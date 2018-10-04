@@ -1,51 +1,34 @@
 === tests/cases/compiler/typeArgInference.ts ===
 interface I {
->I : I
-
     f<T, U>(a1: { a: T; b: U }[], a2: { a: T; b: U }[]): { c: T; d: U };
 >f : <T, U>(a1: { a: T; b: U; }[], a2: { a: T; b: U; }[]) => { c: T; d: U; }
->T : T
->U : U
 >a1 : { a: T; b: U; }[]
 >a : T
->T : T
 >b : U
->U : U
 >a2 : { a: T; b: U; }[]
 >a : T
->T : T
 >b : U
->U : U
 >c : T
->T : T
 >d : U
->U : U
 
     g<T, U>(...arg: { a: T; b: U }[][]): { c: T; d: U };
 >g : <T, U>(...arg: { a: T; b: U; }[][]) => { c: T; d: U; }
->T : T
->U : U
 >arg : { a: T; b: U; }[][]
 >a : T
->T : T
 >b : U
->U : U
 >c : T
->T : T
 >d : U
->U : U
 }
 var o = { a: 3, b: "test" };
 >o : { a: number; b: string; }
 >{ a: 3, b: "test" } : { a: number; b: string; }
 >a : number
->3 : number
+>3 : 3
 >b : string
->"test" : string
+>"test" : "test"
 
 var x: I;
 >x : I
->I : I
 
 var t1 = x.f([o], [o]);
 >t1 : { c: number; d: string; }

@@ -1,0 +1,44 @@
+=== tests/cases/conformance/async/es5/awaitUnion_es5.ts ===
+declare let a: number | string;
+>a : Symbol(a, Decl(awaitUnion_es5.ts, 0, 11))
+
+declare let b: PromiseLike<number> | PromiseLike<string>;
+>b : Symbol(b, Decl(awaitUnion_es5.ts, 1, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+declare let c: PromiseLike<number | string>;
+>c : Symbol(c, Decl(awaitUnion_es5.ts, 2, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+declare let d: number | PromiseLike<string>;
+>d : Symbol(d, Decl(awaitUnion_es5.ts, 3, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+declare let e: number | PromiseLike<number | string>;
+>e : Symbol(e, Decl(awaitUnion_es5.ts, 4, 11))
+>PromiseLike : Symbol(PromiseLike, Decl(lib.es5.d.ts, --, --))
+
+async function f() {
+>f : Symbol(f, Decl(awaitUnion_es5.ts, 4, 53))
+
+	let await_a = await a;
+>await_a : Symbol(await_a, Decl(awaitUnion_es5.ts, 6, 4))
+>a : Symbol(a, Decl(awaitUnion_es5.ts, 0, 11))
+
+	let await_b = await b;
+>await_b : Symbol(await_b, Decl(awaitUnion_es5.ts, 7, 4))
+>b : Symbol(b, Decl(awaitUnion_es5.ts, 1, 11))
+
+	let await_c = await c;
+>await_c : Symbol(await_c, Decl(awaitUnion_es5.ts, 8, 4))
+>c : Symbol(c, Decl(awaitUnion_es5.ts, 2, 11))
+
+	let await_d = await d;
+>await_d : Symbol(await_d, Decl(awaitUnion_es5.ts, 9, 4))
+>d : Symbol(d, Decl(awaitUnion_es5.ts, 3, 11))
+
+	let await_e = await e;
+>await_e : Symbol(await_e, Decl(awaitUnion_es5.ts, 10, 4))
+>e : Symbol(e, Decl(awaitUnion_es5.ts, 4, 11))
+}

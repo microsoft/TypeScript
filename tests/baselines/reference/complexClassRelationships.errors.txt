@@ -1,11 +1,12 @@
-tests/cases/compiler/complexClassRelationships.ts(2,23): error TS2690: A class must be declared after its base class.
+tests/cases/compiler/complexClassRelationships.ts(2,23): error TS2449: Class 'Base' used before its declaration.
 
 
 ==== tests/cases/compiler/complexClassRelationships.ts (1 errors) ====
     // There should be no errors in this file
     class Derived extends Base {
                           ~~~~
-!!! error TS2690: A class must be declared after its base class.
+!!! error TS2449: Class 'Base' used before its declaration.
+!!! related TS2728 tests/cases/compiler/complexClassRelationships.ts:13:7: 'Base' is declared here.
         public static createEmpty(): Derived {
             var item = new Derived();
             return item;

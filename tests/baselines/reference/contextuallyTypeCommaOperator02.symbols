@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/contextualTypes/commaOperator/contextuallyTypeCommaOperator02.ts ===
+let x: (a: string) => string;
+>x : Symbol(x, Decl(contextuallyTypeCommaOperator02.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator02.ts, 0, 8))
+
+x = (100, a => {
+>x : Symbol(x, Decl(contextuallyTypeCommaOperator02.ts, 0, 3))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator02.ts, 2, 9))
+
+    const b: number = a;
+>b : Symbol(b, Decl(contextuallyTypeCommaOperator02.ts, 3, 9))
+>a : Symbol(a, Decl(contextuallyTypeCommaOperator02.ts, 2, 9))
+
+    return b;
+>b : Symbol(b, Decl(contextuallyTypeCommaOperator02.ts, 3, 9))
+
+});

@@ -3,7 +3,7 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >x : (a: number) => void
 >a : number
 >true ? (a) => a.toExponential() : (b) => b.toFixed() : (a: number) => string
->true : boolean
+>true : true
 >(a) => a.toExponential() : (a: number) => string
 >a : number
 >a.toExponential() : string
@@ -41,9 +41,8 @@ class C extends A {
 var x2: (a: A) => void = true ? (a) => a.foo : (b) => b.foo;
 >x2 : (a: A) => void
 >a : A
->A : A
 >true ? (a) => a.foo : (b) => b.foo : (a: A) => number
->true : boolean
+>true : true
 >(a) => a.foo : (a: A) => number
 >a : A
 >a.foo : number

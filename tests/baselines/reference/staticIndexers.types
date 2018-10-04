@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/indexMemberDeclarations/staticIndexers.ts ===
+// static indexers not allowed
+
+class C {
+>C : C
+
+    static [x: string]: string;
+>x : string
+}
+
+class D {
+>D : D
+
+    static [x: number]: string;
+>x : number
+}
+
+class E<T> {
+>E : E<T>
+
+    static [x: string]: T;
+>x : string
+}

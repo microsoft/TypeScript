@@ -71,7 +71,7 @@ function a5() {
 //// [nestedBlockScopedBindings3.js]
 function a0() {
     {
-        var _loop_1 = function(x) {
+        var _loop_1 = function (x) {
             (function () { return x; });
         };
         for (var x = 0; x < 1;) {
@@ -79,7 +79,7 @@ function a0() {
         }
     }
     {
-        var _loop_2 = function(x) {
+        var _loop_2 = function (x) {
             (function () { return x; });
         };
         for (var x = void 0;;) {
@@ -88,13 +88,13 @@ function a0() {
     }
 }
 function a1() {
-    var _loop_3 = function(x) {
+    var _loop_3 = function (x) {
         (function () { return x; });
     };
     for (var x = void 0; x < 1;) {
         _loop_3(x);
     }
-    var _loop_4 = function(x) {
+    var _loop_4 = function (x) {
         (function () { return x; });
     };
     for (var x = void 0;;) {
@@ -120,7 +120,7 @@ function a3() {
     }
 }
 function a4() {
-    var _loop_5 = function(x) {
+    var _loop_5 = function (x) {
         x = x + 1;
         (function () { return x; });
         out_x_1 = x;
@@ -137,7 +137,7 @@ function a4() {
     }
 }
 function a5() {
-    var _loop_6 = function(x) {
+    var _loop_6 = function (x) {
         x = x + 1;
         (function () { return x; });
         out_x_2 = x;

@@ -32,31 +32,31 @@ sourceFile:sourceMapForFunctionInInternalModuleWithCommentPrecedingStatement01.t
 1->
 2 >^^^^^^^^^^^
 3 >           ^
-4 >            ^^
-5 >              ^
-6 >               ^^^^->
+4 >            ^^^^^^^->
 1->
 2 >module 
 3 >           Q
-4 >             
-5 >              {
 1->Emitted(2, 1) Source(1, 1) + SourceIndex(0)
 2 >Emitted(2, 12) Source(1, 8) + SourceIndex(0)
 3 >Emitted(2, 13) Source(1, 9) + SourceIndex(0)
-4 >Emitted(2, 15) Source(1, 10) + SourceIndex(0)
-5 >Emitted(2, 16) Source(1, 11) + SourceIndex(0)
 ---
 >>>    function P() {
 1->^^^^
-2 >    ^^^^^^^^^^^^^^^^^->
-1->
+2 >    ^^^^^^^^^
+3 >             ^
+4 >              ^^^^^^^->
+1-> {
   >    
+2 >    function 
+3 >             P
 1->Emitted(3, 5) Source(2, 5) + SourceIndex(0)
+2 >Emitted(3, 14) Source(2, 14) + SourceIndex(0)
+3 >Emitted(3, 15) Source(2, 15) + SourceIndex(0)
 ---
 >>>        // Test this
 1->^^^^^^^^
 2 >        ^^^^^^^^^^^^
-1->function P() {
+1->() {
   >        
 2 >        // Test this
 1->Emitted(4, 9) Source(3, 9) + SourceIndex(0)

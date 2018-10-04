@@ -1,10 +1,9 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/LabeledStatements/parser_duplicateLabel3.ts ===
-
 target:
 >target : any
 
 while (true) {
->true : boolean
+>true : true
 
   function f() {
 >f : () => void
@@ -13,7 +12,7 @@ while (true) {
 >target : any
 
     while (true) {
->true : boolean
+>true : true
     }
   }
 }

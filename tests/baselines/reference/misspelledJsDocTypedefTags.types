@@ -1,0 +1,21 @@
+=== tests/cases/compiler/a.js ===
+/** @typedef {{ endTime: number, screenshots: number}} A.<b>*/
+Animation.AnimationModel.ScreenshotCapture.Request;
+>Animation.AnimationModel.ScreenshotCapture.Request : error
+>Animation.AnimationModel.ScreenshotCapture : any
+>Animation.AnimationModel : any
+>Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
+>AnimationModel : any
+>ScreenshotCapture : any
+>Request : any
+
+/** @typedef {{ endTime: number, screenshots: !B.<string>}} */
+Animation.AnimationModel.ScreenshotCapture.Request;
+>Animation.AnimationModel.ScreenshotCapture.Request : error
+>Animation.AnimationModel.ScreenshotCapture : any
+>Animation.AnimationModel : any
+>Animation : { new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }
+>AnimationModel : any
+>ScreenshotCapture : any
+>Request : any
+

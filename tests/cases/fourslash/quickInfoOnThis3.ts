@@ -15,18 +15,12 @@
 ////    console.log(th/*7*/is);
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('any');
-goTo.marker('2');
-verify.quickInfoIs('(parameter) this: void');
-goTo.marker('3');
-verify.quickInfoIs('this: void');
-goTo.marker('4');
-verify.quickInfoIs('(parameter) this: Restricted');
-goTo.marker('5');
-verify.quickInfoIs('this: Restricted');
-goTo.marker('6');
-
-verify.quickInfoIs('(parameter) this: {\n    n: number;\n}');
-goTo.marker('7');
-verify.quickInfoIs('this: {\n    n: number;\n}');
+verify.quickInfos({
+    1: "any",
+    2: "(parameter) this: void",
+    3: "this: void", 
+    4: "(parameter) this: Restricted", 
+    5: "this: Restricted",
+    6: "(parameter) this: {\n    n: number;\n}",
+    7: "this: {\n    n: number;\n}"
+});

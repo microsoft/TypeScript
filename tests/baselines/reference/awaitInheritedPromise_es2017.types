@@ -1,0 +1,12 @@
+=== tests/cases/conformance/async/es2017/awaitInheritedPromise_es2017.ts ===
+interface A extends Promise<string> {}
+declare var a: A;
+>a : A
+
+async function f() {
+>f : () => Promise<void>
+
+    await a;
+>await a : string
+>a : A
+}

@@ -13,9 +13,9 @@ class C {
 }
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 module M { export var a }
 >M : typeof M
@@ -35,7 +35,6 @@ var d: string;
 
 var e: Object;
 >e : Object
->Object : Object
 
 // any as left operand, result is type Any except plusing string
 var r1 = a + a;
@@ -130,9 +129,9 @@ var r15 = a + E.a;
 >r15 : any
 >a + E.a : any
 >a : any
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var r16 = a + M;
 >r16 : any
@@ -144,13 +143,13 @@ var r17 = a + '';
 >r17 : string
 >a + '' : string
 >a : any
->'' : string
+>'' : ""
 
 var r18 = a + 123;
 >r18 : any
 >a + 123 : any
 >a : any
->123 : number
+>123 : 123
 
 var r19 = a + { a: '' };
 >r19 : any
@@ -158,7 +157,7 @@ var r19 = a + { a: '' };
 >a : any
 >{ a: '' } : { a: string; }
 >a : string
->'' : string
+>'' : ""
 
 var r20 = a + ((a: string) => { return a });
 >r20 : any

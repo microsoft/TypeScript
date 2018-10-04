@@ -1,5 +1,4 @@
 === tests/cases/compiler/innerOverloads.ts ===
-
 function outer() {
 >outer : () => any
 
@@ -19,7 +18,7 @@ function outer() {
     return inner(0);
 >inner(0) : any
 >inner : { (x: number): any; (x: string): any; }
->0 : number
+>0 : 0
 }
 
 var x = outer(); // should work

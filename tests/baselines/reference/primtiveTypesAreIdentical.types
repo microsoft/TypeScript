@@ -67,17 +67,15 @@ function foo5(x: any) { }
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
 >x : E
->E : E
 
 function foo6(x: E);
 >foo6 : { (x: E): any; (x: E): any; }
 >x : E
->E : E
 
 function foo6(x: any) { }
 >foo6 : { (x: E): any; (x: E): any; }

@@ -1,5 +1,4 @@
 === tests/cases/compiler/es2015modulekind.ts ===
-
 export default class A
 >A : A
 {
@@ -12,6 +11,6 @@ export default class A
 >B : () => number
     {
         return 42;
->42 : number
+>42 : 42
     }
 }

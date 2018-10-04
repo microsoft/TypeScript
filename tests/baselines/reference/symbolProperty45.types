@@ -3,19 +3,21 @@ class C {
 >C : C
 
     get [Symbol.hasInstance]() {
+>[Symbol.hasInstance] : string
 >Symbol.hasInstance : symbol
 >Symbol : SymbolConstructor
 >hasInstance : symbol
 
         return "";
->"" : string
+>"" : ""
     }
     get [Symbol.toPrimitive]() {
+>[Symbol.toPrimitive] : string
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 
         return "";
->"" : string
+>"" : ""
     }
 }

@@ -4,7 +4,7 @@ class Foo { }
 switch (0) {
     case Foo: break;    // Error
     case "sss": break;  // Error
-    case 123: break;    // No Error
+    case 123: break;    // Error
     case true: break;   // Error
 }
 
@@ -18,8 +18,9 @@ switch (s) {
     case true: break;
 }
 
+
 //// [switchCasesExpressionTypeMismatch.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
@@ -27,7 +28,7 @@ var Foo = (function () {
 switch (0) {
     case Foo: break; // Error
     case "sss": break; // Error
-    case 123: break; // No Error
+    case 123: break; // Error
     case true: break; // Error
 }
 var s = 0;

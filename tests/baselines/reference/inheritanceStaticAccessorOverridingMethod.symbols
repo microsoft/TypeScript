@@ -1,0 +1,26 @@
+=== tests/cases/compiler/inheritanceStaticAccessorOverridingMethod.ts ===
+class a {
+>a : Symbol(a, Decl(inheritanceStaticAccessorOverridingMethod.ts, 0, 0))
+
+    static x() {
+>x : Symbol(a.x, Decl(inheritanceStaticAccessorOverridingMethod.ts, 0, 9))
+
+        return "20";
+    }
+}
+
+class b extends a {
+>b : Symbol(b, Decl(inheritanceStaticAccessorOverridingMethod.ts, 4, 1))
+>a : Symbol(a, Decl(inheritanceStaticAccessorOverridingMethod.ts, 0, 0))
+
+    static get x() {
+>x : Symbol(b.x, Decl(inheritanceStaticAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceStaticAccessorOverridingMethod.ts, 9, 5))
+
+        return "20";
+    }
+    static set x(aValue: string) {
+>x : Symbol(b.x, Decl(inheritanceStaticAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceStaticAccessorOverridingMethod.ts, 9, 5))
+>aValue : Symbol(aValue, Decl(inheritanceStaticAccessorOverridingMethod.ts, 10, 17))
+
+    }
+}

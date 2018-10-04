@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments17.ts ===
+function f() {
+>f : Symbol(f, Decl(emitArrowFunctionWhenUsingArguments17.ts, 0, 0))
+
+    var { arguments } = { arguments: "hello" };
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments17.ts, 1, 9), Decl(emitArrowFunctionWhenUsingArguments17.ts, 5, 7))
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments17.ts, 1, 25))
+
+    if (Math.random()) {
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+        return () => arguments[0];
+>arguments : Symbol(arguments)
+    }
+    var arguments = "world";
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments17.ts, 1, 9), Decl(emitArrowFunctionWhenUsingArguments17.ts, 5, 7))
+}

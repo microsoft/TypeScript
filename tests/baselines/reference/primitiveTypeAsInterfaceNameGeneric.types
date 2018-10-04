@@ -1,0 +1,3 @@
+=== tests/cases/compiler/primitiveTypeAsInterfaceNameGeneric.ts ===
+interface number<T> {}
+No type information for this code.

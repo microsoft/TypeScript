@@ -1,5 +1,4 @@
 //// [constDeclarations-access2.ts]
-
 const x = 0
 
 // Errors

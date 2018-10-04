@@ -1,27 +1,17 @@
 === tests/cases/compiler/genericReversingTypeParameters.ts ===
 class BiMap<K, V> {
 >BiMap : BiMap<K, V>
->K : K
->V : V
 
     private inverseBiMap: BiMap<V, K>;
 >inverseBiMap : BiMap<V, K>
->BiMap : BiMap<K, V>
->V : V
->K : K
 
     public get(key: K): V { return null; }
 >get : (key: K) => V
 >key : K
->K : K
->V : V
 >null : null
 
     public inverse(): BiMap<V, K> { return null; }
 >inverse : () => BiMap<V, K>
->BiMap : BiMap<K, V>
->V : V
->K : K
 >null : null
 }
 
@@ -36,7 +26,7 @@ var r1 = b.get('');
 >b.get : (key: string) => number
 >b : BiMap<string, number>
 >get : (key: string) => number
->'' : string
+>'' : ""
 
 var i = b.inverse(); // used to get the type wrong here.
 >i : BiMap<number, string>
@@ -51,5 +41,5 @@ var r2b = i.get(1);
 >i.get : (key: number) => string
 >i : BiMap<number, string>
 >get : (key: number) => string
->1 : number
+>1 : 1
 

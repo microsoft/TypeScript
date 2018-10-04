@@ -1,0 +1,16 @@
+=== tests/cases/compiler/metadataOfStringLiteral.ts ===
+function PropDeco(target: Object, propKey: string | symbol) { }
+>PropDeco : Symbol(PropDeco, Decl(metadataOfStringLiteral.ts, 0, 0))
+>target : Symbol(target, Decl(metadataOfStringLiteral.ts, 0, 18))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propKey : Symbol(propKey, Decl(metadataOfStringLiteral.ts, 0, 33))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(metadataOfStringLiteral.ts, 0, 63))
+
+    @PropDeco
+>PropDeco : Symbol(PropDeco, Decl(metadataOfStringLiteral.ts, 0, 0))
+
+    public foo: "foo" | "bar";
+>foo : Symbol(Foo.foo, Decl(metadataOfStringLiteral.ts, 2, 11))
+}

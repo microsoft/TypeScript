@@ -1,0 +1,20 @@
+=== tests/cases/compiler/moduleWithNoValuesAsType.ts ===
+module A { }
+var a: A; // error
+>a : any
+
+module B {
+    interface I {}
+}
+var b: B; // error
+>b : any
+
+module C {
+    module M {
+        interface I {}
+    }
+}
+
+var c: C; // error
+>c : any
+

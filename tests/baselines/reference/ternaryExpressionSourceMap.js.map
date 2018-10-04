@@ -1,2 +1,2 @@
 //// [ternaryExpressionSourceMap.js.map]
-{"version":3,"file":"ternaryExpressionSourceMap.js","sourceRoot":"","sources":["ternaryExpressionSourceMap.ts"],"names":[],"mappings":"AACA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,IAAI,GAAG,GAAG,CAAC,GAAG,cAAM,OAAA,CAAC,EAAD,CAAC,GAAG,cAAM,OAAA,CAAC,EAAD,CAAC,CAAC"}
+{"version":3,"file":"ternaryExpressionSourceMap.js","sourceRoot":"","sources":["ternaryExpressionSourceMap.ts"],"names":[],"mappings":"AAAA,IAAI,CAAC,GAAG,CAAC,CAAC;AACV,IAAI,GAAG,GAAG,CAAC,CAAC,CAAC,CAAC,cAAM,OAAA,CAAC,EAAD,CAAC,CAAC,CAAC,CAAC,cAAM,OAAA,CAAC,EAAD,CAAC,CAAC"}

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyCannotNameAccessorDeclFile.ts] ////
 
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.ts]
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;
@@ -139,7 +138,8 @@ class privateClassWithPrivateModuleGetAccessorTypes {
 //// [privacyCannotNameAccessorDeclFile_GlobalWidgets.js]
 //// [privacyCannotNameAccessorDeclFile_Widgets.js]
 "use strict";
-var Widget1 = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
     }
@@ -152,7 +152,7 @@ function createWidget1() {
 exports.createWidget1 = createWidget1;
 var SpecializedWidget;
 (function (SpecializedWidget) {
-    var Widget2 = (function () {
+    var Widget2 = /** @class */ (function () {
         function Widget2() {
             this.name = 'one';
         }
@@ -166,6 +166,7 @@ var SpecializedWidget;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyCannotNameAccessorDeclFile_exporter.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 ///<reference path='privacyCannotNameAccessorDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyCannotNameAccessorDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -187,8 +188,9 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyCannotNameAccessorDeclFile_consumer.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var exporter = require("./privacyCannotNameAccessorDeclFile_exporter");
-var publicClassWithWithPrivateGetAccessorTypes = (function () {
+var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -250,7 +252,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
     return publicClassWithWithPrivateGetAccessorTypes;
 }());
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-var privateClassWithWithPrivateGetAccessorTypes = (function () {
+var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -311,7 +313,7 @@ var privateClassWithWithPrivateGetAccessorTypes = (function () {
     });
     return privateClassWithWithPrivateGetAccessorTypes;
 }());
-var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -345,7 +347,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     return publicClassWithPrivateModuleGetAccessorTypes;
 }());
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -412,3 +414,21 @@ export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+//// [privacyCannotNameAccessorDeclFile_consumer.d.ts]
+/// <reference path="privacyCannotNameAccessorDeclFile_GlobalWidgets.d.ts" />
+export declare class publicClassWithWithPrivateGetAccessorTypes {
+    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private static readonly myPrivateStaticMethod;
+    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").Widget1;
+    private readonly myPrivateMethod;
+    static readonly myPublicStaticMethod1: import("GlobalWidgets").Widget3;
+    private static readonly myPrivateStaticMethod1;
+    readonly myPublicMethod1: import("GlobalWidgets").Widget3;
+    private readonly myPrivateMethod1;
+}
+export declare class publicClassWithPrivateModuleGetAccessorTypes {
+    static readonly myPublicStaticMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    readonly myPublicMethod: import("./privacyCannotNameAccessorDeclFile_Widgets").SpecializedWidget.Widget2;
+    static readonly myPublicStaticMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    readonly myPublicMethod1: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+}

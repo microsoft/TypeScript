@@ -8,7 +8,6 @@
 ////function f ({ /*1*/next: { /*2*/next: x} }: Recursive) {
 ////}
 
-for (let { position } of test.markers()) {
-    goTo.position(position)
-    verify.quickInfoIs("(property) Recursive.next: Recursive");
+for (const marker of test.markerNames()) {
+    verify.quickInfoAt(marker, "(property) Recursive.next?: Recursive");
 }

@@ -2,7 +2,7 @@
 var v = class C {};
 
 //// [classExpression1.js]
-var v = (function () {
+var v = /** @class */ (function () {
     function C() {
     }
     return C;

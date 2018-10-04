@@ -4,7 +4,7 @@ class C {
 
     x = 1;
 >x : number
->1 : number
+>1 : 1
 }
 
 var c = new C();
@@ -13,11 +13,11 @@ var c = new C();
 >C : typeof C
 
 c.x = 3;
->c.x = 3 : number
+>c.x = 3 : 3
 >c.x : number
 >c : C
 >x : number
->3 : number
+>3 : 3
 
 var c2 = new C();
 >c2 : C

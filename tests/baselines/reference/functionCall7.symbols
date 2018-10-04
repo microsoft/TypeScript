@@ -1,0 +1,36 @@
+=== tests/cases/compiler/functionCall7.ts ===
+module m1 { export class c1 { public a; }}
+>m1 : Symbol(m1, Decl(functionCall7.ts, 0, 0))
+>c1 : Symbol(c1, Decl(functionCall7.ts, 0, 11))
+>a : Symbol(c1.a, Decl(functionCall7.ts, 0, 29))
+
+function foo(a:m1.c1){ a.a = 1; }; 
+>foo : Symbol(foo, Decl(functionCall7.ts, 0, 42))
+>a : Symbol(a, Decl(functionCall7.ts, 1, 13))
+>m1 : Symbol(m1, Decl(functionCall7.ts, 0, 0))
+>c1 : Symbol(m1.c1, Decl(functionCall7.ts, 0, 11))
+>a.a : Symbol(m1.c1.a, Decl(functionCall7.ts, 0, 29))
+>a : Symbol(a, Decl(functionCall7.ts, 1, 13))
+>a : Symbol(m1.c1.a, Decl(functionCall7.ts, 0, 29))
+
+var myC = new m1.c1(); 
+>myC : Symbol(myC, Decl(functionCall7.ts, 2, 3))
+>m1.c1 : Symbol(m1.c1, Decl(functionCall7.ts, 0, 11))
+>m1 : Symbol(m1, Decl(functionCall7.ts, 0, 0))
+>c1 : Symbol(m1.c1, Decl(functionCall7.ts, 0, 11))
+
+foo(myC); 
+>foo : Symbol(foo, Decl(functionCall7.ts, 0, 42))
+>myC : Symbol(myC, Decl(functionCall7.ts, 2, 3))
+
+foo(myC, myC); 
+>foo : Symbol(foo, Decl(functionCall7.ts, 0, 42))
+>myC : Symbol(myC, Decl(functionCall7.ts, 2, 3))
+>myC : Symbol(myC, Decl(functionCall7.ts, 2, 3))
+
+foo(4);
+>foo : Symbol(foo, Decl(functionCall7.ts, 0, 42))
+
+foo();
+>foo : Symbol(foo, Decl(functionCall7.ts, 0, 42))
+

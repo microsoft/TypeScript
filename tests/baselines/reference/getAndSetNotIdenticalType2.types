@@ -1,0 +1,50 @@
+=== tests/cases/compiler/getAndSetNotIdenticalType2.ts ===
+class A<T> { foo: T; }
+>A : A<T>
+>foo : T
+
+class C<T> {
+>C : C<T>
+
+    data: A<T>;
+>data : A<T>
+
+    get x(): A<T> {
+>x : A<T>
+
+        return this.data;
+>this.data : A<T>
+>this : this
+>data : A<T>
+    }
+    set x(v: A<string>) {
+>x : A<T>
+>v : A<string>
+
+        this.data = v;
+>this.data = v : A<string>
+>this.data : A<T>
+>this : this
+>data : A<T>
+>v : A<string>
+    }
+}
+
+var x = new C();
+>x : C<{}>
+>new C() : C<{}>
+>C : typeof C
+
+var r = x.x;
+>r : A<{}>
+>x.x : A<{}>
+>x : C<{}>
+>x : A<{}>
+
+x.x = r;
+>x.x = r : A<{}>
+>x.x : A<{}>
+>x : C<{}>
+>x : A<{}>
+>r : A<{}>
+

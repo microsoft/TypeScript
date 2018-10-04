@@ -14,15 +14,15 @@ class Foo {
 
 //// [collisionThisExpressionAndNameResolution.js]
 var console;
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.x = function () {
         var _this = 10; // Local var. No this capture in x(), so no conflict.
         function inner() {
-            var _this = this;
+            var _this_1 = this;
             console.log(_this); // Error as this doesnt not resolve to user defined _this
-            return function (x) { return _this; }; // New scope.  So should inject new _this capture into function inner
+            return function (x) { return _this_1; }; // New scope.  So should inject new _this capture into function inner
         }
     };
     return Foo;

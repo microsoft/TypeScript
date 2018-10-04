@@ -1,0 +1,25 @@
+=== tests/cases/compiler/es6DeclOrdering.ts ===
+class Bar {
+>Bar : Symbol(Bar, Decl(es6DeclOrdering.ts, 0, 0))
+
+   //public bar() { }
+
+   public foo() {
+>foo : Symbol(Bar.foo, Decl(es6DeclOrdering.ts, 0, 11))
+
+       return this._store.length;
+>this : Symbol(Bar, Decl(es6DeclOrdering.ts, 0, 0))
+ 
+   }
+
+   constructor(store: string) {
+>store : Symbol(store, Decl(es6DeclOrdering.ts, 9, 15))
+
+       this._store = store; // this is an error for some reason? Unresolved symbol store
+>this : Symbol(Bar, Decl(es6DeclOrdering.ts, 0, 0))
+>store : Symbol(store, Decl(es6DeclOrdering.ts, 9, 15))
+ 
+   } 
+}
+
+

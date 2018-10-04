@@ -1,0 +1,44 @@
+=== tests/cases/compiler/test.ts ===
+// #15734 failed when test.ts comes before typings.d.ts
+namespace C {
+>C : Symbol(C, Decl(test.ts, 0, 0))
+
+    export class Name {
+>Name : Symbol(Name, Decl(test.ts, 1, 13))
+
+        static funcData = A.AA.func();
+>funcData : Symbol(Name.funcData, Decl(test.ts, 2, 23))
+>A.AA.func : Symbol(A.AA.func, Decl(typings.d.ts, 1, 18))
+>A.AA : Symbol(A.AA, Decl(typings.d.ts, 0, 21))
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+>AA : Symbol(A.AA, Decl(typings.d.ts, 0, 21))
+>func : Symbol(A.AA.func, Decl(typings.d.ts, 1, 18))
+
+        static someConst = A.AA.foo;
+>someConst : Symbol(Name.someConst, Decl(test.ts, 3, 38))
+>A.AA.foo : Symbol(A.AA.foo, Decl(typings.d.ts, 3, 13))
+>A.AA : Symbol(A.AA, Decl(typings.d.ts, 0, 21))
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+>AA : Symbol(A.AA, Decl(typings.d.ts, 0, 21))
+>foo : Symbol(A.AA.foo, Decl(typings.d.ts, 3, 13))
+
+        constructor(parameters) {}
+>parameters : Symbol(parameters, Decl(test.ts, 6, 20))
+    }
+}
+
+=== tests/cases/compiler/typings.d.ts ===
+declare namespace A {
+>A : Symbol(A, Decl(typings.d.ts, 0, 0))
+
+    namespace AA {
+>AA : Symbol(AA, Decl(typings.d.ts, 0, 21))
+
+        function func(): number;
+>func : Symbol(func, Decl(typings.d.ts, 1, 18))
+
+        const foo = "";
+>foo : Symbol(foo, Decl(typings.d.ts, 3, 13))
+    }
+}
+

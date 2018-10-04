@@ -44,13 +44,12 @@ fooLength + 1;
 "use strict";
 var A;
 (function (A) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B(b) {
         }
         return B;
     }());
     A.B = B;
-    var B;
     (function (B) {
         B.b = 0;
     })(B = A.B || (A.B = {}));
@@ -61,6 +60,7 @@ module.exports = A.B;
 module.exports = "foo".length;
 //// [index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X2 = require("foobarx");

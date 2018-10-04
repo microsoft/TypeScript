@@ -1,0 +1,49 @@
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(2,15): error TS7017: Element implicitly has an 'any' type because type '{ prop: string; }' has no index signature.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(13,15): error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(21,15): error TS2536: Type 'unique symbol' cannot be used to index type '{ [idx: number]: string; }'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(23,15): error TS2536: Type 'unique symbol' cannot be used to index type '{ [idx: string]: string; }'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(25,16): error TS2536: Type 'symbol' cannot be used to index type '{ [idx: number]: string; }'.
+tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts(27,16): error TS2536: Type 'symbol' cannot be used to index type '{ [idx: string]: string; }'.
+
+
+==== tests/cases/compiler/lateBoundDestructuringImplicitAnyError.ts (6 errors) ====
+    let named = "foo";
+    let {[named]: prop} = {prop: "foo"};
+                  ~~~~
+!!! error TS7017: Element implicitly has an 'any' type because type '{ prop: string; }' has no index signature.
+    void prop;
+    
+    const numIndexed: {[idx: number]: string} = null as any;
+    const strIndexed: {[idx: string]: string} = null as any;
+    
+    let numed = 6;
+    
+    const symed = Symbol();
+    let symed2 = Symbol();
+    
+    let {[named]: prop2} = numIndexed;
+                  ~~~~~
+!!! error TS7015: Element implicitly has an 'any' type because index expression is not of type 'number'.
+    void prop2;
+    let {[numed]: prop3} = numIndexed;
+    void prop3;
+    let {[named]: prop4} = strIndexed;
+    void prop4;
+    let {[numed]: prop5} = strIndexed;
+    void prop5;
+    let {[symed]: prop6} = numIndexed;
+                  ~~~~~
+!!! error TS2536: Type 'unique symbol' cannot be used to index type '{ [idx: number]: string; }'.
+    void prop6;
+    let {[symed]: prop7} = strIndexed;
+                  ~~~~~
+!!! error TS2536: Type 'unique symbol' cannot be used to index type '{ [idx: string]: string; }'.
+    void prop7;
+    let {[symed2]: prop8} = numIndexed;
+                   ~~~~~
+!!! error TS2536: Type 'symbol' cannot be used to index type '{ [idx: number]: string; }'.
+    void prop8;
+    let {[symed2]: prop9} = strIndexed;
+                   ~~~~~
+!!! error TS2536: Type 'symbol' cannot be used to index type '{ [idx: string]: string; }'.
+    void prop9;

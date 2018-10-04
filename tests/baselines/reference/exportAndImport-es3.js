@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportAndImport-es3.ts] ////
 
 //// [m1.ts]
-
 export default function f1() {
 }
 
@@ -14,15 +13,15 @@ export default function f2() {
 
 //// [m1.js]
 "use strict";
+exports.__esModule = true;
 function f1() {
 }
-exports.__esModule = true;
 exports["default"] = f1;
 //// [m2.js]
 "use strict";
+exports.__esModule = true;
 var m1_1 = require("./m1");
 function f2() {
     m1_1["default"]();
 }
-exports.__esModule = true;
 exports["default"] = f2;

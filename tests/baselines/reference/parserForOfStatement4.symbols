@@ -1,0 +1,4 @@
+=== tests/cases/conformance/parser/ecmascript6/Iterators/parserForOfStatement4.ts ===
+for (var a = 1 of X) {
+>a : Symbol(a, Decl(parserForOfStatement4.ts, 0, 8))
+}

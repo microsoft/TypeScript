@@ -1,0 +1,13 @@
+=== /a.js ===
+class Foo {
+>Foo : Symbol(Foo, Decl(a.js, 0, 0))
+
+    /**@param {string} x */
+    m = x => x.toLowerCase();
+>m : Symbol(Foo.m, Decl(a.js, 0, 11))
+>x : Symbol(x, Decl(a.js, 2, 7))
+>x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(a.js, 2, 7))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
+}
+

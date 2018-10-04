@@ -1,4 +1,4 @@
-/// <reference path="../src/harness/external/node.d.ts" />
+/// <reference types="node"/>
 
 import fs = require('fs');
 import path = require('path');
@@ -64,7 +64,6 @@ module Commands {
             }
             if (path.charAt(1) === ":") {
                 if (path.charAt(2) === directorySeparator) return 3;
-                return 2;
             }
             return 0;
         }

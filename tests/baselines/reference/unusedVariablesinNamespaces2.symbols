@@ -1,0 +1,25 @@
+=== tests/cases/compiler/unusedVariablesinNamespaces2.ts ===
+namespace Validation {
+>Validation : Symbol(Validation, Decl(unusedVariablesinNamespaces2.ts, 0, 0))
+
+    const lettersRegexp = /^[A-Za-z]+$/;
+>lettersRegexp : Symbol(lettersRegexp, Decl(unusedVariablesinNamespaces2.ts, 1, 9))
+
+    const numberRegexp = /^[0-9]+$/;
+>numberRegexp : Symbol(numberRegexp, Decl(unusedVariablesinNamespaces2.ts, 2, 9))
+
+    export class LettersOnlyValidator {
+>LettersOnlyValidator : Symbol(LettersOnlyValidator, Decl(unusedVariablesinNamespaces2.ts, 2, 36))
+
+        isAcceptable(s2: string) {
+>isAcceptable : Symbol(LettersOnlyValidator.isAcceptable, Decl(unusedVariablesinNamespaces2.ts, 4, 39))
+>s2 : Symbol(s2, Decl(unusedVariablesinNamespaces2.ts, 5, 21))
+
+            return lettersRegexp.test(s2);
+>lettersRegexp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>lettersRegexp : Symbol(lettersRegexp, Decl(unusedVariablesinNamespaces2.ts, 1, 9))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>s2 : Symbol(s2, Decl(unusedVariablesinNamespaces2.ts, 5, 21))
+        }
+    }
+}

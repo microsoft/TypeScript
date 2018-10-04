@@ -1,5 +1,4 @@
 //// [letDeclarations-es5.ts]
-
 let l1;
 let l2: number;
 let l3, l4, l5 :string, l6;

@@ -1,0 +1,245 @@
+=== tests/cases/conformance/types/spread/objectSpreadNegative.ts ===
+let o = { a: 1, b: 'no' }
+>o : Symbol(o, Decl(objectSpreadNegative.ts, 0, 3))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 0, 9))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 0, 15))
+
+/// private propagates
+class PrivateOptionalX {
+>PrivateOptionalX : Symbol(PrivateOptionalX, Decl(objectSpreadNegative.ts, 0, 25))
+
+    private x?: number;
+>x : Symbol(PrivateOptionalX.x, Decl(objectSpreadNegative.ts, 3, 24))
+}
+class PublicX {
+>PublicX : Symbol(PublicX, Decl(objectSpreadNegative.ts, 5, 1))
+
+    public x: number;
+>x : Symbol(PublicX.x, Decl(objectSpreadNegative.ts, 6, 15))
+}
+let publicX: PublicX;
+>publicX : Symbol(publicX, Decl(objectSpreadNegative.ts, 9, 3))
+>PublicX : Symbol(PublicX, Decl(objectSpreadNegative.ts, 5, 1))
+
+let privateOptionalX: PrivateOptionalX;
+>privateOptionalX : Symbol(privateOptionalX, Decl(objectSpreadNegative.ts, 10, 3))
+>PrivateOptionalX : Symbol(PrivateOptionalX, Decl(objectSpreadNegative.ts, 0, 25))
+
+let o2 = { ...publicX, ...privateOptionalX };
+>o2 : Symbol(o2, Decl(objectSpreadNegative.ts, 11, 3))
+>publicX : Symbol(publicX, Decl(objectSpreadNegative.ts, 9, 3))
+>privateOptionalX : Symbol(privateOptionalX, Decl(objectSpreadNegative.ts, 10, 3))
+
+let sn: number = o2.x; // error, x is private
+>sn : Symbol(sn, Decl(objectSpreadNegative.ts, 12, 3))
+>o2 : Symbol(o2, Decl(objectSpreadNegative.ts, 11, 3))
+
+let optionalString: { sn?: string };
+>optionalString : Symbol(optionalString, Decl(objectSpreadNegative.ts, 13, 3))
+>sn : Symbol(sn, Decl(objectSpreadNegative.ts, 13, 21))
+
+let optionalNumber: { sn?: number };
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadNegative.ts, 14, 3))
+>sn : Symbol(sn, Decl(objectSpreadNegative.ts, 14, 21))
+
+let allOptional: { sn: string | number } = { ...optionalString, ...optionalNumber };
+>allOptional : Symbol(allOptional, Decl(objectSpreadNegative.ts, 15, 3))
+>sn : Symbol(sn, Decl(objectSpreadNegative.ts, 15, 18))
+>optionalString : Symbol(optionalString, Decl(objectSpreadNegative.ts, 13, 3))
+>optionalNumber : Symbol(optionalNumber, Decl(objectSpreadNegative.ts, 14, 3))
+
+// error, 'sn' is optional in source, required in target
+
+// assignability as target
+interface Bool { b: boolean };
+>Bool : Symbol(Bool, Decl(objectSpreadNegative.ts, 15, 84))
+>b : Symbol(Bool.b, Decl(objectSpreadNegative.ts, 19, 16))
+
+interface Str { s: string };
+>Str : Symbol(Str, Decl(objectSpreadNegative.ts, 19, 30))
+>s : Symbol(Str.s, Decl(objectSpreadNegative.ts, 20, 15))
+
+let spread = { ...{ b: true }, ...{s: "foo" } };
+>spread : Symbol(spread, Decl(objectSpreadNegative.ts, 21, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 21, 19))
+>s : Symbol(s, Decl(objectSpreadNegative.ts, 21, 35))
+
+spread = { s: "foo" };  // error, missing 'b'
+>spread : Symbol(spread, Decl(objectSpreadNegative.ts, 21, 3))
+>s : Symbol(s, Decl(objectSpreadNegative.ts, 22, 10))
+
+let b = { b: false };
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 23, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 23, 9))
+
+spread = b; // error, missing 's'
+>spread : Symbol(spread, Decl(objectSpreadNegative.ts, 21, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 23, 3))
+
+// literal repeats are not allowed, but spread repeats are fine
+let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+>duplicated : Symbol(duplicated, Decl(objectSpreadNegative.ts, 27, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 27, 18), Decl(objectSpreadNegative.ts, 27, 34), Decl(objectSpreadNegative.ts, 27, 51))
+>o : Symbol(o, Decl(objectSpreadNegative.ts, 0, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 27, 18), Decl(objectSpreadNegative.ts, 27, 34), Decl(objectSpreadNegative.ts, 27, 51))
+>o2 : Symbol(o2, Decl(objectSpreadNegative.ts, 11, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 27, 18), Decl(objectSpreadNegative.ts, 27, 34), Decl(objectSpreadNegative.ts, 27, 51))
+
+let duplicatedSpread = { ...o, ...o }
+>duplicatedSpread : Symbol(duplicatedSpread, Decl(objectSpreadNegative.ts, 28, 3))
+>o : Symbol(o, Decl(objectSpreadNegative.ts, 0, 3))
+>o : Symbol(o, Decl(objectSpreadNegative.ts, 0, 3))
+
+// primitives are not allowed, except for falsy ones
+let spreadNum = { ...12 };
+>spreadNum : Symbol(spreadNum, Decl(objectSpreadNegative.ts, 31, 3))
+
+let spreadSum = { ...1 + 1 };
+>spreadSum : Symbol(spreadSum, Decl(objectSpreadNegative.ts, 32, 3))
+
+let spreadZero = { ...0 };
+>spreadZero : Symbol(spreadZero, Decl(objectSpreadNegative.ts, 33, 3))
+
+spreadZero.toFixed(); // error, no methods even from a falsy number
+>spreadZero : Symbol(spreadZero, Decl(objectSpreadNegative.ts, 33, 3))
+
+let spreadBool = { ...true };
+>spreadBool : Symbol(spreadBool, Decl(objectSpreadNegative.ts, 35, 3))
+
+spreadBool.valueOf();
+>spreadBool : Symbol(spreadBool, Decl(objectSpreadNegative.ts, 35, 3))
+
+let spreadStr = { ...'foo' };
+>spreadStr : Symbol(spreadStr, Decl(objectSpreadNegative.ts, 37, 3))
+
+spreadStr.length; // error, no 'length'
+>spreadStr : Symbol(spreadStr, Decl(objectSpreadNegative.ts, 37, 3))
+
+spreadStr.charAt(1); // error, no methods either
+>spreadStr : Symbol(spreadStr, Decl(objectSpreadNegative.ts, 37, 3))
+
+// functions are skipped
+let spreadFunc = { ...function () { } }
+>spreadFunc : Symbol(spreadFunc, Decl(objectSpreadNegative.ts, 41, 3))
+
+spreadFunc(); // error, no call signature
+>spreadFunc : Symbol(spreadFunc, Decl(objectSpreadNegative.ts, 41, 3))
+
+// write-only properties get skipped
+let setterOnly = { ...{ set b (bad: number) { } } };
+>setterOnly : Symbol(setterOnly, Decl(objectSpreadNegative.ts, 45, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 45, 23))
+>bad : Symbol(bad, Decl(objectSpreadNegative.ts, 45, 31))
+
+setterOnly.b = 12; // error, 'b' does not exist
+>setterOnly : Symbol(setterOnly, Decl(objectSpreadNegative.ts, 45, 3))
+
+// methods are skipped because they aren't enumerable
+class C { p = 1; m() { } }
+>C : Symbol(C, Decl(objectSpreadNegative.ts, 46, 18))
+>p : Symbol(C.p, Decl(objectSpreadNegative.ts, 49, 9))
+>m : Symbol(C.m, Decl(objectSpreadNegative.ts, 49, 16))
+
+let c: C = new C()
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 50, 3))
+>C : Symbol(C, Decl(objectSpreadNegative.ts, 46, 18))
+>C : Symbol(C, Decl(objectSpreadNegative.ts, 46, 18))
+
+let spreadC = { ...c }
+>spreadC : Symbol(spreadC, Decl(objectSpreadNegative.ts, 51, 3))
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 50, 3))
+
+spreadC.m(); // error 'm' is not in '{ ... c }'
+>spreadC : Symbol(spreadC, Decl(objectSpreadNegative.ts, 51, 3))
+
+// non primitive
+let obj: object = { a: 123 };
+>obj : Symbol(obj, Decl(objectSpreadNegative.ts, 55, 3))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 55, 19))
+
+let spreadObj = { ...obj };
+>spreadObj : Symbol(spreadObj, Decl(objectSpreadNegative.ts, 56, 3))
+>obj : Symbol(obj, Decl(objectSpreadNegative.ts, 55, 3))
+
+spreadObj.a; // error 'a' is not in {}
+>spreadObj : Symbol(spreadObj, Decl(objectSpreadNegative.ts, 56, 3))
+
+// generics
+function f<T, U>(t: T, u: U) {
+>f : Symbol(f, Decl(objectSpreadNegative.ts, 57, 12))
+>T : Symbol(T, Decl(objectSpreadNegative.ts, 60, 11))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 60, 13))
+>t : Symbol(t, Decl(objectSpreadNegative.ts, 60, 17))
+>T : Symbol(T, Decl(objectSpreadNegative.ts, 60, 11))
+>u : Symbol(u, Decl(objectSpreadNegative.ts, 60, 22))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 60, 13))
+
+    return { ...t, ...u, id: 'id' };
+>t : Symbol(t, Decl(objectSpreadNegative.ts, 60, 17))
+>u : Symbol(u, Decl(objectSpreadNegative.ts, 60, 22))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 61, 24))
+}
+function override<U>(initial: U, override: U): U {
+>override : Symbol(override, Decl(objectSpreadNegative.ts, 62, 1))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 63, 18))
+>initial : Symbol(initial, Decl(objectSpreadNegative.ts, 63, 21))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 63, 18))
+>override : Symbol(override, Decl(objectSpreadNegative.ts, 63, 32))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 63, 18))
+>U : Symbol(U, Decl(objectSpreadNegative.ts, 63, 18))
+
+    return { ...initial, ...override };
+>initial : Symbol(initial, Decl(objectSpreadNegative.ts, 63, 21))
+>override : Symbol(override, Decl(objectSpreadNegative.ts, 63, 32))
+}
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+>exclusive : Symbol(exclusive, Decl(objectSpreadNegative.ts, 66, 3))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 66, 16))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 66, 28))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 66, 39))
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 66, 50))
+>d : Symbol(d, Decl(objectSpreadNegative.ts, 66, 61))
+
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+>f : Symbol(f, Decl(objectSpreadNegative.ts, 57, 12))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 67, 7))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 67, 13))
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 67, 27))
+>d : Symbol(d, Decl(objectSpreadNegative.ts, 67, 36))
+
+let overlap: { id: string, a: number, b: string } =
+>overlap : Symbol(overlap, Decl(objectSpreadNegative.ts, 68, 3))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 68, 14))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 68, 26))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 68, 37))
+
+    f({ a: 1 }, { a: 2, b: 'extra' })
+>f : Symbol(f, Decl(objectSpreadNegative.ts, 57, 12))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 69, 7))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 69, 17))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 69, 23))
+
+let overlapConflict: { id:string, a: string } =
+>overlapConflict : Symbol(overlapConflict, Decl(objectSpreadNegative.ts, 70, 3))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 70, 22))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 70, 33))
+
+    f({ a: 1 }, { a: 'mismatch' })
+>f : Symbol(f, Decl(objectSpreadNegative.ts, 57, 12))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 71, 7))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 71, 17))
+
+let overwriteId: { id: string, a: number, c: number, d: string } =
+>overwriteId : Symbol(overwriteId, Decl(objectSpreadNegative.ts, 72, 3))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 72, 18))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 72, 30))
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 72, 41))
+>d : Symbol(d, Decl(objectSpreadNegative.ts, 72, 52))
+
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
+>f : Symbol(f, Decl(objectSpreadNegative.ts, 57, 12))
+>a : Symbol(a, Decl(objectSpreadNegative.ts, 73, 7))
+>id : Symbol(id, Decl(objectSpreadNegative.ts, 73, 13))
+>c : Symbol(c, Decl(objectSpreadNegative.ts, 73, 27))
+>d : Symbol(d, Decl(objectSpreadNegative.ts, 73, 33))
+

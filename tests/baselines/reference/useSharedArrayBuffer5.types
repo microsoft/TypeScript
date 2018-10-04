@@ -1,10 +1,9 @@
 === tests/cases/conformance/es2017/useSharedArrayBuffer5.ts ===
-
 var foge = new SharedArrayBuffer(1024);
 >foge : SharedArrayBuffer
 >new SharedArrayBuffer(1024) : SharedArrayBuffer
 >SharedArrayBuffer : SharedArrayBufferConstructor
->1024 : number
+>1024 : 1024
 
 var species = foge[Symbol.species];
 >species : SharedArrayBuffer

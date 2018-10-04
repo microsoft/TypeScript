@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ParameterLists/parserParameterList14.ts ===
+declare class C {
+>C : C
+
+  foo(a = 1): void;
+>foo : (a?: number) => void
+>a : number
+>1 : 1
+}

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/getsetReturnTypes.ts ===
+function makePoint(x: number) { 
+>makePoint : Symbol(makePoint, Decl(getsetReturnTypes.ts, 0, 0))
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 0, 19))
+
+ return { 
+  get x() { return x; } 
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 1, 9))
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 0, 19))
+ } 
+}; 
+var x = makePoint(2).x;
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 5, 3))
+>makePoint(2).x : Symbol(x, Decl(getsetReturnTypes.ts, 1, 9))
+>makePoint : Symbol(makePoint, Decl(getsetReturnTypes.ts, 0, 0))
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 1, 9))
+
+var y: number = makePoint(2).x;
+>y : Symbol(y, Decl(getsetReturnTypes.ts, 6, 3))
+>makePoint(2).x : Symbol(x, Decl(getsetReturnTypes.ts, 1, 9))
+>makePoint : Symbol(makePoint, Decl(getsetReturnTypes.ts, 0, 0))
+>x : Symbol(x, Decl(getsetReturnTypes.ts, 1, 9))
+

@@ -12,15 +12,7 @@
 ////
 ////var x : One | Two;
 ////
-////x./*propertyReference*/commonProperty;
+////x.[|/*propertyReference*/commonProperty|];
 ////x./*3*/commonFunction;
 
-
-goTo.marker("propertyReference");
-verify.definitionCountIs(2);
-goTo.definition(0);
-verify.caretAtMarker("propertyDefinition1");
-
-goTo.marker("propertyReference");
-goTo.definition(1);
-verify.caretAtMarker("propertyDefinition2");
+verify.goToDefinition("propertyReference", ["propertyDefinition1", "propertyDefinition2"]);

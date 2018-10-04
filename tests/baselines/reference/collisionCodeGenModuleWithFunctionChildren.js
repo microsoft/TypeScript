@@ -27,14 +27,12 @@ var M;
         if (p === void 0) { p = M_1.x; }
     }
 })(M || (M = {}));
-var M;
 (function (M_2) {
     function fn2() {
         var M;
         var p = M_2.x;
     }
 })(M || (M = {}));
-var M;
 (function (M_3) {
     function fn3() {
         function M() {

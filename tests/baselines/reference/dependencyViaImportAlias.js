@@ -13,7 +13,8 @@ export = A;
 //// [A.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    exports.__esModule = true;
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -21,7 +22,7 @@ define(["require", "exports"], function (require, exports) {
     exports.A = A;
 });
 //// [B.js]
-define(["require", "exports", 'A'], function (require, exports, a) {
+define(["require", "exports", "A"], function (require, exports, a) {
     "use strict";
     var A = a.A;
     return A;

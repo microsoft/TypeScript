@@ -14,7 +14,7 @@ var y;
 >y : any
 
 switch (1) {
->1 : number
+>1 : 1
 
     case 1:
 >1 : 1

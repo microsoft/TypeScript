@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileAccessors.ts] ////
 
 //// [declFileAccessors_0.ts]
-
 /** This is comment for c1*/
 export class c1 {
     /** getter property*/
@@ -103,8 +102,9 @@ class c2 {
 
 //// [declFileAccessors_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 /** This is comment for c1*/
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     function c1() {
     }
     Object.defineProperty(c1.prototype, "p3", {
@@ -187,7 +187,7 @@ var c1 = (function () {
 exports.c1 = c1;
 //// [declFileAccessors_1.js]
 /** This is comment for c2 - the global class*/
-var c2 = (function () {
+var c2 = /** @class */ (function () {
     function c2() {
     }
     Object.defineProperty(c2.prototype, "p3", {

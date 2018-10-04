@@ -1,16 +1,13 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes04.ts ===
-
 type T = "" | "foo";
 >T : T
 
 let x: T = undefined;
 >x : T
->T : T
 >undefined : undefined
 
 let y: T = undefined;
 >y : T
->T : T
 >undefined : undefined
 
 if (x === "") {

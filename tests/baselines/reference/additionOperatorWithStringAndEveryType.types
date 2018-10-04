@@ -1,9 +1,9 @@
 === tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithStringAndEveryType.ts ===
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 var a: any;
 >a : any
@@ -19,14 +19,12 @@ var d: string;
 
 var e: Object;
 >e : Object
->Object : Object
 
 var f: void;
 >f : void
 
 var g: E;
 >g : E
->E : E
 
 var x: string;
 >x : string
@@ -129,21 +127,21 @@ var r16 = x + E.a;
 >r16 : string
 >x + E.a : string
 >x : string
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var r17 = x + '';
 >r17 : string
 >x + '' : string
 >x : string
->'' : string
+>'' : ""
 
 var r18 = x + 0;
 >r18 : string
 >x + 0 : string
 >x : string
->0 : number
+>0 : 0
 
 var r19 = x + { a: '' };
 >r19 : string
@@ -151,7 +149,7 @@ var r19 = x + { a: '' };
 >x : string
 >{ a: '' } : { a: string; }
 >a : string
->'' : string
+>'' : ""
 
 var r20 = x + [];
 >r20 : string

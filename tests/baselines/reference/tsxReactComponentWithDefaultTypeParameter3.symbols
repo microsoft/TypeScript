@@ -1,0 +1,46 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(Prop.a, Decl(file.tsx, 2, 16))
+
+    b: string
+>b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
+}
+
+declare class MyComp<P extends Prop> extends React.Component<P, {}> {
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+
+    internalProp: P;
+>internalProp : Symbol(MyComp.internalProp, Decl(file.tsx, 7, 69))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+}
+
+// Error
+let x1 = <MyComp />
+>x1 : Symbol(x1, Decl(file.tsx, 12, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+// OK
+let x = <MyComp a={10} b="hi" />
+>x : Symbol(x, Decl(file.tsx, 15, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>a : Symbol(a, Decl(file.tsx, 15, 15))
+>b : Symbol(b, Decl(file.tsx, 15, 22))
+
+// Error
+let x2 = <MyComp a="hi"/>
+>x2 : Symbol(x2, Decl(file.tsx, 18, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>a : Symbol(a, Decl(file.tsx, 18, 16))
+

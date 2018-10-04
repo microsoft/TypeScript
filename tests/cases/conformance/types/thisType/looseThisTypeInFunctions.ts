@@ -1,3 +1,6 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 interface I {
     n: number;
     explicitThis(this: this, m: number): number;

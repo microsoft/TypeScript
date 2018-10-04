@@ -4,16 +4,13 @@
 
 function outer<T>(x: T) {
 >outer : <T>(x: T) => typeof Inner
->T : T
 >x : T
->T : T
 
   class Inner {
 >Inner : Inner
 
     static y: T = x;
 >y : T
->T : T
 >x : T
   }
   return Inner;
@@ -24,7 +21,7 @@ let y: number = outer(5).y;
 >outer(5).y : number
 >outer(5) : typeof Inner
 >outer : <T>(x: T) => typeof Inner
->5 : number
+>5 : 5
 >y : number
 
 class ListWrapper2 {
@@ -32,26 +29,20 @@ class ListWrapper2 {
 
   static clone<T>(dit: typeof ListWrapper2, array: T[]): T[] { return array.slice(0); }
 >clone : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
->T : T
 >dit : typeof ListWrapper2
 >ListWrapper2 : typeof ListWrapper2
 >array : T[]
->T : T
->T : T
 >array.slice(0) : T[]
 >array.slice : (start?: number, end?: number) => T[]
 >array : T[]
 >slice : (start?: number, end?: number) => T[]
->0 : number
+>0 : 0
 
   static reversed<T>(dit: typeof ListWrapper2, array: T[]): T[] {
 >reversed : <T>(dit: typeof ListWrapper2, array: T[]) => T[]
->T : T
 >dit : typeof ListWrapper2
 >ListWrapper2 : typeof ListWrapper2
 >array : T[]
->T : T
->T : T
 
     var a = ListWrapper2.clone(dit, array);
 >a : T[]
@@ -76,23 +67,17 @@ namespace tessst {
      */
     export function funkyFor<T, U>(array: T[], callback: (element: T, index: number) => U): U {
 >funkyFor : <T, U>(array: T[], callback: (element: T, index: number) => U) => U
->T : T
->U : U
 >array : T[]
->T : T
 >callback : (element: T, index: number) => U
 >element : T
->T : T
 >index : number
->U : U
->U : U
 
         if (array) {
 >array : T[]
 
             for (let i = 0, len = array.length; i < len; i++) {
 >i : number
->0 : number
+>0 : 0
 >len : number
 >array.length : number
 >array : T[]
@@ -125,16 +110,11 @@ namespace tessst {
     }
 }
 interface Scanner {
->Scanner : Scanner
-
   scanRange<T>(start: number, length: number, callback: () => T): T;
 >scanRange : <T>(start: number, length: number, callback: () => T) => T
->T : T
 >start : number
 >length : number
 >callback : () => T
->T : T
->T : T
 }
 class ListWrapper {
 >ListWrapper : ListWrapper
@@ -161,33 +141,27 @@ class ListWrapper {
 
   static clone<T>(dit: typeof ListWrapper, array: T[]): T[] { return array.slice(0); }
 >clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
->T : T
 >array.slice(0) : T[]
 >array.slice : (start?: number, end?: number) => T[]
 >array : T[]
 >slice : (start?: number, end?: number) => T[]
->0 : number
+>0 : 0
 
   static forEachWithIndex<T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) {
 >forEachWithIndex : <T>(dit: typeof ListWrapper, array: T[], fn: (t: T, n: number) => void) => void
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
 >fn : (t: T, n: number) => void
 >t : T
->T : T
 >n : number
 
     for (var i = 0; i < array.length; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < array.length : boolean
 >i : number
 >array.length : number
@@ -207,12 +181,9 @@ class ListWrapper {
   }
   static first<T>(dit: typeof ListWrapper, array: T[]): T {
 >first : <T>(dit: typeof ListWrapper, array: T[]) => T
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
->T : T
 
     if (!array) return null;
 >!array : boolean
@@ -222,16 +193,13 @@ class ListWrapper {
     return array[0];
 >array[0] : T
 >array : T[]
->0 : number
+>0 : 0
   }
   static last<T>(dit: typeof ListWrapper, array: T[]): T {
 >last : <T>(dit: typeof ListWrapper, array: T[]) => T
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
->T : T
 
     if (!array || array.length == 0) return null;
 >!array || array.length == 0 : boolean
@@ -251,19 +219,16 @@ class ListWrapper {
 >array.length : number
 >array : T[]
 >length : number
->1 : number
+>1 : 1
   }
   static indexOf<T>(dit: typeof ListWrapper, array: T[], value: T, startIndex: number = 0): number {
 >indexOf : <T>(dit: typeof ListWrapper, array: T[], value: T, startIndex?: number) => number
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
 >value : T
->T : T
 >startIndex : number
->0 : number
+>0 : 0
 
     return array.indexOf(value, startIndex);
 >array.indexOf(value, startIndex) : number
@@ -275,13 +240,10 @@ class ListWrapper {
   }
   static contains<T>(dit: typeof ListWrapper, list: T[], el: T): boolean { return list.indexOf(el) !== -1; }
 >contains : <T>(dit: typeof ListWrapper, list: T[], el: T) => boolean
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >el : T
->T : T
 >list.indexOf(el) !== -1 : boolean
 >list.indexOf(el) : number
 >list.indexOf : (searchElement: T, fromIndex?: number) => number
@@ -289,16 +251,13 @@ class ListWrapper {
 >indexOf : (searchElement: T, fromIndex?: number) => number
 >el : T
 >-1 : -1
->1 : number
+>1 : 1
 
   static reversed<T>(dit: typeof ListWrapper, array: T[]): T[] {
 >reversed : <T>(dit: typeof ListWrapper, array: T[]) => T[]
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >array : T[]
->T : T
->T : T
 
     var a = ListWrapper.clone(dit, array);
 >a : T[]
@@ -311,15 +270,14 @@ class ListWrapper {
 
     let scanner: Scanner;
 >scanner : Scanner
->Scanner : Scanner
 
     scanner.scanRange(3, 5, () => {  });
 >scanner.scanRange(3, 5, () => {  }) : void
 >scanner.scanRange : <T>(start: number, length: number, callback: () => T) => T
 >scanner : Scanner
 >scanRange : <T>(start: number, length: number, callback: () => T) => T
->3 : number
->5 : number
+>3 : 3
+>5 : 5
 >() => {  } : () => void
 
     return tessst.funkyFor(array, t => t.toString()) ? a.reverse() : a;
@@ -348,38 +306,32 @@ class ListWrapper {
 >a : any[]
 >b : any[]
 >a.concat(b) : any[]
->a.concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>a.concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >a : any[]
->concat : { (...items: any[][]): any[]; (...items: any[]): any[]; }
+>concat : { (...items: ConcatArray<any>[]): any[]; (...items: any[]): any[]; }
 >b : any[]
 
   static insert<T>(dit: typeof ListWrapper, list: T[], index: number, value: T) { list.splice(index, 0, value); }
 >insert : <T>(dit: typeof ListWrapper, list: T[], index: number, value: T) => void
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >index : number
 >value : T
->T : T
 >list.splice(index, 0, value) : T[]
->list.splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
->0 : number
+>0 : 0
 >value : T
 
   static removeAt<T>(dit: typeof ListWrapper, list: T[], index: number): T {
 >removeAt : <T>(dit: typeof ListWrapper, list: T[], index: number) => T
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >index : number
->T : T
 
     var res = list[index];
 >res : T
@@ -389,28 +341,25 @@ class ListWrapper {
 
     list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
->1 : number
+>1 : 1
 
     return res;
 >res : T
   }
   static removeAll<T>(dit: typeof ListWrapper, list: T[], items: T[]) {
 >removeAll : <T>(dit: typeof ListWrapper, list: T[], items: T[]) => void
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >items : T[]
->T : T
 
     for (var i = 0; i < items.length; ++i) {
 >i : number
->0 : number
+>0 : 0
 >i < items.length : boolean
 >i : number
 >items.length : number
@@ -431,22 +380,19 @@ class ListWrapper {
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
->1 : number
+>1 : 1
     }
   }
   static remove<T>(dit: typeof ListWrapper, list: T[], el: T): boolean {
 >remove : <T>(dit: typeof ListWrapper, list: T[], el: T) => boolean
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >el : T
->T : T
 
     var index = list.indexOf(el);
 >index : number
@@ -459,33 +405,33 @@ class ListWrapper {
     if (index > -1) {
 >index > -1 : boolean
 >index : number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
       list.splice(index, 1);
 >list.splice(index, 1) : T[]
->list.splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>list.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >list : T[]
->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >index : number
->1 : number
+>1 : 1
 
       return true;
->true : boolean
+>true : true
     }
     return false;
->false : boolean
+>false : false
   }
   static clear(dit: typeof ListWrapper, list: any[]) { list.length = 0; }
 >clear : (dit: typeof ListWrapper, list: any[]) => void
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : any[]
->list.length = 0 : number
+>list.length = 0 : 0
 >list.length : number
 >list : any[]
 >length : number
->0 : number
+>0 : 0
 
   static isEmpty(dit: typeof ListWrapper, list: any[]): boolean { return list.length == 0; }
 >isEmpty : (dit: typeof ListWrapper, list: any[]) => boolean
@@ -505,7 +451,7 @@ class ListWrapper {
 >list : any[]
 >value : any
 >start : number
->0 : number
+>0 : 0
 >end : number
 >null : null
 
@@ -540,11 +486,11 @@ class ListWrapper {
 >b.length : number
 >b : any[]
 >length : number
->false : boolean
+>false : false
 
     for (var i = 0; i < a.length; ++i) {
 >i : number
->0 : number
+>0 : 0
 >i < a.length : boolean
 >i : number
 >a.length : number
@@ -561,23 +507,20 @@ class ListWrapper {
 >b[i] : any
 >b : any[]
 >i : number
->false : boolean
+>false : false
     }
     return true;
->true : boolean
+>true : true
   }
   static slice<T>(dit: typeof ListWrapper, l: T[], from: number = 0, to: number = null): T[] {
 >slice : <T>(dit: typeof ListWrapper, l: T[], from?: number, to?: number) => T[]
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >l : T[]
->T : T
 >from : number
->0 : number
+>0 : 0
 >to : number
 >null : null
->T : T
 
     return l.slice(from, to === null ? undefined : to);
 >l.slice(from, to === null ? undefined : to) : T[]
@@ -594,33 +537,26 @@ class ListWrapper {
   }
   static splice<T>(dit: typeof ListWrapper, l: T[], from: number, length: number): T[] { return l.splice(from, length); }
 >splice : <T>(dit: typeof ListWrapper, l: T[], from: number, length: number) => T[]
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >l : T[]
->T : T
 >from : number
 >length : number
->T : T
 >l.splice(from, length) : T[]
->l.splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>l.splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >l : T[]
->splice : { (start: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
+>splice : { (start: number, deleteCount?: number): T[]; (start: number, deleteCount: number, ...items: T[]): T[]; }
 >from : number
 >length : number
 
   static sort<T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) {
 >sort : <T>(dit: typeof ListWrapper, l: T[], compareFn?: (a: T, b: T) => number) => void
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >l : T[]
->T : T
 >compareFn : (a: T, b: T) => number
 >a : T
->T : T
 >b : T
->T : T
 
     if (isPresent(compareFn)) {
 >isPresent(compareFn) : boolean
@@ -644,11 +580,9 @@ class ListWrapper {
   }
   static toString<T>(dit: typeof ListWrapper, l: T[]): string { return l.toString(); }
 >toString : <T>(dit: typeof ListWrapper, l: T[]) => string
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >l : T[]
->T : T
 >l.toString() : string
 >l.toString : () => string
 >l : T[]
@@ -656,11 +590,9 @@ class ListWrapper {
 
   static toJSON<T>(dit: typeof ListWrapper, l: T[]): string { return JSON.stringify(l); }
 >toJSON : <T>(dit: typeof ListWrapper, l: T[]) => string
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >l : T[]
->T : T
 >JSON.stringify(l) : string
 >JSON.stringify : { (value: any, replacer?: (key: string, value: any) => any, space?: string | number): string; (value: any, replacer?: (string | number)[], space?: string | number): string; }
 >JSON : JSON
@@ -669,15 +601,11 @@ class ListWrapper {
 
   static maximum<T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number): T {
 >maximum : <T>(dit: typeof ListWrapper, list: T[], predicate: (t: T) => number) => T
->T : T
 >dit : typeof ListWrapper
 >ListWrapper : typeof ListWrapper
 >list : T[]
->T : T
 >predicate : (t: T) => number
 >t : T
->T : T
->T : T
 
     if (list.length == 0) {
 >list.length == 0 : boolean
@@ -691,7 +619,6 @@ class ListWrapper {
     }
     var solution: T = null;
 >solution : T
->T : T
 >null : null
 
     var maxValue = -Infinity;
@@ -701,7 +628,7 @@ class ListWrapper {
 
     for (var index = 0; index < list.length; index++) {
 >index : number
->0 : number
+>0 : 0
 >index < list.length : boolean
 >index : number
 >list.length : number
@@ -757,10 +684,10 @@ let cloned = ListWrapper.clone(ListWrapper, [1,2,3,4]);
 >clone : <T>(dit: typeof ListWrapper, array: T[]) => T[]
 >ListWrapper : typeof ListWrapper
 >[1,2,3,4] : number[]
->1 : number
->2 : number
->3 : number
->4 : number
+>1 : 1
+>2 : 2
+>3 : 3
+>4 : 4
 
 declare function isBlank(x: any): boolean;
 >isBlank : (x: any) => boolean
@@ -768,17 +695,11 @@ declare function isBlank(x: any): boolean;
 
 declare function isPresent<T>(compareFn?: (a: T, b: T) => number): boolean;
 >isPresent : <T>(compareFn?: (a: T, b: T) => number) => boolean
->T : T
 >compareFn : (a: T, b: T) => number
 >a : T
->T : T
 >b : T
->T : T
 
 interface Array<T> {
->Array : T[]
->T : T
-
 	fill(value: any, start: number, end: number): void;
 >fill : (value: any, start: number, end: number) => void
 >value : any

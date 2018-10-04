@@ -1,0 +1,53 @@
+=== tests/cases/compiler/indexedAccessRelation.ts ===
+// Repro from #14723
+
+class Component<S> {
+>Component : Symbol(Component, Decl(indexedAccessRelation.ts, 0, 0))
+>S : Symbol(S, Decl(indexedAccessRelation.ts, 2, 16))
+
+    setState<K extends keyof S>(state: Pick<S, K>) {}
+>setState : Symbol(Component.setState, Decl(indexedAccessRelation.ts, 2, 20))
+>K : Symbol(K, Decl(indexedAccessRelation.ts, 3, 13))
+>S : Symbol(S, Decl(indexedAccessRelation.ts, 2, 16))
+>state : Symbol(state, Decl(indexedAccessRelation.ts, 3, 32))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(indexedAccessRelation.ts, 2, 16))
+>K : Symbol(K, Decl(indexedAccessRelation.ts, 3, 13))
+}
+
+export interface State<T> {
+>State : Symbol(State, Decl(indexedAccessRelation.ts, 4, 1))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 6, 23))
+
+    a?: T;
+>a : Symbol(State.a, Decl(indexedAccessRelation.ts, 6, 27))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 6, 23))
+}
+
+class Foo {}
+>Foo : Symbol(Foo, Decl(indexedAccessRelation.ts, 8, 1))
+
+class Comp<T extends Foo, S> extends Component<S & State<T>>
+>Comp : Symbol(Comp, Decl(indexedAccessRelation.ts, 10, 12))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 12, 11))
+>Foo : Symbol(Foo, Decl(indexedAccessRelation.ts, 8, 1))
+>S : Symbol(S, Decl(indexedAccessRelation.ts, 12, 25))
+>Component : Symbol(Component, Decl(indexedAccessRelation.ts, 0, 0))
+>S : Symbol(S, Decl(indexedAccessRelation.ts, 12, 25))
+>State : Symbol(State, Decl(indexedAccessRelation.ts, 4, 1))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 12, 11))
+{
+    foo(a: T) {
+>foo : Symbol(Comp.foo, Decl(indexedAccessRelation.ts, 13, 1))
+>a : Symbol(a, Decl(indexedAccessRelation.ts, 14, 8))
+>T : Symbol(T, Decl(indexedAccessRelation.ts, 12, 11))
+
+        this.setState({ a: a });
+>this.setState : Symbol(Component.setState, Decl(indexedAccessRelation.ts, 2, 20))
+>this : Symbol(Comp, Decl(indexedAccessRelation.ts, 10, 12))
+>setState : Symbol(Component.setState, Decl(indexedAccessRelation.ts, 2, 20))
+>a : Symbol(a, Decl(indexedAccessRelation.ts, 15, 23))
+>a : Symbol(a, Decl(indexedAccessRelation.ts, 14, 8))
+    }
+}
+

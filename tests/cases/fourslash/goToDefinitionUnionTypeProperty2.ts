@@ -14,13 +14,6 @@
 ////
 ////var x : One | Two;
 ////
-////x.common./*propertyReference*/a;
+////x.common.[|/*propertyReference*/a|];
 
-goTo.marker("propertyReference");
-verify.definitionCountIs(2);
-goTo.definition(0);
-verify.caretAtMarker("propertyDefinition2");
-
-goTo.marker("propertyReference");
-goTo.definition(1);
-verify.caretAtMarker("propertyDefinition1");
+verify.goToDefinition("propertyReference", ["propertyDefinition2", "propertyDefinition1"]);

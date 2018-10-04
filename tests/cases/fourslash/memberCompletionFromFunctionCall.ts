@@ -8,5 +8,5 @@
 
 goTo.marker();
 edit.insert(".");
-verify.not.memberListIsEmpty();
-verify.memberListContains("text");
+verify.not.completionListIsEmpty();
+verify.completionListContains("text");

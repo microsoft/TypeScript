@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators01.ts ===
-
 let abc: "ABC" = "ABC";
 >abc : "ABC"
 >"ABC" : "ABC"
@@ -16,33 +15,33 @@ let abcOrXyz: "ABC" | "XYZ" = abc || xyz;
 
 let abcOrXyzOrNumber: "ABC" | "XYZ" | number = abcOrXyz || 100;
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
->abcOrXyz || 100 : number | "ABC" | "XYZ"
+>abcOrXyz || 100 : "ABC" | "XYZ" | 100
 >abcOrXyz : "ABC" | "XYZ"
->100 : number
+>100 : 100
 
 let a = "" + abc;
 >a : string
 >"" + abc : string
->"" : string
+>"" : ""
 >abc : "ABC"
 
 let b = abc + "";
 >b : string
 >abc + "" : string
 >abc : "ABC"
->"" : string
+>"" : ""
 
 let c = 10 + abc;
 >c : string
 >10 + abc : string
->10 : number
+>10 : 10
 >abc : "ABC"
 
 let d = abc + 10;
 >d : string
 >abc + 10 : string
 >abc : "ABC"
->10 : number
+>10 : 10
 
 let e = xyz + abc;
 >e : string
@@ -59,14 +58,14 @@ let f = abc + xyz;
 let g = true + abc;
 >g : string
 >true + abc : string
->true : boolean
+>true : true
 >abc : "ABC"
 
 let h = abc + true;
 >h : string
 >abc + true : string
 >abc : "ABC"
->true : boolean
+>true : true
 
 let i = abc + abcOrXyz + xyz;
 >i : string
@@ -96,12 +95,12 @@ let m = abcOrXyzOrNumber + "";
 >m : string
 >abcOrXyzOrNumber + "" : string
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
->"" : string
+>"" : ""
 
 let n = "" + abcOrXyzOrNumber;
 >n : string
 >"" + abcOrXyzOrNumber : string
->"" : string
+>"" : ""
 >abcOrXyzOrNumber : number | "ABC" | "XYZ"
 
 let o = abcOrXyzOrNumber + abcOrXyz;

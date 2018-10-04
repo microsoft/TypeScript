@@ -1,5 +1,4 @@
 //// [exponentiationOperatorInTemplateStringWithSyntaxError2.ts]
-
 var t1 = 10;
 var t2 = 10;
 var s;
@@ -37,18 +36,18 @@ var s;
 "hello " + (Math.pow(-t1, t2) - t1);
 "hello " + (Math.pow(-++t1, t2) - t1);
 "hello " + (Math.pow(-t1++, t2) - t1);
-"hello " + (Math.pow(!t1, Math.pow(t2, --t1)));
-"hello " + (Math.pow(typeof t1, Math.pow(t2, t1)));
+"hello " + Math.pow(!t1, Math.pow(t2, --t1));
+"hello " + Math.pow(typeof t1, Math.pow(t2, t1));
 "hello " + (1 + Math.pow(typeof t1, Math.pow(t2, t1)));
 "hello " + (Math.pow(-t1, t2) - t1) + (Math.pow(-t1, t2) - t1);
 "hello " + (Math.pow(-++t1, t2) - t1) + (Math.pow(-++t1, t2) - t1);
 "hello " + (Math.pow(-t1++, t2) - t1) + (Math.pow(-t1++, t2) - t1);
-"hello " + (Math.pow(!t1, Math.pow(t2, --t1))) + (Math.pow(!t1, Math.pow(t2, --t1)));
-"hello " + (Math.pow(typeof t1, Math.pow(t2, t1))) + (Math.pow(typeof t1, Math.pow(t2, t1)));
+"hello " + Math.pow(!t1, Math.pow(t2, --t1)) + Math.pow(!t1, Math.pow(t2, --t1));
+"hello " + Math.pow(typeof t1, Math.pow(t2, t1)) + Math.pow(typeof t1, Math.pow(t2, t1));
 "hello " + (1 + Math.pow(typeof t1, Math.pow(t2, t1))) + (1 + Math.pow(typeof t1, Math.pow(t2, t1)));
 "hello " + (Math.pow(-t1, t2) - t1) + " hello world " + (Math.pow(-t1, t2) - t1);
 "hello " + (Math.pow(-++t1, t2) - t1) + " hello world " + (Math.pow(-++t1, t2) - t1);
 "hello " + (Math.pow(-t1++, t2) - t1) + " hello world " + (Math.pow(-t1++, t2) - t1);
-"hello " + (Math.pow(!t1, Math.pow(t2, --t1))) + " hello world " + (Math.pow(!t1, Math.pow(t2, --t1)));
-"hello " + (Math.pow(typeof t1, Math.pow(t2, t1))) + " hello world " + (Math.pow(typeof t1, Math.pow(t2, t1)));
+"hello " + Math.pow(!t1, Math.pow(t2, --t1)) + " hello world " + Math.pow(!t1, Math.pow(t2, --t1));
+"hello " + Math.pow(typeof t1, Math.pow(t2, t1)) + " hello world " + Math.pow(typeof t1, Math.pow(t2, t1));
 "hello " + (1 + Math.pow(typeof t1, Math.pow(t2, t1))) + " hello world " + (1 + Math.pow(typeof t1, Math.pow(t2, t1)));

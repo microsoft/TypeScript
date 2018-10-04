@@ -1,0 +1,9 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export function foo() { return "foo"; }
+>foo : Symbol(foo, Decl(0.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+var x = import { foo } from './0';
+>x : Symbol(x, Decl(1.ts, 0, 3))
+>foo : Symbol(foo, Decl(1.ts, 0, 16))
+

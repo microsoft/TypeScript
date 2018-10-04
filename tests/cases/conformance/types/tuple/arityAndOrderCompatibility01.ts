@@ -1,6 +1,7 @@
 interface StrNum extends Array<string|number> {
     0: string;
     1: number;
+    length: 2;
 }
 
 var x: [string, number];
@@ -8,6 +9,7 @@ var y: StrNum
 var z: {
     0: string;
     1: number;
+    length: 2;
 }
 
 var [a, b, c] = x;

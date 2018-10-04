@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsdoc/in.js ===
+/**
+ * @param {'literal'} p1
+ * @param {"literal"} p2
+ * @param {'literal' | 'other'} p3
+ * @param {'literal' | number} p4
+ * @param {12 | true | 'str'} p5
+ */
+function f(p1, p2, p3, p4, p5) {
+>f : Symbol(f, Decl(in.js, 0, 0))
+>p1 : Symbol(p1, Decl(in.js, 7, 11))
+>p2 : Symbol(p2, Decl(in.js, 7, 14))
+>p3 : Symbol(p3, Decl(in.js, 7, 18))
+>p4 : Symbol(p4, Decl(in.js, 7, 22))
+>p5 : Symbol(p5, Decl(in.js, 7, 26))
+
+    return p1 + p2 + p3 + p4 + p5 + '.';
+>p1 : Symbol(p1, Decl(in.js, 7, 11))
+>p2 : Symbol(p2, Decl(in.js, 7, 14))
+>p3 : Symbol(p3, Decl(in.js, 7, 18))
+>p4 : Symbol(p4, Decl(in.js, 7, 22))
+>p5 : Symbol(p5, Decl(in.js, 7, 26))
+}
+

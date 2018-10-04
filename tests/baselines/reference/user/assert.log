@@ -1,0 +1,42 @@
+Exit Code: 1
+Standard output:
+node_modules/assert/assert.js(124,8): error TS2540: Cannot assign to 'name' because it is a constant or a read-only property.
+node_modules/assert/assert.js(125,8): error TS2339: Property 'actual' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(126,8): error TS2339: Property 'expected' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(127,8): error TS2339: Property 'operator' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(129,10): error TS2339: Property 'message' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(130,10): error TS2339: Property 'generatedMessage' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(132,10): error TS2339: Property 'message' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(133,10): error TS2339: Property 'generatedMessage' does not exist on type 'typeof ok'.
+node_modules/assert/assert.js(154,12): error TS2339: Property 'stack' does not exist on type 'typeof ok'.
+node_modules/assert/test.js(25,5): error TS2367: This condition will always return 'false' since the types 'string | undefined' and 'boolean' have no overlap.
+node_modules/assert/test.js(39,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(55,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(74,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(84,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(94,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(103,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(120,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(128,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(140,10): error TS2339: Property 'a' does not exist on type 'number[]'.
+node_modules/assert/test.js(141,10): error TS2339: Property 'b' does not exist on type 'number[]'.
+node_modules/assert/test.js(142,10): error TS2339: Property 'b' does not exist on type 'number[]'.
+node_modules/assert/test.js(143,10): error TS2339: Property 'a' does not exist on type 'number[]'.
+node_modules/assert/test.js(149,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(157,51): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'never' has no compatible call signatures.
+node_modules/assert/test.js(161,5): error TS2552: Cannot find name 'test'. Did you mean 'tests'?
+node_modules/assert/test.js(168,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(182,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(229,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(235,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(250,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(254,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(256,55): error TS2345: Argument of type 'TypeError' is not assignable to parameter of type 'string'.
+node_modules/assert/test.js(262,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(279,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(285,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+node_modules/assert/test.js(320,5): error TS2582: Cannot find name 'test'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.
+
+
+
+Standard error:

@@ -1,0 +1,49 @@
+=== tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts ===
+class C {
+>C : Symbol(C, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 0, 0))
+
+    constructor() { }
+}
+
+// this should be an error
+var x: { y; z; }             // error at "y,z"
+>x : Symbol(x, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 5, 3))
+>y : Symbol(y, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 5, 8))
+>z : Symbol(z, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 5, 11))
+
+var x1: { y1: C; z1; };      // error at "z1" 
+>x1 : Symbol(x1, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 6, 3))
+>y1 : Symbol(y1, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 6, 9))
+>C : Symbol(C, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 0, 0))
+>z1 : Symbol(z1, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 6, 16))
+
+var x11: { new (); };        // error at "new"
+>x11 : Symbol(x11, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 7, 3))
+
+var x2: (y2) => number;      // error at "y2"
+>x2 : Symbol(x2, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 8, 3))
+>y2 : Symbol(y2, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 8, 9))
+
+var x3: (x3: string, y3) => void ; // error at "y3"
+>x3 : Symbol(x3, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 9, 3))
+>x3 : Symbol(x3, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 9, 9))
+>y3 : Symbol(y3, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 9, 20))
+
+// this should not be an error
+var bar: { a: number; b: number };
+>bar : Symbol(bar, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 12, 3))
+>a : Symbol(a, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 12, 10))
+>b : Symbol(b, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 12, 21))
+
+var foo: { littleC: C; c: string };
+>foo : Symbol(foo, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 13, 3))
+>littleC : Symbol(littleC, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 13, 10))
+>C : Symbol(C, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 0, 0))
+>c : Symbol(c, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 13, 22))
+
+var x4: new () => any;
+>x4 : Symbol(x4, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 14, 3))
+
+var x5: () => any;
+>x5 : Symbol(x5, Decl(implicitAnyDeclareTypePropertyWithoutType.ts, 15, 3))
+

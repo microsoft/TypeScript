@@ -2,7 +2,6 @@
 function foo1(strs: TemplateStringsArray, x: number): string;
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 
 function foo1(strs: string[], x: number): number;
@@ -23,14 +22,14 @@ var a = foo1 `${1}`;
 >foo1 `${1}` : string
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >`${1}` : string
->1 : number
+>1 : 1
 
 var b = foo1([], 1);
 >b : number
 >foo1([], 1) : number
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >[] : undefined[]
->1 : number
+>1 : 1
 
 function foo2(strs: string[], x: number): number;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
@@ -40,7 +39,6 @@ function foo2(strs: string[], x: number): number;
 function foo2(strs: TemplateStringsArray, x: number): string;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 
 function foo2(...stuff: any[]): any {
@@ -56,12 +54,12 @@ var c = foo2 `${1}`;
 >foo2 `${1}` : string
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >`${1}` : string
->1 : number
+>1 : 1
 
 var d = foo2([], 1);
 >d : number
 >foo2([], 1) : number
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >[] : undefined[]
->1 : number
+>1 : 1
 

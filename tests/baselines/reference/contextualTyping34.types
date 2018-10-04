@@ -6,5 +6,5 @@ var foo = <{ id: number;}> ({id:4});
 >({id:4}) : { id: number; }
 >{id:4} : { id: number; }
 >id : number
->4 : number
+>4 : 4
 

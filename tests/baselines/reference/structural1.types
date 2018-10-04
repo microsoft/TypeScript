@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     export interface I {
->I : I
-
         salt:number;
 >salt : number
 
@@ -15,7 +13,6 @@ module M {
     export function f(i:I) {
 >f : (i: I) => void
 >i : I
->I : I
     }
 
     f({salt:2,pepper:0});
@@ -23,8 +20,8 @@ module M {
 >f : (i: I) => void
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
->2 : number
+>2 : 2
 >pepper : number
->0 : number
+>0 : 0
 }
 

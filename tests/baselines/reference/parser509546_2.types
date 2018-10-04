@@ -1,6 +1,6 @@
 === tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509546_2.ts ===
 "use strict";
->"use strict" : string
+>"use strict" : "use strict"
 
 export class Logger { 
 >Logger : Logger

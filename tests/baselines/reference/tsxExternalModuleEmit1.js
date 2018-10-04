@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxExternalModuleEmit1.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	class Component<T, U> { }
 }
@@ -33,16 +32,25 @@ export class Button extends React.Component<any, any> {
 
 //// [button.jsx]
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var React = require('react');
-var Button = (function (_super) {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var React = require("react");
+var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Button.prototype.render = function () {
         return <button>Some button</button>;
@@ -52,18 +60,27 @@ var Button = (function (_super) {
 exports.Button = Button;
 //// [app.jsx]
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var React = require('react');
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
+var React = require("react");
 // Should see var button_1 = require('./button') here
-var button_1 = require('./button');
-var App = (function (_super) {
+var button_1 = require("./button");
+var App = /** @class */ (function (_super) {
     __extends(App, _super);
     function App() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     App.prototype.render = function () {
         return <button_1.Button />;

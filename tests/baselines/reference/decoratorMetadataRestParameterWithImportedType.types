@@ -1,0 +1,76 @@
+=== tests/cases/compiler/aux.ts ===
+export class SomeClass {
+>SomeClass : SomeClass
+
+    field: string;
+>field : string
+}
+
+=== tests/cases/compiler/aux1.ts ===
+export class SomeClass1 {
+>SomeClass1 : SomeClass1
+
+    field: string;
+>field : string
+}
+
+=== tests/cases/compiler/aux2.ts ===
+export class SomeClass2 {
+>SomeClass2 : SomeClass2
+
+    field: string;
+>field : string
+}
+=== tests/cases/compiler/main.ts ===
+import { SomeClass } from './aux';
+>SomeClass : typeof SomeClass
+
+import { SomeClass1 } from './aux1';
+>SomeClass1 : typeof SomeClass1
+
+function annotation(): ClassDecorator {
+>annotation : () => ClassDecorator
+
+    return (target: any): void => { };
+>(target: any): void => { } : (target: any) => void
+>target : any
+}
+
+function annotation1(): MethodDecorator {
+>annotation1 : () => MethodDecorator
+
+    return (target: any): void => { };
+>(target: any): void => { } : (target: any) => void
+>target : any
+}
+
+@annotation()
+>annotation() : ClassDecorator
+>annotation : () => ClassDecorator
+
+export class ClassA {
+>ClassA : ClassA
+
+    array: SomeClass[];
+>array : SomeClass[]
+
+    constructor(...init: SomeClass[]) {
+>init : SomeClass[]
+
+        this.array = init;
+>this.array = init : SomeClass[]
+>this.array : SomeClass[]
+>this : this
+>array : SomeClass[]
+>init : SomeClass[]
+    }
+
+    @annotation1()
+>annotation1() : MethodDecorator
+>annotation1 : () => MethodDecorator
+
+    foo(... args: SomeClass1[]) {
+>foo : (...args: SomeClass1[]) => void
+>args : SomeClass1[]
+    }
+}

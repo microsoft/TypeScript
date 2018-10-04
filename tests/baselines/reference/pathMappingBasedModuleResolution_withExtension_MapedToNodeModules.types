@@ -1,0 +1,4 @@
+=== /a.ts ===
+import foobar from "foo/bar/foobar.js";
+>foobar : any
+

@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames51_ES5.ts ===
+function f<T, K extends keyof T>() {
+>f : Symbol(f, Decl(computedPropertyNames51_ES5.ts, 0, 0))
+>T : Symbol(T, Decl(computedPropertyNames51_ES5.ts, 0, 11))
+>K : Symbol(K, Decl(computedPropertyNames51_ES5.ts, 0, 13))
+>T : Symbol(T, Decl(computedPropertyNames51_ES5.ts, 0, 11))
+
+    var t: T;
+>t : Symbol(t, Decl(computedPropertyNames51_ES5.ts, 1, 7))
+>T : Symbol(T, Decl(computedPropertyNames51_ES5.ts, 0, 11))
+
+    var k: K;
+>k : Symbol(k, Decl(computedPropertyNames51_ES5.ts, 2, 7))
+>K : Symbol(K, Decl(computedPropertyNames51_ES5.ts, 0, 13))
+
+    var v = {
+>v : Symbol(v, Decl(computedPropertyNames51_ES5.ts, 3, 7))
+
+        [t]: 0,
+>[t] : Symbol([t], Decl(computedPropertyNames51_ES5.ts, 3, 13))
+>t : Symbol(t, Decl(computedPropertyNames51_ES5.ts, 1, 7))
+
+        [k]: 1
+>[k] : Symbol([k], Decl(computedPropertyNames51_ES5.ts, 4, 15))
+>k : Symbol(k, Decl(computedPropertyNames51_ES5.ts, 2, 7))
+
+    };
+}
+

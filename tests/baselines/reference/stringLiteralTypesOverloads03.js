@@ -1,5 +1,4 @@
 //// [stringLiteralTypesOverloads03.ts]
-
 interface Base {
     x: string;
     y: number;
@@ -52,7 +51,7 @@ var helloOrWorld;
 function f() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return undefined;
 }
@@ -62,7 +61,7 @@ var fResult3 = f(helloOrWorld);
 function g() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return undefined;
 }

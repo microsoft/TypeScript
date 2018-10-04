@@ -1,14 +1,11 @@
 === tests/cases/conformance/statements/VariableStatements/everyTypeWithInitializer.ts ===
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -16,28 +13,21 @@ class C implements I {
 
 class D<T>{
 >D : D<T>
->T : T
 
     source: T;
 >source : T
->T : T
 
     recurse: D<T>;
 >recurse : D<T>
->D : D<T>
->T : T
 
     wrapped: D<D<T>>
 >wrapped : D<D<T>>
->D : D<T>
->D : D<T>
->T : T
 }
 
 function F(x: string): number { return 42; }
 >F : (x: string) => number
 >x : string
->42 : number
+>42 : 42
 
 module M {
 >M : typeof M
@@ -60,17 +50,17 @@ module M {
 
 var aNumber = 9.9;
 >aNumber : number
->9.9 : number
+>9.9 : 9.9
 
 var aString = 'this is a string';
 >aString : string
->'this is a string' : string
+>'this is a string' : "this is a string"
 
 var aDate = new Date(12);
 >aDate : Date
 >new Date(12) : Date
 >Date : DateConstructor
->12 : number
+>12 : 12
 
 var anObject = new Object();
 >anObject : Object
@@ -106,7 +96,7 @@ var anObjectLiteral = { id: 12 };
 >anObjectLiteral : { id: number; }
 >{ id: 12 } : { id: number; }
 >id : number
->12 : number
+>12 : 12
 
 var aFunction = F;
 >aFunction : (x: string) => number
@@ -116,7 +106,7 @@ var aLambda = (x) => 2;
 >aLambda : (x: any) => number
 >(x) => 2 : (x: any) => number
 >x : any
->2 : number
+>2 : 2
 
 var aModule = M;
 >aModule : typeof M

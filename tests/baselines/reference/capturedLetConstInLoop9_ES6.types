@@ -1,11 +1,10 @@
 === tests/cases/compiler/capturedLetConstInLoop9_ES6.ts ===
-
 for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -79,7 +78,7 @@ for (let x = 0; x < 1; ++x) {
             return x + 1;
 >x + 1 : any
 >x : any
->1 : number
+>1 : 1
         }
     }
 }
@@ -89,7 +88,7 @@ declare function use(a: any);
 >a : any
 
 function foo() {
->foo : () => number
+>foo : () => 50 | 100
 
     l0:
 >l0 : any
@@ -126,9 +125,9 @@ function foo() {
 >[{x:1, y:2}] : [{ x: number; y: number; }]
 >{x:1, y:2} : { x: number; y: number; }
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 
             if (b === 1) {
 >b === 1 : boolean
@@ -161,7 +160,7 @@ function foo() {
             }
             
             return 50;
->50 : number
+>50 : 50
         }
 
         for (let b of []) {
@@ -175,7 +174,7 @@ function foo() {
 >[{x1:1, y:arguments.length}] : [{ x1: number; y: number; }]
 >{x1:1, y:arguments.length} : { x1: number; y: number; }
 >x1 : number
->1 : number
+>1 : 1
 >y : number
 >arguments.length : number
 >arguments : IArguments
@@ -202,7 +201,7 @@ function foo() {
 >b : any
 
             return 100;
->100 : number
+>100 : 100
         }
 
         
@@ -307,10 +306,10 @@ class C {
 
         for (let i = 0; i < 100; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 100 : boolean
 >i : number
->100 : number
+>100 : 100
 >i++ : number
 >i : number
 

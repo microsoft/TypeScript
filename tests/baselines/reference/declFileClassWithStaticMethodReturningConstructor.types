@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileClassWithStaticMethodReturningConstructor.ts ===
-
 export class Enhancement {
 >Enhancement : Enhancement
 

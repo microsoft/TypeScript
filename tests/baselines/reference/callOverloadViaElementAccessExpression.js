@@ -12,7 +12,7 @@ var r: string = c['foo'](1);
 var r2: number = c['foo']('');
 
 //// [callOverloadViaElementAccessExpression.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x) {

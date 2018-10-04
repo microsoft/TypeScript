@@ -6,6 +6,7 @@ void 0;
 
 //// [moduleCodegenTest4.js]
 "use strict";
+exports.__esModule = true;
 var Baz;
 (function (Baz) {
     Baz.x = "hello";

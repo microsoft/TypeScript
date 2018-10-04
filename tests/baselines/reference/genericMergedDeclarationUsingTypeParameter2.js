@@ -7,12 +7,11 @@ module foo {
 
 
 //// [genericMergedDeclarationUsingTypeParameter2.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo(x) {
     }
     return foo;
 }());
-var foo;
 (function (foo) {
     var y = 1;
 })(foo || (foo = {}));

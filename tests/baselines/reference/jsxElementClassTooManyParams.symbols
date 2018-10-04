@@ -1,0 +1,58 @@
+=== tests/cases/compiler/jsxElementClassTooManyParams.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(jsxElementClassTooManyParams.tsx, 0, 0))
+
+    export interface Element {}
+>Element : Symbol(Element, Decl(jsxElementClassTooManyParams.tsx, 0, 15))
+
+    export interface IntrinsicClassAttributes<TClass, TOther=never> {
+>IntrinsicClassAttributes : Symbol(IntrinsicClassAttributes, Decl(jsxElementClassTooManyParams.tsx, 1, 31))
+>TClass : Symbol(TClass, Decl(jsxElementClassTooManyParams.tsx, 2, 46))
+>TOther : Symbol(TOther, Decl(jsxElementClassTooManyParams.tsx, 2, 53))
+
+        ref?: TClass;
+>ref : Symbol(IntrinsicClassAttributes.ref, Decl(jsxElementClassTooManyParams.tsx, 2, 69))
+>TClass : Symbol(TClass, Decl(jsxElementClassTooManyParams.tsx, 2, 46))
+
+        item?: TOther;
+>item : Symbol(IntrinsicClassAttributes.item, Decl(jsxElementClassTooManyParams.tsx, 3, 21))
+>TOther : Symbol(TOther, Decl(jsxElementClassTooManyParams.tsx, 2, 53))
+    }
+    export interface ElementClass extends Element {}
+>ElementClass : Symbol(ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
+>Element : Symbol(Element, Decl(jsxElementClassTooManyParams.tsx, 0, 15))
+
+    export interface ElementAttributesProperty { props: {}; }
+>ElementAttributesProperty : Symbol(ElementAttributesProperty, Decl(jsxElementClassTooManyParams.tsx, 6, 52))
+>props : Symbol(ElementAttributesProperty.props, Decl(jsxElementClassTooManyParams.tsx, 7, 48))
+
+    export interface ElementChildrenAttribute { children: {}; }
+>ElementChildrenAttribute : Symbol(ElementChildrenAttribute, Decl(jsxElementClassTooManyParams.tsx, 7, 61))
+>children : Symbol(ElementChildrenAttribute.children, Decl(jsxElementClassTooManyParams.tsx, 8, 47))
+
+    export interface IntrinsicAttributes {}
+>IntrinsicAttributes : Symbol(IntrinsicAttributes, Decl(jsxElementClassTooManyParams.tsx, 8, 63))
+
+    export interface IntrinsicElements { [key: string]: Element }
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(jsxElementClassTooManyParams.tsx, 9, 43))
+>key : Symbol(key, Decl(jsxElementClassTooManyParams.tsx, 10, 42))
+>Element : Symbol(Element, Decl(jsxElementClassTooManyParams.tsx, 0, 15))
+}
+class ElemClass<T extends {x: number}> implements JSX.ElementClass {
+>ElemClass : Symbol(ElemClass, Decl(jsxElementClassTooManyParams.tsx, 11, 1))
+>T : Symbol(T, Decl(jsxElementClassTooManyParams.tsx, 12, 16))
+>x : Symbol(x, Decl(jsxElementClassTooManyParams.tsx, 12, 27))
+>JSX.ElementClass : Symbol(JSX.ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
+>JSX : Symbol(JSX, Decl(jsxElementClassTooManyParams.tsx, 0, 0))
+>ElementClass : Symbol(JSX.ElementClass, Decl(jsxElementClassTooManyParams.tsx, 5, 5))
+
+    constructor(public props: T) {}
+>props : Symbol(ElemClass.props, Decl(jsxElementClassTooManyParams.tsx, 13, 16))
+>T : Symbol(T, Decl(jsxElementClassTooManyParams.tsx, 12, 16))
+}
+const elem = <ElemClass x={12} y={24} />
+>elem : Symbol(elem, Decl(jsxElementClassTooManyParams.tsx, 15, 5))
+>ElemClass : Symbol(ElemClass, Decl(jsxElementClassTooManyParams.tsx, 11, 1))
+>x : Symbol(x, Decl(jsxElementClassTooManyParams.tsx, 15, 23))
+>y : Symbol(y, Decl(jsxElementClassTooManyParams.tsx, 15, 30))
+

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/assigningFromObjectToAnythingElse.ts ===
+var x: Object;
+>x : Object
+
+var y: RegExp;
+>y : RegExp
+
+y = x;
+>y = x : Object
+>y : RegExp
+>x : Object
+
+var a: String = Object.create<Object>("");
+>a : String
+>Object.create<Object>("") : any
+>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>"" : ""
+
+var c: String = Object.create<Number>(1);
+>c : String
+>Object.create<Number>(1) : any
+>Object.create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>Object : ObjectConstructor
+>create : { (o: object): any; (o: object, properties: PropertyDescriptorMap & ThisType<any>): any; }
+>1 : 1
+
+var w: Error = new Object();
+>w : Error
+>new Object() : Object
+>Object : ObjectConstructor
+

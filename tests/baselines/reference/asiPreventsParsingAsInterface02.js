@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsInterface02.ts]
-
 function f(interface: number, I: string) {
     interface   // This should be the identifier 'interface'
     I           // This should be the identifier 'I'

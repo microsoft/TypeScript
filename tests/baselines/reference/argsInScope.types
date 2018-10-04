@@ -10,7 +10,7 @@ class C {
 
        for (var i = 0; i < arguments.length; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < arguments.length : boolean
 >i : number
 >arguments.length : number
@@ -34,7 +34,7 @@ c.P(1,2,3);
 >c.P : (ii: number, j: number, k: number) => void
 >c : C
 >P : (ii: number, j: number, k: number) => void
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 

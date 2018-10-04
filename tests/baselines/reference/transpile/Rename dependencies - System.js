@@ -1,15 +1,16 @@
-System.register(["SomeOtherName"], function(exports_1, context_1) {
+System.register(["SomeOtherName"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var SomeName_1;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[
+        setters: [
             function (SomeName_1_1) {
                 SomeName_1 = SomeName_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             use(SomeName_1.foo);
         }
-    }
+    };
 });
 //# sourceMappingURL=file.js.map

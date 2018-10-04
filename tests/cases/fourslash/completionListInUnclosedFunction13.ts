@@ -9,6 +9,4 @@
 ////    }
 ////}
 
-goTo.marker("1");
-
-verify.memberListContains("MyType");
+verify.completions({ marker: "1", includes: "MyType" });

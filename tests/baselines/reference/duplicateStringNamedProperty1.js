@@ -6,3 +6,4 @@ export interface Album {
 
 //// [duplicateStringNamedProperty1.js]
 "use strict";
+exports.__esModule = true;

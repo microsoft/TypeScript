@@ -1,5 +1,4 @@
 //// [a.js]
-
 class c {
     method(a) {
         let x = a => this.method(a);
@@ -7,7 +6,7 @@ class c {
 }
 
 //// [out.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     c.prototype.method = function (a) {

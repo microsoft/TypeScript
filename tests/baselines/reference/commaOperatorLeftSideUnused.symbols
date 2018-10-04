@@ -1,0 +1,153 @@
+=== tests/cases/compiler/commaOperatorLeftSideUnused.ts ===
+var xx: any;
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+var yy: any;
+>yy : Symbol(yy, Decl(commaOperatorLeftSideUnused.ts, 1, 3))
+
+function fn() {
+>fn : Symbol(fn, Decl(commaOperatorLeftSideUnused.ts, 1, 12))
+
+  let arr: any[] = [];
+>arr : Symbol(arr, Decl(commaOperatorLeftSideUnused.ts, 4, 5))
+
+  switch(arr.length) {
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(commaOperatorLeftSideUnused.ts, 4, 5))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    // Should error
+    case 0, 1:
+      return 'zero or one';
+    default:
+      return 'more than one';
+  }
+}
+
+// Should error
+let x = Math.pow((3, 5), 2);
+>x : Symbol(x, Decl(commaOperatorLeftSideUnused.ts, 15, 3))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+
+// Should error
+let a = [(3 + 4), ((1 + 1, 8) * 4)];
+>a : Symbol(a, Decl(commaOperatorLeftSideUnused.ts, 18, 3))
+
+// Error cases
+xx = (1, 2);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = ('', xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (/323/, 5);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (`wat`, 'ok'),
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (true, false);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (false, true);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (null, xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (undefined, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>undefined : Symbol(undefined)
+
+xx = (() => {}, 'no');
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (function() { }, 100);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = ({}, {});
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (typeof xx, 'unused');
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = ([1, 2, x++], xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>x : Symbol(x, Decl(commaOperatorLeftSideUnused.ts, 15, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (xx!, xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (xx ? 3 : 4, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (3 + 4, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (!xx, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (~xx, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (-xx, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (+xx, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+// OK cases
+xx = (xx ? x++ : 4, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>x : Symbol(x, Decl(commaOperatorLeftSideUnused.ts, 15, 3))
+
+xx = (--xx, 3);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (xx = 3, 1);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = ((xx = 3), 5);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (xx+= 4, xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = ((xx+= 4), xx);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (Math.pow(3, 2), 4);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>Math.pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>pow : Symbol(Math.pow, Decl(lib.es5.d.ts, --, --))
+
+xx = (void xx, 10);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+
+xx = (xx as any, 100);
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+>xx : Symbol(xx, Decl(commaOperatorLeftSideUnused.ts, 0, 3))
+

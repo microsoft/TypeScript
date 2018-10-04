@@ -1,5 +1,4 @@
 //// [emptyArrayBindingPatternParameter01.ts]
-
 function f([]) {
     var x, y, z;
 }

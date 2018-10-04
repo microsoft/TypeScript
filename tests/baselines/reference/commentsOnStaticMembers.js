@@ -1,5 +1,4 @@
 //// [commentsOnStaticMembers.ts]
-
 class test {
     /**
      * p1 comment appears in output
@@ -21,7 +20,7 @@ class test {
 }
 
 //// [commentsOnStaticMembers.js]
-var test = (function () {
+var test = /** @class */ (function () {
     function test() {
     }
     /**

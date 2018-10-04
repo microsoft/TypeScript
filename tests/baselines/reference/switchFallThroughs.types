@@ -17,7 +17,7 @@ function R1(index: number) {
 
             var a = 'a';
 >a : string
->'a' : string
+>'a' : "a"
 
             return a;
 >a : string
@@ -29,14 +29,14 @@ function R1(index: number) {
 >4 : 4
 
             return 'b';
->'b' : string
+>'b' : "b"
         }
 		case 5:
 >5 : 5
 
 		default:
 			return 'c';
->'c' : string
+>'c' : "c"
     }
 }
 

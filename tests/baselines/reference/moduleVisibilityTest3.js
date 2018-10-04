@@ -29,7 +29,7 @@ module editor {
 //// [moduleVisibilityTest3.js]
 var _modes;
 (function (_modes) {
-    var Mode = (function () {
+    var Mode = /** @class */ (function () {
         function Mode() {
         }
         return Mode;
@@ -40,7 +40,7 @@ var editor;
 (function (editor) {
     var i;
     // If you just use p1:modes, the compiler accepts it - should be an error
-    var Bug = (function () {
+    var Bug = /** @class */ (function () {
         function Bug(p1, p2) {
             var x;
         }

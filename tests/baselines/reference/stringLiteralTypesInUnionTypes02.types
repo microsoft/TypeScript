@@ -1,62 +1,60 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesInUnionTypes02.ts ===
-
 type T = string | "foo" | "bar" | "baz";
->T : string | "foo" | "bar" | "baz"
+>T : string
 
 var x: "foo" | "bar" | "baz" | string = undefined;
->x : string | "foo" | "bar" | "baz"
+>x : string
 >undefined : undefined
 
 var y: T = undefined;
->y : string | "foo" | "bar" | "baz"
->T : string | "foo" | "bar" | "baz"
+>y : string
 >undefined : undefined
 
 if (x === "foo") {
 >x === "foo" : boolean
->x : string | "foo" | "bar" | "baz"
+>x : string
 >"foo" : "foo"
 
     let a = x;
->a : string | "foo"
->x : string | "foo"
+>a : string
+>x : "foo"
 }
 else if (x !== "bar") {
 >x !== "bar" : boolean
->x : string | "bar" | "baz"
+>x : string
 >"bar" : "bar"
 
     let b = x || y;
 >b : string
 >x || y : string
->x : string | "baz"
->y : string | "foo" | "bar" | "baz"
+>x : string
+>y : string
 }
 else {
     let c = x;
->c : string | "bar"
->x : string | "bar"
+>c : string
+>x : "bar"
 
     let d = y;
->d : string | "foo" | "bar" | "baz"
->y : string | "foo" | "bar" | "baz"
+>d : string
+>y : string
 
     let e: (typeof x) | (typeof y) = c || d;
->e : string | "foo" | "bar" | "baz"
->x : string | "bar"
->y : string | "foo" | "bar" | "baz"
+>e : string
+>x : "bar"
+>y : string
 >c || d : string
->c : string | "bar"
->d : string | "foo" | "bar" | "baz"
+>c : string
+>d : string
 }
 
 x = y;
->x = y : string | "foo" | "bar" | "baz"
->x : string | "foo" | "bar" | "baz"
->y : string | "foo" | "bar" | "baz"
+>x = y : string
+>x : string
+>y : string
 
 y = x;
->y = x : string | "foo" | "bar" | "baz"
->y : string | "foo" | "bar" | "baz"
->x : string | "foo" | "bar" | "baz"
+>y = x : string
+>y : string
+>x : string
 

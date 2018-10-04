@@ -1,0 +1,34 @@
+=== tests/cases/compiler/jsxMultilineAttributeValuesReact.tsx ===
+declare var React: any;
+>React : any
+
+const a = <input value="
+>a : error
+><input value="foo: 23"></input> : error
+>input : any
+>value : string
+
+foo: 23
+"></input>;
+>input : any
+
+const b = <input value='
+>b : error
+><input value='foo: 23'></input> : error
+>input : any
+>value : string
+
+foo: 23
+'></input>;
+>input : any
+
+const c = <input value='
+>c : error
+><input value='foo: 23\n'></input> : error
+>input : any
+>value : string
+
+foo: 23\n
+'></input>;
+>input : any
+

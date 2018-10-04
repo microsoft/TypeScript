@@ -1,0 +1,166 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface Prop {
+    a: number,
+>a : number
+
+    b: string,
+>b : string
+
+    children: string | JSX.Element
+>children : string | JSX.Element
+>JSX : any
+}
+
+function Comp(p: Prop) {
+>Comp : (p: Prop) => JSX.Element
+>p : Prop
+
+    return <div>{p.b}</div>;
+><div>{p.b}</div> : JSX.Element
+>div : any
+>p.b : string
+>p : Prop
+>b : string
+>div : any
+}
+
+// Error: missing children
+let k = <Comp a={10} b="hi" />;
+>k : JSX.Element
+><Comp a={10} b="hi" /> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+let k0 =
+>k0 : JSX.Element
+
+    <Comp a={10} b="hi" children="Random" >
+><Comp a={10} b="hi" children="Random" >        hi hi hi!    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+>children : string
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+let o = {
+>o : { children: string; }
+>{     children:"Random"} : { children: string; }
+
+     children:"Random"
+>children : string
+>"Random" : "Random"
+}
+let k1 =
+>k1 : JSX.Element
+
+    <Comp a={10} b="hi" {...o} >
+><Comp a={10} b="hi" {...o} >        hi hi hi!    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+>o : { children: string; }
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+// Error: incorrect type
+let k2 =
+>k2 : JSX.Element
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div> My Div </div>        {(name: string) => <div> My name {name} </div>}    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        <div> My Div </div>
+><div> My Div </div> : JSX.Element
+>div : any
+>div : any
+
+        {(name: string) => <div> My name {name} </div>}
+>(name: string) => <div> My name {name} </div> : (name: string) => JSX.Element
+>name : string
+><div> My name {name} </div> : JSX.Element
+>div : any
+>name : string
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+let k3 =
+>k3 : JSX.Element
+
+    <Comp a={10} b="hi">
+><Comp a={10} b="hi">        <div> My Div </div>        {1000000}    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        <div> My Div </div>
+><div> My Div </div> : JSX.Element
+>div : any
+>div : any
+
+        {1000000}
+>1000000 : 1000000
+
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+let k4 =
+>k4 : JSX.Element
+
+    <Comp a={10} b="hi" >
+><Comp a={10} b="hi" >        <div> My Div </div>        hi hi hi!    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        <div> My Div </div>
+><div> My Div </div> : JSX.Element
+>div : any
+>div : any
+
+        hi hi hi!
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+
+let k5 =
+>k5 : JSX.Element
+
+    <Comp a={10} b="hi" >
+><Comp a={10} b="hi" >        <div> My Div </div>        <div> My Div </div>    </Comp> : JSX.Element
+>Comp : (p: Prop) => JSX.Element
+>a : number
+>10 : 10
+>b : string
+
+        <div> My Div </div>
+><div> My Div </div> : JSX.Element
+>div : any
+>div : any
+
+        <div> My Div </div>
+><div> My Div </div> : JSX.Element
+>div : any
+>div : any
+
+    </Comp>;
+>Comp : (p: Prop) => JSX.Element
+

@@ -10,12 +10,9 @@
 ////     }
 //// }
 
-goTo.marker('className');
-verify.quickInfoIs('class Sphere');
+verify.quickInfoAt("className", "class Sphere");
 
 goTo.marker('insertHere');
 edit.insert("ray: Ray;");
 
-goTo.marker('className');
-
-verify.quickInfoIs('class Sphere');
+verify.quickInfoAt("className", "class Sphere");

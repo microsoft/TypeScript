@@ -1,0 +1,20 @@
+=== tests/cases/compiler/letDeclarations-useBeforeDefinition.ts ===
+{
+    l1;
+>l1 : any
+
+    let l1;
+>l1 : any
+}
+
+var v1;
+>v1 : any
+{
+    v1;
+>v1 : number
+
+    let v1 = 0;
+>v1 : number
+>0 : 0
+}
+

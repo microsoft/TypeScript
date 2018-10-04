@@ -1,7 +1,5 @@
 === tests/cases/compiler/arrayLiteralContextualType.ts ===
 interface IAnimal {
->IAnimal : IAnimal
-
     name: string;
 >name : string
 }
@@ -11,11 +9,11 @@ class Giraffe {
 
     name = "Giraffe";
 >name : string
->"Giraffe" : string
+>"Giraffe" : "Giraffe"
 
     neckLength = "3m";
 >neckLength : string
->"3m" : string
+>"3m" : "3m"
 }
 
 class Elephant {
@@ -23,23 +21,21 @@ class Elephant {
 
     name = "Elephant";
 >name : string
->"Elephant" : string
+>"Elephant" : "Elephant"
 
     trunkDiameter = "20cm";
 >trunkDiameter : string
->"20cm" : string
+>"20cm" : "20cm"
 }
 
 function foo(animals: IAnimal[]) { }
 >foo : (animals: IAnimal[]) => void
 >animals : IAnimal[]
->IAnimal : IAnimal
 
 function bar(animals: { [n: number]: IAnimal }) { }
 >bar : (animals: { [n: number]: IAnimal; }) => void
 >animals : { [n: number]: IAnimal; }
 >n : number
->IAnimal : IAnimal
 
 foo([
 >foo([    new Giraffe(),    new Elephant()]) : void

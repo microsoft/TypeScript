@@ -1,6 +1,4 @@
 //// [callConstructAssignment.ts]
-
-
 var foo:{ ( ):void; }
 
 var bar:{ new ( ):any; }

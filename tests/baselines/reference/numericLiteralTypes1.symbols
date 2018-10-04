@@ -69,95 +69,95 @@ function f3(a: 1, b: 0 | 1 | 2) {
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a + b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a - b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a * b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a / b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a % b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a | b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a & b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = a ^ b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = -b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var x = ~b;
->x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7), Decl(numericLiteralTypes1.ts, 30, 7), Decl(numericLiteralTypes1.ts, 31, 7), Decl(numericLiteralTypes1.ts, 32, 7), Decl(numericLiteralTypes1.ts, 33, 7), Decl(numericLiteralTypes1.ts, 34, 7))
+>x : Symbol(x, Decl(numericLiteralTypes1.ts, 25, 7), Decl(numericLiteralTypes1.ts, 26, 7), Decl(numericLiteralTypes1.ts, 27, 7), Decl(numericLiteralTypes1.ts, 28, 7), Decl(numericLiteralTypes1.ts, 29, 7) ... and 5 more)
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a == b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a != b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a === b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a !== b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a > b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a < b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a >= b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = a <= b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >a : Symbol(a, Decl(numericLiteralTypes1.ts, 24, 12))
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 
     var y = !b;
->y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7), Decl(numericLiteralTypes1.ts, 40, 7), Decl(numericLiteralTypes1.ts, 41, 7), Decl(numericLiteralTypes1.ts, 42, 7), Decl(numericLiteralTypes1.ts, 43, 7))
+>y : Symbol(y, Decl(numericLiteralTypes1.ts, 35, 7), Decl(numericLiteralTypes1.ts, 36, 7), Decl(numericLiteralTypes1.ts, 37, 7), Decl(numericLiteralTypes1.ts, 38, 7), Decl(numericLiteralTypes1.ts, 39, 7) ... and 4 more)
 >b : Symbol(b, Decl(numericLiteralTypes1.ts, 24, 17))
 }
 
@@ -218,7 +218,7 @@ function assertNever(x: never): never {
 >x : Symbol(x, Decl(numericLiteralTypes1.ts, 63, 21))
 
     throw new Error("Unexpected value");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 type Tag = 0 | 1 | 2;

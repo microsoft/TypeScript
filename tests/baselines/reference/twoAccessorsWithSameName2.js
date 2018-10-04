@@ -17,7 +17,7 @@ class E {
 }
 
 //// [twoAccessorsWithSameName2.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     Object.defineProperty(C, "x", {
@@ -27,7 +27,7 @@ var C = (function () {
     });
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D, "x", {
@@ -37,7 +37,7 @@ var D = (function () {
     });
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
     }
     Object.defineProperty(E, "x", {

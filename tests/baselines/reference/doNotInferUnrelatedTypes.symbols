@@ -1,0 +1,24 @@
+=== tests/cases/compiler/doNotInferUnrelatedTypes.ts ===
+// #16709
+declare function dearray<T>(ara: ReadonlyArray<T>): T;
+>dearray : Symbol(dearray, Decl(doNotInferUnrelatedTypes.ts, 0, 0))
+>T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
+>ara : Symbol(ara, Decl(doNotInferUnrelatedTypes.ts, 1, 28))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
+>T : Symbol(T, Decl(doNotInferUnrelatedTypes.ts, 1, 25))
+
+type LiteralType = "foo" | "bar";
+>LiteralType : Symbol(LiteralType, Decl(doNotInferUnrelatedTypes.ts, 1, 54))
+
+declare var alt: Array<LiteralType>;
+>alt : Symbol(alt, Decl(doNotInferUnrelatedTypes.ts, 3, 11))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>LiteralType : Symbol(LiteralType, Decl(doNotInferUnrelatedTypes.ts, 1, 54))
+
+let foo: LiteralType = dearray(alt);
+>foo : Symbol(foo, Decl(doNotInferUnrelatedTypes.ts, 5, 3))
+>LiteralType : Symbol(LiteralType, Decl(doNotInferUnrelatedTypes.ts, 1, 54))
+>dearray : Symbol(dearray, Decl(doNotInferUnrelatedTypes.ts, 0, 0))
+>alt : Symbol(alt, Decl(doNotInferUnrelatedTypes.ts, 3, 11))
+

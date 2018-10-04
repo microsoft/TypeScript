@@ -1,5 +1,4 @@
 //// [exponentiationOperatorSyntaxError1.ts]
-
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
 -1 ** 2;
 +1 ** 2
@@ -41,7 +40,8 @@ var temp = 10;
 
 //// [exponentiationOperatorSyntaxError1.js]
 // Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
-Math.pow(-1, 2);
+Math.pow(// Error: early syntax error using ES7 SimpleUnaryExpression on left-hand side without ()
+-1, 2);
 Math.pow(+1, 2);
 Math.pow(1, Math.pow(-2, 3));
 Math.pow(1, Math.pow(-2, -3));

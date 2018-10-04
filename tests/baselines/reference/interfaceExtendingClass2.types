@@ -1,0 +1,32 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/interfaceExtendingClass2.ts ===
+class Foo {
+>Foo : Foo
+
+    x: string;
+>x : string
+
+    y() { }
+>y : () => void
+
+    get Z() {
+>Z : number
+
+        return 1;
+>1 : 1
+    }
+    [x: string]: Object;
+>x : string
+}
+
+interface I2 extends Foo { // error
+    a: {
+>a : { toString: () => {}; }
+
+        toString: () => {
+>toString : () => {}
+
+            return 1;
+>1 : 1
+
+        };
+    }

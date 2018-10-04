@@ -1,0 +1,47 @@
+=== tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts ===
+class C {
+>C : C
+
+    constructor() { }
+}
+
+// this should be an error
+var x: { y; z; }             // error at "y,z"
+>x : { y: any; z: any; }
+>y : any
+>z : any
+
+var x1: { y1: C; z1; };      // error at "z1" 
+>x1 : { y1: C; z1: any; }
+>y1 : C
+>z1 : any
+
+var x11: { new (); };        // error at "new"
+>x11 : new () => any
+
+var x2: (y2) => number;      // error at "y2"
+>x2 : (y2: any) => number
+>y2 : any
+
+var x3: (x3: string, y3) => void ; // error at "y3"
+>x3 : (x3: string, y3: any) => void
+>x3 : string
+>y3 : any
+
+// this should not be an error
+var bar: { a: number; b: number };
+>bar : { a: number; b: number; }
+>a : number
+>b : number
+
+var foo: { littleC: C; c: string };
+>foo : { littleC: C; c: string; }
+>littleC : C
+>c : string
+
+var x4: new () => any;
+>x4 : new () => any
+
+var x5: () => any;
+>x5 : () => any
+

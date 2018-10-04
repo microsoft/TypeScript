@@ -1,10 +1,7 @@
-tests/cases/compiler/constDeclarations-scopes.ts(13,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/constDeclarations-scopes.ts(22,1): error TS7027: Unreachable code detected.
-tests/cases/compiler/constDeclarations-scopes.ts(28,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/constDeclarations-scopes.ts (3 errors) ====
-    
+==== tests/cases/compiler/constDeclarations-scopes.ts (1 errors) ====
     // global
     const c = "string";
     
@@ -17,8 +14,6 @@ tests/cases/compiler/constDeclarations-scopes.ts(28,7): error TS2410: All symbol
     }
     else { 
         const c = 0;
-        ~~~~~
-!!! error TS7027: Unreachable code detected.
         n = c;
     }
     
@@ -28,16 +23,14 @@ tests/cases/compiler/constDeclarations-scopes.ts(28,7): error TS2410: All symbol
     }
     
     do { 
-    ~~
-!!! error TS7027: Unreachable code detected.
        const c = 0;
         n = c;
     } while (true);
     
     var obj;
     with (obj) {
-          ~~~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         const c = 0;
         n = c;
     }

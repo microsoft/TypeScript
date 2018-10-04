@@ -1,0 +1,30 @@
+=== tests/cases/conformance/classes/members/accessibility/privateStaticNotAccessibleInClodule2.ts ===
+// Any attempt to access a private property member outside the class body that contains its declaration results in a compile-time error.
+
+class C {
+>C : Symbol(C, Decl(privateStaticNotAccessibleInClodule2.ts, 0, 0))
+
+    private foo: string;
+>foo : Symbol(C.foo, Decl(privateStaticNotAccessibleInClodule2.ts, 2, 9))
+
+    private static bar: string;
+>bar : Symbol(C.bar, Decl(privateStaticNotAccessibleInClodule2.ts, 3, 24))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(privateStaticNotAccessibleInClodule2.ts, 5, 1), Decl(privateStaticNotAccessibleInClodule2.ts, 9, 1))
+>C : Symbol(C, Decl(privateStaticNotAccessibleInClodule2.ts, 0, 0))
+
+    baz: number;   
+>baz : Symbol(D.baz, Decl(privateStaticNotAccessibleInClodule2.ts, 7, 19))
+}
+
+module D {
+>D : Symbol(D, Decl(privateStaticNotAccessibleInClodule2.ts, 5, 1), Decl(privateStaticNotAccessibleInClodule2.ts, 9, 1))
+
+    export var y = D.bar; // error
+>y : Symbol(y, Decl(privateStaticNotAccessibleInClodule2.ts, 12, 14))
+>D.bar : Symbol(C.bar, Decl(privateStaticNotAccessibleInClodule2.ts, 3, 24))
+>D : Symbol(D, Decl(privateStaticNotAccessibleInClodule2.ts, 5, 1), Decl(privateStaticNotAccessibleInClodule2.ts, 9, 1))
+>bar : Symbol(C.bar, Decl(privateStaticNotAccessibleInClodule2.ts, 3, 24))
+}

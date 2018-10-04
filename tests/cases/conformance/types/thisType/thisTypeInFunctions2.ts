@@ -1,3 +1,6 @@
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 interface IndexedWithThis {
     // this is a workaround for React
     init?: (this: this) => void;
@@ -32,15 +35,13 @@ extend1({
 });
 extend2({
     init() {
-        this  // this: any because the contextual signature of init doesn't specify this' type
+        this // this: IndexedWithoutThis because of contextual typing
         this.mine
-        this.willDestroy
     },
     mine: 13,
     foo() {
-        this // this: any because of the string indexer
+        this // this: IndexedWithoutThis because of contextual typing
         this.mine
-        this.willDestroy
     }
 });
 

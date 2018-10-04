@@ -3,20 +3,20 @@
 ////interface MultiRobot {
 ////    name: string;
 ////    skills: {
-////        /*1*/[|primary|]: string;
+////        [|primary|]: string;
 ////        secondary: string;
 ////    };
 ////}
 ////let multiRobots: MultiRobot[];
-////for ({ skills: { /*2*/[|primary|]: primaryA, secondary: secondaryA } } of multiRobots) {
-////    console.log(primaryA);
+////let [|primary|]: string, secondary: string, primaryA: string, secondaryA: string;
+////for ({ skills: { [|primary|]: primaryA, secondary: secondaryA } } of multiRobots) {
+////    primaryA;
 ////}
 ////for ({ skills: { [|primary|], secondary } } of multiRobots) {
-////    console.log(primary);
+////    [|primary|];
 ////}
 
-goTo.marker("1");
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-
-goTo.marker("2");
-verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
+verify.noErrors();
+const [r0, r1, r2, r3, r4] = test.ranges();
+verify.renameLocations([r0, r2], [r0, r2, { range: r3, suffixText: ": primary" }]);
+verify.renameLocations([r1, r3, r4], [r1, { range: r3, prefixText: "primary: " }, r4])

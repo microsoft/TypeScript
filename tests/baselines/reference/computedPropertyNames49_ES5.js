@@ -1,5 +1,4 @@
 //// [computedPropertyNames49_ES5.ts]
-
 var x = {
     p1: 10,
     get [1 + 1]() {
@@ -26,6 +25,7 @@ var x = {
 }
 
 //// [computedPropertyNames49_ES5.js]
+var _a;
 var x = (_a = {
         p1: 10
     },
@@ -60,8 +60,5 @@ var x = (_a = {
         enumerable: true,
         configurable: true
     }),
-    ,
     _a.p2 = 20,
-    _a
-);
-var _a;
+    _a);

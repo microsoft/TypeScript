@@ -1,0 +1,35 @@
+tests/cases/compiler/useBeforeDeclaration_superClass.ts(25,18): error TS2729: Property 'x' is used before its initialization.
+
+
+==== tests/cases/compiler/useBeforeDeclaration_superClass.ts (1 errors) ====
+    class C {
+        x = 0;
+    }
+    class D extends C {
+        // Not an error -- this will access the parent's initialized value for `x`, not the one on the child.
+        old_x = this.x;
+        x = 1;
+    }
+    
+    // Test that it works on chains of classes
+    class X {
+        x = 0;
+    }
+    class Y extends X {}
+    class Z extends Y {
+        old_x = this.x;
+        x = 1;
+    }
+    
+    // Interface doesn't count
+    interface I {
+        x: number;
+    }
+    class J implements I {
+        old_x = this.x;
+                     ~
+!!! error TS2729: Property 'x' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/useBeforeDeclaration_superClass.ts:26:5: 'x' is declared here.
+        x = 1;
+    }
+    

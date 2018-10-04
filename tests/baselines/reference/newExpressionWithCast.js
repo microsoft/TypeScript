@@ -1,5 +1,4 @@
 //// [newExpressionWithCast.ts]
-
 function Test() { }
 // valid but error with noImplicitAny
 var test = new Test();

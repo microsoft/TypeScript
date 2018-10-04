@@ -1,0 +1,39 @@
+=== tests/cases/compiler/functionArgShadowing.ts ===
+class A { foo() { } }
+>A : A
+>foo : () => void
+
+class B { bar() { } }
+>B : B
+>bar : () => void
+
+function foo(x: A) {
+>foo : (x: A) => void
+>x : A
+
+   var x: B = new B();
+>x : A
+>new B() : B
+>B : typeof B
+
+     x.bar(); // the property bar does not exist on a value of type A
+>x.bar() : any
+>x.bar : any
+>x : A
+>bar : any
+}
+ 
+class C {
+>C : C
+
+	constructor(public p: number) {
+>p : number
+
+		var p: string;
+>p : number
+
+		var n: number = p;
+>n : number
+>p : number
+	}
+}

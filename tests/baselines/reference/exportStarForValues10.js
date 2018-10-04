@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportStarForValues10.ts] ////
 
 //// [file0.ts]
-
 export var v = 1;
 
 //// [file1.ts]
@@ -13,46 +12,47 @@ export * from "file1";
 var x = 1;
 
 //// [file0.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var v;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             exports_1("v", v = 1);
         }
-    }
+    };
 });
 //// [file1.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
     var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
         }
-    }
+    };
 });
 //// [file2.js]
-System.register(["file0"], function(exports_1, context_1) {
+System.register(["file0"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var x;
+    var __moduleName = context_1 && context_1.id;
     function exportStar_1(m) {
         var exports = {};
-        for(var n in m) {
+        for (var n in m) {
             if (n !== "default") exports[n] = m[n];
         }
         exports_1(exports);
     }
     return {
-        setters:[
+        setters: [
             function (file0_1_1) {
                 exportStar_1(file0_1_1);
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             x = 1;
         }
-    }
+    };
 });

@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsInterface04.ts]
-
 var declare: boolean, interface: number, I: string;
 
 declare     // This should be the identifier 'declare'

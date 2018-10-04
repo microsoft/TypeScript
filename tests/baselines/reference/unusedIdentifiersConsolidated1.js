@@ -1,5 +1,4 @@
 //// [unusedIdentifiersConsolidated1.ts]
-
 function greeter(person: string) {
     var unused = 20;
 }
@@ -103,15 +102,23 @@ namespace Greeter {
 }
 
 //// [unusedIdentifiersConsolidated1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 function greeter(person) {
     var unused = 20;
 }
-var Dummy = (function () {
+var Dummy = /** @class */ (function () {
     function Dummy(message) {
         var unused2 = 22;
         this.greeting = "Dummy Message";
@@ -132,7 +139,7 @@ var Validation;
 (function (Validation) {
     var lettersRegexp = /^[A-Za-z]+$/;
     var numberRegexp = /^[0-9]+$/;
-    var LettersOnlyValidator = (function () {
+    var LettersOnlyValidator = /** @class */ (function () {
         function LettersOnlyValidator() {
         }
         LettersOnlyValidator.prototype.isAcceptable = function (s2) {
@@ -143,7 +150,7 @@ var Validation;
         return LettersOnlyValidator;
     }());
     Validation.LettersOnlyValidator = LettersOnlyValidator;
-    var ZipCodeValidator = (function () {
+    var ZipCodeValidator = /** @class */ (function () {
         function ZipCodeValidator() {
         }
         ZipCodeValidator.prototype.isAcceptable = function (s3) {
@@ -152,7 +159,7 @@ var Validation;
         return ZipCodeValidator;
     }());
     Validation.ZipCodeValidator = ZipCodeValidator;
-    var dummy = (function () {
+    var dummy = /** @class */ (function () {
         function dummy() {
         }
         return dummy;
@@ -160,25 +167,25 @@ var Validation;
 })(Validation || (Validation = {}));
 var Greeter;
 (function (Greeter) {
-    var class1 = (function () {
+    var class1 = /** @class */ (function () {
         function class1() {
         }
         return class1;
     }());
-    var class2 = (function (_super) {
+    var class2 = /** @class */ (function (_super) {
         __extends(class2, _super);
         function class2() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class2;
     }(class1));
     Greeter.class2 = class2;
-    var class3 = (function () {
+    var class3 = /** @class */ (function () {
         function class3() {
         }
         return class3;
     }());
-    var class4 = (function () {
+    var class4 = /** @class */ (function () {
         function class4() {
         }
         return class4;

@@ -5,7 +5,10 @@ class C {
 >C : Symbol(C, Decl(objectTypeWithNumericProperty.ts, 0, 0))
 
     1: number;
+>1 : Symbol(C[1], Decl(objectTypeWithNumericProperty.ts, 2, 9))
+
     1.1: string;
+>1.1 : Symbol(C[1.1], Decl(objectTypeWithNumericProperty.ts, 3, 14))
 }
 
 var c: C;
@@ -36,7 +39,10 @@ interface I {
 >I : Symbol(I, Decl(objectTypeWithNumericProperty.ts, 11, 18))
 
     1: number;
+>1 : Symbol(I[1], Decl(objectTypeWithNumericProperty.ts, 13, 13))
+
     1.1: string;
+>1.1 : Symbol(I[1.1], Decl(objectTypeWithNumericProperty.ts, 14, 14))
 }
 
 var i: I;
@@ -67,7 +73,10 @@ var a: {
 >a : Symbol(a, Decl(objectTypeWithNumericProperty.ts, 24, 3))
 
     1: number;
+>1 : Symbol(1, Decl(objectTypeWithNumericProperty.ts, 24, 8))
+
     1.1: string;
+>1.1 : Symbol(1.1, Decl(objectTypeWithNumericProperty.ts, 25, 14))
 }
 
 var r1 = a[1];
@@ -94,7 +103,10 @@ var b = {
 >b : Symbol(b, Decl(objectTypeWithNumericProperty.ts, 34, 3))
 
     1: 1,
+>1 : Symbol(1, Decl(objectTypeWithNumericProperty.ts, 34, 9))
+
     1.1: ""
+>1.1 : Symbol(1.1, Decl(objectTypeWithNumericProperty.ts, 35, 9))
 }
 
 var r1 = b[1];

@@ -1,0 +1,186 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts ===
+function foo(x: 'a');
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 21))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 13))
+
+function foo(x: number) { }
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 0), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 0, 21))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 1, 13))
+
+class C {
+>C : Symbol(C, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 1, 27))
+
+    foo(x: 'a');
+>foo : Symbol(C.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 3, 9), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 4, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 5, 19))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 4, 8))
+
+    foo(x: number);
+>foo : Symbol(C.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 3, 9), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 4, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 5, 19))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 5, 8))
+
+    foo(x: any) { }
+>foo : Symbol(C.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 3, 9), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 4, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 5, 19))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 6, 8))
+}
+
+class C2<T> {
+>C2 : Symbol(C2, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 7, 1))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 9, 9))
+
+    foo(x: 'a');
+>foo : Symbol(C2.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 9, 13), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 10, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 11, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 10, 8))
+
+    foo(x: T);
+>foo : Symbol(C2.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 9, 13), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 10, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 11, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 11, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 9, 9))
+
+    foo(x: any) { }
+>foo : Symbol(C2.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 9, 13), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 10, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 11, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 12, 8))
+}
+
+class C3<T extends String> {
+>C3 : Symbol(C3, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 13, 1))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 9))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    foo(x: 'a');
+>foo : Symbol(C3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 28), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 16, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 17, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 16, 8))
+
+    foo(x: T);
+>foo : Symbol(C3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 28), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 16, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 17, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 17, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 9))
+
+    foo(x: any) { }
+>foo : Symbol(C3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 15, 28), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 16, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 17, 14))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 18, 8))
+}
+
+interface I {
+>I : Symbol(I, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 19, 1))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 22, 5))
+
+    (x: number);
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 23, 5))
+
+    foo(x: 'a');
+>foo : Symbol(I.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 23, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 24, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 24, 8))
+
+    foo(x: number);
+>foo : Symbol(I.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 23, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 24, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 25, 8))
+}
+
+interface I2<T> {
+>I2 : Symbol(I2, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 26, 1))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 28, 13))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 29, 5))
+
+    (x: T);
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 30, 5))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 28, 13))
+
+    foo(x: 'a');
+>foo : Symbol(I2.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 30, 11), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 31, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 31, 8))
+
+    foo(x: T);
+>foo : Symbol(I2.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 30, 11), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 31, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 32, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 28, 13))
+}
+
+interface I3<T extends String> {
+>I3 : Symbol(I3, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 33, 1))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 35, 13))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 36, 5))
+
+    (x: T);
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 37, 5))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 35, 13))
+
+    foo(x: 'a');
+>foo : Symbol(I3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 37, 11), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 38, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 38, 8))
+
+    foo(x: T);
+>foo : Symbol(I3.foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 37, 11), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 38, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 39, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 35, 13))
+}
+
+var a: {
+>a : Symbol(a, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 42, 3))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 43, 5))
+
+    (x: number);
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 44, 5))
+
+    foo(x: 'a');
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 44, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 45, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 45, 8))
+
+    foo(x: number);
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 44, 16), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 45, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 46, 8))
+}
+
+var a2: {
+>a2 : Symbol(a2, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 49, 3))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 50, 5))
+
+    <T>(x: T);
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 51, 5))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 51, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 51, 5))
+
+    foo(x: 'a');
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 51, 14), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 52, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 52, 8))
+
+    foo<T>(x: T);
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 51, 14), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 52, 16))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 53, 8))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 53, 11))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 53, 8))
+}
+
+var a3: {
+>a3 : Symbol(a3, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 56, 3))
+
+    (x: 'a');
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 57, 5))
+
+    <T>(x: T);
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 5))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 8))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 5))
+
+    foo(x: 'a');
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 14), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 59, 16))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 59, 8))
+
+    foo<T extends String>(x: T);
+>foo : Symbol(foo, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 58, 14), Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 59, 16))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 8))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 26))
+>T : Symbol(T, Decl(specializedSignatureIsNotSubtypeOfNonSpecializedSignature.ts, 60, 8))
+}
+

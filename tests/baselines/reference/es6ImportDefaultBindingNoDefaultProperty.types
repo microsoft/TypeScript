@@ -1,0 +1,9 @@
+=== tests/cases/compiler/es6ImportDefaultBindingNoDefaultProperty_0.ts ===
+export var a = 10;
+>a : number
+>10 : 10
+
+=== tests/cases/compiler/es6ImportDefaultBindingNoDefaultProperty_1.ts ===
+import defaultBinding from "./es6ImportDefaultBindingNoDefaultProperty_0";
+>defaultBinding : any
+

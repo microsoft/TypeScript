@@ -1,0 +1,22 @@
+=== tests/cases/compiler/superCallWithCommentEmit01.ts ===
+class A {
+>A : A
+
+    constructor(public text: string) { }
+>text : string
+}
+
+class B extends A {
+>B : B
+>A : A
+
+    constructor(text: string) {
+>text : string
+
+        // this is subclass constructor
+        super(text)
+>super(text) : void
+>super : typeof A
+>text : string
+     }
+}

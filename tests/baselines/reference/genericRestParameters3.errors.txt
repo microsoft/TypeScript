@@ -1,0 +1,149 @@
+tests/cases/conformance/types/rest/genericRestParameters3.ts(11,11): error TS2345: Argument of type '[10]' is not assignable to parameter of type '[string] | [number, boolean]'.
+  Type '[10]' is not assignable to type '[string]'.
+    Type '10' is not assignable to type 'string'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(12,1): error TS2345: Argument of type '[]' is not assignable to parameter of type '[string] | [number, boolean]'.
+  Type '[]' is not assignable to type '[number, boolean]'.
+    Property '0' is missing in type '[]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(16,1): error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(17,1): error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+  Types of parameters 'y' and 'args' are incompatible.
+    Type '[string] | [number, boolean]' is not assignable to type '[string]'.
+      Type '[number, boolean]' is not assignable to type '[string]'.
+        Types of property '0' are incompatible.
+          Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+  Types of parameters 'y' and 'args' are incompatible.
+    Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
+      Type '[string]' is not assignable to type '[number, boolean]'.
+        Property '1' is missing in type '[string]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(19,1): error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(29,1): error TS2554: Expected 1 arguments, but got 0.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(30,21): error TS2345: Argument of type '100' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(31,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
+  Types of parameters 'cb' and 'args' are incompatible.
+    Type 'CoolArray<any>' is not assignable to type '[(...args: any[]) => void]'.
+      Property '0' is missing in type 'CoolArray<any>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(38,32): error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
+  Property 'hello' is missing in type '[10, 20]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(43,1): error TS2345: Argument of type '[]' is not assignable to parameter of type 'CoolArray<never>'.
+  Property 'hello' is missing in type '[]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(44,5): error TS2345: Argument of type '[number]' is not assignable to parameter of type 'CoolArray<{}>'.
+  Property 'hello' is missing in type '[number]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(45,5): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type 'CoolArray<{}>'.
+  Property 'hello' is missing in type '[number, number]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(46,5): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'CoolArray<number>'.
+  Property 'hello' is missing in type 'number[]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
+  Type '["what"]' is not assignable to type '[number, string]'.
+    Property '1' is missing in type '["what"]'.
+
+
+==== tests/cases/conformance/types/rest/genericRestParameters3.ts (15 errors) ====
+    declare let f1: (x: string, ...args: [string] | [number, boolean]) => void;
+    declare let f2: (x: string, y: string) => void;
+    declare let f3: (x: string, y: number, z: boolean) => void;
+    declare let f4: (...args: [string, string] | [string, number, boolean]) => void;
+    
+    declare const tt: [string] | [number, boolean];
+    
+    f1("foo", "abc");
+    f1("foo", 10, true);
+    f1("foo", ...tt);
+    f1("foo", 10);  // Error
+              ~~
+!!! error TS2345: Argument of type '[10]' is not assignable to parameter of type '[string] | [number, boolean]'.
+!!! error TS2345:   Type '[10]' is not assignable to type '[string]'.
+!!! error TS2345:     Type '10' is not assignable to type 'string'.
+    f1("foo");  // Error
+    ~~~~~~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type '[string] | [number, boolean]'.
+!!! error TS2345:   Type '[]' is not assignable to type '[number, boolean]'.
+!!! error TS2345:     Property '0' is missing in type '[]'.
+    
+    f2 = f1;
+    f3 = f1;
+    f4 = f1;  // Error, misaligned complex rest types
+    ~~
+!!! error TS2322: Type '(x: string, ...args: [string] | [number, boolean]) => void' is not assignable to type '(...args: [string, string] | [string, number, boolean]) => void'.
+    f1 = f2;  // Error
+    ~~
+!!! error TS2322: Type '(x: string, y: string) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+!!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
+!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[string]'.
+!!! error TS2322:       Type '[number, boolean]' is not assignable to type '[string]'.
+!!! error TS2322:         Types of property '0' are incompatible.
+!!! error TS2322:           Type 'number' is not assignable to type 'string'.
+    f1 = f3;  // Error
+    ~~
+!!! error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+!!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
+!!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
+!!! error TS2322:       Type '[string]' is not assignable to type '[number, boolean]'.
+!!! error TS2322:         Property '1' is missing in type '[string]'.
+    f1 = f4;  // Error, misaligned complex rest types
+    ~~
+!!! error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
+    
+    // Repro from #26110
+    
+    interface CoolArray<E> extends Array<E> { 
+        hello: number;
+    }
+    
+    declare function foo<T extends any[]>(cb: (...args: T) => void): void;
+    
+    foo<CoolArray<any>>();     // Error
+    ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/rest/genericRestParameters3.ts:27:39: An argument for 'cb' was not provided.
+    foo<CoolArray<any>>(100);  // Error
+                        ~~~
+!!! error TS2345: Argument of type '100' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
+    foo<CoolArray<any>>(foo);  // Error
+                        ~~~
+!!! error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
+!!! error TS2345:   Types of parameters 'cb' and 'args' are incompatible.
+!!! error TS2345:     Type 'CoolArray<any>' is not assignable to type '[(...args: any[]) => void]'.
+!!! error TS2345:       Property '0' is missing in type 'CoolArray<any>'.
+    
+    function bar<T extends any[]>(...args: T): T {
+        return args;
+    }
+    
+    let a = bar(10, 20);
+    let b = bar<CoolArray<number>>(10, 20);  // Error
+                                   ~~
+!!! error TS2345: Argument of type '[10, 20]' is not assignable to parameter of type 'CoolArray<number>'.
+!!! error TS2345:   Property 'hello' is missing in type '[10, 20]'.
+    
+    declare function baz<T>(...args: CoolArray<T>): void;
+    declare const ca: CoolArray<number>;
+    
+    baz();       // Error
+    ~~~~~
+!!! error TS2345: Argument of type '[]' is not assignable to parameter of type 'CoolArray<never>'.
+!!! error TS2345:   Property 'hello' is missing in type '[]'.
+    baz(1);      // Error
+        ~
+!!! error TS2345: Argument of type '[number]' is not assignable to parameter of type 'CoolArray<{}>'.
+!!! error TS2345:   Property 'hello' is missing in type '[number]'.
+    baz(1, 2);   // Error
+        ~
+!!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type 'CoolArray<{}>'.
+!!! error TS2345:   Property 'hello' is missing in type '[number, number]'.
+    baz(...ca);  // Error
+        ~~~~~
+!!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'CoolArray<number>'.
+!!! error TS2345:   Property 'hello' is missing in type 'number[]'.
+    
+    // Repro from #26491
+    
+    declare function hmm<A extends [] | [number, string]>(...args: A): void;
+    hmm(); // okay, A = []
+    hmm(1, "s"); // okay, A = [1, "s"]
+    hmm("what"); // no error?  A = [] | [number, string] ?
+        ~~~~~~
+!!! error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
+!!! error TS2345:   Type '["what"]' is not assignable to type '[number, string]'.
+!!! error TS2345:     Property '1' is missing in type '["what"]'.
+    

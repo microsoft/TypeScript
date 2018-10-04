@@ -1,5 +1,4 @@
 //// [duplicatePropertiesInTypeAssertions01.ts]
-
 let x = <{a: number; a: number}>{};
 
 //// [duplicatePropertiesInTypeAssertions01.js]

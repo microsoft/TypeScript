@@ -1,5 +1,4 @@
 //// [arrowFunctionContexts.ts]
-
 // Arrow function used in with statement
 with (window) {
     var p = () => this;
@@ -97,26 +96,35 @@ var asserted2: any;
 
 
 //// [arrowFunctionContexts.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var _this = this;
 // Arrow function used in with statement
 with (window) {
-    var p = function () { return this; };
+    var p = function () { return _this; };
 }
 // Arrow function as argument to super call
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(n) {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = this;
-        _super.call(this, function () { return _this; });
+        var _this = _super.call(this, function () { return _this; }) || this;
+        return _this;
     }
     return Derived;
 }(Base));
@@ -130,6 +138,7 @@ var arr; // Incorrect error here (bug 829597)
 // Arrow function as enum value
 var E;
 (function (E) {
+    var _this = this;
     E[E["x"] = function () { return 4; }] = "x";
     E[E["y"] = (function () { return _this; }).length] = "y"; // error, can't use this in enum
 })(E || (E = {}));
@@ -142,21 +151,22 @@ var M;
 // Repeat above for module members that are functions? (necessary to redo all of them?)
 var M2;
 (function (M2) {
+    var _this = this;
     // Arrow function used in with statement
     with (window) {
-        var p = function () { return this; };
+        var p = function () { return _this; };
     }
     // Arrow function as argument to super call
-    var Base = (function () {
+    var Base = /** @class */ (function () {
         function Base(n) {
         }
         return Base;
     }());
-    var Derived = (function (_super) {
+    var Derived = /** @class */ (function (_super) {
         __extends(Derived, _super);
         function Derived() {
-            var _this = this;
-            _super.call(this, function () { return _this; });
+            var _this = _super.call(this, function () { return _this; }) || this;
+            return _this;
         }
         return Derived;
     }(Base));
@@ -170,6 +180,7 @@ var M2;
     // Arrow function as enum value
     var E;
     (function (E) {
+        var _this = this;
         E[E["x"] = function () { return 4; }] = "x";
         E[E["y"] = (function () { return _this; }).length] = "y";
     })(E || (E = {}));

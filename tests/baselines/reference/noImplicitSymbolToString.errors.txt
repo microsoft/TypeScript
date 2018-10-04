@@ -1,0 +1,32 @@
+tests/cases/compiler/noImplicitSymbolToString.ts(6,30): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+tests/cases/compiler/noImplicitSymbolToString.ts(7,30): error TS2469: The '+' operator cannot be applied to type 'symbol'.
+tests/cases/compiler/noImplicitSymbolToString.ts(8,8): error TS2469: The '+=' operator cannot be applied to type 'symbol'.
+tests/cases/compiler/noImplicitSymbolToString.ts(13,47): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+tests/cases/compiler/noImplicitSymbolToString.ts(13,90): error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+
+
+==== tests/cases/compiler/noImplicitSymbolToString.ts (5 errors) ====
+    // Fix #19666
+    
+    let symbol!: symbol;
+    let str = "hello ";
+    
+    const templateStr = `hello ${symbol}`;
+                                 ~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    const appendStr = "hello " + symbol;
+                                 ~~~~~~
+!!! error TS2469: The '+' operator cannot be applied to type 'symbol'.
+    str += symbol;
+           ~~~~~~
+!!! error TS2469: The '+=' operator cannot be applied to type 'symbol'.
+    
+    let symbolUnionNumber!: symbol | number;
+    let symbolUnionString!: symbol | string;
+    
+    const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+                                                  ~~~~~~~~~~~~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+                                                                                             ~~~~~~~~~~~~~~~~~
+!!! error TS2731: Implicit conversion of a 'symbol' to a 'string' will fail at runtime. Consider wrapping this expression in 'String(...)'.
+    

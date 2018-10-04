@@ -19,7 +19,7 @@ class A {
 
 
 //// [genericStaticAnyTypeFunction.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.one = function (source, value) {

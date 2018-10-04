@@ -14,12 +14,11 @@
 ////var /*2*/r1 = t(); // Should return a Date
 ////var /*3*/r2 = t./*4*/foo; // t should have 'foo' in dropdown list and be of type 'string'
 
-goTo.marker('1');
-verify.quickInfoIs("import test = require('./exportEqualTypes_file0')");
-goTo.marker('2');
-verify.quickInfoIs('var r1: Date');
-goTo.marker('3');
-verify.quickInfoIs('var r2: string');
+verify.quickInfos({
+    1: "(alias) interface test\nimport test = require('./exportEqualTypes_file0')",
+    2: "var r1: Date",
+    3: "var r2: string"
+});
 goTo.marker('4');
-verify.memberListContains('foo');
-verify.numberOfErrorsInCurrentFile(0);
+verify.completionListContains('foo');
+verify.noErrors();

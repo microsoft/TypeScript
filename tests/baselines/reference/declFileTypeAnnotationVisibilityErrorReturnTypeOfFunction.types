@@ -1,0 +1,106 @@
+=== tests/cases/compiler/declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts ===
+module m {
+>m : typeof m
+
+    class private1 {
+>private1 : private1
+    }
+
+    export class public1 {
+>public1 : public1
+    }
+
+    // Directly using names from this module
+    function foo1(): private1 {
+>foo1 : () => private1
+
+        return;
+    }
+    function foo2() {
+>foo2 : () => private1
+
+        return new private1();
+>new private1() : private1
+>private1 : typeof private1
+    }
+
+    export function foo3(): private1 {
+>foo3 : () => private1
+
+        return;
+    }
+    export function foo4() {
+>foo4 : () => private1
+
+        return new private1();
+>new private1() : private1
+>private1 : typeof private1
+    }
+
+    function foo11(): public1 {
+>foo11 : () => public1
+
+        return;
+    }
+    function foo12() {
+>foo12 : () => public1
+
+        return new public1();
+>new public1() : public1
+>public1 : typeof public1
+    }
+
+    export function foo13(): public1 {
+>foo13 : () => public1
+
+        return;
+    }
+    export function foo14() {
+>foo14 : () => public1
+
+        return new public1();
+>new public1() : public1
+>public1 : typeof public1
+    }
+
+    module m2 {
+>m2 : typeof m2
+
+        export class public2 {
+>public2 : public2
+        }
+    }
+
+    function foo111(): m2.public2 {
+>foo111 : () => m2.public2
+>m2 : any
+
+        return;
+    }
+    function foo112() {
+>foo112 : () => m2.public2
+
+        return new m2.public2();
+>new m2.public2() : m2.public2
+>m2.public2 : typeof m2.public2
+>m2 : typeof m2
+>public2 : typeof m2.public2
+    }
+
+    export function foo113(): m2.public2 {
+>foo113 : () => m2.public2
+>m2 : any
+
+        return;
+    }
+    export function foo114() {
+>foo114 : () => m2.public2
+
+        return new m2.public2();
+>new m2.public2() : m2.public2
+>m2.public2 : typeof m2.public2
+>m2 : typeof m2
+>public2 : typeof m2.public2
+    }
+}
+

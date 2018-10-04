@@ -11,13 +11,10 @@
     "declarationDir": "declarations",
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "subfolder/b.ts",
         "a.ts",
         "subfolder/c.ts"
     ],
-    "emittedFiles": [
-        "out.js",
-        "out.d.ts"
-    ]
+    "emittedFiles": []
 }

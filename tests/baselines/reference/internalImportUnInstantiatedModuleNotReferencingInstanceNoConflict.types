@@ -1,9 +1,6 @@
 === tests/cases/compiler/internalImportUnInstantiatedModuleNotReferencingInstanceNoConflict.ts ===
 module A {
->A : any
-
     export interface X { s: string }
->X : X
 >s : string
 }
 
@@ -12,10 +9,10 @@ module B {
 
     var A = 1;
 >A : number
->1 : number
+>1 : 1
 
     import Y = A;
 >Y : any
->A : any
+>A : error
 }
 

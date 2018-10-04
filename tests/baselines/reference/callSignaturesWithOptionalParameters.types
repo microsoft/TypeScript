@@ -20,7 +20,7 @@ var f2 = (x: number, y?: number) => { }
 foo(1);
 >foo(1) : void
 >foo : (x?: number) => void
->1 : number
+>1 : 1
 
 foo();
 >foo() : void
@@ -29,7 +29,7 @@ foo();
 f(1);
 >f(1) : void
 >f : (x?: number) => void
->1 : number
+>1 : 1
 
 f();
 >f() : void
@@ -38,13 +38,13 @@ f();
 f2(1);
 >f2(1) : void
 >f2 : (x: number, y?: number) => void
->1 : number
+>1 : 1
 
 f2(1, 2);
 >f2(1, 2) : void
 >f2 : (x: number, y?: number) => void
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 class C {
 >C : C
@@ -56,7 +56,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.foo();
 >c.foo() : void
@@ -69,11 +68,9 @@ c.foo(1);
 >c.foo : (x?: number) => void
 >c : C
 >foo : (x?: number) => void
->1 : number
+>1 : 1
 
 interface I {
->I : I
-
     (x?: number);
 >x : number
 
@@ -85,7 +82,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 i();
 >i() : any
@@ -94,22 +90,22 @@ i();
 i(1);
 >i(1) : any
 >i : I
->1 : number
+>1 : 1
 
 i.foo(1);
 >i.foo(1) : any
 >i.foo : (x: number, y?: number) => any
 >i : I
 >foo : (x: number, y?: number) => any
->1 : number
+>1 : 1
 
 i.foo(1, 2);
 >i.foo(1, 2) : any
 >i.foo : (x: number, y?: number) => any
 >i : I
 >foo : (x: number, y?: number) => any
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 var a: {
 >a : { (x?: number): any; foo(x?: number): any; }
@@ -129,7 +125,7 @@ a();
 a(1);
 >a(1) : any
 >a : { (x?: number): any; foo(x?: number): any; }
->1 : number
+>1 : 1
 
 a.foo();
 >a.foo() : any
@@ -142,7 +138,7 @@ a.foo(1);
 >a.foo : (x?: number) => any
 >a : { (x?: number): any; foo(x?: number): any; }
 >foo : (x?: number) => any
->1 : number
+>1 : 1
 
 var b = {
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
@@ -176,22 +172,22 @@ b.foo(1);
 >b.foo : (x?: number) => void
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 >foo : (x?: number) => void
->1 : number
+>1 : 1
 
 b.a(1);
 >b.a(1) : void
 >b.a : (x: number, y?: number) => void
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 >a : (x: number, y?: number) => void
->1 : number
+>1 : 1
 
 b.a(1, 2);
 >b.a(1, 2) : void
 >b.a : (x: number, y?: number) => void
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 >a : (x: number, y?: number) => void
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 b.b();
 >b.b() : void
@@ -204,5 +200,5 @@ b.b(1);
 >b.b : (x?: number) => void
 >b : { foo(x?: number): void; a: (x: number, y?: number) => void; b: (x?: number) => void; }
 >b : (x?: number) => void
->1 : number
+>1 : 1
 

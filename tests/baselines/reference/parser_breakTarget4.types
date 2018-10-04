@@ -1,5 +1,4 @@
 === tests/cases/conformance/parser/ecmascript5/Statements/BreakStatements/parser_breakTarget4.ts ===
-
 target1:
 >target1 : any
 
@@ -7,7 +6,7 @@ target2:
 >target2 : any
 
 while (true) {
->true : boolean
+>true : true
 
   break target2;
 >target2 : any

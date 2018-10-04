@@ -1,5 +1,5 @@
-tests/cases/compiler/couldNotSelectGenericOverload.ts(3,11): error TS2346: Supplied parameters do not match any signature of call target.
-tests/cases/compiler/couldNotSelectGenericOverload.ts(7,11): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/couldNotSelectGenericOverload.ts(3,11): error TS2554: Expected 1 arguments, but got 2.
+tests/cases/compiler/couldNotSelectGenericOverload.ts(7,11): error TS2554: Expected 1 arguments, but got 2.
 
 
 ==== tests/cases/compiler/couldNotSelectGenericOverload.ts (2 errors) ====
@@ -7,11 +7,11 @@ tests/cases/compiler/couldNotSelectGenericOverload.ts(7,11): error TS2346: Suppl
     var b = [1, ""];
     var b1G = makeArray(1, ""); // any, no error
               ~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     var b2G = makeArray(b); // any[]
     
     function makeArray2(items: any[]): any[] { return items; }
     var b3G = makeArray2(1, ""); // error
               ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 1 arguments, but got 2.
     

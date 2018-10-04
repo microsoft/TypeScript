@@ -1,13 +1,12 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithSubtypeEnumAndNumber.ts ===
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 var a: E;
 >a : E
->E : E
 
 var b: number;
 >b : number
@@ -28,34 +27,34 @@ var ra2 = b < a;
 var ra3 = E.a < b;
 >ra3 : boolean
 >E.a < b : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 >b : number
 
 var ra4 = b < E.a;
 >ra4 : boolean
 >b < E.a : boolean
 >b : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var ra5 = E.a < 0;
 >ra5 : boolean
 >E.a < 0 : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->0 : number
+>a : E.a
+>0 : 0
 
 var ra6 = 0 < E.a;
 >ra6 : boolean
 >0 < E.a : boolean
->0 : number
->E.a : E
+>0 : 0
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 // operator >
 var rb1 = a > b;
@@ -73,34 +72,34 @@ var rb2 = b > a;
 var rb3 = E.a > b;
 >rb3 : boolean
 >E.a > b : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 >b : number
 
 var rb4 = b > E.a;
 >rb4 : boolean
 >b > E.a : boolean
 >b : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rb5 = E.a > 0;
 >rb5 : boolean
 >E.a > 0 : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->0 : number
+>a : E.a
+>0 : 0
 
 var rb6 = 0 > E.a;
 >rb6 : boolean
 >0 > E.a : boolean
->0 : number
->E.a : E
+>0 : 0
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 // operator <=
 var rc1 = a <= b;
@@ -118,34 +117,34 @@ var rc2 = b <= a;
 var rc3 = E.a <= b;
 >rc3 : boolean
 >E.a <= b : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 >b : number
 
 var rc4 = b <= E.a;
 >rc4 : boolean
 >b <= E.a : boolean
 >b : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rc5 = E.a <= 0;
 >rc5 : boolean
 >E.a <= 0 : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->0 : number
+>a : E.a
+>0 : 0
 
 var rc6 = 0 <= E.a;
 >rc6 : boolean
 >0 <= E.a : boolean
->0 : number
->E.a : E
+>0 : 0
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 // operator >=
 var rd1 = a >= b;
@@ -163,34 +162,34 @@ var rd2 = b >= a;
 var rd3 = E.a >= b;
 >rd3 : boolean
 >E.a >= b : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 >b : number
 
 var rd4 = b >= E.a;
 >rd4 : boolean
 >b >= E.a : boolean
 >b : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 var rd5 = E.a >= 0;
 >rd5 : boolean
 >E.a >= 0 : boolean
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->0 : number
+>a : E.a
+>0 : 0
 
 var rd6 = 0 >= E.a;
 >rd6 : boolean
 >0 >= E.a : boolean
->0 : number
->E.a : E
+>0 : 0
+>E.a : E.a
 >E : typeof E
->a : E
+>a : E.a
 
 // operator ==
 var re1 = a == b;

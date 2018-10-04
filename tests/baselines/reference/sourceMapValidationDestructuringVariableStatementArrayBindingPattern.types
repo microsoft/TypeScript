@@ -11,19 +11,17 @@ type Robot = [number, string, string];
 
 var robotA: Robot = [1, "mower", "mowing"];
 >robotA : [number, string, string]
->Robot : [number, string, string]
 >[1, "mower", "mowing"] : [number, string, string]
->1 : number
->"mower" : string
->"mowing" : string
+>1 : 1
+>"mower" : "mower"
+>"mowing" : "mowing"
 
 var robotB: Robot = [2, "trimmer", "trimming"];
 >robotB : [number, string, string]
->Robot : [number, string, string]
 >[2, "trimmer", "trimming"] : [number, string, string]
->2 : number
->"trimmer" : string
->"trimming" : string
+>2 : 2
+>"trimmer" : "trimmer"
+>"trimming" : "trimming"
 
 
 let [, nameA] = robotA;
@@ -44,22 +42,22 @@ let [numberA2, nameA2, skillA2] = robotA;
 let [numberC2] = [3, "edging", "Trimming edges"];
 >numberC2 : number
 >[3, "edging", "Trimming edges"] : [number, string, string]
->3 : number
->"edging" : string
->"Trimming edges" : string
+>3 : 3
+>"edging" : "edging"
+>"Trimming edges" : "Trimming edges"
 
 let [numberC, nameC, skillC] = [3, "edging", "Trimming edges"];
 >numberC : number
 >nameC : string
 >skillC : string
 >[3, "edging", "Trimming edges"] : [number, string, string]
->3 : number
->"edging" : string
->"Trimming edges" : string
+>3 : 3
+>"edging" : "edging"
+>"Trimming edges" : "Trimming edges"
 
 let [numberA3, ...robotAInfo] = robotA;
 >numberA3 : number
->robotAInfo : (string | number)[]
+>robotAInfo : [string, string]
 >robotA : [number, string, string]
 
 if (nameA == nameA2) {

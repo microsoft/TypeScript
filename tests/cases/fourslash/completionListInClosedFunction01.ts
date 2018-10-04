@@ -6,7 +6,7 @@
 
 goTo.marker("1");
 
-verify.memberListContains("foo");
-verify.memberListContains("x");
-verify.memberListContains("y");
-verify.memberListContains("z");
+verify.completionListContains("foo");
+verify.completionListContains("x");
+verify.completionListContains("y");
+verify.completionListContains("z");

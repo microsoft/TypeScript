@@ -3,8 +3,9 @@
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>A : ENUM1.A
+>B : ENUM1.B
+>"" : ENUM1.
 
 // enum type var
 var ResultIsNumber1 = ~ENUM1;
@@ -16,21 +17,21 @@ var ResultIsNumber1 = ~ENUM1;
 var ResultIsNumber2 = ~ENUM1["A"];
 >ResultIsNumber2 : number
 >~ENUM1["A"] : number
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 var ResultIsNumber3 = ~(ENUM1.A + ENUM1["B"]);
 >ResultIsNumber3 : number
 >~(ENUM1.A + ENUM1["B"]) : number
 >(ENUM1.A + ENUM1["B"]) : number
 >ENUM1.A + ENUM1["B"] : number
->ENUM1.A : ENUM1
+>ENUM1.A : ENUM1.A
 >ENUM1 : typeof ENUM1
->A : ENUM1
->ENUM1["B"] : ENUM1
+>A : ENUM1.A
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 // multiple ~ operators
 var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
@@ -40,12 +41,12 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 >~(ENUM1["A"] + ENUM1.B) : number
 >(ENUM1["A"] + ENUM1.B) : number
 >ENUM1["A"] + ENUM1.B : number
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
->ENUM1.B : ENUM1
+>"A" : "A"
+>ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
->B : ENUM1
+>B : ENUM1.B
 
 // miss assignment operators
 ~ENUM1;
@@ -54,18 +55,18 @@ var ResultIsNumber4 = ~~~(ENUM1["A"] + ENUM1.B);
 
 ~ENUM1["A"];
 >~ENUM1["A"] : number
->ENUM1["A"] : ENUM1
+>ENUM1["A"] : ENUM1.A
 >ENUM1 : typeof ENUM1
->"A" : string
+>"A" : "A"
 
 ~ENUM1.A, ~ENUM1["B"];
 >~ENUM1.A, ~ENUM1["B"] : number
 >~ENUM1.A : number
->ENUM1.A : ENUM1
+>ENUM1.A : ENUM1.A
 >ENUM1 : typeof ENUM1
->A : ENUM1
+>A : ENUM1.A
 >~ENUM1["B"] : number
->ENUM1["B"] : ENUM1
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 

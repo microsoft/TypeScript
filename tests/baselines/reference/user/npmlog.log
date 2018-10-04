@@ -1,0 +1,15 @@
+Exit Code: 1
+Standard output:
+node_modules/npmlog/log.js(83,12): error TS2551: Property '_pause' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(149,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(154,13): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(155,8): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(194,37): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[any, ...any[]]'.
+  Property '0' is missing in type 'any[]'.
+node_modules/npmlog/log.js(218,12): error TS2551: Property '_paused' does not exist on type 'typeof EventEmitter'. Did you mean 'pause'?
+node_modules/npmlog/log.js(271,16): error TS2345: Argument of type 'string | undefined' is not assignable to parameter of type 'string'.
+  Type 'undefined' is not assignable to type 'string'.
+
+
+
+Standard error:

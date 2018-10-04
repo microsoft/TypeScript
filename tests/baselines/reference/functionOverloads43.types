@@ -34,7 +34,7 @@ var x = foo([{a: "str"}]);
 >[{a: "str"}] : { a: string; }[]
 >{a: "str"} : { a: string; }
 >a : string
->"str" : string
+>"str" : "str"
 
 var y = foo([{a: 100}]);
 >y : number
@@ -43,5 +43,5 @@ var y = foo([{a: 100}]);
 >[{a: 100}] : { a: number; }[]
 >{a: 100} : { a: number; }
 >a : number
->100 : number
+>100 : 100
 

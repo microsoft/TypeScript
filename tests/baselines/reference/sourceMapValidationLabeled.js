@@ -1,5 +1,4 @@
 //// [sourceMapValidationLabeled.ts]
-
 x:
 var b = 10;
 

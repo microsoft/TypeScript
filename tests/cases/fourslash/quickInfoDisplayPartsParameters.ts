@@ -7,39 +7,4 @@
 ////    /*9*/restParam[0] = "World";
 ////}
 
-goTo.marker("1");
-verify.verifyQuickInfoDisplayParts("function", "", { start: test.markerByName('1').position, length: "foo".length },
-    [{ text: "function", kind: "keyword" },
-        { text: " ", kind: "space" }, { text: "foo", kind: "functionName" }, { text: "(", kind: "punctuation" }, 
-        { text: "param", kind: "parameterName" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" },
-        { text: ",", kind: "punctuation" }, { text: " ", kind: "space" }, 
-        { text: "optionalParam", kind: "parameterName" }, { text: "?", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" },
-        { text: ",", kind: "punctuation" }, { text: " ", kind: "space" },
-        { text: "paramWithInitializer", kind: "parameterName" }, { text: "?", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" },
-        { text: ",", kind: "punctuation" }, { text: " ", kind: "space" },
-        { text: "...", kind: "punctuation" }, { text: "restParam", kind: "parameterName" }, { text: ":", kind: "punctuation" }, 
-        { text: " ", kind: "space" }, { text: "string", kind: "keyword" } , { text: "[", kind: "punctuation" }, { text: "]", kind: "punctuation" },
-        { text: ")", kind: "punctuation" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "void", kind: "keyword" }],
-    []);
-
-var marker = 1;
-function verifyParam(parameterName: string, isRest: boolean) {
-    marker++;
-    goTo.marker(marker.toString());
-    var displayParts = [{ text: "(", kind: "punctuation" }, { text: "parameter", kind: "text" }, { text: ")", kind: "punctuation" }, { text: " ", kind: "space" },
-        { text: parameterName, kind: "parameterName" }, { text: ":", kind: "punctuation" }, { text: " ", kind: "space" }, { text: "string", kind: "keyword" }];
-    if (isRest) {
-        displayParts.push({ text: "[", kind: "punctuation" }, { text: "]", kind: "punctuation" });
-    }
-    verify.verifyQuickInfoDisplayParts("parameter", "", { start: test.markerByName(marker.toString()).position, length: parameterName.length }, displayParts, []);
-}
-
-verifyParam('param', /*isRest*/false);
-verifyParam('optionalParam', /*isRest*/false);
-verifyParam('paramWithInitializer', /*isRest*/false); 
-verifyParam('restParam', /*isRest*/true);
-
-verifyParam('param', /*isRest*/false);
-verifyParam('optionalParam', /*isRest*/false);
-verifyParam('paramWithInitializer', /*isRest*/false);
-verifyParam('restParam', /*isRest*/true);
+verify.baselineQuickInfo();

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsFileCompilationWithMapFileAsJsWithInlineSourceMap.ts] ////
 
 //// [a.ts]
-
 class c {
 }
 
@@ -14,9 +13,9 @@ function bar() {
 }
 
 //// [a.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
 }());
-//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQ0E7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==
+//# sourceMappingURL=data:application/json;base64,eyJ2ZXJzaW9uIjozLCJmaWxlIjoiYS5qcyIsInNvdXJjZVJvb3QiOiIiLCJzb3VyY2VzIjpbImEudHMiXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IkFBQUE7SUFBQTtJQUNBLENBQUM7SUFBRCxRQUFDO0FBQUQsQ0FBQyxBQURELElBQ0MifQ==

@@ -1,0 +1,58 @@
+=== tests/cases/conformance/interfaces/declarationMerging/twoInterfacesDifferentRootModule.ts ===
+// two interfaces with different root modules should not merge
+
+module M {
+    export interface A {
+        foo: string;
+>foo : string
+    }
+
+    export interface B<T> {
+        foo: T;
+>foo : T
+    }
+}
+
+module M2 {
+>M2 : typeof M2
+
+    export interface A {
+        bar: number;
+>bar : number
+    }
+
+    var a: A;
+>a : A
+
+    var r1 = a.foo; // error
+>r1 : any
+>a.foo : any
+>a : A
+>foo : any
+
+    var r2 = a.bar; 
+>r2 : number
+>a.bar : number
+>a : A
+>bar : number
+
+    export interface B<T> {
+        bar: T;
+>bar : T
+    }
+
+    var b: B<string>;
+>b : B<string>
+
+    var r3 = b.foo; // error
+>r3 : any
+>b.foo : any
+>b : B<string>
+>foo : any
+
+    var r4 = b.bar; 
+>r4 : string
+>b.bar : string
+>b : B<string>
+>bar : string
+}

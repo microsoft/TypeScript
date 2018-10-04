@@ -1,63 +1,50 @@
 === tests/cases/compiler/hidingCallSignatures.ts ===
 interface C {
->C : C
-
     new (a: string): string;
 >a : string
 }
 
 interface D extends C {
->D : D
->C : C
-
     (a: string): number; // Should be ok
 >a : string
 }
 
 interface E {
->E : E
-
     (a: string): {};
 >a : string
 }
 
 interface F extends E {
->F : F
->E : E
-
     (a: string): string;
 >a : string
 }
 
 var d: D;
 >d : D
->D : D
 
 d(""); // number
 >d("") : number
 >d : D
->"" : string
+>"" : ""
 
 new d(""); // should be string
 >new d("") : string
 >d : D
->"" : string
+>"" : ""
 
 var f: F;
 >f : F
->F : F
 
 f(""); // string
 >f("") : string
 >f : F
->"" : string
+>"" : ""
 
 var e: E;
 >e : E
->E : E
 
 e(""); // {}
 >e("") : {}
 >e : E
->"" : string
+>"" : ""
 

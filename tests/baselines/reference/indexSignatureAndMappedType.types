@@ -1,0 +1,78 @@
+=== tests/cases/compiler/indexSignatureAndMappedType.ts ===
+// A mapped type { [P in K]: X }, where K is a generic type, is related to
+// { [key: string]: Y } if X is related to Y.
+
+function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
+>f1 : <T, K extends string>(x: { [key: string]: T; }, y: Record<K, T>) => void
+>x : { [key: string]: T; }
+>key : string
+>y : Record<K, T>
+
+    x = y;
+>x = y : Record<K, T>
+>x : { [key: string]: T; }
+>y : Record<K, T>
+
+    y = x;  // Error
+>y = x : { [key: string]: T; }
+>y : Record<K, T>
+>x : { [key: string]: T; }
+}
+
+function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
+>f2 : <T>(x: { [key: string]: T; }, y: Record<string, T>) => void
+>x : { [key: string]: T; }
+>key : string
+>y : Record<string, T>
+
+    x = y;
+>x = y : Record<string, T>
+>x : { [key: string]: T; }
+>y : Record<string, T>
+
+    y = x;
+>y = x : { [key: string]: T; }
+>y : Record<string, T>
+>x : { [key: string]: T; }
+}
+
+function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
+>f3 : <T, U, K extends string>(x: { [key: string]: T; }, y: Record<K, U>) => void
+>x : { [key: string]: T; }
+>key : string
+>y : Record<K, U>
+
+    x = y;  // Error
+>x = y : Record<K, U>
+>x : { [key: string]: T; }
+>y : Record<K, U>
+
+    y = x;  // Error
+>y = x : { [key: string]: T; }
+>y : Record<K, U>
+>x : { [key: string]: T; }
+}
+
+// Repro from #14548
+
+type Dictionary = {
+>Dictionary : Dictionary
+
+    [key: string]: string;
+>key : string
+
+};
+
+interface IBaseEntity {
+    name: string;
+>name : string
+
+    properties: Dictionary;
+>properties : Dictionary
+}
+
+interface IEntity<T extends string> extends IBaseEntity {
+    properties: Record<T, string>;
+>properties : Record<T, string>
+}
+

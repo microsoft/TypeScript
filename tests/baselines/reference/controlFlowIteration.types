@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/controlFlowIteration.ts ===
-
 let cond: boolean;
 >cond : boolean
 
@@ -10,15 +9,15 @@ function ff() {
 >x : string | undefined
 
     while (true) {
->true : boolean
+>true : true
 
         if (cond) {
 >cond : boolean
 
             x = "";
->x = "" : string
+>x = "" : ""
 >x : string | undefined
->"" : string
+>"" : ""
         }
         else {
             if (x) {

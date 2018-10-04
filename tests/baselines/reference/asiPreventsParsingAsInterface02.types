@@ -1,5 +1,4 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/asiPreventsParsingAsInterface02.ts ===
-
 function f(interface: number, I: string) {
 >f : (interface: number, I: string) => void
 >interface : number

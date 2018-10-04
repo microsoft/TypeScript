@@ -1,0 +1,43 @@
+{
+    "kind": "TypeLiteral",
+    "pos": 1,
+    "end": 19,
+    "flags": "JSDoc",
+    "members": {
+        "0": {
+            "kind": "PropertySignature",
+            "pos": 2,
+            "end": 6,
+            "flags": "JSDoc",
+            "name": {
+                "kind": "Identifier",
+                "pos": 2,
+                "end": 5,
+                "flags": "JSDoc",
+                "escapedText": "foo"
+            }
+        },
+        "1": {
+            "kind": "PropertySignature",
+            "pos": 6,
+            "end": 18,
+            "flags": "JSDoc",
+            "name": {
+                "kind": "Identifier",
+                "pos": 6,
+                "end": 10,
+                "flags": "JSDoc",
+                "escapedText": "bar"
+            },
+            "type": {
+                "kind": "NumberKeyword",
+                "pos": 11,
+                "end": 18,
+                "flags": "JSDoc"
+            }
+        },
+        "length": 2,
+        "pos": 2,
+        "end": 18
+    }
+}

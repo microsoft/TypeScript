@@ -1,86 +1,141 @@
-/// <reference path="checker.ts"/>
-
 /* @internal */
 namespace ts {
     export interface SourceMapWriter {
-        getSourceMapData(): SourceMapData;
-        setSourceFile(sourceFile: SourceFile): void;
-        emitPos(pos: number): void;
-        emitStart(range: TextRange): void;
-        emitEnd(range: TextRange, stopOverridingSpan?: boolean): void;
-        changeEmitSourcePos(): void;
-        getText(): string;
-        getSourceMappingURL(): string;
-        initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void;
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
+         */
+        initialize(filePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, sourceMapOutput?: SourceMapData[]): void;
+
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         reset(): void;
+
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
+        setSourceFile(sourceFile: SourceMapSource): void;
+
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
+        emitPos(pos: number): void;
+
+        /**
+         * Emits a node with possible leading and trailing source maps.
+         *
+         * @param hint The current emit context
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
+         */
+        emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void): void;
+
+        /**
+         * Emits a token of a node node with possible leading and trailing source maps.
+         *
+         * @param node The node containing the token.
+         * @param token The token to emit.
+         * @param tokenStartPos The start pos of the token.
+         * @param emitCallback The callback used to emit the token.
+         */
+        emitTokenWithSourceMap(node: Node, token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number): number;
+
+        /**
+         * Gets the text for the source map.
+         */
+        getText(): string;
+
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
+        getSourceMappingURL(): string;
     }
 
-    let nullSourceMapWriter: SourceMapWriter;
     // Used for initialize lastEncodedSourceMapSpan and reset lastEncodedSourceMapSpan when updateLastEncodedAndRecordedSpans
     const defaultLastEncodedSourceMapSpan: SourceMapSpan = {
-        emittedLine: 1,
-        emittedColumn: 1,
-        sourceLine: 1,
-        sourceColumn: 1,
+        emittedLine: 0,
+        emittedColumn: 0,
+        sourceLine: 0,
+        sourceColumn: 0,
         sourceIndex: 0
     };
 
-    export function getNullSourceMapWriter(): SourceMapWriter {
-        if (nullSourceMapWriter === undefined) {
-            nullSourceMapWriter = {
-                getSourceMapData(): SourceMapData { return undefined; },
-                setSourceFile(sourceFile: SourceFile): void { },
-                emitStart(range: TextRange): void { },
-                emitEnd(range: TextRange, stopOverridingSpan?: boolean): void { },
-                emitPos(pos: number): void { },
-                changeEmitSourcePos(): void { },
-                getText(): string { return undefined; },
-                getSourceMappingURL(): string { return undefined; },
-                initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean): void { },
-                reset(): void { },
-            };
-        }
-
-        return nullSourceMapWriter;
+    export interface SourceMapOptions {
+        sourceMap?: boolean;
+        inlineSourceMap?: boolean;
+        inlineSources?: boolean;
+        sourceRoot?: string;
+        mapRoot?: string;
+        extendedDiagnostics?: boolean;
     }
 
-    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter): SourceMapWriter {
-        const compilerOptions = host.getCompilerOptions();
-        let currentSourceFile: SourceFile;
+    export function createSourceMapWriter(host: EmitHost, writer: EmitTextWriter, compilerOptions: SourceMapOptions = host.getCompilerOptions()): SourceMapWriter {
+        const extendedDiagnostics = compilerOptions.extendedDiagnostics;
+        let currentSource: SourceMapSource;
+        let currentSourceText: string;
         let sourceMapDir: string; // The directory in which sourcemap will be
-        let stopOverridingSpan = false;
-        let modifyLastSourcePos = false;
 
         // Current source map file and its index in the sources list
         let sourceMapSourceIndex: number;
 
         // Last recorded and encoded spans
-        let lastRecordedSourceMapSpan: SourceMapSpan;
-        let lastEncodedSourceMapSpan: SourceMapSpan;
-        let lastEncodedNameIndex: number;
+        let lastRecordedSourceMapSpan: SourceMapSpan | undefined;
+        let lastEncodedSourceMapSpan: SourceMapSpan | undefined;
+        let lastEncodedNameIndex: number | undefined;
 
         // Source map data
         let sourceMapData: SourceMapData;
+        let sourceMapDataList: SourceMapData[] | undefined;
+        let disabled: boolean = !(compilerOptions.sourceMap || compilerOptions.inlineSourceMap);
 
         return {
-            getSourceMapData: () => sourceMapData,
-            setSourceFile,
-            emitPos,
-            emitStart,
-            emitEnd,
-            changeEmitSourcePos,
-            getText,
-            getSourceMappingURL,
             initialize,
             reset,
+            setSourceFile,
+            emitPos,
+            emitNodeWithSourceMap,
+            emitTokenWithSourceMap,
+            getText,
+            getSourceMappingURL,
         };
 
-        function initialize(filePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
+        /**
+         * Skips trivia such as comments and white-space that can optionally overriden by the source map source
+         */
+        function skipSourceTrivia(pos: number): number {
+            return currentSource.skipTrivia ? currentSource.skipTrivia(pos) : skipTrivia(currentSourceText, pos);
+        }
+
+        /**
+         * Initialize the SourceMapWriter for a new output file.
+         *
+         * @param filePath The path to the generated output file.
+         * @param sourceMapFilePath The path to the output source map file.
+         * @param sourceFileOrBundle The input source file or bundle for the program.
+         */
+        function initialize(filePath: string, sourceMapFilePath: string, sourceFileOrBundle: SourceFile | Bundle, outputSourceMapDataList?: SourceMapData[]) {
+            if (disabled || fileExtensionIs(filePath, Extension.Json)) {
+                return;
+            }
+
             if (sourceMapData) {
                 reset();
             }
+            sourceMapDataList = outputSourceMapDataList;
 
-            currentSourceFile = undefined;
+            currentSource = undefined!;
+            currentSourceText = undefined!;
 
             // Current source map file and its index in the sources list
             sourceMapSourceIndex = -1;
@@ -92,8 +147,8 @@ namespace ts {
 
             // Initialize source map data
             sourceMapData = {
-                sourceMapFilePath: sourceMapFilePath,
-                jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined,
+                sourceMapFilePath,
+                jsSourceMappingURL: !compilerOptions.inlineSourceMap ? getBaseFileName(normalizeSlashes(sourceMapFilePath)) : undefined!, // TODO: GH#18217
                 sourceMapFile: getBaseFileName(normalizeSlashes(filePath)),
                 sourceMapSourceRoot: compilerOptions.sourceRoot || "",
                 sourceMapSources: [],
@@ -101,23 +156,21 @@ namespace ts {
                 sourceMapNames: [],
                 sourceMapMappings: "",
                 sourceMapSourcesContent: compilerOptions.inlineSources ? [] : undefined,
-                sourceMapDecodedMappings: []
             };
 
             // Normalize source root and make sure it has trailing "/" so that it can be used to combine paths with the
             // relative paths of the sources list in the sourcemap
-            sourceMapData.sourceMapSourceRoot = ts.normalizeSlashes(sourceMapData.sourceMapSourceRoot);
+            sourceMapData.sourceMapSourceRoot = normalizeSlashes(sourceMapData.sourceMapSourceRoot);
             if (sourceMapData.sourceMapSourceRoot.length && sourceMapData.sourceMapSourceRoot.charCodeAt(sourceMapData.sourceMapSourceRoot.length - 1) !== CharacterCodes.slash) {
                 sourceMapData.sourceMapSourceRoot += directorySeparator;
             }
 
             if (compilerOptions.mapRoot) {
                 sourceMapDir = normalizeSlashes(compilerOptions.mapRoot);
-                if (!isBundledEmit) { // emitting single module file
-                    Debug.assert(sourceFiles.length === 1);
+                if (sourceFileOrBundle.kind === SyntaxKind.SourceFile) { // emitting single module file
                     // For modules or multiple emit files the mapRoot will have directory structure like the sources
                     // So if src\a.ts and src\lib\b.ts are compiled together user would be moving the maps into mapRoot\a.js.map and mapRoot\lib\b.js.map
-                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFiles[0], host, sourceMapDir));
+                    sourceMapDir = getDirectoryPath(getSourceFilePathInNewDir(sourceFileOrBundle.fileName, host, sourceMapDir));
                 }
 
                 if (!isRootedDiskPath(sourceMapDir) && !isUrl(sourceMapDir)) {
@@ -139,56 +192,53 @@ namespace ts {
             }
         }
 
+        /**
+         * Reset the SourceMapWriter to an empty state.
+         */
         function reset() {
-            currentSourceFile = undefined;
-            sourceMapDir = undefined;
-            sourceMapSourceIndex = undefined;
-            lastRecordedSourceMapSpan = undefined;
-            lastEncodedSourceMapSpan = undefined;
-            lastEncodedNameIndex = undefined;
-            sourceMapData = undefined;
-        }
-
-        function updateLastEncodedAndRecordedSpans() {
-            if (modifyLastSourcePos) {
-                // Reset the source pos
-                modifyLastSourcePos = false;
-
-                // Change Last recorded Map with last encoded emit line and character
-                lastRecordedSourceMapSpan.emittedLine = lastEncodedSourceMapSpan.emittedLine;
-                lastRecordedSourceMapSpan.emittedColumn = lastEncodedSourceMapSpan.emittedColumn;
-
-                // Pop sourceMapDecodedMappings to remove last entry
-                sourceMapData.sourceMapDecodedMappings.pop();
-
-                // Point the lastEncodedSourceMapSpace to the previous encoded sourceMapSpan
-                // If the list is empty which indicates that we are at the beginning of the file,
-                // we have to reset it to default value (same value when we first initialize sourceMapWriter)
-                lastEncodedSourceMapSpan = sourceMapData.sourceMapDecodedMappings.length ?
-                    sourceMapData.sourceMapDecodedMappings[sourceMapData.sourceMapDecodedMappings.length - 1] :
-                    defaultLastEncodedSourceMapSpan;
-
-                // TODO: Update lastEncodedNameIndex
-                // Since we dont support this any more, lets not worry about it right now.
-                // When we start supporting nameIndex, we will get back to this
-
-                // Change the encoded source map
-                const sourceMapMappings = sourceMapData.sourceMapMappings;
-                let lenthToSet = sourceMapMappings.length - 1;
-                for (; lenthToSet >= 0; lenthToSet--) {
-                    const currentChar = sourceMapMappings.charAt(lenthToSet);
-                    if (currentChar === ",") {
-                        // Separator for the entry found
-                        break;
-                    }
-                    if (currentChar === ";" && lenthToSet !== 0 && sourceMapMappings.charAt(lenthToSet - 1) !== ";") {
-                        // Last line separator found
-                        break;
-                    }
-                }
-                sourceMapData.sourceMapMappings = sourceMapMappings.substr(0, Math.max(0, lenthToSet));
+            if (disabled) {
+                return;
             }
+
+            // Record source map data for the test harness.
+            if (sourceMapDataList) {
+                sourceMapDataList.push(sourceMapData);
+            }
+
+            currentSource = undefined!;
+            sourceMapDir = undefined!;
+            sourceMapSourceIndex = undefined!;
+            lastRecordedSourceMapSpan = undefined;
+            lastEncodedSourceMapSpan = undefined!;
+            lastEncodedNameIndex = undefined;
+            sourceMapData = undefined!;
+            sourceMapDataList = undefined!;
         }
+
+        type SourceMapSectionDefinition =
+            | { offset: { line: number, column: number }, url: string } // Included for completeness
+            | { offset: { line: number, column: number }, map: SourceMap };
+
+        interface SectionalSourceMap {
+            version: 3;
+            file: string;
+            sections: SourceMapSectionDefinition[];
+        }
+
+        type SourceMap = SectionalSourceMap | SourceMapSection;
+
+        function captureSection(): SourceMapSection {
+            return {
+                version: 3,
+                file: sourceMapData.sourceMapFile,
+                sourceRoot: sourceMapData.sourceMapSourceRoot,
+                sources: sourceMapData.sourceMapSources,
+                names: sourceMapData.sourceMapNames,
+                mappings: sourceMapData.sourceMapMappings,
+                sourcesContent: sourceMapData.sourceMapSourcesContent,
+            };
+        }
+
 
         // Encoding for sourcemap span
         function encodeLastRecordedSourceMapSpan() {
@@ -196,9 +246,14 @@ namespace ts {
                 return;
             }
 
-            let prevEncodedEmittedColumn = lastEncodedSourceMapSpan.emittedColumn;
+            Debug.assert(lastRecordedSourceMapSpan.emittedColumn >= 0, "lastEncodedSourceMapSpan.emittedColumn was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceIndex >= 0, "lastEncodedSourceMapSpan.sourceIndex was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceLine >= 0, "lastEncodedSourceMapSpan.sourceLine was negative");
+            Debug.assert(lastRecordedSourceMapSpan.sourceColumn >= 0, "lastEncodedSourceMapSpan.sourceColumn was negative");
+
+            let prevEncodedEmittedColumn = lastEncodedSourceMapSpan!.emittedColumn;
             // Line/Comma delimiters
-            if (lastEncodedSourceMapSpan.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
+            if (lastEncodedSourceMapSpan!.emittedLine === lastRecordedSourceMapSpan.emittedLine) {
                 // Emit comma to separate the entry
                 if (sourceMapData.sourceMapMappings) {
                     sourceMapData.sourceMapMappings += ",";
@@ -206,47 +261,52 @@ namespace ts {
             }
             else {
                 // Emit line delimiters
-                for (let encodedLine = lastEncodedSourceMapSpan.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
+                for (let encodedLine = lastEncodedSourceMapSpan!.emittedLine; encodedLine < lastRecordedSourceMapSpan.emittedLine; encodedLine++) {
                     sourceMapData.sourceMapMappings += ";";
                 }
-                prevEncodedEmittedColumn = 1;
+                prevEncodedEmittedColumn = 0;
             }
 
             // 1. Relative Column 0 based
             sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.emittedColumn - prevEncodedEmittedColumn);
 
             // 2. Relative sourceIndex
-            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceIndex - lastEncodedSourceMapSpan.sourceIndex);
+            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceIndex - lastEncodedSourceMapSpan!.sourceIndex);
 
             // 3. Relative sourceLine 0 based
-            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceLine - lastEncodedSourceMapSpan.sourceLine);
+            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceLine - lastEncodedSourceMapSpan!.sourceLine);
 
             // 4. Relative sourceColumn 0 based
-            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan.sourceColumn);
+            sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.sourceColumn - lastEncodedSourceMapSpan!.sourceColumn);
 
             // 5. Relative namePosition 0 based
-            if (lastRecordedSourceMapSpan.nameIndex >= 0) {
+            if (lastRecordedSourceMapSpan.nameIndex! >= 0) {
                 Debug.assert(false, "We do not support name index right now, Make sure to update updateLastEncodedAndRecordedSpans when we start using this");
-                sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex - lastEncodedNameIndex);
+                sourceMapData.sourceMapMappings += base64VLQFormatEncode(lastRecordedSourceMapSpan.nameIndex! - lastEncodedNameIndex!);
                 lastEncodedNameIndex = lastRecordedSourceMapSpan.nameIndex;
             }
 
             lastEncodedSourceMapSpan = lastRecordedSourceMapSpan;
-            sourceMapData.sourceMapDecodedMappings.push(lastEncodedSourceMapSpan);
         }
 
+        /**
+         * Emits a mapping.
+         *
+         * If the position is synthetic (undefined or a negative value), no mapping will be
+         * created.
+         *
+         * @param pos The position.
+         */
         function emitPos(pos: number) {
-            if (pos === -1) {
+            if (disabled || positionIsSynthesized(pos) || isJsonSourceMapSource(currentSource)) {
                 return;
             }
 
-            const start = performance.mark();
+            if (extendedDiagnostics) {
+                performance.mark("beforeSourcemap");
+            }
 
-            const sourceLinePos = getLineAndCharacterOfPosition(currentSourceFile, pos);
-
-            // Convert the location to be one-based.
-            sourceLinePos.line++;
-            sourceLinePos.character++;
+            const sourceLinePos = getLineAndCharacterOfPosition(currentSource, pos);
 
             const emittedLine = writer.getLine();
             const emittedColumn = writer.getColumn();
@@ -264,98 +324,262 @@ namespace ts {
 
                 // New span
                 lastRecordedSourceMapSpan = {
-                    emittedLine: emittedLine,
-                    emittedColumn: emittedColumn,
+                    emittedLine,
+                    emittedColumn,
                     sourceLine: sourceLinePos.line,
                     sourceColumn: sourceLinePos.character,
                     sourceIndex: sourceMapSourceIndex
                 };
-
-                stopOverridingSpan = false;
             }
-            else if (!stopOverridingSpan) {
+            else {
                 // Take the new pos instead since there is no change in emittedLine and column since last location
                 lastRecordedSourceMapSpan.sourceLine = sourceLinePos.line;
                 lastRecordedSourceMapSpan.sourceColumn = sourceLinePos.character;
                 lastRecordedSourceMapSpan.sourceIndex = sourceMapSourceIndex;
             }
 
-            updateLastEncodedAndRecordedSpans();
-
-            performance.measure("Source Map", start);
+            if (extendedDiagnostics) {
+                performance.mark("afterSourcemap");
+                performance.measure("Source Map", "beforeSourcemap", "afterSourcemap");
+            }
         }
 
-        function getStartPos(range: TextRange) {
-            const rangeHasDecorators = !!(range as Node).decorators;
-            return range.pos !== -1 ? skipTrivia(currentSourceFile.text, rangeHasDecorators ? (range as Node).decorators.end : range.pos) : -1;
+        function isPossiblySourceMap(x: {}): x is SourceMapSection {
+            return typeof x === "object" && !!(x as any).mappings && typeof (x as any).mappings === "string" && !!(x as any).sources;
         }
 
-        function emitStart(range: TextRange) {
-            emitPos(getStartPos(range));
+        /**
+         * Emits a node with possible leading and trailing source maps.
+         *
+         * @param hint A hint as to the intended usage of the node.
+         * @param node The node to emit.
+         * @param emitCallback The callback used to emit the node.
+         */
+        function emitNodeWithSourceMap(hint: EmitHint, node: Node, emitCallback: (hint: EmitHint, node: Node) => void) {
+            if (disabled || isInJsonFile(node)) {
+                return emitCallback(hint, node);
+            }
+
+            if (node) {
+                if (isUnparsedSource(node) && node.sourceMapText !== undefined) {
+                    const text = node.sourceMapText;
+                    let parsed: {} | undefined;
+                    try {
+                        parsed = JSON.parse(text);
+                    }
+                    catch {
+                        // empty
+                    }
+                    if (!parsed || !isPossiblySourceMap(parsed)) {
+                        return emitCallback(hint, node);
+                    }
+                    const offsetLine = writer.getLine();
+                    const firstLineColumnOffset = writer.getColumn();
+                    // First, decode the old component sourcemap
+                    const originalMap = parsed;
+
+                    const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+                    const resolvedPathCache = createMap<string>();
+                    const absolutePathCache = createMap<string>();
+                    const sourcemapIterator = sourcemaps.decodeMappings(originalMap);
+                    for (let { value: raw, done } = sourcemapIterator.next(); !done; { value: raw, done } = sourcemapIterator.next()) {
+                        const pathCacheKey = "" + raw.sourceIndex;
+                        // Apply offsets to each position and fixup source entries
+                        if (!resolvedPathCache.has(pathCacheKey)) {
+                            const rawPath = originalMap.sources[raw.sourceIndex];
+                            const relativePath = originalMap.sourceRoot ? combinePaths(originalMap.sourceRoot, rawPath) : rawPath;
+                            const combinedPath = combinePaths(getDirectoryPath(node.sourceMapPath!), relativePath);
+                            const resolvedPath = getRelativePathToDirectoryOrUrl(
+                                sourcesDirectoryPath,
+                                combinedPath,
+                                host.getCurrentDirectory(),
+                                host.getCanonicalFileName,
+                                /*isAbsolutePathAnUrl*/ true
+                            );
+                            resolvedPathCache.set(pathCacheKey, resolvedPath);
+                            absolutePathCache.set(pathCacheKey, getNormalizedAbsolutePath(resolvedPath, sourcesDirectoryPath));
+                        }
+                        const resolvedPath = resolvedPathCache.get(pathCacheKey)!;
+                        const absolutePath = absolutePathCache.get(pathCacheKey)!;
+                        // tslint:disable-next-line:no-null-keyword
+                        setupSourceEntry(absolutePath, originalMap.sourcesContent ? originalMap.sourcesContent[raw.sourceIndex] : null, resolvedPath); // TODO: Lookup content for inlining?
+                        const newIndex = sourceMapData.sourceMapSources.indexOf(resolvedPath);
+                        // Then reencode all the updated spans into the overall map
+                        encodeLastRecordedSourceMapSpan();
+                        lastRecordedSourceMapSpan = {
+                            ...raw,
+                            emittedLine: raw.emittedLine + offsetLine,
+                            emittedColumn: raw.emittedLine === 0 ? (raw.emittedColumn + firstLineColumnOffset) : raw.emittedColumn,
+                            sourceIndex: newIndex,
+                        };
+                    }
+                    // And actually emit the text these sourcemaps are for
+                    return emitCallback(hint, node);
+                }
+                const emitNode = node.emitNode;
+                const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
+                const range = emitNode && emitNode.sourceMapRange;
+                const { pos, end } = range || node;
+                let source = range && range.source;
+                const oldSource = currentSource;
+                if (source === oldSource) source = undefined;
+
+                if (source) setSourceFile(source);
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoLeadingSourceMap) === 0
+                    && pos >= 0) {
+                    emitPos(skipSourceTrivia(pos));
+                }
+
+                if (source) setSourceFile(oldSource);
+
+                if (emitFlags & EmitFlags.NoNestedSourceMaps) {
+                    disabled = true;
+                    emitCallback(hint, node);
+                    disabled = false;
+                }
+                else {
+                    emitCallback(hint, node);
+                }
+
+                if (source) setSourceFile(source);
+
+                if (node.kind !== SyntaxKind.NotEmittedStatement
+                    && (emitFlags & EmitFlags.NoTrailingSourceMap) === 0
+                    && end >= 0) {
+                    emitPos(end);
+                }
+
+                if (source) setSourceFile(oldSource);
+            }
         }
 
-        function emitEnd(range: TextRange, stopOverridingEnd?: boolean) {
-            emitPos(range.end);
-            stopOverridingSpan = stopOverridingEnd;
+        /**
+         * Emits a token of a node with possible leading and trailing source maps.
+         *
+         * @param node The node containing the token.
+         * @param token The token to emit.
+         * @param tokenStartPos The start pos of the token.
+         * @param emitCallback The callback used to emit the token.
+         */
+        function emitTokenWithSourceMap(node: Node, token: SyntaxKind, writer: (s: string) => void, tokenPos: number, emitCallback: (token: SyntaxKind, writer: (s: string) => void, tokenStartPos: number) => number) {
+            if (disabled || isInJsonFile(node)) {
+                return emitCallback(token, writer, tokenPos);
+            }
+
+            const emitNode = node && node.emitNode;
+            const emitFlags = emitNode && emitNode.flags || EmitFlags.None;
+            const range = emitNode && emitNode.tokenSourceMapRanges && emitNode.tokenSourceMapRanges[token];
+
+            tokenPos = skipSourceTrivia(range ? range.pos : tokenPos);
+            if ((emitFlags & EmitFlags.NoTokenLeadingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            tokenPos = emitCallback(token, writer, tokenPos);
+
+            if (range) tokenPos = range.end;
+            if ((emitFlags & EmitFlags.NoTokenTrailingSourceMaps) === 0 && tokenPos >= 0) {
+                emitPos(tokenPos);
+            }
+
+            return tokenPos;
         }
 
-        function changeEmitSourcePos() {
-            Debug.assert(!modifyLastSourcePos);
-            modifyLastSourcePos = true;
+        function isJsonSourceMapSource(sourceFile: SourceMapSource) {
+            return fileExtensionIs(sourceFile.fileName, Extension.Json);
         }
 
-        function setSourceFile(sourceFile: SourceFile) {
-            currentSourceFile = sourceFile;
+        /**
+         * Set the current source file.
+         *
+         * @param sourceFile The source file.
+         */
+        function setSourceFile(sourceFile: SourceMapSource) {
+            if (disabled) {
+                return;
+            }
 
-            // Add the file to tsFilePaths
-            // If sourceroot option: Use the relative path corresponding to the common directory path
-            // otherwise source locations relative to map file location
-            const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+            currentSource = sourceFile;
+            currentSourceText = currentSource.text;
 
-            const source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
-                currentSourceFile.fileName,
-                host.getCurrentDirectory(),
-                host.getCanonicalFileName,
-                /*isAbsolutePathAnUrl*/ true);
+            if (isJsonSourceMapSource(sourceFile)) {
+                return;
+            }
 
-            sourceMapSourceIndex = indexOf(sourceMapData.sourceMapSources, source);
+            setupSourceEntry(sourceFile.fileName, sourceFile.text);
+        }
+
+        function setupSourceEntry(fileName: string, content: string | null, source?: string) {
+            if (!source) {
+                // Add the file to tsFilePaths
+                // If sourceroot option: Use the relative path corresponding to the common directory path
+                // otherwise source locations relative to map file location
+                const sourcesDirectoryPath = compilerOptions.sourceRoot ? host.getCommonSourceDirectory() : sourceMapDir;
+
+                source = getRelativePathToDirectoryOrUrl(sourcesDirectoryPath,
+                    fileName,
+                    host.getCurrentDirectory(),
+                    host.getCanonicalFileName,
+                    /*isAbsolutePathAnUrl*/ true);
+            }
+
+            sourceMapSourceIndex = sourceMapData.sourceMapSources.indexOf(source);
             if (sourceMapSourceIndex === -1) {
                 sourceMapSourceIndex = sourceMapData.sourceMapSources.length;
                 sourceMapData.sourceMapSources.push(source);
 
                 // The one that can be used from program to get the actual source file
-                sourceMapData.inputSourceFileNames.push(sourceFile.fileName);
+                sourceMapData.inputSourceFileNames.push(fileName);
 
                 if (compilerOptions.inlineSources) {
-                    sourceMapData.sourceMapSourcesContent.push(sourceFile.text);
+                    sourceMapData.sourceMapSourcesContent!.push(content);
                 }
             }
         }
 
+        /**
+         * Gets the text for the source map.
+         */
         function getText() {
+            if (disabled || isJsonSourceMapSource(currentSource)) {
+                return undefined!; // TODO: GH#18217
+            }
+
             encodeLastRecordedSourceMapSpan();
 
-            return stringify({
-                version: 3,
-                file: sourceMapData.sourceMapFile,
-                sourceRoot: sourceMapData.sourceMapSourceRoot,
-                sources: sourceMapData.sourceMapSources,
-                names: sourceMapData.sourceMapNames,
-                mappings: sourceMapData.sourceMapMappings,
-                sourcesContent: sourceMapData.sourceMapSourcesContent,
-            });
+            return JSON.stringify(captureSection());
         }
 
+        /**
+         * Gets the SourceMappingURL for the source map.
+         */
         function getSourceMappingURL() {
+            if (disabled || isJsonSourceMapSource(currentSource)) {
+                return undefined!; // TODO: GH#18217
+            }
+
             if (compilerOptions.inlineSourceMap) {
                 // Encode the sourceMap into the sourceMap url
-                const base64SourceMapText = convertToBase64(getText());
+                const base64SourceMapText = base64encode(sys, getText());
                 return sourceMapData.jsSourceMappingURL = `data:application/json;base64,${base64SourceMapText}`;
             }
             else {
                 return sourceMapData.jsSourceMappingURL;
             }
         }
+    }
+
+    export interface SourceMapSection {
+        version: 3;
+        file: string;
+        sourceRoot?: string;
+        sources: string[];
+        names?: string[];
+        mappings: string;
+        sourcesContent?: (string | null)[];
+        sections?: undefined;
     }
 
     const base64Chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/";

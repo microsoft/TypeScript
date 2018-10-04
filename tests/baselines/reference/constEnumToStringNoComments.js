@@ -23,15 +23,15 @@ let c1 = Foo["C"].toString();
 
 
 //// [constEnumToStringNoComments.js]
-var x0 = 100 .toString();
-var x1 = 100 .toString();
+var x0 = 100..toString();
+var x1 = 100..toString();
 var y0 = 0.5.toString();
 var y1 = 0.5.toString();
-var z0 = 2 .toString();
-var z1 = 2 .toString();
-var a0 = -1 .toString();
-var a1 = -1 .toString();
+var z0 = 2..toString();
+var z1 = 2..toString();
+var a0 = -1..toString();
+var a1 = -1..toString();
 var b0 = -1.5.toString();
 var b1 = -1.5.toString();
-var c0 = -1 .toString();
-var c1 = -1 .toString();
+var c0 = -1..toString();
+var c1 = -1..toString();

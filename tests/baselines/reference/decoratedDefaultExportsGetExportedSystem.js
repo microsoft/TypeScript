@@ -13,9 +13,8 @@ var decorator: ClassDecorator;
 export default class {}
 
 //// [a.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -23,9 +22,10 @@ System.register([], function(exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var decorator, Foo;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             Foo = class Foo {
             };
             Foo = __decorate([
@@ -33,12 +33,11 @@ System.register([], function(exports_1, context_1) {
             ], Foo);
             exports_1("default", Foo);
         }
-    }
+    };
 });
 //// [b.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
         var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
         if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
@@ -46,9 +45,10 @@ System.register([], function(exports_1, context_1) {
         return c > 3 && r && Object.defineProperty(target, key, r), r;
     };
     var decorator, default_1;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             default_1 = class {
             };
             default_1 = __decorate([
@@ -56,5 +56,5 @@ System.register([], function(exports_1, context_1) {
             ], default_1);
             exports_1("default", default_1);
         }
-    }
+    };
 });

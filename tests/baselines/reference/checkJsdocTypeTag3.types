@@ -1,0 +1,5 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+/** @type {Array<?number>} */
+var nns;
+>nns : number[]
+

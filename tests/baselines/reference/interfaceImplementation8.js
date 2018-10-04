@@ -41,56 +41,64 @@ class C8 extends C7 implements i2{
 
 
 //// [interfaceImplementation8.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C1 = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C1 = /** @class */ (function () {
     function C1() {
     }
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
-var C4 = (function (_super) {
+var C4 = /** @class */ (function (_super) {
     __extends(C4, _super);
     function C4() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C4;
 }(C1));
-var C5 = (function (_super) {
+var C5 = /** @class */ (function (_super) {
     __extends(C5, _super);
     function C5() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C5;
 }(C2));
-var C6 = (function (_super) {
+var C6 = /** @class */ (function (_super) {
     __extends(C6, _super);
     function C6() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C6;
 }(C3));
-var C7 = (function () {
+var C7 = /** @class */ (function () {
     function C7() {
     }
     return C7;
 }());
-var C8 = (function (_super) {
+var C8 = /** @class */ (function (_super) {
     __extends(C8, _super);
     function C8() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C8;
 }(C7));

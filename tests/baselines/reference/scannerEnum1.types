@@ -3,10 +3,10 @@
 >CodeGenTarget : CodeGenTarget
 
         ES3 = 0,
->ES3 : CodeGenTarget
->0 : number
+>ES3 : CodeGenTarget.ES3
+>0 : 0
 
         ES5 = 1,
->ES5 : CodeGenTarget
->1 : number
+>ES5 : CodeGenTarget.ES5
+>1 : 1
     }

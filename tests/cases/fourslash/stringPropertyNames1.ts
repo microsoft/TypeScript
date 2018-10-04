@@ -6,5 +6,4 @@
 ////var a: Album;
 ////var /**/x = a['artist'];
 
-goTo.marker();
-verify.quickInfoIs('var x: number');
+verify.quickInfoAt("", "var x: number");

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames21_ES6.ts ===
+class C {
+>C : Symbol(C, Decl(computedPropertyNames21_ES6.ts, 0, 0))
+
+    bar() {
+>bar : Symbol(C.bar, Decl(computedPropertyNames21_ES6.ts, 0, 9))
+
+        return 0;
+    }
+    [this.bar()]() { }
+>[this.bar()] : Symbol(C[this.bar()], Decl(computedPropertyNames21_ES6.ts, 3, 5))
+}

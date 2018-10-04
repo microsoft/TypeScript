@@ -4,13 +4,13 @@ function* g() {
 
     yield 0;
 >yield 0 : any
->0 : number
+>0 : 0
 
     function* g2() {
 >g2 : () => IterableIterator<string>
 
         yield "";
 >yield "" : any
->"" : string
+>"" : ""
     }
 }

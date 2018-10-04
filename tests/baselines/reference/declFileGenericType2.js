@@ -1,5 +1,4 @@
 //// [declFileGenericType2.ts]
-
 declare module templa.mvc {
     interface IModel {
     }
@@ -43,11 +42,19 @@ module templa.dom.mvc.composite {
 
 
 //// [declFileGenericType2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Module
 var templa;
 (function (templa) {
@@ -55,10 +62,10 @@ var templa;
     (function (dom) {
         var mvc;
         (function (mvc) {
-            var AbstractElementController = (function (_super) {
+            var AbstractElementController = /** @class */ (function (_super) {
                 __extends(AbstractElementController, _super);
                 function AbstractElementController() {
-                    _super.call(this);
+                    return _super.call(this) || this;
                 }
                 return AbstractElementController;
             }(templa.mvc.AbstractController));
@@ -67,7 +74,6 @@ var templa;
     })(dom = templa.dom || (templa.dom = {}));
 })(templa || (templa = {}));
 // Module
-var templa;
 (function (templa) {
     var dom;
     (function (dom) {
@@ -75,11 +81,12 @@ var templa;
         (function (mvc) {
             var composite;
             (function (composite) {
-                var AbstractCompositeElementController = (function (_super) {
+                var AbstractCompositeElementController = /** @class */ (function (_super) {
                     __extends(AbstractCompositeElementController, _super);
                     function AbstractCompositeElementController() {
-                        _super.call(this);
-                        this._controllers = [];
+                        var _this = _super.call(this) || this;
+                        _this._controllers = [];
+                        return _this;
                     }
                     return AbstractCompositeElementController;
                 }(templa.dom.mvc.AbstractElementController));

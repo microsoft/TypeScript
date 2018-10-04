@@ -18,13 +18,13 @@ module A {
 //// [ExportFunctionWithAccessibleTypesInParameterAndReturnTypeAnnotation.js]
 var A;
 (function (A) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point() {
         }
         return Point;
     }());
     A.Point = Point;
-    var Line = (function () {
+    var Line = /** @class */ (function () {
         function Line(start, end) {
             this.start = start;
             this.end = end;

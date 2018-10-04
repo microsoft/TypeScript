@@ -1,9 +1,7 @@
-tests/cases/compiler/letDeclarations-scopes.ts(29,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/letDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
 ==== tests/cases/compiler/letDeclarations-scopes.ts (1 errors) ====
-    
-    
     // global
     let l = "string";
     
@@ -31,8 +29,8 @@ tests/cases/compiler/letDeclarations-scopes.ts(29,7): error TS2410: All symbols 
     
     var obj;
     with (obj) {
-          ~~~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         let l = 0;
         n = l;
     }

@@ -36,7 +36,7 @@ var A;
     (function (B) {
         var C;
         (function (C) {
-            var Point = (function () {
+            var Point = /** @class */ (function () {
                 function Point() {
                 }
                 return Point;
@@ -45,11 +45,10 @@ var A;
         })(C = B.C || (B.C = {}));
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -61,7 +60,7 @@ var M2;
 (function (M2) {
     var X;
     (function (X) {
-        var Point = (function () {
+        var Point = /** @class */ (function () {
             function Point() {
             }
             return Point;
@@ -69,7 +68,6 @@ var M2;
         X.Point = Point;
     })(X = M2.X || (M2.X = {}));
 })(M2 || (M2 = {}));
-var M2;
 (function (M2) {
     var X;
     (function (X) {

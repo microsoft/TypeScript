@@ -41,42 +41,42 @@ new DCC1;
 new DCC2;
 
 //// [classAbstractMergedDeclaration.js]
-var CM = (function () {
+var CM = /** @class */ (function () {
     function CM() {
     }
     return CM;
 }());
-var MC = (function () {
+var MC = /** @class */ (function () {
     function MC() {
     }
     return MC;
 }());
-var CI = (function () {
+var CI = /** @class */ (function () {
     function CI() {
     }
     return CI;
 }());
-var IC = (function () {
+var IC = /** @class */ (function () {
     function IC() {
     }
     return IC;
 }());
-var CC1 = (function () {
+var CC1 = /** @class */ (function () {
     function CC1() {
     }
     return CC1;
 }());
-var CC1 = (function () {
+var CC1 = /** @class */ (function () {
     function CC1() {
     }
     return CC1;
 }());
-var CC2 = (function () {
+var CC2 = /** @class */ (function () {
     function CC2() {
     }
     return CC2;
 }());
-var CC2 = (function () {
+var CC2 = /** @class */ (function () {
     function CC2() {
     }
     return CC2;

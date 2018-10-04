@@ -1,0 +1,17 @@
+=== tests/cases/compiler/main.ts ===
+import { X } from "./other";
+>X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
+
+const X = 42;
+>X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
+
+console.log('X is ' + X);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>X : Symbol(X, Decl(main.ts, 0, 8), Decl(main.ts, 1, 5))
+
+=== tests/cases/compiler/other.ts ===
+export type X = {};
+>X : Symbol(X, Decl(other.ts, 0, 0))
+

@@ -13,7 +13,8 @@ export var x = 5;
 //// [exportingContainingVisibleType.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Foo = (function () {
+    exports.__esModule = true;
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         Object.defineProperty(Foo.prototype, "foo", {

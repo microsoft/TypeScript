@@ -1,4 +1,5 @@
 // @strictNullChecks: true
+// @target: ES2017
 
 declare function getStringOrNumber(): string | number;
 
@@ -46,3 +47,30 @@ if (!test) {
 (() => {
     test.slice(1); // No error
 })();
+
+// Repro from #23565
+
+function f4() {
+    let v: number;
+    (function() {
+        v = 1;
+    })();
+    v;
+}
+
+function f5() {
+    let v: number;
+    (function*() {
+        yield 1;
+        v = 1;
+    })();
+    v; // still undefined
+}
+
+function f6() {
+    let v: number;
+    (async function() {
+        v = await 1;
+    })();
+    v; // still undefined
+}

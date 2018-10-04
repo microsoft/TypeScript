@@ -1,0 +1,37 @@
+=== tests/cases/conformance/types/literal/literalTypesAndTypeAssertions.ts ===
+const obj = {
+>obj : Symbol(obj, Decl(literalTypesAndTypeAssertions.ts, 0, 5))
+
+    a: "foo" as "foo",
+>a : Symbol(a, Decl(literalTypesAndTypeAssertions.ts, 0, 13))
+
+    b: <"foo">"foo",
+>b : Symbol(b, Decl(literalTypesAndTypeAssertions.ts, 1, 22))
+
+    c: "foo"
+>c : Symbol(c, Decl(literalTypesAndTypeAssertions.ts, 2, 20))
+
+};
+
+let x1 = 1 as (0 | 1);
+>x1 : Symbol(x1, Decl(literalTypesAndTypeAssertions.ts, 6, 3))
+
+let x2 = 1;
+>x2 : Symbol(x2, Decl(literalTypesAndTypeAssertions.ts, 7, 3))
+
+let { a = "foo" } = { a: "foo" };
+>a : Symbol(a, Decl(literalTypesAndTypeAssertions.ts, 9, 5))
+>a : Symbol(a, Decl(literalTypesAndTypeAssertions.ts, 9, 21))
+
+let { b = "foo" as "foo" } = { b: "bar" };
+>b : Symbol(b, Decl(literalTypesAndTypeAssertions.ts, 10, 5))
+>b : Symbol(b, Decl(literalTypesAndTypeAssertions.ts, 10, 30))
+
+let { c = "foo" } = { c: "bar" as "bar" };
+>c : Symbol(c, Decl(literalTypesAndTypeAssertions.ts, 11, 5))
+>c : Symbol(c, Decl(literalTypesAndTypeAssertions.ts, 11, 21))
+
+let { d = "foo" as "foo" } = { d: "bar" as "bar" };
+>d : Symbol(d, Decl(literalTypesAndTypeAssertions.ts, 12, 5))
+>d : Symbol(d, Decl(literalTypesAndTypeAssertions.ts, 12, 30))
+

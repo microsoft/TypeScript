@@ -12,7 +12,7 @@
 ////}
 
 goTo.marker('1');
-verify.memberListIsEmpty();
+verify.completionListIsEmpty();
 
 goTo.marker('2');
 // Only keywords should show in completion, no members or types

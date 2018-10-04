@@ -13,7 +13,7 @@ class  bigClass {
 
 
 //// [es6ClassTest5.js]
-var C1T5 = (function () {
+var C1T5 = /** @class */ (function () {
     function C1T5() {
         this.foo = function (i) {
             return i;
@@ -21,9 +21,9 @@ var C1T5 = (function () {
     }
     return C1T5;
 }());
-var bigClass = (function () {
+var bigClass = /** @class */ (function () {
     function bigClass() {
-        this.break = 1;
+        this["break"] = 1;
     }
     return bigClass;
 }());

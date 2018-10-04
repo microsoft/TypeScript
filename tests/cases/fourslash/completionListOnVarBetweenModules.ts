@@ -13,5 +13,5 @@
 ////}
 
 goTo.marker();
-verify.memberListContains("C1");
-verify.memberListContains("C2");
+verify.completionListContains("C1");
+verify.completionListContains("C2");

@@ -26,24 +26,32 @@ var myDerivedList: DerivedList<number>;
 var as = [list, myDerivedList]; // List<number>[]
 
 //// [arrayLiteralsWithRecursiveGenerics.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var List = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var List = /** @class */ (function () {
     function List() {
     }
     return List;
 }());
-var DerivedList = (function (_super) {
+var DerivedList = /** @class */ (function (_super) {
     __extends(DerivedList, _super);
     function DerivedList() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return DerivedList;
 }(List));
-var MyList = (function () {
+var MyList = /** @class */ (function () {
     function MyList() {
     }
     return MyList;

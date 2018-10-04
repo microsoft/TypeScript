@@ -12,4 +12,4 @@
 ////var y = new DefaultExportedClass;
 
 goTo.marker();
-verify.renameInfoSucceeded("DefaultExportedClass", '"tests/cases/fourslash/foo".DefaultExportedClass');
+verify.renameInfoSucceeded("DefaultExportedClass", '"/tests/cases/fourslash/foo".DefaultExportedClass');

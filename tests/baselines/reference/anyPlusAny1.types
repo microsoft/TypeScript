@@ -1,13 +1,13 @@
 === tests/cases/compiler/anyPlusAny1.ts ===
-var x;
+var x: any;
 >x : any
 
 x.name = "hello";
->x.name = "hello" : string
+>x.name = "hello" : "hello"
 >x.name : any
 >x : any
 >name : any
->"hello" : string
+>"hello" : "hello"
 
 var z = x + x;
 >z : any

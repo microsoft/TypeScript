@@ -6,7 +6,8 @@ export export class Foo {
 
 //// [parser618973.js]
 "use strict";
-var Foo = (function () {
+exports.__esModule = true;
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.Bar = function () {

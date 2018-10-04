@@ -1,5 +1,4 @@
 //// [unusedSingleParameterInMethodDeclaration.ts]
-
 class Dummy {
     public greeter(person: string) {
         var unused = 20;
@@ -7,7 +6,7 @@ class Dummy {
 }
 
 //// [unusedSingleParameterInMethodDeclaration.js]
-var Dummy = (function () {
+var Dummy = /** @class */ (function () {
     function Dummy() {
     }
     Dummy.prototype.greeter = function (person) {

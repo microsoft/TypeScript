@@ -1,0 +1,23 @@
+=== /a.ts ===
+import * as _ from "./a";
+>_ : Symbol(_, Decl(a.ts, 0, 6))
+
+for (const _ of []) { }
+>_ : Symbol(_, Decl(a.ts, 2, 10))
+
+for (const _ in []) { }
+>_ : Symbol(_, Decl(a.ts, 4, 10))
+
+namespace _ns {
+>_ns : Symbol(_ns, Decl(a.ts, 4, 23))
+
+    let _;
+>_ : Symbol(_, Decl(a.ts, 7, 7))
+
+    for (const _ of []) { }
+>_ : Symbol(_, Decl(a.ts, 8, 14))
+
+    for (const _ in []) { }
+>_ : Symbol(_, Decl(a.ts, 10, 14))
+}
+

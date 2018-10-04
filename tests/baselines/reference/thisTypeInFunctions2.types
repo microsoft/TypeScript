@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts ===
 interface IndexedWithThis {
->IndexedWithThis : IndexedWithThis
-
     // this is a workaround for React
     init?: (this: this) => void;
 >init : (this: this) => void
@@ -18,8 +16,6 @@ interface IndexedWithThis {
 >args : any[]
 }
 interface IndexedWithoutThis {
->IndexedWithoutThis : IndexedWithoutThis
-
     // this is what React would like to write (and what they write today)
     init?: () => void;
 >init : () => void
@@ -31,8 +27,6 @@ interface IndexedWithoutThis {
 >propName : string
 }
 interface SimpleInterface {
->SimpleInterface : SimpleInterface
-
     foo(n: string);
 >foo : (n: string) => any
 >n : string
@@ -43,25 +37,22 @@ interface SimpleInterface {
 declare function extend1(args: IndexedWithThis): void;
 >extend1 : (args: IndexedWithThis) => void
 >args : IndexedWithThis
->IndexedWithThis : IndexedWithThis
 
 declare function extend2(args: IndexedWithoutThis): void;
 >extend2 : (args: IndexedWithoutThis) => void
 >args : IndexedWithoutThis
->IndexedWithoutThis : IndexedWithoutThis
 
 declare function simple(arg: SimpleInterface): void;
 >simple : (arg: SimpleInterface) => void
 >arg : SimpleInterface
->SimpleInterface : SimpleInterface
 
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
 >extend1 : (args: IndexedWithThis) => void
->{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }} : { init(this: IndexedWithThis): void; mine: number; foo(this: any): void; }
 
     init() {
->init : () => void
+>init : (this: IndexedWithThis) => void
 
         this // this: IndexedWithThis because of contextual typing.
 >this : IndexedWithThis
@@ -75,10 +66,10 @@ extend1({
     },
     mine: 12,
 >mine : number
->12 : number
+>12 : 12
 
     foo() {
->foo : () => void
+>foo : (this: any) => void
 
         this.url; // this: any because 'foo' matches the string indexer
 >this.url : any
@@ -92,74 +83,64 @@ extend1({
     }
 });
 extend2({
->extend2({    init() {        this  // this: any because the contextual signature of init doesn't specify this' type        this.mine        this.willDestroy    },    mine: 13,    foo() {        this // this: any because of the string indexer        this.mine        this.willDestroy    }}) : void
+>extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this  // this: any because the contextual signature of init doesn't specify this' type        this.mine        this.willDestroy    },    mine: 13,    foo() {        this // this: any because of the string indexer        this.mine        this.willDestroy    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
 
-        this  // this: any because the contextual signature of init doesn't specify this' type
->this : any
+        this // this: IndexedWithoutThis because of contextual typing
+>this : IndexedWithoutThis
 
         this.mine
 >this.mine : any
->this : any
+>this : IndexedWithoutThis
 >mine : any
-
-        this.willDestroy
->this.willDestroy : any
->this : any
->willDestroy : any
 
     },
     mine: 13,
 >mine : number
->13 : number
+>13 : 13
 
     foo() {
 >foo : () => void
 
-        this // this: any because of the string indexer
->this : any
+        this // this: IndexedWithoutThis because of contextual typing
+>this : IndexedWithoutThis
 
         this.mine
 >this.mine : any
->this : any
+>this : IndexedWithoutThis
 >mine : any
-
-        this.willDestroy
->this.willDestroy : any
->this : any
->willDestroy : any
     }
 });
 
 simple({
 >simple({    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }}) : void
 >simple : (arg: SimpleInterface) => void
->{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): any; bar(): number; }
+>{    foo(n) {        return n.length + this.bar();    },    bar() {        return 14;    }} : { foo(n: string): number; bar(): number; }
 
     foo(n) {
->foo : (n: string) => any
+>foo : (n: string) => number
 >n : string
 
         return n.length + this.bar();
->n.length + this.bar() : any
+>n.length + this.bar() : number
 >n.length : number
 >n : string
 >length : number
->this.bar() : any
->this.bar : any
->this : any
->bar : any
+>this.bar() : number
+>this.bar : () => number
+>this : SimpleInterface
+>bar : () => number
 
     },
     bar() {
 >bar : () => number
 
         return 14;
->14 : number
+>14 : 14
     }
 })
 

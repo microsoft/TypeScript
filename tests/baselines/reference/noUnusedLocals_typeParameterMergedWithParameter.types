@@ -1,0 +1,25 @@
+=== tests/cases/compiler/noUnusedLocals_typeParameterMergedWithParameter.ts ===
+function useNone<T>(T: number) {}
+>useNone : <T>(T: number) => void
+>T : number
+
+function useParam<T>(T: number) {
+>useParam : <T>(T: number) => number
+>T : number
+
+    return T;
+>T : number
+}
+
+function useTypeParam<T>(T: T) {}
+>useTypeParam : <T>(T: T) => void
+>T : T
+
+function useBoth<T>(T: T) {
+>useBoth : <T>(T: T) => T
+>T : T
+
+    return T;
+>T : T
+}
+

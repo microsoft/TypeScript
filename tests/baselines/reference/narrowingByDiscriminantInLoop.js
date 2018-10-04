@@ -1,5 +1,4 @@
 //// [narrowingByDiscriminantInLoop.ts]
-
 // Repro from #9977
 
 type IDLMemberTypes = OperationMemberType | ConstantMemberType;

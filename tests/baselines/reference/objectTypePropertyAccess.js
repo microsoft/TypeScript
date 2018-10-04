@@ -31,7 +31,7 @@ var r11 = a['foo'];
 
 //// [objectTypePropertyAccess.js]
 // Index notation should resolve to the type of a declared property with that same name
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

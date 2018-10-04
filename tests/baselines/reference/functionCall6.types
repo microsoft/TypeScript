@@ -1,0 +1,25 @@
+=== tests/cases/compiler/functionCall6.ts ===
+function foo(a:string){}; 
+>foo : (a: string) => void
+>a : string
+
+foo('bar');
+>foo('bar') : void
+>foo : (a: string) => void
+>'bar' : "bar"
+
+foo(2);
+>foo(2) : void
+>foo : (a: string) => void
+>2 : 2
+
+foo('foo', 'bar');
+>foo('foo', 'bar') : void
+>foo : (a: string) => void
+>'foo' : "foo"
+>'bar' : "bar"
+
+foo();
+>foo() : void
+>foo : (a: string) => void
+

@@ -1,0 +1,31 @@
+=== tests/cases/compiler/gettersAndSettersTypesAgree.ts ===
+class C {
+>C : Symbol(C, Decl(gettersAndSettersTypesAgree.ts, 0, 0))
+
+    public get Foo() { return "foo";} // ok
+>Foo : Symbol(C.Foo, Decl(gettersAndSettersTypesAgree.ts, 0, 9), Decl(gettersAndSettersTypesAgree.ts, 1, 37))
+
+    public set Foo(foo) {} // ok - type inferred from getter return statement
+>Foo : Symbol(C.Foo, Decl(gettersAndSettersTypesAgree.ts, 0, 9), Decl(gettersAndSettersTypesAgree.ts, 1, 37))
+>foo : Symbol(foo, Decl(gettersAndSettersTypesAgree.ts, 2, 19))
+
+    public get Bar() { return "foo";} // ok
+>Bar : Symbol(C.Bar, Decl(gettersAndSettersTypesAgree.ts, 2, 26), Decl(gettersAndSettersTypesAgree.ts, 4, 37))
+
+    public set Bar(bar:string) {} // ok - type must be declared
+>Bar : Symbol(C.Bar, Decl(gettersAndSettersTypesAgree.ts, 2, 26), Decl(gettersAndSettersTypesAgree.ts, 4, 37))
+>bar : Symbol(bar, Decl(gettersAndSettersTypesAgree.ts, 5, 19))
+}
+
+var o1 = {get Foo(){return 0;}, set Foo(val){}}; // ok - types agree (inference)
+>o1 : Symbol(o1, Decl(gettersAndSettersTypesAgree.ts, 8, 3))
+>Foo : Symbol(Foo, Decl(gettersAndSettersTypesAgree.ts, 8, 10), Decl(gettersAndSettersTypesAgree.ts, 8, 31))
+>Foo : Symbol(Foo, Decl(gettersAndSettersTypesAgree.ts, 8, 10), Decl(gettersAndSettersTypesAgree.ts, 8, 31))
+>val : Symbol(val, Decl(gettersAndSettersTypesAgree.ts, 8, 40))
+
+var o2 = {get Foo(){return 0;}, set Foo(val:number){}}; // ok - types agree
+>o2 : Symbol(o2, Decl(gettersAndSettersTypesAgree.ts, 9, 3))
+>Foo : Symbol(Foo, Decl(gettersAndSettersTypesAgree.ts, 9, 10), Decl(gettersAndSettersTypesAgree.ts, 9, 31))
+>Foo : Symbol(Foo, Decl(gettersAndSettersTypesAgree.ts, 9, 10), Decl(gettersAndSettersTypesAgree.ts, 9, 31))
+>val : Symbol(val, Decl(gettersAndSettersTypesAgree.ts, 9, 40))
+

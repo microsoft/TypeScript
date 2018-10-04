@@ -1,14 +1,11 @@
 === tests/cases/conformance/jsx/file1.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
 }
 
 // OK, but implicit any
 <div n='x' />;
 ><div n='x' /> : JSX.Element
 >div : any
->n : any
+>n : string
 

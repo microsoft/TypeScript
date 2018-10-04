@@ -1,0 +1,25 @@
+=== tests/cases/conformance/decorators/decoratorCallGeneric.ts ===
+interface I<T> {
+    prototype: T,
+>prototype : T
+
+    m: () => T
+>m : () => T
+}
+function dec<T>(c: I<T>) { }
+>dec : <T>(c: I<T>) => void
+>c : I<T>
+
+@dec
+>dec : <T>(c: I<T>) => void
+
+class C {
+>C : C
+
+    _brand: any;
+>_brand : any
+
+    static m() {}
+>m : () => void
+}
+

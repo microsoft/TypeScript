@@ -1,0 +1,37 @@
+=== tests/cases/compiler/commentsAfterCaseClauses1.ts ===
+function getSecurity(level) {
+>getSecurity : (level: any) => "Hi" | "hello" | "world"
+>level : any
+
+    switch(level){
+>level : any
+
+        case 0: // Zero
+>0 : 0
+
+        case 1: // one
+>1 : 1
+
+        case 2: // two
+>2 : 2
+
+            return "Hi";
+>"Hi" : "Hi"
+
+        case 3: // three
+>3 : 3
+
+        case 4   : // four
+>4 : 4
+
+            return "hello";
+>"hello" : "hello"
+
+        case 5: // five
+>5 : 5
+
+        default:  // default
+            return "world";
+>"world" : "world"
+    }
+}

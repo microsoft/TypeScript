@@ -5,14 +5,13 @@ class Rule {
 
     public regex: RegExp = new RegExp('');
 >regex : RegExp
->RegExp : RegExp
 >new RegExp('') : RegExp
 >RegExp : RegExpConstructor
->'' : string
+>'' : ""
 
     public name: string = '';
 >name : string
->'' : string
+>'' : ""
 
     constructor(name: string) {
 >name : string

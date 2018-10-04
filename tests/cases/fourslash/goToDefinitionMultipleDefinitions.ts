@@ -1,51 +1,34 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: a.ts
-/////*interfaceDefintion1*/interface IFoo {
+////interface /*interfaceDefinition1*/IFoo {
 ////    instance1: number;
 ////}
 
 // @Filename: b.ts
-/////*interfaceDefintion2*/interface IFoo {
+////interface /*interfaceDefinition2*/IFoo {
 ////    instance2: number;
 ////}
 ////
-/////*interfaceDefintion3*/interface IFoo {
+////interface /*interfaceDefinition3*/IFoo {
 ////    instance3: number;
 ////}
 ////
-////var ifoo: IFo/*interfaceReference*/o;
+////var ifoo: [|IFo/*interfaceReference*/o|];
 
-goTo.marker('interfaceReference');
-goTo.definition(0);
-verify.caretAtMarker('interfaceDefintion1');
-
-goTo.marker('interfaceReference');
-goTo.definition(1);
-verify.caretAtMarker('interfaceDefintion2');
-
-goTo.marker('interfaceReference');
-goTo.definition(2);
-verify.caretAtMarker('interfaceDefintion3');
-
+verify.goToDefinition("interfaceReference", ["interfaceDefinition1", "interfaceDefinition2", "interfaceDefinition3"]);
 
 // @Filename: c.ts
-/////*moduleDefintion1*/module Module {
+////module /*moduleDefinition1*/Module {
 ////    export class c1 { }
 ////}
 
 // @Filename: d.ts
-/////*moduleDefintion2*/module Module {
+////module /*moduleDefinition2*/Module {
 ////    export class c2 { }
 ////}
 
 // @Filename: e.ts
-////Modul/*moduleReference*/e;
+////[|Modul/*moduleReference*/e|];
 
-goTo.marker('moduleReference');
-goTo.definition(0);
-verify.caretAtMarker('moduleDefintion1');
-
-goTo.marker('moduleReference');
-goTo.definition(1);
-verify.caretAtMarker('moduleDefintion2');
+verify.goToDefinition("moduleReference", ["moduleDefinition1", "moduleDefinition2"]);

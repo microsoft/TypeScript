@@ -1,0 +1,12 @@
+=== tests/cases/compiler/asyncArrowInClassES5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/16924
+// Should capture `this`
+
+class Test {
+>Test : Symbol(Test, Decl(asyncArrowInClassES5.ts, 0, 0))
+
+    static member = async (x: string) => { };
+>member : Symbol(Test.member, Decl(asyncArrowInClassES5.ts, 3, 12))
+>x : Symbol(x, Decl(asyncArrowInClassES5.ts, 4, 27))
+}
+

@@ -1,8 +1,7 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithPropertyAccessingOnLHS1.ts ===
-
 var globalCounter = 0;
 >globalCounter : number
->0 : number
+>0 : 0
 
 function foo() {
 >foo : () => { prop: number; }
@@ -10,12 +9,12 @@ function foo() {
     globalCounter += 1;
 >globalCounter += 1 : number
 >globalCounter : number
->1 : number
+>1 : 1
 
     return { prop: 2 };
 >{ prop: 2 } : { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 }
 foo().prop **= 2;
 >foo().prop **= 2 : number
@@ -23,7 +22,7 @@ foo().prop **= 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 
 var result0 = foo().prop **= 2;
 >result0 : number
@@ -32,7 +31,7 @@ var result0 = foo().prop **= 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 
 foo().prop **= foo().prop **= 2;
 >foo().prop **= foo().prop **= 2 : number
@@ -45,7 +44,7 @@ foo().prop **= foo().prop **= 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 
 var result1 = foo().prop **= foo().prop **= 2;
 >result1 : number
@@ -59,7 +58,7 @@ var result1 = foo().prop **= foo().prop **= 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 
 foo().prop **= foo().prop ** 2;
 >foo().prop **= foo().prop ** 2 : number
@@ -72,7 +71,7 @@ foo().prop **= foo().prop ** 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 
 var result2 = foo().prop **= foo().prop ** 2;
 >result2 : number
@@ -86,5 +85,5 @@ var result2 = foo().prop **= foo().prop ** 2;
 >foo() : { prop: number; }
 >foo : () => { prop: number; }
 >prop : number
->2 : number
+>2 : 2
 

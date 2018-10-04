@@ -1,0 +1,28 @@
+=== tests/cases/conformance/decorators/class/constructor/decoratorOnClassConstructor4.ts ===
+declare var dec: any;
+>dec : Symbol(dec, Decl(decoratorOnClassConstructor4.ts, 0, 11))
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnClassConstructor4.ts, 0, 11))
+
+class A {
+>A : Symbol(A, Decl(decoratorOnClassConstructor4.ts, 0, 21))
+}
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnClassConstructor4.ts, 0, 11))
+
+class B {
+>B : Symbol(B, Decl(decoratorOnClassConstructor4.ts, 4, 1))
+
+    constructor(x: number) {}
+>x : Symbol(x, Decl(decoratorOnClassConstructor4.ts, 8, 16))
+}
+
+@dec
+>dec : Symbol(dec, Decl(decoratorOnClassConstructor4.ts, 0, 11))
+
+class C extends A {
+>C : Symbol(C, Decl(decoratorOnClassConstructor4.ts, 9, 1))
+>A : Symbol(A, Decl(decoratorOnClassConstructor4.ts, 0, 21))
+}

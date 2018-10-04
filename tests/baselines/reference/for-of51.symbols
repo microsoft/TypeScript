@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/for-ofStatements/for-of51.ts ===
+for (let let of []) {}
+>let : Symbol(let, Decl(for-of51.ts, 0, 8))
+

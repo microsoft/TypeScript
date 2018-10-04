@@ -1,0 +1,130 @@
+=== tests/cases/conformance/classes/members/inheritanceAndOverriding/derivedClassIncludesInheritedMembers.ts ===
+class Base {
+>Base : Base
+
+    a: string;
+>a : string
+
+    b() { }
+>b : () => void
+
+    get c() { return ''; }
+>c : string
+>'' : ""
+
+    set c(v) { }
+>c : string
+>v : string
+
+    static r: string;
+>r : string
+
+    static s() { }
+>s : () => void
+
+    static get t() { return ''; }
+>t : string
+>'' : ""
+
+    static set t(v) { }
+>t : string
+>v : string
+
+    constructor(x) { }
+>x : any
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+}
+
+var d: Derived = new Derived(1);
+>d : Derived
+>new Derived(1) : Derived
+>Derived : typeof Derived
+>1 : 1
+
+var r1 = d.a;
+>r1 : string
+>d.a : string
+>d : Derived
+>a : string
+
+var r2 = d.b();
+>r2 : void
+>d.b() : void
+>d.b : () => void
+>d : Derived
+>b : () => void
+
+var r3 = d.c;
+>r3 : string
+>d.c : string
+>d : Derived
+>c : string
+
+d.c = '';
+>d.c = '' : ""
+>d.c : string
+>d : Derived
+>c : string
+>'' : ""
+
+var r4 = Derived.r;
+>r4 : string
+>Derived.r : string
+>Derived : typeof Derived
+>r : string
+
+var r5 = Derived.s();
+>r5 : void
+>Derived.s() : void
+>Derived.s : () => void
+>Derived : typeof Derived
+>s : () => void
+
+var r6 = Derived.t;
+>r6 : string
+>Derived.t : string
+>Derived : typeof Derived
+>t : string
+
+Derived.t = '';
+>Derived.t = '' : ""
+>Derived.t : string
+>Derived : typeof Derived
+>t : string
+>'' : ""
+
+class Base2 {
+>Base2 : Base2
+
+    [x: string]: Object;
+>x : string
+
+    [x: number]: Date;
+>x : number
+}
+
+class Derived2 extends Base2 {
+>Derived2 : Derived2
+>Base2 : Base2
+}
+
+var d2: Derived2;
+>d2 : Derived2
+
+var r7 = d2[''];
+>r7 : Object
+>d2[''] : Object
+>d2 : Derived2
+>'' : ""
+
+var r8 = d2[1];
+>r8 : Date
+>d2[1] : Date
+>d2 : Derived2
+>1 : 1
+
+

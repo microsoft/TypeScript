@@ -1,0 +1,14 @@
+=== tests/cases/compiler/staticInstanceResolution4.ts ===
+class A {
+>A : A
+
+   public foo() {}
+>foo : () => void
+}
+
+A.foo();
+>A.foo() : any
+>A.foo : any
+>A : typeof A
+>foo : any
+

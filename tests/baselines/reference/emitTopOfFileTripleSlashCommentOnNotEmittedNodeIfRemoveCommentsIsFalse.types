@@ -5,13 +5,11 @@ declare var OData: any;
 
 /// <reference path="file0.ts" />
 interface F { }
->F : F
 
 
 
 === tests/cases/compiler/file0.ts ===
-
 var x = 10
 >x : number
->10 : number
+>10 : 10
 

@@ -1,0 +1,41 @@
+=== tests/cases/compiler/narrowingConstrainedTypeParameter.ts ===
+// Repro from #10811
+
+interface Pet {
+>Pet : Symbol(Pet, Decl(narrowingConstrainedTypeParameter.ts, 0, 0))
+
+    name: string;
+>name : Symbol(Pet.name, Decl(narrowingConstrainedTypeParameter.ts, 2, 15))
+}
+
+function isPet(pet: any): pet is Pet {
+>isPet : Symbol(isPet, Decl(narrowingConstrainedTypeParameter.ts, 4, 1))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 6, 15))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 6, 15))
+>Pet : Symbol(Pet, Decl(narrowingConstrainedTypeParameter.ts, 0, 0))
+
+    return typeof pet.name === "string";
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 6, 15))
+}
+
+export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string): string {
+>speak : Symbol(speak, Decl(narrowingConstrainedTypeParameter.ts, 8, 1))
+>TPet : Symbol(TPet, Decl(narrowingConstrainedTypeParameter.ts, 10, 22))
+>Pet : Symbol(Pet, Decl(narrowingConstrainedTypeParameter.ts, 0, 0))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 10, 40))
+>TPet : Symbol(TPet, Decl(narrowingConstrainedTypeParameter.ts, 10, 22))
+>voice : Symbol(voice, Decl(narrowingConstrainedTypeParameter.ts, 10, 50))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 10, 59))
+>TPet : Symbol(TPet, Decl(narrowingConstrainedTypeParameter.ts, 10, 22))
+
+    if (!isPet(pet)) {
+>isPet : Symbol(isPet, Decl(narrowingConstrainedTypeParameter.ts, 4, 1))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 10, 40))
+
+        throw new Error("Expected \"pet\" to be a Pet");
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+    }
+    return voice(pet);
+>voice : Symbol(voice, Decl(narrowingConstrainedTypeParameter.ts, 10, 50))
+>pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 10, 40))
+}

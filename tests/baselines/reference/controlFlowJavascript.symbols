@@ -1,0 +1,215 @@
+=== tests/cases/compiler/controlFlowJavascript.js ===
+let cond = true;
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+// CFA for 'let' and no initializer
+function f1() {
+>f1 : Symbol(f1, Decl(controlFlowJavascript.js, 0, 16))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 4, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 4, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 4, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 11, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 4, 7))
+}
+
+// CFA for 'let' and 'undefined' initializer
+function f2() {
+>f2 : Symbol(f2, Decl(controlFlowJavascript.js, 12, 1))
+
+    let x = undefined;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 16, 7))
+>undefined : Symbol(undefined)
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 16, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 16, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 23, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 16, 7))
+}
+
+// CFA for 'let' and 'null' initializer
+function f3() {
+>f3 : Symbol(f3, Decl(controlFlowJavascript.js, 24, 1))
+
+    let x = null;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 28, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 28, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 28, 7))
+    }
+    const y = x;  // string | number | null
+>y : Symbol(y, Decl(controlFlowJavascript.js, 35, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 28, 7))
+}
+
+// CFA for 'var' with no initializer
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowJavascript.js, 36, 1))
+
+    var x;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 40, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 40, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 40, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 47, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 40, 7))
+}
+
+// CFA for 'var' with 'undefined' initializer
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowJavascript.js, 48, 1))
+
+    var x = undefined;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 52, 7))
+>undefined : Symbol(undefined)
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 52, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 52, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 59, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 52, 7))
+}
+
+// CFA for 'var' with 'null' initializer
+function f7() {
+>f7 : Symbol(f7, Decl(controlFlowJavascript.js, 60, 1))
+
+    var x = null;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 64, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 64, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 64, 7))
+    }
+    const y = x;  // string | number | null
+>y : Symbol(y, Decl(controlFlowJavascript.js, 71, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 64, 7))
+}
+
+// No CFA for captured outer variables
+function f9() {
+>f9 : Symbol(f9, Decl(controlFlowJavascript.js, 72, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 76, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 76, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 76, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 83, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 76, 7))
+
+    function f() {
+>f : Symbol(f, Decl(controlFlowJavascript.js, 83, 16))
+
+        const z = x;  // any
+>z : Symbol(z, Decl(controlFlowJavascript.js, 85, 13))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 76, 7))
+    }
+}
+
+// No CFA for captured outer variables
+function f10() {
+>f10 : Symbol(f10, Decl(controlFlowJavascript.js, 87, 1))
+
+    let x;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 91, 7))
+
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = 1;
+>x : Symbol(x, Decl(controlFlowJavascript.js, 91, 7))
+    }
+    if (cond) {
+>cond : Symbol(cond, Decl(controlFlowJavascript.js, 0, 3))
+
+        x = "hello";
+>x : Symbol(x, Decl(controlFlowJavascript.js, 91, 7))
+    }
+    const y = x;  // string | number | undefined
+>y : Symbol(y, Decl(controlFlowJavascript.js, 98, 9))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 91, 7))
+
+    const f = () => {
+>f : Symbol(f, Decl(controlFlowJavascript.js, 99, 9))
+
+        const z = x;  // any
+>z : Symbol(z, Decl(controlFlowJavascript.js, 100, 13))
+>x : Symbol(x, Decl(controlFlowJavascript.js, 91, 7))
+
+    };
+}
+

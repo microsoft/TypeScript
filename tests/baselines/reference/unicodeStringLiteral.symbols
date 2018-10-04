@@ -1,0 +1,4 @@
+=== tests/cases/compiler/unicodeStringLiteral.ts ===
+var ੳ = "Ü­ਲĭ";
+>ੳ : Symbol(ੳ, Decl(unicodeStringLiteral.ts, 0, 3))
+

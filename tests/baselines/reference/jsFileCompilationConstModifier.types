@@ -1,0 +1,5 @@
+=== tests/cases/compiler/a.js ===
+const c = 10;
+>c : 10
+>10 : 10
+

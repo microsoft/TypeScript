@@ -16,7 +16,7 @@ var r: string = m.foo;
 //// [exportAssignmentOfGenericType1_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var T = (function () {
+    var T = /** @class */ (function () {
         function T() {
         }
         return T;
@@ -24,17 +24,26 @@ define(["require", "exports"], function (require, exports) {
     return T;
 });
 //// [exportAssignmentOfGenericType1_1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 define(["require", "exports", "exportAssignmentOfGenericType1_0"], function (require, exports, q) {
     "use strict";
-    var M = (function (_super) {
+    exports.__esModule = true;
+    var M = /** @class */ (function (_super) {
         __extends(M, _super);
         function M() {
-            _super.apply(this, arguments);
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return M;
     }(q));

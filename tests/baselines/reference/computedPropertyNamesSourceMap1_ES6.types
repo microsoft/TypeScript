@@ -3,14 +3,16 @@ class C {
 >C : C
 
     ["hello"]() {
->"hello" : string
+>["hello"] : () => void
+>"hello" : "hello"
 
         debugger;
 	}
 	get ["goodbye"]() {
->"goodbye" : string
+>["goodbye"] : number
+>"goodbye" : "goodbye"
 
 		return 0;
->0 : number
+>0 : 0
 	}
 }

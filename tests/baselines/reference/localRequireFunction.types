@@ -1,0 +1,23 @@
+=== tests/cases/compiler/app.js ===
+function require(a) {
+>require : (a: any) => any
+>a : any
+
+    return a;
+>a : any
+}
+
+const fs = require("fs");
+>fs : any
+>require("fs") : any
+>require : (a: any) => any
+>"fs" : "fs"
+
+const text = fs.readFileSync("/a/b/c");
+>text : any
+>fs.readFileSync("/a/b/c") : any
+>fs.readFileSync : any
+>fs : any
+>readFileSync : any
+>"/a/b/c" : "/a/b/c"
+

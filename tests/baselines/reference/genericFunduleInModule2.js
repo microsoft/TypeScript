@@ -18,7 +18,6 @@ var A;
     function B(x) { return x; }
     A.B = B;
 })(A || (A = {}));
-var A;
 (function (A) {
     var B;
     (function (B) {

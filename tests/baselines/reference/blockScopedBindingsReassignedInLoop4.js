@@ -13,7 +13,7 @@ function f1() {
 
 //// [blockScopedBindingsReassignedInLoop4.js]
 function f1() {
-    var _loop_1 = function(x, y) {
+    var _loop_1 = function (x, y) {
         var a = function () { return x++ + y++; };
         if (x == 1) {
             return { value: 1 };
@@ -29,6 +29,7 @@ function f1() {
         var state_1 = _loop_1(x, y);
         x = out_x_1;
         y = out_y_1;
-        if (typeof state_1 === "object") return state_1.value;
+        if (typeof state_1 === "object")
+            return state_1.value;
     }
 }

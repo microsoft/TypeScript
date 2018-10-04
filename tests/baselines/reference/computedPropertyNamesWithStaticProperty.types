@@ -4,17 +4,19 @@ class C {
 
     static staticProp = 10;
 >staticProp : number
->10 : number
+>10 : 10
 
     get [C.staticProp]() {
+>[C.staticProp] : string
 >C.staticProp : number
 >C : typeof C
 >staticProp : number
 
         return "hello";
->"hello" : string
+>"hello" : "hello"
     }
     set [C.staticProp](x: string) {
+>[C.staticProp] : string
 >C.staticProp : number
 >C : typeof C
 >staticProp : number
@@ -25,6 +27,7 @@ class C {
 >x : string
     }
     [C.staticProp]() { }
+>[C.staticProp] : () => void
 >C.staticProp : number
 >C : typeof C
 >staticProp : number

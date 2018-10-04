@@ -1,0 +1,15 @@
+=== tests/cases/compiler/typeCheckingInsideFunctionExpressionInArray.ts ===
+var functions = [function () {
+>functions : Symbol(functions, Decl(typeCheckingInsideFunctionExpressionInArray.ts, 0, 3))
+
+  var k: string = 10;
+>k : Symbol(k, Decl(typeCheckingInsideFunctionExpressionInArray.ts, 1, 5))
+
+    k = new Object();
+>k : Symbol(k, Decl(typeCheckingInsideFunctionExpressionInArray.ts, 1, 5))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    [1, 2, 3].NonexistantMethod();
+    derp();
+}];
+

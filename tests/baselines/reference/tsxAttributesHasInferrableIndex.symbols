@@ -1,0 +1,43 @@
+=== tests/cases/compiler/tsxAttributesHasInferrableIndex.tsx ===
+type AttributeValue = number | string | Date | boolean;
+>AttributeValue : Symbol(AttributeValue, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 0))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+interface Attributes {
+>Attributes : Symbol(Attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 55))
+
+    [key: string]: AttributeValue;
+>key : Symbol(key, Decl(tsxAttributesHasInferrableIndex.tsx, 2, 5))
+>AttributeValue : Symbol(AttributeValue, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 0))
+}
+function createElement(name: string, attributes: Attributes | undefined, ...contents: string[]) {
+>createElement : Symbol(createElement, Decl(tsxAttributesHasInferrableIndex.tsx, 3, 1), Decl(tsxAttributesHasInferrableIndex.tsx, 6, 1))
+>name : Symbol(name, Decl(tsxAttributesHasInferrableIndex.tsx, 4, 23))
+>attributes : Symbol(attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 4, 36))
+>Attributes : Symbol(Attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 55))
+>contents : Symbol(contents, Decl(tsxAttributesHasInferrableIndex.tsx, 4, 72))
+
+    return name;
+>name : Symbol(name, Decl(tsxAttributesHasInferrableIndex.tsx, 4, 23))
+}
+namespace createElement.JSX {
+>createElement : Symbol(createElement, Decl(tsxAttributesHasInferrableIndex.tsx, 3, 1), Decl(tsxAttributesHasInferrableIndex.tsx, 6, 1))
+>JSX : Symbol(JSX, Decl(tsxAttributesHasInferrableIndex.tsx, 7, 24))
+
+    type Element = string;
+>Element : Symbol(Element, Decl(tsxAttributesHasInferrableIndex.tsx, 7, 29))
+}
+
+function Button(attributes: Attributes | undefined, contents: string[]) {
+>Button : Symbol(Button, Decl(tsxAttributesHasInferrableIndex.tsx, 9, 1))
+>attributes : Symbol(attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 11, 16))
+>Attributes : Symbol(Attributes, Decl(tsxAttributesHasInferrableIndex.tsx, 0, 55))
+>contents : Symbol(contents, Decl(tsxAttributesHasInferrableIndex.tsx, 11, 51))
+
+    return '';
+}
+const b = <Button></Button>
+>b : Symbol(b, Decl(tsxAttributesHasInferrableIndex.tsx, 14, 5))
+>Button : Symbol(Button, Decl(tsxAttributesHasInferrableIndex.tsx, 9, 1))
+>Button : Symbol(Button, Decl(tsxAttributesHasInferrableIndex.tsx, 9, 1))
+

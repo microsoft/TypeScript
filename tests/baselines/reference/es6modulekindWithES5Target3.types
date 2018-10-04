@@ -1,6 +1,4 @@
-=== tests/cases/compiler/es6modulekindWithES5Target3.ts ===
-
-
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target3.ts ===
 declare function foo(...args: any[]): any;
 >foo : (...args: any[]) => any
 >args : any[]
@@ -13,11 +11,11 @@ export default class D {
 
     static s = 0;
 >s : number
->0 : number
+>0 : 0
 
     p = 1;
 >p : number
->1 : number
+>1 : 1
 
     method() { }
 >method : () => void

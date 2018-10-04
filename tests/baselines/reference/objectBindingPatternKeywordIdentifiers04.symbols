@@ -1,0 +1,7 @@
+=== tests/cases/conformance/es6/destructuring/objectBindingPatternKeywordIdentifiers04.ts ===
+var { "while": while } = { while: 1 }
+> : Symbol((Missing), Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 5), Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 14))
+>while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 26))
+> : Symbol((Missing), Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 5), Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 14))
+>while : Symbol(while, Decl(objectBindingPatternKeywordIdentifiers04.ts, 0, 26))
+

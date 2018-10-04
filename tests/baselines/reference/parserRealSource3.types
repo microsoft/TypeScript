@@ -1,0 +1,343 @@
+=== tests/cases/conformance/parser/ecmascript5/parserRealSource3.ts ===
+// Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
+// See LICENSE.txt in the project root for complete license information.
+
+///<reference path='typescript.ts' />
+
+module TypeScript {
+>TypeScript : typeof TypeScript
+
+    // Note: Any addition to the NodeType should also be supported with addition to AstWalkerDetailCallback
+    export enum NodeType {
+>NodeType : NodeType
+
+        None,
+>None : NodeType.None
+
+        Empty,
+>Empty : NodeType.Empty
+
+        EmptyExpr,
+>EmptyExpr : NodeType.EmptyExpr
+
+        True,
+>True : NodeType.True
+
+        False,
+>False : NodeType.False
+
+        This,
+>This : NodeType.This
+
+        Super,
+>Super : NodeType.Super
+
+        QString,
+>QString : NodeType.QString
+
+        Regex,
+>Regex : NodeType.Regex
+
+        Null,
+>Null : NodeType.Null
+
+        ArrayLit,
+>ArrayLit : NodeType.ArrayLit
+
+        ObjectLit,
+>ObjectLit : NodeType.ObjectLit
+
+        Void,
+>Void : NodeType.Void
+
+        Comma,
+>Comma : NodeType.Comma
+
+        Pos,
+>Pos : NodeType.Pos
+
+        Neg,
+>Neg : NodeType.Neg
+
+        Delete,
+>Delete : NodeType.Delete
+
+        Await,
+>Await : NodeType.Await
+
+        In,
+>In : NodeType.In
+
+        Dot,
+>Dot : NodeType.Dot
+
+        From,
+>From : NodeType.From
+
+        Is,
+>Is : NodeType.Is
+
+        InstOf,
+>InstOf : NodeType.InstOf
+
+        Typeof,
+>Typeof : NodeType.Typeof
+
+        NumberLit,
+>NumberLit : NodeType.NumberLit
+
+        Name,
+>Name : NodeType.Name
+
+        TypeRef,
+>TypeRef : NodeType.TypeRef
+
+        Index,
+>Index : NodeType.Index
+
+        Call,
+>Call : NodeType.Call
+
+        New,
+>New : NodeType.New
+
+        Asg,
+>Asg : NodeType.Asg
+
+        AsgAdd,
+>AsgAdd : NodeType.AsgAdd
+
+        AsgSub,
+>AsgSub : NodeType.AsgSub
+
+        AsgDiv,
+>AsgDiv : NodeType.AsgDiv
+
+        AsgMul,
+>AsgMul : NodeType.AsgMul
+
+        AsgMod,
+>AsgMod : NodeType.AsgMod
+
+        AsgAnd,
+>AsgAnd : NodeType.AsgAnd
+
+        AsgXor,
+>AsgXor : NodeType.AsgXor
+
+        AsgOr,
+>AsgOr : NodeType.AsgOr
+
+        AsgLsh,
+>AsgLsh : NodeType.AsgLsh
+
+        AsgRsh,
+>AsgRsh : NodeType.AsgRsh
+
+        AsgRs2,
+>AsgRs2 : NodeType.AsgRs2
+
+        ConditionalExpression,
+>ConditionalExpression : NodeType.ConditionalExpression
+
+        LogOr,
+>LogOr : NodeType.LogOr
+
+        LogAnd,
+>LogAnd : NodeType.LogAnd
+
+        Or,
+>Or : NodeType.Or
+
+        Xor,
+>Xor : NodeType.Xor
+
+        And,
+>And : NodeType.And
+
+        Eq,
+>Eq : NodeType.Eq
+
+        Ne,
+>Ne : NodeType.Ne
+
+        Eqv,
+>Eqv : NodeType.Eqv
+
+        NEqv,
+>NEqv : NodeType.NEqv
+
+        Lt,
+>Lt : NodeType.Lt
+
+        Le,
+>Le : NodeType.Le
+
+        Gt,
+>Gt : NodeType.Gt
+
+        Ge,
+>Ge : NodeType.Ge
+
+        Add,
+>Add : NodeType.Add
+
+        Sub,
+>Sub : NodeType.Sub
+
+        Mul,
+>Mul : NodeType.Mul
+
+        Div,
+>Div : NodeType.Div
+
+        Mod,
+>Mod : NodeType.Mod
+
+        Lsh,
+>Lsh : NodeType.Lsh
+
+        Rsh,
+>Rsh : NodeType.Rsh
+
+        Rs2,
+>Rs2 : NodeType.Rs2
+
+        Not,
+>Not : NodeType.Not
+
+        LogNot,
+>LogNot : NodeType.LogNot
+
+        IncPre,
+>IncPre : NodeType.IncPre
+
+        DecPre,
+>DecPre : NodeType.DecPre
+
+        IncPost,
+>IncPost : NodeType.IncPost
+
+        DecPost,
+>DecPost : NodeType.DecPost
+
+        TypeAssertion,
+>TypeAssertion : NodeType.TypeAssertion
+
+        FuncDecl,
+>FuncDecl : NodeType.FuncDecl
+
+        Member,
+>Member : NodeType.Member
+
+        VarDecl,
+>VarDecl : NodeType.VarDecl
+
+        ArgDecl,
+>ArgDecl : NodeType.ArgDecl
+
+        Return,
+>Return : NodeType.Return
+
+        Break,
+>Break : NodeType.Break
+
+        Continue,
+>Continue : NodeType.Continue
+
+        Throw,
+>Throw : NodeType.Throw
+
+        For,
+>For : NodeType.For
+
+        ForIn,
+>ForIn : NodeType.ForIn
+
+        If,
+>If : NodeType.If
+
+        While,
+>While : NodeType.While
+
+        DoWhile,
+>DoWhile : NodeType.DoWhile
+
+        Block,
+>Block : NodeType.Block
+
+        Case,
+>Case : NodeType.Case
+
+        Switch,
+>Switch : NodeType.Switch
+
+        Try,
+>Try : NodeType.Try
+
+        TryCatch,
+>TryCatch : NodeType.TryCatch
+
+        TryFinally,
+>TryFinally : NodeType.TryFinally
+
+        Finally,
+>Finally : NodeType.Finally
+
+        Catch,
+>Catch : NodeType.Catch
+
+        List,
+>List : NodeType.List
+
+        Script,
+>Script : NodeType.Script
+
+        ClassDeclaration,
+>ClassDeclaration : NodeType.ClassDeclaration
+
+        InterfaceDeclaration,
+>InterfaceDeclaration : NodeType.InterfaceDeclaration
+
+        ModuleDeclaration,
+>ModuleDeclaration : NodeType.ModuleDeclaration
+
+        ImportDeclaration,
+>ImportDeclaration : NodeType.ImportDeclaration
+
+        With,
+>With : NodeType.With
+
+        Label,
+>Label : NodeType.Label
+
+        LabeledStatement,
+>LabeledStatement : NodeType.LabeledStatement
+
+        EBStart,
+>EBStart : NodeType.EBStart
+
+        GotoEB,
+>GotoEB : NodeType.GotoEB
+
+        EndCode,
+>EndCode : NodeType.EndCode
+
+        Error,
+>Error : NodeType.Error
+
+        Comment,
+>Comment : NodeType.Comment
+
+        Debugger,
+>Debugger : NodeType.Debugger
+
+        GeneralNode = FuncDecl,
+>GeneralNode : NodeType.FuncDecl
+>FuncDecl : NodeType.FuncDecl
+
+        LastAsg = AsgRs2,
+>LastAsg : NodeType.AsgRs2
+>AsgRs2 : NodeType.AsgRs2
+    }
+}

@@ -6,7 +6,6 @@ $.foo();
 >foo : () => void
 
 === /a/types/jquery/index.d.ts ===
-
 declare var $: { foo(): void };
 >$ : { foo(): void; }
 >foo : () => void

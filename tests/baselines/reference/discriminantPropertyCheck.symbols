@@ -1,0 +1,230 @@
+=== tests/cases/compiler/discriminantPropertyCheck.ts ===
+type Item = Item1 | Item2;
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+>Item1 : Symbol(Item1, Decl(discriminantPropertyCheck.ts, 4, 1))
+>Item2 : Symbol(Item2, Decl(discriminantPropertyCheck.ts, 11, 1))
+
+interface Base {
+>Base : Symbol(Base, Decl(discriminantPropertyCheck.ts, 0, 26))
+
+    bar: boolean;
+>bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
+}
+
+interface Item1 extends Base {
+>Item1 : Symbol(Item1, Decl(discriminantPropertyCheck.ts, 4, 1))
+>Base : Symbol(Base, Decl(discriminantPropertyCheck.ts, 0, 26))
+
+    kind: "A";
+>kind : Symbol(Item1.kind, Decl(discriminantPropertyCheck.ts, 6, 30))
+
+    foo: string | undefined;
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+
+    baz: boolean;
+>baz : Symbol(Item1.baz, Decl(discriminantPropertyCheck.ts, 8, 28))
+
+    qux: true;
+>qux : Symbol(Item1.qux, Decl(discriminantPropertyCheck.ts, 9, 17))
+}
+
+interface Item2 extends Base {
+>Item2 : Symbol(Item2, Decl(discriminantPropertyCheck.ts, 11, 1))
+>Base : Symbol(Base, Decl(discriminantPropertyCheck.ts, 0, 26))
+
+    kind: "B";
+>kind : Symbol(Item2.kind, Decl(discriminantPropertyCheck.ts, 13, 30))
+
+    foo: string | undefined;
+>foo : Symbol(Item2.foo, Decl(discriminantPropertyCheck.ts, 14, 14))
+
+    baz: boolean;
+>baz : Symbol(Item2.baz, Decl(discriminantPropertyCheck.ts, 15, 28))
+
+    qux: false;
+>qux : Symbol(Item2.qux, Decl(discriminantPropertyCheck.ts, 16, 17))
+}
+
+function goo1(x: Item) {
+>goo1 : Symbol(goo1, Decl(discriminantPropertyCheck.ts, 18, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.kind === "A" && x.foo !== undefined) {
+>x.kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
+>kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>undefined : Symbol(undefined)
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 20, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function goo2(x: Item) {
+>goo2 : Symbol(goo2, Decl(discriminantPropertyCheck.ts, 24, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.foo !== undefined && x.kind === "A") {
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+>x.kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
+>kind : Symbol(kind, Decl(discriminantPropertyCheck.ts, 6, 30), Decl(discriminantPropertyCheck.ts, 13, 30))
+
+        x.foo.length;  // Error, intervening discriminant guard
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 26, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo1(x: Item) {
+>foo1 : Symbol(foo1, Decl(discriminantPropertyCheck.ts, 30, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.bar && x.foo !== undefined) {
+>x.bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
+>bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 32, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo2(x: Item) {
+>foo2 : Symbol(foo2, Decl(discriminantPropertyCheck.ts, 36, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.foo !== undefined && x.bar) {
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+>x.bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
+>bar : Symbol(Base.bar, Decl(discriminantPropertyCheck.ts, 2, 16))
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 38, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo3(x: Item) {
+>foo3 : Symbol(foo3, Decl(discriminantPropertyCheck.ts, 42, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.baz && x.foo !== undefined) {
+>x.baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
+>baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 44, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo4(x: Item) {
+>foo4 : Symbol(foo4, Decl(discriminantPropertyCheck.ts, 48, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.foo !== undefined && x.baz) {
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+>x.baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
+>baz : Symbol(baz, Decl(discriminantPropertyCheck.ts, 8, 28), Decl(discriminantPropertyCheck.ts, 15, 28))
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 50, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo5(x: Item) {
+>foo5 : Symbol(foo5, Decl(discriminantPropertyCheck.ts, 54, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.qux && x.foo !== undefined) {
+>x.qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
+>qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>undefined : Symbol(undefined)
+
+        x.foo.length;
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 56, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}
+
+function foo6(x: Item) {
+>foo6 : Symbol(foo6, Decl(discriminantPropertyCheck.ts, 60, 1))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
+>Item : Symbol(Item, Decl(discriminantPropertyCheck.ts, 0, 0))
+
+    if (x.foo !== undefined && x.qux) {
+>x.foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
+>foo : Symbol(foo, Decl(discriminantPropertyCheck.ts, 7, 14), Decl(discriminantPropertyCheck.ts, 14, 14))
+>undefined : Symbol(undefined)
+>x.qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
+>qux : Symbol(qux, Decl(discriminantPropertyCheck.ts, 9, 17), Decl(discriminantPropertyCheck.ts, 16, 17))
+
+        x.foo.length;  // Error, intervening discriminant guard
+>x.foo.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>x : Symbol(x, Decl(discriminantPropertyCheck.ts, 62, 14))
+>foo : Symbol(Item1.foo, Decl(discriminantPropertyCheck.ts, 7, 14))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+    }
+}

@@ -1,0 +1,77 @@
+=== tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts ===
+class C {
+>C : C
+
+    public foo(x: any) { return x; }
+>foo : (x: any) => any
+>x : any
+>x : any
+
+    private x = 1;
+>x : number
+>1 : 1
+}
+
+interface I extends C {
+    other(x: any): any;
+>other : (x: any) => any
+>x : any
+}
+
+class D extends C implements I {
+>D : D
+>C : C
+
+    public foo(x: any) { return x; }
+>foo : (x: any) => any
+>x : any
+>x : any
+
+    other(x: any) { return x; }
+>other : (x: any) => any
+>x : any
+>x : any
+
+    bar() { }
+>bar : () => void
+} 
+
+var c: C;
+>c : C
+
+var i: I;
+>i : I
+
+var d: D;
+>d : D
+
+c = i;
+>c = i : I
+>c : C
+>i : I
+
+i = c; // error
+>i = c : C
+>i : I
+>c : C
+
+i = d;
+>i = d : D
+>i : I
+>d : D
+
+d = i; // error
+>d = i : I
+>d : D
+>i : I
+
+c = d;
+>c = d : D
+>c : C
+>d : D
+
+d = c; // error
+>d = c : C
+>d : D
+>c : C
+

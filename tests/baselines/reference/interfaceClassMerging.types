@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaceClassMerging.ts ===
 interface Foo {
->Foo : Foo
-
     method(a: number): string;
 >method : (a: number) => string
 >a : number
@@ -32,7 +30,7 @@ class Foo {
 >this.method : (a: number) => string
 >this : this
 >method : (a: number) => string
->0 : number
+>0 : 0
     }
 }
 
@@ -62,14 +60,14 @@ bar.method(0);
 >bar.method : (a: number) => string
 >bar : Bar
 >method : (a: number) => string
->0 : number
+>0 : 0
 
 bar.optionalMethod(1);
 >bar.optionalMethod(1) : string
 >bar.optionalMethod : (a: number) => string
 >bar : Bar
 >optionalMethod : (a: number) => string
->1 : number
+>1 : 1
 
 bar.property;
 >bar.property : string
@@ -91,7 +89,7 @@ bar.additionalMethod(2);
 >bar.additionalMethod : (a: number) => string
 >bar : Bar
 >additionalMethod : (a: number) => string
->2 : number
+>2 : 2
 
 var obj: {
 >obj : { method(a: number): string; property: string; additionalProperty: string; additionalMethod(a: number): string; }

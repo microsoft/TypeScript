@@ -5,23 +5,22 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var o: {} = c;
 >o : {}
 >c : C
 
 c = 1;
->c = 1 : number
+>c = 1 : 1
 >c : C
->1 : number
+>1 : 1
 
 c = { foo: '' }
 >c = { foo: '' } : { foo: string; }
 >c : C
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 c = () => { }
 >c = () => { } : () => void
@@ -33,29 +32,28 @@ class D {
 
     constructor() {
         return 1;
->1 : number
+>1 : 1
     }
 }
 
 var d: D;
 >d : D
->D : D
 
 var o: {} = d;
 >o : {}
 >d : D
 
 d = 1;
->d = 1 : number
+>d = 1 : 1
 >d : D
->1 : number
+>1 : 1
 
 d = { foo: '' }
 >d = { foo: '' } : { foo: string; }
 >d : D
 >{ foo: '' } : { foo: string; }
 >foo : string
->'' : string
+>'' : ""
 
 d = () => { }
 >d = () => { } : () => void

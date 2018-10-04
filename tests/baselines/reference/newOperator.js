@@ -71,14 +71,14 @@ var t5 = new new Date;
 new String;
 var M;
 (function (M) {
-    var T = (function () {
+    var T = /** @class */ (function () {
         function T() {
         }
         return T;
     }());
     M.T = T;
 })(M || (M = {}));
-var S = (function () {
+var S = /** @class */ (function () {
     function S() {
     }
     Object.defineProperty(S.prototype, "xs", {

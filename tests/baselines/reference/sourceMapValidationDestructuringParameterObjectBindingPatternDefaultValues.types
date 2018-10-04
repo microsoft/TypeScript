@@ -1,7 +1,5 @@
 === tests/cases/compiler/sourceMapValidationDestructuringParameterObjectBindingPatternDefaultValues.ts ===
 interface Robot {
->Robot : Robot
-
     name?: string;
 >name : string
 
@@ -17,23 +15,21 @@ declare var console: {
 }
 var hello = "hello";
 >hello : string
->"hello" : string
+>"hello" : "hello"
 
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 
 function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
->foo1 : ({name: nameA}?: Robot) => void
+>foo1 : ({ name: nameA }?: Robot) => void
 >name : any
 >nameA : string
->"<NoName>" : string
->Robot : Robot
+>"<NoName>" : "<NoName>"
 >{ } : {}
 
     console.log(nameA);
@@ -44,14 +40,13 @@ function foo1({ name: nameA = "<NoName>" }: Robot = { }) {
 >nameA : string
 }
 function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}) {
->foo2 : ({name: nameB, skill: skillB}?: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }?: Robot) => void
 >name : any
 >nameB : string
->"<NoName>" : string
+>"<NoName>" : "<NoName>"
 >skill : any
 >skillB : string
->"noSkill" : string
->Robot : Robot
+>"noSkill" : "noSkill"
 >{} : {}
 
     console.log(nameB);
@@ -62,10 +57,9 @@ function foo2({ name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {
 >nameB : string
 }
 function foo3({ name = "<NoName>" }: Robot = {}) {
->foo3 : ({name}?: Robot) => void
+>foo3 : ({ name }?: Robot) => void
 >name : string
->"<NoName>" : string
->Robot : Robot
+>"<NoName>" : "<NoName>"
 >{} : {}
 
     console.log(name);
@@ -78,43 +72,43 @@ function foo3({ name = "<NoName>" }: Robot = {}) {
 
 foo1(robotA);
 >foo1(robotA) : void
->foo1 : ({name: nameA}?: Robot) => void
+>foo1 : ({ name: nameA }?: Robot) => void
 >robotA : Robot
 
 foo1({ name: "Edger", skill: "cutting edges" });
 >foo1({ name: "Edger", skill: "cutting edges" }) : void
->foo1 : ({name: nameA}?: Robot) => void
+>foo1 : ({ name: nameA }?: Robot) => void
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 
 foo2(robotA);
 >foo2(robotA) : void
->foo2 : ({name: nameB, skill: skillB}?: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }?: Robot) => void
 >robotA : Robot
 
 foo2({ name: "Edger", skill: "cutting edges" });
 >foo2({ name: "Edger", skill: "cutting edges" }) : void
->foo2 : ({name: nameB, skill: skillB}?: Robot) => void
+>foo2 : ({ name: nameB, skill: skillB }?: Robot) => void
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 
 foo3(robotA);
 >foo3(robotA) : void
->foo3 : ({name}?: Robot) => void
+>foo3 : ({ name }?: Robot) => void
 >robotA : Robot
 
 foo3({ name: "Edger", skill: "cutting edges" });
 >foo3({ name: "Edger", skill: "cutting edges" }) : void
->foo3 : ({name}?: Robot) => void
+>foo3 : ({ name }?: Robot) => void
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 

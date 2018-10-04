@@ -1,11 +1,10 @@
 === tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments10_ES6.ts ===
-
 function f() {
 >f : () => void
 
     var _arguments = 10;
 >_arguments : number
->10 : number
+>10 : 10
 
     var a = () => () => arguments;
 >a : () => () => IArguments

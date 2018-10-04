@@ -64,4 +64,4 @@ function other3(arg) {
 //    var d: Date = r2['hm']; // ok
 //    // BUG 821629
 //    //var u: U = r2['hm']; // ok
-//} 
+//}

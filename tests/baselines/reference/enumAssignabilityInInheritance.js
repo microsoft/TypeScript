@@ -125,13 +125,13 @@ var r4 = foo5(E.A);
 var r4 = foo6(E.A);
 var r4 = foo7(E.A);
 var r4 = foo8(E.A);
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var r4 = foo9(E.A);
-var A2 = (function () {
+var A2 = /** @class */ (function () {
     function A2() {
     }
     return A2;
@@ -145,17 +145,15 @@ var E2;
 })(E2 || (E2 = {}));
 var r4 = foo13(E.A);
 function f() { }
-var f;
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
 var r4 = foo14(E.A);
-var CC = (function () {
+var CC = /** @class */ (function () {
     function CC() {
     }
     return CC;
 }());
-var CC;
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

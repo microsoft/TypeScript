@@ -9,4 +9,4 @@
 ////var { /**/property1 } = foo;
 
 goTo.marker();
-verify.quickInfoIs("var property1: number");
+verify.quickInfoAt("", "var property1: number");

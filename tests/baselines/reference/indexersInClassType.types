@@ -4,16 +4,15 @@ class C {
 
     [x: number]: Date;
 >x : number
->Date : Date
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     1: Date;
->Date : Date
+>1 : Date
 
     'a': {}
+>'a' : {}
 
     fn() {
 >fn : () => this
@@ -39,7 +38,7 @@ var r2 = r[1];
 >r2 : Date
 >r[1] : Date
 >r : C
->1 : number
+>1 : 1
 
 var r3 = r.a
 >r3 : {}

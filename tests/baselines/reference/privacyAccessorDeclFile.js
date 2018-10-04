@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyAccessorDeclFile.ts] ////
 
 //// [privacyAccessorDeclFile_externalModule.ts]
-
 class privateClass {
 }
 
@@ -1061,18 +1060,19 @@ module publicModuleInGlobal {
 
 //// [privacyAccessorDeclFile_externalModule.js]
 "use strict";
-var privateClass = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var privateClass = /** @class */ (function () {
     function privateClass() {
     }
     return privateClass;
 }());
-var publicClass = (function () {
+var publicClass = /** @class */ (function () {
     function publicClass() {
     }
     return publicClass;
 }());
 exports.publicClass = publicClass;
-var publicClassWithWithPrivateGetAccessorTypes = (function () {
+var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -1134,7 +1134,7 @@ var publicClassWithWithPrivateGetAccessorTypes = (function () {
     return publicClassWithWithPrivateGetAccessorTypes;
 }());
 exports.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-var publicClassWithWithPublicGetAccessorTypes = (function () {
+var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPublicGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -1196,7 +1196,7 @@ var publicClassWithWithPublicGetAccessorTypes = (function () {
     return publicClassWithWithPublicGetAccessorTypes;
 }());
 exports.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-var privateClassWithWithPrivateGetAccessorTypes = (function () {
+var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPrivateGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -1257,7 +1257,7 @@ var privateClassWithWithPrivateGetAccessorTypes = (function () {
     });
     return privateClassWithWithPrivateGetAccessorTypes;
 }());
-var privateClassWithWithPublicGetAccessorTypes = (function () {
+var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPublicGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -1318,7 +1318,7 @@ var privateClassWithWithPublicGetAccessorTypes = (function () {
     });
     return privateClassWithWithPublicGetAccessorTypes;
 }());
-var publicClassWithWithPrivateSetAccessorTypes = (function () {
+var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPrivateSetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -1348,7 +1348,7 @@ var publicClassWithWithPrivateSetAccessorTypes = (function () {
     return publicClassWithWithPrivateSetAccessorTypes;
 }());
 exports.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-var publicClassWithWithPublicSetAccessorTypes = (function () {
+var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
     function publicClassWithWithPublicSetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -1378,7 +1378,7 @@ var publicClassWithWithPublicSetAccessorTypes = (function () {
     return publicClassWithWithPublicSetAccessorTypes;
 }());
 exports.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-var privateClassWithWithPrivateSetAccessorTypes = (function () {
+var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPrivateSetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -1407,7 +1407,7 @@ var privateClassWithWithPrivateSetAccessorTypes = (function () {
     });
     return privateClassWithWithPrivateSetAccessorTypes;
 }());
-var privateClassWithWithPublicSetAccessorTypes = (function () {
+var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
     function privateClassWithWithPublicSetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -1436,7 +1436,7 @@ var privateClassWithWithPublicSetAccessorTypes = (function () {
     });
     return privateClassWithWithPublicSetAccessorTypes;
 }());
-var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -1470,7 +1470,7 @@ var publicClassWithPrivateModuleGetAccessorTypes = (function () {
     return publicClassWithPrivateModuleGetAccessorTypes;
 }());
 exports.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-var publicClassWithPrivateModuleSetAccessorTypes = (function () {
+var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleSetAccessorTypes() {
     }
     Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -1488,7 +1488,7 @@ var publicClassWithPrivateModuleSetAccessorTypes = (function () {
     return publicClassWithPrivateModuleSetAccessorTypes;
 }());
 exports.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleGetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -1521,7 +1521,7 @@ var privateClassWithPrivateModuleGetAccessorTypes = (function () {
     });
     return privateClassWithPrivateModuleGetAccessorTypes;
 }());
-var privateClassWithPrivateModuleSetAccessorTypes = (function () {
+var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleSetAccessorTypes() {
     }
     Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -1540,18 +1540,18 @@ var privateClassWithPrivateModuleSetAccessorTypes = (function () {
 }());
 var publicModule;
 (function (publicModule) {
-    var privateClass = (function () {
+    var privateClass = /** @class */ (function () {
         function privateClass() {
         }
         return privateClass;
     }());
-    var publicClass = (function () {
+    var publicClass = /** @class */ (function () {
         function publicClass() {
         }
         return publicClass;
     }());
     publicModule.publicClass = publicClass;
-    var publicClassWithWithPrivateGetAccessorTypes = (function () {
+    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -1613,7 +1613,7 @@ var publicModule;
         return publicClassWithWithPrivateGetAccessorTypes;
     }());
     publicModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = (function () {
+    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -1675,7 +1675,7 @@ var publicModule;
         return publicClassWithWithPublicGetAccessorTypes;
     }());
     publicModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = (function () {
+    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -1736,7 +1736,7 @@ var publicModule;
         });
         return privateClassWithWithPrivateGetAccessorTypes;
     }());
-    var privateClassWithWithPublicGetAccessorTypes = (function () {
+    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -1797,7 +1797,7 @@ var publicModule;
         });
         return privateClassWithWithPublicGetAccessorTypes;
     }());
-    var publicClassWithWithPrivateSetAccessorTypes = (function () {
+    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -1827,7 +1827,7 @@ var publicModule;
         return publicClassWithWithPrivateSetAccessorTypes;
     }());
     publicModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = (function () {
+    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -1857,7 +1857,7 @@ var publicModule;
         return publicClassWithWithPublicSetAccessorTypes;
     }());
     publicModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = (function () {
+    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -1886,7 +1886,7 @@ var publicModule;
         });
         return privateClassWithWithPrivateSetAccessorTypes;
     }());
-    var privateClassWithWithPublicSetAccessorTypes = (function () {
+    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -1915,7 +1915,7 @@ var publicModule;
         });
         return privateClassWithWithPublicSetAccessorTypes;
     }());
-    var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -1949,7 +1949,7 @@ var publicModule;
         return publicClassWithPrivateModuleGetAccessorTypes;
     }());
     publicModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -1967,7 +1967,7 @@ var publicModule;
         return publicClassWithPrivateModuleSetAccessorTypes;
     }());
     publicModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -2000,7 +2000,7 @@ var publicModule;
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
     }());
-    var privateClassWithPrivateModuleSetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -2020,18 +2020,18 @@ var publicModule;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    var privateClass = (function () {
+    var privateClass = /** @class */ (function () {
         function privateClass() {
         }
         return privateClass;
     }());
-    var publicClass = (function () {
+    var publicClass = /** @class */ (function () {
         function publicClass() {
         }
         return publicClass;
     }());
     privateModule.publicClass = publicClass;
-    var publicClassWithWithPrivateGetAccessorTypes = (function () {
+    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -2093,7 +2093,7 @@ var privateModule;
         return publicClassWithWithPrivateGetAccessorTypes;
     }());
     privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = (function () {
+    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -2155,7 +2155,7 @@ var privateModule;
         return publicClassWithWithPublicGetAccessorTypes;
     }());
     privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = (function () {
+    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -2216,7 +2216,7 @@ var privateModule;
         });
         return privateClassWithWithPrivateGetAccessorTypes;
     }());
-    var privateClassWithWithPublicGetAccessorTypes = (function () {
+    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -2277,7 +2277,7 @@ var privateModule;
         });
         return privateClassWithWithPublicGetAccessorTypes;
     }());
-    var publicClassWithWithPrivateSetAccessorTypes = (function () {
+    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -2307,7 +2307,7 @@ var privateModule;
         return publicClassWithWithPrivateSetAccessorTypes;
     }());
     privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = (function () {
+    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -2337,7 +2337,7 @@ var privateModule;
         return publicClassWithWithPublicSetAccessorTypes;
     }());
     privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = (function () {
+    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -2366,7 +2366,7 @@ var privateModule;
         });
         return privateClassWithWithPrivateSetAccessorTypes;
     }());
-    var privateClassWithWithPublicSetAccessorTypes = (function () {
+    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -2395,7 +2395,7 @@ var privateModule;
         });
         return privateClassWithWithPublicSetAccessorTypes;
     }());
-    var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -2429,7 +2429,7 @@ var privateModule;
         return publicClassWithPrivateModuleGetAccessorTypes;
     }());
     privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -2447,7 +2447,7 @@ var privateModule;
         return publicClassWithPrivateModuleSetAccessorTypes;
     }());
     privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -2480,7 +2480,7 @@ var privateModule;
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
     }());
-    var privateClassWithPrivateModuleSetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -2499,12 +2499,12 @@ var privateModule;
     }());
 })(privateModule || (privateModule = {}));
 //// [privacyAccessorDeclFile_GlobalFile.js]
-var publicClassInGlobal = (function () {
+var publicClassInGlobal = /** @class */ (function () {
     function publicClassInGlobal() {
     }
     return publicClassInGlobal;
 }());
-var publicClassInGlobalWithPublicGetAccessorTypes = (function () {
+var publicClassInGlobalWithPublicGetAccessorTypes = /** @class */ (function () {
     function publicClassInGlobalWithPublicGetAccessorTypes() {
     }
     Object.defineProperty(publicClassInGlobalWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -2565,7 +2565,7 @@ var publicClassInGlobalWithPublicGetAccessorTypes = (function () {
     });
     return publicClassInGlobalWithPublicGetAccessorTypes;
 }());
-var publicClassInGlobalWithWithPublicSetAccessorTypes = (function () {
+var publicClassInGlobalWithWithPublicSetAccessorTypes = /** @class */ (function () {
     function publicClassInGlobalWithWithPublicSetAccessorTypes() {
     }
     Object.defineProperty(publicClassInGlobalWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -2596,12 +2596,12 @@ var publicClassInGlobalWithWithPublicSetAccessorTypes = (function () {
 }());
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
-    var privateClass = (function () {
+    var privateClass = /** @class */ (function () {
         function privateClass() {
         }
         return privateClass;
     }());
-    var publicClass = (function () {
+    var publicClass = /** @class */ (function () {
         function publicClass() {
         }
         return publicClass;
@@ -2609,18 +2609,18 @@ var publicModuleInGlobal;
     publicModuleInGlobal.publicClass = publicClass;
     var privateModule;
     (function (privateModule) {
-        var privateClass = (function () {
+        var privateClass = /** @class */ (function () {
             function privateClass() {
             }
             return privateClass;
         }());
-        var publicClass = (function () {
+        var publicClass = /** @class */ (function () {
             function publicClass() {
             }
             return publicClass;
         }());
         privateModule.publicClass = publicClass;
-        var publicClassWithWithPrivateGetAccessorTypes = (function () {
+        var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
             function publicClassWithWithPrivateGetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -2682,7 +2682,7 @@ var publicModuleInGlobal;
             return publicClassWithWithPrivateGetAccessorTypes;
         }());
         privateModule.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-        var publicClassWithWithPublicGetAccessorTypes = (function () {
+        var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
             function publicClassWithWithPublicGetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -2744,7 +2744,7 @@ var publicModuleInGlobal;
             return publicClassWithWithPublicGetAccessorTypes;
         }());
         privateModule.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-        var privateClassWithWithPrivateGetAccessorTypes = (function () {
+        var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
             function privateClassWithWithPrivateGetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -2805,7 +2805,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithWithPrivateGetAccessorTypes;
         }());
-        var privateClassWithWithPublicGetAccessorTypes = (function () {
+        var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
             function privateClassWithWithPublicGetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -2866,7 +2866,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithWithPublicGetAccessorTypes;
         }());
-        var publicClassWithWithPrivateSetAccessorTypes = (function () {
+        var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
             function publicClassWithWithPrivateSetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -2896,7 +2896,7 @@ var publicModuleInGlobal;
             return publicClassWithWithPrivateSetAccessorTypes;
         }());
         privateModule.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-        var publicClassWithWithPublicSetAccessorTypes = (function () {
+        var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
             function publicClassWithWithPublicSetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -2926,7 +2926,7 @@ var publicModuleInGlobal;
             return publicClassWithWithPublicSetAccessorTypes;
         }());
         privateModule.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-        var privateClassWithWithPrivateSetAccessorTypes = (function () {
+        var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
             function privateClassWithWithPrivateSetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -2955,7 +2955,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithWithPrivateSetAccessorTypes;
         }());
-        var privateClassWithWithPublicSetAccessorTypes = (function () {
+        var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
             function privateClassWithWithPublicSetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -2984,7 +2984,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithWithPublicSetAccessorTypes;
         }());
-        var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+        var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
             function publicClassWithPrivateModuleGetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -3018,7 +3018,7 @@ var publicModuleInGlobal;
             return publicClassWithPrivateModuleGetAccessorTypes;
         }());
         privateModule.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-        var publicClassWithPrivateModuleSetAccessorTypes = (function () {
+        var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
             function publicClassWithPrivateModuleSetAccessorTypes() {
             }
             Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -3036,7 +3036,7 @@ var publicModuleInGlobal;
             return publicClassWithPrivateModuleSetAccessorTypes;
         }());
         privateModule.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-        var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+        var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
             function privateClassWithPrivateModuleGetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -3069,7 +3069,7 @@ var publicModuleInGlobal;
             });
             return privateClassWithPrivateModuleGetAccessorTypes;
         }());
-        var privateClassWithPrivateModuleSetAccessorTypes = (function () {
+        var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
             function privateClassWithPrivateModuleSetAccessorTypes() {
             }
             Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -3087,7 +3087,7 @@ var publicModuleInGlobal;
             return privateClassWithPrivateModuleSetAccessorTypes;
         }());
     })(privateModule || (privateModule = {}));
-    var publicClassWithWithPrivateGetAccessorTypes = (function () {
+    var publicClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -3149,7 +3149,7 @@ var publicModuleInGlobal;
         return publicClassWithWithPrivateGetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPrivateGetAccessorTypes = publicClassWithWithPrivateGetAccessorTypes;
-    var publicClassWithWithPublicGetAccessorTypes = (function () {
+    var publicClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -3211,7 +3211,7 @@ var publicModuleInGlobal;
         return publicClassWithWithPublicGetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPublicGetAccessorTypes = publicClassWithWithPublicGetAccessorTypes;
-    var privateClassWithWithPrivateGetAccessorTypes = (function () {
+    var privateClassWithWithPrivateGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateGetAccessorTypes, "myPublicStaticMethod", {
@@ -3272,7 +3272,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithWithPrivateGetAccessorTypes;
     }());
-    var privateClassWithWithPublicGetAccessorTypes = (function () {
+    var privateClassWithWithPublicGetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicGetAccessorTypes, "myPublicStaticMethod", {
@@ -3333,7 +3333,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithWithPublicGetAccessorTypes;
     }());
-    var publicClassWithWithPrivateSetAccessorTypes = (function () {
+    var publicClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -3363,7 +3363,7 @@ var publicModuleInGlobal;
         return publicClassWithWithPrivateSetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPrivateSetAccessorTypes = publicClassWithWithPrivateSetAccessorTypes;
-    var publicClassWithWithPublicSetAccessorTypes = (function () {
+    var publicClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function publicClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -3393,7 +3393,7 @@ var publicModuleInGlobal;
         return publicClassWithWithPublicSetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithWithPublicSetAccessorTypes = publicClassWithWithPublicSetAccessorTypes;
-    var privateClassWithWithPrivateSetAccessorTypes = (function () {
+    var privateClassWithWithPrivateSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPrivateSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPrivateSetAccessorTypes, "myPublicStaticMethod", {
@@ -3422,7 +3422,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithWithPrivateSetAccessorTypes;
     }());
-    var privateClassWithWithPublicSetAccessorTypes = (function () {
+    var privateClassWithWithPublicSetAccessorTypes = /** @class */ (function () {
         function privateClassWithWithPublicSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithWithPublicSetAccessorTypes, "myPublicStaticMethod", {
@@ -3451,7 +3451,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithWithPublicSetAccessorTypes;
     }());
-    var publicClassWithPrivateModuleGetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -3485,7 +3485,7 @@ var publicModuleInGlobal;
         return publicClassWithPrivateModuleGetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithPrivateModuleGetAccessorTypes = publicClassWithPrivateModuleGetAccessorTypes;
-    var publicClassWithPrivateModuleSetAccessorTypes = (function () {
+    var publicClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function publicClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(publicClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -3503,7 +3503,7 @@ var publicModuleInGlobal;
         return publicClassWithPrivateModuleSetAccessorTypes;
     }());
     publicModuleInGlobal.publicClassWithPrivateModuleSetAccessorTypes = publicClassWithPrivateModuleSetAccessorTypes;
-    var privateClassWithPrivateModuleGetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleGetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleGetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleGetAccessorTypes, "myPublicStaticMethod", {
@@ -3536,7 +3536,7 @@ var publicModuleInGlobal;
         });
         return privateClassWithPrivateModuleGetAccessorTypes;
     }());
-    var privateClassWithPrivateModuleSetAccessorTypes = (function () {
+    var privateClassWithPrivateModuleSetAccessorTypes = /** @class */ (function () {
         function privateClassWithPrivateModuleSetAccessorTypes() {
         }
         Object.defineProperty(privateClassWithPrivateModuleSetAccessorTypes, "myPublicStaticMethod", {
@@ -3554,3 +3554,535 @@ var publicModuleInGlobal;
         return privateClassWithPrivateModuleSetAccessorTypes;
     }());
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
+
+
+//// [privacyAccessorDeclFile_externalModule.d.ts]
+class privateClass {
+}
+export declare class publicClass {
+}
+export declare class publicClassWithWithPrivateGetAccessorTypes {
+    static readonly myPublicStaticMethod: privateClass;
+    private static readonly myPrivateStaticMethod;
+    readonly myPublicMethod: privateClass;
+    private readonly myPrivateMethod;
+    static readonly myPublicStaticMethod1: privateClass;
+    private static readonly myPrivateStaticMethod1;
+    readonly myPublicMethod1: privateClass;
+    private readonly myPrivateMethod1;
+}
+export declare class publicClassWithWithPublicGetAccessorTypes {
+    static readonly myPublicStaticMethod: publicClass;
+    private static readonly myPrivateStaticMethod;
+    readonly myPublicMethod: publicClass;
+    private readonly myPrivateMethod;
+    static readonly myPublicStaticMethod1: publicClass;
+    private static readonly myPrivateStaticMethod1;
+    readonly myPublicMethod1: publicClass;
+    private readonly myPrivateMethod1;
+}
+export declare class publicClassWithWithPrivateSetAccessorTypes {
+    static myPublicStaticMethod: privateClass;
+    private static myPrivateStaticMethod;
+    myPublicMethod: privateClass;
+    private myPrivateMethod;
+}
+export declare class publicClassWithWithPublicSetAccessorTypes {
+    static myPublicStaticMethod: publicClass;
+    private static myPrivateStaticMethod;
+    myPublicMethod: publicClass;
+    private myPrivateMethod;
+}
+export declare class publicClassWithPrivateModuleGetAccessorTypes {
+    static readonly myPublicStaticMethod: privateModule.publicClass;
+    readonly myPublicMethod: privateModule.publicClass;
+    static readonly myPublicStaticMethod1: privateModule.publicClass;
+    readonly myPublicMethod1: privateModule.publicClass;
+}
+export declare class publicClassWithPrivateModuleSetAccessorTypes {
+    static myPublicStaticMethod: privateModule.publicClass;
+    myPublicMethod: privateModule.publicClass;
+}
+export declare module publicModule {
+    class privateClass {
+    }
+    class publicClass {
+    }
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: privateClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: privateClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: privateClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPublicGetAccessorTypes {
+        static readonly myPublicStaticMethod: publicClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: publicClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: publicClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: publicClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static myPublicStaticMethod: privateClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: privateClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithWithPublicSetAccessorTypes {
+        static myPublicStaticMethod: publicClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: publicClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateModule.publicClass;
+        readonly myPublicMethod: privateModule.publicClass;
+        static readonly myPublicStaticMethod1: privateModule.publicClass;
+        readonly myPublicMethod1: privateModule.publicClass;
+    }
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static myPublicStaticMethod: privateModule.publicClass;
+        myPublicMethod: privateModule.publicClass;
+    }
+}
+declare module privateModule {
+    class privateClass {
+    }
+    class publicClass {
+    }
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: privateClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: privateClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: privateClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPublicGetAccessorTypes {
+        static readonly myPublicStaticMethod: publicClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: publicClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: publicClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: publicClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static myPublicStaticMethod: privateClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: privateClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithWithPublicSetAccessorTypes {
+        static myPublicStaticMethod: publicClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: publicClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateModule.publicClass;
+        readonly myPublicMethod: privateModule.publicClass;
+        static readonly myPublicStaticMethod1: publicClass;
+        readonly myPublicMethod1: publicClass;
+    }
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static myPublicStaticMethod: privateModule.publicClass;
+        myPublicMethod: privateModule.publicClass;
+    }
+}
+export {};
+//// [privacyAccessorDeclFile_GlobalFile.d.ts]
+declare class publicClassInGlobal {
+}
+declare class publicClassInGlobalWithPublicGetAccessorTypes {
+    static readonly myPublicStaticMethod: publicClassInGlobal;
+    private static readonly myPrivateStaticMethod;
+    readonly myPublicMethod: publicClassInGlobal;
+    private readonly myPrivateMethod;
+    static readonly myPublicStaticMethod1: publicClassInGlobal;
+    private static readonly myPrivateStaticMethod1;
+    readonly myPublicMethod1: publicClassInGlobal;
+    private readonly myPrivateMethod1;
+}
+declare class publicClassInGlobalWithWithPublicSetAccessorTypes {
+    static myPublicStaticMethod: publicClassInGlobal;
+    private static myPrivateStaticMethod;
+    myPublicMethod: publicClassInGlobal;
+    private myPrivateMethod;
+}
+declare module publicModuleInGlobal {
+    class privateClass {
+    }
+    class publicClass {
+    }
+    module privateModule {
+        class privateClass {
+        }
+        class publicClass {
+        }
+        class publicClassWithWithPrivateGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: privateClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: privateClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: privateClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPublicGetAccessorTypes {
+            static readonly myPublicStaticMethod: publicClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: publicClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: publicClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: publicClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPrivateSetAccessorTypes {
+            static myPublicStaticMethod: privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: privateClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithWithPublicSetAccessorTypes {
+            static myPublicStaticMethod: publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: publicClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithPrivateModuleGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateModule.publicClass;
+            readonly myPublicMethod: privateModule.publicClass;
+            static readonly myPublicStaticMethod1: publicClass;
+            readonly myPublicMethod1: publicClass;
+        }
+        class publicClassWithPrivateModuleSetAccessorTypes {
+            static myPublicStaticMethod: privateModule.publicClass;
+            myPublicMethod: privateModule.publicClass;
+        }
+    }
+    class publicClassWithWithPrivateGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: privateClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: privateClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: privateClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPublicGetAccessorTypes {
+        static readonly myPublicStaticMethod: publicClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: publicClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: publicClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: publicClass;
+        private readonly myPrivateMethod1;
+    }
+    class publicClassWithWithPrivateSetAccessorTypes {
+        static myPublicStaticMethod: privateClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: privateClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithWithPublicSetAccessorTypes {
+        static myPublicStaticMethod: publicClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: publicClass;
+        private myPrivateMethod;
+    }
+    class publicClassWithPrivateModuleGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateModule.publicClass;
+        readonly myPublicMethod: privateModule.publicClass;
+        static readonly myPublicStaticMethod1: privateModule.publicClass;
+        readonly myPublicMethod1: privateModule.publicClass;
+    }
+    class publicClassWithPrivateModuleSetAccessorTypes {
+        static myPublicStaticMethod: privateModule.publicClass;
+        myPublicMethod: privateModule.publicClass;
+    }
+}
+
+
+//// [DtsFileErrors]
+
+
+tests/cases/compiler/privacyAccessorDeclFile_externalModule.d.ts(1,1): error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+
+
+==== tests/cases/compiler/privacyAccessorDeclFile_externalModule.d.ts (1 errors) ====
+    class privateClass {
+    ~~~~~
+!!! error TS1046: A 'declare' modifier is required for a top level declaration in a .d.ts file.
+    }
+    export declare class publicClass {
+    }
+    export declare class publicClassWithWithPrivateGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: privateClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: privateClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: privateClass;
+        private readonly myPrivateMethod1;
+    }
+    export declare class publicClassWithWithPublicGetAccessorTypes {
+        static readonly myPublicStaticMethod: publicClass;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: publicClass;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: publicClass;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: publicClass;
+        private readonly myPrivateMethod1;
+    }
+    export declare class publicClassWithWithPrivateSetAccessorTypes {
+        static myPublicStaticMethod: privateClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: privateClass;
+        private myPrivateMethod;
+    }
+    export declare class publicClassWithWithPublicSetAccessorTypes {
+        static myPublicStaticMethod: publicClass;
+        private static myPrivateStaticMethod;
+        myPublicMethod: publicClass;
+        private myPrivateMethod;
+    }
+    export declare class publicClassWithPrivateModuleGetAccessorTypes {
+        static readonly myPublicStaticMethod: privateModule.publicClass;
+        readonly myPublicMethod: privateModule.publicClass;
+        static readonly myPublicStaticMethod1: privateModule.publicClass;
+        readonly myPublicMethod1: privateModule.publicClass;
+    }
+    export declare class publicClassWithPrivateModuleSetAccessorTypes {
+        static myPublicStaticMethod: privateModule.publicClass;
+        myPublicMethod: privateModule.publicClass;
+    }
+    export declare module publicModule {
+        class privateClass {
+        }
+        class publicClass {
+        }
+        class publicClassWithWithPrivateGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: privateClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: privateClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: privateClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPublicGetAccessorTypes {
+            static readonly myPublicStaticMethod: publicClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: publicClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: publicClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: publicClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPrivateSetAccessorTypes {
+            static myPublicStaticMethod: privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: privateClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithWithPublicSetAccessorTypes {
+            static myPublicStaticMethod: publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: publicClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithPrivateModuleGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateModule.publicClass;
+            readonly myPublicMethod: privateModule.publicClass;
+            static readonly myPublicStaticMethod1: privateModule.publicClass;
+            readonly myPublicMethod1: privateModule.publicClass;
+        }
+        class publicClassWithPrivateModuleSetAccessorTypes {
+            static myPublicStaticMethod: privateModule.publicClass;
+            myPublicMethod: privateModule.publicClass;
+        }
+    }
+    declare module privateModule {
+        class privateClass {
+        }
+        class publicClass {
+        }
+        class publicClassWithWithPrivateGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: privateClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: privateClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: privateClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPublicGetAccessorTypes {
+            static readonly myPublicStaticMethod: publicClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: publicClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: publicClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: publicClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPrivateSetAccessorTypes {
+            static myPublicStaticMethod: privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: privateClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithWithPublicSetAccessorTypes {
+            static myPublicStaticMethod: publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: publicClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithPrivateModuleGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateModule.publicClass;
+            readonly myPublicMethod: privateModule.publicClass;
+            static readonly myPublicStaticMethod1: publicClass;
+            readonly myPublicMethod1: publicClass;
+        }
+        class publicClassWithPrivateModuleSetAccessorTypes {
+            static myPublicStaticMethod: privateModule.publicClass;
+            myPublicMethod: privateModule.publicClass;
+        }
+    }
+    export {};
+    
+==== tests/cases/compiler/privacyAccessorDeclFile_GlobalFile.d.ts (0 errors) ====
+    declare class publicClassInGlobal {
+    }
+    declare class publicClassInGlobalWithPublicGetAccessorTypes {
+        static readonly myPublicStaticMethod: publicClassInGlobal;
+        private static readonly myPrivateStaticMethod;
+        readonly myPublicMethod: publicClassInGlobal;
+        private readonly myPrivateMethod;
+        static readonly myPublicStaticMethod1: publicClassInGlobal;
+        private static readonly myPrivateStaticMethod1;
+        readonly myPublicMethod1: publicClassInGlobal;
+        private readonly myPrivateMethod1;
+    }
+    declare class publicClassInGlobalWithWithPublicSetAccessorTypes {
+        static myPublicStaticMethod: publicClassInGlobal;
+        private static myPrivateStaticMethod;
+        myPublicMethod: publicClassInGlobal;
+        private myPrivateMethod;
+    }
+    declare module publicModuleInGlobal {
+        class privateClass {
+        }
+        class publicClass {
+        }
+        module privateModule {
+            class privateClass {
+            }
+            class publicClass {
+            }
+            class publicClassWithWithPrivateGetAccessorTypes {
+                static readonly myPublicStaticMethod: privateClass;
+                private static readonly myPrivateStaticMethod;
+                readonly myPublicMethod: privateClass;
+                private readonly myPrivateMethod;
+                static readonly myPublicStaticMethod1: privateClass;
+                private static readonly myPrivateStaticMethod1;
+                readonly myPublicMethod1: privateClass;
+                private readonly myPrivateMethod1;
+            }
+            class publicClassWithWithPublicGetAccessorTypes {
+                static readonly myPublicStaticMethod: publicClass;
+                private static readonly myPrivateStaticMethod;
+                readonly myPublicMethod: publicClass;
+                private readonly myPrivateMethod;
+                static readonly myPublicStaticMethod1: publicClass;
+                private static readonly myPrivateStaticMethod1;
+                readonly myPublicMethod1: publicClass;
+                private readonly myPrivateMethod1;
+            }
+            class publicClassWithWithPrivateSetAccessorTypes {
+                static myPublicStaticMethod: privateClass;
+                private static myPrivateStaticMethod;
+                myPublicMethod: privateClass;
+                private myPrivateMethod;
+            }
+            class publicClassWithWithPublicSetAccessorTypes {
+                static myPublicStaticMethod: publicClass;
+                private static myPrivateStaticMethod;
+                myPublicMethod: publicClass;
+                private myPrivateMethod;
+            }
+            class publicClassWithPrivateModuleGetAccessorTypes {
+                static readonly myPublicStaticMethod: privateModule.publicClass;
+                readonly myPublicMethod: privateModule.publicClass;
+                static readonly myPublicStaticMethod1: publicClass;
+                readonly myPublicMethod1: publicClass;
+            }
+            class publicClassWithPrivateModuleSetAccessorTypes {
+                static myPublicStaticMethod: privateModule.publicClass;
+                myPublicMethod: privateModule.publicClass;
+            }
+        }
+        class publicClassWithWithPrivateGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: privateClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: privateClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: privateClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPublicGetAccessorTypes {
+            static readonly myPublicStaticMethod: publicClass;
+            private static readonly myPrivateStaticMethod;
+            readonly myPublicMethod: publicClass;
+            private readonly myPrivateMethod;
+            static readonly myPublicStaticMethod1: publicClass;
+            private static readonly myPrivateStaticMethod1;
+            readonly myPublicMethod1: publicClass;
+            private readonly myPrivateMethod1;
+        }
+        class publicClassWithWithPrivateSetAccessorTypes {
+            static myPublicStaticMethod: privateClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: privateClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithWithPublicSetAccessorTypes {
+            static myPublicStaticMethod: publicClass;
+            private static myPrivateStaticMethod;
+            myPublicMethod: publicClass;
+            private myPrivateMethod;
+        }
+        class publicClassWithPrivateModuleGetAccessorTypes {
+            static readonly myPublicStaticMethod: privateModule.publicClass;
+            readonly myPublicMethod: privateModule.publicClass;
+            static readonly myPublicStaticMethod1: privateModule.publicClass;
+            readonly myPublicMethod1: privateModule.publicClass;
+        }
+        class publicClassWithPrivateModuleSetAccessorTypes {
+            static myPublicStaticMethod: privateModule.publicClass;
+            myPublicMethod: privateModule.publicClass;
+        }
+    }
+    

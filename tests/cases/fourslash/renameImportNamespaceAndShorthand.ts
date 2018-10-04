@@ -3,8 +3,5 @@
 ////import * as [|foo|] from 'bar';
 ////const bar = { [|foo|] };
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+const [r0, r1] = test.ranges();
+verify.renameLocations([r0, r1], [r0, { range: r1, prefixText: "foo: " }]);

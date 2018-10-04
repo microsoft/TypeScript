@@ -19,11 +19,11 @@ enum Test {
 >Math.random : () => number
 >Math : Math
 >random : () => number
->1000 : number
+>1000 : 1000
 
     D = 10,
 >D : Test
->10 : number
+>10 : 10
 
     E // Error but shouldn't be
 >E : Test

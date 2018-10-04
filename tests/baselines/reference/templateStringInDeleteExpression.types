@@ -2,5 +2,5 @@
 delete `abc${0}abc`;
 >delete `abc${0}abc` : boolean
 >`abc${0}abc` : string
->0 : number
+>0 : 0
 

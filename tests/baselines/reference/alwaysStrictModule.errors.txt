@@ -1,0 +1,11 @@
+tests/cases/compiler/alwaysStrictModule.ts(3,13): error TS1100: Invalid use of 'arguments' in strict mode.
+
+
+==== tests/cases/compiler/alwaysStrictModule.ts (1 errors) ====
+    module M {
+        export function f() {
+            var arguments = [];
+                ~~~~~~~~~
+!!! error TS1100: Invalid use of 'arguments' in strict mode.
+        }
+    }

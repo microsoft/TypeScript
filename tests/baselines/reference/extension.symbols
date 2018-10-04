@@ -1,0 +1,66 @@
+=== tests/cases/compiler/extension.ts ===
+interface I {
+>I : Symbol(I, Decl(extension.ts, 0, 0), Decl(extension.ts, 2, 1))
+
+    x;
+>x : Symbol(I.x, Decl(extension.ts, 0, 13))
+}
+
+interface I {
+>I : Symbol(I, Decl(extension.ts, 0, 0), Decl(extension.ts, 2, 1))
+
+    y;
+>y : Symbol(I.y, Decl(extension.ts, 4, 13))
+}
+
+declare module M {
+>M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
+
+    export class C {
+>C : Symbol(C, Decl(extension.ts, 8, 18))
+
+        public p:number;
+>p : Symbol(C.p, Decl(extension.ts, 9, 20))
+    }
+}
+
+declare module M {
+>M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
+
+    export extension class C {
+>C : Symbol(C, Decl(extension.ts, 15, 20))
+
+        public pe:string;
+>pe : Symbol(C.pe, Decl(extension.ts, 15, 30))
+    }
+}
+
+var c=new M.C();
+>c : Symbol(c, Decl(extension.ts, 20, 3))
+>M.C : Symbol(M.C, Decl(extension.ts, 8, 18))
+>M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
+>C : Symbol(M.C, Decl(extension.ts, 8, 18))
+
+c.pe;
+>c : Symbol(c, Decl(extension.ts, 20, 3))
+
+c.p;
+>c.p : Symbol(M.C.p, Decl(extension.ts, 9, 20))
+>c : Symbol(c, Decl(extension.ts, 20, 3))
+>p : Symbol(M.C.p, Decl(extension.ts, 9, 20))
+
+var i:I;
+>i : Symbol(i, Decl(extension.ts, 23, 3))
+>I : Symbol(I, Decl(extension.ts, 0, 0), Decl(extension.ts, 2, 1))
+
+i.x;
+>i.x : Symbol(I.x, Decl(extension.ts, 0, 13))
+>i : Symbol(i, Decl(extension.ts, 23, 3))
+>x : Symbol(I.x, Decl(extension.ts, 0, 13))
+
+i.y;
+>i.y : Symbol(I.y, Decl(extension.ts, 4, 13))
+>i : Symbol(i, Decl(extension.ts, 23, 3))
+>y : Symbol(I.y, Decl(extension.ts, 4, 13))
+
+

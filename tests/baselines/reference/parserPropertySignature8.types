@@ -1,6 +1,5 @@
 === tests/cases/conformance/parser/ecmascript5/PropertySignatures/parserPropertySignature8.ts ===
 interface I {
->I : I
-
   "H"?:any;
+>"H" : any
 }

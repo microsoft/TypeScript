@@ -1,11 +1,7 @@
-﻿/// <reference path='fourslash.ts' />
-
-////var x : (s/*1*/
+/// <reference path='fourslash.ts' />
 
 ////var y : (s:string, list/*2*/
 
-test.markers().forEach((m) => {
-    goTo.position(m.position, m.fileName);
-    verify.not.completionListIsEmpty();
-    verify.completionListAllowsNewIdentifier();
-});
+goTo.marker("2");
+verify.completionListIsEmpty(); // Parameter name
+verify.completionListAllowsNewIdentifier();

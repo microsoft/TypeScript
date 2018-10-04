@@ -21,14 +21,7 @@
 ////b./*quickInfoB*/x;
 ////c./*quickInfoC*/x;
 
-goTo.marker('signatureA');
-verify.currentSignatureHelpIs('x(a: number): void');
-
-goTo.marker('signatureB');
-verify.currentSignatureHelpIs('x(a: number): void');
-
-goTo.marker('signatureC');
-verify.currentSignatureHelpIs('x(a: number): void');
+verify.signatureHelp({ marker: ["signatureA", "signatureB", "signatureC"], text: "x(a: number): void" });
 
 goTo.marker('completionA');
 verify.completionListContains("x", "(method) x(a: number): void");
@@ -39,11 +32,8 @@ verify.completionListContains("x", "(property) x: (a: number) => void");
 goTo.marker('completionC');
 verify.completionListContains("x", "(property) x: (a: number) => void");
 
-goTo.marker('quickInfoA');
-verify.quickInfoIs("(method) x(a: number): void", undefined);
-
-goTo.marker('quickInfoB');
-verify.quickInfoIs("(property) x: (a: number) => void", undefined);
-
-goTo.marker('quickInfoC');
-verify.quickInfoIs("(property) x: (a: number) => void", undefined);
+verify.quickInfos({
+    quickInfoA: "(method) x(a: number): void",
+    quickInfoB: "(property) x: (a: number) => void",
+    quickInfoC: "(property) x: (a: number) => void"
+});

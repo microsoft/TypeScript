@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression19_es6.ts ===
+function*foo() {
+>foo : Symbol(foo, Decl(YieldExpression19_es6.ts, 0, 0))
+
+  function bar() {
+>bar : Symbol(bar, Decl(YieldExpression19_es6.ts, 0, 16))
+
+    function* quux() {
+>quux : Symbol(quux, Decl(YieldExpression19_es6.ts, 1, 18))
+
+      yield(foo);
+>foo : Symbol(foo, Decl(YieldExpression19_es6.ts, 0, 0))
+    }
+  }
+}

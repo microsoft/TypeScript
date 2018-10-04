@@ -31,7 +31,7 @@ function f2() {
 
 //// [blockScopedBindingsReassignedInLoop6.js]
 function f1() {
-    var _loop_1 = function(x, y) {
+    var _loop_1 = function (x, y) {
         var a = function () { return x++ + y++; };
         if (x == 1)
             return out_x_1 = x, out_y_1 = y, "break";
@@ -47,12 +47,14 @@ function f1() {
         var state_1 = _loop_1(x, y);
         x = out_x_1;
         y = out_y_1;
-        if (typeof state_1 === "object") return state_1.value;
-        if (state_1 === "break") break;
+        if (typeof state_1 === "object")
+            return state_1.value;
+        if (state_1 === "break")
+            break;
     }
 }
 function f2() {
-    var _loop_2 = function(x, y) {
+    var _loop_2 = function (x, y) {
         var a = function () { return x++ + y++; };
         if (x == 1)
             return out_x_2 = x, out_y_2 = y, "break";
@@ -68,7 +70,9 @@ function f2() {
         var state_2 = _loop_2(x, y);
         x = out_x_2;
         y = out_y_2;
-        if (typeof state_2 === "object") return state_2.value;
-        if (state_2 === "break") break;
+        if (typeof state_2 === "object")
+            return state_2.value;
+        if (state_2 === "break")
+            break;
     }
 }

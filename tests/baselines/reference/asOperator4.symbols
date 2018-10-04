@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/asOperator/foo.ts ===
-
 export function foo() { }
 >foo : Symbol(foo, Decl(foo.ts, 0, 0))
 

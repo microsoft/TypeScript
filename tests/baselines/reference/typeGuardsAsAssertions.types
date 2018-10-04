@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/typeGuardsAsAssertions.ts ===
-
 // Repro from #8513
 
 let cond: boolean;
@@ -7,49 +6,32 @@ let cond: boolean;
 
 export type Optional<a> = Some<a> | None;
 >Optional : Optional<a>
->a : a
->Some : Some<a>
->a : a
->None : None
 
 export interface None { readonly none: string; }
->None : None
 >none : string
 
 export interface Some<a> { readonly some: a; }
->Some : Some<a>
->a : a
 >some : a
->a : a
 
 export const none : None = { none: '' };
 >none : None
->None : None
 >{ none: '' } : { none: string; }
 >none : string
->'' : string
+>'' : ""
 
 export function isSome<a>(value: Optional<a>): value is Some<a> {
 >isSome : <a>(value: Optional<a>) => value is Some<a>
->a : a
 >value : Optional<a>
->Optional : Optional<a>
->a : a
->value : any
->Some : Some<a>
->a : a
 
     return 'some' in value;
 >'some' in value : boolean
->'some' : string
+>'some' : "some"
 >value : Optional<a>
 }
 
 function someFrom<a>(some: a) {
 >someFrom : <a>(some: a) => { some: a; }
->a : a
 >some : a
->a : a
 
     return { some };
 >{ some } : { some: a; }
@@ -58,14 +40,10 @@ function someFrom<a>(some: a) {
 
 export function fn<r>(makeSome: () => r): void {
 >fn : <r>(makeSome: () => r) => void
->r : r
 >makeSome : () => r
->r : r
 
     let result: Optional<r> = none;
 >result : Optional<r>
->Optional : Optional<a>
->r : r
 >none : None
 
     result;  // None
@@ -102,7 +80,7 @@ function foo1() {
 
     let x: string | number | boolean = 0;
 >x : string | number | boolean
->0 : number
+>0 : 0
 
     x;  // number
 >x : number
@@ -118,14 +96,14 @@ function foo1() {
 >x : string | number | boolean
 >typeof x === "string" ? x.slice() : "abc" : string
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 >x.slice() : string
 >x.slice : (start?: number | undefined, end?: number | undefined) => string
 >x : string
 >slice : (start?: number | undefined, end?: number | undefined) => string
->"abc" : string
+>"abc" : "abc"
 
         x;  // string
 >x : string
@@ -139,7 +117,7 @@ function foo2() {
 
     let x: string | number | boolean = 0;
 >x : string | number | boolean
->0 : number
+>0 : 0
 
     x;  // number
 >x : number
@@ -152,7 +130,7 @@ function foo2() {
 
         if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -166,9 +144,9 @@ function foo2() {
         }
         else {
             x = "abc";
->x = "abc" : string
+>x = "abc" : "abc"
 >x : string | number | boolean
->"abc" : string
+>"abc" : "abc"
         }
         x;  // string
 >x : string
@@ -211,7 +189,7 @@ function f2() {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : undefined
 >"string" : "string"
 
@@ -254,7 +232,7 @@ function f4() {
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : undefined
 >"boolean" : "boolean"
 
@@ -272,11 +250,11 @@ function f5(x: string | number) {
     if (typeof x === "string" && typeof x === "number") {
 >typeof x === "string" && typeof x === "number" : boolean
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 >typeof x === "number" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string
 >"number" : "number"
 
@@ -306,9 +284,9 @@ function f6() {
 >slice : (start?: number | undefined, end?: number | undefined) => string
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | null | undefined
->"" : string
+>"" : ""
 
     x!.slice();
 >x!.slice() : string
@@ -359,7 +337,7 @@ function f6() {
 >x = <string | undefined>"" : string | undefined
 >x : string | null | undefined
 ><string | undefined>"" : string | undefined
->"" : string
+>"" : ""
 
     x!.slice();
 >x!.slice() : string
@@ -373,13 +351,27 @@ function f6() {
 >x : string | null | undefined
 ><string | null>"" : string | null
 >null : null
->"" : string
+>"" : ""
 
     x!.slice();
 >x!.slice() : string
 >x!.slice : (start?: number | undefined, end?: number | undefined) => string
 >x! : string
 >x : string | null
+>slice : (start?: number | undefined, end?: number | undefined) => string
+}
+
+function f7() {
+>f7 : () => void
+
+    let x: string;
+>x : string
+
+    x!.slice();
+>x!.slice() : string
+>x!.slice : (start?: number | undefined, end?: number | undefined) => string
+>x! : string
+>x : string
 >slice : (start?: number | undefined, end?: number | undefined) => string
 }
 

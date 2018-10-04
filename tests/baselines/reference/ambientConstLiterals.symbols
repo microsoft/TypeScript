@@ -1,0 +1,80 @@
+=== tests/cases/compiler/ambientConstLiterals.ts ===
+function f<T>(x: T): T {
+>f : Symbol(f, Decl(ambientConstLiterals.ts, 0, 0))
+>T : Symbol(T, Decl(ambientConstLiterals.ts, 0, 11))
+>x : Symbol(x, Decl(ambientConstLiterals.ts, 0, 14))
+>T : Symbol(T, Decl(ambientConstLiterals.ts, 0, 11))
+>T : Symbol(T, Decl(ambientConstLiterals.ts, 0, 11))
+
+    return x;
+>x : Symbol(x, Decl(ambientConstLiterals.ts, 0, 14))
+}
+
+enum E { A, B, C, "non identifier" }
+>E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+>A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
+>B : Symbol(E.B, Decl(ambientConstLiterals.ts, 4, 11))
+>C : Symbol(E.C, Decl(ambientConstLiterals.ts, 4, 14))
+>"non identifier" : Symbol(E["non identifier"], Decl(ambientConstLiterals.ts, 4, 17))
+
+const c1 = "abc";
+>c1 : Symbol(c1, Decl(ambientConstLiterals.ts, 6, 5))
+
+const c2 = 123;
+>c2 : Symbol(c2, Decl(ambientConstLiterals.ts, 7, 5))
+
+const c3 = c1;
+>c3 : Symbol(c3, Decl(ambientConstLiterals.ts, 8, 5))
+>c1 : Symbol(c1, Decl(ambientConstLiterals.ts, 6, 5))
+
+const c4 = c2;
+>c4 : Symbol(c4, Decl(ambientConstLiterals.ts, 9, 5))
+>c2 : Symbol(c2, Decl(ambientConstLiterals.ts, 7, 5))
+
+const c5 = f(123);
+>c5 : Symbol(c5, Decl(ambientConstLiterals.ts, 10, 5))
+>f : Symbol(f, Decl(ambientConstLiterals.ts, 0, 0))
+
+const c6 = f(-123);
+>c6 : Symbol(c6, Decl(ambientConstLiterals.ts, 11, 5))
+>f : Symbol(f, Decl(ambientConstLiterals.ts, 0, 0))
+
+const c7 = true;
+>c7 : Symbol(c7, Decl(ambientConstLiterals.ts, 12, 5))
+
+const c8 = E.A;
+>c8 : Symbol(c8, Decl(ambientConstLiterals.ts, 13, 5))
+>E.A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
+>E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+>A : Symbol(E.A, Decl(ambientConstLiterals.ts, 4, 8))
+
+const c8b = E["non identifier"];
+>c8b : Symbol(c8b, Decl(ambientConstLiterals.ts, 14, 5))
+>E : Symbol(E, Decl(ambientConstLiterals.ts, 2, 1))
+>"non identifier" : Symbol(E["non identifier"], Decl(ambientConstLiterals.ts, 4, 17))
+
+const c9 = { x: "abc" };
+>c9 : Symbol(c9, Decl(ambientConstLiterals.ts, 15, 5))
+>x : Symbol(x, Decl(ambientConstLiterals.ts, 15, 12))
+
+const c10 = [123];
+>c10 : Symbol(c10, Decl(ambientConstLiterals.ts, 16, 5))
+
+const c11 = "abc" + "def";
+>c11 : Symbol(c11, Decl(ambientConstLiterals.ts, 17, 5))
+
+const c12 = 123 + 456;
+>c12 : Symbol(c12, Decl(ambientConstLiterals.ts, 18, 5))
+
+const c13 = Math.random() > 0.5 ? "abc" : "def";
+>c13 : Symbol(c13, Decl(ambientConstLiterals.ts, 19, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+
+const c14 = Math.random() > 0.5 ? 123 : 456;
+>c14 : Symbol(c14, Decl(ambientConstLiterals.ts, 20, 5))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+

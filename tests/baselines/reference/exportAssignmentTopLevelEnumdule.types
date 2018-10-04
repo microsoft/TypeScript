@@ -4,7 +4,6 @@ import foo = require("./foo_0");
 
 var color: foo;
 >color : foo
->foo : foo
 
 if(color === foo.green){
 >color === foo.green : boolean
@@ -26,16 +25,16 @@ enum foo {
 >foo : foo
 
 	red, green, blue
->red : foo
->green : foo
->blue : foo
+>red : foo.red
+>green : foo.green
+>blue : foo.blue
 }
 module foo {
 >foo : typeof foo
 
 	export var answer = 42;
 >answer : number
->42 : number
+>42 : 42
 }
 export = foo;
 >foo : foo

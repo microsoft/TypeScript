@@ -16,7 +16,7 @@ var r4 = d instanceof x1;
 
 
 //// [instanceofOperatorWithLHSIsObject.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

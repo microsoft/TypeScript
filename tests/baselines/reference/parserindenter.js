@@ -759,7 +759,7 @@ module Formatting {
 ///<reference path='formatting.ts' />
 var Formatting;
 (function (Formatting) {
-    var Indenter = (function () {
+    var Indenter = /** @class */ (function () {
         function Indenter(logger, tree, snapshot, languageHostIndentation, editorOptions, firstToken, smartIndent) {
             this.logger = logger;
             this.tree = tree;
@@ -912,20 +912,20 @@ var Formatting;
         Indenter.prototype.GetSpecialCaseIndentation = function (token, node) {
             var indentationInfo = null;
             switch (token.Token) {
-                case AuthorTokenKind.atkLCurly:
+                case AuthorTokenKind.atkLCurly: // { is not part of the tree
                     indentationInfo = this.GetSpecialCaseIndentationForLCurly(node);
                     return indentationInfo;
                 case AuthorTokenKind.atkElse: // else is not part of the tree
-                case AuthorTokenKind.atkRBrack:
+                case AuthorTokenKind.atkRBrack: // ] is not part of the tree
                     indentationInfo = node.GetNodeStartLineIndentation(this);
                     return indentationInfo;
-                case AuthorTokenKind.atkRCurly:
+                case AuthorTokenKind.atkRCurly: // } is not part of the tree
                     // if '}' is for a body-block, get indentation based on its parent.
                     if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkBlock && node.AuthorNode.EdgeLabel == AuthorParseNodeEdge.apneBody)
                         node = node.Parent;
                     indentationInfo = node.GetNodeStartLineIndentation(this);
                     return indentationInfo;
-                case AuthorTokenKind.atkWhile:
+                case AuthorTokenKind.atkWhile: // while (in do-while) is not part of the tree
                     if (node.AuthorNode.Details.Kind == AuthorParseNodeKind.apnkDoWhile) {
                         indentationInfo = node.GetNodeStartLineIndentation(this);
                         return indentationInfo;

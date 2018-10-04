@@ -8,10 +8,10 @@ module M {
 //// [bind1.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;
-    }());
-    M.C = C; // this should be an unresolved symbol I error
+    }()); // this should be an unresolved symbol I error
+    M.C = C;
 })(M || (M = {}));

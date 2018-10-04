@@ -13,12 +13,12 @@ var func: {
 func(""); // number
 >func("") : number
 >func : { (s: string): number; (s: any): string; }
->"" : string
+>"" : ""
 
 func(3); // string
 >func(3) : string
 >func : { (s: string): number; (s: any): string; }
->3 : number
+>3 : 3
 
 var x: any;
 >x : any
@@ -42,7 +42,6 @@ var func2: {
     (s: string, t: any): RegExp;
 >s : string
 >t : any
->RegExp : RegExp
 
     (s: any, t: any): string;
 >s : any
@@ -58,18 +57,18 @@ func2(x, x); // string
 func2("", ""); // number
 >func2("", "") : number
 >func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
->"" : string
->"" : string
+>"" : ""
+>"" : ""
 
 func2(x, ""); // boolean
 >func2(x, "") : boolean
 >func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
 >x : any
->"" : string
+>"" : ""
 
 func2("", x); // RegExp
 >func2("", x) : RegExp
 >func2 : { (s: string, t: string): number; (s: any, t: string): boolean; (s: string, t: any): RegExp; (s: any, t: any): string; }
->"" : string
+>"" : ""
 >x : any
 

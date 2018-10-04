@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsOnStaticMembers.ts ===
-
 class test {
 >test : test
 
@@ -8,7 +7,7 @@ class test {
      */
     public static p1: string = "";
 >p1 : string
->"" : string
+>"" : ""
 
     /**
      * p2 comment does not appear in output
@@ -21,7 +20,7 @@ class test {
      */
     private static p3: string = "";
 >p3 : string
->"" : string
+>"" : ""
 
     /**
      * p4 comment does not appear in output

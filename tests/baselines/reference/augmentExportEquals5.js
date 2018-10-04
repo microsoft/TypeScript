@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals5.ts] ////
 
 //// [express.d.ts]
-
-
 declare module Express {
     export interface Request { }
     export interface Response { }
@@ -85,10 +83,12 @@ const y = x.id;
 //// [augmentation.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [consumer.js]
 define(["require", "exports", "./augmentation"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var x;
     var y = x.id;
 });

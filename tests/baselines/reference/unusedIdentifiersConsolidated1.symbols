@@ -1,0 +1,191 @@
+=== tests/cases/compiler/unusedIdentifiersConsolidated1.ts ===
+function greeter(person: string) {
+>greeter : Symbol(greeter, Decl(unusedIdentifiersConsolidated1.ts, 0, 0))
+>person : Symbol(person, Decl(unusedIdentifiersConsolidated1.ts, 0, 17))
+
+    var unused = 20;
+>unused : Symbol(unused, Decl(unusedIdentifiersConsolidated1.ts, 1, 7))
+}
+
+class Dummy<usedtypeparameter, unusedtypeparameter> {
+>Dummy : Symbol(Dummy, Decl(unusedIdentifiersConsolidated1.ts, 2, 1))
+>usedtypeparameter : Symbol(usedtypeparameter, Decl(unusedIdentifiersConsolidated1.ts, 4, 12))
+>unusedtypeparameter : Symbol(unusedtypeparameter, Decl(unusedIdentifiersConsolidated1.ts, 4, 30))
+
+    private unusedprivatevariable: string;
+>unusedprivatevariable : Symbol(Dummy.unusedprivatevariable, Decl(unusedIdentifiersConsolidated1.ts, 4, 53))
+
+    private greeting: string;
+>greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+
+    public unusedpublicvariable: string;
+>unusedpublicvariable : Symbol(Dummy.unusedpublicvariable, Decl(unusedIdentifiersConsolidated1.ts, 6, 29))
+
+    public typedvariable: usedtypeparameter;
+>typedvariable : Symbol(Dummy.typedvariable, Decl(unusedIdentifiersConsolidated1.ts, 7, 40))
+>usedtypeparameter : Symbol(usedtypeparameter, Decl(unusedIdentifiersConsolidated1.ts, 4, 12))
+
+    constructor(message: string) {
+>message : Symbol(message, Decl(unusedIdentifiersConsolidated1.ts, 10, 16))
+
+        var unused2 = 22;
+>unused2 : Symbol(unused2, Decl(unusedIdentifiersConsolidated1.ts, 11, 11))
+
+        this.greeting = "Dummy Message";
+>this.greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+>this : Symbol(Dummy, Decl(unusedIdentifiersConsolidated1.ts, 2, 1))
+>greeting : Symbol(Dummy.greeting, Decl(unusedIdentifiersConsolidated1.ts, 5, 42))
+    }
+
+    public greeter(person: string) {
+>greeter : Symbol(Dummy.greeter, Decl(unusedIdentifiersConsolidated1.ts, 13, 5))
+>person : Symbol(person, Decl(unusedIdentifiersConsolidated1.ts, 15, 19))
+
+        var unused = 20;
+>unused : Symbol(unused, Decl(unusedIdentifiersConsolidated1.ts, 16, 11))
+
+        this.usedPrivateFunction();
+>this.usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+>this : Symbol(Dummy, Decl(unusedIdentifiersConsolidated1.ts, 2, 1))
+>usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+    }
+
+    private usedPrivateFunction() {
+>usedPrivateFunction : Symbol(Dummy.usedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 18, 5))
+    }
+
+    private unUsedPrivateFunction() {
+>unUsedPrivateFunction : Symbol(Dummy.unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 21, 5))
+    }
+}
+
+var user = "Jane User";
+>user : Symbol(user, Decl(unusedIdentifiersConsolidated1.ts, 27, 3))
+
+var user2 = "Jane2 User2";
+>user2 : Symbol(user2, Decl(unusedIdentifiersConsolidated1.ts, 28, 3))
+
+namespace Validation {
+>Validation : Symbol(Validation, Decl(unusedIdentifiersConsolidated1.ts, 28, 26))
+
+    export interface StringValidator {
+>StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
+
+        isAcceptable(s: string): boolean;
+>isAcceptable : Symbol(StringValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 31, 38))
+>s : Symbol(s, Decl(unusedIdentifiersConsolidated1.ts, 32, 21))
+    }
+
+    const lettersRegexp = /^[A-Za-z]+$/;
+>lettersRegexp : Symbol(lettersRegexp, Decl(unusedIdentifiersConsolidated1.ts, 35, 9))
+
+    const numberRegexp = /^[0-9]+$/;
+>numberRegexp : Symbol(numberRegexp, Decl(unusedIdentifiersConsolidated1.ts, 36, 9))
+
+    export class LettersOnlyValidator implements StringValidator {
+>LettersOnlyValidator : Symbol(LettersOnlyValidator, Decl(unusedIdentifiersConsolidated1.ts, 36, 36))
+>StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
+
+        isAcceptable(s2: string) {
+>isAcceptable : Symbol(LettersOnlyValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 38, 66))
+>s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
+
+            return lettersRegexp.test(s2);
+>lettersRegexp.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>lettersRegexp : Symbol(lettersRegexp, Decl(unusedIdentifiersConsolidated1.ts, 35, 9))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>s2 : Symbol(s2, Decl(unusedIdentifiersConsolidated1.ts, 39, 21))
+        }
+
+        private unUsedPrivateFunction() {
+>unUsedPrivateFunction : Symbol(LettersOnlyValidator.unUsedPrivateFunction, Decl(unusedIdentifiersConsolidated1.ts, 41, 9))
+        }
+    }
+
+    export class ZipCodeValidator implements StringValidator {
+>ZipCodeValidator : Symbol(ZipCodeValidator, Decl(unusedIdentifiersConsolidated1.ts, 45, 5))
+>StringValidator : Symbol(StringValidator, Decl(unusedIdentifiersConsolidated1.ts, 30, 22))
+
+        isAcceptable(s3: string) {
+>isAcceptable : Symbol(ZipCodeValidator.isAcceptable, Decl(unusedIdentifiersConsolidated1.ts, 47, 62))
+>s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
+
+            return s3.length === 5;
+>s3.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s3 : Symbol(s3, Decl(unusedIdentifiersConsolidated1.ts, 48, 21))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+
+    interface usedLocallyInterface {
+>usedLocallyInterface : Symbol(usedLocallyInterface, Decl(unusedIdentifiersConsolidated1.ts, 51, 5))
+    }
+
+    interface usedLocallyInterface2 {
+>usedLocallyInterface2 : Symbol(usedLocallyInterface2, Decl(unusedIdentifiersConsolidated1.ts, 54, 5))
+
+        someFunction(s1: string): void;
+>someFunction : Symbol(usedLocallyInterface2.someFunction, Decl(unusedIdentifiersConsolidated1.ts, 56, 37))
+>s1 : Symbol(s1, Decl(unusedIdentifiersConsolidated1.ts, 57, 21))
+    }
+
+    export interface exportedInterface {
+>exportedInterface : Symbol(exportedInterface, Decl(unusedIdentifiersConsolidated1.ts, 58, 5))
+    }
+
+    class dummy implements usedLocallyInterface {
+>dummy : Symbol(dummy, Decl(unusedIdentifiersConsolidated1.ts, 61, 5))
+>usedLocallyInterface : Symbol(usedLocallyInterface, Decl(unusedIdentifiersConsolidated1.ts, 51, 5))
+    }
+
+    interface unusedInterface {
+>unusedInterface : Symbol(unusedInterface, Decl(unusedIdentifiersConsolidated1.ts, 64, 5))
+    }
+}
+
+
+namespace Greeter {
+>Greeter : Symbol(Greeter, Decl(unusedIdentifiersConsolidated1.ts, 68, 1))
+
+    class class1 {
+>class1 : Symbol(class1, Decl(unusedIdentifiersConsolidated1.ts, 71, 19))
+    }
+
+    export class class2 extends class1 {
+>class2 : Symbol(class2, Decl(unusedIdentifiersConsolidated1.ts, 73, 5))
+>class1 : Symbol(class1, Decl(unusedIdentifiersConsolidated1.ts, 71, 19))
+    }
+
+    class class3 {
+>class3 : Symbol(class3, Decl(unusedIdentifiersConsolidated1.ts, 76, 5))
+    }
+
+    export class class4 {
+>class4 : Symbol(class4, Decl(unusedIdentifiersConsolidated1.ts, 79, 5))
+    }
+
+    interface interface1 {
+>interface1 : Symbol(interface1, Decl(unusedIdentifiersConsolidated1.ts, 82, 5))
+    }
+
+    export interface interface2 extends interface1 {
+>interface2 : Symbol(interface2, Decl(unusedIdentifiersConsolidated1.ts, 85, 5))
+>interface1 : Symbol(interface1, Decl(unusedIdentifiersConsolidated1.ts, 82, 5))
+    }
+
+    interface interface3 {
+>interface3 : Symbol(interface3, Decl(unusedIdentifiersConsolidated1.ts, 88, 5))
+    }
+
+    export interface interface4 {
+>interface4 : Symbol(interface4, Decl(unusedIdentifiersConsolidated1.ts, 91, 5))
+    }
+
+    export let a: interface3;
+>a : Symbol(a, Decl(unusedIdentifiersConsolidated1.ts, 96, 14))
+>interface3 : Symbol(interface3, Decl(unusedIdentifiersConsolidated1.ts, 88, 5))
+
+    interface interface5 {
+>interface5 : Symbol(interface5, Decl(unusedIdentifiersConsolidated1.ts, 96, 29))
+    }
+}

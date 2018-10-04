@@ -1,11 +1,10 @@
 === tests/cases/compiler/iteratorsAndStrictNullChecks.ts ===
-
 // for..of
 for (const x of ["a", "b"]) {
 >x : string
 >["a", "b"] : string[]
->"a" : string
->"b" : string
+>"a" : "a"
+>"b" : "b"
 
     x.substring;
 >x.substring : (start: number, end?: number | undefined) => string
@@ -17,15 +16,15 @@ for (const x of ["a", "b"]) {
 const xs = [1, 2, 3];
 >xs : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 const ys = [4, 5];
 >ys : number[]
 >[4, 5] : number[]
->4 : number
->5 : number
+>4 : 4
+>5 : 5
 
 xs.push(...ys);
 >xs.push(...ys) : number

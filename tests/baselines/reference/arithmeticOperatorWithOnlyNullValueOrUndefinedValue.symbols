@@ -1,0 +1,171 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts ===
+// operator *
+var ra1 = null * null;
+>ra1 : Symbol(ra1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 1, 3))
+
+var ra2 = null * undefined;
+>ra2 : Symbol(ra2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 2, 3))
+>undefined : Symbol(undefined)
+
+var ra3 = undefined * null;
+>ra3 : Symbol(ra3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 3, 3))
+>undefined : Symbol(undefined)
+
+var ra4 = undefined * undefined;
+>ra4 : Symbol(ra4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 4, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator /
+var rb1 = null / null;
+>rb1 : Symbol(rb1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 7, 3))
+
+var rb2 = null / undefined;
+>rb2 : Symbol(rb2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 8, 3))
+>undefined : Symbol(undefined)
+
+var rb3 = undefined / null;
+>rb3 : Symbol(rb3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 9, 3))
+>undefined : Symbol(undefined)
+
+var rb4 = undefined / undefined;
+>rb4 : Symbol(rb4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 10, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator %
+var rc1 = null % null;
+>rc1 : Symbol(rc1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 13, 3))
+
+var rc2 = null % undefined;
+>rc2 : Symbol(rc2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 14, 3))
+>undefined : Symbol(undefined)
+
+var rc3 = undefined % null;
+>rc3 : Symbol(rc3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 15, 3))
+>undefined : Symbol(undefined)
+
+var rc4 = undefined % undefined;
+>rc4 : Symbol(rc4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 16, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator -
+var rd1 = null - null;
+>rd1 : Symbol(rd1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 19, 3))
+
+var rd2 = null - undefined;
+>rd2 : Symbol(rd2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 20, 3))
+>undefined : Symbol(undefined)
+
+var rd3 = undefined - null;
+>rd3 : Symbol(rd3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 21, 3))
+>undefined : Symbol(undefined)
+
+var rd4 = undefined - undefined;
+>rd4 : Symbol(rd4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 22, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator <<
+var re1 = null << null;
+>re1 : Symbol(re1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 25, 3))
+
+var re2 = null << undefined;
+>re2 : Symbol(re2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 26, 3))
+>undefined : Symbol(undefined)
+
+var re3 = undefined << null;
+>re3 : Symbol(re3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 27, 3))
+>undefined : Symbol(undefined)
+
+var re4 = undefined << undefined;
+>re4 : Symbol(re4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 28, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator >>
+var rf1 = null >> null;
+>rf1 : Symbol(rf1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 31, 3))
+
+var rf2 = null >> undefined;
+>rf2 : Symbol(rf2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 32, 3))
+>undefined : Symbol(undefined)
+
+var rf3 = undefined >> null;
+>rf3 : Symbol(rf3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 33, 3))
+>undefined : Symbol(undefined)
+
+var rf4 = undefined >> undefined;
+>rf4 : Symbol(rf4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 34, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator >>>
+var rg1 = null >>> null;
+>rg1 : Symbol(rg1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 37, 3))
+
+var rg2 = null >>> undefined;
+>rg2 : Symbol(rg2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 38, 3))
+>undefined : Symbol(undefined)
+
+var rg3 = undefined >>> null;
+>rg3 : Symbol(rg3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 39, 3))
+>undefined : Symbol(undefined)
+
+var rg4 = undefined >>> undefined;
+>rg4 : Symbol(rg4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 40, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator &
+var rh1 = null & null;
+>rh1 : Symbol(rh1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 43, 3))
+
+var rh2 = null & undefined;
+>rh2 : Symbol(rh2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 44, 3))
+>undefined : Symbol(undefined)
+
+var rh3 = undefined & null;
+>rh3 : Symbol(rh3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 45, 3))
+>undefined : Symbol(undefined)
+
+var rh4 = undefined & undefined;
+>rh4 : Symbol(rh4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 46, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator ^
+var ri1 = null ^ null;
+>ri1 : Symbol(ri1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 49, 3))
+
+var ri2 = null ^ undefined;
+>ri2 : Symbol(ri2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 50, 3))
+>undefined : Symbol(undefined)
+
+var ri3 = undefined ^ null;
+>ri3 : Symbol(ri3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 51, 3))
+>undefined : Symbol(undefined)
+
+var ri4 = undefined ^ undefined;
+>ri4 : Symbol(ri4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 52, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+// operator |
+var rj1 = null | null;
+>rj1 : Symbol(rj1, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 55, 3))
+
+var rj2 = null | undefined;
+>rj2 : Symbol(rj2, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 56, 3))
+>undefined : Symbol(undefined)
+
+var rj3 = undefined | null;
+>rj3 : Symbol(rj3, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 57, 3))
+>undefined : Symbol(undefined)
+
+var rj4 = undefined | undefined;
+>rj4 : Symbol(rj4, Decl(arithmeticOperatorWithOnlyNullValueOrUndefinedValue.ts, 58, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+

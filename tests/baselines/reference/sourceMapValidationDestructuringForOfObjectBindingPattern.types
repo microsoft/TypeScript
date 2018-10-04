@@ -7,8 +7,6 @@ declare var console: {
 >msg : any
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -17,8 +15,6 @@ interface Robot {
 }
 
 interface MultiRobot {
->MultiRobot : MultiRobot
-
     name: string;
 >name : string
 
@@ -36,43 +32,41 @@ interface MultiRobot {
 
 let robots: Robot[] = [{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }];
 >robots : Robot[]
->Robot : Robot
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 
 let multiRobots: MultiRobot[] = [{ name: "mower", skills: { primary: "mowing", secondary: "none" } },
 >multiRobots : MultiRobot[]
->MultiRobot : MultiRobot
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skills : { primary: string; secondary: string; }
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
->"mowing" : string
+>"mowing" : "mowing"
 >secondary : string
->"none" : string
+>"none" : "none"
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }];
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
 function getRobots() {
 >getRobots : () => Robot[]
@@ -119,14 +113,14 @@ for (let {name: nameA } of [{ name: "mower", skill: "mowing" }, { name: "trimmer
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -175,24 +169,24 @@ for (let { skills: { primary: primaryA, secondary: secondaryA } } of [{ name: "m
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skills : { primary: string; secondary: string; }
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
->"mowing" : string
+>"mowing" : "mowing"
 >secondary : string
->"none" : string
+>"none" : "none"
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
     console.log(primaryA);
 >console.log(primaryA) : void
@@ -239,14 +233,14 @@ for (let {name: nameA, skill: skillA } of [{ name: "mower", skill: "mowing" }, {
 >[{ name: "mower", skill: "mowing" }, { name: "trimmer", skill: "trimming" }] : { name: string; skill: string; }[]
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 
     console.log(nameA);
 >console.log(nameA) : void
@@ -301,24 +295,24 @@ for (let {name: nameA, skills: { primary: primaryA, secondary: secondaryA } } of
 >[{ name: "mower", skills: { primary: "mowing", secondary: "none" } },    { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }] : { name: string; skills: { primary: string; secondary: string; }; }[]
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skills : { primary: string; secondary: string; }
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
->"mowing" : string
+>"mowing" : "mowing"
 >secondary : string
->"none" : string
+>"none" : "none"
 
     { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } }]) {
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
     console.log(nameA);
 >console.log(nameA) : void

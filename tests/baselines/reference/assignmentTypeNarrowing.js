@@ -28,8 +28,15 @@ for (x of a) {
     x; // string
 }
 
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+arr.push({ x: "ok" });
+
 
 //// [assignmentTypeNarrowing.js]
+var _a, _b, _c;
 var x;
 x = "";
 x; // string
@@ -37,17 +44,18 @@ x = [true][0];
 x; // boolean
 _a = [1][0], x = _a === void 0 ? "" : _a;
 x; // string | number
-(_b = { x: true }, x = _b.x, _b);
+(x = { x: true }.x);
 x; // boolean
-(_c = { y: 1 }, x = _c.y, _c);
+(x = { y: 1 }.y);
 x; // number
-(_d = { x: true }, _e = _d.x, x = _e === void 0 ? "" : _e, _d);
+(_b = { x: true }.x, x = _b === void 0 ? "" : _b);
 x; // string | boolean
-(_f = { y: 1 }, _g = _f.y, x = _g === void 0 ? /a/ : _g, _f);
+(_c = { y: 1 }.y, x = _c === void 0 ? /a/ : _c);
 x; // number | RegExp
 var a;
 for (var _i = 0, a_1 = a; _i < a_1.length; _i++) {
     x = a_1[_i];
     x; // string
 }
-var _a, _b, _c, _d, _e, _f, _g;
+var arr = [{ x: "ok" }]; // weak type
+arr.push({ x: "ok" });

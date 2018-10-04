@@ -6,7 +6,7 @@ var a = {
     /** own x*/
     x: 0
 >x : number
->0 : number
+>0 : 0
 
 };
 

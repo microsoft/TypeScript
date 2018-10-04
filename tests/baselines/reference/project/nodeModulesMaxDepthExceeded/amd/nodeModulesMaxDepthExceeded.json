@@ -6,15 +6,15 @@
     "moduleResolution": "node",
     "project": "maxDepthExceeded",
     "resolvedInputFiles": [
-        "lib.d.ts",
-        "maxDepthExceeded/node_modules/m2/entry.js",
-        "maxDepthExceeded/node_modules/m1/relative.js",
+        "lib.es5.d.ts",
         "maxDepthExceeded/node_modules/m1/index.js",
-        "maxDepthExceeded/root.ts"
+        "maxDepthExceeded/root.ts",
+        "maxDepthExceeded/node_modules/m2/entry.js",
+        "maxDepthExceeded/node_modules/m1/relative.js"
     ],
     "emittedFiles": [
-        "maxDepthExceeded/built/node_modules/m1/relative.js",
         "maxDepthExceeded/built/node_modules/m1/index.js",
-        "maxDepthExceeded/built/root.js"
+        "maxDepthExceeded/built/root.js",
+        "maxDepthExceeded/built/node_modules/m1/relative.js"
     ]
 }

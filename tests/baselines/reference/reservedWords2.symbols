@@ -1,0 +1,34 @@
+=== tests/cases/compiler/reservedWords2.ts ===
+import while = require("dfdf");
+import * as  while from "foo"
+> : Symbol((Missing), Decl(reservedWords2.ts, 3, 16), Decl(reservedWords2.ts, 1, 6))
+
+var typeof = 10;
+function throw() {}
+> : Symbol((Missing), Decl(reservedWords2.ts, 3, 16), Decl(reservedWords2.ts, 1, 6))
+
+module void {}
+var {while, return} = { while: 1, return: 2 };
+>while : Symbol(while, Decl(reservedWords2.ts, 6, 23))
+> : Symbol((Missing), Decl(reservedWords2.ts, 6, 5))
+>return : Symbol(return, Decl(reservedWords2.ts, 6, 33))
+> : Symbol((Missing), Decl(reservedWords2.ts, 6, 11))
+>while : Symbol(while, Decl(reservedWords2.ts, 6, 23))
+>return : Symbol(return, Decl(reservedWords2.ts, 6, 33))
+
+var {this, switch: { continue} } = { this: 1, switch: { continue: 2 }};
+>this : Symbol(this, Decl(reservedWords2.ts, 7, 36))
+> : Symbol((Missing), Decl(reservedWords2.ts, 7, 5))
+>switch : Symbol(switch, Decl(reservedWords2.ts, 7, 45))
+>continue : Symbol(continue, Decl(reservedWords2.ts, 7, 55))
+> : Symbol((Missing), Decl(reservedWords2.ts, 7, 20))
+>this : Symbol(this, Decl(reservedWords2.ts, 7, 36))
+>switch : Symbol(switch, Decl(reservedWords2.ts, 7, 45))
+>continue : Symbol(continue, Decl(reservedWords2.ts, 7, 55))
+
+var [debugger, if] = [1, 2];
+enum void {}
+> : Symbol((Missing), Decl(reservedWords2.ts, 8, 28))
+
+
+

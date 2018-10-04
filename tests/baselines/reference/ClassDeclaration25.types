@@ -1,0 +1,18 @@
+=== tests/cases/compiler/ClassDeclaration25.ts ===
+interface IList<T> {
+    data(): T;
+>data : () => T
+
+    next(): string;
+>next : () => string
+}
+class List<U> implements IList<U> {
+>List : List<U>
+
+    data(): U;
+>data : () => U
+
+    next(): string;
+>next : () => string
+}
+

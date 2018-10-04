@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeRelationships/widenedTypes/strictNullChecksNoWidening.ts ===
-
 var a1 = null;
 >a1 : null
 >null : null
@@ -11,7 +10,7 @@ var a2 = undefined;
 var a3 = void 0;
 >a3 : undefined
 >void 0 : undefined
->0 : number
+>0 : 0
 
 var b1 = [];
 >b1 : never[]
@@ -42,10 +41,7 @@ var b5 = [[], [,]];
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var c1 = f(null);
 >c1 : null

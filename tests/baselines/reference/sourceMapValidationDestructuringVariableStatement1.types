@@ -1,7 +1,5 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatement1.ts ===
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -17,25 +15,23 @@ declare var console: {
 }
 var hello = "hello";
 >hello : string
->"hello" : string
+>"hello" : "hello"
 
 var robotA: Robot = { name: "mower", skill: "mowing" };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skill: "mowing" } : { name: string; skill: string; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skill : string
->"mowing" : string
+>"mowing" : "mowing"
 
 var robotB: Robot = { name: "trimmer", skill: "trimming" };
 >robotB : Robot
->Robot : Robot
 >{ name: "trimmer", skill: "trimming" } : { name: string; skill: string; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skill : string
->"trimming" : string
+>"trimming" : "trimming"
 
 var a: string, { name: nameA } = robotA;
 >a : string
@@ -59,9 +55,9 @@ var c: string, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting
 >skillC : string
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 
 var { name: nameA } = robotA, a = hello;
 >name : any
@@ -77,7 +73,7 @@ var { name: nameB, skill: skillB } = robotB, b = " hello";
 >skillB : string
 >robotB : Robot
 >b : string
->" hello" : string
+>" hello" : " hello"
 
 var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c = hello;
 >name : any
@@ -86,9 +82,9 @@ var { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, 
 >skillC : string
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 >c : string
 >hello : string
 
@@ -99,7 +95,7 @@ var a = hello, { name: nameA } = robotA, a1= "hello";
 >nameA : string
 >robotA : Robot
 >a1 : string
->"hello" : string
+>"hello" : "hello"
 
 var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
 >b : string
@@ -110,7 +106,7 @@ var b = hello, { name: nameB, skill: skillB } = robotB, b1 = "hello";
 >skillB : string
 >robotB : Robot
 >b1 : string
->"hello" : string
+>"hello" : "hello"
 
 var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting edges" }, c1 = hello;
 >c : string
@@ -121,9 +117,9 @@ var c = hello, { name: nameC, skill: skillC } = { name: "Edger", skill: "cutting
 >skillC : string
 >{ name: "Edger", skill: "cutting edges" } : { name: string; skill: string; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skill : string
->"cutting edges" : string
+>"cutting edges" : "cutting edges"
 >c1 : string
 >hello : string
 

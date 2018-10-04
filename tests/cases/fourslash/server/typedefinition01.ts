@@ -5,8 +5,6 @@
 ////var x/*1*/ = new n.Foo();
 
 // @Filename: a.ts
-//// /*2*/export class Foo {}
+////export class /*2*/Foo {}
 
-goTo.marker('1');
-goTo.type();
-verify.caretAtMarker('2');
+verify.goToType("1", "2");

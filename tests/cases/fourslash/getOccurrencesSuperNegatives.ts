@@ -20,8 +20,4 @@
 ////    }
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    verify.occurrencesAtPositionCount(0);
-});
+goTo.eachRange(() => verify.occurrencesAtPositionCount(0));

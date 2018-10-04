@@ -1,9 +1,9 @@
 error TS5051: Option 'sourceRoot can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.
-error TS5052: Option 'mapRoot' cannot be specified without specifying option 'sourceMap'.
+error TS5069: Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
 
 
 !!! error TS5051: Option 'sourceRoot can only be used when either option '--inlineSourceMap' or option '--sourceMap' is provided.
-!!! error TS5052: Option 'mapRoot' cannot be specified without specifying option 'sourceMap'.
+!!! error TS5069: Option 'mapRoot' cannot be specified without specifying option 'sourceMap' or option 'declarationMap'.
 ==== m1.ts (0 errors) ====
     var m1_a1 = 10;
     class m1_c1 {

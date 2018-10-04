@@ -3,7 +3,7 @@
 >`abc${0}abc`.indexOf(`abc`) : number
 >`abc${0}abc`.indexOf : (searchString: string, position?: number) => number
 >`abc${0}abc` : string
->0 : number
+>0 : 0
 >indexOf : (searchString: string, position?: number) => number
->`abc` : string
+>`abc` : "abc"
 

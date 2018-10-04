@@ -6,7 +6,7 @@ module A {
 
     export var x = 'hello world'
 >x : string
->'hello world' : string
+>'hello world' : "hello world"
 
     export class Point {
 >Point : Point
@@ -16,11 +16,7 @@ module A {
 >y : number
     }
     export module B {
->B : any
-
         export interface Id {
->Id : Id
-
             name: string;
 >name : string
         }
@@ -53,8 +49,8 @@ var b: { x: number; y: number; } = new C.a.Point(0, 0);
 >C : typeof C
 >a : typeof A
 >Point : typeof A.Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 var c: { name: string };
 >c : { name: string; }
@@ -65,7 +61,6 @@ var c: C.a.B.Id;
 >C : any
 >a : any
 >B : any
->Id : A.B.Id
 
 module X {
 >X : typeof X
@@ -74,7 +69,7 @@ module X {
 >Y : typeof Y
 
         return 42;
->42 : number
+>42 : 42
     }
 
     export module Y {
@@ -117,8 +112,8 @@ var n: { x: number; y: number; } = new Z.y.Point(0, 0);
 >Z : typeof Z
 >y : typeof X.Y
 >Point : typeof X.Y.Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 
 module K {
 >K : typeof K
@@ -135,11 +130,9 @@ module K {
 
         export var y = 12;
 >y : number
->12 : number
+>12 : 12
 
         export interface Point {
->Point : Point
-
             x: number;
 >x : number
 
@@ -168,7 +161,7 @@ var o = new M.D('Hello');
 >M.D : typeof K.L
 >M : typeof M
 >D : typeof K.L
->'Hello' : string
+>'Hello' : "Hello"
 
 var p: { x: number; y: number; }
 >p : { x: number; y: number; }
@@ -179,5 +172,4 @@ var p: M.D.Point;
 >p : { x: number; y: number; }
 >M : any
 >D : any
->Point : K.L.Point
 

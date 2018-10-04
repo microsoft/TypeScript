@@ -1,0 +1,157 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts ===
+// type parameter type is not a valid operand of addition operator
+enum E { a, b }
+>E : E
+>a : E.a
+>b : E.b
+
+function foo<T, U>(t: T, u: U) {
+>foo : <T, U>(t: T, u: U) => void
+>t : T
+>u : U
+
+    var a: any;
+>a : any
+
+    var b: boolean;
+>b : boolean
+
+    var c: number;
+>c : number
+
+    var d: string;
+>d : string
+
+    var e: Object;
+>e : Object
+
+    var g: E;
+>g : E
+
+    var f: void;
+>f : void
+
+    // type parameter as left operand
+    var r1: any = t + a; // ok, one operand is any
+>r1 : any
+>t + a : any
+>t : T
+>a : any
+
+    var r2 = t + b;
+>r2 : any
+>t + b : any
+>t : T
+>b : boolean
+
+    var r3 = t + c;
+>r3 : any
+>t + c : any
+>t : T
+>c : number
+
+    var r4 = t + d; // ok, one operand is string
+>r4 : string
+>t + d : string
+>t : T
+>d : string
+
+    var r5 = t + e;
+>r5 : any
+>t + e : any
+>t : T
+>e : Object
+
+    var r6 = t + g;
+>r6 : any
+>t + g : any
+>t : T
+>g : E
+
+    var r7 = t + f;
+>r7 : any
+>t + f : any
+>t : T
+>f : void
+
+    // type parameter as right operand
+    var r8 = a + t; // ok, one operand is any
+>r8 : any
+>a + t : any
+>a : any
+>t : T
+
+    var r9 = b + t;
+>r9 : any
+>b + t : any
+>b : boolean
+>t : T
+
+    var r10 = c + t;
+>r10 : any
+>c + t : any
+>c : number
+>t : T
+
+    var r11 = d + t; // ok, one operand is string
+>r11 : string
+>d + t : string
+>d : string
+>t : T
+
+    var r12 = e + t;
+>r12 : any
+>e + t : any
+>e : Object
+>t : T
+
+    var r13 = g + t;
+>r13 : any
+>g + t : any
+>g : E
+>t : T
+
+    var r14 = f + t;
+>r14 : any
+>f + t : any
+>f : void
+>t : T
+
+    // other cases
+    var r15 = t + null;
+>r15 : any
+>t + null : any
+>t : T
+>null : null
+
+    var r16 = t + undefined;
+>r16 : any
+>t + undefined : any
+>t : T
+>undefined : undefined
+
+    var r17 = t + t;
+>r17 : any
+>t + t : any
+>t : T
+>t : T
+
+    var r18 = t + u;
+>r18 : any
+>t + u : any
+>t : T
+>u : U
+
+    var r19 = t + (() => { });
+>r19 : any
+>t + (() => { }) : any
+>t : T
+>(() => { }) : () => void
+>() => { } : () => void
+
+    var r20 = t + [];
+>r20 : any
+>t + [] : any
+>t : T
+>[] : undefined[]
+}

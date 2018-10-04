@@ -1,0 +1,34 @@
+=== tests/cases/compiler/callOverloadViaElementAccessExpression.ts ===
+class C {
+>C : Symbol(C, Decl(callOverloadViaElementAccessExpression.ts, 0, 0))
+
+    foo(x: number): number;
+>foo : Symbol(C.foo, Decl(callOverloadViaElementAccessExpression.ts, 0, 9), Decl(callOverloadViaElementAccessExpression.ts, 1, 27), Decl(callOverloadViaElementAccessExpression.ts, 2, 27))
+>x : Symbol(x, Decl(callOverloadViaElementAccessExpression.ts, 1, 8))
+
+    foo(x: string): string;
+>foo : Symbol(C.foo, Decl(callOverloadViaElementAccessExpression.ts, 0, 9), Decl(callOverloadViaElementAccessExpression.ts, 1, 27), Decl(callOverloadViaElementAccessExpression.ts, 2, 27))
+>x : Symbol(x, Decl(callOverloadViaElementAccessExpression.ts, 2, 8))
+
+    foo(x: any): any {
+>foo : Symbol(C.foo, Decl(callOverloadViaElementAccessExpression.ts, 0, 9), Decl(callOverloadViaElementAccessExpression.ts, 1, 27), Decl(callOverloadViaElementAccessExpression.ts, 2, 27))
+>x : Symbol(x, Decl(callOverloadViaElementAccessExpression.ts, 3, 8))
+
+        return null;
+    }
+}
+
+var c = new C();
+>c : Symbol(c, Decl(callOverloadViaElementAccessExpression.ts, 8, 3))
+>C : Symbol(C, Decl(callOverloadViaElementAccessExpression.ts, 0, 0))
+
+var r: string = c['foo'](1);
+>r : Symbol(r, Decl(callOverloadViaElementAccessExpression.ts, 9, 3))
+>c : Symbol(c, Decl(callOverloadViaElementAccessExpression.ts, 8, 3))
+>'foo' : Symbol(C.foo, Decl(callOverloadViaElementAccessExpression.ts, 0, 9), Decl(callOverloadViaElementAccessExpression.ts, 1, 27), Decl(callOverloadViaElementAccessExpression.ts, 2, 27))
+
+var r2: number = c['foo']('');
+>r2 : Symbol(r2, Decl(callOverloadViaElementAccessExpression.ts, 10, 3))
+>c : Symbol(c, Decl(callOverloadViaElementAccessExpression.ts, 8, 3))
+>'foo' : Symbol(C.foo, Decl(callOverloadViaElementAccessExpression.ts, 0, 9), Decl(callOverloadViaElementAccessExpression.ts, 1, 27), Decl(callOverloadViaElementAccessExpression.ts, 2, 27))
+

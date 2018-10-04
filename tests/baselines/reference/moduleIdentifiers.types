@@ -3,13 +3,12 @@ module M {
 >M : typeof M
 
     interface P { x: number; y: number; }
->P : P
 >x : number
 >y : number
 
     export var a = 1
 >a : number
->1 : number
+>1 : 1
 }
 
 //var p: M.P;

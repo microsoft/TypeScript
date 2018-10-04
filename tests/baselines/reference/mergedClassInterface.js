@@ -1,8 +1,6 @@
 //// [tests/cases/conformance/classes/classDeclarations/mergedClassInterface.ts] ////
 
 //// [file1.ts]
-
-
 declare class C1 { }
 
 interface C1 { }
@@ -43,24 +41,22 @@ c5.x3;
 c5.x4;
 
 //// [file2.ts]
-
 declare class C6 { }
 
 interface C7 { }
 
 //// [file3.ts]
-
 interface C6 { }
 
 declare class C7 { }
 
 //// [file1.js]
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     return C4;

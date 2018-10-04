@@ -15,5 +15,5 @@ function foo(bar:{a:any; b?:string;}[]) { return 0 }
 >bar : { a: any; b?: string; }[]
 >a : any
 >b : string
->0 : number
+>0 : 0
 

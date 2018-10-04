@@ -1,5 +1,4 @@
 === tests/cases/compiler/stringIncludes.ts ===
-
 var includes: boolean;
 >includes : boolean
 
@@ -8,17 +7,17 @@ includes = "abcde".includes("cd");
 >includes : boolean
 >"abcde".includes("cd") : boolean
 >"abcde".includes : (searchString: string, position?: number) => boolean
->"abcde" : string
+>"abcde" : "abcde"
 >includes : (searchString: string, position?: number) => boolean
->"cd" : string
+>"cd" : "cd"
 
 includes = "abcde".includes("cd", 2);
 >includes = "abcde".includes("cd", 2) : boolean
 >includes : boolean
 >"abcde".includes("cd", 2) : boolean
 >"abcde".includes : (searchString: string, position?: number) => boolean
->"abcde" : string
+>"abcde" : "abcde"
 >includes : (searchString: string, position?: number) => boolean
->"cd" : string
->2 : number
+>"cd" : "cd"
+>2 : 2
 

@@ -6,12 +6,12 @@ var STRING: string;
 var STRING1: string[] = ["", "abc"];
 >STRING1 : string[]
 >["", "abc"] : string[]
->"" : string
->"abc" : string
+>"" : ""
+>"abc" : "abc"
 
 function foo(): string { return "abc"; }
 >foo : () => string
->"abc" : string
+>"abc" : "abc"
 
 class A {
 >A : A
@@ -21,7 +21,7 @@ class A {
 
     static foo() { return ""; }
 >foo : () => string
->"" : string
+>"" : ""
 }
 module M {
 >M : typeof M
@@ -50,23 +50,23 @@ var ResultIsNumber2 = +STRING1;
 var ResultIsNumber3 = +"";
 >ResultIsNumber3 : number
 >+"" : number
->"" : string
+>"" : ""
 
 var ResultIsNumber4 = +{ x: "", y: "" };
 >ResultIsNumber4 : number
 >+{ x: "", y: "" } : number
 >{ x: "", y: "" } : { x: string; y: string; }
 >x : string
->"" : string
+>"" : ""
 >y : string
->"" : string
+>"" : ""
 
 var ResultIsNumber5 = +{ x: "", y: (s: string) => { return s; } };
 >ResultIsNumber5 : number
 >+{ x: "", y: (s: string) => { return s; } } : number
 >{ x: "", y: (s: string) => { return s; } } : { x: string; y: (s: string) => string; }
 >x : string
->"" : string
+>"" : ""
 >y : (s: string) => string
 >(s: string) => { return s; } : (s: string) => string
 >s : string
@@ -92,7 +92,7 @@ var ResultIsNumber8 = +STRING1[0];
 >+STRING1[0] : number
 >STRING1[0] : string
 >STRING1 : string[]
->0 : number
+>0 : 0
 
 var ResultIsNumber9 = +foo();
 >ResultIsNumber9 : number
@@ -123,12 +123,12 @@ var ResultIsNumber12 = +STRING.charAt(0);
 >STRING.charAt : (pos: number) => string
 >STRING : string
 >charAt : (pos: number) => string
->0 : number
+>0 : 0
 
 // miss assignment operators
 +"";
 >+"" : number
->"" : string
+>"" : ""
 
 +STRING;
 >+STRING : number

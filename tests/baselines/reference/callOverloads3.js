@@ -1,5 +1,4 @@
 //// [callOverloads3.ts]
-
 function Foo():Foo; // error
 function Foo(s:string):Foo; // error
 class Foo { // error
@@ -19,7 +18,7 @@ Foo("s");
 
 
 //// [callOverloads3.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x) {
         // WScript.Echo("Constructor function has executed");
     }

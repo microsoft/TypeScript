@@ -3,18 +3,21 @@ class C {
 >C : C
 
     [Symbol.iterator](x: string): string;
+>[Symbol.iterator] : { (x: string): string; (x: number): number; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >x : string
 
     [Symbol.iterator](x: number): number;
+>[Symbol.iterator] : { (x: string): string; (x: number): number; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >x : number
 
     [Symbol.iterator](x: any) {
+>[Symbol.iterator] : { (x: string): string; (x: number): number; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -37,7 +40,7 @@ c[Symbol.iterator]("");
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->"" : string
+>"" : ""
 
 c[Symbol.iterator](0);
 >c[Symbol.iterator](0) : number
@@ -46,5 +49,5 @@ c[Symbol.iterator](0);
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->0 : number
+>0 : 0
 

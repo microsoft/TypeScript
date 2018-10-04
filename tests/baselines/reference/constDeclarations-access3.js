@@ -1,6 +1,4 @@
 //// [constDeclarations-access3.ts]
-
-
 module M {
     export const x = 0;
 }

@@ -1,18 +1,17 @@
 === tests/cases/conformance/controlFlow/controlFlowDestructuringDeclaration.ts ===
-
 function f1() {
 >f1 : () => void
 
     let x: string | number = 1;
 >x : string | number
->1 : number
+>1 : 1
 
     x;
 >x : number
 
     let y: string | undefined = "";
 >y : string | undefined
->"" : string
+>"" : ""
 
     y;
 >y : string
@@ -24,7 +23,7 @@ function f2() {
     let [x]: [string | number] = [1];
 >x : string | number
 >[1] : [number]
->1 : number
+>1 : 1
 
     x;
 >x : number
@@ -32,14 +31,14 @@ function f2() {
     let [y]: [string | undefined] = [""];
 >y : string | undefined
 >[""] : [string]
->"" : string
+>"" : ""
 
     y;
 >y : string
 
     let [z = ""]: [string | undefined] = [undefined];
 >z : string
->"" : string
+>"" : ""
 >[undefined] : [undefined]
 >undefined : undefined
 
@@ -53,7 +52,7 @@ function f3() {
     let [x]: (string | number)[] = [1];
 >x : string | number
 >[1] : number[]
->1 : number
+>1 : 1
 
     x;
 >x : number
@@ -61,14 +60,14 @@ function f3() {
     let [y]: (string | undefined)[] = [""];
 >y : string | undefined
 >[""] : string[]
->"" : string
+>"" : ""
 
     y;
 >y : string
 
     let [z = ""]: (string | undefined)[] = [undefined];
 >z : string
->"" : string
+>"" : ""
 >[undefined] : undefined[]
 >undefined : undefined
 
@@ -84,7 +83,7 @@ function f4() {
 >x : string | number
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
     x;
 >x : number
@@ -94,14 +93,14 @@ function f4() {
 >y : string | undefined
 >{ y: "" } : { y: string; }
 >y : string
->"" : string
+>"" : ""
 
     y;
 >y : string
 
     let { z = "" }: { z: string | undefined } = { z: undefined };
 >z : string
->"" : string
+>"" : ""
 >z : string | undefined
 >{ z: undefined } : { z: undefined; }
 >z : undefined
@@ -119,7 +118,7 @@ function f5() {
 >x : string | number | undefined
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
     x;
 >x : number
@@ -129,14 +128,14 @@ function f5() {
 >y : string | undefined
 >{ y: "" } : { y: string; }
 >y : string
->"" : string
+>"" : ""
 
     y;
 >y : string
 
     let { z = "" }: { z?: string | undefined } = { z: undefined };
 >z : string
->"" : string
+>"" : ""
 >z : string | undefined
 >{ z: undefined } : { z: undefined; }
 >z : undefined
@@ -167,7 +166,7 @@ function f6() {
 
     let { z = "" }: { z?: string | undefined } = {};
 >z : string
->"" : string
+>"" : ""
 >z : string | undefined
 >{} : {}
 
@@ -183,7 +182,7 @@ function f7() {
 >x : string
 >{ x: 1 } : { x: number; }
 >x : number
->1 : number
+>1 : 1
 
     let { x }: { [x: string]: string | number } = o;
 >x : string | number

@@ -2,7 +2,6 @@
 class A<T extends T> {
     foo() {
         var x: T;
-        // no error expected below this line
         var a = x.foo();
         var b = new x(123);
         var c = x[1];
@@ -11,12 +10,11 @@ class A<T extends T> {
 }
 
 //// [typeParameterWithInvalidConstraintType.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function () {
         var x;
-        // no error expected below this line
         var a = x.foo();
         var b = new x(123);
         var c = x[1];

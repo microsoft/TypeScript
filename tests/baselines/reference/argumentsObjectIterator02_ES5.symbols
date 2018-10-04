@@ -1,0 +1,30 @@
+=== tests/cases/compiler/argumentsObjectIterator02_ES5.ts ===
+function doubleAndReturnAsArray(x: number, y: number, z: number): [number, number, number] {
+>doubleAndReturnAsArray : Symbol(doubleAndReturnAsArray, Decl(argumentsObjectIterator02_ES5.ts, 0, 0))
+>x : Symbol(x, Decl(argumentsObjectIterator02_ES5.ts, 0, 32))
+>y : Symbol(y, Decl(argumentsObjectIterator02_ES5.ts, 0, 42))
+>z : Symbol(z, Decl(argumentsObjectIterator02_ES5.ts, 0, 53))
+
+    let blah = arguments[Symbol.iterator];
+>blah : Symbol(blah, Decl(argumentsObjectIterator02_ES5.ts, 1, 7))
+>arguments : Symbol(arguments)
+
+    let result = [];
+>result : Symbol(result, Decl(argumentsObjectIterator02_ES5.ts, 3, 7))
+
+    for (let arg of blah()) {
+>arg : Symbol(arg, Decl(argumentsObjectIterator02_ES5.ts, 4, 12))
+>blah : Symbol(blah, Decl(argumentsObjectIterator02_ES5.ts, 1, 7))
+
+        result.push(arg + arg);
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(argumentsObjectIterator02_ES5.ts, 3, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arg : Symbol(arg, Decl(argumentsObjectIterator02_ES5.ts, 4, 12))
+>arg : Symbol(arg, Decl(argumentsObjectIterator02_ES5.ts, 4, 12))
+    }
+    return <[any, any, any]>result;
+>result : Symbol(result, Decl(argumentsObjectIterator02_ES5.ts, 3, 7))
+}
+
+

@@ -1,0 +1,97 @@
+=== tests/cases/conformance/types/import/foo.ts ===
+interface Point {
+>Point : Symbol(Point, Decl(foo.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Point.x, Decl(foo.ts, 0, 17))
+
+    y: number;
+>y : Symbol(Point.y, Decl(foo.ts, 1, 14))
+}
+export = Point;
+>Point : Symbol(Point, Decl(foo.ts, 0, 0))
+
+=== tests/cases/conformance/types/import/foo2.ts ===
+namespace Bar {
+>Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
+
+    export interface I {
+>I : Symbol(I, Decl(foo2.ts, 0, 15))
+
+        a: string;
+>a : Symbol(I.a, Decl(foo2.ts, 1, 24))
+
+        b: number;
+>b : Symbol(I.b, Decl(foo2.ts, 2, 18))
+    }
+}
+
+export namespace Baz {
+>Baz : Symbol(Baz, Decl(foo2.ts, 5, 1))
+
+    export interface J {
+>J : Symbol(J, Decl(foo2.ts, 7, 22))
+
+        a: number;
+>a : Symbol(J.a, Decl(foo2.ts, 8, 24))
+
+        b: string;
+>b : Symbol(J.b, Decl(foo2.ts, 9, 18))
+    }
+}
+
+class Bar {
+>Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
+
+    item: Bar.I;
+>item : Symbol(Bar.item, Decl(foo2.ts, 14, 11))
+>Bar : Symbol(Bar, Decl(foo2.ts, 0, 0), Decl(foo2.ts, 12, 1))
+>I : Symbol(Bar.I, Decl(foo2.ts, 0, 15))
+
+    constructor(input: Baz.J) {}
+>input : Symbol(input, Decl(foo2.ts, 16, 16))
+>Baz : Symbol(Baz, Decl(foo2.ts, 5, 1))
+>J : Symbol(Baz.J, Decl(foo2.ts, 7, 22))
+}
+export { Bar }
+>Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
+
+=== tests/cases/conformance/types/import/usage.ts ===
+export const x: import("./fo") = { x: 0, y: 0 };
+>x : Symbol(x, Decl(usage.ts, 0, 12))
+>x : Symbol(x, Decl(usage.ts, 0, 34))
+>y : Symbol(y, Decl(usage.ts, 0, 40))
+
+export let y: import("./fo2").Bar.I = { a: "", b: 0 };
+>y : Symbol(y, Decl(usage.ts, 1, 10))
+>a : Symbol(a, Decl(usage.ts, 1, 39))
+>b : Symbol(b, Decl(usage.ts, 1, 46))
+
+export let z: import("./foo2").Bar.Q = { a: "", b: 0 };
+>z : Symbol(z, Decl(usage.ts, 2, 10))
+>Bar : Symbol(Bar, Decl(foo2.ts, 18, 8))
+>a : Symbol(a, Decl(usage.ts, 2, 40))
+>b : Symbol(b, Decl(usage.ts, 2, 47))
+
+export class Bar2 {
+>Bar2 : Symbol(Bar2, Decl(usage.ts, 2, 55))
+
+    item: {a: string, b: number, c: object};
+>item : Symbol(Bar2.item, Decl(usage.ts, 4, 19))
+>a : Symbol(a, Decl(usage.ts, 5, 11))
+>b : Symbol(b, Decl(usage.ts, 5, 21))
+>c : Symbol(c, Decl(usage.ts, 5, 32))
+
+    constructor(input?: any) {}
+>input : Symbol(input, Decl(usage.ts, 6, 16))
+}
+
+export let shim: typeof import("./fo2") = {
+>shim : Symbol(shim, Decl(usage.ts, 9, 10))
+
+    Bar: Bar2
+>Bar : Symbol(Bar, Decl(usage.ts, 9, 43))
+>Bar2 : Symbol(Bar2, Decl(usage.ts, 2, 55))
+
+};
+

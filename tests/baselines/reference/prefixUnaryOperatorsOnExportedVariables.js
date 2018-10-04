@@ -1,5 +1,4 @@
 //// [prefixUnaryOperatorsOnExportedVariables.ts]
-
 export var x = false;
 export var y = 1;
 if (!x) {
@@ -31,13 +30,13 @@ if (++y) {
 }
 
 //// [prefixUnaryOperatorsOnExportedVariables.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var x, y;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             exports_1("x", x = false);
             exports_1("y", y = 1);
             if (!x) {
@@ -55,5 +54,5 @@ System.register([], function(exports_1, context_1) {
             if (exports_1("y", ++y)) {
             }
         }
-    }
+    };
 });

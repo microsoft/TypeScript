@@ -8,13 +8,12 @@ module Clod {
 }
 
 //// [staticsNotInScopeInClodule.js]
-var Clod = (function () {
+var Clod = /** @class */ (function () {
     function Clod() {
     }
     Clod.x = 10;
     return Clod;
 }());
-var Clod;
 (function (Clod) {
     var p = x; // x isn't in scope here
 })(Clod || (Clod = {}));

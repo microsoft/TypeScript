@@ -10,7 +10,7 @@ declare function use(n: number): void;
 //// [blockScopedBindingsReassignedInLoop1.js]
 (function () {
     'use strict';
-    var _loop_1 = function(i) {
+    var _loop_1 = function (i) {
         (function () { return use(++i); })();
         out_i_1 = i;
     };

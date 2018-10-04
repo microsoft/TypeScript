@@ -1,5 +1,4 @@
 === tests/cases/compiler/_apply.js ===
-
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
  * with the `this` binding of `thisArg` and the arguments of `args`.
@@ -10,7 +9,7 @@
  * @param {...*} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(func, thisArg, args) {
+function apply(func, thisArg, ...args) {
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
 >func : Function
 >thisArg : any
@@ -42,7 +41,7 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 
         case 2: return func.call(thisArg, args[0], args[1]);
 >2 : 2
@@ -53,10 +52,10 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 >args[1] : any
 >args : any[]
->1 : number
+>1 : 1
 
         case 3: return func.call(thisArg, args[0], args[1], args[2]);
 >3 : 3
@@ -67,13 +66,13 @@ function apply(func, thisArg, args) {
 >thisArg : any
 >args[0] : any
 >args : any[]
->0 : number
+>0 : 0
 >args[1] : any
 >args : any[]
->1 : number
+>1 : 1
 >args[2] : any
 >args : any[]
->2 : number
+>2 : 2
     }
     return func.apply(thisArg, args);
 >func.apply(thisArg, args) : any

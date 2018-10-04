@@ -1,0 +1,95 @@
+=== tests/cases/compiler/overrideBaseIntersectionMethod.ts ===
+// Repro from #14615
+
+type Constructor<T> = new (...args: any[]) => T;
+>Constructor : Constructor<T>
+>args : any[]
+
+const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Base {
+>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
+><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
+>Base : T
+>class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
+>Base : Point
+
+  getLocation(): [number, number] {
+>getLocation : () => [number, number]
+
+    const [x,y] = super.getLocation();
+>x : number
+>y : number
+>super.getLocation() : [number, number]
+>super.getLocation : () => [number, number]
+>super : Point
+>getLocation : () => [number, number]
+
+    return [this.x | x, this.y | y];
+>[this.x | x, this.y | y] : [number, number]
+>this.x | x : number
+>this.x : number
+>this : this
+>x : number
+>x : number
+>this.y | y : number
+>this.y : number
+>this : this
+>y : number
+>y : number
+  }
+}
+
+class Point {
+>Point : Point
+
+  constructor(public x: number, public y: number) { }
+>x : number
+>y : number
+
+  getLocation(): [number, number] {
+>getLocation : () => [number, number]
+
+    return [0,0];
+>[0,0] : [number, number]
+>0 : 0
+>0 : 0
+  }
+}
+
+class Foo extends WithLocation(Point) {
+>Foo : Foo
+>WithLocation(Point) : WithLocation<typeof Point>.(Anonymous class) & Point
+>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
+>Point : typeof Point
+
+  calculate() {
+>calculate : () => number
+
+    return this.x + this.y;
+>this.x + this.y : number
+>this.x : number
+>this : this
+>x : number
+>this.y : number
+>this : this
+>y : number
+  }
+  getLocation() {
+>getLocation : () => [number, number]
+
+    return super.getLocation()
+>super.getLocation() : [number, number]
+>super.getLocation : (() => [number, number]) & (() => [number, number])
+>super : WithLocation<typeof Point>.(Anonymous class) & Point
+>getLocation : (() => [number, number]) & (() => [number, number])
+  }
+  whereAmI() {
+>whereAmI : () => [number, number]
+
+    return this.getLocation();
+>this.getLocation() : [number, number]
+>this.getLocation : () => [number, number]
+>this : this
+>getLocation : () => [number, number]
+  }
+}
+

@@ -10,7 +10,7 @@ module M {
     {
         let M = 0;
 >M : number
->0 : number
+>0 : 0
 
         new C();
 >new C() : C

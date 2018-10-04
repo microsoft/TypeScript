@@ -1,0 +1,71 @@
+=== tests/cases/compiler/interfaceImplementation5.ts ===
+interface I1 {
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    getset1:number;
+>getset1 : Symbol(I1.getset1, Decl(interfaceImplementation5.ts, 0, 14))
+}
+
+class C1 implements I1 {
+>C1 : Symbol(C1, Decl(interfaceImplementation5.ts, 2, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public get getset1(){return 1;}
+>getset1 : Symbol(C1.getset1, Decl(interfaceImplementation5.ts, 4, 24))
+}
+
+class C2 implements I1 {
+>C2 : Symbol(C2, Decl(interfaceImplementation5.ts, 6, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public set getset1(baz:number){}
+>getset1 : Symbol(C2.getset1, Decl(interfaceImplementation5.ts, 8, 24))
+>baz : Symbol(baz, Decl(interfaceImplementation5.ts, 9, 23))
+}
+
+class C3 implements I1 {
+>C3 : Symbol(C3, Decl(interfaceImplementation5.ts, 10, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public get getset1(){return 1;}
+>getset1 : Symbol(C3.getset1, Decl(interfaceImplementation5.ts, 12, 24), Decl(interfaceImplementation5.ts, 13, 35))
+
+    public set getset1(baz:number){}
+>getset1 : Symbol(C3.getset1, Decl(interfaceImplementation5.ts, 12, 24), Decl(interfaceImplementation5.ts, 13, 35))
+>baz : Symbol(baz, Decl(interfaceImplementation5.ts, 14, 23))
+}
+
+class C4 implements I1 {
+>C4 : Symbol(C4, Decl(interfaceImplementation5.ts, 15, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public get getset1(){var x:any; return x;}
+>getset1 : Symbol(C4.getset1, Decl(interfaceImplementation5.ts, 17, 24))
+>x : Symbol(x, Decl(interfaceImplementation5.ts, 18, 28))
+>x : Symbol(x, Decl(interfaceImplementation5.ts, 18, 28))
+}
+
+class C5 implements I1 {
+>C5 : Symbol(C5, Decl(interfaceImplementation5.ts, 19, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public set getset1(baz:any){}
+>getset1 : Symbol(C5.getset1, Decl(interfaceImplementation5.ts, 21, 24))
+>baz : Symbol(baz, Decl(interfaceImplementation5.ts, 22, 23))
+}
+
+class C6 implements I1 {
+>C6 : Symbol(C6, Decl(interfaceImplementation5.ts, 23, 1))
+>I1 : Symbol(I1, Decl(interfaceImplementation5.ts, 0, 0))
+
+    public set getset1(baz:any){}
+>getset1 : Symbol(C6.getset1, Decl(interfaceImplementation5.ts, 25, 24), Decl(interfaceImplementation5.ts, 26, 33))
+>baz : Symbol(baz, Decl(interfaceImplementation5.ts, 26, 23))
+
+    public get getset1(){var x:any; return x;}
+>getset1 : Symbol(C6.getset1, Decl(interfaceImplementation5.ts, 25, 24), Decl(interfaceImplementation5.ts, 26, 33))
+>x : Symbol(x, Decl(interfaceImplementation5.ts, 27, 28))
+>x : Symbol(x, Decl(interfaceImplementation5.ts, 27, 28))
+}
+
+

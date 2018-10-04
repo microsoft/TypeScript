@@ -66,7 +66,7 @@ function f1NoError(arguments) {
 function f3() {
     var restParameters = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        restParameters[_i - 0] = arguments[_i];
+        restParameters[_i] = arguments[_i];
     }
     var arguments = 10; // no error
 }

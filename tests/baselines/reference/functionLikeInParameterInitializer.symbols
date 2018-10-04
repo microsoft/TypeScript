@@ -1,0 +1,42 @@
+=== tests/cases/compiler/functionLikeInParameterInitializer.ts ===
+// error
+export function bar(func = () => foo) {
+>bar : Symbol(bar, Decl(functionLikeInParameterInitializer.ts, 0, 0))
+>func : Symbol(func, Decl(functionLikeInParameterInitializer.ts, 1, 20))
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 2, 7))
+
+    let foo = "in";
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 2, 7))
+}
+// error
+export function baz1(func = { f() { return foo } }) {
+>baz1 : Symbol(baz1, Decl(functionLikeInParameterInitializer.ts, 3, 1))
+>func : Symbol(func, Decl(functionLikeInParameterInitializer.ts, 5, 21))
+>f : Symbol(f, Decl(functionLikeInParameterInitializer.ts, 5, 29))
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 6, 7))
+
+    let foo = "in";
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 6, 7))
+}
+
+// error
+export function baz2(func = function () { return foo }) {
+>baz2 : Symbol(baz2, Decl(functionLikeInParameterInitializer.ts, 7, 1))
+>func : Symbol(func, Decl(functionLikeInParameterInitializer.ts, 10, 21))
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 11, 7))
+
+    let foo = "in";
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 11, 7))
+}
+
+// error
+export function baz3(func = class { x = foo }) {
+>baz3 : Symbol(baz3, Decl(functionLikeInParameterInitializer.ts, 12, 1))
+>func : Symbol(func, Decl(functionLikeInParameterInitializer.ts, 15, 21))
+>x : Symbol((Anonymous class).x, Decl(functionLikeInParameterInitializer.ts, 15, 35))
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 16, 7))
+
+    let foo = "in";
+>foo : Symbol(foo, Decl(functionLikeInParameterInitializer.ts, 16, 7))
+}
+

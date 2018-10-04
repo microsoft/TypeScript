@@ -21,12 +21,11 @@ module A {
 
         export var x = 1;
 >x : number
->1 : number
+>1 : 1
     }
 }
 
 var b: A.B; // ok
 >b : A.B
 >A : any
->B : A.B
 

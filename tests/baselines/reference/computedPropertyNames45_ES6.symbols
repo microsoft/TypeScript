@@ -1,0 +1,34 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames45_ES6.ts ===
+class Foo { x }
+>Foo : Symbol(Foo, Decl(computedPropertyNames45_ES6.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(computedPropertyNames45_ES6.ts, 0, 11))
+
+class Foo2 { x; y }
+>Foo2 : Symbol(Foo2, Decl(computedPropertyNames45_ES6.ts, 0, 15))
+>x : Symbol(Foo2.x, Decl(computedPropertyNames45_ES6.ts, 1, 12))
+>y : Symbol(Foo2.y, Decl(computedPropertyNames45_ES6.ts, 1, 15))
+
+class C {
+>C : Symbol(C, Decl(computedPropertyNames45_ES6.ts, 1, 19))
+
+    get ["get1"]() { return new Foo }
+>["get1"] : Symbol(C["get1"], Decl(computedPropertyNames45_ES6.ts, 3, 9))
+>"get1" : Symbol(C["get1"], Decl(computedPropertyNames45_ES6.ts, 3, 9))
+>Foo : Symbol(Foo, Decl(computedPropertyNames45_ES6.ts, 0, 0))
+}
+
+class D extends C {
+>D : Symbol(D, Decl(computedPropertyNames45_ES6.ts, 5, 1))
+>C : Symbol(C, Decl(computedPropertyNames45_ES6.ts, 1, 19))
+
+    // No error when the indexer is in a class more derived than the computed property
+    [s: string]: Foo2;
+>s : Symbol(s, Decl(computedPropertyNames45_ES6.ts, 9, 5))
+>Foo2 : Symbol(Foo2, Decl(computedPropertyNames45_ES6.ts, 0, 15))
+
+    set ["set1"](p: Foo) { }
+>["set1"] : Symbol(D["set1"], Decl(computedPropertyNames45_ES6.ts, 9, 22))
+>"set1" : Symbol(D["set1"], Decl(computedPropertyNames45_ES6.ts, 9, 22))
+>p : Symbol(p, Decl(computedPropertyNames45_ES6.ts, 10, 17))
+>Foo : Symbol(Foo, Decl(computedPropertyNames45_ES6.ts, 0, 0))
+}

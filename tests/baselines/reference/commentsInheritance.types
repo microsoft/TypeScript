@@ -1,9 +1,6 @@
 === tests/cases/compiler/commentsInheritance.ts ===
-
 /** i1 is interface with properties*/
 interface i1 {
->i1 : i1
-
     /** i1_p1*/
     i1_p1: number;
 >i1_p1 : number
@@ -46,7 +43,6 @@ interface i1 {
 }
 class c1 implements i1 {
 >c1 : c1
->i1 : i1
 
     public i1_p1: number;
 >i1_p1 : number
@@ -93,7 +89,6 @@ class c1 implements i1 {
 }
 var i1_i: i1;
 >i1_i : i1
->i1 : i1
 
 var c1_i = new c1();
 >c1_i : c1
@@ -122,7 +117,7 @@ class c2 {
 >c2_prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
     public c2_nc_p1: number;
 >c2_nc_p1 : number
@@ -134,7 +129,7 @@ class c2 {
 >c2_nc_prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** c2 p1*/
     public p1: number;
@@ -149,7 +144,7 @@ class c2 {
 >prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
     public nc_p1: number;
 >nc_p1 : number
@@ -161,7 +156,7 @@ class c2 {
 >nc_prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
     /** c2 constructor*/
     constructor(a: number) {
@@ -183,7 +178,7 @@ class c3 extends c2 {
         super(10);
 >super(10) : void
 >super : typeof c2
->10 : number
+>10 : 10
     }
     /** c3 p1*/
     public p1: number;
@@ -198,7 +193,7 @@ class c3 extends c2 {
 >prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
     public nc_p1: number;
 >nc_p1 : number
@@ -210,14 +205,14 @@ class c3 extends c2 {
 >nc_prop : number
 
         return 10;
->10 : number
+>10 : 10
     }
 }
 var c2_i = new c2(10);
 >c2_i : c2
 >new c2(10) : c2
 >c2 : typeof c2
->10 : number
+>10 : 10
 
 var c3_i = new c3();
 >c3_i : c3
@@ -238,11 +233,9 @@ var c4_i = new c4(10);
 >c4_i : c4
 >new c4(10) : c4
 >c4 : typeof c4
->10 : number
+>10 : 10
 
 interface i2 {
->i2 : i2
-
     /** i2_p1*/
     i2_p1: number;
 >i2_p1 : number
@@ -287,9 +280,6 @@ interface i2 {
 >nc_l1 : () => void
 }
 interface i3 extends i2 {
->i3 : i3
->i2 : i2
-
     /** i3 p1 */
     p1: number;
 >p1 : number
@@ -315,11 +305,9 @@ interface i3 extends i2 {
 }
 var i2_i: i2;
 >i2_i : i2
->i2 : i2
 
 var i3_i: i3;
 >i3_i : i3
->i3 : i3
 
 // assign to interface
 i2_i = i3_i;

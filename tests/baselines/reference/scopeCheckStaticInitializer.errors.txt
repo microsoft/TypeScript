@@ -1,0 +1,34 @@
+tests/cases/compiler/scopeCheckStaticInitializer.ts(2,38): error TS2729: Property 'data' is used before its initialization.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(5,23): error TS2449: Class 'After' used before its declaration.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(5,29): error TS2729: Property 'data' is used before its initialization.
+tests/cases/compiler/scopeCheckStaticInitializer.ts(6,23): error TS2449: Class 'After' used before its declaration.
+
+
+==== tests/cases/compiler/scopeCheckStaticInitializer.ts (4 errors) ====
+    class X {
+        static illegalBeforeProperty = X.data;
+                                         ~~~~
+!!! error TS2729: Property 'data' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:7:12: 'data' is declared here.
+        static okBeforeMethod = X.method;
+    
+        static illegal2 = After.data;
+                          ~~~~~
+!!! error TS2449: Class 'After' used before its declaration.
+!!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:10:7: 'After' is declared here.
+                                ~~~~
+!!! error TS2729: Property 'data' is used before its initialization.
+!!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:11:12: 'data' is declared here.
+        static illegal3 = After.method;
+                          ~~~~~
+!!! error TS2449: Class 'After' used before its declaration.
+!!! related TS2728 tests/cases/compiler/scopeCheckStaticInitializer.ts:10:7: 'After' is declared here.
+        static data = 13;
+        static method() { }
+    }
+    class After {
+        static data = 12;
+        static method() { };
+    }
+    
+    

@@ -1,5 +1,4 @@
 //// [taggedTemplateContextualTyping1.ts]
-
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 
 function tempTag1<T>(templateStrs: TemplateStringsArray, f: FuncType, x: T): T;

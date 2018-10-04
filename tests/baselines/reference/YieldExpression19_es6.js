@@ -8,9 +8,9 @@ function*foo() {
 }
 
 //// [YieldExpression19_es6.js]
-function foo() {
+function* foo() {
     function bar() {
-        function quux() {
+        function* quux() {
             yield (foo);
         }
     }

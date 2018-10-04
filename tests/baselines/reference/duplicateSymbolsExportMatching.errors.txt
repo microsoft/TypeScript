@@ -9,7 +9,7 @@ tests/cases/compiler/duplicateSymbolsExportMatching.ts(43,16): error TS2395: Ind
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(44,9): error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(45,16): error TS2395: Individual declarations in merged declaration 'w' must be all exported or all local.
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(49,12): error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
-tests/cases/compiler/duplicateSymbolsExportMatching.ts(49,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged
+tests/cases/compiler/duplicateSymbolsExportMatching.ts(49,12): error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(52,21): error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(56,11): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
 tests/cases/compiler/duplicateSymbolsExportMatching.ts(57,12): error TS2395: Individual declarations in merged declaration 'C' must be all exported or all local.
@@ -91,7 +91,7 @@ tests/cases/compiler/duplicateSymbolsExportMatching.ts(65,18): error TS2395: Ind
                ~
 !!! error TS2395: Individual declarations in merged declaration 'F' must be all exported or all local.
                ~
-!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged
+!!! error TS2434: A namespace declaration cannot be located prior to a class or function with which it is merged.
             var t;
         }
         export function F() { } // Only one error for duplicate identifier (don't consider visibility)

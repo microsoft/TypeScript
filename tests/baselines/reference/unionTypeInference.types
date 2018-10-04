@@ -4,12 +4,8 @@
 
 function f<T>(x: T, y: string|T): T {
 >f : <T>(x: T, y: string | T) => T
->T : T
 >x : T
->T : T
 >y : string | T
->T : T
->T : T
 
     return x;
 >x : T
@@ -20,20 +16,20 @@ var a1: number;
 
 var a1 = f(1, 2);
 >a1 : number
->f(1, 2) : number
+>f(1, 2) : any
 >f : <T>(x: T, y: string | T) => T
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 var a2: number;
 >a2 : number
 
 var a2 = f(1, "hello");
 >a2 : number
->f(1, "hello") : number
+>f(1, "hello") : 1
 >f : <T>(x: T, y: string | T) => T
->1 : number
->"hello" : string
+>1 : 1
+>"hello" : "hello"
 
 var a3: number;
 >a3 : number
@@ -42,10 +38,10 @@ var a3 = f(1, a1 || "hello");
 >a3 : number
 >f(1, a1 || "hello") : number
 >f : <T>(x: T, y: string | T) => T
->1 : number
->a1 || "hello" : string | number
+>1 : 1
+>a1 || "hello" : number | "hello"
 >a1 : number
->"hello" : string
+>"hello" : "hello"
 
 var a4: any;
 >a4 : any
@@ -55,19 +51,16 @@ var a4 = f(undefined, "abc");
 >f(undefined, "abc") : any
 >f : <T>(x: T, y: string | T) => T
 >undefined : undefined
->"abc" : string
+>"abc" : "abc"
 
 function g<T>(value: [string, T]): T {
 >g : <T>(value: [string, T]) => T
->T : T
 >value : [string, T]
->T : T
->T : T
 
     return value[1];
 >value[1] : T
 >value : [string, T]
->1 : number
+>1 : 1
 }
 
 var b1: boolean;
@@ -77,26 +70,23 @@ var b1 = g(["string", true]);
 >b1 : boolean
 >g(["string", true]) : boolean
 >g : <T>(value: [string, T]) => T
->["string", true] : [string, boolean]
->"string" : string
->true : boolean
+>["string", true] : [string, true]
+>"string" : "string"
+>true : true
 
 function h<T>(x: string|boolean|T): T {
 >h : <T>(x: string | boolean | T) => T
->T : T
 >x : string | boolean | T
->T : T
->T : T
 
     return typeof x === "string" || typeof x === "boolean" ? undefined : x;
 >typeof x === "string" || typeof x === "boolean" ? undefined : x : T
 >typeof x === "string" || typeof x === "boolean" : boolean
 >typeof x === "string" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | boolean | T
 >"string" : "string"
 >typeof x === "boolean" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : boolean | T
 >"boolean" : "boolean"
 >undefined : undefined
@@ -108,16 +98,16 @@ var c1: number;
 
 var c1 = h(5);
 >c1 : number
->h(5) : number
+>h(5) : 5
 >h : <T>(x: string | boolean | T) => T
->5 : number
+>5 : 5
 
 var c2: string;
 >c2 : string
 
 var c2 = h("abc");
 >c2 : string
->h("abc") : string
+>h("abc") : "abc"
 >h : <T>(x: string | boolean | T) => T
->"abc" : string
+>"abc" : "abc"
 

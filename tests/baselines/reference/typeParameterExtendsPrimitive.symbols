@@ -1,0 +1,83 @@
+=== tests/cases/compiler/typeParameterExtendsPrimitive.ts ===
+// #14473
+function f<T extends number>() {
+>f : Symbol(f, Decl(typeParameterExtendsPrimitive.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 1, 11))
+
+    var t: T;
+>t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 1, 11))
+
+    var v = {
+>v : Symbol(v, Decl(typeParameterExtendsPrimitive.ts, 3, 7))
+
+        [t]: 0
+>[t] : Symbol([t], Decl(typeParameterExtendsPrimitive.ts, 3, 13))
+>t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
+    }
+    return t + t;
+>t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
+>t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
+}
+
+// #15501
+interface I { x: number }
+>I : Symbol(I, Decl(typeParameterExtendsPrimitive.ts, 7, 1))
+>x : Symbol(I.x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+
+type IdMap<T> = { [P in keyof T]: T[P] };
+>IdMap : Symbol(IdMap, Decl(typeParameterExtendsPrimitive.ts, 10, 25))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 11, 11))
+>P : Symbol(P, Decl(typeParameterExtendsPrimitive.ts, 11, 19))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 11, 11))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 11, 11))
+>P : Symbol(P, Decl(typeParameterExtendsPrimitive.ts, 11, 19))
+
+function g<T extends I>(i: IdMap<T>) {
+>g : Symbol(g, Decl(typeParameterExtendsPrimitive.ts, 11, 41))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 12, 11))
+>I : Symbol(I, Decl(typeParameterExtendsPrimitive.ts, 7, 1))
+>i : Symbol(i, Decl(typeParameterExtendsPrimitive.ts, 12, 24))
+>IdMap : Symbol(IdMap, Decl(typeParameterExtendsPrimitive.ts, 10, 25))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 12, 11))
+
+    const n: number = i.x;
+>n : Symbol(n, Decl(typeParameterExtendsPrimitive.ts, 13, 9))
+>i.x : Symbol(x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+>i : Symbol(i, Decl(typeParameterExtendsPrimitive.ts, 12, 24))
+>x : Symbol(x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+
+    return i.x * 2;
+>i.x : Symbol(x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+>i : Symbol(i, Decl(typeParameterExtendsPrimitive.ts, 12, 24))
+>x : Symbol(x, Decl(typeParameterExtendsPrimitive.ts, 10, 13))
+}
+
+// #17069
+function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
+>h : Symbol(h, Decl(typeParameterExtendsPrimitive.ts, 15, 1))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 18, 11))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(typeParameterExtendsPrimitive.ts, 18, 39))
+>K : Symbol(K, Decl(typeParameterExtendsPrimitive.ts, 18, 39))
+>array : Symbol(array, Decl(typeParameterExtendsPrimitive.ts, 18, 58))
+>T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 18, 11))
+>prop : Symbol(prop, Decl(typeParameterExtendsPrimitive.ts, 18, 69))
+>K : Symbol(K, Decl(typeParameterExtendsPrimitive.ts, 18, 39))
+
+    let result = 0;
+>result : Symbol(result, Decl(typeParameterExtendsPrimitive.ts, 19, 7))
+
+    for (const v of array) {
+>v : Symbol(v, Decl(typeParameterExtendsPrimitive.ts, 20, 14))
+>array : Symbol(array, Decl(typeParameterExtendsPrimitive.ts, 18, 58))
+
+        result += v[prop];
+>result : Symbol(result, Decl(typeParameterExtendsPrimitive.ts, 19, 7))
+>v : Symbol(v, Decl(typeParameterExtendsPrimitive.ts, 20, 14))
+>prop : Symbol(prop, Decl(typeParameterExtendsPrimitive.ts, 18, 69))
+    }
+    return result;
+>result : Symbol(result, Decl(typeParameterExtendsPrimitive.ts, 19, 7))
+}
+

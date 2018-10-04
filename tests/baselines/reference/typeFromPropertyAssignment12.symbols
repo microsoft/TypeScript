@@ -1,0 +1,35 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = function(element, config) {};
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
+>element : Symbol(element, Decl(module.js, 0, 21))
+>config : Symbol(config, Decl(module.js, 0, 29))
+
+=== tests/cases/conformance/salsa/usage.js ===
+/** @constructor */
+Outer.Pos = function (line, ch) {};
+>Outer.Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
+>Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+>line : Symbol(line, Decl(usage.js, 1, 22))
+>ch : Symbol(ch, Decl(usage.js, 1, 27))
+
+/** @type {number} */
+Outer.Pos.prototype.line;
+>Outer.Pos.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Outer.Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
+>Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+
+var pos = new Outer.Pos(1, 'x');
+>pos : Symbol(pos, Decl(usage.js, 4, 3))
+>Outer.Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(usage.js, 0, 0))
+>Pos : Symbol(Outer.Pos, Decl(usage.js, 0, 0))
+
+pos.line;
+>pos.line : Symbol(Outer.Pos.line, Decl(usage.js, 1, 35))
+>pos : Symbol(pos, Decl(usage.js, 4, 3))
+>line : Symbol(Outer.Pos.line, Decl(usage.js, 1, 35))
+
+

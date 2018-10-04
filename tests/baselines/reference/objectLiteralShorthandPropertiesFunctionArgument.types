@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument.ts ===
 var id: number = 10000;
 >id : number
->10000 : number
+>10000 : 10000
 
 var name: string = "my name";
 >name : string
->"my name" : string
+>"my name" : "my name"
 
 var person = { name, id };
 >person : { name: string; id: number; }

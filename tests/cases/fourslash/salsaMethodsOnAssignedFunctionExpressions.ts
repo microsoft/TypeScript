@@ -11,7 +11,7 @@
 ////
 ////var x = new C();
 ////x/*1*/./*2*/m();
-goTo.marker('1');
-verify.quickInfoIs('var x: {\n    m: (a: string) => void;\n}');
+
+verify.quickInfoAt("1", "var x: C");
 goTo.marker('2');
 verify.completionListContains('m', '(property) C.m: (a: string) => void', 'The prototype method.');

@@ -15,5 +15,5 @@ var parts = [];
 parts[0];
 >parts[0] : any
 >parts : any[]
->0 : number
+>0 : 0
 

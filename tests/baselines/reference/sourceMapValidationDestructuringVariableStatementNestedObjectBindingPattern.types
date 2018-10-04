@@ -7,8 +7,6 @@ declare var console: {
 >msg : string
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -25,29 +23,27 @@ interface Robot {
 }
 var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"mower" : string
+>"mower" : "mower"
 >skills : { primary: string; secondary: string; }
 >{ primary: "mowing", secondary: "none" } : { primary: string; secondary: string; }
 >primary : string
->"mowing" : string
+>"mowing" : "mowing"
 >secondary : string
->"none" : string
+>"none" : "none"
 
 var robotB: Robot = { name: "trimmer", skills: { primary: "trimming", secondary: "edging" } };
 >robotB : Robot
->Robot : Robot
 >{ name: "trimmer", skills: { primary: "trimming", secondary: "edging" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"trimmer" : string
+>"trimmer" : "trimmer"
 >skills : { primary: string; secondary: string; }
 >{ primary: "trimming", secondary: "edging" } : { primary: string; secondary: string; }
 >primary : string
->"trimming" : string
+>"trimming" : "trimming"
 >secondary : string
->"edging" : string
+>"edging" : "edging"
 
 var { skills: { primary: primaryA, secondary: secondaryA } } = robotA;
 >skills : any
@@ -77,13 +73,13 @@ var { name: nameC, skills: { primary: primaryB, secondary: secondaryB } } = { na
 >secondaryB : string
 >{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
->"Edger" : string
+>"Edger" : "Edger"
 >skills : { primary: string; secondary: string; }
 >{ primary: "edging", secondary: "branch trimming" } : { primary: string; secondary: string; }
 >primary : string
->"edging" : string
+>"edging" : "edging"
 >secondary : string
->"branch trimming" : string
+>"branch trimming" : "branch trimming"
 
 if (nameB == nameB) {
 >nameB == nameB : boolean

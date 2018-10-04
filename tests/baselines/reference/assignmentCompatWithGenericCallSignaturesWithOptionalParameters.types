@@ -1,0 +1,687 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithGenericCallSignaturesWithOptionalParameters.ts ===
+// call signatures in derived types must have the same or fewer optional parameters as the target for assignment
+
+module ClassTypeParam {
+>ClassTypeParam : typeof ClassTypeParam
+
+    class Base<T> {
+>Base : Base<T>
+
+        a: () => T;
+>a : () => T
+
+        a2: (x?: T) => T;
+>a2 : (x?: T) => T
+>x : T
+
+        a3: (x: T) => T;
+>a3 : (x: T) => T
+>x : T
+
+        a4: (x: T, y?: T) => T;
+>a4 : (x: T, y?: T) => T
+>x : T
+>y : T
+
+        a5: (x?: T, y?: T) => T;
+>a5 : (x?: T, y?: T) => T
+>x : T
+>y : T
+
+        init = () => {
+>init : () => void
+>() => {            this.a = () => null; // ok, same T of required params            this.a = (x?: T) => null; // ok, same T of required params            this.a = (x: T) => null; // error, too many required params            this.a2 = () => null; // ok, same T of required params            this.a2 = (x?: T) => null; // ok, same T of required params            this.a2 = (x: T) => null; // ok, same number of params            this.a3 = () => null; // ok, fewer required params            this.a3 = (x?: T) => null; // ok, fewer required params            this.a3 = (x: T) => null; // ok, same T of required params            this.a3 = (x: T, y: T) => null;  // error, too many required params            this.a4 = () => null; // ok, fewer required params            this.a4 = (x?: T, y?: T) => null; // ok, fewer required params            this.a4 = (x: T) => null; // ok, same T of required params            this.a4 = (x: T, y: T) => null;  // ok, same number of params            this.a5 = () => null; // ok, fewer required params            this.a5 = (x?: T, y?: T) => null; // ok, fewer required params            this.a5 = (x: T) => null; // ok, all present params match            this.a5 = (x: T, y: T) => null;  // ok, same number of params        } : () => void
+
+            this.a = () => null; // ok, same T of required params
+>this.a = () => null : () => any
+>this.a : () => T
+>this : this
+>a : () => T
+>() => null : () => any
+>null : null
+
+            this.a = (x?: T) => null; // ok, same T of required params
+>this.a = (x?: T) => null : (x?: T) => any
+>this.a : () => T
+>this : this
+>a : () => T
+>(x?: T) => null : (x?: T) => any
+>x : T
+>null : null
+
+            this.a = (x: T) => null; // error, too many required params
+>this.a = (x: T) => null : (x: T) => any
+>this.a : () => T
+>this : this
+>a : () => T
+>(x: T) => null : (x: T) => any
+>x : T
+>null : null
+
+            this.a2 = () => null; // ok, same T of required params
+>this.a2 = () => null : () => any
+>this.a2 : (x?: T) => T
+>this : this
+>a2 : (x?: T) => T
+>() => null : () => any
+>null : null
+
+            this.a2 = (x?: T) => null; // ok, same T of required params
+>this.a2 = (x?: T) => null : (x?: T) => any
+>this.a2 : (x?: T) => T
+>this : this
+>a2 : (x?: T) => T
+>(x?: T) => null : (x?: T) => any
+>x : T
+>null : null
+
+            this.a2 = (x: T) => null; // ok, same number of params
+>this.a2 = (x: T) => null : (x: T) => any
+>this.a2 : (x?: T) => T
+>this : this
+>a2 : (x?: T) => T
+>(x: T) => null : (x: T) => any
+>x : T
+>null : null
+
+            this.a3 = () => null; // ok, fewer required params
+>this.a3 = () => null : () => any
+>this.a3 : (x: T) => T
+>this : this
+>a3 : (x: T) => T
+>() => null : () => any
+>null : null
+
+            this.a3 = (x?: T) => null; // ok, fewer required params
+>this.a3 = (x?: T) => null : (x?: T) => any
+>this.a3 : (x: T) => T
+>this : this
+>a3 : (x: T) => T
+>(x?: T) => null : (x?: T) => any
+>x : T
+>null : null
+
+            this.a3 = (x: T) => null; // ok, same T of required params
+>this.a3 = (x: T) => null : (x: T) => any
+>this.a3 : (x: T) => T
+>this : this
+>a3 : (x: T) => T
+>(x: T) => null : (x: T) => any
+>x : T
+>null : null
+
+            this.a3 = (x: T, y: T) => null;  // error, too many required params
+>this.a3 = (x: T, y: T) => null : (x: T, y: T) => any
+>this.a3 : (x: T) => T
+>this : this
+>a3 : (x: T) => T
+>(x: T, y: T) => null : (x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a4 = () => null; // ok, fewer required params
+>this.a4 = () => null : () => any
+>this.a4 : (x: T, y?: T) => T
+>this : this
+>a4 : (x: T, y?: T) => T
+>() => null : () => any
+>null : null
+
+            this.a4 = (x?: T, y?: T) => null; // ok, fewer required params
+>this.a4 = (x?: T, y?: T) => null : (x?: T, y?: T) => any
+>this.a4 : (x: T, y?: T) => T
+>this : this
+>a4 : (x: T, y?: T) => T
+>(x?: T, y?: T) => null : (x?: T, y?: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a4 = (x: T) => null; // ok, same T of required params
+>this.a4 = (x: T) => null : (x: T) => any
+>this.a4 : (x: T, y?: T) => T
+>this : this
+>a4 : (x: T, y?: T) => T
+>(x: T) => null : (x: T) => any
+>x : T
+>null : null
+
+            this.a4 = (x: T, y: T) => null;  // ok, same number of params
+>this.a4 = (x: T, y: T) => null : (x: T, y: T) => any
+>this.a4 : (x: T, y?: T) => T
+>this : this
+>a4 : (x: T, y?: T) => T
+>(x: T, y: T) => null : (x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+
+
+            this.a5 = () => null; // ok, fewer required params
+>this.a5 = () => null : () => any
+>this.a5 : (x?: T, y?: T) => T
+>this : this
+>a5 : (x?: T, y?: T) => T
+>() => null : () => any
+>null : null
+
+            this.a5 = (x?: T, y?: T) => null; // ok, fewer required params
+>this.a5 = (x?: T, y?: T) => null : (x?: T, y?: T) => any
+>this.a5 : (x?: T, y?: T) => T
+>this : this
+>a5 : (x?: T, y?: T) => T
+>(x?: T, y?: T) => null : (x?: T, y?: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a5 = (x: T) => null; // ok, all present params match
+>this.a5 = (x: T) => null : (x: T) => any
+>this.a5 : (x?: T, y?: T) => T
+>this : this
+>a5 : (x?: T, y?: T) => T
+>(x: T) => null : (x: T) => any
+>x : T
+>null : null
+
+            this.a5 = (x: T, y: T) => null;  // ok, same number of params
+>this.a5 = (x: T, y: T) => null : (x: T, y: T) => any
+>this.a5 : (x?: T, y?: T) => T
+>this : this
+>a5 : (x?: T, y?: T) => T
+>(x: T, y: T) => null : (x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+        }
+    }
+}
+
+module GenericSignaturesInvalid {
+>GenericSignaturesInvalid : typeof GenericSignaturesInvalid
+
+    class Base2 {
+>Base2 : Base2
+
+        a: <T>() => T;
+>a : <T>() => T
+
+        a2: <T>(x?: T) => T;
+>a2 : <T>(x?: T) => T
+>x : T
+
+        a3: <T>(x: T) => T;
+>a3 : <T>(x: T) => T
+>x : T
+
+        a4: <T>(x: T, y?: T) => T;
+>a4 : <T>(x: T, y?: T) => T
+>x : T
+>y : T
+
+        a5: <T>(x?: T, y?: T) => T;
+>a5 : <T>(x?: T, y?: T) => T
+>x : T
+>y : T
+    }
+
+    class Target<T> {
+>Target : Target<T>
+
+        a: () => T;
+>a : () => T
+
+        a2: (x?: T) => T;
+>a2 : (x?: T) => T
+>x : T
+
+        a3: (x: T) => T;
+>a3 : (x: T) => T
+>x : T
+
+        a4: (x: T, y?: T) => T;
+>a4 : (x: T, y?: T) => T
+>x : T
+>y : T
+
+        a5: (x?: T, y?: T) => T;
+>a5 : (x?: T, y?: T) => T
+>x : T
+>y : T
+    }
+
+
+    function foo<T>() {
+>foo : <T>() => void
+
+        var b: Base2;
+>b : Base2
+
+        var t: Target<T>;
+>t : Target<T>
+
+        // all errors
+        b.a = t.a;
+>b.a = t.a : () => T
+>b.a : <T>() => T
+>b : Base2
+>a : <T>() => T
+>t.a : () => T
+>t : Target<T>
+>a : () => T
+
+        b.a = t.a2;
+>b.a = t.a2 : (x?: T) => T
+>b.a : <T>() => T
+>b : Base2
+>a : <T>() => T
+>t.a2 : (x?: T) => T
+>t : Target<T>
+>a2 : (x?: T) => T
+
+        b.a = t.a3;
+>b.a = t.a3 : (x: T) => T
+>b.a : <T>() => T
+>b : Base2
+>a : <T>() => T
+>t.a3 : (x: T) => T
+>t : Target<T>
+>a3 : (x: T) => T
+
+        b.a = t.a4;
+>b.a = t.a4 : (x: T, y?: T) => T
+>b.a : <T>() => T
+>b : Base2
+>a : <T>() => T
+>t.a4 : (x: T, y?: T) => T
+>t : Target<T>
+>a4 : (x: T, y?: T) => T
+
+        b.a = t.a5;
+>b.a = t.a5 : (x?: T, y?: T) => T
+>b.a : <T>() => T
+>b : Base2
+>a : <T>() => T
+>t.a5 : (x?: T, y?: T) => T
+>t : Target<T>
+>a5 : (x?: T, y?: T) => T
+
+        b.a2 = t.a;
+>b.a2 = t.a : () => T
+>b.a2 : <T>(x?: T) => T
+>b : Base2
+>a2 : <T>(x?: T) => T
+>t.a : () => T
+>t : Target<T>
+>a : () => T
+
+        b.a2 = t.a2;
+>b.a2 = t.a2 : (x?: T) => T
+>b.a2 : <T>(x?: T) => T
+>b : Base2
+>a2 : <T>(x?: T) => T
+>t.a2 : (x?: T) => T
+>t : Target<T>
+>a2 : (x?: T) => T
+
+        b.a2 = t.a3;
+>b.a2 = t.a3 : (x: T) => T
+>b.a2 : <T>(x?: T) => T
+>b : Base2
+>a2 : <T>(x?: T) => T
+>t.a3 : (x: T) => T
+>t : Target<T>
+>a3 : (x: T) => T
+
+        b.a2 = t.a4;
+>b.a2 = t.a4 : (x: T, y?: T) => T
+>b.a2 : <T>(x?: T) => T
+>b : Base2
+>a2 : <T>(x?: T) => T
+>t.a4 : (x: T, y?: T) => T
+>t : Target<T>
+>a4 : (x: T, y?: T) => T
+
+        b.a2 = t.a5;
+>b.a2 = t.a5 : (x?: T, y?: T) => T
+>b.a2 : <T>(x?: T) => T
+>b : Base2
+>a2 : <T>(x?: T) => T
+>t.a5 : (x?: T, y?: T) => T
+>t : Target<T>
+>a5 : (x?: T, y?: T) => T
+
+        b.a3 = t.a;
+>b.a3 = t.a : () => T
+>b.a3 : <T>(x: T) => T
+>b : Base2
+>a3 : <T>(x: T) => T
+>t.a : () => T
+>t : Target<T>
+>a : () => T
+
+        b.a3 = t.a2;
+>b.a3 = t.a2 : (x?: T) => T
+>b.a3 : <T>(x: T) => T
+>b : Base2
+>a3 : <T>(x: T) => T
+>t.a2 : (x?: T) => T
+>t : Target<T>
+>a2 : (x?: T) => T
+
+        b.a3 = t.a3;
+>b.a3 = t.a3 : (x: T) => T
+>b.a3 : <T>(x: T) => T
+>b : Base2
+>a3 : <T>(x: T) => T
+>t.a3 : (x: T) => T
+>t : Target<T>
+>a3 : (x: T) => T
+
+        b.a3 = t.a4;
+>b.a3 = t.a4 : (x: T, y?: T) => T
+>b.a3 : <T>(x: T) => T
+>b : Base2
+>a3 : <T>(x: T) => T
+>t.a4 : (x: T, y?: T) => T
+>t : Target<T>
+>a4 : (x: T, y?: T) => T
+
+        b.a3 = t.a5;
+>b.a3 = t.a5 : (x?: T, y?: T) => T
+>b.a3 : <T>(x: T) => T
+>b : Base2
+>a3 : <T>(x: T) => T
+>t.a5 : (x?: T, y?: T) => T
+>t : Target<T>
+>a5 : (x?: T, y?: T) => T
+
+        b.a4 = t.a;
+>b.a4 = t.a : () => T
+>b.a4 : <T>(x: T, y?: T) => T
+>b : Base2
+>a4 : <T>(x: T, y?: T) => T
+>t.a : () => T
+>t : Target<T>
+>a : () => T
+
+        b.a4 = t.a2;
+>b.a4 = t.a2 : (x?: T) => T
+>b.a4 : <T>(x: T, y?: T) => T
+>b : Base2
+>a4 : <T>(x: T, y?: T) => T
+>t.a2 : (x?: T) => T
+>t : Target<T>
+>a2 : (x?: T) => T
+
+        b.a4 = t.a3;
+>b.a4 = t.a3 : (x: T) => T
+>b.a4 : <T>(x: T, y?: T) => T
+>b : Base2
+>a4 : <T>(x: T, y?: T) => T
+>t.a3 : (x: T) => T
+>t : Target<T>
+>a3 : (x: T) => T
+
+        b.a4 = t.a4;
+>b.a4 = t.a4 : (x: T, y?: T) => T
+>b.a4 : <T>(x: T, y?: T) => T
+>b : Base2
+>a4 : <T>(x: T, y?: T) => T
+>t.a4 : (x: T, y?: T) => T
+>t : Target<T>
+>a4 : (x: T, y?: T) => T
+
+        b.a4 = t.a5;
+>b.a4 = t.a5 : (x?: T, y?: T) => T
+>b.a4 : <T>(x: T, y?: T) => T
+>b : Base2
+>a4 : <T>(x: T, y?: T) => T
+>t.a5 : (x?: T, y?: T) => T
+>t : Target<T>
+>a5 : (x?: T, y?: T) => T
+
+        b.a5 = t.a;
+>b.a5 = t.a : () => T
+>b.a5 : <T>(x?: T, y?: T) => T
+>b : Base2
+>a5 : <T>(x?: T, y?: T) => T
+>t.a : () => T
+>t : Target<T>
+>a : () => T
+
+        b.a5 = t.a2;
+>b.a5 = t.a2 : (x?: T) => T
+>b.a5 : <T>(x?: T, y?: T) => T
+>b : Base2
+>a5 : <T>(x?: T, y?: T) => T
+>t.a2 : (x?: T) => T
+>t : Target<T>
+>a2 : (x?: T) => T
+
+        b.a5 = t.a3;
+>b.a5 = t.a3 : (x: T) => T
+>b.a5 : <T>(x?: T, y?: T) => T
+>b : Base2
+>a5 : <T>(x?: T, y?: T) => T
+>t.a3 : (x: T) => T
+>t : Target<T>
+>a3 : (x: T) => T
+
+        b.a5 = t.a4;
+>b.a5 = t.a4 : (x: T, y?: T) => T
+>b.a5 : <T>(x?: T, y?: T) => T
+>b : Base2
+>a5 : <T>(x?: T, y?: T) => T
+>t.a4 : (x: T, y?: T) => T
+>t : Target<T>
+>a4 : (x: T, y?: T) => T
+
+        b.a5 = t.a5;
+>b.a5 = t.a5 : (x?: T, y?: T) => T
+>b.a5 : <T>(x?: T, y?: T) => T
+>b : Base2
+>a5 : <T>(x?: T, y?: T) => T
+>t.a5 : (x?: T, y?: T) => T
+>t : Target<T>
+>a5 : (x?: T, y?: T) => T
+    }
+}
+
+module GenericSignaturesValid {
+>GenericSignaturesValid : typeof GenericSignaturesValid
+
+    class Base2 {
+>Base2 : Base2
+
+        a: <T>() => T;
+>a : <T>() => T
+
+        a2: <T>(x?: T) => T;
+>a2 : <T>(x?: T) => T
+>x : T
+
+        a3: <T>(x: T) => T;
+>a3 : <T>(x: T) => T
+>x : T
+
+        a4: <T>(x: T, y?: T) => T;
+>a4 : <T>(x: T, y?: T) => T
+>x : T
+>y : T
+
+        a5: <T>(x?: T, y?: T) => T;
+>a5 : <T>(x?: T, y?: T) => T
+>x : T
+>y : T
+
+        init = () => {
+>init : () => void
+>() => {            this.a = <T>() => null; // ok, same T of required params            this.a = <T>(x?: T) => null; // ok, same T of required params            this.a = <T>(x: T) => null; // error, too many required params            this.a2 = <T>() => null; // ok, same T of required params            this.a2 = <T>(x?: T) => null; // ok, same T of required params            this.a2 = <T>(x: T) => null; // ok, same number of params            this.a3 = <T>() => null; // ok, fewer required params            this.a3 = <T>(x?: T) => null; // ok, fewer required params            this.a3 = <T>(x: T) => null; // ok, same T of required params            this.a3 = <T>(x: T, y: T) => null;  // error, too many required params            this.a4 = <T>() => null; // ok, fewer required params            this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params            this.a4 = <T>(x: T) => null; // ok, same T of required params            this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params            this.a5 = <T>() => null; // ok, fewer required params            this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params            this.a5 = <T>(x: T) => null; // ok, all present params match            this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params        } : () => void
+
+            this.a = <T>() => null; // ok, same T of required params
+>this.a = <T>() => null : <T>() => any
+>this.a : <T>() => T
+>this : this
+>a : <T>() => T
+><T>() => null : <T>() => any
+>null : null
+
+            this.a = <T>(x?: T) => null; // ok, same T of required params
+>this.a = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a : <T>() => T
+>this : this
+>a : <T>() => T
+><T>(x?: T) => null : <T>(x?: T) => any
+>x : T
+>null : null
+
+            this.a = <T>(x: T) => null; // error, too many required params
+>this.a = <T>(x: T) => null : <T>(x: T) => any
+>this.a : <T>() => T
+>this : this
+>a : <T>() => T
+><T>(x: T) => null : <T>(x: T) => any
+>x : T
+>null : null
+
+            this.a2 = <T>() => null; // ok, same T of required params
+>this.a2 = <T>() => null : <T>() => any
+>this.a2 : <T>(x?: T) => T
+>this : this
+>a2 : <T>(x?: T) => T
+><T>() => null : <T>() => any
+>null : null
+
+            this.a2 = <T>(x?: T) => null; // ok, same T of required params
+>this.a2 = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a2 : <T>(x?: T) => T
+>this : this
+>a2 : <T>(x?: T) => T
+><T>(x?: T) => null : <T>(x?: T) => any
+>x : T
+>null : null
+
+            this.a2 = <T>(x: T) => null; // ok, same number of params
+>this.a2 = <T>(x: T) => null : <T>(x: T) => any
+>this.a2 : <T>(x?: T) => T
+>this : this
+>a2 : <T>(x?: T) => T
+><T>(x: T) => null : <T>(x: T) => any
+>x : T
+>null : null
+
+            this.a3 = <T>() => null; // ok, fewer required params
+>this.a3 = <T>() => null : <T>() => any
+>this.a3 : <T>(x: T) => T
+>this : this
+>a3 : <T>(x: T) => T
+><T>() => null : <T>() => any
+>null : null
+
+            this.a3 = <T>(x?: T) => null; // ok, fewer required params
+>this.a3 = <T>(x?: T) => null : <T>(x?: T) => any
+>this.a3 : <T>(x: T) => T
+>this : this
+>a3 : <T>(x: T) => T
+><T>(x?: T) => null : <T>(x?: T) => any
+>x : T
+>null : null
+
+            this.a3 = <T>(x: T) => null; // ok, same T of required params
+>this.a3 = <T>(x: T) => null : <T>(x: T) => any
+>this.a3 : <T>(x: T) => T
+>this : this
+>a3 : <T>(x: T) => T
+><T>(x: T) => null : <T>(x: T) => any
+>x : T
+>null : null
+
+            this.a3 = <T>(x: T, y: T) => null;  // error, too many required params
+>this.a3 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>this.a3 : <T>(x: T) => T
+>this : this
+>a3 : <T>(x: T) => T
+><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a4 = <T>() => null; // ok, fewer required params
+>this.a4 = <T>() => null : <T>() => any
+>this.a4 : <T>(x: T, y?: T) => T
+>this : this
+>a4 : <T>(x: T, y?: T) => T
+><T>() => null : <T>() => any
+>null : null
+
+            this.a4 = <T>(x?: T, y?: T) => null; // ok, fewer required params
+>this.a4 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>this.a4 : <T>(x: T, y?: T) => T
+>this : this
+>a4 : <T>(x: T, y?: T) => T
+><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a4 = <T>(x: T) => null; // ok, same T of required params
+>this.a4 = <T>(x: T) => null : <T>(x: T) => any
+>this.a4 : <T>(x: T, y?: T) => T
+>this : this
+>a4 : <T>(x: T, y?: T) => T
+><T>(x: T) => null : <T>(x: T) => any
+>x : T
+>null : null
+
+            this.a4 = <T>(x: T, y: T) => null;  // ok, same number of params
+>this.a4 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>this.a4 : <T>(x: T, y?: T) => T
+>this : this
+>a4 : <T>(x: T, y?: T) => T
+><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+
+
+            this.a5 = <T>() => null; // ok, fewer required params
+>this.a5 = <T>() => null : <T>() => any
+>this.a5 : <T>(x?: T, y?: T) => T
+>this : this
+>a5 : <T>(x?: T, y?: T) => T
+><T>() => null : <T>() => any
+>null : null
+
+            this.a5 = <T>(x?: T, y?: T) => null; // ok, fewer required params
+>this.a5 = <T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>this.a5 : <T>(x?: T, y?: T) => T
+>this : this
+>a5 : <T>(x?: T, y?: T) => T
+><T>(x?: T, y?: T) => null : <T>(x?: T, y?: T) => any
+>x : T
+>y : T
+>null : null
+
+            this.a5 = <T>(x: T) => null; // ok, all present params match
+>this.a5 = <T>(x: T) => null : <T>(x: T) => any
+>this.a5 : <T>(x?: T, y?: T) => T
+>this : this
+>a5 : <T>(x?: T, y?: T) => T
+><T>(x: T) => null : <T>(x: T) => any
+>x : T
+>null : null
+
+            this.a5 = <T>(x: T, y: T) => null;  // ok, same number of params
+>this.a5 = <T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>this.a5 : <T>(x?: T, y?: T) => T
+>this : this
+>a5 : <T>(x?: T, y?: T) => T
+><T>(x: T, y: T) => null : <T>(x: T, y: T) => any
+>x : T
+>y : T
+>null : null
+        }
+    }
+}

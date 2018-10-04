@@ -1,6 +1,6 @@
 === tests/cases/compiler/downlevelLetConst15.ts ===
 'use strict'
->'use strict' : string
+>'use strict' : "use strict"
 
 declare function use(a: any);
 >use : (a: any) => any
@@ -8,7 +8,7 @@ declare function use(a: any);
 
 var x = 10;
 >x : number
->10 : number
+>10 : 10
 
 var z0, z1, z2, z3;
 >z0 : any
@@ -17,18 +17,18 @@ var z0, z1, z2, z3;
 >z3 : any
 {
     const x = 20;
->x : number
->20 : number
+>x : 20
+>20 : 20
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : number
+>x : 20
 
     const [z0] = [1];
 >z0 : number
 >[1] : [number]
->1 : number
+>1 : 1
 
     use(z0);
 >use(z0) : any
@@ -41,7 +41,7 @@ var z0, z1, z2, z3;
 >[{a: 1}] : [{ a: number; }]
 >{a: 1} : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
     use(z1);
 >use(z1) : any
@@ -53,7 +53,7 @@ var z0, z1, z2, z3;
 >z2 : number
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
     use(z2);
 >use(z2) : any
@@ -68,7 +68,7 @@ var z0, z1, z2, z3;
 >a : { b: number; }
 >{b: 1} : { b: number; }
 >b : number
->1 : number
+>1 : 1
 
     use(z3);
 >use(z3) : any
@@ -105,32 +105,32 @@ var z6;
 
 var y = true;
 >y : boolean
->true : boolean
+>true : true
 {
     const y = "";
->y : string
->"" : string
+>y : ""
+>"" : ""
 
     const [z6] = [true]
 >z6 : boolean
 >[true] : [boolean]
->true : boolean
+>true : true
     {
         const y = 1;
->y : number
->1 : number
+>y : 1
+>1 : 1
 
         const {a: z6} = { a: 1 }
 >a : any
 >z6 : number
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
         use(y);
 >use(y) : any
 >use : (a: any) => any
->y : number
+>y : 1
 
         use(z6);
 >use(z6) : any
@@ -140,7 +140,7 @@ var y = true;
     use(y);
 >use(y) : any
 >use : (a: any) => any
->y : string
+>y : ""
 
     use(z6);
 >use(z6) : any
@@ -150,7 +150,7 @@ var y = true;
 use(y);
 >use(y) : any
 >use : (a: any) => any
->y : boolean
+>y : true
 
 use(z6);
 >use(z6) : any
@@ -159,45 +159,45 @@ use(z6);
 
 var z = false;
 >z : boolean
->false : boolean
+>false : false
 
 var z5 = 1;
 >z5 : number
->1 : number
+>1 : 1
 {
     const z = "";
->z : string
->"" : string
+>z : ""
+>"" : ""
 
     const [z5] = [5];
 >z5 : number
 >[5] : [number]
->5 : number
+>5 : 5
     {
         const _z = 1;
->_z : number
->1 : number
+>_z : 1
+>1 : 1
 
         const {a: _z5} = { a: 1 };
 >a : any
 >_z5 : number
 >{ a: 1 } : { a: number; }
 >a : number
->1 : number
+>1 : 1
 
         // try to step on generated name
         use(_z);
 >use(_z) : any
 >use : (a: any) => any
->_z : number
+>_z : 1
     }
     use(z);
 >use(z) : any
 >use : (a: any) => any
->z : string
+>z : ""
 }
 use(y);
 >use(y) : any
 >use : (a: any) => any
->y : boolean
+>y : true
 

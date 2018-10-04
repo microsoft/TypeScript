@@ -1,0 +1,38 @@
+=== tests/cases/conformance/types/typeRelationships/recursiveTypes/objectTypeWithRecursiveWrappedProperty.ts ===
+// Basic recursive type
+
+class List<T> {
+>List : List<T>
+
+    data: T;
+>data : T
+
+    next: List<List<T>>;
+>next : List<List<T>>
+}
+
+var list1 = new List<number>();
+>list1 : List<number>
+>new List<number>() : List<number>
+>List : typeof List
+
+var list2 = new List<number>();
+>list2 : List<number>
+>new List<number>() : List<number>
+>List : typeof List
+
+var list3 = new List<string>();
+>list3 : List<string>
+>new List<string>() : List<string>
+>List : typeof List
+
+list1 = list2; // ok
+>list1 = list2 : List<number>
+>list1 : List<number>
+>list2 : List<number>
+
+list1 = list3; // error
+>list1 = list3 : List<string>
+>list1 : List<number>
+>list3 : List<string>
+

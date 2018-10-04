@@ -1,5 +1,4 @@
 //// [systemModuleNonTopLevelModuleMembers.ts]
-
 export class TopLevelClass {}
 export module TopLevelModule {var v;}
 export function TopLevelFunction(): void {}
@@ -13,16 +12,16 @@ export module TopLevelModule2 {
 }
 
 //// [systemModuleNonTopLevelModuleMembers.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var TopLevelClass, TopLevelModule, TopLevelEnum, TopLevelModule2;
+    var __moduleName = context_1 && context_1.id;
     function TopLevelFunction() { }
     exports_1("TopLevelFunction", TopLevelFunction);
     return {
-        setters:[],
-        execute: function() {
-            TopLevelClass = (function () {
+        setters: [],
+        execute: function () {
+            TopLevelClass = /** @class */ (function () {
                 function TopLevelClass() {
                 }
                 return TopLevelClass;
@@ -30,14 +29,14 @@ System.register([], function(exports_1, context_1) {
             exports_1("TopLevelClass", TopLevelClass);
             (function (TopLevelModule) {
                 var v;
-            })(TopLevelModule = TopLevelModule || (TopLevelModule = {}));
+            })(TopLevelModule || (TopLevelModule = {}));
             exports_1("TopLevelModule", TopLevelModule);
             (function (TopLevelEnum) {
                 TopLevelEnum[TopLevelEnum["E"] = 0] = "E";
             })(TopLevelEnum || (TopLevelEnum = {}));
             exports_1("TopLevelEnum", TopLevelEnum);
             (function (TopLevelModule2) {
-                var NonTopLevelClass = (function () {
+                var NonTopLevelClass = /** @class */ (function () {
                     function NonTopLevelClass() {
                     }
                     return NonTopLevelClass;
@@ -49,12 +48,12 @@ System.register([], function(exports_1, context_1) {
                 })(NonTopLevelModule = TopLevelModule2.NonTopLevelModule || (TopLevelModule2.NonTopLevelModule = {}));
                 function NonTopLevelFunction() { }
                 TopLevelModule2.NonTopLevelFunction = NonTopLevelFunction;
+                var NonTopLevelEnum;
                 (function (NonTopLevelEnum) {
                     NonTopLevelEnum[NonTopLevelEnum["E"] = 0] = "E";
-                })(TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {}));
-                var NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum;
-            })(TopLevelModule2 = TopLevelModule2 || (TopLevelModule2 = {}));
+                })(NonTopLevelEnum = TopLevelModule2.NonTopLevelEnum || (TopLevelModule2.NonTopLevelEnum = {}));
+            })(TopLevelModule2 || (TopLevelModule2 = {}));
             exports_1("TopLevelModule2", TopLevelModule2);
         }
-    }
+    };
 });

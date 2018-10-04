@@ -62,53 +62,61 @@ l1 = sc;
 l1 = c;
 
 //// [inheritance1.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Control = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Control = /** @class */ (function () {
     function Control() {
     }
     return Control;
 }());
-var Button = (function (_super) {
+var Button = /** @class */ (function (_super) {
     __extends(Button, _super);
     function Button() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     Button.prototype.select = function () { };
     return Button;
 }(Control));
-var TextBox = (function (_super) {
+var TextBox = /** @class */ (function (_super) {
     __extends(TextBox, _super);
     function TextBox() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     TextBox.prototype.select = function () { };
     return TextBox;
 }(Control));
-var ImageBase = (function (_super) {
+var ImageBase = /** @class */ (function (_super) {
     __extends(ImageBase, _super);
     function ImageBase() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return ImageBase;
 }(Control));
-var Image1 = (function (_super) {
+var Image1 = /** @class */ (function (_super) {
     __extends(Image1, _super);
     function Image1() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Image1;
 }(Control));
-var Locations = (function () {
+var Locations = /** @class */ (function () {
     function Locations() {
     }
     Locations.prototype.select = function () { };
     return Locations;
 }());
-var Locations1 = (function () {
+var Locations1 = /** @class */ (function () {
     function Locations1() {
     }
     Locations1.prototype.select = function () { };

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/es6/destructuring/destructuringReassignsRightHandSide.ts ===
+var foo: any = { foo: 1, bar: 2 };
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 3), Decl(destructuringReassignsRightHandSide.ts, 7, 5))
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 16))
+>bar : Symbol(bar, Decl(destructuringReassignsRightHandSide.ts, 0, 24))
+
+var bar: any;
+>bar : Symbol(bar, Decl(destructuringReassignsRightHandSide.ts, 1, 3))
+
+// reassignment in destructuring pattern
+({ foo, bar } = foo);
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 4, 2))
+>bar : Symbol(bar, Decl(destructuringReassignsRightHandSide.ts, 4, 7))
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 3), Decl(destructuringReassignsRightHandSide.ts, 7, 5))
+
+// reassignment in subsequent var
+var { foo, baz } = foo;
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 3), Decl(destructuringReassignsRightHandSide.ts, 7, 5))
+>baz : Symbol(baz, Decl(destructuringReassignsRightHandSide.ts, 7, 10))
+>foo : Symbol(foo, Decl(destructuringReassignsRightHandSide.ts, 0, 3), Decl(destructuringReassignsRightHandSide.ts, 7, 5))
+

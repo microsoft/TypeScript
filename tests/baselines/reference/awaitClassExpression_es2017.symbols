@@ -1,0 +1,18 @@
+=== tests/cases/conformance/async/es2017/awaitClassExpression_es2017.ts ===
+declare class C { }
+>C : Symbol(C, Decl(awaitClassExpression_es2017.ts, 0, 0))
+
+declare var p: Promise<typeof C>;
+>p : Symbol(p, Decl(awaitClassExpression_es2017.ts, 1, 11))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>C : Symbol(C, Decl(awaitClassExpression_es2017.ts, 0, 0))
+
+async function func(): Promise<void> {
+>func : Symbol(func, Decl(awaitClassExpression_es2017.ts, 1, 33))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    class D extends (await p) {
+>D : Symbol(D, Decl(awaitClassExpression_es2017.ts, 3, 38))
+>p : Symbol(p, Decl(awaitClassExpression_es2017.ts, 1, 11))
+    }
+}

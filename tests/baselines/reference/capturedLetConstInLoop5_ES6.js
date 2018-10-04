@@ -1,5 +1,4 @@
 //// [capturedLetConstInLoop5_ES6.ts]
-
 declare function use(a: any);
 
 //====let

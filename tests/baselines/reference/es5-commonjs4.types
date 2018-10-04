@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5-commonjs4.ts ===
-
 export default class A
 >A : A
 {
@@ -12,10 +11,10 @@ export default class A
 >B : () => number
     {
         return 42;
->42 : number
+>42 : 42
     }
 }
 export var __esModule = 1;
 >__esModule : number
->1 : number
+>1 : 1
 

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/callOnClass.ts ===
+class C { }
+>C : Symbol(C, Decl(callOnClass.ts, 0, 0))
+
+var c = C();
+>c : Symbol(c, Decl(callOnClass.ts, 1, 3))
+>C : Symbol(C, Decl(callOnClass.ts, 0, 0))
+ 
+

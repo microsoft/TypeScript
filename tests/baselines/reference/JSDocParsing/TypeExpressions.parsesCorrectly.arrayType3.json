@@ -1,0 +1,37 @@
+{
+    "kind": "JSDocOptionalType",
+    "pos": 1,
+    "end": 9,
+    "flags": "JSDoc",
+    "type": {
+        "kind": "ParenthesizedType",
+        "pos": 1,
+        "end": 8,
+        "flags": "JSDoc",
+        "type": {
+            "kind": "ArrayType",
+            "pos": 2,
+            "end": 7,
+            "flags": "JSDoc",
+            "elementType": {
+                "kind": "ArrayType",
+                "pos": 2,
+                "end": 5,
+                "flags": "JSDoc",
+                "elementType": {
+                    "kind": "TypeReference",
+                    "pos": 2,
+                    "end": 3,
+                    "flags": "JSDoc",
+                    "typeName": {
+                        "kind": "Identifier",
+                        "pos": 2,
+                        "end": 3,
+                        "flags": "JSDoc",
+                        "escapedText": "a"
+                    }
+                }
+            }
+        }
+    }
+}

@@ -1,0 +1,40 @@
+=== tests/cases/compiler/collisionSuperAndLocalVarInConstructor.ts ===
+var _super = 10; // No Error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 3))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 16))
+
+    constructor() {
+        var _super = 10; // No error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInConstructor.ts, 3, 11))
+    }
+}
+class b extends Foo {
+>b : Symbol(b, Decl(collisionSuperAndLocalVarInConstructor.ts, 5, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 16))
+
+    constructor() {
+        super();
+>super : Symbol(Foo, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 16))
+
+        var _super = 10; // Should be error 
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInConstructor.ts, 9, 11))
+    }
+}
+class c extends Foo {
+>c : Symbol(c, Decl(collisionSuperAndLocalVarInConstructor.ts, 11, 1))
+>Foo : Symbol(Foo, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 16))
+
+    constructor() {
+        super();
+>super : Symbol(Foo, Decl(collisionSuperAndLocalVarInConstructor.ts, 0, 16))
+
+        var x = () => {
+>x : Symbol(x, Decl(collisionSuperAndLocalVarInConstructor.ts, 15, 11))
+
+            var _super = 10; // Should be error
+>_super : Symbol(_super, Decl(collisionSuperAndLocalVarInConstructor.ts, 16, 15))
+        }
+    }
+}

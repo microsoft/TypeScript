@@ -85,17 +85,18 @@ function x(a) {
 module.exports = x;
 //// [consumer.js]
 "use strict";
-var iString = require('./expString');
+exports.__esModule = true;
+var iString = require("./expString");
 var v1 = iString;
-var iNumber = require('./expNumber');
+var iNumber = require("./expNumber");
 var v2 = iNumber;
-var iBoolean = require('./expBoolean');
+var iBoolean = require("./expBoolean");
 var v3 = iBoolean;
-var iArray = require('./expArray');
+var iArray = require("./expArray");
 var v4 = iArray;
-var iObject = require('./expObject');
+var iObject = require("./expObject");
 var v5 = iObject;
-var iAny = require('./expAny');
+var iAny = require("./expAny");
 var v6 = iAny;
-var iGeneric = require('./expGeneric');
+var iGeneric = require("./expGeneric");
 var v7 = iGeneric;

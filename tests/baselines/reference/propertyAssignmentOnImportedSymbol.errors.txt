@@ -1,0 +1,11 @@
+tests/cases/conformance/salsa/bug24658.js(1,10): error TS2440: Import declaration conflicts with local declaration of 'hurk'.
+
+
+==== tests/cases/conformance/salsa/mod1.js (0 errors) ====
+    export var hurk = {}
+==== tests/cases/conformance/salsa/bug24658.js (1 errors) ====
+    import { hurk } from './mod1'
+             ~~~~
+!!! error TS2440: Import declaration conflicts with local declaration of 'hurk'.
+    hurk.expando = 4
+    

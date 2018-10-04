@@ -1,6 +1,6 @@
 === tests/cases/compiler/blockScopedFunctionDeclarationES6.ts ===
 if (true) {
->true : boolean
+>true : true
 
     function foo() { }
 >foo : () => void

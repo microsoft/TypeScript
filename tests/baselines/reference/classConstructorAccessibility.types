@@ -1,0 +1,83 @@
+=== tests/cases/conformance/classes/constructorDeclarations/classConstructorAccessibility.ts ===
+class C {
+>C : C
+
+    public constructor(public x: number) { }
+>x : number
+}
+
+class D {
+>D : D
+
+    private constructor(public x: number) { }
+>x : number
+}
+
+class E {
+>E : E
+
+    protected constructor(public x: number) { }
+>x : number
+}
+
+var c = new C(1);
+>c : C
+>new C(1) : C
+>C : typeof C
+>1 : 1
+
+var d = new D(1); // error
+>d : any
+>new D(1) : any
+>D : typeof D
+>1 : 1
+
+var e = new E(1); // error
+>e : any
+>new E(1) : any
+>E : typeof E
+>1 : 1
+
+module Generic {
+>Generic : typeof Generic
+
+    class C<T> {
+>C : C<T>
+
+        public constructor(public x: T) { }
+>x : T
+    }
+
+    class D<T> {
+>D : D<T>
+
+        private constructor(public x: T) { }
+>x : T
+    }
+
+    class E<T> {
+>E : E<T>
+
+        protected constructor(public x: T) { }
+>x : T
+    }
+
+    var c = new C(1);
+>c : C<number>
+>new C(1) : C<number>
+>C : typeof C
+>1 : 1
+
+    var d = new D(1); // error
+>d : any
+>new D(1) : any
+>D : typeof D
+>1 : 1
+
+    var e = new E(1); // error
+>e : any
+>new E(1) : any
+>E : typeof E
+>1 : 1
+}
+

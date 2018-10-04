@@ -2,7 +2,7 @@
 var v30 = [1, 2], v31;
 >v30 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 >v31 : any
 

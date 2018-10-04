@@ -41,12 +41,20 @@ class D extends C {
 
 
 //// [typeRelationships.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
     function C() {
         this.self = this;
         this.c = new C();
@@ -69,14 +77,15 @@ var C = (function () {
     };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        _super.apply(this, arguments);
-        this.self1 = this;
-        this.self2 = this.self;
-        this.self3 = this.foo();
-        this.d = new D();
+        var _this = _super !== null && _super.apply(this, arguments) || this;
+        _this.self1 = _this;
+        _this.self2 = _this.self;
+        _this.self3 = _this.foo();
+        _this.d = new D();
+        return _this;
     }
     D.prototype.bar = function () {
         this.self = this.self1;

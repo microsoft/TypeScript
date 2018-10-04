@@ -1,5 +1,4 @@
 //// [arrayBindingPatternOmittedExpressions.ts]
-
 var results: string[];
 
 {

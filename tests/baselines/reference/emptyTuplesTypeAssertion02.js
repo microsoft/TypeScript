@@ -1,5 +1,4 @@
 //// [emptyTuplesTypeAssertion02.ts]
-
 let x = [] as [];
 let y = x[0];
 

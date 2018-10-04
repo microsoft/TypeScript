@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports1.ts] ////
 
 //// [file1.ts]
-
 export class Calculator {
 
 }
@@ -11,7 +10,8 @@ import {Calculator} from "./file1"
 
 //// [file1.js]
 "use strict";
-var Calculator = (function () {
+exports.__esModule = true;
+var Calculator = /** @class */ (function () {
     function Calculator() {
     }
     return Calculator;
@@ -19,3 +19,4 @@ var Calculator = (function () {
 exports.Calculator = Calculator;
 //// [file2.js]
 "use strict";
+exports.__esModule = true;

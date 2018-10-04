@@ -1,9 +1,8 @@
 === tests/cases/conformance/decorators/class/a.ts ===
-
 // from #3108
 export var test = 'abc';
 >test : string
->'abc' : string
+>'abc' : "abc"
 
 === tests/cases/conformance/decorators/class/b.ts ===
 import { test } from './a';

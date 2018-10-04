@@ -1,5 +1,5 @@
 //// [promiseIdentityWithAny2.ts]
-interface IPromise<T, V> {
+export interface IPromise<T, V> {
     then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
 }
 interface Promise<T, V> {
@@ -23,6 +23,8 @@ var y: IPromise2<string, number>;
 var y: Promise2<string, boolean>;
 
 //// [promiseIdentityWithAny2.js]
+"use strict";
+exports.__esModule = true;
 // Error because type parameter arity doesn't match
 var x;
 var x;

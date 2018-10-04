@@ -8,5 +8,5 @@ f `\x0D${ "Interrupted CRLF" }\x0A`;
 >f `\x0D${ "Interrupted CRLF" }\x0A` : void
 >f : (...args: any[]) => void
 >`\x0D${ "Interrupted CRLF" }\x0A` : string
->"Interrupted CRLF" : string
+>"Interrupted CRLF" : "Interrupted CRLF"
 

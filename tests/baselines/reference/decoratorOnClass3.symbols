@@ -1,0 +1,15 @@
+=== tests/cases/conformance/decorators/class/decoratorOnClass3.ts ===
+declare function dec<T>(target: T): T;
+>dec : Symbol(dec, Decl(decoratorOnClass3.ts, 0, 0))
+>T : Symbol(T, Decl(decoratorOnClass3.ts, 0, 21))
+>target : Symbol(target, Decl(decoratorOnClass3.ts, 0, 24))
+>T : Symbol(T, Decl(decoratorOnClass3.ts, 0, 21))
+>T : Symbol(T, Decl(decoratorOnClass3.ts, 0, 21))
+
+export
+@dec
+>dec : Symbol(dec, Decl(decoratorOnClass3.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(decoratorOnClass3.ts, 2, 6))
+}

@@ -5,7 +5,7 @@
 ////    secondMember,
 ////    thirdMember
 ////}
-////var enumMember = e./*1*/thirdMember;
+////var enumMember = e.[|/*1*/thirdMember|];
 
 goTo.marker("1");
-verify.verifyDefinitionsName("thirdMember", "e");
+verify.goToDefinitionName("thirdMember", "e");

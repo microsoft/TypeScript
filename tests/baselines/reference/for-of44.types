@@ -1,15 +1,15 @@
 === tests/cases/conformance/es6/for-ofStatements/for-of44.ts ===
 var array: [number, string | boolean | symbol][] = [[0, ""], [0, true], [1, Symbol()]]
 >array : [number, string | boolean | symbol][]
->[[0, ""], [0, true], [1, Symbol()]] : ([number, string] | [number, boolean] | [number, symbol])[]
+>[[0, ""], [0, true], [1, Symbol()]] : ([number, string] | [number, true] | [number, symbol])[]
 >[0, ""] : [number, string]
->0 : number
->"" : string
->[0, true] : [number, boolean]
->0 : number
->true : boolean
+>0 : 0
+>"" : ""
+>[0, true] : [number, true]
+>0 : 0
+>true : true
 >[1, Symbol()] : [number, symbol]
->1 : number
+>1 : 1
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 

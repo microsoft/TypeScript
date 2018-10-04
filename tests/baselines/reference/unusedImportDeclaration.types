@@ -4,12 +4,11 @@ import B = require("./unusedImportDeclaration_testerB");
 
 var thingy: B = {
 >thingy : B
->B : B
 >{    me: "A"} : { me: string; }
 
     me: "A"
 >me : string
->"A" : string
+>"A" : "A"
 
 };
 declare function foo(a: string): void;
@@ -21,11 +20,11 @@ foo("IN " + thingy.me + "!");
 >foo : (a: string) => void
 >"IN " + thingy.me + "!" : string
 >"IN " + thingy.me : string
->"IN " : string
+>"IN " : "IN "
 >thingy.me : string
 >thingy : B
 >me : string
->"!" : string
+>"!" : "!"
 
 === tests/cases/compiler/unusedImportDeclaration_testerB.ts ===
 class TesterB {

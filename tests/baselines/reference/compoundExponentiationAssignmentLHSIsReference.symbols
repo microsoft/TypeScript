@@ -1,5 +1,5 @@
 === tests/cases/conformance/es7/exponentiationOperator/compoundExponentiationAssignmentLHSIsReference.ts ===
-var value;
+var value: any;
 >value : Symbol(value, Decl(compoundExponentiationAssignmentLHSIsReference.ts, 0, 3))
 
 // identifiers: variable and parameter

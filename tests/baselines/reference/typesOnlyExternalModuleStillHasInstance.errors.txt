@@ -1,5 +1,5 @@
-tests/cases/conformance/externalModules/foo_1.ts(5,5): error TS2322: Type 'typeof "tests/cases/conformance/externalModules/foo_0"' is not assignable to type '{ M2: Object; }'.
-  Property 'M2' is missing in type 'typeof "tests/cases/conformance/externalModules/foo_0"'.
+tests/cases/conformance/externalModules/foo_1.ts(5,5): error TS2322: Type 'typeof import("tests/cases/conformance/externalModules/foo_0")' is not assignable to type '{ M2: Object; }'.
+  Property 'M2' is missing in type 'typeof import("tests/cases/conformance/externalModules/foo_0")'.
 
 
 ==== tests/cases/conformance/externalModules/foo_1.ts (1 errors) ====
@@ -9,8 +9,8 @@ tests/cases/conformance/externalModules/foo_1.ts(5,5): error TS2322: Type 'typeo
     var x: typeof foo0 = {};
     var y: {M2: Object} = foo0;
         ~
-!!! error TS2322: Type 'typeof "tests/cases/conformance/externalModules/foo_0"' is not assignable to type '{ M2: Object; }'.
-!!! error TS2322:   Property 'M2' is missing in type 'typeof "tests/cases/conformance/externalModules/foo_0"'.
+!!! error TS2322: Type 'typeof import("tests/cases/conformance/externalModules/foo_0")' is not assignable to type '{ M2: Object; }'.
+!!! error TS2322:   Property 'M2' is missing in type 'typeof import("tests/cases/conformance/externalModules/foo_0")'.
     
 ==== tests/cases/conformance/externalModules/foo_0.ts (0 errors) ====
     export interface Person {

@@ -1,13 +1,8 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(64,11): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
-tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(77,79): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
-    Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(62,36): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts(76,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 
 
 ==== tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference.ts (2 errors) ====
-    
-    
     // Generic tag with one parameter
     function noParams<T>(n: T) { }
     noParams ``;
@@ -70,9 +65,8 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
         return null;
     }
     var a9a = someGenerics9 `${ '' }${ 0 }${ [] }`;
-              ~~~~~~~~~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'string' is not a valid type argument because it is not a supertype of candidate 'number'.
+                                       ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
     var a9a: {};
     
     // Generic tag with multiple parameters of generic type passed arguments with multiple best common types
@@ -86,11 +80,9 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsTypeArgumentInference
     }
     
     var a9e = someGenerics9 `${ undefined }${ { x: 6, z: new Date() } }${ { x: 6, y: '' } }`;
-                                                                                  ~~~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate '{ x: number; z: Date; }' is not a valid type argument because it is not a supertype of candidate '{ x: number; y: string; }'.
-!!! error TS2453:     Object literal may only specify known properties, and 'y' does not exist in type '{ x: number; z: Date; }'.
     var a9e: {};
+        ~~~
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Date; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     
     // Generic tag with multiple parameters of generic type passed arguments with a single best common type
     var a9d = someGenerics9 `${ { x: 3 }}${ { x: 6 }}${ { x: 6 } }`;

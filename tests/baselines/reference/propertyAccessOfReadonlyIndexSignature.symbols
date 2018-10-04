@@ -1,0 +1,15 @@
+=== tests/cases/compiler/propertyAccessOfReadonlyIndexSignature.ts ===
+interface Test {
+>Test : Symbol(Test, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 0))
+
+    readonly [key: string]: string;
+>key : Symbol(key, Decl(propertyAccessOfReadonlyIndexSignature.ts, 1, 14))
+}
+
+declare var a: Test;
+>a : Symbol(a, Decl(propertyAccessOfReadonlyIndexSignature.ts, 4, 11))
+>Test : Symbol(Test, Decl(propertyAccessOfReadonlyIndexSignature.ts, 0, 0))
+
+a.foo = 'baz';
+>a : Symbol(a, Decl(propertyAccessOfReadonlyIndexSignature.ts, 4, 11))
+

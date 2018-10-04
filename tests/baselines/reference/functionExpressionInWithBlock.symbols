@@ -1,0 +1,10 @@
+=== tests/cases/compiler/functionExpressionInWithBlock.ts ===
+function x() {
+>x : Symbol(x, Decl(functionExpressionInWithBlock.ts, 0, 0))
+
+ with({}) {
+  function f() {
+   () => this;
+  }
+ }
+}

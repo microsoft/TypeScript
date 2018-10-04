@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitDestructuringObjectLiteralPattern2.ts ===
-
 var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: true } } };
 >a : any
 >x11 : number
@@ -11,30 +10,30 @@ var { a: x11, b: { a: y11, b: { a: z11 }}} = { a: 1, b: { a: "hello", b: { a: tr
 >z11 : boolean
 >{ a: 1, b: { a: "hello", b: { a: true } } } : { a: number; b: { a: string; b: { a: boolean; }; }; }
 >a : number
->1 : number
+>1 : 1
 >b : { a: string; b: { a: boolean; }; }
 >{ a: "hello", b: { a: true } } : { a: string; b: { a: boolean; }; }
 >a : string
->"hello" : string
+>"hello" : "hello"
 >b : { a: boolean; }
 >{ a: true } : { a: boolean; }
 >a : boolean
->true : boolean
+>true : true
 
 function f15() {
 >f15 : () => { a4: string; b4: number; c4: boolean; }
 
     var a4 = "hello";
 >a4 : string
->"hello" : string
+>"hello" : "hello"
 
     var b4 = 1;
 >b4 : number
->1 : number
+>1 : 1
 
     var c4 = true;
 >c4 : boolean
->true : boolean
+>true : true
 
     return { a4, b4, c4 };
 >{ a4, b4, c4 } : { a4: string; b4: number; c4: boolean; }

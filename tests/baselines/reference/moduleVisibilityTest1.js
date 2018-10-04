@@ -1,6 +1,4 @@
 //// [moduleVisibilityTest1.ts]
-
-
 module OuterMod {
 	export function someExportedOuterFunc() { return -1; }
 
@@ -86,21 +84,21 @@ var M;
         function someExportedInnerFunc() { return -2; }
         InnerMod.someExportedInnerFunc = someExportedInnerFunc;
     })(InnerMod = M.InnerMod || (M.InnerMod = {}));
+    var E;
     (function (E) {
         E[E["A"] = 0] = "A";
         E[E["B"] = 1] = "B";
         E[E["C"] = 2] = "C";
-    })(M.E || (M.E = {}));
-    var E = M.E;
+    })(E = M.E || (M.E = {}));
     M.x = 5;
     var y = M.x + M.x;
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B() {
             this.b = 0;
         }
         return B;
     }());
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
             this.someProp = 1;
             function someInnerFunc() { return 2; }
@@ -116,7 +114,6 @@ var M;
     var someModuleVar = 4;
     function someModuleFunction() { return 5; }
 })(M || (M = {}));
-var M;
 (function (M) {
     M.c = M.x;
     M.meb = M.E.B;

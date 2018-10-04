@@ -5,14 +5,14 @@ var f: any;
 f `abc`
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 f.g.h `abc`
 >f.g.h `abc` : any
@@ -21,7 +21,7 @@ f.g.h `abc`
 >f : any
 >g : any
 >h : any
->`abc` : string
+>`abc` : "abc"
 
 f.g.h `abc${1}def${2}ghi`;
 >f.g.h `abc${1}def${2}ghi` : any
@@ -31,14 +31,14 @@ f.g.h `abc${1}def${2}ghi`;
 >g : any
 >h : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 f `abc`.member
 >f `abc`.member : any
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 >member : any
 
 f `abc${1}def${2}ghi`.member;
@@ -46,25 +46,25 @@ f `abc${1}def${2}ghi`.member;
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 >member : any
 
 f `abc`["member"];
 >f `abc`["member"] : any
 >f `abc` : any
 >f : any
->`abc` : string
->"member" : string
+>`abc` : "abc"
+>"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
 >f `abc${1}def${2}ghi`["member"] : any
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
->"member" : string
+>1 : 1
+>2 : 2
+>"member" : "member"
 
 f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"].someOtherTag `abc${1}def${2}ghi` : any
@@ -72,12 +72,12 @@ f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"] : any
 >f `abc` : any
 >f : any
->`abc` : string
->"member" : string
+>`abc` : "abc"
+>"member" : "member"
 >someOtherTag : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi` : any
@@ -86,20 +86,20 @@ f `abc${1}def${2}ghi`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : any
 >f : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
->"member" : string
+>1 : 1
+>2 : 2
+>"member" : "member"
 >someOtherTag : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 f.thisIsNotATag(`abc`);
 >f.thisIsNotATag(`abc`) : any
 >f.thisIsNotATag : any
 >f : any
 >thisIsNotATag : any
->`abc` : string
+>`abc` : "abc"
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : any
@@ -107,6 +107,6 @@ f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f : any
 >thisIsNotATag : any
 >`abc${1}def${2}ghi` : string
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 

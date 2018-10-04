@@ -2,9 +2,13 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
   Types of property 'a' are incompatible.
     Type 'new (x: number) => string' is not assignable to type 'new (x: number) => number'.
       Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts(67,15): error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+  Types of property 'a2' are incompatible.
+    Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
+      Type 'string' is not assignable to type 'T'.
 
 
-==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts (1 errors) ====
+==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/constructSignatureAssignabilityInInheritance.ts (2 errors) ====
     // Checking basic subtype relations with construct signatures
     
     module ConstructSignature {
@@ -77,6 +81,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/construc
     
         // S's
         interface I3 extends Base2 {
+                  ~~
+!!! error TS2430: Interface 'I3' incorrectly extends interface 'Base2'.
+!!! error TS2430:   Types of property 'a2' are incompatible.
+!!! error TS2430:     Type 'new <T>(x: T) => string' is not assignable to type 'new <T>(x: T) => T'.
+!!! error TS2430:       Type 'string' is not assignable to type 'T'.
             // N's
             a2: new <T>(x: T) => string; // error because base returns non-void;
         }

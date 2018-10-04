@@ -1,0 +1,37 @@
+=== tests/cases/compiler/objectLitPropertyScoping.ts ===
+// Should compile, x and y should not be picked up from the properties
+
+function makePoint(x: number, y: number) {
+>makePoint : Symbol(makePoint, Decl(objectLitPropertyScoping.ts, 0, 0))
+>x : Symbol(x, Decl(objectLitPropertyScoping.ts, 2, 19))
+>y : Symbol(y, Decl(objectLitPropertyScoping.ts, 2, 29))
+
+    return {
+        get x() {
+>x : Symbol(x, Decl(objectLitPropertyScoping.ts, 3, 12))
+
+            return x;
+>x : Symbol(x, Decl(objectLitPropertyScoping.ts, 2, 19))
+
+        },
+        get y() {
+>y : Symbol(y, Decl(objectLitPropertyScoping.ts, 6, 10))
+
+            return y;
+>y : Symbol(y, Decl(objectLitPropertyScoping.ts, 2, 29))
+
+        },
+        dist: function () {
+>dist : Symbol(dist, Decl(objectLitPropertyScoping.ts, 9, 10))
+
+            return Math.sqrt(x * x + y * y);
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(objectLitPropertyScoping.ts, 2, 19))
+>x : Symbol(x, Decl(objectLitPropertyScoping.ts, 2, 19))
+>y : Symbol(y, Decl(objectLitPropertyScoping.ts, 2, 29))
+>y : Symbol(y, Decl(objectLitPropertyScoping.ts, 2, 29))
+        }
+    }
+};

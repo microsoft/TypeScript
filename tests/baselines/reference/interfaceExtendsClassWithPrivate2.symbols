@@ -1,0 +1,68 @@
+=== tests/cases/compiler/interfaceExtendsClassWithPrivate2.ts ===
+class C {
+>C : Symbol(C, Decl(interfaceExtendsClassWithPrivate2.ts, 0, 0))
+
+    public foo(x: any) { return x; }
+>foo : Symbol(C.foo, Decl(interfaceExtendsClassWithPrivate2.ts, 0, 9))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 1, 15))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 1, 15))
+
+    private x = 1;
+>x : Symbol(C.x, Decl(interfaceExtendsClassWithPrivate2.ts, 1, 36))
+}
+
+interface I extends C {
+>I : Symbol(I, Decl(interfaceExtendsClassWithPrivate2.ts, 3, 1))
+>C : Symbol(C, Decl(interfaceExtendsClassWithPrivate2.ts, 0, 0))
+
+    other(x: any): any;
+>other : Symbol(I.other, Decl(interfaceExtendsClassWithPrivate2.ts, 5, 23))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 6, 10))
+}
+
+class D extends C implements I { // error
+>D : Symbol(D, Decl(interfaceExtendsClassWithPrivate2.ts, 7, 1))
+>C : Symbol(C, Decl(interfaceExtendsClassWithPrivate2.ts, 0, 0))
+>I : Symbol(I, Decl(interfaceExtendsClassWithPrivate2.ts, 3, 1))
+
+    public foo(x: any) { return x; }
+>foo : Symbol(D.foo, Decl(interfaceExtendsClassWithPrivate2.ts, 9, 32))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 10, 15))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 10, 15))
+
+    private x = 2;
+>x : Symbol(D.x, Decl(interfaceExtendsClassWithPrivate2.ts, 10, 36))
+
+    private y = 3;
+>y : Symbol(D.y, Decl(interfaceExtendsClassWithPrivate2.ts, 11, 18))
+
+    other(x: any) { return x; }
+>other : Symbol(D.other, Decl(interfaceExtendsClassWithPrivate2.ts, 12, 18))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 13, 10))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 13, 10))
+
+    bar() {}
+>bar : Symbol(D.bar, Decl(interfaceExtendsClassWithPrivate2.ts, 13, 31))
+} 
+
+class D2 extends C implements I { // error
+>D2 : Symbol(D2, Decl(interfaceExtendsClassWithPrivate2.ts, 15, 1))
+>C : Symbol(C, Decl(interfaceExtendsClassWithPrivate2.ts, 0, 0))
+>I : Symbol(I, Decl(interfaceExtendsClassWithPrivate2.ts, 3, 1))
+
+    public foo(x: any) { return x; }
+>foo : Symbol(D2.foo, Decl(interfaceExtendsClassWithPrivate2.ts, 17, 33))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 18, 15))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 18, 15))
+
+    private x = "";
+>x : Symbol(D2.x, Decl(interfaceExtendsClassWithPrivate2.ts, 18, 36))
+
+    other(x: any) { return x; }
+>other : Symbol(D2.other, Decl(interfaceExtendsClassWithPrivate2.ts, 19, 19))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 20, 10))
+>x : Symbol(x, Decl(interfaceExtendsClassWithPrivate2.ts, 20, 10))
+
+    bar() { }
+>bar : Symbol(D2.bar, Decl(interfaceExtendsClassWithPrivate2.ts, 20, 31))
+} 

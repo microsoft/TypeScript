@@ -1,0 +1,15 @@
+=== tests/cases/compiler/noImplicitAnyStringIndexerOnObject.ts ===
+var x = {}["hello"];
+>x : any
+>{}["hello"] : any
+>{} : {}
+>"hello" : "hello"
+
+var y: string = { '': 'foo' }[''];
+>y : string
+>{ '': 'foo' }[''] : string
+>{ '': 'foo' } : { '': string; }
+>'' : string
+>'foo' : "foo"
+>'' : ""
+

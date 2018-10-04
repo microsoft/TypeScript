@@ -3,32 +3,46 @@ class B {
 >B : B
 
     "hello" = 10;
->10 : number
+>"hello" : number
+>10 : 10
 
     0b110 = "world";
->"world" : string
+>0b110 : string
+>"world" : "world"
 
     0o23534 = "WORLD";
->"WORLD" : string
+>0o23534 : string
+>"WORLD" : "WORLD"
 
     20 = "twenty";
->"twenty" : string
+>20 : string
+>"twenty" : "twenty"
 
     "foo"() { }
+>"foo" : () => void
+
     0b1110() {}
+>0b1110 : () => void
+
     11() { }
+>11 : () => void
+
     interface() { }
 >interface : () => void
 
     static "hi" = 10000;
->10000 : number
+>"hi" : number
+>10000 : 10000
 
     static 22 = "twenty-two";
->"twenty-two" : string
+>22 : string
+>"twenty-two" : "twenty-two"
 
     static 0b101 = "binary";
->"binary" : string
+>0b101 : string
+>"binary" : "binary"
 
     static 0o3235 = "octal";
->"octal" : string
+>0o3235 : string
+>"octal" : "octal"
 }

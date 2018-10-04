@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 ////declare var /*ambientVariableDefinition*/ambientVar;
-/////*ambientFunctionDefinition*/declare function ambientFunction();
+////declare function /*ambientFunctionDefinition*/ambientFunction();
 ////declare class ambientClass {
 ////    /*constructorDefinition*/constructor();
-////    /*staticMethodDefinition*/static method();
-////    /*instanceMethodDefinition*/public method();
+////    static /*staticMethodDefinition*/method();
+////    public /*instanceMethodDefinition*/method();
 ////}
 ////
 /////*ambientVariableReference*/ambientVar = 1;
@@ -14,16 +14,4 @@
 ////ambientClass./*staticMethodReference*/method();
 ////ambientClassVariable./*instanceMethodReference*/method();
 
-var markerList = [
-    "ambientVariable",
-    "ambientFunction",
-    "constructor",
-    "staticMethod",
-    "instanceMethod",
-];
-
-markerList.forEach((marker) => {
-    goTo.marker(marker + 'Reference');
-    goTo.definition();
-    verify.caretAtMarker(marker + 'Definition');
-});
+verify.goToDefinitionForMarkers("ambientVariable", "ambientFunction", "constructor", "staticMethod", "instanceMethod");

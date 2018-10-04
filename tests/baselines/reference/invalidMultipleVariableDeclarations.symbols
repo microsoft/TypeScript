@@ -1,0 +1,142 @@
+=== tests/cases/conformance/statements/VariableStatements/invalidMultipleVariableDeclarations.ts ===
+interface I {
+>I : Symbol(I, Decl(invalidMultipleVariableDeclarations.ts, 0, 0))
+
+    id: number;
+>id : Symbol(I.id, Decl(invalidMultipleVariableDeclarations.ts, 0, 13))
+}
+
+class C implements I {
+>C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+>I : Symbol(I, Decl(invalidMultipleVariableDeclarations.ts, 0, 0))
+
+    id: number;
+>id : Symbol(C.id, Decl(invalidMultipleVariableDeclarations.ts, 4, 22))
+
+    valid: boolean;
+>valid : Symbol(C.valid, Decl(invalidMultipleVariableDeclarations.ts, 5, 15))
+}
+
+class C2 extends C {
+>C2 : Symbol(C2, Decl(invalidMultipleVariableDeclarations.ts, 7, 1))
+>C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+
+    name: string;
+>name : Symbol(C2.name, Decl(invalidMultipleVariableDeclarations.ts, 9, 20))
+}
+
+class D<T>{
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+>T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+
+    source: T;
+>source : Symbol(D.source, Decl(invalidMultipleVariableDeclarations.ts, 13, 11))
+>T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+
+    recurse: D<T>;
+>recurse : Symbol(D.recurse, Decl(invalidMultipleVariableDeclarations.ts, 14, 14))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+>T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+
+    wrapped: D<D<T>>
+>wrapped : Symbol(D.wrapped, Decl(invalidMultipleVariableDeclarations.ts, 15, 18))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+>T : Symbol(T, Decl(invalidMultipleVariableDeclarations.ts, 13, 8))
+}
+
+function F(x: string): number { return 42; }
+>F : Symbol(F, Decl(invalidMultipleVariableDeclarations.ts, 17, 1))
+>x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 19, 11))
+
+module M {
+>M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
+
+    export class A {
+>A : Symbol(A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+
+        name: string;
+>name : Symbol(A.name, Decl(invalidMultipleVariableDeclarations.ts, 22, 20))
+    }
+
+    export function F2(x: number): string { return x.toString(); }
+>F2 : Symbol(F2, Decl(invalidMultipleVariableDeclarations.ts, 24, 5))
+>x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 26, 23))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+}
+
+// all of these are errors
+var a: any;
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+
+var a = 1;
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+
+var a = 'a string';
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+
+var a = new C();
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+>C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+
+var a = new D<string>();
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+
+var a = M;
+>a : Symbol(a, Decl(invalidMultipleVariableDeclarations.ts, 30, 3), Decl(invalidMultipleVariableDeclarations.ts, 31, 3), Decl(invalidMultipleVariableDeclarations.ts, 32, 3), Decl(invalidMultipleVariableDeclarations.ts, 33, 3), Decl(invalidMultipleVariableDeclarations.ts, 34, 3) ... and 1 more)
+>M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
+
+var b: I;
+>b : Symbol(b, Decl(invalidMultipleVariableDeclarations.ts, 37, 3), Decl(invalidMultipleVariableDeclarations.ts, 38, 3), Decl(invalidMultipleVariableDeclarations.ts, 39, 3))
+>I : Symbol(I, Decl(invalidMultipleVariableDeclarations.ts, 0, 0))
+
+var b = new C();
+>b : Symbol(b, Decl(invalidMultipleVariableDeclarations.ts, 37, 3), Decl(invalidMultipleVariableDeclarations.ts, 38, 3), Decl(invalidMultipleVariableDeclarations.ts, 39, 3))
+>C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+
+var b = new C2();
+>b : Symbol(b, Decl(invalidMultipleVariableDeclarations.ts, 37, 3), Decl(invalidMultipleVariableDeclarations.ts, 38, 3), Decl(invalidMultipleVariableDeclarations.ts, 39, 3))
+>C2 : Symbol(C2, Decl(invalidMultipleVariableDeclarations.ts, 7, 1))
+
+var f = F;
+>f : Symbol(f, Decl(invalidMultipleVariableDeclarations.ts, 41, 3), Decl(invalidMultipleVariableDeclarations.ts, 42, 3))
+>F : Symbol(F, Decl(invalidMultipleVariableDeclarations.ts, 17, 1))
+
+var f = (x: number) => '';
+>f : Symbol(f, Decl(invalidMultipleVariableDeclarations.ts, 41, 3), Decl(invalidMultipleVariableDeclarations.ts, 42, 3))
+>x : Symbol(x, Decl(invalidMultipleVariableDeclarations.ts, 42, 9))
+
+var arr: string[];
+>arr : Symbol(arr, Decl(invalidMultipleVariableDeclarations.ts, 44, 3), Decl(invalidMultipleVariableDeclarations.ts, 45, 3), Decl(invalidMultipleVariableDeclarations.ts, 46, 3))
+
+var arr = [1, 2, 3, 4];
+>arr : Symbol(arr, Decl(invalidMultipleVariableDeclarations.ts, 44, 3), Decl(invalidMultipleVariableDeclarations.ts, 45, 3), Decl(invalidMultipleVariableDeclarations.ts, 46, 3))
+
+var arr = [new C(), new C2(), new D<string>()];
+>arr : Symbol(arr, Decl(invalidMultipleVariableDeclarations.ts, 44, 3), Decl(invalidMultipleVariableDeclarations.ts, 45, 3), Decl(invalidMultipleVariableDeclarations.ts, 46, 3))
+>C : Symbol(C, Decl(invalidMultipleVariableDeclarations.ts, 2, 1))
+>C2 : Symbol(C2, Decl(invalidMultipleVariableDeclarations.ts, 7, 1))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+
+var arr2 = [new D<string>()];
+>arr2 : Symbol(arr2, Decl(invalidMultipleVariableDeclarations.ts, 48, 3), Decl(invalidMultipleVariableDeclarations.ts, 49, 3))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+
+var arr2 = new Array<D<number>>();
+>arr2 : Symbol(arr2, Decl(invalidMultipleVariableDeclarations.ts, 48, 3), Decl(invalidMultipleVariableDeclarations.ts, 49, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>D : Symbol(D, Decl(invalidMultipleVariableDeclarations.ts, 11, 1))
+
+var m: typeof M;
+>m : Symbol(m, Decl(invalidMultipleVariableDeclarations.ts, 51, 3), Decl(invalidMultipleVariableDeclarations.ts, 52, 3))
+>M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
+
+var m = M.A;
+>m : Symbol(m, Decl(invalidMultipleVariableDeclarations.ts, 51, 3), Decl(invalidMultipleVariableDeclarations.ts, 52, 3))
+>M.A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+>M : Symbol(M, Decl(invalidMultipleVariableDeclarations.ts, 19, 44))
+>A : Symbol(M.A, Decl(invalidMultipleVariableDeclarations.ts, 21, 10))
+

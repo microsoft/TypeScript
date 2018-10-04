@@ -1,0 +1,59 @@
+=== tests/cases/compiler/moduleAndInterfaceWithSameName.ts ===
+module Foo1 {
+>Foo1 : typeof Foo1
+
+    export module Bar {
+>Bar : typeof Bar
+
+        export var x = 42;
+>x : number
+>42 : 42
+    }
+
+    export interface Bar { 
+        y: string;
+>y : string
+    }
+}
+
+module Foo2 {
+>Foo2 : typeof Foo2
+
+    module Bar {
+>Bar : typeof Bar
+
+        export var x = 42;
+>x : number
+>42 : 42
+    }
+
+    export interface Bar {
+        y: string;
+>y : string
+    }
+}
+
+var z2 = Foo2.Bar.y; // Error for using interface name as a value.
+>z2 : any
+>Foo2.Bar.y : any
+>Foo2.Bar : any
+>Foo2 : typeof Foo2
+>Bar : any
+>y : any
+
+module Foo3 {
+>Foo3 : typeof Foo3
+
+    export module Bar {
+>Bar : typeof Bar
+
+        export var x = 42;
+>x : number
+>42 : 42
+    }
+
+    interface Bar { 
+        y: string;
+>y : string
+    }
+}

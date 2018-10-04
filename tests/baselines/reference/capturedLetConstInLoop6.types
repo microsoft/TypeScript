@@ -63,10 +63,10 @@ for (let x in []) {
 
 for (let x = 0; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -165,16 +165,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
@@ -204,12 +204,12 @@ for (let y = 0; y < 1; ++y) {
 
 for (let x = 0, y = 1; x < 1; ++x) {
 >x : number
->0 : number
+>0 : 0
 >y : number
->1 : number
+>1 : 1
 >x < 1 : boolean
 >x : number
->1 : number
+>1 : 1
 >++x : number
 >x : number
 
@@ -322,16 +322,16 @@ do {
 
 for (let y = 0; y < 1; ++y) {
 >y : number
->0 : number
+>0 : 0
 >y < 1 : boolean
 >y : number
->1 : number
+>1 : 1
 >++y : number
 >y : number
 
     let x = 1;
 >x : number
->1 : number
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
@@ -427,32 +427,32 @@ for (const x in []) {
 
 
 for (const x = 0; x < 1;) {
->x : number
->0 : number
+>x : 0
+>0 : 0
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 0
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 0
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 0
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
         continue;
@@ -465,29 +465,29 @@ while (1 === 1) {
 >1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;
@@ -496,29 +496,29 @@ while (1 === 1) {
 
 do {
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;
@@ -529,36 +529,36 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x});
 >(function() { return x}) : () => number
 >function() { return x} : () => number
->x : number
+>x : 1
 
     (() => x);
 >(() => x) : () => number
 >() => x : () => number
->x : number
+>x : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;
@@ -566,38 +566,38 @@ for (const y = 0; y < 1;) {
 }
 
 for (const x = 0, y = 1; x < 1;) {
->x : number
->0 : number
->y : number
->1 : number
+>x : 0
+>0 : 0
+>y : 1
+>1 : 1
 >x < 1 : boolean
->x : number
->1 : number
+>x : 0
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 0
+>y : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 0
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : 0
 >2 : 2
 
         continue;
@@ -610,35 +610,35 @@ while (1 === 1) {
 >1 : 1
 
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;
@@ -647,35 +647,35 @@ while (1 === 1) {
 
 do {
     const x = 1, y = 1;
->x : number
->1 : number
->y : number
->1 : number
+>x : 1
+>1 : 1
+>y : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 1
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;
@@ -686,40 +686,40 @@ do {
 >1 : 1
 
 for (const y = 0; y < 1;) {
->y : number
->0 : number
+>y : 0
+>0 : 0
 >y < 1 : boolean
->y : number
->1 : number
+>y : 0
+>1 : 1
 
     const x = 1;
->x : number
->1 : number
+>x : 1
+>1 : 1
 
     (function() { return x + y});
 >(function() { return x + y}) : () => number
 >function() { return x + y} : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 
     (() => x + y);
 >(() => x + y) : () => number
 >() => x + y : () => number
 >x + y : number
->x : number
->y : number
+>x : 1
+>y : 0
 
     if (x == 1) {
 >x == 1 : boolean
->x : number
+>x : 1
 >1 : 1
 
         break;
     }
     if (x == 2) {
 >x == 2 : boolean
->x : number
+>x : never
 >2 : 2
 
         continue;

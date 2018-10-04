@@ -18,7 +18,7 @@ tests/cases/conformance/es6/memberFunctionDeclarations/MemberFunctionDeclaration
 !!! error TS1109: Expression expected.
                    ~~~
 !!! error TS2304: Cannot find name 'bar'.
-        return bar; 
+        return bar;
                ~~~
 !!! error TS2304: Cannot find name 'bar'.
       }

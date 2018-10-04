@@ -1,5 +1,4 @@
 //// [recurringTypeParamForContainerOfBase01.ts]
-
 interface BoxOfFoo<T extends Foo<T>> {
     item: T
 }

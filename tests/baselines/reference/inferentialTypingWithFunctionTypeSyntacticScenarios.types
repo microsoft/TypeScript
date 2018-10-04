@@ -1,22 +1,13 @@
 === tests/cases/compiler/inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
 declare function map<T, U>(array: T, func: (x: T) => U): U;
 >map : <T, U>(array: T, func: (x: T) => U) => U
->T : T
->U : U
 >array : T
->T : T
 >func : (x: T) => U
 >x : T
->T : T
->U : U
->U : U
 
 declare function identity<V>(y: V): V;
 >identity : <V>(y: V) => V
->V : V
 >y : V
->V : V
->V : V
 
 var s: string;
 >s : string
@@ -33,7 +24,7 @@ s = map("", dottedIdentity.x);
 >s : string
 >map("", dottedIdentity.x) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >dottedIdentity.x : <V>(y: V) => V
 >dottedIdentity : { x: <V>(y: V) => V; }
 >x : <V>(y: V) => V
@@ -44,10 +35,10 @@ s = map("", dottedIdentity['x']);
 >s : string
 >map("", dottedIdentity['x']) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >dottedIdentity['x'] : <V>(y: V) => V
 >dottedIdentity : { x: <V>(y: V) => V; }
->'x' : string
+>'x' : "x"
 
 // function call
 s = map("", (() => identity)());
@@ -55,7 +46,7 @@ s = map("", (() => identity)());
 >s : string
 >map("", (() => identity)()) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >(() => identity)() : <V>(y: V) => V
 >(() => identity) : () => <V>(y: V) => V
 >() => identity : () => <V>(y: V) => V
@@ -63,21 +54,18 @@ s = map("", (() => identity)());
 
 // construct
 interface IdentityConstructor {
->IdentityConstructor : IdentityConstructor
-
     new (): typeof identity;
 >identity : <V>(y: V) => V
 }
 var ic: IdentityConstructor;
 >ic : IdentityConstructor
->IdentityConstructor : IdentityConstructor
 
 s = map("", new ic());
 >s = map("", new ic()) : string
 >s : string
 >map("", new ic()) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >new ic() : <V>(y: V) => V
 >ic : IdentityConstructor
 
@@ -90,7 +78,7 @@ s = map("", t = identity);
 >s : string
 >map("", t = identity) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >t = identity : <V>(y: V) => V
 >t : any
 >identity : <V>(y: V) => V
@@ -101,7 +89,7 @@ s = map("", <typeof identity>identity);
 >s : string
 >map("", <typeof identity>identity) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 ><typeof identity>identity : <V>(y: V) => V
 >identity : <V>(y: V) => V
 >identity : <V>(y: V) => V
@@ -112,7 +100,7 @@ s = map("", (identity));
 >s : string
 >map("", (identity)) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >(identity) : <V>(y: V) => V
 >identity : <V>(y: V) => V
 
@@ -122,9 +110,9 @@ s = map("", ("", identity));
 >s : string
 >map("", ("", identity)) : string
 >map : <T, U>(array: T, func: (x: T) => U) => U
->"" : string
+>"" : ""
 >("", identity) : <V>(y: V) => V
 >"", identity : <V>(y: V) => V
->"" : string
+>"" : ""
 >identity : <V>(y: V) => V
 

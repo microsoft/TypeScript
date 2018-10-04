@@ -1,7 +1,5 @@
 === tests/cases/compiler/typeAnnotationBestCommonTypeInArrayLiteral.ts ===
 interface IMenuItem {
->IMenuItem : IMenuItem
-
     id: string;
 >id : string
 
@@ -22,37 +20,44 @@ interface IMenuItem {
 }
 var menuData: IMenuItem[] = [
 >menuData : IMenuItem[]
->IMenuItem : IMenuItem
 >[    {        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    }, {        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    }] : ({ "id": string; "type": string; "link": string; "icon": string; } | { "id": string; "type": string; "link": string; "text": string; })[]
     {
 >{        "id": "ourLogo",        "type": "image",        "link": "",        "icon": "modules/menu/logo.svg"    } : { "id": string; "type": string; "link": string; "icon": string; }
 
         "id": "ourLogo",
->"ourLogo" : string
+>"id" : string
+>"ourLogo" : "ourLogo"
 
         "type": "image",
->"image" : string
+>"type" : string
+>"image" : "image"
 
         "link": "",
->"" : string
+>"link" : string
+>"" : ""
 
         "icon": "modules/menu/logo.svg"
->"modules/menu/logo.svg" : string
+>"icon" : string
+>"modules/menu/logo.svg" : "modules/menu/logo.svg"
 
     }, {
 >{        "id": "productName",        "type": "default",        "link": "",        "text": "Product Name"    } : { "id": string; "type": string; "link": string; "text": string; }
 
         "id": "productName",
->"productName" : string
+>"id" : string
+>"productName" : "productName"
 
         "type": "default",
->"default" : string
+>"type" : string
+>"default" : "default"
 
         "link": "",
->"" : string
+>"link" : string
+>"" : ""
 
         "text": "Product Name"
->"Product Name" : string
+>"text" : string
+>"Product Name" : "Product Name"
     }
 ];
 

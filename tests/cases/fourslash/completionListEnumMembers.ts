@@ -10,15 +10,15 @@
 ////Foo.bar./*enumValueReference*/;
 
 goTo.marker('valueReference');
-verify.memberListContains("bar");
-verify.memberListContains("baz");
-verify.memberListCount(2);
+verify.completionListContains("bar");
+verify.completionListContains("baz");
+verify.completionListCount(2);
 
 
 goTo.marker('typeReference');
-verify.memberListCount(2);
+verify.completionListCount(2);
 
 goTo.marker('enumValueReference');
-verify.memberListContains("toString");
-verify.memberListContains("toFixed");
-verify.memberListCount(6);
+verify.completionListContains("toString");
+verify.completionListContains("toFixed");
+verify.completionListCount(6);

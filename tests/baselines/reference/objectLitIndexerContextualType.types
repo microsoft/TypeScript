@@ -1,0 +1,76 @@
+=== tests/cases/compiler/objectLitIndexerContextualType.ts ===
+interface I {
+    [s: string]: (s: string) => number;
+>s : string
+>s : string
+}
+
+interface J {
+    [s: number]: (s: string) => number;
+>s : number
+>s : string
+}
+
+var x: I;
+>x : I
+
+var y: J;
+>y : J
+
+x = {
+>x = {    s: t => t * t, // Should error} : { s: (t: string) => number; }
+>x : I
+>{    s: t => t * t, // Should error} : { s: (t: string) => number; }
+
+    s: t => t * t, // Should error
+>s : (t: string) => number
+>t => t * t : (t: string) => number
+>t : string
+>t * t : number
+>t : string
+>t : string
+
+};
+x = {
+>x = {    0: t => t * t, // Should error} : { 0: (t: string) => number; }
+>x : I
+>{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
+
+    0: t => t * t, // Should error
+>0 : (t: string) => number
+>t => t * t : (t: string) => number
+>t : string
+>t * t : number
+>t : string
+>t : string
+
+};
+y = {
+>y = {    s: t => t * t, // Should error} : { s: (t: any) => number; }
+>y : J
+>{    s: t => t * t, // Should error} : { s: (t: any) => number; }
+
+    s: t => t * t, // Should error
+>s : (t: any) => number
+>t => t * t : (t: any) => number
+>t : any
+>t * t : number
+>t : any
+>t : any
+
+};
+y = {
+>y = {    0: t => t * t, // Should error} : { 0: (t: string) => number; }
+>y : J
+>{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
+
+    0: t => t * t, // Should error
+>0 : (t: string) => number
+>t => t * t : (t: string) => number
+>t : string
+>t * t : number
+>t : string
+>t : string
+
+};
+

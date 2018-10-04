@@ -1,10 +1,7 @@
 === tests/cases/conformance/es6/decorators/class/decoratorOnClass6.es6.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
->T : T
->T : T
 
 @dec
 >dec : <T>(target: T) => T
@@ -20,7 +17,7 @@ export class C {
 
     static y = 1;
 >y : number
->1 : number
+>1 : 1
 }
 
 let c = new C();

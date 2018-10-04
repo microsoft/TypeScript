@@ -38,41 +38,32 @@ var c = new C('a');
 >c : C
 >new C('a') : C
 >C : typeof C
->'a' : string
+>'a' : "a"
 
 interface I {
->I : I
-
     new(x: 'hi'): Derived1;
 >x : "hi"
->Derived1 : Derived1
 
     new(x: 'bye'): Derived2;
 >x : "bye"
->Derived2 : Derived2
 
     new(x: string): Base;
 >x : string
->Base : Base
 }
 var i: I;
 >i : I
->I : I
 
 var a: {
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
 
     new(x: 'hi'): Derived1;
 >x : "hi"
->Derived1 : Derived1
 
     new(x: 'bye'): Derived2;
 >x : "bye"
->Derived2 : Derived2
 
     new(x: string): Base;
 >x : string
->Base : Base
 
 };
 
@@ -104,15 +95,13 @@ var r1 = new C('hi');
 
 var r2: Derived2 = new i('bye');
 >r2 : Derived2
->Derived2 : Derived2
 >new i('bye') : Derived2
 >i : I
 >'bye' : "bye"
 
 var r3: Base = new a('hm');
 >r3 : Base
->Base : Base
 >new a('hm') : Base
 >a : { new (x: "hi"): Derived1; new (x: "bye"): Derived2; new (x: string): Base; }
->'hm' : string
+>'hm' : "hm"
 

@@ -1,0 +1,12 @@
+=== tests/cases/conformance/es6/destructuring/restElementWithInitializer2.ts ===
+var a: number[];
+>a : Symbol(a, Decl(restElementWithInitializer2.ts, 0, 3))
+
+var x: number[];
+>x : Symbol(x, Decl(restElementWithInitializer2.ts, 1, 3))
+
+[...x = a] = a;  // Error, rest element cannot have initializer
+>x : Symbol(x, Decl(restElementWithInitializer2.ts, 1, 3))
+>a : Symbol(a, Decl(restElementWithInitializer2.ts, 0, 3))
+>a : Symbol(a, Decl(restElementWithInitializer2.ts, 0, 3))
+

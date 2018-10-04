@@ -4,7 +4,7 @@ class Foo {
 
 	public v = "Yo";
 >v : string
->"Yo" : string
+>"Yo" : "Yo"
 }
 
 var f = new Foo();
@@ -16,17 +16,17 @@ var q = f["v"];
 >q : string
 >f["v"] : string
 >f : Foo
->"v" : string
+>"v" : "v"
 
 var o = {v:"Yo2"};
 >o : { v: string; }
 >{v:"Yo2"} : { v: string; }
 >v : string
->"Yo2" : string
+>"Yo2" : "Yo2"
 
 var q2 = o["v"];
 >q2 : string
 >o["v"] : string
 >o : { v: string; }
->"v" : string
+>"v" : "v"
 

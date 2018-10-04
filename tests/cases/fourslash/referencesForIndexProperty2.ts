@@ -3,7 +3,6 @@
 // References to a unknown index property
 
 ////var a;
-////a[/**/"blah"];
+////a["[|{| "isInString": true |}blah|]"];
 
-goTo.marker("");
-verify.referencesAre([]);
+verify.singleReferenceGroup('"blah"');

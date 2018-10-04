@@ -11,7 +11,7 @@ function x() {
 
     var _this = 5;
 >_this : number
->5 : number
+>5 : 5
 
     x => { console.log(_this); };
 >x => { console.log(_this); } : (x: any) => void

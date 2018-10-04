@@ -1,0 +1,22 @@
+/a.ts(7,11): error TS6133: '_ns' is declared but its value is never read.
+/a.ts(8,9): error TS6133: '_' is declared but its value is never read.
+
+
+==== /a.ts (2 errors) ====
+    import * as _ from "./a";
+    
+    for (const _ of []) { }
+    
+    for (const _ in []) { }
+    
+    namespace _ns {
+              ~~~
+!!! error TS6133: '_ns' is declared but its value is never read.
+        let _;
+            ~
+!!! error TS6133: '_' is declared but its value is never read.
+        for (const _ of []) { }
+    
+        for (const _ in []) { }
+    }
+    

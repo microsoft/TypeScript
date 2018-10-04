@@ -13,26 +13,26 @@ class Foo3 {
 
 
 //// [varArgConstructorMemberParameter.js]
-var Foo1 = (function () {
+var Foo1 = /** @class */ (function () {
     function Foo1() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
     }
     return Foo1;
 }());
-var Foo2 = (function () {
+var Foo2 = /** @class */ (function () {
     function Foo2(args) {
         this.args = args;
     }
     return Foo2;
 }());
-var Foo3 = (function () {
+var Foo3 = /** @class */ (function () {
     function Foo3() {
         var args = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            args[_i - 0] = arguments[_i];
+            args[_i] = arguments[_i];
         }
         this.args = args;
     }

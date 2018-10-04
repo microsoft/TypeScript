@@ -1,14 +1,10 @@
 === tests/cases/conformance/classes/classDeclarations/file1.ts ===
-
-
 declare class C1 { }
 >C1 : C1
 
 interface C1 { }
->C1 : C1
 
 interface C2 { }
->C2 : C2
 
 declare class C2 { }
 >C2 : C2
@@ -17,17 +13,13 @@ class C3 { }
 >C3 : C3
 
 interface C3 { }
->C3 : C3
 
 interface C4 { }
->C4 : C4
 
 class C4 { }
 >C4 : C4
 
 interface C5 {
->C5 : C5
-
     x1: number;
 >x1 : number
 }
@@ -40,15 +32,11 @@ declare class C5 {
 }
 
 interface C5 {
->C5 : C5
-
     x3: number;
 >x3 : number
 }
 
 interface C5 {
->C5 : C5
-
     x4: number;
 >x4 : number
 }
@@ -56,7 +44,6 @@ interface C5 {
 // checks if properties actually were merged
 var c5 : C5;
 >c5 : C5
->C5 : C5
 
 c5.x1;
 >c5.x1 : number
@@ -79,17 +66,13 @@ c5.x4;
 >x4 : number
 
 === tests/cases/conformance/classes/classDeclarations/file2.ts ===
-
 declare class C6 { }
 >C6 : C6
 
 interface C7 { }
->C7 : C7
 
 === tests/cases/conformance/classes/classDeclarations/file3.ts ===
-
 interface C6 { }
->C6 : C6
 
 declare class C7 { }
 >C7 : C7

@@ -99,13 +99,13 @@ var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
 var r3 = foo3(a); // any
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 var r3 = foo3(a); // any
-var A2 = (function () {
+var A2 = /** @class */ (function () {
     function A2() {
     }
     return A2;
@@ -119,17 +119,15 @@ var E;
 })(E || (E = {}));
 var r3 = foo3(a); // any
 function f() { }
-var f;
 (function (f) {
     f.bar = 1;
 })(f || (f = {}));
 var r3 = foo3(a); // any
-var CC = (function () {
+var CC = /** @class */ (function () {
     function CC() {
     }
     return CC;
 }());
-var CC;
 (function (CC) {
     CC.bar = 1;
 })(CC || (CC = {}));

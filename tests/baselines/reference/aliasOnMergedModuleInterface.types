@@ -1,0 +1,42 @@
+=== tests/cases/compiler/aliasOnMergedModuleInterface_1.ts ===
+///<reference path='aliasOnMergedModuleInterface_0.ts' />
+import foo = require("foo")
+>foo : any
+
+var z: foo;
+>z : foo
+
+z.bar("hello"); // This should be ok
+>z.bar("hello") : foo.A
+>z.bar : (name: string) => foo.A
+>z : foo
+>bar : (name: string) => foo.A
+>"hello" : "hello"
+
+var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
+>x : foo.A
+>foo : any
+>foo.bar("hello") : any
+>foo.bar : any
+>foo : any
+>bar : any
+>"hello" : "hello"
+
+=== tests/cases/compiler/aliasOnMergedModuleInterface_0.ts ===
+declare module "foo"
+>"foo" : typeof import("foo")
+{
+    module B {
+        export interface A {
+        }
+    }
+    interface B {
+        bar(name: string): B.A;
+>bar : (name: string) => B.A
+>name : string
+>B : any
+    }
+    export = B;
+>B : B
+}
+

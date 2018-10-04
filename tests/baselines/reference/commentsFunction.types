@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsFunction.ts ===
-
 /** This comment should appear for foo*/
 function foo() {
 >foo : () => void
@@ -26,8 +25,8 @@ function fooWithParameters(/** this is comment about a*/a: string,
 fooWithParameters("a", 10);
 >fooWithParameters("a", 10) : void
 >fooWithParameters : (a: string, b: number) => void
->"a" : string
->10 : number
+>"a" : "a"
+>10 : 10
 
 /** fooFunc
  * comment
@@ -64,14 +63,14 @@ var lambddaNoVarComment = /** this is lambda multiplication*/ (/**param a*/a: nu
 lambdaFoo(10, 20);
 >lambdaFoo(10, 20) : number
 >lambdaFoo : (a: number, b: number) => number
->10 : number
->20 : number
+>10 : 10
+>20 : 20
 
 lambddaNoVarComment(10, 20);
 >lambddaNoVarComment(10, 20) : number
 >lambddaNoVarComment : (a: number, b: number) => number
->10 : number
->20 : number
+>10 : 10
+>20 : 20
 
 function blah(a: string /* multiline trailing comment 
 >blah : (a: string) => void
@@ -104,12 +103,12 @@ lambdaFoo = (a, b) => a * b; // This is trailing comment
 
 /*leading comment*/() => 0; // Needs to be wrapped in parens to be a valid expression (not declaration)
 >() => 0 : () => number
->0 : number
+>0 : 0
 
 /*leading comment*/(() => 0); //trailing comment
 >(() => 0) : () => number
 >() => 0 : () => number
->0 : number
+>0 : 0
 
 function blah4(/*1*/a: string/*2*/,/*3*/b: string/*4*/) {
 >blah4 : (a: string, b: string) => void

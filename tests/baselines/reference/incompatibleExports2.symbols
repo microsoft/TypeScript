@@ -1,0 +1,16 @@
+=== tests/cases/compiler/incompatibleExports2.ts ===
+declare module "foo" { 
+>"foo" : Symbol("foo", Decl(incompatibleExports2.ts, 0, 0))
+
+    export interface x { a: string } 
+>x : Symbol(x, Decl(incompatibleExports2.ts, 0, 22))
+>a : Symbol(x.a, Decl(incompatibleExports2.ts, 1, 24))
+
+    interface y { a: Date }
+>y : Symbol(y, Decl(incompatibleExports2.ts, 1, 36))
+>a : Symbol(y.a, Decl(incompatibleExports2.ts, 2, 17))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+    export = y;
+>y : Symbol(y, Decl(incompatibleExports2.ts, 1, 36))
+}

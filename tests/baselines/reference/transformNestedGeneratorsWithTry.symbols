@@ -1,0 +1,50 @@
+=== tests/cases/compiler/main.ts ===
+// https://github.com/Microsoft/TypeScript/issues/11177
+import * as Bluebird from 'bluebird';
+>Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
+
+async function a(): Bluebird<void> {
+>a : Symbol(a, Decl(main.ts, 1, 37))
+>Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
+
+  try {
+    const b = async function b(): Bluebird<void> {
+>b : Symbol(b, Decl(main.ts, 4, 9))
+>b : Symbol(b, Decl(main.ts, 4, 13))
+>Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
+
+      try {
+        await Bluebird.resolve(); // -- remove this and it compiles
+>Bluebird.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Bluebird : Symbol(Bluebird, Decl(main.ts, 1, 6))
+>resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+      } catch (error) { }
+>error : Symbol(error, Decl(main.ts, 7, 15))
+
+    };
+
+    await b(); // -- or remove this and it compiles
+>b : Symbol(b, Decl(main.ts, 4, 9))
+
+  } catch (error) { }
+>error : Symbol(error, Decl(main.ts, 11, 11))
+}
+
+=== tests/cases/compiler/bluebird.d.ts ===
+declare module "bluebird" {
+>"bluebird" : Symbol("bluebird", Decl(bluebird.d.ts, 0, 0))
+
+    type Bluebird<T> = Promise<T>;
+>Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
+>T : Symbol(T, Decl(bluebird.d.ts, 1, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>T : Symbol(T, Decl(bluebird.d.ts, 1, 18))
+
+    const Bluebird: typeof Promise;
+>Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    export = Bluebird;
+>Bluebird : Symbol(Bluebird, Decl(bluebird.d.ts, 0, 27), Decl(bluebird.d.ts, 2, 9))
+}

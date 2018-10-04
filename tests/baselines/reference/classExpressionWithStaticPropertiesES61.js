@@ -6,10 +6,10 @@ var v = class C {
 };
 
 //// [classExpressionWithStaticPropertiesES61.js]
-var v = (C_1 = class C {
+var _a;
+var v = (_a = class C {
     },
-    C_1.a = 1,
-    C_1.b = 2,
-    C_1.c = C_1.a + 3,
-    C_1);
-var C_1;
+    _a.a = 1,
+    _a.b = 2,
+    _a.c = _a.a + 3,
+    _a);

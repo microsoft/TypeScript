@@ -1,0 +1,24 @@
+=== tests/cases/compiler/genericTypeReferencesRequireTypeArgs.ts ===
+class C<T> {
+>C : C<T>
+
+   foo(): T { return null }
+>foo : () => T
+>null : null
+}
+interface I<T> {
+   bar(): T;
+>bar : () => T
+}
+var c1: C; // error
+>c1 : any
+
+var i1: I; // error
+>i1 : any
+
+var c2: C<I>; // should be an error
+>c2 : C<any>
+
+var i2: I<C>; // should be an error
+>i2 : I<any>
+

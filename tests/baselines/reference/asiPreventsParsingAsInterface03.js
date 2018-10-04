@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsInterface03.ts]
-
 var interface: number, I: string;
 
 namespace n {

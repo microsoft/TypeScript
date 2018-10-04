@@ -159,7 +159,7 @@ foo(
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 8;
 });
@@ -203,7 +203,7 @@ foo(
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 28;
 });
@@ -226,7 +226,7 @@ false ? function (arg) {
 false ? function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 48;
 } : null;
@@ -247,7 +247,7 @@ false ? (function (arg) {
 false ? (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 58;
 }) : null;
@@ -268,7 +268,7 @@ false ? null : function (arg) {
 false ? null : function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 68;
 };
@@ -294,7 +294,7 @@ false ? null : function () {
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 96;
 }) instanceof Function;
@@ -326,13 +326,13 @@ false ? null : function () {
 (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 0;
 }) + '' + (function () {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
     return 107;
 });
@@ -354,7 +354,7 @@ false ? null : function () {
 function foo() {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
 }
 foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
@@ -371,7 +371,7 @@ foo(function (a) { return 110; }, (function (a) { return 111; }), function (a) {
 }, function () {
     var a = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        a[_i - 0] = arguments[_i];
+        a[_i] = arguments[_i];
     }
     return 119;
 }, function (a, b) {

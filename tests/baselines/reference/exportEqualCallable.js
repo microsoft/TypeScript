@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/exportEqualCallable.ts] ////
 
 //// [exportEqualCallable_0.ts]
-
 var server: {
     (): any;
 };
@@ -20,7 +19,8 @@ define(["require", "exports"], function (require, exports) {
     return server;
 });
 //// [exportEqualCallable_1.js]
-define(["require", "exports", 'exportEqualCallable_0'], function (require, exports, connect) {
+define(["require", "exports", "exportEqualCallable_0"], function (require, exports, connect) {
     "use strict";
+    exports.__esModule = true;
     connect();
 });

@@ -1,0 +1,12 @@
+=== tests/cases/compiler/test.ts ===
+#!/usr/bin/env gjs
+"use strict"
+>"use strict" : "use strict"
+
+class Doo {}
+>Doo : Doo
+
+class Scooby extends Doo {}
+>Scooby : Scooby
+>Doo : Doo
+

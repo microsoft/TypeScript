@@ -1,9 +1,8 @@
 //// [stringLiteralTypesOverloads04.ts]
-
 declare function f(x: (p: "foo" | "bar") => "foo");
 
 f(y => {
-    let z = y = "foo";
+    const z = y = "foo";
     return z;
 })
 

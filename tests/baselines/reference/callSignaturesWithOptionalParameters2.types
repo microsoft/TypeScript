@@ -12,7 +12,7 @@ function foo(x?: number) { }
 foo(1);
 >foo(1) : any
 >foo : (x?: number) => any
->1 : number
+>1 : 1
 
 foo();
 >foo() : any
@@ -35,13 +35,13 @@ function foo2(x: number, y?: number) { }
 foo2(1);
 >foo2(1) : any
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
->1 : number
+>1 : 1
 
 foo2(1, 2);
 >foo2(1, 2) : any
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 class C {
 >C : C
@@ -71,7 +71,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.foo();
 >c.foo() : any
@@ -84,26 +83,24 @@ c.foo(1);
 >c.foo : (x?: number) => any
 >c : C
 >foo : (x?: number) => any
->1 : number
+>1 : 1
 
 c.foo2(1);
 >c.foo2(1) : any
 >c.foo2 : { (x: number): any; (x: number, y?: number): any; }
 >c : C
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
->1 : number
+>1 : 1
 
 c.foo2(1, 2);
 >c.foo2(1, 2) : any
 >c.foo2 : { (x: number): any; (x: number, y?: number): any; }
 >c : C
 >foo2 : { (x: number): any; (x: number, y?: number): any; }
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 interface I {
->I : I
-
     (x?: number);
 >x : number
 
@@ -125,7 +122,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 i();
 >i() : any
@@ -134,37 +130,37 @@ i();
 i(1);
 >i(1) : any
 >i : I
->1 : number
+>1 : 1
 
 i(1, 2);
 >i(1, 2) : any
 >i : I
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 i.foo(1);
 >i.foo(1) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >i : I
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
+>1 : 1
 
 i.foo(1, 2);
 >i.foo(1, 2) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >i : I
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 i.foo(1, 2, 3);
 >i.foo(1, 2, 3) : any
 >i.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >i : I
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 var a: {
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
@@ -195,35 +191,35 @@ a();
 a(1);
 >a(1) : any
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
->1 : number
+>1 : 1
 
 a(1, 2);
 >a(1, 2) : any
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 a.foo(1);
 >a.foo(1) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
+>1 : 1
 
 a.foo(1, 2);
 >a.foo(1, 2) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 a.foo(1, 2, 3);
 >a.foo(1, 2, 3) : any
 >a.foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
 >a : { (x?: number): any; (x?: number, y?: number): any; foo(x: number, y?: number): any; foo(x: number, y?: number, z?: number): any; }
 >foo : { (x: number, y?: number): any; (x: number, y?: number, z?: number): any; }
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 

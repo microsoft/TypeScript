@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
-
 declare var console: any;
 >console : any
 
@@ -11,7 +10,7 @@ export function _() {
 >console.log : any
 >console : any
 >log : any
->"_" : string
+>"_" : "_"
 }
 export function __() {
 >__ : () => void
@@ -21,7 +20,7 @@ export function __() {
 >console.log : any
 >console : any
 >log : any
->"__" : string
+>"__" : "__"
 }
 export function ___() {
 >___ : () => void
@@ -31,7 +30,7 @@ export function ___() {
 >console.log : any
 >console : any
 >log : any
->"___" : string
+>"___" : "___"
 }
 export function _hi() {
 >_hi : () => void
@@ -41,7 +40,7 @@ export function _hi() {
 >console.log : any
 >console : any
 >log : any
->"_hi" : string
+>"_hi" : "_hi"
 }
 export function __proto() {
 >__proto : () => void
@@ -51,7 +50,7 @@ export function __proto() {
 >console.log : any
 >console : any
 >log : any
->"__proto" : string
+>"__proto" : "__proto"
 }
 export function __esmodule() {
 >__esmodule : () => void
@@ -61,7 +60,7 @@ export function __esmodule() {
 >console.log : any
 >console : any
 >log : any
->"__esmodule" : string
+>"__esmodule" : "__esmodule"
 }
 export function ___hello(){
 >___hello : () => void
@@ -71,7 +70,7 @@ export function ___hello(){
 >console.log : any
 >console : any
 >log : any
->"___hello" : string
+>"___hello" : "___hello"
 }
 
 === tests/cases/conformance/es6/modules/m2.ts ===

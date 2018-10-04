@@ -3,5 +3,5 @@ var x = +`abc${ 123 }def`;
 >x : number
 >+`abc${ 123 }def` : number
 >`abc${ 123 }def` : string
->123 : number
+>123 : 123
 

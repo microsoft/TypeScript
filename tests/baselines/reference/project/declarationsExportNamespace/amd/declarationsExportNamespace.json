@@ -1,0 +1,19 @@
+{
+    "scenario": "declarations_ExportNamespace",
+    "projectRoot": "tests/cases/projects/declarations_ExportNamespace",
+    "inputFiles": [
+        "decl.d.ts",
+        "useModule.ts"
+    ],
+    "declaration": true,
+    "baselineCheck": true,
+    "emittedFiles": [
+        "useModule.js",
+        "useModule.d.ts"
+    ],
+    "resolvedInputFiles": [
+        "lib.es5.d.ts",
+        "decl.d.ts",
+        "useModule.ts"
+    ]
+}

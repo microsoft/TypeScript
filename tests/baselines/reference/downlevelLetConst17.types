@@ -1,6 +1,6 @@
 === tests/cases/compiler/downlevelLetConst17.ts ===
 'use strict'
->'use strict' : string
+>'use strict' : "use strict"
 
 declare function use(a: any);
 >use : (a: any) => any
@@ -11,7 +11,7 @@ var x;
 
 for (let x = 10; ;) {
 >x : number
->10 : number
+>10 : 10
 
     use(x);
 >use(x) : any
@@ -24,19 +24,19 @@ use(x);
 >x : any
 
 for (const x = 10; ;) {
->x : number
->10 : number
+>x : 10
+>10 : 10
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : number
+>x : 10
 }
 
 for (; ;) {
     let x = 10;
 >x : number
->10 : number
+>10 : 10
 
     use(x);
 >use(x) : any
@@ -44,20 +44,20 @@ for (; ;) {
 >x : number
 
     x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : number
->1 : number
+>1 : 1
 }
 
 for (; ;) {
     const x = 10;
->x : number
->10 : number
+>x : 10
+>10 : 10
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : number
+>x : 10
 }
 
 for (let x; ;) {
@@ -69,9 +69,9 @@ for (let x; ;) {
 >x : any
 
     x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 }
 
 for (; ;) {
@@ -84,13 +84,13 @@ for (; ;) {
 >x : any
 
     x = 1;
->x = 1 : number
+>x = 1 : 1
 >x : any
->1 : number
+>1 : 1
 }
 
 while (true) {
->true : boolean
+>true : true
 
     let x;
 >x : any
@@ -102,16 +102,16 @@ while (true) {
 }
 
 while (true) {
->true : boolean
+>true : true
 
     const x = true;
->x : boolean
->true : boolean
+>x : true
+>true : true
 
     use(x);
 >use(x) : any
 >use : (a: any) => any
->x : boolean
+>x : true
 }
 
 do {
@@ -124,7 +124,7 @@ do {
 >x : any
 
 } while (true);
->true : boolean
+>true : true
 
 do {
     let x;
@@ -136,7 +136,7 @@ do {
 >x : any
 
 } while (true);
->true : boolean
+>true : true
 
 for (let x in []) {
 >x : string

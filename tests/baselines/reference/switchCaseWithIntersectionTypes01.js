@@ -1,5 +1,4 @@
 //// [switchCaseWithIntersectionTypes01.ts]
-
 var strAndNum: string & number;
 var numAndBool: number & boolean;
 var str: string;

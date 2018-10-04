@@ -1,0 +1,19 @@
+=== tests/cases/compiler/genericMergedDeclarationUsingTypeParameter.ts ===
+function foo<T extends U, U>(y: T, z: U) { return y; }
+>foo : typeof foo
+>y : T
+>z : U
+>y : T
+
+module foo {
+>foo : typeof foo
+
+    export var x: T;
+>x : any
+
+    var y = <T>1;
+>y : any
+><T>1 : any
+>1 : 1
+}
+

@@ -63,13 +63,13 @@
 //// }
 ////  /*1*/
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 goTo.marker('1');
 edit.insertLine('');
 edit.insertLine('');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 goTo.marker('2');
 edit.deleteAtCaret("Cookie".length);
 edit.insert("any");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 edit.insertLine('var narnia = new GenericPlanet2<Cookie, string>('); // shouldn't crash at this point

@@ -178,7 +178,7 @@ function d0(x) { }
 function d0(x) {
     if (x === void 0) { x = 10; }
 }
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.d3 = function () { };
@@ -188,7 +188,7 @@ var C2 = (function () {
     };
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     C3.prototype.d3 = function (_a) {

@@ -1,0 +1,215 @@
+=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+function foo0() {
+>foo0 : Symbol(foo0, Decl(blockScopedVariablesUseBeforeDef.ts, 0, 0))
+
+    let a = x;
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 1, 7))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 2, 7))
+
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 2, 7))
+}
+
+function foo1() {
+>foo1 : Symbol(foo1, Decl(blockScopedVariablesUseBeforeDef.ts, 3, 1))
+
+    let a = () => x;
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 6, 7))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 7, 7))
+
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 7, 7))
+}
+
+function foo2() {
+>foo2 : Symbol(foo2, Decl(blockScopedVariablesUseBeforeDef.ts, 8, 1))
+
+    let a = function () { return x; }
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 11, 7))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 12, 7))
+
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 12, 7))
+}
+
+function foo3() {
+>foo3 : Symbol(foo3, Decl(blockScopedVariablesUseBeforeDef.ts, 13, 1))
+
+    class X {
+>X : Symbol(X, Decl(blockScopedVariablesUseBeforeDef.ts, 15, 17))
+
+        m() { return x;}
+>m : Symbol(X.m, Decl(blockScopedVariablesUseBeforeDef.ts, 16, 13))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 19, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 19, 7))
+}
+
+function foo4() {
+>foo4 : Symbol(foo4, Decl(blockScopedVariablesUseBeforeDef.ts, 20, 1))
+
+    let y = class {
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 7))
+
+        m() { return x; }
+>m : Symbol(y.m, Decl(blockScopedVariablesUseBeforeDef.ts, 23, 19))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 26, 7))
+
+    };
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 26, 7))
+}
+
+function foo5() {
+>foo5 : Symbol(foo5, Decl(blockScopedVariablesUseBeforeDef.ts, 27, 1))
+
+    let x = () => y;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 30, 7))
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 31, 7))
+
+    let y = () => x;
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 31, 7))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 30, 7))
+}
+
+function foo6() {
+>foo6 : Symbol(foo6, Decl(blockScopedVariablesUseBeforeDef.ts, 32, 1))
+
+    function f() {
+>f : Symbol(f, Decl(blockScopedVariablesUseBeforeDef.ts, 34, 17))
+
+        return x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 38, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 38, 7))
+}
+
+function foo7() {
+>foo7 : Symbol(foo7, Decl(blockScopedVariablesUseBeforeDef.ts, 39, 1))
+
+    class A {
+>A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 41, 17))
+
+        a = x;
+>a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 42, 13))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 45, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 45, 7))
+}
+
+function foo8() {
+>foo8 : Symbol(foo8, Decl(blockScopedVariablesUseBeforeDef.ts, 46, 1))
+
+    let y = class {
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 7))
+
+        a = x;
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 49, 19))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 52, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 52, 7))
+}
+
+function foo9() {
+>foo9 : Symbol(foo9, Decl(blockScopedVariablesUseBeforeDef.ts, 53, 1))
+
+    let y = class {
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 7))
+
+        static a = x;
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 56, 19))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 59, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 59, 7))
+}
+
+function foo10() {
+>foo10 : Symbol(foo10, Decl(blockScopedVariablesUseBeforeDef.ts, 60, 1))
+
+    class A {
+>A : Symbol(A, Decl(blockScopedVariablesUseBeforeDef.ts, 62, 18))
+
+        static a = x;
+>a : Symbol(A.a, Decl(blockScopedVariablesUseBeforeDef.ts, 63, 13))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 66, 7))
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 66, 7))
+}
+
+function foo11() {
+>foo11 : Symbol(foo11, Decl(blockScopedVariablesUseBeforeDef.ts, 67, 1))
+
+    function f () {
+>f : Symbol(f, Decl(blockScopedVariablesUseBeforeDef.ts, 69, 18))
+
+        let y = class {
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 11))
+
+            static a = x;
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 71, 23))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 75, 7))
+        }
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 75, 7))
+}
+
+function foo12() {
+>foo12 : Symbol(foo12, Decl(blockScopedVariablesUseBeforeDef.ts, 76, 1))
+
+    function f () {
+>f : Symbol(f, Decl(blockScopedVariablesUseBeforeDef.ts, 78, 18))
+
+        let y = class {
+>y : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 11))
+
+            a;
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+
+            constructor() {
+                this.a = x;
+>this.a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+>this : Symbol(y, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 15))
+>a : Symbol(y.a, Decl(blockScopedVariablesUseBeforeDef.ts, 80, 23))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 87, 7))
+            }
+        }
+    }
+    let x;
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 87, 7))
+}
+
+function foo13() {
+>foo13 : Symbol(foo13, Decl(blockScopedVariablesUseBeforeDef.ts, 88, 1))
+
+    let a = {
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 91, 7))
+
+        get a() { return x } 
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 91, 13))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 94, 7))
+    }
+    let x
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 94, 7))
+}
+
+function foo14() {
+>foo14 : Symbol(foo14, Decl(blockScopedVariablesUseBeforeDef.ts, 95, 1))
+
+    let a = {
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 98, 7))
+
+        a: x 
+>a : Symbol(a, Decl(blockScopedVariablesUseBeforeDef.ts, 98, 13))
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 101, 7))
+    }
+    let x
+>x : Symbol(x, Decl(blockScopedVariablesUseBeforeDef.ts, 101, 7))
+}
+

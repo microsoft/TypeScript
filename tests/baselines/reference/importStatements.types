@@ -14,14 +14,12 @@ module A {
 >Origin : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 }
 
 // no code gen expected
 module B {
->B : any
-
     import a = A; //Error generates 'var <Alias> = <EntityName>;'
 >a : typeof a
 >A : typeof a
@@ -42,15 +40,14 @@ module C {
     var p: a.Point;
 >p : a.Point
 >a : any
->Point : a.Point
 
     var p = {x:0, y:0 };
 >p : a.Point
 >{x:0, y:0 } : { x: number; y: number; }
 >x : number
->0 : number
+>0 : 0
 >y : number
->0 : number
+>0 : 0
 }
 
 // code gen expected
@@ -67,8 +64,8 @@ module D {
 >a.Point : typeof a.Point
 >a : typeof a
 >Point : typeof a.Point
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 }
 
 module E {
@@ -82,7 +79,6 @@ module E {
 >xDist : (x: a.Point) => number
 >x : a.Point
 >a : any
->Point : a.Point
 
         return (a.Origin.x - x.x);
 >(a.Origin.x - x.x) : number

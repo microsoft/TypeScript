@@ -1,0 +1,36 @@
+Exit Code: 1
+Standard output:
+node_modules/minimatch/minimatch.js(77,17): error TS2551: Property 'minimatch' does not exist on type 'typeof minimatch'. Did you mean 'Minimatch'?
+node_modules/minimatch/minimatch.js(410,15): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(411,13): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(414,9): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(414,12): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(572,32): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,28): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,40): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(573,43): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(574,27): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(574,30): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(574,41): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(574,44): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(575,28): error TS2532: Object is possibly 'undefined'.
+node_modules/minimatch/minimatch.js(575,31): error TS2339: Property 'reEnd' does not exist on type '{ type: any; start: number; reStart: number; open: any; close: any; }'.
+node_modules/minimatch/minimatch.js(631,10): error TS2339: Property '_glob' does not exist on type 'RegExp'.
+node_modules/minimatch/minimatch.js(632,10): error TS2339: Property '_src' does not exist on type 'RegExp'.
+node_modules/minimatch/minimatch.js(763,3): error TS2554: Expected 0 arguments, but got 2.
+node_modules/minimatch/minimatch.js(766,3): error TS2554: Expected 0 arguments, but got 3.
+node_modules/minimatch/minimatch.js(774,5): error TS2554: Expected 0 arguments, but got 1.
+node_modules/minimatch/minimatch.js(778,5): error TS2554: Expected 0 arguments, but got 3.
+node_modules/minimatch/minimatch.js(785,7): error TS2554: Expected 0 arguments, but got 2.
+node_modules/minimatch/minimatch.js(812,9): error TS2554: Expected 0 arguments, but got 1.
+node_modules/minimatch/minimatch.js(830,9): error TS2554: Expected 0 arguments, but got 6.
+node_modules/minimatch/minimatch.js(834,11): error TS2554: Expected 0 arguments, but got 4.
+node_modules/minimatch/minimatch.js(842,13): error TS2554: Expected 0 arguments, but got 5.
+node_modules/minimatch/minimatch.js(847,11): error TS2554: Expected 0 arguments, but got 1.
+node_modules/minimatch/minimatch.js(857,9): error TS2554: Expected 0 arguments, but got 5.
+node_modules/minimatch/minimatch.js(873,7): error TS2554: Expected 0 arguments, but got 4.
+node_modules/minimatch/minimatch.js(876,7): error TS2554: Expected 0 arguments, but got 4.
+
+
+
+Standard error:

@@ -1,5 +1,4 @@
 === tests/cases/compiler/classExpressionWithStaticPropertiesES63.ts ===
-
 declare var console: any;
 >console : any
 
@@ -10,10 +9,10 @@ const arr: {y(): number}[] = [];
 
 for (let i = 0; i < 3; i++) {
 >i : number
->0 : number
+>0 : 0
 >i < 3 : boolean
 >i : number
->3 : number
+>3 : 3
 >i++ : number
 >i : number
 
@@ -36,7 +35,7 @@ for (let i = 0; i < 3; i++) {
 >C.x : number
 >C : typeof C
 >x : number
->2 : number
+>2 : 2
 
     });
 }

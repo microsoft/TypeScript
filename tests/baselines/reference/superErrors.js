@@ -52,18 +52,26 @@ class RegisteredUser extends User {
 }
 
 //// [superErrors.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 function foo() {
     // super in a non class context
     var x = _super.;
     var y = function () { return _super.; };
     var z = function () { return function () { return function () { return _super.; }; }; };
 }
-var User = (function () {
+var User = /** @class */ (function () {
     function User() {
         this.name = "Bob";
     }
@@ -72,34 +80,36 @@ var User = (function () {
     };
     return User;
 }());
-var RegisteredUser = (function (_super) {
+var RegisteredUser = /** @class */ (function (_super) {
     __extends(RegisteredUser, _super);
     function RegisteredUser() {
-        _super.call(this);
-        this.name = "Frank";
+        var _this = _super.call(this) || this;
+        _this.name = "Frank";
         // super call in an inner function in a constructor
         function inner() {
             _super.sayHello.call(this);
         }
         // super call in a lambda in an inner function in a constructor 
         function inner2() {
-            var x = function () { return _super.sayHello.call(this); };
+            var _this = this;
+            var x = function () { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
+        return _this;
     }
     RegisteredUser.prototype.sayHello = function () {
         // super call in a method
         _super.prototype.sayHello.call(this);
         // super call in a lambda in an inner function in a method
         function inner() {
-            var x = function () { return _super.sayHello.call(this); };
+            var _this = this;
+            var x = function () { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
         (function () { return function () { return _super.; }; })();
     };
     RegisteredUser.staticFunction = function () {
-        var _this = this;
         // super in static functions
         var s = _super.;
         var x = function () { return _super.; };

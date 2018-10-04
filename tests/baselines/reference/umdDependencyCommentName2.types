@@ -1,0 +1,14 @@
+=== tests/cases/compiler/umdDependencyCommentName2.ts ===
+///<amd-dependency path='bar' name='b'/>
+///<amd-dependency path='foo'/>
+///<amd-dependency path='goo' name='c'/>
+
+import m1 = require("m2")
+>m1 : any
+
+m1.f();
+>m1.f() : any
+>m1.f : any
+>m1 : any
+>f : any
+

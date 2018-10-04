@@ -1,0 +1,223 @@
+=== tests/cases/compiler/excessPropertyCheckWithUnions.ts ===
+type ADT = {
+>ADT : Symbol(ADT, Decl(excessPropertyCheckWithUnions.ts, 0, 0))
+
+    tag: "A",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 0, 12))
+
+    a1: string
+>a1 : Symbol(a1, Decl(excessPropertyCheckWithUnions.ts, 1, 13))
+
+} | {
+    tag: "D",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 3, 5))
+
+    d20: 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 11 | 12 | 13 | 14 | 15 | 16 | 17 | 18 | 19 | 20
+>d20 : Symbol(d20, Decl(excessPropertyCheckWithUnions.ts, 4, 13))
+
+} | {
+    tag: "T",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 6, 5))
+}
+let wrong: ADT = { tag: "T", a1: "extra" }
+>wrong : Symbol(wrong, Decl(excessPropertyCheckWithUnions.ts, 9, 3))
+>ADT : Symbol(ADT, Decl(excessPropertyCheckWithUnions.ts, 0, 0))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 9, 18))
+>a1 : Symbol(a1, Decl(excessPropertyCheckWithUnions.ts, 9, 28))
+
+wrong = { tag: "A", d20: 12 }
+>wrong : Symbol(wrong, Decl(excessPropertyCheckWithUnions.ts, 9, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 10, 9))
+>d20 : Symbol(d20, Decl(excessPropertyCheckWithUnions.ts, 10, 19))
+
+wrong = { tag: "D" }
+>wrong : Symbol(wrong, Decl(excessPropertyCheckWithUnions.ts, 9, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 11, 9))
+
+type Ambiguous = {
+>Ambiguous : Symbol(Ambiguous, Decl(excessPropertyCheckWithUnions.ts, 11, 20))
+
+    tag: "A",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 13, 18))
+
+    x: string
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 14, 13))
+
+} | {
+    tag: "A",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 16, 5))
+
+    y: number
+>y : Symbol(y, Decl(excessPropertyCheckWithUnions.ts, 17, 13))
+
+} | {
+    tag: "B",
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 19, 5))
+
+    z: boolean
+>z : Symbol(z, Decl(excessPropertyCheckWithUnions.ts, 20, 13))
+
+} | {
+    tag: "C"
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 22, 5))
+}
+let amb: Ambiguous
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>Ambiguous : Symbol(Ambiguous, Decl(excessPropertyCheckWithUnions.ts, 11, 20))
+
+// no error for ambiguous tag, even when it could satisfy both constituents at once
+amb = { tag: "A", x: "hi" }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 27, 7))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 27, 17))
+
+amb = { tag: "A", y: 12 }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 28, 7))
+>y : Symbol(y, Decl(excessPropertyCheckWithUnions.ts, 28, 17))
+
+amb = { tag: "A", x: "hi", y: 12 }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 29, 7))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 29, 17))
+>y : Symbol(y, Decl(excessPropertyCheckWithUnions.ts, 29, 26))
+
+// correctly error on excess property 'extra', even when ambiguous
+amb = { tag: "A", x: "hi", extra: 12 }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 32, 7))
+>x : Symbol(x, Decl(excessPropertyCheckWithUnions.ts, 32, 17))
+>extra : Symbol(extra, Decl(excessPropertyCheckWithUnions.ts, 32, 26))
+
+amb = { tag: "A", y: 12, extra: 12 }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 33, 7))
+>y : Symbol(y, Decl(excessPropertyCheckWithUnions.ts, 33, 17))
+>extra : Symbol(extra, Decl(excessPropertyCheckWithUnions.ts, 33, 24))
+
+// assignability errors still work.
+// But note that the error for `z: true` is the fallback one of reporting on
+// the last constituent since assignability error reporting can't find a single best discriminant either.
+amb = { tag: "A" }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 38, 7))
+
+amb = { tag: "A", z: true }
+>amb : Symbol(amb, Decl(excessPropertyCheckWithUnions.ts, 25, 3))
+>tag : Symbol(tag, Decl(excessPropertyCheckWithUnions.ts, 39, 7))
+>z : Symbol(z, Decl(excessPropertyCheckWithUnions.ts, 39, 17))
+
+type Overlapping =
+>Overlapping : Symbol(Overlapping, Decl(excessPropertyCheckWithUnions.ts, 39, 27))
+
+    | { a: 1, b: 1, first: string }
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 42, 7))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 42, 13))
+>first : Symbol(first, Decl(excessPropertyCheckWithUnions.ts, 42, 19))
+
+    | { a: 2, second: string }
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 43, 7))
+>second : Symbol(second, Decl(excessPropertyCheckWithUnions.ts, 43, 13))
+
+    | { b: 3, third: string }
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 44, 7))
+>third : Symbol(third, Decl(excessPropertyCheckWithUnions.ts, 44, 13))
+
+let over: Overlapping
+>over : Symbol(over, Decl(excessPropertyCheckWithUnions.ts, 45, 3))
+>Overlapping : Symbol(Overlapping, Decl(excessPropertyCheckWithUnions.ts, 39, 27))
+
+// these two are still errors despite their doubled up discriminants
+over = { a: 1, b: 1, first: "ok", second: "error" }
+>over : Symbol(over, Decl(excessPropertyCheckWithUnions.ts, 45, 3))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 48, 8))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 48, 14))
+>first : Symbol(first, Decl(excessPropertyCheckWithUnions.ts, 48, 20))
+>second : Symbol(second, Decl(excessPropertyCheckWithUnions.ts, 48, 33))
+
+over = { a: 1, b: 1, first: "ok", third: "error" }
+>over : Symbol(over, Decl(excessPropertyCheckWithUnions.ts, 45, 3))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 49, 8))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 49, 14))
+>first : Symbol(first, Decl(excessPropertyCheckWithUnions.ts, 49, 20))
+>third : Symbol(third, Decl(excessPropertyCheckWithUnions.ts, 49, 33))
+
+// Freshness disappears after spreading a union
+declare let t0: { a: any, b: any } | { d: any, e: any }
+>t0 : Symbol(t0, Decl(excessPropertyCheckWithUnions.ts, 52, 11))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 52, 17))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 52, 25))
+>d : Symbol(d, Decl(excessPropertyCheckWithUnions.ts, 52, 38))
+>e : Symbol(e, Decl(excessPropertyCheckWithUnions.ts, 52, 46))
+
+declare let t1: { a: any, b: any, c: any } | { c: any, d: any, e: any }
+>t1 : Symbol(t1, Decl(excessPropertyCheckWithUnions.ts, 53, 11))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 53, 17))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 53, 25))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 53, 33))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 53, 46))
+>d : Symbol(d, Decl(excessPropertyCheckWithUnions.ts, 53, 54))
+>e : Symbol(e, Decl(excessPropertyCheckWithUnions.ts, 53, 62))
+
+let t2 = { ...t1 }
+>t2 : Symbol(t2, Decl(excessPropertyCheckWithUnions.ts, 54, 3))
+>t1 : Symbol(t1, Decl(excessPropertyCheckWithUnions.ts, 53, 11))
+
+t0 = t2
+>t0 : Symbol(t0, Decl(excessPropertyCheckWithUnions.ts, 52, 11))
+>t2 : Symbol(t2, Decl(excessPropertyCheckWithUnions.ts, 54, 3))
+
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+>AN : Symbol(AN, Decl(excessPropertyCheckWithUnions.ts, 55, 7))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 58, 11))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 58, 27))
+
+type BN = { b: string }
+>BN : Symbol(BN, Decl(excessPropertyCheckWithUnions.ts, 58, 39))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 59, 11))
+
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 60, 11))
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 60, 22))
+>AN : Symbol(AN, Decl(excessPropertyCheckWithUnions.ts, 55, 7))
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 60, 34))
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 60, 45))
+>BN : Symbol(BN, Decl(excessPropertyCheckWithUnions.ts, 58, 39))
+
+const abab: AB = {
+>abab : Symbol(abab, Decl(excessPropertyCheckWithUnions.ts, 61, 5))
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+
+    kind: "A",
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 61, 18))
+
+    n: {
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 62, 14))
+
+        a: "a",
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 63, 8))
+
+        b: "b", // excess -- kind: "A"
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 64, 15))
+    }
+}
+const abac: AB = {
+>abac : Symbol(abac, Decl(excessPropertyCheckWithUnions.ts, 68, 5))
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+
+    kind: "A",
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 68, 18))
+
+    n: {
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 69, 14))
+
+        a: "a",
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 70, 8))
+
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 71, 15))
+    }
+}
+

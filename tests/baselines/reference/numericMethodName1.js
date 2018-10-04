@@ -5,7 +5,7 @@ class C {
 
 
 //// [numericMethodName1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this[1] = 2;
     }

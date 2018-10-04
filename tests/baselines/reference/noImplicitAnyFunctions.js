@@ -1,5 +1,4 @@
 //// [noImplicitAnyFunctions.ts]
-
 declare function f1();
 
 declare function f2(): any;

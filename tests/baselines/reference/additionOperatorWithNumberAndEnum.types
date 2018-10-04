@@ -1,25 +1,22 @@
 === tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithNumberAndEnum.ts ===
 enum E { a, b }
 >E : E
->a : E
->b : E
+>a : E.a
+>b : E.b
 
 enum F { c, d }
 >F : F
->c : F
->d : F
+>c : F.c
+>d : F.d
 
 var a: number;
 >a : number
 
 var b: E;
 >b : E
->E : E
 
 var c: E | F;
 >c : E | F
->E : E
->F : F
 
 var r1 = a + a;
 >r1 : number
@@ -48,46 +45,46 @@ var r4 = b + b;
 var r5 = 0 + a;
 >r5 : number
 >0 + a : number
->0 : number
+>0 : 0
 >a : number
 
 var r6 = E.a + 0;
 >r6 : number
 >E.a + 0 : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->0 : number
+>a : E.a
+>0 : 0
 
 var r7 = E.a + E.b;
 >r7 : number
 >E.a + E.b : number
->E.a : E
+>E.a : E.a
 >E : typeof E
->a : E
->E.b : E
+>a : E.a
+>E.b : E.b
 >E : typeof E
->b : E
+>b : E.b
 
 var r8 = E['a'] + E['b'];
 >r8 : number
 >E['a'] + E['b'] : number
->E['a'] : E
+>E['a'] : E.a
 >E : typeof E
->'a' : string
->E['b'] : E
+>'a' : "a"
+>E['b'] : E.b
 >E : typeof E
->'b' : string
+>'b' : "b"
 
 var r9 = E['a'] + F['c'];
 >r9 : number
 >E['a'] + F['c'] : number
->E['a'] : E
+>E['a'] : E.a
 >E : typeof E
->'a' : string
->F['c'] : F
+>'a' : "a"
+>F['c'] : F.c
 >F : typeof F
->'c' : string
+>'c' : "c"
 
 var r10 = a + c;
 >r10 : number

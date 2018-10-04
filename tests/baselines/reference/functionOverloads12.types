@@ -1,5 +1,4 @@
 === tests/cases/compiler/functionOverloads12.ts ===
-
 function foo():string;
 >foo : { (): string; (): number; }
 
@@ -8,7 +7,7 @@ function foo():number;
 
 function foo():any { if (true) return ""; else return 0;}
 >foo : { (): string; (): number; }
->true : boolean
->"" : string
->0 : number
+>true : true
+>"" : ""
+>0 : 0
 

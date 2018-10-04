@@ -90,39 +90,47 @@ function fn8(x: Alpha|Beta|Gamma) {
 
 
 //// [instanceOfAssignability.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 // Derived1 is assignable to, but not a subtype of, Base
-var Derived1 = (function () {
+var Derived1 = /** @class */ (function () {
     function Derived1() {
     }
     return Derived1;
 }());
 // Derived2 is a subtype of Base that is not assignable to Derived1
-var Derived2 = (function () {
+var Derived2 = /** @class */ (function () {
     function Derived2() {
     }
     return Derived2;
 }());
-var Animal = (function () {
+var Animal = /** @class */ (function () {
     function Animal() {
     }
     return Animal;
 }());
-var Mammal = (function (_super) {
+var Mammal = /** @class */ (function (_super) {
     __extends(Mammal, _super);
     function Mammal() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Mammal;
 }(Animal));
-var Giraffe = (function (_super) {
+var Giraffe = /** @class */ (function (_super) {
     __extends(Giraffe, _super);
     function Giraffe() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Giraffe;
 }(Mammal));
@@ -175,7 +183,7 @@ function fn7(x) {
         var y = x;
     }
 }
-var ABC = (function () {
+var ABC = /** @class */ (function () {
     function ABC() {
     }
     return ABC;

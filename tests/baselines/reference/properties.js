@@ -1,5 +1,4 @@
 //// [properties.ts]
-
 class MyClass
 {
     public get Count(): number
@@ -14,7 +13,7 @@ class MyClass
 }
 
 //// [properties.js]
-var MyClass = (function () {
+var MyClass = /** @class */ (function () {
     function MyClass() {
     }
     Object.defineProperty(MyClass.prototype, "Count", {

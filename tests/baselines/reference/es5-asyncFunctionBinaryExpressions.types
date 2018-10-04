@@ -1,0 +1,388 @@
+=== tests/cases/compiler/es5-asyncFunctionBinaryExpressions.ts ===
+declare var x, y, z, a, b, c;
+>x : any
+>y : any
+>z : any
+>a : any
+>b : any
+>c : any
+
+async function binaryPlus0() {
+>binaryPlus0 : () => Promise<void>
+
+    (await x) + y;
+>(await x) + y : any
+>(await x) : any
+>await x : any
+>x : any
+>y : any
+}
+
+async function binaryPlus1() {
+>binaryPlus1 : () => Promise<void>
+
+    x + await y;
+>x + await y : any
+>x : any
+>await y : any
+>y : any
+}
+
+async function binaryLogicalAnd0() {
+>binaryLogicalAnd0 : () => Promise<void>
+
+    (await x) && y;
+>(await x) && y : any
+>(await x) : any
+>await x : any
+>x : any
+>y : any
+}
+
+async function binaryLogicalAnd1() {
+>binaryLogicalAnd1 : () => Promise<void>
+
+    x && await y;
+>x && await y : any
+>x : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment0() {
+>binaryAssignment0 : () => Promise<void>
+
+    x = await y;
+>x = await y : any
+>x : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment1() {
+>binaryAssignment1 : () => Promise<void>
+
+    x.a = await y;
+>x.a = await y : any
+>x.a : any
+>x : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment2() {
+>binaryAssignment2 : () => Promise<void>
+
+    x.a.b = await y;
+>x.a.b = await y : any
+>x.a.b : any
+>x.a : any
+>x : any
+>a : any
+>b : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment3() {
+>binaryAssignment3 : () => Promise<void>
+
+    x[z] = await y;
+>x[z] = await y : any
+>x[z] : any
+>x : any
+>z : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment4() {
+>binaryAssignment4 : () => Promise<void>
+
+    x[z].b = await y;
+>x[z].b = await y : any
+>x[z].b : any
+>x[z] : any
+>x : any
+>z : any
+>b : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment5() {
+>binaryAssignment5 : () => Promise<void>
+
+    x.a[z] = await y;
+>x.a[z] = await y : any
+>x.a[z] : any
+>x.a : any
+>x : any
+>a : any
+>z : any
+>await y : any
+>y : any
+}
+
+async function binaryAssignment6() {
+>binaryAssignment6 : () => Promise<void>
+
+    (await x).a = y;
+>(await x).a = y : any
+>(await x).a : any
+>(await x) : any
+>await x : any
+>x : any
+>a : any
+>y : any
+}
+
+async function binaryAssignment7() {
+>binaryAssignment7 : () => Promise<void>
+
+    (await x.a).b = y;
+>(await x.a).b = y : any
+>(await x.a).b : any
+>(await x.a) : any
+>await x.a : any
+>x.a : any
+>x : any
+>a : any
+>b : any
+>y : any
+}
+
+async function binaryAssignment8() {
+>binaryAssignment8 : () => Promise<void>
+
+    (await x)[z] = y;
+>(await x)[z] = y : any
+>(await x)[z] : any
+>(await x) : any
+>await x : any
+>x : any
+>z : any
+>y : any
+}
+
+async function binaryAssignment9() {
+>binaryAssignment9 : () => Promise<void>
+
+    x[await z] = y;
+>x[await z] = y : any
+>x[await z] : any
+>x : any
+>await z : any
+>z : any
+>y : any
+}
+
+async function binaryAssignment10() {
+>binaryAssignment10 : () => Promise<void>
+
+    x[await z].b = y;
+>x[await z].b = y : any
+>x[await z].b : any
+>x[await z] : any
+>x : any
+>await z : any
+>z : any
+>b : any
+>y : any
+}
+
+async function binaryAssignment11() {
+>binaryAssignment11 : () => Promise<void>
+
+    (await x[z]).b = y;
+>(await x[z]).b = y : any
+>(await x[z]).b : any
+>(await x[z]) : any
+>await x[z] : any
+>x[z] : any
+>x : any
+>z : any
+>b : any
+>y : any
+}
+
+async function binaryAssignment12() {
+>binaryAssignment12 : () => Promise<void>
+
+    x.a[await z] = y;
+>x.a[await z] = y : any
+>x.a[await z] : any
+>x.a : any
+>x : any
+>a : any
+>await z : any
+>z : any
+>y : any
+}
+
+async function binaryAssignment13() {
+>binaryAssignment13 : () => Promise<void>
+
+    (await x.a)[z] = y;
+>(await x.a)[z] = y : any
+>(await x.a)[z] : any
+>(await x.a) : any
+>await x.a : any
+>x.a : any
+>x : any
+>a : any
+>z : any
+>y : any
+}
+
+async function binaryCompoundAssignment0() {
+>binaryCompoundAssignment0 : () => Promise<void>
+
+    x += await y;
+>x += await y : any
+>x : any
+>await y : any
+>y : any
+}
+
+async function binaryCompoundAssignment1() {
+>binaryCompoundAssignment1 : () => Promise<void>
+
+    x.a += await y;
+>x.a += await y : any
+>x.a : any
+>x : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryCompoundAssignment2() {
+>binaryCompoundAssignment2 : () => Promise<void>
+
+    x[a] += await y;
+>x[a] += await y : any
+>x[a] : any
+>x : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryCompoundAssignment3() {
+>binaryCompoundAssignment3 : () => Promise<void>
+
+    (await x).a += y;
+>(await x).a += y : any
+>(await x).a : any
+>(await x) : any
+>await x : any
+>x : any
+>a : any
+>y : any
+}
+
+async function binaryCompoundAssignment4() {
+>binaryCompoundAssignment4 : () => Promise<void>
+
+    (await x)[a] += y;
+>(await x)[a] += y : any
+>(await x)[a] : any
+>(await x) : any
+>await x : any
+>x : any
+>a : any
+>y : any
+}
+
+async function binaryCompoundAssignment5() {
+>binaryCompoundAssignment5 : () => Promise<void>
+
+    x[await a] += y;
+>x[await a] += y : any
+>x[await a] : any
+>x : any
+>await a : any
+>a : any
+>y : any
+}
+
+async function binaryCompoundAssignment6() {
+>binaryCompoundAssignment6 : () => Promise<void>
+
+    (await x).a += await y;
+>(await x).a += await y : any
+>(await x).a : any
+>(await x) : any
+>await x : any
+>x : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryCompoundAssignment7() {
+>binaryCompoundAssignment7 : () => Promise<void>
+
+    (await x)[a] += await y;
+>(await x)[a] += await y : any
+>(await x)[a] : any
+>(await x) : any
+>await x : any
+>x : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryCompoundAssignment8() {
+>binaryCompoundAssignment8 : () => Promise<void>
+
+    x[await a] += await y;
+>x[await a] += await y : any
+>x[await a] : any
+>x : any
+>await a : any
+>a : any
+>await y : any
+>y : any
+}
+
+async function binaryExponentiation() {
+>binaryExponentiation : () => Promise<void>
+
+    (await x) ** y;
+>(await x) ** y : number
+>(await x) : any
+>await x : any
+>x : any
+>y : any
+
+    x ** await y;
+>x ** await y : number
+>x : any
+>await y : any
+>y : any
+}
+
+async function binaryComma0() {
+>binaryComma0 : () => Promise<any>
+
+    return (await x), y;
+>(await x), y : any
+>(await x) : any
+>await x : any
+>x : any
+>y : any
+}
+
+async function binaryComma1(): Promise<any> {
+>binaryComma1 : () => Promise<any>
+
+    return x, await y;
+>x, await y : any
+>x : any
+>await y : any
+>y : any
+}

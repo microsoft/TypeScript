@@ -5,7 +5,7 @@ class C {
 }
 
 //// [illegalModifiersOnClassElements.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.foo = 1;
         this.bar = 1;

@@ -17,7 +17,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -33,7 +32,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 //Cond is a number type variable
 condNumber ? exprAny1 : exprAny2;
@@ -75,73 +73,73 @@ condNumber ? exprString1 : exprBoolean1; // Union
 //Cond is a number type literal
 1 ? exprAny1 : exprAny2;
 >1 ? exprAny1 : exprAny2 : any
->1 : number
+>1 : 1
 >exprAny1 : any
 >exprAny2 : any
 
 0 ? exprBoolean1 : exprBoolean2;
 >0 ? exprBoolean1 : exprBoolean2 : boolean
->0 : number
+>0 : 0
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
 0.123456789 ? exprNumber1 : exprNumber2;
 >0.123456789 ? exprNumber1 : exprNumber2 : number
->0.123456789 : number
+>0.123456789 : 0.123456789
 >exprNumber1 : number
 >exprNumber2 : number
 
 - 10000000000000 ? exprString1 : exprString2;
 >- 10000000000000 ? exprString1 : exprString2 : string
->- 10000000000000 : number
->10000000000000 : number
+>- 10000000000000 : -10000000000000
+>10000000000000 : 10000000000000
 >exprString1 : string
 >exprString2 : string
 
 1000000000000 ? exprIsObject1 : exprIsObject2;
 >1000000000000 ? exprIsObject1 : exprIsObject2 : Object
->1000000000000 : number
+>1000000000000 : 1000000000000
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 10000 ? exprString1 : exprBoolean1; // Union
 >10000 ? exprString1 : exprBoolean1 : string | boolean
->10000 : number
+>10000 : 10000
 >exprString1 : string
 >exprBoolean1 : boolean
 
 //Cond is a number type expression
 function foo() { return 1 };
 >foo : () => number
->1 : number
+>1 : 1
 
 var array = [1, 2, 3];
 >array : number[]
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 
 1 * 0 ? exprAny1 : exprAny2;
 >1 * 0 ? exprAny1 : exprAny2 : any
 >1 * 0 : number
->1 : number
->0 : number
+>1 : 1
+>0 : 0
 >exprAny1 : any
 >exprAny2 : any
 
 1 + 1 ? exprBoolean1 : exprBoolean2;
 >1 + 1 ? exprBoolean1 : exprBoolean2 : boolean
 >1 + 1 : number
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
 "string".length ? exprNumber1 : exprNumber2;
 >"string".length ? exprNumber1 : exprNumber2 : number
 >"string".length : number
->"string" : string
+>"string" : "string"
 >length : number
 >exprNumber1 : number
 >exprNumber2 : number
@@ -160,7 +158,7 @@ foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >foo : () => number
 >array[1] : number
 >array : number[]
->1 : number
+>1 : 1
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -217,43 +215,43 @@ var resultIsStringOrBoolean1 = condNumber ? exprString1 : exprBoolean1; // Union
 var resultIsAny2 = 1 ? exprAny1 : exprAny2;
 >resultIsAny2 : any
 >1 ? exprAny1 : exprAny2 : any
->1 : number
+>1 : 1
 >exprAny1 : any
 >exprAny2 : any
 
 var resultIsBoolean2 = 0 ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : boolean
 >0 ? exprBoolean1 : exprBoolean2 : boolean
->0 : number
+>0 : 0
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
 var resultIsNumber2 = 0.123456789 ? exprNumber1 : exprNumber2;
 >resultIsNumber2 : number
 >0.123456789 ? exprNumber1 : exprNumber2 : number
->0.123456789 : number
+>0.123456789 : 0.123456789
 >exprNumber1 : number
 >exprNumber2 : number
 
 var resultIsString2 = - 10000000000000 ? exprString1 : exprString2;
 >resultIsString2 : string
 >- 10000000000000 ? exprString1 : exprString2 : string
->- 10000000000000 : number
->10000000000000 : number
+>- 10000000000000 : -10000000000000
+>10000000000000 : 10000000000000
 >exprString1 : string
 >exprString2 : string
 
 var resultIsObject2 = 1000000000000 ? exprIsObject1 : exprIsObject2;
 >resultIsObject2 : Object
 >1000000000000 ? exprIsObject1 : exprIsObject2 : Object
->1000000000000 : number
+>1000000000000 : 1000000000000
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
 var resultIsStringOrBoolean2 = 10000 ? exprString1 : exprBoolean1; // Union
 >resultIsStringOrBoolean2 : string | boolean
 >10000 ? exprString1 : exprBoolean1 : string | boolean
->10000 : number
+>10000 : 10000
 >exprString1 : string
 >exprBoolean1 : boolean
 
@@ -261,8 +259,8 @@ var resultIsAny3 = 1 * 0 ? exprAny1 : exprAny2;
 >resultIsAny3 : any
 >1 * 0 ? exprAny1 : exprAny2 : any
 >1 * 0 : number
->1 : number
->0 : number
+>1 : 1
+>0 : 0
 >exprAny1 : any
 >exprAny2 : any
 
@@ -270,8 +268,8 @@ var resultIsBoolean3 = 1 + 1 ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : boolean
 >1 + 1 ? exprBoolean1 : exprBoolean2 : boolean
 >1 + 1 : number
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 >exprBoolean1 : boolean
 >exprBoolean2 : boolean
 
@@ -279,7 +277,7 @@ var resultIsNumber3 = "string".length ? exprNumber1 : exprNumber2;
 >resultIsNumber3 : number
 >"string".length ? exprNumber1 : exprNumber2 : number
 >"string".length : number
->"string" : string
+>"string" : "string"
 >length : number
 >exprNumber1 : number
 >exprNumber2 : number
@@ -300,7 +298,7 @@ var resultIsObject3 = foo() / array[1] ? exprIsObject1 : exprIsObject2;
 >foo : () => number
 >array[1] : number
 >array : number[]
->1 : number
+>1 : 1
 >exprIsObject1 : Object
 >exprIsObject2 : Object
 
@@ -312,7 +310,7 @@ var resultIsStringOrBoolean3 = foo() / array[1] ? exprString1 : exprBoolean1; //
 >foo : () => number
 >array[1] : number
 >array : number[]
->1 : number
+>1 : 1
 >exprString1 : string
 >exprBoolean1 : boolean
 

@@ -11,13 +11,9 @@
     "sourceRoot": "tests/cases/projects/outputdir_module_subfolder/src",
     "resolveSourceRoot": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "ref/m1.ts",
         "test.ts"
     ],
-    "emittedFiles": [
-        "bin/test.js.map",
-        "bin/test.js",
-        "bin/test.d.ts"
-    ]
+    "emittedFiles": []
 }

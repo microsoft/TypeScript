@@ -1,7 +1,7 @@
 === tests/cases/compiler/sourceMapValidationIfElse.ts ===
 var i = 10;
 >i : number
->10 : number
+>10 : 10
 
 if (i == 10) {
 >i == 10 : boolean
@@ -41,7 +41,7 @@ else if (i == 20) {
     i += 70;
 >i += 70 : number
 >i : number
->70 : number
+>70 : 70
 
 } else {
     i--;

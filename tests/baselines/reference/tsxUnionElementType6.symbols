@@ -1,0 +1,61 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+function EmptySFC1() {
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
+
+    return <div>Hi</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+function EmptySFC2() {
+>EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
+
+    return <div>Hello</div>
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+function SFC2(prop: { x: boolean }) {
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 8, 1))
+>prop : Symbol(prop, Decl(file.tsx, 10, 14))
+>x : Symbol(x, Decl(file.tsx, 10, 21))
+
+    return <h1>World</h1>;
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+>h1 : Symbol(JSX.IntrinsicElements.h1, Decl(react.d.ts, 2410, 47))
+}
+
+var EmptySFCComp = EmptySFC1 || EmptySFC2;
+>EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
+>EmptySFC2 : Symbol(EmptySFC2, Decl(file.tsx, 4, 1))
+
+var SFC2AndEmptyComp = SFC2 || EmptySFC1;
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+>SFC2 : Symbol(SFC2, Decl(file.tsx, 8, 1))
+>EmptySFC1 : Symbol(EmptySFC1, Decl(file.tsx, 0, 32))
+
+// Error
+let a = <EmptySFCComp x />;
+>a : Symbol(a, Decl(file.tsx, 17, 3))
+>EmptySFCComp : Symbol(EmptySFCComp, Decl(file.tsx, 14, 3))
+>x : Symbol(x, Decl(file.tsx, 17, 21))
+
+let b = <SFC2AndEmptyComp x="hi" />;
+>b : Symbol(b, Decl(file.tsx, 18, 3))
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+>x : Symbol(x, Decl(file.tsx, 18, 25))
+
+let c = <SFC2AndEmptyComp />;
+>c : Symbol(c, Decl(file.tsx, 19, 3))
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+
+let d = <SFC2AndEmptyComp data-prop />;
+>d : Symbol(d, Decl(file.tsx, 20, 3))
+>SFC2AndEmptyComp : Symbol(SFC2AndEmptyComp, Decl(file.tsx, 15, 3))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 20, 25))
+
+

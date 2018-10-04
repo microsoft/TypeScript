@@ -1,0 +1,43 @@
+=== tests/cases/conformance/async/es5/asyncAwaitNestedClasses_es5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/20744
+class A {
+>A : Symbol(A, Decl(asyncAwaitNestedClasses_es5.ts, 0, 0))
+
+    static B = class B {
+>B : Symbol(A.B, Decl(asyncAwaitNestedClasses_es5.ts, 1, 9))
+>B : Symbol(B, Decl(asyncAwaitNestedClasses_es5.ts, 2, 14))
+
+        static func2(): Promise<void> {
+>func2 : Symbol(B.func2, Decl(asyncAwaitNestedClasses_es5.ts, 2, 24))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+
+            return new Promise((resolve) => { resolve(null); });
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(asyncAwaitNestedClasses_es5.ts, 4, 32))
+>resolve : Symbol(resolve, Decl(asyncAwaitNestedClasses_es5.ts, 4, 32))
+        }
+        static C = class C {
+>C : Symbol(B.C, Decl(asyncAwaitNestedClasses_es5.ts, 5, 9))
+>C : Symbol(C, Decl(asyncAwaitNestedClasses_es5.ts, 6, 18))
+
+            static async func() {
+>func : Symbol(C.func, Decl(asyncAwaitNestedClasses_es5.ts, 6, 28))
+
+                await B.func2();
+>B.func2 : Symbol(B.func2, Decl(asyncAwaitNestedClasses_es5.ts, 2, 24))
+>B : Symbol(B, Decl(asyncAwaitNestedClasses_es5.ts, 2, 14))
+>func2 : Symbol(B.func2, Decl(asyncAwaitNestedClasses_es5.ts, 2, 24))
+            }
+        }
+    }
+}
+
+A.B.C.func();
+>A.B.C.func : Symbol(C.func, Decl(asyncAwaitNestedClasses_es5.ts, 6, 28))
+>A.B.C : Symbol(B.C, Decl(asyncAwaitNestedClasses_es5.ts, 5, 9))
+>A.B : Symbol(A.B, Decl(asyncAwaitNestedClasses_es5.ts, 1, 9))
+>A : Symbol(A, Decl(asyncAwaitNestedClasses_es5.ts, 0, 0))
+>B : Symbol(A.B, Decl(asyncAwaitNestedClasses_es5.ts, 1, 9))
+>C : Symbol(B.C, Decl(asyncAwaitNestedClasses_es5.ts, 5, 9))
+>func : Symbol(C.func, Decl(asyncAwaitNestedClasses_es5.ts, 6, 28))
+

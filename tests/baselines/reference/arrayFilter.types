@@ -6,7 +6,7 @@ var foo = [
     { name: 'bar' },
 >{ name: 'bar' } : { name: string; }
 >name : string
->'bar' : string
+>'bar' : "bar"
 
     { name: null },
 >{ name: null } : { name: null; }
@@ -16,15 +16,15 @@ var foo = [
     { name: 'baz' }
 >{ name: 'baz' } : { name: string; }
 >name : string
->'baz' : string
+>'baz' : "baz"
 
 ]
 
 foo.filter(x => x.name); //should accepted all possible types not only boolean! 
 >foo.filter(x => x.name) : { name: string; }[]
->foo.filter : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => { name: string; }[]
+>foo.filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any): { name: string; }[]; }
 >foo : { name: string; }[]
->filter : (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any) => { name: string; }[]
+>filter : { <S extends { name: string; }>(callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: { name: string; }, index: number, array: { name: string; }[]) => any, thisArg?: any): { name: string; }[]; }
 >x => x.name : (x: { name: string; }) => string
 >x : { name: string; }
 >x.name : string

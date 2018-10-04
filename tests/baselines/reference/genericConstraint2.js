@@ -29,7 +29,7 @@ function compare(x, y) {
         return 1;
     return x.comparer(y);
 }
-var ComparableString = (function () {
+var ComparableString = /** @class */ (function () {
     function ComparableString(currentValue) {
         this.currentValue = currentValue;
     }

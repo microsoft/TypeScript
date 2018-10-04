@@ -1,0 +1,170 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithInvalidOperands.ts ===
+function foo() { }
+>foo : () => void
+
+class C {
+>C : C
+
+    public a: string;
+>a : string
+
+    static foo() { }
+>foo : () => void
+}
+enum E { a, b, c }
+>E : E
+>a : E.a
+>b : E.b
+>c : E.c
+
+module M { export var a }
+>M : typeof M
+>a : any
+
+var a: boolean;
+>a : boolean
+
+var b: number;
+>b : number
+
+var c: Object;
+>c : Object
+
+var d: Number;
+>d : Number
+
+// boolean + every type except any and string
+var r1 = a + a;
+>r1 : any
+>a + a : any
+>a : boolean
+>a : boolean
+
+var r2 = a + b;
+>r2 : any
+>a + b : any
+>a : boolean
+>b : number
+
+var r3 = a + c;
+>r3 : any
+>a + c : any
+>a : boolean
+>c : Object
+
+// number + every type except any and string
+var r4 = b + a;
+>r4 : any
+>b + a : any
+>b : number
+>a : boolean
+
+var r5 = b + b; // number + number is valid
+>r5 : number
+>b + b : number
+>b : number
+>b : number
+
+var r6 = b + c;
+>r6 : any
+>b + c : any
+>b : number
+>c : Object
+
+// object + every type except any and string
+var r7 = c + a;
+>r7 : any
+>c + a : any
+>c : Object
+>a : boolean
+
+var r8 = c + b;
+>r8 : any
+>c + b : any
+>c : Object
+>b : number
+
+var r9 = c + c;
+>r9 : any
+>c + c : any
+>c : Object
+>c : Object
+
+// other cases
+var r10 = a + true;
+>r10 : any
+>a + true : any
+>a : boolean
+>true : true
+
+var r11 = true + false;
+>r11 : any
+>true + false : any
+>true : true
+>false : false
+
+var r12 = true + 123;
+>r12 : any
+>true + 123 : any
+>true : true
+>123 : 123
+
+var r13 = {} + {};
+>r13 : any
+>{} + {} : any
+>{} : {}
+>{} : {}
+
+var r14 = b + d;
+>r14 : any
+>b + d : any
+>b : number
+>d : Number
+
+var r15 = b + foo;
+>r15 : any
+>b + foo : any
+>b : number
+>foo : () => void
+
+var r16 = b + foo();
+>r16 : any
+>b + foo() : any
+>b : number
+>foo() : void
+>foo : () => void
+
+var r17 = b + C;
+>r17 : any
+>b + C : any
+>b : number
+>C : typeof C
+
+var r18 = E.a + new C();
+>r18 : any
+>E.a + new C() : any
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>new C() : C
+>C : typeof C
+
+var r19 = E.a + C.foo();
+>r19 : any
+>E.a + C.foo() : any
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>C.foo() : void
+>C.foo : () => void
+>C : typeof C
+>foo : () => void
+
+var r20 = E.a + M;
+>r20 : any
+>E.a + M : any
+>E.a : E.a
+>E : typeof E
+>a : E.a
+>M : typeof M
+

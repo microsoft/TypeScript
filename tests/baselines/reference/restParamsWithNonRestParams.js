@@ -10,7 +10,7 @@ foo3(); // error but shouldn't be
 function foo() {
     var b = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        b[_i - 0] = arguments[_i];
+        b[_i] = arguments[_i];
     }
 }
 foo(); // ok

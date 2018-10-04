@@ -1,5 +1,4 @@
 //// [constDeclarations-errors.ts]
-
 // error, missing intialicer
 const c1;
 const c2: number;

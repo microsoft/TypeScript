@@ -1,5 +1,4 @@
 === tests/cases/compiler/json.stringify.ts ===
-
 var value = null;
 >value : null
 >null : null
@@ -11,7 +10,7 @@ JSON.stringify(value, undefined, 2);
 >stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >undefined : undefined
->2 : number
+>2 : 2
 
 JSON.stringify(value, null, 2);
 >JSON.stringify(value, null, 2) : string
@@ -20,7 +19,7 @@ JSON.stringify(value, null, 2);
 >stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >null : null
->2 : number
+>2 : 2
 
 JSON.stringify(value, ["a", 1], 2);
 >JSON.stringify(value, ["a", 1], 2) : string
@@ -29,9 +28,9 @@ JSON.stringify(value, ["a", 1], 2);
 >stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >["a", 1] : (string | number)[]
->"a" : string
->1 : number
->2 : number
+>"a" : "a"
+>1 : 1
+>2 : 2
 
 JSON.stringify(value, (k) => undefined, 2);
 >JSON.stringify(value, (k) => undefined, 2) : string
@@ -42,7 +41,7 @@ JSON.stringify(value, (k) => undefined, 2);
 >(k) => undefined : (k: string) => undefined
 >k : string
 >undefined : undefined
->2 : number
+>2 : 2
 
 JSON.stringify(value, undefined, 2);
 >JSON.stringify(value, undefined, 2) : string
@@ -51,5 +50,5 @@ JSON.stringify(value, undefined, 2);
 >stringify : { (value: any, replacer?: ((key: string, value: any) => any) | undefined, space?: string | number | undefined): string; (value: any, replacer?: (string | number)[] | null | undefined, space?: string | number | undefined): string; }
 >value : null
 >undefined : undefined
->2 : number
+>2 : 2
 

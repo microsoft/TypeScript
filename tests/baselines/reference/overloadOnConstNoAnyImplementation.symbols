@@ -1,0 +1,56 @@
+=== tests/cases/compiler/overloadOnConstNoAnyImplementation.ts ===
+function x1(a: number, cb: (x: 'hi') => number);
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation.ts, 0, 12))
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 0, 22))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 0, 28))
+
+function x1(a: number, cb: (x: 'bye') => number);
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation.ts, 1, 12))
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 1, 22))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 1, 28))
+
+function x1(a: number, cb: (x: string) => number) {
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>a : Symbol(a, Decl(overloadOnConstNoAnyImplementation.ts, 2, 12))
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 2, 28))
+
+    cb('hi');
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+
+    cb('bye');
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+
+    var hm = 'hm';
+>hm : Symbol(hm, Decl(overloadOnConstNoAnyImplementation.ts, 5, 7))
+
+    cb(hm);
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+>hm : Symbol(hm, Decl(overloadOnConstNoAnyImplementation.ts, 5, 7))
+
+    cb('uh');
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+
+    cb(1); // error
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 2, 22))
+}
+
+var cb: (number) => number = (x: number) => 1;
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 11, 3))
+>number : Symbol(number, Decl(overloadOnConstNoAnyImplementation.ts, 11, 9))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 11, 30))
+
+x1(1, cb);
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>cb : Symbol(cb, Decl(overloadOnConstNoAnyImplementation.ts, 11, 3))
+
+x1(1, (x: 'hi') => 1); // error
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 13, 7))
+
+x1(1, (x: string) => 1);
+>x1 : Symbol(x1, Decl(overloadOnConstNoAnyImplementation.ts, 0, 0), Decl(overloadOnConstNoAnyImplementation.ts, 0, 48), Decl(overloadOnConstNoAnyImplementation.ts, 1, 49))
+>x : Symbol(x, Decl(overloadOnConstNoAnyImplementation.ts, 14, 7))
+

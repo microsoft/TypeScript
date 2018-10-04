@@ -32,7 +32,7 @@ rs.forEach(x => {
 });
 
 //// [typeOfThisInInstanceMember.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = this;
         var t = this;

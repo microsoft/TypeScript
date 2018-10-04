@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 //The second operand type is boolean
 ANY, BOOLEAN;
@@ -91,90 +90,90 @@ ANY = undefined, BOOLEAN;
 >BOOLEAN : boolean
 
 1, true;
->1, true : boolean
->1 : number
->true : boolean
+>1, true : true
+>1 : 1
+>true : true
 
 ++NUMBER, true;
->++NUMBER, true : boolean
+>++NUMBER, true : true
 >++NUMBER : number
 >NUMBER : number
->true : boolean
+>true : true
 
 [1, 2, 3], !BOOLEAN;
 >[1, 2, 3], !BOOLEAN : boolean
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
+>1 : 1
+>2 : 2
+>3 : 3
 >!BOOLEAN : boolean
 >BOOLEAN : boolean
 
 OBJECT = [1, 2, 3], BOOLEAN = false;
->OBJECT = [1, 2, 3], BOOLEAN = false : boolean
+>OBJECT = [1, 2, 3], BOOLEAN = false : false
 >OBJECT = [1, 2, 3] : number[]
 >OBJECT : Object
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
->BOOLEAN = false : boolean
+>1 : 1
+>2 : 2
+>3 : 3
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
+>false : false
 
 var resultIsBoolean6 = (null, BOOLEAN);
 >resultIsBoolean6 : boolean
->(null, BOOLEAN) : boolean
->null, BOOLEAN : boolean
+>(null, BOOLEAN) : false
+>null, BOOLEAN : false
 >null : null
->BOOLEAN : boolean
+>BOOLEAN : false
 
 var resultIsBoolean7 = (ANY = undefined, BOOLEAN);
 >resultIsBoolean7 : boolean
->(ANY = undefined, BOOLEAN) : boolean
->ANY = undefined, BOOLEAN : boolean
+>(ANY = undefined, BOOLEAN) : false
+>ANY = undefined, BOOLEAN : false
 >ANY = undefined : undefined
 >ANY : any
 >undefined : undefined
->BOOLEAN : boolean
+>BOOLEAN : false
 
 var resultIsBoolean8 = (1, true);
 >resultIsBoolean8 : boolean
->(1, true) : boolean
->1, true : boolean
->1 : number
->true : boolean
+>(1, true) : true
+>1, true : true
+>1 : 1
+>true : true
 
 var resultIsBoolean9 = (++NUMBER, true);
 >resultIsBoolean9 : boolean
->(++NUMBER, true) : boolean
->++NUMBER, true : boolean
+>(++NUMBER, true) : true
+>++NUMBER, true : true
 >++NUMBER : number
 >NUMBER : number
->true : boolean
+>true : true
 
 var resultIsBoolean10 = ([1, 2, 3], !BOOLEAN);
 >resultIsBoolean10 : boolean
->([1, 2, 3], !BOOLEAN) : boolean
->[1, 2, 3], !BOOLEAN : boolean
+>([1, 2, 3], !BOOLEAN) : true
+>[1, 2, 3], !BOOLEAN : true
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
->!BOOLEAN : boolean
->BOOLEAN : boolean
+>1 : 1
+>2 : 2
+>3 : 3
+>!BOOLEAN : true
+>BOOLEAN : false
 
 var resultIsBoolean11 = (OBJECT = [1, 2, 3], BOOLEAN = false);
 >resultIsBoolean11 : boolean
->(OBJECT = [1, 2, 3], BOOLEAN = false) : boolean
->OBJECT = [1, 2, 3], BOOLEAN = false : boolean
+>(OBJECT = [1, 2, 3], BOOLEAN = false) : false
+>OBJECT = [1, 2, 3], BOOLEAN = false : false
 >OBJECT = [1, 2, 3] : number[]
 >OBJECT : Object
 >[1, 2, 3] : number[]
->1 : number
->2 : number
->3 : number
->BOOLEAN = false : boolean
+>1 : 1
+>2 : 2
+>3 : 3
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
+>false : false
 

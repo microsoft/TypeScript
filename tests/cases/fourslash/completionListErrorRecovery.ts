@@ -5,9 +5,6 @@
 ////Foo./**/;
 /////*1*/var bar;
 
-// this line triggers a semantic/syntactic error check, remove line when 788570 is fixed
-edit.insert('');
-
 goTo.marker();
-verify.memberListContains("fun");
+verify.completionListContains("fun");
 verify.not.errorExistsAfterMarker("1");

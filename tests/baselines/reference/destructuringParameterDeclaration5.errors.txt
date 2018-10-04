@@ -1,15 +1,9 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(47,4): error TS2345: Argument of type '{ y: Class; }' is not assignable to parameter of type '{ y: D; }'.
-  Types of property 'y' are incompatible.
-    Type 'Class' is not assignable to type 'D'.
-      Property 'foo' is missing in type 'Class'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(47,6): error TS2322: Type 'Class' is not assignable to type 'D'.
+  Property 'foo' is missing in type 'Class'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(48,4): error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
   Property 'y' is missing in type '{}'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(49,4): error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type '{ y: D; }'.
-  Types of property 'y' are incompatible.
-    Type 'number' is not assignable to type 'D'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,4): error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
-  Types of property 'y' are incompatible.
-    Type 'string' is not assignable to type 'D'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(49,6): error TS2322: Type 'number' is not assignable to type 'D'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,6): error TS2322: Type 'string' is not assignable to type 'D'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts (4 errors) ====
@@ -60,22 +54,19 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
     d3({ y: new SubClass() });
     // Error
     d3({ y: new Class() });
-       ~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ y: Class; }' is not assignable to parameter of type '{ y: D; }'.
-!!! error TS2345:   Types of property 'y' are incompatible.
-!!! error TS2345:     Type 'Class' is not assignable to type 'D'.
-!!! error TS2345:       Property 'foo' is missing in type 'Class'.
+         ~
+!!! error TS2322: Type 'Class' is not assignable to type 'D'.
+!!! error TS2322:   Property 'foo' is missing in type 'Class'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts:29:33: The expected type comes from property 'y' which is declared here on type '{ y: D; }'
     d3({});
        ~~
 !!! error TS2345: Argument of type '{}' is not assignable to parameter of type '{ y: D; }'.
 !!! error TS2345:   Property 'y' is missing in type '{}'.
     d3({ y: 1 });
-       ~~~~~~~~
-!!! error TS2345: Argument of type '{ y: number; }' is not assignable to parameter of type '{ y: D; }'.
-!!! error TS2345:   Types of property 'y' are incompatible.
-!!! error TS2345:     Type 'number' is not assignable to type 'D'.
+         ~
+!!! error TS2322: Type 'number' is not assignable to type 'D'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts:29:33: The expected type comes from property 'y' which is declared here on type '{ y: D; }'
     d3({ y: "world" });
-       ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ y: string; }' is not assignable to parameter of type '{ y: D; }'.
-!!! error TS2345:   Types of property 'y' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'D'.
+         ~
+!!! error TS2322: Type 'string' is not assignable to type 'D'.
+!!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts:29:33: The expected type comes from property 'y' which is declared here on type '{ y: D; }'

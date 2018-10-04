@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface ComponentProps {
+>ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
+
+    property1: string;
+>property1 : Symbol(ComponentProps.property1, Decl(file.tsx, 2, 26))
+
+    property2: number;
+>property2 : Symbol(ComponentProps.property2, Decl(file.tsx, 3, 22))
+}
+
+export default function Component(props: ComponentProps) {
+>Component : Symbol(Component, Decl(file.tsx, 5, 1))
+>props : Symbol(props, Decl(file.tsx, 7, 34))
+>ComponentProps : Symbol(ComponentProps, Decl(file.tsx, 0, 32))
+
+    let condition1: boolean;
+>condition1 : Symbol(condition1, Decl(file.tsx, 8, 7))
+
+    if (condition1) {
+>condition1 : Symbol(condition1, Decl(file.tsx, 8, 7))
+
+        return (
+            <ChildComponent {...props} />
+>ChildComponent : Symbol(ChildComponent, Decl(file.tsx, 21, 1))
+>props : Symbol(props, Decl(file.tsx, 7, 34))
+
+        );
+    }
+    else {
+        return (<ChildComponent {...props} property1="NewString" />);
+>ChildComponent : Symbol(ChildComponent, Decl(file.tsx, 21, 1))
+>props : Symbol(props, Decl(file.tsx, 7, 34))
+>property1 : Symbol(property1, Decl(file.tsx, 15, 42))
+    }
+}
+
+interface AnotherComponentProps {
+>AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 17, 1))
+
+    property1: string;
+>property1 : Symbol(AnotherComponentProps.property1, Decl(file.tsx, 19, 33))
+}
+
+function ChildComponent({ property1 }: AnotherComponentProps) {
+>ChildComponent : Symbol(ChildComponent, Decl(file.tsx, 21, 1))
+>property1 : Symbol(property1, Decl(file.tsx, 23, 25))
+>AnotherComponentProps : Symbol(AnotherComponentProps, Decl(file.tsx, 17, 1))
+
+    return (
+        <span>{property1}</span>
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+>property1 : Symbol(property1, Decl(file.tsx, 23, 25))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+
+    );
+}

@@ -37,7 +37,7 @@ export module m2 {
 >cProp.foo : (a: number) => number
 >cProp : c
 >foo : (a: number) => number
->10 : number
+>10 : 10
     }
 }
 

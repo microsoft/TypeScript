@@ -1,9 +1,8 @@
 === tests/cases/conformance/statements/continueStatements/doWhileContinueStatements.ts ===
-
 do {
     continue;
 } while(true)
->true : boolean
+>true : true
 
 ONE:
 >ONE : any
@@ -13,7 +12,7 @@ do {
 >ONE : any
 }
 while (true)
->true : boolean
+>true : true
 
 TWO:
 >TWO : any
@@ -26,7 +25,7 @@ do {
 >THREE : any
 
 }while (true)
->true : boolean
+>true : true
 
 FOUR:
 >FOUR : any
@@ -40,10 +39,10 @@ do {
 >FOUR : any
 
     }while (true)
->true : boolean
+>true : true
 
 }while (true)
->true : boolean
+>true : true
 
 do {
     SIX:
@@ -51,19 +50,19 @@ do {
 
     do continue SIX; while(true)
 >SIX : any
->true : boolean
+>true : true
 
 }while (true)
->true : boolean
+>true : true
 
 SEVEN:
 >SEVEN : any
 
 do do do continue SEVEN; while (true) while (true)  while (true)
 >SEVEN : any
->true : boolean
->true : boolean
->true : boolean
+>true : true
+>true : true
+>true : true
 
 EIGHT:
 >EIGHT : any
@@ -77,5 +76,5 @@ do{
 >EIGHT : any
 
 }while(true)
->true : boolean
+>true : true
 

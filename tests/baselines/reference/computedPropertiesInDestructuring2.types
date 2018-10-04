@@ -2,7 +2,7 @@
 let foo2 = () => "bar";
 >foo2 : () => string
 >() => "bar" : () => string
->"bar" : string
+>"bar" : "bar"
 
 let {[foo2()]: bar3} = {};
 >foo2() : string

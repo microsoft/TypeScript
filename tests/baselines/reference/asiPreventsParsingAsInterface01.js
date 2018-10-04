@@ -1,5 +1,4 @@
 //// [asiPreventsParsingAsInterface01.ts]
-
 var interface: number, I: string;
 
 interface   // This should be the identifier 'interface'

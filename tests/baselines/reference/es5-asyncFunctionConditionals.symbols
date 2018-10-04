@@ -1,0 +1,38 @@
+=== tests/cases/compiler/es5-asyncFunctionConditionals.ts ===
+declare var x, y, z, a, b, c;
+>x : Symbol(x, Decl(es5-asyncFunctionConditionals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionConditionals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionConditionals.ts, 0, 17))
+>a : Symbol(a, Decl(es5-asyncFunctionConditionals.ts, 0, 20))
+>b : Symbol(b, Decl(es5-asyncFunctionConditionals.ts, 0, 23))
+>c : Symbol(c, Decl(es5-asyncFunctionConditionals.ts, 0, 26))
+
+async function conditional0() {
+>conditional0 : Symbol(conditional0, Decl(es5-asyncFunctionConditionals.ts, 0, 29))
+
+    a = (await x) ? y : z;
+>a : Symbol(a, Decl(es5-asyncFunctionConditionals.ts, 0, 20))
+>x : Symbol(x, Decl(es5-asyncFunctionConditionals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionConditionals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionConditionals.ts, 0, 17))
+}
+
+async function conditional1() {
+>conditional1 : Symbol(conditional1, Decl(es5-asyncFunctionConditionals.ts, 4, 1))
+
+    a = x ? await y : z;
+>a : Symbol(a, Decl(es5-asyncFunctionConditionals.ts, 0, 20))
+>x : Symbol(x, Decl(es5-asyncFunctionConditionals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionConditionals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionConditionals.ts, 0, 17))
+}
+
+async function conditional2() {
+>conditional2 : Symbol(conditional2, Decl(es5-asyncFunctionConditionals.ts, 8, 1))
+
+    a = x ? y : await z;
+>a : Symbol(a, Decl(es5-asyncFunctionConditionals.ts, 0, 20))
+>x : Symbol(x, Decl(es5-asyncFunctionConditionals.ts, 0, 11))
+>y : Symbol(y, Decl(es5-asyncFunctionConditionals.ts, 0, 14))
+>z : Symbol(z, Decl(es5-asyncFunctionConditionals.ts, 0, 17))
+}

@@ -1,8 +1,6 @@
 === tests/cases/compiler/asyncawait.ts ===
-
 export function async<T>(...args: any[]): any { }
 >async : <T>(...args: any[]) => any
->T : T
 >args : any[]
 
 export function await(...args: any[]): any { }
@@ -24,12 +22,12 @@ export default async(() => await(Promise.resolve(1)));
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
->1 : number
+>1 : 1
 
 === tests/cases/compiler/b.ts ===
 export default async () => { return 0; };
 >async () => { return 0; } : () => Promise<number>
->0 : number
+>0 : 0
 
 === tests/cases/compiler/c.ts ===
 import { async, await } from 'asyncawait';

@@ -1,11 +1,7 @@
-tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(1,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(15,1): error TS2557: Expected at least 1 arguments, but got 0 or more.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts (1 errors) ====
-    foo(...new SymbolIterator);
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
-    
     function foo(s1: symbol, ...s: symbol[]) { }
     class SymbolIterator {
         next() {
@@ -19,3 +15,8 @@ tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts(1,1): error TS2346: 
             return this;
         }
     }
+    
+    foo(...new SymbolIterator);
+    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2557: Expected at least 1 arguments, but got 0 or more.
+!!! related TS6210 tests/cases/conformance/es6/spread/iteratorSpreadInCall4.ts:1:14: An argument for 's1' was not provided.

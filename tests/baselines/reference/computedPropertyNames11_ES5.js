@@ -17,6 +17,7 @@ var v = {
 }
 
 //// [computedPropertyNames11_ES5.js]
+var _a;
 var s;
 var n;
 var a;
@@ -76,6 +77,4 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    _a
-);
-var _a;
+    _a);

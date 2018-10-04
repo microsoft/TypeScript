@@ -1,0 +1,3 @@
+=== tests/cases/compiler/breakNotInIterationOrSwitchStatement1.ts ===
+break;
+No type information for this code.

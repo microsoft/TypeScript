@@ -38,7 +38,7 @@ var d: boolean = null;
 
 var e: Date = null;
 >e : Symbol(e, Decl(nullAssignableToEveryType.ts, 15, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 var f: any = null;
 >f : Symbol(f, Decl(nullAssignableToEveryType.ts, 16, 3))
@@ -48,7 +48,7 @@ var g: void = null;
 
 var h: Object = null;
 >h : Symbol(h, Decl(nullAssignableToEveryType.ts, 18, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var i: {} = null;
 >i : Symbol(i, Decl(nullAssignableToEveryType.ts, 19, 3))
@@ -58,7 +58,7 @@ var j: () => {} = null;
 
 var k: Function = null;
 >k : Symbol(k, Decl(nullAssignableToEveryType.ts, 21, 3))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var l: (x: number) => string = null;
 >l : Symbol(l, Decl(nullAssignableToEveryType.ts, 22, 3))
@@ -89,18 +89,18 @@ var o: <T>(x: T) => T = null;
 
 var p: Number = null;
 >p : Symbol(p, Decl(nullAssignableToEveryType.ts, 29, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var q: String = null;
 >q : Symbol(q, Decl(nullAssignableToEveryType.ts, 30, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function foo<T, U, V extends Date>(x: T, y: U, z: V) {
 >foo : Symbol(foo, Decl(nullAssignableToEveryType.ts, 30, 21))
 >T : Symbol(T, Decl(nullAssignableToEveryType.ts, 32, 13))
 >U : Symbol(U, Decl(nullAssignableToEveryType.ts, 32, 15))
 >V : Symbol(V, Decl(nullAssignableToEveryType.ts, 32, 18))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >x : Symbol(x, Decl(nullAssignableToEveryType.ts, 32, 35))
 >T : Symbol(T, Decl(nullAssignableToEveryType.ts, 32, 13))
 >y : Symbol(y, Decl(nullAssignableToEveryType.ts, 32, 40))

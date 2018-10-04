@@ -7,6 +7,6 @@ function* gen() {
 >x : string
 >`abc${ yield 10 }def` : string
 >yield 10 : any
->10 : number
+>10 : 10
 }
 

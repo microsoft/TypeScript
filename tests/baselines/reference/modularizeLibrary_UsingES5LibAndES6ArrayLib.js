@@ -1,5 +1,4 @@
 //// [modularizeLibrary_UsingES5LibAndES6ArrayLib.ts]
-
 // No error
 function f(x: number, y: number, z: number) {
     return Array.from(arguments);

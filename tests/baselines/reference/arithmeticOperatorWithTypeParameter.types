@@ -1,0 +1,681 @@
+=== tests/cases/conformance/expressions/binaryOperators/arithmeticOperator/arithmeticOperatorWithTypeParameter.ts ===
+// type parameter type is not valid for arithmetic operand
+function foo<T>(t: T) {
+>foo : <T>(t: T) => void
+>t : T
+
+    var a: any;
+>a : any
+
+    var b: boolean;
+>b : boolean
+
+    var c: number;
+>c : number
+
+    var d: string;
+>d : string
+
+    var e: {};
+>e : {}
+
+    var r1a1 = a * t;
+>r1a1 : number
+>a * t : number
+>a : any
+>t : T
+
+    var r1a2 = a / t;
+>r1a2 : number
+>a / t : number
+>a : any
+>t : T
+
+    var r1a3 = a % t;
+>r1a3 : number
+>a % t : number
+>a : any
+>t : T
+
+    var r1a4 = a - t;
+>r1a4 : number
+>a - t : number
+>a : any
+>t : T
+
+    var r1a5 = a << t;
+>r1a5 : number
+>a << t : number
+>a : any
+>t : T
+
+    var r1a6 = a >> t;
+>r1a6 : number
+>a >> t : number
+>a : any
+>t : T
+
+    var r1a7 = a >>> t;
+>r1a7 : number
+>a >>> t : number
+>a : any
+>t : T
+
+    var r1a8 = a & t;
+>r1a8 : number
+>a & t : number
+>a : any
+>t : T
+
+    var r1a9 = a ^ t;
+>r1a9 : number
+>a ^ t : number
+>a : any
+>t : T
+
+    var r1a10 = a | t;
+>r1a10 : number
+>a | t : number
+>a : any
+>t : T
+
+    var r2a1 = t * a;
+>r2a1 : number
+>t * a : number
+>t : T
+>a : any
+
+    var r2a2 = t / a;
+>r2a2 : number
+>t / a : number
+>t : T
+>a : any
+
+    var r2a3 = t % a;
+>r2a3 : number
+>t % a : number
+>t : T
+>a : any
+
+    var r2a4 = t - a;
+>r2a4 : number
+>t - a : number
+>t : T
+>a : any
+
+    var r2a5 = t << a;
+>r2a5 : number
+>t << a : number
+>t : T
+>a : any
+
+    var r2a6 = t >> a;
+>r2a6 : number
+>t >> a : number
+>t : T
+>a : any
+
+    var r2a7 = t >>> a;
+>r2a7 : number
+>t >>> a : number
+>t : T
+>a : any
+
+    var r2a8 = t & a;
+>r2a8 : number
+>t & a : number
+>t : T
+>a : any
+
+    var r2a9 = t ^ a;
+>r2a9 : number
+>t ^ a : number
+>t : T
+>a : any
+
+    var r2a10 = t | a;
+>r2a10 : number
+>t | a : number
+>t : T
+>a : any
+
+    var r1b1 = b * t;
+>r1b1 : number
+>b * t : number
+>b : boolean
+>t : T
+
+    var r1b2 = b / t;
+>r1b2 : number
+>b / t : number
+>b : boolean
+>t : T
+
+    var r1b3 = b % t;
+>r1b3 : number
+>b % t : number
+>b : boolean
+>t : T
+
+    var r1b4 = b - t;
+>r1b4 : number
+>b - t : number
+>b : boolean
+>t : T
+
+    var r1b5 = b << t;
+>r1b5 : number
+>b << t : number
+>b : boolean
+>t : T
+
+    var r1b6 = b >> t;
+>r1b6 : number
+>b >> t : number
+>b : boolean
+>t : T
+
+    var r1b7 = b >>> t;
+>r1b7 : number
+>b >>> t : number
+>b : boolean
+>t : T
+
+    var r1b8 = b & t;
+>r1b8 : number
+>b & t : number
+>b : boolean
+>t : T
+
+    var r1b9 = b ^ t;
+>r1b9 : number
+>b ^ t : number
+>b : boolean
+>t : T
+
+    var r1b10 = b | t;
+>r1b10 : number
+>b | t : number
+>b : boolean
+>t : T
+
+    var r2b1 = t * b;
+>r2b1 : number
+>t * b : number
+>t : T
+>b : boolean
+
+    var r2b2 = t / b;
+>r2b2 : number
+>t / b : number
+>t : T
+>b : boolean
+
+    var r2b3 = t % b;
+>r2b3 : number
+>t % b : number
+>t : T
+>b : boolean
+
+    var r2b4 = t - b;
+>r2b4 : number
+>t - b : number
+>t : T
+>b : boolean
+
+    var r2b5 = t << b;
+>r2b5 : number
+>t << b : number
+>t : T
+>b : boolean
+
+    var r2b6 = t >> b;
+>r2b6 : number
+>t >> b : number
+>t : T
+>b : boolean
+
+    var r2b7 = t >>> b;
+>r2b7 : number
+>t >>> b : number
+>t : T
+>b : boolean
+
+    var r2b8 = t & b;
+>r2b8 : number
+>t & b : number
+>t : T
+>b : boolean
+
+    var r2b9 = t ^ b;
+>r2b9 : number
+>t ^ b : number
+>t : T
+>b : boolean
+
+    var r2b10 = t | b;
+>r2b10 : number
+>t | b : number
+>t : T
+>b : boolean
+
+    var r1c1 = c * t;
+>r1c1 : number
+>c * t : number
+>c : number
+>t : T
+
+    var r1c2 = c / t;
+>r1c2 : number
+>c / t : number
+>c : number
+>t : T
+
+    var r1c3 = c % t;
+>r1c3 : number
+>c % t : number
+>c : number
+>t : T
+
+    var r1c4 = c - t;
+>r1c4 : number
+>c - t : number
+>c : number
+>t : T
+
+    var r1c5 = c << t;
+>r1c5 : number
+>c << t : number
+>c : number
+>t : T
+
+    var r1c6 = c >> t;
+>r1c6 : number
+>c >> t : number
+>c : number
+>t : T
+
+    var r1c7 = c >>> t;
+>r1c7 : number
+>c >>> t : number
+>c : number
+>t : T
+
+    var r1c8 = c & t;
+>r1c8 : number
+>c & t : number
+>c : number
+>t : T
+
+    var r1c9 = c ^ t;
+>r1c9 : number
+>c ^ t : number
+>c : number
+>t : T
+
+    var r1c10 = c | t;
+>r1c10 : number
+>c | t : number
+>c : number
+>t : T
+
+    var r2c1 = t * c;
+>r2c1 : number
+>t * c : number
+>t : T
+>c : number
+
+    var r2c2 = t / c;
+>r2c2 : number
+>t / c : number
+>t : T
+>c : number
+
+    var r2c3 = t % c;
+>r2c3 : number
+>t % c : number
+>t : T
+>c : number
+
+    var r2c4 = t - c;
+>r2c4 : number
+>t - c : number
+>t : T
+>c : number
+
+    var r2c5 = t << c;
+>r2c5 : number
+>t << c : number
+>t : T
+>c : number
+
+    var r2c6 = t >> c;
+>r2c6 : number
+>t >> c : number
+>t : T
+>c : number
+
+    var r2c7 = t >>> c;
+>r2c7 : number
+>t >>> c : number
+>t : T
+>c : number
+
+    var r2c8 = t & c;
+>r2c8 : number
+>t & c : number
+>t : T
+>c : number
+
+    var r2c9 = t ^ c;
+>r2c9 : number
+>t ^ c : number
+>t : T
+>c : number
+
+    var r2c10 = t | c;
+>r2c10 : number
+>t | c : number
+>t : T
+>c : number
+
+    var r1d1 = d * t;
+>r1d1 : number
+>d * t : number
+>d : string
+>t : T
+
+    var r1d2 = d / t;
+>r1d2 : number
+>d / t : number
+>d : string
+>t : T
+
+    var r1d3 = d % t;
+>r1d3 : number
+>d % t : number
+>d : string
+>t : T
+
+    var r1d4 = d - t;
+>r1d4 : number
+>d - t : number
+>d : string
+>t : T
+
+    var r1d5 = d << t;
+>r1d5 : number
+>d << t : number
+>d : string
+>t : T
+
+    var r1d6 = d >> t;
+>r1d6 : number
+>d >> t : number
+>d : string
+>t : T
+
+    var r1d7 = d >>> t;
+>r1d7 : number
+>d >>> t : number
+>d : string
+>t : T
+
+    var r1d8 = d & t;
+>r1d8 : number
+>d & t : number
+>d : string
+>t : T
+
+    var r1d9 = d ^ t;
+>r1d9 : number
+>d ^ t : number
+>d : string
+>t : T
+
+    var r1d10 = d | t;
+>r1d10 : number
+>d | t : number
+>d : string
+>t : T
+
+    var r2d1 = t * d;
+>r2d1 : number
+>t * d : number
+>t : T
+>d : string
+
+    var r2d2 = t / d;
+>r2d2 : number
+>t / d : number
+>t : T
+>d : string
+
+    var r2d3 = t % d;
+>r2d3 : number
+>t % d : number
+>t : T
+>d : string
+
+    var r2d4 = t - d;
+>r2d4 : number
+>t - d : number
+>t : T
+>d : string
+
+    var r2d5 = t << d;
+>r2d5 : number
+>t << d : number
+>t : T
+>d : string
+
+    var r2d6 = t >> d;
+>r2d6 : number
+>t >> d : number
+>t : T
+>d : string
+
+    var r2d7 = t >>> d;
+>r2d7 : number
+>t >>> d : number
+>t : T
+>d : string
+
+    var r2d8 = t & d;
+>r2d8 : number
+>t & d : number
+>t : T
+>d : string
+
+    var r2d9 = t ^ d;
+>r2d9 : number
+>t ^ d : number
+>t : T
+>d : string
+
+    var r2d10 = t | d;
+>r2d10 : number
+>t | d : number
+>t : T
+>d : string
+
+    var r1e1 = e * t;
+>r1e1 : number
+>e * t : number
+>e : {}
+>t : T
+
+    var r1e2 = e / t;
+>r1e2 : number
+>e / t : number
+>e : {}
+>t : T
+
+    var r1e3 = e % t;
+>r1e3 : number
+>e % t : number
+>e : {}
+>t : T
+
+    var r1e4 = e - t;
+>r1e4 : number
+>e - t : number
+>e : {}
+>t : T
+
+    var r1e5 = e << t;
+>r1e5 : number
+>e << t : number
+>e : {}
+>t : T
+
+    var r1e6 = e >> t;
+>r1e6 : number
+>e >> t : number
+>e : {}
+>t : T
+
+    var r1e7 = e >>> t;
+>r1e7 : number
+>e >>> t : number
+>e : {}
+>t : T
+
+    var r1e8 = e & t;
+>r1e8 : number
+>e & t : number
+>e : {}
+>t : T
+
+    var r1e9 = e ^ t;
+>r1e9 : number
+>e ^ t : number
+>e : {}
+>t : T
+
+    var r1e10 = e | t;
+>r1e10 : number
+>e | t : number
+>e : {}
+>t : T
+
+    var r2e1 = t * e;
+>r2e1 : number
+>t * e : number
+>t : T
+>e : {}
+
+    var r2e2 = t / e;
+>r2e2 : number
+>t / e : number
+>t : T
+>e : {}
+
+    var r2e3 = t % e;
+>r2e3 : number
+>t % e : number
+>t : T
+>e : {}
+
+    var r2e4 = t - e;
+>r2e4 : number
+>t - e : number
+>t : T
+>e : {}
+
+    var r2e5 = t << e;
+>r2e5 : number
+>t << e : number
+>t : T
+>e : {}
+
+    var r2e6 = t >> e;
+>r2e6 : number
+>t >> e : number
+>t : T
+>e : {}
+
+    var r2e7 = t >>> e;
+>r2e7 : number
+>t >>> e : number
+>t : T
+>e : {}
+
+    var r2e8 = t & e;
+>r2e8 : number
+>t & e : number
+>t : T
+>e : {}
+
+    var r2e9 = t ^ e;
+>r2e9 : number
+>t ^ e : number
+>t : T
+>e : {}
+
+    var r2e10 = t | e;
+>r2e10 : number
+>t | e : number
+>t : T
+>e : {}
+
+    var r1f1 = t * t;
+>r1f1 : number
+>t * t : number
+>t : T
+>t : T
+
+    var r1f2 = t / t;
+>r1f2 : number
+>t / t : number
+>t : T
+>t : T
+
+    var r1f3 = t % t;
+>r1f3 : number
+>t % t : number
+>t : T
+>t : T
+
+    var r1f4 = t - t;
+>r1f4 : number
+>t - t : number
+>t : T
+>t : T
+
+    var r1f5 = t << t;
+>r1f5 : number
+>t << t : number
+>t : T
+>t : T
+
+    var r1f6 = t >> t;
+>r1f6 : number
+>t >> t : number
+>t : T
+>t : T
+
+    var r1f7 = t >>> t;
+>r1f7 : number
+>t >>> t : number
+>t : T
+>t : T
+
+    var r1f8 = t & t;
+>r1f8 : number
+>t & t : number
+>t : T
+>t : T
+
+    var r1f9 = t ^ t;
+>r1f9 : number
+>t ^ t : number
+>t : T
+>t : T
+
+    var r1f10 = t | t;
+>r1f10 : number
+>t | t : number
+>t : T
+>t : T
+}

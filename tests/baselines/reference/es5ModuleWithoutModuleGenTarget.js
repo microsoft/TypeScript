@@ -13,7 +13,8 @@ export class A
 
 //// [es5ModuleWithoutModuleGenTarget.js]
 "use strict";
-var A = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.B = function () {

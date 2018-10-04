@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsx/jsxAndTypeAssertion.tsx ===
+declare var createElement: any;
+>createElement : Symbol(createElement, Decl(jsxAndTypeAssertion.tsx, 0, 11))
+
+class foo {}
+>foo : Symbol(foo, Decl(jsxAndTypeAssertion.tsx, 0, 31))
+
+var x: any;
+>x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
+
+x = <any> { test: <any></any> };
+>x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
+
+x = <any><any></any>;
+ 
+x = <foo>hello {<foo>{}} </foo>;
+
+x = <foo test={<foo>{}}>hello</foo>;
+>test : Symbol(test, Decl(jsxAndTypeAssertion.tsx, 11, 8))
+
+x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
+>test : Symbol(test, Decl(jsxAndTypeAssertion.tsx, 13, 8))
+
+x = <foo>x</foo>, x = <foo/>;
+
+<foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
+>/foo/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
+
+    
+

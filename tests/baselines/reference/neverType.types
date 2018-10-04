@@ -1,6 +1,4 @@
 === tests/cases/conformance/types/never/neverType.ts ===
-
-
 function error(message: string): never {
 >error : (message: string) => never
 >message : string
@@ -27,7 +25,7 @@ function fail() {
     return error("Something failed");
 >error("Something failed") : never
 >error : (message: string) => never
->"Something failed" : string
+>"Something failed" : "Something failed"
 }
 
 function failOrThrow(shouldFail: boolean) {
@@ -50,7 +48,7 @@ function infiniteLoop1() {
 >infiniteLoop1 : () => void
 
     while (true) {
->true : boolean
+>true : true
     }
 }
 
@@ -58,12 +56,12 @@ function infiniteLoop2(): never {
 >infiniteLoop2 : () => never
 
     while (true) {
->true : boolean
+>true : true
     }
 }
 
 function move1(direction: "up" | "down") {
->move1 : (direction: "up" | "down") => number
+>move1 : (direction: "up" | "down") => 1 | -1
 >direction : "up" | "down"
 
     switch (direction) {
@@ -73,58 +71,56 @@ function move1(direction: "up" | "down") {
 >"up" : "up"
 
             return 1;
->1 : number
+>1 : 1
 
         case "down":
 >"down" : "down"
 
             return -1; 
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
     }
     return error("Should never get here");
 >error("Should never get here") : never
 >error : (message: string) => never
->"Should never get here" : string
+>"Should never get here" : "Should never get here"
 }
 
 function move2(direction: "up" | "down") {
->move2 : (direction: "up" | "down") => number
+>move2 : (direction: "up" | "down") => 1 | -1
 >direction : "up" | "down"
 
     return direction === "up" ? 1 :
->direction === "up" ? 1 :        direction === "down" ? -1 :        error("Should never get here") : number
+>direction === "up" ? 1 :        direction === "down" ? -1 :        error("Should never get here") : 1 | -1
 >direction === "up" : boolean
 >direction : "up" | "down"
 >"up" : "up"
->1 : number
+>1 : 1
 
         direction === "down" ? -1 :
->direction === "down" ? -1 :        error("Should never get here") : number
+>direction === "down" ? -1 :        error("Should never get here") : -1
 >direction === "down" : boolean
 >direction : "down"
 >"down" : "down"
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
         error("Should never get here");
 >error("Should never get here") : never
 >error : (message: string) => never
->"Should never get here" : string
+>"Should never get here" : "Should never get here"
 }
 
 function check<T>(x: T | undefined) {
 >check : <T>(x: T | undefined) => T
->T : T
 >x : T | undefined
->T : T
 
     return x || error("Undefined value");
 >x || error("Undefined value") : T
 >x : T | undefined
 >error("Undefined value") : never
 >error : (message: string) => never
->"Undefined value" : string
+>"Undefined value" : "Undefined value"
 }
 
 class C {
@@ -141,7 +137,7 @@ class C {
 >void2 : () => void
 
         while (true) {}
->true : boolean
+>true : true
     }
     never1(): never {
 >never1 : () => never
@@ -154,7 +150,7 @@ class C {
 >never2 : () => never
 
         while (true) {}
->true : boolean
+>true : true
     }
 }
 
@@ -164,7 +160,7 @@ function f1(x: string | number) {
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"boolean" : "boolean"
 
@@ -178,11 +174,11 @@ function f2(x: string | number) {
 >x : string | number
 
     while (true) {
->true : boolean
+>true : true
 
         if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : string
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"boolean" : "boolean"
 
@@ -210,13 +206,13 @@ let errorCallback = () => error("Error callback");
 >() => error("Error callback") : () => never
 >error("Error callback") : never
 >error : (message: string) => never
->"Error callback" : string
+>"Error callback" : "Error callback"
 
 test(() => "hello");
 >test(() => "hello") : string
 >test : (cb: () => string) => string
 >() => "hello" : () => string
->"hello" : string
+>"hello" : "hello"
 
 test(() => fail());
 >test(() => fail()) : string

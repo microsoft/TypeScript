@@ -1,0 +1,100 @@
+=== tests/cases/compiler/strictModeInConstructor.ts ===
+class A {
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+}
+
+ 
+
+class B extends A {
+>B : Symbol(B, Decl(strictModeInConstructor.ts, 1, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public s: number = 9;
+>s : Symbol(B.s, Decl(strictModeInConstructor.ts, 5, 19))
+
+    constructor () {
+        "use strict";   // No error
+        super();
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+    }
+}
+
+class C extends A {
+>C : Symbol(C, Decl(strictModeInConstructor.ts, 12, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public s: number = 9;
+>s : Symbol(C.s, Decl(strictModeInConstructor.ts, 14, 19))
+
+    constructor () {
+        super();            // No error
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+        "use strict";
+    }
+}
+
+class D extends A {
+>D : Symbol(D, Decl(strictModeInConstructor.ts, 21, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public s: number = 9;
+>s : Symbol(D.s, Decl(strictModeInConstructor.ts, 23, 19))
+
+    constructor () {
+        var x = 1; // Error
+>x : Symbol(x, Decl(strictModeInConstructor.ts, 27, 11))
+
+        super();
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+        "use strict";
+    }
+}
+
+class Bs extends A {
+>Bs : Symbol(Bs, Decl(strictModeInConstructor.ts, 31, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public static s: number = 9;
+>s : Symbol(Bs.s, Decl(strictModeInConstructor.ts, 33, 20))
+
+    constructor () {
+        "use strict";   // No error
+        super();
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+    }
+}
+
+class Cs extends A {
+>Cs : Symbol(Cs, Decl(strictModeInConstructor.ts, 40, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public static s: number = 9;
+>s : Symbol(Cs.s, Decl(strictModeInConstructor.ts, 42, 20))
+
+    constructor () {
+        super();            // No error
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+        "use strict";
+    }
+}
+
+class Ds extends A {
+>Ds : Symbol(Ds, Decl(strictModeInConstructor.ts, 49, 1))
+>A : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+    public static s: number = 9;
+>s : Symbol(Ds.s, Decl(strictModeInConstructor.ts, 51, 20))
+
+    constructor () {
+        var x = 1; // no Error
+>x : Symbol(x, Decl(strictModeInConstructor.ts, 55, 11))
+
+        super();
+>super : Symbol(A, Decl(strictModeInConstructor.ts, 0, 0))
+
+        "use strict";
+    }
+}

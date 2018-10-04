@@ -1,0 +1,9 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/AccessibilityAfterStatic/parserAccessibilityAfterStatic10.ts ===
+class Outer
+>Outer : Symbol(Outer, Decl(parserAccessibilityAfterStatic10.ts, 0, 0))
+{
+static public intI<T>() {}
+>intI : Symbol(Outer.intI, Decl(parserAccessibilityAfterStatic10.ts, 1, 1))
+>T : Symbol(T, Decl(parserAccessibilityAfterStatic10.ts, 2, 19))
+}
+

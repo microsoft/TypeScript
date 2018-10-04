@@ -6,8 +6,9 @@ enum ENUM { };
 
 enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
->A : ENUM1
->B : ENUM1
+>A : ENUM1.A
+>B : ENUM1.B
+>"" : ENUM1.
 
 // enum type var
 var ResultIsNumber1 = -ENUM;
@@ -19,21 +20,21 @@ var ResultIsNumber1 = -ENUM;
 var ResultIsNumber2 = -ENUM1["B"];
 >ResultIsNumber2 : number
 >-ENUM1["B"] : number
->ENUM1["B"] : ENUM1
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 >ResultIsNumber3 : number
 >-(ENUM1.B + ENUM1[""]) : number
 >(ENUM1.B + ENUM1[""]) : number
 >ENUM1.B + ENUM1[""] : number
->ENUM1.B : ENUM1
+>ENUM1.B : ENUM1.B
 >ENUM1 : typeof ENUM1
->B : ENUM1
->ENUM1[""] : ENUM1
+>B : ENUM1.B
+>ENUM1[""] : ENUM1.
 >ENUM1 : typeof ENUM1
->"" : string
+>"" : ""
 
 // miss assignment operators
 -ENUM;
@@ -46,9 +47,9 @@ var ResultIsNumber3 = -(ENUM1.B + ENUM1[""]);
 
 -ENUM1["B"];
 >-ENUM1["B"] : number
->ENUM1["B"] : ENUM1
+>ENUM1["B"] : ENUM1.B
 >ENUM1 : typeof ENUM1
->"B" : string
+>"B" : "B"
 
 -ENUM, ENUM1;
 >-ENUM, ENUM1 : typeof ENUM1

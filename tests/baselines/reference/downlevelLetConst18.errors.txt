@@ -1,9 +1,8 @@
-tests/cases/compiler/downlevelLetConst18.ts(5,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
-tests/cases/compiler/downlevelLetConst18.ts(9,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+tests/cases/compiler/downlevelLetConst18.ts(4,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
+tests/cases/compiler/downlevelLetConst18.ts(8,14): error TS1250: Function declarations are not allowed inside blocks in strict mode when targeting 'ES3' or 'ES5'.
 
 
 ==== tests/cases/compiler/downlevelLetConst18.ts (2 errors) ====
-    
     'use strict'
     
     for (let x; ;) {

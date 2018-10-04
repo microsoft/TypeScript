@@ -7,32 +7,29 @@ type TreeNode = {
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 type TreeNodeMiddleman = {
->TreeNodeMiddleman : { name: string; parent: TreeNode; }
+>TreeNodeMiddleman : TreeNodeMiddleman
 
     name: string;
 >name : string
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 var nodes: TreeNodeMiddleman[];
->nodes : { name: string; parent: TreeNode; }[]
->TreeNodeMiddleman : { name: string; parent: TreeNode; }
+>nodes : TreeNodeMiddleman[]
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
->nodes.map : <U>(callbackfn: (value: { name: string; parent: TreeNode; }, index: number, array: { name: string; parent: TreeNode; }[]) => U, thisArg?: any) => U[]
->nodes : { name: string; parent: TreeNode; }[]
->map : <U>(callbackfn: (value: { name: string; parent: TreeNode; }, index: number, array: { name: string; parent: TreeNode; }[]) => U, thisArg?: any) => U[]
->n => n.name : (n: { name: string; parent: TreeNode; }) => string
->n : { name: string; parent: TreeNode; }
+>nodes.map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
+>nodes : TreeNodeMiddleman[]
+>map : <U>(callbackfn: (value: TreeNodeMiddleman, index: number, array: TreeNodeMiddleman[]) => U, thisArg?: any) => U[]
+>n => n.name : (n: TreeNodeMiddleman) => string
+>n : TreeNodeMiddleman
 >n.name : string
->n : { name: string; parent: TreeNode; }
+>n : TreeNodeMiddleman
 >name : string
 

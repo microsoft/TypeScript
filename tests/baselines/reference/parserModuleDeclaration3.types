@@ -1,0 +1,6 @@
+=== tests/cases/conformance/parser/ecmascript5/ModuleDeclarations/parserModuleDeclaration3.ts ===
+declare module M {
+No type information for this code.  declare module M2 {
+No type information for this code.  }
+No type information for this code.}
+No type information for this code.

@@ -22,7 +22,7 @@ var f4 = (x: string, y: number, z = 10) => { }
 >x : string
 >y : number
 >z : number
->10 : number
+>10 : 10
 
 function foo(func: () => boolean) { }
 >foo : (func: () => boolean) => void
@@ -31,12 +31,12 @@ function foo(func: () => boolean) { }
 foo(() => true);
 >foo(() => true) : void
 >foo : (func: () => boolean) => void
->() => true : () => boolean
->true : boolean
+>() => true : () => true
+>true : true
 
 foo(() => { return false; });
 >foo(() => { return false; }) : void
 >foo : (func: () => boolean) => void
->() => { return false; } : () => boolean
->false : boolean
+>() => { return false; } : () => false
+>false : false
 

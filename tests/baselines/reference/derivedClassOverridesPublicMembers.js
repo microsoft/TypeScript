@@ -63,14 +63,22 @@ var r8 = d2[1];
 
 
 //// [derivedClassOverridesPublicMembers.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var x;
 var y;
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base(a) {
     }
     Base.prototype.b = function (a) { };
@@ -89,10 +97,10 @@ var Base = (function () {
     });
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived(a) {
-        _super.call(this, x);
+        return _super.call(this, x) || this;
     }
     Derived.prototype.b = function (a) { };
     Object.defineProperty(Derived.prototype, "c", {
@@ -121,15 +129,15 @@ var r5 = Derived.s(y);
 var r6 = Derived.t;
 var r6a = Derived.u;
 Derived.t = y;
-var Base2 = (function () {
+var Base2 = /** @class */ (function () {
     function Base2() {
     }
     return Base2;
 }());
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Base2));

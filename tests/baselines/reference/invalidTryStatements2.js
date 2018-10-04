@@ -1,64 +1,51 @@
 //// [invalidTryStatements2.ts]
 function fn() {
-    try {
-    } catch { // syntax error, missing '(x)'
-    }
-
     catch(x) { } // error missing try
 
-    finally{ } // potential error; can be absorbed by the 'catch'
+    finally { } // potential error; can be absorbed by the 'catch'
+
+    try { }; // error missing finally
 }
 
 function fn2() {
     finally { } // error missing try
     catch (x) { } // error missing try
+    
+    try { } finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
 
-    // no error
-    try {
-    }
-    finally {
-    }
+    finally { } // error missing try
+    
+    catch (x) { } // error missing try
 
-    // error missing try
-    finally {
-    }
-
-    // error missing try
-    catch (x) {
-    }
+    try { } catch () { } // error missing catch binding
 }
 
 //// [invalidTryStatements2.js]
 function fn() {
     try {
     }
-    catch () {
-    }
-    try {
-    }
     catch (x) { } // error missing try
     finally { } // potential error; can be absorbed by the 'catch'
+    try { }
+    finally { // error missing finally
+     } // error missing finally
+    ; // error missing finally
 }
 function fn2() {
     try {
     }
     finally { } // error missing try
     try {
-    } // error missing try
+    }
     catch (x) { } // error missing try
-    // no error
+    try { }
+    finally { } // statement is here, so the 'catch' clause above doesn't absorb errors from the 'finally' clause below
     try {
     }
-    finally {
-    }
-    // error missing try
+    finally { } // error missing try
     try {
     }
-    finally {
-    }
-    // error missing try
-    try {
-    }
-    catch (x) {
-    }
+    catch (x) { } // error missing try
+    try { }
+    catch () { } // error missing catch binding
 }

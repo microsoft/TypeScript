@@ -9,7 +9,7 @@ try { } catch (error) {
 >error : any
 >number : any
 >-2147024809 : -2147024809
->2147024809 : number
+>2147024809 : 2147024809
 }
 for (var key in this) { }
 >key : string
@@ -22,7 +22,7 @@ class C {
 >temp : () => void
 
         for (var x in this) {
->x : string
+>x : Extract<keyof this, string>
 >this : this
         }
     }

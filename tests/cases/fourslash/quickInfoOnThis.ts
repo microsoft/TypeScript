@@ -22,17 +22,12 @@
 ////    }
 ////}
 
-goTo.marker('0');
-verify.quickInfoIs('this: this');
-goTo.marker('1');
-verify.quickInfoIs('this: void');
-goTo.marker('2');
-verify.quickInfoIs('this: this');
-goTo.marker('3');
-verify.quickInfoIs('(parameter) this: Restricted');
-goTo.marker('4');
-verify.quickInfoIs('this: Restricted');
-goTo.marker('5');
-verify.quickInfoIs('(parameter) this: Foo');
-goTo.marker('6');
-verify.quickInfoIs('this: Foo');
+verify.quickInfos({
+    0: "this",
+    1: "this: void",
+    2: "this: this",
+    3: "(parameter) this: Restricted",
+    4: "this: Restricted",
+    5: "(parameter) this: Foo",
+    6: "this: Foo"
+});

@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/ComputedPropertyNames/parserES5ComputedPropertyName2.ts ===
+var v = { [e]: 1 };
+>v : { [x: number]: number; }
+>{ [e]: 1 } : { [x: number]: number; }
+>[e] : number
+>e : any
+>1 : 1
+

@@ -472,7 +472,7 @@ module TypeScript {
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
-    var AssignScopeContext = (function () {
+    var AssignScopeContext = /** @class */ (function () {
         function AssignScopeContext(scopeChain, typeFlow, modDeclChain) {
             this.scopeChain = scopeChain;
             this.typeFlow = typeFlow;
@@ -506,7 +506,7 @@ var TypeScript;
         return s.isInstanceProperty();
     }
     TypeScript.instanceFilterStop = instanceFilterStop;
-    var ScopeSearchFilter = (function () {
+    var ScopeSearchFilter = /** @class */ (function () {
         function ScopeSearchFilter(select, stop) {
             this.select = select;
             this.stop = stop;

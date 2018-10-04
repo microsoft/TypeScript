@@ -1,29 +1,21 @@
 === tests/cases/compiler/promiseVoidErrorCallback.ts ===
 interface T1 {
->T1 : T1
-
     __t1: string;
 >__t1 : string
 }
 
 interface T2 {
->T2 : T2
-
     __t2: string;
 >__t2 : string
 }
 
 interface T3 {
->T3 : T3
-
     __t3: string;
 >__t3 : string
 }
 
 function f1(): Promise<T1> {
 >f1 : () => Promise<T1>
->Promise : Promise<T>
->T1 : T1
 
     return Promise.resolve({ __t1: "foo_t1" });
 >Promise.resolve({ __t1: "foo_t1" }) : Promise<{ __t1: string; }>
@@ -32,14 +24,12 @@ function f1(): Promise<T1> {
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >{ __t1: "foo_t1" } : { __t1: string; }
 >__t1 : string
->"foo_t1" : string
+>"foo_t1" : "foo_t1"
 }
 
 function f2(x: T1): T2 {
 >f2 : (x: T1) => T2
 >x : T1
->T1 : T1
->T2 : T2
 
     return { __t2: x.__t1 + ":foo_21" };
 >{ __t2: x.__t1 + ":foo_21" } : { __t2: string; }
@@ -48,34 +38,32 @@ function f2(x: T1): T2 {
 >x.__t1 : string
 >x : T1
 >__t1 : string
->":foo_21" : string
+>":foo_21" : ":foo_21"
 }
 
 var x3 = f1()
 >x3 : Promise<{ __t3: string; }>
 >f1()    .then(f2, (e: Error) => {    throw e;})    .then((x: T2) => {    return { __t3: x.__t2 + "bar" };}) : Promise<{ __t3: string; }>
->f1()    .then(f2, (e: Error) => {    throw e;})    .then : { <TResult1, TResult2>(onfulfilled: (value: T2) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: T2) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: T2) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<T2>; }
+>f1()    .then(f2, (e: Error) => {    throw e;})    .then : <TResult1 = T2, TResult2 = never>(onfulfilled?: (value: T2) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >f1()    .then(f2, (e: Error) => {    throw e;}) : Promise<T2>
->f1()    .then : { <TResult1, TResult2>(onfulfilled: (value: T1) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: T1) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: T1) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<T1>; }
+>f1()    .then : <TResult1 = T1, TResult2 = never>(onfulfilled?: (value: T1) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >f1() : Promise<T1>
 >f1 : () => Promise<T1>
 
     .then(f2, (e: Error) => {
->then : { <TResult1, TResult2>(onfulfilled: (value: T1) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: T1) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: T1) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<T1>; }
+>then : <TResult1 = T1, TResult2 = never>(onfulfilled?: (value: T1) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >f2 : (x: T1) => T2
 >(e: Error) => {    throw e;} : (e: Error) => never
 >e : Error
->Error : Error
 
     throw e;
 >e : Error
 
 })
     .then((x: T2) => {
->then : { <TResult1, TResult2>(onfulfilled: (value: T2) => TResult1 | PromiseLike<TResult1>, onrejected: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <TResult>(onfulfilled: (value: T2) => TResult | PromiseLike<TResult>, onrejected: (reason: any) => TResult | PromiseLike<TResult>): Promise<TResult>; <TResult>(onfulfilled: (value: T2) => TResult | PromiseLike<TResult>): Promise<TResult>; (): Promise<T2>; }
+>then : <TResult1 = T2, TResult2 = never>(onfulfilled?: (value: T2) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>) => Promise<TResult1 | TResult2>
 >(x: T2) => {    return { __t3: x.__t2 + "bar" };} : (x: T2) => { __t3: string; }
 >x : T2
->T2 : T2
 
     return { __t3: x.__t2 + "bar" };
 >{ __t3: x.__t2 + "bar" } : { __t3: string; }
@@ -84,6 +72,6 @@ var x3 = f1()
 >x.__t2 : string
 >x : T2
 >__t2 : string
->"bar" : string
+>"bar" : "bar"
 
 });

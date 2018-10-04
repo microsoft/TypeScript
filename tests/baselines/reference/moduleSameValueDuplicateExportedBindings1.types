@@ -8,5 +8,5 @@ No type information for this code.
 No type information for this code.=== tests/cases/compiler/c.ts ===
 export var foo = 42;
 >foo : number
->42 : number
+>42 : 42
 

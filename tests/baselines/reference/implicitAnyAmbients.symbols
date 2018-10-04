@@ -1,0 +1,63 @@
+=== tests/cases/compiler/implicitAnyAmbients.ts ===
+declare module m {
+>m : Symbol(m, Decl(implicitAnyAmbients.ts, 0, 0))
+
+    var x; // error
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 1, 7))
+
+    var y: any;
+>y : Symbol(y, Decl(implicitAnyAmbients.ts, 2, 7))
+
+    function f(x); // error 
+>f : Symbol(f, Decl(implicitAnyAmbients.ts, 2, 15))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 4, 15))
+
+    function f2(x: any); // error
+>f2 : Symbol(f2, Decl(implicitAnyAmbients.ts, 4, 18))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 5, 16))
+
+    function f3(x: any): any;
+>f3 : Symbol(f3, Decl(implicitAnyAmbients.ts, 5, 24))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 6, 16))
+
+    interface I {
+>I : Symbol(I, Decl(implicitAnyAmbients.ts, 6, 29))
+
+        foo(); // error
+>foo : Symbol(I.foo, Decl(implicitAnyAmbients.ts, 8, 17))
+
+        foo2(x: any); // error
+>foo2 : Symbol(I.foo2, Decl(implicitAnyAmbients.ts, 9, 14))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 10, 13))
+
+        foo3(x: any): any;
+>foo3 : Symbol(I.foo3, Decl(implicitAnyAmbients.ts, 10, 21))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 11, 13))
+    }
+
+    class C {
+>C : Symbol(C, Decl(implicitAnyAmbients.ts, 12, 5))
+
+        foo(); // error
+>foo : Symbol(C.foo, Decl(implicitAnyAmbients.ts, 14, 13))
+
+        foo2(x: any); // error
+>foo2 : Symbol(C.foo2, Decl(implicitAnyAmbients.ts, 15, 14))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 16, 13))
+
+        foo3(x: any): any;
+>foo3 : Symbol(C.foo3, Decl(implicitAnyAmbients.ts, 16, 21))
+>x : Symbol(x, Decl(implicitAnyAmbients.ts, 17, 13))
+    }
+
+    module n {
+>n : Symbol(n, Decl(implicitAnyAmbients.ts, 18, 5))
+
+        var y; // error
+>y : Symbol(y, Decl(implicitAnyAmbients.ts, 21, 11))
+    }
+
+    import m2 = n;
+>m2 : Symbol(m2, Decl(implicitAnyAmbients.ts, 22, 5))
+>n : Symbol(n, Decl(implicitAnyAmbients.ts, 18, 5))
+}

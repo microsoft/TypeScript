@@ -1,0 +1,64 @@
+=== tests/cases/compiler/classBlockScoping.ts ===
+function f(b: boolean) {
+>f : Symbol(f, Decl(classBlockScoping.ts, 0, 0))
+>b : Symbol(b, Decl(classBlockScoping.ts, 0, 11))
+
+  let Foo: any;
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 1, 5))
+
+  if (b) {
+>b : Symbol(b, Decl(classBlockScoping.ts, 0, 11))
+
+    Foo = class Foo {
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 1, 5))
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+
+      static y = new Foo();
+>y : Symbol(Foo.y, Decl(classBlockScoping.ts, 3, 21))
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+
+      static x() {
+>x : Symbol(Foo.x, Decl(classBlockScoping.ts, 4, 27))
+
+        new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+      }
+
+      m() {
+>m : Symbol(Foo.m, Decl(classBlockScoping.ts, 8, 7))
+
+        new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 3, 9))
+      }
+    };
+
+    new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 1, 5))
+  }
+  else {
+    class Foo {
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+
+      static y = new Foo();
+>y : Symbol(Foo.y, Decl(classBlockScoping.ts, 18, 15))
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+
+      static x() {
+>x : Symbol(Foo.x, Decl(classBlockScoping.ts, 19, 27))
+
+        new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+      }
+
+      m() {
+>m : Symbol(Foo.m, Decl(classBlockScoping.ts, 23, 7))
+
+        new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+      }
+    }
+
+    new Foo();
+>Foo : Symbol(Foo, Decl(classBlockScoping.ts, 17, 8))
+  }
+}

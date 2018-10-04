@@ -1,5 +1,5 @@
 tests/cases/compiler/returnTypeParameter.ts(1,22): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/returnTypeParameter.ts(2,34): error TS2304: Cannot find name 'T'.
+tests/cases/compiler/returnTypeParameter.ts(2,34): error TS2693: 'T' only refers to a type, but is being used as a value here.
 
 
 ==== tests/cases/compiler/returnTypeParameter.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/returnTypeParameter.ts(2,34): error TS2304: Cannot find nam
 !!! error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
     function f2<T>(a: T): T { return T; } // bug was that this satisfied the return statement requirement
                                      ~
-!!! error TS2304: Cannot find name 'T'.
+!!! error TS2693: 'T' only refers to a type, but is being used as a value here.

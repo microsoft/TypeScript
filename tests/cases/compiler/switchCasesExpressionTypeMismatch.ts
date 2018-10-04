@@ -3,7 +3,7 @@ class Foo { }
 switch (0) {
     case Foo: break;    // Error
     case "sss": break;  // Error
-    case 123: break;    // No Error
+    case 123: break;    // Error
     case true: break;   // Error
 }
 

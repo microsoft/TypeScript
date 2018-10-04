@@ -2,9 +2,9 @@
 // @noLib: true
 
 ////[|this|];
-////function f([|this|]) {
+////function f([|{| "isWriteAccess": true, "isDefinition": true |}this|]) {
 ////    return [|this|];
-////    function g([|this|]) { return [|this|]; }
+////    function g([|{| "isWriteAccess": true, "isDefinition": true |}this|]) { return [|this|]; }
 ////}
 ////class C {
 ////    static x() {
@@ -21,13 +21,13 @@
 ////    }
 ////}
 ////// These are *not* real uses of the 'this' keyword, they are identifiers.
-////const x = { [|this|]: 0 }
+////const x = { [|{| "isWriteAccess": true, "isDefinition": true |}this|]: 0 }
 ////x.[|this|];
 
 const [global, f0, f1, g0, g1, x, y, constructor, method, propDef, propUse] = test.ranges();
-verify.referencesOf(global, [global]);
-verify.rangesReferenceEachOther([f0, f1]);
-verify.rangesReferenceEachOther([g0, g1]);
-verify.rangesReferenceEachOther([x, y]);
-verify.rangesReferenceEachOther([constructor, method]);
-verify.rangesReferenceEachOther([propDef, propUse]);
+verify.singleReferenceGroup("this", [global]);
+verify.singleReferenceGroup("(parameter) this: any", [f0, f1]);
+verify.singleReferenceGroup("(parameter) this: any", [g0, g1]);
+verify.singleReferenceGroup("this: typeof C", [x, y]);
+verify.singleReferenceGroup("this: this", [constructor, method]);
+verify.singleReferenceGroup("(property) this: number", [propDef, propUse]);

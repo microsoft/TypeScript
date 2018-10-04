@@ -1,0 +1,16 @@
+=== tests/cases/conformance/types/primitives/string/assignFromStringInterface.ts ===
+var x = '';
+>x : Symbol(x, Decl(assignFromStringInterface.ts, 0, 3))
+
+var a: String;
+>a : Symbol(a, Decl(assignFromStringInterface.ts, 1, 3))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+x = a;
+>x : Symbol(x, Decl(assignFromStringInterface.ts, 0, 3))
+>a : Symbol(a, Decl(assignFromStringInterface.ts, 1, 3))
+
+a = x;
+>a : Symbol(a, Decl(assignFromStringInterface.ts, 1, 3))
+>x : Symbol(x, Decl(assignFromStringInterface.ts, 0, 3))
+

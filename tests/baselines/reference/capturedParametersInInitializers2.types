@@ -1,0 +1,25 @@
+=== tests/cases/compiler/capturedParametersInInitializers2.ts ===
+function foo(y = class {static c = x}, x = 1) {
+>foo : (y?: typeof (Anonymous class), x?: number) => void
+>y : typeof (Anonymous class)
+>class {static c = x} : typeof (Anonymous class)
+>c : number
+>x : number
+>x : number
+>1 : 1
+
+    y.c
+>y.c : number
+>y : typeof (Anonymous class)
+>c : number
+}
+function foo2(y = class {[x] = x}, x = 1) {
+>foo2 : (y?: typeof (Anonymous class), x?: number) => void
+>y : typeof (Anonymous class)
+>class {[x] = x} : typeof (Anonymous class)
+>[x] : number
+>x : number
+>x : number
+>x : number
+>1 : 1
+}

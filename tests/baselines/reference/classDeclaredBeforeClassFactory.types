@@ -1,0 +1,15 @@
+=== tests/cases/compiler/classDeclaredBeforeClassFactory.ts ===
+// Should be OK due to hoisting
+class Derived extends makeBaseClass() {}
+>Derived : Derived
+>makeBaseClass() : Base
+>makeBaseClass : () => typeof Base
+
+function makeBaseClass() {
+>makeBaseClass : () => typeof Base
+
+    return class Base {};
+>class Base {} : typeof Base
+>Base : typeof Base
+}
+

@@ -12,7 +12,7 @@
 ////     export class B extends A { /*1*/ }
 //// }
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 goTo.marker('1');
 edit.insert("public m(n: number) { return 0; }");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

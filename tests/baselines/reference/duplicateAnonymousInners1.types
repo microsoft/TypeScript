@@ -14,7 +14,7 @@ module Foo {
     
     export var Outer=0;
 >Outer : number
->0 : number
+>0 : 0
 }
 
 

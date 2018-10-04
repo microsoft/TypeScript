@@ -5,14 +5,9 @@
 ////var /*3*/c = { x: 0, y: null };	// var c: { x: number, y: any }
 ////var /*4*/d = [null, undefined];      // var d: any[]
 
-goTo.marker('1');
-verify.quickInfoIs('var a: any');
-
-goTo.marker('2');
-verify.quickInfoIs('var b: any');
-
-goTo.marker('3');
-verify.quickInfoIs('var c: {\n    x: number;\n    y: any;\n}');
-
-goTo.marker('4');
-verify.quickInfoIs('var d: any[]');
+verify.quickInfos({
+    1: "var a: any",
+    2: "var b: any",
+    3: "var c: {\n    x: number;\n    y: any;\n}",
+    4: "var d: any[]"
+});

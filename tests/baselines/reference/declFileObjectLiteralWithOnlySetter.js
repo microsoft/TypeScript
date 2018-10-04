@@ -1,5 +1,4 @@
 //// [declFileObjectLiteralWithOnlySetter.ts]
-
 function /*1*/makePoint(x: number) { 
     return {
         b: 10,
@@ -18,7 +17,7 @@ function makePoint(x) {
 }
 ;
 var /*3*/ point = makePoint(2);
-point.x = 30;
+point. /*2*/x = 30;
 
 
 //// [declFileObjectLiteralWithOnlySetter.d.ts]
@@ -26,7 +25,7 @@ declare function makePoint(x: number): {
     b: number;
     x: number;
 };
-declare var point: {
+declare var /*3*/ point: {
     b: number;
     x: number;
 };

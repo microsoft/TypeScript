@@ -1,5 +1,4 @@
 === tests/cases/compiler/a.js ===
-
 function foo(name) {
 >foo : (name: any) => void
 >name : any
@@ -9,6 +8,6 @@ function foo(name) {
 >require("t/" + name) : any
 >require : any
 >"t/" + name : string
->"t/" : string
+>"t/" : "t/"
 >name : any
 }

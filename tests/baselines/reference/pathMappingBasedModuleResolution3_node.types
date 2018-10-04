@@ -1,5 +1,4 @@
 === c:/root/folder1/file1.ts ===
-
 // baseUrl set via command line
 
 import {x} from "folder2/file2"
@@ -35,7 +34,7 @@ export var x = a + b;
 === c:/root/folder2/file3.ts ===
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 === c:/node_modules/file4/index.d.ts ===
 export var y: number;

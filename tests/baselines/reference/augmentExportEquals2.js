@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/augmentExportEquals2.ts] ////
 
 //// [file1.ts]
-
 function foo() {}
 export = foo;
 
@@ -27,9 +26,11 @@ define(["require", "exports"], function (require, exports) {
 //// [file2.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [file3.js]
 define(["require", "exports", "./file2"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a; // should not work
 });

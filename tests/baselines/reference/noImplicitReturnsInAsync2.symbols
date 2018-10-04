@@ -1,0 +1,66 @@
+=== tests/cases/compiler/noImplicitReturnsInAsync2.ts ===
+// Should be an error, Promise<number>, currently retorted correctly 
+async function test3(isError: boolean = true) {
+>test3 : Symbol(test3, Decl(noImplicitReturnsInAsync2.ts, 0, 0))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 1, 21))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 1, 21))
+
+        return 6;
+    }
+}
+
+// Should not be an error, Promise<any>, currently **not** working
+async function test4(isError: boolean = true) {  
+>test4 : Symbol(test4, Decl(noImplicitReturnsInAsync2.ts, 5, 1))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 8, 21))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 8, 21))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+// should not be error, Promise<any> currently working correctly 
+async function test5(isError: boolean = true): Promise<any> { //should not be error
+>test5 : Symbol(test5, Decl(noImplicitReturnsInAsync2.ts, 12, 1))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 15, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 15, 21))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+
+// should be error, currently reported correctly 
+async function test6(isError: boolean = true): Promise<number> { 
+>test6 : Symbol(test6, Decl(noImplicitReturnsInAsync2.ts, 19, 1))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 23, 21))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 23, 21))
+
+        return undefined;
+>undefined : Symbol(undefined)
+    }
+}
+
+// infered to be Promise<void>, should not be an error, currently reported correctly 
+async function test7(isError: boolean = true) { 
+>test7 : Symbol(test7, Decl(noImplicitReturnsInAsync2.ts, 27, 1))
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 30, 21))
+
+    if (isError === true) {
+>isError : Symbol(isError, Decl(noImplicitReturnsInAsync2.ts, 30, 21))
+
+        return;
+    }
+}

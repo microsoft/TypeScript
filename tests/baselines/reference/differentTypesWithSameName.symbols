@@ -1,0 +1,38 @@
+=== tests/cases/compiler/differentTypesWithSameName.ts ===
+module m {
+>m : Symbol(m, Decl(differentTypesWithSameName.ts, 0, 0))
+
+  export class variable{
+>variable : Symbol(variable, Decl(differentTypesWithSameName.ts, 0, 10))
+
+    s: string;
+>s : Symbol(variable.s, Decl(differentTypesWithSameName.ts, 1, 24))
+  }
+  export function doSomething(v: m.variable) {
+>doSomething : Symbol(doSomething, Decl(differentTypesWithSameName.ts, 3, 3))
+>v : Symbol(v, Decl(differentTypesWithSameName.ts, 4, 30))
+>m : Symbol(m, Decl(differentTypesWithSameName.ts, 0, 0))
+>variable : Symbol(variable, Decl(differentTypesWithSameName.ts, 0, 10))
+    
+  }
+}
+
+class variable {
+>variable : Symbol(variable, Decl(differentTypesWithSameName.ts, 7, 1))
+
+ t: number;
+>t : Symbol(variable.t, Decl(differentTypesWithSameName.ts, 9, 16))
+}
+
+
+var v: variable = new variable();
+>v : Symbol(v, Decl(differentTypesWithSameName.ts, 14, 3))
+>variable : Symbol(variable, Decl(differentTypesWithSameName.ts, 7, 1))
+>variable : Symbol(variable, Decl(differentTypesWithSameName.ts, 7, 1))
+
+m.doSomething(v);
+>m.doSomething : Symbol(m.doSomething, Decl(differentTypesWithSameName.ts, 3, 3))
+>m : Symbol(m, Decl(differentTypesWithSameName.ts, 0, 0))
+>doSomething : Symbol(m.doSomething, Decl(differentTypesWithSameName.ts, 3, 3))
+>v : Symbol(v, Decl(differentTypesWithSameName.ts, 14, 3))
+

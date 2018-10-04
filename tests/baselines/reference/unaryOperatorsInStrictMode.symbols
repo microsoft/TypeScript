@@ -1,0 +1,20 @@
+=== tests/cases/compiler/unaryOperatorsInStrictMode.ts ===
+"use strict"
+
+++eval;
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+
+--eval;
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+
+++arguments;
+--arguments;
+eval++;
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+
+eval--;
+>eval : Symbol(eval, Decl(lib.es5.d.ts, --, --))
+
+arguments++;
+arguments--;
+

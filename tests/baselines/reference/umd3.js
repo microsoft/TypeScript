@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd3.ts] ////
 
 //// [foo.d.ts]
-
 export var x: number;
 export function fn(): void;
 export interface Thing { n: typeof x }
@@ -16,7 +15,8 @@ let y: number = x.n;
 
 //// [a.js]
 "use strict";
-var Foo = require('./foo');
+exports.__esModule = true;
+var Foo = require("./foo");
 Foo.fn();
 var x;
 var y = x.n;

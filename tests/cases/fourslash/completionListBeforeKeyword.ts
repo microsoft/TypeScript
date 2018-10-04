@@ -18,9 +18,9 @@
 
 
 goTo.marker("TypeReference");
-verify.memberListContains("C1");
-verify.memberListContains("C2");
+verify.completionListContains("C1");
+verify.completionListContains("C2");
 
 goTo.marker("ValueReference");
-verify.memberListContains("C1");
-verify.memberListContains("C2");
+verify.completionListContains("C1");
+verify.completionListContains("C2");

@@ -5,7 +5,7 @@
 >(jake => { }) : (jake: string) => void
 >jake => { } : (jake: string) => void
 >jake : string
->"build" : string
+>"build" : "build"
 
 // function expression
 (function (cats) { })("lol");
@@ -13,7 +13,7 @@
 >(function (cats) { }) : (cats: string) => void
 >function (cats) { } : (cats: string) => void
 >cats : string
->"lol" : string
+>"lol" : "lol"
 
 // Lots of Irritating Superfluous Parentheses
 (function (x) { } ("!"));
@@ -21,7 +21,7 @@
 >function (x) { } ("!") : void
 >function (x) { } : (x: string) => void
 >x : string
->"!" : string
+>"!" : "!"
 
 ((((function (y) { }))))("-");
 >((((function (y) { }))))("-") : void
@@ -31,7 +31,7 @@
 >(function (y) { }) : (y: string) => void
 >function (y) { } : (y: string) => void
 >y : string
->"-" : string
+>"-" : "-"
 
 // multiple arguments
 ((a, b, c) => { })("foo", 101, false);
@@ -41,9 +41,9 @@
 >a : string
 >b : number
 >c : boolean
->"foo" : string
->101 : number
->false : boolean
+>"foo" : "foo"
+>101 : 101
+>false : false
 
 // default parameters
 ((m = 10) => m + 1)(12);
@@ -51,21 +51,21 @@
 >((m = 10) => m + 1) : (m?: number) => number
 >(m = 10) => m + 1 : (m?: number) => number
 >m : number
->10 : number
+>10 : 10
 >m + 1 : number
 >m : number
->1 : number
->12 : number
+>1 : 1
+>12 : 12
 
 ((n = 10) => n + 1)();
 >((n = 10) => n + 1)() : number
 >((n = 10) => n + 1) : (n?: number) => number
 >(n = 10) => n + 1 : (n?: number) => number
 >n : number
->10 : number
+>10 : 10
 >n + 1 : number
 >n : number
->1 : number
+>1 : 1
 
 // optional parameters
 ((j?) => j + 1)(12);
@@ -75,8 +75,8 @@
 >j : number
 >j + 1 : number
 >j : number
->1 : number
->12 : number
+>1 : 1
+>12 : 12
 
 ((k?) => k + 1)();
 >((k?) => k + 1)() : any
@@ -85,7 +85,7 @@
 >k : any
 >k + 1 : any
 >k : any
->1 : number
+>1 : 1
 
 ((l, o?) => l + o)(12); // o should be any
 >((l, o?) => l + o)(12) : any
@@ -96,127 +96,127 @@
 >l + o : any
 >l : number
 >o : any
->12 : number
+>12 : 12
 
 // rest parameters
 ((...numbers) => numbers.every(n => n > 0))(5,6,7);
 >((...numbers) => numbers.every(n => n > 0))(5,6,7) : boolean
->((...numbers) => numbers.every(n => n > 0)) : (...numbers: number[]) => boolean
->(...numbers) => numbers.every(n => n > 0) : (...numbers: number[]) => boolean
->numbers : number[]
+>((...numbers) => numbers.every(n => n > 0)) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>(...numbers) => numbers.every(n => n > 0) : (numbers_0: number, numbers_1: number, numbers_2: number) => boolean
+>numbers : [number, number, number]
 >numbers.every(n => n > 0) : boolean
 >numbers.every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
->numbers : number[]
+>numbers : [number, number, number]
 >every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
 >n : number
->0 : number
->5 : number
->6 : number
->7 : number
+>0 : 0
+>5 : 5
+>6 : 6
+>7 : 7
 
 ((...mixed) => mixed.every(n => !!n))(5,'oops','oh no');
 >((...mixed) => mixed.every(n => !!n))(5,'oops','oh no') : boolean
->((...mixed) => mixed.every(n => !!n)) : (...mixed: (string | number)[]) => boolean
->(...mixed) => mixed.every(n => !!n) : (...mixed: (string | number)[]) => boolean
->mixed : (string | number)[]
+>((...mixed) => mixed.every(n => !!n)) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>(...mixed) => mixed.every(n => !!n) : (mixed_0: number, mixed_1: string, mixed_2: string) => boolean
+>mixed : [number, string, string]
 >mixed.every(n => !!n) : boolean
 >mixed.every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
->mixed : (string | number)[]
+>mixed : [number, string, string]
 >every : (callbackfn: (value: string | number, index: number, array: (string | number)[]) => boolean, thisArg?: any) => boolean
 >n => !!n : (n: string | number) => boolean
 >n : string | number
 >!!n : boolean
 >!n : boolean
 >n : string | number
->5 : number
->'oops' : string
->'oh no' : string
+>5 : 5
+>'oops' : "oops"
+>'oh no' : "oh no"
 
 ((...noNumbers) => noNumbers.some(n => n > 0))();
 >((...noNumbers) => noNumbers.some(n => n > 0))() : boolean
->((...noNumbers) => noNumbers.some(n => n > 0)) : (...noNumbers: any[]) => boolean
->(...noNumbers) => noNumbers.some(n => n > 0) : (...noNumbers: any[]) => boolean
->noNumbers : any[]
+>((...noNumbers) => noNumbers.some(n => n > 0)) : () => boolean
+>(...noNumbers) => noNumbers.some(n => n > 0) : () => boolean
+>noNumbers : []
 >noNumbers.some(n => n > 0) : boolean
->noNumbers.some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
->noNumbers : any[]
->some : (callbackfn: (value: any, index: number, array: any[]) => boolean, thisArg?: any) => boolean
->n => n > 0 : (n: any) => boolean
->n : any
+>noNumbers.some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>noNumbers : []
+>some : (callbackfn: (value: never, index: number, array: never[]) => boolean, thisArg?: any) => boolean
+>n => n > 0 : (n: never) => boolean
+>n : never
 >n > 0 : boolean
->n : any
->0 : number
+>n : never
+>0 : 0
 
 ((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10);
 >((first, ...rest) => first ? [] : rest.map(n => n > 0))(8,9,10) : boolean[]
->((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, ...rest: number[]) => boolean[]
->(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, ...rest: number[]) => boolean[]
+>((first, ...rest) => first ? [] : rest.map(n => n > 0)) : (first: number, rest_0: number, rest_1: number) => boolean[]
+>(first, ...rest) => first ? [] : rest.map(n => n > 0) : (first: number, rest_0: number, rest_1: number) => boolean[]
 >first : number
->rest : number[]
+>rest : [number, number]
 >first ? [] : rest.map(n => n > 0) : boolean[]
 >first : number
 >[] : undefined[]
 >rest.map(n => n > 0) : boolean[]
 >rest.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
->rest : number[]
+>rest : [number, number]
 >map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >n => n > 0 : (n: number) => boolean
 >n : number
 >n > 0 : boolean
 >n : number
->0 : number
->8 : number
->9 : number
->10 : number
+>0 : 0
+>8 : 8
+>9 : 9
+>10 : 10
 
 // destructuring parameters (with defaults too!)
 (({ q }) => q)({ q : 13 });
 >(({ q }) => q)({ q : 13 }) : number
->(({ q }) => q) : ({q}: { q: number; }) => number
->({ q }) => q : ({q}: { q: number; }) => number
+>(({ q }) => q) : ({ q }: { q: number; }) => number
+>({ q }) => q : ({ q }: { q: number; }) => number
 >q : number
 >q : number
 >{ q : 13 } : { q: number; }
 >q : number
->13 : number
+>13 : 13
 
 (({ p = 14 }) => p)({ p : 15 });
 >(({ p = 14 }) => p)({ p : 15 }) : number
->(({ p = 14 }) => p) : ({p}: { p: number; }) => number
->({ p = 14 }) => p : ({p}: { p: number; }) => number
+>(({ p = 14 }) => p) : ({ p }: { p: number; }) => number
+>({ p = 14 }) => p : ({ p }: { p: number; }) => number
 >p : number
->14 : number
+>14 : 14
 >p : number
 >{ p : 15 } : { p: number; }
 >p : number
->15 : number
+>15 : 15
 
 (({ r = 17 } = { r: 18 }) => r)({r : 19});
 >(({ r = 17 } = { r: 18 }) => r)({r : 19}) : number
->(({ r = 17 } = { r: 18 }) => r) : ({r}?: { r: number; }) => number
->({ r = 17 } = { r: 18 }) => r : ({r}?: { r: number; }) => number
+>(({ r = 17 } = { r: 18 }) => r) : ({ r }?: { r: number; }) => number
+>({ r = 17 } = { r: 18 }) => r : ({ r }?: { r: number; }) => number
 >r : number
->17 : number
+>17 : 17
 >{ r: 18 } : { r: number; }
 >r : number
->18 : number
+>18 : 18
 >r : number
 >{r : 19} : { r: number; }
 >r : number
->19 : number
+>19 : 19
 
 (({ u = 22 } = { u: 23 }) => u)();
 >(({ u = 22 } = { u: 23 }) => u)() : number
->(({ u = 22 } = { u: 23 }) => u) : ({u}?: { u?: number; }) => number
->({ u = 22 } = { u: 23 }) => u : ({u}?: { u?: number; }) => number
+>(({ u = 22 } = { u: 23 }) => u) : ({ u }?: { u?: number; }) => number
+>({ u = 22 } = { u: 23 }) => u : ({ u }?: { u?: number; }) => number
 >u : number
->22 : number
+>22 : 22
 >{ u: 23 } : { u?: number; }
 >u : number
->23 : number
+>23 : 23
 >u : number
 
 // contextually typed parameters.
@@ -228,7 +228,7 @@ let twelve = (f => f(12))(i => i);
 >f : (i: any) => any
 >f(12) : any
 >f : (i: any) => any
->12 : number
+>12 : 12
 >i => i : (i: any) => any
 >i : any
 >i : any
@@ -243,10 +243,29 @@ let eleven = (o => o.a(11))({ a: function(n) { return n; } });
 >o.a : (n: any) => any
 >o : { a: (n: any) => any; }
 >a : (n: any) => any
->11 : number
+>11 : 11
 >{ a: function(n) { return n; } } : { a: (n: any) => any; }
 >a : (n: any) => any
 >function(n) { return n; } : (n: any) => any
 >n : any
 >n : any
+
+// missing arguments
+(function(x, undefined) { return x; })(42);
+>(function(x, undefined) { return x; })(42) : number
+>(function(x, undefined) { return x; }) : (x: number, undefined?: any) => number
+>function(x, undefined) { return x; } : (x: number, undefined?: any) => number
+>x : number
+>undefined : any
+>x : number
+>42 : 42
+
+((x, y, z) => 42)();
+>((x, y, z) => 42)() : number
+>((x, y, z) => 42) : (x?: any, y?: any, z?: any) => number
+>(x, y, z) => 42 : (x?: any, y?: any, z?: any) => number
+>x : any
+>y : any
+>z : any
+>42 : 42
 

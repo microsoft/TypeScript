@@ -6,6 +6,8 @@ function* g() {
 >x : Symbol(x, Decl(generatorTypeCheck44.ts, 1, 7))
 
         get [yield 0]() {
+>[yield 0] : Symbol([yield 0], Decl(generatorTypeCheck44.ts, 1, 13))
+
             return 0;
         }
     }

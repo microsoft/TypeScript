@@ -10,9 +10,12 @@
 ////}
 ////var a = new Circle(/**/
 
-goTo.marker('');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("Circle(radius: number): Circle");
-verify.currentParameterHelpArgumentNameIs("radius");
-verify.currentParameterSpanIs("radius: number");
-verify.currentParameterHelpArgumentDocCommentIs("The radius of the circle.");
+verify.signatureHelp({
+    marker: "",
+    text: "Circle(radius: number): Circle",
+    parameterName: "radius",
+    parameterSpan: "radius: number",
+    docComment: "Initialize a circle.",
+    parameterDocComment: "The radius of the circle.",
+    tags: [{ name: "param", text: "radius The radius of the circle." }],
+});

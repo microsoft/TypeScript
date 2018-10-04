@@ -1,5 +1,4 @@
 //// [capturedLetConstInLoop9_ES6.ts]
-
 for (let x = 0; x < 1; ++x) {
     let x;
     (function() { return x });
@@ -196,10 +195,10 @@ function foo() {
             if (b === 2) {
                 break l0;
             }
-            (() => b);
+            () => b;
             return 100;
         }
-        (() => a);
+        () => a;
     }
     use(x);
     use(z);

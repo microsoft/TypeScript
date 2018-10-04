@@ -1,0 +1,1776 @@
+=== tests/cases/compiler/giant.ts ===
+/*
+    Prefixes
+    p -> public
+    r -> private
+    i -> import
+    e -> export
+    a -> ambient
+    t -> static
+    s -> set
+    g -> get
+
+    MAX DEPTH 3 LEVELS
+*/
+var V;
+>V : Symbol(V, Decl(giant.ts, 13, 3))
+
+function F() { };
+>F : Symbol(F, Decl(giant.ts, 13, 6))
+
+class C {
+>C : Symbol(C, Decl(giant.ts, 14, 17))
+
+    constructor () { }
+    public pV;
+>pV : Symbol(C.pV, Decl(giant.ts, 16, 22))
+
+    private rV;
+>rV : Symbol(C.rV, Decl(giant.ts, 17, 14))
+
+    public pF() { }
+>pF : Symbol(C.pF, Decl(giant.ts, 18, 15))
+
+    private rF() { }
+>rF : Symbol(C.rF, Decl(giant.ts, 19, 19))
+
+    public pgF() { }
+>pgF : Symbol(C.pgF, Decl(giant.ts, 20, 20))
+
+    public get pgF()
+>pgF : Symbol(C.pgF, Decl(giant.ts, 21, 20))
+
+    public psF(param:any) { }
+>psF : Symbol(C.psF, Decl(giant.ts, 22, 20))
+>param : Symbol(param, Decl(giant.ts, 23, 15))
+
+    public set psF(param:any)
+>psF : Symbol(C.psF, Decl(giant.ts, 23, 29))
+>param : Symbol(param, Decl(giant.ts, 24, 19))
+
+    private rgF() { }
+>rgF : Symbol(C.rgF, Decl(giant.ts, 24, 29))
+
+    private get rgF()
+>rgF : Symbol(C.rgF, Decl(giant.ts, 25, 21))
+
+    private rsF(param:any) { }
+>rsF : Symbol(C.rsF, Decl(giant.ts, 26, 21))
+>param : Symbol(param, Decl(giant.ts, 27, 16))
+
+    private set rsF(param:any)
+>rsF : Symbol(C.rsF, Decl(giant.ts, 27, 30))
+>param : Symbol(param, Decl(giant.ts, 28, 20))
+
+    static tV;
+>tV : Symbol(C.tV, Decl(giant.ts, 28, 30))
+
+    static tF() { }
+>tF : Symbol(C.tF, Decl(giant.ts, 29, 14))
+
+    static tsF(param:any) { }
+>tsF : Symbol(C.tsF, Decl(giant.ts, 30, 19))
+>param : Symbol(param, Decl(giant.ts, 31, 15))
+
+    static set tsF(param:any)
+>tsF : Symbol(C.tsF, Decl(giant.ts, 31, 29))
+>param : Symbol(param, Decl(giant.ts, 32, 19))
+
+    static tgF() { }
+>tgF : Symbol(C.tgF, Decl(giant.ts, 32, 29))
+
+    static get tgF()
+>tgF : Symbol(C.tgF, Decl(giant.ts, 33, 20))
+}
+interface I {
+>I : Symbol(I, Decl(giant.ts, 35, 1))
+
+    //Call Signature
+    ();
+    (): number;
+    (p);
+>p : Symbol(p, Decl(giant.ts, 40, 5))
+
+    (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 41, 5))
+
+    (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 42, 5))
+
+    (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 43, 5))
+
+    (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 44, 5))
+>p5 : Symbol(p5, Decl(giant.ts, 44, 16))
+
+    (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 45, 5))
+>p7 : Symbol(p7, Decl(giant.ts, 45, 16))
+
+    //(p8?: string, ...p9: any[]);
+    //(p10:string, p8?: string, ...p9: any[]);
+    
+    //Construct Signature
+    new ();
+    new (): number;
+    new (p: string);
+>p : Symbol(p, Decl(giant.ts, 52, 9))
+
+    new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 53, 9))
+
+    new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 54, 9))
+
+    new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 55, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 55, 20))
+
+    new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 56, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 56, 20))
+
+    //Index Signature
+    [p];
+>[p] : Symbol(I[p], Decl(giant.ts, 56, 35))
+
+    [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 60, 5))
+
+    [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 61, 5))
+>p3 : Symbol(p3, Decl(giant.ts, 61, 16))
+
+    //Property Signature
+    p;
+>p : Symbol(I.p, Decl(giant.ts, 61, 29))
+
+    p1?;
+>p1 : Symbol(I.p1, Decl(giant.ts, 64, 6))
+
+    p2?: string;
+>p2 : Symbol(I.p2, Decl(giant.ts, 65, 8))
+    
+    //Function Signature
+    p3();
+>p3 : Symbol(I.p3, Decl(giant.ts, 66, 16))
+
+    p4? ();
+>p4 : Symbol(I.p4, Decl(giant.ts, 69, 9))
+
+    p5? (): void;
+>p5 : Symbol(I.p5, Decl(giant.ts, 70, 11))
+
+    p6(pa1): void;
+>p6 : Symbol(I.p6, Decl(giant.ts, 71, 17))
+>pa1 : Symbol(pa1, Decl(giant.ts, 72, 7))
+
+    p7(pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 72, 18), Decl(giant.ts, 73, 23))
+>pa1 : Symbol(pa1, Decl(giant.ts, 73, 7))
+>pa2 : Symbol(pa2, Decl(giant.ts, 73, 11))
+
+    p7? (pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 72, 18), Decl(giant.ts, 73, 23))
+>pa1 : Symbol(pa1, Decl(giant.ts, 74, 9))
+>pa2 : Symbol(pa2, Decl(giant.ts, 74, 13))
+}
+module M {
+>M : Symbol(M, Decl(giant.ts, 75, 1))
+
+    var V;
+>V : Symbol(V, Decl(giant.ts, 77, 7))
+
+    function F() { };
+>F : Symbol(F, Decl(giant.ts, 77, 10))
+
+    class C {
+>C : Symbol(C, Decl(giant.ts, 78, 21))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(C.pV, Decl(giant.ts, 80, 26))
+
+        private rV;
+>rV : Symbol(C.rV, Decl(giant.ts, 81, 18))
+
+        public pF() { }
+>pF : Symbol(C.pF, Decl(giant.ts, 82, 19))
+
+        private rF() { }
+>rF : Symbol(C.rF, Decl(giant.ts, 83, 23))
+
+        public pgF() { }
+>pgF : Symbol(C.pgF, Decl(giant.ts, 84, 24))
+
+        public get pgF()
+>pgF : Symbol(C.pgF, Decl(giant.ts, 85, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(C.psF, Decl(giant.ts, 86, 24))
+>param : Symbol(param, Decl(giant.ts, 87, 19))
+
+        public set psF(param:any)
+>psF : Symbol(C.psF, Decl(giant.ts, 87, 33))
+>param : Symbol(param, Decl(giant.ts, 88, 23))
+
+        private rgF() { }
+>rgF : Symbol(C.rgF, Decl(giant.ts, 88, 33))
+
+        private get rgF()
+>rgF : Symbol(C.rgF, Decl(giant.ts, 89, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(C.rsF, Decl(giant.ts, 90, 25))
+>param : Symbol(param, Decl(giant.ts, 91, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(C.rsF, Decl(giant.ts, 91, 34))
+>param : Symbol(param, Decl(giant.ts, 92, 24))
+
+        static tV;
+>tV : Symbol(C.tV, Decl(giant.ts, 92, 34))
+
+        static tF() { }
+>tF : Symbol(C.tF, Decl(giant.ts, 93, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(C.tsF, Decl(giant.ts, 94, 23))
+>param : Symbol(param, Decl(giant.ts, 95, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(C.tsF, Decl(giant.ts, 95, 33))
+>param : Symbol(param, Decl(giant.ts, 96, 23))
+
+        static tgF() { }
+>tgF : Symbol(C.tgF, Decl(giant.ts, 96, 33))
+
+        static get tgF()
+>tgF : Symbol(C.tgF, Decl(giant.ts, 97, 24))
+    }
+    interface I {
+>I : Symbol(I, Decl(giant.ts, 99, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p);
+>p : Symbol(p, Decl(giant.ts, 104, 9))
+
+        (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 105, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 106, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 107, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 108, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 108, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 109, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 109, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 116, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 117, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 118, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 119, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 119, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 120, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 120, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(I[p], Decl(giant.ts, 120, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 124, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 125, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 125, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(I.p, Decl(giant.ts, 125, 33))
+
+        p1?;
+>p1 : Symbol(I.p1, Decl(giant.ts, 128, 10))
+
+        p2?: string;
+>p2 : Symbol(I.p2, Decl(giant.ts, 129, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(I.p3, Decl(giant.ts, 130, 20))
+
+        p4? ();
+>p4 : Symbol(I.p4, Decl(giant.ts, 133, 13))
+
+        p5? (): void;
+>p5 : Symbol(I.p5, Decl(giant.ts, 134, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(I.p6, Decl(giant.ts, 135, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 136, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 136, 22), Decl(giant.ts, 137, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 137, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 137, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 136, 22), Decl(giant.ts, 137, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 138, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 138, 17))
+    }
+    module M {
+>M : Symbol(M, Decl(giant.ts, 139, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 141, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 141, 14))
+
+        class C { };
+>C : Symbol(C, Decl(giant.ts, 142, 25))
+
+        interface I { };
+>I : Symbol(I, Decl(giant.ts, 143, 20))
+
+        module M { };
+>M : Symbol(M, Decl(giant.ts, 144, 24))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 146, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 146, 22))
+
+        export class eC { };
+>eC : Symbol(eC, Decl(giant.ts, 147, 33))
+
+        export interface eI { };
+>eI : Symbol(eI, Decl(giant.ts, 148, 28))
+
+        export module eM { };
+>eM : Symbol(eM, Decl(giant.ts, 149, 32))
+
+        export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 151, 26))
+
+        export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 151, 31))
+
+        export declare class eaC { };
+>eaC : Symbol(eaC, Decl(giant.ts, 152, 42))
+
+        export declare module eaM { };
+>eaM : Symbol(eaM, Decl(giant.ts, 153, 37))
+    }
+    export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 156, 14))
+
+    export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 156, 18))
+
+    export class eC {
+>eC : Symbol(eC, Decl(giant.ts, 157, 29))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(eC.pV, Decl(giant.ts, 159, 26))
+
+        private rV;
+>rV : Symbol(eC.rV, Decl(giant.ts, 160, 18))
+
+        public pF() { }
+>pF : Symbol(eC.pF, Decl(giant.ts, 161, 19))
+
+        private rF() { }
+>rF : Symbol(eC.rF, Decl(giant.ts, 162, 23))
+
+        public pgF() { }
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 163, 24))
+
+        public get pgF()
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 164, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(eC.psF, Decl(giant.ts, 165, 24))
+>param : Symbol(param, Decl(giant.ts, 166, 19))
+
+        public set psF(param:any)
+>psF : Symbol(eC.psF, Decl(giant.ts, 166, 33))
+>param : Symbol(param, Decl(giant.ts, 167, 23))
+
+        private rgF() { }
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 167, 33))
+
+        private get rgF()
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 168, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 169, 25))
+>param : Symbol(param, Decl(giant.ts, 170, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 170, 34))
+>param : Symbol(param, Decl(giant.ts, 171, 24))
+
+        static tV;
+>tV : Symbol(eC.tV, Decl(giant.ts, 171, 34))
+
+        static tF() { }
+>tF : Symbol(eC.tF, Decl(giant.ts, 172, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 173, 23))
+>param : Symbol(param, Decl(giant.ts, 174, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 174, 33))
+>param : Symbol(param, Decl(giant.ts, 175, 23))
+
+        static tgF() { }
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 175, 33))
+
+        static get tgF()
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 176, 24))
+    }
+    export interface eI {
+>eI : Symbol(eI, Decl(giant.ts, 178, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p);
+>p : Symbol(p, Decl(giant.ts, 183, 9))
+
+        (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 184, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 185, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 186, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 187, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 187, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 188, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 188, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 195, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 196, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 197, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 198, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 198, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 199, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 199, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(eI[p], Decl(giant.ts, 199, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 203, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 204, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 204, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(eI.p, Decl(giant.ts, 204, 33))
+
+        p1?;
+>p1 : Symbol(eI.p1, Decl(giant.ts, 207, 10))
+
+        p2?: string;
+>p2 : Symbol(eI.p2, Decl(giant.ts, 208, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(eI.p3, Decl(giant.ts, 209, 20))
+
+        p4? ();
+>p4 : Symbol(eI.p4, Decl(giant.ts, 212, 13))
+
+        p5? (): void;
+>p5 : Symbol(eI.p5, Decl(giant.ts, 213, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(eI.p6, Decl(giant.ts, 214, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 215, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 215, 22), Decl(giant.ts, 216, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 216, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 216, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 215, 22), Decl(giant.ts, 216, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 217, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 217, 17))
+    }
+    export module eM {
+>eM : Symbol(eM, Decl(giant.ts, 218, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 220, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 220, 14))
+
+        class C { };
+>C : Symbol(C, Decl(giant.ts, 221, 25))
+
+        interface I { };
+>I : Symbol(I, Decl(giant.ts, 222, 20))
+
+        module M { };
+>M : Symbol(M, Decl(giant.ts, 223, 24))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 225, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 225, 22))
+
+        export class eC { };
+>eC : Symbol(eC, Decl(giant.ts, 226, 33))
+
+        export interface eI { };
+>eI : Symbol(eI, Decl(giant.ts, 227, 28))
+
+        export module eM { };
+>eM : Symbol(eM, Decl(giant.ts, 228, 32))
+
+        export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 230, 26))
+
+        export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 230, 31))
+
+        export declare class eaC { };
+>eaC : Symbol(eaC, Decl(giant.ts, 231, 42))
+
+        export declare module eaM { };
+>eaM : Symbol(eaM, Decl(giant.ts, 232, 37))
+    }
+    export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 235, 22))
+
+    export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 235, 27))
+
+    export declare class eaC {
+>eaC : Symbol(eaC, Decl(giant.ts, 236, 38))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(eaC.pV, Decl(giant.ts, 238, 26))
+
+        private rV;
+>rV : Symbol(eaC.rV, Decl(giant.ts, 239, 18))
+
+        public pF() { }
+>pF : Symbol(eaC.pF, Decl(giant.ts, 240, 19))
+
+        private rF() { }
+>rF : Symbol(eaC.rF, Decl(giant.ts, 241, 23))
+
+        public pgF() { }
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 242, 24))
+
+        public get pgF()
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 243, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(eaC.psF, Decl(giant.ts, 244, 24))
+>param : Symbol(param, Decl(giant.ts, 245, 19))
+
+        public set psF(param:any)
+>psF : Symbol(eaC.psF, Decl(giant.ts, 245, 33))
+>param : Symbol(param, Decl(giant.ts, 246, 23))
+
+        private rgF() { }
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 246, 33))
+
+        private get rgF()
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 247, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 248, 25))
+>param : Symbol(param, Decl(giant.ts, 249, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 249, 34))
+>param : Symbol(param, Decl(giant.ts, 250, 24))
+
+        static tV;
+>tV : Symbol(eaC.tV, Decl(giant.ts, 250, 34))
+
+        static tF() { }
+>tF : Symbol(eaC.tF, Decl(giant.ts, 251, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 252, 23))
+>param : Symbol(param, Decl(giant.ts, 253, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 253, 33))
+>param : Symbol(param, Decl(giant.ts, 254, 23))
+
+        static tgF() { }
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 254, 33))
+
+        static get tgF()
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 255, 24))
+    }
+    export declare module eaM {
+>eaM : Symbol(eaM, Decl(giant.ts, 257, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 259, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 259, 14))
+
+        class C { }
+>C : Symbol(C, Decl(giant.ts, 260, 25))
+
+        interface I { }
+>I : Symbol(I, Decl(giant.ts, 261, 19))
+
+        module M { }
+>M : Symbol(M, Decl(giant.ts, 262, 23))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 264, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 264, 22))
+
+        export class eC { }
+>eC : Symbol(eC, Decl(giant.ts, 265, 33))
+
+        export interface eI { }
+>eI : Symbol(eI, Decl(giant.ts, 266, 27))
+
+        export module eM { }
+>eM : Symbol(eM, Decl(giant.ts, 267, 31))
+    }
+}
+export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 271, 10))
+
+export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 271, 14))
+
+export class eC {
+>eC : Symbol(eC, Decl(giant.ts, 272, 25))
+
+    constructor () { }
+    public pV;
+>pV : Symbol(eC.pV, Decl(giant.ts, 274, 22))
+
+    private rV;
+>rV : Symbol(eC.rV, Decl(giant.ts, 275, 14))
+
+    public pF() { }
+>pF : Symbol(eC.pF, Decl(giant.ts, 276, 15))
+
+    private rF() { }
+>rF : Symbol(eC.rF, Decl(giant.ts, 277, 19))
+
+    public pgF() { }
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 278, 20))
+
+    public get pgF()
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 279, 20))
+
+    public psF(param:any) { }
+>psF : Symbol(eC.psF, Decl(giant.ts, 280, 20))
+>param : Symbol(param, Decl(giant.ts, 281, 15))
+
+    public set psF(param:any)
+>psF : Symbol(eC.psF, Decl(giant.ts, 281, 29))
+>param : Symbol(param, Decl(giant.ts, 282, 19))
+
+    private rgF() { }
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 282, 29))
+
+    private get rgF()
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 283, 21))
+
+    private rsF(param:any) { }
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 284, 21))
+>param : Symbol(param, Decl(giant.ts, 285, 16))
+
+    private set rsF(param:any)
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 285, 30))
+>param : Symbol(param, Decl(giant.ts, 286, 20))
+
+    static tV;
+>tV : Symbol(eC.tV, Decl(giant.ts, 286, 30))
+
+    static tF() { }
+>tF : Symbol(eC.tF, Decl(giant.ts, 287, 14))
+
+    static tsF(param:any) { }
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 288, 19))
+>param : Symbol(param, Decl(giant.ts, 289, 15))
+
+    static set tsF(param:any)
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 289, 29))
+>param : Symbol(param, Decl(giant.ts, 290, 19))
+
+    static tgF() { }
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 290, 29))
+
+    static get tgF()
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 291, 20))
+}
+export interface eI {
+>eI : Symbol(eI, Decl(giant.ts, 293, 1))
+
+    //Call Signature
+    ();
+    (): number;
+    (p);
+>p : Symbol(p, Decl(giant.ts, 298, 5))
+
+    (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 299, 5))
+
+    (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 300, 5))
+
+    (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 301, 5))
+
+    (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 302, 5))
+>p5 : Symbol(p5, Decl(giant.ts, 302, 16))
+
+    (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 303, 5))
+>p7 : Symbol(p7, Decl(giant.ts, 303, 16))
+
+    //(p8?: string, ...p9: any[]);
+    //(p10:string, p8?: string, ...p9: any[]);
+    
+    //Construct Signature
+    new ();
+    new (): number;
+    new (p: string);
+>p : Symbol(p, Decl(giant.ts, 310, 9))
+
+    new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 311, 9))
+
+    new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 312, 9))
+
+    new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 313, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 313, 20))
+
+    new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 314, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 314, 20))
+
+    //Index Signature
+    [p];
+>[p] : Symbol(eI[p], Decl(giant.ts, 314, 35))
+
+    [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 318, 5))
+
+    [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 319, 5))
+>p3 : Symbol(p3, Decl(giant.ts, 319, 16))
+
+    //Property Signature
+    p;
+>p : Symbol(eI.p, Decl(giant.ts, 319, 29))
+
+    p1?;
+>p1 : Symbol(eI.p1, Decl(giant.ts, 322, 6))
+
+    p2?: string;
+>p2 : Symbol(eI.p2, Decl(giant.ts, 323, 8))
+    
+    //Function Signature
+    p3();
+>p3 : Symbol(eI.p3, Decl(giant.ts, 324, 16))
+
+    p4? ();
+>p4 : Symbol(eI.p4, Decl(giant.ts, 327, 9))
+
+    p5? (): void;
+>p5 : Symbol(eI.p5, Decl(giant.ts, 328, 11))
+
+    p6(pa1): void;
+>p6 : Symbol(eI.p6, Decl(giant.ts, 329, 17))
+>pa1 : Symbol(pa1, Decl(giant.ts, 330, 7))
+
+    p7(pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 330, 18), Decl(giant.ts, 331, 23))
+>pa1 : Symbol(pa1, Decl(giant.ts, 331, 7))
+>pa2 : Symbol(pa2, Decl(giant.ts, 331, 11))
+
+    p7? (pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 330, 18), Decl(giant.ts, 331, 23))
+>pa1 : Symbol(pa1, Decl(giant.ts, 332, 9))
+>pa2 : Symbol(pa2, Decl(giant.ts, 332, 13))
+}
+export module eM {
+>eM : Symbol(eM, Decl(giant.ts, 333, 1))
+
+    var V;
+>V : Symbol(V, Decl(giant.ts, 335, 7))
+
+    function F() { };
+>F : Symbol(F, Decl(giant.ts, 335, 10))
+
+    class C {
+>C : Symbol(C, Decl(giant.ts, 336, 21))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(C.pV, Decl(giant.ts, 338, 26))
+
+        private rV;
+>rV : Symbol(C.rV, Decl(giant.ts, 339, 18))
+
+        public pF() { }
+>pF : Symbol(C.pF, Decl(giant.ts, 340, 19))
+
+        private rF() { }
+>rF : Symbol(C.rF, Decl(giant.ts, 341, 23))
+
+        public pgF() { }
+>pgF : Symbol(C.pgF, Decl(giant.ts, 342, 24))
+
+        public get pgF()
+>pgF : Symbol(C.pgF, Decl(giant.ts, 343, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(C.psF, Decl(giant.ts, 344, 24))
+>param : Symbol(param, Decl(giant.ts, 345, 19))
+
+        public set psF(param:any)
+>psF : Symbol(C.psF, Decl(giant.ts, 345, 33))
+>param : Symbol(param, Decl(giant.ts, 346, 23))
+
+        private rgF() { }
+>rgF : Symbol(C.rgF, Decl(giant.ts, 346, 33))
+
+        private get rgF()
+>rgF : Symbol(C.rgF, Decl(giant.ts, 347, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(C.rsF, Decl(giant.ts, 348, 25))
+>param : Symbol(param, Decl(giant.ts, 349, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(C.rsF, Decl(giant.ts, 349, 34))
+>param : Symbol(param, Decl(giant.ts, 350, 24))
+
+        static tV;
+>tV : Symbol(C.tV, Decl(giant.ts, 350, 34))
+
+        static tF() { }
+>tF : Symbol(C.tF, Decl(giant.ts, 351, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(C.tsF, Decl(giant.ts, 352, 23))
+>param : Symbol(param, Decl(giant.ts, 353, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(C.tsF, Decl(giant.ts, 353, 33))
+>param : Symbol(param, Decl(giant.ts, 354, 23))
+
+        static tgF() { }
+>tgF : Symbol(C.tgF, Decl(giant.ts, 354, 33))
+
+        static get tgF()
+>tgF : Symbol(C.tgF, Decl(giant.ts, 355, 24))
+    }
+    interface I {
+>I : Symbol(I, Decl(giant.ts, 357, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p);
+>p : Symbol(p, Decl(giant.ts, 362, 9))
+
+        (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 363, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 364, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 365, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 366, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 366, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 367, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 367, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 374, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 375, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 376, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 377, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 377, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 378, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 378, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(I[p], Decl(giant.ts, 378, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 382, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 383, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 383, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(I.p, Decl(giant.ts, 383, 33))
+
+        p1?;
+>p1 : Symbol(I.p1, Decl(giant.ts, 386, 10))
+
+        p2?: string;
+>p2 : Symbol(I.p2, Decl(giant.ts, 387, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(I.p3, Decl(giant.ts, 388, 20))
+
+        p4? ();
+>p4 : Symbol(I.p4, Decl(giant.ts, 391, 13))
+
+        p5? (): void;
+>p5 : Symbol(I.p5, Decl(giant.ts, 392, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(I.p6, Decl(giant.ts, 393, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 394, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 394, 22), Decl(giant.ts, 395, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 395, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 395, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 394, 22), Decl(giant.ts, 395, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 396, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 396, 17))
+    }
+    module M {
+>M : Symbol(M, Decl(giant.ts, 397, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 399, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 399, 14))
+
+        class C { };
+>C : Symbol(C, Decl(giant.ts, 400, 25))
+
+        interface I { };
+>I : Symbol(I, Decl(giant.ts, 401, 20))
+
+        module M { };
+>M : Symbol(M, Decl(giant.ts, 402, 24))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 404, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 404, 22))
+
+        export class eC { };
+>eC : Symbol(eC, Decl(giant.ts, 405, 33))
+
+        export interface eI { };
+>eI : Symbol(eI, Decl(giant.ts, 406, 28))
+
+        export module eM { };
+>eM : Symbol(eM, Decl(giant.ts, 407, 32))
+
+        export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 409, 26))
+
+        export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 409, 31))
+
+        export declare class eaC { };
+>eaC : Symbol(eaC, Decl(giant.ts, 410, 42))
+
+        export declare module eaM { };
+>eaM : Symbol(eaM, Decl(giant.ts, 411, 37))
+    }
+    export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 414, 14))
+
+    export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 414, 18))
+
+    export class eC {
+>eC : Symbol(eC, Decl(giant.ts, 415, 29))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(eC.pV, Decl(giant.ts, 417, 26))
+
+        private rV;
+>rV : Symbol(eC.rV, Decl(giant.ts, 418, 18))
+
+        public pF() { }
+>pF : Symbol(eC.pF, Decl(giant.ts, 419, 19))
+
+        private rF() { }
+>rF : Symbol(eC.rF, Decl(giant.ts, 420, 23))
+
+        public pgF() { }
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 421, 24))
+
+        public get pgF()
+>pgF : Symbol(eC.pgF, Decl(giant.ts, 422, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(eC.psF, Decl(giant.ts, 423, 24))
+>param : Symbol(param, Decl(giant.ts, 424, 19))
+
+        public set psF(param:any)
+>psF : Symbol(eC.psF, Decl(giant.ts, 424, 33))
+>param : Symbol(param, Decl(giant.ts, 425, 23))
+
+        private rgF() { }
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 425, 33))
+
+        private get rgF()
+>rgF : Symbol(eC.rgF, Decl(giant.ts, 426, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 427, 25))
+>param : Symbol(param, Decl(giant.ts, 428, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(eC.rsF, Decl(giant.ts, 428, 34))
+>param : Symbol(param, Decl(giant.ts, 429, 24))
+
+        static tV;
+>tV : Symbol(eC.tV, Decl(giant.ts, 429, 34))
+
+        static tF() { }
+>tF : Symbol(eC.tF, Decl(giant.ts, 430, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 431, 23))
+>param : Symbol(param, Decl(giant.ts, 432, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(eC.tsF, Decl(giant.ts, 432, 33))
+>param : Symbol(param, Decl(giant.ts, 433, 23))
+
+        static tgF() { }
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 433, 33))
+
+        static get tgF()
+>tgF : Symbol(eC.tgF, Decl(giant.ts, 434, 24))
+    }
+    export interface eI {
+>eI : Symbol(eI, Decl(giant.ts, 436, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p);
+>p : Symbol(p, Decl(giant.ts, 441, 9))
+
+        (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 442, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 443, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 444, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 445, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 445, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 446, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 446, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 453, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 454, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 455, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 456, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 456, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 457, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 457, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(eI[p], Decl(giant.ts, 457, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 461, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 462, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 462, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(eI.p, Decl(giant.ts, 462, 33))
+
+        p1?;
+>p1 : Symbol(eI.p1, Decl(giant.ts, 465, 10))
+
+        p2?: string;
+>p2 : Symbol(eI.p2, Decl(giant.ts, 466, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(eI.p3, Decl(giant.ts, 467, 20))
+
+        p4? ();
+>p4 : Symbol(eI.p4, Decl(giant.ts, 470, 13))
+
+        p5? (): void;
+>p5 : Symbol(eI.p5, Decl(giant.ts, 471, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(eI.p6, Decl(giant.ts, 472, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 473, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 473, 22), Decl(giant.ts, 474, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 474, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 474, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 473, 22), Decl(giant.ts, 474, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 475, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 475, 17))
+    }
+    export module eM {
+>eM : Symbol(eM, Decl(giant.ts, 476, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 478, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 478, 14))
+
+        class C { };
+>C : Symbol(C, Decl(giant.ts, 479, 25))
+
+        interface I { };
+>I : Symbol(I, Decl(giant.ts, 480, 20))
+
+        module M { };
+>M : Symbol(M, Decl(giant.ts, 481, 24))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 483, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 483, 22))
+
+        export class eC { };
+>eC : Symbol(eC, Decl(giant.ts, 484, 33))
+
+        export interface eI { };
+>eI : Symbol(eI, Decl(giant.ts, 485, 28))
+
+        export module eM { };
+>eM : Symbol(eM, Decl(giant.ts, 486, 32))
+
+        export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 488, 26))
+
+        export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 488, 31))
+
+        export declare class eaC { };
+>eaC : Symbol(eaC, Decl(giant.ts, 489, 42))
+
+        export declare module eaM { };
+>eaM : Symbol(eaM, Decl(giant.ts, 490, 37))
+    }
+    export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 493, 22))
+
+    export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 493, 27))
+
+    export declare class eaC {
+>eaC : Symbol(eaC, Decl(giant.ts, 494, 38))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(eaC.pV, Decl(giant.ts, 496, 26))
+
+        private rV;
+>rV : Symbol(eaC.rV, Decl(giant.ts, 497, 18))
+
+        public pF() { }
+>pF : Symbol(eaC.pF, Decl(giant.ts, 498, 19))
+
+        private rF() { }
+>rF : Symbol(eaC.rF, Decl(giant.ts, 499, 23))
+
+        public pgF() { }
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 500, 24))
+
+        public get pgF()
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 501, 24))
+
+        public psF(param:any) { }
+>psF : Symbol(eaC.psF, Decl(giant.ts, 502, 24))
+>param : Symbol(param, Decl(giant.ts, 503, 19))
+
+        public set psF(param:any)
+>psF : Symbol(eaC.psF, Decl(giant.ts, 503, 33))
+>param : Symbol(param, Decl(giant.ts, 504, 23))
+
+        private rgF() { }
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 504, 33))
+
+        private get rgF()
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 505, 25))
+
+        private rsF(param:any) { }
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 506, 25))
+>param : Symbol(param, Decl(giant.ts, 507, 20))
+
+        private set rsF(param:any)
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 507, 34))
+>param : Symbol(param, Decl(giant.ts, 508, 24))
+
+        static tV;
+>tV : Symbol(eaC.tV, Decl(giant.ts, 508, 34))
+
+        static tF() { }
+>tF : Symbol(eaC.tF, Decl(giant.ts, 509, 18))
+
+        static tsF(param:any) { }
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 510, 23))
+>param : Symbol(param, Decl(giant.ts, 511, 19))
+
+        static set tsF(param:any)
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 511, 33))
+>param : Symbol(param, Decl(giant.ts, 512, 23))
+
+        static tgF() { }
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 512, 33))
+
+        static get tgF()
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 513, 24))
+    }
+    export declare module eaM {
+>eaM : Symbol(eaM, Decl(giant.ts, 515, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 517, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 517, 14))
+
+        class C { }
+>C : Symbol(C, Decl(giant.ts, 518, 25))
+
+        interface I { }
+>I : Symbol(I, Decl(giant.ts, 519, 19))
+
+        module M { }
+>M : Symbol(M, Decl(giant.ts, 520, 23))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 522, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 522, 22))
+
+        export class eC { }
+>eC : Symbol(eC, Decl(giant.ts, 523, 33))
+
+        export interface eI { }
+>eI : Symbol(eI, Decl(giant.ts, 524, 27))
+
+        export module eM { }
+>eM : Symbol(eM, Decl(giant.ts, 525, 31))
+    }
+}
+export declare var eaV;
+>eaV : Symbol(eaV, Decl(giant.ts, 529, 18))
+
+export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 529, 23))
+
+export declare class eaC {
+>eaC : Symbol(eaC, Decl(giant.ts, 530, 34))
+
+    constructor () { }
+    public pV;
+>pV : Symbol(eaC.pV, Decl(giant.ts, 532, 22))
+
+    private rV;
+>rV : Symbol(eaC.rV, Decl(giant.ts, 533, 14))
+
+    public pF() { }
+>pF : Symbol(eaC.pF, Decl(giant.ts, 534, 15))
+
+    private rF() { }
+>rF : Symbol(eaC.rF, Decl(giant.ts, 535, 19))
+
+    public pgF() { }
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 536, 20))
+
+    public get pgF()
+>pgF : Symbol(eaC.pgF, Decl(giant.ts, 537, 20))
+
+    public psF(param:any) { }
+>psF : Symbol(eaC.psF, Decl(giant.ts, 538, 20))
+>param : Symbol(param, Decl(giant.ts, 539, 15))
+
+    public set psF(param:any)
+>psF : Symbol(eaC.psF, Decl(giant.ts, 539, 29))
+>param : Symbol(param, Decl(giant.ts, 540, 19))
+
+    private rgF() { }
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 540, 29))
+
+    private get rgF()
+>rgF : Symbol(eaC.rgF, Decl(giant.ts, 541, 21))
+
+    private rsF(param:any) { }
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 542, 21))
+>param : Symbol(param, Decl(giant.ts, 543, 16))
+
+    private set rsF(param:any)
+>rsF : Symbol(eaC.rsF, Decl(giant.ts, 543, 30))
+>param : Symbol(param, Decl(giant.ts, 544, 20))
+
+    static tV;
+>tV : Symbol(eaC.tV, Decl(giant.ts, 544, 30))
+
+    static tF() { }
+>tF : Symbol(eaC.tF, Decl(giant.ts, 545, 14))
+
+    static tsF(param:any) { }
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 546, 19))
+>param : Symbol(param, Decl(giant.ts, 547, 15))
+
+    static set tsF(param:any)
+>tsF : Symbol(eaC.tsF, Decl(giant.ts, 547, 29))
+>param : Symbol(param, Decl(giant.ts, 548, 19))
+
+    static tgF() { }
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 548, 29))
+
+    static get tgF()
+>tgF : Symbol(eaC.tgF, Decl(giant.ts, 549, 20))
+}
+export declare module eaM {
+>eaM : Symbol(eaM, Decl(giant.ts, 551, 1))
+
+    var V;
+>V : Symbol(V, Decl(giant.ts, 553, 7))
+
+    function F() { };
+>F : Symbol(F, Decl(giant.ts, 553, 10))
+
+    class C {
+>C : Symbol(C, Decl(giant.ts, 554, 21))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(C.pV, Decl(giant.ts, 556, 26))
+
+        private rV;
+>rV : Symbol(C.rV, Decl(giant.ts, 557, 18))
+
+        public pF() { }
+>pF : Symbol(C.pF, Decl(giant.ts, 558, 19))
+
+        static tV;
+>tV : Symbol(C.tV, Decl(giant.ts, 559, 23))
+
+        static tF() { }
+>tF : Symbol(C.tF, Decl(giant.ts, 560, 18))
+    }
+    interface I {
+>I : Symbol(I, Decl(giant.ts, 562, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p: string);
+>p : Symbol(p, Decl(giant.ts, 567, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 568, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 569, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 570, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 570, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 571, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 571, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 578, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 579, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 580, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 581, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 581, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 582, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 582, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(I[p], Decl(giant.ts, 582, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 586, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 587, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 587, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(I.p, Decl(giant.ts, 587, 33))
+
+        p1?;
+>p1 : Symbol(I.p1, Decl(giant.ts, 590, 10))
+
+        p2?: string;
+>p2 : Symbol(I.p2, Decl(giant.ts, 591, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(I.p3, Decl(giant.ts, 592, 20))
+
+        p4? ();
+>p4 : Symbol(I.p4, Decl(giant.ts, 595, 13))
+
+        p5? (): void;
+>p5 : Symbol(I.p5, Decl(giant.ts, 596, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(I.p6, Decl(giant.ts, 597, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 598, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 598, 22), Decl(giant.ts, 599, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 599, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 599, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(I.p7, Decl(giant.ts, 598, 22), Decl(giant.ts, 599, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 600, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 600, 17))
+    }
+    module M {
+>M : Symbol(M, Decl(giant.ts, 601, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 603, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 603, 14))
+
+        class C { }
+>C : Symbol(C, Decl(giant.ts, 604, 25))
+
+        interface I { }
+>I : Symbol(I, Decl(giant.ts, 605, 19))
+
+        module M { }
+>M : Symbol(M, Decl(giant.ts, 606, 23))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 608, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 608, 22))
+
+        export class eC { }
+>eC : Symbol(eC, Decl(giant.ts, 609, 33))
+
+        export interface eI { }
+>eI : Symbol(eI, Decl(giant.ts, 610, 27))
+
+        export module eM { }
+>eM : Symbol(eM, Decl(giant.ts, 611, 31))
+
+        export declare var eaV
+>eaV : Symbol(eaV, Decl(giant.ts, 613, 26))
+
+        export declare function eaF() { };
+>eaF : Symbol(eaF, Decl(giant.ts, 613, 30))
+
+        export declare class eaC { }
+>eaC : Symbol(eaC, Decl(giant.ts, 614, 42))
+
+        export declare module eaM { }
+>eaM : Symbol(eaM, Decl(giant.ts, 615, 36))
+    }
+    export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 618, 14))
+
+    export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 618, 18))
+
+    export class eC {
+>eC : Symbol(eC, Decl(giant.ts, 619, 29))
+
+        constructor () { }
+        public pV;
+>pV : Symbol(eC.pV, Decl(giant.ts, 621, 26))
+
+        private rV;
+>rV : Symbol(eC.rV, Decl(giant.ts, 622, 18))
+
+        public pF() { }
+>pF : Symbol(eC.pF, Decl(giant.ts, 623, 19))
+
+        static tV
+>tV : Symbol(eC.tV, Decl(giant.ts, 624, 23))
+
+        static tF() { }
+>tF : Symbol(eC.tF, Decl(giant.ts, 625, 17))
+    }
+    export interface eI {
+>eI : Symbol(eI, Decl(giant.ts, 627, 5))
+
+        //Call Signature
+        ();
+        (): number;
+        (p);
+>p : Symbol(p, Decl(giant.ts, 632, 9))
+
+        (p1: string);
+>p1 : Symbol(p1, Decl(giant.ts, 633, 9))
+
+        (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 634, 9))
+
+        (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 635, 9))
+
+        (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 636, 9))
+>p5 : Symbol(p5, Decl(giant.ts, 636, 20))
+
+        (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 637, 9))
+>p7 : Symbol(p7, Decl(giant.ts, 637, 20))
+
+        //(p8?: string, ...p9: any[]);
+        //(p10:string, p8?: string, ...p9: any[]);
+    
+        //Construct Signature
+        new ();
+        new (): number;
+        new (p: string);
+>p : Symbol(p, Decl(giant.ts, 644, 13))
+
+        new (p2?: string);
+>p2 : Symbol(p2, Decl(giant.ts, 645, 13))
+
+        new (...p3: any[]);
+>p3 : Symbol(p3, Decl(giant.ts, 646, 13))
+
+        new (p4: string, p5?: string);
+>p4 : Symbol(p4, Decl(giant.ts, 647, 13))
+>p5 : Symbol(p5, Decl(giant.ts, 647, 24))
+
+        new (p6: string, ...p7: any[]);
+>p6 : Symbol(p6, Decl(giant.ts, 648, 13))
+>p7 : Symbol(p7, Decl(giant.ts, 648, 24))
+
+        //Index Signature
+        [p];
+>[p] : Symbol(eI[p], Decl(giant.ts, 648, 39))
+
+        [p1: string];
+>p1 : Symbol(p1, Decl(giant.ts, 652, 9))
+
+        [p2: string, p3: number];
+>p2 : Symbol(p2, Decl(giant.ts, 653, 9))
+>p3 : Symbol(p3, Decl(giant.ts, 653, 20))
+
+        //Property Signature
+        p;
+>p : Symbol(eI.p, Decl(giant.ts, 653, 33))
+
+        p1?;
+>p1 : Symbol(eI.p1, Decl(giant.ts, 656, 10))
+
+        p2?: string;
+>p2 : Symbol(eI.p2, Decl(giant.ts, 657, 12))
+    
+        //Function Signature
+        p3();
+>p3 : Symbol(eI.p3, Decl(giant.ts, 658, 20))
+
+        p4? ();
+>p4 : Symbol(eI.p4, Decl(giant.ts, 661, 13))
+
+        p5? (): void;
+>p5 : Symbol(eI.p5, Decl(giant.ts, 662, 15))
+
+        p6(pa1): void;
+>p6 : Symbol(eI.p6, Decl(giant.ts, 663, 21))
+>pa1 : Symbol(pa1, Decl(giant.ts, 664, 11))
+
+        p7(pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 664, 22), Decl(giant.ts, 665, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 665, 11))
+>pa2 : Symbol(pa2, Decl(giant.ts, 665, 15))
+
+        p7? (pa1, pa2): void;
+>p7 : Symbol(eI.p7, Decl(giant.ts, 664, 22), Decl(giant.ts, 665, 27))
+>pa1 : Symbol(pa1, Decl(giant.ts, 666, 13))
+>pa2 : Symbol(pa2, Decl(giant.ts, 666, 17))
+    }
+    export module eM {
+>eM : Symbol(eM, Decl(giant.ts, 667, 5))
+
+        var V;
+>V : Symbol(V, Decl(giant.ts, 669, 11))
+
+        function F() { };
+>F : Symbol(F, Decl(giant.ts, 669, 14))
+
+        class C { }
+>C : Symbol(C, Decl(giant.ts, 670, 25))
+
+        module M { }
+>M : Symbol(M, Decl(giant.ts, 671, 19))
+
+        export var eV;
+>eV : Symbol(eV, Decl(giant.ts, 673, 18))
+
+        export function eF() { };
+>eF : Symbol(eF, Decl(giant.ts, 673, 22))
+
+        export class eC { }
+>eC : Symbol(eC, Decl(giant.ts, 674, 33))
+
+        export interface eI { }
+>eI : Symbol(eI, Decl(giant.ts, 675, 27))
+
+        export module eM { }
+>eM : Symbol(eM, Decl(giant.ts, 676, 31))
+    }
+}

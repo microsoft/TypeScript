@@ -1,0 +1,47 @@
+=== tests/cases/compiler/excessPropertyCheckWithSpread.ts ===
+declare function f({ a: number }): void
+>f : Symbol(f, Decl(excessPropertyCheckWithSpread.ts, 0, 0))
+>a : Symbol(a)
+>number : Symbol(number, Decl(excessPropertyCheckWithSpread.ts, 0, 20))
+
+interface I {
+>I : Symbol(I, Decl(excessPropertyCheckWithSpread.ts, 0, 39))
+
+    readonly n: number;
+>n : Symbol(I.n, Decl(excessPropertyCheckWithSpread.ts, 1, 13))
+}
+declare let i: I;
+>i : Symbol(i, Decl(excessPropertyCheckWithSpread.ts, 4, 11))
+>I : Symbol(I, Decl(excessPropertyCheckWithSpread.ts, 0, 39))
+
+f({ a: 1, ...i });
+>f : Symbol(f, Decl(excessPropertyCheckWithSpread.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyCheckWithSpread.ts, 5, 3))
+>i : Symbol(i, Decl(excessPropertyCheckWithSpread.ts, 4, 11))
+
+interface R {
+>R : Symbol(R, Decl(excessPropertyCheckWithSpread.ts, 5, 18))
+
+    opt?: number
+>opt : Symbol(R.opt, Decl(excessPropertyCheckWithSpread.ts, 7, 13))
+}
+interface L {
+>L : Symbol(L, Decl(excessPropertyCheckWithSpread.ts, 9, 1))
+
+    opt: string
+>opt : Symbol(L.opt, Decl(excessPropertyCheckWithSpread.ts, 10, 13))
+}
+declare let l: L;
+>l : Symbol(l, Decl(excessPropertyCheckWithSpread.ts, 13, 11))
+>L : Symbol(L, Decl(excessPropertyCheckWithSpread.ts, 9, 1))
+
+declare let r: R;
+>r : Symbol(r, Decl(excessPropertyCheckWithSpread.ts, 14, 11))
+>R : Symbol(R, Decl(excessPropertyCheckWithSpread.ts, 5, 18))
+
+f({ a: 1, ...l, ...r });
+>f : Symbol(f, Decl(excessPropertyCheckWithSpread.ts, 0, 0))
+>a : Symbol(a, Decl(excessPropertyCheckWithSpread.ts, 15, 3))
+>l : Symbol(l, Decl(excessPropertyCheckWithSpread.ts, 13, 11))
+>r : Symbol(r, Decl(excessPropertyCheckWithSpread.ts, 14, 11))
+

@@ -1,0 +1,23 @@
+=== tests/cases/compiler/captureSuperPropertyAccessInSuperCall01.ts ===
+class A {
+>A : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+
+	constructor(f: () => string) {
+>f : Symbol(f, Decl(captureSuperPropertyAccessInSuperCall01.ts, 1, 13))
+	}
+	public blah(): string { return ""; }
+>blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+}
+
+class B extends A {
+>B : Symbol(B, Decl(captureSuperPropertyAccessInSuperCall01.ts, 4, 1))
+>A : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+
+	constructor() {
+		super(() => { return super.blah(); })
+>super : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+>super.blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+>super : Symbol(A, Decl(captureSuperPropertyAccessInSuperCall01.ts, 0, 0))
+>blah : Symbol(A.blah, Decl(captureSuperPropertyAccessInSuperCall01.ts, 2, 2))
+	}
+}

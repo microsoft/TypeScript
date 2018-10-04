@@ -1,0 +1,31 @@
+=== tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly.ts ===
+class C extends E { foo: string; } // error
+>C : C
+>E : typeof E
+>foo : string
+
+class D extends C { bar: string; }
+>D : D
+>C : typeof C
+>bar : string
+
+class E extends D { baz: number; }
+>E : E
+>D : typeof D
+>baz : number
+
+class C2<T> extends E2<T> { foo: T; } // error
+>C2 : C2<T>
+>E2 : typeof E2
+>foo : T
+
+class D2<T> extends C2<T> { bar: T; }
+>D2 : D2<T>
+>C2 : typeof C2
+>bar : T
+
+class E2<T> extends D2<T> { baz: T; }
+>E2 : E2<T>
+>D2 : typeof D2
+>baz : T
+

@@ -1,0 +1,8 @@
+tests/cases/compiler/anyIndexedAccessArrayNoException.ts(1,12): error TS2538: Type '[]' cannot be used as an index type.
+
+
+==== tests/cases/compiler/anyIndexedAccessArrayNoException.ts (1 errors) ====
+    var x: any[[]];
+               ~~
+!!! error TS2538: Type '[]' cannot be used as an index type.
+    

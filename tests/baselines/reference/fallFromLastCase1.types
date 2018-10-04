@@ -1,5 +1,4 @@
 === tests/cases/compiler/fallFromLastCase1.ts ===
-
 declare function use(a: string);
 >use : (a: string) => any
 >a : string
@@ -17,7 +16,7 @@ function foo1(a: number) {
             use("1");
 >use("1") : any
 >use : (a: string) => any
->"1" : string
+>"1" : "1"
 
             break;
         case 2:
@@ -26,7 +25,7 @@ function foo1(a: number) {
             use("2");
 >use("2") : any
 >use : (a: string) => any
->"2" : string
+>"2" : "2"
     }
 }
 
@@ -44,13 +43,13 @@ function foo2(a: number) {
             use("1");
 >use("1") : any
 >use : (a: string) => any
->"1" : string
+>"1" : "1"
 
             break;
         default:
             use("2");
 >use("2") : any
 >use : (a: string) => any
->"2" : string
+>"2" : "2"
     }
 }

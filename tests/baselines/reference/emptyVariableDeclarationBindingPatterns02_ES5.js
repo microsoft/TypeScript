@@ -1,5 +1,4 @@
 //// [emptyVariableDeclarationBindingPatterns02_ES5.ts]
-
 (function () {
     var {};
     let {};

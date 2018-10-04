@@ -8,7 +8,7 @@ class C {
 }
 
 //// [conflictMarkerTrivia1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.v = 1;
     }

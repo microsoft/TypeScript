@@ -3,10 +3,9 @@ import y = require("./a");
 >y : typeof y
 
 === tests/cases/compiler/ref.ts ===
-
 var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/a.ts ===
 /// <reference path="ref.ts"/>

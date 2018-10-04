@@ -1,0 +1,18 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/TypeArgumentLists/TypeArgumentList1.ts ===
+Foo<A,B,\ C>(4, 5, 6);
+>Foo<A,B, : any
+>Foo<A,B : any
+>Foo<A : boolean
+>Foo : any
+>A : any
+>B : any
+> : any
+>C>(4, 5, 6) : boolean
+>C : any
+>(4, 5, 6) : 6
+>4, 5, 6 : 6
+>4, 5 : 5
+>4 : 4
+>5 : 5
+>6 : 6
+

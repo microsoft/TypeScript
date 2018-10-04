@@ -1,0 +1,93 @@
+{
+    "kind": "JSDocComment",
+    "pos": 0,
+    "end": 66,
+    "tags": {
+        "0": {
+            "kind": "JSDocParameterTag",
+            "pos": 6,
+            "end": 64,
+            "atToken": {
+                "kind": "AtToken",
+                "pos": 6,
+                "end": 7
+            },
+            "tagName": {
+                "kind": "Identifier",
+                "pos": 7,
+                "end": 12,
+                "escapedText": "param"
+            },
+            "typeExpression": {
+                "kind": "JSDocTypeExpression",
+                "pos": 34,
+                "end": 64,
+                "type": {
+                    "kind": "JSDocTypeLiteral",
+                    "pos": 34,
+                    "end": 64,
+                    "jsDocPropertyTags": [
+                        {
+                            "kind": "JSDocParameterTag",
+                            "pos": 34,
+                            "end": 64,
+                            "atToken": {
+                                "kind": "AtToken",
+                                "pos": 34,
+                                "end": 35
+                            },
+                            "tagName": {
+                                "kind": "Identifier",
+                                "pos": 35,
+                                "end": 40,
+                                "escapedText": "param"
+                            },
+                            "typeExpression": {
+                                "kind": "JSDocTypeExpression",
+                                "pos": 41,
+                                "end": 49,
+                                "type": {
+                                    "kind": "StringKeyword",
+                                    "pos": 42,
+                                    "end": 48
+                                }
+                            },
+                            "name": {
+                                "kind": "FirstNode",
+                                "pos": 50,
+                                "end": 53,
+                                "left": {
+                                    "kind": "Identifier",
+                                    "pos": 50,
+                                    "end": 51,
+                                    "escapedText": "o"
+                                },
+                                "right": {
+                                    "kind": "Identifier",
+                                    "pos": 52,
+                                    "end": 53,
+                                    "escapedText": "f"
+                                }
+                            },
+                            "isNameFirst": false,
+                            "isBracketed": false,
+                            "comment": "Doc for f"
+                        }
+                    ]
+                }
+            },
+            "name": {
+                "kind": "Identifier",
+                "pos": 22,
+                "end": 23,
+                "escapedText": "o"
+            },
+            "isNameFirst": true,
+            "isBracketed": false,
+            "comment": "Doc doc"
+        },
+        "length": 1,
+        "pos": 6,
+        "end": 64
+    }
+}

@@ -78,20 +78,20 @@ function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures2.js]
 // object types are identical structurally
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x) {
         return null;
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         return null;
     }
     return C;
 }());
 var a;
-var b = { new: function (x) { return ''; } }; // not a construct signature, function called new
+var b = { "new": function (x) { return ''; } }; // not a construct signature, function called new
 function foo1b(x) { }
 function foo1c(x) { }
 function foo2(x) { }

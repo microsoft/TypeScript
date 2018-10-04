@@ -2,22 +2,22 @@
 true.toString()
 >true.toString() : string
 >true.toString : () => string
->true : boolean
+>true : true
 >toString : () => string
 
 var aBool = false;
 >aBool : boolean
->false : boolean
+>false : false
 
 aBool.toString();
 >aBool.toString() : string
 >aBool.toString : () => string
->aBool : boolean
+>aBool : false
 >toString : () => string
 
 1..toString();
 >1..toString() : string
 >1..toString : (radix?: number) => string
->1. : number
+>1. : 1
 >toString : (radix?: number) => string
 

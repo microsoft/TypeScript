@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithNew.ts ===
+var a: any;
+>a : any
+
+var b: any;
+>b : any
+
+var c: any;
+>c : any
+
+new a ** b ** c;
+>new a ** b ** c : number
+>new a : any
+>a : any
+>b ** c : number
+>b : any
+>c : any
+
+new a ** new b ** c;
+>new a ** new b ** c : number
+>new a : any
+>a : any
+>new b ** c : number
+>new b : any
+>b : any
+>c : any
+
+new (a ** b ** c);
+>new (a ** b ** c) : any
+>(a ** b ** c) : number
+>a ** b ** c : number
+>a : any
+>b ** c : number
+>b : any
+>c : any
+

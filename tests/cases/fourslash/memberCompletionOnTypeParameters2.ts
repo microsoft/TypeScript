@@ -17,5 +17,5 @@
 
 
 goTo.marker();
-verify.memberListContains("foo");
-verify.memberListCount(1);
+verify.completionListContains("foo");
+verify.completionListCount(1);

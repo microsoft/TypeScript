@@ -5,16 +5,5 @@
 ////        var v = /*1*/
 ////}
 
-goTo.marker("1");
-
-verify.memberListContains("foo");
-verify.memberListContains("x");
-verify.memberListContains("y");
-verify.memberListContains("z");
-
-verify.memberListContains("bar");
-verify.memberListContains("a");
-verify.memberListContains("b");
-verify.memberListContains("c");
-
-verify.memberListContains("v"); // questionable
+// Note: "v" questionable since we're in its initializer
+verify.completions({ marker: "1", includes: ["foo", "x", "y", "z", "bar", "a", "b", "c", "v"], isNewIdentifierLocation: true });

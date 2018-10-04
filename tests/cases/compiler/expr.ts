@@ -6,7 +6,7 @@ enum E {
 }
 
 function f() {
-    var a;
+    var a: any;
     var n=3;
     var s="";
     var b=false;

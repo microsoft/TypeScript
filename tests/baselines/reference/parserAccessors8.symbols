@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/Accessors/parserAccessors8.ts ===
+var v = { set foo() { } }
+>v : Symbol(v, Decl(parserAccessors8.ts, 0, 3))
+>foo : Symbol(foo, Decl(parserAccessors8.ts, 0, 9))
+

@@ -22,7 +22,7 @@ function other<T>(arg: T) {
 
         [x: string]: Object;
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 8, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         [x: number]: T; // ok, T is a subtype of Object because its apparent type is {}
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 9, 9))
@@ -40,7 +40,7 @@ function other3<T extends U, U extends Date>(arg: T) {
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 16))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 28))
 >U : Symbol(U, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 28))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >arg : Symbol(arg, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 45))
 >T : Symbol(T, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 14, 16))
 
@@ -49,7 +49,7 @@ function other3<T extends U, U extends Date>(arg: T) {
 
         [x: string]: Object;
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 16, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         [x: number]: T;
 >x : Symbol(x, Decl(genericCallWithObjectTypeArgsAndIndexersErrors.ts, 17, 9))

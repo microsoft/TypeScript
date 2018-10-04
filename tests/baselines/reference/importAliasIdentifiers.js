@@ -49,7 +49,7 @@ var p: { x: number; y: number; };
 //// [importAliasIdentifiers.js]
 var moduleA;
 (function (moduleA) {
-    var Point = (function () {
+    var Point = /** @class */ (function () {
         function Point(x, y) {
             this.x = x;
             this.y = y;
@@ -62,12 +62,11 @@ var alias = moduleA;
 var p;
 var p;
 var p;
-var clodule = (function () {
+var clodule = /** @class */ (function () {
     function clodule() {
     }
     return clodule;
 }());
-var clodule;
 (function (clodule) {
     var Point = { x: 0, y: 0 };
 })(clodule || (clodule = {}));
@@ -78,7 +77,6 @@ var p;
 function fundule() {
     return { x: 0, y: 0 };
 }
-var fundule;
 (function (fundule) {
     var Point = { x: 0, y: 0 };
 })(fundule || (fundule = {}));

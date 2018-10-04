@@ -13,11 +13,11 @@ class C {
 
     [s: string]: () => Foo2;
 >s : string
->Foo2 : Foo2
 
     // Computed properties
     static [""]() { return new Foo }
->"" : string
+>[""] : () => Foo
+>"" : ""
 >new Foo : Foo
 >Foo : typeof Foo
 }

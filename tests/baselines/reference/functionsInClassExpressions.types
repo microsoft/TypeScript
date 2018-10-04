@@ -1,7 +1,7 @@
 === tests/cases/compiler/functionsInClassExpressions.ts ===
 let Foo = class {
->Foo : typeof (Anonymous class)
->class {    constructor() {        this.bar++;    }    bar = 0;    inc = () => {        this.bar++;    }    m() { return this.bar; }} : typeof (Anonymous class)
+>Foo : typeof Foo
+>class {    constructor() {        this.bar++;    }    bar = 0;    inc = () => {        this.bar++;    }    m() { return this.bar; }} : typeof Foo
 
     constructor() {
         this.bar++;
@@ -12,7 +12,7 @@ let Foo = class {
     }
     bar = 0;
 >bar : number
->0 : number
+>0 : 0
 
     inc = () => {
 >inc : () => void

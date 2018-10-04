@@ -1,0 +1,16 @@
+=== tests/cases/compiler/importDeclWithDeclareModifier.ts ===
+module x {
+>x : Symbol(x, Decl(importDeclWithDeclareModifier.ts, 0, 0))
+
+    interface c {
+>c : Symbol(c, Decl(importDeclWithDeclareModifier.ts, 0, 10))
+    }
+}
+declare export import a = x.c;
+>a : Symbol(a, Decl(importDeclWithDeclareModifier.ts, 3, 1))
+>x : Symbol(x, Decl(importDeclWithDeclareModifier.ts, 0, 0))
+
+var b: a;
+>b : Symbol(b, Decl(importDeclWithDeclareModifier.ts, 5, 3))
+>a : Symbol(a, Decl(importDeclWithDeclareModifier.ts, 3, 1))
+

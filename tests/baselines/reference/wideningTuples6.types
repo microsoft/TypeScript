@@ -7,12 +7,12 @@ var [a, b] = [undefined, null];
 >null : null
 
 a = "";
->a = "" : string
+>a = "" : ""
 >a : any
->"" : string
+>"" : ""
 
 b = "";
->b = "" : string
+>b = "" : ""
 >b : any
->"" : string
+>"" : ""
 

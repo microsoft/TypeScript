@@ -21,5 +21,5 @@ var x = foo({a:1});
 >foo : { (bar: { a: number; }): number; (bar: { a: string; }): string; }
 >{a:1} : { a: number; }
 >a : number
->1 : number
+>1 : 1
 

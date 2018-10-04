@@ -4,8 +4,9 @@ var obj = {
 >{    [this.bar]: 0} : { [x: number]: number; }
 
     [this.bar]: 0
+>[this.bar] : number
 >this.bar : any
 >this : any
 >bar : any
->0 : number
+>0 : 0
 }

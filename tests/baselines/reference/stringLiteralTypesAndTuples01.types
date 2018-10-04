@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/stringLiteral/stringLiteralTypesAndTuples01.ts ===
-
 // Should all be strings.
 let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 >hello : string
@@ -7,10 +6,10 @@ let [hello, brave, newish, world] = ["Hello", "Brave", "New", "World"];
 >newish : string
 >world : string
 >["Hello", "Brave", "New", "World"] : [string, string, string, string]
->"Hello" : string
->"Brave" : string
->"New" : string
->"World" : string
+>"Hello" : "Hello"
+>"Brave" : "Brave"
+>"New" : "New"
+>"World" : "World"
 
 type RexOrRaptor = "t-rex" | "raptor"
 >RexOrRaptor : RexOrRaptor
@@ -19,21 +18,19 @@ let [im, a, dinosaur]: ["I'm", "a", RexOrRaptor] = ['I\'m', 'a', 't-rex'];
 >im : "I'm"
 >a : "a"
 >dinosaur : RexOrRaptor
->RexOrRaptor : RexOrRaptor
 >['I\'m', 'a', 't-rex'] : ["I'm", "a", "t-rex"]
 >'I\'m' : "I'm"
 >'a' : "a"
 >'t-rex' : "t-rex"
 
 rawr(dinosaur);
->rawr(dinosaur) : string
->rawr : (dino: RexOrRaptor) => string
+>rawr(dinosaur) : "ROAAAAR!" | "yip yip!"
+>rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
 >dinosaur : "t-rex"
 
 function rawr(dino: RexOrRaptor) {
->rawr : (dino: RexOrRaptor) => string
+>rawr : (dino: RexOrRaptor) => "ROAAAAR!" | "yip yip!"
 >dino : RexOrRaptor
->RexOrRaptor : RexOrRaptor
 
     if (dino === "t-rex") {
 >dino === "t-rex" : boolean
@@ -41,7 +38,7 @@ function rawr(dino: RexOrRaptor) {
 >"t-rex" : "t-rex"
 
         return "ROAAAAR!";
->"ROAAAAR!" : string
+>"ROAAAAR!" : "ROAAAAR!"
     }
     if (dino === "raptor") {
 >dino === "raptor" : boolean
@@ -49,11 +46,11 @@ function rawr(dino: RexOrRaptor) {
 >"raptor" : "raptor"
 
         return "yip yip!";
->"yip yip!" : string
+>"yip yip!" : "yip yip!"
     }
 
     throw "Unexpected " + dino;
 >"Unexpected " + dino : string
->"Unexpected " : string
+>"Unexpected " : "Unexpected "
 >dino : never
 }

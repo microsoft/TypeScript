@@ -1,5 +1,4 @@
 === tests/cases/compiler/file1.ts ===
-
 declare class Promise { }
 >Promise : Promise
 
@@ -11,8 +10,8 @@ declare class C {}
 
 declare enum E {X = 1};
 >E : E
->X : E
->1 : number
+>X : E.X
+>1 : 1
 
 export var promise = Promise;
 >promise : typeof Promise
@@ -45,8 +44,8 @@ export declare var v: number;
 === tests/cases/compiler/file5.ts ===
 export declare enum E {X = 1}
 >E : E
->X : E
->1 : number
+>X : E.X
+>1 : 1
 
 === tests/cases/compiler/file6.ts ===
 export declare module M { var v: number; }

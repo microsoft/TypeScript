@@ -1,0 +1,72 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericFunctionParameters.ts ===
+declare function f1<T>(cb: <S>(x: S) => T): T;
+>f1 : Symbol(f1, Decl(genericFunctionParameters.ts, 0, 0))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 0, 20))
+>cb : Symbol(cb, Decl(genericFunctionParameters.ts, 0, 23))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 0, 28))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 0, 31))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 0, 28))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 0, 20))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 0, 20))
+
+declare function f2<T>(cb: <S extends number>(x: S) => T): T;
+>f2 : Symbol(f2, Decl(genericFunctionParameters.ts, 0, 46))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 1, 20))
+>cb : Symbol(cb, Decl(genericFunctionParameters.ts, 1, 23))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 1, 28))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 1, 46))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 1, 28))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 1, 20))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 1, 20))
+
+declare function f3<T>(cb: <S extends Array<S>>(x: S) => T): T;
+>f3 : Symbol(f3, Decl(genericFunctionParameters.ts, 1, 61))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 2, 20))
+>cb : Symbol(cb, Decl(genericFunctionParameters.ts, 2, 23))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 2, 48))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 2, 28))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 2, 20))
+>T : Symbol(T, Decl(genericFunctionParameters.ts, 2, 20))
+
+let x1 = f1(x => x);  // {}
+>x1 : Symbol(x1, Decl(genericFunctionParameters.ts, 4, 3))
+>f1 : Symbol(f1, Decl(genericFunctionParameters.ts, 0, 0))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 4, 12))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 4, 12))
+
+let x2 = f2(x => x);  // number
+>x2 : Symbol(x2, Decl(genericFunctionParameters.ts, 5, 3))
+>f2 : Symbol(f2, Decl(genericFunctionParameters.ts, 0, 46))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 5, 12))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 5, 12))
+
+let x3 = f3(x => x);  // Array<any>
+>x3 : Symbol(x3, Decl(genericFunctionParameters.ts, 6, 3))
+>f3 : Symbol(f3, Decl(genericFunctionParameters.ts, 1, 61))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 6, 12))
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 6, 12))
+
+// Repro from #19345
+
+declare const s: <R>(go: <S>(ops: { init(): S; }) => R) => R;
+>s : Symbol(s, Decl(genericFunctionParameters.ts, 10, 13))
+>R : Symbol(R, Decl(genericFunctionParameters.ts, 10, 18))
+>go : Symbol(go, Decl(genericFunctionParameters.ts, 10, 21))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 10, 26))
+>ops : Symbol(ops, Decl(genericFunctionParameters.ts, 10, 29))
+>init : Symbol(init, Decl(genericFunctionParameters.ts, 10, 35))
+>S : Symbol(S, Decl(genericFunctionParameters.ts, 10, 26))
+>R : Symbol(R, Decl(genericFunctionParameters.ts, 10, 18))
+>R : Symbol(R, Decl(genericFunctionParameters.ts, 10, 18))
+
+const x = s(a => a.init());  // x is any, should have been {}
+>x : Symbol(x, Decl(genericFunctionParameters.ts, 11, 5))
+>s : Symbol(s, Decl(genericFunctionParameters.ts, 10, 13))
+>a : Symbol(a, Decl(genericFunctionParameters.ts, 11, 12))
+>a.init : Symbol(init, Decl(genericFunctionParameters.ts, 10, 35))
+>a : Symbol(a, Decl(genericFunctionParameters.ts, 11, 12))
+>init : Symbol(init, Decl(genericFunctionParameters.ts, 10, 35))
+

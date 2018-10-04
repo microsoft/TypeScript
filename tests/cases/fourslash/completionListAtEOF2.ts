@@ -8,4 +8,4 @@
 ////var p = <Shapes.
 
 goTo.eof();
-verify.memberListContains("Point");
+verify.completionListContains("Point");

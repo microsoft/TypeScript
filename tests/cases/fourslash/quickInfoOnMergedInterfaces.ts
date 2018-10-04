@@ -16,5 +16,4 @@
 ////    var /*1*/r4 = a(1, true);
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs("var r4: number");
+verify.quickInfoAt("1", "var r4: number");

@@ -1,0 +1,47 @@
+=== tests/cases/compiler/ambiguousOverload.ts ===
+function foof(bar: string, y): number;
+>foof : Symbol(foof, Decl(ambiguousOverload.ts, 0, 0), Decl(ambiguousOverload.ts, 0, 38), Decl(ambiguousOverload.ts, 1, 38))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 0, 14))
+>y : Symbol(y, Decl(ambiguousOverload.ts, 0, 26))
+
+function foof(bar: string, x): string;
+>foof : Symbol(foof, Decl(ambiguousOverload.ts, 0, 0), Decl(ambiguousOverload.ts, 0, 38), Decl(ambiguousOverload.ts, 1, 38))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 1, 14))
+>x : Symbol(x, Decl(ambiguousOverload.ts, 1, 26))
+
+function foof(bar: any): any { return bar };
+>foof : Symbol(foof, Decl(ambiguousOverload.ts, 0, 0), Decl(ambiguousOverload.ts, 0, 38), Decl(ambiguousOverload.ts, 1, 38))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 2, 14))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 2, 14))
+
+var x: number = foof("s", null);
+>x : Symbol(x, Decl(ambiguousOverload.ts, 3, 3))
+>foof : Symbol(foof, Decl(ambiguousOverload.ts, 0, 0), Decl(ambiguousOverload.ts, 0, 38), Decl(ambiguousOverload.ts, 1, 38))
+
+var y: string = foof("s", null);
+>y : Symbol(y, Decl(ambiguousOverload.ts, 4, 3))
+>foof : Symbol(foof, Decl(ambiguousOverload.ts, 0, 0), Decl(ambiguousOverload.ts, 0, 38), Decl(ambiguousOverload.ts, 1, 38))
+
+function foof2(bar: string, x): string;
+>foof2 : Symbol(foof2, Decl(ambiguousOverload.ts, 4, 32), Decl(ambiguousOverload.ts, 6, 39), Decl(ambiguousOverload.ts, 7, 39))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 6, 15))
+>x : Symbol(x, Decl(ambiguousOverload.ts, 6, 27))
+
+function foof2(bar: string, y): number;
+>foof2 : Symbol(foof2, Decl(ambiguousOverload.ts, 4, 32), Decl(ambiguousOverload.ts, 6, 39), Decl(ambiguousOverload.ts, 7, 39))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 7, 15))
+>y : Symbol(y, Decl(ambiguousOverload.ts, 7, 27))
+
+function foof2(bar: any): any { return bar };
+>foof2 : Symbol(foof2, Decl(ambiguousOverload.ts, 4, 32), Decl(ambiguousOverload.ts, 6, 39), Decl(ambiguousOverload.ts, 7, 39))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 8, 15))
+>bar : Symbol(bar, Decl(ambiguousOverload.ts, 8, 15))
+
+var x2: string = foof2("s", null);
+>x2 : Symbol(x2, Decl(ambiguousOverload.ts, 9, 3))
+>foof2 : Symbol(foof2, Decl(ambiguousOverload.ts, 4, 32), Decl(ambiguousOverload.ts, 6, 39), Decl(ambiguousOverload.ts, 7, 39))
+
+var y2: number = foof2("s", null);
+>y2 : Symbol(y2, Decl(ambiguousOverload.ts, 10, 3))
+>foof2 : Symbol(foof2, Decl(ambiguousOverload.ts, 4, 32), Decl(ambiguousOverload.ts, 6, 39), Decl(ambiguousOverload.ts, 7, 39))
+

@@ -14,11 +14,9 @@ import X2 from "foobarx";
 const x: X = X;
 >x : number
 >X : number
->X : number
 
 const x2: X2 = X2;
 >x2 : number
->X2 : number
 >X2 : number
 
 import B from "./a";
@@ -26,7 +24,6 @@ import B from "./a";
 
 const b: B = new B(B.b);
 >b : B
->B : B
 >new B(B.b) : B
 >B : typeof B
 >B.b : number
@@ -39,7 +36,7 @@ import fooLength from "./b";
 fooLength + 1;
 >fooLength + 1 : number
 >fooLength : number
->1 : number
+>1 : 1
 
 === tests/cases/compiler/declarations.d.ts ===
 // This test is just like exportEqualsProperty, but with `export default`.
@@ -56,13 +53,17 @@ declare namespace foo.bar {
 }
 
 declare module "foobar" {
+>"foobar" : typeof import("foobar")
+
     export default foo.bar;
->foo.bar : typeof default
+>foo.bar : typeof foo.bar
 >foo : typeof foo
->bar : typeof default
+>bar : typeof foo.bar
 }
 
 declare module "foobarx" {
+>"foobarx" : typeof import("foobarx")
+
     export default foo.bar.X;
 >foo.bar.X : number
 >foo.bar : typeof foo.bar
@@ -82,16 +83,16 @@ namespace A {
     export namespace B { export const b: number = 0; }
 >B : typeof B
 >b : number
->0 : number
+>0 : 0
 }
 export default A.B;
->A.B : typeof default
+>A.B : typeof A.B
 >A : typeof A
->B : typeof default
+>B : typeof A.B
 
 === tests/cases/compiler/b.ts ===
 export default "foo".length;
 >"foo".length : number
->"foo" : string
+>"foo" : "foo"
 >length : number
 

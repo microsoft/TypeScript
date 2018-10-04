@@ -1,0 +1,23 @@
+=== tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts ===
+interface I {}
+type any = I;
+>any : I
+
+type number = I;
+>number : I
+
+type boolean = I;
+>boolean : I
+
+type string = I;
+>string : I
+
+type void = I;
+>type : any
+>void : undefined
+> : any
+>I : any
+
+type object = I;
+>object : I
+

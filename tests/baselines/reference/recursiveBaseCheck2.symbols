@@ -1,0 +1,45 @@
+=== tests/cases/compiler/recursiveBaseCheck2.ts ===
+declare module Box2D.Collision.Shapes {
+>Box2D : Symbol(Box2D, Decl(recursiveBaseCheck2.ts, 0, 0), Decl(recursiveBaseCheck2.ts, 5, 1))
+>Collision : Symbol(Collision, Decl(recursiveBaseCheck2.ts, 0, 21))
+>Shapes : Symbol(Shapes, Decl(recursiveBaseCheck2.ts, 0, 31))
+
+    export class b2CircleShape extends b2Shape {
+>b2CircleShape : Symbol(b2CircleShape, Decl(recursiveBaseCheck2.ts, 0, 39))
+>b2Shape : Symbol(b2Shape, Decl(recursiveBaseCheck2.ts, 2, 5))
+    }
+    export class b2Shape extends Box2D.Collision.Shapes.b2CircleShape {
+>b2Shape : Symbol(b2Shape, Decl(recursiveBaseCheck2.ts, 2, 5))
+>Box2D.Collision.Shapes.b2CircleShape : Symbol(b2CircleShape, Decl(recursiveBaseCheck2.ts, 0, 39))
+>Box2D.Collision.Shapes : Symbol(Shapes, Decl(recursiveBaseCheck2.ts, 0, 31))
+>Box2D.Collision : Symbol(Collision, Decl(recursiveBaseCheck2.ts, 0, 21))
+>Box2D : Symbol(Box2D, Decl(recursiveBaseCheck2.ts, 0, 0), Decl(recursiveBaseCheck2.ts, 5, 1))
+>Collision : Symbol(Collision, Decl(recursiveBaseCheck2.ts, 0, 21))
+>Shapes : Symbol(Shapes, Decl(recursiveBaseCheck2.ts, 0, 31))
+>b2CircleShape : Symbol(b2CircleShape, Decl(recursiveBaseCheck2.ts, 0, 39))
+    }
+}
+declare module Box2D.Dynamics {
+>Box2D : Symbol(Box2D, Decl(recursiveBaseCheck2.ts, 0, 0), Decl(recursiveBaseCheck2.ts, 5, 1))
+>Dynamics : Symbol(Dynamics, Decl(recursiveBaseCheck2.ts, 6, 21))
+
+    export class b2ContactListener extends Box2D.Collision.Shapes.b2Shape {
+>b2ContactListener : Symbol(b2ContactListener, Decl(recursiveBaseCheck2.ts, 6, 31))
+>Box2D.Collision.Shapes.b2Shape : Symbol(Collision.Shapes.b2Shape, Decl(recursiveBaseCheck2.ts, 2, 5))
+>Box2D.Collision.Shapes : Symbol(Collision.Shapes, Decl(recursiveBaseCheck2.ts, 0, 31))
+>Box2D.Collision : Symbol(Collision, Decl(recursiveBaseCheck2.ts, 0, 21))
+>Box2D : Symbol(Box2D, Decl(recursiveBaseCheck2.ts, 0, 0), Decl(recursiveBaseCheck2.ts, 5, 1))
+>Collision : Symbol(Collision, Decl(recursiveBaseCheck2.ts, 0, 21))
+>Shapes : Symbol(Collision.Shapes, Decl(recursiveBaseCheck2.ts, 0, 31))
+>b2Shape : Symbol(Collision.Shapes.b2Shape, Decl(recursiveBaseCheck2.ts, 2, 5))
+    }
+    export class b2FixtureDef extends Box2D.Dynamics.b2ContactListener {
+>b2FixtureDef : Symbol(b2FixtureDef, Decl(recursiveBaseCheck2.ts, 8, 5))
+>Box2D.Dynamics.b2ContactListener : Symbol(b2ContactListener, Decl(recursiveBaseCheck2.ts, 6, 31))
+>Box2D.Dynamics : Symbol(Dynamics, Decl(recursiveBaseCheck2.ts, 6, 21))
+>Box2D : Symbol(Box2D, Decl(recursiveBaseCheck2.ts, 0, 0), Decl(recursiveBaseCheck2.ts, 5, 1))
+>Dynamics : Symbol(Dynamics, Decl(recursiveBaseCheck2.ts, 6, 21))
+>b2ContactListener : Symbol(b2ContactListener, Decl(recursiveBaseCheck2.ts, 6, 31))
+    }
+}
+

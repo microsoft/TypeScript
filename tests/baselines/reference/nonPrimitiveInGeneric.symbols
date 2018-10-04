@@ -1,0 +1,113 @@
+=== tests/cases/conformance/types/nonPrimitive/nonPrimitiveInGeneric.ts ===
+function generic<T>(t: T) {
+>generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 0, 17))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 0, 20))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 0, 17))
+
+    var o: object = t; // expect error
+>o : Symbol(o, Decl(nonPrimitiveInGeneric.ts, 1, 7))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 0, 20))
+}
+var a = {};
+>a : Symbol(a, Decl(nonPrimitiveInGeneric.ts, 3, 3))
+
+var b = "42";
+>b : Symbol(b, Decl(nonPrimitiveInGeneric.ts, 4, 3))
+
+generic<object>({});
+>generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
+
+generic<object>(a);
+>generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
+>a : Symbol(a, Decl(nonPrimitiveInGeneric.ts, 3, 3))
+
+generic<object>(123); // expect error
+>generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
+
+generic<object>(b); // expect error
+>generic : Symbol(generic, Decl(nonPrimitiveInGeneric.ts, 0, 0))
+>b : Symbol(b, Decl(nonPrimitiveInGeneric.ts, 4, 3))
+
+function bound<T extends object>(t: T) {
+>bound : Symbol(bound, Decl(nonPrimitiveInGeneric.ts, 9, 19))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 11, 15))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 11, 33))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 11, 15))
+
+    var o: object = t; // ok
+>o : Symbol(o, Decl(nonPrimitiveInGeneric.ts, 12, 7))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 11, 33))
+}
+
+bound({});
+>bound : Symbol(bound, Decl(nonPrimitiveInGeneric.ts, 9, 19))
+
+bound(a);
+>bound : Symbol(bound, Decl(nonPrimitiveInGeneric.ts, 9, 19))
+>a : Symbol(a, Decl(nonPrimitiveInGeneric.ts, 3, 3))
+
+bound(123); // expect error
+>bound : Symbol(bound, Decl(nonPrimitiveInGeneric.ts, 9, 19))
+
+bound(b); // expect error
+>bound : Symbol(bound, Decl(nonPrimitiveInGeneric.ts, 9, 19))
+>b : Symbol(b, Decl(nonPrimitiveInGeneric.ts, 4, 3))
+
+function bound2<T extends object>() {}
+>bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 20, 16))
+
+bound2<{}>();
+>bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
+
+bound2<Object>();
+>bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+bound2<number>(); // expect error
+>bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
+
+bound2<string>(); // expect error
+>bound2 : Symbol(bound2, Decl(nonPrimitiveInGeneric.ts, 18, 9))
+
+function bound3<T extends {}>(t: T) {
+>bound3 : Symbol(bound3, Decl(nonPrimitiveInGeneric.ts, 25, 17))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 27, 16))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 27, 30))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 27, 16))
+
+    var o: object = t; // ok
+>o : Symbol(o, Decl(nonPrimitiveInGeneric.ts, 28, 7))
+>t : Symbol(t, Decl(nonPrimitiveInGeneric.ts, 27, 30))
+}
+
+interface Proxy<T extends object> {}
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>T : Symbol(T, Decl(nonPrimitiveInGeneric.ts, 31, 16))
+
+var x: Proxy<number>; // error
+>x : Symbol(x, Decl(nonPrimitiveInGeneric.ts, 33, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+
+var y: Proxy<null>; // ok
+>y : Symbol(y, Decl(nonPrimitiveInGeneric.ts, 34, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+
+var z: Proxy<undefined> ; // ok
+>z : Symbol(z, Decl(nonPrimitiveInGeneric.ts, 35, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+
+
+interface Blah {
+>Blah : Symbol(Blah, Decl(nonPrimitiveInGeneric.ts, 35, 25))
+
+    foo: number;
+>foo : Symbol(Blah.foo, Decl(nonPrimitiveInGeneric.ts, 38, 16))
+}
+
+var u: Proxy<Blah>; // ok
+>u : Symbol(u, Decl(nonPrimitiveInGeneric.ts, 42, 3))
+>Proxy : Symbol(Proxy, Decl(nonPrimitiveInGeneric.ts, 29, 1))
+>Blah : Symbol(Blah, Decl(nonPrimitiveInGeneric.ts, 35, 25))
+

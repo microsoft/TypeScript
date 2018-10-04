@@ -1,0 +1,116 @@
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_core.ts ===
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts'/>
+///<reference path='privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts'/>
+// Privacy errors - importing private elements
+import im_private_mi_private = require("m");
+>im_private_mi_private : typeof im_private_mi_private
+
+import im_private_mu_private = require("m2");
+>im_private_mu_private : typeof im_private_mu_private
+
+import im_private_mi_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require");
+>im_private_mi_public : typeof im_private_mi_public
+
+import im_private_mu_public = require("privacyTopLevelAmbientExternalModuleImportWithoutExport_require1");
+>im_private_mu_public : typeof im_private_mu_public
+
+// Usage of privacy error imports
+var privateUse_im_private_mi_private = new im_private_mi_private.c_private();
+>privateUse_im_private_mi_private : im_private_mi_private.c_private
+>new im_private_mi_private.c_private() : im_private_mi_private.c_private
+>im_private_mi_private.c_private : typeof im_private_mi_private.c_private
+>im_private_mi_private : typeof im_private_mi_private
+>c_private : typeof im_private_mi_private.c_private
+
+export var publicUse_im_private_mi_private = new im_private_mi_private.c_private();
+>publicUse_im_private_mi_private : im_private_mi_private.c_private
+>new im_private_mi_private.c_private() : im_private_mi_private.c_private
+>im_private_mi_private.c_private : typeof im_private_mi_private.c_private
+>im_private_mi_private : typeof im_private_mi_private
+>c_private : typeof im_private_mi_private.c_private
+
+var privateUse_im_private_mu_private = new im_private_mu_private.c_private();
+>privateUse_im_private_mu_private : im_private_mu_private.c_private
+>new im_private_mu_private.c_private() : im_private_mu_private.c_private
+>im_private_mu_private.c_private : typeof im_private_mu_private.c_private
+>im_private_mu_private : typeof im_private_mu_private
+>c_private : typeof im_private_mu_private.c_private
+
+export var publicUse_im_private_mu_private = new im_private_mu_private.c_private();
+>publicUse_im_private_mu_private : im_private_mu_private.c_private
+>new im_private_mu_private.c_private() : im_private_mu_private.c_private
+>im_private_mu_private.c_private : typeof im_private_mu_private.c_private
+>im_private_mu_private : typeof im_private_mu_private
+>c_private : typeof im_private_mu_private.c_private
+
+var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
+>privateUse_im_private_mi_public : im_private_mi_public.c_public
+>new im_private_mi_public.c_public() : im_private_mi_public.c_public
+>im_private_mi_public.c_public : typeof im_private_mi_public.c_public
+>im_private_mi_public : typeof im_private_mi_public
+>c_public : typeof im_private_mi_public.c_public
+
+export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
+>publicUse_im_private_mi_public : im_private_mi_public.c_public
+>new im_private_mi_public.c_public() : im_private_mi_public.c_public
+>im_private_mi_public.c_public : typeof im_private_mi_public.c_public
+>im_private_mi_public : typeof im_private_mi_public
+>c_public : typeof im_private_mi_public.c_public
+
+var privateUse_im_private_mi_public = new im_private_mi_public.c_public();
+>privateUse_im_private_mi_public : im_private_mi_public.c_public
+>new im_private_mi_public.c_public() : im_private_mi_public.c_public
+>im_private_mi_public.c_public : typeof im_private_mi_public.c_public
+>im_private_mi_public : typeof im_private_mi_public
+>c_public : typeof im_private_mi_public.c_public
+
+export var publicUse_im_private_mi_public = new im_private_mi_public.c_public();
+>publicUse_im_private_mi_public : im_private_mi_public.c_public
+>new im_private_mi_public.c_public() : im_private_mi_public.c_public
+>im_private_mi_public.c_public : typeof im_private_mi_public.c_public
+>im_private_mi_public : typeof im_private_mi_public
+>c_public : typeof im_private_mi_public.c_public
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require.ts ===
+// Public elements
+export class c_public {
+>c_public : c_public
+
+    foo: string;
+>foo : string
+}
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require1.ts ===
+export class c_public {
+>c_public : c_public
+
+    bar: string;
+>bar : string
+}
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts ===
+// private elements
+// Export - Error ambient modules allowed only in global
+declare module 'm' {
+>'m' : typeof import("m")
+
+    export class c_private {
+>c_private : c_private
+
+        baz: string
+>baz : string
+    }   
+}
+
+=== tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts ===
+declare module 'm2' {
+>'m2' : typeof import("m2")
+
+    export class c_private {
+>c_private : c_private
+
+        bing: string;
+>bing : string
+    }
+}
+

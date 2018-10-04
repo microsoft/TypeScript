@@ -1,5 +1,4 @@
 //// [systemModuleDeclarationMerging.ts]
-
 export function F() {}
 export module F { var x; }
 
@@ -10,20 +9,20 @@ export enum E {}
 export module E { var x; }
 
 //// [systemModuleDeclarationMerging.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
+    var C, E;
     var __moduleName = context_1 && context_1.id;
-    var F, C, E;
     function F() { }
     exports_1("F", F);
     return {
-        setters:[],
-        execute: function() {
+        setters: [],
+        execute: function () {
             (function (F) {
                 var x;
-            })(F = F || (F = {}));
+            })(F || (F = {}));
             exports_1("F", F);
-            C = (function () {
+            C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -31,15 +30,15 @@ System.register([], function(exports_1, context_1) {
             exports_1("C", C);
             (function (C) {
                 var x;
-            })(C = C || (C = {}));
+            })(C || (C = {}));
             exports_1("C", C);
             (function (E) {
             })(E || (E = {}));
             exports_1("E", E);
             (function (E) {
                 var x;
-            })(E = E || (E = {}));
+            })(E || (E = {}));
             exports_1("E", E);
         }
-    }
+    };
 });

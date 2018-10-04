@@ -1,0 +1,16 @@
+=== tests/cases/compiler/augmentedTypesModules3.ts ===
+//// module then class
+module m3 { }
+>m3 : Symbol(m3, Decl(augmentedTypesModules3.ts, 0, 0), Decl(augmentedTypesModules3.ts, 1, 13))
+
+class m3 { } // ok since the module is not instantiated
+>m3 : Symbol(m3, Decl(augmentedTypesModules3.ts, 0, 0), Decl(augmentedTypesModules3.ts, 1, 13))
+
+module m3a { var y = 2; }
+>m3a : Symbol(m3a, Decl(augmentedTypesModules3.ts, 2, 12), Decl(augmentedTypesModules3.ts, 4, 25))
+>y : Symbol(y, Decl(augmentedTypesModules3.ts, 4, 16))
+
+class m3a { foo() { } } // error, class isn't ambient or declared before the module
+>m3a : Symbol(m3a, Decl(augmentedTypesModules3.ts, 2, 12), Decl(augmentedTypesModules3.ts, 4, 25))
+>foo : Symbol(m3a.foo, Decl(augmentedTypesModules3.ts, 5, 11))
+

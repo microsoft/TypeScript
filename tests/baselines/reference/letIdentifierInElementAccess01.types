@@ -4,10 +4,10 @@ var let: any = {};
 >{} : {}
 
 (let[0] = 100);
->(let[0] = 100) : number
->let[0] = 100 : number
+>(let[0] = 100) : 100
+>let[0] = 100 : 100
 >let[0] : any
 >let : any
->0 : number
->100 : number
+>0 : 0
+>100 : 100
 

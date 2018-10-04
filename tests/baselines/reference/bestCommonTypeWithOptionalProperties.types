@@ -1,29 +1,21 @@
 === tests/cases/compiler/bestCommonTypeWithOptionalProperties.ts ===
 interface X { foo: string }
->X : X
 >foo : string
 
 interface Y extends X { bar?: number }
->Y : Y
->X : X
 >bar : number
 
 interface Z extends X { bar: string }
->Z : Z
->X : X
 >bar : string
 
 var x: X;
 >x : X
->X : X
 
 var y: Y;
 >y : Y
->Y : Y
 
 var z: Z;
 >z : Z
->Z : Z
 
 // All these arrays should be X[]
 var b1 = [x, y, z];

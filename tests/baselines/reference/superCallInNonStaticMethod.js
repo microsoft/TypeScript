@@ -51,26 +51,34 @@ class Other extends Doing {
 
 
 //// [superCallInNonStaticMethod.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Doing = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Doing = /** @class */ (function () {
     function Doing() {
     }
     Doing.prototype.instanceMethod = function () {
     };
     return Doing;
 }());
-var Other = (function (_super) {
+var Other = /** @class */ (function (_super) {
     __extends(Other, _super);
     function Other() {
-        var _this = this;
-        _super.call(this);
-        this.propertyInitializer = _super.prototype.instanceMethod.call(this);
-        this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
-        _super.prototype.instanceMethod.call(this);
+        var _this = _super.call(this) || this;
+        _this.propertyInitializer = _super.prototype.instanceMethod.call(_this);
+        _this.functionProperty = function () { _super.prototype.instanceMethod.call(_this); };
+        _super.prototype.instanceMethod.call(_this);
+        return _this;
     }
     // in instance method
     Other.prototype.instanceMethod = function () {

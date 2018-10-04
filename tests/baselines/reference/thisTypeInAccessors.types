@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInAccessors.ts ===
 interface Foo {
->Foo : Foo
-
     n: number;
 >n : number
 
@@ -15,12 +13,11 @@ const explicit = {
 
     n: 12,
 >n : number
->12 : number
+>12 : 12
 
     get x(this: Foo): number { return this.n; },
 >x : number
 >this : Foo
->Foo : Foo
 >this.n : number
 >this : Foo
 >n : number
@@ -28,7 +25,6 @@ const explicit = {
     set x(this: Foo, n: number) { this.n = n; }
 >x : number
 >this : Foo
->Foo : Foo
 >n : number
 >this.n = n : number
 >this.n : number
@@ -42,12 +38,11 @@ const copiedFromGetter = {
 
     n: 14,
 >n : number
->14 : number
+>14 : 14
 
     get x(this: Foo): number { return this.n; },
 >x : number
 >this : Foo
->Foo : Foo
 >this.n : number
 >this : Foo
 >n : number
@@ -67,7 +62,7 @@ const copiedFromSetter = {
 
     n: 15,
 >n : number
->15 : number
+>15 : 15
 
     get x() { return this.n },
 >x : number
@@ -78,7 +73,6 @@ const copiedFromSetter = {
     set x(this: Foo, n: number) { this.n = n; }
 >x : number
 >this : Foo
->Foo : Foo
 >n : number
 >this.n = n : number
 >this.n : number
@@ -92,12 +86,11 @@ const copiedFromGetterUnannotated = {
 
     n: 16,
 >n : number
->16 : number
+>16 : 16
 
     get x(this: Foo) { return this.n },
 >x : number
 >this : Foo
->Foo : Foo
 >this.n : number
 >this : Foo
 >n : number
@@ -118,12 +111,11 @@ class Explicit {
 
     n = 17;
 >n : number
->17 : number
+>17 : 17
 
     get x(this: Foo): number { return this.n; }
 >x : number
 >this : Foo
->Foo : Foo
 >this.n : number
 >this : Foo
 >n : number
@@ -131,7 +123,6 @@ class Explicit {
     set x(this: Foo, n: number) { this.n = n; }
 >x : number
 >this : Foo
->Foo : Foo
 >n : number
 >this.n = n : number
 >this.n : number
@@ -144,7 +135,7 @@ class Contextual {
 
     n = 21;
 >n : number
->21 : number
+>21 : 21
 
     get x() { return this.n } // inside a class, so already correct
 >x : number

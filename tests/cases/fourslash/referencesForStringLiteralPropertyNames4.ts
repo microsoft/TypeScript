@@ -1,7 +1,12 @@
 /// <reference path='fourslash.ts'/>
 
-////var x = { "[|someProperty|]": 0 }
+////var x = { "[|{| "isWriteAccess": true, "isDefinition": true |}someProperty|]": 0 }
 ////x["[|someProperty|]"] = 3;
-////x./*1*/[|someProperty|] = 5;
+////x.[|{| "isWriteAccess": true |}someProperty|] = 5;
 
-verify.rangesReferenceEachOther();
+const ranges = test.ranges();
+const [r0, r1, r2] = ranges;
+verify.referenceGroups(r0, [{ definition: '(property) "someProperty": number', ranges }]);
+verify.referenceGroups([r1, r2], [
+    { definition: '(property) "someProperty": number', ranges: [r0, r1, r2] },
+]);

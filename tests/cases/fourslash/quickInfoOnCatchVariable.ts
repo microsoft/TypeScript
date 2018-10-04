@@ -4,6 +4,4 @@
 ////    try { } catch (/**/e) { }
 //// }
 
-goTo.marker();
-verify.quickInfoExists();
-verify.quickInfoIs("(local var) e: any");
+verify.quickInfoAt("", "(local var) e: any");

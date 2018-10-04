@@ -1,5 +1,4 @@
 //// [declarationFiles.ts]
-
 class C1 {
     x: this;
     f(x: this): this { return undefined; }
@@ -49,23 +48,23 @@ class C4 {
 
 
 //// [declarationFiles.js]
-var C1 = (function () {
+var C1 = /** @class */ (function () {
     function C1(x) {
     }
     C1.prototype.f = function (x) { return undefined; };
     return C1;
 }());
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     return C2;
 }());
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     return C3;
 }());
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
         var _this = this;
         this.x1 = { a: this };

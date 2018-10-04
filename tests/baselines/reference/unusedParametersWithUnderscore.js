@@ -1,5 +1,4 @@
 //// [unusedParametersWithUnderscore.ts]
-
 function f(a, _b, c, ___, d,e___, _f) {
 }
 
@@ -35,13 +34,13 @@ function f3(_c) {
 function f4() {
     var arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        arg[_i - 0] = arguments[_i];
+        arg[_i] = arguments[_i];
     }
 }
 function f5() {
     var _arg = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        _arg[_i - 0] = arguments[_i];
+        _arg[_i] = arguments[_i];
     }
 }
 function f6(arg, _arg) {

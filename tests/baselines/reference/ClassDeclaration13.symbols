@@ -1,0 +1,10 @@
+=== tests/cases/compiler/ClassDeclaration13.ts ===
+class C {
+>C : Symbol(C, Decl(ClassDeclaration13.ts, 0, 0))
+
+   foo();
+>foo : Symbol(C.foo, Decl(ClassDeclaration13.ts, 0, 9))
+
+   bar() { }
+>bar : Symbol(C.bar, Decl(ClassDeclaration13.ts, 1, 9))
+}

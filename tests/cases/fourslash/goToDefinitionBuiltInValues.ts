@@ -6,7 +6,6 @@
 ////var t = /*true*/true;
 ////var f = /*false*/false;
 
-test.markers().forEach((m, i, a) => {
-    goTo.position(m.position, m.fileName);
-    verify.not.definitionLocationExists();
-});
+for (const marker of test.markerNames()) {
+    verify.goToDefinition(marker, []);
+}

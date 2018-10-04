@@ -7,6 +7,7 @@ var v = {
 }
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.js]
+var _a;
 var v = (_a = {},
     _a["" + ""] = 0,
     _a["" + ""] = function () { },
@@ -20,9 +21,7 @@ var v = (_a = {},
         enumerable: true,
         configurable: true
     }),
-    _a
-);
-var _a;
+    _a);
 
 
 //// [computedPropertyNamesDeclarationEmit5_ES5.d.ts]

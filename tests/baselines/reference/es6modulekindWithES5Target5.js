@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target5.ts]
-
 export enum E1 {
     value1
 }

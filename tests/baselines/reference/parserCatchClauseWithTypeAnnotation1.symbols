@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/CatchClauses/parserCatchClauseWithTypeAnnotation1.ts ===
+try {
+} catch (e: Error) {
+>e : Symbol(e, Decl(parserCatchClauseWithTypeAnnotation1.ts, 1, 9))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+

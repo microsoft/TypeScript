@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/unusedImports11.ts] ////
 
 //// [b.ts]
-
 export class Member {}
 export default Member;
 
@@ -20,19 +19,20 @@ new r.Member();
 
 //// [b.js]
 "use strict";
-var Member = (function () {
+exports.__esModule = true;
+var Member = /** @class */ (function () {
     function Member() {
     }
     return Member;
 }());
 exports.Member = Member;
-exports.__esModule = true;
 exports["default"] = Member;
 //// [a.js]
 "use strict";
-var b_1 = require('./b');
-var b_2 = require('./b');
-var ns = require('./b');
+exports.__esModule = true;
+var b_1 = require("./b");
+var b_2 = require("./b");
+var ns = require("./b");
 var r = require("./b");
 new b_1.Member();
 new b_2["default"]();

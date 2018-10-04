@@ -41,7 +41,7 @@ I = null; // Error
 //  Assign to a parameter
 //  Assign to an interface
 M = null; // Error
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

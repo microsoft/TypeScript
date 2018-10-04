@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5ExportDefaultIdentifier.ts ===
-
 export function f() { }
 >f : Symbol(f, Decl(es5ExportDefaultIdentifier.ts, 0, 0))
 

@@ -1,7 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 let cond: boolean;
 >cond : boolean
@@ -12,29 +11,29 @@ x = /a/;
 >/a/ : RegExp
 
 if (x /* RegExp */, (x = true)) {
->x /* RegExp */, (x = true) : boolean
+>x /* RegExp */, (x = true) : true
 >x : RegExp
->(x = true) : boolean
->x = true : boolean
+>(x = true) : true
+>x = true : true
 >x : string | number | boolean | RegExp
->true : boolean
+>true : true
 
     x; // boolean
 >x : true
 
     x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number | boolean | RegExp
->"" : string
+>"" : ""
 }
 else {
     x; // boolean
->x : boolean
+>x : true
 
     x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number | boolean | RegExp
->42 : number
+>42 : 42
 }
 x; // string | number
 >x : string | number
@@ -49,15 +48,15 @@ function a() {
 >cond : boolean
 
         x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number
->42 : number
+>42 : 42
     }
     else {
         x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
 
         return;
     }
@@ -74,32 +73,29 @@ function b() {
 >cond : boolean
 
         x = 42;
->x = 42 : number
+>x = 42 : 42
 >x : string | number
->42 : number
+>42 : 42
 
         throw "";
->"" : string
+>"" : ""
     }
     else {
         x = "";
->x = "" : string
+>x = "" : ""
 >x : string | number
->"" : string
+>"" : ""
     }
     x; // string
 >x : string
 }
 function c<T>(data: string | T): T {
 >c : <T>(data: string | T) => T
->T : T
 >data : string | T
->T : T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : string
+>typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 
@@ -108,7 +104,7 @@ function c<T>(data: string | T): T {
 >JSON.parse : (text: string, reviver?: (key: any, value: any) => any) => any
 >JSON : JSON
 >parse : (text: string, reviver?: (key: any, value: any) => any) => any
->data : string
+>data : string | (T & string)
     }
     else {
         return data;
@@ -117,20 +113,18 @@ function c<T>(data: string | T): T {
 }
 function d<T extends string>(data: string | T): never {
 >d : <T extends string>(data: string | T) => never
->T : T
 >data : string | T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : string
+>typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 
         throw new Error('will always happen');
 >new Error('will always happen') : Error
 >Error : ErrorConstructor
->'will always happen' : string
+>'will always happen' : "will always happen"
     }
     else {
         return data;

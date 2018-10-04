@@ -1,0 +1,102 @@
+=== tests/cases/conformance/types/members/duplicatePropertyNames.ts ===
+// duplicate property names are an error in all types
+
+interface Number {
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 0, 0))
+
+    foo: string;
+>foo : Symbol(Number.foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
+
+    foo: string;
+>foo : Symbol(Number.foo, Decl(duplicatePropertyNames.ts, 2, 18), Decl(duplicatePropertyNames.ts, 3, 16))
+}
+
+interface String {
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 5, 1))
+
+    foo(): string;
+>foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
+
+    foo(): string;
+>foo : Symbol(String.foo, Decl(duplicatePropertyNames.ts, 7, 18), Decl(duplicatePropertyNames.ts, 8, 18))
+}
+
+interface Array<T> {
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 10, 1))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+
+    foo: T;
+>foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+
+    foo: T;
+>foo : Symbol(Array.foo, Decl(duplicatePropertyNames.ts, 12, 20), Decl(duplicatePropertyNames.ts, 13, 11))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(duplicatePropertyNames.ts, 12, 16))
+}
+
+class C {
+>C : Symbol(C, Decl(duplicatePropertyNames.ts, 15, 1))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
+
+    foo: string;
+>foo : Symbol(C.foo, Decl(duplicatePropertyNames.ts, 17, 9), Decl(duplicatePropertyNames.ts, 18, 16))
+
+    bar(x) { }
+>bar : Symbol(C.bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
+>x : Symbol(x, Decl(duplicatePropertyNames.ts, 21, 8))
+
+    bar(x) { }
+>bar : Symbol(C.bar, Decl(duplicatePropertyNames.ts, 19, 16), Decl(duplicatePropertyNames.ts, 21, 14))
+>x : Symbol(x, Decl(duplicatePropertyNames.ts, 22, 8))
+
+    baz = () => { }
+>baz : Symbol(C.baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
+
+    baz = () => { }
+>baz : Symbol(C.baz, Decl(duplicatePropertyNames.ts, 22, 14), Decl(duplicatePropertyNames.ts, 24, 19))
+}
+
+interface I {
+>I : Symbol(I, Decl(duplicatePropertyNames.ts, 26, 1))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
+
+    foo: string;
+>foo : Symbol(I.foo, Decl(duplicatePropertyNames.ts, 28, 13), Decl(duplicatePropertyNames.ts, 29, 16))
+}
+
+var a: {
+>a : Symbol(a, Decl(duplicatePropertyNames.ts, 33, 3))
+
+    foo: string;
+>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 33, 8), Decl(duplicatePropertyNames.ts, 34, 16))
+
+    foo: string;
+>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 33, 8), Decl(duplicatePropertyNames.ts, 34, 16))
+
+    bar: () => {};
+>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 35, 16), Decl(duplicatePropertyNames.ts, 37, 18))
+
+    bar: () => {};
+>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 35, 16), Decl(duplicatePropertyNames.ts, 37, 18))
+}
+
+var b = {
+>b : Symbol(b, Decl(duplicatePropertyNames.ts, 41, 3))
+
+    foo: '',
+>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 41, 9), Decl(duplicatePropertyNames.ts, 42, 12))
+
+    foo: '',
+>foo : Symbol(foo, Decl(duplicatePropertyNames.ts, 41, 9), Decl(duplicatePropertyNames.ts, 42, 12))
+
+    bar: () => { },
+>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 43, 12), Decl(duplicatePropertyNames.ts, 44, 19))
+
+    bar: () => { }
+>bar : Symbol(bar, Decl(duplicatePropertyNames.ts, 43, 12), Decl(duplicatePropertyNames.ts, 44, 19))
+}
+

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/privacyClassImplementsClauseDeclFile.ts] ////
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.ts]
-
 export module publicModule {
     export interface publicInterfaceInPublicModule {
     }
@@ -96,42 +95,43 @@ class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceI
 
 //// [privacyClassImplementsClauseDeclFile_externalModule.js]
 "use strict";
+exports.__esModule = true;
 var publicModule;
 (function (publicModule) {
-    var privateClassImplementingPublicInterfaceInModule = (function () {
+    var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
     }());
-    var privateClassImplementingPrivateInterfaceInModule = (function () {
+    var privateClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
     }());
-    var publicClassImplementingPublicInterfaceInModule = (function () {
+    var publicClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
     }());
     publicModule.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
-    var publicClassImplementingPrivateInterfaceInModule = (function () {
+    var publicClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
     }());
     publicModule.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
-    var privateClassImplementingFromPrivateModuleInterface = (function () {
+    var privateClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
         function privateClassImplementingFromPrivateModuleInterface() {
         }
         return privateClassImplementingFromPrivateModuleInterface;
     }());
-    var publicClassImplementingFromPrivateModuleInterface = (function () {
+    var publicClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
         function publicClassImplementingFromPrivateModuleInterface() {
         }
         return publicClassImplementingFromPrivateModuleInterface;
     }());
     publicModule.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
-    var publicClassImplementingPrivateAndPublicInterface = (function () {
+    var publicClassImplementingPrivateAndPublicInterface = /** @class */ (function () {
         function publicClassImplementingPrivateAndPublicInterface() {
         }
         return publicClassImplementingPrivateAndPublicInterface;
@@ -140,68 +140,68 @@ var publicModule;
 })(publicModule = exports.publicModule || (exports.publicModule = {}));
 var privateModule;
 (function (privateModule) {
-    var privateClassImplementingPublicInterfaceInModule = (function () {
+    var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
     }());
-    var privateClassImplementingPrivateInterfaceInModule = (function () {
+    var privateClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
     }());
-    var publicClassImplementingPublicInterfaceInModule = (function () {
+    var publicClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
     }());
     privateModule.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
-    var publicClassImplementingPrivateInterfaceInModule = (function () {
+    var publicClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
     }());
     privateModule.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
-    var privateClassImplementingFromPrivateModuleInterface = (function () {
+    var privateClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
         function privateClassImplementingFromPrivateModuleInterface() {
         }
         return privateClassImplementingFromPrivateModuleInterface;
     }());
-    var publicClassImplementingFromPrivateModuleInterface = (function () {
+    var publicClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
         function publicClassImplementingFromPrivateModuleInterface() {
         }
         return publicClassImplementingFromPrivateModuleInterface;
     }());
     privateModule.publicClassImplementingFromPrivateModuleInterface = publicClassImplementingFromPrivateModuleInterface;
 })(privateModule || (privateModule = {}));
-var privateClassImplementingPublicInterface = (function () {
+var privateClassImplementingPublicInterface = /** @class */ (function () {
     function privateClassImplementingPublicInterface() {
     }
     return privateClassImplementingPublicInterface;
 }());
-var privateClassImplementingPrivateInterfaceInModule = (function () {
+var privateClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
     function privateClassImplementingPrivateInterfaceInModule() {
     }
     return privateClassImplementingPrivateInterfaceInModule;
 }());
-var publicClassImplementingPublicInterface = (function () {
+var publicClassImplementingPublicInterface = /** @class */ (function () {
     function publicClassImplementingPublicInterface() {
     }
     return publicClassImplementingPublicInterface;
 }());
 exports.publicClassImplementingPublicInterface = publicClassImplementingPublicInterface;
-var publicClassImplementingPrivateInterface = (function () {
+var publicClassImplementingPrivateInterface = /** @class */ (function () {
     function publicClassImplementingPrivateInterface() {
     }
     return publicClassImplementingPrivateInterface;
 }());
 exports.publicClassImplementingPrivateInterface = publicClassImplementingPrivateInterface;
-var privateClassImplementingFromPrivateModuleInterface = (function () {
+var privateClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
     function privateClassImplementingFromPrivateModuleInterface() {
     }
     return privateClassImplementingFromPrivateModuleInterface;
 }());
-var publicClassImplementingFromPrivateModuleInterface = (function () {
+var publicClassImplementingFromPrivateModuleInterface = /** @class */ (function () {
     function publicClassImplementingFromPrivateModuleInterface() {
     }
     return publicClassImplementingFromPrivateModuleInterface;
@@ -210,31 +210,86 @@ exports.publicClassImplementingFromPrivateModuleInterface = publicClassImplement
 //// [privacyClassImplementsClauseDeclFile_GlobalFile.js]
 var publicModuleInGlobal;
 (function (publicModuleInGlobal) {
-    var privateClassImplementingPublicInterfaceInModule = (function () {
+    var privateClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPublicInterfaceInModule() {
         }
         return privateClassImplementingPublicInterfaceInModule;
     }());
-    var privateClassImplementingPrivateInterfaceInModule = (function () {
+    var privateClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function privateClassImplementingPrivateInterfaceInModule() {
         }
         return privateClassImplementingPrivateInterfaceInModule;
     }());
-    var publicClassImplementingPublicInterfaceInModule = (function () {
+    var publicClassImplementingPublicInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPublicInterfaceInModule() {
         }
         return publicClassImplementingPublicInterfaceInModule;
     }());
     publicModuleInGlobal.publicClassImplementingPublicInterfaceInModule = publicClassImplementingPublicInterfaceInModule;
-    var publicClassImplementingPrivateInterfaceInModule = (function () {
+    var publicClassImplementingPrivateInterfaceInModule = /** @class */ (function () {
         function publicClassImplementingPrivateInterfaceInModule() {
         }
         return publicClassImplementingPrivateInterfaceInModule;
     }());
     publicModuleInGlobal.publicClassImplementingPrivateInterfaceInModule = publicClassImplementingPrivateInterfaceInModule;
 })(publicModuleInGlobal || (publicModuleInGlobal = {}));
-var publicClassImplementingPublicInterfaceInGlobal = (function () {
+var publicClassImplementingPublicInterfaceInGlobal = /** @class */ (function () {
     function publicClassImplementingPublicInterfaceInGlobal() {
     }
     return publicClassImplementingPublicInterfaceInGlobal;
 }());
+
+
+//// [privacyClassImplementsClauseDeclFile_externalModule.d.ts]
+export declare module publicModule {
+    interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    }
+    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    }
+    class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    }
+    class publicClassImplementingPrivateAndPublicInterface implements privateInterfaceInPublicModule, publicInterfaceInPublicModule {
+    }
+}
+declare module privateModule {
+    interface publicInterfaceInPrivateModule {
+    }
+    interface privateInterfaceInPrivateModule {
+    }
+    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPrivateModule {
+    }
+    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPrivateModule {
+    }
+    class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+    }
+}
+export interface publicInterface {
+}
+interface privateInterface {
+}
+export declare class publicClassImplementingPublicInterface implements publicInterface {
+}
+export declare class publicClassImplementingPrivateInterface implements privateInterface {
+}
+export declare class publicClassImplementingFromPrivateModuleInterface implements privateModule.publicInterfaceInPrivateModule {
+}
+export {};
+//// [privacyClassImplementsClauseDeclFile_GlobalFile.d.ts]
+declare module publicModuleInGlobal {
+    interface publicInterfaceInPublicModule {
+    }
+    interface privateInterfaceInPublicModule {
+    }
+    class publicClassImplementingPublicInterfaceInModule implements publicInterfaceInPublicModule {
+    }
+    class publicClassImplementingPrivateInterfaceInModule implements privateInterfaceInPublicModule {
+    }
+}
+interface publicInterfaceInGlobal {
+}
+declare class publicClassImplementingPublicInterfaceInGlobal implements publicInterfaceInGlobal {
+}

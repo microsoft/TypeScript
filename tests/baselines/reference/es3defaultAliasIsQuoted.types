@@ -1,11 +1,10 @@
 === tests/cases/compiler/es3defaultAliasQuoted_file0.ts ===
-
 export class Foo {
 >Foo : Foo
 
     static CONSTANT = "Foo";
 >CONSTANT : string
->"Foo" : string
+>"Foo" : "Foo"
 }
 
 export default function assert(value: boolean) {
@@ -17,7 +16,7 @@ export default function assert(value: boolean) {
 >value : boolean
 >new Error("Assertion failed!") : Error
 >Error : ErrorConstructor
->"Assertion failed!" : string
+>"Assertion failed!" : "Assertion failed!"
 }
 
 === tests/cases/compiler/es3defaultAliasQuoted_file1.ts ===

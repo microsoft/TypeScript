@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportAllInEs5.ts] ////
 
 //// [server.ts]
-
 export class c {
 }
 export interface i {
@@ -18,7 +17,8 @@ export * from "./server";
 
 //// [server.js]
 "use strict";
-var c = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
@@ -34,6 +34,7 @@ exports.x = 10;
 function __export(m) {
     for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
 }
+Object.defineProperty(exports, "__esModule", { value: true });
 __export(require("./server"));
 
 

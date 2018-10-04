@@ -1,0 +1,13 @@
+=== tests/cases/compiler/functionOverloadImplementationOfWrongName.ts ===
+function foo(x);
+>foo : { (x: any): any; (x: any, y: any): any; }
+>x : any
+
+function foo(x, y);
+>foo : { (x: any): any; (x: any, y: any): any; }
+>x : any
+>y : any
+
+function bar() { }
+>bar : () => void
+

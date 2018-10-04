@@ -1,0 +1,15 @@
+=== tests/cases/compiler/baseTypePrivateMemberClash.ts ===
+class X {
+>X : X
+
+    private m: number;
+>m : number
+}
+class Y {
+>Y : Y
+
+    private m: string;
+>m : string
+}
+
+interface Z extends X, Y { }

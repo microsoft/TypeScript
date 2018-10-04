@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportInExportAssignment.ts] ////
 
 //// [es6ImportNamedImportInExportAssignment_0.ts]
-
 export var a = 10;
 
 //// [es6ImportNamedImportInExportAssignment_1.ts]
@@ -10,6 +9,7 @@ export = a;
 
 //// [es6ImportNamedImportInExportAssignment_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.a = 10;
 //// [es6ImportNamedImportInExportAssignment_1.js]
 "use strict";

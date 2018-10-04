@@ -6,9 +6,9 @@
 
 enum E { a, b, c }
 >E : E
->a : E
->b : E
->c : E
+>a : E.a
+>b : E.b
+>c : E.c
 
 var a1: any;
 >a1 : any
@@ -27,7 +27,6 @@ var a5: void;
 
 var a6: E;
 >a6 : E
->E : E
 
 var a7: {a: string};
 >a7 : { a: string; }
@@ -127,8 +126,8 @@ var rb5 = a5 || a2;         // void      || boolean is void | boolean
 >a2 : boolean
 
 var rb6 = a6 || a2;         // enum      || boolean is E | boolean
->rb6 : boolean | E
->a6 || a2 : boolean | E
+>rb6 : boolean | E.b | E.c
+>a6 || a2 : boolean | E.b | E.c
 >a6 : E
 >a2 : boolean
 
@@ -247,8 +246,8 @@ var rd5 = a5 || a4;         // void      || string is void | string
 >a4 : string
 
 var rd6 = a6 || a4;         // enum      || string is enum | string
->rd6 : string | E
->a6 || a4 : string | E
+>rd6 : string | E.b | E.c
+>a6 || a4 : string | E.b | E.c
 >a6 : E
 >a4 : string
 
@@ -307,8 +306,8 @@ var re5 = a5 || a5;         // void      || void is void
 >a5 : void
 
 var re6 = a6 || a5;         // enum      || void is enum | void
->re6 : void | E
->a6 || a5 : void | E
+>re6 : void | E.b | E.c
+>a6 || a5 : void | E.b | E.c
 >a6 : E
 >a5 : void
 
@@ -427,8 +426,8 @@ var rh5 = a5 || a7;         // void      || object is void | object
 >a7 : { a: string; }
 
 var rh6 = a6 || a7;         // enum      || object is enum | object
->rh6 : E | { a: string; }
->a6 || a7 : E | { a: string; }
+>rh6 : E.b | E.c | { a: string; }
+>a6 || a7 : E.b | E.c | { a: string; }
 >a6 : E
 >a7 : { a: string; }
 
@@ -487,8 +486,8 @@ var ri5 = a5 || a8;         // void      || array is void | array
 >a8 : string[]
 
 var ri6 = a6 || a8;         // enum      || array is enum | array
->ri6 : E | string[]
->a6 || a8 : E | string[]
+>ri6 : E.b | E.c | string[]
+>a6 || a8 : E.b | E.c | string[]
 >a6 : E
 >a8 : string[]
 
@@ -547,8 +546,8 @@ var rj5 = a5 || null;         // void      || null is void
 >null : null
 
 var rj6 = a6 || null;         // enum      || null is E
->rj6 : E
->a6 || null : E
+>rj6 : E.b | E.c
+>a6 || null : E.b | E.c
 >a6 : E
 >null : null
 
@@ -607,8 +606,8 @@ var rf5 = a5 || undefined;         // void      || undefined is void
 >undefined : undefined
 
 var rf6 = a6 || undefined;         // enum      || undefined is E
->rf6 : E
->a6 || undefined : E
+>rf6 : E.b | E.c
+>a6 || undefined : E.b | E.c
 >a6 : E
 >undefined : undefined
 

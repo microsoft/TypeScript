@@ -1,5 +1,4 @@
 //// [emptyVariableDeclarationBindingPatterns02_ES6.ts]
-
 (function () {
     var {};
     let {};
@@ -12,9 +11,9 @@
 
 //// [emptyVariableDeclarationBindingPatterns02_ES6.js]
 (function () {
-    var {  };
-    let {  };
-    const {  };
+    var {};
+    let {};
+    const {};
     var [];
     let [];
     const [];

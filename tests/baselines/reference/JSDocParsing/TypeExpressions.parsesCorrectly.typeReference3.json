@@ -1,0 +1,27 @@
+{
+    "kind": "TypeReference",
+    "pos": 1,
+    "end": 11,
+    "flags": "JSDoc",
+    "typeName": {
+        "kind": "FirstNode",
+        "pos": 1,
+        "end": 11,
+        "flags": "JSDoc",
+        "left": {
+            "kind": "Identifier",
+            "pos": 1,
+            "end": 2,
+            "flags": "JSDoc",
+            "escapedText": "a"
+        },
+        "right": {
+            "kind": "Identifier",
+            "pos": 3,
+            "end": 11,
+            "flags": "JSDoc",
+            "originalKeywordKind": "FunctionKeyword",
+            "escapedText": "function"
+        }
+    }
+}

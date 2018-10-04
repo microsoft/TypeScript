@@ -1,0 +1,20 @@
+=== tests/cases/conformance/async/es5/task.ts ===
+export class Task<T> extends Promise<T> { }
+>Task : Symbol(Task, Decl(task.ts, 0, 0))
+>T : Symbol(T, Decl(task.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>T : Symbol(T, Decl(task.ts, 0, 18))
+
+=== tests/cases/conformance/async/es5/test.ts ===
+import { Task } from "./task";
+>Task : Symbol(Task, Decl(test.ts, 0, 8))
+
+class Test {
+>Test : Symbol(Test, Decl(test.ts, 0, 30))
+
+    async example<T>(): Task<T> { return; }
+>example : Symbol(Test.example, Decl(test.ts, 1, 12))
+>T : Symbol(T, Decl(test.ts, 2, 18))
+>Task : Symbol(Task, Decl(test.ts, 0, 8))
+>T : Symbol(T, Decl(test.ts, 2, 18))
+}

@@ -1,5 +1,4 @@
 //// [noImplicitAnyInContextuallyTypesFunctionParamter.ts]
-
 var regexMatchList = ['', ''];
 regexMatchList.forEach(match => ''.replace(match, ''));
 

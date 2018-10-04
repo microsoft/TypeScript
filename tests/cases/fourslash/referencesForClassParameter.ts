@@ -7,16 +7,16 @@
 ////class p { }
 ////
 ////class foo {
-////    constructor (public [|p|]: any) {
+////    constructor (public [|{| "isWriteAccess": true, "isDefinition": true |}p|]: any) {
 ////    }
 ////
 ////    public f(p) {
-////        this.[|p|] = p;
+////        this.[|{| "isWriteAccess": true |}p|] = p;
 ////    }
 ////
 ////}
 ////
 ////var n = new foo(undefined);
-////n.[|p|] = null;
+////n.[|{| "isWriteAccess": true |}p|] = null;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) foo.p: any");

@@ -3,6 +3,6 @@ declare enum E {
 >E : E
 
  e = 3
->e : E
->3 : number
+>e : E.e
+>3 : 3
 }

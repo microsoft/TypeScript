@@ -1,5 +1,4 @@
 === A:/bar.ts ===
-
 import {z} from "./foo";
 >z : number
 
@@ -19,8 +18,8 @@ export var i = Math.sqrt(-1);
 >Math.sqrt : (x: number) => number
 >Math : Math
 >sqrt : (x: number) => number
->-1 : number
->1 : number
+>-1 : -1
+>1 : 1
 
 export var z = pi * pi;
 >z : number

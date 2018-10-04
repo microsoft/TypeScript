@@ -1,0 +1,21 @@
+=== tests/cases/compiler/genericCallsWithoutParens.ts ===
+function f<T>() { }
+>f : <T>() => void
+
+var r = f<number>; // parse error
+>r : void
+>f<number> : void
+>f : <T>() => void
+
+class C<T> {
+>C : C<T>
+
+    foo: T;
+>foo : T
+}
+var c = new C<number>; // parse error
+>c : C<number>
+>new C<number> : C<number>
+>C : typeof C
+
+

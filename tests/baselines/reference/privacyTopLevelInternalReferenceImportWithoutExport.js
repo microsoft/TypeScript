@@ -1,5 +1,4 @@
 //// [privacyTopLevelInternalReferenceImportWithoutExport.ts]
-
 // private elements
 module m_private {
     export class c_private {
@@ -103,20 +102,21 @@ export var publicUse_im_private_mu_public: im_private_mu_public.i;
 //// [privacyTopLevelInternalReferenceImportWithoutExport.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // private elements
     var m_private;
     (function (m_private) {
-        var c_private = (function () {
+        var c_private = /** @class */ (function () {
             function c_private() {
             }
             return c_private;
         }());
         m_private.c_private = c_private;
+        var e_private;
         (function (e_private) {
             e_private[e_private["Happy"] = 0] = "Happy";
             e_private[e_private["Grumpy"] = 1] = "Grumpy";
-        })(m_private.e_private || (m_private.e_private = {}));
-        var e_private = m_private.e_private;
+        })(e_private = m_private.e_private || (m_private.e_private = {}));
         function f_private() {
             return new c_private();
         }
@@ -124,7 +124,7 @@ define(["require", "exports"], function (require, exports) {
         m_private.v_private = new c_private();
         var mi_private;
         (function (mi_private) {
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -135,17 +135,17 @@ define(["require", "exports"], function (require, exports) {
     // Public elements
     var m_public;
     (function (m_public) {
-        var c_public = (function () {
+        var c_public = /** @class */ (function () {
             function c_public() {
             }
             return c_public;
         }());
         m_public.c_public = c_public;
+        var e_public;
         (function (e_public) {
             e_public[e_public["Happy"] = 0] = "Happy";
             e_public[e_public["Grumpy"] = 1] = "Grumpy";
-        })(m_public.e_public || (m_public.e_public = {}));
-        var e_public = m_public.e_public;
+        })(e_public = m_public.e_public || (m_public.e_public = {}));
         function f_public() {
             return new c_public();
         }
@@ -153,7 +153,7 @@ define(["require", "exports"], function (require, exports) {
         m_public.v_public = 10;
         var mi_public;
         (function (mi_public) {
-            var c = (function () {
+            var c = /** @class */ (function () {
                 function c() {
                 }
                 return c;
@@ -200,3 +200,71 @@ define(["require", "exports"], function (require, exports) {
     exports.publicUse_im_private_mi_public = new im_private_mi_public.c();
     var privateUse_im_private_mu_public;
 });
+
+
+//// [privacyTopLevelInternalReferenceImportWithoutExport.d.ts]
+declare module m_private {
+    class c_private {
+    }
+    enum e_private {
+        Happy = 0,
+        Grumpy = 1
+    }
+    function f_private(): c_private;
+    var v_private: c_private;
+    interface i_private {
+    }
+    module mi_private {
+        class c {
+        }
+    }
+    module mu_private {
+        interface i {
+        }
+    }
+}
+export declare module m_public {
+    class c_public {
+    }
+    enum e_public {
+        Happy = 0,
+        Grumpy = 1
+    }
+    function f_public(): c_public;
+    var v_public: number;
+    interface i_public {
+    }
+    module mi_public {
+        class c {
+        }
+    }
+    module mu_public {
+        interface i {
+        }
+    }
+}
+import im_private_c_private = m_private.c_private;
+import im_private_e_private = m_private.e_private;
+import im_private_i_private = m_private.i_private;
+import im_private_mi_private = m_private.mi_private;
+import im_private_mu_private = m_private.mu_private;
+export declare var publicUse_im_private_c_private: im_private_c_private;
+export declare var publicUse_im_private_e_private: im_private_e_private;
+export declare var publicUse_im_private_f_private: im_private_c_private;
+export declare var publicUse_im_private_v_private: im_private_c_private;
+export declare var publicUse_im_private_i_private: im_private_i_private;
+export declare var publicUse_im_private_mi_private: im_private_mi_private.c;
+export declare var publicUse_im_private_mu_private: im_private_mu_private.i;
+import im_private_c_public = m_public.c_public;
+import im_private_e_public = m_public.e_public;
+import im_private_i_public = m_public.i_public;
+import im_private_mi_public = m_public.mi_public;
+import im_private_mu_public = m_public.mu_public;
+export declare var publicUse_im_private_c_public: im_private_c_public;
+export declare var publicUse_im_private_e_public: im_private_e_public;
+export declare var publicUse_im_private_f_public: im_private_c_public;
+export declare var publicUse_im_private_v_public: number;
+export declare var publicUse_im_private_i_public: im_private_i_public;
+export declare var publicUse_im_private_mi_public: im_private_mi_public.c;
+export declare var publicUse_im_private_mu_public: im_private_mu_public.i;
+export {};

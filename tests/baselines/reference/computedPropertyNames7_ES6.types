@@ -3,15 +3,16 @@ enum E {
 >E : E
 
     member
->member : E
+>member : E.member
 }
 var v = {
->v : { [x: number]: number; }
->{    [E.member]: 0} : { [x: number]: number; }
+>v : { [E.member]: number; }
+>{    [E.member]: 0} : { [E.member]: number; }
 
     [E.member]: 0
+>[E.member] : number
 >E.member : E
 >E : typeof E
 >member : E
->0 : number
+>0 : 0
 }

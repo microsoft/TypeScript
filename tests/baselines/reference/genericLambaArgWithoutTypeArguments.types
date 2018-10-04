@@ -1,0 +1,21 @@
+=== tests/cases/compiler/genericLambaArgWithoutTypeArguments.ts ===
+interface Foo<T> {
+   x: T;
+>x : T
+}
+function foo(a) {
+>foo : (a: any) => any
+>a : any
+
+   return null;
+>null : null
+}
+foo((arg: Foo) => { return arg.x; });
+>foo((arg: Foo) => { return arg.x; }) : any
+>foo : (a: any) => any
+>(arg: Foo) => { return arg.x; } : (arg: any) => any
+>arg : any
+>arg.x : any
+>arg : any
+>x : any
+

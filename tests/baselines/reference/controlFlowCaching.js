@@ -1,5 +1,4 @@
 //// [controlFlowCaching.ts]
-
 // Repro for #8401
 
 function f(dim, offsets, arr, acommon, centerAnchorLimit, g, has, lin) {

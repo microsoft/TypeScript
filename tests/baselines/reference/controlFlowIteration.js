@@ -1,5 +1,4 @@
 //// [controlFlowIteration.ts]
-
 let cond: boolean;
 
 function ff() {

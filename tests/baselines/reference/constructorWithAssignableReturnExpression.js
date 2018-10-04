@@ -37,31 +37,31 @@ class G<T> {
 
 //// [constructorWithAssignableReturnExpression.js]
 // a class constructor may return an expression, it must be assignable to the class instance type to be valid
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         return 1;
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
         return 1; // error
     }
     return D;
 }());
-var E = (function () {
+var E = /** @class */ (function () {
     function E() {
         return { x: 1 };
     }
     return E;
 }());
-var F = (function () {
+var F = /** @class */ (function () {
     function F() {
         return { x: 1 }; // error
     }
     return F;
 }());
-var G = (function () {
+var G = /** @class */ (function () {
     function G() {
         return { x: null };
     }

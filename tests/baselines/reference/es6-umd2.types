@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6-umd2.ts ===
-
 export class A
 >A : A
 {
@@ -12,6 +11,6 @@ export class A
 >B : () => number
     {
         return 42;
->42 : number
+>42 : 42
     }
 }

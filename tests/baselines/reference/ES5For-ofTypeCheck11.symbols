@@ -1,0 +1,11 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck11.ts ===
+var union: string | number[];
+>union : Symbol(union, Decl(ES5For-ofTypeCheck11.ts, 0, 3))
+
+var v: string;
+>v : Symbol(v, Decl(ES5For-ofTypeCheck11.ts, 1, 3))
+
+for (v of union) { }
+>v : Symbol(v, Decl(ES5For-ofTypeCheck11.ts, 1, 3))
+>union : Symbol(union, Decl(ES5For-ofTypeCheck11.ts, 0, 3))
+

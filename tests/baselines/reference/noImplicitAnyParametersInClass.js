@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInClass.ts]
-
 class C {
     // No implicit-'any' errors.
     public pub_f1(): void { }
@@ -93,7 +92,7 @@ class C {
 }
 
 //// [noImplicitAnyParametersInClass.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         // No implicit-'any' errors.
         this.pub_f9 = function () { return ""; };
@@ -107,7 +106,7 @@ var C = (function () {
         this.pub_f13 = function () {
             var r = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                r[_i - 0] = arguments[_i];
+                r[_i] = arguments[_i];
             }
             return "";
         };
@@ -131,7 +130,7 @@ var C = (function () {
         this.priv_f13 = function () {
             var r = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                r[_i - 0] = arguments[_i];
+                r[_i] = arguments[_i];
             }
             return "";
         };
@@ -158,7 +157,7 @@ var C = (function () {
     C.prototype.pub_f6 = function () {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i - 0] = arguments[_i];
+            r[_i] = arguments[_i];
         }
     };
     // Implicit-'any'/'any[]' errors for x, r.
@@ -184,7 +183,7 @@ var C = (function () {
     C.prototype.priv_f6 = function () {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i - 0] = arguments[_i];
+            r[_i] = arguments[_i];
         }
     };
     // Implicit-'any'/'any[]' errors for x, r.

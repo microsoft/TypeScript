@@ -1,0 +1,135 @@
+=== tests/cases/compiler/duplicateSymbolsExportMatching.ts ===
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 10), Decl(duplicateSymbolsExportMatching.ts, 4, 10))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 1, 26))
+}
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    export interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 0, 10), Decl(duplicateSymbolsExportMatching.ts, 4, 10))
+
+    interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 5, 26))
+}
+
+// Doesn't match export visibility, but it's in a different parent, so it's ok
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 10, 10))
+
+    export interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 11, 19))
+}
+
+module N {
+>N : Symbol(N, Decl(duplicateSymbolsExportMatching.ts, 13, 1))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 10), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
+
+    interface I { } // ok
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 15, 10), Decl(duplicateSymbolsExportMatching.ts, 16, 19))
+
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 17, 19), Decl(duplicateSymbolsExportMatching.ts, 18, 26))
+
+    export interface E { } // ok
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 17, 19), Decl(duplicateSymbolsExportMatching.ts, 18, 26))
+}
+
+module N2 {
+>N2 : Symbol(N2, Decl(duplicateSymbolsExportMatching.ts, 20, 1))
+
+    interface I { }
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 22, 11), Decl(duplicateSymbolsExportMatching.ts, 23, 19))
+
+    export interface I { } // error
+>I : Symbol(I, Decl(duplicateSymbolsExportMatching.ts, 23, 19))
+
+    export interface E { }
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 24, 26))
+
+    interface E { } // error
+>E : Symbol(E, Decl(duplicateSymbolsExportMatching.ts, 24, 26), Decl(duplicateSymbolsExportMatching.ts, 25, 26))
+}
+
+// Should report error only once for instantiated module
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    module inst {
+>inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 30, 10), Decl(duplicateSymbolsExportMatching.ts, 33, 5))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 32, 11))
+    }
+    export module inst { // one error
+>inst : Symbol(inst, Decl(duplicateSymbolsExportMatching.ts, 33, 5))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 35, 11))
+    }
+}
+
+// Variables of the same / different type
+module M2 {
+>M2 : Symbol(M2, Decl(duplicateSymbolsExportMatching.ts, 37, 1))
+
+    var v: string;
+>v : Symbol(v, Decl(duplicateSymbolsExportMatching.ts, 41, 7), Decl(duplicateSymbolsExportMatching.ts, 42, 14))
+
+    export var v: string; // one error (visibility)
+>v : Symbol(v, Decl(duplicateSymbolsExportMatching.ts, 42, 14))
+
+    var w: number;
+>w : Symbol(w, Decl(duplicateSymbolsExportMatching.ts, 43, 7), Decl(duplicateSymbolsExportMatching.ts, 44, 14))
+
+    export var w: string; // two errors (visibility and type mismatch)
+>w : Symbol(w, Decl(duplicateSymbolsExportMatching.ts, 44, 14))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    module F {
+>F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 50, 5), Decl(duplicateSymbolsExportMatching.ts, 47, 10))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 49, 11))
+    }
+    export function F() { } // Only one error for duplicate identifier (don't consider visibility)
+>F : Symbol(F, Decl(duplicateSymbolsExportMatching.ts, 50, 5))
+}
+
+module M {
+>M : Symbol(M, Decl(duplicateSymbolsExportMatching.ts, 0, 0), Decl(duplicateSymbolsExportMatching.ts, 3, 1), Decl(duplicateSymbolsExportMatching.ts, 7, 1), Decl(duplicateSymbolsExportMatching.ts, 27, 1), Decl(duplicateSymbolsExportMatching.ts, 45, 1) ... and 1 more)
+
+    class C { }
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 10), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+
+    module C { }
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 54, 10), Decl(duplicateSymbolsExportMatching.ts, 55, 15), Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+
+    export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
+>C : Symbol(C, Decl(duplicateSymbolsExportMatching.ts, 56, 16))
+
+        var t;
+>t : Symbol(t, Decl(duplicateSymbolsExportMatching.ts, 58, 11))
+    }
+}
+
+// Top level
+interface D { }
+>D : Symbol(D, Decl(duplicateSymbolsExportMatching.ts, 60, 1), Decl(duplicateSymbolsExportMatching.ts, 63, 15))
+
+export interface D { }
+>D : Symbol(D, Decl(duplicateSymbolsExportMatching.ts, 63, 15))
+

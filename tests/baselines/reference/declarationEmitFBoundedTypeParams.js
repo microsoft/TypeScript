@@ -1,5 +1,4 @@
 //// [declarationEmitFBoundedTypeParams.ts]
-
 // Repro from #6040
 
 function append<a, b extends a>(result: a[], value: b): a[] {

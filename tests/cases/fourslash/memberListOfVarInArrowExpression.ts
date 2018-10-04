@@ -15,4 +15,4 @@
 
 goTo.marker('1');
 verify.quickInfoIs("(property) a1: string");
-verify.memberListContains("a1", "(property) a1: string");
+verify.completionListContains("a1", "(property) a1: string");

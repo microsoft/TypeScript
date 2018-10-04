@@ -8,7 +8,7 @@ class foo {
 var x = foo.bar();
 
 //// [thisInStaticMethod1.js]
-var foo = (function () {
+var foo = /** @class */ (function () {
     function foo() {
     }
     foo.bar = function () {

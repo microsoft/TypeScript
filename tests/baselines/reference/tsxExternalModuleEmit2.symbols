@@ -1,11 +1,12 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
-
 declare module 'mod' {
+>'mod' : Symbol('mod', Decl(modules.d.ts, 0, 0))
+
   var y: any;
->y : Symbol(y, Decl(modules.d.ts, 2, 5))
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
 
   export default y;
->y : Symbol(y, Decl(modules.d.ts, 2, 5))
+>y : Symbol(y, Decl(modules.d.ts, 1, 5))
 }
 
 === tests/cases/conformance/jsx/app.tsx ===
@@ -19,7 +20,7 @@ declare var Foo, React;
 // Should see mod_1['default'] in emit here
 <Foo handler={Main}></Foo>;
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
->handler : Symbol(unknown)
+>handler : Symbol(handler, Decl(app.tsx, 3, 4))
 >Main : Symbol(Main, Decl(app.tsx, 0, 6))
 >Foo : Symbol(Foo, Decl(app.tsx, 1, 11))
 

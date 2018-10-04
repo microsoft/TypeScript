@@ -4,7 +4,7 @@
 ////      jspm: string;
 ////      'jspm:browser': string;
 ////  } = {
-////          /*0*/: "", 
+////          /*0*/: "",
 ////  }
 
 ////  let configFiles2: {
@@ -12,15 +12,8 @@
 ////      'jspm:browser': string;
 ////  } = {
 ////         jspm: "",
-////         '/*1*/': "" 
+////         '/*1*/': ""
 ////  }
 
-goTo.marker('0');
-verify.completionListContains("jspm");
-verify.completionListAllowsNewIdentifier();
-verify.memberListCount(1);
-
-goTo.marker('1');
-verify.completionListContains("jspm:browser");
-verify.completionListAllowsNewIdentifier();
-verify.memberListCount(2);
+verify.completionsAt("0", ["jspm", '"jspm:browser"']);
+verify.completionsAt("1", ["jspm", "jspm:browser"]);

@@ -1,7 +1,5 @@
 === tests/cases/compiler/topLevel.ts ===
 interface IPoint {
->IPoint : IPoint
-
     x:number;
 >x : number
 
@@ -11,7 +9,6 @@ interface IPoint {
 
 class Point implements IPoint {
 >Point : Point
->IPoint : IPoint
 
     constructor(public x,public y){}
 >x : any
@@ -48,21 +45,21 @@ class Point implements IPoint {
 >"("+this.x+","+this.y : string
 >"("+this.x+"," : string
 >"("+this.x : string
->"(" : string
+>"(" : "("
 >this.x : any
 >this : this
 >x : any
->"," : string
+>"," : ","
 >this.y : any
 >this : this
 >y : any
->")" : string
+>")" : ")"
     }
 }
 
 var result="";
 >result : string
->"" : string
+>"" : ""
 
 result+=(new Point(3,4).move(2,2));
 >result+=(new Point(3,4).move(2,2)) : string
@@ -72,11 +69,11 @@ result+=(new Point(3,4).move(2,2));
 >new Point(3,4).move : (xo: number, yo: number) => Point
 >new Point(3,4) : Point
 >Point : typeof Point
->3 : number
->4 : number
+>3 : 3
+>4 : 4
 >move : (xo: number, yo: number) => Point
->2 : number
->2 : number
+>2 : 2
+>2 : 2
 
 module M {
 >M : typeof M
@@ -85,8 +82,8 @@ module M {
 >origin : Point
 >new Point(0,0) : Point
 >Point : typeof Point
->0 : number
->0 : number
+>0 : 0
+>0 : 0
 }
 
 result+=(M.origin.move(1,1));
@@ -99,7 +96,7 @@ result+=(M.origin.move(1,1));
 >M : typeof M
 >origin : Point
 >move : (xo: number, yo: number) => Point
->1 : number
->1 : number
+>1 : 1
+>1 : 1
 
 

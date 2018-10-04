@@ -1,0 +1,13 @@
+=== tests/cases/compiler/parserConstructorDeclaration12.ts ===
+class C {
+>C : C
+
+  constructor<>() { }
+  constructor<> () { }
+  constructor <>() { }
+  constructor <> () { }
+  constructor< >() { }
+  constructor< > () { }
+  constructor < >() { }
+  constructor < > () { }
+}

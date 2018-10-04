@@ -37,7 +37,7 @@ function f2(_a) {
     var _b = _a["show"], showRename = _b === void 0 ? function (v) { return v.toString(); } : _b;
 }
 function f3(_a) {
-    var _b = "show", _c = _a[_b], showRename = _c === void 0 ? function (v) { return v.toString(); } : _c;
+    var _b = _a["show"], showRename = _b === void 0 ? function (v) { return v.toString(); } : _b;
 }
 function ff(_a) {
     var _b = _a.nested, nested = _b === void 0 ? { show: function (v) { return v.toString(); } } : _b;

@@ -1,35 +1,34 @@
 === tests/cases/compiler/declFileTypeofEnum.ts ===
-
 enum days {
 >days : days
 
     monday,
->monday : days
+>monday : days.monday
 
     tuesday,
->tuesday : days
+>tuesday : days.tuesday
 
     wednesday,
->wednesday : days
+>wednesday : days.wednesday
 
     thursday,
->thursday : days
+>thursday : days.thursday
 
     friday,
->friday : days
+>friday : days.friday
 
     saturday,
->saturday : days
+>saturday : days.saturday
 
     sunday
->sunday : days
+>sunday : days.sunday
 }
 
 var weekendDay = days.saturday;
 >weekendDay : days
->days.saturday : days
+>days.saturday : days.saturday
 >days : typeof days
->saturday : days
+>saturday : days.saturday
 
 var daysOfMonth = days;
 >daysOfMonth : typeof days

@@ -17,7 +17,7 @@ foo("IN " + thingy.me + "!");
 
 //// [unusedImportDeclaration_testerB.js]
 "use strict";
-var TesterB = (function () {
+var TesterB = /** @class */ (function () {
     function TesterB() {
     }
     return TesterB;
@@ -25,6 +25,7 @@ var TesterB = (function () {
 module.exports = TesterB;
 //// [unusedImportDeclaration_testerA.js]
 "use strict";
+exports.__esModule = true;
 var thingy = {
     me: "A"
 };
@@ -37,3 +38,4 @@ declare class TesterB {
 }
 export = TesterB;
 //// [unusedImportDeclaration_testerA.d.ts]
+export {};

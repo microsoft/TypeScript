@@ -8,14 +8,12 @@
 //// 
 //// /*delete*/var x;
 
-// Sanity check
-goTo.marker('foo');
-verify.quickInfoIs('namespace foo');
+// Sanity check\
+verify.quickInfoAt("foo", "namespace foo");
 
 // Delete some code
 goTo.marker('delete');
 edit.deleteAtCaret('var x;'.length);
 
 // Pull on the RHS of an import
-goTo.marker('foo');
-verify.quickInfoIs('namespace foo');
+verify.quickInfoAt("foo", "namespace foo");

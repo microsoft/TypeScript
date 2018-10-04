@@ -5,12 +5,12 @@
 //// class D { }
 
 // @Filename: refFile2.ts
-//// export class E {} 
+//// export class E {}
 
 // @Filename: main.ts
 // @ResolveReference: true
 //// ///<reference path="refFile1.ts" />
-//// /*1*////<reference path = "NotExistRef.ts" />/*2*/
+//// ///<reference path = "/*1*/NotExistRef.ts/*2*/" />
 //// /*3*////<reference path "invalidRefFile1.ts" />/*4*/
 //// import ref2 = require("refFile2");
 //// import noExistref2 = require(/*5*/"NotExistRefFile2"/*6*/);

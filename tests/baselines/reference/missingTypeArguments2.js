@@ -7,7 +7,7 @@ var y: A<A>;
 (): A => null;
 
 //// [missingTypeArguments2.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;

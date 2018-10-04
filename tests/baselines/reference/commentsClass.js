@@ -1,5 +1,4 @@
 //// [commentsClass.ts]
-
 /** This is class c2 without constuctor*/
 class c2 {
 } // trailing comment1
@@ -75,14 +74,14 @@ class c9 {
 
 //// [commentsClass.js]
 /** This is class c2 without constuctor*/
-var c2 = (function () {
+var c2 = /** @class */ (function () {
     function c2() {
     }
     return c2;
 }()); // trailing comment1
 var i2 = new c2();
 var i2_c = c2;
-var c3 = (function () {
+var c3 = /** @class */ (function () {
     /** Constructor comment*/
     function c3() {
     } // trailing comment of constructor
@@ -91,7 +90,7 @@ var c3 = (function () {
 var i3 = new c3();
 var i3_c = c3;
 /** Class comment*/
-var c4 = (function () {
+var c4 = /** @class */ (function () {
     /** Constructor comment*/
     function c4() {
     } /* trailing comment of constructor 2*/
@@ -100,7 +99,7 @@ var c4 = (function () {
 var i4 = new c4();
 var i4_c = c4;
 /** Class with statics*/
-var c5 = (function () {
+var c5 = /** @class */ (function () {
     function c5() {
     }
     return c5;
@@ -108,7 +107,7 @@ var c5 = (function () {
 var i5 = new c5();
 var i5_c = c5;
 /// class with statics and constructor
-var c6 = (function () {
+var c6 = /** @class */ (function () {
     /// constructor comment
     function c6() {
     }
@@ -117,7 +116,7 @@ var c6 = (function () {
 var i6 = new c6();
 var i6_c = c6;
 // class with statics and constructor
-var c7 = (function () {
+var c7 = /** @class */ (function () {
     // constructor comment
     function c7() {
     }
@@ -127,7 +126,7 @@ var i7 = new c7();
 var i7_c = c7;
 /** class with statics and constructor
  */
-var c8 = (function () {
+var c8 = /** @class */ (function () {
     /** constructor comment
     */
     function c8() {
@@ -138,7 +137,7 @@ var c8 = (function () {
 }());
 var i8 = new c8();
 var i8_c = c8;
-var c9 = (function () {
+var c9 = /** @class */ (function () {
     function c9() {
         /// This is some detached comment
         // should emit this leading comment of } too
@@ -188,7 +187,7 @@ declare var i7_c: typeof c7;
  */
 declare class c8 {
     /** s1 comment */
-    static s1: number;
+    static s1: number; /** s1 comment2 */
     /** constructor comment
     */
     constructor();

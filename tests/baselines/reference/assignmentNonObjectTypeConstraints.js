@@ -25,12 +25,12 @@ function foo(x) {
 }
 foo(5);
 foo(0 /* A */);
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;

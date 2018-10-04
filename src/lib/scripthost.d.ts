@@ -29,7 +29,7 @@ interface TextStreamBase {
 
     /**
      * Closes a text stream.
-     * It is not necessary to close standard streams; they close automatically when the process ends. If 
+     * It is not necessary to close standard streams; they close automatically when the process ends. If
      * you close a standard stream, be aware that any other pointers to that standard stream become invalid.
      */
     Close(): void;
@@ -99,9 +99,9 @@ interface TextStreamReader extends TextStreamBase {
 
 declare var WScript: {
     /**
-    * Outputs text to either a message box (under WScript.exe) or the command console window followed by
-    * a newline (under CScript.exe).
-    */
+     * Outputs text to either a message box (under WScript.exe) or the command console window followed by
+     * a newline (under CScript.exe).
+     */
     Echo(s: any): void;
 
     /**
@@ -202,9 +202,22 @@ declare var WScript: {
 };
 
 /**
+ * WSH is an alias for WScript under Windows Script Host
+ */
+declare var WSH: typeof WScript;
+
+/**
+ * Represents an Automation SAFEARRAY
+ */
+declare class SafeArray<T = any> {
+    private constructor();
+    private SafeArray_typekey: SafeArray<T>;
+}
+
+/**
  * Allows enumerating over a COM collection, which may not have indexed item access.
  */
-interface Enumerator<T> {
+interface Enumerator<T = any> {
     /**
      * Returns true if the current item is the last one in the collection, or the collection is empty,
      * or the current item is undefined.
@@ -230,8 +243,9 @@ interface Enumerator<T> {
 }
 
 interface EnumeratorConstructor {
-    new <T>(collection: any): Enumerator<T>;
-    new (collection: any): Enumerator<any>;
+    new <T = any>(safearray: SafeArray<T>): Enumerator<T>;
+    new <T = any>(collection: { Item(index: any): T }): Enumerator<T>;
+    new <T = any>(collection: any): Enumerator<T>;
 }
 
 declare var Enumerator: EnumeratorConstructor;
@@ -239,7 +253,7 @@ declare var Enumerator: EnumeratorConstructor;
 /**
  * Enables reading from a COM safe array, which might have an alternate lower bound, or multiple dimensions.
  */
-interface VBArray<T> {
+interface VBArray<T = any> {
     /**
      * Returns the number of dimensions (1-based).
      */
@@ -271,8 +285,7 @@ interface VBArray<T> {
 }
 
 interface VBArrayConstructor {
-    new <T>(safeArray: any): VBArray<T>;
-    new (safeArray: any): VBArray<any>;
+    new <T = any>(safeArray: SafeArray<T>): VBArray<T>;
 }
 
 declare var VBArray: VBArrayConstructor;
@@ -280,7 +293,10 @@ declare var VBArray: VBArrayConstructor;
 /**
  * Automation date (VT_DATE)
  */
-interface VarDate { }
+declare class VarDate {
+    private constructor();
+    private VarDate_typekey: VarDate;
+}
 
 interface DateConstructor {
     new (vd: VarDate): Date;

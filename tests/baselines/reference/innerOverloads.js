@@ -1,5 +1,4 @@
 //// [innerOverloads.ts]
-
 function outer() {
     function inner(x:number); // should work
     function inner(x:string);

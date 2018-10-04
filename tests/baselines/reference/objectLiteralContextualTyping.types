@@ -5,8 +5,6 @@
 //      the string index type of the contextual type, if any.
 
 interface Item {
->Item : Item
-
     name: string;
 >name : string
 
@@ -17,7 +15,6 @@ interface Item {
 declare function foo(item: Item): string;
 >foo : { (item: Item): string; (item: any): number; }
 >item : Item
->Item : Item
 
 declare function foo(item: any): number;
 >foo : { (item: Item): string; (item: any): number; }
@@ -29,7 +26,7 @@ var x = foo({ name: "Sprocket" });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket" } : { name: string; }
 >name : string
->"Sprocket" : string
+>"Sprocket" : "Sprocket"
 
 var x: string;
 >x : string
@@ -40,9 +37,9 @@ var y = foo({ name: "Sprocket", description: "Bumpy wheel" });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket", description: "Bumpy wheel" } : { name: string; description: string; }
 >name : string
->"Sprocket" : string
+>"Sprocket" : "Sprocket"
 >description : string
->"Bumpy wheel" : string
+>"Bumpy wheel" : "Bumpy wheel"
 
 var y: string;
 >y : string
@@ -53,9 +50,9 @@ var z = foo({ name: "Sprocket", description: false });
 >foo : { (item: Item): string; (item: any): number; }
 >{ name: "Sprocket", description: false } : { name: string; description: boolean; }
 >name : string
->"Sprocket" : string
+>"Sprocket" : "Sprocket"
 >description : boolean
->false : boolean
+>false : false
 
 var z: number;
 >z : number
@@ -66,18 +63,15 @@ var w = foo({ a: 10 });
 >foo : { (item: Item): string; (item: any): number; }
 >{ a: 10 } : { a: number; }
 >a : number
->10 : number
+>10 : 10
 
 var w: number;
 >w : number
 
 declare function bar<T>(param: { x?: T }): T;
 >bar : <T>(param: { x?: T; }) => T
->T : T
 >param : { x?: T; }
 >x : T
->T : T
->T : T
 
 var b = bar({});
 >b : {}

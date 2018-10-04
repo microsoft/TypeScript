@@ -1,13 +1,10 @@
 //// [tests/cases/compiler/systemModule17.ts] ////
 
 //// [f1.ts]
-
-
 export class A {}
 export interface I {}
 
 //// [f2.ts]
-
 var x = 1;
 interface I { }
 
@@ -42,47 +39,47 @@ export {II};
 export {II as II1};
 
 //// [f1.js]
-System.register([], function(exports_1, context_1) {
+System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var A;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[],
-        execute: function() {
-            A = (function () {
+        setters: [],
+        execute: function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;
             }());
             exports_1("A", A);
         }
-    }
+    };
 });
 //// [f2.js]
-System.register(["f1"], function(exports_1, context_1) {
+System.register(["f1"], function (exports_1, context_1) {
     "use strict";
+    var x, N, IX, f1_1;
     var __moduleName = context_1 && context_1.id;
-    var f1_1;
-    var x, N, IX;
     return {
-        setters:[
+        setters: [
             function (f1_1_1) {
                 f1_1 = f1_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             x = 1;
+            exports_1("x", x);
+            exports_1("x1", x);
             (function (N) {
                 N.x = 1;
             })(N || (N = {}));
             IX = N.x;
-            exports_1("x", x);
-            exports_1("x1", x);
+            exports_1("IX", IX);
+            exports_1("IX1", IX);
             exports_1("A", f1_1.A);
             exports_1("A1", f1_1.A);
             exports_1("EA", f1_1.A);
             exports_1("EA1", f1_1.A);
-            exports_1("IX", IX);
-            exports_1("IX1", IX);
         }
-    }
+    };
 });

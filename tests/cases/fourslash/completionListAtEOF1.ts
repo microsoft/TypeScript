@@ -3,4 +3,4 @@
 //// if(0 === ''.
 
 goTo.eof();
-verify.memberListContains("charAt");
+verify.completionListContains("charAt");

@@ -1,0 +1,196 @@
+=== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/enumAssignability.ts ===
+// enums assignable to number, any, Object, errors unless otherwise noted
+
+enum E { A }
+>E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
+>A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
+
+enum F { B }
+>F : Symbol(F, Decl(enumAssignability.ts, 2, 12))
+>B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
+
+var e = E.A;
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+>E.A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
+>E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
+>A : Symbol(E.A, Decl(enumAssignability.ts, 2, 8))
+
+var f = F.B;
+>f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+>F.B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
+>F : Symbol(F, Decl(enumAssignability.ts, 2, 12))
+>B : Symbol(F.B, Decl(enumAssignability.ts, 3, 8))
+
+e = f; 
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+>f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+
+f = e; 
+>f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+e = 1; // ok
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+f = 1; // ok
+>f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+
+var x: number = e; // ok
+>x : Symbol(x, Decl(enumAssignability.ts, 12, 3))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+x = f; // ok
+>x : Symbol(x, Decl(enumAssignability.ts, 12, 3))
+>f : Symbol(f, Decl(enumAssignability.ts, 6, 3))
+
+module Others {
+>Others : Symbol(Others, Decl(enumAssignability.ts, 13, 6))
+
+    var a: any = e; // ok
+>a : Symbol(a, Decl(enumAssignability.ts, 16, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    class C {
+>C : Symbol(C, Decl(enumAssignability.ts, 16, 19))
+
+        foo: string;
+>foo : Symbol(C.foo, Decl(enumAssignability.ts, 18, 13))
+    }
+    var ac: C;
+>ac : Symbol(ac, Decl(enumAssignability.ts, 21, 7))
+>C : Symbol(C, Decl(enumAssignability.ts, 16, 19))
+
+    interface I {
+>I : Symbol(I, Decl(enumAssignability.ts, 21, 14))
+
+        foo: string;
+>foo : Symbol(I.foo, Decl(enumAssignability.ts, 22, 17))
+    }
+    var ai: I;
+>ai : Symbol(ai, Decl(enumAssignability.ts, 25, 7))
+>I : Symbol(I, Decl(enumAssignability.ts, 21, 14))
+
+    var b: number = e; // ok
+>b : Symbol(b, Decl(enumAssignability.ts, 27, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var c: string = e;
+>c : Symbol(c, Decl(enumAssignability.ts, 28, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var d: boolean = e;
+>d : Symbol(d, Decl(enumAssignability.ts, 29, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var ee: Date = e;
+>ee : Symbol(ee, Decl(enumAssignability.ts, 30, 7))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var f: any = e; // ok
+>f : Symbol(f, Decl(enumAssignability.ts, 31, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var g: void = e;
+>g : Symbol(g, Decl(enumAssignability.ts, 32, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var h: Object = e;
+>h : Symbol(h, Decl(enumAssignability.ts, 33, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var i: {} = e;
+>i : Symbol(i, Decl(enumAssignability.ts, 34, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var j: () => {} = e;
+>j : Symbol(j, Decl(enumAssignability.ts, 35, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var k: Function = e;
+>k : Symbol(k, Decl(enumAssignability.ts, 36, 7))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var l: (x: number) => string = e;
+>l : Symbol(l, Decl(enumAssignability.ts, 37, 7))
+>x : Symbol(x, Decl(enumAssignability.ts, 37, 12))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    ac = e;
+>ac : Symbol(ac, Decl(enumAssignability.ts, 21, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    ai = e;
+>ai : Symbol(ai, Decl(enumAssignability.ts, 25, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var m: number[] = e;
+>m : Symbol(m, Decl(enumAssignability.ts, 40, 7))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var n: { foo: string } = e;
+>n : Symbol(n, Decl(enumAssignability.ts, 41, 7))
+>foo : Symbol(foo, Decl(enumAssignability.ts, 41, 12))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var o: <T>(x: T) => T = e;
+>o : Symbol(o, Decl(enumAssignability.ts, 42, 7))
+>T : Symbol(T, Decl(enumAssignability.ts, 42, 12))
+>x : Symbol(x, Decl(enumAssignability.ts, 42, 15))
+>T : Symbol(T, Decl(enumAssignability.ts, 42, 12))
+>T : Symbol(T, Decl(enumAssignability.ts, 42, 12))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var p: Number = e;
+>p : Symbol(p, Decl(enumAssignability.ts, 43, 7))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    var q: String = e;
+>q : Symbol(q, Decl(enumAssignability.ts, 44, 7))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+    function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
+>foo : Symbol(foo, Decl(enumAssignability.ts, 44, 22))
+>T : Symbol(T, Decl(enumAssignability.ts, 46, 17))
+>U : Symbol(U, Decl(enumAssignability.ts, 46, 19))
+>T : Symbol(T, Decl(enumAssignability.ts, 46, 17))
+>V : Symbol(V, Decl(enumAssignability.ts, 46, 32))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>A : Symbol(A, Decl(enumAssignability.ts, 46, 48))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(enumAssignability.ts, 46, 66))
+>E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
+>x : Symbol(x, Decl(enumAssignability.ts, 46, 80))
+>T : Symbol(T, Decl(enumAssignability.ts, 46, 17))
+>y : Symbol(y, Decl(enumAssignability.ts, 46, 85))
+>U : Symbol(U, Decl(enumAssignability.ts, 46, 19))
+>z : Symbol(z, Decl(enumAssignability.ts, 46, 91))
+>V : Symbol(V, Decl(enumAssignability.ts, 46, 32))
+
+        x = e;
+>x : Symbol(x, Decl(enumAssignability.ts, 46, 80))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+        y = e;
+>y : Symbol(y, Decl(enumAssignability.ts, 46, 85))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+        z = e;
+>z : Symbol(z, Decl(enumAssignability.ts, 46, 91))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+        var a: A = e;
+>a : Symbol(a, Decl(enumAssignability.ts, 50, 11))
+>A : Symbol(A, Decl(enumAssignability.ts, 46, 48))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+
+        var b: B = e;
+>b : Symbol(b, Decl(enumAssignability.ts, 51, 11))
+>B : Symbol(B, Decl(enumAssignability.ts, 46, 66))
+>e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
+    }
+}

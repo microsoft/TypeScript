@@ -50,20 +50,20 @@ use(z1.toExponential());
 === c:/root/folder2/file1.ts ===
 export var x = 1;
 >x : number
->1 : number
+>1 : 1
 
 === c:/root/generated/folder3/file2.ts ===
 export var y = 1;
 >y : number
->1 : number
+>1 : 1
 
 === c:/root/shared/components/file3.ts ===
 export var z = 1;
 >z : number
->1 : number
+>1 : 1
 
 === c:/file4.ts ===
 export var z1 = 1;
 >z1 : number
->1 : number
+>1 : 1
 

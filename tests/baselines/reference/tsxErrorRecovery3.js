@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxErrorRecovery3.tsx] ////
 
 //// [file1.tsx]
-
 declare namespace JSX { interface Element { } }
 
 <div></div>
@@ -16,4 +15,4 @@ React.createElement("div", null)
     ,
         React.createElement("div", null);
 //// [file2.js]
-var x = React.createElement("div", null), React.createElement("div", null);
+var x = (React.createElement("div", null), React.createElement("div", null));

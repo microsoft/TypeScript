@@ -7,27 +7,27 @@
 var arr1 = [1, 2]; // number[]
 >arr1 : number[]
 >[1, 2] : number[]
->1 : number
->2 : number
+>1 : 1
+>2 : 2
 
 var arr2 = ["hello", true]; // (string | number)[]
 >arr2 : (string | boolean)[]
 >["hello", true] : (string | boolean)[]
->"hello" : string
->true : boolean
+>"hello" : "hello"
+>true : true
 
 var arr3Tuple: [number, string] = [3, "three"]; // [number, string]
 >arr3Tuple : [number, string]
 >[3, "three"] : [number, string]
->3 : number
->"three" : string
+>3 : 3
+>"three" : "three"
 
 var arr4Tuple: [number, string] = [3, "three", "hello"]; // [number, string, string]
 >arr4Tuple : [number, string]
 >[3, "three", "hello"] : [number, string, string]
->3 : number
->"three" : string
->"hello" : string
+>3 : 3
+>"three" : "three"
+>"hello" : "hello"
 
 var arrEmpty = [];
 >arrEmpty : any[]
@@ -37,16 +37,20 @@ var arr5Tuple: {
 >arr5Tuple : { 0: string; 5: number; }
 
     0: string;
+>0 : string
+
     5: number;
+>5 : number
+
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 >["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
->"hello" : string
->true : boolean
->false : boolean
->" hello" : string
->true : boolean
->10 : number
->"any" : string
+>"hello" : "hello"
+>true : true
+>false : false
+>" hello" : " hello"
+>true : true
+>10 : 10
+>"any" : "any"
 
 class C { foo() { } }
 >C : C
@@ -68,13 +72,9 @@ class F extends C { foo4() { } }
 
 var c: C, d: D, e: E, f: F;
 >c : C
->C : C
 >d : D
->D : D
 >e : E
->E : E
 >f : F
->F : F
 
 var arr6 = [c, d];  // (C | D)[]
 >arr6 : (C | D)[]

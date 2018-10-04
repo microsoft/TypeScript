@@ -1,10 +1,9 @@
 === tests/cases/compiler/blockScopedBindingsReassignedInLoop3.ts ===
-
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 >x < y : boolean
 >x : number
 >y : number
@@ -33,10 +32,10 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
     else {
         for (let a = 1; a < 5; --a) {
 >a : number
->1 : number
+>1 : 1
 >a < 5 : boolean
 >a : number
->5 : number
+>5 : 5
 >--a : number
 >a : number
 
@@ -63,18 +62,18 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         }
         
         y = 5;
->y = 5 : number
+>y = 5 : 5
 >y : number
->5 : number
+>5 : 5
     }
 }
 
 
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 >x < y : boolean
 >x : number
 >y : number
@@ -103,10 +102,10 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
     else {
         for (let a = 1; a < 5; --a) {
 >a : number
->1 : number
+>1 : 1
 >a < 5 : boolean
 >a : number
->5 : number
+>5 : 5
 >--a : number
 >a : number
 
@@ -133,9 +132,9 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         }
         
         y = 5;
->y = 5 : number
+>y = 5 : 5
 >y : number
->5 : number
+>5 : 5
     }
 }
 
@@ -144,9 +143,9 @@ loop2:
 
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 >x < y : boolean
 >x : number
 >y : number
@@ -179,10 +178,10 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
         for (let a = 1; a < 5; --a) {
 >a : number
->1 : number
+>1 : 1
 >a < 5 : boolean
 >a : number
->5 : number
+>5 : 5
 >--a : number
 >a : number
 
@@ -213,9 +212,9 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         }
         
         y = 5;
->y = 5 : number
+>y = 5 : 5
 >y : number
->5 : number
+>5 : 5
     }
 }
 
@@ -224,9 +223,9 @@ loop2:
 
 for (let x = 1, y = 2; x < y; ++x, --y) {
 >x : number
->1 : number
+>1 : 1
 >y : number
->2 : number
+>2 : 2
 >x < y : boolean
 >x : number
 >y : number
@@ -259,10 +258,10 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
 
         for (let a = 1; a < 5; --a) {
 >a : number
->1 : number
+>1 : 1
 >a < 5 : boolean
 >a : number
->5 : number
+>5 : 5
 >--a : number
 >a : number
 
@@ -293,9 +292,9 @@ for (let x = 1, y = 2; x < y; ++x, --y) {
         }
         
         y = 5;
->y = 5 : number
+>y = 5 : 5
 >y : number
->5 : number
+>5 : 5
     }
 }
 

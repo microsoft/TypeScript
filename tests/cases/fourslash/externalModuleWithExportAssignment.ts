@@ -29,55 +29,58 @@
 ////var v1: a1./*15*/connectExport;
 
 goTo.file("externalModuleWithExportAssignment_file1.ts");
-goTo.marker('1');
-verify.quickInfoIs('import a1 = require("./externalModuleWithExportAssignment_file0")');
-
-goTo.marker('2');
-verify.quickInfoIs("var a: {\n    (): a1.connectExport;\n    test1: a1.connectModule;\n    test2(): a1.connectModule;\n}", undefined);
+verify.quickInfoAt("1", [
+    "(alias) namespace a1",
+    "(alias) var a1: {",
+    "    (): connectExport;",
+    "    test1: connectModule;",
+    "    test2(): connectModule;",
+    "}",
+    'import a1 = require("./externalModuleWithExportAssignment_file0")'
+].join("\n"));
+verify.quickInfoAt("2", [
+    "var a: {",
+    "    (): a1.connectExport;",
+    "    test1: a1.connectModule;",
+    "    test2(): a1.connectModule;",
+    "}"
+].join("\n"), undefined);
 
 goTo.marker('3');
-verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
+verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
 verify.not.completionListContains("connectModule");
 verify.not.completionListContains("connectExport");
 
-goTo.marker('4');
-verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");
+verify.signatureHelp(
+    { marker: "4", text: "test1(res: any, req: any, next: any): void" },
+    { marker: "5", text: "test2(): a1.connectModule" },
+);
 
-goTo.marker('5');
-verify.currentSignatureHelpIs("test2(): a1.connectModule");
+verify.quickInfoAt("6", "var r1: a1.connectModule", undefined);
 
-goTo.marker('6');
-verify.quickInfoIs("var r1: a1.connectModule", undefined);
+verify.signatureHelp({ marker: "7", text: "a(): a1.connectExport" });
 
-goTo.marker('7');
-verify.currentSignatureHelpIs("a(): a1.connectExport");
-
-goTo.marker('8');
-verify.quickInfoIs("var r2: a1.connectExport", undefined);
+verify.quickInfoAt("8", "var r2: a1.connectExport", undefined);
 
 goTo.marker('9');
-verify.quickInfoIs("(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
-verify.completionListContains("test1", "(property) test1: a1.connectModule(res: any, req: any, next: any) => void", undefined);
+verify.quickInfoIs("(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
+verify.completionListContains("test1", "(property) test1: a1.connectModule\n(res: any, req: any, next: any) => void", undefined);
 verify.completionListContains("test2", "(method) test2(): a1.connectModule", undefined);
-verify.completionListContains("connectModule");
-verify.completionListContains("connectExport");
+verify.not.completionListContains("connectModule");
+verify.not.completionListContains("connectExport");
 
-goTo.marker('10');
-verify.currentSignatureHelpIs("test1(res: any, req: any, next: any): void");
+verify.signatureHelp(
+    { marker: "10", text: "test1(res: any, req: any, next: any): void" },
+    { marker: "11", text: "test2(): a1.connectModule" },
+);
 
-goTo.marker('11');
-verify.currentSignatureHelpIs("test2(): a1.connectModule");
+verify.quickInfoAt("12", "var r3: a1.connectModule", undefined);
 
-goTo.marker('12');
-verify.quickInfoIs("var r3: a1.connectModule", undefined);
+verify.signatureHelp({ marker: "13", text: "a1(): a1.connectExport" });
 
-goTo.marker('13');
-verify.currentSignatureHelpIs("a1(): a1.connectExport");
-
-goTo.marker('14');
-verify.quickInfoIs("var r4: a1.connectExport", undefined);
+verify.quickInfoAt("14", "var r4: a1.connectExport", undefined);
 
 goTo.marker('15');
 verify.not.completionListContains("test1", "(property) test1: a1.connectModule", undefined);

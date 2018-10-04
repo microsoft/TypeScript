@@ -11,18 +11,19 @@ Foo.bar();
 Foo.foo();
 
 //// [a.js]
-System.register(["./b"], function(exports_1, context_1) {
+System.register(["./b"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var b_1;
+    var __moduleName = context_1 && context_1.id;
     return {
-        setters:[
+        setters: [
             function (b_1_1) {
                 b_1 = b_1_1;
-            }],
-        execute: function() {
+            }
+        ],
+        execute: function () {
             b_1["default"].bar();
             b_1["default"].foo();
         }
-    }
+    };
 });

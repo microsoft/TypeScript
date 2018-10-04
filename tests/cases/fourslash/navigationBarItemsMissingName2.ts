@@ -6,6 +6,23 @@
 ////}
 
 // Anonymous classes are still included.
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "<class>",
+            "kind": "class",
+            "childItems": [
+                {
+                    "text": "foo",
+                    "kind": "method"
+                }
+            ]
+        }
+    ]
+});
+
 verify.navigationBar([
     {
         "text": "<global>",

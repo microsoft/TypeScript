@@ -1,7 +1,4 @@
 ﻿//@target: ES6
-var v: string;
-for (v of new NumberIterator) { } // Should succeed
-
 class NumberIterator {
     next() {
         return {
@@ -13,3 +10,6 @@ class NumberIterator {
         return this;
     }
 }
+
+var v: string;
+for (v of new NumberIterator) { } // Should succeed

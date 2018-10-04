@@ -1,0 +1,130 @@
+=== tests/cases/conformance/salsa/a.js ===
+export class C1 { }
+>C1 : Symbol(C1, Decl(a.js, 0, 0), Decl(a.js, 0, 19))
+
+C1.staticProp = 0;
+>C1.staticProp : Symbol(C1.staticProp, Decl(a.js, 0, 19))
+>C1 : Symbol(C1, Decl(a.js, 0, 0), Decl(a.js, 0, 19))
+>staticProp : Symbol(C1.staticProp, Decl(a.js, 0, 19))
+
+export function F1() { }
+>F1 : Symbol(F1, Decl(a.js, 1, 18), Decl(a.js, 3, 24))
+
+F1.staticProp = 0;
+>F1.staticProp : Symbol(F1.staticProp, Decl(a.js, 3, 24))
+>F1 : Symbol(F1, Decl(a.js, 1, 18), Decl(a.js, 3, 24))
+>staticProp : Symbol(F1.staticProp, Decl(a.js, 3, 24))
+
+export var C2 = class { };
+>C2 : Symbol(C2, Decl(a.js, 6, 10), Decl(a.js, 6, 26))
+
+C2.staticProp = 0;
+>C2.staticProp : Symbol(C2.staticProp, Decl(a.js, 6, 26))
+>C2 : Symbol(C2, Decl(a.js, 6, 10), Decl(a.js, 6, 26))
+>staticProp : Symbol(C2.staticProp, Decl(a.js, 6, 26))
+
+export let F2 = function () { };
+>F2 : Symbol(F2, Decl(a.js, 9, 10), Decl(a.js, 9, 32))
+
+F2.staticProp = 0;
+>F2.staticProp : Symbol(F2.staticProp, Decl(a.js, 9, 32))
+>F2 : Symbol(F2, Decl(a.js, 9, 10), Decl(a.js, 9, 32))
+>staticProp : Symbol(F2.staticProp, Decl(a.js, 9, 32))
+
+=== tests/cases/conformance/salsa/global.js ===
+class C3 { }
+>C3 : Symbol(C3, Decl(global.js, 0, 0), Decl(global.js, 0, 12))
+
+C3.staticProp = 0;
+>C3.staticProp : Symbol(C3.staticProp, Decl(global.js, 0, 12))
+>C3 : Symbol(C3, Decl(global.js, 0, 0), Decl(global.js, 0, 12))
+>staticProp : Symbol(C3.staticProp, Decl(global.js, 0, 12))
+
+function F3() { }
+>F3 : Symbol(F3, Decl(global.js, 1, 18), Decl(global.js, 3, 17))
+
+F3.staticProp = 0;
+>F3.staticProp : Symbol(F3.staticProp, Decl(global.js, 3, 17))
+>F3 : Symbol(F3, Decl(global.js, 1, 18), Decl(global.js, 3, 17))
+>staticProp : Symbol(F3.staticProp, Decl(global.js, 3, 17))
+
+var C4 = class { };
+>C4 : Symbol(C4, Decl(global.js, 6, 3), Decl(global.js, 6, 19))
+
+C4.staticProp = 0;
+>C4.staticProp : Symbol(C4.staticProp, Decl(global.js, 6, 19))
+>C4 : Symbol(C4, Decl(global.js, 6, 3), Decl(global.js, 6, 19))
+>staticProp : Symbol(C4.staticProp, Decl(global.js, 6, 19))
+
+let F4 = function () { };
+>F4 : Symbol(F4, Decl(global.js, 9, 3), Decl(global.js, 9, 25))
+
+F4.staticProp = 0;
+>F4.staticProp : Symbol(F4.staticProp, Decl(global.js, 9, 25))
+>F4 : Symbol(F4, Decl(global.js, 9, 3), Decl(global.js, 9, 25))
+>staticProp : Symbol(F4.staticProp, Decl(global.js, 9, 25))
+
+=== tests/cases/conformance/salsa/b.ts ===
+import * as a from "./a";
+>a : Symbol(a, Decl(b.ts, 0, 6))
+
+var n: number;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+
+var n = a.C1.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.C1.staticProp : Symbol(a.C1.staticProp, Decl(a.js, 0, 19))
+>a.C1 : Symbol(a.C1, Decl(a.js, 0, 0), Decl(a.js, 0, 19))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>C1 : Symbol(a.C1, Decl(a.js, 0, 0), Decl(a.js, 0, 19))
+>staticProp : Symbol(a.C1.staticProp, Decl(a.js, 0, 19))
+
+var n = a.C2.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.C2.staticProp : Symbol(a.C2.staticProp, Decl(a.js, 6, 26))
+>a.C2 : Symbol(a.C2, Decl(a.js, 6, 10), Decl(a.js, 6, 26))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>C2 : Symbol(a.C2, Decl(a.js, 6, 10), Decl(a.js, 6, 26))
+>staticProp : Symbol(a.C2.staticProp, Decl(a.js, 6, 26))
+
+var n = a.F1.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.F1.staticProp : Symbol(a.F1.staticProp, Decl(a.js, 3, 24))
+>a.F1 : Symbol(a.F1, Decl(a.js, 1, 18), Decl(a.js, 3, 24))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>F1 : Symbol(a.F1, Decl(a.js, 1, 18), Decl(a.js, 3, 24))
+>staticProp : Symbol(a.F1.staticProp, Decl(a.js, 3, 24))
+
+var n = a.F2.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>a.F2.staticProp : Symbol(a.F2.staticProp, Decl(a.js, 9, 32))
+>a.F2 : Symbol(a.F2, Decl(a.js, 9, 10), Decl(a.js, 9, 32))
+>a : Symbol(a, Decl(b.ts, 0, 6))
+>F2 : Symbol(a.F2, Decl(a.js, 9, 10), Decl(a.js, 9, 32))
+>staticProp : Symbol(a.F2.staticProp, Decl(a.js, 9, 32))
+
+
+var n = C3.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>C3.staticProp : Symbol(C3.staticProp, Decl(global.js, 0, 12))
+>C3 : Symbol(C3, Decl(global.js, 0, 0), Decl(global.js, 0, 12))
+>staticProp : Symbol(C3.staticProp, Decl(global.js, 0, 12))
+
+var n = C4.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>C4.staticProp : Symbol(C4.staticProp, Decl(global.js, 6, 19))
+>C4 : Symbol(C4, Decl(global.js, 6, 3), Decl(global.js, 6, 19))
+>staticProp : Symbol(C4.staticProp, Decl(global.js, 6, 19))
+
+var n = F3.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>F3.staticProp : Symbol(F3.staticProp, Decl(global.js, 3, 17))
+>F3 : Symbol(F3, Decl(global.js, 1, 18), Decl(global.js, 3, 17))
+>staticProp : Symbol(F3.staticProp, Decl(global.js, 3, 17))
+
+var n = F4.staticProp;
+>n : Symbol(n, Decl(b.ts, 1, 3), Decl(b.ts, 3, 3), Decl(b.ts, 4, 3), Decl(b.ts, 5, 3), Decl(b.ts, 6, 3) ... and 4 more)
+>F4.staticProp : Symbol(F4.staticProp, Decl(global.js, 9, 25))
+>F4 : Symbol(F4, Decl(global.js, 9, 3), Decl(global.js, 9, 25))
+>staticProp : Symbol(F4.staticProp, Decl(global.js, 9, 25))
+

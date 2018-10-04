@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/MissingTokens/parserMissingToken1.ts ===
+a / finally
+No type information for this code.

@@ -7,8 +7,9 @@ function* g() {
 >{        [yield 0]: 0    } : { [x: number]: number; }
 
         [yield 0]: 0
+>[yield 0] : number
 >yield 0 : any
->0 : number
->0 : number
+>0 : 0
+>0 : 0
     }
 }

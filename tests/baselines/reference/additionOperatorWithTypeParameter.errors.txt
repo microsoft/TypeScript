@@ -8,8 +8,8 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(27,15): error TS2365: Operator '+' cannot be applied to types 'Object' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(28,15): error TS2365: Operator '+' cannot be applied to types 'E' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(29,15): error TS2365: Operator '+' cannot be applied to types 'void' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
-tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(32,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
+tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(33,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(34,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(35,15): error TS2365: Operator '+' cannot be applied to types 'T' and 'U'.
 tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts(36,15): error TS2365: Operator '+' cannot be applied to types 'T' and '() => void'.
@@ -70,10 +70,10 @@ tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOpe
         // other cases
         var r15 = t + null;
                   ~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'null'.
         var r16 = t + undefined;
                   ~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.
+!!! error TS2365: Operator '+' cannot be applied to types 'T' and 'undefined'.
         var r17 = t + t;
                   ~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'T' and 'T'.

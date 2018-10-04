@@ -1,0 +1,9 @@
+=== tests/cases/compiler/systemDefaultExportCommentValidity.ts ===
+const Home = {}
+>Home : {}
+>{} : {}
+
+export default Home
+>Home : {}
+
+// There is intentionally no semicolon on the prior line, this comment should not break emit

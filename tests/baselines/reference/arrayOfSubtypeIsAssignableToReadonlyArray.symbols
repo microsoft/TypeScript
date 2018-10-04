@@ -1,0 +1,77 @@
+=== tests/cases/compiler/arrayOfSubtypeIsAssignableToReadonlyArray.ts ===
+class A { a }
+>A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+>a : Symbol(A.a, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 9))
+
+class B extends A { b }
+>B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
+>A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+>b : Symbol(B.b, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 19))
+
+class C<T> extends Array<T> { c }
+>C : Symbol(C, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 23))
+>T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 8))
+>c : Symbol(C.c, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 2, 29))
+
+declare var ara: A[];
+>ara : Symbol(ara, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 3, 11))
+>A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+
+declare var arb: B[];
+>arb : Symbol(arb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 4, 11))
+>B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
+
+declare var cra: C<A>;
+>cra : Symbol(cra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 5, 11))
+>C : Symbol(C, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 23))
+>A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+
+declare var crb: C<B>;
+>crb : Symbol(crb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 6, 11))
+>C : Symbol(C, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 1, 23))
+>B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
+
+declare var rra: ReadonlyArray<A>;
+>rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>A : Symbol(A, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 0))
+
+declare var rrb: ReadonlyArray<B>;
+>rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+>B : Symbol(B, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 0, 13))
+
+rra = ara;
+>rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
+>ara : Symbol(ara, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 3, 11))
+
+rrb = arb; // OK, Array<B> is assignable to ReadonlyArray<A>
+>rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
+>arb : Symbol(arb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 4, 11))
+
+rra = arb;
+>rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
+>arb : Symbol(arb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 4, 11))
+
+rrb = ara; // error: 'A' is not assignable to 'B'
+>rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
+>ara : Symbol(ara, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 3, 11))
+
+rra = cra;
+>rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
+>cra : Symbol(cra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 5, 11))
+
+rra = crb; // OK, C<B> is assignable to ReadonlyArray<A>
+>rra : Symbol(rra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 7, 11))
+>crb : Symbol(crb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 6, 11))
+
+rrb = crb;
+>rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
+>crb : Symbol(crb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 6, 11))
+
+rrb = cra; // error: 'A' is not assignable to 'B'
+>rrb : Symbol(rrb, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 8, 11))
+>cra : Symbol(cra, Decl(arrayOfSubtypeIsAssignableToReadonlyArray.ts, 5, 11))
+

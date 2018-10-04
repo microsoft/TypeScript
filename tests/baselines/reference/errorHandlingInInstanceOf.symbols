@@ -1,0 +1,11 @@
+=== tests/cases/compiler/errorHandlingInInstanceOf.ts ===
+if (x instanceof String) {
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+}
+
+var y: any;
+>y : Symbol(y, Decl(errorHandlingInInstanceOf.ts, 3, 3))
+
+if (y instanceof UnknownType) {
+>y : Symbol(y, Decl(errorHandlingInInstanceOf.ts, 3, 3))
+}

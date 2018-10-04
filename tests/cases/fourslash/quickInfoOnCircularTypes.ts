@@ -14,8 +14,7 @@
 ////
 ////x/*B*/x = y/*C*/y;
 
-goTo.marker('B');
-verify.quickInfoIs('var xx: B');
-
-goTo.marker('C');
-verify.quickInfoIs('var yy: C');
+verify.quickInfos({
+    B: "var xx: B",
+    C: "var yy: C"
+});

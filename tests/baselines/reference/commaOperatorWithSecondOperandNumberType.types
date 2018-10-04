@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 //The second operand type is number
 ANY, NUMBER;
@@ -91,33 +90,33 @@ ANY = undefined, NUMBER;
 >NUMBER : number
 
 true, 1;
->true, 1 : number
->true : boolean
->1 : number
+>true, 1 : 1
+>true : true
+>1 : 1
 
 BOOLEAN = false, 1;
->BOOLEAN = false, 1 : number
->BOOLEAN = false : boolean
+>BOOLEAN = false, 1 : 1
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
->1 : number
+>false : false
+>1 : 1
 
 "", NUMBER = 1;
->"", NUMBER = 1 : number
->"" : string
->NUMBER = 1 : number
+>"", NUMBER = 1 : 1
+>"" : ""
+>NUMBER = 1 : 1
 >NUMBER : number
->1 : number
+>1 : 1
 
 STRING.trim(), NUMBER = 1;
->STRING.trim(), NUMBER = 1 : number
+>STRING.trim(), NUMBER = 1 : 1
 >STRING.trim() : string
 >STRING.trim : () => string
 >STRING : string
 >trim : () => string
->NUMBER = 1 : number
+>NUMBER = 1 : 1
 >NUMBER : number
->1 : number
+>1 : 1
 
 var resultIsNumber6 = (null, NUMBER);
 >resultIsNumber6 : number
@@ -137,38 +136,38 @@ var resultIsNumber7 = (ANY = undefined, NUMBER);
 
 var resultIsNumber8 = (true, 1);
 >resultIsNumber8 : number
->(true, 1) : number
->true, 1 : number
->true : boolean
->1 : number
+>(true, 1) : 1
+>true, 1 : 1
+>true : true
+>1 : 1
 
 var resultIsNumber9 = (BOOLEAN = false, 1);
 >resultIsNumber9 : number
->(BOOLEAN = false, 1) : number
->BOOLEAN = false, 1 : number
->BOOLEAN = false : boolean
+>(BOOLEAN = false, 1) : 1
+>BOOLEAN = false, 1 : 1
+>BOOLEAN = false : false
 >BOOLEAN : boolean
->false : boolean
->1 : number
+>false : false
+>1 : 1
 
 var resultIsNumber10 = ("", NUMBER = 1);
 >resultIsNumber10 : number
->("", NUMBER = 1) : number
->"", NUMBER = 1 : number
->"" : string
->NUMBER = 1 : number
+>("", NUMBER = 1) : 1
+>"", NUMBER = 1 : 1
+>"" : ""
+>NUMBER = 1 : 1
 >NUMBER : number
->1 : number
+>1 : 1
 
 var resultIsNumber11 = (STRING.trim(), NUMBER = 1);
 >resultIsNumber11 : number
->(STRING.trim(), NUMBER = 1) : number
->STRING.trim(), NUMBER = 1 : number
+>(STRING.trim(), NUMBER = 1) : 1
+>STRING.trim(), NUMBER = 1 : 1
 >STRING.trim() : string
 >STRING.trim : () => string
 >STRING : string
 >trim : () => string
->NUMBER = 1 : number
+>NUMBER = 1 : 1
 >NUMBER : number
->1 : number
+>1 : 1
 

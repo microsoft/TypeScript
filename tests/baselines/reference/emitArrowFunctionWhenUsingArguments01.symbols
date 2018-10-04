@@ -1,0 +1,62 @@
+=== tests/cases/conformance/es6/arrowFunction/emitArrowFunctionWhenUsingArguments01.ts ===
+var a = () => {
+>a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments01.ts, 0, 3))
+
+    var arg = arguments[0];  // error
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 1, 7))
+>arguments : Symbol(arguments)
+}
+
+var b = function () {
+>b : Symbol(b, Decl(emitArrowFunctionWhenUsingArguments01.ts, 4, 3))
+
+    var a = () => {
+>a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments01.ts, 5, 7))
+
+        var arg = arguments[0];  // error
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 6, 11))
+>arguments : Symbol(arguments)
+    }
+}
+
+function baz() {
+>baz : Symbol(baz, Decl(emitArrowFunctionWhenUsingArguments01.ts, 8, 1))
+
+	() => {
+		var arg = arguments[0];
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 12, 5))
+>arguments : Symbol(arguments)
+	}
+}
+
+function foo(inputFunc: () => void) { }
+>foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments01.ts, 14, 1))
+>inputFunc : Symbol(inputFunc, Decl(emitArrowFunctionWhenUsingArguments01.ts, 16, 13))
+
+foo(() => {
+>foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments01.ts, 14, 1))
+
+    var arg = arguments[0];  // error
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 18, 7))
+>arguments : Symbol(arguments)
+
+});
+
+function bar() {
+>bar : Symbol(bar, Decl(emitArrowFunctionWhenUsingArguments01.ts, 19, 3))
+
+    var arg = arguments[0];  // no error
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 22, 7))
+>arguments : Symbol(arguments)
+}
+
+
+() => {
+	function foo() {
+>foo : Symbol(foo, Decl(emitArrowFunctionWhenUsingArguments01.ts, 26, 7))
+
+		var arg = arguments[0];  // no error
+>arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01.ts, 28, 5))
+>arguments : Symbol(arguments)
+	}
+}

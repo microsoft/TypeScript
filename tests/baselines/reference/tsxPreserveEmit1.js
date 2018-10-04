@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxPreserveEmit1.tsx] ////
 
 //// [react.d.ts]
-
 declare module 'react' {
 	var x: any;
 	export = x;
@@ -34,14 +33,14 @@ module M {
 
 
 //// [test.jsx]
-define(["require", "exports", 'react', 'react-router'], function (require, exports, React, ReactRouter) {
+define(["require", "exports", "react", "react-router"], function (require, exports, React, ReactRouter) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     var Route = ReactRouter.Route;
     var routes1 = <Route />;
     var M;
     (function (M) {
     })(M || (M = {}));
-    var M;
     (function (M) {
         // Should emit 'M.X' in both opening and closing tags
         var y = <M.X></M.X>;

@@ -1,5 +1,4 @@
 //// [arrowFunctionsMissingTokens.ts]
-
 module missingArrowsWithCurly {
     var a = () { };
 
@@ -88,25 +87,25 @@ var missingCurliesWithArrow;
     })(withStatement || (withStatement = {}));
     var withoutStatement;
     (function (withoutStatement) {
-        var a = ;
+        var a = function () { return ; };
     })(withoutStatement || (withoutStatement = {}));
     ;
-    var b = ;
+    var b = function () { return ; };
 })(missingCurliesWithArrow || (missingCurliesWithArrow = {}));
-var c = ;
+var c = function (x) { return ; };
 ;
-var d = ;
+var d = function (x, y) { return ; };
 ;
-var e = ;
+var e = function (x, y) { return ; };
 ;
-var f = ;
+var f = function () { return ; };
 var ce_nEst_pas_une_arrow_function;
 (function (ce_nEst_pas_une_arrow_function) {
     var a = ();
-    var b = ;
+    var b = function () { return ; };
     var c = (x);
-    var d = ;
-    var e = ;
+    var d = function (x, y) { return ; };
+    var e = function (x, y) { return ; };
 })(ce_nEst_pas_une_arrow_function || (ce_nEst_pas_une_arrow_function = {}));
 var okay;
 (function (okay) {

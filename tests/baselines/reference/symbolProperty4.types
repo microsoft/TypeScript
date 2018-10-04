@@ -4,19 +4,22 @@ var x = {
 >{    [Symbol()]: 0,    [Symbol()]() { },    get [Symbol()]() {        return 0;    }} : { [x: string]: number | (() => void); }
 
     [Symbol()]: 0,
+>[Symbol()] : number
 >Symbol() : symbol
 >Symbol : SymbolConstructor
->0 : number
+>0 : 0
 
     [Symbol()]() { },
+>[Symbol()] : () => void
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 
     get [Symbol()]() {
+>[Symbol()] : number
 >Symbol() : symbol
 >Symbol : SymbolConstructor
 
         return 0;
->0 : number
+>0 : 0
     }
 }

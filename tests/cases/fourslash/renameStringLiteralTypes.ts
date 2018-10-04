@@ -11,8 +11,4 @@
 ////
 ////animate({ deltaX: 100, deltaY: 100, easing: "[|ease-in-out|]" });
 
-let ranges = test.ranges();
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+goTo.eachRange(() => { verify.renameInfoFailed(); });

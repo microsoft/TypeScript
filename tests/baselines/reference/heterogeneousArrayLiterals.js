@@ -133,11 +133,19 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 
 //// [heterogeneousArrayLiterals.js]
 // type of an array is the best common type of its elements (plus its contextual type if it exists)
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var a = [1, '']; // {}[]
 var b = [1, null]; // number[]
 var c = [1, '', null]; // {}[]
@@ -152,29 +160,28 @@ var k = [function () { return 1; }, function () { return 1; }]; // { (): number 
 var l = [function () { return 1; }, function () { return null; }]; // { (): any }[]
 var m = [function () { return 1; }, function () { return ''; }, function () { return null; }]; // { (): any }[]
 var n = [[function () { return 1; }], [function () { return ''; }]]; // {}[]
-var Base = (function () {
+var Base = /** @class */ (function () {
     function Base() {
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        _super.apply(this, arguments);
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Derived2;
 }(Base));
 var base;
 var derived;
 var derived2;
-var Derived;
 (function (Derived) {
     var h = [{ foo: base, basear: derived }, { foo: base }]; // {foo: Base}[]
     var i = [{ foo: base, basear: derived }, { foo: derived }]; // {foo: Derived}[]
@@ -264,4 +271,4 @@ function foo4(t, u) {
 //    var i = [u, base]; // Base[]
 //    var j = [u, derived]; // Derived[]
 //    var k: Base[] = [t, u];
-//} 
+//}

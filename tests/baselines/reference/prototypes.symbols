@@ -1,0 +1,17 @@
+=== tests/cases/compiler/prototypes.ts ===
+Object.prototype; // ok
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+
+new Object().prototype; // error
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+function f() {}
+>f : Symbol(f, Decl(prototypes.ts, 1, 23))
+
+f.prototype;
+>f.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>f : Symbol(f, Decl(prototypes.ts, 1, 23))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+

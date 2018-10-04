@@ -17,32 +17,32 @@ var t3: A; // should not error
 
 
 //// [overloadOnGenericClassAndNonGenericClass.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
     }
     return X;
 }());
-var X1 = (function () {
+var X1 = /** @class */ (function () {
     function X1() {
     }
     return X1;
 }());
-var X2 = (function () {
+var X2 = /** @class */ (function () {
     function X2() {
     }
     return X2;

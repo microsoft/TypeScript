@@ -1,5 +1,4 @@
 === tests/cases/compiler/elidingImportNames_test.ts ===
-
 import a = require('./elidingImportNames_main'); // alias used in typeof
 >a : typeof a
 
@@ -22,10 +21,10 @@ var b2 = a2;
 === tests/cases/compiler/elidingImportNames_main.ts ===
 export var main = 10;
 >main : number
->10 : number
+>10 : 10
 
 === tests/cases/compiler/elidingImportNames_main1.ts ===
 export var main = 10;
 >main : number
->10 : number
+>10 : 10
 

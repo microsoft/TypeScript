@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/commonjsSafeImport.ts] ////
 
 //// [10_lib.ts]
-
 export function Foo() {}
 
 //// [main.ts]
@@ -12,14 +11,17 @@ Foo();
 
 //// [10_lib.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function Foo() { }
 exports.Foo = Foo;
 //// [main.js]
 "use strict";
-var _10_lib_1 = require('./10_lib');
+Object.defineProperty(exports, "__esModule", { value: true });
+var _10_lib_1 = require("./10_lib");
 _10_lib_1.Foo();
 
 
 //// [10_lib.d.ts]
 export declare function Foo(): void;
 //// [main.d.ts]
+export {};

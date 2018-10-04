@@ -1,17 +1,16 @@
 /// <reference path="fourslash.ts" />
 
 ////module Test {
-//// class Mocked {
-//// myProp: string;
-//// }
-//// class Tester {
-//// willThrowError() {
-//// Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.
-//// return { /**/myProp: "test" };
-//// };
-//// }
-//// }
+////    class Mocked {
+////        myProp: string;
+////    }
+////    class Tester {
+////        willThrowError() {
+////            Mocked = Mocked || function () { // => Error: Invalid left-hand side of assignment expression.
+////                return { /**/myProp: "test" };
+////            };
+////        }
+////    }
 ////}
 
-goTo.marker();
-verify.quickInfoIs("(property) myProp: string", undefined);
+verify.quickInfoAt("", "(property) myProp: string");

@@ -1,0 +1,50 @@
+=== tests/cases/conformance/types/any/narrowExceptionVariableInCatchClause.ts ===
+declare function isFooError(x: any): x is { type: 'foo'; dontPanic(); };
+>isFooError : Symbol(isFooError, Decl(narrowExceptionVariableInCatchClause.ts, 0, 0))
+>x : Symbol(x, Decl(narrowExceptionVariableInCatchClause.ts, 0, 28))
+>x : Symbol(x, Decl(narrowExceptionVariableInCatchClause.ts, 0, 28))
+>type : Symbol(type, Decl(narrowExceptionVariableInCatchClause.ts, 0, 43))
+>dontPanic : Symbol(dontPanic, Decl(narrowExceptionVariableInCatchClause.ts, 0, 56))
+
+function tryCatch() {
+>tryCatch : Symbol(tryCatch, Decl(narrowExceptionVariableInCatchClause.ts, 0, 72))
+
+    try {
+        // do stuff...
+    }
+    catch (err) { // err is implicitly 'any' and cannot be annotated
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+
+        if (isFooError(err)) {
+>isFooError : Symbol(isFooError, Decl(narrowExceptionVariableInCatchClause.ts, 0, 0))
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+
+            err.dontPanic(); // OK
+>err.dontPanic : Symbol(dontPanic, Decl(narrowExceptionVariableInCatchClause.ts, 0, 56))
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+>dontPanic : Symbol(dontPanic, Decl(narrowExceptionVariableInCatchClause.ts, 0, 56))
+
+            err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+        }
+
+        else if (err instanceof Error) {
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+            err.message;
+>err.message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+>message : Symbol(Error.message, Decl(lib.es5.d.ts, --, --))
+
+            err.massage; // ERROR: Property 'massage' does not exist on type 'Error'
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+        }
+
+        else {
+            throw err;
+>err : Symbol(err, Decl(narrowExceptionVariableInCatchClause.ts, 6, 11))
+        }
+    }
+}
+

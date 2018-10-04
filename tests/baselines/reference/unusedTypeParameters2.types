@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedTypeParameters2.ts ===
+class greeter<typeparameter1, typeparameter2> {
+>greeter : greeter<typeparameter1, typeparameter2>
+
+    private x: typeparameter2;
+>x : typeparameter2
+
+    public function1() {
+>function1 : () => void
+
+        this.x;
+>this.x : typeparameter2
+>this : this
+>x : typeparameter2
+    }
+}

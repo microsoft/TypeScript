@@ -18,6 +18,8 @@
 ////    // These will only show up as childItems.
 ////    function z() {}
 ////    console.log(function() {})
+////    describe("this", 'function', () => {});
+////    [].map(() => {});
 ////})
 ////(function classes() {
 ////    // Classes show up in top-level regardless of whether they have names or inner declarations.
@@ -25,6 +27,93 @@
 ////    console.log(class cls3 {});
 ////    (class { });
 ////})
+
+verify.navigationTree({
+    "text": "<global>",
+    "kind": "script",
+    "childItems": [
+        {
+            "text": "<function>",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "nest",
+                    "kind": "function",
+                    "childItems": [
+                        {
+                            "text": "moreNest",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "x",
+                    "kind": "const",
+                    "childItems": [
+                        {
+                            "text": "xx",
+                            "kind": "function"
+                        }
+                    ]
+                },
+                {
+                    "text": "y",
+                    "kind": "const",
+                    "childItems": [
+                        {
+                            "text": "foo",
+                            "kind": "function"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "text": "<function>",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "console.log() callback",
+                    "kind": "function"
+                },
+                {
+                    "text": `describe("this", 'function') callback`,
+                    "kind": "function"
+                },
+                {
+                    "text": `map() callback`,
+                    "kind": "function"
+                },
+                {
+                    "text": "z",
+                    "kind": "function"
+                }
+            ]
+        },
+        {
+            "text": "classes",
+            "kind": "function",
+            "childItems": [
+                {
+                    "text": "<class>",
+                    "kind": "class"
+                },
+                {
+                    "text": "cls2",
+                    "kind": "const"
+                },
+                {
+                    "text": "cls3",
+                    "kind": "class"
+                }
+            ]
+        },
+        {
+            "text": "cls",
+            "kind": "class"
+        }
+    ]
+});
 
 verify.navigationBar([
     {
@@ -44,7 +133,7 @@ verify.navigationBar([
                 "kind": "function"
             },
             {
-                "text": "global.cls",
+                "text": "cls",
                 "kind": "class"
             }
         ]
@@ -59,7 +148,7 @@ verify.navigationBar([
             },
             {
                 "text": "x",
-                "kind": "function"
+                "kind": "const"
             },
             {
                 "text": "y",
@@ -81,10 +170,21 @@ verify.navigationBar([
     },
     {
         "text": "x",
-        "kind": "function",
+        "kind": "const",
         "childItems": [
             {
                 "text": "xx",
+                "kind": "function"
+            }
+        ],
+        "indent": 2
+    },
+    {
+        "text": "y",
+        "kind": "const",
+        "childItems": [
+            {
+                "text": "foo",
                 "kind": "function"
             }
         ],
@@ -95,7 +195,15 @@ verify.navigationBar([
         "kind": "function",
         "childItems": [
             {
-                "text": "<function>",
+                "text": "console.log() callback",
+                "kind": "function"
+            },
+            {
+                "text": `describe("this", 'function') callback`,
+                "kind": "function"
+            },
+            {
+                "text": `map() callback`,
                 "kind": "function"
             },
             {
@@ -115,7 +223,7 @@ verify.navigationBar([
             },
             {
                 "text": "cls2",
-                "kind": "class"
+                "kind": "const"
             },
             {
                 "text": "cls3",
@@ -130,17 +238,12 @@ verify.navigationBar([
         "indent": 2
     },
     {
-        "text": "cls2",
-        "kind": "class",
-        "indent": 2
-    },
-    {
         "text": "cls3",
         "kind": "class",
         "indent": 2
     },
     {
-        "text": "global.cls",
+        "text": "cls",
         "kind": "class",
         "indent": 1
     }

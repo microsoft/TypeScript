@@ -1,10 +1,7 @@
-tests/cases/compiler/letDeclarations-validContexts.ts(21,7): error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+tests/cases/compiler/letDeclarations-validContexts.ts(18,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
 ==== tests/cases/compiler/letDeclarations-validContexts.ts (1 errors) ====
-    
-    
-    
     // Control flow statements with blocks
     if (true) { 
         let l1 = 0;
@@ -23,8 +20,8 @@ tests/cases/compiler/letDeclarations-validContexts.ts(21,7): error TS2410: All s
     
     var obj;
     with (obj) {
-          ~~~
-!!! error TS2410: All symbols within a 'with' block will be resolved to 'any'.
+    ~~~~~~~~~~
+!!! error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
         let l5 = 0;
     }
     

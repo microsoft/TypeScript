@@ -1,6 +1,6 @@
 // @Filename: missingFunctionImplementation2_a.ts
 export {};
-declare module "./missingFunctionImplementation2_b.ts" {
+declare module "./missingFunctionImplementation2_b" {
   export function f(a, b): void;
 }
 

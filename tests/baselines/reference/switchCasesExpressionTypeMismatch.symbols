@@ -1,0 +1,28 @@
+=== tests/cases/compiler/switchCasesExpressionTypeMismatch.ts ===
+class Foo { }
+>Foo : Symbol(Foo, Decl(switchCasesExpressionTypeMismatch.ts, 0, 0))
+
+switch (0) {
+    case Foo: break;    // Error
+>Foo : Symbol(Foo, Decl(switchCasesExpressionTypeMismatch.ts, 0, 0))
+
+    case "sss": break;  // Error
+    case 123: break;    // Error
+    case true: break;   // Error
+}
+
+var s: any = 0;
+>s : Symbol(s, Decl(switchCasesExpressionTypeMismatch.ts, 9, 3))
+
+// No error for all
+switch (s) {
+>s : Symbol(s, Decl(switchCasesExpressionTypeMismatch.ts, 9, 3))
+
+    case Foo: break;
+>Foo : Symbol(Foo, Decl(switchCasesExpressionTypeMismatch.ts, 0, 0))
+
+    case "sss": break;
+    case 123: break;
+    case true: break;
+}
+

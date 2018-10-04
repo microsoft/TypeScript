@@ -1,0 +1,170 @@
+=== tests/cases/conformance/types/objectTypeLiteral/callSignatures/restParametersOfNonArrayTypes2.ts ===
+// Rest parameters must be an array type if they have a type annotation, 
+// user defined subtypes of array do not count, all of these are errors
+
+interface MyThing extends Array<any> { }
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+interface MyThing2<T> extends Array<T> { }
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+>T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(restParametersOfNonArrayTypes2.ts, 4, 19))
+
+function foo(...x: MyThing) { }
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 4, 42))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 6, 13))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+var f = function foo(...x: MyThing) { }
+>f : Symbol(f, Decl(restParametersOfNonArrayTypes2.ts, 7, 3))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 7, 7))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 7, 21))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+var f2 = (...x: MyThing, ...y: MyThing) => { }
+>f2 : Symbol(f2, Decl(restParametersOfNonArrayTypes2.ts, 8, 3))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 8, 10))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 8, 24))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+class C {
+>C : Symbol(C, Decl(restParametersOfNonArrayTypes2.ts, 8, 46))
+
+    foo(...x: MyThing) { }
+>foo : Symbol(C.foo, Decl(restParametersOfNonArrayTypes2.ts, 10, 9))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 11, 8))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+}
+
+interface I {
+>I : Symbol(I, Decl(restParametersOfNonArrayTypes2.ts, 12, 1))
+
+    (...x: MyThing);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 15, 5))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+    foo(...x: MyThing, ...y: MyThing);
+>foo : Symbol(I.foo, Decl(restParametersOfNonArrayTypes2.ts, 15, 20))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 16, 8))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 16, 22))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+}
+
+var a: {
+>a : Symbol(a, Decl(restParametersOfNonArrayTypes2.ts, 19, 3))
+
+    (...x: MyThing);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 20, 5))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+    foo(...x: MyThing);
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 20, 20))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 21, 8))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+}
+
+var b = {
+>b : Symbol(b, Decl(restParametersOfNonArrayTypes2.ts, 24, 3))
+
+    foo(...x: MyThing) { },
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 24, 9))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 25, 8))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+    a: function foo(...x: MyThing, ...y: MyThing) { },
+>a : Symbol(a, Decl(restParametersOfNonArrayTypes2.ts, 25, 27))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 26, 6))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 26, 20))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 26, 34))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+
+    b: (...x: MyThing) => { }
+>b : Symbol(b, Decl(restParametersOfNonArrayTypes2.ts, 26, 54))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 27, 8))
+>MyThing : Symbol(MyThing, Decl(restParametersOfNonArrayTypes2.ts, 0, 0))
+}
+
+
+
+
+function foo2(...x: MyThing2<string>) { }
+>foo2 : Symbol(foo2, Decl(restParametersOfNonArrayTypes2.ts, 28, 1))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 33, 14))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+var f3 = function foo(...x: MyThing2<string>) { }
+>f3 : Symbol(f3, Decl(restParametersOfNonArrayTypes2.ts, 34, 3))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 34, 8))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 34, 22))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+var f4 = (...x: MyThing2<string>, ...y: MyThing2<string>) => { }
+>f4 : Symbol(f4, Decl(restParametersOfNonArrayTypes2.ts, 35, 3))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 35, 10))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 35, 33))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+class C2 {
+>C2 : Symbol(C2, Decl(restParametersOfNonArrayTypes2.ts, 35, 64))
+
+    foo(...x: MyThing2<string>) { }
+>foo : Symbol(C2.foo, Decl(restParametersOfNonArrayTypes2.ts, 37, 10))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 38, 8))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+}
+
+interface I2 {
+>I2 : Symbol(I2, Decl(restParametersOfNonArrayTypes2.ts, 39, 1))
+
+    (...x: MyThing2<string>);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 42, 5))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+    foo(...x: MyThing2<string>, ...y: MyThing2<string>);
+>foo : Symbol(I2.foo, Decl(restParametersOfNonArrayTypes2.ts, 42, 29))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 43, 8))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 43, 31))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+}
+
+var a2: {
+>a2 : Symbol(a2, Decl(restParametersOfNonArrayTypes2.ts, 46, 3))
+
+    (...x: MyThing2<string>);
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 47, 5))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+    foo(...x: MyThing2<string>);
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 47, 29))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 48, 8))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+}
+
+var b2 = {
+>b2 : Symbol(b2, Decl(restParametersOfNonArrayTypes2.ts, 51, 3))
+
+    foo(...x: MyThing2<string>) { },
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 51, 10))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 52, 8))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+    a: function foo(...x: MyThing2<string>, ...y: MyThing2<string>) { },
+>a : Symbol(a, Decl(restParametersOfNonArrayTypes2.ts, 52, 36))
+>foo : Symbol(foo, Decl(restParametersOfNonArrayTypes2.ts, 53, 6))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 53, 20))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+>y : Symbol(y, Decl(restParametersOfNonArrayTypes2.ts, 53, 43))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+
+    b: (...x: MyThing2<string>) => { }
+>b : Symbol(b, Decl(restParametersOfNonArrayTypes2.ts, 53, 72))
+>x : Symbol(x, Decl(restParametersOfNonArrayTypes2.ts, 54, 8))
+>MyThing2 : Symbol(MyThing2, Decl(restParametersOfNonArrayTypes2.ts, 3, 40))
+}

@@ -1,5 +1,4 @@
 //// [jsxReactTestSuite.tsx]
-
 declare var React: any;
 declare var Component:any;
 declare var Composite:any;
@@ -148,7 +147,10 @@ var x = <div attr1={"foo" + "bar"} attr2={"foo" + "bar" +
     
     
   </div>);
-(<div attr1="foo">
+(<div 
+/* a multi-line
+   comment */
+attr1="foo">
     <span // a double-slash comment
  attr2="bar"/>
   </div>);

@@ -1,0 +1,9 @@
+=== tests/cases/compiler/switchCaseInternalComments.ts ===
+/*-1*/ foo /*0*/ : /*1*/ switch /*2*/ ( /*3*/ false /*4*/ ) /*5*/ {
+No type information for this code.    /*6*/ case /*7*/ false /*8*/ : /*9*/
+No type information for this code.        /*10*/ break /*11*/ foo /*12*/;
+No type information for this code.    /*13*/ default /*14*/ : /*15*/
+No type information for this code.    /*16*/ case /*17*/ false /*18*/ : /*19*/ { /*20*/
+No type information for this code.    /*21*/ } /*22*/
+No type information for this code.}
+No type information for this code.

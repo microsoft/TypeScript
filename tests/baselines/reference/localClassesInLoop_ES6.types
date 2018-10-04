@@ -1,11 +1,10 @@
 === tests/cases/compiler/localClassesInLoop_ES6.ts ===
-
 declare function use(a: any);
 >use : (a: any) => any
 >a : any
 
 "use strict"
->"use strict" : string
+>"use strict" : "use strict"
 
 var data = [];
 >data : any[]
@@ -13,10 +12,10 @@ var data = [];
 
 for (let x = 0; x < 2; ++x) {
 >x : number
->0 : number
+>0 : 0
 >x < 2 : boolean
 >x : number
->2 : number
+>2 : 2
 >++x : number
 >x : number
 
@@ -39,9 +38,9 @@ use(data[0]() === data[1]());
 >data[0]() : any
 >data[0] : any
 >data : any[]
->0 : number
+>0 : 0
 >data[1]() : any
 >data[1] : any
 >data : any[]
->1 : number
+>1 : 1
 

@@ -9,32 +9,32 @@ class C {
 
     protected a = '';
 >a : string
->'' : string
+>'' : ""
 
     protected b: string = '';
 >b : string
->'' : string
+>'' : ""
 
     protected c() { return '' }
 >c : () => string
->'' : string
+>'' : ""
 
     protected d = () => '';
 >d : () => string
 >() => '' : () => string
->'' : string
+>'' : ""
 
     protected static e;
 >e : any
 
     protected static f() { return '' }
 >f : () => string
->'' : string
+>'' : ""
 
     protected static g = () => '';
 >g : () => string
 >() => '' : () => string
->'' : string
+>'' : ""
 }
 
 class D extends C {

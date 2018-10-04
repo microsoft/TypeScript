@@ -1,0 +1,26 @@
+=== tests/cases/compiler/genericObjectCreationWithoutTypeArgs.ts ===
+class SS<T>{
+>SS : SS<T>
+
+}
+
+var x1 = new SS<number>(); // OK
+>x1 : SS<number>
+>new SS<number>() : SS<number>
+>SS : typeof SS
+
+var x2 = new SS < number>;   // Correctly give error 
+>x2 : SS<number>
+>new SS < number> : SS<number>
+>SS : typeof SS
+
+var x3 = new SS();         // OK
+>x3 : SS<{}>
+>new SS() : SS<{}>
+>SS : typeof SS
+
+var x4 = new SS;           // Should be allowed, but currently give error ('supplied parameters do not match any signature of the call target')
+>x4 : SS<{}>
+>new SS : SS<{}>
+>SS : typeof SS
+

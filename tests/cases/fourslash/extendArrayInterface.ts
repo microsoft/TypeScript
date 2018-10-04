@@ -8,7 +8,7 @@
 
 
 goTo.marker("1");
-verify.memberListContains("concat");
+verify.completionListContains("concat");
 
 // foo doesn't exist, so both references should be in error
 verify.errorExistsBetweenMarkers("2", "3");

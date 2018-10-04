@@ -1,0 +1,52 @@
+=== tests/cases/compiler/assignmentToReferenceTypes.ts ===
+// Should all be allowed
+
+module M {
+}
+M = null;
+>M = null : null
+>M : any
+>null : null
+
+class C {
+>C : C
+}
+C = null;
+>C = null : null
+>C : any
+>null : null
+
+enum E {
+>E : E
+}
+E = null;
+>E = null : null
+>E : any
+>null : null
+
+function f() { }
+>f : () => void
+
+f = null;
+>f = null : null
+>f : any
+>null : null
+
+var x = 1;
+>x : number
+>1 : 1
+
+x = null;
+>x = null : null
+>x : number
+>null : null
+
+function g(x) {
+>g : (x: any) => void
+>x : any
+
+    x = null;
+>x = null : null
+>x : any
+>null : null
+}

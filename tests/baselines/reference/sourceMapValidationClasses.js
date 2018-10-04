@@ -42,7 +42,7 @@ var Foo;
     var Bar;
     (function (Bar) {
         "use strict";
-        var Greeter = (function () {
+        var Greeter = /** @class */ (function () {
             function Greeter(greeting) {
                 this.greeting = greeting;
             }
@@ -59,7 +59,7 @@ var Foo;
         function foo2(greeting) {
             var restGreetings /* more greeting */ = [];
             for (var _i = 1; _i < arguments.length; _i++) {
-                restGreetings /* more greeting */[_i - 1] = arguments[_i];
+                restGreetings[_i - 1] = arguments[_i];
             }
             var greeters = []; /* inline block comment */
             greeters[0] = new Greeter(greeting);

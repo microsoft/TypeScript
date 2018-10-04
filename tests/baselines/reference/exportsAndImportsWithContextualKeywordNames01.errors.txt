@@ -2,7 +2,6 @@ tests/cases/conformance/es6/modules/t3.ts(1,17): error TS1214: Identifier expect
 
 
 ==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
-    
     let set = {
         set foo(x: number) {
         }

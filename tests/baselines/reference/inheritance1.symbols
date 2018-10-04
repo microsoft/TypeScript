@@ -1,0 +1,180 @@
+=== tests/cases/compiler/inheritance1.ts ===
+class Control {
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+
+    private state: any;
+>state : Symbol(Control.state, Decl(inheritance1.ts, 0, 15))
+}
+interface SelectableControl extends Control {
+>SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+
+    select(): void;
+>select : Symbol(SelectableControl.select, Decl(inheritance1.ts, 3, 45))
+}
+
+class Button extends Control implements SelectableControl {
+>Button : Symbol(Button, Decl(inheritance1.ts, 5, 1))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+>SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+
+    select() { }
+>select : Symbol(Button.select, Decl(inheritance1.ts, 7, 59))
+}
+class TextBox extends Control {
+>TextBox : Symbol(TextBox, Decl(inheritance1.ts, 9, 1))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+
+    select() { }
+>select : Symbol(TextBox.select, Decl(inheritance1.ts, 10, 31))
+}
+class ImageBase extends Control implements SelectableControl{
+>ImageBase : Symbol(ImageBase, Decl(inheritance1.ts, 12, 1))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+>SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+}
+class Image1 extends Control {
+>Image1 : Symbol(Image1, Decl(inheritance1.ts, 14, 1))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+}
+class Locations implements SelectableControl {
+>Locations : Symbol(Locations, Decl(inheritance1.ts, 16, 1))
+>SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+
+    select() { }
+>select : Symbol(Locations.select, Decl(inheritance1.ts, 17, 46))
+}
+class Locations1 {
+>Locations1 : Symbol(Locations1, Decl(inheritance1.ts, 19, 1))
+
+    select() { }
+>select : Symbol(Locations1.select, Decl(inheritance1.ts, 20, 18))
+}
+var sc: SelectableControl;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>SelectableControl : Symbol(SelectableControl, Decl(inheritance1.ts, 2, 1))
+
+var c: Control;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>Control : Symbol(Control, Decl(inheritance1.ts, 0, 0))
+
+var b: Button;
+>b : Symbol(b, Decl(inheritance1.ts, 26, 3))
+>Button : Symbol(Button, Decl(inheritance1.ts, 5, 1))
+
+sc = b;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>b : Symbol(b, Decl(inheritance1.ts, 26, 3))
+
+c = b;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>b : Symbol(b, Decl(inheritance1.ts, 26, 3))
+
+b = sc;
+>b : Symbol(b, Decl(inheritance1.ts, 26, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+b = c;
+>b : Symbol(b, Decl(inheritance1.ts, 26, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+
+var t: TextBox;
+>t : Symbol(t, Decl(inheritance1.ts, 32, 3))
+>TextBox : Symbol(TextBox, Decl(inheritance1.ts, 9, 1))
+
+sc = t;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>t : Symbol(t, Decl(inheritance1.ts, 32, 3))
+
+c = t;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>t : Symbol(t, Decl(inheritance1.ts, 32, 3))
+
+t = sc;
+>t : Symbol(t, Decl(inheritance1.ts, 32, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+t = c;
+>t : Symbol(t, Decl(inheritance1.ts, 32, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+
+var i: ImageBase;
+>i : Symbol(i, Decl(inheritance1.ts, 38, 3))
+>ImageBase : Symbol(ImageBase, Decl(inheritance1.ts, 12, 1))
+
+sc = i;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>i : Symbol(i, Decl(inheritance1.ts, 38, 3))
+
+c = i;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>i : Symbol(i, Decl(inheritance1.ts, 38, 3))
+
+i = sc;
+>i : Symbol(i, Decl(inheritance1.ts, 38, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+i = c;
+>i : Symbol(i, Decl(inheritance1.ts, 38, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+
+var i1: Image1;
+>i1 : Symbol(i1, Decl(inheritance1.ts, 44, 3))
+>Image1 : Symbol(Image1, Decl(inheritance1.ts, 14, 1))
+
+sc = i1;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>i1 : Symbol(i1, Decl(inheritance1.ts, 44, 3))
+
+c = i1;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>i1 : Symbol(i1, Decl(inheritance1.ts, 44, 3))
+
+i1 = sc;
+>i1 : Symbol(i1, Decl(inheritance1.ts, 44, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+i1 = c;
+>i1 : Symbol(i1, Decl(inheritance1.ts, 44, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+
+var l: Locations;
+>l : Symbol(l, Decl(inheritance1.ts, 50, 3))
+>Locations : Symbol(Locations, Decl(inheritance1.ts, 16, 1))
+
+sc = l;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>l : Symbol(l, Decl(inheritance1.ts, 50, 3))
+
+c = l;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>l : Symbol(l, Decl(inheritance1.ts, 50, 3))
+
+l = sc;
+>l : Symbol(l, Decl(inheritance1.ts, 50, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+l = c;
+>l : Symbol(l, Decl(inheritance1.ts, 50, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+
+var l1: Locations1;
+>l1 : Symbol(l1, Decl(inheritance1.ts, 56, 3))
+>Locations1 : Symbol(Locations1, Decl(inheritance1.ts, 19, 1))
+
+sc = l1;
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+>l1 : Symbol(l1, Decl(inheritance1.ts, 56, 3))
+
+c = l1;
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+>l1 : Symbol(l1, Decl(inheritance1.ts, 56, 3))
+
+l1 = sc;
+>l1 : Symbol(l1, Decl(inheritance1.ts, 56, 3))
+>sc : Symbol(sc, Decl(inheritance1.ts, 23, 3))
+
+l1 = c;
+>l1 : Symbol(l1, Decl(inheritance1.ts, 56, 3))
+>c : Symbol(c, Decl(inheritance1.ts, 24, 3))
+

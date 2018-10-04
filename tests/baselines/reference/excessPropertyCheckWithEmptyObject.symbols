@@ -1,0 +1,33 @@
+=== tests/cases/compiler/excessPropertyCheckWithEmptyObject.ts ===
+// Repro from #14910
+
+// Excess property error expected here
+Object.defineProperty(window, "prop", { value: "v1.0.0", readonly: false });
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>value : Symbol(value, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 39))
+>readonly : Symbol(readonly, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 56))
+
+interface A { x?: string }
+>A : Symbol(A, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 76))
+>x : Symbol(A.x, Decl(excessPropertyCheckWithEmptyObject.ts, 5, 13))
+
+// Excess property error expected here
+let a: A & ThisType<any> = { y: 10 };
+>a : Symbol(a, Decl(excessPropertyCheckWithEmptyObject.ts, 8, 3))
+>A : Symbol(A, Decl(excessPropertyCheckWithEmptyObject.ts, 3, 76))
+>ThisType : Symbol(ThisType, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(excessPropertyCheckWithEmptyObject.ts, 8, 28))
+
+interface Empty {}
+>Empty : Symbol(Empty, Decl(excessPropertyCheckWithEmptyObject.ts, 8, 37))
+
+// Excess property error expected here
+let x: Empty & { x: number } = { y: "hello" };
+>x : Symbol(x, Decl(excessPropertyCheckWithEmptyObject.ts, 13, 3))
+>Empty : Symbol(Empty, Decl(excessPropertyCheckWithEmptyObject.ts, 8, 37))
+>x : Symbol(x, Decl(excessPropertyCheckWithEmptyObject.ts, 13, 16))
+>y : Symbol(y, Decl(excessPropertyCheckWithEmptyObject.ts, 13, 32))
+
