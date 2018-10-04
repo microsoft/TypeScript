@@ -275,8 +275,8 @@ namespace Harness.LanguageService {
     class ShimLanguageServiceHost extends LanguageServiceAdapterHost implements ts.LanguageServiceShimHost, ts.CoreServicesShimHost {
         private nativeHost: NativeLanguageServiceHost;
 
-        public getModuleResolutionsForFile: (fileName: string) => string;
-        public getTypeReferenceDirectiveResolutionsForFile: (fileName: string) => string;
+        public getModuleResolutionsForFile: ((fileName: string) => string) | undefined;
+        public getTypeReferenceDirectiveResolutionsForFile: ((fileName: string) => string) | undefined;
 
         constructor(preprocessToResolve: boolean, cancellationToken?: ts.HostCancellationToken, options?: ts.CompilerOptions) {
             super(cancellationToken, options);
@@ -625,7 +625,7 @@ namespace Harness.LanguageService {
 
     // Server adapter
     class SessionClientHost extends NativeLanguageServiceHost implements ts.server.SessionClientHost {
-        private client: ts.server.SessionClient;
+        private client!: ts.server.SessionClient;
 
         constructor(cancellationToken: ts.HostCancellationToken | undefined, settings: ts.CompilerOptions | undefined) {
             super(cancellationToken, settings);

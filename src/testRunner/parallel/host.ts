@@ -28,9 +28,9 @@ namespace Harness.Parallel.Host {
         let totalCost = 0;
 
         class RemoteSuite extends Mocha.Suite {
-            suites: RemoteSuite[];
+            suites!: RemoteSuite[];
             suiteMap = ts.createMap<RemoteSuite>();
-            tests: RemoteTest[];
+            tests!: RemoteTest[];
             constructor(title: string) {
                 super(title);
                 this.pending = false;

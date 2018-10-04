@@ -89,9 +89,9 @@ namespace ts.server {
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
-        private program: Program;
-        private externalFiles: SortedReadonlyArray<string>;
-        private missingFilesMap: Map<FileWatcher>;
+        private program: Program | undefined;
+        private externalFiles: SortedReadonlyArray<string> | undefined;
+        private missingFilesMap: Map<FileWatcher> | undefined;
         private plugins: PluginModule[] = [];
 
         /*@internal*/
@@ -118,7 +118,7 @@ namespace ts.server {
         readonly realpath?: (path: string) => string;
 
         /*@internal*/
-        hasInvalidatedResolution: HasInvalidatedResolution;
+        hasInvalidatedResolution: HasInvalidatedResolution | undefined;
 
         /*@internal*/
         resolutionCache: ResolutionCache;
@@ -131,7 +131,7 @@ namespace ts.server {
         /**
          * Set of files that was returned from the last call to getChangesSinceVersion.
          */
-        private lastReportedFileNames: Map<true>;
+        private lastReportedFileNames: Map<true> | undefined;
         /**
          * Last version that was reported.
          */
@@ -489,8 +489,8 @@ namespace ts.server {
                 return [];
             }
             updateProjectIfDirty(this);
-            this.builderState = BuilderState.create(this.program, this.projectService.toCanonicalFileName, this.builderState);
-            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
+            this.builderState = BuilderState.create(this.program!, this.projectService.toCanonicalFileName, this.builderState);
+            return mapDefined(BuilderState.getFilesAffectedBy(this.builderState, this.program!, scriptInfo.path, this.cancellationToken, data => this.projectService.host.createHash!(data)), // TODO: GH#18217
                 sourceFile => this.shouldEmitFile(this.projectService.getScriptInfoForPath(sourceFile.path)!) ? sourceFile.fileName : undefined);
         }
 
@@ -571,7 +571,7 @@ namespace ts.server {
 
         /* @internal */
         getSourceFileOrConfigFile(path: Path): SourceFile | undefined {
-            const options = this.program.getCompilerOptions();
+            const options = this.program!.getCompilerOptions();
             return path === options.configFilePath ? options.configFile : this.getSourceFile(path);
         }
 
@@ -661,7 +661,7 @@ namespace ts.server {
                 // if language service is not enabled - return just root files
                 return this.rootFiles;
             }
-            return map(this.program.getSourceFiles(), sourceFile => {
+            return map(this.program!.getSourceFiles(), sourceFile => {
                 const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
@@ -729,7 +729,7 @@ namespace ts.server {
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.isRoot(info) || (this.program && this.program.getSourceFileByPath(info.path) !== undefined);
+            return this.isRoot(info) || (!!this.program && this.program.getSourceFileByPath(info.path) !== undefined);
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {
@@ -861,8 +861,8 @@ namespace ts.server {
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasNewProgram || changedFiles.length) {
                     let result: string[] | undefined;
-                    const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-                    for (const sourceFile of this.program.getSourceFiles()) {
+                    const ambientModules = this.program!.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
+                    for (const sourceFile of this.program!.getSourceFiles()) {
                         const unResolved = this.extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules);
                         if (unResolved !== emptyArray) {
                             (result || (result = [])).push(...unResolved);
@@ -896,7 +896,7 @@ namespace ts.server {
 
         /* @internal */
         getCurrentProgram() {
-            return this.program;
+            return Debug.assertDefined(this.program);
         }
 
         protected removeExistingTypings(include: string[]): string[] {
@@ -981,8 +981,8 @@ namespace ts.server {
                         this.getCachedDirectoryStructureHost().addOrDeleteFile(fileName, missingFilePath, eventKind);
                     }
 
-                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap.has(missingFilePath)) {
-                        this.missingFilesMap.delete(missingFilePath);
+                    if (eventKind === FileWatcherEventKind.Created && this.missingFilesMap!.has(missingFilePath)) {
+                        this.missingFilesMap!.delete(missingFilePath);
                         fileWatcher.close();
 
                         // When a missing file is created, we should update the graph.
@@ -997,7 +997,7 @@ namespace ts.server {
         }
 
         private isWatchedMissingFile(path: Path) {
-            return this.missingFilesMap && this.missingFilesMap.has(path);
+            return !!this.missingFilesMap && this.missingFilesMap.has(path);
         }
 
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined {
@@ -1312,20 +1312,20 @@ namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     export class ConfiguredProject extends Project {
-        private typeAcquisition: TypeAcquisition;
+        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /* @internal */
         configFileWatcher: FileWatcher | undefined;
         private directoriesWatchedForWildcards: Map<WildcardDirectoryWatcher> | undefined;
         readonly canonicalConfigFilePath: NormalizedPath;
 
         /* @internal */
-        pendingReload: ConfigFileProgramReloadLevel;
+        pendingReload: ConfigFileProgramReloadLevel | undefined;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
 
         /*@internal*/
-        canConfigFileJsonReportNoInputFiles: boolean;
+        canConfigFileJsonReportNoInputFiles: boolean | undefined;
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
@@ -1544,7 +1544,7 @@ namespace ts.server {
 
         /*@internal*/
         updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
-            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
+            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, Debug.assertDefined(this.canConfigFileJsonReportNoInputFiles));
         }
     }
 
@@ -1554,7 +1554,7 @@ namespace ts.server {
      */
     export class ExternalProject extends Project {
         excludedFiles: ReadonlyArray<NormalizedPath> = [];
-        private typeAcquisition: TypeAcquisition;
+        private typeAcquisition!: TypeAcquisition; // TODO: GH#18217
         /*@internal*/
         constructor(public externalProjectName: string,
             projectService: ProjectService,

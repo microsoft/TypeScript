@@ -10,11 +10,11 @@ namespace ts.formatting {
     }
 
     export class FormattingContext {
-        public currentTokenSpan: TextRangeWithKind;
-        public nextTokenSpan: TextRangeWithKind;
-        public contextNode: Node;
-        public currentTokenParent: Node;
-        public nextTokenParent: Node;
+        public currentTokenSpan!: TextRangeWithKind;
+        public nextTokenSpan!: TextRangeWithKind;
+        public contextNode!: Node;
+        public currentTokenParent!: Node;
+        public nextTokenParent!: Node;
 
         private contextNodeAllOnSameLine: boolean | undefined;
         private nextNodeAllOnSameLine: boolean | undefined;
@@ -26,17 +26,11 @@ namespace ts.formatting {
         }
 
         public updateContext(currentRange: TextRangeWithKind, currentTokenParent: Node, nextRange: TextRangeWithKind, nextTokenParent: Node, commonParent: Node) {
-            Debug.assert(currentRange !== undefined, "currentTokenSpan is null");
-            Debug.assert(currentTokenParent !== undefined, "currentTokenParent is null");
-            Debug.assert(nextRange !== undefined, "nextTokenSpan is null");
-            Debug.assert(nextTokenParent !== undefined, "nextTokenParent is null");
-            Debug.assert(commonParent !== undefined, "commonParent is null");
-
-            this.currentTokenSpan = currentRange;
-            this.currentTokenParent = currentTokenParent;
-            this.nextTokenSpan = nextRange;
-            this.nextTokenParent = nextTokenParent;
-            this.contextNode = commonParent;
+            this.currentTokenSpan = Debug.assertDefined(currentRange);
+            this.currentTokenParent = Debug.assertDefined(currentTokenParent);
+            this.nextTokenSpan = Debug.assertDefined(nextRange);
+            this.nextTokenParent = Debug.assertDefined(nextTokenParent);
+            this.contextNode = Debug.assertDefined(commonParent);
 
             // drop cached results
             this.contextNodeAllOnSameLine = undefined;

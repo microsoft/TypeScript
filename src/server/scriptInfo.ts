@@ -29,15 +29,15 @@ namespace ts.server {
         /**
          * True if the text is for the file thats open in the editor
          */
-        public isOpen: boolean;
+        public isOpen = false;
         /**
          * True if the text present is the text from the file on the disk
          */
-        private ownFileText: boolean;
+        private ownFileText = false;
         /**
          * True when reloading contents of file from the disk is pending
          */
-        private pendingReloadFromDisk: boolean;
+        private pendingReloadFromDisk = false;
 
         constructor(private readonly host: ServerHost, private readonly fileName: NormalizedPath, initialVersion: ScriptInfoVersion | undefined, private readonly info: ScriptInfo) {
             this.version = initialVersion || { svc: 0, text: 0 };
@@ -248,7 +248,7 @@ namespace ts.server {
         private realpath: Path | undefined;
 
         /*@internal*/
-        cacheSourceFile: DocumentRegistrySourceFileCache;
+        cacheSourceFile!: DocumentRegistrySourceFileCache; // TODO: GH#18217
 
         /*@internal*/
         mTime?: number;

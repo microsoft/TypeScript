@@ -215,7 +215,7 @@ namespace fakes {
 
         private _setParentNodes: boolean;
         private _sourceFiles: collections.SortedMap<string, ts.SourceFile>;
-        private _parseConfigHost: ParseConfigHost;
+        private _parseConfigHost: ParseConfigHost | undefined;
         private _newLine: string;
 
         constructor(sys: System | vfs.FileSystem, options = ts.getDefaultCompilerOptions(), setParentNodes = false) {

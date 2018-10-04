@@ -487,7 +487,7 @@ namespace ts {
         position: number;
     }
 
-    export class TextChange {
+    export interface TextChange {
         span: TextSpan;
         newText: string;
     }

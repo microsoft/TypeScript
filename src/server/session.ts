@@ -498,7 +498,7 @@ namespace ts.server {
         protected projectService: ProjectService;
         private changeSeq = 0;
 
-        private currentRequestId: number;
+        private currentRequestId!: number;
         private errorCheck: MultistepOperation;
 
         protected host: ServerHost;

@@ -158,7 +158,7 @@ namespace FourSlash {
         public lastKnownMarker = "";
 
         // The file that's currently 'opened'
-        public activeFile: FourSlashFile;
+        public activeFile!: FourSlashFile;
 
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
@@ -1070,9 +1070,9 @@ namespace FourSlash {
         }
 
         /** Use `getProgram` instead of accessing this directly. */
-        private _program: ts.Program;
+        private _program: ts.Program | undefined;
         /** Use `getChecker` instead of accessing this directly. */
-        private _checker: ts.TypeChecker;
+        private _checker: ts.TypeChecker | undefined;
 
         private getProgram(): ts.Program {
             return this._program || (this._program = this.languageService.getProgram()!); // TODO: GH#18217
@@ -4043,7 +4043,7 @@ namespace FourSlashInterface {
     }
 
     export class VerifyNegatable {
-        public not: VerifyNegatable;
+        public not: VerifyNegatable | undefined;
         public allowedClassElementKeywords = [
             "public",
             "private",

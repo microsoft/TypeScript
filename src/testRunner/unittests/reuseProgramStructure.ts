@@ -27,7 +27,7 @@ namespace ts {
     }
 
     export class SourceText implements IScriptSnapshot {
-        private fullText: string;
+        private fullText: string | undefined;
 
         constructor(private references: string,
             private importsAndExports: string,

@@ -331,9 +331,9 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModuleFull[];
-        public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
-        public directoryExists: (directoryName: string) => boolean;
+        public resolveModuleNames: ((moduleName: string[], containingFile: string) => ResolvedModuleFull[]) | undefined;
+        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[]) | undefined;
+        public directoryExists: ((directoryName: string) => boolean) | undefined;
 
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
@@ -485,17 +485,23 @@ namespace ts {
 
     export class CoreServicesShimHostAdapter implements ParseConfigHost, ModuleResolutionHost, JsTyping.TypingResolutionHost {
 
-        public directoryExists: (directoryName: string) => boolean;
+        public directoryExists: ((directoryName: string) => boolean);
         public realpath: (path: string) => string;
         public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+            this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
+            else {
+                this.directoryExists = undefined!; // TODO: GH#18217
+            }
             if ("realpath" in this.shimHost) {
                 this.realpath = path => this.shimHost.realpath!(path); // TODO: GH#18217
+            }
+            else {
+                this.realpath = undefined!; // TODO: GH#18217
             }
         }
 
@@ -1182,7 +1188,7 @@ namespace ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry;
+        private documentRegistry: DocumentRegistry | undefined;
 
         /*
          * Returns script API version.

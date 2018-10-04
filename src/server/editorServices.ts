@@ -448,7 +448,7 @@ namespace ts.server {
          */
         private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
 
-        private compilerOptionsForInferredProjects: CompilerOptions;
+        private compilerOptionsForInferredProjects: CompilerOptions | undefined;
         private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
         /**
          * Project size for configured or external projects
@@ -470,7 +470,7 @@ namespace ts.server {
 
         private pendingProjectUpdates = createMap<Project>();
         /* @internal */
-        pendingEnsureProjectForOpenFiles: boolean;
+        pendingEnsureProjectForOpenFiles: boolean | undefined;
 
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
@@ -1875,7 +1875,7 @@ namespace ts.server {
         }
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
-            const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
+            const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
             const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);

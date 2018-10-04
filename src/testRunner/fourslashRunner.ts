@@ -21,6 +21,8 @@ class FourSlashRunner extends RunnerBase {
                 this.basePath = "tests/cases/fourslash/server";
                 this.testSuiteName = "fourslash-server";
                 break;
+            default:
+                throw ts.Debug.assertNever(testType);
         }
     }
 

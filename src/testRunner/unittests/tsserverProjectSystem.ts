@@ -72,7 +72,7 @@ namespace ts.projectSystem {
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
-        protected projectService: server.ProjectService;
+        protected projectService!: server.ProjectService;
         constructor(
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
@@ -274,7 +274,7 @@ namespace ts.projectSystem {
     class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host: TestServerHost;
+        public host!: TestServerHost;
 
         getProjectService() {
             return this.projectService;
