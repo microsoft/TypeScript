@@ -283,4 +283,15 @@ chowder.flavour.claim
 >flavour : any
 >claim : any
 
+var errorNoArgs = new Chowder();
+>errorNoArgs : any
+>new Chowder() : any
+>Chowder : typeof Chowder
+
+var errorArgType = new Chowder(0);
+>errorArgType : any
+>new Chowder(0) : any
+>Chowder : typeof Chowder
+>0 : 0
+
 

@@ -101,4 +101,6 @@ var soup = new Soup(1);
 soup.flavour
 var chowder = new Chowder({ claim: "ignorant" });
 chowder.flavour.claim
+var errorNoArgs = new Chowder();
+var errorArgType = new Chowder(0);
 
