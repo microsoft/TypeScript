@@ -28389,7 +28389,7 @@ namespace ts {
 
         function isImplementationOfOverload(node: SignatureDeclaration) {
             if (nodeIsPresent((node as FunctionLikeDeclaration).body)) {
-                if (isGetAccessorDeclaration(node) || isSetAccessorDeclaration(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
+                if (isGetAccessor(node) || isSetAccessor(node)) return false; // Get or set accessors can never be overload implementations, but can have up to 2 signatures
                 const symbol = getSymbolOfNode(node);
                 const signaturesOfSymbol = getSignaturesOfSymbol(symbol);
                 // If this function body corresponds to function with multiple signature, it is implementation of overload

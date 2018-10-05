@@ -6727,6 +6727,13 @@ namespace ts {
         return !!jsDoc && jsDoc.length > 0;
     }
 
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
+    }
+
     /** True if has type node attached to it. */
     /* @internal */
     export function hasType(node: Node): node is HasType {
