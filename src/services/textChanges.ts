@@ -41,12 +41,6 @@ namespace ts.textChanges {
         Start
     }
 
-    export enum CommentKind {
-        Single,
-        Multi,
-        Jsdoc,
-    }
-
     function skipWhitespacesAndLineBreaks(text: string, start: number) {
         return skipTrivia(text, start, /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
     }
@@ -213,7 +207,7 @@ namespace ts.textChanges {
         formatContext: formatting.FormatContext;
     }
 
-    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature | PropertyAccessExpression;
+    export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
     export class ChangeTracker {
         private readonly changes: Change[] = [];
@@ -331,7 +325,7 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
         }
 
-        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string, kind = CommentKind.Single): void {
+        public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
             const lineStartPosition = getStartPositionOfLine(lineNumber, sourceFile);
             const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
             // First try to see if we can put the comment on the previous line.
@@ -341,19 +335,13 @@ namespace ts.textChanges {
             const insertAtLineStart = isValidLocationToAddComment(sourceFile, startPosition);
             const token = getTouchingToken(sourceFile, insertAtLineStart ? startPosition : position);
             const indent = sourceFile.text.slice(lineStartPosition, startPosition);
-            const completeCommentText = kind === CommentKind.Jsdoc ? `/**${commentText}*/` :
-                kind === CommentKind.Multi ? `/*${commentText}*/` :
-                `//${commentText}`;
-            const text = (insertAtLineStart ? "" : this.newLineCharacter) + completeCommentText + this.newLineCharacter + indent;
+            const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string, kind = CommentKind.Single): void {
+        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string): void {
             const token = getTouchingToken(sourceFile, position);
-            const completeCommentText = kind === CommentKind.Jsdoc ? `/**${commentText}*/` :
-                kind === CommentKind.Multi ? `/*${commentText}*/` :
-                `//${commentText}`;
-            const text = completeCommentText + this.newLineCharacter + " ".repeat(character);
+            const text = "/**" + commentText + "*/" + this.newLineCharacter + this.repeatString(" ", character);
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
@@ -365,28 +353,25 @@ namespace ts.textChanges {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
-        public tryInsertJSDocParams(sourceFile: SourceFile, annotations: codefix.FakeSymbol[]) {
-            const parent = (annotations[0].declaration!).parent;
+        public tryInsertJSDocParameters(sourceFile: SourceFile, parameters: codefix.ParameterInference[]) {
+            if (parameters.length === 0) {
+                return;
+            }
+            const parent = parameters[0].declaration.parent;
             const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
             let commentText = "\n";
-            for (const { declaration, typeNode: type, isOptional } of annotations) {
-                const node = declaration as ParameterDeclaration;
-                if (isIdentifier(node.name)) {
-                    const printed = createPrinter().printNode(EmitHint.Unspecified, type!, sourceFile);
-                    commentText += this.printJSDocParameter(indent, printed, node.name, isOptional);
+            for (const { declaration, typeNode, isOptional } of parameters) {
+                if (isIdentifier(declaration.name)) {
+                    const printed = createPrinter().printNode(EmitHint.Unspecified, typeNode!, sourceFile);
+                    commentText += this.printJSDocParameter(indent, printed, declaration.name, isOptional);
                 }
             }
-            commentText += " ".repeat(indent + 1);
-            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText, CommentKind.Jsdoc);
+            commentText += this.repeatString(" ", indent + 1);
+            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
-            if (isInJSFile(sourceFile) && topNode.kind !== SyntaxKind.PropertySignature) {
-                // TODO: Lift this out into callers (and maybe tryInsertJSDocType too?)
-                return this.tryInsertJSDocType(sourceFile, topNode, type);
-            }
-            const node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode): void {
             let endNode: Node | undefined;
             if (isFunctionLike(node)) {
                 endNode = findChildOfKind(node, SyntaxKind.CloseParenToken, sourceFile);
@@ -413,8 +398,16 @@ namespace ts.textChanges {
                 commentText = ` @type {${printed}} `;
                 node = node.parent;
             }
-            // before this: move this to inferFromUsage?
-            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart()).character, node.getStart(), commentText, CommentKind.Jsdoc);
+            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart()).character, node.getStart(), commentText);
+        }
+
+        /** Should only be used to repeat strings a small number of times */
+        private repeatString(s: string, n: number) {
+            let sum = "";
+            for (let i = 0; i < n; i++) {
+                sum += s;
+            }
+            return sum;
         }
 
         private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
@@ -422,7 +415,7 @@ namespace ts.textChanges {
             if (isOptionalParameter) {
                 printName = `[${printName}]`;
             }
-            return " ".repeat(indent) + ` * @param {${printed}} ${printName}\n`;
+            return this.repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
