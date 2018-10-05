@@ -666,6 +666,7 @@ namespace ts {
             ResolvedReturnType,
             ImmediateBaseConstraint,
             EnumTagType,
+            JSDocTypeReference,
         }
 
         const enum CheckMode {
@@ -4503,6 +4504,8 @@ namespace ts {
                     return !!(<Signature>target).resolvedReturnType;
                 case TypeSystemPropertyName.ImmediateBaseConstraint:
                     return !!(<Type>target).immediateBaseConstraint;
+                case TypeSystemPropertyName.JSDocTypeReference:
+                    return !!getSymbolLinks(target as Symbol).resolvedJSDocType;
             }
             return Debug.assertNever(propertyName);
         }
@@ -8275,7 +8278,7 @@ namespace ts {
                 return type;
             }
 
-            // JS are 'string' or 'number', not an enum type.
+            // JS enums are 'string' or 'number', not an enum type.
             const enumTag = isInJSFile(node) && symbol.valueDeclaration && getJSDocEnumTag(symbol.valueDeclaration);
             if (enumTag) {
                 const links = getNodeLinks(enumTag);
@@ -8318,12 +8321,21 @@ namespace ts {
          * the type of this reference is just the type of the value we resolved to.
          */
         function getJSDocTypeReference(node: NodeWithTypeArguments, symbol: Symbol, typeArguments: Type[] | undefined): Type | undefined {
+            if (!pushTypeResolution(symbol, TypeSystemPropertyName.JSDocTypeReference)) {
+                return errorType;
+            }
             const assignedType = getAssignedClassType(symbol);
             const valueType = getTypeOfSymbol(symbol);
             const referenceType = valueType.symbol && valueType.symbol !== symbol && !isInferredClassType(valueType) && getTypeReferenceTypeWorker(node, valueType.symbol, typeArguments);
+            if (!popTypeResolution()) {
+                getSymbolLinks(symbol).resolvedJSDocType = errorType;
+                error(node, Diagnostics.JSDoc_type_0_circularly_references_itself, symbolToString(symbol));
+                return errorType;
+            }
             if (referenceType || assignedType) {
                 // TODO: GH#18217 (should the `|| assignedType` be at a lower precedence?)
-                return (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
+                const type = (referenceType && assignedType ? getIntersectionType([assignedType, referenceType]) : referenceType || assignedType)!;
+                return getSymbolLinks(symbol).resolvedJSDocType = type;
             }
         }
 
@@ -8460,7 +8472,7 @@ namespace ts {
                     symbol = resolveTypeReferenceName(getTypeReferenceName(node), meaning);
                     type = getTypeReferenceType(node, symbol);
                 }
-                // Cache both the resolved symbol and the resolved type. The resolved symbol is needed in when we check the
+                // Cache both the resolved symbol and the resolved type. The resolved symbol is needed when we check the
                 // type reference in checkTypeReferenceNode.
                 links.resolvedSymbol = symbol;
                 links.resolvedType = type;
