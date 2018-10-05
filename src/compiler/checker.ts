@@ -4704,11 +4704,11 @@ namespace ts {
             }
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
             // undefined from the final type.
-            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
+            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
             return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
-                getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReduction.Subtype) :
+                getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
                 type;
         }
 
