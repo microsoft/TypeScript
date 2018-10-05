@@ -3,7 +3,7 @@ namespace ts {
         function showTSConfigCorrectly(name: string, commandLinesArgs: string[]) {
             describe(name, () => {
                 const commandLine = parseCommandLine(commandLinesArgs);
-                const initResult = convertToTSConfig(commandLine, `/${name}/tsconfig.json`, { getCurrentDirectory() { return `/${name}` }, useCaseSensitiveFileNames: true });
+                const initResult = convertToTSConfig(commandLine, `/${name}/tsconfig.json`, { getCurrentDirectory() { return `/${name}`; }, useCaseSensitiveFileNames: true });
                 const outputFileName = `showConfig/${name.replace(/[^a-z0-9\-. ]/ig, "")}/tsconfig.json`;
 
                 it(`Correct output for ${outputFileName}`, () => {
