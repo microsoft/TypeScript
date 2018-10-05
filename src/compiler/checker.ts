@@ -11640,27 +11640,14 @@ namespace ts {
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
             function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
-                let match: Type | undefined;
                 const sourceProperties = getPropertiesOfObjectType(source);
                 if (sourceProperties) {
                     const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
                     if (sourcePropertiesFiltered) {
-                        for (const sourceProperty of sourcePropertiesFiltered) {
-                            const sourceType = getTypeOfSymbol(sourceProperty);
-                            for (const type of target.types) {
-                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
-                                if (targetType && isRelatedTo(sourceType, targetType)) {
-                                    if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                    if (match) {
-                                        return undefined;
-                                    }
-                                    match = type;
-                                }
-                            }
-                        }
+                        return discriminateTypeByDiscriminableItems(target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
                     }
                 }
-                return match;
+                return undefined;
             }
 
             function typeRelatedToEachType(source: Type, target: IntersectionType, reportErrors: boolean): Ternary {
@@ -12473,6 +12460,25 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary): Type | undefined;
+        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue: Type): Type;
+        function discriminateTypeByDiscriminableItems(target: UnionType, discriminators: [() => Type, __String][], related: (source: Type, target: Type) => boolean | Ternary, defaultValue?: Type) {
+            let match: Type | undefined;
+            for (const [getDiscriminatingType, propertyName] of discriminators) {
+                for (const type of target.types) {
+                    const targetType = getTypeOfPropertyOfType(type, propertyName);
+                    if (targetType && related(getDiscriminatingType(), targetType)) {
+                        if (match) {
+                            if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                            return defaultValue;
+                        }
+                        match = type;
+                    }
+                }
+            }
+            return match || defaultValue;
         }
 
         /**
@@ -14187,7 +14193,7 @@ namespace ts {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
                         (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) && isLiteralType(getTypeOfSymbol(prop));
                     }
-                    return (<TransientSymbol>prop).isDiscriminantProperty;
+                    return !!(<TransientSymbol>prop).isDiscriminantProperty;
                 }
             }
             return false;
@@ -16762,12 +16768,37 @@ namespace ts {
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
                 case SyntaxKind.Identifier:
+                case SyntaxKind.UndefinedKeyword:
                     return true;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ParenthesizedExpression:
                     return isPossiblyDiscriminantValue((<PropertyAccessExpression | ParenthesizedExpression>node).expression);
+                case SyntaxKind.JsxExpression:
+                    return !(node as JsxExpression).expression || isPossiblyDiscriminantValue((node as JsxExpression).expression!);
             }
             return false;
+        }
+
+        function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
+            return discriminateTypeByDiscriminableItems(contextualType,
+                map(
+                    filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.PropertyAssignment && isPossiblyDiscriminantValue(p.initializer) && isDiscriminantProperty(contextualType, p.symbol.escapedName)),
+                    prop => ([() => checkExpression((prop as PropertyAssignment).initializer), prop.symbol.escapedName] as [() => Type, __String])
+                ),
+                isTypeAssignableTo,
+                contextualType
+            );
+        }
+
+        function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
+            return discriminateTypeByDiscriminableItems(contextualType,
+                map(
+                    filter(node.properties, p => !!p.symbol && p.kind === SyntaxKind.JsxAttribute && isDiscriminantProperty(contextualType, p.symbol.escapedName) && (!p.initializer || isPossiblyDiscriminantValue(p.initializer))),
+                    prop => ([!(prop as JsxAttribute).initializer ? (() => trueType) : (() => checkExpression((prop as JsxAttribute).initializer!)), prop.symbol.escapedName] as [() => Type, __String])
+                ),
+                isTypeAssignableTo,
+                contextualType
+            );
         }
 
         // Return the contextual type for a given expression node. During overload resolution, a contextual type may temporarily
@@ -16775,30 +16806,15 @@ namespace ts {
         function getApparentTypeOfContextualType(node: Expression): Type | undefined {
             let contextualType = getContextualType(node);
             contextualType = contextualType && mapType(contextualType, getApparentType);
-            if (!(contextualType && contextualType.flags & TypeFlags.Union && isObjectLiteralExpression(node))) {
-                return contextualType;
-            }
-            // Keep the below up-to-date with the work done within `isRelatedTo` by `findMatchingDiscriminantType`
-            let match: Type | undefined;
-            propLoop: for (const prop of node.properties) {
-                if (!prop.symbol) continue;
-                if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
-                if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
-                    const discriminatingType = checkExpression(prop.initializer);
-                    for (const type of (contextualType as UnionType).types) {
-                        const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
-                        if (targetType && isTypeAssignableTo(discriminatingType, targetType)) {
-                            if (match) {
-                                if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                match = undefined;
-                                break propLoop;
-                            }
-                            match = type;
-                        }
-                    }
+            if (contextualType && contextualType.flags & TypeFlags.Union) {
+                if (isObjectLiteralExpression(node)) {
+                    return discriminateContextualTypeByObjectMembers(node, contextualType as UnionType);
+                }
+                else if (isJsxAttributes(node)) {
+                    return discriminateContextualTypeByJSXAttributes(node, contextualType as UnionType);
                 }
             }
-            return match || contextualType;
+            return contextualType;
         }
 
         /**
