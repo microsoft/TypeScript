@@ -11,7 +11,9 @@
 ////f(1);
 
 verify.fileAfterCodeFix(
-`/** @param {number} [a] */
+`/**
+ * @param {number} [a]
+ */
 function f(a) {
     a;
 }

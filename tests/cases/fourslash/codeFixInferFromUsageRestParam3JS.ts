@@ -12,7 +12,9 @@
 
 verify.fileAfterCodeFix(
 `/** @param {number} a */
-/** @param {number[]} rest */
+/**
+ * @param {number[]} rest
+ */
 function f(a, ...rest){
     a;
     rest.push(22);

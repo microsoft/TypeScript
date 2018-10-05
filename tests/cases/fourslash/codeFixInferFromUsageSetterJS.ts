@@ -14,7 +14,9 @@
 verify.fileAfterCodeFix(
 `
 class C {
-    /** @param {number} v */
+    /**
+     * @param {number} v
+     */
     set x(v) {
         v;
     }

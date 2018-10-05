@@ -12,7 +12,9 @@ verify.codeFixAll({
     fixId: "inferFromUsage",
     fixAllDescription: "Infer all types from usage",
     newFileContent:
-`/** @param {() => void} b */
+`/**
+ * @param {() => void} b
+ */
 function wat(b) {
     b();
 }`});

@@ -9,7 +9,9 @@
 ////}
 
 verify.fileAfterCodeFix(
-`/** @param {number[]} a */
+`/**
+ * @param {number[]} a
+ */
 function f(a) {
     return a[0] + 1;
 }`, undefined, 2);

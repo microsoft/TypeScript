@@ -365,10 +365,24 @@ namespace ts.textChanges {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
+        public tryInsertJSDocParams(sourceFile: SourceFile, annotations: [ParameterDeclaration, TypeNode, boolean][]) {
+            const parent = annotations[0][0].parent;
+            const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
+            let commentText = "\n";
+            for (const [node, type, isOptionalParameter] of annotations) {
+                if (isIdentifier(node.name)) {
+                    const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
+                    commentText += this.printJSDocParameter(indent, printed, node.name, isOptionalParameter);
+                }
+            }
+            commentText += " ".repeat(indent + 1);
+            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText, CommentKind.Jsdoc);
+        }
+
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
-        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode, isOptionalParameter?: boolean): void {
+        public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
             if (isInJSFile(sourceFile) && topNode.kind !== SyntaxKind.PropertySignature) {
-                return this.tryInsertJSDocType(sourceFile, topNode, type, isOptionalParameter);
+                return this.tryInsertJSDocType(sourceFile, topNode, type);
             }
             const node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
             let endNode: Node | undefined;
@@ -391,16 +405,10 @@ namespace ts.textChanges {
          * TODO: Might need to only disallow node from being a parameterdecl, propertydecl, propertysig
          * (or correctly handle parameterdecl by walking up and adding a param, at least)
          */
-        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode, isOptionalParameter: boolean | undefined): void {
-            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, etc)
-            // TODO: Parameter probably shouldn't need to manually unescape its text
+        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
             const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
             let commentText;
-            if (isParameter(node) && isIdentifier(node.name)) {
-                commentText = this.printJSDocParameter(printed, node.name, isOptionalParameter);
-                node = node.parent;
-            }
-            else if (isGetAccessorDeclaration(node)) {
+            if (isGetAccessorDeclaration(node)) {
                 commentText = ` @return {${printed}} `;
             }
             else {
@@ -411,12 +419,12 @@ namespace ts.textChanges {
             // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
 
-        private printJSDocParameter(printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
+        private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
             let printName = unescapeLeadingUnderscores(name.escapedText);
             if (isOptionalParameter) {
                 printName = `[${printName}]`;
             }
-            return ` @param {${printed}} ${printName} `;
+            return " ".repeat(indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {

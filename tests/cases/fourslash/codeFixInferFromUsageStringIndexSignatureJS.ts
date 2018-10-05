@@ -14,7 +14,9 @@ verify.codeFix({
     index: 2,
     description: "Infer parameter types from usage",
     newFileContent:
-`/** @param {{ [x: string]: any; }} a */
+`/**
+ * @param {{ [x: string]: any; }} a
+ */
 function f(a) {
     return a['hi'];
 }`,

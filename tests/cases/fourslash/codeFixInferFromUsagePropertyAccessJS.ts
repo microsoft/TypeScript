@@ -17,9 +17,11 @@
 ////}
 
 verify.fileAfterCodeFix(
-`/** @param {{ b: { c: any; }; }} a */
-/** @param {{ n: () => number; }} m */
-/** @param {{ y: { z: number[]; }; }} x */
+`/**
+ * @param {{ b: { c: any; }; }} a
+ * @param {{ n: () => number; }} m
+ * @param {{ y: { z: number[]; }; }} x
+ */
 function foo(a, m, x) {
     a.b.c;
 

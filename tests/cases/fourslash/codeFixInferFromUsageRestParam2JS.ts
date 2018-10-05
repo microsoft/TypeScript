@@ -15,7 +15,9 @@
 
 verify.fileAfterCodeFix(
 `/** @param {number} a */
-/** @param {(string | boolean)[]} rest */
+/**
+ * @param {(string | boolean)[]} rest
+ */
 function f(a, ...rest){
     a; rest;
 }

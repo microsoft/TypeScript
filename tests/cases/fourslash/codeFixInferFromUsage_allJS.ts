@@ -24,14 +24,18 @@ verify.codeFixAll({
     fixId: "inferFromUsage",
     fixAllDescription: "Infer all types from usage",
     newFileContent:
-`/** @param {number} x */
-/** @param {string} y */
+`/**
+ * @param {number} x
+ * @param {string} y
+ */
 function f(x, y) {
     x += 0;
     y += "";
 }
 
-/** @param {number} z */
+/**
+ * @param {number} z
+ */
 function g(z) {
     return z * 2;
 }

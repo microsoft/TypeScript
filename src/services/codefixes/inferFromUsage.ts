@@ -165,11 +165,29 @@ namespace ts.codefix {
             return;
         }
 
-        zipWith<ParameterDeclaration, [Type | undefined, boolean], void>(containingFunction.parameters, types, (parameter, [type, isOptionalParameter]) => {
-            if (!(parameter.type || isInJSFile(parameter) && getJSDocType(parameter)) && !parameter.initializer) {
-                annotate(changes, sourceFile, parameter, type, program, isOptionalParameter);
+        if (isInJSFile(containingFunction)) {
+            annotateJSDocParameters(changes, sourceFile, containingFunction.parameters, types, program);
+        }
+        else {
+            zipWith<ParameterDeclaration, [Type | undefined, boolean], void>(containingFunction.parameters, types, (parameter, typair) => {
+                if (!parameter.type && !parameter.initializer) {
+                    annotate(changes, sourceFile, parameter, typair[0], program);
+                }
+            });
+        }
+    }
+
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, params: NodeArray<ParameterDeclaration>, types: [Type | undefined, boolean][], program: Program): void {
+        const triples = [];
+        for (let i = 0; i < params.length; i++) {
+            const param = params[i];
+            const [t, opt] = types[i];
+            const typeNode = t && getTypeNodeIfAccessible(t, param, program.getTypeChecker());
+            if (!(param.type || isInJSFile(param) && getJSDocType(param)) && !param.initializer && typeNode) {
+                triples.push([param, typeNode, opt] as [ParameterDeclaration, TypeNode, boolean]);
             }
-        });
+        }
+        changes.tryInsertJSDocParams(sourceFile, triples);
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
@@ -177,13 +195,21 @@ namespace ts.codefix {
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
             const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
                 inferTypeForVariableFromUsage(param.name, program, cancellationToken);
-            annotate(changes, sourceFile, param, type, program);
+            if (isInJSFile(setAccessorDeclaration)) {
+                const typeNode = type && getTypeNodeIfAccessible(type, param, program.getTypeChecker());
+                if (typeNode) {
+                    changes.tryInsertJSDocParams(sourceFile, [[param, typeNode, /*isOptionalParameter*/ false]]);
+                }
+            }
+            else {
+                annotate(changes, sourceFile, param, type, program);
+            }
         }
     }
 
-    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program, isOptionalParameter?: boolean): void {
+    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode, isOptionalParameter);
+        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
     }
 
     function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
