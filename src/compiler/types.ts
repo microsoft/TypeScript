@@ -3184,7 +3184,7 @@ namespace ts {
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
         InReverseMappedType                     = 1 << 25,
 
-        /* @internal */ DoNotIncludeSymbolChain                 = 1 << 25,    // Skip looking up and printing an accessible symbol chain
+        /* @internal */ DoNotIncludeSymbolChain                 = 1 << 26,    // Skip looking up and printing an accessible symbol chain
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
