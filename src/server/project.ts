@@ -1324,6 +1324,9 @@ namespace ts.server {
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
 
+        /*@internal*/
+        canConfigFileJsonReportNoInputFiles: boolean;
+
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
 
@@ -1540,13 +1543,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(hasFileNames: boolean) {
-            if (hasFileNames) {
-                filterMutate(this.projectErrors!, error => !isErrorNoInputFiles(error)); // TODO: GH#18217
-            }
-            else if (!this.configFileSpecs!.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) { // TODO: GH#18217
-                this.projectErrors!.push(getErrorForNoInputFiles(this.configFileSpecs!, this.getConfigFilePath()));
-            }
+        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
+            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 
