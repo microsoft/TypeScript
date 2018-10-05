@@ -365,14 +365,15 @@ namespace ts.textChanges {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
         }
 
-        public tryInsertJSDocParams(sourceFile: SourceFile, annotations: [ParameterDeclaration, TypeNode, boolean][]) {
-            const parent = annotations[0][0].parent;
+        public tryInsertJSDocParams(sourceFile: SourceFile, annotations: codefix.FakeSymbol[]) {
+            const parent = (annotations[0].declaration!).parent;
             const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
             let commentText = "\n";
-            for (const [node, type, isOptionalParameter] of annotations) {
+            for (const { declaration, typeNode: type, isOptional } of annotations) {
+                const node = declaration as ParameterDeclaration;
                 if (isIdentifier(node.name)) {
-                    const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
-                    commentText += this.printJSDocParameter(indent, printed, node.name, isOptionalParameter);
+                    const printed = createPrinter().printNode(EmitHint.Unspecified, type!, sourceFile);
+                    commentText += this.printJSDocParameter(indent, printed, node.name, isOptional);
                 }
             }
             commentText += " ".repeat(indent + 1);
@@ -382,6 +383,7 @@ namespace ts.textChanges {
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
         public tryInsertTypeAnnotation(sourceFile: SourceFile, topNode: TypeAnnotatable, type: TypeNode): void {
             if (isInJSFile(sourceFile) && topNode.kind !== SyntaxKind.PropertySignature) {
+                // TODO: Lift this out into callers (and maybe tryInsertJSDocType too?)
                 return this.tryInsertJSDocType(sourceFile, topNode, type);
             }
             const node = topNode as SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
@@ -401,10 +403,6 @@ namespace ts.textChanges {
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
         }
 
-        /** TODO: Try allowing insertion of other things too
-         * TODO: Might need to only disallow node from being a parameterdecl, propertydecl, propertysig
-         * (or correctly handle parameterdecl by walking up and adding a param, at least)
-         */
         public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
             const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
             let commentText;
@@ -415,8 +413,8 @@ namespace ts.textChanges {
                 commentText = ` @type {${printed}} `;
                 node = node.parent;
             }
+            // before this: move this to inferFromUsage?
             this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart()).character, node.getStart(), commentText, CommentKind.Jsdoc);
-            // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
 
         private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {

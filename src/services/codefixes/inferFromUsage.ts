@@ -1,5 +1,11 @@
 /* @internal */
 namespace ts.codefix {
+    export interface FakeSymbol {
+        declaration?: Node;
+        type?: Type;
+        typeNode?: TypeNode;
+        isOptional?: boolean;
+    }
     const fixId = "inferFromUsage";
     const errorCodes = [
         // Variable declarations
@@ -65,15 +71,13 @@ namespace ts.codefix {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
-                // TODO: Here!
                 if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
                     annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
                     return parent;
                 }
                 if (isPropertyAccessExpression(parent)) {
-                    annotateThisPropertyAssignment(changes, sourceFile, parent, program, cancellationToken);
+                    annotate(changes, sourceFile, parent, inferTypeForVariableFromUsage(parent.name, program, cancellationToken), program);
                     return parent;
-                    // Try jumping!
                 }
                 return undefined;
 
@@ -136,10 +140,6 @@ namespace ts.codefix {
         }
     }
 
-    function annotateThisPropertyAssignment(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: PropertyAccessExpression, program: Program, cancellationToken: CancellationToken): void {
-        annotate(changes, sourceFile, declaration, inferTypeForVariableFromUsage(declaration.name, program, cancellationToken), program);
-    }
-
     function isApplicableFunctionForInference(declaration: FunctionLike): declaration is MethodDeclaration | FunctionDeclaration | ConstructorDeclaration {
         switch (declaration.kind) {
             case SyntaxKind.FunctionDeclaration:
@@ -157,37 +157,38 @@ namespace ts.codefix {
             return;
         }
 
-        const types = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-
-            containingFunction.parameters.map(p => [isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined, /*isOptionalParameter*/ false] as [Type | undefined, boolean]);
+        const symbols = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
+            containingFunction.parameters.map(p => ({
+                declaration: p,
+                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined
+            } as FakeSymbol));
         // We didn't actually find a set of type inference positions matching each parameter position
-        if (containingFunction.parameters.length !== types.length) {
+        if (containingFunction.parameters.length !== symbols.length) {
             return;
         }
 
         if (isInJSFile(containingFunction)) {
-            annotateJSDocParameters(changes, sourceFile, containingFunction.parameters, types, program);
+            annotateJSDocParameters(changes, sourceFile, symbols, program);
         }
         else {
-            zipWith<ParameterDeclaration, [Type | undefined, boolean], void>(containingFunction.parameters, types, (parameter, typair) => {
+            zipWith<ParameterDeclaration, FakeSymbol, void>(containingFunction.parameters, symbols, (parameter, { type }) => {
                 if (!parameter.type && !parameter.initializer) {
-                    annotate(changes, sourceFile, parameter, typair[0], program);
+                    annotate(changes, sourceFile, parameter, type, program);
                 }
             });
         }
     }
 
-    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, params: NodeArray<ParameterDeclaration>, types: [Type | undefined, boolean][], program: Program): void {
-        const triples = [];
-        for (let i = 0; i < params.length; i++) {
-            const param = params[i];
-            const [t, opt] = types[i];
-            const typeNode = t && getTypeNodeIfAccessible(t, param, program.getTypeChecker());
-            if (!(param.type || isInJSFile(param) && getJSDocType(param)) && !param.initializer && typeNode) {
-                triples.push([param, typeNode, opt] as [ParameterDeclaration, TypeNode, boolean]);
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbols: FakeSymbol[], program: Program): void {
+        const result = [];
+        for (const symbol of symbols) {
+            const param = symbol.declaration as ParameterDeclaration;
+            const typeNode = symbol.type && getTypeNodeIfAccessible(symbol.type, param, program.getTypeChecker());
+            if (typeNode && !param.initializer && !getJSDocType(param)) {
+                result.push({ ...symbol, typeNode });
             }
         }
-        changes.tryInsertJSDocParams(sourceFile, triples);
+        changes.tryInsertJSDocParams(sourceFile, result);
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
@@ -198,7 +199,7 @@ namespace ts.codefix {
             if (isInJSFile(setAccessorDeclaration)) {
                 const typeNode = type && getTypeNodeIfAccessible(type, param, program.getTypeChecker());
                 if (typeNode) {
-                    changes.tryInsertJSDocParams(sourceFile, [[param, typeNode, /*isOptionalParameter*/ false]]);
+                    changes.tryInsertJSDocParams(sourceFile, [{ declaration: param, typeNode, isOptional: false }]);
                 }
             }
             else {
@@ -237,7 +238,7 @@ namespace ts.codefix {
         return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ([Type | undefined, boolean])[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): FakeSymbol[] | undefined {
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionExpression:
@@ -280,7 +281,7 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ([Type | undefined, boolean])[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): FakeSymbol[] | undefined {
             if (references.length === 0) {
                 return undefined;
             }
@@ -316,10 +317,14 @@ namespace ts.codefix {
                     }
                 }
                 if (!types.length) {
-                    return [undefined, false] as [undefined, boolean];
+                    return { type: undefined, isOptional: false };
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return [isRest ? checker.createArrayType(type) : type, isOptional && !isRest] as [Type, boolean];
+                return {
+                    type: isRest ? checker.createArrayType(type) : type,
+                    isOptional: isOptional && !isRest,
+                    declaration: parameter
+                };
             });
         }
 
