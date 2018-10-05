@@ -11648,16 +11648,11 @@ namespace ts {
                     if (sourcePropertiesFiltered) {
                         for (const sourceProperty of sourcePropertiesFiltered) {
                             const sourceType = getTypeOfSymbol(sourceProperty);
-                            for (const type of target.types) {
-                                const targetType = getTypeOfPropertyOfType(type, sourceProperty.escapedName);
-                                if (targetType && isRelatedTo(sourceType, targetType)) {
-                                    if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                    if (match) {
-                                        return undefined;
-                                    }
-                                    match = type;
-                                }
+                            const result = getDiscriminationResultForProperty(target, sourceType, sourceProperty.escapedName, match, isRelatedTo);
+                            if (result === "mismatch") {
+                                return undefined;
                             }
+                            match = result;
                         }
                     }
                 }
@@ -12474,6 +12469,20 @@ namespace ts {
 
                 return false;
             }
+        }
+
+        function getDiscriminationResultForProperty(target: UnionType, discriminatingType: Type, propertyName: __String, match: Type | undefined, related: (source: Type, target: Type) => boolean | Ternary) {
+            for (const type of target.types) {
+                const targetType = getTypeOfPropertyOfType(type, propertyName);
+                if (targetType && related(discriminatingType!, targetType)) {
+                    if (match) {
+                        if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
+                        return "mismatch";
+                    }
+                    match = type;
+                }
+            }
+            return match;
         }
 
         /**
@@ -16774,22 +16783,16 @@ namespace ts {
         function discriminateContextualTypeByObjectMembers(node: ObjectLiteralExpression, contextualType: UnionType) {
             // Keep the below up-to-date with the work done within `isRelatedTo` by `findMatchingDiscriminantType`
             let match: Type | undefined;
-            propLoop: for (const prop of node.properties) {
+            for (const prop of node.properties) {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.PropertyAssignment) continue;
                 if (isPossiblyDiscriminantValue(prop.initializer) && isDiscriminantProperty(contextualType, prop.symbol.escapedName)) {
                     const discriminatingType = checkExpression(prop.initializer);
-                    for (const type of contextualType.types) {
-                        const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
-                        if (targetType && isTypeAssignableTo(discriminatingType, targetType)) {
-                            if (match) {
-                                if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                match = undefined;
-                                break propLoop;
-                            }
-                            match = type;
-                        }
+                    const result = getDiscriminationResultForProperty(contextualType, discriminatingType, prop.symbol.escapedName, match, isTypeAssignableTo);
+                    if (result === "mismatch") {
+                        return contextualType;
                     }
+                    match = result;
                 }
             }
             return match || contextualType;
@@ -16797,7 +16800,7 @@ namespace ts {
 
         function discriminateContextualTypeByJSXAttributes(node: JsxAttributes, contextualType: UnionType) {
             let match: Type | undefined;
-            propLoop: for (const prop of node.properties) {
+            for (const prop of node.properties) {
                 if (!prop.symbol) continue;
                 if (prop.kind !== SyntaxKind.JsxAttribute) continue;
                 let discriminatingType: Type | undefined;
@@ -16814,17 +16817,11 @@ namespace ts {
                     }
                 }
                 if (possiblyDiscriminant) {
-                    for (const type of contextualType.types) {
-                        const targetType = getTypeOfPropertyOfType(type, prop.symbol.escapedName);
-                        if (targetType && isTypeAssignableTo(discriminatingType!, targetType)) {
-                            if (match) {
-                                if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
-                                match = undefined;
-                                break propLoop;
-                            }
-                            match = type;
-                        }
+                    const result = getDiscriminationResultForProperty(contextualType, discriminatingType!, prop.symbol.escapedName, match, isTypeAssignableTo);
+                    if (result === "mismatch") {
+                        return contextualType;
                     }
+                    match = result;
                 }
             }
             return match || contextualType;
