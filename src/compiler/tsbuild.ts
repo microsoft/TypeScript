@@ -902,12 +902,7 @@ namespace ts {
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
-                if (result.fileNames.length !== 0) {
-                    filterMutate(proj.errors, error => !isErrorNoInputFiles(error));
-                }
-                else if (!proj.configFileSpecs!.filesSpecs && !some(proj.errors, isErrorNoInputFiles)) {
-                    proj.errors.push(getErrorForNoInputFiles(proj.configFileSpecs!, resolved));
-                }
+                updateErrorForNoInputFiles(result, resolved, proj.configFileSpecs!, proj.errors, canJsonReportNoInutFiles(proj.raw));
                 proj.fileNames = result.fileNames;
                 watchInputFiles(resolved, proj);
             }
@@ -1002,6 +997,7 @@ namespace ts {
                 return resultFlags;
             }
             if (configFile.fileNames.length === 0) {
+                reportAndStoreErrors(proj, configFile.errors);
                 // Nothing to build - must be a solution file, basically
                 return BuildResultFlags.None;
             }

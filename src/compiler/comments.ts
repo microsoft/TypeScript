@@ -220,7 +220,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.mark("beginEmitBodyWithDetachedCommetns");
+                performance.mark("beginEmitBodyWithDetachedComments");
             }
 
             if (!skipTrailingComments) {
@@ -231,7 +231,7 @@ namespace ts {
             }
 
             if (extendedDiagnostics) {
-                performance.measure("commentTime", "beginEmitBodyWithDetachedCommetns");
+                performance.measure("commentTime", "beginEmitBodyWithDetachedComments");
             }
         }
 

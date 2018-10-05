@@ -531,7 +531,7 @@ for (let [numberA3 = -1, ...robotAInfo] = robotA, i = 0; i < 1; i++) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->robotAInfo : string[]
+>robotAInfo : [string, string]
 >robotA : [number, string, string]
 >i : number
 >0 : 0
@@ -552,7 +552,7 @@ for (let [numberA3 = -1, ...robotAInfo] = getRobot(), i = 0; i < 1; i++) {
 >numberA3 : number
 >-1 : -1
 >1 : 1
->robotAInfo : string[]
+>robotAInfo : [string, string]
 >getRobot() : [number, string, string]
 >getRobot : () => [number, string, string]
 >i : number
@@ -574,7 +574,7 @@ for (let [numberA3 = -1, ...robotAInfo] = [2, "trimmer", "trimming"], i = 0; i <
 >numberA3 : number
 >-1 : -1
 >1 : 1
->robotAInfo : string[]
+>robotAInfo : [string, string]
 >[2, "trimmer", "trimming"] : [number, string, string]
 >2 : 2
 >"trimmer" : "trimmer"

@@ -1529,7 +1529,12 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            if (!returnValue) {
+                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+            }
+
+            // Filter out invalid values
+            return filter(elements.map(element => convertPropertyValueToJson(element, elementOption)), v => v !== undefined);
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
@@ -1949,7 +1954,7 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !hasProperty(raw, "references")) {
+            if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles(raw), resolutionStack)) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
@@ -1984,18 +1989,37 @@ namespace ts {
         }
     }
 
-    /*@internal*/
-    export function isErrorNoInputFiles(error: Diagnostic) {
+    function isErrorNoInputFiles(error: Diagnostic) {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
 
-    /*@internal*/
-    export function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
+    function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
         return createCompilerDiagnostic(
             Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
             configFileName || "tsconfig.json",
             JSON.stringify(includeSpecs || []),
             JSON.stringify(excludeSpecs || []));
+    }
+
+    function shouldReportNoInputFiles(result: ExpandResult, canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
+        return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
+    }
+
+     /*@internal*/
+    export function canJsonReportNoInutFiles(raw: any) {
+        return !hasProperty(raw, "files") && !hasProperty(raw, "references");
+    }
+
+     /*@internal*/
+    export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+        const existingErrors = configParseDiagnostics.length;
+        if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {
+            configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
+        }
+        else {
+            filterMutate(configParseDiagnostics, error => !isErrorNoInputFiles(error));
+        }
+        return existingErrors !== configParseDiagnostics.length;
     }
 
     interface ParsedTsconfig {
