@@ -469,7 +469,8 @@ namespace ts {
         const { configFileName, optionsToExtend: optionsToExtendForConfigFile = {}, createProgram } = host;
         let { rootFiles: rootFileNames, options: compilerOptions, projectReferences } = host;
         let configFileSpecs: ConfigFileSpecs;
-        let configFileParsingDiagnostics: ReadonlyArray<Diagnostic> | undefined;
+        let configFileParsingDiagnostics: Diagnostic[] | undefined;
+        let canConfigFileJsonReportNoInputFiles = false;
         let hasChangedConfigFileParsingErrors = false;
 
         const cachedDirectoryStructureHost = configFileName === undefined ? undefined : createCachedDirectoryStructureHost(host, currentDirectory, useCaseSensitiveFileNames);
@@ -829,12 +830,7 @@ namespace ts {
         function reloadFileNamesFromConfigFile() {
             writeLog("Reloading new file names and options");
             const result = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), compilerOptions, parseConfigFileHost);
-            if (result.fileNames.length) {
-                configFileParsingDiagnostics = filter(configFileParsingDiagnostics, error => !isErrorNoInputFiles(error));
-                hasChangedConfigFileParsingErrors = true;
-            }
-            else if (!configFileSpecs.filesSpecs && !some(configFileParsingDiagnostics, isErrorNoInputFiles)) {
-                configFileParsingDiagnostics = configFileParsingDiagnostics!.concat(getErrorForNoInputFiles(configFileSpecs, configFileName));
+            if (updateErrorForNoInputFiles(result, configFileName, configFileSpecs, configFileParsingDiagnostics!, canConfigFileJsonReportNoInputFiles)) {
                 hasChangedConfigFileParsingErrors = true;
             }
             rootFileNames = result.fileNames;
@@ -867,7 +863,8 @@ namespace ts {
             compilerOptions = configFileParseResult.options;
             configFileSpecs = configFileParseResult.configFileSpecs!; // TODO: GH#18217
             projectReferences = configFileParseResult.projectReferences;
-            configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult);
+            configFileParsingDiagnostics = getConfigFileParsingDiagnostics(configFileParseResult).slice();
+            canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(configFileParseResult.raw);
             hasChangedConfigFileParsingErrors = true;
         }
 

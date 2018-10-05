@@ -640,6 +640,7 @@ namespace ts {
         function bindChildrenWorker(node: Node): void {
             if (checkUnreachable(node)) {
                 bindEachChild(node);
+                bindJSDoc(node);
                 return;
             }
             switch (node.kind) {
@@ -2310,27 +2311,17 @@ namespace ts {
             if (node.modifiers && node.modifiers.length) {
                 file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Modifiers_cannot_appear_here));
             }
-
-            if (node.parent.kind !== SyntaxKind.SourceFile) {
-                file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_at_top_level));
-                return;
+            const diag = !isSourceFile(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_at_top_level
+                : !isExternalModule(node.parent) ? Diagnostics.Global_module_exports_may_only_appear_in_module_files
+                : !node.parent.isDeclarationFile ? Diagnostics.Global_module_exports_may_only_appear_in_declaration_files
+                : undefined;
+            if (diag) {
+                file.bindDiagnostics.push(createDiagnosticForNode(node, diag));
             }
             else {
-                const parent = node.parent as SourceFile;
-
-                if (!isExternalModule(parent)) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_module_files));
-                    return;
-                }
-
-                if (!parent.isDeclarationFile) {
-                    file.bindDiagnostics.push(createDiagnosticForNode(node, Diagnostics.Global_module_exports_may_only_appear_in_declaration_files));
-                    return;
-                }
+                file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
+                declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
             }
-
-            file.symbol.globalExports = file.symbol.globalExports || createSymbolTable();
-            declareSymbol(file.symbol.globalExports, file.symbol, node, SymbolFlags.Alias, SymbolFlags.AliasExcludes);
         }
 
         function bindExportDeclaration(node: ExportDeclaration) {
@@ -3010,7 +3001,7 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        if (subtreeFlags & TransformFlags.ContainsSpread
+        if (subtreeFlags & TransformFlags.ContainsRestOrSpread
             || (expression.transformFlags & (TransformFlags.Super | TransformFlags.ContainsSuper))) {
             // If the this node contains a SpreadExpression, or is a super call, then it is an ES6
             // node.
@@ -3041,7 +3032,7 @@ namespace ts {
         if (node.typeArguments) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
-        if (subtreeFlags & TransformFlags.ContainsSpread) {
+        if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
             // If the this node contains a SpreadElementExpression then it is an ES6
             // node.
             transformFlags |= TransformFlags.AssertES2015;
@@ -3084,18 +3075,18 @@ namespace ts {
         // syntax.
         if (node.questionToken
             || node.type
-            || subtreeFlags & TransformFlags.ContainsDecorators
+            || (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax && some(node.decorators))
             || isThisIdentifier(name)) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
         // If a parameter has an accessibility modifier, then it is TypeScript syntax.
         if (hasModifier(node, ModifierFlags.ParameterPropertyModifier)) {
-            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsParameterPropertyAssignments;
+            transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
         // parameters with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3148,7 +3139,7 @@ namespace ts {
             // TypeScript syntax.
             // An exported declaration may be TypeScript syntax, but is handled by the visitor
             // for a namespace declaration.
-            if ((subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask)
+            if ((subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax)
                 || node.typeParameters) {
                 transformFlags |= TransformFlags.AssertTypeScript;
             }
@@ -3170,7 +3161,7 @@ namespace ts {
 
         // A class with a parameter property assignment, property initializer, or decorator is
         // TypeScript syntax.
-        if (subtreeFlags & TransformFlags.TypeScriptClassSyntaxMask
+        if (subtreeFlags & TransformFlags.ContainsTypeScriptClassSyntax
             || node.typeParameters) {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
@@ -3247,7 +3238,7 @@ namespace ts {
         }
 
         // function declarations with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3271,7 +3262,7 @@ namespace ts {
         }
 
         // function declarations with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3302,7 +3293,7 @@ namespace ts {
         }
 
         // function declarations with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3317,7 +3308,7 @@ namespace ts {
         // If the PropertyDeclaration has an initializer or a computed name, we need to inform its ancestor
         // so that it handle the transformation.
         if (node.initializer || isComputedPropertyName(node.name)) {
-            transformFlags |= TransformFlags.ContainsPropertyInitializer;
+            transformFlags |= TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3351,7 +3342,7 @@ namespace ts {
             }
 
             // function declarations with object rest destructuring are ES Next syntax
-            if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+            if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                 transformFlags |= TransformFlags.AssertESNext;
             }
 
@@ -3393,7 +3384,7 @@ namespace ts {
         }
 
         // function expressions with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3434,7 +3425,7 @@ namespace ts {
         }
 
         // arrow functions with object rest destructuring are ES Next syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3482,7 +3473,7 @@ namespace ts {
         transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
 
         // A VariableDeclaration containing ObjectRest is ESNext syntax
-        if (subtreeFlags & TransformFlags.ContainsObjectRest) {
+        if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
             transformFlags |= TransformFlags.AssertESNext;
         }
 
@@ -3731,11 +3722,11 @@ namespace ts {
                 break;
 
             case SyntaxKind.SpreadElement:
-                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsSpread;
+                transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsRestOrSpread;
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectSpread;
+                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
                 break;
 
             case SyntaxKind.SuperKeyword:
@@ -3751,8 +3742,8 @@ namespace ts {
 
             case SyntaxKind.ObjectBindingPattern:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
-                if (subtreeFlags & TransformFlags.ContainsRest) {
-                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRest;
+                if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
+                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
                 }
                 excludeFlags = TransformFlags.BindingPatternExcludes;
                 break;
@@ -3765,13 +3756,13 @@ namespace ts {
             case SyntaxKind.BindingElement:
                 transformFlags |= TransformFlags.AssertES2015;
                 if ((<BindingElement>node).dotDotDotToken) {
-                    transformFlags |= TransformFlags.ContainsRest;
+                    transformFlags |= TransformFlags.ContainsRestOrSpread;
                 }
                 break;
 
             case SyntaxKind.Decorator:
                 // This node is TypeScript syntax, and marks its container as also being TypeScript syntax.
-                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsDecorators;
+                transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
                 break;
 
             case SyntaxKind.ObjectLiteralExpression:
@@ -3788,7 +3779,7 @@ namespace ts {
                     transformFlags |= TransformFlags.ContainsLexicalThis;
                 }
 
-                if (subtreeFlags & TransformFlags.ContainsObjectSpread) {
+                if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     // If an ObjectLiteralExpression contains a spread element, then it
                     // is an ES next node.
                     transformFlags |= TransformFlags.AssertESNext;
@@ -3799,7 +3790,7 @@ namespace ts {
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.NewExpression:
                 excludeFlags = TransformFlags.ArrayLiteralOrCallOrNewExcludes;
-                if (subtreeFlags & TransformFlags.ContainsSpread) {
+                if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
                     // If the this node contains a SpreadExpression, then it is an ES6
                     // node.
                     transformFlags |= TransformFlags.AssertES2015;

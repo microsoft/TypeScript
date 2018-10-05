@@ -6441,13 +6441,6 @@ namespace ts {
                                     indent += asterisk.length;
                                 }
                                 break;
-                            case SyntaxKind.Identifier:
-                                // Anything else is doc comment text. We just save it. Because it
-                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
-                                // line break.
-                                pushComment(scanner.getTokenText());
-                                state = JSDocState.SavingComments;
-                                break;
                             case SyntaxKind.WhitespaceTrivia:
                                 // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                                 const whitespace = scanner.getTokenText();
@@ -6462,7 +6455,9 @@ namespace ts {
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
                             default:
-                                // anything other than whitespace or asterisk at the beginning of the line starts the comment text
+                                // Anything else is doc comment text. We just save it. Because it
+                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                                // line break.
                                 state = JSDocState.SavingComments;
                                 pushComment(scanner.getTokenText());
                                 break;
@@ -7725,7 +7720,7 @@ namespace ts {
     /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
-        const pragmas: PragmaPsuedoMapEntry[] = [];
+        const pragmas: PragmaPseudoMapEntry[] = [];
 
         // Keep scanning all the leading trivia in the file until we get to something that
         // isn't trivia.  Any single line comment will be analyzed to see if it is a
@@ -7780,7 +7775,7 @@ namespace ts {
                     const referencedFiles = context.referencedFiles;
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
-                    forEach(toArray(entryOrList), (arg: PragmaPsuedoMap["reference"]) => {
+                    forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
                         // TODO: GH#18217
                         if (arg!.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
@@ -7803,7 +7798,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPsuedoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
+                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
                     break;
                 }
                 case "amd-module": {
@@ -7813,11 +7808,11 @@ namespace ts {
                                 // TODO: It's probably fine to issue this diagnostic on all instances of the pragma
                                 reportDiagnostic(entry!.range.pos, entry!.range.end - entry!.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
                             }
-                            context.moduleName = (entry as PragmaPsuedoMap["amd-module"])!.arguments.name;
+                            context.moduleName = (entry as PragmaPseudoMap["amd-module"])!.arguments.name;
                         }
                     }
                     else {
-                        context.moduleName = (entryOrList as PragmaPsuedoMap["amd-module"])!.arguments.name;
+                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"])!.arguments.name;
                     }
                     break;
                 }
@@ -7853,10 +7848,10 @@ namespace ts {
 
     const tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/im;
     const singleLinePragmaRegEx = /^\/\/\/?\s*@(\S+)\s*(.*)\s*$/im;
-    function extractPragmas(pragmas: PragmaPsuedoMapEntry[], range: CommentRange, text: string) {
+    function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, text: string) {
         const tripleSlash = range.kind === SyntaxKind.SingleLineCommentTrivia && tripleSlashXMLCommentStartRegEx.exec(text);
         if (tripleSlash) {
-            const name = tripleSlash[1].toLowerCase() as keyof PragmaPsuedoMap; // Technically unsafe cast, but we do it so the below check to make it safe typechecks
+            const name = tripleSlash[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so the below check to make it safe typechecks
             const pragma = commentPragmas[name] as PragmaDefinition;
             if (!pragma || !(pragma.kind! & PragmaKindFlags.TripleSlashXML)) {
                 return;
@@ -7883,10 +7878,10 @@ namespace ts {
                         }
                     }
                 }
-                pragmas.push({ name, args: { arguments: argument, range } } as PragmaPsuedoMapEntry);
+                pragmas.push({ name, args: { arguments: argument, range } } as PragmaPseudoMapEntry);
             }
             else {
-                pragmas.push({ name, args: { arguments: {}, range } } as PragmaPsuedoMapEntry);
+                pragmas.push({ name, args: { arguments: {}, range } } as PragmaPseudoMapEntry);
             }
             return;
         }
@@ -7905,9 +7900,9 @@ namespace ts {
         }
     }
 
-    function addPragmaForMatch(pragmas: PragmaPsuedoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
+    function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
         if (!match) return;
-        const name = match[1].toLowerCase() as keyof PragmaPsuedoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
+        const name = match[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
         const pragma = commentPragmas[name] as PragmaDefinition;
         if (!pragma || !(pragma.kind! & kind)) {
             return;
@@ -7915,7 +7910,7 @@ namespace ts {
         const args = match[2]; // Split on spaces and match up positionally with definition
         const argument = getNamedPragmaArguments(pragma, args);
         if (argument === "fail") return; // Missing required argument, fail to parse it
-        pragmas.push({ name, args: { arguments: argument, range } } as PragmaPsuedoMapEntry);
+        pragmas.push({ name, args: { arguments: argument, range } } as PragmaPseudoMapEntry);
         return;
     }
 

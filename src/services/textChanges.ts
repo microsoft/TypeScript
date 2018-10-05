@@ -295,7 +295,7 @@ namespace ts.textChanges {
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
-            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, options, nodes: newNodes, range: { pos, end: pos } });
+            this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
@@ -312,7 +312,17 @@ namespace ts.textChanges {
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
-            this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { suffix: " " });
+        }
+
+        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            if (!before.modifiers) {
+                this.insertModifierBefore(sourceFile, modifier, before);
+                return;
+            }
+
+            const pos = before.modifiers.end;
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -403,7 +413,7 @@ namespace ts.textChanges {
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
             const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
-            this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
+            this.insertNodeAt(sourceFile, pos, newNode, {
                 prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });

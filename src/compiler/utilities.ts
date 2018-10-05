@@ -3265,7 +3265,7 @@ namespace ts {
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {
             const moduleKind = getEmitModuleKind(options);
-            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
+            const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             return filter(host.getSourceFiles(), sourceFile =>
                 (moduleEmitEnabled || !isExternalModule(sourceFile)) && sourceFileMayBeEmitted(sourceFile, options, isSourceFileFromExternalLibrary));
@@ -3734,11 +3734,20 @@ namespace ts {
 
     /** Get `C` given `N` if `N` is in the position `class C extends N` where `N` is an ExpressionWithTypeArguments. */
     export function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined {
-        if (isExpressionWithTypeArguments(node) &&
-            node.parent.token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent)) {
-            return node.parent.parent;
-        }
+        const cls = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
+        return cls && !cls.isImplements ? cls.class : undefined;
+    }
+
+    export interface ClassImplementingOrExtendingExpressionWithTypeArguments {
+        readonly class: ClassLikeDeclaration;
+        readonly isImplements: boolean;
+    }
+    export function tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node: Node): ClassImplementingOrExtendingExpressionWithTypeArguments | undefined {
+        return isExpressionWithTypeArguments(node)
+            && isHeritageClause(node.parent)
+            && isClassLike(node.parent.parent)
+            ? { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword }
+            : undefined;
     }
 
     export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
@@ -3763,15 +3772,6 @@ namespace ts {
 
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): node is ExpressionWithTypeArguments {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
-    }
-
-    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): node is ExpressionWithTypeArguments {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments
-            && isEntityNameExpression((node as ExpressionWithTypeArguments).expression)
-            && node.parent
-            && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
-            && node.parent.parent
-            && isClassLike(node.parent.parent);
     }
 
     export function isEntityNameExpression(node: Node): node is EntityNameExpression {
@@ -8368,5 +8368,17 @@ namespace ts {
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
+    }
+
+    export function getOrUpdate<T>(map: Map<T>, key: string, getDefault: () => T): T {
+        const got = map.get(key);
+        if (got === undefined) {
+            const value = getDefault();
+            map.set(key, value);
+            return value;
+        }
+        else {
+            return got;
+        }
     }
 }

@@ -465,7 +465,19 @@ namespace ts {
         const enumNumberIndexInfo = createIndexInfo(stringType, /*isReadonly*/ true);
 
         const globals = createSymbolTable();
-        let amalgamatedDuplicates: Map<{ firstFile: SourceFile, secondFile: SourceFile, firstFileInstances: Map<{ instances: Node[], blockScoped: boolean }>, secondFileInstances: Map<{ instances: Node[], blockScoped: boolean }> }> | undefined;
+        interface DuplicateInfoForSymbol {
+            readonly firstFileLocations: Node[];
+            readonly secondFileLocations: Node[];
+            readonly isBlockScoped: boolean;
+        }
+        interface DuplicateInfoForFiles {
+            readonly firstFile: SourceFile;
+            readonly secondFile: SourceFile;
+            /** Key is symbol name. */
+            readonly conflictingSymbols: Map<DuplicateInfoForSymbol>;
+        }
+        /** Key is "/path/to/a.ts|/path/to/b.ts". */
+        let amalgamatedDuplicates: Map<DuplicateInfoForFiles> | undefined;
         const reverseMappedCache = createMap<Type | undefined>();
         let ambientModulesCache: Symbol[] | undefined;
         /**
@@ -885,50 +897,45 @@ namespace ts {
                         : Diagnostics.Duplicate_identifier_0;
                 const sourceSymbolFile = source.declarations && getSourceFileOfNode(source.declarations[0]);
                 const targetSymbolFile = target.declarations && getSourceFileOfNode(target.declarations[0]);
+                const symbolName = symbolToString(source);
 
                 // Collect top-level duplicate identifier errors into one mapping, so we can then merge their diagnostics if there are a bunch
                 if (sourceSymbolFile && targetSymbolFile && amalgamatedDuplicates && !isEitherEnum && sourceSymbolFile !== targetSymbolFile) {
                     const firstFile = comparePaths(sourceSymbolFile.path, targetSymbolFile.path) === Comparison.LessThan ? sourceSymbolFile : targetSymbolFile;
                     const secondFile = firstFile === sourceSymbolFile ? targetSymbolFile : sourceSymbolFile;
-                    const cacheKey = `${firstFile.path}|${secondFile.path}`;
-                    const existing = amalgamatedDuplicates.get(cacheKey) || { firstFile, secondFile, firstFileInstances: createMap(), secondFileInstances: createMap() };
-                    const symbolName = symbolToString(source);
-                    const firstInstanceList = existing.firstFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
-                    const secondInstanceList = existing.secondFileInstances.get(symbolName) || { instances: [], blockScoped: isEitherBlockScoped };
-
-                    forEach(source.declarations, node => {
-                        const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                        const targetList = sourceSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
-                        targetList.instances.push(errorNode);
-                    });
-                    forEach(target.declarations, node => {
-                        const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                        const targetList = targetSymbolFile === firstFile ? firstInstanceList : secondInstanceList;
-                        targetList.instances.push(errorNode);
-                    });
-
-                    existing.firstFileInstances.set(symbolName, firstInstanceList);
-                    existing.secondFileInstances.set(symbolName, secondInstanceList);
-                    amalgamatedDuplicates.set(cacheKey, existing);
-                    return target;
+                    const filesDuplicates = getOrUpdate<DuplicateInfoForFiles>(amalgamatedDuplicates, `${firstFile.path}|${secondFile.path}`, () =>
+                        ({ firstFile, secondFile, conflictingSymbols: createMap() }));
+                    const conflictingSymbolInfo = getOrUpdate<DuplicateInfoForSymbol>(filesDuplicates.conflictingSymbols, symbolName, () =>
+                        ({ isBlockScoped: isEitherBlockScoped, firstFileLocations: [], secondFileLocations: [] }));
+                    addDuplicateLocations(conflictingSymbolInfo.firstFileLocations, source);
+                    addDuplicateLocations(conflictingSymbolInfo.secondFileLocations, target);
                 }
-                const symbolName = symbolToString(source);
-                addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
-                addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
+                else {
+                    addDuplicateDeclarationErrorsForSymbols(source, message, symbolName, target);
+                    addDuplicateDeclarationErrorsForSymbols(target, message, symbolName, source);
+                }
             }
             return target;
+
+            function addDuplicateLocations(locs: Node[], symbol: Symbol): void {
+                for (const decl of symbol.declarations) {
+                    pushIfUnique(locs, (getExpandoInitializer(decl, /*isPrototypeAssignment*/ false) ? getNameOfExpando(decl) : getNameOfDeclaration(decl)) || decl);
+                }
+            }
         }
 
         function addDuplicateDeclarationErrorsForSymbols(target: Symbol, message: DiagnosticMessage, symbolName: string, source: Symbol) {
             forEach(target.declarations, node => {
                 const errorNode = (getExpandoInitializer(node, /*isPrototypeAssignment*/ false) ? getNameOfExpando(node) : getNameOfDeclaration(node)) || node;
-                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations && source.declarations[0]);
+                addDuplicateDeclarationError(errorNode, message, symbolName, source.declarations);
             });
         }
 
-        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNode: Node | undefined) {
+        function addDuplicateDeclarationError(errorNode: Node, message: DiagnosticMessage, symbolName: string, relatedNodes: ReadonlyArray<Node> | undefined) {
             const err = lookupOrIssueError(errorNode, message, symbolName);
-            if (relatedNode && length(err.relatedInformation) < 5) {
+            for (const relatedNode of relatedNodes || emptyArray) {
+                err.relatedInformation = err.relatedInformation || [];
+                if (length(err.relatedInformation) >= 5) continue;
                 addRelatedInfo(err, !length(err.relatedInformation) ? createDiagnosticForNode(relatedNode, Diagnostics._0_was_also_declared_here, symbolName) : createDiagnosticForNode(relatedNode, Diagnostics.and_here));
             }
         }
@@ -1230,7 +1237,7 @@ namespace ts {
                                     // local types not visible outside the function body
                                     : false;
                             }
-                            if (meaning & SymbolFlags.Value && result.flags & SymbolFlags.FunctionScopedVariable) {
+                            if (meaning & result.flags & SymbolFlags.FunctionScopedVariable) {
                                 // parameters are visible only inside function body, parameter list and return type
                                 // technically for parameter list case here we might mix parameters and variables declared in function,
                                 // however it is detected separately when checking initializers of parameters
@@ -4670,11 +4677,11 @@ namespace ts {
                 const elementType = checkIteratedTypeOrElementType(parentType, pattern, /*allowStringInput*/ false, /*allowAsyncIterables*/ false);
                 const index = pattern.elements.indexOf(declaration);
                 if (declaration.dotDotDotToken) {
-                    // If the parent is a tuple type, the rest element has an array type with a union of the
+                    // If the parent is a tuple type, the rest element has a tuple type of the
                     // remaining tuple element types. Otherwise, the rest element has an array type with same
                     // element type as the parent type.
                     type = isTupleType(parentType) ?
-                        getArrayLiteralType((parentType.typeArguments || emptyArray).slice(index, getTypeReferenceArity(parentType))) :
+                        sliceTupleType(parentType, index) :
                         createArrayType(elementType);
                 }
                 else {
@@ -5172,7 +5179,7 @@ namespace ts {
                 return type;
             }
             if (declaration.kind === SyntaxKind.ExportAssignment) {
-                return checkExpression((<ExportAssignment>declaration).expression);
+                return widenTypeForVariableLikeDeclaration(checkExpressionCached((<ExportAssignment>declaration).expression), declaration);
             }
 
             // Handle variable, parameter or property
@@ -8717,6 +8724,20 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function sliceTupleType(type: TupleTypeReference, index: number) {
+            const tuple = type.target;
+            if (tuple.hasRestElement) {
+                // don't slice off rest element
+                index = Math.min(index, getTypeReferenceArity(type) - 1);
+            }
+            return createTupleType(
+                (type.typeArguments || emptyArray).slice(index),
+                Math.max(0, tuple.minLength - index),
+                tuple.hasRestElement,
+                tuple.associatedNames && tuple.associatedNames.slice(index),
+            );
+        }
+
         function getTypeFromOptionalTypeNode(node: OptionalTypeNode): Type {
             const type = getTypeFromTypeNode(node.type);
             return strictNullChecks ? getOptionalType(type) : type;
@@ -9283,7 +9304,9 @@ namespace ts {
                         }
                     }
                     const propType = getTypeOfSymbol(prop);
-                    return accessExpression ? getFlowTypeOfReference(accessExpression, propType) : propType;
+                    return accessExpression && getAssignmentTargetKind(accessExpression) !== AssignmentKind.Definite ?
+                        getFlowTypeOfReference(accessExpression, propType) :
+                        propType;
                 }
                 if (isTupleType(objectType)) {
                     const restType = getRestTypeOfTupleType(objectType);
@@ -10595,7 +10618,8 @@ namespace ts {
             return source.flags & TypeFlags.Union ? every((<UnionType>source).types, t => isTypeDerivedFrom(t, target)) :
                 target.flags & TypeFlags.Union ? some((<UnionType>target).types, t => isTypeDerivedFrom(source, t)) :
                 source.flags & TypeFlags.InstantiableNonPrimitive ? isTypeDerivedFrom(getBaseConstraintOfType(source) || emptyObjectType, target) :
-                target === globalObjectType || target === globalFunctionType ? isTypeSubtypeOf(source, target) :
+                target === globalObjectType ? !!(source.flags & (TypeFlags.Object | TypeFlags.NonPrimitive)) :
+                target === globalFunctionType ? isFunctionObjectType(source as ObjectType) :
                 hasBaseType(source, getTargetType(target));
             }
 
@@ -11874,8 +11898,9 @@ namespace ts {
                     }
                 }
                 else if (target.flags & TypeFlags.IndexedAccess) {
-                    // A type S is related to a type T[K] if S is related to C, where C is the base constraint of T[K]
-                    if (relation !== identityRelation) {
+                    // A type S is related to a type T[K], where T and K aren't both type variables, if S is related to C,
+                    // where C is the base constraint of T[K]
+                    if (relation !== identityRelation && !(isGenericObjectType((<IndexedAccessType>target).objectType) && isGenericIndexType((<IndexedAccessType>target).indexType))) {
                         const constraint = getBaseConstraintOfType(target);
                         if (constraint && constraint !== target) {
                             if (result = isRelatedTo(source, constraint, reportErrors)) {
@@ -13461,6 +13486,7 @@ namespace ts {
             let symbolStack: Symbol[];
             let visited: Map<boolean>;
             let contravariant = false;
+            let bivariant = false;
             let propagationType: Type;
             let allowComplexConstraintInference = true;
             inferFromTypes(originalSource, originalTarget);
@@ -13547,11 +13573,13 @@ namespace ts {
                             }
                             if (priority === inference.priority) {
                                 const candidate = propagationType || source;
-                                if (contravariant) {
-                                    inference.contraCandidates = append(inference.contraCandidates, candidate);
+                                // We make contravariant inferences only if we are in a pure contravariant position,
+                                // i.e. only if we have not descended into a bivariant position.
+                                if (contravariant && !bivariant) {
+                                    inference.contraCandidates = appendIfUnique(inference.contraCandidates, candidate);
                                 }
                                 else {
-                                    inference.candidates = append(inference.candidates, candidate);
+                                    inference.candidates = appendIfUnique(inference.candidates, candidate);
                                 }
                             }
                             if (!(priority & InferencePriority.ReturnType) && target.flags & TypeFlags.TypeParameter && !isTypeParameterAtTopLevel(originalTarget, <TypeParameter>target)) {
@@ -13799,7 +13827,12 @@ namespace ts {
 
             function inferFromSignature(source: Signature, target: Signature, skipParameters: boolean) {
                 if (!skipParameters) {
+                    const saveBivariant = bivariant;
+                    const kind = target.declaration ? target.declaration.kind : SyntaxKind.Unknown;
+                    // Once we descend into a bivariant signature we remain bivariant for all nested inferences
+                    bivariant = bivariant || kind === SyntaxKind.MethodDeclaration || kind === SyntaxKind.MethodSignature || kind === SyntaxKind.Constructor;
                     forEachMatchingParameterType(source, target, inferFromContravariantTypes);
+                    bivariant = saveBivariant;
                 }
                 const sourceTypePredicate = getTypePredicateOfSignature(source);
                 const targetTypePredicate = getTypePredicateOfSignature(target);
@@ -15339,7 +15372,7 @@ namespace ts {
 
                 // Check that right operand is a function type with a prototype property
                 const rightType = getTypeOfExpression(expr.right);
-                if (!isTypeSubtypeOf(rightType, globalFunctionType)) {
+                if (!isTypeDerivedFrom(rightType, globalFunctionType)) {
                     return type;
                 }
 
@@ -15359,24 +15392,16 @@ namespace ts {
                 }
 
                 if (!targetType) {
-                    // Target type is type of construct signature
-                    let constructSignatures: ReadonlyArray<Signature> | undefined;
-                    if (getObjectFlags(rightType) & ObjectFlags.Interface) {
-                        constructSignatures = resolveDeclaredMembers(<InterfaceType>rightType).declaredConstructSignatures;
+                    let constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
+                    if (constructSignatures.length === 0) {
+                        constructSignatures = filter(getSignaturesOfType(rightType, SignatureKind.Call), sig => isJSConstructor(sig.declaration));
                     }
-                    else if (getObjectFlags(rightType) & ObjectFlags.Anonymous) {
-                        constructSignatures = getSignaturesOfType(rightType, SignatureKind.Construct);
-                    }
-                    if (constructSignatures && constructSignatures.length) {
-                        targetType = getUnionType(map(constructSignatures, signature => getReturnTypeOfSignature(getErasedSignature(signature))));
-                    }
+                    targetType = constructSignatures.length ?
+                        getUnionType(map(constructSignatures, signature => isJSConstructor(signature.declaration) && getJSClassType(getSymbolOfNode(signature.declaration!)) || getReturnTypeOfSignature(getErasedSignature(signature)))) :
+                        emptyObjectType;
                 }
 
-                if (targetType) {
-                    return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
-                }
-
-                return type;
+                return getNarrowedType(type, targetType, assumeTrue, isTypeDerivedFrom);
             }
 
             function getNarrowedType(type: Type, candidate: Type, assumeTrue: boolean, isRelated: (source: Type, target: Type) => boolean) {
@@ -15743,6 +15768,10 @@ namespace ts {
             return !!findAncestor(node, n => n === threshold ? "quit" : isFunctionLike(n));
         }
 
+        function getPartOfForStatementContainingNode(node: Node, container: ForStatement) {
+            return findAncestor(node, n => n === container ? "quit" : n === container.initializer || n === container.condition || n === container.incrementor || n === container.statement);
+        }
+
         function checkNestedBlockScopedBinding(node: Identifier, symbol: Symbol): void {
             if (languageVersion >= ScriptTarget.ES2015 ||
                 (symbol.flags & (SymbolFlags.BlockScopedVariable | SymbolFlags.Class)) === 0 ||
@@ -15771,7 +15800,25 @@ namespace ts {
             if (containedInIterationStatement) {
                 if (usedInFunction) {
                     // mark iteration statement as containing block-scoped binding captured in some function
-                    getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    let capturesBlockScopeBindingInLoopBody = true;
+                    if (isForStatement(container) &&
+                        getAncestor(symbol.valueDeclaration, SyntaxKind.VariableDeclarationList)!.parent === container) {
+                        const part = getPartOfForStatementContainingNode(node.parent, container);
+                        if (part) {
+                            const links = getNodeLinks(part);
+                            links.flags |= NodeCheckFlags.ContainsCapturedBlockScopeBinding;
+
+                            const capturedBindings = links.capturedBlockScopeBindings || (links.capturedBlockScopeBindings = []);
+                            pushIfUnique(capturedBindings, symbol);
+
+                            if (part === container.initializer) {
+                                capturesBlockScopeBindingInLoopBody = false; // Initializer is outside of loop body
+                            }
+                        }
+                    }
+                    if (capturesBlockScopeBindingInLoopBody) {
+                        getNodeLinks(current).flags |= NodeCheckFlags.LoopWithCapturedBlockScopedBinding;
+                    }
                 }
 
                 // mark variables that are declared in loop initializer and reassigned inside the body of ForStatement.
@@ -15789,6 +15836,11 @@ namespace ts {
             if (usedInFunction) {
                 getNodeLinks(symbol.valueDeclaration).flags |= NodeCheckFlags.CapturedBlockScopedBinding;
             }
+        }
+
+        function isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement) {
+            const links = getNodeLinks(node);
+            return !!links && contains(links.capturedBlockScopeBindings, getSymbolOfNode(decl));
         }
 
         function isAssignedInBodyOfForStatement(node: Identifier, container: ForStatement): boolean {
@@ -17138,37 +17190,45 @@ namespace ts {
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
                 // If array literal is actually a destructuring pattern, mark it as an implied type. We do this such
                 // that we get the same behavior for "var [x, y] = []" and "[x, y] = []".
+                let tupleResult: Type | undefined;
                 if (inDestructuringPattern && minLength > 0) {
                     const type = cloneTypeReference(<TypeReference>createTupleType(elementTypes, minLength, hasRestElement));
                     type.pattern = node;
                     return type;
                 }
-                if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
-                    const pattern = contextualType.pattern;
-                    // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
-                    // tuple type with the corresponding binding or assignment element types to make the lengths equal.
-                    if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
-                        const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
-                        for (let i = elementCount; i < patternElements.length; i++) {
-                            const e = patternElements[i];
-                            if (hasDefaultValue(e)) {
-                                elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
-                            }
-                            else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
-                                if (e.kind !== SyntaxKind.OmittedExpression) {
-                                    error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
-                                }
-                                elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
-                            }
-                        }
-                    }
-                    return createTupleType(elementTypes, minLength, hasRestElement);
+                else if (tupleResult = getArrayLiteralTupleTypeIfApplicable(elementTypes, contextualType, hasRestElement, elementCount)) {
+                    return tupleResult;
                 }
                 else if (forceTuple) {
                     return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }
             return getArrayLiteralType(elementTypes, UnionReduction.Subtype);
+        }
+
+        function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length) {
+            if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
+                const minLength = elementCount - (hasRestElement ? 1 : 0);
+                const pattern = contextualType.pattern;
+                // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
+                // tuple type with the corresponding binding or assignment element types to make the lengths equal.
+                if (!hasRestElement && pattern && (pattern.kind === SyntaxKind.ArrayBindingPattern || pattern.kind === SyntaxKind.ArrayLiteralExpression)) {
+                    const patternElements = (<BindingPattern | ArrayLiteralExpression>pattern).elements;
+                    for (let i = elementCount; i < patternElements.length; i++) {
+                        const e = patternElements[i];
+                        if (hasDefaultValue(e)) {
+                            elementTypes.push((<TypeReference>contextualType).typeArguments![i]);
+                        }
+                        else if (i < patternElements.length - 1 || !(e.kind === SyntaxKind.BindingElement && (<BindingElement>e).dotDotDotToken || e.kind === SyntaxKind.SpreadElement)) {
+                            if (e.kind !== SyntaxKind.OmittedExpression) {
+                                error(e, Diagnostics.Initializer_provides_no_value_for_this_binding_element_and_the_binding_element_has_no_default_value);
+                            }
+                            elementTypes.push(strictNullChecks ? implicitNeverType : undefinedWideningType);
+                        }
+                    }
+                }
+                return createTupleType(elementTypes, minLength, hasRestElement);
+            }
         }
 
         function getArrayLiteralType(elementTypes: Type[], unionReduction = UnionReduction.Literal) {
@@ -17586,11 +17646,13 @@ namespace ts {
                         error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
                     }
 
+                    const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes);
+                    const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
                     const childrenPropSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient, jsxChildrenPropertyName);
                     childrenPropSymbol.type = childrenTypes.length === 1 ?
                         childrenTypes[0] :
-                        createArrayType(getUnionType(childrenTypes));
+                        (getArrayLiteralTupleTypeIfApplicable(childrenTypes, childrenContextualType, /*hasRestElement*/ false) || createArrayType(getUnionType(childrenTypes)));
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
@@ -21647,7 +21709,7 @@ namespace ts {
                         else {
                             checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
                             const type = isTupleType(sourceType) ?
-                                getArrayLiteralType((sourceType.typeArguments || emptyArray).slice(elementIndex, getTypeReferenceArity(sourceType))) :
+                                sliceTupleType(sourceType, elementIndex) :
                                 createArrayType(elementType);
                             return checkDestructuringAssignment(restExpression, type, checkMode);
                         }
@@ -27907,24 +27969,20 @@ namespace ts {
                 return errorType;
             }
 
+            const classDecl = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
+            const classType = classDecl && getDeclaredTypeOfClassOrInterface(getSymbolOfNode(classDecl.class));
             if (isPartOfTypeNode(node)) {
                 const typeFromTypeNode = getTypeFromTypeNode(<TypeNode>node);
-
-                if (isExpressionWithTypeArgumentsInClassImplementsClause(node)) {
-                    return getTypeWithThisArgument(typeFromTypeNode, getTypeOfClassContainingHeritageClause(node).thisType);
-                }
-
-                return typeFromTypeNode;
+                return classType ? getTypeWithThisArgument(typeFromTypeNode, classType.thisType) : typeFromTypeNode;
             }
 
             if (isExpressionNode(node)) {
                 return getRegularTypeOfExpression(<Expression>node);
             }
 
-            if (isExpressionWithTypeArgumentsInClassExtendsClause(node)) {
+            if (classType && !classDecl!.isImplements) {
                 // A SyntaxKind.ExpressionWithTypeArguments is considered a type node, except when it occurs in the
                 // extends clause of a class. We handle that case here.
-                const classType = getTypeOfClassContainingHeritageClause(node);
                 const baseType = firstOrUndefined(getBaseTypes(classType));
                 return baseType ? getTypeWithThisArgument(baseType, classType.thisType) : errorType;
             }
@@ -27964,10 +28022,6 @@ namespace ts {
             }
 
             return errorType;
-        }
-
-        function getTypeOfClassContainingHeritageClause(node: ExpressionWithTypeArguments): InterfaceType {
-            return getDeclaredTypeOfClassOrInterface(getSymbolOfNode(node.parent.parent));
         }
 
         // Gets the type of object literal or array literal of destructuring assignment.
@@ -28681,7 +28735,12 @@ namespace ts {
                         getAccessor
                     };
                 },
-                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined)
+                getSymbolOfExternalModuleSpecifier: moduleName => resolveExternalModuleNameWorker(moduleName, moduleName, /*moduleNotFoundError*/ undefined),
+                isBindingCapturedByNode: (node, decl) => {
+                    const parseNode = getParseTreeNode(node);
+                    const parseDecl = getParseTreeNode(decl);
+                    return !!parseNode && !!parseDecl && (isVariableDeclaration(parseDecl) || isBindingElement(parseDecl)) && isBindingCapturedByNode(parseNode, parseDecl);
+                }
             };
 
             function isInHeritageClause(node: PropertyAccessEntityNameExpression) {
@@ -28871,38 +28930,33 @@ namespace ts {
                 }
             }
 
-            amalgamatedDuplicates.forEach(({ firstFile, secondFile, firstFileInstances, secondFileInstances }) => {
-                const conflictingKeys = arrayFrom(firstFileInstances.keys());
+            amalgamatedDuplicates.forEach(({ firstFile, secondFile, conflictingSymbols }) => {
                 // If not many things conflict, issue individual errors
-                if (conflictingKeys.length < 8) {
-                    addErrorsForDuplicates(firstFileInstances, secondFileInstances);
-                    addErrorsForDuplicates(secondFileInstances, firstFileInstances);
-                    return;
+                if (conflictingSymbols.size < 8) {
+                    conflictingSymbols.forEach(({ isBlockScoped, firstFileLocations, secondFileLocations }, symbolName) => {
+                        const message = isBlockScoped ? Diagnostics.Cannot_redeclare_block_scoped_variable_0 : Diagnostics.Duplicate_identifier_0;
+                        for (const node of firstFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, secondFileLocations);
+                        }
+                        for (const node of secondFileLocations) {
+                            addDuplicateDeclarationError(node, message, symbolName, firstFileLocations);
+                        }
+                    });
                 }
-                // Otheriwse issue top-level error since the files appear very identical in terms of what they appear
-                const list = conflictingKeys.join(", ");
-                diagnostics.add(addRelatedInfo(
-                    createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
-                    createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)
-                ));
-                diagnostics.add(addRelatedInfo(
-                    createDiagnosticForNode(secondFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
-                    createDiagnosticForNode(firstFile, Diagnostics.Conflicts_are_in_this_file)
-                ));
+                else {
+                    // Otherwise issue top-level error since the files appear very identical in terms of what they contain
+                    const list = arrayFrom(conflictingSymbols.keys()).join(", ");
+                    diagnostics.add(addRelatedInfo(
+                        createDiagnosticForNode(firstFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                        createDiagnosticForNode(secondFile, Diagnostics.Conflicts_are_in_this_file)
+                    ));
+                    diagnostics.add(addRelatedInfo(
+                        createDiagnosticForNode(secondFile, Diagnostics.Definitions_of_the_following_identifiers_conflict_with_those_in_another_file_Colon_0, list),
+                        createDiagnosticForNode(firstFile, Diagnostics.Conflicts_are_in_this_file)
+                    ));
+                }
             });
             amalgamatedDuplicates = undefined;
-
-            function addErrorsForDuplicates(secondFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>, firstFileInstances: Map<{ instances: Node[]; blockScoped: boolean; }>) {
-                secondFileInstances.forEach((locations, symbolName) => {
-                    const firstFileEquivalent = firstFileInstances.get(symbolName)!;
-                    const message = locations.blockScoped
-                        ? Diagnostics.Cannot_redeclare_block_scoped_variable_0
-                        : Diagnostics.Duplicate_identifier_0;
-                    locations.instances.forEach(node => {
-                        addDuplicateDeclarationError(node, message, symbolName, firstFileEquivalent.instances[0]);
-                    });
-                });
-            }
         }
 
         function checkExternalEmitHelpers(location: Node, helpers: ExternalEmitHelpers) {
