@@ -348,6 +348,15 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
+        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string, kind = CommentKind.Single): void {
+            const token = getTouchingToken(sourceFile, position);
+            const completeCommentText = kind === CommentKind.Jsdoc ? `/**${commentText}*/` :
+                kind === CommentKind.Multi ? `/*${commentText}*/` :
+                `//${commentText}`;
+            const text = completeCommentText + this.newLineCharacter + " ".repeat(character);
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
@@ -382,15 +391,23 @@ namespace ts.textChanges {
          * TODO: Might need to only disallow node from being a parameterdecl, propertydecl, propertysig
          * (or correctly handle parameterdecl by walking up and adding a param, at least)
          */
-        public tryInsertJSDocType(sourceFile: SourceFile, node: TypeAnnotatable, type: TypeNode, isOptionalParameter: boolean | undefined): void {
-            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, the line before might be the wrong place, etc)
+        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode, isOptionalParameter: boolean | undefined): void {
+            // TODO: Parameter code needs to be MUCH smarter (multiple parameters are ugly, etc)
             // TODO: Parameter probably shouldn't need to manually unescape its text
             const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
-            const commentText =
-                isParameter(node) && isIdentifier(node.name) ? this.printJSDocParameter(printed, node.name, isOptionalParameter) :
-                isGetAccessorDeclaration(node) ? ` @return {${printed}} ` :
-                ` @type {${printed}} `;
-            this.insertCommentBeforeLine(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.pos + 1).line, node.pos, commentText, CommentKind.Jsdoc);
+            let commentText;
+            if (isParameter(node) && isIdentifier(node.name)) {
+                commentText = this.printJSDocParameter(printed, node.name, isOptionalParameter);
+                node = node.parent;
+            }
+            else if (isGetAccessorDeclaration(node)) {
+                commentText = ` @return {${printed}} `;
+            }
+            else {
+                commentText = ` @type {${printed}} `;
+                node = node.parent;
+            }
+            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart()).character, node.getStart(), commentText, CommentKind.Jsdoc);
             // this.replaceRangeWithText <-- SOMEDAY, when we support existing ones
         }
 
