@@ -6719,19 +6719,19 @@ namespace ts {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
+    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
+        return node.kind === SyntaxKind.SetAccessor;
+    }
+     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+        return node.kind === SyntaxKind.GetAccessor;
+    }
+
     /** True if has jsdoc nodes attached to it. */
     /* @internal */
     // TODO: GH#19856 Would like to return `node is Node & { jsDoc: JSDoc[] }` but it causes long compile times
     export function hasJSDocNodes(node: Node): node is HasJSDoc {
         const { jsDoc } = node as JSDocContainer;
         return !!jsDoc && jsDoc.length > 0;
-    }
-
-    export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
-        return node.kind === SyntaxKind.SetAccessor;
-    }
-     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
-        return node.kind === SyntaxKind.GetAccessor;
     }
 
     /** True if has type node attached to it. */
