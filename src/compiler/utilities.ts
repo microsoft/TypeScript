@@ -6722,7 +6722,8 @@ namespace ts {
     export function isSetAccessor(node: Node): node is SetAccessorDeclaration {
         return node.kind === SyntaxKind.SetAccessor;
     }
-     export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
+
+    export function isGetAccessor(node: Node): node is GetAccessorDeclaration {
         return node.kind === SyntaxKind.GetAccessor;
     }
 
