@@ -523,7 +523,6 @@ namespace ts {
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
 
-        let deferredNodes: Map<Node> | undefined;
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
         let flowLoopStart = 0;
@@ -21223,6 +21222,7 @@ namespace ts {
 
         function checkFunctionExpressionOrObjectLiteralMethod(node: FunctionExpression | MethodDeclaration, checkMode?: CheckMode): Type {
             Debug.assert(node.kind !== SyntaxKind.MethodDeclaration || isObjectLiteralMethod(node));
+            checkNodeDeferred(node);
 
             // The identityMapper object is used to indicate that function expressions are wildcards
             if (checkMode === CheckMode.SkipContextSensitive && isContextSensitive(node)) {
@@ -21280,7 +21280,6 @@ namespace ts {
                         }
                     }
                     checkSignatureDeclaration(node);
-                    checkNodeDeferred(node);
                 }
             }
 
@@ -27353,14 +27352,21 @@ namespace ts {
         // determining the type of foo would cause foo to be given type any because of the recursive reference.
         // Delaying the type check of the body ensures foo has been assigned a type.
         function checkNodeDeferred(node: Node) {
-            if (deferredNodes) {
+            const enclosingFile = getSourceFileOfNode(node);
+            const links = getNodeLinks(enclosingFile);
+            if (!(links.flags & NodeCheckFlags.TypeChecked)) {
+                links.deferredNodes = links.deferredNodes || createMap();
                 const id = "" + getNodeId(node);
-                deferredNodes.set(id, node);
+                links.deferredNodes.set(id, node);
             }
         }
 
-        function checkDeferredNodes() {
-            deferredNodes!.forEach(node => {
+        function checkDeferredNodes(context: SourceFile) {
+            const links = getNodeLinks(context);
+            if (!links.deferredNodes) {
+                return;
+            }
+            links.deferredNodes.forEach(node => {
                 switch (node.kind) {
                     case SyntaxKind.FunctionExpression:
                     case SyntaxKind.ArrowFunction:
@@ -27421,10 +27427,9 @@ namespace ts {
                 clear(potentialThisCollisions);
                 clear(potentialNewTargetCollisions);
 
-                deferredNodes = createMap<Node>();
                 forEach(node.statements, checkSourceElement);
 
-                checkDeferredNodes();
+                checkDeferredNodes(node);
 
                 if (isExternalOrCommonJsModule(node)) {
                     registerForUnusedIdentifiersCheck(node);
@@ -27437,8 +27442,6 @@ namespace ts {
                         }
                     });
                 }
-
-                deferredNodes = undefined;
 
                 if (isExternalOrCommonJsModule(node)) {
                     checkExternalModuleExports(node);
