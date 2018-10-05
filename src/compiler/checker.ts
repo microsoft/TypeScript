@@ -9305,7 +9305,9 @@ namespace ts {
                         }
                     }
                     const propType = getTypeOfSymbol(prop);
-                    return accessExpression ? getFlowTypeOfReference(accessExpression, propType) : propType;
+                    return accessExpression && getAssignmentTargetKind(accessExpression) !== AssignmentKind.Definite ?
+                        getFlowTypeOfReference(accessExpression, propType) :
+                        propType;
                 }
                 if (isTupleType(objectType)) {
                     const restType = getRestTypeOfTupleType(objectType);
