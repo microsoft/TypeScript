@@ -62,9 +62,9 @@ var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >"hello" : "hello"
 
 var [b5 = 3, b6 = true, b7 = temp] = [undefined, undefined, undefined];
->b5 : 3
+>b5 : number
 >3 : 3
->b6 : true
+>b6 : boolean
 >true : true
 >b7 : { t1: boolean; t2: string; }
 >temp : { t1: boolean; t2: string; }
