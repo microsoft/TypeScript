@@ -48,8 +48,8 @@ i1.tuple1 = ["foo", 5, false, true];
 >true : true
 
 var e3 = i1.tuple1[2];  // {}
->e3 : string | number
->i1.tuple1[2] : string | number
+>e3 : undefined
+>i1.tuple1[2] : undefined
 >i1.tuple1 : [string, number]
 >i1 : I<string, number>
 >tuple1 : [string, number]
@@ -57,7 +57,7 @@ var e3 = i1.tuple1[2];  // {}
 
 i1.tuple1[3] = { a: "string" };
 >i1.tuple1[3] = { a: "string" } : { a: string; }
->i1.tuple1[3] : string | number
+>i1.tuple1[3] : undefined
 >i1.tuple1 : [string, number]
 >i1 : I<string, number>
 >tuple1 : [string, number]
@@ -67,8 +67,8 @@ i1.tuple1[3] = { a: "string" };
 >"string" : "string"
 
 var e4 = i1.tuple1[3];  // {}
->e4 : string | number
->i1.tuple1[3] : string | number
+>e4 : undefined
+>i1.tuple1[3] : undefined
 >i1.tuple1 : [string, number]
 >i1 : I<string, number>
 >tuple1 : [string, number]

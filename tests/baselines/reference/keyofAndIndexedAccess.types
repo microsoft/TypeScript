@@ -146,7 +146,7 @@ type Q31 = [string, number][1];  // number
 >Q31 : number
 
 type Q32 = [string, number][2];  // string | number
->Q32 : string | number
+>Q32 : undefined
 
 type Q33 = [string, number][E.A];  // string
 >Q33 : string
@@ -157,7 +157,7 @@ type Q34 = [string, number][E.B];  // number
 >E : any
 
 type Q35 = [string, number][E.C];  // string | number
->Q35 : string | number
+>Q35 : undefined
 >E : any
 
 type Q36 = [string, number]["0"];  // string

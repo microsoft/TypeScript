@@ -12,14 +12,14 @@ const a1 = a[1]
 >1 : 1
 
 const a2 = a[2]
->a2 : string | number
->a[2] : string | number
+>a2 : undefined
+>a[2] : undefined
 >a : [number, string]
 >2 : 2
 
 const a3 = a[1000]
->a3 : string | number
->a[1000] : string | number
+>a3 : undefined
+>a[1000] : undefined
 >a : [number, string]
 >1000 : 1000
 
