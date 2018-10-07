@@ -12869,7 +12869,7 @@ namespace ts {
                 return propType;
             }
             if (everyType(type, isTupleType)) {
-                let restType = mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
+                const restType = mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
                 if (restType !== undefinedType) {
                     return restType;
                 }
