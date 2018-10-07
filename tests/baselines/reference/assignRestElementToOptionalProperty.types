@@ -1,0 +1,16 @@
+=== tests/cases/compiler/assignRestElementToOptionalProperty.ts ===
+// Inspired by #27144
+
+let t: [number, ...string[]];
+>t : [number, ...string[]]
+
+// Error, rest type of `t` does not match element 1 of `t2`
+let t2: [number, number?, ...string[]] = t;
+>t2 : [number, number?, ...string[]]
+>t : [number, ...string[]]
+
+// OK
+let t3: [number, string?, ...string[]] = t;
+>t3 : [number, string?, ...string[]]
+>t : [number, ...string[]]
+

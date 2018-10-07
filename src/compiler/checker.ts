@@ -12148,7 +12148,10 @@ namespace ts {
                 for (const targetProp of properties) {
                     if (!(targetProp.flags & SymbolFlags.Prototype)) {
                         const sourceProp = getPropertyOfType(source, targetProp.escapedName);
-                        if (sourceProp && sourceProp !== targetProp) {
+                        if (sourceProp === targetProp) {
+                            // OK
+                        }
+                        else if (sourceProp) {
                             if (isIgnoredJsxProperty(source, sourceProp, getTypeOfSymbol(targetProp))) {
                                 continue;
                             }
@@ -12214,6 +12217,30 @@ namespace ts {
                                         symbolToString(targetProp), typeToString(source), typeToString(target));
                                 }
                                 return Ternary.False;
+                            }
+                        }
+                        else {
+                            Debug.assert(!!(targetProp.flags & SymbolFlags.Optional));
+                            let sourcePropType, diagnostic;
+                            if (isTupleType(source)) {
+                                sourcePropType = isNumericLiteralName(targetProp.escapedName) && +targetProp.escapedName >= 0 ? getRestTypeOfTupleType(source) : undefined;
+                                diagnostic = Diagnostics.Rest_element_type_is_incompatible_with_property_0;
+                            }
+                            else {
+                                sourcePropType =
+                                    isNumericLiteralName(targetProp.escapedName) && getIndexTypeOfType(source, IndexKind.Number) ||
+                                    getIndexTypeOfType(source, IndexKind.String);
+                                diagnostic = Diagnostics.Index_signature_is_incompatible_with_property_0;
+                            }
+                            if (sourcePropType) {
+                                const related = isRelatedTo(sourcePropType, getTypeOfSymbol(targetProp), reportErrors);
+                                if (!related) {
+                                    if (reportErrors) {
+                                        reportError(diagnostic, symbolToString(targetProp));
+                                    }
+                                    return Ternary.False;
+                                }
+                                result &= related;
                             }
                         }
                     }

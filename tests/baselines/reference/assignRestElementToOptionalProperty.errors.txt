@@ -1,0 +1,18 @@
+tests/cases/compiler/assignRestElementToOptionalProperty.ts(5,5): error TS2322: Type '[number, ...string[]]' is not assignable to type '[number, number?, ...string[]]'.
+  Rest element type is incompatible with property '1'.
+    Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/assignRestElementToOptionalProperty.ts (1 errors) ====
+    // Inspired by #27144
+    
+    let t: [number, ...string[]];
+    // Error, rest type of `t` does not match element 1 of `t2`
+    let t2: [number, number?, ...string[]] = t;
+        ~~
+!!! error TS2322: Type '[number, ...string[]]' is not assignable to type '[number, number?, ...string[]]'.
+!!! error TS2322:   Rest element type is incompatible with property '1'.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+    // OK
+    let t3: [number, string?, ...string[]] = t;
+    

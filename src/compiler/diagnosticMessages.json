@@ -2489,6 +2489,14 @@
         "category": "Error",
         "code": 2734
     },
+    "Index signature is incompatible with property '{0}'.": {
+        "category": "Error",
+        "code": 2735
+    },
+    "Rest element type is incompatible with property '{0}'.": {
+        "category": "Error",
+        "code": 2736
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

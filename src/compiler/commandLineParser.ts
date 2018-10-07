@@ -962,14 +962,14 @@ namespace ts {
         getOptionNameMap: () => OptionNameMap,
         [unknownOptionDiagnostic, optionTypeMismatchDiagnostic]: ParseCommandLineWorkerDiagnostics,
         commandLine: ReadonlyArray<string>,
-        readFile?: (path: string) => string | undefined) {
+        readFile?: (path: string) => string | undefined): ParsedCommandLine {
         const options = {} as OptionsBase;
         const fileNames: string[] = [];
         const errors: Diagnostic[] = [];
 
         parseStrings(commandLine);
         return {
-            options,
+            options: options as CompilerOptions,
             fileNames,
             errors
         };

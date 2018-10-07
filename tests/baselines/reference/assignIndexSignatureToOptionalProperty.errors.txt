@@ -1,0 +1,30 @@
+tests/cases/compiler/assignIndexSignatureToOptionalProperty.ts(17,5): error TS2322: Type 'Bar' is not assignable to type 'Foo'.
+  Index signature is incompatible with property 'b'.
+    Type 'number' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/assignIndexSignatureToOptionalProperty.ts (1 errors) ====
+    // #27144
+    
+    interface Foo {
+        a: number;
+        b?: string;
+    }
+    interface Foo2 {
+        a: number;
+        b?: number;
+    }
+    interface Bar {
+        a: number;
+        [n: string]: number;
+    }
+    let b: Bar = { a: 42, b: 43 };
+    // Error, index signature does not match optional property `b`
+    let f: Foo = b;
+        ~
+!!! error TS2322: Type 'Bar' is not assignable to type 'Foo'.
+!!! error TS2322:   Index signature is incompatible with property 'b'.
+!!! error TS2322:     Type 'number' is not assignable to type 'string'.
+    // OK
+    let f2: Foo2 = b;
+    

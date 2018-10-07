@@ -1,0 +1,48 @@
+=== tests/cases/compiler/assignIndexSignatureToOptionalProperty.ts ===
+// #27144
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(assignIndexSignatureToOptionalProperty.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(assignIndexSignatureToOptionalProperty.ts, 2, 15))
+
+    b?: string;
+>b : Symbol(Foo.b, Decl(assignIndexSignatureToOptionalProperty.ts, 3, 14))
+}
+interface Foo2 {
+>Foo2 : Symbol(Foo2, Decl(assignIndexSignatureToOptionalProperty.ts, 5, 1))
+
+    a: number;
+>a : Symbol(Foo2.a, Decl(assignIndexSignatureToOptionalProperty.ts, 6, 16))
+
+    b?: number;
+>b : Symbol(Foo2.b, Decl(assignIndexSignatureToOptionalProperty.ts, 7, 14))
+}
+interface Bar {
+>Bar : Symbol(Bar, Decl(assignIndexSignatureToOptionalProperty.ts, 9, 1))
+
+    a: number;
+>a : Symbol(Bar.a, Decl(assignIndexSignatureToOptionalProperty.ts, 10, 15))
+
+    [n: string]: number;
+>n : Symbol(n, Decl(assignIndexSignatureToOptionalProperty.ts, 12, 5))
+}
+let b: Bar = { a: 42, b: 43 };
+>b : Symbol(b, Decl(assignIndexSignatureToOptionalProperty.ts, 14, 3))
+>Bar : Symbol(Bar, Decl(assignIndexSignatureToOptionalProperty.ts, 9, 1))
+>a : Symbol(a, Decl(assignIndexSignatureToOptionalProperty.ts, 14, 14))
+>b : Symbol(b, Decl(assignIndexSignatureToOptionalProperty.ts, 14, 21))
+
+// Error, index signature does not match optional property `b`
+let f: Foo = b;
+>f : Symbol(f, Decl(assignIndexSignatureToOptionalProperty.ts, 16, 3))
+>Foo : Symbol(Foo, Decl(assignIndexSignatureToOptionalProperty.ts, 0, 0))
+>b : Symbol(b, Decl(assignIndexSignatureToOptionalProperty.ts, 14, 3))
+
+// OK
+let f2: Foo2 = b;
+>f2 : Symbol(f2, Decl(assignIndexSignatureToOptionalProperty.ts, 18, 3))
+>Foo2 : Symbol(Foo2, Decl(assignIndexSignatureToOptionalProperty.ts, 5, 1))
+>b : Symbol(b, Decl(assignIndexSignatureToOptionalProperty.ts, 14, 3))
+

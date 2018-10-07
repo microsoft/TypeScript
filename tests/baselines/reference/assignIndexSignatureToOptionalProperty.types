@@ -1,0 +1,42 @@
+=== tests/cases/compiler/assignIndexSignatureToOptionalProperty.ts ===
+// #27144
+
+interface Foo {
+    a: number;
+>a : number
+
+    b?: string;
+>b : string
+}
+interface Foo2 {
+    a: number;
+>a : number
+
+    b?: number;
+>b : number
+}
+interface Bar {
+    a: number;
+>a : number
+
+    [n: string]: number;
+>n : string
+}
+let b: Bar = { a: 42, b: 43 };
+>b : Bar
+>{ a: 42, b: 43 } : { a: number; b: number; }
+>a : number
+>42 : 42
+>b : number
+>43 : 43
+
+// Error, index signature does not match optional property `b`
+let f: Foo = b;
+>f : Foo
+>b : Bar
+
+// OK
+let f2: Foo2 = b;
+>f2 : Foo2
+>b : Bar
+

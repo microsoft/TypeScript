@@ -1,0 +1,16 @@
+=== tests/cases/compiler/assignRestElementToOptionalProperty.ts ===
+// Inspired by #27144
+
+let t: [number, ...string[]];
+>t : Symbol(t, Decl(assignRestElementToOptionalProperty.ts, 2, 3))
+
+// Error, rest type of `t` does not match element 1 of `t2`
+let t2: [number, number?, ...string[]] = t;
+>t2 : Symbol(t2, Decl(assignRestElementToOptionalProperty.ts, 4, 3))
+>t : Symbol(t, Decl(assignRestElementToOptionalProperty.ts, 2, 3))
+
+// OK
+let t3: [number, string?, ...string[]] = t;
+>t3 : Symbol(t3, Decl(assignRestElementToOptionalProperty.ts, 6, 3))
+>t : Symbol(t, Decl(assignRestElementToOptionalProperty.ts, 2, 3))
+
