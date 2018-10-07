@@ -4835,5 +4835,9 @@
     "Enable the 'experimentalDecorators' option in your configuration file": {
         "category": "Message",
         "code": 95074
+    },
+    "Make all const or readonly expressions reassignable": {
+        "category": "Message",
+        "code": 95075
     }
 }
