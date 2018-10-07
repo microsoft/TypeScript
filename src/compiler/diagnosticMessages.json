@@ -4683,5 +4683,9 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Make all const or readonly expressions reassignable": {
+        "category": "Message",
+        "code": 95069
     }
 }
