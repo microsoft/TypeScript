@@ -16,11 +16,9 @@ namespace ts.codefix {
 
     function addMissingNewOperator(changes: textChanges.ChangeTracker, sourceFile: SourceFile, span: TextSpan): void {
         const call = cast(findAncestorMatchingSpan(sourceFile, span), isCallExpression);
-        changes.insertNodeAt(sourceFile, span.start, createToken(SyntaxKind.NewKeyword), { suffix: " " });
-        if (isCallExpression(call.expression)) {
-            changes.insertNodeAt(sourceFile, call.expression.getStart(sourceFile), createToken(SyntaxKind.OpenParenToken));
-            changes.insertNodeAt(sourceFile, call.expression.end, createToken(SyntaxKind.CloseParenToken));
-        }
+        const newExpression = createNew(call.expression, call.typeArguments, call.arguments);
+
+        changes.replaceNode(sourceFile, call, newExpression);
     }
 
     function findAncestorMatchingSpan(sourceFile: SourceFile, span: TextSpan): Node {
