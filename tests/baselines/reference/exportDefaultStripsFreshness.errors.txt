@@ -1,0 +1,34 @@
+tests/cases/compiler/index.ts(10,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+  Property 'foo' is missing in type '{ foob: string; }'.
+tests/cases/compiler/index.ts(12,6): error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+  Property 'foo' is missing in type '{ foob: string; }'.
+
+
+==== tests/cases/compiler/items.ts (0 errors) ====
+    export default {
+        foob: "a"
+    }
+    
+    export const q = {
+        foob: "b"
+    }
+==== tests/cases/compiler/index.ts (2 errors) ====
+    import B, {q} from "./items";
+    
+    interface IFoo {
+        foo: string;
+    }
+    
+    function nFoo(x: IFoo) {}
+    
+    
+    nFoo(q); // for comparison
+         ~
+!!! error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+!!! error TS2345:   Property 'foo' is missing in type '{ foob: string; }'.
+    
+    nFoo(B);
+         ~
+!!! error TS2345: Argument of type '{ foob: string; }' is not assignable to parameter of type 'IFoo'.
+!!! error TS2345:   Property 'foo' is missing in type '{ foob: string; }'.
+    
