@@ -11817,6 +11817,20 @@ namespace ts {
                 return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
             }
 
+            function mayBeNever(type: Type): boolean {
+                if (type.flags & TypeFlags.Intersection) {
+                    return some((<IntersectionType>type).types, mayBeNever);
+                }
+                if (type.flags & TypeFlags.Union) {
+                    return every((<UnionType>type).types, mayBeNever);
+                }
+                if (type.flags & TypeFlags.Instantiable) {
+                    // Maybe we could be smarter in some cases.
+                    return true;
+                }
+                return !!(type.flags & TypeFlags.Never);
+            }
+
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -11915,6 +11929,21 @@ namespace ts {
                             if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
                                 return result;
                             }
+                        }
+                    }
+                }
+                else if (target.flags & TypeFlags.Conditional) {
+                    // A type T1 is related to a conditional type 'T2 extends U2 ? X2 : Y2' if the
+                    // conditional type has no infer type parameters, T1 is related to both X2 and
+                    // Y2, and (the conditional type is non-distributive or we know that T2 cannot
+                    // instantiate to never).
+                    if (!(<ConditionalType>target).root.inferTypeParameters &&
+                        (!(<ConditionalType>target).root.isDistributive || !mayBeNever((<ConditionalType>target).checkType))) {
+                        if (result = isRelatedTo(source, getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
+                            result &= isRelatedTo(source, getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
+                        }
+                        if (result) {
+                            return result;
                         }
                     }
                 }
