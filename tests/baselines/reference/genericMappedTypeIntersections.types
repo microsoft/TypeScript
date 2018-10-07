@@ -1,0 +1,21 @@
+=== tests/cases/compiler/genericMappedTypeIntersections.ts ===
+// Repro for #27484
+function makePropsForWrappedComponent<PassthroughProps, ExternalProps, InjectedProps>(
+>makePropsForWrappedComponent : <PassthroughProps, ExternalProps, InjectedProps>(outerProps: Readonly<PassthroughProps & ExternalProps>, injectedProps: Readonly<InjectedProps>) => Readonly<PassthroughProps & InjectedProps>
+
+    outerProps: Readonly<PassthroughProps & ExternalProps>,
+>outerProps : Readonly<PassthroughProps & ExternalProps>
+
+    injectedProps: Readonly<InjectedProps>): Readonly<PassthroughProps & InjectedProps> {
+>injectedProps : Readonly<InjectedProps>
+
+    return Object.assign({}, injectedProps, outerProps);
+>Object.assign({}, injectedProps, outerProps) : Readonly<InjectedProps> & Readonly<PassthroughProps & ExternalProps>
+>Object.assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>{} : {}
+>injectedProps : Readonly<InjectedProps>
+>outerProps : Readonly<PassthroughProps & ExternalProps>
+}
+

@@ -11817,6 +11817,16 @@ namespace ts {
                 return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
             }
 
+            function typeRelatedToMappedTypeTemplateConstituent(source: Type, parameter: TypeParameter, templateConstituent: Type, reportErrors: boolean) {
+                if (templateConstituent.flags & TypeFlags.IndexedAccess &&
+                    (<IndexedAccessType>templateConstituent).indexType === parameter) {
+                    return isRelatedTo(source, (<IndexedAccessType>templateConstituent).objectType, reportErrors);
+                }
+                else {
+                    return Ternary.False;
+                }
+            }
+
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -11853,8 +11863,10 @@ namespace ts {
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 const saveErrorInfo = errorInfo;
                 if (target.flags & TypeFlags.TypeParameter) {
-                    // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
-                    if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
+                    // A source type { [P in K]: X } is related to a target type T if keyof T is related to K
+                    // and X is related to T[P].
+                    if (getObjectFlags(source) & ObjectFlags.Mapped &&
+                        isRelatedTo(getIndexType(target), getConstraintTypeFromMappedType(<MappedType>source))) {
                         if (!(getMappedTypeModifiers(<MappedType>source) & MappedTypeModifiers.IncludeOptional)) {
                             const templateType = getTemplateTypeFromMappedType(<MappedType>source);
                             const indexedAccessType = getIndexedAccessType(target, getTypeParameterFromMappedType(<MappedType>source));
@@ -11904,9 +11916,22 @@ namespace ts {
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
                     if (!(modifiers & MappedTypeModifiers.ExcludeOptional)) {
-                        if (template.flags & TypeFlags.IndexedAccess && (<IndexedAccessType>template).objectType === source &&
-                            (<IndexedAccessType>template).indexType === getTypeParameterFromMappedType(target)) {
-                            return Ternary.True;
+                        const parameter = getTypeParameterFromMappedType(target);
+                        if (template.flags & TypeFlags.Intersection) {
+                            // C.f. typeRelatedToEachType
+                            result = Ternary.True;
+                            for (const templateConstituent of (<IntersectionType>template).types) {
+                                result &= typeRelatedToMappedTypeTemplateConstituent(source, parameter, templateConstituent, reportErrors);
+                                if (!result) {
+                                    break;
+                                }
+                            }
+                        }
+                        else {
+                            result = typeRelatedToMappedTypeTemplateConstituent(source, parameter, template, reportErrors);
+                        }
+                        if (result) {
+                            return result;
                         }
                         // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
                         if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {

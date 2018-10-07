@@ -1,0 +1,30 @@
+=== tests/cases/compiler/genericMappedTypeIntersections.ts ===
+// Repro for #27484
+function makePropsForWrappedComponent<PassthroughProps, ExternalProps, InjectedProps>(
+>makePropsForWrappedComponent : Symbol(makePropsForWrappedComponent, Decl(genericMappedTypeIntersections.ts, 0, 0))
+>PassthroughProps : Symbol(PassthroughProps, Decl(genericMappedTypeIntersections.ts, 1, 38))
+>ExternalProps : Symbol(ExternalProps, Decl(genericMappedTypeIntersections.ts, 1, 55))
+>InjectedProps : Symbol(InjectedProps, Decl(genericMappedTypeIntersections.ts, 1, 70))
+
+    outerProps: Readonly<PassthroughProps & ExternalProps>,
+>outerProps : Symbol(outerProps, Decl(genericMappedTypeIntersections.ts, 1, 86))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>PassthroughProps : Symbol(PassthroughProps, Decl(genericMappedTypeIntersections.ts, 1, 38))
+>ExternalProps : Symbol(ExternalProps, Decl(genericMappedTypeIntersections.ts, 1, 55))
+
+    injectedProps: Readonly<InjectedProps>): Readonly<PassthroughProps & InjectedProps> {
+>injectedProps : Symbol(injectedProps, Decl(genericMappedTypeIntersections.ts, 2, 59))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>InjectedProps : Symbol(InjectedProps, Decl(genericMappedTypeIntersections.ts, 1, 70))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>PassthroughProps : Symbol(PassthroughProps, Decl(genericMappedTypeIntersections.ts, 1, 38))
+>InjectedProps : Symbol(InjectedProps, Decl(genericMappedTypeIntersections.ts, 1, 70))
+
+    return Object.assign({}, injectedProps, outerProps);
+>Object.assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>assign : Symbol(ObjectConstructor.assign, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>injectedProps : Symbol(injectedProps, Decl(genericMappedTypeIntersections.ts, 2, 59))
+>outerProps : Symbol(outerProps, Decl(genericMappedTypeIntersections.ts, 1, 86))
+}
+
