@@ -6828,7 +6828,7 @@ namespace ts {
 
         function getConstraintTypeFromMappedType(type: MappedType) {
             return type.constraintType ||
-                (type.constraintType = instantiateType(getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)), type.mapper || identityMapper) || errorType);
+                (type.constraintType = getConstraintOfTypeParameter(getTypeParameterFromMappedType(type)) || errorType);
         }
 
         function getTemplateTypeFromMappedType(type: MappedType) {
@@ -10381,6 +10381,12 @@ namespace ts {
             const result = <AnonymousType>createObjectType(type.objectFlags | ObjectFlags.Instantiated, type.symbol);
             if (type.objectFlags & ObjectFlags.Mapped) {
                 (<MappedType>result).declaration = (<MappedType>type).declaration;
+                // C.f. instantiateSignature
+                const origTypeParameter = getTypeParameterFromMappedType(<MappedType>type);
+                const freshTypeParameter = cloneTypeParameter(origTypeParameter);
+                (<MappedType>result).typeParameter = freshTypeParameter;
+                mapper = combineTypeMappers(makeUnaryTypeMapper(origTypeParameter, freshTypeParameter), mapper);
+                freshTypeParameter.mapper = mapper;
             }
             result.target = type;
             result.mapper = mapper;
