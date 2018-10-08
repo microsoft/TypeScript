@@ -1935,7 +1935,7 @@ namespace ts {
                         combineValueAndTypeSymbols(symbolFromVariable, symbolFromModule) :
                         symbolFromModule || symbolFromVariable;
                     if (!symbol) {
-                        const moduleName = getFullyQualifiedName(moduleSymbol);
+                        const moduleName = getFullyQualifiedName(moduleSymbol, node);
                         const declarationName = declarationNameToString(name);
                         const suggestion = getSuggestedSymbolForNonexistentModule(name, targetSymbol);
                         if (suggestion !== undefined) {
@@ -2101,8 +2101,8 @@ namespace ts {
             }
         }
 
-        function getFullyQualifiedName(symbol: Symbol): string {
-            return symbol.parent ? getFullyQualifiedName(symbol.parent) + "." + symbolToString(symbol) : symbolToString(symbol);
+        function getFullyQualifiedName(symbol: Symbol, containingLocation?: Node): string {
+            return symbol.parent ? getFullyQualifiedName(symbol.parent, containingLocation) + "." + symbolToString(symbol) : symbolToString(symbol, containingLocation, /*meaning*/ undefined, SymbolFormatFlags.DoNotIncludeSymbolChain | SymbolFormatFlags.AllowAnyNodeKind);
         }
 
         /**
@@ -3078,6 +3078,9 @@ namespace ts {
             if (flags & SymbolFormatFlags.UseAliasDefinedOutsideCurrentScope) {
                 nodeFlags |= NodeBuilderFlags.UseAliasDefinedOutsideCurrentScope;
             }
+            if (flags & SymbolFormatFlags.DoNotIncludeSymbolChain) {
+                nodeFlags |= NodeBuilderFlags.DoNotIncludeSymbolChain;
+            }
             const builder = flags & SymbolFormatFlags.AllowAnyNodeKind ? nodeBuilder.symbolToExpression : nodeBuilder.symbolToEntityName;
             return writer ? symbolToStringWorker(writer).getText() : usingSingleLineStringWriter(symbolToStringWorker);
 
@@ -3155,7 +3158,12 @@ namespace ts {
                 const context: NodeBuilderContext = {
                     enclosingDeclaration,
                     flags: flags || NodeBuilderFlags.None,
-                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop },
+                    // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
+                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
+                        getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+                        getSourceFiles: () => host.getSourceFiles(),
+                        getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
+                    } : undefined },
                     encounteredError: false,
                     visitedSymbols: undefined,
                     inferTypeParameters: undefined,
@@ -3885,7 +3893,7 @@ namespace ts {
                 // Try to get qualified name if the symbol is not a type parameter and there is an enclosing declaration.
                 let chain: Symbol[];
                 const isTypeParameter = symbol.flags & SymbolFlags.TypeParameter;
-                if (!isTypeParameter && (context.enclosingDeclaration || context.flags & NodeBuilderFlags.UseFullyQualifiedType)) {
+                if (!isTypeParameter && (context.enclosingDeclaration || context.flags & NodeBuilderFlags.UseFullyQualifiedType) && !(context.flags & NodeBuilderFlags.DoNotIncludeSymbolChain)) {
                     chain = Debug.assertDefined(getSymbolChain(symbol, meaning, /*endOfChain*/ true));
                     Debug.assert(chain && chain.length > 0);
                 }
@@ -4140,6 +4148,9 @@ namespace ts {
                 function createExpressionFromSymbolChain(chain: Symbol[], index: number): Expression {
                     const typeParameterNodes = lookupTypeParameterNodes(chain, index, context);
                     const symbol = chain[index];
+                    if (some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
+                        return createLiteral(getSpecifierForModuleSymbol(symbol, context));
+                    }
 
                     if (index === 0) {
                         context.flags |= NodeBuilderFlags.InInitialEntityName;
