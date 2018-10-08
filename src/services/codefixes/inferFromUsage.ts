@@ -177,6 +177,32 @@ namespace ts.codefix {
         }
     }
 
+    function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
+        const param = firstOrUndefined(setAccessorDeclaration.parameters);
+        if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
+            const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
+                inferTypeForVariableFromUsage(param.name, program, cancellationToken);
+            if (isInJSFile(setAccessorDeclaration)) {
+                annotateJSDocParameters(changes, sourceFile, [{ declaration: param, type }], program);
+            }
+            else {
+                annotate(changes, sourceFile, param, type, program);
+            }
+        }
+    }
+
+    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
+        const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
+        if (typeNode) {
+            if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
+                changes.tryInsertJSDocType(sourceFile, declaration, typeNode);
+            }
+            else {
+                changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
+            }
+        }
+    }
+
     function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbols: ParameterInference[], program: Program): void {
         const result = [];
         for (const symbol of symbols) {
@@ -189,38 +215,7 @@ namespace ts.codefix {
         changes.tryInsertJSDocParameters(sourceFile, result);
     }
 
-    function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
-        const param = firstOrUndefined(setAccessorDeclaration.parameters);
-        if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
-            const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
-                inferTypeForVariableFromUsage(param.name, program, cancellationToken);
-            if (isInJSFile(setAccessorDeclaration)) {
-                const typeNode = type && getTypeNodeIfAccessible(type, param, program.getTypeChecker());
-                if (typeNode) {
-                    changes.tryInsertJSDocParameters(sourceFile, [{ declaration: param, typeNode }]);
-                }
-            }
-            else {
-                annotate(changes, sourceFile, param, type, program);
-            }
-        }
-    }
-
-    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
-        const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-
-        if (typeNode) {
-            if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-                // TODO: Lift this out into callers (and maybe tryInsertJSDocType too?)
-                changes.tryInsertJSDocType(sourceFile, declaration, typeNode);
-            }
-            else {
-                changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
-            }
-        }
-    }
-
-    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
+   function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };
         const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
