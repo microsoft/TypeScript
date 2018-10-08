@@ -167,7 +167,7 @@ namespace ts.server {
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
             // Only non typescript files have size limitation
-            if (!hasTypeScriptFileExtension(this.fileName)) {
+            if (!hasTSFileExtension(this.fileName)) {
                 const fileSize = this.host.getFileSize ? this.host.getFileSize(fileName) : getText().length;
                 if (fileSize > maxFileSize) {
                     Debug.assert(!!this.info.containingProjects.length);
@@ -234,7 +234,7 @@ namespace ts.server {
          */
         readonly containingProjects: Project[] = [];
         private formatSettings: FormatCodeSettings | undefined;
-        private preferences: UserPreferences | undefined;
+        private preferences: protocol.UserPreferences | undefined;
 
         /* @internal */
         fileWatcher: FileWatcher | undefined;
@@ -249,6 +249,9 @@ namespace ts.server {
 
         /*@internal*/
         cacheSourceFile: DocumentRegistrySourceFileCache;
+
+        /*@internal*/
+        mTime?: number;
 
         constructor(
             private readonly host: ServerHost,
@@ -333,7 +336,7 @@ namespace ts.server {
         }
 
         getFormatCodeSettings(): FormatCodeSettings | undefined { return this.formatSettings; }
-        getPreferences(): UserPreferences | undefined { return this.preferences; }
+        getPreferences(): protocol.UserPreferences | undefined { return this.preferences; }
 
         attachToProject(project: Project): boolean {
             const isNew = !this.isAttached(project);
@@ -432,7 +435,7 @@ namespace ts.server {
             }
         }
 
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void {
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
                     this.formatSettings = getDefaultFormatCodeSettings(this.host);

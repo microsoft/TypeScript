@@ -1,11 +1,11 @@
 /*@internal*/
 namespace ts {
     export function getDeclarationDiagnostics(host: EmitHost, resolver: EmitResolver, file: SourceFile | undefined): DiagnosticWithLocation[] | undefined {
-        if (file && isSourceFileJavaScript(file)) {
+        if (file && isSourceFileJS(file)) {
             return []; // No declaration diagnostics for js for now
         }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJavaScript), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJS), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -157,7 +157,7 @@ namespace ts {
         function transformRoot(node: SourceFile): SourceFile;
         function transformRoot(node: SourceFile | Bundle): SourceFile | Bundle;
         function transformRoot(node: SourceFile | Bundle) {
-            if (node.kind === SyntaxKind.SourceFile && (node.isDeclarationFile || isSourceFileJavaScript(node))) {
+            if (node.kind === SyntaxKind.SourceFile && (node.isDeclarationFile || isSourceFileJS(node))) {
                 return node;
             }
 
@@ -168,7 +168,7 @@ namespace ts {
                 let hasNoDefaultLib = false;
                 const bundle = createBundle(map(node.sourceFiles,
                     sourceFile => {
-                        if (sourceFile.isDeclarationFile || isSourceFileJavaScript(sourceFile)) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
+                        if (sourceFile.isDeclarationFile || isSourceFileJS(sourceFile)) return undefined!; // Omit declaration files from bundle results, too // TODO: GH#18217
                         hasNoDefaultLib = hasNoDefaultLib || sourceFile.hasNoDefaultLib;
                         currentSourceFile = sourceFile;
                         enclosingDeclaration = sourceFile;
@@ -289,6 +289,13 @@ namespace ts {
                         if (startsWith(fileName, "./") && hasExtension(fileName)) {
                             fileName = fileName.substring(2);
                         }
+
+                        // omit references to files from node_modules (npm may disambiguate module
+                        // references when installing this package, making the path is unreliable).
+                        if (startsWith(fileName, "node_modules/") || fileName.indexOf("/node_modules/") !== -1) {
+                            return;
+                        }
+
                         references.push({ pos: -1, end: -1, fileName });
                     }
                 };
@@ -296,7 +303,7 @@ namespace ts {
         }
 
         function collectReferences(sourceFile: SourceFile, ret: Map<SourceFile>) {
-            if (noResolve || isSourceFileJavaScript(sourceFile)) return ret;
+            if (noResolve || isSourceFileJS(sourceFile)) return ret;
             forEach(sourceFile.referencedFiles, f => {
                 const elem = tryResolveScriptReference(host, sourceFile, f);
                 if (elem) {
@@ -971,7 +978,7 @@ namespace ts {
                 }
                 case SyntaxKind.FunctionDeclaration: {
                     // Generators lose their generator-ness, excepting their return type
-                    return cleanup(updateFunctionDeclaration(
+                    const clean = cleanup(updateFunctionDeclaration(
                         input,
                         /*decorators*/ undefined,
                         ensureModifiers(input, isPrivate),
@@ -982,6 +989,21 @@ namespace ts {
                         ensureType(input, input.type),
                         /*body*/ undefined
                     ));
+                    if (clean && resolver.isExpandoFunctionDeclaration(input)) {
+                        const declarations = mapDefined(resolver.getPropertiesOfContainerFunction(input), p => {
+                            if (!isPropertyAccessExpression(p.valueDeclaration)) {
+                                return undefined;
+                            }
+                            const type = resolver.createTypeOfDeclaration(p.valueDeclaration, enclosingDeclaration, declarationEmitNodeBuilderFlags, symbolTracker);
+                            const varDecl = createVariableDeclaration(unescapeLeadingUnderscores(p.escapedName), type, /*initializer*/ undefined);
+                            return createVariableStatement(/*modifiers*/ undefined, createVariableDeclarationList([varDecl]));
+                        });
+                        const namespaceDecl = createModuleDeclaration(/*decorators*/ undefined, ensureModifiers(input, isPrivate), input.name!, createModuleBlock(declarations), NodeFlags.Namespace);
+                        return [clean, namespaceDecl];
+                    }
+                    else {
+                        return clean;
+                    }
                 }
                 case SyntaxKind.ModuleDeclaration: {
                     needsDeclare = false;
@@ -1309,12 +1331,13 @@ namespace ts {
     }
 
     type CanHaveLiteralInitializer = VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration;
-    function canHaveLiteralInitializer(node: Node): node is CanHaveLiteralInitializer {
+    function canHaveLiteralInitializer(node: Node): boolean {
         switch (node.kind) {
-            case SyntaxKind.VariableDeclaration:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
+                return !hasModifier(node, ModifierFlags.Private);
             case SyntaxKind.Parameter:
+            case SyntaxKind.VariableDeclaration:
                 return true;
         }
         return false;

@@ -48,8 +48,8 @@ var n = ExpandoDecl.prop + ExpandoDecl.m(12) + ExpandoDecl(101).length
 >length : number
 
 const ExpandoExpr = function (n: number) {
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
->function (n: number) {    return n.toString();} : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+>function (n: number) {    return n.toString();} : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >n : number
 
     return n.toString();
@@ -58,17 +58,28 @@ const ExpandoExpr = function (n: number) {
 >n : number
 >toString : (radix?: number) => string
 }
-ExpandoExpr.prop = 2
->ExpandoExpr.prop = 2 : 2
->ExpandoExpr.prop : number
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
->prop : number
+ExpandoExpr.prop = { x: 2 }
+>ExpandoExpr.prop = { x: 2 } : { x: number; }
+>ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+>prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+>{ x: 2 } : { x: number; }
+>x : number
 >2 : 2
+
+ExpandoExpr.prop = { y: "" }
+>ExpandoExpr.prop = { y: "" } : { y: string; }
+>ExpandoExpr.prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+>prop : { x: number; y?: undefined; } | { y: string; x?: undefined; }
+>{ y: "" } : { y: string; }
+>y : string
+>"" : ""
 
 ExpandoExpr.m = function(n: number) {
 >ExpandoExpr.m = function(n: number) {    return n + 1;} : (n: number) => number
 >ExpandoExpr.m : (n: number) => number
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >m : (n: number) => number
 >function(n: number) {    return n + 1;} : (n: number) => number
 >n : number
@@ -78,21 +89,26 @@ ExpandoExpr.m = function(n: number) {
 >n : number
 >1 : 1
 }
-var n = ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length
+var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >n : number
->ExpandoExpr.prop + ExpandoExpr.m(12) + ExpandoExpr(101).length : number
->ExpandoExpr.prop + ExpandoExpr.m(12) : number
->ExpandoExpr.prop : number
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
->prop : number
+>(ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length : number
+>(ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) : number
+>(ExpandoExpr.prop.x || 0) : 0
+>ExpandoExpr.prop.x || 0 : 0
+>ExpandoExpr.prop.x : undefined
+>ExpandoExpr.prop : { y: string; x?: undefined; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
+>prop : { y: string; x?: undefined; }
+>x : undefined
+>0 : 0
 >ExpandoExpr.m(12) : number
 >ExpandoExpr.m : (n: number) => number
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >m : (n: number) => number
 >12 : 12
 >ExpandoExpr(101).length : number
 >ExpandoExpr(101) : string
->ExpandoExpr : { (n: number): string; prop: number; m(n: number): number; }
+>ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
 >101 : 101
 >length : number
 
@@ -125,6 +141,110 @@ ExpandoArrow.m = function(n: number) {
 >n : number
 >1 : 1
 
+}
+
+function ExpandoNested(n: number) {
+>ExpandoNested : typeof ExpandoNested
+>n : number
+
+    const nested = function (m: number) {
+>nested : { (m: number): number; total: number; }
+>function (m: number) {        return n + m;    } : { (m: number): number; total: number; }
+>m : number
+
+        return n + m;
+>n + m : number
+>n : number
+>m : number
+
+    };
+    nested.total = n + 1_000_000;
+>nested.total = n + 1_000_000 : number
+>nested.total : number
+>nested : { (m: number): number; total: number; }
+>total : number
+>n + 1_000_000 : number
+>n : number
+>1_000_000 : 1000000
+
+    return nested;
+>nested : { (m: number): number; total: number; }
+}
+ExpandoNested.also = -1;
+>ExpandoNested.also = -1 : -1
+>ExpandoNested.also : number
+>ExpandoNested : typeof ExpandoNested
+>also : number
+>-1 : -1
+>1 : 1
+
+function ExpandoMerge(n: number) {
+>ExpandoMerge : typeof ExpandoMerge
+>n : number
+
+    return n * 100;
+>n * 100 : number
+>n : number
+>100 : 100
+}
+ExpandoMerge.p1 = 111
+>ExpandoMerge.p1 = 111 : 111
+>ExpandoMerge.p1 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p1 : number
+>111 : 111
+
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p2 = 222;
+>p2 : number
+>222 : 222
+}
+namespace ExpandoMerge {
+>ExpandoMerge : typeof ExpandoMerge
+
+    export var p3 = 333;
+>p3 : number
+>333 : 333
+}
+var n = ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1);
+>n : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 + ExpandoMerge(1) : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 + ExpandoMerge.p3 : number
+>ExpandoMerge.p1 + ExpandoMerge.p2 : number
+>ExpandoMerge.p1 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p1 : number
+>ExpandoMerge.p2 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p2 : number
+>ExpandoMerge.p3 : number
+>ExpandoMerge : typeof ExpandoMerge
+>p3 : number
+>ExpandoMerge(1) : number
+>ExpandoMerge : typeof ExpandoMerge
+>1 : 1
+
+namespace Ns {
+>Ns : typeof Ns
+
+    function ExpandoNamespace(): void {}
+>ExpandoNamespace : { (): void; p6: number; }
+
+    ExpandoNamespace.p6 = 42;
+>ExpandoNamespace.p6 = 42 : 42
+>ExpandoNamespace.p6 : number
+>ExpandoNamespace : { (): void; p6: number; }
+>p6 : number
+>42 : 42
+
+    export function foo() {
+>foo : () => { (): void; p6: number; }
+
+        return ExpandoNamespace;
+>ExpandoNamespace : { (): void; p6: number; }
+    }
 }
 
 // Should not work in Typescript -- must be const

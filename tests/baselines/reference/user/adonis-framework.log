@@ -35,14 +35,19 @@ node_modules/adonis-framework/src/Env/index.js(54,15): error TS2304: Cannot find
 node_modules/adonis-framework/src/Env/index.js(56,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Env/index.js(80,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Event/index.js(13,21): error TS2307: Cannot find module 'adonis-fold'.
-node_modules/adonis-framework/src/Event/index.js(128,5): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
+node_modules/adonis-framework/src/Event/index.js(128,12): error TS2322: Type '() => {}[]' is not assignable to type 'any[]'.
   Property 'pop' is missing in type '() => {}[]'.
 node_modules/adonis-framework/src/Event/index.js(153,25): error TS2339: Property 'wildcard' does not exist on type 'EventEmitter2'.
 node_modules/adonis-framework/src/Event/index.js(188,17): error TS2304: Cannot find name 'Spread'.
+node_modules/adonis-framework/src/Event/index.js(201,27): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'pop' is missing in type 'IArguments'.
 node_modules/adonis-framework/src/Event/index.js(207,24): error TS2304: Cannot find name 'Sring'.
 node_modules/adonis-framework/src/Event/index.js(256,52): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
   Type 'Function' provides no match for the signature '(...values: any[]): void'.
 node_modules/adonis-framework/src/Event/index.js(264,28): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
+node_modules/adonis-framework/src/Event/index.js(271,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
+  Property '0' is missing in type 'IArguments'.
+node_modules/adonis-framework/src/Event/index.js(278,25): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[string, any, TimerHandler]'.
 node_modules/adonis-framework/src/Event/index.js(294,30): error TS2345: Argument of type 'Function' is not assignable to parameter of type 'Listener'.
 node_modules/adonis-framework/src/Exceptions/index.js(13,14): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 node_modules/adonis-framework/src/Exceptions/index.js(27,12): error TS2554: Expected 0 arguments, but got 3.
@@ -107,6 +112,13 @@ node_modules/adonis-framework/src/Response/index.js(95,16): error TS2304: Cannot
 node_modules/adonis-framework/src/Response/index.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(299,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Response/index.js(323,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/ResourceCollection.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+  Property 'pop' is missing in type 'IArguments'.
+node_modules/adonis-framework/src/Route/ResourceCollection.js(56,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/ResourceMember.js(43,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/ResourceMember.js(56,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/group.js(34,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/group.js(43,41): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/helpers.js(22,13): error TS2304: Cannot find name 'Any'.
 node_modules/adonis-framework/src/Route/helpers.js(34,3): error TS2322: Type 'string | string[]' is not assignable to type 'string'.
   Type 'string[]' is not assignable to type 'string'.
@@ -120,6 +132,8 @@ node_modules/adonis-framework/src/Route/index.js(259,21): error TS2345: Argument
 node_modules/adonis-framework/src/Route/index.js(280,21): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/index.js(321,13): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/index.js(321,20): error TS8029: JSDoc '@param' tag has name 'keys', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/index.js(333,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
+node_modules/adonis-framework/src/Route/index.js(343,33): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/index.js(354,20): error TS2694: Namespace 'Route' has no exported member 'Group'.
 node_modules/adonis-framework/src/Route/index.js(368,3): error TS2322: Type 'null' is not assignable to type 'string'.
 node_modules/adonis-framework/src/Route/index.js(396,10): error TS2554: Expected 2 arguments, but got 3.
@@ -133,11 +147,16 @@ node_modules/adonis-framework/src/Route/resource.js(96,25): error TS2345: Argume
 node_modules/adonis-framework/src/Route/resource.js(97,25): error TS2345: Argument of type 'string[]' is not assignable to parameter of type 'string'.
 node_modules/adonis-framework/src/Route/resource.js(172,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(172,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/resource.js(183,45): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/resource.js(198,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(198,22): error TS8029: JSDoc '@param' tag has name 'methods', but there is no parameter with that name. It would match 'arguments' if it had an array type.
+node_modules/adonis-framework/src/Route/resource.js(209,45): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Route/resource.js(233,15): error TS2304: Cannot find name 'Mixed'.
 node_modules/adonis-framework/src/Route/resource.js(261,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/resource.js(290,40): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any, ...any[]]'.
+  Property '0' is missing in type 'IArguments'.
 node_modules/adonis-framework/src/Route/resource.js(296,15): error TS2304: Cannot find name 'Mixed'.
+node_modules/adonis-framework/src/Route/resource.js(314,62): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
 node_modules/adonis-framework/src/Server/helpers.js(17,29): error TS8024: JSDoc '@param' tag has name 'appNamespace', but there is no parameter with that name.
 node_modules/adonis-framework/src/Server/index.js(17,21): error TS2307: Cannot find module 'adonis-fold'.
 node_modules/adonis-framework/src/Server/index.js(54,21): error TS2554: Expected 4 arguments, but got 3.

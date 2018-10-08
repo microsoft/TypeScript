@@ -58,9 +58,9 @@ export function css<S extends { [K in keyof S]: string }>(styles: S, ...classNam
 >"string" : "string"
 
       return styles[arg];
->styles[arg] : S[keyof S]
+>styles[arg] : S[keyof S & string]
 >styles : S
->arg : keyof S
+>arg : keyof S & string
     }
     if (typeof arg == "object") {
 >typeof arg == "object" : boolean

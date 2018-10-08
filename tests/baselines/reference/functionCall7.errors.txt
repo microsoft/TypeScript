@@ -17,4 +17,5 @@ tests/cases/compiler/functionCall7.ts(7,1): error TS2554: Expected 1 arguments, 
     foo();
     ~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/functionCall7.ts:2:14: An argument for 'a' was not provided.
     

@@ -65,12 +65,10 @@ f20(42, ...t2);
 f20(42, "hello", ...t3);
 f20(42, "hello", ...t2, true);
 
-type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new(...args: infer U) => any) ? U : any[];
-
 type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
 type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
-type T03 = Parameters<new (x: number, y: string, ...z: boolean[]) => void>;
-type T04 = Parameters<new (...args: [number, string, ...boolean[]]) => void>;
+type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
+type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
 type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 type T06 = T05<[number, ...boolean[]]>;
 
@@ -142,11 +140,10 @@ declare let f13: (a: number, b: string, ...c: boolean[]) => void;
 declare const ns: [number, string];
 declare const sn: [string, number];
 declare const f20: <T extends unknown[]>(...args: T) => T;
-declare type Parameters<T extends Function> = T extends ((...args: infer U) => any) | (new (...args: infer U) => any) ? U : any[];
 declare type T01 = Parameters<(x: number, y: string, ...z: boolean[]) => void>;
 declare type T02 = Parameters<(...args: [number, string, ...boolean[]]) => void>;
-declare type T03 = Parameters<new (x: number, y: string, ...z: boolean[]) => void>;
-declare type T04 = Parameters<new (...args: [number, string, ...boolean[]]) => void>;
+declare type T03 = ConstructorParameters<new (x: number, y: string, ...z: boolean[]) => void>;
+declare type T04 = ConstructorParameters<new (...args: [number, string, ...boolean[]]) => void>;
 declare type T05<T extends any[]> = Parameters<(x: string, ...args: T) => void>;
 declare type T06 = T05<[number, ...boolean[]]>;
 declare type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? {

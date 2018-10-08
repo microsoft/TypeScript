@@ -1087,16 +1087,17 @@ namespace ts.server.protocol {
     /**
      * Information about the item to be renamed.
      */
-    export interface RenameInfo {
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
         /**
          * True if item can be renamed.
          */
-        canRename: boolean;
-
+        canRename: true;
         /**
-         * Error message if item can not be renamed.
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
-        localizedErrorMessage?: string;
+        fileToRename?: string;
 
         /**
          * Display name of the item to be renamed.
@@ -1117,6 +1118,16 @@ namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers: string;
+
+        /** Span of text to rename. */
+        triggerSpan: TextSpan;
+    }
+    export interface RenameInfoFailure {
+        canRename: false;
+        /**
+         * Error message if item can not be renamed.
+         */
+        localizedErrorMessage: string;
     }
 
     /**
@@ -1126,7 +1137,12 @@ namespace ts.server.protocol {
         /** The file to which the spans apply */
         file: string;
         /** The text spans in this group */
-        locs: TextSpan[];
+        locs: RenameTextSpan[];
+    }
+
+    export interface RenameTextSpan extends TextSpan {
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
 
     export interface RenameResponseBody {
@@ -1839,7 +1855,7 @@ namespace ts.server.protocol {
      * begin with prefix.
      */
     export interface CompletionsRequest extends FileLocationRequest {
-        command: CommandTypes.Completions;
+        command: CommandTypes.Completions | CommandTypes.CompletionInfo;
         arguments: CompletionsRequestArgs;
     }
 
@@ -2436,6 +2452,42 @@ namespace ts.server.protocol {
         openFiles: string[];
     }
 
+    export type ProjectLoadingStartEventName = "projectLoadingStart";
+    export interface ProjectLoadingStartEvent extends Event {
+        event: ProjectLoadingStartEventName;
+        body: ProjectLoadingStartEventBody;
+    }
+
+    export interface ProjectLoadingStartEventBody {
+        /** name of the project */
+        projectName: string;
+        /** reason for loading */
+        reason: string;
+    }
+
+    export type ProjectLoadingFinishEventName = "projectLoadingFinish";
+    export interface ProjectLoadingFinishEvent extends Event {
+        event: ProjectLoadingFinishEventName;
+        body: ProjectLoadingFinishEventBody;
+    }
+
+    export interface ProjectLoadingFinishEventBody {
+        /** name of the project */
+        projectName: string;
+    }
+
+    export type SurveyReadyEventName = "surveyReady";
+
+    export interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+
+    export interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+    }
+
     export type LargeFileReferencedEventName = "largeFileReferenced";
     export interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -2716,6 +2768,14 @@ namespace ts.server.protocol {
         payload: TypingsInstalledTelemetryEventPayload;
     }
 
+/* __GDPR__
+   "typingsinstalled" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
+        "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
+        "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+   }
+ */
     export interface TypingsInstalledTelemetryEventPayload {
         /**
          * Comma separated list of installed typing packages
@@ -2823,6 +2883,7 @@ namespace ts.server.protocol {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
     }
 
     export interface CompilerOptions {

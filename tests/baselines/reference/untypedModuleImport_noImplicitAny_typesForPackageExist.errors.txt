@@ -1,11 +1,11 @@
 /a.ts(2,25): error TS7016: Could not find a declaration file for module 'foo/sub'. '/node_modules/foo/sub.js' implicitly has an 'any' type.
   If the 'foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/foo`
 /a.ts(3,25): error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
-  Try `npm install @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
+  Try `npm install @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar/sub';`
 /a.ts(5,30): error TS7016: Could not find a declaration file for module '@scope/foo/sub'. '/node_modules/@scope/foo/sub.js' implicitly has an 'any' type.
   If the '@scope/foo' package actually exposes this module, consider sending a pull request to amend 'https://github.com/DefinitelyTyped/DefinitelyTyped/tree/master/types/scope__foo`
 /a.ts(6,30): error TS7016: Could not find a declaration file for module '@scope/bar/sub'. '/node_modules/@scope/bar/sub.js' implicitly has an 'any' type.
-  Try `npm install @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar';`
+  Try `npm install @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar/sub';`
 
 
 ==== /a.ts (4 errors) ====
@@ -17,7 +17,7 @@
     import * as barSub from "bar/sub";
                             ~~~~~~~~~
 !!! error TS7016: Could not find a declaration file for module 'bar/sub'. '/node_modules/bar/sub.js' implicitly has an 'any' type.
-!!! error TS7016:   Try `npm install @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar';`
+!!! error TS7016:   Try `npm install @types/bar` if it exists or add a new declaration (.d.ts) file containing `declare module 'bar/sub';`
     import * as scopeFoo from "@scope/foo";
     import * as scopeFooSub from "@scope/foo/sub";
                                  ~~~~~~~~~~~~~~~~
@@ -26,7 +26,7 @@
     import * as scopeBarSub from "@scope/bar/sub";
                                  ~~~~~~~~~~~~~~~~
 !!! error TS7016: Could not find a declaration file for module '@scope/bar/sub'. '/node_modules/@scope/bar/sub.js' implicitly has an 'any' type.
-!!! error TS7016:   Try `npm install @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar';`
+!!! error TS7016:   Try `npm install @types/scope__bar` if it exists or add a new declaration (.d.ts) file containing `declare module '@scope/bar/sub';`
     
 ==== /node_modules/@types/foo/index.d.ts (0 errors) ====
     export const foo: number;

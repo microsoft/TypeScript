@@ -23,8 +23,10 @@ namespace ts {
 
     export function getMeaningFromDeclaration(node: Node): SemanticMeaning {
         switch (node.kind) {
-            case SyntaxKind.Parameter:
             case SyntaxKind.VariableDeclaration:
+                return isInJSFile(node) && getJSDocEnumTag(node) ? SemanticMeaning.All : SemanticMeaning.Value;
+
+            case SyntaxKind.Parameter:
             case SyntaxKind.BindingElement:
             case SyntaxKind.PropertyDeclaration:
             case SyntaxKind.PropertySignature:
@@ -88,7 +90,7 @@ namespace ts {
         if (node.kind === SyntaxKind.SourceFile) {
             return SemanticMeaning.Value;
         }
-        else if (node.parent.kind === SyntaxKind.ExportAssignment) {
+        else if (node.parent.kind === SyntaxKind.ExportAssignment || node.parent.kind === SyntaxKind.ExternalModuleReference) {
             return SemanticMeaning.All;
         }
         else if (isInRightSideOfInternalImportEqualsDeclaration(node)) {
@@ -224,6 +226,14 @@ namespace ts {
         return undefined;
     }
 
+    export function hasPropertyAccessExpressionWithName(node: CallExpression, funcName: string): boolean {
+        if (!isPropertyAccessExpression(node.expression)) {
+            return false;
+        }
+
+        return node.expression.name.text === funcName;
+    }
+
     export function isJumpStatementTarget(node: Node): node is Identifier & { parent: BreakOrContinueStatement } {
         return node.kind === SyntaxKind.Identifier && isBreakOrContinueStatement(node.parent) && node.parent.label === node;
     }
@@ -355,23 +365,23 @@ namespace ts {
             case SyntaxKind.NamespaceImport:
                 return ScriptElementKind.alias;
             case SyntaxKind.BinaryExpression:
-                const kind = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const kind = getAssignmentDeclarationKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
                 switch (kind) {
-                    case SpecialPropertyAssignmentKind.None:
+                    case AssignmentDeclarationKind.None:
                         return ScriptElementKind.unknown;
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
+                    case AssignmentDeclarationKind.ExportsProperty:
+                    case AssignmentDeclarationKind.ModuleExports:
                         const rightKind = getNodeKind(right);
                         return rightKind === ScriptElementKind.unknown ? ScriptElementKind.constElement : rightKind;
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
+                    case AssignmentDeclarationKind.PrototypeProperty:
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
-                    case SpecialPropertyAssignmentKind.ThisProperty:
+                    case AssignmentDeclarationKind.ThisProperty:
                         return ScriptElementKind.memberVariableElement; // property
-                    case SpecialPropertyAssignmentKind.Property:
+                    case AssignmentDeclarationKind.Property:
                         // static method / property
                         return isFunctionExpression(right) ? ScriptElementKind.memberFunctionElement : ScriptElementKind.memberVariableElement;
-                    case SpecialPropertyAssignmentKind.Prototype:
+                    case AssignmentDeclarationKind.Prototype:
                         return ScriptElementKind.localClassElement;
                     default: {
                         assertType<never>(kind);
@@ -755,7 +765,7 @@ namespace ts {
         return result;
 
         function find(n: Node): Node | undefined {
-            if (isNonWhitespaceToken(n)) {
+            if (isNonWhitespaceToken(n) && n.kind !== SyntaxKind.EndOfFileToken) {
                 return n;
             }
 
@@ -786,16 +796,14 @@ namespace ts {
                 }
             }
 
-            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || isJSDocCommentContainingNode(n));
+            Debug.assert(startNode !== undefined || n.kind === SyntaxKind.SourceFile || n.kind === SyntaxKind.EndOfFileToken || isJSDocCommentContainingNode(n));
 
             // Here we know that none of child token nodes embrace the position,
             // the only known case is when position is at the end of the file.
             // Try to find the rightmost token in the file without filtering.
             // Namely we are skipping the check: 'position < node.end'
-            if (children.length) {
-                const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
-                return candidate && findRightmostToken(candidate, sourceFile);
-            }
+            const candidate = findRightmostChildNodeWithTokens(children, /*exclusiveStartPosition*/ children.length, sourceFile);
+            return candidate && findRightmostToken(candidate, sourceFile);
         }
     }
 
@@ -1048,7 +1056,7 @@ namespace ts {
     function nodeHasTokens(n: Node, sourceFile: SourceFileLike): boolean {
         // If we have a token or node that has a non-zero width, it must have tokens.
         // Note: getWidth() does not take trivia into account.
-        return n.getWidth(sourceFile) !== 0;
+        return n.kind === SyntaxKind.EndOfFileToken ? !!(n as EndOfFileToken).jsDoc : n.getWidth(sourceFile) !== 0;
     }
 
     export function getNodeModifiers(node: Node): string {
@@ -1165,7 +1173,7 @@ namespace ts {
     }
 
     export function createTextRangeFromNode(node: Node, sourceFile: SourceFile): TextRange {
-        return createTextRange(node.getStart(sourceFile), node.end);
+        return createRange(node.getStart(sourceFile), node.end);
     }
 
     export function createTextSpanFromRange(range: TextRange): TextSpan {
@@ -1173,7 +1181,7 @@ namespace ts {
     }
 
     export function createTextRangeFromSpan(span: TextSpan): TextRange {
-        return createTextRange(span.start, span.start + span.length);
+        return createRange(span.start, span.start + span.length);
     }
 
     export function createTextChangeFromStartLength(start: number, length: number, newText: string): TextChange {
@@ -1317,7 +1325,16 @@ namespace ts {
         });
     }
 
-    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: BindingElement & { name: Identifier }) {
+    export type ObjectBindingElementWithoutPropertyName = BindingElement & { name: Identifier };
+
+    export function isObjectBindingElementWithoutPropertyName(bindingElement: Node): bindingElement is ObjectBindingElementWithoutPropertyName {
+        return isBindingElement(bindingElement) &&
+            isObjectBindingPattern(bindingElement.parent) &&
+            isIdentifier(bindingElement.name) &&
+            !bindingElement.propertyName;
+    }
+
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName) {
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
         const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
         if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
@@ -1657,11 +1674,10 @@ namespace ts {
         return clone;
     }
 
-    export function getSynthesizedDeepCloneWithRenames<T extends Node | undefined>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
-
+    export function getSynthesizedDeepCloneWithRenames<T extends Node>(node: T, includeTrivia = true, renameMap?: Map<Identifier>, checker?: TypeChecker, callback?: (originalNode: Node, clone: Node) => any): T {
         let clone;
-        if (node && isIdentifier(node!) && renameMap && checker) {
-            const symbol = checker.getSymbolAtLocation(node!);
+        if (isIdentifier(node) && renameMap && checker) {
+            const symbol = checker.getSymbolAtLocation(node);
             const renameInfo = symbol && renameMap.get(String(getSymbolId(symbol)));
 
             if (renameInfo) {
@@ -1670,11 +1686,11 @@ namespace ts {
         }
 
         if (!clone) {
-            clone = node && getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
+            clone = getSynthesizedDeepCloneWorker(node as NonNullable<T>, renameMap, checker, callback);
         }
 
         if (clone && !includeTrivia) suppressLeadingAndTrailingTrivia(clone);
-        if (callback && node) callback(node!, clone);
+        if (callback && clone) callback(node, clone);
 
         return clone as T;
     }

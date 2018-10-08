@@ -302,23 +302,16 @@ type S2 = {
     b: string;
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -651,3 +644,17 @@ function ff2<V extends string, T extends string>(dd: DictDict<V, T>, k1: V, k2: 
     const d: Dict<T> = dd[k1];
     return d[k2];
 }
+
+// Repro from #26409
+
+const cf1 = <T extends { [P in K]: string; } & { cool: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};
+
+const cf2 = <T extends { [P in K | "cool"]: string; }, K extends keyof T>(t: T, k: K) =>
+{
+    const s: string = t[k];
+    t.cool;
+};

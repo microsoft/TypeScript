@@ -141,7 +141,7 @@ enum E7 {
 
     A = 'foo'['foo']
 >A : E7
->'foo'['foo'] : any
+>'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
 }
@@ -152,7 +152,7 @@ enum E8 {
 
     B = 'foo'['foo']
 >B : E8
->'foo'['foo'] : any
+>'foo'['foo'] : error
 >'foo' : "foo"
 >'foo' : "foo"
 }
@@ -162,10 +162,10 @@ enum E9 {
 >E9 : E9
 
     A,
->A : E9
+>A : E9.A
 
     B = A
->B : E9
+>B : E9.A
 >A : E9
 }
 

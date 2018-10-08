@@ -231,7 +231,8 @@ namespace ts.server {
         // buffer, but we have yet to find a way to retrieve that value.
         private static readonly maxActiveRequestCount = 10;
         private static readonly requestDelayMillis = 100;
-        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: any): void } | undefined;
+        private packageInstalledPromise: { resolve(value: ApplyCodeActionCommandResult): void, reject(reason: unknown): void } | undefined;
+        private inspectValuePromise: { resolve(value: ValueInfo): void } | undefined;
 
         constructor(
             private readonly telemetryEnabled: boolean,
@@ -261,12 +262,17 @@ namespace ts.server {
         }
 
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult> {
-            const rq: InstallPackageRequest = { kind: "installPackage", ...options };
-            this.send(rq);
+            this.send<InstallPackageRequest>({ kind: "installPackage", ...options });
             Debug.assert(this.packageInstalledPromise === undefined);
-            return new Promise((resolve, reject) => {
+            return new Promise<ApplyCodeActionCommandResult>((resolve, reject) => {
                 this.packageInstalledPromise = { resolve, reject };
             });
+        }
+
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            this.send<InspectValueRequest>({ kind: "inspectValue", options });
+            Debug.assert(this.inspectValuePromise === undefined);
+            return new Promise<ValueInfo>(resolve => { this.inspectValuePromise = { resolve }; });
         }
 
         attach(projectService: ProjectService) {
@@ -320,7 +326,7 @@ namespace ts.server {
             this.send({ projectName: p.getProjectName(), kind: "closeProject" });
         }
 
-        private send(rq: TypingInstallerRequestUnion): void {
+        private send<T extends TypingInstallerRequestUnion>(rq: T): void {
             this.installer.send(rq);
         }
 
@@ -353,7 +359,7 @@ namespace ts.server {
             }
         }
 
-        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
+        private handleMessage(response: TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | SetTypings | InvalidateCachedTypings | BeginInstallTypes | EndInstallTypes | InitializationFailedResponse) {
             if (this.logger.hasLevel(LogLevel.verbose)) {
                 this.logger.info(`Received response:${stringifyIndented(response)}`);
             }
@@ -378,6 +384,10 @@ namespace ts.server {
                     this.event(response, "setTypings");
                     break;
                 }
+                case ActionValueInspected:
+                    this.inspectValuePromise!.resolve(response.result);
+                    this.inspectValuePromise = undefined;
+                    break;
                 case EventInitializationFailed:
                     {
                         const body: protocol.TypesInstallerInitializationFailedEventBody = {
@@ -510,6 +520,7 @@ namespace ts.server {
                 globalPlugins,
                 pluginProbeLocations,
                 allowLocalPluginLoads,
+                typesMapLocation,
             });
 
             this.eventPort = eventPort;
@@ -644,14 +655,18 @@ namespace ts.server {
         const cmdLineVerbosity = getLogLevel(findArgument("--logVerbosity"));
         const envLogOptions = parseLoggingEnvironmentString(process.env.TSS_LOG);
 
-        const logFileName = cmdLineLogFileName
+        const unsubstitutedLogFileName = cmdLineLogFileName
             ? stripQuotes(cmdLineLogFileName)
             : envLogOptions.logToFile
                 ? envLogOptions.file || (__dirname + "/.log" + process.pid.toString())
                 : undefined;
 
+        const substitutedLogFileName = unsubstitutedLogFileName
+            ? unsubstitutedLogFileName.replace("PID", process.pid.toString())
+            : undefined;
+
         const logVerbosity = cmdLineVerbosity || envLogOptions.detailLevel;
-        return new Logger(logFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
+        return new Logger(substitutedLogFileName!, envLogOptions.traceToConsole!, logVerbosity!); // TODO: GH#18217
     }
     // This places log file in the directory containing editorServices.js
     // TODO: check that this location is writable
@@ -887,7 +902,7 @@ namespace ts.server {
 
     sys.require = (initialDir: string, moduleName: string): RequireResult => {
         try {
-            return { module: require(resolveJavaScriptModule(moduleName, initialDir, sys)), error: undefined };
+            return { module: require(resolveJSModule(moduleName, initialDir, sys)), error: undefined };
         }
         catch (error) {
             return { module: undefined, error };
@@ -920,7 +935,7 @@ namespace ts.server {
     setStackTraceLimit();
 
     const typingSafeListLocation = findArgument(Arguments.TypingSafeListLocation)!; // TODO: GH#18217
-    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(sys.getExecutingFilePath(), "../typesMap.json");
+    const typesMapLocation = findArgument(Arguments.TypesMapLocation) || combinePaths(getDirectoryPath(sys.getExecutingFilePath()), "typesMap.json");
     const npmLocation = findArgument(Arguments.NpmLocation);
 
     function parseStringArray(argName: string): ReadonlyArray<string> {

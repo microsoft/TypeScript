@@ -246,14 +246,16 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
+    const indentStr = "\n    ";
+
     /* @internal */
     export function indent(str: string): string {
-        return "\n    " + str;
+        return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
     /* @internal */
     export function stringifyIndented(json: {}): string {
-        return "\n    " + JSON.stringify(json);
+        return indentStr + JSON.stringify(json);
     }
 }

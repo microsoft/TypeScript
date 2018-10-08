@@ -739,6 +739,7 @@ namespace ts {
     }
 
     export interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -883,6 +884,7 @@ namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         // used when ObjectLiteralExpression is used in ObjectAssignmentPattern
         // it is grammar error to appear in actual object initializer
         equalsToken?: Token<SyntaxKind.EqualsToken>;
@@ -941,6 +943,7 @@ namespace ts {
 
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
 
@@ -1705,7 +1708,7 @@ namespace ts {
 
     export interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause;
+        parent: HeritageClause | JSDocAugmentsTag;
         expression: LeftHandSideExpression;
     }
 
@@ -2548,7 +2551,18 @@ namespace ts {
         fileName: string;
         /* @internal */ path: Path;
         text: string;
+        /** Resolved path can be different from path property,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case resolvedPath = path to output file
+         * path = input file's path
+         */
         /* @internal */ resolvedPath: Path;
+        /** Original file name that can be different from fileName,
+         * when file is included through project reference is mapped to its output instead of source
+         * in that case originalFileName = name of input file
+         * fileName = output file's name
+         */
+        /* @internal */ originalFileName: string;
 
         /**
          * If two source files are for the same version of the same package, one will redirect to the other.
@@ -2590,6 +2604,8 @@ namespace ts {
         /* @internal */ externalModuleIndicator?: Node;
         // The first node that causes this file to be a CommonJS module
         /* @internal */ commonJsModuleIndicator?: Node;
+        // JS identifier-declarations that are intended to merge with globals
+        /* @internal */ jsGlobalAugmentations?: SymbolTable;
 
         /* @internal */ identifiers: Map<string>; // Map from a string to an interned string
         /* @internal */ nodeCount: number;
@@ -2632,7 +2648,7 @@ namespace ts {
         /* @internal */ ambientModuleNames: ReadonlyArray<string>;
         /* @internal */ checkJsDirective?: CheckJsDirective;
         /* @internal */ version: string;
-        /* @internal */ pragmas: PragmaMap;
+        /* @internal */ pragmas: ReadonlyPragmaMap;
         /* @internal */ localJsxNamespace?: __String;
         /* @internal */ localJsxFactory?: EntityName;
 
@@ -2812,7 +2828,9 @@ namespace ts {
 
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
-        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
     }
 
     /* @internal */
@@ -3025,8 +3043,8 @@ namespace ts {
         /* @internal */ getStringType(): Type;
         /* @internal */ getNumberType(): Type;
         /* @internal */ getBooleanType(): Type;
-        /* @internal */ getFalseType(): Type;
-        /* @internal */ getTrueType(): Type;
+        /* @internal */ getFalseType(fresh?: boolean): Type;
+        /* @internal */ getTrueType(fresh?: boolean): Type;
         /* @internal */ getVoidType(): Type;
         /* @internal */ getUndefinedType(): Type;
         /* @internal */ getNullType(): Type;
@@ -3091,6 +3109,10 @@ namespace ts {
          */
         /* @internal */ getAccessibleSymbolChain(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags, useOnlyExternalAliasing: boolean): Symbol[] | undefined;
         /* @internal */ getTypePredicateOfSignature(signature: Signature): TypePredicate;
+        /**
+         * An external module with an 'export =' declaration resolves to the target of the 'export =' declaration,
+         * and an external module with no 'export =' declaration resolves to the module itself.
+         */
         /* @internal */ resolveExternalModuleSymbol(symbol: Symbol): Symbol;
         /** @param node A location where we might consider accessing `this`. Not necessarily a ThisExpression. */
         /* @internal */ tryGetThisTypeAt(node: Node): Type | undefined;
@@ -3108,6 +3130,8 @@ namespace ts {
          * and the operation is cancelled, then it should be discarded, otherwise it is safe to keep.
          */
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
+
+        /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
     }
 
     /* @internal */
@@ -3368,7 +3392,9 @@ namespace ts {
         isImplementationOfOverload(node: FunctionLike): boolean | undefined;
         isRequiredInitializedParameter(node: ParameterDeclaration): boolean;
         isOptionalUninitializedParameterProperty(node: ParameterDeclaration): boolean;
-        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
+        isExpandoFunctionDeclaration(node: FunctionDeclaration): boolean;
+        getPropertiesOfContainerFunction(node: Declaration): Symbol[];
+        createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
         createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): Expression;
@@ -3388,6 +3414,7 @@ namespace ts {
         getJsxFactoryEntity(location?: Node): EntityName | undefined;
         getAllAccessorDeclarations(declaration: AccessorDeclaration): AllAccessorDeclarations;
         getSymbolOfExternalModuleSpecifier(node: StringLiteralLike): Symbol | undefined;
+        isBindingCapturedByNode(node: Node, decl: VariableDeclaration | BindingElement): boolean;
     }
 
     export const enum SymbolFlags {
@@ -3418,7 +3445,7 @@ namespace ts {
         ExportStar              = 1 << 23,  // Export * declaration
         Optional                = 1 << 24,  // Optional property
         Transient               = 1 << 25,  // Transient symbol (created during type check)
-        JSContainer             = 1 << 26,  // Contains Javascript special declarations
+        Assignment              = 1 << 26,  // Assignment treated as declaration (eg `this.prop = 1`)
         ModuleExports           = 1 << 27,  // Symbol for CommonJS `module` of `module.exports`
 
         /* @internal */
@@ -3427,8 +3454,8 @@ namespace ts {
 
         Enum = RegularEnum | ConstEnum,
         Variable = FunctionScopedVariable | BlockScopedVariable,
-        Value = Variable | Property | EnumMember | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | JSContainer,
-        Type = Class | Interface | Enum | EnumMember | TypeLiteral | ObjectLiteral | TypeParameter | TypeAlias | JSContainer,
+        Value = Variable | Property | EnumMember | ObjectLiteral | Function | Class | Enum | ValueModule | Method | GetAccessor | SetAccessor | Assignment,
+        Type = Class | Interface | Enum | EnumMember | TypeLiteral | TypeParameter | TypeAlias | Assignment,
         Namespace = ValueModule | NamespaceModule | Enum,
         Module = ValueModule | NamespaceModule,
         Accessor = GetAccessor | SetAccessor,
@@ -3449,7 +3476,7 @@ namespace ts {
         InterfaceExcludes = Type & ~(Interface | Class),
         RegularEnumExcludes = (Value | Type) & ~(RegularEnum | ValueModule), // regular enums merge only with regular enums and modules
         ConstEnumExcludes = (Value | Type) & ~ConstEnum, // const enums merge only with const enums
-        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule),
+        ValueModuleExcludes = Value & ~(Function | Class | RegularEnum | ValueModule | Assignment),
         NamespaceModuleExcludes = 0,
         MethodExcludes = Value & ~Method,
         GetAccessorExcludes = Value & ~SetAccessor,
@@ -3503,6 +3530,7 @@ namespace ts {
         type?: Type;                        // Type of value symbol
         uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         inferredClassType?: Type;           // Type of an inferred ES5 class
@@ -3636,20 +3664,22 @@ namespace ts {
         EnumValuesComputed                  = 0x00004000,  // Values for enum members have been computed, and any errors have been reported for them.
         LexicalModuleMergesWithClass        = 0x00008000,  // Instantiated lexical module declaration is merged with a previous class declaration.
         LoopWithCapturedBlockScopedBinding  = 0x00010000,  // Loop that contains block scoped variable captured in closure
-        CapturedBlockScopedBinding          = 0x00020000,  // Block-scoped binding that is captured in some function
-        BlockScopedBindingInLoop            = 0x00040000,  // Block-scoped binding with declaration nested inside iteration statement
-        ClassWithBodyScopedClassBinding     = 0x00080000,  // Decorated class that contains a binding to itself inside of the class body.
-        BodyScopedClassBinding              = 0x00100000,  // Binding to a decorated class inside of the class's body.
-        NeedsLoopOutParameter               = 0x00200000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
-        AssignmentsMarked                   = 0x00400000,  // Parameter assignments have been marked
-        ClassWithConstructorReference       = 0x00800000,  // Class that contains a binding to its constructor inside of the class body.
-        ConstructorReferenceInClass         = 0x01000000,  // Binding to a class constructor inside of the class's body.
+        ContainsCapturedBlockScopeBinding   = 0x00020000,  // Part of a loop that contains block scoped variable captured in closure
+        CapturedBlockScopedBinding          = 0x00040000,  // Block-scoped binding that is captured in some function
+        BlockScopedBindingInLoop            = 0x00080000,  // Block-scoped binding with declaration nested inside iteration statement
+        ClassWithBodyScopedClassBinding     = 0x00100000,  // Decorated class that contains a binding to itself inside of the class body.
+        BodyScopedClassBinding              = 0x00200000,  // Binding to a decorated class inside of the class's body.
+        NeedsLoopOutParameter               = 0x00400000,  // Block scoped binding whose value should be explicitly copied outside of the converted loop
+        AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
+        ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
+        ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
     }
 
     /* @internal */
     export interface NodeLinks {
         flags: NodeCheckFlags;           // Set of flags specific to Node
         resolvedType?: Type;              // Cached type of type node
+        resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
         resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
@@ -3667,6 +3697,8 @@ namespace ts {
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
+        capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
     export const enum TypeFlags {
@@ -3714,7 +3746,7 @@ namespace ts {
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
-        StringOrNumberLiteralOrUnique = StringOrNumberLiteral | UniqueESSymbol,
+        StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
         DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
         PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
@@ -3784,6 +3816,15 @@ namespace ts {
     export interface IntrinsicType extends Type {
         intrinsicName: string;        // Name of intrinsic type
     }
+
+    /* @internal */
+    export interface FreshableIntrinsicType extends IntrinsicType {
+        freshType: IntrinsicType;     // Fresh version of type
+        regularType: IntrinsicType;   // Regular version of type
+    }
+
+    /* @internal */
+    export type FreshableType = LiteralType | FreshableIntrinsicType;
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
@@ -4161,9 +4202,8 @@ namespace ts {
     /* @internal */
     export const enum InferenceFlags {
         None            =      0,  // No special inference behaviors
-        InferUnionTypes = 1 << 0,  // Infer union types for disjoint candidates (otherwise unknownType)
-        NoDefault       = 1 << 1,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
-        AnyDefault      = 1 << 2,  // Infer anyType for no inferences (otherwise emptyObjectType)
+        NoDefault       = 1 << 0,  // Infer unknownType for no inferences (otherwise anyType or emptyObjectType)
+        AnyDefault      = 1 << 1,  // Infer anyType for no inferences (otherwise emptyObjectType)
     }
 
     /**
@@ -4203,7 +4243,7 @@ namespace ts {
     }
 
     /* @internal */
-    export const enum SpecialPropertyAssignmentKind {
+    export const enum AssignmentDeclarationKind {
         None,
         /// exports.name = expr
         ExportsProperty,
@@ -4386,6 +4426,7 @@ namespace ts {
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;  // Always combine with strict property
+        strictBindCallApply?: boolean;  // Always combine with strict property
         strictNullChecks?: boolean;  // Always combine with strict property
         strictPropertyInitialization?: boolean;  // Always combine with strict property
         stripInternal?: boolean;
@@ -4500,7 +4541,6 @@ namespace ts {
     /* @internal */
     export interface ConfigFileSpecs {
         filesSpecs: ReadonlyArray<string> | undefined;
-        referencesSpecs: ReadonlyArray<ProjectReference> | undefined;
         /**
          * Present to report errors (user specified specs), validatedIncludeSpecs are used for file name matching
          */
@@ -4516,7 +4556,6 @@ namespace ts {
 
     export interface ExpandResult {
         fileNames: string[];
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
         /* @internal */ spec: ConfigFileSpecs;
     }
@@ -4543,6 +4582,9 @@ namespace ts {
         showInSimplifiedHelpView?: boolean;
         category?: DiagnosticMessage;
         strictFlag?: true;                                      // true if the option is one of the flag under strict
+        affectsSourceFile?: true;                               // true if we should recreate SourceFiles after this option changes
+        affectsModuleResolution?: true;                         // currently same effect as `affectsSourceFile`
+        affectsBindDiagnostics?: true;                          // true if this affects binding (currently same effect as `affectsSourceFile`)
         affectsSemanticDiagnostics?: true;                      // true if option affects semantic diagnostics
     }
 
@@ -4709,16 +4751,6 @@ namespace ts {
         verticalTab = 0x0B,           // \v
     }
 
-    /*@internal*/
-    export interface UpToDateHost {
-        fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date | undefined;
-        getUnchangedTime?(fileName: string): Date | undefined;
-        getLastStatus?(fileName: string): UpToDateStatus | undefined;
-        setLastStatus?(fileName: string, status: UpToDateStatus): void;
-        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
-    }
-
     export interface ModuleResolutionHost {
         // TODO: GH#18217 Optional methods frequently used as non-optional
 
@@ -4849,10 +4881,6 @@ namespace ts {
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;
-
-        getModifiedTime?(fileName: string): Date | undefined;
-        setModifiedTime?(fileName: string, date: Date): void;
-        deleteFile?(fileName: string): void;
     }
 
     /* @internal */
@@ -4876,25 +4904,21 @@ namespace ts {
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 12,
-        ContainsPropertyInitializer = 1 << 13,
-        ContainsLexicalThis = 1 << 14,
-        ContainsCapturedLexicalThis = 1 << 15,
-        ContainsLexicalThisInComputedPropertyName = 1 << 16,
-        ContainsDefaultValueAssignments = 1 << 17,
-        ContainsParameterPropertyAssignments = 1 << 18,
-        ContainsSpread = 1 << 19,
-        ContainsObjectSpread = 1 << 20,
-        ContainsRest = ContainsSpread,
-        ContainsObjectRest = ContainsObjectSpread,
-        ContainsComputedPropertyName = 1 << 21,
-        ContainsBlockScopedBinding = 1 << 22,
-        ContainsBindingPattern = 1 << 23,
-        ContainsYield = 1 << 24,
-        ContainsHoistedDeclarationOrCompletion = 1 << 25,
-        ContainsDynamicImport = 1 << 26,
-        Super = 1 << 27,
-        ContainsSuper = 1 << 28,
+        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsRestOrSpread = 1 << 17,
+        ContainsObjectRestOrSpread = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+        ContainsYield = 1 << 22,
+        ContainsHoistedDeclarationOrCompletion = 1 << 23,
+        ContainsDynamicImport = 1 << 24,
+        Super = 1 << 25,
+        ContainsSuper = 1 << 26,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -4918,23 +4942,22 @@ namespace ts {
         OuterExpressionExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes | Super,
         NodeExcludes = PropertyAccessExcludes | ContainsSuper,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
-        ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
+        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
+        ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRest,
+        ObjectLiteralExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectRestOrSpread,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsRestOrSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRestOrSpread,
         ParameterExcludes = NodeExcludes,
-        CatchClauseExcludes = NodeExcludes | ContainsObjectRest,
-        BindingPatternExcludes = NodeExcludes | ContainsRest,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectRestOrSpread,
+        BindingPatternExcludes = NodeExcludes | ContainsRestOrSpread,
 
         // Masks
         // - Additional bitmasks
-        TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
         ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
@@ -4952,7 +4975,7 @@ namespace ts {
     /* @internal */
     export interface EmitNode {
         annotatedNodes?: Node[];                 // Tracks Parse-tree nodes with EmitNodes for eventual cleanup.
-        flags: EmitFlags;                       // Flags that customize emit
+        flags: EmitFlags;                        // Flags that customize emit
         leadingComments?: SynthesizedComment[];  // Synthesized leading comments
         trailingComments?: SynthesizedComment[]; // Synthesized trailing comments
         commentRange?: TextRange;                // The text range to use when emitting leading or trailing comments
@@ -5314,6 +5337,7 @@ namespace ts {
         /*@internal*/ inlineSources?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
+        /*@internal*/ neverAsciiEscape?: boolean;
     }
 
     /* @internal */
@@ -5413,8 +5437,6 @@ namespace ts {
         useCaseSensitiveFileNames?(): boolean;
         fileExists?(path: string): boolean;
         readFile?(path: string): string | undefined;
-        getSourceFiles?(): ReadonlyArray<SourceFile>; // Used for cached resolutions to find symlinks without traversing the fs (again)
-        getCommonSourceDirectory?(): string;
     }
 
     // Note: this used to be deprecated in our public API, but is still used internally
@@ -5427,7 +5449,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: ModuleSpecifierResolutionHost;
+        moduleResolverHost?: EmitHost;
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }
@@ -5661,10 +5683,16 @@ namespace ts {
     type ConcretePragmaSpecs = typeof commentPragmas;
 
     /* @internal */
-    export type PragmaPsuedoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
+    export type PragmaPseudoMap = {[K in keyof ConcretePragmaSpecs]?: {arguments: PragmaArgumentType<ConcretePragmaSpecs[K]>, range: CommentRange}};
 
     /* @internal */
-    export type PragmaPsuedoMapEntry = {[K in keyof PragmaPsuedoMap]: {name: K, args: PragmaPsuedoMap[K]}}[keyof PragmaPsuedoMap];
+    export type PragmaPseudoMapEntry = {[K in keyof PragmaPseudoMap]: {name: K, args: PragmaPseudoMap[K]}}[keyof PragmaPseudoMap];
+
+    /* @internal */
+    export interface ReadonlyPragmaMap extends ReadonlyMap<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]> {
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
+    }
 
     /**
      * A strongly-typed es6 map of pragma entries, the values of which are either a single argument
@@ -5672,9 +5700,20 @@ namespace ts {
      * in multiple places
      */
     /* @internal */
-    export interface PragmaMap extends Map<PragmaPsuedoMap[keyof PragmaPsuedoMap] | PragmaPsuedoMap[keyof PragmaPsuedoMap][]> {
-        set<TKey extends keyof PragmaPsuedoMap>(key: TKey, value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][]): this;
-        get<TKey extends keyof PragmaPsuedoMap>(key: TKey): PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][];
-        forEach(action: <TKey extends keyof PragmaPsuedoMap>(value: PragmaPsuedoMap[TKey] | PragmaPsuedoMap[TKey][], key: TKey) => void): void;
+    export interface PragmaMap extends Map<PragmaPseudoMap[keyof PragmaPseudoMap] | PragmaPseudoMap[keyof PragmaPseudoMap][]>, ReadonlyPragmaMap {
+        set<TKey extends keyof PragmaPseudoMap>(key: TKey, value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][]): this;
+        get<TKey extends keyof PragmaPseudoMap>(key: TKey): PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][];
+        forEach(action: <TKey extends keyof PragmaPseudoMap>(value: PragmaPseudoMap[TKey] | PragmaPseudoMap[TKey][], key: TKey) => void): void;
+    }
+
+    export interface UserPreferences {
+        readonly disableSuggestions?: boolean;
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly allowTextChangesInNewFiles?: boolean;
     }
 }

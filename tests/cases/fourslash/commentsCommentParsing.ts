@@ -244,8 +244,18 @@ verify.quickInfoAt("13q", "function noHelpComment2(): void");
 verify.signatureHelp({ marker: "14", docComment: "" });
 verify.quickInfoAt("14q", "function noHelpComment3(): void");
 
-goTo.marker('15');
-verify.completionListContains("sum", "function sum(a: number, b: number): number", "Adds two integers and returns the result");
+verify.completions({
+    marker: "15",
+    includes: {
+        name: "sum",
+        text: "function sum(a: number, b: number): number",
+        documentation: "Adds two integers and returns the result",
+        tags: [
+            { name: "param", text: "a first number" },
+            { name: "param", text: "b second number" },
+        ],
+    },
+});
 
 const addTags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
     { name: "param", text: "a first number" },
@@ -323,7 +333,7 @@ verify.quickInfos({
 
 verify.signatureHelp({ marker: "26", overloadsCount: 2, docComment: "" });
 verify.quickInfos({
-    "26q": "function f1(b: string): any (+1 overload)",
+    "26q": ["function f1(b: string): any (+1 overload)", "fn f1 with number"],
     "26aq": "(parameter) b: string"
 });
 

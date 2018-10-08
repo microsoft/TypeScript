@@ -2,7 +2,7 @@
 
 ////class Foo {
 ////    public _bar;
-////    public [|{| "isWriteAccess": true, "isDefinition": true |}__bar|];
+////    public [|{| "isDefinition": true |}__bar|];
 ////    public ___bar;
 ////    public ____bar;
 ////}

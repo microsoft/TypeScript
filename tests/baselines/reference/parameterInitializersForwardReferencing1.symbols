@@ -1,0 +1,92 @@
+=== tests/cases/conformance/functions/parameterInitializersForwardReferencing1.ts ===
+let foo: string = "";
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 0, 3))
+
+function f1 (bar = foo) { // unexpected compiler error; works at runtime
+>f1 : Symbol(f1, Decl(parameterInitializersForwardReferencing1.ts, 0, 21))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 2, 13))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 3, 7))
+
+    var foo: number = 2;
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 3, 7))
+
+    return bar; // returns 1
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 2, 13))
+}
+
+function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
+>f2 : Symbol(f2, Decl(parameterInitializersForwardReferencing1.ts, 5, 1))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 7, 13))
+>baz : Symbol(baz, Decl(parameterInitializersForwardReferencing1.ts, 7, 20))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 8, 7))
+>baz : Symbol(baz, Decl(parameterInitializersForwardReferencing1.ts, 7, 20))
+
+    var foo: number = 2;
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 8, 7))
+
+    return bar(); // returns 1
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 7, 13))
+}
+
+function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
+>f3 : Symbol(f3, Decl(parameterInitializersForwardReferencing1.ts, 10, 1))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 12, 13))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 12, 23))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 12, 23))
+
+    return bar;
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 12, 13))
+}
+
+function f4 (foo, bar = foo) {
+>f4 : Symbol(f4, Decl(parameterInitializersForwardReferencing1.ts, 14, 1))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 16, 13))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 16, 17))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 16, 13))
+
+    return bar
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 16, 17))
+}
+
+function f5 (a = a) {
+>f5 : Symbol(f5, Decl(parameterInitializersForwardReferencing1.ts, 18, 1))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing1.ts, 20, 13))
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing1.ts, 20, 13))
+
+    return a
+>a : Symbol(a, Decl(parameterInitializersForwardReferencing1.ts, 20, 13))
+}
+
+function f6 (async = async) {
+>f6 : Symbol(f6, Decl(parameterInitializersForwardReferencing1.ts, 22, 1))
+>async : Symbol(async, Decl(parameterInitializersForwardReferencing1.ts, 24, 13))
+>async : Symbol(async, Decl(parameterInitializersForwardReferencing1.ts, 24, 13))
+
+    return async
+>async : Symbol(async, Decl(parameterInitializersForwardReferencing1.ts, 24, 13))
+}
+
+function f7({[foo]: bar}: any[]) {
+>f7 : Symbol(f7, Decl(parameterInitializersForwardReferencing1.ts, 26, 1))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 29, 7))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 28, 13))
+
+    let foo: number = 2;
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 29, 7))
+}
+
+class Foo {
+>Foo : Symbol(Foo, Decl(parameterInitializersForwardReferencing1.ts, 30, 1))
+
+    constructor(public x = 12, public y = x) {}
+>x : Symbol(Foo.x, Decl(parameterInitializersForwardReferencing1.ts, 33, 16))
+>y : Symbol(Foo.y, Decl(parameterInitializersForwardReferencing1.ts, 33, 30))
+>x : Symbol(x, Decl(parameterInitializersForwardReferencing1.ts, 33, 16))
+}
+
+function f8(foo1: string, bar = foo1) { }
+>f8 : Symbol(f8, Decl(parameterInitializersForwardReferencing1.ts, 34, 1))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+>bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 36, 25))
+>foo1 : Symbol(foo1, Decl(parameterInitializersForwardReferencing1.ts, 36, 12))
+
