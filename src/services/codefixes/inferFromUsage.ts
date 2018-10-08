@@ -155,21 +155,18 @@ namespace ts.codefix {
             return;
         }
 
-        const symbols = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-            containingFunction.parameters.map(p => ({
+        const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
+            containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
                 type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined
-            } as ParameterInference));
-        // We didn't actually find a set of type inference positions matching each parameter position
-        if (containingFunction.parameters.length !== symbols.length) {
-            return;
-        }
+            }));
+        Debug.assert(containingFunction.parameters.length === parameterInferences.length);
 
         if (isInJSFile(containingFunction)) {
-            annotateJSDocParameters(changes, sourceFile, symbols, program);
+            annotateJSDocParameters(changes, sourceFile, parameterInferences, program);
         }
         else {
-            for (const { declaration, type } of symbols) {
+            for (const { declaration, type } of parameterInferences) {
                 if (declaration && !declaration.type && !declaration.initializer) {
                     annotate(changes, sourceFile, declaration, type, program);
                 }
@@ -203,15 +200,12 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbols: ParameterInference[], program: Program): void {
-        const result = [];
-        for (const symbol of symbols) {
-            const param = symbol.declaration;
-            const typeNode = symbol.type && getTypeNodeIfAccessible(symbol.type, param, program.getTypeChecker());
-            if (typeNode && !param.initializer && !getJSDocType(param)) {
-                result.push({ ...symbol, typeNode });
-            }
-        }
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ParameterInference[], program: Program): void {
+        const result = mapDefined(parameterInferences, inference => {
+            const param = inference.declaration;
+            const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program.getTypeChecker());
+            return typeNode && !param.initializer && !getJSDocType(param) ? { ...inference, typeNode } : undefined;
+        });
         changes.tryInsertJSDocParameters(sourceFile, result);
     }
 
@@ -256,7 +250,7 @@ namespace ts.codefix {
         }
     }
 
-    export interface ParameterInference {
+    interface ParameterInference {
         declaration: ParameterDeclaration;
         type?: Type;
         typeNode?: TypeNode;
@@ -306,10 +300,10 @@ namespace ts.codefix {
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            let isOptional = false;
             return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
                 const types: Type[] = [];
                 const isRest = isRestParameter(parameter);
+                let isOptional = false;
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
                         isOptional = isInJSFile(declaration);
