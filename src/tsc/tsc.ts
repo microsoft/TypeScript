@@ -53,14 +53,10 @@ namespace ts {
     }
 
     export function executeCommandLine(args: string[]): void {
-        if (args.length > 0 && ((args[0].toLowerCase() === "--build") || (args[0].toLowerCase() === "-b"))) {
-            const result = performBuild(args.slice(1));
-            // undefined = in watch mode, do not exit
-            if (result !== undefined) {
-                return sys.exit(result);
-            }
-            else {
-                return;
+        if (args.length > 0 && args[0].charCodeAt(0) === CharacterCodes.minus) {
+            const firstOption = args[0].slice(args[0].charCodeAt(1) === CharacterCodes.minus ? 2 : 1).toLowerCase();
+            if (firstOption === "build" || firstOption === "b") {
+                return performBuild(args.slice(1));
             }
         }
 
@@ -164,40 +160,30 @@ namespace ts {
         }
     }
 
-    function performBuild(args: string[]): number | undefined {
-        const { buildOptions, projects: buildProjects, errors } = parseBuildCommand(args);
+    function performBuild(args: string[]) {
+        const { buildOptions, projects, errors } = parseBuildCommand(args);
         if (errors.length > 0) {
             errors.forEach(reportDiagnostic);
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
 
         if (buildOptions.help) {
             printVersion();
             printHelp(buildOpts, "--build ");
-            return ExitStatus.Success;
+            return sys.exit(ExitStatus.Success);
         }
 
         // Update to pretty if host supports it
         updateReportDiagnostic();
-        const projects = mapDefined(buildProjects, project => {
-            const fileName = resolvePath(sys.getCurrentDirectory(), project);
-            const refPath = resolveProjectReferencePath(sys, { path: fileName });
-            if (!sys.fileExists(refPath)) {
-                reportDiagnostic(createCompilerDiagnostic(Diagnostics.File_0_does_not_exist, fileName));
-                return undefined;
-            }
-            return refPath;
-        });
-
         if (projects.length === 0) {
             printVersion();
             printHelp(buildOpts, "--build ");
-            return ExitStatus.Success;
+            return sys.exit(ExitStatus.Success);
         }
 
         if (!sys.getModifiedTime || !sys.setModifiedTime || (buildOptions.clean && !sys.deleteFile)) {
             reportDiagnostic(createCompilerDiagnostic(Diagnostics.The_current_host_does_not_support_the_0_option, "--build"));
-            return ExitStatus.DiagnosticsPresent_OutputsSkipped;
+            return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
         }
         if (buildOptions.watch) {
             reportWatchModeWithoutSysSupport();
@@ -206,16 +192,15 @@ namespace ts {
         // TODO: change this to host if watch => watchHost otherwiue without wathc
         const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
         if (buildOptions.clean) {
-            return builder.cleanAllProjects();
+            return sys.exit(builder.cleanAllProjects());
         }
 
         if (buildOptions.watch) {
             builder.buildAllProjects();
-            builder.startWatching();
-            return undefined;
+            return builder.startWatching();
         }
 
-        return builder.buildAllProjects();
+        return sys.exit(builder.buildAllProjects());
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
@@ -237,12 +222,12 @@ namespace ts {
 
     function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
         const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics) => {
+        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
                 enableStatistics(options);
             }
-            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics);
+            return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {

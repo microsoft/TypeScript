@@ -64,27 +64,6 @@ namespace ts {
     }
 
     export const newLineCharacter = "\n";
-    export const testFormatOptions: FormatCodeSettings = {
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter,
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceBeforeFunctionParenthesis: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-    };
 
     export const notImplementedHost: LanguageServiceHost = {
         getCompilationSettings: notImplemented,
@@ -123,7 +102,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions),
+                formatContext: formatting.getFormatContext(testFormatSettings),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));
@@ -185,7 +164,7 @@ namespace ts {
                 startPosition: selectionRange.pos,
                 endPosition: selectionRange.end,
                 host: notImplementedHost,
-                formatContext: formatting.getFormatContext(testFormatOptions),
+                formatContext: formatting.getFormatContext(testFormatSettings),
                 preferences: emptyOptions,
             };
             const rangeToExtract = refactor.extractSymbol.getRangeToExtract(sourceFile, createTextSpanFromRange(selectionRange));

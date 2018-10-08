@@ -58,12 +58,13 @@ namespace ts.projectSystem {
         getLogFileName: () => undefined,
     };
 
-    function createHasErrorMessageLogger() {
+    export function createHasErrorMessageLogger() {
         let hasErrorMsg = false;
         const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
         const logger: server.Logger = {
             close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-            msg: () => {
+            msg: (s, type) => {
+                Debug.fail(`Error: ${s}, type: ${type}`);
                 hasErrorMsg = true;
             }
         };
@@ -85,6 +86,7 @@ namespace ts.projectSystem {
 
         isKnownTypesPackageName = notImplemented;
         installPackage = notImplemented;
+        inspectValue = notImplemented;
 
         executePendingCommands() {
             const actionsToRun = this.postExecActions;
@@ -321,7 +323,7 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || nullLogger,
+            logger: opts.logger || createHasErrorMessageLogger().logger,
             canUseEvents: false
         };
 
@@ -358,7 +360,7 @@ namespace ts.projectSystem {
     }
     export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
         const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || nullLogger;
+        const logger = parameters.logger || createHasErrorMessageLogger().logger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
     }
@@ -448,6 +450,14 @@ namespace ts.projectSystem {
         const toLocation = protocolToLocation(str);
         return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
+    function protocolRenameSpanFromSubstring(
+        str: string,
+        substring: string,
+        options?: SpanFromSubstringOptions,
+        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
+    ): protocol.RenameTextSpan {
+        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
+    }
     function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
         const start = nthIndexOf(str, substring, options ? options.index : 0);
         Debug.assert(start !== -1);
@@ -456,11 +466,14 @@ namespace ts.projectSystem {
     function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
         return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
     }
-    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions) {
+    function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileSpan {
         return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring, options) };
     }
     function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
         return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
+    }
+    function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
+        return documentSpanFromSubstring(file, substring, options);
     }
     interface SpanFromSubstringOptions {
         readonly index: number;
@@ -3136,7 +3149,7 @@ namespace ts.projectSystem {
             const project = projectService.configuredProjects.get(configFile.path)!;
             assert.isDefined(project);
             checkProjectActualFiles(project, [file1.path, libFile.path, module1.path, module2.path, configFile.path]);
-            checkWatchedFiles(host, [libFile.path, module1.path, module2.path, configFile.path]);
+            checkWatchedFiles(host, [libFile.path, configFile.path]);
             checkWatchedDirectories(host, [], /*recursive*/ false);
             const watchedRecursiveDirectories = getTypeRootsFromLocation(root + "/a/b/src");
             watchedRecursiveDirectories.push(`${root}/a/b/src/node_modules`, `${root}/a/b/node_modules`);
@@ -3204,7 +3217,7 @@ namespace ts.projectSystem {
                     { text: "number", kind: "keyword" }
                 ],
                 documentation: [],
-                tags: []
+                tags: undefined,
             });
         });
 
@@ -3491,7 +3504,7 @@ namespace ts.projectSystem {
             host.checkTimeoutQueueLength(2); // Update configured project and projects for open file
             checkProjectActualFiles(services.configuredProjects.get(config.path)!, filesWithFileA.map(f => f.path));
 
-           // host.fileExists = originalFileExists;
+            // host.fileExists = originalFileExists;
             openFile(fileSubA);
             // This should create inferred project since fileSubA not on the disk
             checkProjectActualFiles(services.configuredProjects.get(config.path)!, mapDefined(filesWithFileA, f => f === fileA ? undefined : f.path));
@@ -3672,7 +3685,7 @@ namespace ts.projectSystem {
                 path: `${projectRoot}/app1/tsconfig.json`,
                 content: JSON.stringify({
                     files: ["app.ts", "../core/core.ts"],
-                    compilerOptions: { outFile : "build/output.js" },
+                    compilerOptions: { outFile: "build/output.js" },
                     compileOnSave: true
                 })
             };
@@ -6778,9 +6791,9 @@ namespace ts.projectSystem {
                         fileName: "/a.1.ts",
                         textChanges: [
                             {
-                              start: { line: 0, offset: 0 },
-                              end: { line: 0, offset: 0 },
-                              newText: "export const a = 0;",
+                                start: { line: 0, offset: 0 },
+                                end: { line: 0, offset: 0 },
+                                newText: "export const a = 0;",
                             },
                         ],
                     }
@@ -7435,7 +7448,7 @@ namespace ts.projectSystem {
                     const projectFilePaths = map(projectFiles, f => f.path);
                     checkProjectActualFiles(project, projectFilePaths);
 
-                    const filesWatched = filter(projectFilePaths, p => p !== app.path);
+                    const filesWatched = filter(projectFilePaths, p => p !== app.path && p.indexOf("/a/b/node_modules") === -1);
                     checkWatchedFiles(host, filesWatched);
                     checkWatchedDirectories(host, typeRootDirectories.concat(recursiveWatchedDirectories), /*recursive*/ true);
                     checkWatchedDirectories(host, [], /*recursive*/ false);
@@ -8283,19 +8296,21 @@ namespace ts.projectSystem {
             const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, { file: aFc, ...protocolLocationFromSubstring(cFile.content, "C") });
 
             assert.equal(aFile.content, bFile.content);
-            const abLocs: protocol.TextSpan[] = [
-                protocolTextSpanFromSubstring(aFile.content, "C"),
-                protocolTextSpanFromSubstring(aFile.content, "C", { index: 1 }),
+            const abLocs: protocol.RenameTextSpan[] = [
+                protocolRenameSpanFromSubstring(aFile.content, "C"),
+                protocolRenameSpanFromSubstring(aFile.content, "C", { index: 1 }),
             ];
-            const cLocs: protocol.TextSpan[] = [protocolTextSpanFromSubstring(cFile.content, "C")];
+            const span = protocolRenameSpanFromSubstring(cFile.content, "C");
+            const cLocs: protocol.RenameTextSpan[] = [span];
             assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
                 info: {
                     canRename: true,
                     displayName: "C",
+                    fileToRename: undefined,
                     fullDisplayName: '"/users/username/projects/a/c/fc".C',
                     kind: ScriptElementKind.constElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(cFile.content, "C"),
                 },
                 locs: [
                     { file: aFc, locs: cLocs },
@@ -8658,9 +8673,20 @@ new C();`
         }
 
         function verifyWatchesWithConfigFile(host: TestServerHost, files: File[], openFile: File, extraExpectedDirectories?: ReadonlyArray<string>) {
-            checkWatchedFiles(host, mapDefined(files, f => f === openFile ? undefined : f.path));
+            const expectedRecursiveDirectories = arrayToSet([projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)]);
+            checkWatchedFiles(host, mapDefined(files, f => {
+                if (f === openFile) {
+                    return undefined;
+                }
+                const indexOfNodeModules = f.path.indexOf("/node_modules/");
+                if (indexOfNodeModules === -1) {
+                    return f.path;
+                }
+                expectedRecursiveDirectories.set(f.path.substr(0, indexOfNodeModules + "/node_modules".length), true);
+                return undefined;
+            }));
             checkWatchedDirectories(host, [], /*recursive*/ false);
-            checkWatchedDirectories(host, [projectLocation, `${projectLocation}/${nodeModulesAtTypes}`, ...(extraExpectedDirectories || emptyArray)], /*recursive*/ true);
+            checkWatchedDirectories(host, arrayFrom(expectedRecursiveDirectories.keys()), /*recursive*/ true);
         }
 
         describe("from files in same folder", () => {
@@ -8862,7 +8888,7 @@ new C();`
                 verifyTrace(resolutionTrace, expectedTrace);
 
                 const currentDirectory = getDirectoryPath(file1.path);
-                const watchedFiles = mapDefined(files, f => f === file1 ? undefined : f.path);
+                const watchedFiles = mapDefined(files, f => f === file1 || f.path.indexOf("/node_modules/") !== -1 ? undefined : f.path);
                 forEachAncestorDirectory(currentDirectory, d => {
                     watchedFiles.push(combinePaths(d, "tsconfig.json"), combinePaths(d, "jsconfig.json"));
                 });
@@ -9079,7 +9105,7 @@ export const x = 10;`
 
             Debug.assert(!!project.resolveModuleNames);
 
-            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatOptions, emptyOptions);
+            const edits = project.getLanguageService().getEditsForFileRename("/old.ts", "/new.ts", testFormatSettings, emptyOptions);
             assert.deepEqual<ReadonlyArray<FileTextChanges>>(edits, [{
                 fileName: "/user.ts",
                 textChanges: [{
@@ -9448,8 +9474,7 @@ export function Test2() {
                 content: "{}",
             };
 
-            const host = createServerHost([aTs, bTs, tsconfig]);
-            const session = createSession(host);
+            const session = createSession(createServerHost([aTs, bTs, tsconfig]));
             openFilesForSession([aTs, bTs], session);
 
             const requestLocation: protocol.FileLocationRequestArgs = {
@@ -9501,7 +9526,7 @@ export function Test2() {
                 kindModifiers: ScriptElementKindModifier.exportedModifier,
                 name: "foo",
                 source: [{ text: "./a", kind: "text" }],
-                tags: emptyArray,
+                tags: undefined,
             };
             assert.deepEqual<ReadonlyArray<protocol.CompletionEntryDetails> | undefined>(detailsResponse, [
                 {
@@ -9555,6 +9580,58 @@ export function Test2() {
         });
     });
 
+    describe("tsserverProjectSystem rename", () => {
+        it("works with fileToRename", () => {
+            const aTs: File = { path: "/a.ts", content: "export const a = 0;" };
+            const bTs: File = { path: "/b.ts", content: 'import { a } from "./a";' };
+
+            const session = createSession(createServerHost([aTs, bTs]));
+            openFilesForSession([bTs], session);
+
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(bTs, 'a";'));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    fileToRename: aTs.path,
+                    displayName: aTs.path,
+                    fullDisplayName: aTs.path,
+                    kind: ScriptElementKind.moduleElement,
+                    kindModifiers: "",
+                    triggerSpan: protocolTextSpanFromSubstring(bTs.content, "a", { index: 1 }),
+                },
+                locs: [{ file: bTs.path, locs: [protocolRenameSpanFromSubstring(bTs.content, "./a")] }],
+            });
+        });
+
+        it("works with prefixText and suffixText", () => {
+            const aTs: File = { path: "/a.ts", content: "const x = 0; const o = { x };" };
+            const session = createSession(createServerHost([aTs]));
+            openFilesForSession([aTs], session);
+
+            const response = executeSessionRequest<protocol.RenameRequest, protocol.RenameResponse>(session, protocol.CommandTypes.Rename, protocolFileLocationFromSubstring(aTs, "x"));
+            assert.deepEqual<protocol.RenameResponseBody | undefined>(response, {
+                info: {
+                    canRename: true,
+                    fileToRename: undefined,
+                    displayName: "x",
+                    fullDisplayName: "x",
+                    kind: ScriptElementKind.constElement,
+                    kindModifiers: ScriptElementKindModifier.none,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "x"),
+                },
+                locs: [
+                    {
+                        file: aTs.path,
+                        locs: [
+                            protocolRenameSpanFromSubstring(aTs.content, "x"),
+                            protocolRenameSpanFromSubstring(aTs.content, "x", { index: 1 }, { prefixText: "x: " }),
+                        ],
+                    },
+                ],
+            });
+        });
+    });
+
     describe("tsserverProjectSystem typeReferenceDirectives", () => {
         it("when typeReferenceDirective contains UpperCasePackage", () => {
             const projectLocation = "/user/username/projects/myproject";
@@ -9583,7 +9660,7 @@ declare class TestLib {
 
     constructor() {
         var l = new TestLib();
-        
+
     }
 
     public test2() {
@@ -9611,6 +9688,32 @@ declare class TestLib {
             checkProjectActualFiles(project, files.map(f => f.path));
             host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
             host.checkTimeoutQueueLengthAndRun(2);
+        });
+
+        it("when typeReferenceDirective is relative path and in a sibling folder", () => {
+            const projectRootPath = "/user/username/projects/browser-addon";
+            const projectPath = `${projectRootPath}/background`;
+            const file: File = {
+                path: `${projectPath}/a.ts`,
+                content: "let x = 10;"
+            };
+            const tsconfig: File = {
+                path: `${projectPath}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        types: [
+                            "../typedefs/filesystem"
+                        ]                    }
+                })
+            };
+            const filesystem: File = {
+                path: `${projectRootPath}/typedefs/filesystem.d.ts`,
+                content: `interface LocalFileSystem { someProperty: string; }`
+            };
+            const files = [file, tsconfig, filesystem, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
         });
     });
 
@@ -9739,7 +9842,7 @@ declare class TestLib {
         function verifyATsConfigOriginalProject(session: TestSession) {
             checkNumberOfProjects(session.getProjectService(), { inferredProjects: 1, configuredProjects: 1 });
             verifyInferredProjectUnchanged(session);
-             verifyATsConfigProject(session);
+            verifyATsConfigProject(session);
             // Close user file should close all the projects
             closeFilesForSession([userTs], session);
             verifyOnlyOrphanInferredProject(session);
@@ -9889,11 +9992,12 @@ declare class TestLib {
             verifyATsConfigWhenOpened(session);
         });
 
+        interface ReferencesFullRequest extends protocol.FileLocationRequest { readonly command: protocol.CommandTypes.ReferencesFull; }
+        interface ReferencesFullResponse extends protocol.Response { readonly body: ReadonlyArray<ReferencedSymbol>; }
+
         it("findAllReferencesFull", () => {
             const session = makeSampleProjects();
 
-            interface ReferencesFullRequest extends protocol.FileLocationRequest { command: protocol.CommandTypes.ReferencesFull; }
-            interface ReferencesFullResponse extends protocol.Response { body: ReadonlyArray<ReferencedSymbol>; }
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
             function fnAVoid(kind: SymbolDisplayPartKind): SymbolDisplayPart[] {
@@ -9950,6 +10054,67 @@ declare class TestLib {
             verifyATsConfigOriginalProject(session);
         });
 
+        it("findAllReferencesFull definition is in mapped file", () => {
+            const aTs: File = { path: "/a/a.ts", content: `function f() {}` };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { declaration: true, declarationMap: true, outFile: "../bin/a.js" } }),
+            };
+            const bTs: File = { path: "/b/b.ts", content: `f();` };
+            const bTsconfig: File = { path: "/b/tsconfig.json", content: JSON.stringify({ references: [{ path: "../a" }] }) };
+            const aDts: File = { path: "/bin/a.d.ts", content: `declare function f(): void;\n//# sourceMappingURL=a.d.ts.map` };
+            const aDtsMap: File = {
+                path: "/bin/a.d.ts.map",
+                content: JSON.stringify({ version: 3, file: "a.d.ts", sourceRoot: "", sources: ["../a/a.ts"], names: [], mappings: "AAAA,iBAAS,CAAC,SAAK" }),
+            };
+
+            const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
+            checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
+            openFilesForSession([bTs], session);
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+
+            const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
+
+            assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
+                {
+                    definition: {
+                        containerKind: ScriptElementKind.unknown,
+                        containerName: "",
+                        displayParts: [
+                            keywordPart(SyntaxKind.FunctionKeyword),
+                            spacePart(),
+                            displayPart("f", SymbolDisplayPartKind.functionName),
+                            punctuationPart(SyntaxKind.OpenParenToken),
+                            punctuationPart(SyntaxKind.CloseParenToken),
+                            punctuationPart(SyntaxKind.ColonToken),
+                            spacePart(),
+                            keywordPart(SyntaxKind.VoidKeyword),
+                        ],
+                        fileName: aTs.path,
+                        kind: ScriptElementKind.functionElement,
+                        name: "function f(): void",
+                        textSpan: { start: 9, length: 1 },
+                    },
+                    references: [
+                        {
+                            fileName: bTs.path,
+                            isDefinition: false,
+                            isInString: undefined,
+                            isWriteAccess: false,
+                            textSpan: { start: 0, length: 1 },
+                        },
+                        {
+                            fileName: aTs.path,
+                            isDefinition: true,
+                            isInString: undefined,
+                            isWriteAccess: true,
+                            textSpan: { start: 9, length: 1 },
+                        },
+                    ],
+                }
+            ]);
+        });
+
         it("findAllReferences -- target does not exist", () => {
             const session = makeSampleProjects();
 
@@ -9969,13 +10134,13 @@ declare class TestLib {
 
         const renameATs = (aTs: File): protocol.SpanGroup => ({
             file: aTs.path,
-            locs: [protocolTextSpanFromSubstring(aTs.content, "fnA")],
+            locs: [protocolRenameSpanFromSubstring(aTs.content, "fnA")],
         });
         const renameUserTs = (userTs: File): protocol.SpanGroup => ({
             file: userTs.path,
             locs: [
-                protocolTextSpanFromSubstring(userTs.content, "fnA"),
-                protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                protocolRenameSpanFromSubstring(userTs.content, "fnA"),
+                protocolRenameSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
             ],
         });
 
@@ -9986,10 +10151,11 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnA",
+                    fileToRename: undefined,
                     fullDisplayName: "fnA",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
             });
@@ -10004,10 +10170,11 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnA",
+                    fileToRename: undefined,
                     fullDisplayName: '"/a/a".fnA',
                     kind: ScriptElementKind.functionElement,
                     kindModifiers: ScriptElementKindModifier.exportedModifier,
-                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(aTs.content, "fnA"),
                 },
                 locs: [renameATs(aTs), renameUserTs(userTs)],
             });
@@ -10018,9 +10185,9 @@ declare class TestLib {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
-                documentSpanFromSubstring(userTs, "fnA"),
-                documentSpanFromSubstring(userTs, "fnA", { index: 1 }),
-                documentSpanFromSubstring(aTs, "fnA"),
+                renameLocation(userTs, "fnA"),
+                renameLocation(userTs, "fnA", { index: 1 }),
+                renameLocation(aTs, "fnA"),
             ]);
             verifyATsConfigOriginalProject(session);
         });
@@ -10032,22 +10199,23 @@ declare class TestLib {
                 info: {
                     canRename: true,
                     displayName: "fnB",
+                    fileToRename: undefined,
                     fullDisplayName: "fnB",
                     kind: ScriptElementKind.alias,
                     kindModifiers: ScriptElementKindModifier.none,
-                    localizedErrorMessage: undefined,
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                 },
                 locs: [
                     {
                         file: userTs.path,
                         locs: [
-                            protocolTextSpanFromSubstring(userTs.content, "fnB"),
-                            protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
+                            protocolRenameSpanFromSubstring(userTs.content, "fnB"),
+                            protocolRenameSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
                         ],
                     },
                     {
                         file: bDts.path,
-                        locs: [protocolTextSpanFromSubstring(bDts.content, "fnB")],
+                        locs: [protocolRenameSpanFromSubstring(bDts.content, "fnB")],
                     }
                 ],
             });
@@ -10164,6 +10332,35 @@ declare class TestLib {
                         }],
                     }],
                     commands: undefined,
+                },
+            ]);
+        });
+    });
+
+    describe("tsserverProjectSystem config file change", () => {
+        it("Updates diagnostics when '--noUnusedLabels' changes", () => {
+            const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
+            const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+            const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
+
+            const host = createServerHost([aTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+
+            host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
+            host.runQueuedTimeoutCallbacks();
+
+            const response = executeSessionRequest<protocol.SemanticDiagnosticsSyncRequest, protocol.SemanticDiagnosticsSyncResponse>(session, protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as protocol.Diagnostic[] | undefined;
+            assert.deepEqual<protocol.Diagnostic[] | undefined>(response, [
+                {
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 1 + "label".length },
+                    text: "Unused label.",
+                    category: "error",
+                    code: Diagnostics.Unused_label.code,
+                    relatedInformation: undefined,
+                    reportsUnnecessary: true,
+                    source: undefined,
                 },
             ]);
         });

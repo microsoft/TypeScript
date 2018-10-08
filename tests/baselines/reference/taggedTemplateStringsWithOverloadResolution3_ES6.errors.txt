@@ -57,6 +57,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     fn3 ``; // Error
     ~~~~~~
 !!! error TS2554: Expected 2-4 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution3_ES6.ts:28:45: An argument for 'n' was not provided.
     
     // Generic overloads with constraints
     function fn4<T extends string, U extends number>(strs: TemplateStringsArray, n: T, m: U);

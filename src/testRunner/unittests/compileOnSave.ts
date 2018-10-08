@@ -36,7 +36,7 @@ namespace ts.projectSystem {
                 typingsInstaller: typingsInstaller || server.nullTypingsInstaller,
                 byteLength: Utils.byteLength,
                 hrtime: process.hrtime,
-                logger: nullLogger,
+                logger: createHasErrorMessageLogger().logger,
                 canUseEvents: false
             };
             return new server.Session(opts);

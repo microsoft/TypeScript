@@ -40,7 +40,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(timeout);
-            const cp = require("child_process");
+            const cp: typeof import("child_process") = require("child_process");
 
             it("should build successfully", () => {
                 let cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directoryName);
@@ -53,7 +53,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (reset.status !== 0) throw new Error(`git reset for ${directoryName} failed: ${reset.stderr.toString()}`);
                     const clean = cp.spawnSync("git", ["clean", "-f"], { cwd: submoduleDir, timeout, shell: true, stdio });
                     if (clean.status !== 0) throw new Error(`git clean for ${directoryName} failed: ${clean.stderr.toString()}`);
-                    const update = cp.spawnSync("git", ["submodule", "update", "--remote", "."], { cwd: submoduleDir, timeout, shell: true, stdio });
+                    const update = cp.spawnSync("git", ["submodule", "update", "--init", "--remote", "."], { cwd: submoduleDir, timeout, shell: true, stdio });
                     if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed: ${update.stderr.toString()}`);
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;

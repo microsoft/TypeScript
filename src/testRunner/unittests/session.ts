@@ -502,7 +502,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.nullLogger,
+                    logger: projectSystem.createHasErrorMessageLogger().logger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler(this.customHandler, () => {
@@ -570,7 +570,7 @@ namespace ts.server {
                     typingsInstaller: undefined!, // TODO: GH#18217
                     byteLength: Utils.byteLength,
                     hrtime: process.hrtime,
-                    logger: projectSystem.nullLogger,
+                    logger: projectSystem.createHasErrorMessageLogger().logger,
                     canUseEvents: true
                 });
                 this.addProtocolHandler("echo", (req: protocol.Request) => ({

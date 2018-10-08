@@ -1,7 +1,4 @@
-tests/cases/compiler/overloadResolutionTest1.ts(7,16): error TS2345: Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
-  Type '{ a: string; }' is not assignable to type '{ a: boolean; }'.
-    Types of property 'a' are incompatible.
-      Type 'string' is not assignable to type 'boolean'.
+tests/cases/compiler/overloadResolutionTest1.ts(7,18): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/compiler/overloadResolutionTest1.ts(18,16): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2322: Type 'true' is not assignable to type 'string'.
 
@@ -14,11 +11,9 @@ tests/cases/compiler/overloadResolutionTest1.ts(24,15): error TS2322: Type 'true
     var x1 = foo([{a:true}]); // works
     var x11 = foo([{a:0}]); // works
     var x111 = foo([{a:"s"}]); // error - does not match any signature
-                   ~~~~~~~~~
-!!! error TS2345: Argument of type '{ a: string; }[]' is not assignable to parameter of type '{ a: boolean; }[]'.
-!!! error TS2345:   Type '{ a: string; }' is not assignable to type '{ a: boolean; }'.
-!!! error TS2345:     Types of property 'a' are incompatible.
-!!! error TS2345:       Type 'string' is not assignable to type 'boolean'.
+                     ~
+!!! error TS2322: Type 'string' is not assignable to type 'boolean'.
+!!! related TS6500 tests/cases/compiler/overloadResolutionTest1.ts:2:19: The expected type comes from property 'a' which is declared here on type '{ a: boolean; }'
     var x1111 = foo([{a:null}]); // works - ambiguous call is resolved to be the first in the overload set so this returns a string
     
     

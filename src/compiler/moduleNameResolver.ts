@@ -74,7 +74,7 @@ namespace ts {
         if (!resolved) {
             return undefined;
         }
-        Debug.assert(extensionIsTypeScript(resolved.extension));
+        Debug.assert(extensionIsTS(resolved.extension));
         return { fileName: resolved.path, packageId: resolved.packageId };
     }
 
@@ -337,7 +337,14 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
                 }
-                const result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined);
+                let result: SearchResult<Resolved> | undefined;
+                if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
+                    result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined);
+                }
+                else {
+                    const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
+                    result = toSearchResult(nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true));
+                }
                 const resolvedFile = resolvedTypeScriptOnly(result && result.value);
                 if (!resolvedFile && traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
@@ -381,8 +388,13 @@ namespace ts {
                             // tslint:disable-next-line:no-null-keyword
                             const isNotNeededPackage = host.fileExists(packageJsonPath) && (readJson(packageJsonPath, host) as PackageJson).typings === null;
                             if (!isNotNeededPackage) {
-                                // Return just the type directive names
-                                result.push(getBaseFileName(normalized));
+                                const baseFileName = getBaseFileName(normalized);
+
+                                // At this stage, skip results with leading dot.
+                                if (baseFileName.charCodeAt(0) !== CharacterCodes.dot) {
+                                    // Return just the type directive names
+                                    result.push(baseFileName);
+                                }
                             }
                         }
                     }
@@ -778,13 +790,22 @@ namespace ts {
      * Throws an error if the module can't be resolved.
      */
     /* @internal */
-    export function resolveJavaScriptModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
-        const { resolvedModule, failedLookupLocations } =
-            nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
+    export function resolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string {
+        const { resolvedModule, failedLookupLocations } = tryResolveJSModuleWorker(moduleName, initialDir, host);
         if (!resolvedModule) {
             throw new Error(`Could not resolve JS module '${moduleName}' starting at '${initialDir}'. Looked in: ${failedLookupLocations.join(", ")}`);
         }
         return resolvedModule.resolvedFileName;
+    }
+
+    /* @internal */
+    export function tryResolveJSModule(moduleName: string, initialDir: string, host: ModuleResolutionHost): string | undefined {
+        const { resolvedModule } = tryResolveJSModuleWorker(moduleName, initialDir, host);
+        return resolvedModule && resolvedModule.resolvedFileName;
+    }
+
+    function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
+        return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*jsOnly*/ true);
     }
 
     export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache): ResolvedModuleWithFailedLookupLocations {
@@ -958,7 +979,7 @@ namespace ts {
 
         // If that didn't work, try stripping a ".js" or ".jsx" extension and replacing it with a TypeScript one;
         // e.g. "./foo.js" can be matched by "./foo.ts" or "./foo.d.ts"
-        if (hasJavaScriptFileExtension(candidate)) {
+        if (hasJSFileExtension(candidate)) {
             const extensionless = removeFileExtension(candidate);
             if (state.traceEnabled) {
                 const extension = candidate.substring(extensionless.length);
@@ -1022,15 +1043,6 @@ namespace ts {
         return withPackageId(packageId, loadNodeModuleFromDirectoryWorker(extensions, candidate, onlyRecordFailures, state, packageJsonContent, versionPaths));
     }
 
-    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, packageJsonContent: PackageJsonPathFields | undefined, versionPaths: VersionPaths | undefined): PathAndExtension | undefined {
-        const fromPackageJson = packageJsonContent && loadModuleFromPackageJson(packageJsonContent, versionPaths, extensions, candidate, state);
-        if (fromPackageJson) {
-            return fromPackageJson;
-        }
-        const directoryExists = !onlyRecordFailures && directoryProbablyExists(candidate, state.host);
-        return loadModuleFromFile(extensions, combinePaths(candidate, "index"), !directoryExists, state);
-    }
-
     interface PackageJsonInfo {
         packageJsonContent: PackageJsonPathFields | undefined;
         packageId: PackageId | undefined;
@@ -1052,7 +1064,7 @@ namespace ts {
                     const jsPath = readPackageJsonMainField(packageJsonContent, packageDirectory, state);
                     if (typeof jsPath === "string" && jsPath.length > packageDirectory.length) {
                         const potentialSubModule = jsPath.substring(packageDirectory.length + 1);
-                        subModuleName = (forEach(supportedJavascriptExtensions, extension =>
+                        subModuleName = (forEach(supportedJSExtensions, extension =>
                             tryRemoveExtension(potentialSubModule, extension)) || potentialSubModule) + Extension.Dts;
                     }
                     else {
@@ -1090,22 +1102,12 @@ namespace ts {
         }
     }
 
-    function loadModuleFromPackageJson(jsonContent: PackageJsonPathFields, versionPaths: VersionPaths | undefined, extensions: Extensions, candidate: string, state: ModuleResolutionState): PathAndExtension | undefined {
-        let file = extensions !== Extensions.JavaScript && extensions !== Extensions.Json
-            ? readPackageJsonTypesFields(jsonContent, candidate, state)
-            : readPackageJsonMainField(jsonContent, candidate, state);
-        if (!file) {
-            if (extensions === Extensions.TypeScript) {
+    function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, jsonContent: PackageJsonPathFields | undefined, versionPaths: VersionPaths | undefined): PathAndExtension | undefined {
+        const packageFile = jsonContent && (extensions !== Extensions.JavaScript && extensions !== Extensions.Json
+            ? readPackageJsonTypesFields(jsonContent, candidate, state) ||
                 // When resolving typescript modules, try resolving using main field as well
-                file = readPackageJsonMainField(jsonContent, candidate, state);
-                if (!file) {
-                    return undefined;
-                }
-            }
-            else {
-                return undefined;
-            }
-        }
+                (extensions === Extensions.TypeScript ? readPackageJsonMainField(jsonContent, candidate, state) : undefined)
+            : readPackageJsonMainField(jsonContent, candidate, state));
 
         const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
             const fromFile = tryFile(candidate, onlyRecordFailures, state);
@@ -1125,21 +1127,26 @@ namespace ts {
             return nodeLoadModuleByRelativeName(nextExtensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ false);
         };
 
-        const onlyRecordFailures = !directoryProbablyExists(getDirectoryPath(file), state.host);
+        const onlyRecordFailuresForPackageFile = packageFile ? !directoryProbablyExists(getDirectoryPath(packageFile), state.host) : undefined;
+        const onlyRecordFailuresForIndex = onlyRecordFailures || !directoryProbablyExists(candidate, state.host);
+        const indexPath = combinePaths(candidate, "index");
 
-        if (versionPaths && containsPath(candidate, file)) {
-            const moduleName = getRelativePathFromDirectory(candidate, file, /*ignoreCase*/ false);
+        if (versionPaths && (!packageFile || containsPath(candidate, packageFile))) {
+            const moduleName = getRelativePathFromDirectory(candidate, packageFile || indexPath, /*ignoreCase*/ false);
             if (state.traceEnabled) {
                 trace(state.host, Diagnostics.package_json_has_a_typesVersions_entry_0_that_matches_compiler_version_1_looking_for_a_pattern_to_match_module_name_2, versionPaths.version, version, moduleName);
             }
-            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailures, state);
+            const result = tryLoadModuleUsingPaths(extensions, moduleName, candidate, versionPaths.paths, loader, onlyRecordFailuresForPackageFile || onlyRecordFailuresForIndex, state);
             if (result) {
                 return removeIgnoredPackageId(result.value);
             }
         }
 
         // It won't have a `packageId` set, because we disabled `considerPackageJson`.
-        return removeIgnoredPackageId(loader(extensions, file, onlyRecordFailures, state));
+        const packageFileResult = packageFile && removeIgnoredPackageId(loader(extensions, packageFile, onlyRecordFailuresForPackageFile!, state));
+        if (packageFileResult) return packageFileResult;
+
+        return loadModuleFromFile(extensions, indexPath, onlyRecordFailuresForIndex, state);
     }
 
     /** Resolve from an arbitrarily specified file. Return `undefined` if it has an unsupported extension. */
