@@ -145,8 +145,8 @@ type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
 >Q31 : number
 
-type Q32 = [string, number][2];  // string | number
->Q32 : undefined
+type Q32 = [string, number][number];  // string | number
+>Q32 : string | number
 
 type Q33 = [string, number][E.A];  // string
 >Q33 : string
@@ -156,15 +156,11 @@ type Q34 = [string, number][E.B];  // number
 >Q34 : number
 >E : any
 
-type Q35 = [string, number][E.C];  // string | number
->Q35 : undefined
->E : any
+type Q35 = [string, number]["0"];  // string
+>Q35 : string
 
-type Q36 = [string, number]["0"];  // string
->Q36 : string
-
-type Q37 = [string, number]["1"];  // string
->Q37 : number
+type Q36 = [string, number]["1"];  // string
+>Q36 : number
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Q40 : boolean | "yes" | "no"
