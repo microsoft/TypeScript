@@ -2481,10 +2481,6 @@
         "category": "Error",
         "code": 2732
     },
-    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
-        "category": "Error",
-        "code": 2733
-    },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
