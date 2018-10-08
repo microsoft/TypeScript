@@ -1236,6 +1236,13 @@ function [#|f|]() {
 }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsRejectedPromiseInTryBlock", `
+function [#|f|]() {
+    return Promise.resolve(1)
+        .then(x => Promise.reject(x))
+        .catch(err => console.log(err));
+}    
+`);
 
 _testConvertToAsyncFunction("convertToAsyncFunction_nestedPromises", `
 function [#|f|]() {

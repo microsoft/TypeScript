@@ -3445,7 +3445,9 @@ namespace ts {
         // ES6 syntax, and requires a lexical `this` binding.
         if (transformFlags & TransformFlags.Super) {
             transformFlags ^= TransformFlags.Super;
-            transformFlags |= TransformFlags.ContainsSuper;
+            // super inside of an async function requires hoisting the super access (ES2017).
+            // same for super inside of an async generator, which is ESNext.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3461,7 +3463,9 @@ namespace ts {
         // ES6 syntax, and requires a lexical `this` binding.
         if (expressionFlags & TransformFlags.Super) {
             transformFlags &= ~TransformFlags.Super;
-            transformFlags |= TransformFlags.ContainsSuper;
+            // super inside of an async function requires hoisting the super access (ES2017).
+            // same for super inside of an async generator, which is ESNext.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
