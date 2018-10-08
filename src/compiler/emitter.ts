@@ -148,6 +148,9 @@ namespace ts {
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
+                }
             }
         }
 
