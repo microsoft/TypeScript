@@ -1,0 +1,20 @@
+=== tests/cases/conformance/jsdoc/bug27025.js ===
+export class Alpha { }
+>Alpha : Alpha
+
+export class Beta {
+>Beta : Beta
+
+  /**
+   * @constructor
+   */
+  constructor() {
+  }
+}
+
+const arr = [Alpha, Beta];
+>arr : (typeof Alpha)[]
+>[Alpha, Beta] : (typeof Alpha)[]
+>Alpha : typeof Alpha
+>Beta : typeof Beta
+
