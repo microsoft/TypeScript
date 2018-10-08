@@ -1208,7 +1208,7 @@ namespace ts.textChanges {
 
             if (parent.kind === SyntaxKind.CatchClause) {
                 // TODO: There's currently no unused diagnostic for this, could be a suggestion
-                changes.deleteNodeRange(sourceFile, findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!, findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!);
+                changes.deleteNodeRange(sourceFile, findChildOfKind(parent, SyntaxKind.OpenParenToken, sourceFile)!, findChildOfKind(parent, SyntaxKind.CloseParenToken, sourceFile)!);
                 return;
             }
 
