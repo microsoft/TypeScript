@@ -339,12 +339,35 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
+        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string): void {
+            const token = getTouchingToken(sourceFile, position);
+            const text = "/**" + commentText + "*/" + this.newLineCharacter + this.repeatString(" ", character);
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
 
         public insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
+        }
+
+        public tryInsertJSDocParameters(sourceFile: SourceFile, parameters: codefix.ParameterInference[]) {
+            if (parameters.length === 0) {
+                return;
+            }
+            const parent = parameters[0].declaration.parent;
+            const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
+            let commentText = "\n";
+            for (const { declaration, typeNode, isOptional } of parameters) {
+                if (isIdentifier(declaration.name)) {
+                    const printed = createPrinter().printNode(EmitHint.Unspecified, typeNode!, sourceFile);
+                    commentText += this.printJSDocParameter(indent, printed, declaration.name, isOptional);
+                }
+            }
+            commentText += this.repeatString(" ", indent + 1);
+            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -363,6 +386,36 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+        }
+
+        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
+            const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
+            let commentText;
+            if (isGetAccessorDeclaration(node)) {
+                commentText = ` @return {${printed}} `;
+            }
+            else {
+                commentText = ` @type {${printed}} `;
+                node = node.parent;
+            }
+            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart()).character, node.getStart(), commentText);
+        }
+
+        /** Should only be used to repeat strings a small number of times */
+        private repeatString(s: string, n: number) {
+            let sum = "";
+            for (let i = 0; i < n; i++) {
+                sum += s;
+            }
+            return sum;
+        }
+
+        private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
+            let printName = unescapeLeadingUnderscores(name.escapedText);
+            if (isOptionalParameter) {
+                printName = `[${printName}]`;
+            }
+            return this.repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {

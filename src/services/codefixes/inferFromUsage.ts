@@ -26,9 +26,6 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, program, span: { start }, errorCode, cancellationToken } = context;
-            if (isSourceFileJS(sourceFile)) {
-                return undefined; // TODO: GH#20113
-            }
 
             const token = getTokenAtPosition(sourceFile, start);
             let declaration!: Declaration | undefined;
@@ -50,7 +47,7 @@ namespace ts.codefix {
     function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
         switch (errorCode) {
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                return isSetAccessor(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
+                return isSetAccessorDeclaration(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 return Diagnostics.Infer_parameter_types_from_usage;
             default:
@@ -59,7 +56,7 @@ namespace ts.codefix {
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker): Declaration | undefined {
-        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken) {
+        if (!isParameterPropertyModifier(token.kind) && token.kind !== SyntaxKind.Identifier && token.kind !== SyntaxKind.DotDotDotToken && token.kind !== SyntaxKind.ThisKeyword) {
             return undefined;
         }
 
@@ -70,6 +67,14 @@ namespace ts.codefix {
             case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code:
                 if ((isVariableDeclaration(parent) && markSeen(parent)) || isPropertyDeclaration(parent) || isPropertySignature(parent)) { // handle bad location
                     annotateVariableDeclaration(changes, sourceFile, parent, program, cancellationToken);
+                    return parent;
+                }
+                if (isPropertyAccessExpression(parent)) {
+                    const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
+                    const typeNode = type && getTypeNodeIfAccessible(type, parent, program.getTypeChecker());
+                    if (typeNode) {
+                        changes.tryInsertJSDocType(sourceFile, parent, typeNode);
+                    }
                     return parent;
                 }
                 return undefined;
@@ -92,7 +97,7 @@ namespace ts.codefix {
         switch (errorCode) {
             // Parameter declarations
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
-                if (isSetAccessor(containingFunction)) {
+                if (isSetAccessorDeclaration(containingFunction)) {
                     annotateSetAccessor(changes, sourceFile, containingFunction, program, cancellationToken);
                     return containingFunction;
                 }
@@ -108,7 +113,7 @@ namespace ts.codefix {
             // Get Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code:
             case Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code:
-                if (isGetAccessor(containingFunction) && isIdentifier(containingFunction.name)) {
+                if (isGetAccessorDeclaration(containingFunction) && isIdentifier(containingFunction.name)) {
                     annotate(changes, sourceFile, containingFunction, inferTypeForVariableFromUsage(containingFunction.name, program, cancellationToken), program);
                     return containingFunction;
                 }
@@ -116,7 +121,7 @@ namespace ts.codefix {
 
             // Set Accessor declarations
             case Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code:
-                if (isSetAccessor(containingFunction)) {
+                if (isSetAccessorDeclaration(containingFunction)) {
                     annotateSetAccessor(changes, sourceFile, containingFunction, program, cancellationToken);
                     return containingFunction;
                 }
@@ -150,18 +155,26 @@ namespace ts.codefix {
             return;
         }
 
-        const types = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
-            containingFunction.parameters.map(p => isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined);
+        const symbols = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
+            containingFunction.parameters.map(p => ({
+                declaration: p,
+                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined
+            } as ParameterInference));
         // We didn't actually find a set of type inference positions matching each parameter position
-        if (!types || containingFunction.parameters.length !== types.length) {
+        if (containingFunction.parameters.length !== symbols.length) {
             return;
         }
 
-        zipWith(containingFunction.parameters, types, (parameter, type) => {
-            if (!parameter.type && !parameter.initializer) {
-                annotate(changes, sourceFile, parameter, type, program);
+        if (isInJSFile(containingFunction)) {
+            annotateJSDocParameters(changes, sourceFile, symbols, program);
+        }
+        else {
+            for (const { declaration, type } of symbols) {
+                if (declaration && !declaration.type && !declaration.initializer) {
+                    annotate(changes, sourceFile, declaration, type, program);
+                }
             }
-        });
+        }
     }
 
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, cancellationToken: CancellationToken): void {
@@ -169,16 +182,40 @@ namespace ts.codefix {
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
             const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
                 inferTypeForVariableFromUsage(param.name, program, cancellationToken);
-            annotate(changes, sourceFile, param, type, program);
+            if (isInJSFile(setAccessorDeclaration)) {
+                annotateJSDocParameters(changes, sourceFile, [{ declaration: param, type }], program);
+            }
+            else {
+                annotate(changes, sourceFile, param, type, program);
+            }
         }
     }
 
     function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program): void {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program.getTypeChecker());
-        if (typeNode) changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
+        if (typeNode) {
+            if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
+                changes.tryInsertJSDocType(sourceFile, declaration, typeNode);
+            }
+            else {
+                changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
+            }
+        }
     }
 
-    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, symbols: ParameterInference[], program: Program): void {
+        const result = [];
+        for (const symbol of symbols) {
+            const param = symbol.declaration;
+            const typeNode = symbol.type && getTypeNodeIfAccessible(symbol.type, param, program.getTypeChecker());
+            if (typeNode && !param.initializer && !getJSDocType(param)) {
+                result.push({ ...symbol, typeNode });
+            }
+        }
+        changes.tryInsertJSDocParameters(sourceFile, result);
+    }
+
+   function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, checker: TypeChecker): TypeNode | undefined {
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };
         const res = checker.typeToTypeNode(type, enclosingScope, /*flags*/ undefined, {
@@ -203,7 +240,7 @@ namespace ts.codefix {
         return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
-    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+    function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
             case SyntaxKind.FunctionExpression:
@@ -217,6 +254,13 @@ namespace ts.codefix {
                     return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
                 }
         }
+    }
+
+    export interface ParameterInference {
+        declaration: ParameterDeclaration;
+        type?: Type;
+        typeNode?: TypeNode;
+        isOptional?: boolean;
     }
 
     namespace InferFromReference {
@@ -246,7 +290,7 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker);
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): (Type | undefined)[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ParameterInference[] | undefined {
             if (references.length === 0) {
                 return undefined;
             }
@@ -262,11 +306,13 @@ namespace ts.codefix {
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
+            let isOptional = false;
             return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
                 const types: Type[] = [];
                 const isRest = isRestParameter(parameter);
                 for (const callContext of callContexts) {
                     if (callContext.argumentTypes.length <= parameterIndex) {
+                        isOptional = isInJSFile(declaration);
                         continue;
                     }
 
@@ -280,10 +326,14 @@ namespace ts.codefix {
                     }
                 }
                 if (!types.length) {
-                    return undefined;
+                    return { declaration: parameter };
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
-                return isRest ? checker.createArrayType(type) : type;
+                return {
+                    type: isRest ? checker.createArrayType(type) : type,
+                    isOptional: isOptional && !isRest,
+                    declaration: parameter
+                };
             });
         }
 
