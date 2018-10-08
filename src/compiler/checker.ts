@@ -20409,18 +20409,20 @@ namespace ts {
          * file.
          */
         function isJSConstructor(node: Declaration | undefined): boolean {
-            if (node && isInJSFile(node)) {
+            if (!node || !isInJSFile(node)) {
+                return false;
+            }
+            const func = isFunctionDeclaration(node) || isFunctionExpression(node) ? node :
+                isVariableDeclaration(node) && node.initializer && isFunctionExpression(node.initializer) ? node.initializer :
+                undefined;
+            if (func) {
                 // If the node has a @class tag, treat it like a constructor.
                 if (getJSDocClassTag(node)) return true;
 
                 // If the symbol of the node has members, treat it like a constructor.
-                const symbol = isFunctionDeclaration(node) || isFunctionExpression(node) ? getSymbolOfNode(node) :
-                     isVariableDeclaration(node) && node.initializer && isFunctionExpression(node.initializer) ? getSymbolOfNode(node.initializer) :
-                     undefined;
-
+                const symbol = getSymbolOfNode(func);
                 return !!symbol && symbol.members !== undefined;
             }
-
             return false;
         }
 
