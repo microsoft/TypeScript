@@ -38,7 +38,8 @@ namespace ts.SignatureHelp {
             return undefined;
         }
 
-        const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile, typeChecker);
+        const isManuallyInvoked = !!triggerReason && triggerReason.kind === "invoked";
+        const argumentInfo = getContainingArgumentInfo(startingToken, position, sourceFile, typeChecker, isManuallyInvoked);
         if (!argumentInfo) return undefined;
 
         cancellationToken.throwIfCancellationRequested();
@@ -450,8 +451,8 @@ namespace ts.SignatureHelp {
         return createTextSpan(applicableSpanStart, applicableSpanEnd - applicableSpanStart);
     }
 
-    function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker): ArgumentListInfo | undefined {
-        for (let n = node; !isBlock(n) && !isSourceFile(n); n = n.parent) {
+    function getContainingArgumentInfo(node: Node, position: number, sourceFile: SourceFile, checker: TypeChecker, isManuallyInvoked: boolean): ArgumentListInfo | undefined {
+        for (let n = node; isManuallyInvoked || (!isBlock(n) && !isSourceFile(n)); n = n.parent) {
             // If the node is not a subspan of its parent, this is a big problem.
             // There have been crashes that might be caused by this violation.
             Debug.assert(rangeContainsRange(n.parent, n), "Not a subspan", () => `Child: ${Debug.showSyntaxKind(n)}, parent: ${Debug.showSyntaxKind(n.parent)}`);
