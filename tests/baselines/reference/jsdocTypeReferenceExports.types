@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/bug27342.js ===
+module.exports = {}
+>module.exports = {} : typeof import("tests/cases/conformance/jsdoc/bug27342")
+>module.exports : typeof import("tests/cases/conformance/jsdoc/bug27342")
+>module : { "tests/cases/conformance/jsdoc/bug27342": typeof import("tests/cases/conformance/jsdoc/bug27342"); }
+>exports : typeof import("tests/cases/conformance/jsdoc/bug27342")
+>{} : {}
+
+/**
+ * @type {exports}
+ */
+var x
+>x : typeof import("tests/cases/conformance/jsdoc/bug27342")
+
+
