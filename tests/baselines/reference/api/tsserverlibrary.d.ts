@@ -7514,6 +7514,26 @@ declare namespace ts.server.protocol {
          */
         openFiles: string[];
     }
+    type ProjectLoadingStartEventName = "projectLoadingStart";
+    interface ProjectLoadingStartEvent extends Event {
+        event: ProjectLoadingStartEventName;
+        body: ProjectLoadingStartEventBody;
+    }
+    interface ProjectLoadingStartEventBody {
+        /** name of the project */
+        projectName: string;
+        /** reason for loading */
+        reason: string;
+    }
+    type ProjectLoadingFinishEventName = "projectLoadingFinish";
+    interface ProjectLoadingFinishEvent extends Event {
+        event: ProjectLoadingFinishEventName;
+        body: ProjectLoadingFinishEventBody;
+    }
+    interface ProjectLoadingFinishEventBody {
+        /** name of the project */
+        projectName: string;
+    }
     type SurveyReadyEventName = "surveyReady";
     interface SurveyReadyEvent extends Event {
         event: SurveyReadyEventName;
@@ -8266,6 +8286,8 @@ declare namespace ts.server {
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    const ProjectLoadingStartEvent = "projectLoadingStart";
+    const ProjectLoadingFinishEvent = "projectLoadingFinish";
     const SurveyReady = "surveyReady";
     const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
@@ -8276,6 +8298,19 @@ declare namespace ts.server {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
             openFiles: string[];
+        };
+    }
+    interface ProjectLoadingStartEvent {
+        eventName: typeof ProjectLoadingStartEvent;
+        data: {
+            project: Project;
+            reason: string;
+        };
+    }
+    interface ProjectLoadingFinishEvent {
+        eventName: typeof ProjectLoadingFinishEvent;
+        data: {
+            project: Project;
         };
     }
     interface SurveyReady {
@@ -8362,7 +8397,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {

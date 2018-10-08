@@ -3536,6 +3536,7 @@ namespace ts {
         type?: Type;                        // Type of value symbol
         uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         inferredClassType?: Type;           // Type of an inferred ES5 class
@@ -3702,6 +3703,7 @@ namespace ts {
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
