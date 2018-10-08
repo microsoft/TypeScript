@@ -191,13 +191,12 @@ namespace ts.codefix {
             reportPrivateInBaseOfClassExpression: notAccessible,
             reportInaccessibleUniqueSymbolError: notAccessible,
             moduleResolverHost: {
-                directoryExists: host.directoryExists,
-                fileExists: host.fileExists,
-                getCommonSourceDirectory: program.getCommonSourceDirectory,
-                getCurrentDirectory: program.getCurrentDirectory,
-                getSourceFiles: program.getSourceFiles,
                 readFile: host.readFile,
-                useCaseSensitiveFileNames: host.useCaseSensitiveFileNames,
+                fileExists: host.fileExists,
+                directoryExists: host.directoryExists,
+                getSourceFiles: program.getSourceFiles,
+                getCurrentDirectory: program.getCurrentDirectory,
+                getCommonSourceDirectory: program.getCommonSourceDirectory,
             }
         });
         return typeIsAccessible ? res : undefined;
