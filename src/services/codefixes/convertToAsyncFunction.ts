@@ -465,11 +465,11 @@ namespace ts.codefix {
                         return innerCbBody;
                     }
 
+                    const type = transformer.checker.getTypeAtLocation(func);
+                    const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
+                    const rightHandSide = getSynthesizedDeepClone(funcBody);
+                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                     if (!shouldReturn) {
-                        const type = transformer.checker.getTypeAtLocation(func);
-                        const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                        const rightHandSide = getSynthesizedDeepClone(funcBody);
-                        const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                         const transformedStatement = createTransformedStatement(prevArgName, possiblyAwaitedRightHandSide, transformer);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
@@ -477,7 +477,7 @@ namespace ts.codefix {
                         return transformedStatement;
                     }
                     else {
-                        return [createReturn(getSynthesizedDeepClone(funcBody))];
+                        return [createReturn(possiblyAwaitedRightHandSide)];
                     }
                 }
             }
