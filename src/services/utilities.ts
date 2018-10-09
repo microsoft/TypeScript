@@ -906,6 +906,20 @@ namespace ts {
         return isTemplateLiteralKind(token.kind) && position > token.getStart(sourceFile);
     }
 
+    export function isInJSXText(sourceFile: SourceFile, position: number) {
+        const token = getTokenAtPosition(sourceFile, position);
+        if (isJsxText(token)) {
+            return position >= token.getStart(sourceFile);
+        }
+        if (token.kind === SyntaxKind.OpenBraceToken && isJsxExpression(token.parent) && isJsxElement(token.parent.parent)) {
+            return true;
+        }
+        if (token.kind === SyntaxKind.LessThanToken && isJsxOpeningLikeElement(token.parent) && isJsxElement(token.parent.parent)) {
+            return true;
+        }
+        return false;
+    }
+
     export function findPrecedingMatchingToken(token: Node, matchingTokenKind: SyntaxKind, sourceFile: SourceFile) {
         const tokenKind = token.kind;
         let remainingMatchingTokens = 0;
