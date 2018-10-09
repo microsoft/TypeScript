@@ -356,6 +356,19 @@ export class cNew {}`);
                     "TSFILE: /src/tests/index.d.ts",
                 ]);
             });
+
+            it("listEmittedFiles with emitDeclarationOnly", () => {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                const builder = createSolutionBuilder(host, ["/src/tests"], { listEmittedFiles: true, declaration: true, emitDeclarationOnly: true });
+                builder.buildAllProjects();
+                assert.deepEqual(host.traces, [
+                    "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/logic/index.d.ts",
+                    "TSFILE: /src/tests/index.d.ts",
+                ]);
+            });
         });
 
         describe("tsbuild - with rootDir of project reference in parentDirectory", () => {
