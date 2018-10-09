@@ -27,7 +27,7 @@ verify.codeFix({
     newFileContent:
 `export class C {
     /**
-     * @param {Promise<typeof import("/a")>} val
+     * @param {Promise<typeof import("./a")>} val
      */
     set x(val) { val; }
     method() { this.x = import("./a"); }
