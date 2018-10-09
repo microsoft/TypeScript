@@ -846,7 +846,7 @@ namespace ts {
                 }
             }
 
-            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string) => void;
+            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined) => void;
 
             function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
                 return (_fileName, eventKind) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "");
