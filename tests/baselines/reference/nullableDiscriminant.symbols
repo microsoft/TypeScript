@@ -1,0 +1,276 @@
+=== tests/cases/compiler/nullableDiscriminant.ts ===
+// Repro. from #24193
+
+interface WithError {
+>WithError : Symbol(WithError, Decl(nullableDiscriminant.ts, 0, 0))
+
+    error: Error
+>error : Symbol(WithError.error, Decl(nullableDiscriminant.ts, 2, 21))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    data: null
+>data : Symbol(WithError.data, Decl(nullableDiscriminant.ts, 3, 16))
+}
+
+interface WithoutError<Data> {
+>WithoutError : Symbol(WithoutError, Decl(nullableDiscriminant.ts, 5, 1))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 7, 23))
+
+    error: null
+>error : Symbol(WithoutError.error, Decl(nullableDiscriminant.ts, 7, 30))
+
+    data: Data
+>data : Symbol(WithoutError.data, Decl(nullableDiscriminant.ts, 8, 15))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 7, 23))
+}
+
+type DataCarrier<Data> = WithError | WithoutError<Data>
+>DataCarrier : Symbol(DataCarrier, Decl(nullableDiscriminant.ts, 10, 1))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 12, 17))
+>WithError : Symbol(WithError, Decl(nullableDiscriminant.ts, 0, 0))
+>WithoutError : Symbol(WithoutError, Decl(nullableDiscriminant.ts, 5, 1))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 12, 17))
+
+function test<Data>(carrier: DataCarrier<Data>) {
+>test : Symbol(test, Decl(nullableDiscriminant.ts, 12, 55))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 14, 14))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>DataCarrier : Symbol(DataCarrier, Decl(nullableDiscriminant.ts, 10, 1))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 14, 14))
+
+    if (carrier.error === null) {
+>carrier.error : Symbol(error, Decl(nullableDiscriminant.ts, 2, 21), Decl(nullableDiscriminant.ts, 7, 30))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>error : Symbol(error, Decl(nullableDiscriminant.ts, 2, 21), Decl(nullableDiscriminant.ts, 7, 30))
+
+        const error: null = carrier.error
+>error : Symbol(error, Decl(nullableDiscriminant.ts, 16, 13))
+>carrier.error : Symbol(WithoutError.error, Decl(nullableDiscriminant.ts, 7, 30))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>error : Symbol(WithoutError.error, Decl(nullableDiscriminant.ts, 7, 30))
+
+        const data: Data = carrier.data
+>data : Symbol(data, Decl(nullableDiscriminant.ts, 17, 13))
+>Data : Symbol(Data, Decl(nullableDiscriminant.ts, 14, 14))
+>carrier.data : Symbol(WithoutError.data, Decl(nullableDiscriminant.ts, 8, 15))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>data : Symbol(WithoutError.data, Decl(nullableDiscriminant.ts, 8, 15))
+    }
+    else {
+        const error: Error = carrier.error
+>error : Symbol(error, Decl(nullableDiscriminant.ts, 20, 13))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>carrier.error : Symbol(WithError.error, Decl(nullableDiscriminant.ts, 2, 21))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>error : Symbol(WithError.error, Decl(nullableDiscriminant.ts, 2, 21))
+
+        const data: null = carrier.data
+>data : Symbol(data, Decl(nullableDiscriminant.ts, 21, 13))
+>carrier.data : Symbol(WithError.data, Decl(nullableDiscriminant.ts, 3, 16))
+>carrier : Symbol(carrier, Decl(nullableDiscriminant.ts, 14, 20))
+>data : Symbol(WithError.data, Decl(nullableDiscriminant.ts, 3, 16))
+    }
+}
+
+// Repro. from #24479
+
+export interface Errored {
+>Errored : Symbol(Errored, Decl(nullableDiscriminant.ts, 23, 1))
+
+    error: Error
+>error : Symbol(Errored.error, Decl(nullableDiscriminant.ts, 27, 26))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    value: null
+>value : Symbol(Errored.value, Decl(nullableDiscriminant.ts, 28, 16))
+}
+
+export interface Succeeded<Value> {
+>Succeeded : Symbol(Succeeded, Decl(nullableDiscriminant.ts, 30, 1))
+>Value : Symbol(Value, Decl(nullableDiscriminant.ts, 32, 27))
+
+    error: null
+>error : Symbol(Succeeded.error, Decl(nullableDiscriminant.ts, 32, 35))
+
+    value: Value
+>value : Symbol(Succeeded.value, Decl(nullableDiscriminant.ts, 33, 15))
+>Value : Symbol(Value, Decl(nullableDiscriminant.ts, 32, 27))
+}
+
+type Result<T> = Succeeded<T> | Errored;
+>Result : Symbol(Result, Decl(nullableDiscriminant.ts, 35, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 37, 12))
+>Succeeded : Symbol(Succeeded, Decl(nullableDiscriminant.ts, 30, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 37, 12))
+>Errored : Symbol(Errored, Decl(nullableDiscriminant.ts, 23, 1))
+
+declare function getVal<T>(x :T): Result<T>
+>getVal : Symbol(getVal, Decl(nullableDiscriminant.ts, 37, 40))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 39, 24))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 39, 27))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 39, 24))
+>Result : Symbol(Result, Decl(nullableDiscriminant.ts, 35, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 39, 24))
+
+let x = getVal("hello");
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 41, 3))
+>getVal : Symbol(getVal, Decl(nullableDiscriminant.ts, 37, 40))
+
+if (x.error === null) {
+>x.error : Symbol(error, Decl(nullableDiscriminant.ts, 27, 26), Decl(nullableDiscriminant.ts, 32, 35))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 41, 3))
+>error : Symbol(error, Decl(nullableDiscriminant.ts, 27, 26), Decl(nullableDiscriminant.ts, 32, 35))
+
+    x.value.toUpperCase();
+>x.value.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+>x.value : Symbol(Succeeded.value, Decl(nullableDiscriminant.ts, 33, 15))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 41, 3))
+>value : Symbol(Succeeded.value, Decl(nullableDiscriminant.ts, 33, 15))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
+}
+
+type ErrorOrSuccess<T> = | { value: null, message: string } | { value: T };
+>ErrorOrSuccess : Symbol(ErrorOrSuccess, Decl(nullableDiscriminant.ts, 45, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 47, 20))
+>value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 28))
+>message : Symbol(message, Decl(nullableDiscriminant.ts, 47, 41))
+>value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 63))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 47, 20))
+
+declare function getErrorOrSuccess<T>(x :T): ErrorOrSuccess<T>
+>getErrorOrSuccess : Symbol(getErrorOrSuccess, Decl(nullableDiscriminant.ts, 47, 75))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 49, 35))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 49, 38))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 49, 35))
+>ErrorOrSuccess : Symbol(ErrorOrSuccess, Decl(nullableDiscriminant.ts, 45, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 49, 35))
+
+let y = getErrorOrSuccess({y: "foo"});
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 50, 3))
+>getErrorOrSuccess : Symbol(getErrorOrSuccess, Decl(nullableDiscriminant.ts, 47, 75))
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 50, 27))
+
+if(y.value === null) {
+>y.value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 28), Decl(nullableDiscriminant.ts, 47, 63))
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 50, 3))
+>value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 28), Decl(nullableDiscriminant.ts, 47, 63))
+
+    // ok
+    "message: " + y.message;
+>y.message : Symbol(message, Decl(nullableDiscriminant.ts, 47, 41))
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 50, 3))
+>message : Symbol(message, Decl(nullableDiscriminant.ts, 47, 41))
+}
+
+function genericNarrow<T>(x: T): true {
+>genericNarrow : Symbol(genericNarrow, Decl(nullableDiscriminant.ts, 55, 1))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 57, 23))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 57, 26))
+>T : Symbol(T, Decl(nullableDiscriminant.ts, 57, 23))
+
+    let y = getErrorOrSuccess(x);
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 58, 7))
+>getErrorOrSuccess : Symbol(getErrorOrSuccess, Decl(nullableDiscriminant.ts, 47, 75))
+>x : Symbol(x, Decl(nullableDiscriminant.ts, 57, 26))
+
+    if(y.value === null) {
+>y.value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 28), Decl(nullableDiscriminant.ts, 47, 63))
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 58, 7))
+>value : Symbol(value, Decl(nullableDiscriminant.ts, 47, 28), Decl(nullableDiscriminant.ts, 47, 63))
+
+        // not ok because T could be null
+        "message: " + y.message;
+>y : Symbol(y, Decl(nullableDiscriminant.ts, 58, 7))
+    }
+    return true;
+}
+
+interface A {
+>A : Symbol(A, Decl(nullableDiscriminant.ts, 64, 1))
+
+    f?: number;
+>f : Symbol(A.f, Decl(nullableDiscriminant.ts, 66, 13))
+
+    bar: string; 
+>bar : Symbol(A.bar, Decl(nullableDiscriminant.ts, 67, 15))
+}
+
+interface B {
+>B : Symbol(B, Decl(nullableDiscriminant.ts, 69, 1))
+
+    f: number; 
+>f : Symbol(B.f, Decl(nullableDiscriminant.ts, 71, 13))
+}
+
+declare const aOrB: A | B;
+>aOrB : Symbol(aOrB, Decl(nullableDiscriminant.ts, 75, 13))
+>A : Symbol(A, Decl(nullableDiscriminant.ts, 64, 1))
+>B : Symbol(B, Decl(nullableDiscriminant.ts, 69, 1))
+
+if (aOrB.f === undefined) {
+>aOrB.f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13))
+>aOrB : Symbol(aOrB, Decl(nullableDiscriminant.ts, 75, 13))
+>f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13))
+>undefined : Symbol(undefined)
+
+    // ok
+    aOrB.bar
+>aOrB.bar : Symbol(A.bar, Decl(nullableDiscriminant.ts, 67, 15))
+>aOrB : Symbol(aOrB, Decl(nullableDiscriminant.ts, 75, 13))
+>bar : Symbol(A.bar, Decl(nullableDiscriminant.ts, 67, 15))
+} 
+
+interface C {
+>C : Symbol(C, Decl(nullableDiscriminant.ts, 79, 1))
+
+    f: null;
+>f : Symbol(C.f, Decl(nullableDiscriminant.ts, 81, 13))
+
+    baz: string;
+>baz : Symbol(C.baz, Decl(nullableDiscriminant.ts, 82, 12))
+}
+
+declare const aOrBorC: A | B | C;
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>A : Symbol(A, Decl(nullableDiscriminant.ts, 64, 1))
+>B : Symbol(B, Decl(nullableDiscriminant.ts, 69, 1))
+>C : Symbol(C, Decl(nullableDiscriminant.ts, 79, 1))
+
+if (aOrBorC.f == null) {
+>aOrBorC.f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+
+    // not ok
+    aOrBorC.bar
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+}
+
+if (aOrBorC.f === null) {
+>aOrBorC.f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+
+    // ok
+    aOrBorC.baz
+>aOrBorC.baz : Symbol(C.baz, Decl(nullableDiscriminant.ts, 82, 12))
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>baz : Symbol(C.baz, Decl(nullableDiscriminant.ts, 82, 12))
+} 
+
+if (aOrBorC.f === undefined) {
+>aOrBorC.f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>f : Symbol(f, Decl(nullableDiscriminant.ts, 66, 13), Decl(nullableDiscriminant.ts, 71, 13), Decl(nullableDiscriminant.ts, 81, 13))
+>undefined : Symbol(undefined)
+
+    // ok
+    aOrBorC.bar
+>aOrBorC.bar : Symbol(A.bar, Decl(nullableDiscriminant.ts, 67, 15))
+>aOrBorC : Symbol(aOrBorC, Decl(nullableDiscriminant.ts, 86, 13))
+>bar : Symbol(A.bar, Decl(nullableDiscriminant.ts, 67, 15))
+} 
+
+
+
+

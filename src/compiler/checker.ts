@@ -12919,6 +12919,24 @@ namespace ts {
                 isUnitType(type);
         }
 
+        function isNullableDiscriminable(type: Type): boolean {
+            if (type.flags & TypeFlags.Union) {
+                let hasDiscriminant = false;
+                for (const current of (<UnionType>type).types) {
+                    if (current.flags & TypeFlags.Nullable) {
+                        hasDiscriminant = true;
+                        continue;
+                    }
+                    else if (current.flags & (TypeFlags.DisjointDomains | TypeFlags.Object)) {
+                        continue;
+                    }
+                    return false;
+                }
+                return hasDiscriminant;
+            }
+            return false;
+        }
+
         function getBaseTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral ? stringType :
@@ -14217,7 +14235,9 @@ namespace ts {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                        (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) && isLiteralType(getTypeOfSymbol(prop));
+                        let propType: Type;
+                        (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) &&
+                            (propType = getTypeOfSymbol(prop), (isLiteralType(propType) || isNullableDiscriminable(propType)));
                     }
                     return !!(<TransientSymbol>prop).isDiscriminantProperty;
                 }
