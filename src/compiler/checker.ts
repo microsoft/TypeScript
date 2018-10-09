@@ -16567,6 +16567,9 @@ namespace ts {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
             const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
+                return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
+            }
             return getTypeAtPosition(signature, argIndex);
         }
 
@@ -16934,7 +16937,11 @@ namespace ts {
                 // (as below) instead!
                 return node.parent.contextualType;
             }
-            return getAttributesTypeFromJsxOpeningLikeElement(node);
+            return getContextualTypeForArgumentAtIndex(node, 0);
+        }
+
+        function getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxOpeningLikeElement) {
+            return isJsxStatelessFunctionReference(node) ? getJsxPropsTypeFromCallSignature(signature, node) : getJsxPropsTypeFromClassType(signature, node);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxOpeningLikeElement) {
@@ -16952,23 +16959,42 @@ namespace ts {
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
         }
 
+        function getStaticTypeOfReferencedJsxConstructor(context: JsxOpeningLikeElement) {
+            if (isJsxIntrinsicIdentifier(context.tagName)) {
+                const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(context);
+                const fakeSignature = createSignatureForJSXIntrinsic(context, result);
+                return getOrCreateTypeFromSignature(fakeSignature);
+            }
+            const tagType = checkExpressionCached(context.tagName);
+            if (tagType.flags & TypeFlags.StringLiteral) {
+                const result = getIntrinsicAttributesTypeFromStringLiteralType(tagType as StringLiteralType, context);
+                if (!result) {
+                    return errorType;
+                }
+                const fakeSignature = createSignatureForJSXIntrinsic(context, result);
+                return getOrCreateTypeFromSignature(fakeSignature);
+            }
+            return tagType;
+        }
+
         function getJsxManagedAttributesFromLocatedAttributes(context: JsxOpeningLikeElement, ns: Symbol, attributesType: Type) {
             const managedSym = getJsxLibraryManagedAttributes(ns);
             if (managedSym) {
                 const declaredManagedType = getDeclaredTypeOfSymbol(managedSym);
+                const ctorType = getStaticTypeOfReferencedJsxConstructor(context);
                 if (length((declaredManagedType as GenericType).typeParameters) >= 2) {
-                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
+                    const args = fillMissingTypeArguments([ctorType, attributesType], (declaredManagedType as GenericType).typeParameters, 2, isInJSFile(context));
                     return createTypeReference((declaredManagedType as GenericType), args);
                 }
                 else if (length(declaredManagedType.aliasTypeArguments) >= 2) {
-                    const args = fillMissingTypeArguments([checkExpressionCached(context.tagName), attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJSFile(context));
+                    const args = fillMissingTypeArguments([ctorType, attributesType], declaredManagedType.aliasTypeArguments!, 2, isInJSFile(context));
                     return getTypeAliasInstantiation(declaredManagedType.aliasSymbol!, args);
                 }
             }
             return attributesType;
         }
 
-        function getJsxPropsTypeFromClassType(sig: Signature, isJs: boolean, context: JsxOpeningLikeElement) {
+        function getJsxPropsTypeFromClassType(sig: Signature, context: JsxOpeningLikeElement) {
             const ns = getJsxNamespaceAt(context);
             const forcedLookupLocation = getJsxElementPropertiesName(ns);
             let attributesType = forcedLookupLocation === undefined
@@ -17003,7 +17029,7 @@ namespace ts {
                     const hostClassType = getReturnTypeOfSignature(sig);
                     apparentAttributesType = intersectTypes(
                         typeParams
-                            ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isJs))
+                            ? createTypeReference(<GenericType>intrinsicClassAttribs, fillMissingTypeArguments([hostClassType], typeParams, getMinTypeArgumentCount(typeParams), isInJSFile(context)))
                             : intrinsicClassAttribs,
                         apparentAttributesType
                     );
@@ -17843,50 +17869,6 @@ namespace ts {
                 return anyType;
         }
 
-        /**
-         * Resolve attributes type of the given opening-like element. The attributes type is a type of attributes associated with the given elementType.
-         * For instance:
-         *      declare function Foo(attr: { p1: string}): JSX.Element;
-         *      <Foo p1={10} />;  // This function will try resolve "Foo" and return an attributes type of "Foo" which is "{ p1: string }"
-         *
-         * The function is intended to initially be called from getAttributesTypeFromJsxOpeningLikeElement which already handle JSX-intrinsic-element..
-         * This function will try to resolve custom JSX attributes type in following order: string literal, stateless function, and stateful component
-         *
-         * @param openingLikeElement a non-intrinsic JSXOPeningLikeElement
-         * @param elementType an instance type of the given opening-like element. If undefined, the function will check type openinglikeElement's tagname.
-         * @return attributes type if able to resolve the type of node
-         *         anyType if there is no type ElementAttributesProperty or there is an error
-         *         emptyObjectType if there is no "prop" in the element instance type
-         */
-        function resolveCustomJsxElementAttributesType(openingLikeElement: JsxOpeningLikeElement, elementType: Type): Type {
-            if (elementType.flags & TypeFlags.Union) {
-                const types = (elementType as UnionType).types;
-                return getUnionType(types.map(type => {
-                    return resolveCustomJsxElementAttributesType(openingLikeElement, type);
-                }), UnionReduction.Subtype);
-            }
-
-            // Shortcircuit any
-            if (isTypeAny(elementType)) {
-                return elementType;
-            }
-            // If the elemType is a string type, we have to return anyType to prevent an error downstream as we will try to find construct or call signature of the type
-            else if (elementType.flags & TypeFlags.String) {
-                return anyType;
-            }
-            else if (elementType.flags & TypeFlags.StringLiteral) {
-                return getIntrinsicAttributesTypeFromStringLiteralType(elementType as StringLiteralType, openingLikeElement) || anyType;
-            }
-
-            // Get the element instance type (the result of newing or invoking this tag)
-            const preferedOverload = getNodeLinks(openingLikeElement).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(openingLikeElement);
-            if (!preferedOverload) {
-                return errorType;
-            }
-            const isSFC = !length(getSignaturesOfType(elementType, SignatureKind.Construct));
-            return isSFC ? getJsxPropsTypeFromCallSignature(preferedOverload, openingLikeElement) : getJsxPropsTypeFromClassType(preferedOverload, isInJSFile(openingLikeElement), openingLikeElement);
-        }
-
         function checkJsxReturnAssignableToAppropriateBound(isSFC: boolean, elemInstanceType: Type, openingLikeElement: Node) {
             if (isSFC) {
                 const sfcReturnConstraint = getJsxStatelessElementTypeAt(openingLikeElement);
@@ -17924,29 +17906,6 @@ namespace ts {
                 }
             }
             return links.resolvedJsxElementAttributesType;
-        }
-
-        /**
-         * Get attributes type of the given custom opening-like JSX element.
-         * This function is intended to be called from a caller that handles intrinsic JSX element already.
-         * @param node a custom JSX opening-like element
-         */
-        function getCustomJsxElementAttributesType(node: JsxOpeningLikeElement): Type {
-            return resolveCustomJsxElementAttributesType(node, checkExpression(node.tagName));
-        }
-
-        /**
-         * Get the attributes type, which indicates the attributes that are valid on the given JSXOpeningLikeElement.
-         * @param node a JSXOpeningLikeElement node
-         * @return an attributes type of the given node
-         */
-        function getAttributesTypeFromJsxOpeningLikeElement(node: JsxOpeningLikeElement): Type {
-            if (isJsxIntrinsicIdentifier(node.tagName)) {
-                return getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
-            }
-            else {
-                return getCustomJsxElementAttributesType(node);
-            }
         }
 
         function getJsxElementClassTypeAt(location: Node): Type | undefined {
@@ -18900,8 +18859,7 @@ namespace ts {
         }
 
         function inferJsxTypeArguments(node: JsxOpeningLikeElement, signature: Signature, excludeArgument: ReadonlyArray<boolean> | undefined, context: InferenceContext): Type[] {
-            const isCtor = !!length(getSignaturesOfType(checkExpression(node.tagName), SignatureKind.Construct));
-            const paramType = isCtor ? getJsxPropsTypeFromClassType(signature, isInJSFile(node), node) : getJsxPropsTypeFromCallSignature(signature, node);
+            const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
 
             const checkAttrType = checkExpressionWithContextualType(node.attributes, paramType, excludeArgument && excludeArgument[0] !== undefined ? identityMapper : context);
             inferTypes(context.inferences, checkAttrType, paramType);
@@ -19046,7 +19004,7 @@ namespace ts {
 
         function isJsxStatelessFunctionReference(node: JsxOpeningLikeElement) {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
-                return false;
+                return true;
             }
             const tagType = checkExpression(node.tagName);
             return !length(getSignaturesOfType(getApparentType(tagType), SignatureKind.Construct));
@@ -19059,11 +19017,11 @@ namespace ts {
          * @param relation a relationship to check parameter and argument type
          * @param excludeArgument
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, isCtor: boolean, relation: Map<RelationComparisonResult>, reportErrors: boolean) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, reportErrors: boolean) {
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
-            const paramType = isCtor ? getJsxPropsTypeFromClassType(signature, isInJSFile(node), node) : getJsxPropsTypeFromCallSignature(signature, node);
+            const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
             const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
@@ -19076,7 +19034,7 @@ namespace ts {
             excludeArgument: boolean[] | undefined,
             reportErrors: boolean) {
             if (isJsxOpeningLikeElement(node)) {
-                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, !isJsxStatelessFunctionReference(node), relation, reportErrors);
+                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, reportErrors);
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {
@@ -20000,11 +19958,39 @@ namespace ts {
             return resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp, headMessage);
         }
 
+        function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
+            // TODO: Since this builds some nodes for the fake'd up signature, this might be worth caching on the node
+            const namespace = getJsxNamespaceAt(node);
+            const exports = namespace && getExportsOfSymbol(namespace);
+            // TODO: We fake up a SFC signature for each intrinsic, however a more specific per-element signature drawn from the JSX declaration
+            // file would probably be preferable.
+            const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
+            const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
+            const declaration = createFunctionTypeNode(/*typeParameters*/ undefined,
+                [createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotdotdot*/ undefined, "props", /*questionMark*/ undefined, nodeBuilder.typeToTypeNode(result, node))],
+                returnNode ? createTypeReferenceNode(returnNode, /*typeArguments*/ undefined) : createKeywordTypeNode(SyntaxKind.AnyKeyword)
+            );
+            const parameterSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "props" as __String);
+            parameterSymbol.type = result;
+            return createSignature(
+                declaration,
+                /*typeParameters*/ undefined,
+                /*thisParameter*/ undefined,
+                [parameterSymbol],
+                typeSymbol ? getDeclaredTypeOfSymbol(typeSymbol) : errorType,
+                /*returnTypePredicate*/ undefined,
+                1,
+                /*hasRestparameter*/ false,
+                /*hasLiteralTypes*/ false
+            );
+        }
+
         function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
-                checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(node.attributes, CheckMode.Normal), result, node.tagName, node.attributes);
-                return anySignature; // TODO: Fake up a signature from the intrinsic types
+                const fakeSignature = createSignatureForJSXIntrinsic(node, result);
+                checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined), result, node.tagName, node.attributes);
+                return fakeSignature;
             }
             const exprTypes = checkExpression(node.tagName);
             const apparentType = getApparentType(exprTypes);
@@ -20012,21 +19998,23 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
-            if (isUntypedFunctionCall(exprTypes, apparentType, callSignatures.length, constructSignatures.length) || exprTypes.flags & TypeFlags.String) {
-                return resolveUntypedCall(node);
-            }
-
             if (exprTypes.flags & TypeFlags.StringLiteral) {
                 const intrinsicType = getIntrinsicAttributesTypeFromStringLiteralType(exprTypes as StringLiteralType, node);
                 if (!intrinsicType) {
                     error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (exprTypes as StringLiteralType).value, "JSX." + JsxNames.IntrinsicElements);
+                    return resolveUntypedCall(node);
                 }
                 else {
-                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(node.attributes, CheckMode.Normal), intrinsicType, node.tagName, node.attributes);
+                    const fakeSignature = createSignatureForJSXIntrinsic(node, intrinsicType);
+                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined), intrinsicType, node.tagName, node.attributes);
+                    return fakeSignature;
                 }
-                return anySignature; // TODO: Fake up a signature from the intrinsic types
+            }
+
+            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
+            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
+            if (exprTypes.flags & TypeFlags.String || isUntypedFunctionCall(exprTypes, apparentType, callSignatures.length, constructSignatures.length)) {
+                return resolveUntypedCall(node);
             }
 
             const signatures = getUninstantiatedJsxSignaturesOfType(apparentType);
