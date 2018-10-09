@@ -149,6 +149,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(274,42): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(298,19): error TS2339: Property 'breadcrumb' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(302,23): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(314,15): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(323,23): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(330,27): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(391,50): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
@@ -4399,6 +4400,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManag
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(247,24): error TS2694: Namespace 'Coverage' has no exported member 'RawLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(248,24): error TS2694: Namespace 'Coverage' has no exported member 'RawLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(255,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(258,34): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(277,18): error TS2339: Property 'uninstallGutter' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(293,16): error TS2339: Property 'uninstallGutter' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(294,16): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
@@ -4452,6 +4454,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(57,54):
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(141,5): error TS2322: Type 'Timer' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(187,55): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(187,85): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(231,59): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(12,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(20,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(28,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -6251,6 +6254,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(44,24): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(46,20): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(46,69): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(58,26): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(96,3): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(103,45): error TS2322: Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(138,3): error TS2554: Expected 2-3 arguments, but got 1.
@@ -6442,6 +6446,8 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(918,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
   Property 'pop' is missing in type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(920,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1020,16): error TS2587: JSDoc type 'JSHeapSnapshotEdge' circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1028,16): error TS2587: JSDoc type 'JSHeapSnapshotRetainerEdge' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1045,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1083,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1086,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
@@ -6776,6 +6782,7 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(199,80): error TS2339: Property '_layer' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(222,11): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(223,25): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(110,15): error TS2587: JSDoc type 'Layer' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(125,84): error TS2339: Property 'scrollRectIndex' does not exist on type 'Selection'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(135,19): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(149,34): error TS2339: Property '_snapshot' does not exist on type 'Selection'.
@@ -7870,14 +7877,12 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(694,31): e
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(701,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entryIndex' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(796,43): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(903,60): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(915,27): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(919,45): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(907,17): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(931,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(940,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1027,38): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1167,15): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1169,70): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1176,27): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1182,43): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1273,25): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1286,19): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1390,34): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'GroupStyle'.
@@ -8827,6 +8832,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
     Type 'HeapSnapshotProviderProxy' is not assignable to type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
       Property '_worker' does not exist on type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,15): error TS2577: Return type annotation circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,16): error TS2587: JSDoc type 'HeapSnapshotRetainingObjectNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(871,36): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(874,34): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(892,3): error TS2416: Property 'createProvider' in type 'HeapSnapshotInstanceNode' is not assignable to the same property in base type 'HeapSnapshotGenericObjectNode'.
@@ -9887,6 +9893,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(250,43): er
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(281,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(304,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(319,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
+node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(332,32): error TS2587: JSDoc type 'BreakLocation' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(346,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(347,34): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(355,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
@@ -9973,6 +9980,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(23,15): err
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(28,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(33,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(38,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(45,12): error TS2502: 'child' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(48,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(53,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(58,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -10610,6 +10618,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,43): err
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,55): error TS2339: Property 'ordinal' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(647,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,15): error TS2577: Return type annotation circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,16): error TS2587: JSDoc type 'ObjectSnapshot' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(859,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(870,5): error TS2322: Type 'NamedObject[]' is not assignable to type 'Thread[]'.
   Type 'NamedObject' is not assignable to type 'Thread'.
@@ -10871,6 +10880,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(170,23)
 node_modules/chrome-devtools-frontend/front_end/source_frame/PreviewFactory.js(14,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ResourceSourceFrame.js(51,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(15,22): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(18,24): error TS2587: JSDoc type 'TextEditorPositionHandle' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(89,28): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(110,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
@@ -11793,6 +11803,7 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1551,68): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1563,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1569,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1571,9): error TS2502: 'positionHandle' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1614,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1615,48): error TS2339: Property 'line' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1621,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
@@ -12613,6 +12624,8 @@ node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1780,33): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1811,25): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1819,32): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModelFilter.js(43,22): error TS1110: Type expected.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(72,15): error TS2587: JSDoc type 'TopDownNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(74,26): error TS2502: 'parent' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(168,31): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
   Type 'symbol' is not assignable to type 'string'.
@@ -12674,6 +12687,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/Context.js(73,30): error TS23
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(77,33): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(86,45): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(101,16): error TS2339: Property 'runtime' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(36,15): error TS2587: JSDoc type 'ContextMenu' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(42,15): error TS2502: 'contextMenu' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(81,41): error TS2694: Namespace 'InspectorFrontendHostAPI' has no exported member 'ContextMenuDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(87,18): error TS2339: Property '_customElement' does not exist on type 'ContextMenuItem'.
@@ -12862,7 +12876,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(97,36): e
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(108,36): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Descriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(135,42): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(144,42): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
-node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(197,9): error TS1127: Invalid character.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(216,21): error TS2551: Property 'Key' does not exist on type 'typeof KeyboardShortcut'. Did you mean 'Keys'?
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(218,50): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(289,21): error TS2300: Duplicate identifier 'Descriptor'.
