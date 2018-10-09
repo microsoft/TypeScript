@@ -8497,7 +8497,7 @@ declare namespace ts.server {
         private readonly throttledOperations;
         private readonly hostConfiguration;
         private safelist;
-        private legacySafelist;
+        private readonly legacySafelist;
         private pendingProjectUpdates;
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
