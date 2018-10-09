@@ -25,9 +25,24 @@ spread = { s: "foo" };  // error, missing 'b'
 let b = { b: false };
 spread = b; // error, missing 's'
 
-// literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
+// Note: ignore changes the order that properties are printed
+let ignore: { a: number, b: string } =
+    { b: 'ignored', ...o }
+
+let o3 = { a: 1, b: 'no' }
+let o4 = { b: 'yes', c: true }
+let combinedBefore: { a: number, b: string, c: boolean } =
+    { b: 'ok', ...o3, ...o4 }
+let combinedMid: { a: number, b: string, c: boolean } =
+    { ...o3, b: 'ok', ...o4 }
+let combinedNested: { a: number, b: boolean, c: string, d: string } =
+    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+let changeTypeBefore: { a: number, b: string } =
+    { a: 'wrong type?', ...o3 };
+let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+    { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
 
 // primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };
@@ -87,6 +102,7 @@ var __assign = (this && this.__assign) || function () {
     };
     return __assign.apply(this, arguments);
 };
+var _a;
 var o = { a: 1, b: 'no' };
 /// private propagates
 var PrivateOptionalX = /** @class */ (function () {
@@ -112,9 +128,17 @@ var spread = __assign({ b: true }, { s: "foo" });
 spread = { s: "foo" }; // error, missing 'b'
 var b = { b: false };
 spread = b; // error, missing 's'
-// literal repeats are not allowed, but spread repeats are fine
 var duplicated = __assign({ b: 'bad' }, o, { b: 'bad' }, o2, { b: 'bad' });
 var duplicatedSpread = __assign({}, o, o);
+// Note: ignore changes the order that properties are printed
+var ignore = __assign({ b: 'ignored' }, o);
+var o3 = { a: 1, b: 'no' };
+var o4 = { b: 'yes', c: true };
+var combinedBefore = __assign({ b: 'ok' }, o3, o4);
+var combinedMid = __assign({}, o3, { b: 'ok' }, o4);
+var combinedNested = __assign({}, __assign({ a: 4 }, { b: false, c: 'overriden' }), { d: 'actually new' }, { a: 5, d: 'maybe new' });
+var changeTypeBefore = __assign({ a: 'wrong type?' }, o3);
+var computedMiddle = __assign({}, o3, (_a = {}, _a['in the middle'] = 13, _a.b = 'maybe?', _a), o4);
 // primitives are not allowed, except for falsy ones
 var spreadNum = __assign({}, 12);
 var spreadSum = __assign({}, 1 + 1);

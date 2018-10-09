@@ -25,9 +25,24 @@ spread = { s: "foo" };  // error, missing 'b'
 let b = { b: false };
 spread = b; // error, missing 's'
 
-// literal repeats are not allowed, but spread repeats are fine
 let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
 let duplicatedSpread = { ...o, ...o }
+// Note: ignore changes the order that properties are printed
+let ignore: { a: number, b: string } =
+    { b: 'ignored', ...o }
+
+let o3 = { a: 1, b: 'no' }
+let o4 = { b: 'yes', c: true }
+let combinedBefore: { a: number, b: string, c: boolean } =
+    { b: 'ok', ...o3, ...o4 }
+let combinedMid: { a: number, b: string, c: boolean } =
+    { ...o3, b: 'ok', ...o4 }
+let combinedNested: { a: number, b: boolean, c: string, d: string } =
+    { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+let changeTypeBefore: { a: number, b: string } =
+    { a: 'wrong type?', ...o3 };
+let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+    { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
 
 // primitives are not allowed, except for falsy ones
 let spreadNum = { ...12 };

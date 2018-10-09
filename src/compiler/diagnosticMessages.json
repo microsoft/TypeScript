@@ -2489,9 +2489,13 @@
         "category": "Error",
         "code": 2733
     },
-    "It is highly likely that you are missing a semicolon.": {
+    "Are you missing a semicolon here?": {
         "category": "Error",
         "code": 2734
+    },
+    "'{0}' is overwritten by a later spread.": {
+        "category": "Error",
+        "code": 2735
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

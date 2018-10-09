@@ -5,22 +5,29 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(23,1): error TS2322
   Property 'b' is missing in type '{ s: string; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(25,1): error TS2322: Type '{ b: boolean; }' is not assignable to type '{ s: string; b: boolean; }'.
   Property 's' is missing in type '{ b: boolean; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,36): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(28,53): error TS2300: Duplicate identifier 'b'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(32,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(33,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(34,20): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,20): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,19): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,12): error TS2339: Property 'b' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(62,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(65,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(27,20): error TS2735: 'b' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(27,36): error TS2300: Duplicate identifier 'b'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(27,53): error TS2300: Duplicate identifier 'b'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(31,7): error TS2735: 'b' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(36,7): error TS2735: 'b' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(38,14): error TS2735: 'b' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(40,53): error TS2735: 'd' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(42,7): error TS2735: 'a' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(44,37): error TS2735: 'b' is overwritten by a later spread.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,19): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(48,19): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(49,20): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(51,20): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,19): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,1): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '{}' has no compatible call signatures.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(62,12): error TS2339: Property 'b' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(68,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(73,11): error TS2339: Property 'a' does not exist on type '{}'.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(77,14): error TS2698: Spread types may only be created from object types.
+tests/cases/conformance/types/spread/objectSpreadNegative.ts(80,14): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (17 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (24 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -58,13 +65,42 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(65,14): error TS269
 !!! error TS2322: Type '{ b: boolean; }' is not assignable to type '{ s: string; b: boolean; }'.
 !!! error TS2322:   Property 's' is missing in type '{ b: boolean; }'.
     
-    // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }
+                       ~~~~~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
                                        ~
 !!! error TS2300: Duplicate identifier 'b'.
                                                         ~
 !!! error TS2300: Duplicate identifier 'b'.
     let duplicatedSpread = { ...o, ...o }
+    // Note: ignore changes the order that properties are printed
+    let ignore: { a: number, b: string } =
+        { b: 'ignored', ...o }
+          ~~~~~~~~~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
+    
+    let o3 = { a: 1, b: 'no' }
+    let o4 = { b: 'yes', c: true }
+    let combinedBefore: { a: number, b: string, c: boolean } =
+        { b: 'ok', ...o3, ...o4 }
+          ~~~~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
+    let combinedMid: { a: number, b: string, c: boolean } =
+        { ...o3, b: 'ok', ...o4 }
+                 ~~~~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
+    let combinedNested: { a: number, b: boolean, c: string, d: string } =
+        { ...{ a: 4, ...{ b: false, c: 'overriden' } }, d: 'actually new', ...{ a: 5, d: 'maybe new' } }
+                                                        ~~~~~~~~~~~~~~~~~
+!!! error TS2735: 'd' is overwritten by a later spread.
+    let changeTypeBefore: { a: number, b: string } =
+        { a: 'wrong type?', ...o3 };
+          ~~~~~~~~~~~~~~~~
+!!! error TS2735: 'a' is overwritten by a later spread.
+    let computedMiddle: { a: number, b: string, c: boolean, "in the middle": number } =
+        { ...o3, ['in the middle']: 13, b: 'maybe?', ...o4 }
+                                        ~~~~~~~~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
     
     // primitives are not allowed, except for falsy ones
     let spreadNum = { ...12 };

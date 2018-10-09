@@ -9861,6 +9861,9 @@ namespace ts {
                         result.nameType = leftProp.nameType;
                         members.set(leftProp.escapedName, result);
                     }
+                    else if (symbol && shouldCheckAsExcessProperty(leftProp, symbol) && !shouldCheckAsExcessProperty(rightProp, symbol)) {
+                        error(leftProp.valueDeclaration, Diagnostics._0_is_overwritten_by_a_later_spread, unescapeLeadingUnderscores(leftProp.escapedName));
+                    }
                 }
                 else {
                     members.set(leftProp.escapedName, getNonReadonlySymbol(leftProp));
@@ -11547,7 +11550,7 @@ namespace ts {
                         return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (!isPropertyFromSpread(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                        if (shouldCheckAsExcessProperty(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
@@ -11589,10 +11592,6 @@ namespace ts {
                     }
                 }
                 return false;
-            }
-
-            function isPropertyFromSpread(prop: Symbol, container: Symbol) {
-                return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent !== container.valueDeclaration;
             }
 
             function eachTypeRelatedToSomeType(source: UnionOrIntersectionType, target: UnionOrIntersectionType): Ternary {
@@ -12505,6 +12504,10 @@ namespace ts {
                 }
             }
             return match || defaultValue;
+        }
+
+        function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
+            return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
         }
 
         /**
@@ -17632,7 +17635,6 @@ namespace ts {
             let spread: Type = emptyObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
-            let explicitlySpecifyChildrenAttribute = false;
             let propagatingFlags: TypeFlags = 0;
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
 
@@ -17651,9 +17653,6 @@ namespace ts {
                     attributeSymbol.type = exprType;
                     attributeSymbol.target = member;
                     attributesTable.set(attributeSymbol.escapedName, attributeSymbol);
-                    if (attributeDecl.name.escapedText === jsxChildrenPropertyName) {
-                        explicitlySpecifyChildrenAttribute = true;
-                    }
                 }
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
@@ -17687,13 +17686,6 @@ namespace ts {
                 const childrenTypes: Type[] = checkJsxChildren(parent, checkMode);
 
                 if (!hasSpreadAnyType && jsxChildrenPropertyName && jsxChildrenPropertyName !== "") {
-                    // Error if there is a attribute named "children" explicitly specified and children element.
-                    // This is because children element will overwrite the value from attributes.
-                    // Note: we will not warn "children" attribute overwritten if "children" attribute is specified in object spread.
-                    if (explicitlySpecifyChildrenAttribute) {
-                        error(attributes, Diagnostics._0_are_specified_twice_The_attribute_named_0_will_be_overwritten, unescapeLeadingUnderscores(jsxChildrenPropertyName));
-                    }
-
                     const contextualType = getApparentTypeOfContextualType(openingLikeElement.attributes);
                     const childrenContextualType = contextualType && getTypeOfPropertyOfContextualType(contextualType, jsxChildrenPropertyName);
                     // If there are children in the body of JSX element, create dummy attribute "children" with the union of children types so that it will pass the attribute checking process
@@ -20049,7 +20041,7 @@ namespace ts {
                     if (node.arguments.length === 1 && isTypeAssertion(first(node.arguments))) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
-                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
+                            relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.Are_you_missing_a_semicolon_here);
                         }
                     }
                     invocationError(node, apparentType, SignatureKind.Call, relatedInformation);

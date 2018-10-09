@@ -1,0 +1,12 @@
+tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts(3,17): error TS2735: 'b' is overwritten by a later spread.
+
+
+==== tests/cases/conformance/types/spread/spreadOverwritesPropertyStrict.ts (1 errors) ====
+    declare var ab: { a: number, b: number };
+    declare var abq: { a: number, b?: number };
+    var unused1 = { b: 1, ...ab }
+                    ~~~~
+!!! error TS2735: 'b' is overwritten by a later spread.
+    var unused2 = { ...ab, ...ab }
+    var unused3 = { b: 1, ...abq }
+    
