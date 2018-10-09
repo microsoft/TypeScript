@@ -395,7 +395,7 @@ namespace ts.textChanges {
         }
 
         public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
-            const printed = createPrinter().printNode(EmitHint.Unspecified, type, sourceFile);
+            const printed = changesToText.getNonformattedText(type, sourceFile, this.newLineCharacter).text;
             let commentText;
             if (isGetAccessorDeclaration(node)) {
                 commentText = ` @return {${printed}} `;
