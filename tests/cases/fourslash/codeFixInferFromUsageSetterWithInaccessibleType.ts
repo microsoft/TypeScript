@@ -18,7 +18,7 @@ verify.codeFix({
     description: "Infer type of 'x' from usage",
     newFileContent:
 `export class C {
-    set x(val: Promise<typeof import("/a")>) { val; }
+    set x(val: Promise<typeof import("./a")>) { val; }
     method() { this.x = import("./a"); }
 }`,
 });

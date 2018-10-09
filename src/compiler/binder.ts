@@ -1181,7 +1181,6 @@ namespace ts {
                 }
                 const preCaseLabel = createBranchLabel();
                 addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
-                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];

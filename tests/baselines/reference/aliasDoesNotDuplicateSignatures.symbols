@@ -6,7 +6,7 @@ declare namespace demoNS {
 >f : Symbol(f, Decl(demo.d.ts, 0, 26))
 }
 declare module 'demoModule' {
->'demoModule' : Symbol('demoModule', Decl(demo.d.ts, 2, 1))
+>'demoModule' : Symbol("demoModule", Decl(demo.d.ts, 2, 1))
 
     import alias = demoNS;
 >alias : Symbol(alias, Decl(demo.d.ts, 3, 29))
