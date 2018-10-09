@@ -1386,6 +1386,41 @@ foo().hello`
             // File a need not be rewritten
             assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });
+
+        it("updates errors when ambient modules of program changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `declare module 'a' {
+  type foo = number;
+}`
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: "{}"
+            };
+            const files = [aFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            // Create bts with same file contents
+            const bTsPath = `${currentDirectory}/b.ts`;
+            host.writeFile(bTsPath, aFile.content);
+            host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), [aFile.path, "b.ts", libFile.path]);
+            checkOutputErrorsIncremental(host, [
+                "a.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n",
+                "b.ts(2,8): error TS2300: Duplicate identifier 'foo'.\n"
+            ]);
+
+            // Delete bTs
+            host.deleteFile(bTsPath);
+            host.runQueuedTimeoutCallbacks();
+            checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {

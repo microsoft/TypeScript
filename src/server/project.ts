@@ -1326,6 +1326,8 @@ namespace ts.server {
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel;
+        /* @internal */
+        pendingReloadReason: string | undefined;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
@@ -1344,6 +1346,9 @@ namespace ts.server {
         projectOptions?: ProjectOptions | true;
 
         protected isInitialLoadPending: () => boolean = returnTrue;
+
+        /*@internal*/
+        sendLoadingProjectFinish = false;
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
@@ -1377,12 +1382,15 @@ namespace ts.server {
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
-                    this.projectService.reloadConfiguredProject(this);
+                    const reason = Debug.assertDefined(this.pendingReloadReason);
+                    this.pendingReloadReason = undefined;
+                    this.projectService.reloadConfiguredProject(this, reason);
                     result = true;
                     break;
                 default:
                     result = super.updateGraph();
             }
+            this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             this.projectService.sendSurveyReady(this);
             return result;

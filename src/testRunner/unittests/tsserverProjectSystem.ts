@@ -330,6 +330,19 @@ namespace ts.projectSystem {
         return new TestSession({ ...sessionOptions, ...opts });
     }
 
+    function createSessionWithEventTracking<T extends server.ProjectServiceEvent, U extends server.ProjectServiceEvent = T>(host: server.ServerHost, eventName: T["eventName"], eventName2?: U["eventName"]) {
+        const events: (T | U)[] = [];
+        const session = createSession(host, {
+            eventHandler: e => {
+                if (e.eventName === eventName || (eventName2 && e.eventName === eventName2)) {
+                    events.push(e as T | U);
+                }
+            }
+        });
+
+        return { session, events };
+    }
+
     interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
         logger?: server.Logger;
@@ -2872,18 +2885,7 @@ namespace ts.projectSystem {
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
-            let lastEvent!: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent || e.eventName === server.LargeFileReferencedEvent || e.eventName === server.SurveyReady) {
-                        return;
-                    }
-                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                    assert.equal(e.data.project.getProjectName(), config.path, "project name");
-                    lastEvent = e;
-                }
-            });
+            const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
                 type: "request",
@@ -2894,17 +2896,19 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-            assert.isTrue(!!lastEvent, "should receive event");
-            assert.equal(lastEvent.data.project, project, "project name");
-            assert.equal(lastEvent.data.project.getProjectName(), config.path, "config path");
-            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 1, "should receive event");
+            assert.equal(events[0].data.project, project, "project name");
+            assert.equal(events[0].data.project.getProjectName(), config.path, "config path");
+            assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.isTrue(project.languageServiceEnabled, "Language service enabled");
-            assert.equal(lastEvent.data.project, project, "project");
-            assert.isTrue(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 2, "should receive event");
+            assert.equal(events[1].data.project, project, "project");
+            assert.equal(events[1].data.project.getProjectName(), config.path, "config path");
+            assert.isTrue(events[1].data.languageServiceEnabled, "Language service state");
         });
 
         it("syntactic features work even if language service is disabled", () => {
@@ -2924,17 +2928,7 @@ namespace ts.projectSystem {
             const originalGetFileSize = host.getFileSize;
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
-            let lastEvent!: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent) {
-                        return;
-                    }
-                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                    lastEvent = <server.ProjectLanguageServiceStateEvent>e;
-                }
-            });
+            const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
                 type: "request",
@@ -2946,9 +2940,9 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-            assert.isTrue(!!lastEvent, "should receive event");
-            assert.equal(lastEvent.data.project, project, "project name");
-            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 1, "should receive event");
+            assert.equal(events[0].data.project, project, "project name");
+            assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
             const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
@@ -3553,14 +3547,7 @@ namespace ts.projectSystem {
         });
 
         function createSessionWithEventHandler(host: TestServerHost) {
-            const surveyEvents: server.SurveyReady[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.SurveyReady) {
-                        surveyEvents.push(e);
-                    }
-                }
-            });
+            const { session, events: surveyEvents } = createSessionWithEventTracking<server.SurveyReady>(host, server.SurveyReady);
 
             return { session, verifySurveyReadyEvent };
 
@@ -9295,14 +9282,7 @@ export const x = 10;`
             };
             files.push(largeFile);
             const host = createServerHost(files);
-            const largeFileReferencedEvents: server.LargeFileReferencedEvent[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.LargeFileReferencedEvent) {
-                        largeFileReferencedEvents.push(e);
-                    }
-                }
-            });
+            const { session, events: largeFileReferencedEvents } = createSessionWithEventTracking<server.LargeFileReferencedEvent>(host, server.LargeFileReferencedEvent);
 
             return { session, verifyLargeFile };
 
@@ -9359,6 +9339,159 @@ export const x = 10;`
 
         describe("large file is js file", () => {
             verifyLargeFile(/*useLargeTsFile*/ false);
+        });
+    });
+
+    describe("tsserverProjectSystem ProjectLoadingStart and ProjectLoadingFinish events", () => {
+        const projectRoot = "/user/username/projects";
+        const aTs: File = {
+            path: `${projectRoot}/a/a.ts`,
+            content: "export class A { }"
+        };
+        const configA: File = {
+            path: `${projectRoot}/a/tsconfig.json`,
+            content: "{}"
+        };
+        const bTsPath = `${projectRoot}/b/b.ts`;
+        const configBPath = `${projectRoot}/b/tsconfig.json`;
+        const files = [libFile, aTs, configA];
+
+        function createSessionWithEventHandler(files: ReadonlyArray<File>) {
+            const host = createServerHost(files);
+
+            const originalReadFile = host.readFile;
+            host.readFile = file => {
+                if (file === configA.path || file === configBPath) {
+                    assert.equal(events.length, 1, "Event for loading is sent before reading config file");
+                }
+                return originalReadFile.call(host, file);
+            };
+            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+            const service = session.getProjectService();
+            return { host, session, verifyEvent, verifyEventWithOpenTs, service, events };
+
+            function verifyEvent(project: server.Project, reason: string) {
+                assert.deepEqual(events, [
+                    { eventName: server.ProjectLoadingStartEvent, data: { project, reason } },
+                    { eventName: server.ProjectLoadingFinishEvent, data: { project } }
+                ]);
+                events.length = 0;
+            }
+
+            function verifyEventWithOpenTs(file: File, configPath: string, configuredProjects: number) {
+                openFilesForSession([file], session);
+                checkNumberOfProjects(service, { configuredProjects });
+                const project = service.configuredProjects.get(configPath)!;
+                assert.isDefined(project);
+                verifyEvent(project, `Creating possible configured project for ${file.path} to open`);
+            }
+        }
+
+        it("when project is created by open file", () => {
+            const bTs: File = {
+                path: bTsPath,
+                content: "export class B {}"
+            };
+            const configB: File = {
+                path: configBPath,
+                content: "{}"
+            };
+            const { verifyEventWithOpenTs } = createSessionWithEventHandler(files.concat(bTs, configB));
+            verifyEventWithOpenTs(aTs, configA.path, 1);
+            verifyEventWithOpenTs(bTs, configB.path, 2);
+        });
+
+        it("when change is detected in the config file", () => {
+            const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionWithEventHandler(files);
+            verifyEventWithOpenTs(aTs, configA.path, 1);
+
+            host.writeFile(configA.path, configA.content);
+            host.checkTimeoutQueueLengthAndRun(2);
+            const project = service.configuredProjects.get(configA.path)!;
+            verifyEvent(project, `Change in config file detected`);
+        });
+
+        it("when opening original location project", () => {
+            const aDTs: File = {
+                path: `${projectRoot}/a/a.d.ts`,
+                content: `export declare class A {
+}
+//# sourceMappingURL=a.d.ts.map
+`
+            };
+            const aDTsMap: File = {
+                path: `${projectRoot}/a/a.d.ts.map`,
+                content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
+            };
+            const bTs: File = {
+                path: bTsPath,
+                content: `import {A} from "../a/a"; new A();`
+            };
+            const configB: File = {
+                path: configBPath,
+                content: JSON.stringify({
+                    references: [{ path: "../a" }]
+                })
+            };
+
+            const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionWithEventHandler(files.concat(aDTs, aDTsMap, bTs, configB));
+            verifyEventWithOpenTs(bTs, configB.path, 1);
+
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: {
+                    file: bTs.path,
+                    ...protocolLocationFromSubstring(bTs.content, "A()")
+                }
+            });
+
+            checkNumberOfProjects(service, { configuredProjects: 2 });
+            const project = service.configuredProjects.get(configA.path)!;
+            assert.isDefined(project);
+            verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
+        });
+
+        describe("with external projects and config files ", () => {
+            const projectFileName = `${projectRoot}/a/project.csproj`;
+
+            function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
+                const { session, service, verifyEvent: verifyEventWorker, events } = createSessionWithEventHandler(files);
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
+                service.openExternalProject(<protocol.ExternalProject>{
+                    projectFileName,
+                    rootFiles: toExternalFiles([aTs.path, configA.path]),
+                    options: {}
+                });
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                return { session, service, verifyEvent, events };
+
+                function verifyEvent() {
+                    const projectA = service.configuredProjects.get(configA.path)!;
+                    assert.isDefined(projectA);
+                    verifyEventWorker(projectA, `Creating configured project in external project: ${projectFileName}`);
+                }
+            }
+
+            it("when lazyConfiguredProjectsFromExternalProject is false", () => {
+                const { verifyEvent } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ false);
+                verifyEvent();
+            });
+
+            it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
+                const { verifyEvent, events, session } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                assert.equal(events.length, 0);
+
+                openFilesForSession([aTs], session);
+                verifyEvent();
+            });
+
+            it("when lazyConfiguredProjectsFromExternalProject is disabled", () => {
+                const { verifyEvent, events, service } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                assert.equal(events.length, 0);
+
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
+                verifyEvent();
+            });
         });
     });
 
