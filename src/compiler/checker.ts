@@ -17949,17 +17949,6 @@ namespace ts {
             }
         }
 
-        /**
-         * Given a JSX attribute, returns the symbol for the corresponds property
-         * of the element attributes type. Will return unknownSymbol for attributes
-         * that have no matching element attributes type property.
-         */
-        function getJsxAttributePropertySymbol(attrib: JsxAttribute): Symbol {
-            const attributesType = getAttributesTypeFromJsxOpeningLikeElement(attrib.parent.parent as JsxOpeningElement);
-            const prop = getPropertyOfType(attributesType, attrib.name.escapedText);
-            return prop || unknownSymbol;
-        }
-
         function getJsxElementClassTypeAt(location: Node): Type | undefined {
             const type = getJsxType(JsxNames.ElementClass, location);
             if (type === errorType) return undefined;
@@ -27567,9 +27556,6 @@ namespace ts {
             else if (isTypeReferenceIdentifier(<EntityName>entityName)) {
                 const meaning = entityName.parent.kind === SyntaxKind.TypeReference ? SymbolFlags.Type : SymbolFlags.Namespace;
                 return resolveEntityName(<EntityName>entityName, meaning, /*ignoreErrors*/ false, /*dontResolveAlias*/ true);
-            }
-            else if (entityName.parent.kind === SyntaxKind.JsxAttribute) {
-                return getJsxAttributePropertySymbol(<JsxAttribute>entityName.parent);
             }
 
             if (entityName.parent.kind === SyntaxKind.TypePredicate) {
