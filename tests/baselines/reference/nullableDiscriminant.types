@@ -1,0 +1,265 @@
+=== tests/cases/compiler/nullableDiscriminant.ts ===
+// Repro. from #24193
+
+interface WithError {
+    error: Error
+>error : Error
+
+    data: null
+>data : null
+>null : null
+}
+
+interface WithoutError<Data> {
+    error: null
+>error : null
+>null : null
+
+    data: Data
+>data : Data
+}
+
+type DataCarrier<Data> = WithError | WithoutError<Data>
+>DataCarrier : DataCarrier<Data>
+
+function test<Data>(carrier: DataCarrier<Data>) {
+>test : <Data>(carrier: DataCarrier<Data>) => void
+>carrier : DataCarrier<Data>
+
+    if (carrier.error === null) {
+>carrier.error === null : boolean
+>carrier.error : Error | null
+>carrier : DataCarrier<Data>
+>error : Error | null
+>null : null
+
+        const error: null = carrier.error
+>error : null
+>null : null
+>carrier.error : null
+>carrier : WithoutError<Data>
+>error : null
+
+        const data: Data = carrier.data
+>data : Data
+>carrier.data : Data
+>carrier : WithoutError<Data>
+>data : Data
+    }
+    else {
+        const error: Error = carrier.error
+>error : Error
+>carrier.error : Error
+>carrier : WithError
+>error : Error
+
+        const data: null = carrier.data
+>data : null
+>null : null
+>carrier.data : null
+>carrier : WithError
+>data : null
+    }
+}
+
+// Repro. from #24479
+
+export interface Errored {
+    error: Error
+>error : Error
+
+    value: null
+>value : null
+>null : null
+}
+
+export interface Succeeded<Value> {
+    error: null
+>error : null
+>null : null
+
+    value: Value
+>value : Value
+}
+
+type Result<T> = Succeeded<T> | Errored;
+>Result : Result<T>
+
+declare function getVal<T>(x :T): Result<T>
+>getVal : <T>(x: T) => Result<T>
+>x : T
+
+let x = getVal("hello");
+>x : Result<string>
+>getVal("hello") : Result<string>
+>getVal : <T>(x: T) => Result<T>
+>"hello" : "hello"
+
+if (x.error === null) {
+>x.error === null : boolean
+>x.error : Error | null
+>x : Result<string>
+>error : Error | null
+>null : null
+
+    x.value.toUpperCase();
+>x.value.toUpperCase() : string
+>x.value.toUpperCase : () => string
+>x.value : string
+>x : Succeeded<string>
+>value : string
+>toUpperCase : () => string
+}
+
+type ErrorOrSuccess<T> = | { value: null, message: string } | { value: T };
+>ErrorOrSuccess : ErrorOrSuccess<T>
+>value : null
+>null : null
+>message : string
+>value : T
+
+declare function getErrorOrSuccess<T>(x :T): ErrorOrSuccess<T>
+>getErrorOrSuccess : <T>(x: T) => ErrorOrSuccess<T>
+>x : T
+
+let y = getErrorOrSuccess({y: "foo"});
+>y : ErrorOrSuccess<{ y: string; }>
+>getErrorOrSuccess({y: "foo"}) : ErrorOrSuccess<{ y: string; }>
+>getErrorOrSuccess : <T>(x: T) => ErrorOrSuccess<T>
+>{y: "foo"} : { y: string; }
+>y : string
+>"foo" : "foo"
+
+if(y.value === null) {
+>y.value === null : boolean
+>y.value : { y: string; } | null
+>y : ErrorOrSuccess<{ y: string; }>
+>value : { y: string; } | null
+>null : null
+
+    // ok
+    "message: " + y.message;
+>"message: " + y.message : string
+>"message: " : "message: "
+>y.message : string
+>y : { value: null; message: string; }
+>message : string
+}
+
+function genericNarrow<T>(x: T): true {
+>genericNarrow : <T>(x: T) => true
+>x : T
+>true : true
+
+    let y = getErrorOrSuccess(x);
+>y : ErrorOrSuccess<T>
+>getErrorOrSuccess(x) : ErrorOrSuccess<T>
+>getErrorOrSuccess : <T>(x: T) => ErrorOrSuccess<T>
+>x : T
+
+    if(y.value === null) {
+>y.value === null : boolean
+>y.value : T | null
+>y : ErrorOrSuccess<T>
+>value : T | null
+>null : null
+
+        // not ok because T could be null
+        "message: " + y.message;
+>"message: " + y.message : string
+>"message: " : "message: "
+>y.message : any
+>y : ErrorOrSuccess<T>
+>message : any
+    }
+    return true;
+>true : true
+}
+
+interface A {
+    f?: number;
+>f : number | undefined
+
+    bar: string; 
+>bar : string
+}
+
+interface B {
+    f: number; 
+>f : number
+}
+
+declare const aOrB: A | B;
+>aOrB : A | B
+
+if (aOrB.f === undefined) {
+>aOrB.f === undefined : boolean
+>aOrB.f : number | undefined
+>aOrB : A | B
+>f : number | undefined
+>undefined : undefined
+
+    // ok
+    aOrB.bar
+>aOrB.bar : string
+>aOrB : A
+>bar : string
+} 
+
+interface C {
+    f: null;
+>f : null
+>null : null
+
+    baz: string;
+>baz : string
+}
+
+declare const aOrBorC: A | B | C;
+>aOrBorC : A | B | C
+
+if (aOrBorC.f == null) {
+>aOrBorC.f == null : boolean
+>aOrBorC.f : number | null | undefined
+>aOrBorC : A | B | C
+>f : number | null | undefined
+>null : null
+
+    // not ok
+    aOrBorC.bar
+>aOrBorC.bar : any
+>aOrBorC : A | C
+>bar : any
+}
+
+if (aOrBorC.f === null) {
+>aOrBorC.f === null : boolean
+>aOrBorC.f : number | null | undefined
+>aOrBorC : A | B | C
+>f : number | null | undefined
+>null : null
+
+    // ok
+    aOrBorC.baz
+>aOrBorC.baz : string
+>aOrBorC : C
+>baz : string
+} 
+
+if (aOrBorC.f === undefined) {
+>aOrBorC.f === undefined : boolean
+>aOrBorC.f : number | null | undefined
+>aOrBorC : A | B | C
+>f : number | null | undefined
+>undefined : undefined
+
+    // ok
+    aOrBorC.bar
+>aOrBorC.bar : string
+>aOrBorC : A
+>bar : string
+} 
+
+
+
+
