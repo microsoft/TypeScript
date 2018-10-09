@@ -1826,6 +1826,63 @@ namespace ts.projectSystem {
             }
         });
 
+        it("file with name constructor.js doesnt cause issue with typeAcquisition when safe type list", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: `export let x = 5; import { s } from "s"`
+            };
+            const constructorFile = {
+                path: "/a/b/constructor.js",
+                content: "const x = 10;"
+            };
+            const bliss = {
+                path: "/a/b/bliss.js",
+                content: "export function is() { return true; }"
+            };
+            const host = createServerHost([file1, libFile, constructorFile, bliss, customTypesMap]);
+            let request: string | undefined;
+            const cachePath = "/a/data";
+            const typingsInstaller: server.ITypingsInstaller = {
+                isKnownTypesPackageName: returnFalse,
+                installPackage: notImplemented,
+                inspectValue: notImplemented,
+                enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
+                    assert.isUndefined(request);
+                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
+                },
+                attach: noop,
+                onProjectClosed: noop,
+                globalTypingsCacheLocation: cachePath
+            };
+
+            const projectName = "project";
+            const projectService = createProjectService(host, { typingsInstaller });
+            projectService.openExternalProject({ projectFileName: projectName, options: {}, rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]) });
+            assert.equal(request, JSON.stringify({
+                projectName,
+                fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
+                compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
+                typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true },
+                unresolvedImports: ["s"],
+                projectRootPath: "/",
+                cachePath,
+                kind: "discover"
+            }));
+            const response = JSON.parse(request!);
+            request = undefined;
+            projectService.updateTypingsForProject({
+                kind: "action::set",
+                projectName: response.projectName,
+                typeAcquisition: response.typeAcquisition,
+                compilerOptions: response.compilerOptions,
+                typings: emptyArray,
+                unresolvedImports: response.unresolvedImports,
+            });
+
+            host.checkTimeoutQueueLengthAndRun(2);
+            assert.isUndefined(request);
+        });
+
         it("ignores files excluded by the default type list", () => {
             const file1 = {
                 path: "/a/b/f1.js",
