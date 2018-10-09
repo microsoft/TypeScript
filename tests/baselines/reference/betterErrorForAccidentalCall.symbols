@@ -1,0 +1,25 @@
+=== tests/cases/compiler/betterErrorForAccidentalCall.ts ===
+declare function foo(): string;
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+foo()(1 as number).toString();
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+foo()   (1 as number).toString();
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+(1 as number).toString();
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+    (1 + 2).toString();
+
+foo()
+>foo : Symbol(foo, Decl(betterErrorForAccidentalCall.ts, 0, 0))
+
+    (<number>1).toString();
+

@@ -20046,7 +20046,7 @@ namespace ts {
                 }
                 else {
                     let relatedInformation: DiagnosticRelatedInformation | undefined;
-                    if (node.arguments.length === 1 && isTypeAssertion(first(node.arguments))) {
+                    if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
