@@ -55,6 +55,15 @@ function assertObject(x: object) {
 >x : object
 }
 
+function assertObjectOrNull(x: object | null) {
+>assertObjectOrNull : (x: object | null) => object | null
+>x : object | null
+>null : null
+
+    return x;
+>x : object | null
+}
+
 function assertUndefined(x: undefined) {
 >assertUndefined : (x: undefined) => undefined
 >x : undefined
@@ -71,7 +80,7 @@ function assertAll(x: Basic) {
 >x : Basic
 }
 
-function assertStringOrNumber(x: string | number)  {
+function assertStringOrNumber(x: string | number) {
 >assertStringOrNumber : (x: string | number) => string | number
 >x : string | number
 
@@ -79,7 +88,7 @@ function assertStringOrNumber(x: string | number)  {
 >x : string | number
 }
 
-function assertBooleanOrObject(x: boolean | object)  {
+function assertBooleanOrObject(x: boolean | object) {
 >assertBooleanOrObject : (x: boolean | object) => boolean | object
 >x : boolean | object
 
@@ -170,7 +179,7 @@ function testExtendsUnion<T extends Basic>(x: T) {
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : T & Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
@@ -367,7 +376,7 @@ function testExtendsExplicitDefault<T extends Basic>(x: T) {
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : T & Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
@@ -407,7 +416,7 @@ function testExtendsImplicitDefault<T extends Basic>(x: T) {
 >'function' : "function"
 >assertAll(x) : Basic
 >assertAll : (x: Basic) => Basic
->x : T
+>x : T & Function
 
         case 'symbol': assertSymbol(x); return;
 >'symbol' : "symbol"
@@ -555,8 +564,8 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'number': return [xy]
 >'number' : "number"
->[xy] : [X | Y]
->xy : X | Y
+>[xy] : [(X & number) | (Y & number)]
+>xy : (X & number) | (Y & number)
     }
 }
 
@@ -703,6 +712,160 @@ function fallThroughTest(x: string | number | boolean | object) {
 >x : boolean | object
 
             break;
+    }
+}
+
+function unknownNarrowing(x: unknown) {
+>unknownNarrowing : (x: unknown) => void
+>x : unknown
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : unknown
+
+        case 'number': assertNumber(x); return;
+>'number' : "number"
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case 'boolean': assertBoolean(x); return;
+>'boolean' : "boolean"
+>assertBoolean(x) : boolean
+>assertBoolean : (x: boolean) => boolean
+>x : boolean
+
+        case 'function': assertFunction(x); return;
+>'function' : "function"
+>assertFunction(x) : Function
+>assertFunction : (x: Function) => Function
+>x : Function
+
+        case 'symbol': assertSymbol(x); return;
+>'symbol' : "symbol"
+>assertSymbol(x) : symbol
+>assertSymbol : (x: symbol) => symbol
+>x : symbol
+
+        case 'object': assertObjectOrNull(x); return;
+>'object' : "object"
+>assertObjectOrNull(x) : object | null
+>assertObjectOrNull : (x: object | null) => object | null
+>x : object | null
+
+        case 'string': assertString(x); return;
+>'string' : "string"
+>assertString(x) : string
+>assertString : (x: string) => string
+>x : string
+
+        case 'undefined': assertUndefined(x); return;
+>'undefined' : "undefined"
+>assertUndefined(x) : undefined
+>assertUndefined : (x: undefined) => undefined
+>x : undefined
+    }
+}
+
+function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
+>keyofNarrowing : <S extends { [K in keyof S]: string; }>(k: keyof S) => void
+>k : keyof S
+
+    function assertKeyofS(k1: keyof S) { }
+>assertKeyofS : (k1: keyof S) => void
+>k1 : keyof S
+
+    switch (typeof k) {
+>typeof k : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>k : keyof S
+
+        case 'number': assertNumber(k); assertKeyofS(k); return;
+>'number' : "number"
+>assertNumber(k) : number
+>assertNumber : (x: number) => number
+>k : keyof S & number
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & number
+
+        case 'symbol': assertSymbol(k); assertKeyofS(k); return;
+>'symbol' : "symbol"
+>assertSymbol(k) : symbol
+>assertSymbol : (x: symbol) => symbol
+>k : keyof S & symbol
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & symbol
+
+        case 'string': assertString(k); assertKeyofS(k); return;
+>'string' : "string"
+>assertString(k) : string
+>assertString : (x: string) => string
+>k : keyof S & string
+>assertKeyofS(k) : void
+>assertKeyofS : (k1: keyof S) => void
+>k : keyof S & string
+    }
+}
+
+function narrowingNarrows(x: {} | undefined) {
+>narrowingNarrows : (x: {} | undefined) => void
+>x : {} | undefined
+
+    switch (typeof x) {
+>typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>x : {} | undefined
+
+        case 'number': assertNumber(x); return;
+>'number' : "number"
+>assertNumber(x) : number
+>assertNumber : (x: number) => number
+>x : number
+
+        case 'boolean': assertBoolean(x); return;
+>'boolean' : "boolean"
+>assertBoolean(x) : boolean
+>assertBoolean : (x: boolean) => boolean
+>x : boolean
+
+        case 'function': assertFunction(x); return;
+>'function' : "function"
+>assertFunction(x) : Function
+>assertFunction : (x: Function) => Function
+>x : Function
+
+        case 'symbol': assertSymbol(x); return;
+>'symbol' : "symbol"
+>assertSymbol(x) : symbol
+>assertSymbol : (x: symbol) => symbol
+>x : symbol
+
+        case 'object': const _: {} = x; return;
+>'object' : "object"
+>_ : {}
+>x : {}
+
+        case 'string': assertString(x); return;
+>'string' : "string"
+>assertString(x) : string
+>assertString : (x: string) => string
+>x : string
+
+        case 'undefined': assertUndefined(x); return;
+>'undefined' : "undefined"
+>assertUndefined(x) : undefined
+>assertUndefined : (x: undefined) => undefined
+>x : undefined
+
+        case 'number': assertNever(x); return;
+>'number' : "number"
+>assertNever(x) : never
+>assertNever : (x: never) => never
+>x : never
+
+        default: const _y: {} = x; return;
+>_y : {}
+>x : {}
     }
 }
 
