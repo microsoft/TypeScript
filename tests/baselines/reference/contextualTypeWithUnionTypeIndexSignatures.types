@@ -54,13 +54,13 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a };
 >a : number
 >a : number
 
-var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be any
+var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be number (because of index signature of IWithStringIndexSignature1)
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
->{ foo: a => a } : { foo: (a: any) => any; }
->foo : (a: any) => any
->a => a : (a: any) => any
->a : any
->a : any
+>{ foo: a => a } : { foo: (a: number) => number; }
+>foo : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
 
 var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: "hello" }; 
 >x : IWithNoStringIndexSignature | IWithStringIndexSignature1
@@ -99,13 +99,13 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >a : number
 >a : number
 
-var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be any
+var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be number (because of index signature of IWithNumberIndexSignature1)
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
->{ 0: a => a } : { 0: (a: any) => any; }
->0 : (a: any) => any
->a => a : (a: any) => any
->a : any
->a : any
+>{ 0: a => a } : { 0: (a: number) => number; }
+>0 : (a: number) => number
+>a => a : (a: number) => number
+>a : number
+>a : number
 
 var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: "hello" };
 >x3 : IWithNoNumberIndexSignature | IWithNumberIndexSignature1
