@@ -106,11 +106,11 @@ module onlyT {
 
     enum E { A }
 >E : E
->A : E
+>A : E.A
 
     enum F { A }
 >F : F
->A : F
+>A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
@@ -250,11 +250,11 @@ module TU {
 
     enum E { A }
 >E : E
->A : E
+>A : E.A
 
     enum F { A }
 >F : F
->A : F
+>A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T

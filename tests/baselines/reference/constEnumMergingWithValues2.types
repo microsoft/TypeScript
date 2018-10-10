@@ -5,7 +5,7 @@ class foo {}
 module foo {
     const enum E { X }
 >E : E
->X : E
+>X : E.X
 }
 
 export = foo

@@ -46,8 +46,14 @@ namespace ts {
      * so nobody can observe this new value.
      */
     interface LoopOutParameter {
+        flags: LoopOutParameterFlags;
         originalName: Identifier;
         outParamName: Identifier;
+    }
+
+    const enum LoopOutParameterFlags {
+        Body = 1 << 0,          // Modified in the body of the iteration statement
+        Initializer = 1 << 1,   // Set in the initializer of a ForStatement
     }
 
     const enum CopyDirection {
@@ -129,10 +135,14 @@ namespace ts {
          */
         hoistedLocalVariables?: Identifier[];
 
+        conditionVariable?: Identifier;
+
+        loopParameters: ParameterDeclaration[];
+
         /**
          * List of loop out parameters - detailed descripion can be found in the comment to LoopOutParameter
          */
-        loopOutParameters?: LoopOutParameter[];
+        loopOutParameters: LoopOutParameter[];
     }
 
     const enum SuperCaptureResult {
@@ -347,7 +357,7 @@ namespace ts {
             return (node.transformFlags & TransformFlags.ContainsES2015) !== 0
                 || convertedLoopState !== undefined
                 || (hierarchyFacts & HierarchyFacts.ConstructorWithCapturedSuper && (isStatement(node) || (node.kind === SyntaxKind.Block)))
-                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatementBody(node))
+                || (isIterationStatement(node, /*lookInLabeledStatements*/ false) && shouldConvertIterationStatement(node))
                 || (getEmitFlags(node) & EmitFlags.TypeScriptClassWrapper) !== 0;
         }
 
@@ -646,8 +656,8 @@ namespace ts {
                         }
                     }
                     let returnExpression: Expression = createLiteral(labelMarker);
-                    if (convertedLoopState.loopOutParameters!.length) {
-                        const outParams = convertedLoopState.loopOutParameters!;
+                    if (convertedLoopState.loopOutParameters.length) {
+                        const outParams = convertedLoopState.loopOutParameters;
                         let expr: Expression | undefined;
                         for (let i = 0; i < outParams.length; i++) {
                             const copyExpr = copyOutParameter(outParams[i], CopyDirection.ToOutParameter);
@@ -2060,19 +2070,27 @@ namespace ts {
                 setTextRange(declarationList, node);
                 setCommentRange(declarationList, node);
 
+                // If the first or last declaration is a binding pattern, we need to modify
+                // the source map range for the declaration list.
                 if (node.transformFlags & TransformFlags.ContainsBindingPattern
                     && (isBindingPattern(node.declarations[0].name) || isBindingPattern(last(node.declarations).name))) {
-                    // If the first or last declaration is a binding pattern, we need to modify
-                    // the source map range for the declaration list.
-                    const firstDeclaration = firstOrUndefined(declarations);
-                    if (firstDeclaration) {
-                        setSourceMapRange(declarationList, createRange(firstDeclaration.pos, last(declarations).end));
-                    }
+                    setSourceMapRange(declarationList, getRangeUnion(declarations));
                 }
 
                 return declarationList;
             }
             return visitEachChild(node, visitor, context);
+        }
+
+        function getRangeUnion(declarations: ReadonlyArray<Node>): TextRange {
+            // declarations may not be sorted by position.
+            // pos should be the minimum* position over all nodes (that's not -1), end should be the maximum end over all nodes.
+            let pos = -1, end = -1;
+            for (const node of declarations) {
+                pos = pos === -1 ? node.pos : node.pos === -1 ? pos : Math.min(pos, node.pos);
+                end = Math.max(end, node.end);
+            }
+            return createRange(pos, end);
         }
 
         /**
@@ -2602,7 +2620,40 @@ namespace ts {
             return visitEachChild(node, visitor, context);
         }
 
-        function shouldConvertIterationStatementBody(node: IterationStatement): boolean {
+        interface ForStatementWithConvertibleInitializer extends ForStatement {
+            initializer: VariableDeclarationList;
+        }
+
+        interface ForStatementWithConvertibleCondition extends ForStatement {
+            condition: Expression;
+        }
+
+        interface ForStatementWithConvertibleIncrementor extends ForStatement {
+            incrementor: Expression;
+        }
+
+        function shouldConvertPartOfIterationStatement(node: Node) {
+            return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.ContainsCapturedBlockScopeBinding) !== 0;
+        }
+
+        function shouldConvertInitializerOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleInitializer {
+            return isForStatement(node) && !!node.initializer && shouldConvertPartOfIterationStatement(node.initializer);
+        }
+
+        function shouldConvertConditionOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleCondition {
+            return isForStatement(node) && !!node.condition && shouldConvertPartOfIterationStatement(node.condition);
+        }
+
+        function shouldConvertIncrementorOfForStatement(node: IterationStatement): node is ForStatementWithConvertibleIncrementor {
+            return isForStatement(node) && !!node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
+        }
+
+        function shouldConvertIterationStatement(node: IterationStatement) {
+            return shouldConvertBodyOfIterationStatement(node)
+                || shouldConvertInitializerOfForStatement(node);
+        }
+
+        function shouldConvertBodyOfIterationStatement(node: IterationStatement): boolean {
             return (resolver.getNodeCheckFlags(node) & NodeCheckFlags.LoopWithCapturedBlockScopedBinding) !== 0;
         }
 
@@ -2631,7 +2682,7 @@ namespace ts {
         }
 
         function convertIterationStatementBodyIfNecessary(node: IterationStatement, outermostLabeledStatement: LabeledStatement | undefined, convert?: LoopConverter): VisitResult<Statement> {
-            if (!shouldConvertIterationStatementBody(node)) {
+            if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
                     // we get here if we are trying to emit normal loop loop inside converted loop
@@ -2650,7 +2701,102 @@ namespace ts {
                 return result;
             }
 
-            const functionName = createUniqueName("_loop");
+            const currentState = createConvertedLoopState(node);
+            const statements: Statement[] = [];
+
+            const outerConvertedLoopState = convertedLoopState;
+            convertedLoopState = currentState;
+
+            const initializerFunction = shouldConvertInitializerOfForStatement(node) ? createFunctionForInitializerOfForStatement(node, currentState) : undefined;
+            const bodyFunction = shouldConvertBodyOfIterationStatement(node) ? createFunctionForBodyOfIterationStatement(node, currentState, outerConvertedLoopState) : undefined;
+
+            convertedLoopState = outerConvertedLoopState;
+
+            if (initializerFunction) statements.push(initializerFunction.functionDeclaration);
+            if (bodyFunction) statements.push(bodyFunction.functionDeclaration);
+
+            addExtraDeclarationsForConvertedLoop(statements, currentState, outerConvertedLoopState);
+
+            if (initializerFunction) {
+                statements.push(generateCallToConvertedLoopInitializer(initializerFunction.functionName, initializerFunction.containsYield));
+            }
+
+            let loop: Statement;
+            if (bodyFunction) {
+                if (convert) {
+                    loop = convert(node, outermostLabeledStatement, bodyFunction.part);
+                }
+                else {
+                    const clone = convertIterationStatementCore(node, initializerFunction, createBlock(bodyFunction.part, /*multiLine*/ true));
+                    aggregateTransformFlags(clone);
+                    loop = restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
+                }
+            }
+            else {
+                const clone = convertIterationStatementCore(node, initializerFunction, visitNode(node.statement, visitor, isStatement, liftToBlock));
+                aggregateTransformFlags(clone);
+                loop = restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
+            }
+
+            statements.push(loop);
+            return statements;
+        }
+
+        function convertIterationStatementCore(node: IterationStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
+            switch (node.kind) {
+                case SyntaxKind.ForStatement: return convertForStatement(node as ForStatement, initializerFunction, convertedLoopBody);
+                case SyntaxKind.ForInStatement: return convertForInStatement(node as ForInStatement, convertedLoopBody);
+                case SyntaxKind.ForOfStatement: return convertForOfStatement(node as ForOfStatement, convertedLoopBody);
+                case SyntaxKind.DoStatement: return convertDoStatement(node as DoStatement, convertedLoopBody);
+                case SyntaxKind.WhileStatement: return convertWhileStatement(node as WhileStatement, convertedLoopBody);
+                default: return Debug.failBadSyntaxKind(node, "IterationStatement expected");
+            }
+        }
+
+        function convertForStatement(node: ForStatement, initializerFunction: IterationStatementPartFunction<VariableDeclarationList> | undefined, convertedLoopBody: Statement) {
+            const shouldConvertCondition = node.condition && shouldConvertPartOfIterationStatement(node.condition);
+            const shouldConvertIncrementor = shouldConvertCondition || node.incrementor && shouldConvertPartOfIterationStatement(node.incrementor);
+            return updateFor(
+                node,
+                visitNode(initializerFunction ? initializerFunction.part : node.initializer, visitor, isForInitializer),
+                visitNode(shouldConvertCondition ? undefined : node.condition, visitor, isExpression),
+                visitNode(shouldConvertIncrementor ? undefined : node.incrementor, visitor, isExpression),
+                convertedLoopBody
+            );
+        }
+
+        function convertForOfStatement(node: ForOfStatement, convertedLoopBody: Statement) {
+            return updateForOf(
+                node,
+                /*awaitModifier*/ undefined,
+                visitNode(node.initializer, visitor, isForInitializer),
+                visitNode(node.expression, visitor, isExpression),
+                convertedLoopBody);
+        }
+
+        function convertForInStatement(node: ForInStatement, convertedLoopBody: Statement) {
+            return updateForIn(
+                node,
+                visitNode(node.initializer, visitor, isForInitializer),
+                visitNode(node.expression, visitor, isExpression),
+                convertedLoopBody);
+        }
+
+        function convertDoStatement(node: DoStatement, convertedLoopBody: Statement) {
+            return updateDo(
+                node,
+                convertedLoopBody,
+                visitNode(node.expression, visitor, isExpression));
+        }
+
+        function convertWhileStatement(node: WhileStatement, convertedLoopBody: Statement) {
+            return updateWhile(
+                node,
+                visitNode(node.expression, visitor, isExpression),
+                convertedLoopBody);
+        }
+
+        function createConvertedLoopState(node: IterationStatement) {
             let loopInitializer: VariableDeclarationList | undefined;
             switch (node.kind) {
                 case SyntaxKind.ForStatement:
@@ -2662,74 +2808,311 @@ namespace ts {
                     }
                     break;
             }
+
             // variables that will be passed to the loop as parameters
             const loopParameters: ParameterDeclaration[] = [];
             // variables declared in the loop initializer that will be changed inside the loop
             const loopOutParameters: LoopOutParameter[] = [];
             if (loopInitializer && (getCombinedNodeFlags(loopInitializer) & NodeFlags.BlockScoped)) {
+                const hasCapturedBindingsInForInitializer = shouldConvertInitializerOfForStatement(node);
                 for (const decl of loopInitializer.declarations) {
-                    processLoopVariableDeclaration(decl, loopParameters, loopOutParameters);
+                    processLoopVariableDeclaration(node, decl, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
                 }
             }
 
-            const outerConvertedLoopState = convertedLoopState;
-            convertedLoopState = { loopOutParameters };
-            if (outerConvertedLoopState) {
+            const currentState: ConvertedLoopState = { loopParameters, loopOutParameters };
+            if (convertedLoopState) {
                 // convertedOuterLoopState !== undefined means that this converted loop is nested in another converted loop.
                 // if outer converted loop has already accumulated some state - pass it through
-                if (outerConvertedLoopState.argumentsName) {
+                if (convertedLoopState.argumentsName) {
                     // outer loop has already used 'arguments' so we've already have some name to alias it
                     // use the same name in all nested loops
-                    convertedLoopState.argumentsName = outerConvertedLoopState.argumentsName;
+                    currentState.argumentsName = convertedLoopState.argumentsName;
                 }
-                if (outerConvertedLoopState.thisName) {
+                if (convertedLoopState.thisName) {
                     // outer loop has already used 'this' so we've already have some name to alias it
                     // use the same name in all nested loops
-                    convertedLoopState.thisName = outerConvertedLoopState.thisName;
+                    currentState.thisName = convertedLoopState.thisName;
                 }
-                if (outerConvertedLoopState.hoistedLocalVariables) {
+                if (convertedLoopState.hoistedLocalVariables) {
                     // we've already collected some non-block scoped variable declarations in enclosing loop
                     // use the same storage in nested loop
-                    convertedLoopState.hoistedLocalVariables = outerConvertedLoopState.hoistedLocalVariables;
+                    currentState.hoistedLocalVariables = convertedLoopState.hoistedLocalVariables;
+                }
+            }
+            return currentState;
+        }
+
+        function addExtraDeclarationsForConvertedLoop(statements: Statement[], state: ConvertedLoopState, outerState: ConvertedLoopState | undefined) {
+            let extraVariableDeclarations: VariableDeclaration[] | undefined;
+            // propagate state from the inner loop to the outer loop if necessary
+            if (state.argumentsName) {
+                // if alias for arguments is set
+                if (outerState) {
+                    // pass it to outer converted loop
+                    outerState.argumentsName = state.argumentsName;
+                }
+                else {
+                    // this is top level converted loop and we need to create an alias for 'arguments' object
+                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                        createVariableDeclaration(
+                            state.argumentsName,
+                            /*type*/ undefined,
+                            createIdentifier("arguments")
+                        )
+                    );
                 }
             }
 
+            if (state.thisName) {
+                // if alias for this is set
+                if (outerState) {
+                    // pass it to outer converted loop
+                    outerState.thisName = state.thisName;
+                }
+                else {
+                    // this is top level converted loop so we need to create an alias for 'this' here
+                    // NOTE:
+                    // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
+                    // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
+                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
+                        createVariableDeclaration(
+                            state.thisName,
+                            /*type*/ undefined,
+                            createIdentifier("this")
+                        )
+                    );
+                }
+            }
+
+            if (state.hoistedLocalVariables) {
+                // if hoistedLocalVariables !== undefined this means that we've possibly collected some variable declarations to be hoisted later
+                if (outerState) {
+                    // pass them to outer converted loop
+                    outerState.hoistedLocalVariables = state.hoistedLocalVariables;
+                }
+                else {
+                    if (!extraVariableDeclarations) {
+                        extraVariableDeclarations = [];
+                    }
+                    // hoist collected variable declarations
+                    for (const identifier of state.hoistedLocalVariables) {
+                        extraVariableDeclarations.push(createVariableDeclaration(identifier));
+                    }
+                }
+            }
+
+            // add extra variables to hold out parameters if necessary
+            if (state.loopOutParameters.length) {
+                if (!extraVariableDeclarations) {
+                    extraVariableDeclarations = [];
+                }
+                for (const outParam of state.loopOutParameters) {
+                    extraVariableDeclarations.push(createVariableDeclaration(outParam.outParamName));
+                }
+            }
+
+            if (state.conditionVariable) {
+                if (!extraVariableDeclarations) {
+                    extraVariableDeclarations = [];
+                }
+                extraVariableDeclarations.push(createVariableDeclaration(state.conditionVariable, /*type*/ undefined, createFalse()));
+            }
+
+            // create variable statement to hold all introduced variable declarations
+            if (extraVariableDeclarations) {
+                statements.push(createVariableStatement(
+                    /*modifiers*/ undefined,
+                    createVariableDeclarationList(extraVariableDeclarations)
+                ));
+            }
+        }
+
+        interface IterationStatementPartFunction<T> {
+            functionName: Identifier;
+            functionDeclaration: Statement;
+            containsYield: boolean;
+            part: T;
+        }
+
+        function createOutVariable(p: LoopOutParameter) {
+            return createVariableDeclaration(p.originalName, /*type*/ undefined, p.outParamName);
+        }
+
+        /**
+         * Creates a `_loop_init` function for a `ForStatement` with a block-scoped initializer
+         * that is captured in a closure inside of the initializer. The `_loop_init` function is
+         * used to preserve the per-iteration environment semantics of
+         * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
+         */
+        function createFunctionForInitializerOfForStatement(node: ForStatementWithConvertibleInitializer, currentState: ConvertedLoopState): IterationStatementPartFunction<VariableDeclarationList> {
+            const functionName = createUniqueName("_loop_init");
+
+            const containsYield = (node.initializer.transformFlags & TransformFlags.ContainsYield) !== 0;
+            let emitFlags = EmitFlags.None;
+            if (currentState.containsLexicalThis) emitFlags |= EmitFlags.CapturesThis;
+            if (containsYield && hierarchyFacts & HierarchyFacts.AsyncFunctionBody) emitFlags |= EmitFlags.AsyncFunctionBody;
+
+            const statements: Statement[] = [];
+            statements.push(createVariableStatement(/*modifiers*/ undefined, node.initializer));
+            copyOutParameters(currentState.loopOutParameters, LoopOutParameterFlags.Initializer, CopyDirection.ToOutParameter, statements);
+
+            // This transforms the following ES2015 syntax:
+            //
+            //  for (let i = (setImmediate(() => console.log(i)), 0); i < 2; i++) {
+            //      // loop body
+            //  }
+            //
+            // Into the following ES5 syntax:
+            //
+            //  var _loop_init_1 = function () {
+            //      var i = (setImmediate(() => console.log(i)), 0);
+            //      out_i_1 = i;
+            //  };
+            //  var out_i_1;
+            //  _loop_init_1();
+            //  for (var i = out_i_1; i < 2; i++) {
+            //      // loop body
+            //  }
+            //
+            // Which prevents mutations to `i` in the per-iteration environment of the body
+            // from affecting the initial value for `i` outside of the per-iteration environment.
+
+            const functionDeclaration = createVariableStatement(
+                /*modifiers*/ undefined,
+                setEmitFlags(
+                    createVariableDeclarationList([
+                        createVariableDeclaration(
+                            functionName,
+                            /*type*/ undefined,
+                            setEmitFlags(
+                                createFunctionExpression(
+                                    /*modifiers*/ undefined,
+                                    containsYield ? createToken(SyntaxKind.AsteriskToken) : undefined,
+                                    /*name*/ undefined,
+                                    /*typeParameters*/ undefined,
+                                    /*parameters*/ undefined,
+                                    /*type*/ undefined,
+                                    visitNode(
+                                        createBlock(statements, /*multiLine*/ true),
+                                        visitor,
+                                        isBlock
+                                    )
+                                ),
+                                emitFlags
+                            )
+                        )
+                    ]),
+                    EmitFlags.NoHoisting
+                )
+            );
+
+            const part = createVariableDeclarationList(map(currentState.loopOutParameters, createOutVariable));
+            return { functionName, containsYield, functionDeclaration, part };
+        }
+
+        /**
+         * Creates a `_loop` function for an `IterationStatement` with a block-scoped initializer
+         * that is captured in a closure inside of the loop body. The `_loop` function is used to
+         * preserve the per-iteration environment semantics of
+         * [13.7.4.8 RS: ForBodyEvaluation](https://tc39.github.io/ecma262/#sec-forbodyevaluation).
+         */
+        function createFunctionForBodyOfIterationStatement(node: IterationStatement, currentState: ConvertedLoopState, outerState: ConvertedLoopState | undefined): IterationStatementPartFunction<Statement[]> {
+            const functionName = createUniqueName("_loop");
             startLexicalEnvironment();
-            let loopBody = visitNode(node.statement, visitor, isStatement, liftToBlock);
+            const statement = visitNode(node.statement, visitor, isStatement, liftToBlock);
             const lexicalEnvironment = endLexicalEnvironment();
 
-            const currentState = convertedLoopState;
-            convertedLoopState = outerConvertedLoopState;
+            const statements: Statement[] = [];
+            if (shouldConvertConditionOfForStatement(node) || shouldConvertIncrementorOfForStatement(node)) {
+                // If a block-scoped variable declared in the initializer of `node` is captured in
+                // the condition or incrementor, we must move the condition and incrementor into
+                // the body of the for loop.
+                //
+                // This transforms the following ES2015 syntax:
+                //
+                //  for (let i = 0; setImmediate(() => console.log(i)), i < 2; setImmediate(() => console.log(i)), i++) {
+                //      // loop body
+                //  }
+                //
+                // Into the following ES5 syntax:
+                //
+                //  var _loop_1 = function (i) {
+                //      if (inc_1)
+                //          setImmediate(() => console.log(i)), i++;
+                //      else
+                //          inc_1 = true;
+                //      if (!(setImmediate(() => console.log(i)), i < 2))
+                //          return out_i_1 = i, "break";
+                //      // loop body
+                //      out_i_1 = i;
+                //  }
+                //  var out_i_1, inc_1 = false;
+                //  for (var i = 0;;) {
+                //      var state_1 = _loop_1(i);
+                //      i = out_i_1;
+                //      if (state_1 === "break")
+                //          break;
+                //  }
+                //
+                // Which prevents mutations to `i` in the per-iteration environment of the body
+                // from affecting the value of `i` in the previous per-iteration environment.
+                //
+                // Note that the incrementor of a `for` loop is evaluated in a *new* per-iteration
+                // environment that is carried over to the next iteration of the loop. As a result,
+                // we must indicate whether this is the first evaluation of the loop body so that
+                // we only evaluate the incrementor on subsequent evaluations.
 
-            if (loopOutParameters.length || lexicalEnvironment) {
-                const statements = isBlock(loopBody) ? loopBody.statements.slice() : [loopBody];
-                if (loopOutParameters.length) {
-                    copyOutParameters(loopOutParameters, CopyDirection.ToOutParameter, statements);
+                currentState.conditionVariable = createUniqueName("inc");
+                statements.push(createIf(
+                    currentState.conditionVariable,
+                    createStatement(visitNode(node.incrementor, visitor, isExpression)),
+                    createStatement(createAssignment(currentState.conditionVariable, createTrue()))
+                ));
+
+                if (shouldConvertConditionOfForStatement(node)) {
+                    statements.push(createIf(
+                        createPrefix(SyntaxKind.ExclamationToken, visitNode(node.condition, visitor, isExpression)),
+                        visitNode(createBreak(), visitor, isStatement)
+                    ));
                 }
-                addStatementsAfterPrologue(statements, lexicalEnvironment);
-                loopBody = createBlock(statements, /*multiline*/ true);
             }
 
-            if (isBlock(loopBody)) {
-                loopBody.multiLine = true;
+            if (isBlock(statement)) {
+                addRange(statements, statement.statements);
             }
             else {
-                loopBody = createBlock([loopBody], /*multiline*/ true);
+                statements.push(statement);
             }
+
+            copyOutParameters(currentState.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOutParameter, statements);
+            addStatementsAfterPrologue(statements, lexicalEnvironment);
+
+            const loopBody = createBlock(statements, /*multiLine*/ true);
+            if (isBlock(statement)) setOriginalNode(loopBody, statement);
 
             const containsYield = (node.statement.transformFlags & TransformFlags.ContainsYield) !== 0;
-            const isAsyncBlockContainingAwait = containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0;
 
-            let loopBodyFlags: EmitFlags = 0;
-            if (currentState.containsLexicalThis) {
-                loopBodyFlags |= EmitFlags.CapturesThis;
-            }
+            let emitFlags: EmitFlags = 0;
+            if (currentState.containsLexicalThis) emitFlags |= EmitFlags.CapturesThis;
+            if (containsYield && (hierarchyFacts & HierarchyFacts.AsyncFunctionBody) !== 0) emitFlags |= EmitFlags.AsyncFunctionBody;
 
-            if (isAsyncBlockContainingAwait) {
-                loopBodyFlags |= EmitFlags.AsyncFunctionBody;
-            }
+            // This transforms the following ES2015 syntax (in addition to other variations):
+            //
+            //  for (let i = 0; i < 2; i++) {
+            //      setImmediate(() => console.log(i));
+            //  }
+            //
+            // Into the following ES5 syntax:
+            //
+            //  var _loop_1 = function (i) {
+            //      setImmediate(() => console.log(i));
+            //  };
+            //  for (var i = 0; i < 2; i++) {
+            //      _loop_1(i);
+            //  }
 
-            const convertedLoopVariable =
+            const functionDeclaration =
                 createVariableStatement(
                     /*modifiers*/ undefined,
                     setEmitFlags(
@@ -2744,11 +3127,11 @@ namespace ts {
                                             containsYield ? createToken(SyntaxKind.AsteriskToken) : undefined,
                                             /*name*/ undefined,
                                             /*typeParameters*/ undefined,
-                                            loopParameters,
+                                            currentState.loopParameters,
                                             /*type*/ undefined,
-                                            <Block>loopBody
+                                            loopBody
                                         ),
-                                        loopBodyFlags
+                                        emitFlags
                                     )
                                 )
                             ]
@@ -2757,106 +3140,8 @@ namespace ts {
                     )
                 );
 
-            const statements: Statement[] = [convertedLoopVariable];
-
-            let extraVariableDeclarations: VariableDeclaration[] | undefined;
-            // propagate state from the inner loop to the outer loop if necessary
-            if (currentState.argumentsName) {
-                // if alias for arguments is set
-                if (outerConvertedLoopState) {
-                    // pass it to outer converted loop
-                    outerConvertedLoopState.argumentsName = currentState.argumentsName;
-                }
-                else {
-                    // this is top level converted loop and we need to create an alias for 'arguments' object
-                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
-                        createVariableDeclaration(
-                            currentState.argumentsName,
-                            /*type*/ undefined,
-                            createIdentifier("arguments")
-                        )
-                    );
-                }
-            }
-
-            if (currentState.thisName) {
-                // if alias for this is set
-                if (outerConvertedLoopState) {
-                    // pass it to outer converted loop
-                    outerConvertedLoopState.thisName = currentState.thisName;
-                }
-                else {
-                    // this is top level converted loop so we need to create an alias for 'this' here
-                    // NOTE:
-                    // if converted loops were all nested in arrow function then we'll always emit '_this' so convertedLoopState.thisName will not be set.
-                    // If it is set this means that all nested loops are not nested in arrow function and it is safe to capture 'this'.
-                    (extraVariableDeclarations || (extraVariableDeclarations = [])).push(
-                        createVariableDeclaration(
-                            currentState.thisName,
-                            /*type*/ undefined,
-                            createIdentifier("this")
-                        )
-                    );
-                }
-            }
-
-            if (currentState.hoistedLocalVariables) {
-                // if hoistedLocalVariables !== undefined this means that we've possibly collected some variable declarations to be hoisted later
-                if (outerConvertedLoopState) {
-                    // pass them to outer converted loop
-                    outerConvertedLoopState.hoistedLocalVariables = currentState.hoistedLocalVariables;
-                }
-                else {
-                    if (!extraVariableDeclarations) {
-                        extraVariableDeclarations = [];
-                    }
-                    // hoist collected variable declarations
-                    for (const identifier of currentState.hoistedLocalVariables) {
-                        extraVariableDeclarations.push(createVariableDeclaration(identifier));
-                    }
-                }
-            }
-
-            // add extra variables to hold out parameters if necessary
-            if (loopOutParameters.length) {
-                if (!extraVariableDeclarations) {
-                    extraVariableDeclarations = [];
-                }
-                for (const outParam of loopOutParameters) {
-                    extraVariableDeclarations.push(createVariableDeclaration(outParam.outParamName));
-                }
-            }
-
-            // create variable statement to hold all introduced variable declarations
-            if (extraVariableDeclarations) {
-                statements.push(createVariableStatement(
-                    /*modifiers*/ undefined,
-                    createVariableDeclarationList(extraVariableDeclarations)
-                ));
-            }
-
-            const convertedLoopBodyStatements = generateCallToConvertedLoop(functionName, loopParameters, currentState, containsYield);
-
-            let loop: Statement;
-            if (convert) {
-                loop = convert(node, outermostLabeledStatement, convertedLoopBodyStatements);
-            }
-            else {
-                let clone = getMutableClone(node);
-                // clean statement part
-                clone.statement = undefined!;
-                // visit childnodes to transform initializer/condition/incrementor parts
-                clone = visitEachChild(clone, visitor, context);
-                // set loop statement
-                clone.statement = createBlock(convertedLoopBodyStatements, /*multiline*/ true);
-                // reset and re-aggregate the transform flags
-                clone.transformFlags = 0;
-                aggregateTransformFlags(clone);
-                loop = restoreEnclosingLabel(clone, outermostLabeledStatement, convertedLoopState && resetLabel);
-            }
-
-            statements.push(loop);
-            return statements;
+            const part = generateCallToConvertedLoop(functionName, currentState, outerState, containsYield);
+            return { functionName, containsYield, functionDeclaration, part };
         }
 
         function copyOutParameter(outParam: LoopOutParameter, copyDirection: CopyDirection): BinaryExpression {
@@ -2865,14 +3150,26 @@ namespace ts {
             return createBinary(target, SyntaxKind.EqualsToken, source);
         }
 
-        function copyOutParameters(outParams: LoopOutParameter[], copyDirection: CopyDirection, statements: Statement[]): void {
+        function copyOutParameters(outParams: LoopOutParameter[], partFlags: LoopOutParameterFlags, copyDirection: CopyDirection, statements: Statement[]): void {
             for (const outParam of outParams) {
-                statements.push(createExpressionStatement(copyOutParameter(outParam, copyDirection)));
+                if (outParam.flags & partFlags) {
+                    statements.push(createExpressionStatement(copyOutParameter(outParam, copyDirection)));
+                }
             }
         }
 
-        function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, parameters: ParameterDeclaration[], state: ConvertedLoopState, isAsyncBlockContainingAwait: boolean): Statement[] {
-            const outerConvertedLoopState = convertedLoopState;
+        function generateCallToConvertedLoopInitializer(initFunctionExpressionName: Identifier, containsYield: boolean): Statement {
+            const call = createCall(initFunctionExpressionName, /*typeArguments*/ undefined, []);
+            const callResult = containsYield
+                ? createYield(
+                    createToken(SyntaxKind.AsteriskToken),
+                    setEmitFlags(call, EmitFlags.Iterator)
+                )
+                : call;
+            return createStatement(callResult);
+        }
+
+        function generateCallToConvertedLoop(loopFunctionExpressionName: Identifier, state: ConvertedLoopState, outerState: ConvertedLoopState | undefined, containsYield: boolean): Statement[] {
 
             const statements: Statement[] = [];
             // loop is considered simple if it does not have any return statements or break\continue that transfer control outside of the loop
@@ -2883,8 +3180,8 @@ namespace ts {
                 !state.labeledNonLocalBreaks &&
                 !state.labeledNonLocalContinues;
 
-            const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(parameters, p => <Identifier>p.name));
-            const callResult = isAsyncBlockContainingAwait
+            const call = createCall(loopFunctionExpressionName, /*typeArguments*/ undefined, map(state.loopParameters, p => <Identifier>p.name));
+            const callResult = containsYield
                 ? createYield(
                     createToken(SyntaxKind.AsteriskToken),
                     setEmitFlags(call, EmitFlags.Iterator)
@@ -2892,7 +3189,7 @@ namespace ts {
                 : call;
             if (isSimpleLoop) {
                 statements.push(createExpressionStatement(callResult));
-                copyOutParameters(state.loopOutParameters!, CopyDirection.ToOriginal, statements);
+                copyOutParameters(state.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOriginal, statements);
             }
             else {
                 const loopResultName = createUniqueName("state");
@@ -2903,12 +3200,12 @@ namespace ts {
                     )
                 );
                 statements.push(stateVariable);
-                copyOutParameters(state.loopOutParameters!, CopyDirection.ToOriginal, statements);
+                copyOutParameters(state.loopOutParameters, LoopOutParameterFlags.Body, CopyDirection.ToOriginal, statements);
 
                 if (state.nonLocalJumps! & Jump.Return) {
                     let returnStatement: ReturnStatement;
-                    if (outerConvertedLoopState) {
-                        outerConvertedLoopState.nonLocalJumps! |= Jump.Return;
+                    if (outerState) {
+                        outerState.nonLocalJumps! |= Jump.Return;
                         returnStatement = createReturn(loopResultName);
                     }
                     else {
@@ -2941,8 +3238,8 @@ namespace ts {
 
                 if (state.labeledNonLocalBreaks || state.labeledNonLocalContinues) {
                     const caseClauses: CaseClause[] = [];
-                    processLabeledJumps(state.labeledNonLocalBreaks!, /*isBreak*/ true, loopResultName, outerConvertedLoopState, caseClauses);
-                    processLabeledJumps(state.labeledNonLocalContinues!, /*isBreak*/ false, loopResultName, outerConvertedLoopState, caseClauses);
+                    processLabeledJumps(state.labeledNonLocalBreaks!, /*isBreak*/ true, loopResultName, outerState, caseClauses);
+                    processLabeledJumps(state.labeledNonLocalContinues!, /*isBreak*/ false, loopResultName, outerState, caseClauses);
                     statements.push(
                         createSwitch(
                             loopResultName,
@@ -2990,20 +3287,28 @@ namespace ts {
             });
         }
 
-        function processLoopVariableDeclaration(decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[]) {
+        function processLoopVariableDeclaration(container: IterationStatement, decl: VariableDeclaration | BindingElement, loopParameters: ParameterDeclaration[], loopOutParameters: LoopOutParameter[], hasCapturedBindingsInForInitializer: boolean) {
             const name = decl.name;
             if (isBindingPattern(name)) {
                 for (const element of name.elements) {
                     if (!isOmittedExpression(element)) {
-                        processLoopVariableDeclaration(element, loopParameters, loopOutParameters);
+                        processLoopVariableDeclaration(container, element, loopParameters, loopOutParameters, hasCapturedBindingsInForInitializer);
                     }
                 }
             }
             else {
                 loopParameters.push(createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name));
-                if (resolver.getNodeCheckFlags(decl) & NodeCheckFlags.NeedsLoopOutParameter) {
+                const checkFlags = resolver.getNodeCheckFlags(decl);
+                if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter || hasCapturedBindingsInForInitializer) {
                     const outParamName = createUniqueName("out_" + idText(name));
-                    loopOutParameters.push({ originalName: name, outParamName });
+                    let flags: LoopOutParameterFlags = 0;
+                    if (checkFlags & NodeCheckFlags.NeedsLoopOutParameter) {
+                        flags |= LoopOutParameterFlags.Body;
+                    }
+                    if (isForStatement(container) && container.initializer && resolver.isBindingCapturedByNode(container.initializer, decl)) {
+                        flags |= LoopOutParameterFlags.Initializer;
+                    }
+                    loopOutParameters.push({ flags, originalName: name, outParamName });
                 }
             }
         }
@@ -3424,7 +3729,7 @@ namespace ts {
         function visitCallExpressionWithPotentialCapturedThisAssignment(node: CallExpression, assignToCapturedThis: boolean): CallExpression | BinaryExpression {
             // We are here either because SuperKeyword was used somewhere in the expression, or
             // because we contain a SpreadElementExpression.
-            if (node.transformFlags & TransformFlags.ContainsSpread ||
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread ||
                 node.expression.kind === SyntaxKind.SuperKeyword ||
                 isSuperProperty(skipOuterExpressions(node.expression))) {
 
@@ -3434,7 +3739,7 @@ namespace ts {
                 }
 
                 let resultingCall: CallExpression | BinaryExpression;
-                if (node.transformFlags & TransformFlags.ContainsSpread) {
+                if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
                     // [source]
                     //      f(...a, b)
                     //      x.m(...a, b)
@@ -3497,7 +3802,7 @@ namespace ts {
          * @param node A NewExpression node.
          */
         function visitNewExpression(node: NewExpression): LeftHandSideExpression {
-            if (node.transformFlags & TransformFlags.ContainsSpread) {
+            if (node.transformFlags & TransformFlags.ContainsRestOrSpread) {
                 // We are here because we contain a SpreadElementExpression.
                 // [source]
                 //      new C(...a)
@@ -4071,7 +4376,7 @@ namespace ts {
                         ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
                         function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
                     return extendStatics(d, b);
-                }
+                };
 
                 return function (d, b) {
                     extendStatics(d, b);

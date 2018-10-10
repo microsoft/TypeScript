@@ -10,4 +10,5 @@ verify.referenceGroups(r1, [
     { definition: "function bar(): string", ranges: [r0] },
     { definition: "var bar: () => string", ranges: [r1] },
 ]);
-verify.rangesAreRenameLocations();
+verify.renameLocations(r0, [r0, { range: r1, suffixText: ": bar" }]);
+verify.renameLocations(r1, [{ range: r1, prefixText: "bar: " }])

@@ -8,9 +8,12 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(25,18): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(26,18): error TS2538: Type 'void' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(27,18): error TS2538: Type 'undefined' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(28,18): error TS2538: Type '{ x: string; }' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'number'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(29,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(30,18): error TS2538: Type 'string & number' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'false' cannot be used as an index type.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(31,18): error TS2538: Type 'true' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(35,21): error TS2537: Type 'string[]' has no matching index signature for type 'string'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(36,21): error TS2538: Type 'boolean' cannot be used as an index type.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(41,31): error TS2538: Type 'boolean' cannot be used as an index type.
@@ -58,9 +61,14 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(114,5): error
           Type 'string' is not assignable to type 'J'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
   Type 'T' is not assignable to type 'U'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(122,5): error TS2322: Type '42' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type '42' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
+tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (33 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (41 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -111,6 +119,8 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
 !!! error TS2538: Type '{ x: string; }' cannot be used as an index type.
     type T20 = Shape[string | number];  // Error
                      ~~~~~~~~~~~~~~~
+!!! error TS2537: Type 'Shape' has no matching index signature for type 'number'.
+                     ~~~~~~~~~~~~~~~
 !!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
     type T21 = Shape[string & number];  // Error
                      ~~~~~~~~~~~~~~~
@@ -118,6 +128,10 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
     type T22 = Shape[string | boolean];  // Error
                      ~~~~~~~~~~~~~~~~
 !!! error TS2537: Type 'Shape' has no matching index signature for type 'string'.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'false' cannot be used as an index type.
+                     ~~~~~~~~~~~~~~~~
+!!! error TS2538: Type 'true' cannot be used as an index type.
     
     type T30 = string[]["length"];
     type T31 = string[][number];
@@ -271,5 +285,40 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(117,5): error
         ~~
 !!! error TS2322: Type 'T[K]' is not assignable to type 'U[J]'.
 !!! error TS2322:   Type 'T' is not assignable to type 'U'.
+    }
+    
+    // The constraint of 'keyof T' is 'keyof T'
+    function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+        k = 42; // error
+        ~
+!!! error TS2322: Type '42' is not assignable to type 'keyof T'.
+        k = "hello"; // error
+        ~
+!!! error TS2322: Type '"hello"' is not assignable to type 'keyof T'.
+    }
+    
+    // Repro from #27470
+    
+    type UndefinedKeys<T extends Record<string, any>> = {
+      [K in keyof T]: undefined extends T[K] ? K : never
+    };
+    
+    type MyType = {a: string, b: string | undefined}
+    
+    type Result1 = UndefinedKeys<MyType>;
+    
+    const a1: Result1['a'] = 'a';  // Error
+    const b1: Result1['b'] = 'b';
+    
+    function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+        t[k] = 42;  // Error
+        ~~~~
+!!! error TS2322: Type '42' is not assignable to type 'T[K]'.
+        t[k] = "hello";  // Error
+        ~~~~
+!!! error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
+        t[k] = [10, 20];  // Error
+        ~~~~
+!!! error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
     }
     

@@ -3,7 +3,7 @@ enum E {
 >E : E
 
   [e] = 1
->[e] : E
+>[e] : E.__computed
 >e : any
 >1 : 1
 }

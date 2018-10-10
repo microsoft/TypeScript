@@ -1207,12 +1207,11 @@ type S2 = {
 
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
->f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K], x4: T[K]) => void
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
+>f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K]) => void
 >x1 : string
 >x2 : T["a" | "b"]
 >x3 : S2[K]
->x4 : T[K]
 
     x1 = x2;
 >x1 = x2 : T["a" | "b"]
@@ -1224,11 +1223,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x1 : string
 >x3 : S2[K]
 
-    x1 = x4;
->x1 = x4 : T[K]
->x1 : string
->x4 : T[K]
-
     x2 = x1;
 >x2 = x1 : string
 >x2 : T["a" | "b"]
@@ -1239,11 +1233,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x2 : T["a" | "b"]
 >x3 : S2[K]
 
-    x2 = x4;
->x2 = x4 : T[K]
->x2 : T["a" | "b"]
->x4 : T[K]
-
     x3 = x1;
 >x3 = x1 : string
 >x3 : S2[K]
@@ -1253,26 +1242,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x3 = x2 : T["a" | "b"]
 >x3 : S2[K]
 >x2 : T["a" | "b"]
-
-    x3 = x4;
->x3 = x4 : T[K]
->x3 : S2[K]
->x4 : T[K]
-
-    x4 = x1;
->x4 = x1 : string
->x4 : T[K]
->x1 : string
-
-    x4 = x2;
->x4 = x2 : T["a" | "b"]
->x4 : T[K]
->x2 : T["a" | "b"]
-
-    x4 = x3;
->x4 = x3 : S2[K]
->x4 : T[K]
->x3 : S2[K]
 
     x1.length;
 >x1.length : number
@@ -1287,11 +1256,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x3.length;
 >x3.length : number
 >x3 : S2[K]
->length : number
-
-    x4.length;
->x4.length : number
->x4 : T[K]
 >length : number
 }
 

@@ -196,15 +196,23 @@ namespace ts {
     }
 
     function getSourceFileToImportFromResolved(resolved: ResolvedModuleWithFailedLookupLocations | undefined, oldToNew: PathUpdater, host: LanguageServiceHost): ToImport | undefined {
-        return resolved && (
-            (resolved.resolvedModule && getIfExists(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, getIfExists));
+        // Search through all locations looking for a moved file, and only then test already existing files.
+        // This is because if `a.ts` is compiled to `a.js` and `a.ts` is moved, we don't want to resolve anything to `a.js`, but to `a.ts`'s new location.
+        return tryEach(tryGetNewFile) || tryEach(tryGetOldFile);
 
-        function getIfExists(oldLocation: string): ToImport | undefined {
-            const newLocation = oldToNew(oldLocation);
+        function tryEach(cb: (oldFileName: string) => ToImport | undefined): ToImport | undefined {
+            return resolved && (
+                (resolved.resolvedModule && cb(resolved.resolvedModule.resolvedFileName)) || firstDefined(resolved.failedLookupLocations, cb));
+        }
 
-            return host.fileExists!(oldLocation) || newLocation !== undefined && host.fileExists!(newLocation) // TODO: GH#18217
-                ? newLocation !== undefined ? { newFileName: newLocation, updated: true } : { newFileName: oldLocation, updated: false }
-                : undefined;
+        function tryGetNewFile(oldFileName: string): ToImport | undefined {
+            const newFileName = oldToNew(oldFileName);
+            return newFileName !== undefined && host.fileExists!(newFileName) ? { newFileName, updated: true } : undefined; // TODO: GH#18217
+        }
+
+        function tryGetOldFile(oldFileName: string): ToImport | undefined {
+            const newFileName = oldToNew(oldFileName);
+            return host.fileExists!(oldFileName) ? newFileName !== undefined ? { newFileName, updated: true } : { newFileName: oldFileName, updated: false } : undefined; // TODO: GH#18217
         }
     }
 
@@ -221,7 +229,7 @@ namespace ts {
     }
 
     function createStringRange(node: StringLiteralLike, sourceFile: SourceFileLike): TextRange {
-        return createTextRange(node.getStart(sourceFile) + 1, node.end - 1);
+        return createRange(node.getStart(sourceFile) + 1, node.end - 1);
     }
 
     function forEachProperty(objectLiteral: Expression, cb: (property: PropertyAssignment, propertyName: string) => void) {

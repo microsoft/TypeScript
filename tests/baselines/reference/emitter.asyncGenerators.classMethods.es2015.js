@@ -263,9 +263,11 @@ class B9 {
 }
 class C9 extends B9 {
     f() {
-        const _super = name => super[name];
+        const _super = Object.create(null, {
+            g: { get: () => super.g }
+        });
         return __asyncGenerator(this, arguments, function* f_1() {
-            _super("g").call(this);
+            _super.g.call(this);
         });
     }
 }
