@@ -4915,9 +4915,7 @@ namespace ts {
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
             if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
-                if (noImplicitAny) {
-                    reportImplicitAnyError(symbol.valueDeclaration, anyType);
-                }
+                reportImplicitAnyError(noImplicitAny, symbol.valueDeclaration, anyType);
                 return anyType;
             }
             return widened;
@@ -4992,9 +4990,7 @@ namespace ts {
                 return result;
             }
             if (isEmptyArrayLiteralType(type)) {
-                if (noImplicitAny) {
-                    reportImplicitAnyError(expression, anyArrayType);
-                }
+                reportImplicitAnyError(noImplicitAny, expression, anyArrayType);
                 return anyArrayType;
             }
             return type;
@@ -5044,8 +5040,8 @@ namespace ts {
             if (isBindingPattern(element.name)) {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
             }
-            if (reportErrors && noImplicitAny && !declarationBelongsToPrivateAmbientMember(element)) {
-                reportImplicitAnyError(element, anyType);
+            if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
+                reportImplicitAnyError(noImplicitAny, element, anyType);
             }
             return anyType;
         }
@@ -5145,9 +5141,9 @@ namespace ts {
             type = isParameter(declaration) && declaration.dotDotDotToken ? anyArrayType : anyType;
 
             // Report implicit any errors unless this is a private property within an ambient declaration
-            if (reportErrors && noImplicitAny) {
+            if (reportErrors) {
                 if (!declarationBelongsToPrivateAmbientMember(declaration)) {
-                    reportImplicitAnyError(declaration, type);
+                    reportImplicitAnyError(noImplicitAny, declaration, type);
                 }
             }
             return type;
@@ -5328,14 +5324,12 @@ namespace ts {
                     }
                     // Otherwise, fall back to 'any'.
                     else {
-                        if (noImplicitAny) {
-                            if (setter) {
-                                error(setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
-                            }
-                            else {
-                                Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
-                                error(getter, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
-                            }
+                        if (setter) {
+                            errorOrSuggestion(noImplicitAny, setter, Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation, symbolToString(symbol));
+                        }
+                        else {
+                            Debug.assert(!!getter, "there must existed getter as we are current checking either setter or getter in this function");
+                            errorOrSuggestion(noImplicitAny, getter!, Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation, symbolToString(symbol));
                         }
                         type = anyType;
                     }
@@ -13270,7 +13264,7 @@ namespace ts {
             return errorReported;
         }
 
-        function reportImplicitAnyError(declaration: Declaration, type: Type) {
+        function reportImplicitAnyError(noImplicitAny: boolean, declaration: Declaration, type: Type) {
             const typeAsString = typeToString(getWidenedType(type));
             let diagnostic: DiagnosticMessage;
             switch (declaration.kind) {
@@ -13294,26 +13288,28 @@ namespace ts {
                 case SyntaxKind.SetAccessor:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
-                    if (!(declaration as NamedDeclaration).name) {
+                    if (noImplicitAny && !(declaration as NamedDeclaration).name) {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
                     }
                     diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
                     break;
                 case SyntaxKind.MappedType:
-                    error(declaration, Diagnostics.Mapped_object_type_implicitly_has_an_any_template_type);
+                    if (noImplicitAny) {
+                        error(declaration, Diagnostics.Mapped_object_type_implicitly_has_an_any_template_type);
+                    }
                     return;
                 default:
                     diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
             }
-            error(declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
+            errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }
 
         function reportErrorsFromWidening(declaration: Declaration, type: Type) {
             if (produceDiagnostics && noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAnyError(declaration, type);
+                    reportImplicitAnyError(/*noImplicitAny*/ true, declaration, type);
                 }
             }
         }
@@ -22314,15 +22310,11 @@ namespace ts {
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
-                    if (noImplicitAny) {
-                        reportImplicitAnyError(declaration, anyType);
-                    }
+                    reportImplicitAnyError(noImplicitAny, declaration, anyType);
                     return anyType;
                 }
                 else if (isEmptyArrayLiteralType(widened)) {
-                    if (noImplicitAny) {
-                        reportImplicitAnyError(declaration, anyArrayType);
-                    }
+                    reportImplicitAnyError(noImplicitAny, declaration, anyArrayType);
                     return anyArrayType;
                 }
             }
@@ -23313,8 +23305,8 @@ namespace ts {
             checkSourceElement(node.typeParameter);
             checkSourceElement(node.type);
 
-            if (noImplicitAny && !node.type) {
-                reportImplicitAnyError(node, anyType);
+            if (!node.type) {
+                reportImplicitAnyError(noImplicitAny, node, anyType);
             }
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
@@ -24338,8 +24330,8 @@ namespace ts {
             if (produceDiagnostics && !getEffectiveReturnTypeNode(node)) {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
-                if (noImplicitAny && nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
-                    reportImplicitAnyError(node, anyType);
+                if (nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
+                    reportImplicitAnyError(noImplicitAny, node, anyType);
                 }
 
                 if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {

@@ -9,13 +9,15 @@
 ////exports.x = 0;
 ////exports.a1 = () => {};
 ////exports.a2 = () => 0;
-////exports.a3 = x => { x; };
-////exports.a4 = x => x;
+////exports.a3 = [|x|] => { x; };
+////exports.a4 = [|x|] => x;
 
-verify.getSuggestionDiagnostics([{
-    message: "File is a CommonJS module; it may be converted to an ES6 module.",
-    code: 80001,
-}]);
+const [r0, r1, r2] = test.ranges();
+verify.getSuggestionDiagnostics([
+    { message: "File is a CommonJS module; it may be converted to an ES6 module.", code: 80001, range: r0 },
+    { message: "Parameter 'x' implicitly has an 'any' type.", code: 7006, range: r1 },
+    { message: "Parameter 'x' implicitly has an 'any' type.", code: 7006, range: r2 },
+]);
 
 verify.codeFix({
     description: "Convert to ES6 module",
