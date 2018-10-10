@@ -584,7 +584,7 @@
   "Module_name_0_was_successfully_resolved_to_1_6089": "======== 模組名稱 '{0}' 已成功解析為 '{1}'。========",
   "Module_resolution_kind_is_not_specified_using_0_6088": "未指定模組解析種類，將使用 '{0}'。",
   "Module_resolution_using_rootDirs_has_failed_6111": "使用 'rootDirs' 解析模組失敗。",
-  "Move_to_a_new_file_95049": "移至新行",
+  "Move_to_a_new_file_95049": "移至新檔",
   "Multiple_consecutive_numeric_separators_are_not_permitted_6189": "不允許多個連續的數字分隔符號。",
   "Multiple_constructor_implementations_are_not_allowed_2392": "不允許多個建構函式實作。",
   "NEWLINE_6061": "新行",
