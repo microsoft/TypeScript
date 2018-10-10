@@ -1926,12 +1926,7 @@ namespace ts {
                 return AssignmentDeclarationKind.None;
             }
             const entityName = expr.arguments[0];
-            if ((isIdentifier(entityName) && entityName.escapedText === "exports") ||
-                    (isPropertyAccessExpression(entityName) &&
-                    isIdentifier(entityName.expression) &&
-                    entityName.expression.escapedText === "module" &&
-                    entityName.name.escapedText === "exports")
-            ) {
+            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
                 return AssignmentDeclarationKind.ObjectDefinePropertyExports;
             }
             if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
@@ -1955,7 +1950,7 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
+        else if (isModuleExportsPropertyAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }

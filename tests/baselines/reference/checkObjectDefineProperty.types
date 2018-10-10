@@ -8,6 +8,11 @@ x.name;
 >x : typeof x
 >name : string
 
+x.middleInit;
+>x.middleInit : string
+>x : typeof x
+>middleInit : string
+
 x.lastName;
 >x.lastName : string
 >x : typeof x
@@ -28,7 +33,7 @@ x.zipStr;
 >x : typeof x
 >zipStr : string
 
-x.name = "Another"; 
+x.name = "Another";
 >x.name = "Another" : "Another"
 >x.name : string
 >x : typeof x
@@ -70,6 +75,13 @@ x.zipStr = 12; // should fail
 >zipStr : string
 >12 : 12
 
+x.middleInit = "R"; // should also fail
+>x.middleInit = "R" : "R"
+>x.middleInit : any
+>x : typeof x
+>middleInit : any
+>"R" : "R"
+
 === tests/cases/conformance/jsdoc/index.js ===
 const x = {};
 >x : typeof x
@@ -87,6 +99,17 @@ Object.defineProperty(x, "name", { value: "Charles", writable: true });
 >"Charles" : "Charles"
 >writable : true
 >true : true
+
+Object.defineProperty(x, "middleInit", { value: "H" });
+>Object.defineProperty(x, "middleInit", { value: "H" }) : any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object : ObjectConstructor
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>x : typeof x
+>"middleInit" : "middleInit"
+>{ value: "H" } : { value: string; }
+>value : string
+>"H" : "H"
 
 Object.defineProperty(x, "lastName", { value: "Smith", writable: false });
 >Object.defineProperty(x, "lastName", { value: "Smith", writable: false }) : any
@@ -196,9 +219,9 @@ const needsExemplar = (_ = x) => void 0;
 >void 0 : undefined
 >0 : 0
 
-const expected = /** @type {{name: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
->expected : { name: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
->(/** @type {*} */(null)) : { name: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+const expected = /** @type {{name: string, readonly middleInit: string, readonly lastName: string, zip: number, readonly houseNumber: number, zipStr: string}} */(/** @type {*} */(null));
+>expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>(/** @type {*} */(null)) : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >(null) : any
 >null : null
 
@@ -215,11 +238,11 @@ function match(a, b) {}
 match(() => expected, (x = expected) => void 0);
 >match(() => expected, (x = expected) => void 0) : void
 >match : (a: () => typeof x, b: (_?: typeof x) => undefined) => void
->() => expected : () => { name: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
->expected : { name: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>() => expected : () => { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >(x = expected) => void 0 : (x?: typeof x | undefined) => undefined
 >x : typeof x | undefined
->expected : { name: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
+>expected : { name: string; readonly middleInit: string; readonly lastName: string; zip: number; readonly houseNumber: number; zipStr: string; }
 >void 0 : undefined
 >0 : 0
 

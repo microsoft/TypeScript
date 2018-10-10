@@ -16045,6 +16045,9 @@ namespace ts {
                 getAssignmentDeclarationKind(container.parent.parent.parent) === AssignmentDeclarationKind.Prototype) {
                 return (container.parent.parent.parent.left as PropertyAccessExpression).expression;
             }
+            // Object.defineProperty(x, "method", { value: function() { } });
+            // Object.defineProperty(x, "method", { set: (x: () => void) => void });
+            // Object.defineProperty(x, "method", { get: () => function() { }) });
             else if (container.kind === SyntaxKind.FunctionExpression &&
                 isPropertyAssignment(container.parent) &&
                 isIdentifier(container.parent.name) &&
@@ -16055,6 +16058,9 @@ namespace ts {
                 getAssignmentDeclarationKind(container.parent.parent.parent) === AssignmentDeclarationKind.ObjectDefinePrototypeProperty) {
                 return (container.parent.parent.parent.arguments[0] as PropertyAccessExpression).expression;
             }
+            // Object.defineProperty(x, "method", { value() { } });
+            // Object.defineProperty(x, "method", { set(x: () => void) {} });
+            // Object.defineProperty(x, "method", { get() { return () => {} } });
             else if (isMethodDeclaration(container) &&
                 isIdentifier(container.name) &&
                 (container.name.escapedText === "value" || container.name.escapedText === "get" || container.name.escapedText === "set") &&
@@ -16623,7 +16629,7 @@ namespace ts {
                 case AssignmentDeclarationKind.ObjectDefinePropertyValue:
                 case AssignmentDeclarationKind.ObjectDefinePropertyExports:
                 case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
-                    return Debug.fail("Unimplemented");
+                    return Debug.fail("Does not apply");
                 default:
                     return Debug.assertNever(kind);
             }
@@ -21328,16 +21334,16 @@ namespace ts {
             const objectLitType = checkExpressionCached(d.arguments[2]);
             const valueType = getTypeOfPropertyOfType(objectLitType, "value" as __String);
             if (valueType) {
-                const writableType = getTypeOfPropertyOfType(objectLitType, "writable" as __String);
+                const writableProp = getPropertyOfType(objectLitType, "writable" as __String);
+                const writableType = writableProp && getTypeOfSymbol(writableProp);
                 if (!writableType || writableType === falseType || writableType === regularFalseType) {
                     return true;
                 }
                 // We include this definition whereupon we walk back and check the type at the declaration because
-                // The usual definition of `Object.defineProperty` will _not_ cause literal type to be preserved in the
+                // The usual definition of `Object.defineProperty` will _not_ cause literal types to be preserved in the
                 // argument types, should the type be contextualized by the call itself.
-                const writableProp = getPropertyOfType(objectLitType, "writable" as __String);
-                if (writableProp!.valueDeclaration && isPropertyAssignment(writableProp!.valueDeclaration)) {
-                    const initializer = (writableProp!.valueDeclaration as PropertyAssignment).initializer;
+                if (writableProp && writableProp.valueDeclaration && isPropertyAssignment(writableProp.valueDeclaration)) {
+                    const initializer = writableProp.valueDeclaration.initializer;
                     const rawOriginalType = checkExpression(initializer);
                     if (rawOriginalType === falseType || rawOriginalType === regularFalseType) {
                         return true;
