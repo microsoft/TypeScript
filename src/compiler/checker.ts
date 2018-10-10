@@ -12693,10 +12693,11 @@ namespace ts {
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
-                        // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
-                        // and Y1 is related to Y2.
-                        if (isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
-                            (isRelatedTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType) || isRelatedTo((<ConditionalType>target).checkType, (<ConditionalType>source).checkType))) {
+                        // they have the same distributivity, T1 and T2 are identical types, U1 and U2 are identical
+                        // types, X1 is related to X2, and Y1 is related to Y2.
+                        if ((<ConditionalType>source).root.isDistributive === (<ConditionalType>target).root.isDistributive &&
+                            isTypeIdenticalTo((<ConditionalType>source).extendsType, (<ConditionalType>target).extendsType) &&
+                            isTypeIdenticalTo((<ConditionalType>source).checkType, (<ConditionalType>target).checkType)) {
                             if (result = isRelatedTo(getTrueTypeFromConditionalType(<ConditionalType>source), getTrueTypeFromConditionalType(<ConditionalType>target), reportErrors)) {
                                 result &= isRelatedTo(getFalseTypeFromConditionalType(<ConditionalType>source), getFalseTypeFromConditionalType(<ConditionalType>target), reportErrors);
                             }
