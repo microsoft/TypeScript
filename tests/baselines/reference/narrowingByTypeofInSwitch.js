@@ -27,6 +27,10 @@ function assertObject(x: object) {
     return x;
 }
 
+function assertObjectOrNull(x: object | null) {
+    return x;
+}
+
 function assertUndefined(x: undefined) {
     return x;
 }
@@ -35,11 +39,11 @@ function assertAll(x: Basic) {
     return x;
 }
 
-function assertStringOrNumber(x: string | number)  {
+function assertStringOrNumber(x: string | number) {
     return x;
 }
 
-function assertBooleanOrObject(x: boolean | object)  {
+function assertBooleanOrObject(x: boolean | object) {
     return x;
 }
 
@@ -211,6 +215,41 @@ function fallThroughTest(x: string | number | boolean | object) {
     }
 }
 
+function unknownNarrowing(x: unknown) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertFunction(x); return;
+        case 'symbol': assertSymbol(x); return;
+        case 'object': assertObjectOrNull(x); return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+    }
+}
+
+function keyofNarrowing<S extends { [K in keyof S]: string }>(k: keyof S) {
+    function assertKeyofS(k1: keyof S) { }
+    switch (typeof k) {
+        case 'number': assertNumber(k); assertKeyofS(k); return;
+        case 'symbol': assertSymbol(k); assertKeyofS(k); return;
+        case 'string': assertString(k); assertKeyofS(k); return;
+    }
+}
+
+function narrowingNarrows(x: {} | undefined) {
+    switch (typeof x) {
+        case 'number': assertNumber(x); return;
+        case 'boolean': assertBoolean(x); return;
+        case 'function': assertFunction(x); return;
+        case 'symbol': assertSymbol(x); return;
+        case 'object': const _: {} = x; return;
+        case 'string': assertString(x); return;
+        case 'undefined': assertUndefined(x); return;
+        case 'number': assertNever(x); return;
+        default: const _y: {} = x; return;
+    }
+}
+
 
 //// [narrowingByTypeofInSwitch.js]
 function assertNever(x) {
@@ -232,6 +271,9 @@ function assertFunction(x) {
     return x;
 }
 function assertObject(x) {
+    return x;
+}
+function assertObjectOrNull(x) {
     return x;
 }
 function assertUndefined(x) {
@@ -468,5 +510,78 @@ function fallThroughTest(x) {
         case 'boolean':
             assertBooleanOrObject(x);
             break;
+    }
+}
+function unknownNarrowing(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+            return;
+        case 'boolean':
+            assertBoolean(x);
+            return;
+        case 'function':
+            assertFunction(x);
+            return;
+        case 'symbol':
+            assertSymbol(x);
+            return;
+        case 'object':
+            assertObjectOrNull(x);
+            return;
+        case 'string':
+            assertString(x);
+            return;
+        case 'undefined':
+            assertUndefined(x);
+            return;
+    }
+}
+function keyofNarrowing(k) {
+    function assertKeyofS(k1) { }
+    switch (typeof k) {
+        case 'number':
+            assertNumber(k);
+            assertKeyofS(k);
+            return;
+        case 'symbol':
+            assertSymbol(k);
+            assertKeyofS(k);
+            return;
+        case 'string':
+            assertString(k);
+            assertKeyofS(k);
+            return;
+    }
+}
+function narrowingNarrows(x) {
+    switch (typeof x) {
+        case 'number':
+            assertNumber(x);
+            return;
+        case 'boolean':
+            assertBoolean(x);
+            return;
+        case 'function':
+            assertFunction(x);
+            return;
+        case 'symbol':
+            assertSymbol(x);
+            return;
+        case 'object':
+            var _ = x;
+            return;
+        case 'string':
+            assertString(x);
+            return;
+        case 'undefined':
+            assertUndefined(x);
+            return;
+        case 'number':
+            assertNever(x);
+            return;
+        default:
+            var _y = x;
+            return;
     }
 }
