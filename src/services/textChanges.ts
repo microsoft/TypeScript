@@ -409,10 +409,11 @@ namespace ts.textChanges {
 
         private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
             let printName = unescapeLeadingUnderscores(name.escapedText);
+            const documentation = printName.match(/[A-Z]/) ? (" " + printName.replace(/[A-Z]/g, m => " " + m.toLowerCase()).trim()) : "";
             if (isOptionalParameter) {
                 printName = `[${printName}]`;
             }
-            return repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
+            return repeatString(" ", indent) + ` * @param {${printed}} ${printName}${documentation}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
