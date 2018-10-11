@@ -7738,7 +7738,7 @@ namespace ts {
         return `^(${pattern})${terminator}`;
     }
 
-    function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
+    export function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -8003,11 +8003,13 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTSExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTSExtensionsWithJson: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Json];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTSExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJSExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
     export const supportedJSAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
+    const allSupportedExtensionsWithJson: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
@@ -8022,6 +8024,13 @@ namespace ts {
         ];
 
         return deduplicate<string>(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
+    }
+
+    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: ReadonlyArray<string>): ReadonlyArray<string> {
+        if (!options || !options.resolveJsonModule) { return supportedExtensions; }
+        if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
+        if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
+        return [...supportedExtensions, Extension.Json];
     }
 
     function isJSLike(scriptKind: ScriptKind | undefined): boolean {
@@ -8043,7 +8052,8 @@ namespace ts {
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
+        const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
+        for (const extension of getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
