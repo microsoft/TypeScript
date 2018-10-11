@@ -41,20 +41,23 @@ namespace ts {
     export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
-            const jsFilePath = options.outFile || options.out!;
-            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
-            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            const outPath = options.outFile || options.out!;
+            const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
+            const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
+            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
         }
         else {
-            const jsFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
-            const sourceMapFilePath = isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
+            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
+            const jsFilePath = options.emitDeclarationOnly ? undefined : ownOutputFilePath;
+            const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
             const isJs = isSourceFileJS(sourceFile);
             const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
-            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath: undefined };
         }
     }
@@ -135,27 +138,33 @@ namespace ts {
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
+                    if (jsFilePath) {
+                        emittedFilesList.push(jsFilePath);
+                    }
+                    if (sourceMapFilePath) {
+                        emittedFilesList.push(sourceMapFilePath);
+                    }
+                    if (bundleInfoPath) {
+                        emittedFilesList.push(bundleInfoPath);
+                    }
                 }
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
-                if (bundleInfoPath) {
-                    emittedFilesList.push(bundleInfoPath);
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
                 }
             }
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
-                emitSkipped = true;
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
+            if (emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
-            if (emitOnlyDtsFiles) {
+
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || compilerOptions.noEmit) {
+                emitSkipped = true;
                 return;
             }
             // Transform the source files

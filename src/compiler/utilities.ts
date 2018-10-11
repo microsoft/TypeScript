@@ -3245,7 +3245,7 @@ namespace ts {
     }
 
     export interface EmitFileNames {
-        jsFilePath: string;
+        jsFilePath: string | undefined;
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
