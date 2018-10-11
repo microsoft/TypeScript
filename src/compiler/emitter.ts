@@ -134,28 +134,33 @@ namespace ts {
             emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
 
             if (!emitSkipped && emittedFilesList) {
-                if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
+                if (!compilerOptions.emitDeclarationOnly) {
+                    if (!emitOnlyDtsFiles) {
+                        emittedFilesList.push(jsFilePath);
+                    }
+                    if (sourceMapFilePath) {
+                        emittedFilesList.push(sourceMapFilePath);
+                    }
+                    if (bundleInfoPath) {
+                        emittedFilesList.push(bundleInfoPath);
+                    }
                 }
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
-                if (bundleInfoPath) {
-                    emittedFilesList.push(bundleInfoPath);
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
                 }
             }
         }
 
         function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
             // Make sure not to write js file and source map file if any of them cannot be written
-            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
+            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit) {
                 emitSkipped = true;
                 return;
             }
-            if (emitOnlyDtsFiles) {
+            if (emitOnlyDtsFiles || compilerOptions.emitDeclarationOnly) {
                 return;
             }
             // Transform the source files
