@@ -1,0 +1,23 @@
+=== tests/cases/compiler/mappedTypeParameterConstraint.ts ===
+// Repro for #27596
+
+type MyMap<T> = {[P in keyof T]: T[keyof T]};
+>MyMap : Symbol(MyMap, Decl(mappedTypeParameterConstraint.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypeParameterConstraint.ts, 2, 11))
+>P : Symbol(P, Decl(mappedTypeParameterConstraint.ts, 2, 18))
+>T : Symbol(T, Decl(mappedTypeParameterConstraint.ts, 2, 11))
+>T : Symbol(T, Decl(mappedTypeParameterConstraint.ts, 2, 11))
+>T : Symbol(T, Decl(mappedTypeParameterConstraint.ts, 2, 11))
+
+function foo<U>(arg: U): MyMap<U> {
+>foo : Symbol(foo, Decl(mappedTypeParameterConstraint.ts, 2, 45))
+>U : Symbol(U, Decl(mappedTypeParameterConstraint.ts, 3, 13))
+>arg : Symbol(arg, Decl(mappedTypeParameterConstraint.ts, 3, 16))
+>U : Symbol(U, Decl(mappedTypeParameterConstraint.ts, 3, 13))
+>MyMap : Symbol(MyMap, Decl(mappedTypeParameterConstraint.ts, 0, 0))
+>U : Symbol(U, Decl(mappedTypeParameterConstraint.ts, 3, 13))
+
+    return arg;
+>arg : Symbol(arg, Decl(mappedTypeParameterConstraint.ts, 3, 16))
+}
+

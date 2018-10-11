@@ -1,8 +1,8 @@
-tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion02.ts(2,11): error TS2733: Index '0' is out-of-bounds in tuple of length 0.
+tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion02.ts(2,11): error TS2339: Property '0' does not exist on type '[]'.
 
 
 ==== tests/cases/conformance/types/tuple/emptyTuples/emptyTuplesTypeAssertion02.ts (1 errors) ====
     let x = [] as [];
     let y = x[0];
               ~
-!!! error TS2733: Index '0' is out-of-bounds in tuple of length 0.
+!!! error TS2339: Property '0' does not exist on type '[]'.
