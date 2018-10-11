@@ -8,7 +8,7 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span, program } = context;
-            const { declaration } = getDeclaration(sourceFile, span.start, program.getTypeChecker());
+            const declaration = getDeclaration(sourceFile, span.start, program.getTypeChecker());
             if (!declaration) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, declaration));
             const type = declaration.kind === SyntaxKind.VariableDeclaration ? "const" : "readonly";
@@ -16,18 +16,16 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            const { declaration } = getDeclaration(diag.file, diag.start, context.program.getTypeChecker());
+            const declaration = getDeclaration(diag.file, diag.start, context.program.getTypeChecker());
             if (declaration) doChange(changes, context.sourceFile, declaration);
         }),
     });
-    function getDeclaration(sourceFile: SourceFile, pos: number, checker: TypeChecker): {declaration: Declaration | undefined} {
+    function getDeclaration(sourceFile: SourceFile, pos: number, checker: TypeChecker): Declaration | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
-        let declaration: Declaration | undefined;
         const symbol = checker.getSymbolAtLocation(node);
         if (symbol) {
-            declaration = symbol.valueDeclaration;
+            return symbol.valueDeclaration;
         }
-        return { declaration };
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Declaration) {
