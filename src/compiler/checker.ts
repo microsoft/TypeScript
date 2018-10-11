@@ -4705,14 +4705,14 @@ namespace ts {
                     // If the parent is a tuple type, the rest element has a tuple type of the
                     // remaining tuple element types. Otherwise, the rest element has an array type with same
                     // element type as the parent type.
-                    type = isTupleType(parentType) ?
-                        sliceTupleType(parentType, index) :
+                    type = everyType(parentType, isTupleType) ?
+                        mapType(parentType, t => sliceTupleType(<TupleTypeReference>t, index)) :
                         createArrayType(elementType);
                 }
                 else {
                     // Use specific property type when parent is a tuple or numeric index type when parent is an array
                     const index = pattern.elements.indexOf(declaration);
-                    type = isTupleLikeType(parentType) ?
+                    type = everyType(parentType, isTupleLikeType) ?
                         getTupleElementType(parentType, index) || declaration.initializer && checkDeclarationInitializer(declaration) :
                         elementType;
                     if (!type) {
@@ -4728,11 +4728,11 @@ namespace ts {
             }
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
             // undefined from the final type.
-            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkExpressionCached(declaration.initializer)) & TypeFlags.Undefined)) {
+            if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
             return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
-                getUnionType([type, checkExpressionCached(declaration.initializer)], UnionReduction.Subtype) :
+                getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
                 type;
         }
 
@@ -7331,10 +7331,10 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
-                        const index = !isLateBoundName(name) && ((isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number)) || getIndexInfoOfType(type, IndexKind.String));
-                        if (index) {
-                            checkFlags |= index.isReadonly ? CheckFlags.Readonly : 0;
-                            indexTypes = append(indexTypes, index.type);
+                        const indexInfo = !isLateBoundName(name) && (isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number) || getIndexInfoOfType(type, IndexKind.String));
+                        if (indexInfo) {
+                            checkFlags |= indexInfo.isReadonly ? CheckFlags.Readonly : 0;
+                            indexTypes = append(indexTypes, isTupleType(type) ? getRestTypeOfTupleType(type) || undefinedType : indexInfo.type);
                         }
                         else {
                             checkFlags |= CheckFlags.Partial;
@@ -9342,11 +9342,12 @@ namespace ts {
                         getFlowTypeOfReference(accessExpression, propType) :
                         propType;
                 }
-                if (isTupleType(objectType)) {
-                    const restType = getRestTypeOfTupleType(objectType);
-                    if (restType && isNumericLiteralName(propName) && +propName >= 0) {
-                        return restType;
+                if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
+                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+                        const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
+                        error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
+                    return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
@@ -12908,9 +12909,14 @@ namespace ts {
         }
 
         function getTupleElementType(type: Type, index: number) {
-            return isTupleType(type) ?
-                index < getLengthOfTupleType(type) ? type.typeArguments![index] : getRestTypeOfTupleType(type) :
-                getTypeOfPropertyOfType(type, "" + index as __String);
+            const propType = getTypeOfPropertyOfType(type, "" + index as __String);
+            if (propType) {
+                return propType;
+            }
+            if (everyType(type, isTupleType) && !everyType(type, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+                return mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
+            }
+            return undefined;
         }
 
         function isNeitherUnitTypeNorNever(type: Type): boolean {
@@ -14402,7 +14408,7 @@ namespace ts {
         }
 
         function getTypeOfDestructuredArrayElement(type: Type, index: number) {
-            return isTupleLikeType(type) && getTupleElementType(type, index) ||
+            return everyType(type, isTupleLikeType) && getTupleElementType(type, index) ||
                 checkIteratedTypeOrElementType(type, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false) ||
                 errorType;
         }
@@ -14598,6 +14604,10 @@ namespace ts {
 
         function forEachType<T>(type: Type, f: (t: Type) => T | undefined): T | undefined {
             return type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, f) : f(type);
+        }
+
+        function everyType(type: Type, f: (t: Type) => boolean): boolean {
+            return type.flags & TypeFlags.Union ? every((<UnionType>type).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
@@ -16707,11 +16717,6 @@ namespace ts {
             return mapType(type, t => getIndexTypeOfStructuredType(t, kind), /*noReductions*/ true);
         }
 
-        // Return true if the given contextual type is a tuple-like type
-        function contextualTypeIsTupleLikeType(type: Type): boolean {
-            return !!(type.flags & TypeFlags.Union ? forEach((<UnionType>type).types, isTupleLikeType) : isTupleLikeType(type));
-        }
-
         // In an object literal contextually typed by a type T, the contextual type of a property assignment is the type of
         // the matching property in T, if one exists. Otherwise, it is the type of the numeric index signature in T, if one
         // exists. Otherwise, it is the type of the string index signature in T, if one exists.
@@ -17263,7 +17268,8 @@ namespace ts {
         }
 
         function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length) {
-            if (contextualType && contextualTypeIsTupleLikeType(contextualType)) {
+            // Infer a tuple type when the contextual type is or contains a tuple-like type
+            if (contextualType && forEachType(contextualType, isTupleLikeType)) {
                 const minLength = elementCount - (hasRestElement ? 1 : 0);
                 const pattern = contextualType.pattern;
                 // If array literal is contextually typed by a binding pattern or an assignment pattern, pad the resulting
@@ -18992,13 +18998,6 @@ namespace ts {
             if (isConstEnumObjectType(objectType) && indexExpression.kind !== SyntaxKind.StringLiteral) {
                 error(indexExpression, Diagnostics.A_const_enum_member_can_only_be_accessed_using_a_string_literal);
                 return errorType;
-            }
-            if (isTupleType(objectType) && !objectType.target.hasRestElement && isNumericLiteral(indexExpression)) {
-                const index = +indexExpression.text;
-                const maximumIndex = length(objectType.target.typeParameters);
-                if (index >= maximumIndex) {
-                    error(indexExpression, Diagnostics.Index_0_is_out_of_bounds_in_tuple_of_length_1, index, maximumIndex);
-                }
             }
 
             return checkIndexedAccessIndexType(getIndexedAccessType(objectType, isForInVariableForNumericPropertyNames(indexExpression) ? numberType : indexType, node), node);
@@ -21740,7 +21739,7 @@ namespace ts {
                 if (element.kind !== SyntaxKind.SpreadElement) {
                     const propName = "" + elementIndex as __String;
                     const type = isTypeAny(sourceType) ? sourceType :
-                        isTupleLikeType(sourceType) ? getTupleElementType(sourceType, elementIndex) :
+                        everyType(sourceType, isTupleLikeType) ? getTupleElementType(sourceType, elementIndex) :
                         elementType;
                     if (type) {
                         return checkDestructuringAssignment(element, type, checkMode);
@@ -21766,8 +21765,8 @@ namespace ts {
                         }
                         else {
                             checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
-                            const type = isTupleType(sourceType) ?
-                                sliceTupleType(sourceType, elementIndex) :
+                            const type = everyType(sourceType, isTupleType) ?
+                                mapType(sourceType, t => sliceTupleType(<TupleTypeReference>t, elementIndex)) :
                                 createArrayType(elementType);
                             return checkDestructuringAssignment(restExpression, type, checkMode);
                         }
