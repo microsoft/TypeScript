@@ -596,8 +596,7 @@ namespace ts {
                 {
                     compilerOptions: {
                         target: undefined,
-                        module: ModuleKind.ESNext,
-                        types: []
+                        module: ModuleKind.ESNext
                     },
                     hasParseErrors: true
                 }
