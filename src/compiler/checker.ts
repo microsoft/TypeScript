@@ -12882,11 +12882,8 @@ namespace ts {
             if (propType) {
                 return propType;
             }
-            if (everyType(type, isTupleType)) {
-                const restType = mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
-                if (restType !== undefinedType) {
-                    return restType;
-                }
+            if (everyType(type, isTupleType) && !everyType(type, t => !(<TupleTypeReference>t).target.hasRestElement)) {
+                return mapType(type, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
             }
             return undefined;
         }
