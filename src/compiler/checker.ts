@@ -9312,12 +9312,11 @@ namespace ts {
                         propType;
                 }
                 if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
-                    const restType = mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
-                    if (restType === undefinedType && accessNode) {
+                    if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
                         const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
                         error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
-                    return restType;
+                    return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
                 }
             }
             if (!(indexType.flags & TypeFlags.Nullable) && isTypeAssignableToKind(indexType, TypeFlags.StringLike | TypeFlags.NumberLike | TypeFlags.ESSymbolLike)) {
