@@ -4839,5 +4839,9 @@
     "Make all const or readonly expressions reassignable": {
         "category": "Message",
         "code": 95075
+    },
+    "Remove '{0}' modifier": {
+        "category": "Message",
+        "code": 95076
     }
 }

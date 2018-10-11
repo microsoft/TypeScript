@@ -7,7 +7,7 @@
 ////testInstance.prop = 3;
 
 verify.codeFix({
-    description: "Change 'readonly' to 'non-readonly'",
+    description: "Remove 'readonly' modifier",
     newFileContent:
 `class Test {
  prop = 5;
