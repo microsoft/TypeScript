@@ -1569,15 +1569,8 @@ namespace ts {
         }
 
         function hasExportDeclarations(node: ModuleDeclaration | SourceFile): boolean {
-            const body = node.kind === SyntaxKind.SourceFile ? node : node.body;
-            if (body && (body.kind === SyntaxKind.SourceFile || body.kind === SyntaxKind.ModuleBlock)) {
-                for (const stat of (<BlockLike>body).statements) {
-                    if (stat.kind === SyntaxKind.ExportDeclaration || stat.kind === SyntaxKind.ExportAssignment) {
-                        return true;
-                    }
-                }
-            }
-            return false;
+            const body = isSourceFile(node) ? node : tryCast(node.body, isModuleBlock);
+            return !!body && body.statements.some(s => isExportDeclaration(s) || isExportAssignment(s));
         }
 
         function setExportContextFlag(node: ModuleDeclaration | SourceFile) {
