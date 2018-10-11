@@ -1602,8 +1602,9 @@ namespace ts {
             return value;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
-            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
+        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
+            const detail = 'kind' in member && 'pos' in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : member;
+            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: AnyFunction) {
