@@ -1603,7 +1603,7 @@ namespace ts {
         }
 
         export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
-            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : member;
+            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
             return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
