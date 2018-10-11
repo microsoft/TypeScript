@@ -13266,7 +13266,7 @@ namespace ts {
 
         function reportImplicitAny(noImplicitAny: boolean, declaration: Declaration, type: Type) {
             const typeAsString = typeToString(getWidenedType(type));
-            if (isInJSFile(declaration) && !getSourceFileOfNode(declaration).pragmas.has("checkJSDirective") && !compilerOptions.checkJs) {
+            if (isInJSFile(declaration) && !isCheckJsEnabledForFile(getSourceFileOfNode(declaration), compilerOptions)) {
                 // Only report implicit any errors/suggestions in TS and ts-check JS files
                 return;
             }
