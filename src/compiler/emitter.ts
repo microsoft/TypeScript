@@ -52,7 +52,9 @@ namespace ts {
         else {
             const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
             // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
-            const jsFilePath = options.emitDeclarationOnly ? undefined : ownOutputFilePath;
+            const isJsonEmittedToSameLocation = isJsonSourceFile(sourceFile) &&
+                comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+            const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
             const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
             const isJs = isSourceFileJS(sourceFile);
