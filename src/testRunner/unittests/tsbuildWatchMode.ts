@@ -368,6 +368,58 @@ function myFunc() { return 100; }`);
             }
         });
 
+        it("when referenced project change introduces error in the down stream project and then fixes it", () => {
+            const subProjectLibrary = `${projectsLocation}/${project}/Library`;
+            const libraryTs: File = {
+                path: `${subProjectLibrary}/library.ts`,
+                content: `
+interface SomeObject
+{
+	message: string;
+}
+
+export function createSomeObject(): SomeObject
+{
+	return {
+		message: "new Object"
+	};
+}`
+            };
+            const libraryTsconfig: File = {
+                path: `${subProjectLibrary}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { composite: true } })
+            };
+            const subProjectApp = `${projectsLocation}/${project}/App`;
+            const appTs: File = {
+                path: `${subProjectApp}/app.ts`,
+                content: `import { createSomeObject } from "../Library/library";
+createSomeObject().message;`
+            };
+            const appTsconfig: File = {
+                path: `${subProjectApp}/tsconfig.json`,
+                content: JSON.stringify({ references: [{ path: "../Library" }] })
+            };
+
+            const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
+            const host = createWatchedSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
+            createSolutionBuilderWithWatch(host, ["App"]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            // Change message in library to message2
+            host.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2"));
+            host.checkTimeoutQueueLengthAndRun(1); // Build library
+            host.checkTimeoutQueueLengthAndRun(1); // Build App
+            checkOutputErrorsIncremental(host, [
+                "App/app.ts(2,20): error TS2551: Property 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?\n"
+            ]);
+
+            // Revert library changes
+            host.writeFile(libraryTs.path, libraryTs.content);
+            host.checkTimeoutQueueLengthAndRun(1); // Build library
+            host.checkTimeoutQueueLengthAndRun(1); // Build App
+            checkOutputErrorsIncremental(host, emptyArray);
+        });
+
         describe("reports errors in all projects on incremental compile", () => {
             function verifyIncrementalErrors(defaultBuildOptions?: BuildOptions, disabledConsoleClear?: boolean) {
                 const host = createSolutionInWatchMode(allFiles, defaultBuildOptions, disabledConsoleClear);

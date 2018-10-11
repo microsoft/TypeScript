@@ -337,8 +337,10 @@ export class cNew {}`);
                 assert.deepEqual(host.traces, [
                     "TSFILE: /src/core/anotherModule.js",
                     "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/anotherModule.d.ts.map",
                     "TSFILE: /src/core/index.js",
                     "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/core/index.d.ts.map",
                     "TSFILE: /src/logic/index.js",
                     "TSFILE: /src/logic/index.js.map",
                     "TSFILE: /src/logic/index.d.ts",

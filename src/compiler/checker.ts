@@ -1238,17 +1238,25 @@ namespace ts {
                                     // local types not visible outside the function body
                                     : false;
                             }
-                            if (meaning & result.flags & SymbolFlags.FunctionScopedVariable) {
-                                // parameters are visible only inside function body, parameter list and return type
-                                // technically for parameter list case here we might mix parameters and variables declared in function,
-                                // however it is detected separately when checking initializers of parameters
-                                // to make sure that they reference no variables declared after them.
-                                useResult =
-                                    lastLocation.kind === SyntaxKind.Parameter ||
-                                    (
-                                        lastLocation === (<FunctionLikeDeclaration>location).type &&
-                                        !!findAncestor(result.valueDeclaration, isParameter)
-                                    );
+                            if (meaning & result.flags & SymbolFlags.Variable) {
+                                // expression inside parameter will lookup as normal variable scope when targeting es2015+
+                                const functionLocation = <FunctionLikeDeclaration>location;
+                                if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) &&
+                                    functionLocation.body && result.valueDeclaration.pos >= functionLocation.body.pos && result.valueDeclaration.end <= functionLocation.body.end) {
+                                    useResult = false;
+                                }
+                                else if (result.flags & SymbolFlags.FunctionScopedVariable) {
+                                    // parameters are visible only inside function body, parameter list and return type
+                                    // technically for parameter list case here we might mix parameters and variables declared in function,
+                                    // however it is detected separately when checking initializers of parameters
+                                    // to make sure that they reference no variables declared after them.
+                                    useResult =
+                                        lastLocation.kind === SyntaxKind.Parameter ||
+                                        (
+                                            lastLocation === (<FunctionLikeDeclaration>location).type &&
+                                            !!findAncestor(result.valueDeclaration, isParameter)
+                                        );
+                                }
                             }
                         }
                         else if (location.kind === SyntaxKind.ConditionalType) {
@@ -26103,8 +26111,11 @@ namespace ts {
                     if (!checkTypeAssignableTo(typeWithThis, baseWithThis, /*errorNode*/ undefined)) {
                         issueMemberSpecificError(node, typeWithThis, baseWithThis, Diagnostics.Class_0_incorrectly_extends_base_class_1);
                     }
-                    checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
-                        Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    else {
+                        // Report static side error only when instance type is assignable
+                        checkTypeAssignableTo(staticType, getTypeWithoutSignatures(staticBaseType), node.name || node,
+                            Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
+                    }
                     if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
                         error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
                     }

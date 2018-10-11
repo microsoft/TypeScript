@@ -486,7 +486,7 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
-        private legacySafelist: { [key: string]: string } = {};
+        private readonly legacySafelist = createMap<string>();
 
         private pendingProjectUpdates = createMap<Project>();
         /* @internal */
@@ -638,14 +638,14 @@ namespace ts.server {
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
                     if (raw.simpleMap.hasOwnProperty(key)) {
-                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                        this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
-                this.legacySafelist = {};
+                this.legacySafelist.clear();
             }
         }
 
@@ -2723,13 +2723,13 @@ namespace ts.server {
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
-                            if (this.legacySafelist[cleanedTypingName]) {
+                            const typeName = this.legacySafelist.get(cleanedTypingName);
+                            if (typeName !== undefined) {
                                 this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
                                 excludedFiles.push(normalizedNames[i]);
                                 // *exclude* it from the project...
                                 exclude = true;
                                 // ... but *include* it in the list of types to acquire
-                                const typeName = this.legacySafelist[cleanedTypingName];
                                 // Same best-effort dedupe as above
                                 if (typeAcqInclude.indexOf(typeName) < 0) {
                                     typeAcqInclude.push(typeName);
