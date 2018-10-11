@@ -11540,7 +11540,7 @@ namespace ts {
                         return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (shouldCheckAsExcessProp(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                        if (shouldCheckAsExcessProperty(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
@@ -11585,7 +11585,7 @@ namespace ts {
                 return false;
             }
 
-            function shouldCheckAsExcessProp(prop: Symbol, container: Symbol) {
+            function shouldCheckAsExcessProperty(prop: Symbol, container: Symbol) {
                 return prop.valueDeclaration && container.valueDeclaration && prop.valueDeclaration.parent === container.valueDeclaration;
             }
 
@@ -17856,8 +17856,7 @@ namespace ts {
                     const stringLiteralTypeName = type.value;
                     const intrinsicProp = getPropertyOfType(intrinsicElementsType, escapeLeadingUnderscores(stringLiteralTypeName));
                     if (intrinsicProp) {
-                        const target = getTypeOfSymbol(intrinsicProp);
-                        return target;
+                        return getTypeOfSymbol(intrinsicProp);
                     }
                     const indexSignatureType = getIndexTypeOfType(intrinsicElementsType, IndexKind.String);
                     if (indexSignatureType) {
@@ -19959,10 +19958,9 @@ namespace ts {
         }
 
         function createSignatureForJSXIntrinsic(node: JsxOpeningLikeElement, result: Type): Signature {
-            // TODO: Since this builds some nodes for the fake'd up signature, this might be worth caching on the node
             const namespace = getJsxNamespaceAt(node);
             const exports = namespace && getExportsOfSymbol(namespace);
-            // TODO: We fake up a SFC signature for each intrinsic, however a more specific per-element signature drawn from the JSX declaration
+            // We fake up a SFC signature for each intrinsic, however a more specific per-element signature drawn from the JSX declaration
             // file would probably be preferable.
             const typeSymbol = exports && getSymbol(exports, JsxNames.Element, SymbolFlags.Type);
             const returnNode = typeSymbol && nodeBuilder.symbolToEntityName(typeSymbol, SymbolFlags.Type, node);
