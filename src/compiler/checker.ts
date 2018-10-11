@@ -4915,7 +4915,7 @@ namespace ts {
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
             if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
-                reportImplicitAnyError(noImplicitAny, symbol.valueDeclaration, anyType);
+                reportImplicitAny(noImplicitAny, symbol.valueDeclaration, anyType);
                 return anyType;
             }
             return widened;
@@ -4990,7 +4990,7 @@ namespace ts {
                 return result;
             }
             if (isEmptyArrayLiteralType(type)) {
-                reportImplicitAnyError(noImplicitAny, expression, anyArrayType);
+                reportImplicitAny(noImplicitAny, expression, anyArrayType);
                 return anyArrayType;
             }
             return type;
@@ -5041,7 +5041,7 @@ namespace ts {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
             }
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
-                reportImplicitAnyError(noImplicitAny, element, anyType);
+                reportImplicitAny(noImplicitAny, element, anyType);
             }
             return anyType;
         }
@@ -5143,7 +5143,7 @@ namespace ts {
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors) {
                 if (!declarationBelongsToPrivateAmbientMember(declaration)) {
-                    reportImplicitAnyError(noImplicitAny, declaration, type);
+                    reportImplicitAny(noImplicitAny, declaration, type);
                 }
             }
             return type;
@@ -13264,8 +13264,12 @@ namespace ts {
             return errorReported;
         }
 
-        function reportImplicitAnyError(noImplicitAny: boolean, declaration: Declaration, type: Type) {
+        function reportImplicitAny(noImplicitAny: boolean, declaration: Declaration, type: Type) {
             const typeAsString = typeToString(getWidenedType(type));
+            if (isInJSFile(declaration) && !getSourceFileOfNode(declaration).pragmas.has("checkJSDirective") && !compilerOptions.checkJs) {
+                // Only report implicit any errors/suggestions in TS and ts-check JS files
+                return;
+            }
             let diagnostic: DiagnosticMessage;
             switch (declaration.kind) {
                 case SyntaxKind.BinaryExpression:
@@ -13309,7 +13313,7 @@ namespace ts {
             if (produceDiagnostics && noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAnyError(/*noImplicitAny*/ true, declaration, type);
+                    reportImplicitAny(/*noImplicitAny*/ true, declaration, type);
                 }
             }
         }
@@ -22310,11 +22314,11 @@ namespace ts {
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
-                    reportImplicitAnyError(noImplicitAny, declaration, anyType);
+                    reportImplicitAny(noImplicitAny, declaration, anyType);
                     return anyType;
                 }
                 else if (isEmptyArrayLiteralType(widened)) {
-                    reportImplicitAnyError(noImplicitAny, declaration, anyArrayType);
+                    reportImplicitAny(noImplicitAny, declaration, anyArrayType);
                     return anyArrayType;
                 }
             }
@@ -23306,7 +23310,7 @@ namespace ts {
             checkSourceElement(node.type);
 
             if (!node.type) {
-                reportImplicitAnyError(noImplicitAny, node, anyType);
+                reportImplicitAny(noImplicitAny, node, anyType);
             }
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
@@ -24331,7 +24335,7 @@ namespace ts {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
                 if (nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
-                    reportImplicitAnyError(noImplicitAny, node, anyType);
+                    reportImplicitAny(noImplicitAny, node, anyType);
                 }
 
                 if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
