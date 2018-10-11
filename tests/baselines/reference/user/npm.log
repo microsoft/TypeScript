@@ -919,6 +919,8 @@ node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307:
 node_modules/npm/test/common-tap.js(5,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) => void' is not assignable to type 'typeof setImmediate'.
   Property '__promisify__' is missing in type '(...args: any[]) => void'.
+node_modules/npm/test/common-tap.js(10,36): error TS2322: Type '(...args: any[]) => void' is not assignable to type '(callback: (...args: any[]) => void, ...args: any[]) => Immediate'.
+  Type 'void' is not assignable to type 'Immediate'.
 node_modules/npm/test/common-tap.js(12,28): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[(...args: any[]) => void, number, ...any[]]'.
   Property '0' is missing in type 'any[]'.
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
