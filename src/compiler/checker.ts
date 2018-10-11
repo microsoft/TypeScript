@@ -4915,7 +4915,7 @@ namespace ts {
             }
             const widened = getWidenedType(addOptionality(type, definedInMethod && !definedInConstructor));
             if (filterType(widened, t => !!(t.flags & ~TypeFlags.Nullable)) === neverType) {
-                reportImplicitAny(noImplicitAny, symbol.valueDeclaration, anyType);
+                reportImplicitAny(symbol.valueDeclaration, anyType);
                 return anyType;
             }
             return widened;
@@ -4990,7 +4990,7 @@ namespace ts {
                 return result;
             }
             if (isEmptyArrayLiteralType(type)) {
-                reportImplicitAny(noImplicitAny, expression, anyArrayType);
+                reportImplicitAny(expression, anyArrayType);
                 return anyArrayType;
             }
             return type;
@@ -5041,7 +5041,7 @@ namespace ts {
                 return getTypeFromBindingPattern(element.name, includePatternInType, reportErrors);
             }
             if (reportErrors && !declarationBelongsToPrivateAmbientMember(element)) {
-                reportImplicitAny(noImplicitAny, element, anyType);
+                reportImplicitAny(element, anyType);
             }
             return anyType;
         }
@@ -5143,7 +5143,7 @@ namespace ts {
             // Report implicit any errors unless this is a private property within an ambient declaration
             if (reportErrors) {
                 if (!declarationBelongsToPrivateAmbientMember(declaration)) {
-                    reportImplicitAny(noImplicitAny, declaration, type);
+                    reportImplicitAny(declaration, type);
                 }
             }
             return type;
@@ -13264,7 +13264,7 @@ namespace ts {
             return errorReported;
         }
 
-        function reportImplicitAny(noImplicitAny: boolean, declaration: Declaration, type: Type) {
+        function reportImplicitAny(declaration: Declaration, type: Type) {
             const typeAsString = typeToString(getWidenedType(type));
             if (isInJSFile(declaration) && !isCheckJsEnabledForFile(getSourceFileOfNode(declaration), compilerOptions)) {
                 // Only report implicit any errors/suggestions in TS and ts-check JS files
@@ -13313,7 +13313,7 @@ namespace ts {
             if (produceDiagnostics && noImplicitAny && type.flags & TypeFlags.ContainsWideningType) {
                 // Report implicit any error within type if possible, otherwise report error on declaration
                 if (!reportWideningErrorsInType(type)) {
-                    reportImplicitAny(/*noImplicitAny*/ true, declaration, type);
+                    reportImplicitAny(declaration, type);
                 }
             }
         }
@@ -22314,11 +22314,11 @@ namespace ts {
                 isTypeAssertion(initializer) ? type : getWidenedLiteralType(type);
             if (isInJSFile(declaration)) {
                 if (widened.flags & TypeFlags.Nullable) {
-                    reportImplicitAny(noImplicitAny, declaration, anyType);
+                    reportImplicitAny(declaration, anyType);
                     return anyType;
                 }
                 else if (isEmptyArrayLiteralType(widened)) {
-                    reportImplicitAny(noImplicitAny, declaration, anyArrayType);
+                    reportImplicitAny(declaration, anyArrayType);
                     return anyArrayType;
                 }
             }
@@ -23310,7 +23310,7 @@ namespace ts {
             checkSourceElement(node.type);
 
             if (!node.type) {
-                reportImplicitAny(noImplicitAny, node, anyType);
+                reportImplicitAny(node, anyType);
             }
 
             const type = <MappedType>getTypeFromMappedTypeNode(node);
@@ -24335,7 +24335,7 @@ namespace ts {
                 // Report an implicit any error if there is no body, no explicit return type, and node is not a private method
                 // in an ambient context
                 if (nodeIsMissing(body) && !isPrivateWithinAmbient(node)) {
-                    reportImplicitAny(noImplicitAny, node, anyType);
+                    reportImplicitAny(node, anyType);
                 }
 
                 if (functionFlags & FunctionFlags.Generator && nodeIsPresent(body)) {
