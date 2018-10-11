@@ -5111,19 +5111,23 @@ declare namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
-    interface RenameInfo {
-        canRename: boolean;
+    type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    interface RenameInfoSuccess {
+        canRename: true;
         /**
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
-        localizedErrorMessage?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
         triggerSpan: TextSpan;
+    }
+    interface RenameInfoFailure {
+        canRename: false;
+        localizedErrorMessage: string;
     }
     interface SignatureHelpParameter {
         name: string;
@@ -6434,20 +6438,17 @@ declare namespace ts.server.protocol {
     /**
      * Information about the item to be renamed.
      */
-    interface RenameInfo {
+    type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    interface RenameInfoSuccess {
         /**
          * True if item can be renamed.
          */
-        canRename: boolean;
+        canRename: true;
         /**
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
-        /**
-         * Error message if item can not be renamed.
-         */
-        localizedErrorMessage?: string;
         /**
          * Display name of the item to be renamed.
          */
@@ -6466,6 +6467,13 @@ declare namespace ts.server.protocol {
         kindModifiers: string;
         /** Span of text to rename. */
         triggerSpan: TextSpan;
+    }
+    interface RenameInfoFailure {
+        canRename: false;
+        /**
+         * Error message if item can not be renamed.
+         */
+        localizedErrorMessage: string;
     }
     /**
      *  A group of text spans, all in 'file'.
