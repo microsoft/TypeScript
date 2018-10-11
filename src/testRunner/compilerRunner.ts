@@ -5,7 +5,7 @@ const enum CompilerTestType {
 }
 
 interface CompilerFileBasedTest extends Harness.FileBasedTest {
-    payload?: Harness.TestCaseParser.TestCaseContent;
+    readonly content?: string;
 }
 
 class CompilerBaselineRunner extends RunnerBase {
@@ -74,7 +74,14 @@ class CompilerBaselineRunner extends RunnerBase {
         // Mocha holds onto the closure environment of the describe callback even after the test is done.
         // Everything declared here should be cleared out in the "after" callback.
         let compilerTest!: CompilerTest;
-        before(() => { compilerTest = new CompilerTest(fileName, test && test.payload, configuration); });
+        before(() => {
+            let payload;
+            if (test && test.content) {
+                const rootDir = test.file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(test.file) + "/";
+                payload = Harness.TestCaseParser.makeUnitsFromTest(test.content, test.file, rootDir);
+            }
+            compilerTest = new CompilerTest(fileName, payload, configuration);
+        });
         it(`Correct errors for ${fileName}`, () => { compilerTest.verifyDiagnostics(); });
         it(`Correct module resolution tracing for ${fileName}`, () => { compilerTest.verifyModuleResolution(); });
         it(`Correct sourcemap content for ${fileName}`, () => { compilerTest.verifySourceMapRecord(); });
@@ -189,11 +196,9 @@ class CompilerTest {
     public static getConfigurations(file: string): CompilerFileBasedTest {
         // also see `parseCompilerTestConfigurations` in tests/webTestServer.ts
         const content = Harness.IO.readFile(file)!;
-        const rootDir = file.indexOf("conformance") === -1 ? "tests/cases/compiler/" : ts.getDirectoryPath(file) + "/";
-        const payload = Harness.TestCaseParser.makeUnitsFromTest(content, file, rootDir);
         const settings = Harness.TestCaseParser.extractCompilerSettings(content);
         const configurations = Harness.getFileBasedTestConfigurations(settings, /*varyBy*/ ["module", "target"]);
-        return { file, payload, configurations };
+        return { file, configurations, content };
     }
 
     public verifyDiagnostics() {
