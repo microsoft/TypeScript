@@ -7598,35 +7598,35 @@ namespace ts {
          * @param typeParameters The requested type parameters.
          * @param minTypeArgumentCount The minimum number of required type arguments.
          */
-        function fillMissingTypeArguments(typeArguments: Type[], typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[] | undefined;
-        function fillMissingTypeArguments(typeArguments: Type[] | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
+        function fillMissingTypeArguments(typeArguments: ReadonlyArray<Type>, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[];
+        function fillMissingTypeArguments(typeArguments: ReadonlyArray<Type> | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean): Type[] | undefined;
+        function fillMissingTypeArguments(typeArguments: ReadonlyArray<Type> | undefined, typeParameters: ReadonlyArray<TypeParameter> | undefined, minTypeArgumentCount: number, isJavaScriptImplicitAny: boolean) {
             const numTypeParameters = length(typeParameters);
-            if (numTypeParameters) {
-                const numTypeArguments = length(typeArguments);
-                if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
-                    if (!typeArguments) {
-                        typeArguments = [];
-                    }
-
-                    // Map an unsatisfied type parameter with a default type.
-                    // If a type parameter does not have a default type, or if the default type
-                    // is a forward reference, the empty object type is used.
-                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        typeArguments[i] = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
-                    }
-                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                        const mapper = createTypeMapper(typeParameters!, typeArguments);
-                        let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
-                        if (isJavaScriptImplicitAny && defaultType && isTypeIdenticalTo(defaultType, emptyObjectType)) {
-                            defaultType = anyType;
-                        }
-                        typeArguments[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
-                    }
-                    typeArguments.length = typeParameters!.length;
-                }
+            if (!numTypeParameters) {
+                return [];
             }
-            return typeArguments;
+            const numTypeArguments = length(typeArguments);
+            if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
+                const result = typeArguments ? typeArguments.slice() : [];
+
+                // Map an unsatisfied type parameter with a default type.
+                // If a type parameter does not have a default type, or if the default type
+                // is a forward reference, the empty object type is used.
+                for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                    result[i] = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                }
+                for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                    const mapper = createTypeMapper(typeParameters!, result);
+                    let defaultType = getDefaultFromTypeParameter(typeParameters![i]);
+                    if (isJavaScriptImplicitAny && defaultType && isTypeIdenticalTo(defaultType, emptyObjectType)) {
+                        defaultType = anyType;
+                    }
+                    result[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                }
+                result.length = typeParameters!.length;
+                return result;
+            }
+            return typeArguments && typeArguments.slice();
         }
 
         function getSignatureFromDeclaration(declaration: SignatureDeclaration | JSDocSignature): Signature {
@@ -8223,7 +8223,7 @@ namespace ts {
             return checkNoTypeArguments(node, symbol) ? type : errorType;
         }
 
-        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: Type[] | undefined): Type {
+        function getTypeAliasInstantiation(symbol: Symbol, typeArguments: ReadonlyArray<Type> | undefined): Type {
             const type = getDeclaredTypeOfSymbol(symbol);
             const links = getSymbolLinks(symbol);
             const typeParameters = links.typeParameters!;
@@ -11726,9 +11726,7 @@ namespace ts {
                 return result;
             }
 
-            function typeArgumentsRelatedTo(source: TypeReference, target: TypeReference, variances: Variance[], reportErrors: boolean): Ternary {
-                const sources = source.typeArguments || emptyArray;
-                const targets = target.typeArguments || emptyArray;
+            function typeArgumentsRelatedTo(sources: ReadonlyArray<Type> = emptyArray, targets: ReadonlyArray<Type> = emptyArray, variances: ReadonlyArray<Variance> = emptyArray, reportErrors: boolean): Ternary {
                 if (sources.length !== targets.length && relation === identityRelation) {
                     return Ternary.False;
                 }
@@ -11986,6 +11984,14 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
+                        if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
+                            !(getAliasArgumentsContainsMarker(source) || getAliasArgumentsContainsMarker(target))) {
+                            const variances = getAliasVariances(source.aliasSymbol);
+                            if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
@@ -12044,7 +12050,7 @@ namespace ts {
                         // type references (which are intended by be compared structurally). Obtain the variance
                         // information for the type parameters and relate the type arguments accordingly.
                         const variances = getVariances((<TypeReference>source).target);
-                        if (result = typeArgumentsRelatedTo(<TypeReference>source, <TypeReference>target, variances, reportErrors)) {
+                        if (result = typeArgumentsRelatedTo((<TypeReference>source).typeArguments, (<TypeReference>target).typeArguments, variances, reportErrors)) {
                             return result;
                         }
                         // The type arguments did not relate appropriately, but it may be because we have no variance
@@ -12552,48 +12558,68 @@ namespace ts {
             return result;
         }
 
+        function isMarkerType(type: Type) {
+            return type === markerSuperType || type === markerSubType || type === markerOtherType;
+        }
+
+        function getAliasArgumentsContainsMarker(type: Type) {
+            if (!type.aliasSymbol || !type.aliasTypeArguments) {
+                return false;
+            }
+            if (type.aliasTypeArgumentsContainsMarker !== undefined) {
+                return type.aliasTypeArgumentsContainsMarker;
+            }
+            return type.aliasTypeArgumentsContainsMarker = some(type.aliasTypeArguments, isMarkerType);
+        }
+
+        function getAliasVariances(symbol: Symbol) {
+            const links = getSymbolLinks(symbol);
+            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker))));
+        }
+
         // Return an array containing the variance of each type parameter. The variance is effectively
         // a digest of the type comparisons that occur for each type argument when instantiations of the
         // generic type are structurally compared. We infer the variance information by comparing
         // instantiations of the generic type for type arguments with known relations. The function
         // returns the emptyArray singleton if we're not in strictFunctionTypes mode or if the function
         // has been invoked recursively for the given generic type.
+        function getVariancesWorker<TCache extends { variances?: Variance[] }>(typeParameters: ReadonlyArray<TypeParameter> = emptyArray, cache: TCache, createMarkerType: (input: TCache, param: TypeParameter, marker: Type) => Type): Variance[] {
+            let variances = cache.variances;
+            if (!variances) {
+                // The emptyArray singleton is used to signal a recursive invocation.
+                cache.variances = emptyArray;
+                variances = [];
+                for (const tp of typeParameters) {
+                    // We first compare instantiations where the type parameter is replaced with
+                    // marker types that have a known subtype relationship. From this we can infer
+                    // invariance, covariance, contravariance or bivariance.
+                    const typeWithSuper = createMarkerType(cache, tp, markerSuperType);
+                    const typeWithSub = createMarkerType(cache, tp, markerSubType);
+                    let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant : 0) |
+                        (isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant : 0);
+                    // If the instantiations appear to be related bivariantly it may be because the
+                    // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
+                    // type). To determine this we compare instantiations where the type parameter is
+                    // replaced with marker types that are known to be unrelated.
+                    if (variance === Variance.Bivariant && isTypeAssignableTo(createMarkerType(cache, tp, markerOtherType), typeWithSuper)) {
+                        variance = Variance.Independent;
+                    }
+                    variances.push(variance);
+                }
+                cache.variances = variances;
+            }
+            return variances;
+        }
+
         function getVariances(type: GenericType): Variance[] {
             if (!strictFunctionTypes) {
                 return emptyArray;
             }
-            const typeParameters = type.typeParameters || emptyArray;
-            let variances = type.variances;
-            if (!variances) {
-                if (type === globalArrayType || type === globalReadonlyArrayType) {
-                    // Arrays are known to be covariant, no need to spend time computing this
-                    variances = [Variance.Covariant];
-                }
-                else {
-                    // The emptyArray singleton is used to signal a recursive invocation.
-                    type.variances = emptyArray;
-                    variances = [];
-                    for (const tp of typeParameters) {
-                        // We first compare instantiations where the type parameter is replaced with
-                        // marker types that have a known subtype relationship. From this we can infer
-                        // invariance, covariance, contravariance or bivariance.
-                        const typeWithSuper = getMarkerTypeReference(type, tp, markerSuperType);
-                        const typeWithSub = getMarkerTypeReference(type, tp, markerSubType);
-                        let variance = (isTypeAssignableTo(typeWithSub, typeWithSuper) ? Variance.Covariant : 0) |
-                            (isTypeAssignableTo(typeWithSuper, typeWithSub) ? Variance.Contravariant : 0);
-                        // If the instantiations appear to be related bivariantly it may be because the
-                        // type parameter is independent (i.e. it isn't witnessed anywhere in the generic
-                        // type). To determine this we compare instantiations where the type parameter is
-                        // replaced with marker types that are known to be unrelated.
-                        if (variance === Variance.Bivariant && isTypeAssignableTo(getMarkerTypeReference(type, tp, markerOtherType), typeWithSuper)) {
-                            variance = Variance.Independent;
-                        }
-                        variances.push(variance);
-                    }
-                }
-                type.variances = variances;
+            if (type === globalArrayType || type === globalReadonlyArrayType) {
+                // Arrays are known to be covariant, no need to spend time computing this (emptyArray implies covariance for all parameters)
+                return emptyArray;
             }
-            return variances;
+            return getVariancesWorker(type.typeParameters, type, getMarkerTypeReference);
         }
 
         // Return true if the given type reference has a 'void' type argument for a covariant type parameter.
