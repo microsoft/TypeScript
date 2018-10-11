@@ -638,6 +638,29 @@ export function gfoo() {
                         } : fileFromDisk;
                     }
 
+                    function dtsFile(extensionLessFile: string) {
+                        return getFilePathInProject(project, `${extensionLessFile}.d.ts`);
+                    }
+
+                    function jsFile(extensionLessFile: string) {
+                        return getFilePathInProject(project, `${extensionLessFile}.js`);
+                    }
+
+                    function verifyWatchState(
+                        host: WatchedSystem,
+                        watch: Watch,
+                        expectedProgramFiles: ReadonlyArray<string>,
+                        expectedWatchedFiles: ReadonlyArray<string>,
+                        expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
+                        dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>,
+                        expectedWatchedDirectories?: ReadonlyArray<string>) {
+                        checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
+                        verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
+                        for (const [file, deps] of dependencies) {
+                            verifyDependencies(watch, file, deps);
+                        }
+                    }
+
                     function getTsConfigFile(multiFolder: boolean, fileFromDisk: File, folder: string): File {
                         if (!multiFolder) return fileFromDisk;
 
@@ -703,14 +726,6 @@ export function gfoo() {
                             [cTs.path, [cTs.path, refs.path, bDts]]
                         ];
 
-                        function jsFile(extensionLessFile: string) {
-                            return getFilePathInProject(project, `${extensionLessFile}.js`);
-                        }
-
-                        function dtsFile(extensionLessFile: string) {
-                            return getFilePathInProject(project, `${extensionLessFile}.d.ts`);
-                        }
-
                         function createSolutionAndWatchMode() {
                             return createSolutionAndWatchModeOfProject(allFiles, getProjectPath(project), configToBuild, configToBuild, getOutputFileStamps);
                         }
@@ -724,21 +739,7 @@ export function gfoo() {
                         }
 
                         function verifyProgram(host: WatchedSystem, watch: Watch) {
-                            verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies);
-                        }
-
-                        function verifyWatchState(
-                            host: WatchedSystem,
-                            watch: Watch,
-                            expectedProgramFiles: ReadonlyArray<string>,
-                            expectedWatchedFiles: ReadonlyArray<string>,
-                            expectedWatchedDirectoriesRecursive: ReadonlyArray<string>,
-                            dependencies: ReadonlyArray<[string, ReadonlyArray<string>]>) {
-                            checkProgramActualFiles(watch().getProgram(), expectedProgramFiles);
-                            verifyWatchesOfProject(host, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, expectedWatchedDirectories);
-                            for (const [file, deps] of dependencies) {
-                                verifyDependencies(watch, file, deps);
-                            }
+                            verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies, expectedWatchedDirectories);
                         }
 
                         function verifyProject(host: WatchedSystem, service: projectSystem.TestProjectService, orphanInfos?: ReadonlyArray<string>) {
@@ -782,7 +783,7 @@ export function gfoo() {
 
                                 host.checkTimeoutQueueLengthAndRun(1);
                                 checkOutputErrorsIncremental(host, expectedEditErrors);
-                                verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies);
+                                verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, dependencies, expectedWatchedDirectories);
 
                                 if (revert) {
                                     revert(host);
@@ -961,6 +962,42 @@ export function gfoo() {
 
                     describe("when config files are side by side", () => {
                         verifyTransitiveReferences(/*multiFolder*/ false);
+
+                        it("when referenced project uses different module resolution", () => {
+                            const bTs: File = {
+                                path: bTsFile.path,
+                                content: `import {A} from "a";export const b = new A();`
+                            };
+                            const bTsconfig: File = {
+                                path: bTsconfigFile.path,
+                                content: JSON.stringify({
+                                    compilerOptions: { composite: true, moduleResolution: "classic" },
+                                    files: ["b.ts"],
+                                    references: [{ path: "tsconfig.a.json" }]
+                                })
+                            };
+                            const allFiles = [libFile, aTsFile, bTs, cTsFile, aTsconfigFile, bTsconfig, cTsconfigFile, refs];
+                            const aDts = dtsFile("a"), bDts = dtsFile("b");
+                            const expectedFiles = [jsFile("a"), aDts, jsFile("b"), bDts, jsFile("c")];
+                            const expectedProgramFiles = [cTsFile.path, libFile.path, aDts, refs.path, bDts];
+                            const expectedWatchedFiles = expectedProgramFiles.concat(cTsconfigFile.path, bTsconfigFile.path, aTsconfigFile.path).map(s => s.toLowerCase());
+                            const expectedWatchedDirectoriesRecursive = [
+                                getFilePathInProject(project, "refs"), // Failed lookup since refs/a.ts does not exist
+                                ...projectSystem.getTypeRootsFromLocation(getProjectPath(project))
+                            ].map(s => s.toLowerCase());
+
+                            const defaultDependencies: ReadonlyArray<[string, ReadonlyArray<string>]> = [
+                                [aDts, [aDts]],
+                                [bDts, [bDts, aDts]],
+                                [refs.path, [refs.path]],
+                                [cTsFile.path, [cTsFile.path, refs.path, bDts]]
+                            ];
+                            function getOutputFileStamps(host: WatchedSystem) {
+                                return expectedFiles.map(file => [file, host.getModifiedTime(file)] as OutputFileStamp);
+                            }
+                            const { host, watch } = createSolutionAndWatchModeOfProject(allFiles, getProjectPath(project), "tsconfig.c.json", "tsconfig.c.json", getOutputFileStamps);
+                            verifyWatchState(host, watch, expectedProgramFiles, expectedWatchedFiles, expectedWatchedDirectoriesRecursive, defaultDependencies);
+                        });
                     });
                     describe("when config files are in side by side folders", () => {
                         verifyTransitiveReferences(/*multiFolder*/ true);
