@@ -7354,13 +7354,13 @@ namespace ts {
             const propTypes: Type[] = [];
             let first = true;
             let commonValueDeclaration: Declaration | undefined;
-            let hasNonUniformValueDeclaration = false;
+            let hasUniformValueDeclaration = true;
             for (const prop of props) {
                 if (!commonValueDeclaration) {
                     commonValueDeclaration = prop.valueDeclaration;
                 }
                 else if (prop.valueDeclaration !== commonValueDeclaration) {
-                    hasNonUniformValueDeclaration = true;
+                    hasUniformValueDeclaration = false;
                 }
                 declarations = addRange(declarations, prop.declarations);
                 const type = getTypeOfSymbol(prop);
@@ -7379,9 +7379,17 @@ namespace ts {
             addRange(propTypes, indexTypes);
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
             result.containingType = containingType;
-            if (!hasNonUniformValueDeclaration && commonValueDeclaration) {
+
+            // All intersections lead to the same value declaration.
+            if (hasUniformValueDeclaration && commonValueDeclaration) {
                 result.valueDeclaration = commonValueDeclaration;
+
+                // Inherit information about parent type.
+                if (commonValueDeclaration.symbol.parent) {
+                    result.parent = commonValueDeclaration.symbol.parent;
+                }
             }
+
             result.declarations = declarations!;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
