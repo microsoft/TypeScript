@@ -16714,6 +16714,8 @@ namespace ts {
                             return restType;
                         }
                     }
+                    return isNumericLiteralName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
+                        getIndexTypeOfContextualType(type, IndexKind.String);
                 }
                 return undefined;
             }, /*noReductions*/ true);
