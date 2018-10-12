@@ -6793,6 +6793,9 @@ namespace ts {
                 // First, if the constraint type is a type parameter, obtain the base constraint. Then,
                 // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
                 // Finally, iterate over the constituents of the resulting iteration type.
+                //
+                // TODO: When fixing #27819 here, update generic mapped type handling in
+                // getTypeOfPropertyOfContextualType too if needed.
                 const keyType = constraintType.flags & TypeFlags.InstantiableNonPrimitive ? getApparentType(constraintType) : constraintType;
                 const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
                 forEachType(iterationType, addMemberForKeyType);
@@ -9457,19 +9460,19 @@ namespace ts {
             // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
             // and we might never terminate.
             if (isGenericMappedType(objectType)) {
-                return type.simplified = substituteIndexedMappedType(objectType, type);
+                return type.simplified = substituteIndexedMappedType(objectType, type.indexType);
             }
             if (objectType.flags & TypeFlags.TypeParameter) {
                 const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
                 if (constraint && isGenericMappedType(constraint)) {
-                    return type.simplified = substituteIndexedMappedType(constraint, type);
+                    return type.simplified = substituteIndexedMappedType(constraint, type.indexType);
                 }
             }
             return type.simplified = type;
         }
 
-        function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
-            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
+        function substituteIndexedMappedType(objectType: MappedType, indexType: Type) {
+            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [indexType]);
             const templateMapper = combineTypeMappers(objectType.mapper, mapper);
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
@@ -16703,7 +16706,15 @@ namespace ts {
 
         function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
             return mapType(type, t => {
-                if (t.flags & TypeFlags.StructuredType) {
+                if (isGenericMappedType(t)) {
+                    const constraint = getConstraintTypeFromMappedType(t);
+                    const constraintOfConstraint = getBaseConstraintOfType(constraint) || constraint;
+                    const propertyNameType = getLiteralType(unescapeLeadingUnderscores(name));
+                    if (isTypeAssignableTo(propertyNameType, constraintOfConstraint)) {
+                        return substituteIndexedMappedType(t, propertyNameType);
+                    }
+                }
+                else if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
                     if (prop) {
                         return getTypeOfSymbol(prop);
