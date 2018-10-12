@@ -9806,7 +9806,7 @@ namespace ts {
          * this function should be called in a left folding style, with left = previous result of getSpreadType
          * and right = the new element to be spread.
          */
-        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, typeFlags: TypeFlags, objectFlags: ObjectFlags): Type {
+        function getSpreadType(left: Type, right: Type, symbol: Symbol | undefined, typeFlags: TypeFlags, objectFlags: ObjectFlags, isUnion?: boolean): Type {
             if (left.flags & TypeFlags.Any || right.flags & TypeFlags.Any) {
                 return anyType;
             }
@@ -9820,10 +9820,10 @@ namespace ts {
                 return left;
             }
             if (left.flags & TypeFlags.Union) {
-                return mapType(left, t => getSpreadType(t, right, symbol, typeFlags, objectFlags));
+                return mapType(left, t => getSpreadType(t, right, symbol, typeFlags, objectFlags, isUnion));
             }
             if (right.flags & TypeFlags.Union) {
-                return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags));
+                return mapType(right, t => getSpreadType(left, t, symbol, typeFlags, objectFlags, true));
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
@@ -9870,7 +9870,12 @@ namespace ts {
                         result.nameType = leftProp.nameType;
                         members.set(leftProp.escapedName, result);
                     }
-                    else if (symbol && shouldCheckAsExcessProperty(leftProp, symbol) && !shouldCheckAsExcessProperty(rightProp, symbol)) {
+                    else if (strictNullChecks &&
+                             !isUnion &&
+                             symbol &&
+                             shouldCheckAsExcessProperty(leftProp, symbol) &&
+                             !shouldCheckAsExcessProperty(rightProp, symbol) &&
+                             !(getFalsyFlags(rightType) & TypeFlags.Nullable)) {
                         error(leftProp.valueDeclaration, Diagnostics._0_is_overwritten_by_a_later_spread, unescapeLeadingUnderscores(leftProp.escapedName));
                     }
                 }

@@ -5,6 +5,13 @@ var unused1 = { b: 1, ...ab }
 var unused2 = { ...ab, ...ab }
 var unused3 = { b: 1, ...abq }
 
+function g(obj: { x: number | undefined }) {
+    return { x: 1, ...obj }; // should be allowed because of undefined
+}
+function h(obj: { x: number }) {
+    return { x: 1, ...obj }; // should be allowed because we don't know about undefined
+}
+
 
 //// [spreadOverwritesProperty.js]
 var __assign = (this && this.__assign) || function () {
@@ -21,3 +28,9 @@ var __assign = (this && this.__assign) || function () {
 var unused1 = __assign({ b: 1 }, ab);
 var unused2 = __assign({}, ab, ab);
 var unused3 = __assign({ b: 1 }, abq);
+function g(obj) {
+    return __assign({ x: 1 }, obj); // should be allowed because of undefined
+}
+function h(obj) {
+    return __assign({ x: 1 }, obj); // should be allowed because we don't know about undefined
+}

@@ -1,6 +1,5 @@
 tests/cases/conformance/jsx/file.tsx(14,10): error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
   Property 'children' is missing in type '{ a: number; b: string; }'.
-tests/cases/conformance/jsx/file.tsx(17,25): error TS2735: 'children' is overwritten by a later spread.
 tests/cases/conformance/jsx/file.tsx(31,6): error TS2322: Type '{ children: (Element | ((name: string) => Element))[]; a: number; b: string; }' is not assignable to type 'Prop'.
   Types of property 'children' are incompatible.
     Type '(Element | ((name: string) => Element))[]' is not assignable to type 'string | Element'.
@@ -23,7 +22,7 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
         Property 'type' is missing in type 'Element[]'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (6 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     import React = require('react');
     
     interface Prop {
@@ -44,8 +43,6 @@ tests/cases/conformance/jsx/file.tsx(49,6): error TS2322: Type '{ children: Elem
     
     let k0 =
         <Comp a={10} b="hi" children="Random" >
-                            ~~~~~~~~~~~~~~~~~
-!!! error TS2735: 'children' is overwritten by a later spread.
             hi hi hi!
         </Comp>;
     

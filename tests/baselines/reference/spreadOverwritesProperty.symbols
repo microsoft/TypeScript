@@ -24,3 +24,22 @@ var unused3 = { b: 1, ...abq }
 >b : Symbol(b, Decl(spreadOverwritesProperty.ts, 4, 15))
 >abq : Symbol(abq, Decl(spreadOverwritesProperty.ts, 1, 11))
 
+function g(obj: { x: number | undefined }) {
+>g : Symbol(g, Decl(spreadOverwritesProperty.ts, 4, 30))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 6, 11))
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 6, 17))
+
+    return { x: 1, ...obj }; // should be allowed because of undefined
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 7, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 6, 11))
+}
+function h(obj: { x: number }) {
+>h : Symbol(h, Decl(spreadOverwritesProperty.ts, 8, 1))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 9, 11))
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 9, 17))
+
+    return { x: 1, ...obj }; // should be allowed because we don't know about undefined
+>x : Symbol(x, Decl(spreadOverwritesProperty.ts, 10, 12))
+>obj : Symbol(obj, Decl(spreadOverwritesProperty.ts, 9, 11))
+}
+

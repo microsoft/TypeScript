@@ -29,3 +29,26 @@ var unused3 = { b: 1, ...abq }
 >1 : 1
 >abq : { a: number; b?: number; }
 
+function g(obj: { x: number | undefined }) {
+>g : (obj: { x: number; }) => { x: number; }
+>obj : { x: number; }
+>x : number
+
+    return { x: 1, ...obj }; // should be allowed because of undefined
+>{ x: 1, ...obj } : { x: number; }
+>x : number
+>1 : 1
+>obj : { x: number; }
+}
+function h(obj: { x: number }) {
+>h : (obj: { x: number; }) => { x: number; }
+>obj : { x: number; }
+>x : number
+
+    return { x: 1, ...obj }; // should be allowed because we don't know about undefined
+>{ x: 1, ...obj } : { x: number; }
+>x : number
+>1 : 1
+>obj : { x: number; }
+}
+
