@@ -234,9 +234,9 @@ namespace ts {
         {
             name: "jsx",
             type: createMapFromTemplate({
+                "react": JsxEmit.React,
                 "preserve": JsxEmit.Preserve,
                 "react-native": JsxEmit.ReactNative,
-                "react": JsxEmit.React
             }),
             affectsSourceFile: true,
             paramType: Diagnostics.KIND,
