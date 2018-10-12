@@ -25,7 +25,8 @@ namespace ts {
     }
 
     export function getTransformers(compilerOptions: CompilerOptions, customTransformers?: CustomTransformers) {
-        const jsx = compilerOptions.jsx;
+        const jsx = compilerOptions.jsx || JsxEmit.React;
+
         const languageVersion = getEmitScriptTarget(compilerOptions);
         const moduleKind = getEmitModuleKind(compilerOptions);
         const transformers: TransformerFactory<SourceFile | Bundle>[] = [];
