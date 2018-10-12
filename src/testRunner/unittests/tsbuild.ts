@@ -276,6 +276,10 @@ export class cNew {}`);
 
             function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
                 const fs = projFs.shadow();
+                verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
+            }
+
+            function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
@@ -290,6 +294,21 @@ export class cNew {}`);
 
             it("with resolveJsonModule and include only", () => {
                 verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+
+            it("with resolveJsonModule and include of *.json along with other include", () => {
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeOfJson.json");
+            });
+
+            it("with resolveJsonModule and include of *.json along with other include and file name matches ts file", () => {
+                const fs = projFs.shadow();
+                fs.rimrafSync("/src/tests/src/hello.json");
+                fs.writeFileSync("/src/tests/src/index.json", JSON.stringify({ hello: "world" }));
+                fs.writeFileSync("/src/tests/src/index.ts", `import hello from "./index.json"
+
+export default hello.hello`);
+                const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/index.json"];
+                verifyProjectWithResolveJsonModuleWithFs(fs, "/src/tests/tsconfig_withIncludeOfJson.json", allExpectedOutputs);
             });
 
             it("with resolveJsonModule and files containing json file", () => {
@@ -347,8 +366,10 @@ export class cNew {}`);
                 assert.deepEqual(host.traces, [
                     "TSFILE: /src/core/anotherModule.js",
                     "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/anotherModule.d.ts.map",
                     "TSFILE: /src/core/index.js",
                     "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/core/index.d.ts.map",
                     "TSFILE: /src/logic/index.js",
                     "TSFILE: /src/logic/index.js.map",
                     "TSFILE: /src/logic/index.d.ts",

@@ -84,7 +84,7 @@ export class c_public {
 // private elements
 // Export - Error ambient modules allowed only in global
 declare module 'm' {
->'m' : Symbol('m', Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts, 0, 0))
+>'m' : Symbol("m", Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts, 0, 0))
 
     export class c_private {
 >c_private : Symbol(c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require2.ts, 2, 20))
@@ -96,7 +96,7 @@ declare module 'm' {
 
 === tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts ===
 declare module 'm2' {
->'m2' : Symbol('m2', Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts, 0, 0))
+>'m2' : Symbol("m2", Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts, 0, 0))
 
     export class c_private {
 >c_private : Symbol(c_private, Decl(privacyTopLevelAmbientExternalModuleImportWithoutExport_require3.ts, 0, 21))
