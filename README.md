@@ -104,4 +104,4 @@ For details on our planned features and future direction please refer to our [ro
 This software is covered under the APACHE 2 Licence. You can read the license [here][license].
 
 
-[license]: LICENSE
+[license]: LICENSE.txt
