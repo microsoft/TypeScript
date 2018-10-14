@@ -2585,6 +2585,10 @@
         "category": "Error",
         "code": 2749
     },
+    "Cannot invoke expression `{1}`, which is a property and has the type `{0}` which has no compatible call signature. Did you mean `{2}`": {
+        "category": "Error",
+        "code": 2750
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

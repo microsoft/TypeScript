@@ -243,7 +243,17 @@ namespace ts {
                 const parsed = getParseTreeNode(node, isFunctionLike);
                 return parsed ? isImplementationOfOverload(parsed) : undefined;
             },
-            getImmediateAliasedSymbol,
+            getImmediateAliasedSymbol: symbol => {
+                Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
+                const links = getSymbolLinks(symbol);
+                if (!links.immediateTarget) {
+                    const node = getDeclarationOfAliasSymbol(symbol);
+                    if (!node) return Debug.fail();
+                    links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
+                }
+
+                return links.immediateTarget;
+            },
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
@@ -20796,13 +20806,47 @@ namespace ts {
                 }
                 else {
                     let relatedInformation: DiagnosticRelatedInformation | undefined;
+                    let propertyName: string | undefined;
+                    let propertyAccessorText: string | undefined;
                     if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
                         }
                     }
-                    invocationError(node, apparentType, SignatureKind.Call, relatedInformation);
+                    else if (node.expression.kind === SyntaxKind.PropertyAccessExpression) {
+                        const propertyAccess = node.expression as PropertyAccessExpression;
+                        const symbol = getSymbolOfEntityNameOrPropertyAccessExpression(propertyAccess);
+
+                        // Handle union types with non-function-like signatures.
+                        if (symbol) {
+                            const links = getSymbolLinks(symbol);
+                            const isObjectUnionOrIntersection = links && links.type && (
+                                (links.type.flags & (TypeFlags.Union | TypeFlags.Intersection | TypeFlags.Object)) !== 0
+                            ) || false;
+
+                            let invokable = isObjectUnionOrIntersection;
+                            if (isObjectUnionOrIntersection) {
+                                if (links && links.type && (links.type.flags & TypeFlags.Object)) {
+                                    const resolvedType = links.type as ObjectType;
+                                    invokable = (resolvedType.callSignatures && resolvedType.callSignatures.length !== 0) || false;
+                                }
+                                else {
+                                    const resolvedType = links.type as UnionOrIntersectionType;
+                                    invokable = every(resolvedType.types, ty => (ty as ResolvedType).callSignatures && (ty as ResolvedType).callSignatures.length !== 0);
+                                }
+                            }
+
+                            if (!invokable) {
+                                const file = getSourceFileOfNode(node);
+
+                                propertyName = propertyAccess.name.escapedText.toString();
+                                propertyAccessorText = createPrinter().printNode(EmitHint.Expression, propertyAccess, file);
+                            }
+                        }
+                    }
+
+                    invocationError(node, apparentType, SignatureKind.Call, relatedInformation, propertyName, propertyAccessorText);
                 }
                 return resolveErrorCall(node);
             }
@@ -20972,11 +21016,14 @@ namespace ts {
             return true;
         }
 
-        function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation) {
+        function invocationError(node: Node, apparentType: Type, kind: SignatureKind, relatedInformation?: DiagnosticRelatedInformation, propertyName?: string, didYouMean?: string) {
             const diagnostic = error(node, (kind === SignatureKind.Call ?
-                Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures :
+                (propertyName === undefined ?
+                    Diagnostics.Cannot_invoke_an_expression_whose_type_lacks_a_call_signature_Type_0_has_no_compatible_call_signatures :
+                    Diagnostics.Cannot_invoke_expression_1_which_is_a_property_and_has_the_type_0_which_has_no_compatible_call_signature_Did_you_mean_2
+                    ) :
                 Diagnostics.Cannot_use_new_with_an_expression_whose_type_lacks_a_call_or_construct_signature
-            ), typeToString(apparentType));
+            ), typeToString(apparentType), propertyName, didYouMean);
             invocationErrorRecovery(apparentType, kind, relatedInformation ? addRelatedInfo(diagnostic, relatedInformation) : diagnostic);
         }
 
