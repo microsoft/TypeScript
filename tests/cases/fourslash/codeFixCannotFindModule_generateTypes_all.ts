@@ -27,7 +27,7 @@ verify.codeFixAll({
     "compilerOptions": {
         "baseUrl": ".",
         "paths": { "*": ["types/*"] },
-}
+    }
 }`,
     },
     commands: [
