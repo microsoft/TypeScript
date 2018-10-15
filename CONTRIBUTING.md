@@ -194,6 +194,6 @@ to establish the new baselines as the desired behavior. This will change the fil
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in [`diagnosticInformationMap.generated.ts`](./src/compiler/diagnosticInformationMap.generated.ts).
+If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).
