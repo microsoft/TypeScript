@@ -112,7 +112,7 @@ namespace ts {
             const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
 
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
-            const program = createProgram(["/index.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+            const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
 
             for (const file of [a, bar, barFooIndex, fooIndex]) {
                 const isExternalExpected = file !== a;

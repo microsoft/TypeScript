@@ -1330,7 +1330,7 @@ namespace ts {
         }
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
-            return !!sourceFilesFoundSearchingNodeModules.get((file.redirectInfo ? file.redirectInfo.redirectTarget : file).path);
+            return !!sourceFilesFoundSearchingNodeModules.get(file.path);
         }
 
         function isSourceFileDefaultLibrary(file: SourceFile): boolean {
@@ -2031,6 +2031,7 @@ namespace ts {
             redirect.resolvedPath = resolvedPath;
             redirect.originalFileName = originalFileName;
             redirect.redirectInfo = { redirectTarget, unredirected };
+            sourceFilesFoundSearchingNodeModules.set(path, !!sourceFilesFoundSearchingNodeModules.get(redirectTarget.path));
             Object.defineProperties(redirect, {
                 id: {
                     get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
