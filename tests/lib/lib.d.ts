@@ -9570,7 +9570,7 @@ interface HTMLMediaElement extends HTMLElement {
       */
     seekable: TimeRanges;
     /**
-      * Gets a flag that indicates whether the the client is currently moving to a new playback position in the media resource.
+      * Gets a flag that indicates whether the client is currently moving to a new playback position in the media resource.
       */
     seeking: boolean;
     /**

@@ -821,7 +821,7 @@ namespace ts.FindAllReferences.Core {
         // For an export of a module, we may be in a declaration file, and it may be accessed elsewhere. E.g.:
         //     declare module "a" { export type T = number; }
         //     declare module "b" { import { T } from "a"; export const x: T; }
-        // So we must search the whole source file. (Because we will mark the source file as seen, we we won't return to it when searching for imports.)
+        // So we must search the whole source file. (Because we will mark the source file as seen, we won't return to it when searching for imports.)
         return exposedByParent ? scope!.getSourceFile() : scope; // TODO: GH#18217
     }
 

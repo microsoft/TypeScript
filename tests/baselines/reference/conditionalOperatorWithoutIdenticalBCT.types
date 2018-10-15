@@ -39,7 +39,7 @@ var result1 = true ? a : b;
 >a : A
 >b : B
 
-//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+//Be contextually typed and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 >result2 : A
 >true ? a : b : A | B

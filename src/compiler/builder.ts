@@ -406,7 +406,7 @@ namespace ts {
          * When targetSource file is specified, emits the files corresponding to that source file,
          * otherwise for the whole program.
          * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
-         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it is assumed that file is handled from affected file list. If targetSourceFile is not specified,
          * it will only emit all the affected files instead of whole program
          *
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
@@ -589,7 +589,7 @@ namespace ts {
          * When targetSource file is specified, emits the files corresponding to that source file,
          * otherwise for the whole program.
          * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
-         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it is assumed that file is handled from affected file list. If targetSourceFile is not specified,
          * it will only emit all the affected files instead of whole program
          *
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host

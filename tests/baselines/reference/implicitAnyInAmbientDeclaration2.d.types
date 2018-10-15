@@ -3,7 +3,7 @@ declare function foo(x);  // this should be an error
 >foo : (x: any) => any
 >x : any
 
-declare var bar;  // this should be be an erro
+declare var bar;  // this should be an error
 >bar : any
 
 declare class C {

@@ -148,7 +148,7 @@ function fn(s = this) {
     this.spaaaaace = 4;
 }
 
-//type of 'this' in a function expression param list list is Any
+//type of 'this' in a function expression param list is Any
 var q1 = function (s = this) {
     var s: any;
     s.spaaaaaaace = 4;
@@ -329,7 +329,7 @@ function fn(s) {
     var t = this;
     this.spaaaaace = 4;
 }
-//type of 'this' in a function expression param list list is Any
+//type of 'this' in a function expression param list is Any
 var q1 = function (s) {
     if (s === void 0) { s = this; }
     var s;

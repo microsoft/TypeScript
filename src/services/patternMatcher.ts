@@ -84,7 +84,7 @@ namespace ts {
         isLowerCase: boolean;
 
         // The spans in this text chunk that we think are of interest and should be matched
-        // independently.  For example, if the chunk is for "UIElement" the the spans of interest
+        // independently.  For example, if the chunk is for "UIElement" the spans of interest
         // correspond to "U", "I" and "Element".  If "UIElement" isn't found as an exact, prefix.
         // or substring match, then the character spans will be used to attempt a camel case match.
         characterSpans: TextSpan[];

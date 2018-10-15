@@ -4265,7 +4265,7 @@ declare namespace ts {
          * When targetSource file is specified, emits the files corresponding to that source file,
          * otherwise for the whole program.
          * In case of EmitAndSemanticDiagnosticsBuilderProgram, when targetSourceFile is specified,
-         * it is assumed that that file is handled from affected file list. If targetSourceFile is not specified,
+         * it is assumed that file is handled from affected file list. If targetSourceFile is not specified,
          * it will only emit all the affected files instead of whole program
          *
          * The first of writeFile if provided, writeFile of BuilderProgramHost if provided, writeFile of compiler host
@@ -8732,7 +8732,7 @@ declare namespace ts.server {
          * This function goes through all the openFiles and tries to file the config file for them.
          * If the config file is found and it refers to existing project, it reloads it either immediately
          * or schedules it for reload depending on delayReload option
-         * If the there is no existing project it just opens the configured project for the config file
+         * If there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
         private reloadConfiguredProjectForFiles;

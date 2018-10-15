@@ -43,7 +43,7 @@ tests/cases/compiler/controlFlowNoImplicitAny.ts(125,19): error TS7005: Variable
         const y = x;  // string | number | null
     }
     
-    // No CFA for 'let' with with type annotation
+    // No CFA for 'let' with type annotation
     function f4() {
         let x: any;
         if (cond) {
@@ -91,7 +91,7 @@ tests/cases/compiler/controlFlowNoImplicitAny.ts(125,19): error TS7005: Variable
         const y = x;  // string | number | null
     }
     
-    // No CFA for 'var' with with type annotation
+    // No CFA for 'var' with type annotation
     function f8() {
         var x: any;
         if (cond) {

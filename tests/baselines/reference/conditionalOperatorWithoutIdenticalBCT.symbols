@@ -38,7 +38,7 @@ var result1 = true ? a : b;
 >a : Symbol(a, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 6, 3))
 >b : Symbol(b, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 7, 3))
 
-//Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+//Be contextually typed and bct is not identical, results in errors that union type is not assignable to target
 var result2: A = true ? a : b;
 >result2 : Symbol(result2, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 14, 3))
 >A : Symbol(A, Decl(conditionalOperatorWithoutIdenticalBCT.ts, 1, 67))

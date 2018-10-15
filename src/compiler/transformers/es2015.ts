@@ -2685,7 +2685,7 @@ namespace ts {
             if (!shouldConvertIterationStatement(node)) {
                 let saveAllowedNonLabeledJumps: Jump | undefined;
                 if (convertedLoopState) {
-                    // we get here if we are trying to emit normal loop loop inside converted loop
+                    // we get here if we are trying to emit normal loop inside converted loop
                     // set allowedNonLabeledJumps to Break | Continue to mark that break\continue inside the loop should be emitted as is
                     saveAllowedNonLabeledJumps = convertedLoopState.allowedNonLabeledJumps;
                     convertedLoopState.allowedNonLabeledJumps = Jump.Break | Jump.Continue;

@@ -197,10 +197,10 @@ c3({ b: 1 });     // Implied type is { b: number|string }.
 >c3 : Symbol(c3, Decl(destructuringParameterDeclaration1ES6.ts, 40, 25))
 >b : Symbol(b, Decl(destructuringParameterDeclaration1ES6.ts, 54, 4))
 
-c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
+c5([1, 2, [["string"]]]);               // Implied type is [any, any, [[any]]]
 >c5 : Symbol(c5, Decl(destructuringParameterDeclaration1ES6.ts, 41, 58))
 
-c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
+c5([1, 2, [["string"]], false, true]);  // Implied type is [any, any, [[any]]]
 >c5 : Symbol(c5, Decl(destructuringParameterDeclaration1ES6.ts, 41, 58))
 
 

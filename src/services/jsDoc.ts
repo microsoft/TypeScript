@@ -376,7 +376,7 @@ namespace ts.JsDoc {
                 return "quit";
 
             case SyntaxKind.ModuleDeclaration:
-                // If in walking up the tree, we hit a a nested namespace declaration,
+                // If in walking up the tree, we hit a nested namespace declaration,
                 // then we must be somewhere within a dotted namespace name; however we don't
                 // want to give back a JSDoc template for the 'b' or 'c' in 'namespace a.b.c { }'.
                 return commentOwner.parent.kind === SyntaxKind.ModuleDeclaration ? undefined : { commentOwner };
@@ -393,7 +393,7 @@ namespace ts.JsDoc {
     }
 
     /**
-     * Digs into an an initializer or RHS operand of an assignment operation
+     * Digs into an initializer or RHS operand of an assignment operation
      * to get the parameters of an apt signature corresponding to a
      * function expression or a class expression.
      *

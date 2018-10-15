@@ -29,7 +29,7 @@ tests/cases/conformance/expressions/conditonalOperator/conditionalOperatorWithou
     true ? a : b;
     var result1 = true ? a : b;
     
-    //Be contextually typed and and bct is not identical, results in errors that union type is not assignable to target
+    //Be contextually typed and bct is not identical, results in errors that union type is not assignable to target
     var result2: A = true ? a : b;
         ~~~~~~~
 !!! error TS2322: Type 'A | B' is not assignable to type 'A'.

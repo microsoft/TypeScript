@@ -75,7 +75,7 @@ function f3() {
 >x : Symbol(x, Decl(controlFlowNoImplicitAny.ts, 28, 7))
 }
 
-// No CFA for 'let' with with type annotation
+// No CFA for 'let' with type annotation
 function f4() {
 >f4 : Symbol(f4, Decl(controlFlowNoImplicitAny.ts, 36, 1))
 
@@ -172,7 +172,7 @@ function f7() {
 >x : Symbol(x, Decl(controlFlowNoImplicitAny.ts, 76, 7))
 }
 
-// No CFA for 'var' with with type annotation
+// No CFA for 'var' with type annotation
 function f8() {
 >f8 : Symbol(f8, Decl(controlFlowNoImplicitAny.ts, 84, 1))
 

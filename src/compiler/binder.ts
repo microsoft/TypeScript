@@ -461,7 +461,7 @@ namespace ts {
                 //      but return the export symbol (by calling getExportSymbolOfValueSymbolIfExported). That way
                 //      when the emitter comes back to it, it knows not to qualify the name if it was found in a containing scope.
 
-                // NOTE: Nested ambient modules always should go to to 'locals' table to prevent their automatic merge
+                // NOTE: Nested ambient modules always should go to 'locals' table to prevent their automatic merge
                 //       during global merging in the checker. Why? The only case when ambient module is permitted inside another module is module augmentation
                 //       and this case is specially handled. Module augmentations should only be merged with original module definition
                 //       and should never be merged directly with other augmentation, and the latter case would be possible if automatic merge is allowed.

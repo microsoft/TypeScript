@@ -54,8 +54,8 @@ c2({z:1});      // Implied type is {z?: number}
 
 c3({ b: 1 });     // Implied type is { b: number|string }.
 
-c5([1, 2, [["string"]]]);               // Implied type is is [any, any, [[any]]]
-c5([1, 2, [["string"]], false, true]);  // Implied type is is [any, any, [[any]]]
+c5([1, 2, [["string"]]]);               // Implied type is [any, any, [[any]]]
+c5([1, 2, [["string"]], false, true]);  // Implied type is [any, any, [[any]]]
 
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.
@@ -186,8 +186,8 @@ c1({ z: 1 }); // Implied type is {z:number}?
 c2({}); // Implied type is {z?: number}
 c2({ z: 1 }); // Implied type is {z?: number}
 c3({ b: 1 }); // Implied type is { b: number|string }.
-c5([1, 2, [["string"]]]); // Implied type is is [any, any, [[any]]]
-c5([1, 2, [["string"]], false, true]); // Implied type is is [any, any, [[any]]]
+c5([1, 2, [["string"]]]); // Implied type is [any, any, [[any]]]
+c5([1, 2, [["string"]], false, true]); // Implied type is [any, any, [[any]]]
 // A parameter can be marked optional by following its name or binding pattern with a question mark (?)
 // or by including an initializer.
 function d0(x) { }

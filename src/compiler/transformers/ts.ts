@@ -1962,7 +1962,7 @@ namespace ts {
                     // One of the individual is global object, return immediately
                     return serializedIndividual;
                 }
-                // If there exists union that is not void 0 expression, check if the the common type is identifier.
+                // If there exists union that is not void 0 expression, check if the common type is identifier.
                 // anything more complex and we will just default to Object
                 else if (serializedUnion) {
                     // Different types
@@ -2854,7 +2854,7 @@ namespace ts {
          */
         function addVarForEnumOrModuleDeclaration(statements: Statement[], node: ModuleDeclaration | EnumDeclaration) {
             // Emit a variable statement for the module. We emit top-level enums as a `var`
-            // declaration to avoid static errors in global scripts scripts due to redeclaration.
+            // declaration to avoid static errors in global scripts due to redeclaration.
             // enums in any other scope are emitted as a `let` declaration.
             const statement = createVariableStatement(
                 visitNodes(node.modifiers, modifierVisitor, isModifier),

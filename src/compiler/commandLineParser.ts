@@ -2500,7 +2500,7 @@ namespace ts {
         const keyMapper = host.useCaseSensitiveFileNames ? identity : toLowerCase;
 
         // Literal file names (provided via the "files" array in tsconfig.json) are stored in a
-        // file map with a possibly case insensitive key. We use this map later when when including
+        // file map with a possibly case insensitive key. We use this map later when including
         // wildcard paths.
         const literalFileMap = createMap<string>();
 

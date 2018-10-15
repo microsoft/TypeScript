@@ -10362,7 +10362,7 @@ namespace ts {
             // * If T is a tuple we map to a tuple where the element types have been transformed.
             // * Otherwise we map to an object type where the type of each property has been transformed.
             // For example, when T is instantiated to a union type A | B, we produce { [P in keyof A]: X } |
-            // { [P in keyof B]: X }, and when when T is instantiated to a union type A | undefined, we produce
+            // { [P in keyof B]: X }, and when T is instantiated to a union type A | undefined, we produce
             // { [P in keyof A]: X } | undefined.
             const typeVariable = getHomomorphicTypeVariable(type);
             if (typeVariable) {
@@ -11753,7 +11753,7 @@ namespace ts {
                         else if (variance === Variance.Bivariant) {
                             // In the bivariant case we first compare contravariantly without reporting
                             // errors. Then, if that doesn't succeed, we compare covariantly with error
-                            // reporting. Thus, error elaboration will be based on the the covariant check,
+                            // reporting. Thus, error elaboration will be based on the covariant check,
                             // which is generally easier to reason about.
                             related = isRelatedTo(t, s, /*reportErrors*/ false);
                             if (!related) {
@@ -13093,7 +13093,7 @@ namespace ts {
         }
 
         /**
-         * If the the provided object literal is subject to the excess properties check,
+         * If the provided object literal is subject to the excess properties check,
          * create a new that is exempt. Recursively mark object literal members as exempt.
          * Leave signatures alone since they are not subject to the check.
          */
@@ -21243,7 +21243,7 @@ namespace ts {
                 return;
             }
 
-            // Functions with with an explicitly specified 'void' or 'any' return type don't need any return expressions.
+            // Functions with an explicitly specified 'void' or 'any' return type don't need any return expressions.
             if (returnType && maybeTypeOfKind(returnType, TypeFlags.Any | TypeFlags.Void)) {
                 return;
             }

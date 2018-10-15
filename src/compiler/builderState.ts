@@ -402,7 +402,7 @@ namespace ts.BuilderState {
     }
 
     /**
-     * Gets the files referenced by the the file path
+     * Gets the files referenced by the file path
      */
     function getReferencedByPaths(state: Readonly<BuilderState>, referencedFilePath: Path) {
         return arrayFrom(mapDefinedIterator(state.referencedMap!.entries(), ([filePath, referencesInFile]) =>
