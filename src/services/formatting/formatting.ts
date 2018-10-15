@@ -412,7 +412,7 @@ namespace ts.formatting {
 
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
-            let indentNextTokenOrTrivia = true;
+            let indentNextTokenOrTrivia = false;
             if (leadingTrivia) {
                 const commentIndentation = initialIndentation;
                 for (const triviaItem of leadingTrivia) {
@@ -435,9 +435,6 @@ namespace ts.formatting {
                             break;
                     }
                 }
-
-                // processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
-                trimTrailingWhitespacesForRemainingRange();
             }
         }
 
@@ -1089,18 +1086,6 @@ namespace ts.formatting {
                 return pos + 1;
             }
             return -1;
-        }
-
-        /**
-         * Trimming will be done for lines after the previous range
-         */
-        function trimTrailingWhitespacesForRemainingRange() {
-            const startPosition = previousRange ? previousRange.end : originalRange.pos;
-
-            const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
-            const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
-
-            trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }
 
         function recordDelete(start: number, len: number) {
