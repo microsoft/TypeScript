@@ -4074,6 +4074,7 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
+        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {

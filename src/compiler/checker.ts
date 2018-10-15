@@ -10369,7 +10369,15 @@ namespace ts {
             if (typeVariable) {
                 const mappedTypeVariable = instantiateType(typeVariable, mapper);
                 if (typeVariable !== mappedTypeVariable) {
-                    return mapType(mappedTypeVariable, t => {
+                    // If we are already in the process of creating an instantiation of this mapped type,
+                    // return the error type. This situation only arises if we are instantiating the mapped
+                    // type for an array or tuple type, as we then need to eagerly resolve the (possibly
+                    // circular) element type(s).
+                    if (type.instantiating) {
+                        return errorType;
+                    }
+                    type.instantiating = true;
+                    const result = mapType(mappedTypeVariable, t => {
                         if (t.flags & (TypeFlags.AnyOrUnknown | TypeFlags.InstantiableNonPrimitive | TypeFlags.Object | TypeFlags.Intersection) && t !== wildcardType) {
                             const replacementMapper = createReplacementMapper(typeVariable, t, mapper);
                             return isArrayType(t) ? createArrayType(instantiateMappedTypeTemplate(type, numberType, /*isOptional*/ true, replacementMapper)) :
@@ -10379,6 +10387,8 @@ namespace ts {
                         }
                         return t;
                     });
+                    type.instantiating = false;
+                    return result;
                 }
             }
             return instantiateAnonymousType(type, mapper);
