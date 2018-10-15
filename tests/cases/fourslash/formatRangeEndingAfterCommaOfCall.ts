@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts"/>
-////export const strong: StrongParser = verify(fmap(build(() =>
-////    /*start*/surround('**', compress(some(union([inline]), '**')), '**')),/*end*/
-////    ns => [html('strong', ns)]
-////), ([el]) => hasTightStartText(el));
+////someCall(
+////    /*start*/"firstParameter",/*end*/
+////    "something else"
+////);
 
 format.selection("start", "end");
