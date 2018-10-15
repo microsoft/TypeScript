@@ -209,12 +209,6 @@ namespace ts.textChanges {
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
-    interface JSDocParameter {
-        declaration: ParameterDeclaration;
-        typeNode: TypeNode;
-        isOptional?: boolean;
-    }
-
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
@@ -345,10 +339,25 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string): void {
+        // TODO: Replace this with a call to insertNodeAt as well
+        public insertCommentThenNewline(sourceFile: SourceFile, indent: number, position: number, commentText: string): void {
+            // TODO: Use indentation between (beginning of line | preceding non-whitespace character) to indent instead
             const token = getTouchingToken(sourceFile, position);
-            const text = "/**" + commentText + "*/" + this.newLineCharacter + repeatString(" ", character);
+            const text = "/**" + commentText + "*/" + this.newLineCharacter + repeatString(" ", indent);
             this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
+        public replaceExistingJsdocComments(sourceFile: SourceFile, signature: SignatureDeclaration, firstOldTag: JSDoc, lastOldTag: JSDoc, tag: JSDoc) {
+            // TODO: Might not need signature to get the indent
+            const fnStart = signature.getStart(sourceFile);
+            const indent = getIndent(sourceFile, fnStart);
+            this.replaceNodeRange(sourceFile, firstOldTag, lastOldTag, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
+        }
+
+        public insertJsdocCommentBefore(sourceFile: SourceFile, signature: SignatureDeclaration, tag: JSDoc) {
+            const fnStart = signature.getStart(sourceFile);
+            const indent = getIndent(sourceFile, fnStart);
+            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
@@ -357,23 +366,6 @@ namespace ts.textChanges {
 
         public insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
-        }
-
-        public tryInsertJSDocParameters(sourceFile: SourceFile, parameters: JSDocParameter[]) {
-            if (parameters.length === 0) {
-                return;
-            }
-            const parent = parameters[0].declaration.parent;
-            const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
-            let commentText = "\n";
-            for (const { declaration, typeNode, isOptional } of parameters) {
-                if (isIdentifier(declaration.name)) {
-                    const printed = changesToText.getNonformattedText(typeNode, sourceFile, this.newLineCharacter).text;
-                    commentText += this.printJSDocParameter(indent, printed, declaration.name, isOptional);
-                }
-            }
-            commentText += repeatString(" ", indent + 1);
-            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -395,6 +387,7 @@ namespace ts.textChanges {
         }
 
         public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
+            // TODO: Convert to constructors and remove this formatting here too
             const printed = changesToText.getNonformattedText(type, sourceFile, this.newLineCharacter).text;
             let commentText;
             if (isGetAccessorDeclaration(node)) {
@@ -405,14 +398,6 @@ namespace ts.textChanges {
                 node = node.parent;
             }
             this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart(sourceFile)).character, node.getStart(sourceFile), commentText);
-        }
-
-        private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
-            let printName = unescapeLeadingUnderscores(name.escapedText);
-            if (isOptionalParameter) {
-                printName = `[${printName}]`;
-            }
-            return repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
@@ -770,6 +755,11 @@ namespace ts.textChanges {
         }
     }
 
+    function getIndent(sourceFile: SourceFile, position: number): string {
+        const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, position - 1);
+        return sourceFile.text.slice(startPosition + 1, position);
+    }
+
     // find first non-whitespace position in the leading trivia of the node
     function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
@@ -839,20 +829,20 @@ namespace ts.textChanges {
 
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
-            if (validate) validate(node, text);
-            const { options: formatOptions } = formatContext;
-            const initialIndentation =
-                indentation !== undefined
+                const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+                if (validate) validate(node, text);
+                const { options: formatOptions } = formatContext;
+                const initialIndentation =
+                    indentation !== undefined
                     ? indentation
                     : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
-            if (delta === undefined) {
-                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
-            }
+                if (delta === undefined) {
+                    delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+                }
 
-            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
-            return applyChanges(text, changes);
+                const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+                const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
+                return applyChanges(text, changes);
         }
 
         /** Note: output node may be mutated input node. */

@@ -201,12 +201,57 @@ namespace ts.codefix {
     }
 
     function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ParameterInference[], program: Program, host: LanguageServiceHost): void {
-        const result = mapDefined(parameterInferences, inference => {
+
+        // find
+        const paramTags = createMap<JSDocTag>();
+        forEach(parameterInferences, inference => {
             const param = inference.declaration;
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            return typeNode && !param.initializer && !getJSDocType(param) ? { ...inference, typeNode } : undefined;
+            if (typeNode && !param.initializer && !getJSDocType(param) && isIdentifier(inference.declaration.name)) {
+                paramTags.set(inference.declaration.name.escapedText as string, createJSDocParamTag(typeNode, inference.declaration.name as EntityName, !!inference.isOptional, ""));
+            }
         });
-        changes.tryInsertJSDocParameters(sourceFile, result);
+
+        // resolve
+        const signature = parameterInferences[0].declaration.parent;
+        const existingJsdoc = signature.jsDoc && firstOrUndefined(signature.jsDoc);
+        let tag;
+        let things: JSDocTag[] = [];
+        if (existingJsdoc) {
+            // `/** foo */` --> `/**\n * @constructor\n * foo */`
+            // TODO: This is basically the right structure, but of course the code is buggy.
+            if (existingJsdoc.tags) {
+                for (const t of existingJsdoc.tags) {
+                    if (isJSDocParameterTag(t) && isIdentifier(t.name)) {
+                        const x = paramTags.get(t.name.escapedText as string);
+                        if (x) {
+                            // TODO: Update x
+                            things.push(x);
+                            paramTags.delete(t.name.escapedText as string);
+                        }
+                        else {
+                            things.push(t); // TODO: This doesn't roundtrip correctly (the comment prints as "undefined")
+                        }
+                    }
+                    else {
+                        things.push(t);
+                    }
+                }
+                things.push(...arrayFrom(paramTags.values()));
+            }
+            else {
+                things = arrayFrom(paramTags.values());
+            }
+            tag = createJSDocComment(existingJsdoc.comment, createNodeArray(things));
+            changes.replaceExistingJsdocComments(sourceFile, signature, first(signature.jsDoc!), last(signature.jsDoc!), tag);
+        }
+        else {
+            tag = createJSDocComment(/*comment*/ undefined, createNodeArray(arrayFrom(paramTags.values())));
+            // emit
+            if (parameterInferences.length) {
+                changes.insertJsdocCommentBefore(sourceFile, signature, tag);
+            }
+        }
     }
 
    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {

@@ -2170,6 +2170,41 @@ namespace ts {
             : node;
     }
 
+    // JSDoc
+
+    /* @internal */
+    export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
+        const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function createJSDocParamTag(type: TypeNode, name: EntityName, isOptional: boolean, comment: string): JSDocParameterTag {
+        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
+        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.name = name;
+        tag.isBracketed = isOptional;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocComment(comment: string | undefined, tags: NodeArray<JSDocTag> | undefined) {
+        const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
+        node.comment = comment;
+        node.tags = tags;
+        return node;
+    }
+
+    /* @internal */
+    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+        const node = createSynthesizedNode(kind) as T;
+        node.atToken = createToken(SyntaxKind.AtToken);
+        node.tagName = createIdentifier(tagName);
+        return node;
+    }
+
     // JSX
 
     export function createJsxElement(openingElement: JsxOpeningElement, children: ReadonlyArray<JsxChild>, closingElement: JsxClosingElement) {

@@ -862,7 +862,12 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                         return emitEnumMember(<EnumMember>node);
 
-                    // JSDoc nodes (ignored)
+                    // JSDoc nodes
+                    case SyntaxKind.JSDocParameterTag:
+                        return emitJSDocParameterTag(node as JSDocParameterTag);
+                    case SyntaxKind.JSDocComment:
+                        return emitJSDocComment(node as JSDoc);
+
                     // Transformation nodes (ignored)
                 }
 
@@ -2585,6 +2590,42 @@ namespace ts {
         }
 
         //
+        // JSDoc
+        //
+        function emitJSDocComment(node: JSDoc) {
+            write("/**");
+            if (node.comment) {
+                writeSpace();
+                writePunctuation("*");
+                write(node.comment);
+            }
+            if (node.tags) {
+                emitList(node, node.tags, ListFormat.JSDocComment);
+            }
+            writeSpace();
+            write("*/");
+        }
+
+        function emitJSDocParameterTag(param: JSDocParameterTag) {
+            write("@param");
+            writeSpace();
+            if (param.typeExpression) {
+                writePunctuation("{");
+                emit(param.typeExpression.type);
+                writePunctuation("}");
+                writeSpace();
+            }
+            if (param.isBracketed) {
+                writePunctuation("[");
+            }
+            emit(param.name);
+            if (param.isBracketed) {
+                writePunctuation("]");
+            }
+            write(param.comment || "");
+        }
+
+        //
         // Top-level nodes
         //
 
@@ -2875,6 +2916,11 @@ namespace ts {
                     writeSpace();
                     writePunctuation("|");
                     break;
+                case ListFormat.AsteriskDelimited:
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
+                    break;
                 case ListFormat.AmpersandDelimited:
                     writeSpace();
                     writePunctuation("&");
@@ -2944,7 +2990,12 @@ namespace ts {
                     const child = children![start + i];
 
                     // Write the delimiter if this is not the first node.
-                    if (previousSibling) {
+                    if (format & ListFormat.AsteriskDelimited) {
+                        // always write JSDoc in the format "\n *"
+                        writeLine();
+                        writeDelimiter(format);
+                    }
+                    else if (previousSibling) {
                         // i.e
                         //      function commentedParameters(
                         //          /* Parameter a */

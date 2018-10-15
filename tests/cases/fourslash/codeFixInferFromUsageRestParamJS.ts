@@ -14,8 +14,8 @@
 ////f(3, "s1", "s2", "s3", "s4");
 
 verify.fileAfterCodeFix(
-`/** @param {number} a */
-/**
+`/**
+ * @param {number} a
  * @param {string[]} rest
  */
 function f(a: number, ...rest){

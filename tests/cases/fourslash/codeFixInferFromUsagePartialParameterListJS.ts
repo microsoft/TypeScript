@@ -17,8 +17,6 @@ verify.fileAfterCodeFix(
 `
 /**
  * @param {*} y
- */
-/**
  * @param {number} x
  * @param {number} z
  */

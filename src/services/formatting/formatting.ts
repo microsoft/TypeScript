@@ -412,8 +412,31 @@ namespace ts.formatting {
 
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
+            let indentNextTokenOrTrivia = true;
             if (leadingTrivia) {
-                processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
+                const commentIndentation = initialIndentation;
+                for (const triviaItem of leadingTrivia) {
+                    const triviaInRange = rangeContainsRange(originalRange, triviaItem);
+                    switch (triviaItem.kind) {
+                        case SyntaxKind.MultiLineCommentTrivia:
+                            if (triviaInRange) {
+                                indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                            }
+                            indentNextTokenOrTrivia = false;
+                            break;
+                        case SyntaxKind.SingleLineCommentTrivia:
+                            if (indentNextTokenOrTrivia && triviaInRange) {
+                                insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
+                            }
+                            indentNextTokenOrTrivia = false;
+                            break;
+                        case SyntaxKind.NewLineTrivia:
+                            indentNextTokenOrTrivia = true;
+                            break;
+                    }
+                }
+
+                // processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
                 trimTrailingWhitespacesForRemainingRange();
             }
         }

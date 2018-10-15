@@ -538,6 +538,7 @@ namespace ts.formatting {
                 case SyntaxKind.ExportSpecifier:
                 case SyntaxKind.ImportSpecifier:
                 case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.JSDocComment: // maybe???
                     return true;
                 case SyntaxKind.VariableDeclaration:
                 case SyntaxKind.PropertyAssignment:

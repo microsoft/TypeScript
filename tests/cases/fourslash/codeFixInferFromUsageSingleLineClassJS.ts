@@ -12,8 +12,8 @@
 verify.fileAfterCodeFix(
 `
 class C {/**
-          * @param {number} x
-          */
-         m(x) {return x;}}
+ * @param {number} x
+ */
+m(x) {return x;}}
 var c = new C()
 c.m(1)`, undefined, 2);
