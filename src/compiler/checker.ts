@@ -14233,12 +14233,26 @@ namespace ts {
             return undefined;
         }
 
+        function isDiscriminantType(type: Type): boolean {
+            if (type.flags & TypeFlags.Union) {
+                if (type.flags & (TypeFlags.Boolean | TypeFlags.EnumLiteral)) {
+                    return true;
+                }
+                let combined = 0;
+                for (const t of (<UnionType>type).types) combined |= t.flags;
+                if (combined & TypeFlags.Unit && !(combined & TypeFlags.Instantiable)) {
+                    return true;
+                }
+            }
+            return false;
+        }
+
         function isDiscriminantProperty(type: Type | undefined, name: __String) {
             if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
-                        (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) && isLiteralType(getTypeOfSymbol(prop));
+                        (<TransientSymbol>prop).isDiscriminantProperty = !!((<TransientSymbol>prop).checkFlags & CheckFlags.HasNonUniformType) && isDiscriminantType(getTypeOfSymbol(prop));
                     }
                     return !!(<TransientSymbol>prop).isDiscriminantProperty;
                 }
