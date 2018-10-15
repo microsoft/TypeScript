@@ -1330,7 +1330,7 @@ namespace ts {
         }
 
         function isSourceFileFromExternalLibrary(file: SourceFile): boolean {
-            return !!sourceFilesFoundSearchingNodeModules.get(file.path);
+            return !!sourceFilesFoundSearchingNodeModules.get((file.redirectInfo ? file.redirectInfo.redirectTarget : file).path);
         }
 
         function isSourceFileDefaultLibrary(file: SourceFile): boolean {
