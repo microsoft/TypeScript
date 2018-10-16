@@ -16445,6 +16445,7 @@ interface Window extends EventTarget, WindowTimers, WindowSessionStorage, Window
 }
 
 declare var Window: {
+    [key:string]: any;
     prototype: Window;
     new(): Window;
 };
