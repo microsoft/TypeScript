@@ -11955,6 +11955,31 @@ namespace ts {
                         }
                     }
                 }
+                else if (target.flags & TypeFlags.Conditional) {
+                    const root = (target as ConditionalType).root;
+                    if (root.inferTypeParameters) {
+                        // If the constraint indicates that the conditional type is always true (but it is stil deferred to allow for, eg, distribution or inference)
+                        // We should perform the instantiation and only check against the true type
+                        const mapper = (target as ConditionalType).mapper;
+                        const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                        const instantiatedExtends = instantiateType(root.extendsType, mapper);
+                        const checkConstraint = getSimplifiedType(instantiateType(root.checkType, combineTypeMappers(mapper, getBaseConstraintOrType)));
+                        inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                        const combinedMapper = combineTypeMappers(mapper, context);
+                        if (isRelatedTo(checkConstraint, instantiateType(root.extendsType, combinedMapper))) {
+                            if (result = isRelatedTo(source, instantiateType(root.trueType, combinedMapper))) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                    }
+                    if (result = isRelatedTo(source, getTrueTypeFromConditionalType(target as ConditionalType))) {
+                        if (result = isRelatedTo(source, getFalseTypeFromConditionalType(target as ConditionalType))) {
+                            errorInfo = saveErrorInfo;
+                            return result;
+                        }
+                    }
+                }
 
                 if (source.flags & TypeFlags.TypeVariable) {
                     if (source.flags & TypeFlags.IndexedAccess && target.flags & TypeFlags.IndexedAccess) {

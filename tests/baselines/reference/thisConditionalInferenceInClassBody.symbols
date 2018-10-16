@@ -1,0 +1,53 @@
+=== tests/cases/compiler/thisConditionalInferenceInClassBody.ts ===
+type Wrapped<T> = { ___secret: T };
+>Wrapped : Symbol(Wrapped, Decl(thisConditionalInferenceInClassBody.ts, 0, 0))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 0, 13))
+>___secret : Symbol(___secret, Decl(thisConditionalInferenceInClassBody.ts, 0, 19))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 0, 13))
+
+type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
+>Unwrap : Symbol(Unwrap, Decl(thisConditionalInferenceInClassBody.ts, 0, 35))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 1, 12))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 1, 12))
+>Wrapped : Symbol(Wrapped, Decl(thisConditionalInferenceInClassBody.ts, 0, 0))
+>U : Symbol(U, Decl(thisConditionalInferenceInClassBody.ts, 1, 40))
+>U : Symbol(U, Decl(thisConditionalInferenceInClassBody.ts, 1, 40))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 1, 12))
+
+declare function set<T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>): Unwrap<T[K]>;
+>set : Symbol(set, Decl(thisConditionalInferenceInClassBody.ts, 1, 52))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 3, 21))
+>K : Symbol(K, Decl(thisConditionalInferenceInClassBody.ts, 3, 23))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 3, 21))
+>obj : Symbol(obj, Decl(thisConditionalInferenceInClassBody.ts, 3, 43))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 3, 21))
+>key : Symbol(key, Decl(thisConditionalInferenceInClassBody.ts, 3, 50))
+>K : Symbol(K, Decl(thisConditionalInferenceInClassBody.ts, 3, 23))
+>value : Symbol(value, Decl(thisConditionalInferenceInClassBody.ts, 3, 58))
+>Unwrap : Symbol(Unwrap, Decl(thisConditionalInferenceInClassBody.ts, 0, 35))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 3, 21))
+>K : Symbol(K, Decl(thisConditionalInferenceInClassBody.ts, 3, 23))
+>Unwrap : Symbol(Unwrap, Decl(thisConditionalInferenceInClassBody.ts, 0, 35))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 3, 21))
+>K : Symbol(K, Decl(thisConditionalInferenceInClassBody.ts, 3, 23))
+
+class Foo {
+>Foo : Symbol(Foo, Decl(thisConditionalInferenceInClassBody.ts, 3, 94))
+
+    prop: Wrapped<string>;
+>prop : Symbol(Foo.prop, Decl(thisConditionalInferenceInClassBody.ts, 5, 11))
+>Wrapped : Symbol(Wrapped, Decl(thisConditionalInferenceInClassBody.ts, 0, 0))
+
+    method() {
+>method : Symbol(Foo.method, Decl(thisConditionalInferenceInClassBody.ts, 6, 26))
+
+        set(this, 'prop', 'hi'); // <-- type error
+>set : Symbol(set, Decl(thisConditionalInferenceInClassBody.ts, 1, 52))
+>this : Symbol(Foo, Decl(thisConditionalInferenceInClassBody.ts, 3, 94))
+    }
+}
+
+set(new Foo(), 'prop', 'hi'); // <-- typechecks
+>set : Symbol(set, Decl(thisConditionalInferenceInClassBody.ts, 1, 52))
+>Foo : Symbol(Foo, Decl(thisConditionalInferenceInClassBody.ts, 3, 94))
+

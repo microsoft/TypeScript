@@ -1,0 +1,40 @@
+=== tests/cases/compiler/thisConditionalInferenceInClassBody.ts ===
+type Wrapped<T> = { ___secret: T };
+>Wrapped : Wrapped<T>
+>___secret : T
+
+type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
+>Unwrap : Unwrap<T>
+
+declare function set<T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>): Unwrap<T[K]>;
+>set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>obj : T
+>key : K
+>value : Unwrap<T[K]>
+
+class Foo {
+>Foo : Foo
+
+    prop: Wrapped<string>;
+>prop : Wrapped<string>
+
+    method() {
+>method : () => void
+
+        set(this, 'prop', 'hi'); // <-- type error
+>set(this, 'prop', 'hi') : Unwrap<this["prop"]>
+>set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>this : this
+>'prop' : "prop"
+>'hi' : "hi"
+    }
+}
+
+set(new Foo(), 'prop', 'hi'); // <-- typechecks
+>set(new Foo(), 'prop', 'hi') : string
+>set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
+>new Foo() : Foo
+>Foo : typeof Foo
+>'prop' : "prop"
+>'hi' : "hi"
+
