@@ -2425,7 +2425,7 @@
         "category": "Error",
         "code": 2717
     },
-    "Duplicate declaration '{0}'.": {
+    "Duplicate property '{0}'.": {
         "category": "Error",
         "code": 2718
     },
