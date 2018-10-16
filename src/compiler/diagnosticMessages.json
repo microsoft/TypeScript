@@ -2485,6 +2485,10 @@
         "category": "Error",
         "code": 2732
     },
+    "Property '{0}' was also declared here.": {
+        "category": "Error",
+        "code": 2733
+    },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
