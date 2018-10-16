@@ -206,13 +206,30 @@ namespace ts.codefix {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
                 // TODO: @return might exist already with an annotation included
                 // TODO: declaration.parent.parent is wrong for lots of cases
-                const parent = declaration.parent.parent;
-                const typeTag = isGetAccessorDeclaration(parent) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
+                const parent = isVariableDeclaration(declaration) ? declaration.parent.parent : declaration;
+                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
                 const existingJSDoc = (parent as HasJSDoc).jsDoc && firstOrUndefined((parent as HasJSDoc).jsDoc!);
                 if (existingJSDoc) {
                     // TODO: Merge multiple parent JSDoc comments
-                    const tags = createNodeArray(existingJSDoc.tags ? [...existingJSDoc.tags, typeTag] : [typeTag]);
-                    const tag = createJSDocComment(existingJSDoc.comment, tags);
+                    let tags;
+                    if (existingJSDoc.tags) {
+                        let found = false;
+                        tags = existingJSDoc.tags.map(t => {
+                            if (t.kind === typeTag.kind) {
+                                found = true;
+                                typeTag.comment = t.comment;
+                                return typeTag;
+                            }
+                            return t;
+                        });
+                        if (!found) {
+                            tags.push(typeTag);
+                        }
+                    }
+                    else {
+                        tags = [typeTag];
+                    }
+                    const tag = createJSDocComment(existingJSDoc.comment, createNodeArray(tags));
                     changes.replaceExistingJsdocComments(sourceFile, parent as HasJSDoc, tag);
                 }
                 else {

@@ -2,7 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @noImplicitAny: true
-// @strictNullChecks: true
+// @strictNullChecks: false
 // @Filename: important.js
 
 /////** @param x no types here! */
@@ -12,11 +12,9 @@
 ////
 ////var o = {
 ////    /** @return Just one */
-////    get m() { return 1 }
+////    get m() { return undefined }
 ////}
-/////** @type Vestigial or superfluous? You decide. */
-////var x
-////x = 1
+////o.m = 1
 
 verify.codeFixAll({
     fixId: "inferFromUsage",
@@ -30,11 +28,11 @@ function f(x) {
 }
 
 var o = {
-    /** @return {number} Just one */
-    get m() { return 1 }
+    /**
+     * @returns {number} Just one
+     */
+    get m() { return undefined }
 }
-/** @type {number} Vestigial or superfluous? You decide. */
-var x
-x = 1`,
+o.m = 1`,
 });
 
