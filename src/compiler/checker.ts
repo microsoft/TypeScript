@@ -22698,8 +22698,10 @@ namespace ts {
                     if (checkForDisallowedESSymbolOperand(operator)) {
                         leftType = getBaseTypeOfLiteralType(checkNonNullType(leftType, left));
                         rightType = getBaseTypeOfLiteralType(checkNonNullType(rightType, right));
-                        if (!(isTypeComparableTo(leftType, rightType) || isTypeComparableTo(rightType, leftType) ||
-                            (isTypeAssignableTo(leftType, numberOrBigIntType) && isTypeAssignableTo(rightType, numberOrBigIntType))
+                        if (!checkTypeComparableWithLessOrGreaterThanOperator(leftType) &&
+                            !checkTypeComparableWithLessOrGreaterThanOperator(rightType) ||
+                            !(isTypeComparableTo(leftType, rightType) || isTypeComparableTo(rightType, leftType) ||
+                             (isTypeAssignableTo(leftType, numberOrBigIntType) && isTypeAssignableTo(rightType, numberOrBigIntType))
                         )) {
                             reportOperatorError();
                         }
@@ -22758,6 +22760,19 @@ namespace ts {
 
                 default:
                     return Debug.fail();
+            }
+
+            function checkTypeComparableWithLessOrGreaterThanOperator(valueType: Type): boolean {
+                const t = valueType.flags;
+                return (t === TypeFlags.String) ||
+                    (t === TypeFlags.Number) ||
+                    (t === TypeFlags.Any) ||
+                    (t === TypeFlags.TypeParameter) ||
+                    (t === TypeFlags.Enum) ||
+                    (t === TypeFlags.Object) ||
+                    (t === TypeFlags.Intersection) ||
+                    (t === (TypeFlags.EnumLiteral | TypeFlags.Union)) ||
+                    (t === (TypeFlags.Union));
             }
 
             function checkAssignmentDeclaration(kind: AssignmentDeclarationKind, rightType: Type) {
