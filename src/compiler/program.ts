@@ -2031,7 +2031,7 @@ namespace ts {
             redirect.resolvedPath = resolvedPath;
             redirect.originalFileName = originalFileName;
             redirect.redirectInfo = { redirectTarget, unredirected };
-            sourceFilesFoundSearchingNodeModules.set(path, !!sourceFilesFoundSearchingNodeModules.get(redirectTarget.path));
+            sourceFilesFoundSearchingNodeModules.set(path, currentNodeModulesDepth > 0);
             Object.defineProperties(redirect, {
                 id: {
                     get(this: SourceFile) { return this.redirectInfo!.redirectTarget.id; },
