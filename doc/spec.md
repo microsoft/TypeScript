@@ -278,7 +278,7 @@ f({});       // Error
 f("hello");  // Ok
 ```
 
-This optional type annotation on the parameter 's' lets the TypeScript type checker know that the programmer expects parameter 's' to be of type 'string'. Within the body of function 'f', tools can assume 's' is of type 'string' and provide operator type checking and member completion consistent with this assumption. Tools can also signal an error on the first call to 'f', because 'f' expects a string, not an object, as its parameter. For the function 'f', the TypeScript compiler will emit the following JavaScript code:
+This optional type annotation on the parameter 's' lets the TypeScript type checker know that the programmer expects parameter 's' to be of type 'string'. Within the body of function 'f', tools can assume 's' is of type 'string' and provide operator type checking and member completion consistent with this assumption. Tools can also signal an error on the first call to 'f' because 'f' expects a string, not an object, as its parameter. For the function 'f', the TypeScript compiler will emit the following JavaScript code:
 
 ```TypeScript
 function f(s) {  
@@ -419,7 +419,7 @@ Section [3.3](#3.3) provides additional information about object types.
 
 ## <a name="1.4"/>1.4 Structural Subtyping
 
-Object types are compared *structurally*. For example, in the code fragment below, class 'CPoint' matches interface 'Point' because 'CPoint' has all of the required members of 'Point'. A class may optionally declare that it implements an interface, so that the compiler will check the declaration for structural compatibility. The example also illustrates that an object type can match the type inferred from an object literal, as long as the object literal supplies all of the required members.
+Object types are compared *structurally*. For example, in the code fragment below, class 'CPoint' matches interface 'Point' because 'CPoint' has all of the required members of 'Point'. A class may optionally declare that it implements an interface, so that the compiler will check the declaration for structural compatibility. The following example also illustrates that an object type can match the type inferred from an object literal, as long as the object literal supplies all of the required members.
 
 ```TypeScript
 interface Point {  
@@ -523,7 +523,7 @@ var BankAccount: new() => BankAccount;
 
 The function signature is prefixed with the keyword 'new' indicating that the 'BankAccount' function must be called as a constructor. It is possible for a function's type to have both call and constructor signatures. For example, the type of the built-in JavaScript Date object includes both kinds of signatures.
 
-If we want to start our bank account with an initial balance, we can add to the 'BankAccount' class a constructor declaration.
+If we want to start our bank account with an initial balance, we can add to the 'BankAccount' class, a constructor declaration.
 
 ```TypeScript
 class BankAccount {  
