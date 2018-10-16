@@ -419,30 +419,26 @@ namespace ts.formatting {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             let indentNextTokenOrTrivia = false;
             if (leadingTrivia) {
-                if (leadingTrivia.every(t => t.kind !== SyntaxKind.MultiLineCommentTrivia)) {
-                    processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
-                }
-                else {
-                    const commentIndentation = initialIndentation;
-                    for (const triviaItem of leadingTrivia) {
-                        const triviaInRange = rangeContainsRange(originalRange, triviaItem);
-                        switch (triviaItem.kind) {
-                            case SyntaxKind.MultiLineCommentTrivia:
-                                if (triviaInRange) {
-                                    indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                                }
-                                indentNextTokenOrTrivia = false;
-                                break;
-                            case SyntaxKind.SingleLineCommentTrivia:
-                                if (indentNextTokenOrTrivia && triviaInRange) {
-                                    insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
-                                }
-                                indentNextTokenOrTrivia = false;
-                                break;
-                            case SyntaxKind.NewLineTrivia:
-                                indentNextTokenOrTrivia = true;
-                                break;
-                        }
+                const commentIndentation = initialIndentation;
+                for (const triviaItem of leadingTrivia) {
+                    const triviaInRange = rangeContainsRange(originalRange, triviaItem);
+                    switch (triviaItem.kind) {
+                        case SyntaxKind.MultiLineCommentTrivia:
+                            if (triviaInRange) {
+                                indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                            }
+                            indentNextTokenOrTrivia = false;
+                            break;
+                        case SyntaxKind.SingleLineCommentTrivia:
+                            if (indentNextTokenOrTrivia && triviaInRange) {
+                                const triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
+                                processRange(triviaItem, triviaItemStart, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!);
+                            }
+                            indentNextTokenOrTrivia = false;
+                            break;
+                        case SyntaxKind.NewLineTrivia:
+                            indentNextTokenOrTrivia = true;
+                            break;
                     }
                 }
                 trimTrailingWhitespacesForRemainingRange();
@@ -1102,7 +1098,10 @@ namespace ts.formatting {
          * Trimming will be done for lines after the previous range
          */
         function trimTrailingWhitespacesForRemainingRange() {
-            const startPosition = previousRange ? previousRange.end : originalRange.pos;
+            if (!previousRange) {
+                return;
+            }
+            const startPosition = previousRange.end;
 
             const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;

@@ -30,16 +30,11 @@ function f(x) {
 }
 
 var o = {
-    /**
-     * @return {number} Just one
-     */
+    /** @return {number} Just one */
     get m() { return 1 }
 }
-/**
- * @type {number} Vestigial or superfluous? You decide.
- */
+/** @type {number} Vestigial or superfluous? You decide. */
 var x
-x = 1
-`,
+x = 1`,
 });
 

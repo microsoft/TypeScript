@@ -7,24 +7,35 @@
 // @Filename: important.js
 ////class C {
 ////    constructor() {
-////        [|this.p|] = undefined;
+////        /** this is fine */
+////        this.p = undefined;
+////        this.q = undefined
 ////    }
 ////    method() {
 ////        this.p.push(1)
+////        this.q.push(1);
 ////    }
 ////}
 
 
 // Note: Should be number[] | undefined, but inference currently privileges assignments
 // over usage (even when the only result is undefined) and infers only undefined.
-verify.fileAfterCodeFix(
+verify.codeFixAll({
+    fixId: "inferFromUsage",
+    fixAllDescription: "Infer all types from usage",
+    newFileContent:
 `class C {
     constructor() {
-        /** @type {undefined} */
+        /**
+         * this is fine
+         * @type {undefined}
+         */
         this.p = undefined;
+        /** @type {undefined} */
+        this.q = undefined
     }
     method() {
         this.p.push(1)
+        this.q.push(1);
     }
-}
-`, undefined, 2);
+}`});

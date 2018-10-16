@@ -347,15 +347,17 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public replaceExistingJsdocComments(sourceFile: SourceFile, signature: SignatureDeclaration, firstOldTag: JSDoc, lastOldTag: JSDoc, tag: JSDoc) {
-            // TODO: Might not need signature to get the indent
-            const fnStart = signature.getStart(sourceFile);
-            const indent = getIndent(sourceFile, fnStart);
-            this.replaceNodeRange(sourceFile, firstOldTag, lastOldTag, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
+        public replaceExistingJsdocComments(sourceFile: SourceFile, parent: HasJSDoc, tag: JSDoc) {
+            if (!parent.jsDoc) {
+                return Debug.fail("Parent node must have jsdoc to replace");
+            }
+            const firstOldTag = first(parent.jsDoc);
+            const lastOldTag = last(parent.jsDoc);
+            this.replaceNodeRange(sourceFile, firstOldTag, lastOldTag, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}` });
         }
 
-        public insertJsdocCommentBefore(sourceFile: SourceFile, signature: SignatureDeclaration, tag: JSDoc) {
-            const fnStart = signature.getStart(sourceFile);
+        public insertJsdocCommentBefore(sourceFile: SourceFile, node: Node, tag: JSDoc) {
+            const fnStart = node.getStart(sourceFile);
             const indent = getIndent(sourceFile, fnStart);
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
         }
@@ -384,20 +386,6 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
-        }
-
-        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
-            // TODO: Convert to constructors and remove this formatting here too
-            const printed = changesToText.getNonformattedText(type, sourceFile, this.newLineCharacter).text;
-            let commentText;
-            if (isGetAccessorDeclaration(node)) {
-                commentText = ` @return {${printed}} `;
-            }
-            else {
-                commentText = ` @type {${printed}} `;
-                node = node.parent;
-            }
-            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart(sourceFile)).character, node.getStart(sourceFile), commentText);
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {

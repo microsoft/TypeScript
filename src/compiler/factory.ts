@@ -2180,6 +2180,22 @@ namespace ts {
     }
 
     /* @internal */
+    export function createJSDocTypeTag(type: TypeNode, comment: string): JSDocTypeTag {
+        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
+        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocReturnTag(type: TypeNode, comment: string): JSDocReturnTag {
+        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
+        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
     export function createJSDocParamTag(type: TypeNode, name: EntityName, isOptional: boolean, comment: string): JSDocParameterTag {
         const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
         tag.typeExpression = createJSDocTypeExpression(type);

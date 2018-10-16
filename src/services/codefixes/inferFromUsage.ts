@@ -73,7 +73,19 @@ namespace ts.codefix {
                     const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
                     const typeNode = type && getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
-                        changes.tryInsertJSDocType(sourceFile, parent, typeNode);
+                        const typeTag = createJSDocTypeTag(typeNode, /*comment*/ "");
+                        const assignment = parent.parent.parent as ExpressionStatement;
+                        const existingJSDoc = assignment.jsDoc && firstOrUndefined(assignment.jsDoc);
+                        if (existingJSDoc) {
+                            // TODO: Merge multiple parent JSDoc comments
+                            const tags = createNodeArray(existingJSDoc.tags ? [...existingJSDoc.tags, typeTag] : [typeTag]);
+                            const tag = createJSDocComment(existingJSDoc.comment, tags);
+                            changes.replaceExistingJsdocComments(sourceFile, assignment, tag);
+                        }
+                        else {
+                            const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
+                            changes.insertJsdocCommentBefore(sourceFile, assignment, tag);
+                        }
                     }
                     return parent;
                 }
@@ -192,7 +204,22 @@ namespace ts.codefix {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-                changes.tryInsertJSDocType(sourceFile, declaration, typeNode);
+                // TODO: @return might exist already with an annotation included
+                // TODO: declaration.parent.parent is wrong for lots of cases
+                const parent = declaration.parent.parent;
+                const typeTag = isGetAccessorDeclaration(parent) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
+                const existingJSDoc = (parent as HasJSDoc).jsDoc && firstOrUndefined((parent as HasJSDoc).jsDoc!);
+                if (existingJSDoc) {
+                    // TODO: Merge multiple parent JSDoc comments
+                    const tags = createNodeArray(existingJSDoc.tags ? [...existingJSDoc.tags, typeTag] : [typeTag]);
+                    const tag = createJSDocComment(existingJSDoc.comment, tags);
+                    changes.replaceExistingJsdocComments(sourceFile, parent as HasJSDoc, tag);
+                }
+                else {
+                    const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
+                    changes.insertJsdocCommentBefore(sourceFile, parent, tag);
+                }
+
             }
             else {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
@@ -201,9 +228,8 @@ namespace ts.codefix {
     }
 
     function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ParameterInference[], program: Program, host: LanguageServiceHost): void {
-
         // find
-        const paramTags = createMap<JSDocTag>();
+        const paramTags = createMap<JSDocParameterTag>();
         forEach(parameterInferences, inference => {
             const param = inference.declaration;
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
@@ -219,18 +245,18 @@ namespace ts.codefix {
         let things: JSDocTag[] = [];
         if (existingJsdoc) {
             // `/** foo */` --> `/**\n * @constructor\n * foo */`
-            // TODO: This is basically the right structure, but of course the code is buggy.
             if (existingJsdoc.tags) {
                 for (const t of existingJsdoc.tags) {
                     if (isJSDocParameterTag(t) && isIdentifier(t.name)) {
                         const x = paramTags.get(t.name.escapedText as string);
                         if (x) {
-                            // TODO: Update x
+                            x.comment = t.comment;
+                            x.isBracketed = x.isBracketed || t.isBracketed;
                             things.push(x);
                             paramTags.delete(t.name.escapedText as string);
                         }
                         else {
-                            things.push(t); // TODO: This doesn't roundtrip correctly (the comment prints as "undefined")
+                            things.push(t);
                         }
                     }
                     else {
@@ -242,8 +268,9 @@ namespace ts.codefix {
             else {
                 things = arrayFrom(paramTags.values());
             }
+            // TODO: Merge multiple comments
             tag = createJSDocComment(existingJsdoc.comment, createNodeArray(things));
-            changes.replaceExistingJsdocComments(sourceFile, signature, first(signature.jsDoc!), last(signature.jsDoc!), tag);
+            changes.replaceExistingJsdocComments(sourceFile, signature, tag);
         }
         else {
             tag = createJSDocComment(/*comment*/ undefined, createNodeArray(arrayFrom(paramTags.values())));

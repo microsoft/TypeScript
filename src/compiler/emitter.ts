@@ -865,6 +865,8 @@ namespace ts {
                     // JSDoc nodes
                     case SyntaxKind.JSDocParameterTag:
                         return emitJSDocParameterTag(node as JSDocParameterTag);
+                    case SyntaxKind.JSDocTypeTag:
+                        return emitJSDocTypeTag(node as JSDocTypeTag);
                     case SyntaxKind.JSDocComment:
                         return emitJSDocComment(node as JSDoc);
 
@@ -2595,15 +2597,37 @@ namespace ts {
         function emitJSDocComment(node: JSDoc) {
             write("/**");
             if (node.comment) {
+                writeLine();
                 writeSpace();
                 writePunctuation("*");
+                writeSpace();
                 write(node.comment);
             }
             if (node.tags) {
-                emitList(node, node.tags, ListFormat.JSDocComment);
+                if (node.tags.length === 1 && node.tags[0].kind === SyntaxKind.JSDocTypeTag && !node.comment) {
+                    writeSpace();
+                    emit(node.tags[0]);
+                }
+                else {
+                    emitList(node, node.tags, ListFormat.JSDocComment);
+                }
             }
             writeSpace();
             write("*/");
+        }
+
+        function emitJSDocTypeTag(type: JSDocTypeTag) {
+            write("@type");
+            writeSpace();
+            if (type.typeExpression) {
+                writePunctuation("{");
+                emit(type.typeExpression.type);
+                writePunctuation("}");
+            }
+            if (type.comment) {
+                writeSpace();
+                write(type.comment);
+            }
         }
 
         function emitJSDocParameterTag(param: JSDocParameterTag) {
@@ -2622,7 +2646,10 @@ namespace ts {
             if (param.isBracketed) {
                 writePunctuation("]");
             }
-            write(param.comment || "");
+            if (param.comment) {
+                writeSpace();
+                write(param.comment);
+            }
         }
 
         //
