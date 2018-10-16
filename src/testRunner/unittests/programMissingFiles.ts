@@ -98,4 +98,27 @@ namespace ts {
             ]);
         });
     });
+
+    describe("Program.isSourceFileFromExternalLibrary", () => {
+        it("works on redirect files", () => {
+            // In this example '/node_modules/foo/index.d.ts' will redirect to '/node_modules/bar/node_modules/foo/index.d.ts'.
+            const a = new documents.TextDocument("/a.ts", 'import * as bar from "bar"; import * as foo from "foo";');
+            const bar = new documents.TextDocument("/node_modules/bar/index.d.ts", 'import * as foo from "foo";');
+            const fooPackageJsonText = '{ "name": "foo", "version": "1.2.3" }';
+            const fooIndexText = "export const x: number;";
+            const barFooPackage = new documents.TextDocument("/node_modules/bar/node_modules/foo/package.json", fooPackageJsonText);
+            const barFooIndex = new documents.TextDocument("/node_modules/bar/node_modules/foo/index.d.ts", fooIndexText);
+            const fooPackage = new documents.TextDocument("/node_modules/foo/package.json", fooPackageJsonText);
+            const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", fooIndexText);
+
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
+            const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+
+            for (const file of [a, bar, barFooIndex, fooIndex]) {
+                const isExternalExpected = file !== a;
+                const isExternalActual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
+                assert.equal(isExternalActual, isExternalExpected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${isExternalExpected}, got ${isExternalActual}`);
+            }
+        });
+    });
 }

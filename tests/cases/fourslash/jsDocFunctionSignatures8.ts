@@ -14,4 +14,4 @@
 ////}
 ////var p = new Pers/**/on();
 goTo.marker();
-verify.quickInfoIs("function Person(name: string, age: number): void", "Represents a person\na b multiline test");
+verify.quickInfoIs("function Person(name: string, age: number): Person", "Represents a person\na b multiline test");

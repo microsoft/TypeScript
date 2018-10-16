@@ -238,7 +238,7 @@ function f7() {
     var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
 >x : number
 >0 : 0
->y : string | 1
+>y : string | number
 >1 : 1
 >[1, "hello"] : [number, string]
 >1 : 1
@@ -248,7 +248,7 @@ function f7() {
 >x : number
 
     var y: string;
->y : string | 1
+>y : string | number
 }
 
 function f8() {

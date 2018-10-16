@@ -2512,11 +2512,16 @@ namespace ts {
         // via wildcard, and to handle extension priority.
         const wildcardFileMap = createMap<string>();
 
+        // Wildcard paths of json files (provided via the "includes" array in tsconfig.json) are stored in a
+        // file map with a possibly case insensitive key. We use this map to store paths matched
+        // via wildcard of *.json kind
+        const wildCardJsonFileMap = createMap<string>();
         const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -2527,8 +2532,25 @@ namespace ts {
             }
         }
 
+        let jsonOnlyIncludeRegexes: ReadonlyArray<RegExp> | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+                if (fileExtensionIs(file, Extension.Json)) {
+                    // Valid only if *.json specified
+                    if (!jsonOnlyIncludeRegexes) {
+                        const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
+                        const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
+                        jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
+                    }
+                    const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
+                    if (includeIndex !== -1) {
+                        const key = keyMapper(file);
+                        if (!literalFileMap.has(key) && !wildCardJsonFileMap.has(key)) {
+                            wildCardJsonFileMap.set(key, file);
+                        }
+                    }
+                    continue;
+                }
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -2556,7 +2578,7 @@ namespace ts {
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
         return {
-            fileNames: literalFiles.concat(wildcardFiles),
+            fileNames: literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values())),
             wildcardDirectories,
             spec
         };
