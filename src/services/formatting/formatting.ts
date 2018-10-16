@@ -365,16 +365,21 @@ namespace ts.formatting {
     function formatSpan(originalRange: TextRange, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         const enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        return getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end, scanner => formatSpanWorker(
-            originalRange,
-            enclosingNode,
-            SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, formatContext.options),
-            getOwnOrInheritedDelta(enclosingNode, formatContext.options, sourceFile),
-            scanner,
-            formatContext,
-            requestKind,
-            prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
-            sourceFile));
+        return getFormattingScanner(
+            sourceFile.text,
+            sourceFile.languageVariant,
+            getScanStartPosition(enclosingNode, originalRange, sourceFile),
+            originalRange.end,
+            scanner => formatSpanWorker(
+                originalRange,
+                enclosingNode,
+                SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, formatContext.options),
+                getOwnOrInheritedDelta(enclosingNode, formatContext.options, sourceFile),
+                scanner,
+                formatContext,
+                requestKind,
+                prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
+                sourceFile));
     }
 
     function formatSpanWorker(originalRange: TextRange,
@@ -414,27 +419,33 @@ namespace ts.formatting {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             let indentNextTokenOrTrivia = false;
             if (leadingTrivia) {
-                const commentIndentation = initialIndentation;
-                for (const triviaItem of leadingTrivia) {
-                    const triviaInRange = rangeContainsRange(originalRange, triviaItem);
-                    switch (triviaItem.kind) {
-                        case SyntaxKind.MultiLineCommentTrivia:
-                            if (triviaInRange) {
-                                indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                            }
-                            indentNextTokenOrTrivia = false;
-                            break;
-                        case SyntaxKind.SingleLineCommentTrivia:
-                            if (indentNextTokenOrTrivia && triviaInRange) {
-                                insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
-                            }
-                            indentNextTokenOrTrivia = false;
-                            break;
-                        case SyntaxKind.NewLineTrivia:
-                            indentNextTokenOrTrivia = true;
-                            break;
+                if (leadingTrivia.every(t => t.kind !== SyntaxKind.MultiLineCommentTrivia)) {
+                    processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
+                }
+                else {
+                    const commentIndentation = initialIndentation;
+                    for (const triviaItem of leadingTrivia) {
+                        const triviaInRange = rangeContainsRange(originalRange, triviaItem);
+                        switch (triviaItem.kind) {
+                            case SyntaxKind.MultiLineCommentTrivia:
+                                if (triviaInRange) {
+                                    indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                                }
+                                indentNextTokenOrTrivia = false;
+                                break;
+                            case SyntaxKind.SingleLineCommentTrivia:
+                                if (indentNextTokenOrTrivia && triviaInRange) {
+                                    insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
+                                }
+                                indentNextTokenOrTrivia = false;
+                                break;
+                            case SyntaxKind.NewLineTrivia:
+                                indentNextTokenOrTrivia = true;
+                                break;
+                        }
                     }
                 }
+                trimTrailingWhitespacesForRemainingRange();
             }
         }
 
@@ -881,7 +892,6 @@ namespace ts.formatting {
             }
         }
 
-        // TODO: GH#18217 use an enum instead of `boolean | undefined`
         function processRange(range: TextRangeWithKind,
             rangeStart: LineAndCharacter,
             parent: Node,
@@ -1086,6 +1096,18 @@ namespace ts.formatting {
                 return pos + 1;
             }
             return -1;
+        }
+
+        /**
+         * Trimming will be done for lines after the previous range
+         */
+        function trimTrailingWhitespacesForRemainingRange() {
+            const startPosition = previousRange ? previousRange.end : originalRange.pos;
+
+            const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
+            const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;
+
+            trimTrailingWhitespacesForLines(startLine, endLine + 1, previousRange);
         }
 
         function recordDelete(start: number, len: number) {
