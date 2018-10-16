@@ -97,7 +97,7 @@ namespace ts.tscWatch {
         const tests = subProjectFiles(SubProject.tests);
         const ui = subProjectFiles(SubProject.ui);
         const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
-        const testProjectExpectedWatchedFiles = [core[0], core[1], core[2], ...logic, ...tests].map(f => f.path);
+        const testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
         const testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
 
         function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
@@ -244,7 +244,7 @@ export class someClass2 { }`);
             const allFiles = [libFile, ...core, logic[1], ...tests];
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, [core[0], core[1], core[2], logic[0], ...tests].map(f => f.path));
+            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path)); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
             checkOutputErrorsInitial(host, [
