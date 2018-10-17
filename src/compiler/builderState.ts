@@ -37,7 +37,7 @@ namespace ts {
          */
         readonly referencedMap: ReadonlyMap<BuilderState.ReferencedSet> | undefined;
         /**
-         * Contains the map of exported modules ReferencedSet=exorted module files from the file if module emit is enabled
+         * Contains the map of exported modules ReferencedSet=exported module files from the file if module emit is enabled
          * Otherwise undefined
          */
         readonly exportedModulesMap: Map<BuilderState.ReferencedSet> | undefined;
@@ -268,9 +268,9 @@ namespace ts.BuilderState {
      */
     export function getFilesAffectedBy(state: BuilderState, programOfThisState: Program, path: Path, cancellationToken: CancellationToken | undefined, computeHash: ComputeHash, cacheToUpdateSignature?: Map<string>, exportedModulesMapCache?: ComputingExportedModulesMap): ReadonlyArray<SourceFile> {
         // Since the operation could be cancelled, the signatures are always stored in the cache
-        // They will be commited once it is safe to use them
+        // They will be committed once it is safe to use them
         // eg when calling this api from tsserver, if there is no cancellation of the operation
-        // In the other cases the affected files signatures are commited only after the iteration through the result is complete
+        // In the other cases the affected files signatures are committed only after the iteration through the result is complete
         const signatureCache = cacheToUpdateSignature || createMap();
         const sourceFile = programOfThisState.getSourceFileByPath(path);
         if (!sourceFile) {
