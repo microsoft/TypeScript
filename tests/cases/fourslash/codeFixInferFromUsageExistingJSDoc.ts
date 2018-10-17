@@ -11,7 +11,15 @@
 ////}
 ////
 ////var o = {
-////    /** @return Just one */
+////    /** 1
+////     * @return First one
+////     */
+////    /** 2
+////     * @see also
+////     */
+////    /** 3
+////     * @return Second one
+////     */
 ////    get m() { return undefined }
 ////}
 ////o.m = 1
@@ -29,7 +37,9 @@ function f(x) {
 
 var o = {
     /**
-     * @returns {number} Just one
+     * 1 2 3
+     * @returns {number} First one
+     * @see also
      */
     get m() { return undefined }
 }

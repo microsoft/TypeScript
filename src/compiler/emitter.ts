@@ -871,6 +871,8 @@ namespace ts {
                         return emitJSDocTypeTag(node as JSDocTypeTag);
                     case SyntaxKind.JSDocComment:
                         return emitJSDocComment(node as JSDoc);
+                    case SyntaxKind.JSDocTag:
+                        return emitJSDocTag(node as JSDocTag);
 
                     // Transformation nodes (ignored)
                 }
@@ -2632,10 +2634,19 @@ namespace ts {
             }
         }
 
+        function emitJSDocTag(tag: JSDocTag) {
+            writePunctuation("@");
+            emit(tag.tagName);
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
+        }
+
         function emitJSDocReturnTag(type: JSDocReturnTag) {
             write("@returns");
-            writeSpace();
             if (type.typeExpression) {
+                writeSpace();
                 writePunctuation("{");
                 emit(type.typeExpression.type);
                 writePunctuation("}");

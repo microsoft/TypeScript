@@ -204,33 +204,36 @@ namespace ts.codefix {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-                // TODO: @return might exist already with an annotation included
-                // TODO: declaration.parent.parent is wrong for lots of cases
                 const parent = isVariableDeclaration(declaration) ? declaration.parent.parent : declaration;
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
-                const existingJSDoc = (parent as HasJSDoc).jsDoc && firstOrUndefined((parent as HasJSDoc).jsDoc!);
-                if (existingJSDoc) {
-                    // TODO: Merge multiple parent JSDoc comments
-                    let tags;
-                    if (existingJSDoc.tags) {
-                        let found = false;
-                        tags = existingJSDoc.tags.map(t => {
-                            if (t.kind === typeTag.kind) {
-                                found = true;
-                                typeTag.comment = t.comment;
-                                return typeTag;
+                let found = false;
+                let tags = [];
+                if (hasJSDocNodes(parent)) {
+                    let parentComments = [];
+                    for (const existingJSDoc of parent.jsDoc!) {
+                        if (existingJSDoc.comment) {
+                            parentComments.push(existingJSDoc.comment);
+                        }
+                        if (existingJSDoc.tags) {
+                            for (const t of existingJSDoc.tags) {
+                                if (t.kind === typeTag.kind) { // TODO: Also have to account for name if extracing this to params
+                                    if(!found) {
+                                        found = true;
+                                        typeTag.comment = t.comment;
+                                        tags.push(typeTag);
+                                    }
+                                }
+                                else {
+                                    tags.push(t);
+                                }
                             }
-                            return t;
-                        });
-                        if (!found) {
-                            tags.push(typeTag);
                         }
                     }
-                    else {
-                        tags = [typeTag];
+                    if (!found) {
+                        tags.push(typeTag);
                     }
-                    const tag = createJSDocComment(existingJSDoc.comment, createNodeArray(tags));
-                    changes.replaceExistingJsdocComments(sourceFile, parent as HasJSDoc, tag);
+                    const tag = createJSDocComment(parentComments.join(" "), createNodeArray(tags));
+                    changes.replaceExistingJsdocComments(sourceFile, parent, tag);
                 }
                 else {
                     const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));

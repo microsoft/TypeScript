@@ -339,14 +339,6 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        // TODO: Replace this with a call to insertNodeAt as well
-        public insertCommentThenNewline(sourceFile: SourceFile, indent: number, position: number, commentText: string): void {
-            // TODO: Use indentation between (beginning of line | preceding non-whitespace character) to indent instead
-            const token = getTouchingToken(sourceFile, position);
-            const text = "/**" + commentText + "*/" + this.newLineCharacter + repeatString(" ", indent);
-            this.insertText(sourceFile, token.getStart(sourceFile), text);
-        }
-
         public replaceExistingJsdocComments(sourceFile: SourceFile, parent: HasJSDoc, tag: JSDoc) {
             if (!parent.jsDoc) {
                 return Debug.fail("Parent node must have jsdoc to replace");
