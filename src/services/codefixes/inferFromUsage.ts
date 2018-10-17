@@ -216,12 +216,10 @@ namespace ts.codefix {
                         }
                         if (existingJSDoc.tags) {
                             for (const t of existingJSDoc.tags) {
-                                if (t.kind === typeTag.kind) { // TODO: Also have to account for name if extracing this to params
-                                    if(!found) {
-                                        found = true;
-                                        typeTag.comment = t.comment;
-                                        tags.push(typeTag);
-                                    }
+                                if (t.kind === typeTag.kind && !found) {
+                                    found = true;
+                                    typeTag.comment = t.comment;
+                                    tags.push(typeTag);
                                 }
                                 else {
                                     tags.push(t);
@@ -260,36 +258,37 @@ namespace ts.codefix {
 
         // resolve
         const signature = parameterInferences[0].declaration.parent;
-        const existingJsdoc = signature.jsDoc && firstOrUndefined(signature.jsDoc);
         let tag;
-        let things: JSDocTag[] = [];
-        if (existingJsdoc) {
-            // `/** foo */` --> `/**\n * @constructor\n * foo */`
-            if (existingJsdoc.tags) {
-                for (const t of existingJsdoc.tags) {
-                    if (isJSDocParameterTag(t) && isIdentifier(t.name)) {
-                        const x = paramTags.get(t.name.escapedText as string);
-                        if (x) {
-                            x.comment = t.comment;
-                            x.isBracketed = x.isBracketed || t.isBracketed;
-                            things.push(x);
-                            paramTags.delete(t.name.escapedText as string);
+        if (hasJSDocNodes(signature)) {
+            let parentComments = [];
+            let things: JSDocTag[] = [];
+            for (const jsdoc of signature.jsDoc!) {
+                if (jsdoc.comment) {
+                    parentComments.push(jsdoc.comment);
+                }
+                if (jsdoc.tags) {
+                    for (const t of jsdoc.tags) {
+                        if (isJSDocParameterTag(t) && isIdentifier(t.name)) {
+                            const x = paramTags.get(t.name.escapedText as string);
+                            if (x) {
+                                x.comment = t.comment;
+                                x.isBracketed = x.isBracketed || t.isBracketed;
+                                things.push(x);
+                                paramTags.delete(t.name.escapedText as string);
+                            }
+                            else {
+                                things.push(t);
+                            }
                         }
                         else {
                             things.push(t);
                         }
                     }
-                    else {
-                        things.push(t);
-                    }
                 }
-                things.push(...arrayFrom(paramTags.values()));
             }
-            else {
-                things = arrayFrom(paramTags.values());
-            }
-            // TODO: Merge multiple comments
-            tag = createJSDocComment(existingJsdoc.comment, createNodeArray(things));
+            paramTags.forEach(v => things.push(v));
+
+            tag = createJSDocComment(parentComments.join(" "), createNodeArray(things));
             changes.replaceExistingJsdocComments(sourceFile, signature, tag);
         }
         else {

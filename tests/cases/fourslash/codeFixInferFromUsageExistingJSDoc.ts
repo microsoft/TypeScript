@@ -6,6 +6,15 @@
 // @Filename: important.js
 
 /////** @param x no types here! */
+/////**
+//// * 1
+//// * @param x a duplicate!
+//// * @param y yy
+//// */
+/////**
+//// * 2
+//// * @param z zz
+//// */
 ////function f(x) {
 ////    return x * 1
 ////}
@@ -19,6 +28,13 @@
 ////     */
 ////    /** 3
 ////     * @return Second one
+////     * @extends {*} nothing really
+////     * @class
+////     * @this doesn't make sense here
+////     * @enum wat
+////     * @template {string} T
+////     * @typedef {number} Meter
+////     * @callback Thunk not sure what this will do
 ////     */
 ////    get m() { return undefined }
 ////}
@@ -29,7 +45,11 @@ verify.codeFixAll({
     fixAllDescription: "Infer all types from usage",
     newFileContent:
 `/**
+ * 1 2
  * @param {number} x no types here!
+ * @param x a duplicate!
+ * @param y yy
+ * @param z zz
  */
 function f(x) {
     return x * 1
@@ -40,6 +60,14 @@ var o = {
      * 1 2 3
      * @returns {number} First one
      * @see also
+     * @returns Second one
+     * @extends {*} nothing really
+     * @class
+     * @this doesn't make sense here
+     * @enum wat
+     * @template {string} T
+     * @typedef {number} Meter
+     * @callback Thunk not sure what this will do
      */
     get m() { return undefined }
 }
