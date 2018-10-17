@@ -16732,8 +16732,8 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return isNumericLiteralName(name) && getIndexTypeOfContextualType(type, IndexKind.Number) ||
-                        getIndexTypeOfContextualType(type, IndexKind.String);
+                    return isNumericLiteralName(name) && getIndexTypeOfContextualType(t, IndexKind.Number) ||
+                        getIndexTypeOfContextualType(t, IndexKind.String);
                 }
                 return undefined;
             }, /*noReductions*/ true);
