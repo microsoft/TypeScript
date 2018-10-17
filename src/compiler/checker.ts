@@ -13644,6 +13644,17 @@ namespace ts {
                         }
                         return;
                     }
+                    else {
+                        // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
+                        const simplified = getSimplifiedType(target);
+                        if (simplified !== target) {
+                            const key = source.id + "," + simplified.id;
+                            if (!visited || !visited.get(key)) {
+                                (visited || (visited = createMap<boolean>())).set(key, true);
+                                inferFromTypes(source, simplified);
+                            }
+                        }
+                    }
                 }
                 if (getObjectFlags(source) & ObjectFlags.Reference && getObjectFlags(target) & ObjectFlags.Reference && (<TypeReference>source).target === (<TypeReference>target).target) {
                     // If source and target are references to the same generic type, infer from type arguments
