@@ -11964,19 +11964,22 @@ namespace ts {
                         const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
                         const instantiatedExtends = instantiateType(root.extendsType, mapper);
                         const checkConstraint = getSimplifiedType(instantiateType(root.checkType, mapper));
-                        // TODO: Use InferencePriority.NoConstraints for type parameters which are being used contravariantly/in a write-only context
-                        // (Or, ideally, some future InferencePriority.SuperConstraints should we start tracking them!)
-                        // As-is, this is unsound - it can be made stricter by replacing `instantiateType(root.trueType, combinedMapper)` with
-                        // `getintersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)])` which
-                        // would preserve the type-parametery-ness of the check; but such a limitation makes this branch almost useless, as only
+                        // TODO:
+                        // As-is, this is effectively sound, but not particularly useful, thanks to all the types it wrongly rejects - only
                         // conditional types with effectively "independent" inference parameters will end up being assignable via this branch, eg
                         // `type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? T | P1 : never;`
-                        // contains a union in the `true` branch, and so while we can't confirm assignability to `P1`, we _could_ confirm assignability
-                        // to `T`.
+                        // contains a union in the `true` branch, and so while we can't confirm assignability to `P1`, we can confirm assignability to `T`.
+                        // A lenient version could be made by replacing `getintersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)])`
+                        // with `instantiateType(root.trueType, combinedMapper)` which would skip checking aginst the type-parametery-ness of the check;
+                        // but such a change introduces quite a bit of unsoundness as we stop checking against the type-parameteryness of the `infer` type,
+                        // which in turn prevents us from erroring on, eg, unsafe write-position assignments of the constraint of the type.
+                        // To be correct here, we'd need to track the implied variance of the infer parameters and _infer_ appropriately (in addition to checking appropriately)
+                        // Specifically, we'd need to infer with `InferencePriority.NoConstraint` (or ideally a hypothetical `InferencePriority.SuperConstraint`) for contravariant types,
+                        // but continue using the constraints for covariant ones.
                         inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.AlwaysStrict);
                         const combinedMapper = combineTypeMappers(mapper, context);
                         if (isRelatedTo(checkConstraint, instantiateType(root.extendsType, combinedMapper))) {
-                            if (result = isRelatedTo(source, instantiateType(root.trueType, combinedMapper), reportErrors)) {
+                            if (result = isRelatedTo(source, getIntersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)]), reportErrors)) {
                                 errorInfo = saveErrorInfo;
                                 return result;
                             }

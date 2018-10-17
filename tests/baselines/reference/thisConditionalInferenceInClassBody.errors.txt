@@ -1,0 +1,31 @@
+tests/cases/compiler/thisConditionalInferenceInClassBody.ts(10,27): error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
+  Type '"hi"' is not assignable to type 'string & U'.
+    Type '"hi"' is not assignable to type 'U'.
+
+
+==== tests/cases/compiler/thisConditionalInferenceInClassBody.ts (1 errors) ====
+    type Wrapped<T> = { ___secret: T };
+    type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
+    
+    declare function set<T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>): Unwrap<T[K]>;
+    
+    class Foo {
+        prop: Wrapped<string>;
+    
+        method() {
+            set(this, 'prop', 'hi'); // <-- type error
+                              ~~~~
+!!! error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
+!!! error TS2345:   Type '"hi"' is not assignable to type 'string & U'.
+!!! error TS2345:     Type '"hi"' is not assignable to type 'U'.
+        }
+    }
+    
+    set(new Foo(), 'prop', 'hi'); // <-- typechecks
+    
+    type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+    
+    function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
+        return x;
+    }
+    

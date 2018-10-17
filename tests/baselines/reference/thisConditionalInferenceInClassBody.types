@@ -22,7 +22,7 @@ class Foo {
 >method : () => void
 
         set(this, 'prop', 'hi'); // <-- type error
->set(this, 'prop', 'hi') : Unwrap<this["prop"]>
+>set(this, 'prop', 'hi') : any
 >set : <T, K extends keyof T>(obj: T, key: K, value: Unwrap<T[K]>) => Unwrap<T[K]>
 >this : this
 >'prop' : "prop"
