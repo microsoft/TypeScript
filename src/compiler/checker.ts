@@ -11963,11 +11963,20 @@ namespace ts {
                         const mapper = (target as ConditionalType).mapper;
                         const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
                         const instantiatedExtends = instantiateType(root.extendsType, mapper);
-                        const checkConstraint = getSimplifiedType(instantiateType(root.checkType, combineTypeMappers(mapper, getBaseConstraintOrType)));
-                        inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.NoConstraints | InferencePriority.AlwaysStrict);
+                        const checkConstraint = getSimplifiedType(instantiateType(root.checkType, mapper));
+                        // TODO: Use InferencePriority.NoConstraints for type parameters which are being used contravariantly/in a write-only context
+                        // (Or, ideally, some future InferencePriority.SuperConstraints should we start tracking them!)
+                        // As-is, this is unsound - it can be made stricter by replacing `instantiateType(root.trueType, combinedMapper)` with
+                        // `getintersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)])` which
+                        // would preserve the type-parametery-ness of the check; but such a limitation makes this branch almost useless, as only
+                        // conditional types with effectively "independent" inference parameters will end up being assignable via this branch, eg
+                        // `type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? T | P1 : never;`
+                        // contains a union in the `true` branch, and so while we can't confirm assignability to `P1`, we _could_ confirm assignability
+                        // to `T`.
+                        inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.AlwaysStrict);
                         const combinedMapper = combineTypeMappers(mapper, context);
                         if (isRelatedTo(checkConstraint, instantiateType(root.extendsType, combinedMapper))) {
-                            if (result = isRelatedTo(source, instantiateType(root.trueType, combinedMapper))) {
+                            if (result = isRelatedTo(source, instantiateType(root.trueType, combinedMapper), reportErrors)) {
                                 errorInfo = saveErrorInfo;
                                 return result;
                             }

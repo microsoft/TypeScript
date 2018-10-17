@@ -51,3 +51,25 @@ set(new Foo(), 'prop', 'hi'); // <-- typechecks
 >set : Symbol(set, Decl(thisConditionalInferenceInClassBody.ts, 1, 52))
 >Foo : Symbol(Foo, Decl(thisConditionalInferenceInClassBody.ts, 3, 94))
 
+type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+>InferBecauseWhyNot : Symbol(InferBecauseWhyNot, Decl(thisConditionalInferenceInClassBody.ts, 13, 29))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 15, 24))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 15, 24))
+>p : Symbol(p, Decl(thisConditionalInferenceInClassBody.ts, 15, 40))
+>P1 : Symbol(P1, Decl(thisConditionalInferenceInClassBody.ts, 15, 48))
+>P1 : Symbol(P1, Decl(thisConditionalInferenceInClassBody.ts, 15, 48))
+>T : Symbol(T, Decl(thisConditionalInferenceInClassBody.ts, 15, 24))
+
+function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
+>f : Symbol(f, Decl(thisConditionalInferenceInClassBody.ts, 15, 77))
+>Q : Symbol(Q, Decl(thisConditionalInferenceInClassBody.ts, 17, 11))
+>arg : Symbol(arg, Decl(thisConditionalInferenceInClassBody.ts, 17, 22))
+>x : Symbol(x, Decl(thisConditionalInferenceInClassBody.ts, 17, 40))
+>Q : Symbol(Q, Decl(thisConditionalInferenceInClassBody.ts, 17, 11))
+>InferBecauseWhyNot : Symbol(InferBecauseWhyNot, Decl(thisConditionalInferenceInClassBody.ts, 13, 29))
+>Q : Symbol(Q, Decl(thisConditionalInferenceInClassBody.ts, 17, 11))
+
+    return x;
+>x : Symbol(x, Decl(thisConditionalInferenceInClassBody.ts, 17, 40))
+}
+

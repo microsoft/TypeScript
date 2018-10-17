@@ -14,6 +14,13 @@ class Foo {
 
 set(new Foo(), 'prop', 'hi'); // <-- typechecks
 
+type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+
+function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
+    return x;
+}
+
+
 //// [thisConditionalInferenceInClassBody.js]
 var Foo = /** @class */ (function () {
     function Foo() {
@@ -24,3 +31,6 @@ var Foo = /** @class */ (function () {
     return Foo;
 }());
 set(new Foo(), 'prop', 'hi'); // <-- typechecks
+function f(x) {
+    return x;
+}

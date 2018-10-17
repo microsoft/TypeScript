@@ -22,7 +22,7 @@ type Bind1<T extends (head: any, ...tail: any[]) => any> = (...args: Tail<Parame
 >Bind1 : Bind1<T>
 >head : any
 >tail : any[]
->args : any[]
+>args : Tail<Parameters<T>>
 
 type Generic = Bind1<MyFunctionType>; // (bar: string) => boolean
 >Generic : Bind1<MyFunctionType>

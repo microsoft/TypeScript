@@ -38,3 +38,16 @@ set(new Foo(), 'prop', 'hi'); // <-- typechecks
 >'prop' : "prop"
 >'hi' : "hi"
 
+type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+>InferBecauseWhyNot : InferBecauseWhyNot<T>
+>p : P1
+
+function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
+>f : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNot<Q>
+>arg : any
+>x : Q
+
+    return x;
+>x : Q
+}
+
