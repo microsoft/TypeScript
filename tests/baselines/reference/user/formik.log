@@ -1,0 +1,20 @@
+Exit Code: 1
+Standard output:
+index.tsx(33,21): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(36,68): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(46,22): error TS2345: Argument of type 'object' is not assignable to parameter of type 'MyData'.
+  Property 'email' is missing in type '{}'.
+index.tsx(47,11): error TS7006: Parameter 'user' implicitly has an 'any' type.
+index.tsx(52,11): error TS7006: Parameter 'errors' implicitly has an 'any' type.
+index.tsx(74,27): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(76,20): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(76,36): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(76,58): error TS2339: Property 'email' does not exist on type 'object'.
+index.tsx(82,27): error TS2339: Property 'password' does not exist on type 'object'.
+index.tsx(84,20): error TS2339: Property 'password' does not exist on type 'object'.
+index.tsx(84,39): error TS2339: Property 'password' does not exist on type 'object'.
+index.tsx(84,64): error TS2339: Property 'password' does not exist on type 'object'.
+
+
+
+Standard error:
