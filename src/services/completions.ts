@@ -1200,9 +1200,9 @@ namespace ts.Completions {
         function tryGetJsxCompletionSymbols(): GlobalsSearch {
             const jsxContainer = tryGetContainingJsxElement(contextToken);
             // Cursor is inside a JSX self-closing element or opening element
-            const attrsType = jsxContainer && typeChecker.getAllAttributesTypeFromJsxOpeningLikeElement(jsxContainer);
+            const attrsType = jsxContainer && typeChecker.getContextualType(jsxContainer.attributes);
             if (!attrsType) return GlobalsSearch.Continue;
-            symbols = filterJsxAttributes(typeChecker.getPropertiesOfType(attrsType), jsxContainer!.attributes.properties);
+            symbols = filterJsxAttributes(getPropertiesForObjectExpression(attrsType, jsxContainer!.attributes, typeChecker), jsxContainer!.attributes.properties);
             completionKind = CompletionKind.MemberLike;
             isNewIdentifierLocation = false;
             return GlobalsSearch.Success;
@@ -2211,7 +2211,7 @@ namespace ts.Completions {
         return jsdoc && jsdoc.tags && (rangeContainsPosition(jsdoc, position) ? findLast(jsdoc.tags, tag => tag.pos < position) : undefined);
     }
 
-    function getPropertiesForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression, checker: TypeChecker): Symbol[] {
+    function getPropertiesForObjectExpression(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes, checker: TypeChecker): Symbol[] {
         return contextualType.isUnion()
             ? checker.getAllPossiblePropertiesOfTypes(contextualType.types.filter(memberType =>
                 // If we're providing completions for an object literal, skip primitive, array-like, or callable types since those shouldn't be implemented by object literals.

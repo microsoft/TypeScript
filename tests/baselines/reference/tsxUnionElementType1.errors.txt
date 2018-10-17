@@ -13,6 +13,6 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2604: JSX element type 'SFCC
     }
     
     var SFCComp = SFC1 || SFC2;
-    <SFCComp x={"hi"}/>
+    <SFCComp x />
      ~~~~~~~
 !!! error TS2604: JSX element type 'SFCComp' does not have any construct or call signatures.

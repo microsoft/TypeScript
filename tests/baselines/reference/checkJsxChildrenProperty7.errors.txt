@@ -1,17 +1,20 @@
-tests/cases/conformance/jsx/file.tsx(24,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-      Type '(string | Element)[]' is not assignable to type 'Element[]'.
-        Type 'string | Element' is not assignable to type 'Element'.
-          Type 'string' is not assignable to type 'Element'.
-tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-      Type '(string | Element)[]' is not assignable to type 'Element[]'.
-tests/cases/conformance/jsx/file.tsx(27,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-  Types of property 'children' are incompatible.
-    Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-      Type '(string | Element)[]' is not assignable to type 'Element[]'.
+tests/cases/conformance/jsx/file.tsx(24,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+  Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+    Types of property 'children' are incompatible.
+      Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+        Type '(string | Element)[]' is not assignable to type 'Element[]'.
+          Type 'string | Element' is not assignable to type 'Element'.
+            Type 'string' is not assignable to type 'Element'.
+tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+  Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+    Types of property 'children' are incompatible.
+      Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+        Type '(string | Element)[]' is not assignable to type 'Element[]'.
+tests/cases/conformance/jsx/file.tsx(27,11): error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+  Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+    Types of property 'children' are incompatible.
+      Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+        Type '(string | Element)[]' is not assignable to type 'Element[]'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -40,23 +43,26 @@ tests/cases/conformance/jsx/file.tsx(27,11): error TS2322: Type '{ children: (st
     // Error: whitespaces matters
     let k1 = <Comp a={10} b="hi"><Button />  <AnotherButton /></Comp>;
               ~~~~
-!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
-!!! error TS2322:         Type 'string | Element' is not assignable to type 'Element'.
-!!! error TS2322:           Type 'string' is not assignable to type 'Element'.
+!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+!!! error TS2322:   Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+!!! error TS2322:         Type '(string | Element)[]' is not assignable to type 'Element[]'.
+!!! error TS2322:           Type 'string | Element' is not assignable to type 'Element'.
+!!! error TS2322:             Type 'string' is not assignable to type 'Element'.
     let k2 = <Comp a={10} b="hi"><Button />
               ~~~~
-!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
+!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+!!! error TS2322:   Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+!!! error TS2322:         Type '(string | Element)[]' is not assignable to type 'Element[]'.
         <AnotherButton />  </Comp>;
     let k3 = <Comp a={10} b="hi">    <Button />
               ~~~~
-!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:   Types of property 'children' are incompatible.
-!!! error TS2322:     Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
-!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element[]'.
+!!! error TS2322: Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
+!!! error TS2322:   Type '{ children: (string | Element)[]; a: number; b: string; }' is not assignable to type 'Prop'.
+!!! error TS2322:     Types of property 'children' are incompatible.
+!!! error TS2322:       Type '(string | Element)[]' is not assignable to type 'Element | Element[]'.
+!!! error TS2322:         Type '(string | Element)[]' is not assignable to type 'Element[]'.
         <AnotherButton /></Comp>;

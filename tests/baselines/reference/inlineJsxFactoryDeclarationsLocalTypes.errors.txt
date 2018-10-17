@@ -1,8 +1,6 @@
 tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2322: Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
   Property '__predomBrand' is missing in type 'Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,21): error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-  Property 'render' is missing in type 'Element'.
-tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ children?: Element[]; }'.
+tests/cases/conformance/jsx/inline/index.tsx(21,22): error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
   Types of property 'children' are incompatible.
     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
@@ -76,7 +74,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     
     export default <h></h>
     
-==== tests/cases/conformance/jsx/inline/index.tsx (6 errors) ====
+==== tests/cases/conformance/jsx/inline/index.tsx (5 errors) ====
     /** @jsx dom */
     import { dom } from "./renderer"
     import prerendered, {MySFC, MyClass, tree} from "./component";
@@ -101,11 +99,8 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     
     // Should fail, no dom elements
     const _brokenTree = <MySFC x={1} y={2}><MyClass x={3} y={4} /><MyClass x={5} y={6} /></MySFC>
-                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element type 'Element' is not a constructor function for JSX elements.
-!!! error TS2605:   Property 'render' is missing in type 'Element'.
                          ~~~~~
-!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ children?: Element[]; }'.
+!!! error TS2322: Type '{ children: Element[]; x: number; y: number; }' is not assignable to type '{ x: number; y: number; children?: Element[]; }'.
 !!! error TS2322:   Types of property 'children' are incompatible.
 !!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]'.
 !!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.

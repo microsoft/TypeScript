@@ -3103,8 +3103,6 @@ namespace ts {
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
-
-        getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -3171,7 +3169,7 @@ namespace ts {
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
-        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -3769,7 +3767,6 @@ namespace ts {
         resolvedType?: Type;              // Cached type of type node
         resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
