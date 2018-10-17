@@ -38,7 +38,7 @@ set(new Foo(), 'prop', 'hi'); // <-- typechecks
 >'prop' : "prop"
 >'hi' : "hi"
 
-type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any] ? P1 | T : never;
 >InferBecauseWhyNot : InferBecauseWhyNot<T>
 >p : P1
 
@@ -48,6 +48,19 @@ function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
 >x : Q
 
     return x;
+>x : Q
+}
+
+type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any ? P1 | T : never;
+>InferBecauseWhyNotDistributive : InferBecauseWhyNotDistributive<T>
+>p : P1
+
+function f2<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNotDistributive<Q> {
+>f2 : <Q extends (arg: any) => any>(x: Q) => InferBecauseWhyNotDistributive<Q>
+>arg : any
+>x : Q
+
+    return x; // should fail, as when Q = never, InferBecauseWhyNotDistributive<Q> = never,
 >x : Q
 }
 

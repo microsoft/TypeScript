@@ -147,3 +147,27 @@ type B2<T, V> =
 
 type C2<T, V, E> =
     T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+
+// #26933
+type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
+function testAssignabilityToConditionalType<T>() {
+    const o = { a: 1, b: 2 };
+    const x: [T] extends [string] ? { y: number } : { a: number, b: number } = undefined!;
+    // Simple case: OK
+    const o1: [T] extends [number] ? { a: number } : { b: number } = o;
+    // Simple case where source happens to be a conditional type: also OK
+    const x1: [T] extends [number]
+        ? ([T] extends [string] ? { y: number } : { a: number })
+        : ([T] extends [string] ? { y: number } : { b: number })
+        = x;
+    // Infer type parameters: no good
+    const o2: [T] extends [[infer U]] ? U : { b: number } = o;
+    // Distributive where T might instantiate to never: no good
+    const o3: Distributive<T> = o;
+    // Distributive where T & string might instantiate to never: also no good
+    const o4: Distributive<T & string> = o;
+    // Distributive where {a: T} cannot instantiate to never: OK
+    const o5: Distributive<{ a: T }> = o;
+    // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+    const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
+}

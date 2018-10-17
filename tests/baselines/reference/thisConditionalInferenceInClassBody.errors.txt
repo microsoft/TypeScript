@@ -1,9 +1,9 @@
 tests/cases/compiler/thisConditionalInferenceInClassBody.ts(10,27): error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
-  Type '"hi"' is not assignable to type 'string & U'.
-    Type '"hi"' is not assignable to type 'U'.
+tests/cases/compiler/thisConditionalInferenceInClassBody.ts(25,5): error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
+  Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
 
 
-==== tests/cases/compiler/thisConditionalInferenceInClassBody.ts (1 errors) ====
+==== tests/cases/compiler/thisConditionalInferenceInClassBody.ts (2 errors) ====
     type Wrapped<T> = { ___secret: T };
     type Unwrap<T> = T extends Wrapped<infer U> ? U : T;
     
@@ -16,16 +16,23 @@ tests/cases/compiler/thisConditionalInferenceInClassBody.ts(10,27): error TS2345
             set(this, 'prop', 'hi'); // <-- type error
                               ~~~~
 !!! error TS2345: Argument of type '"hi"' is not assignable to parameter of type 'Unwrap<this["prop"]>'.
-!!! error TS2345:   Type '"hi"' is not assignable to type 'string & U'.
-!!! error TS2345:     Type '"hi"' is not assignable to type 'U'.
         }
     }
     
     set(new Foo(), 'prop', 'hi'); // <-- typechecks
     
-    type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+    type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any] ? P1 | T : never;
     
     function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
         return x;
+    }
+    
+    type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any ? P1 | T : never;
+    
+    function f2<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNotDistributive<Q> {
+        return x; // should fail, as when Q = never, InferBecauseWhyNotDistributive<Q> = never,
+        ~~~~~~~~~
+!!! error TS2322: Type 'Q' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
+!!! error TS2322:   Type '(arg: any) => any' is not assignable to type 'InferBecauseWhyNotDistributive<Q>'.
     }
     

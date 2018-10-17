@@ -551,3 +551,95 @@ type C2<T, V, E> =
 >E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
 
+// #26933
+type Distributive<T> = T extends { a: number } ? { a: number } : { b: number };
+>Distributive : Symbol(Distributive, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 148, 18))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 148, 18))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 148, 34))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 148, 50))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 148, 66))
+
+function testAssignabilityToConditionalType<T>() {
+>testAssignabilityToConditionalType : Symbol(testAssignabilityToConditionalType, Decl(conditionalTypes2.ts, 148, 79))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+
+    const o = { a: 1, b: 2 };
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 150, 15))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 150, 21))
+
+    const x: [T] extends [string] ? { y: number } : { a: number, b: number } = undefined!;
+>x : Symbol(x, Decl(conditionalTypes2.ts, 151, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>y : Symbol(y, Decl(conditionalTypes2.ts, 151, 37))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 151, 53))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 151, 64))
+>undefined : Symbol(undefined)
+
+    // Simple case: OK
+    const o1: [T] extends [number] ? { a: number } : { b: number } = o;
+>o1 : Symbol(o1, Decl(conditionalTypes2.ts, 153, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 153, 38))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 153, 54))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+
+    // Simple case where source happens to be a conditional type: also OK
+    const x1: [T] extends [number]
+>x1 : Symbol(x1, Decl(conditionalTypes2.ts, 155, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+
+        ? ([T] extends [string] ? { y: number } : { a: number })
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>y : Symbol(y, Decl(conditionalTypes2.ts, 156, 35))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 156, 51))
+
+        : ([T] extends [string] ? { y: number } : { b: number })
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>y : Symbol(y, Decl(conditionalTypes2.ts, 157, 35))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 157, 51))
+
+        = x;
+>x : Symbol(x, Decl(conditionalTypes2.ts, 151, 9))
+
+    // Infer type parameters: no good
+    const o2: [T] extends [[infer U]] ? U : { b: number } = o;
+>o2 : Symbol(o2, Decl(conditionalTypes2.ts, 160, 9))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 160, 33))
+>U : Symbol(U, Decl(conditionalTypes2.ts, 160, 33))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 160, 45))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+
+    // Distributive where T might instantiate to never: no good
+    const o3: Distributive<T> = o;
+>o3 : Symbol(o3, Decl(conditionalTypes2.ts, 162, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+
+    // Distributive where T & string might instantiate to never: also no good
+    const o4: Distributive<T & string> = o;
+>o4 : Symbol(o4, Decl(conditionalTypes2.ts, 164, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+
+    // Distributive where {a: T} cannot instantiate to never: OK
+    const o5: Distributive<{ a: T }> = o;
+>o5 : Symbol(o5, Decl(conditionalTypes2.ts, 166, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypes2.ts, 145, 63))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 166, 28))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+
+    // Distributive where check type is a conditional which returns a non-never type upon instantiation with `never` but can still return never otherwise: no good
+    const o6: Distributive<[T] extends [never] ? { a: number } : never> = o;
+>o6 : Symbol(o6, Decl(conditionalTypes2.ts, 168, 9))
+>Distributive : Symbol(Distributive, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 44))
+>a : Symbol(a, Decl(conditionalTypes2.ts, 168, 50))
+>o : Symbol(o, Decl(conditionalTypes2.ts, 150, 9))
+}
+

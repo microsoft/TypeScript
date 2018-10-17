@@ -662,6 +662,7 @@ namespace ts {
             ImmediateBaseConstraint,
             EnumTagType,
             JSDocTypeReference,
+            NeverInstantiable,
         }
 
         const enum CheckMode {
@@ -4520,6 +4521,8 @@ namespace ts {
                     return !!(<Type>target).immediateBaseConstraint;
                 case TypeSystemPropertyName.JSDocTypeReference:
                     return !!getSymbolLinks(target as Symbol).resolvedJSDocType;
+                case TypeSystemPropertyName.NeverInstantiable:
+                    return typeof (target as Type).instantiableToNever !== "undefined";
             }
             return Debug.assertNever(propertyName);
         }
@@ -11126,11 +11129,25 @@ namespace ts {
                 !t.numberIndexInfo;
         }
 
+        function isKeylessResolvedType(t: ResolvedType) {
+            return t.properties.length === 0 &&
+                !t.stringIndexInfo &&
+                !t.numberIndexInfo;
+        }
+
         function isEmptyObjectType(type: Type): boolean {
             return type.flags & TypeFlags.Object ? isEmptyResolvedType(resolveStructuredTypeMembers(<ObjectType>type)) :
                 type.flags & TypeFlags.NonPrimitive ? true :
                 type.flags & TypeFlags.Union ? some((<UnionType>type).types, isEmptyObjectType) :
                 type.flags & TypeFlags.Intersection ? every((<UnionType>type).types, isEmptyObjectType) :
+                false;
+        }
+
+        function isKeylessObjectType(type: Type): boolean {
+            return type.flags & TypeFlags.Object ? isKeylessResolvedType(resolveStructuredTypeMembers(<ObjectType>type)) :
+                type.flags & TypeFlags.NonPrimitive ? true :
+                type.flags & TypeFlags.Union ? some((<UnionType>type).types, isKeylessObjectType) :
+                type.flags & TypeFlags.Intersection ? every((<UnionType>type).types, isKeylessObjectType) :
                 false;
         }
 
@@ -11854,6 +11871,70 @@ namespace ts {
                 return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
             }
 
+            function canBeKeyless(type: Type): boolean {
+                if (canBeNever(type)) {
+                    return true; // `keyof never` is `never`, ergo `never` counts as keyless even though conceptually it contains every key
+                }
+                if (type.flags & TypeFlags.Intersection) {
+                    return every((type as IntersectionType).types, canBeKeyless);
+                }
+                if (type.flags & TypeFlags.Union) {
+                    return some((type as UnionType).types, canBeKeyless);
+                }
+                if (type.flags & TypeFlags.Conditional) {
+                    return canBeKeyless(getTrueTypeFromConditionalType(type as ConditionalType)) || canBeKeyless(getFalseTypeFromConditionalType(type as ConditionalType));
+                }
+                if (type.flags & TypeFlags.Index) {
+                    return canBeKeyless((type as IndexType).type);
+                }
+                if (type.flags & TypeFlags.IndexedAccess) {
+                    return canBeKeyless((type as IndexedAccessType).objectType);
+                }
+                if (type.flags & TypeFlags.TypeParameter) {
+                    const constraint = getConstraintOfTypeParameter(type as TypeParameter);
+                    return !constraint || canBeKeyless(constraint);
+                }
+                if (type.flags & TypeFlags.Substitution) {
+                    return canBeKeyless((type as SubstitutionType).substitute) && canBeKeyless((type as SubstitutionType).typeVariable);
+                }
+                return !!(type.flags & TypeFlags.Unknown) || isKeylessObjectType(type);
+            }
+
+            function canBeNever(type: Type): boolean {
+                if (!pushTypeResolution(type, TypeSystemPropertyName.NeverInstantiable)) {
+                    return type.instantiableToNever = true;
+                }
+                let result = true;
+                if (type.flags & TypeFlags.Intersection) {
+                    result = some((type as IntersectionType).types, canBeNever);
+                }
+                else if (type.flags & TypeFlags.Union) {
+                    result = every((type as UnionType).types, canBeNever);
+                }
+                else if (type.flags & TypeFlags.Conditional) {
+                    result = ((type as ConditionalType).root.isDistributive && canBeNever((type as ConditionalType).checkType)) ||
+                        canBeNever(getTrueTypeFromConditionalType(type as ConditionalType)) ||
+                        canBeNever(getFalseTypeFromConditionalType(type as ConditionalType));
+                }
+                else if (type.flags & TypeFlags.Index) {
+                    result = canBeKeyless((type as IndexType).type);
+                }
+                else if (type.flags & TypeFlags.IndexedAccess) {
+                    result = canBeNever((type as IndexedAccessType).indexType) || canBeNever((type as IndexedAccessType).objectType);
+                }
+                else if (type.flags & (TypeFlags.TypeParameter | TypeFlags.Substitution)) {
+                    // If we ever get `super` constraints, adjust this
+                    result = true;
+                }
+                else {
+                    result = !!(type.flags & TypeFlags.Never);
+                }
+                if (!popTypeResolution()) {
+                    return type.instantiableToNever = true;
+                }
+                return type.instantiableToNever = result;
+            }
+
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -11957,38 +12038,40 @@ namespace ts {
                 }
                 else if (target.flags & TypeFlags.Conditional) {
                     const root = (target as ConditionalType).root;
-                    if (root.inferTypeParameters) {
-                        // If the constraint indicates that the conditional type is always true (but it is stil deferred to allow for, eg, distribution or inference)
-                        // We should perform the instantiation and only check against the true type
-                        const mapper = (target as ConditionalType).mapper;
-                        const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
-                        const instantiatedExtends = instantiateType(root.extendsType, mapper);
-                        const checkConstraint = getSimplifiedType(instantiateType(root.checkType, mapper));
-                        // TODO:
-                        // As-is, this is effectively sound, but not particularly useful, thanks to all the types it wrongly rejects - only
-                        // conditional types with effectively "independent" inference parameters will end up being assignable via this branch, eg
-                        // `type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? T | P1 : never;`
-                        // contains a union in the `true` branch, and so while we can't confirm assignability to `P1`, we can confirm assignability to `T`.
-                        // A lenient version could be made by replacing `getintersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)])`
-                        // with `instantiateType(root.trueType, combinedMapper)` which would skip checking aginst the type-parametery-ness of the check;
-                        // but such a change introduces quite a bit of unsoundness as we stop checking against the type-parameteryness of the `infer` type,
-                        // which in turn prevents us from erroring on, eg, unsafe write-position assignments of the constraint of the type.
-                        // To be correct here, we'd need to track the implied variance of the infer parameters and _infer_ appropriately (in addition to checking appropriately)
-                        // Specifically, we'd need to infer with `InferencePriority.NoConstraint` (or ideally a hypothetical `InferencePriority.SuperConstraint`) for contravariant types,
-                        // but continue using the constraints for covariant ones.
-                        inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.AlwaysStrict);
-                        const combinedMapper = combineTypeMappers(mapper, context);
-                        if (isRelatedTo(checkConstraint, instantiateType(root.extendsType, combinedMapper))) {
-                            if (result = isRelatedTo(source, getIntersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)]), reportErrors)) {
+                    if (!root.isDistributive || !canBeNever((target as ConditionalType).checkType)) {
+                        if (root.inferTypeParameters) {
+                            // If the constraint indicates that the conditional type is always true (but it is stil deferred to allow for, eg, distribution or inference)
+                            // We should perform the instantiation and only check against the true type
+                            const mapper = (target as ConditionalType).mapper;
+                            const context = createInferenceContext(root.inferTypeParameters, /*signature*/ undefined, InferenceFlags.None);
+                            const instantiatedExtends = instantiateType(root.extendsType, mapper);
+                            const checkConstraint = getSimplifiedType(instantiateType(root.checkType, mapper));
+                            // TODO:
+                            // As-is, this is effectively sound, but not particularly useful, thanks to all the types it wrongly rejects - only
+                            // conditional types with effectively "independent" inference parameters will end up being assignable via this branch, eg
+                            // `type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? T | P1 : never;`
+                            // contains a union in the `true` branch, and so while we can't confirm assignability to `P1`, we can confirm assignability to `T`.
+                            // A lenient version could be made by replacing `getintersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)])`
+                            // with `instantiateType(root.trueType, combinedMapper)` which would skip checking aginst the type-parametery-ness of the check;
+                            // but such a change introduces quite a bit of unsoundness as we stop checking against the type-parameteryness of the `infer` type,
+                            // which in turn prevents us from erroring on, eg, unsafe write-position assignments of the constraint of the type.
+                            // To be correct here, we'd need to track the implied variance of the infer parameters and _infer_ appropriately (in addition to checking appropriately)
+                            // Specifically, we'd need to infer with `InferencePriority.NoConstraint` (or ideally a hypothetical `InferencePriority.SuperConstraint`) for contravariant types,
+                            // but continue using the constraints for covariant ones.
+                            inferTypes(context.inferences, checkConstraint, instantiatedExtends, InferencePriority.AlwaysStrict);
+                            const combinedMapper = combineTypeMappers(mapper, context);
+                            if (isRelatedTo(checkConstraint, instantiateType(root.extendsType, combinedMapper))) {
+                                if (result = isRelatedTo(source, getIntersectionType([instantiateType(root.trueType, combinedMapper), instantiateType(root.trueType, mapper)]), reportErrors)) {
+                                    errorInfo = saveErrorInfo;
+                                    return result;
+                                }
+                            }
+                        }
+                        if (result = isRelatedTo(source, getTrueTypeFromConditionalType(target as ConditionalType))) {
+                            if (result &= isRelatedTo(source, getFalseTypeFromConditionalType(target as ConditionalType))) {
                                 errorInfo = saveErrorInfo;
                                 return result;
                             }
-                        }
-                    }
-                    if (result = isRelatedTo(source, getTrueTypeFromConditionalType(target as ConditionalType))) {
-                        if (result = isRelatedTo(source, getFalseTypeFromConditionalType(target as ConditionalType))) {
-                            errorInfo = saveErrorInfo;
-                            return result;
                         }
                     }
                 }

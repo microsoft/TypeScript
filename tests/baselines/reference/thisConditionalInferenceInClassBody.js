@@ -14,10 +14,16 @@ class Foo {
 
 set(new Foo(), 'prop', 'hi'); // <-- typechecks
 
-type InferBecauseWhyNot<T> = T extends (p: infer P1) => any ? P1 | T : never;
+type InferBecauseWhyNot<T> = [T] extends [(p: infer P1) => any] ? P1 | T : never;
 
 function f<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNot<Q> {
     return x;
+}
+
+type InferBecauseWhyNotDistributive<T> = T extends (p: infer P1) => any ? P1 | T : never;
+
+function f2<Q extends (arg: any) => any>(x: Q): InferBecauseWhyNotDistributive<Q> {
+    return x; // should fail, as when Q = never, InferBecauseWhyNotDistributive<Q> = never,
 }
 
 
@@ -33,4 +39,7 @@ var Foo = /** @class */ (function () {
 set(new Foo(), 'prop', 'hi'); // <-- typechecks
 function f(x) {
     return x;
+}
+function f2(x) {
+    return x; // should fail, as when Q = never, InferBecauseWhyNotDistributive<Q> = never,
 }
