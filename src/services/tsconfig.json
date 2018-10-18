@@ -80,7 +80,7 @@
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
-        "refactors/convertArrowFunctionOrFunction.ts",
+        "refactors/convertArrowFunctionOrFunctionExpression.ts",
         "services.ts",
         "breakpoints.ts",
         "transform.ts",

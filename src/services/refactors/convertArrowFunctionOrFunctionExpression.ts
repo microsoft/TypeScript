@@ -1,7 +1,7 @@
 /* @internal */
-namespace ts.refactor.convertArrowFunctionOrFunction {
-    const refactorName = "Convert arrow function or anonymous function";
-    const refactorDescription = Diagnostics.Convert_arrow_function_or_anonymous_function.message;
+namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
+    const refactorName = "Convert arrow function or function expression";
+    const refactorDescription = Diagnostics.Convert_arrow_function_or_function_expression.message;
 
     const toAnonymousFunctionActionName = "Convert to anonymous function";
     const toNamedFunctionActionName = "Convert to named function";

@@ -4721,7 +4721,7 @@
         "category": "Message",
         "code": 95068
     },
-    "Convert arrow function or anonymous function": {
+    "Convert arrow function or function expression": {
         "category": "Message",
         "code": 95069
     },
