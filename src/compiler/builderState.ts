@@ -292,6 +292,11 @@ namespace ts.BuilderState {
         let latestSignature: string;
         if (sourceFile.isDeclarationFile) {
             latestSignature = sourceFile.version;
+            if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                // All the references in this file are exported
+                const references = state.referencedMap ? state.referencedMap.get(sourceFile.path) : undefined;
+                exportedModulesMapCache.set(sourceFile.path, references || false);
+            }
         }
         else {
             const emitOutput = getFileEmitOutput(programOfThisState, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);
