@@ -20209,6 +20209,10 @@ namespace ts {
                 return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
             }
             const diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
+            if (argCount > max && args[max].pos !== args[argCount - 1].end) {
+               diagnostic.start = args[max].pos;
+               diagnostic.length = args[argCount - 1].end - diagnostic.start;
+            }
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
 
