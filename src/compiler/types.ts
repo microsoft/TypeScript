@@ -2906,8 +2906,11 @@ namespace ts {
         /* @internal */ getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
 
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
-        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getResolvedProjectReferences(): ReadonlyArray<ResolvedProjectReference | undefined> | undefined;
         /*@internal*/ getProjectReferenceRedirect(fileName: string): string | undefined;
+        /*@internal*/ getResolvedProjectReferenceToRedirect(fileName: string): ResolvedProjectReference | undefined;
+        /*@internal*/ forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined;
+        /*@internal*/ getResolvedProjectReferenceByPath(projectReferencePath: Path): ResolvedProjectReference | undefined;
     }
 
     /* @internal */
@@ -2916,6 +2919,7 @@ namespace ts {
     export interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
         sourceFile: SourceFile;
+        references?: ReadonlyArray<ResolvedProjectReference | undefined>;
     }
 
     /* @internal */
@@ -3103,8 +3107,6 @@ namespace ts {
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
-
-        getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -3171,7 +3173,7 @@ namespace ts {
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
-        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -3769,7 +3771,6 @@ namespace ts {
         resolvedType?: Type;              // Cached type of type node
         resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
@@ -4074,6 +4075,7 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
+        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -4959,13 +4961,13 @@ namespace ts {
          * If resolveModuleNames is implemented then implementation for members from ModuleResolutionHost can be just
          * 'throw new Error("NotImplemented")'
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): (ResolvedModule | undefined)[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
-        /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions): void;
+        /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
         createHash?(data: string): string;

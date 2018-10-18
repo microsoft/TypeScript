@@ -14,7 +14,7 @@ and limitations under the License.
 ***************************************************************************** */
 
 declare namespace ts {
-    const versionMajorMinor = "3.1";
+    const versionMajorMinor = "3.2";
     /** The version of the TypeScript compiler release */
     const version: string;
 }
@@ -69,7 +69,8 @@ declare namespace ts {
         pos: number;
         end: number;
     }
-    type JsDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.NoSubstitutionTemplateLiteral | SyntaxKind.Unknown;
+    type JsDocSyntaxKind = SyntaxKind.EndOfFileToken | SyntaxKind.WhitespaceTrivia | SyntaxKind.AtToken | SyntaxKind.NewLineTrivia | SyntaxKind.AsteriskToken | SyntaxKind.OpenBraceToken | SyntaxKind.CloseBraceToken | SyntaxKind.LessThanToken | SyntaxKind.OpenBracketToken | SyntaxKind.CloseBracketToken | SyntaxKind.EqualsToken | SyntaxKind.CommaToken | SyntaxKind.DotToken | SyntaxKind.Identifier | SyntaxKind.NoSubstitutionTemplateLiteral | SyntaxKind.Unknown | KeywordSyntaxKind;
+    type KeywordSyntaxKind = SyntaxKind.AbstractKeyword | SyntaxKind.AnyKeyword | SyntaxKind.AsKeyword | SyntaxKind.BooleanKeyword | SyntaxKind.BreakKeyword | SyntaxKind.CaseKeyword | SyntaxKind.CatchKeyword | SyntaxKind.ClassKeyword | SyntaxKind.ContinueKeyword | SyntaxKind.ConstKeyword | SyntaxKind.ConstructorKeyword | SyntaxKind.DebuggerKeyword | SyntaxKind.DeclareKeyword | SyntaxKind.DefaultKeyword | SyntaxKind.DeleteKeyword | SyntaxKind.DoKeyword | SyntaxKind.ElseKeyword | SyntaxKind.EnumKeyword | SyntaxKind.ExportKeyword | SyntaxKind.ExtendsKeyword | SyntaxKind.FalseKeyword | SyntaxKind.FinallyKeyword | SyntaxKind.ForKeyword | SyntaxKind.FromKeyword | SyntaxKind.FunctionKeyword | SyntaxKind.GetKeyword | SyntaxKind.IfKeyword | SyntaxKind.ImplementsKeyword | SyntaxKind.ImportKeyword | SyntaxKind.InKeyword | SyntaxKind.InferKeyword | SyntaxKind.InstanceOfKeyword | SyntaxKind.InterfaceKeyword | SyntaxKind.IsKeyword | SyntaxKind.KeyOfKeyword | SyntaxKind.LetKeyword | SyntaxKind.ModuleKeyword | SyntaxKind.NamespaceKeyword | SyntaxKind.NeverKeyword | SyntaxKind.NewKeyword | SyntaxKind.NullKeyword | SyntaxKind.NumberKeyword | SyntaxKind.ObjectKeyword | SyntaxKind.PackageKeyword | SyntaxKind.PrivateKeyword | SyntaxKind.ProtectedKeyword | SyntaxKind.PublicKeyword | SyntaxKind.ReadonlyKeyword | SyntaxKind.RequireKeyword | SyntaxKind.GlobalKeyword | SyntaxKind.ReturnKeyword | SyntaxKind.SetKeyword | SyntaxKind.StaticKeyword | SyntaxKind.StringKeyword | SyntaxKind.SuperKeyword | SyntaxKind.SwitchKeyword | SyntaxKind.SymbolKeyword | SyntaxKind.ThisKeyword | SyntaxKind.ThrowKeyword | SyntaxKind.TrueKeyword | SyntaxKind.TryKeyword | SyntaxKind.TypeKeyword | SyntaxKind.TypeOfKeyword | SyntaxKind.UndefinedKeyword | SyntaxKind.UniqueKeyword | SyntaxKind.UnknownKeyword | SyntaxKind.VarKeyword | SyntaxKind.VoidKeyword | SyntaxKind.WhileKeyword | SyntaxKind.WithKeyword | SyntaxKind.YieldKeyword | SyntaxKind.AsyncKeyword | SyntaxKind.AwaitKeyword | SyntaxKind.OfKeyword;
     type JsxTokenSyntaxKind = SyntaxKind.LessThanSlashToken | SyntaxKind.EndOfFileToken | SyntaxKind.ConflictMarkerTrivia | SyntaxKind.JsxText | SyntaxKind.JsxTextAllWhiteSpaces | SyntaxKind.OpenBraceToken | SyntaxKind.LessThanToken;
     enum SyntaxKind {
         Unknown = 0,
@@ -536,6 +537,7 @@ declare namespace ts {
         name?: Identifier | StringLiteral | NumericLiteral;
     }
     interface ComputedPropertyName extends Node {
+        parent: Declaration;
         kind: SyntaxKind.ComputedPropertyName;
         expression: Expression;
     }
@@ -632,6 +634,7 @@ declare namespace ts {
         kind: SyntaxKind.ShorthandPropertyAssignment;
         name: Identifier;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         equalsToken?: Token<SyntaxKind.EqualsToken>;
         objectAssignmentInitializer?: Expression;
     }
@@ -668,6 +671,7 @@ declare namespace ts {
         _functionLikeDeclarationBrand: any;
         asteriskToken?: AsteriskToken;
         questionToken?: QuestionToken;
+        exclamationToken?: ExclamationToken;
         body?: Block | Expression;
     }
     type FunctionLikeDeclaration = FunctionDeclaration | MethodDeclaration | GetAccessorDeclaration | SetAccessorDeclaration | ConstructorDeclaration | FunctionExpression | ArrowFunction;
@@ -1079,7 +1083,7 @@ declare namespace ts {
     }
     interface ExpressionWithTypeArguments extends NodeWithTypeArguments {
         kind: SyntaxKind.ExpressionWithTypeArguments;
-        parent: HeritageClause;
+        parent: HeritageClause | JSDocAugmentsTag;
         expression: LeftHandSideExpression;
     }
     interface NewExpression extends PrimaryExpression, Declaration {
@@ -1808,7 +1812,8 @@ declare namespace ts {
         getTypeChecker(): TypeChecker;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
-        getProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
+        getResolvedProjectReferences(): (ResolvedProjectReference | undefined)[] | undefined;
     }
     interface ResolvedProjectReference {
         commandLine: ParsedCommandLine;
@@ -2056,32 +2061,32 @@ declare namespace ts {
         ExportStar = 8388608,
         Optional = 16777216,
         Transient = 33554432,
-        JSContainer = 67108864,
+        Assignment = 67108864,
         ModuleExports = 134217728,
         Enum = 384,
         Variable = 3,
-        Value = 67216319,
-        Type = 67901928,
+        Value = 67220415,
+        Type = 67897832,
         Namespace = 1920,
         Module = 1536,
         Accessor = 98304,
-        FunctionScopedVariableExcludes = 67216318,
-        BlockScopedVariableExcludes = 67216319,
-        ParameterExcludes = 67216319,
+        FunctionScopedVariableExcludes = 67220414,
+        BlockScopedVariableExcludes = 67220415,
+        ParameterExcludes = 67220415,
         PropertyExcludes = 0,
         EnumMemberExcludes = 68008959,
-        FunctionExcludes = 67215791,
+        FunctionExcludes = 67219887,
         ClassExcludes = 68008383,
-        InterfaceExcludes = 67901832,
+        InterfaceExcludes = 67897736,
         RegularEnumExcludes = 68008191,
         ConstEnumExcludes = 68008831,
-        ValueModuleExcludes = 67215503,
+        ValueModuleExcludes = 110735,
         NamespaceModuleExcludes = 0,
-        MethodExcludes = 67208127,
-        GetAccessorExcludes = 67150783,
-        SetAccessorExcludes = 67183551,
-        TypeParameterExcludes = 67639784,
-        TypeAliasExcludes = 67901928,
+        MethodExcludes = 67212223,
+        GetAccessorExcludes = 67154879,
+        SetAccessorExcludes = 67187647,
+        TypeParameterExcludes = 67635688,
+        TypeAliasExcludes = 67897832,
         AliasExcludes = 2097152,
         ModuleMember = 2623475,
         ExportHasLocal = 944,
@@ -2490,6 +2495,7 @@ declare namespace ts {
         sourceRoot?: string;
         strict?: boolean;
         strictFunctionTypes?: boolean;
+        strictBindCallApply?: boolean;
         strictNullChecks?: boolean;
         strictPropertyInitialization?: boolean;
         stripInternal?: boolean;
@@ -2581,7 +2587,6 @@ declare namespace ts {
     }
     interface ExpandResult {
         fileNames: string[];
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
         wildcardDirectories: MapLike<WatchDirectoryFlags>;
     }
     interface CreateProgramOptions {
@@ -2591,14 +2596,6 @@ declare namespace ts {
         host?: CompilerHost;
         oldProgram?: Program;
         configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>;
-    }
-    interface UpToDateHost {
-        fileExists(fileName: string): boolean;
-        getModifiedTime(fileName: string): Date | undefined;
-        getUnchangedTime?(fileName: string): Date | undefined;
-        getLastStatus?(fileName: string): UpToDateStatus | undefined;
-        setLastStatus?(fileName: string, status: UpToDateStatus): void;
-        parseConfigFile?(configFilePath: ResolvedConfigFileName): ParsedCommandLine | undefined;
     }
     interface ModuleResolutionHost {
         fileExists(fileName: string): boolean;
@@ -2698,9 +2695,6 @@ declare namespace ts {
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
-        getModifiedTime?(fileName: string): Date | undefined;
-        setModifiedTime?(fileName: string, date: Date): void;
-        deleteFile?(fileName: string): void;
     }
     interface SourceMapRange extends TextRange {
         source?: SourceMapSource;
@@ -3001,6 +2995,16 @@ declare namespace ts {
         Parameters = 1296,
         IndexSignatureParameters = 4432
     }
+    interface UserPreferences {
+        readonly disableSuggestions?: boolean;
+        readonly quotePreference?: "double" | "single";
+        readonly includeCompletionsForModuleExports?: boolean;
+        readonly includeCompletionsWithInsertText?: boolean;
+        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
+        /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
+        readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
+        readonly allowTextChangesInNewFiles?: boolean;
+    }
 }
 declare function setTimeout(handler: (...args: any[]) => void, timeout: number): any;
 declare function clearTimeout(handle: any): void;
@@ -3209,17 +3213,27 @@ declare namespace ts {
     /**
      * Gets the JSDoc parameter tags for the node if present.
      *
-     * @remarks Returns any JSDoc param tag that matches the provided
+     * @remarks Returns any JSDoc param tag whose name matches the provided
      * parameter, whether a param tag on a containing function
      * expression, or a param tag on a variable declaration whose
      * initializer is the containing function. The tags closest to the
      * node are returned first, so in the previous example, the param
      * tag on the containing function expression would be first.
      *
-     * Does not return tags for binding patterns, because JSDoc matches
-     * parameters by name and binding patterns do not have a name.
+     * For binding patterns, parameter tags are matched by position.
      */
     function getJSDocParameterTags(param: ParameterDeclaration): ReadonlyArray<JSDocParameterTag>;
+    /**
+     * Gets the JSDoc type parameter tags for the node if present.
+     *
+     * @remarks Returns any JSDoc template tag whose names match the provided
+     * parameter, whether a template tag on a containing function
+     * expression, or a template tag on a variable declaration whose
+     * initializer is the containing function. The tags closest to the
+     * node are returned first, so in the previous example, the template
+     * tag on the containing function expression would be first.
+     */
+    function getJSDocTypeParameterTags(param: TypeParameterDeclaration): ReadonlyArray<JSDocTemplateTag>;
     /**
      * Return true if the node has JSDoc parameter tags.
      *
@@ -4171,14 +4185,15 @@ declare namespace ts {
      * @returns A 'Program' object.
      */
     function createProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: Program, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): Program;
-    interface ResolveProjectReferencePathHost {
+    /** @deprecated */ interface ResolveProjectReferencePathHost {
         fileExists(fileName: string): boolean;
     }
     /**
      * Returns the target config filename of a project reference.
      * Note: The file might not exist.
      */
-    function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
+    function resolveProjectReferencePath(ref: ProjectReference): ResolvedConfigFileName;
+    /** @deprecated */ function resolveProjectReferencePath(host: ResolveProjectReferencePathHost, ref: ProjectReference): ResolvedConfigFileName;
 }
 declare namespace ts {
     interface EmitOutput {
@@ -4303,32 +4318,43 @@ declare namespace ts {
      * Create the builder to manage semantic diagnostics and cache them
      */
     function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): SemanticDiagnosticsBuilderProgram;
-    function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): SemanticDiagnosticsBuilderProgram;
+    function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): SemanticDiagnosticsBuilderProgram;
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
     function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): EmitAndSemanticDiagnosticsBuilderProgram;
-    function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): EmitAndSemanticDiagnosticsBuilderProgram;
+    function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): EmitAndSemanticDiagnosticsBuilderProgram;
     /**
      * Creates a builder thats just abstraction over program and can be used with watch
      */
     function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
-    function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
+    function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
 }
 declare namespace ts {
     type WatchStatusReporter = (diagnostic: Diagnostic, newLine: string, options: CompilerOptions) => void;
     /** Create the program with rootNames and options, if they are undefined, oldProgram and new configFile diagnostics create new program */
-    type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) => T;
-    interface WatchCompilerHost<T extends BuilderProgram> {
+    type CreateProgram<T extends BuilderProgram> = (rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: T, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference> | undefined) => T;
+    /** Host that has watch functionality used in --watch mode */
+    interface WatchHost {
+        /** If provided, called with Diagnostic message that informs about change in watch status */
+        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
+        /** Used to watch changes in source files, missing files needed to update the program or config file */
+        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
+        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
+        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
+        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
+        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
+        /** If provided, will be used to reset existing delayed compilation */
+        clearTimeout?(timeoutId: any): void;
+    }
+    interface WatchCompilerHost<T extends BuilderProgram> extends WatchHost {
         /**
          * Used to create the program when need for program creation or recreation detected
          */
         createProgram: CreateProgram<T>;
         /** If provided, callback to invoke after every new program creation */
         afterProgramCreate?(program: T): void;
-        /** If provided, called with Diagnostic message that informs about change in watch status */
-        onWatchStatusChange?(diagnostic: Diagnostic, newLine: string, options: CompilerOptions): void;
         useCaseSensitiveFileNames(): boolean;
         getNewLine(): string;
         getCurrentDirectory(): string;
@@ -4361,14 +4387,6 @@ declare namespace ts {
         resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
         /** If provided, used to resolve type reference directives, otherwise typescript's default resolution */
         resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
-        /** Used to watch changes in source files, missing files needed to update the program or config file */
-        watchFile(path: string, callback: FileWatcherCallback, pollingInterval?: number): FileWatcher;
-        /** Used to watch resolved module's failed lookup locations, config file specs, type roots where auto type reference directives are added */
-        watchDirectory(path: string, callback: DirectoryWatcherCallback, recursive?: boolean): FileWatcher;
-        /** If provided, will be used to set delayed compilation, so that multiple changes in short span are compiled together */
-        setTimeout?(callback: (...args: any[]) => void, ms: number, ...args: any[]): any;
-        /** If provided, will be used to reset existing delayed compilation */
-        clearTimeout?(timeoutId: any): void;
     }
     /**
      * Host to create watch with root files and options
@@ -4378,6 +4396,8 @@ declare namespace ts {
         rootFiles: string[];
         /** Compiler options */
         options: CompilerOptions;
+        /** Project References */
+        projectReferences?: ReadonlyArray<ProjectReference>;
     }
     /**
      * Host to create watch with config file
@@ -4412,8 +4432,8 @@ declare namespace ts {
     /**
      * Create the watch compiler host for either configFile or fileNames and its options
      */
-    function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     function createWatchCompilerHost<T extends BuilderProgram>(configFileName: string, optionsToExtend: CompilerOptions | undefined, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter): WatchCompilerHostOfConfigFile<T>;
+    function createWatchCompilerHost<T extends BuilderProgram>(rootFiles: string[], options: CompilerOptions, system: System, createProgram?: CreateProgram<T>, reportDiagnostic?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter, projectReferences?: ReadonlyArray<ProjectReference>): WatchCompilerHostOfFilesAndCompilerOptions<T>;
     /**
      * Creates the watch from the host for root files and compiler options
      */
@@ -4423,184 +4443,11 @@ declare namespace ts {
      */
     function createWatchProgram<T extends BuilderProgram>(host: WatchCompilerHostOfConfigFile<T>): WatchOfConfigFile<T>;
 }
-declare namespace ts {
-    interface BuildHost {
-        verbose(diag: DiagnosticMessage, ...args: string[]): void;
-        error(diag: DiagnosticMessage, ...args: string[]): void;
-        errorDiagnostic(diag: Diagnostic): void;
-        message(diag: DiagnosticMessage, ...args: string[]): void;
-    }
-    /**
-     * A BuildContext tracks what's going on during the course of a build.
-     *
-     * Callers may invoke any number of build requests within the same context;
-     * until the context is reset, each project will only be built at most once.
-     *
-     * Example: In a standard setup where project B depends on project A, and both are out of date,
-     * a failed build of A will result in A remaining out of date. When we try to build
-     * B, we should immediately bail instead of recomputing A's up-to-date status again.
-     *
-     * This also matters for performing fast (i.e. fake) downstream builds of projects
-     * when their upstream .d.ts files haven't changed content (but have newer timestamps)
-     */
-    interface BuildContext {
-        options: BuildOptions;
-        /**
-         * Map from output file name to its pre-build timestamp
-         */
-        unchangedOutputs: FileMap<Date>;
-        /**
-         * Map from config file name to up-to-date status
-         */
-        projectStatus: FileMap<UpToDateStatus>;
-        invalidatedProjects: FileMap<true>;
-        queuedProjects: FileMap<true>;
-        missingRoots: Map<true>;
-    }
-    type Mapper = ReturnType<typeof createDependencyMapper>;
-    interface DependencyGraph {
-        buildQueue: ResolvedConfigFileName[];
-        dependencyMap: Mapper;
-    }
-    interface BuildOptions {
-        dry: boolean;
-        force: boolean;
-        verbose: boolean;
-    }
-    enum UpToDateStatusType {
-        Unbuildable = 0,
-        UpToDate = 1,
-        /**
-         * The project appears out of date because its upstream inputs are newer than its outputs,
-         * but all of its outputs are actually newer than the previous identical outputs of its (.d.ts) inputs.
-         * This means we can Pseudo-build (just touch timestamps), as if we had actually built this project.
-         */
-        UpToDateWithUpstreamTypes = 2,
-        OutputMissing = 3,
-        OutOfDateWithSelf = 4,
-        OutOfDateWithUpstream = 5,
-        UpstreamOutOfDate = 6,
-        UpstreamBlocked = 7,
-        /**
-         * Projects with no outputs (i.e. "solution" files)
-         */
-        ContainerOnly = 8
-    }
-    type UpToDateStatus = Status.Unbuildable | Status.UpToDate | Status.OutputMissing | Status.OutOfDateWithSelf | Status.OutOfDateWithUpstream | Status.UpstreamOutOfDate | Status.UpstreamBlocked | Status.ContainerOnly;
-    namespace Status {
-        /**
-         * The project can't be built at all in its current state. For example,
-         * its config file cannot be parsed, or it has a syntax error or missing file
-         */
-        interface Unbuildable {
-            type: UpToDateStatusType.Unbuildable;
-            reason: string;
-        }
-        /**
-         * This project doesn't have any outputs, so "is it up to date" is a meaningless question.
-         */
-        interface ContainerOnly {
-            type: UpToDateStatusType.ContainerOnly;
-        }
-        /**
-         * The project is up to date with respect to its inputs.
-         * We track what the newest input file is.
-         */
-        interface UpToDate {
-            type: UpToDateStatusType.UpToDate | UpToDateStatusType.UpToDateWithUpstreamTypes;
-            newestInputFileTime?: Date;
-            newestInputFileName?: string;
-            newestDeclarationFileContentChangedTime?: Date;
-            newestOutputFileTime?: Date;
-            newestOutputFileName?: string;
-            oldestOutputFileName?: string;
-        }
-        /**
-         * One or more of the outputs of the project does not exist.
-         */
-        interface OutputMissing {
-            type: UpToDateStatusType.OutputMissing;
-            /**
-             * The name of the first output file that didn't exist
-             */
-            missingOutputFileName: string;
-        }
-        /**
-         * One or more of the project's outputs is older than its newest input.
-         */
-        interface OutOfDateWithSelf {
-            type: UpToDateStatusType.OutOfDateWithSelf;
-            outOfDateOutputFileName: string;
-            newerInputFileName: string;
-        }
-        /**
-         * This project depends on an out-of-date project, so shouldn't be built yet
-         */
-        interface UpstreamOutOfDate {
-            type: UpToDateStatusType.UpstreamOutOfDate;
-            upstreamProjectName: string;
-        }
-        /**
-         * This project depends an upstream project with build errors
-         */
-        interface UpstreamBlocked {
-            type: UpToDateStatusType.UpstreamBlocked;
-            upstreamProjectName: string;
-        }
-        /**
-         * One or more of the project's outputs is older than the newest output of
-         * an upstream project.
-         */
-        interface OutOfDateWithUpstream {
-            type: UpToDateStatusType.OutOfDateWithUpstream;
-            outOfDateOutputFileName: string;
-            newerProjectName: string;
-        }
-    }
-    interface FileMap<T> {
-        setValue(fileName: string, value: T): void;
-        getValue(fileName: string): T | never;
-        getValueOrUndefined(fileName: string): T | undefined;
-        hasKey(fileName: string): boolean;
-        removeKey(fileName: string): void;
-        getKeys(): string[];
-    }
-    function createDependencyMapper(): {
-        addReference: (childConfigFileName: ResolvedConfigFileName, parentConfigFileName: ResolvedConfigFileName) => void;
-        getReferencesTo: (parentConfigFileName: ResolvedConfigFileName) => ResolvedConfigFileName[];
-        getReferencesOf: (childConfigFileName: ResolvedConfigFileName) => ResolvedConfigFileName[];
-        getKeys: () => ReadonlyArray<ResolvedConfigFileName>;
-    };
-    function createBuildContext(options: BuildOptions): BuildContext;
-    function performBuild(args: string[], compilerHost: CompilerHost, buildHost: BuildHost, system?: System): number | undefined;
-    /**
-     * A SolutionBuilder has an immutable set of rootNames that are the "entry point" projects, but
-     * can dynamically add/remove other projects based on changes on the rootNames' references
-     */
-    function createSolutionBuilder(compilerHost: CompilerHost, buildHost: BuildHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions, system?: System): {
-        buildAllProjects: () => ExitStatus;
-        getUpToDateStatus: (project: ParsedCommandLine | undefined) => UpToDateStatus;
-        getUpToDateStatusOfFile: (configFileName: ResolvedConfigFileName) => UpToDateStatus;
-        cleanAllProjects: () => ExitStatus.Success | ExitStatus.DiagnosticsPresent_OutputsSkipped;
-        resetBuildContext: (opts?: BuildOptions) => void;
-        getBuildGraph: (configFileNames: ReadonlyArray<string>) => DependencyGraph | undefined;
-        invalidateProject: (configFileName: string) => void;
-        buildInvalidatedProjects: () => void;
-        buildDependentInvalidatedProjects: () => void;
-        resolveProjectName: (name: string) => ResolvedConfigFileName | undefined;
-        startWatching: () => void;
-    };
-    /**
-     * Gets the UpToDateStatus for a project
-     */
-    function getUpToDateStatus(host: UpToDateHost, project: ParsedCommandLine | undefined): UpToDateStatus;
-    function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string>;
-    function formatUpToDateStatus<T>(configFileName: string, status: UpToDateStatus, relName: (fileName: string) => string, formatMessage: (message: DiagnosticMessage, ...args: string[]) => T): T | undefined;
-}
 declare namespace ts.server {
     type ActionSet = "action::set";
     type ActionInvalidate = "action::invalidate";
     type ActionPackageInstalled = "action::packageInstalled";
+    type ActionValueInspected = "action::valueInspected";
     type EventTypesRegistry = "event::typesRegistry";
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
@@ -4609,7 +4456,7 @@ declare namespace ts.server {
         " __sortedArrayBrand": any;
     }
     interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
     interface TypingInstallerRequestWithProjectName {
         readonly projectName: string;
@@ -4817,14 +4664,7 @@ declare namespace ts {
         getCustomTransformers?(): CustomTransformers | undefined;
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
-    }
-    interface UserPreferences {
-        readonly disableSuggestions?: boolean;
-        readonly quotePreference?: "double" | "single";
-        readonly includeCompletionsForModuleExports?: boolean;
-        readonly includeCompletionsWithInsertText?: boolean;
-        readonly importModuleSpecifierPreference?: "relative" | "non-relative";
-        readonly allowTextChangesInNewFiles?: boolean;
+        writeFile?(fileName: string, content: string): void;
     }
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -4882,9 +4722,9 @@ declare namespace ts {
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
-        applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         /** @deprecated `fileName` will be ignored */
@@ -5046,8 +4886,15 @@ declare namespace ts {
         changes: ReadonlyArray<FileTextChanges>;
         commands?: ReadonlyArray<CodeActionCommand>;
     }
-    type CodeActionCommand = InstallPackageAction;
+    type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
     interface InstallPackageAction {
+    }
+    interface GenerateTypesAction extends GenerateTypesOptions {
+    }
+    interface GenerateTypesOptions {
+        readonly file: string;
+        readonly fileToGenerateTypesFor: string;
+        readonly outputFileName: string;
     }
     /**
      * A set of one or more available refactoring actions, grouped under a parent refactoring.
@@ -5114,6 +4961,8 @@ declare namespace ts {
         originalFileName?: string;
     }
     interface RenameLocation extends DocumentSpan {
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
     interface ReferenceEntry extends DocumentSpan {
         isWriteAccess: boolean;
@@ -5266,14 +5115,23 @@ declare namespace ts {
         documentation?: SymbolDisplayPart[];
         tags?: JSDocTagInfo[];
     }
-    interface RenameInfo {
-        canRename: boolean;
-        localizedErrorMessage?: string;
+    type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    interface RenameInfoSuccess {
+        canRename: true;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
         triggerSpan: TextSpan;
+    }
+    interface RenameInfoFailure {
+        canRename: false;
+        localizedErrorMessage: string;
     }
     interface SignatureHelpParameter {
         name: string;
@@ -5751,24 +5609,6 @@ declare namespace ts.server {
         remove(path: NormalizedPath): void;
     }
     function createNormalizedPathMap<T>(): NormalizedPathMap<T>;
-    interface ProjectOptions {
-        configHasExtendsProperty: boolean;
-        /**
-         * true if config file explicitly listed files
-         */
-        configHasFilesProperty: boolean;
-        configHasIncludeProperty: boolean;
-        configHasExcludeProperty: boolean;
-        projectReferences: ReadonlyArray<ProjectReference> | undefined;
-        /**
-         * these fields can be present in the project file
-         */
-        files?: string[];
-        wildcardDirectories?: Map<WatchDirectoryFlags>;
-        compilerOptions?: CompilerOptions;
-        typeAcquisition?: TypeAcquisition;
-        compileOnSave?: boolean;
-    }
     function isInferredProjectName(name: string): boolean;
     function makeInferredProjectName(counter: number): string;
     function createSortedArray<T>(): SortedArray<T>;
@@ -6602,15 +6442,17 @@ declare namespace ts.server.protocol {
     /**
      * Information about the item to be renamed.
      */
-    interface RenameInfo {
+    type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    interface RenameInfoSuccess {
         /**
          * True if item can be renamed.
          */
-        canRename: boolean;
+        canRename: true;
         /**
-         * Error message if item can not be renamed.
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
-        localizedErrorMessage?: string;
+        fileToRename?: string;
         /**
          * Display name of the item to be renamed.
          */
@@ -6627,6 +6469,15 @@ declare namespace ts.server.protocol {
          * Optional modifiers for the kind (such as 'public').
          */
         kindModifiers: string;
+        /** Span of text to rename. */
+        triggerSpan: TextSpan;
+    }
+    interface RenameInfoFailure {
+        canRename: false;
+        /**
+         * Error message if item can not be renamed.
+         */
+        localizedErrorMessage: string;
     }
     /**
      *  A group of text spans, all in 'file'.
@@ -6635,7 +6486,11 @@ declare namespace ts.server.protocol {
         /** The file to which the spans apply */
         file: string;
         /** The text spans in this group */
-        locs: TextSpan[];
+        locs: RenameTextSpan[];
+    }
+    interface RenameTextSpan extends TextSpan {
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
     interface RenameResponseBody {
         /**
@@ -7148,7 +7003,7 @@ declare namespace ts.server.protocol {
      * begin with prefix.
      */
     interface CompletionsRequest extends FileLocationRequest {
-        command: CommandTypes.Completions;
+        command: CommandTypes.Completions | CommandTypes.CompletionInfo;
         arguments: CompletionsRequestArgs;
     }
     /**
@@ -7660,6 +7515,35 @@ declare namespace ts.server.protocol {
          */
         openFiles: string[];
     }
+    type ProjectLoadingStartEventName = "projectLoadingStart";
+    interface ProjectLoadingStartEvent extends Event {
+        event: ProjectLoadingStartEventName;
+        body: ProjectLoadingStartEventBody;
+    }
+    interface ProjectLoadingStartEventBody {
+        /** name of the project */
+        projectName: string;
+        /** reason for loading */
+        reason: string;
+    }
+    type ProjectLoadingFinishEventName = "projectLoadingFinish";
+    interface ProjectLoadingFinishEvent extends Event {
+        event: ProjectLoadingFinishEventName;
+        body: ProjectLoadingFinishEventBody;
+    }
+    interface ProjectLoadingFinishEventBody {
+        /** name of the project */
+        projectName: string;
+    }
+    type SurveyReadyEventName = "surveyReady";
+    interface SurveyReadyEvent extends Event {
+        event: SurveyReadyEventName;
+        body: SurveyReadyEventBody;
+    }
+    interface SurveyReadyEventBody {
+        /** Name of the survey. This is an internal machine- and programmer-friendly name */
+        surveyId: string;
+    }
     type LargeFileReferencedEventName = "largeFileReferenced";
     interface LargeFileReferencedEvent extends Event {
         event: LargeFileReferencedEventName;
@@ -7995,6 +7879,7 @@ declare namespace ts.server.protocol {
         readonly includeCompletionsWithInsertText?: boolean;
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly allowTextChangesInNewFiles?: boolean;
+        readonly lazyConfiguredProjectsFromExternalProject?: boolean;
     }
     interface CompilerOptions {
         allowJs?: boolean;
@@ -8126,14 +8011,14 @@ declare namespace ts.server {
         getSnapshot(): IScriptSnapshot;
         private ensureRealPath;
         getFormatCodeSettings(): FormatCodeSettings | undefined;
-        getPreferences(): UserPreferences | undefined;
+        getPreferences(): protocol.UserPreferences | undefined;
         attachToProject(project: Project): boolean;
         isAttached(project: Project): boolean;
         detachFromProject(project: Project): void;
         detachAllProjects(): void;
         getDefaultProject(): Project;
         registerFileUpdate(): void;
-        setOptions(formatSettings: FormatCodeSettings, preferences: UserPreferences | undefined): void;
+        setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void;
         getLatestVersion(): string;
         saveTo(fileName: string): void;
         reloadFromFile(tempFileName?: NormalizedPath): boolean;
@@ -8238,6 +8123,7 @@ declare namespace ts.server {
          * This property is different from projectStructureVersion since in most cases edits don't affect set of files in the project
          */
         private projectStateVersion;
+        protected isInitialLoadPending: () => boolean;
         private readonly cancellationToken;
         isNonTsProject(): boolean;
         isJsOnlyProject(): boolean;
@@ -8261,6 +8147,7 @@ declare namespace ts.server {
         useCaseSensitiveFileNames(): boolean;
         readDirectory(path: string, extensions?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
         readFile(fileName: string): string | undefined;
+        writeFile(fileName: string, content: string): void;
         fileExists(file: string): boolean;
         resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[];
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
@@ -8322,7 +8209,7 @@ declare namespace ts.server {
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
-        protected enableGlobalPlugins(): void;
+        protected enableGlobalPlugins(options: CompilerOptions): void;
         protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
@@ -8351,14 +8238,14 @@ declare namespace ts.server {
      * Otherwise it will create an InferredProject.
      */
     class ConfiguredProject extends Project {
-        compileOnSaveEnabled: boolean;
-        private projectReferences;
         private typeAcquisition;
         private directoriesWatchedForWildcards;
         readonly canonicalConfigFilePath: NormalizedPath;
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount;
         private projectErrors;
+        private projectReferences;
+        protected isInitialLoadPending: () => boolean;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -8391,6 +8278,7 @@ declare namespace ts.server {
         compileOnSaveEnabled: boolean;
         excludedFiles: ReadonlyArray<NormalizedPath>;
         private typeAcquisition;
+        updateGraph(): boolean;
         getExcludedFiles(): ReadonlyArray<NormalizedPath>;
         getTypeAcquisition(): TypeAcquisition;
         setTypeAcquisition(newTypeAcquisition: TypeAcquisition): void;
@@ -8399,6 +8287,9 @@ declare namespace ts.server {
 declare namespace ts.server {
     const maxProgramSizeForNonTsFiles: number;
     const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    const ProjectLoadingStartEvent = "projectLoadingStart";
+    const ProjectLoadingFinishEvent = "projectLoadingFinish";
+    const SurveyReady = "surveyReady";
     const LargeFileReferencedEvent = "largeFileReferenced";
     const ConfigFileDiagEvent = "configFileDiag";
     const ProjectLanguageServiceStateEvent = "projectLanguageServiceState";
@@ -8408,6 +8299,25 @@ declare namespace ts.server {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: {
             openFiles: string[];
+        };
+    }
+    interface ProjectLoadingStartEvent {
+        eventName: typeof ProjectLoadingStartEvent;
+        data: {
+            project: Project;
+            reason: string;
+        };
+    }
+    interface ProjectLoadingFinishEvent {
+        eventName: typeof ProjectLoadingFinishEvent;
+        data: {
+            project: Project;
+        };
+    }
+    interface SurveyReady {
+        eventName: typeof SurveyReady;
+        data: {
+            surveyId: string;
         };
     }
     interface LargeFileReferencedEvent {
@@ -8488,7 +8398,7 @@ declare namespace ts.server {
     interface OpenFileInfo {
         readonly checkJs: boolean;
     }
-    type ProjectServiceEvent = LargeFileReferencedEvent | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
     type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
     interface SafeList {
         [name: string]: {
@@ -8509,7 +8419,7 @@ declare namespace ts.server {
     function convertScriptKindName(scriptKindName: protocol.ScriptKindName): ScriptKind.Unknown | ScriptKind.JS | ScriptKind.JSX | ScriptKind.TS | ScriptKind.TSX;
     interface HostConfiguration {
         formatCodeOptions: FormatCodeSettings;
-        preferences: UserPreferences;
+        preferences: protocol.UserPreferences;
         hostInfo: string;
         extraFileExtensions?: FileExtensionInfo[];
     }
@@ -8538,6 +8448,7 @@ declare namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo;
+        private readonly scriptInfoInNodeModulesWatchers;
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
@@ -8586,7 +8497,7 @@ declare namespace ts.server {
         private readonly throttledOperations;
         private readonly hostConfiguration;
         private safelist;
-        private legacySafelist;
+        private readonly legacySafelist;
         private pendingProjectUpdates;
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
@@ -8607,6 +8518,8 @@ declare namespace ts.server {
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
         private readonly seenProjects;
+        /** Tracks projects that we have already sent survey events for. */
+        private readonly seenSurveyProjects;
         constructor(opts: ProjectServiceOptions);
         toPath(fileName: string): Path;
         private loadTypesMap;
@@ -8628,9 +8541,9 @@ declare namespace ts.server {
          */
         private ensureProjectStructuresUptoDate;
         getFormatCodeOptions(file: NormalizedPath): FormatCodeSettings;
-        getPreferences(file: NormalizedPath): UserPreferences;
+        getPreferences(file: NormalizedPath): protocol.UserPreferences;
         getHostFormatCodeOptions(): FormatCodeSettings;
-        getHostPreferences(): UserPreferences;
+        getHostPreferences(): protocol.UserPreferences;
         private onSourceFileChanged;
         private handleDeletedFile;
         private onConfigChangedForConfiguredProject;
@@ -8692,15 +8605,13 @@ declare namespace ts.server {
         private findConfiguredProjectByProjectName;
         private getConfiguredProjectByCanonicalConfigFilePath;
         private findExternalProjectByProjectName;
-        private convertConfigFileContentToProjectOptions;
         /** Get a filename if the language service exceeds the maximum allowed program size; otherwise returns undefined. */
         private getFilenameForExceededTotalSizeLimitForNonTsFiles;
         private createExternalProject;
-        private sendProjectTelemetry;
-        private addFilesToNonInferredProjectAndUpdateGraph;
+        private addFilesToNonInferredProject;
         private createConfiguredProject;
         private updateNonInferredProjectFiles;
-        private updateNonInferredProject;
+        private updateRootAndOptionsOfNonInferredProject;
         private sendConfigFileDiagEvent;
         private getOrCreateInferredProjectForProjectRootPathIfEnabled;
         private getOrCreateSingleInferredProjectIfEnabled;
@@ -8708,6 +8619,10 @@ declare namespace ts.server {
         private createInferredProject;
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
         private watchClosedScriptInfo;
+        private watchClosedScriptInfoInNodeModules;
+        private getModifiedTime;
+        private refreshScriptInfo;
+        private refreshScriptInfosInDirectory;
         private stopWatchingScriptInfo;
         private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath;
         private getOrCreateScriptInfoOpenedByClientForNormalizedPath;
@@ -8815,6 +8730,7 @@ declare namespace ts.server {
         globalPlugins?: ReadonlyArray<string>;
         pluginProbeLocations?: ReadonlyArray<string>;
         allowLocalPluginLoads?: boolean;
+        typesMapLocation?: string;
     }
     class Session implements EventSender {
         private readonly gcTimer;
@@ -8837,6 +8753,7 @@ declare namespace ts.server {
         private defaultEventHandler;
         private projectsUpdatedInBackgroundEvent;
         logError(err: Error, cmd: string): void;
+        private logErrorWorker;
         send(msg: protocol.Message): void;
         event<T extends object>(body: T, eventName: string): void;
         /** @deprecated */
@@ -8881,7 +8798,7 @@ declare namespace ts.server {
         private getProjects;
         private getDefaultProject;
         private getRenameLocations;
-        private static mapRenameInfo;
+        private mapRenameInfo;
         private toSpanGroups;
         private getReferences;
         /**

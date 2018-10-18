@@ -1232,11 +1232,11 @@ namespace ts {
             }
 
             if (host.resolveModuleNames) {
-                compilerHost.resolveModuleNames = (moduleNames, containingFile, reusedNames) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames);
+                compilerHost.resolveModuleNames = (moduleNames, containingFile, reusedNames, redirectedReference) => host.resolveModuleNames!(moduleNames, containingFile, reusedNames, redirectedReference);
             }
             if (host.resolveTypeReferenceDirectives) {
-                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile) => {
-                    return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile);
+                compilerHost.resolveTypeReferenceDirectives = (typeReferenceDirectiveNames, containingFile, redirectedReference) => {
+                    return host.resolveTypeReferenceDirectives!(typeReferenceDirectiveNames, containingFile, redirectedReference);
                 };
             }
 
@@ -1276,7 +1276,7 @@ namespace ts {
             // not part of the new program.
             function onReleaseOldSourceFile(oldSourceFile: SourceFile, oldOptions: CompilerOptions) {
                 const oldSettingsKey = documentRegistry.getKeyForCompilationSettings(oldOptions);
-                documentRegistry.releaseDocumentWithKey(oldSourceFile.path, oldSettingsKey);
+                documentRegistry.releaseDocumentWithKey(oldSourceFile.resolvedPath, oldSettingsKey);
             }
 
             function getOrCreateSourceFile(fileName: string, languageVersion: ScriptTarget, onError?: (message: string) => void, shouldCreateNewSourceFile?: boolean): SourceFile | undefined {

@@ -340,16 +340,6 @@ export default hello.hello`);
                     "/src/tests/index.ts"
                 ]);
 
-                function getLibs() {
-                    return [
-                        "/lib/lib.d.ts",
-                        "/lib/lib.es5.d.ts",
-                        "/lib/lib.dom.d.ts",
-                        "/lib/lib.webworker.importscripts.d.ts",
-                        "/lib/lib.scripthost.d.ts"
-                    ];
-                }
-
                 function getCoreOutputs() {
                     return [
                         "/src/core/index.d.ts",
@@ -395,6 +385,74 @@ export default hello.hello`);
                 for (const output of allExpectedOutputs) {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
+            });
+        });
+
+        describe("tsbuild - when project reference is referenced transitively", () => {
+            const projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
+            const allExpectedOutputs = [
+                "/src/a.js", "/src/a.d.ts",
+                "/src/b.js", "/src/b.d.ts",
+                "/src/c.js"
+            ];
+            const expectedFileTraces = [
+                ...getLibs(),
+                "/src/a.ts",
+                ...getLibs(),
+                "/src/a.d.ts",
+                "/src/b.ts",
+                ...getLibs(),
+                "/src/a.d.ts",
+                "/src/b.d.ts",
+                "/src/refs/a.d.ts",
+                "/src/c.ts"
+            ];
+
+            function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedDiagnostics: DiagnosticMessage[], expectedFileTraces: ReadonlyArray<string>) {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                modifyDiskLayout(fs);
+                const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(...expectedDiagnostics);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+                assert.deepEqual(host.traces, expectedFileTraces);
+            }
+
+            function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
+                fs.writeFileSync("/src/b.ts", `import {A} from 'a';
+export const b = new A();`);
+                fs.writeFileSync("/src/tsconfig.b.json", JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        moduleResolution
+                    },
+                    files: ["b.ts"],
+                    references: [{ path: "tsconfig.a.json" }]
+                }));
+            }
+
+            it("verify that it builds correctly", () => {
+                verifyBuild(noop, allExpectedOutputs, emptyArray, expectedFileTraces);
+            });
+
+            it("verify that it builds correctly when the referenced project uses different module resolution", () => {
+                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, emptyArray, expectedFileTraces);
+            });
+
+            it("verify that it build reports error about module not found with node resolution with external module name", () => {
+                // Error in b build only a
+                const allExpectedOutputs = ["/src/a.js", "/src/a.d.ts"];
+                const expectedFileTraces = [
+                    ...getLibs(),
+                    "/src/a.ts",
+                ];
+                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
+                    allExpectedOutputs,
+                    [Diagnostics.Cannot_find_module_0],
+                    expectedFileTraces);
             });
         });
     }
@@ -604,5 +662,15 @@ export default hello.hello`);
         });
         fs.makeReadonly();
         return fs;
+    }
+
+    function getLibs() {
+        return [
+            "/lib/lib.d.ts",
+            "/lib/lib.es5.d.ts",
+            "/lib/lib.dom.d.ts",
+            "/lib/lib.webworker.importscripts.d.ts",
+            "/lib/lib.scripthost.d.ts"
+        ];
     }
 }

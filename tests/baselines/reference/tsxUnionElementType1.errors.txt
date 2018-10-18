@@ -1,0 +1,18 @@
+tests/cases/conformance/jsx/file.tsx(12,2): error TS2604: JSX element type 'SFCComp' does not have any construct or call signatures.
+
+
+==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
+    import React = require('react');
+    
+    function SFC1(prop: { x: number }) {
+        return <div>hello</div>;
+    };
+    
+    function SFC2(prop: { x: boolean }) {
+        return <h1>World </h1>;
+    }
+    
+    var SFCComp = SFC1 || SFC2;
+    <SFCComp x />
+     ~~~~~~~
+!!! error TS2604: JSX element type 'SFCComp' does not have any construct or call signatures.

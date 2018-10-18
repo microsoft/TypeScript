@@ -1,5 +1,7 @@
-tests/cases/conformance/jsx/tsxTypeErrors.tsx(25,19): error TS2339: Property 'reqd' does not exist on type '{}'.
-tests/cases/conformance/jsx/tsxTypeErrors.tsx(31,19): error TS2339: Property 'pt' does not exist on type '{}'.
+tests/cases/conformance/jsx/tsxTypeErrors.tsx(25,11): error TS2322: Type '{ reqd: boolean; }' is not assignable to type '{}'.
+  Property 'reqd' does not exist on type '{}'.
+tests/cases/conformance/jsx/tsxTypeErrors.tsx(31,11): error TS2322: Type '{ pt: { x: number; y: string; }; }' is not assignable to type '{}'.
+  Property 'pt' does not exist on type '{}'.
 
 
 ==== tests/cases/conformance/jsx/tsxTypeErrors.tsx (2 errors) ====
@@ -28,15 +30,17 @@ tests/cases/conformance/jsx/tsxTypeErrors.tsx(31,19): error TS2339: Property 'pt
     // Let's use it
     // TODO: Error on missing 'reqd'
     var b1 = <MyClass reqd={true} />; 
-                      ~~~~~~~~~~~
-!!! error TS2339: Property 'reqd' does not exist on type '{}'.
+              ~~~~~~~
+!!! error TS2322: Type '{ reqd: boolean; }' is not assignable to type '{}'.
+!!! error TS2322:   Property 'reqd' does not exist on type '{}'.
     
     // Mistyped attribute member
     // sample.tsx(23,22): error TS2322: Type '{ x: number; y: string; }' is not assignable to type '{ x: number; y: number; }'.
     //  Types of property 'y' are incompatible.
     //    Type 'string' is not assignable to type 'number'.
     var b2 = <MyClass pt={{x: 4, y: 'oops'}} />;
-                      ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2339: Property 'pt' does not exist on type '{}'.
+              ~~~~~~~
+!!! error TS2322: Type '{ pt: { x: number; y: string; }; }' is not assignable to type '{}'.
+!!! error TS2322:   Property 'pt' does not exist on type '{}'.
     
     

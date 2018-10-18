@@ -1013,7 +1013,7 @@ namespace ts {
                                     i++;
                                     break;
                                 case "list":
-                                    const result = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i], errors);
+                                    const result = parseListTypeOption(opt, args[i], errors);
                                     options[opt.name] = result || [];
                                     if (result) {
                                         i++;
@@ -1293,6 +1293,9 @@ namespace ts {
 
         const result = parseJsonText(configFileName, configFileText);
         const cwd = host.getCurrentDirectory();
+        result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
+        result.resolvedPath = result.path;
+        result.originalFileName = result.fileName;
         return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 
@@ -1667,7 +1670,7 @@ namespace ts {
                 return undefined;
             }
             else if (optionDefinition.type === "list") {
-                return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
+                return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
             }
             else {
                 return (<CommandLineOptionOfCustomType>optionDefinition).type;
@@ -1731,7 +1734,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
+                    return option.type.keys().next().value;
             }
         }
 
@@ -2338,7 +2341,7 @@ namespace ts {
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (isNullOrUndefined(value)) return undefined;
         if (option.type === "list") {
-            const listOption = <CommandLineOptionOfListType>option;
+            const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
                 return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
             }
@@ -2745,7 +2748,7 @@ namespace ts {
             case "boolean":
                 return typeof value === "boolean" ? value : "";
             case "list":
-                const elementType = (option as CommandLineOptionOfListType).element;
+                const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {
