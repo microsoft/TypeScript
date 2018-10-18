@@ -158,7 +158,7 @@ namespace ts.refactor {
 
                     const shouldMove = (name: Identifier): boolean => {
                         const symbol = isBindingElement(name.parent)
-                            ? getPropertySymbolFromBindingElement(checker, name.parent as BindingElement & { name: Identifier })
+                            ? getPropertySymbolFromBindingElement(checker, name.parent as ObjectBindingElementWithoutPropertyName)
                             : skipAlias(checker.getSymbolAtLocation(name)!, checker); // TODO: GH#18217
                         return !!symbol && movedSymbols.has(symbol);
                     };
@@ -657,7 +657,7 @@ namespace ts.refactor {
 
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                return isBinaryExpression(expression) && getSpecialPropertyAssignmentKind(expression) === SpecialPropertyAssignmentKind.ExportsProperty
+                return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
                     ? cb(statement as TopLevelExpressionStatement)
                     : undefined;
             }

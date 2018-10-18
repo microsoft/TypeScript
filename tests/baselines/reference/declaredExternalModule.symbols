@@ -1,6 +1,6 @@
 === tests/cases/compiler/declaredExternalModule.ts ===
 declare module 'connect' {
->'connect' : Symbol('connect', Decl(declaredExternalModule.ts, 0, 0))
+>'connect' : Symbol("connect", Decl(declaredExternalModule.ts, 0, 0))
 
     interface connectModule {
 >connectModule : Symbol(connectModule, Decl(declaredExternalModule.ts, 0, 26))

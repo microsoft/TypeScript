@@ -130,31 +130,31 @@ class C extends A { c: string }
 >c : string
 
 function foo(x: A | undefined) {
->foo : (x: A) => void
->x : A
+>foo : (x: A | undefined) => void
+>x : A | undefined
 
     x;  // A | undefined
->x : A
+>x : A | undefined
 
     if (x instanceof B || x instanceof C) {
 >x instanceof B || x instanceof C : boolean
 >x instanceof B : boolean
->x : A
+>x : A | undefined
 >B : typeof B
 >x instanceof C : boolean
->x : A
+>x : A | undefined
 >C : typeof C
 
         x;  // B | C
 >x : B | C
     }
     x;  // A | undefined
->x : A
+>x : A | undefined
 
     if (x instanceof B && x instanceof C) {
 >x instanceof B && x instanceof C : boolean
 >x instanceof B : boolean
->x : A
+>x : A | undefined
 >B : typeof B
 >x instanceof C : boolean
 >x : B
@@ -164,11 +164,11 @@ function foo(x: A | undefined) {
 >x : B & C
     }
     x;  // A | undefined
->x : A
+>x : A | undefined
 
     if (!x) {
 >!x : boolean
->x : A
+>x : A | undefined
 
         return;
     }
@@ -211,7 +211,7 @@ function foo(x: A | undefined) {
 
 interface X {
     x?: string;
->x : string
+>x : string | undefined
 }
 
 class Y {
@@ -241,3 +241,51 @@ function goo(x: X) {
     x;
 >x : X
 }
+
+// Repro from #27282
+
+declare const x: (() => void)|null;
+>x : (() => void) | null
+>null : null
+
+declare const ctor: Function;
+>ctor : Function
+
+if (x instanceof ctor) {
+>x instanceof ctor : boolean
+>x : (() => void) | null
+>ctor : Function
+
+    x();
+>x() : void
+>x : () => void
+}
+
+// Repro from #27550 (based on uglify code)
+=== tests/cases/compiler/uglify.js ===
+/** @constructor */
+function AtTop(val) { this.val = val }
+>AtTop : typeof AtTop
+>val : any
+>this.val = val : any
+>this.val : any
+>this : AtTop
+>val : any
+>val : any
+
+/** @type {*} */
+var v = 1;
+>v : any
+>1 : 1
+
+if (v instanceof AtTop) {
+>v instanceof AtTop : boolean
+>v : any
+>AtTop : typeof AtTop
+
+    v.val
+>v.val : any
+>v : AtTop
+>val : any
+}
+

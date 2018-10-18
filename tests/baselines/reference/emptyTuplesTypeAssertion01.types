@@ -5,8 +5,8 @@ let x = <[]>[];
 >[] : []
 
 let y = x[0];
->y : never
->x[0] : never
+>y : undefined
+>x[0] : undefined
 >x : []
 >0 : 0
 

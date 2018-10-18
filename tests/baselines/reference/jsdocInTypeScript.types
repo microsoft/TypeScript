@@ -93,3 +93,13 @@ const obj = { foo: (a, b) => a + b };
 >a : any
 >b : any
 
+/** @enum {string} */
+var E = {};
+>E : {}
+>{} : {}
+
+E[""];
+>E[""] : any
+>E : {}
+>"" : ""
+

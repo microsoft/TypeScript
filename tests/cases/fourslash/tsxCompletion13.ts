@@ -2,7 +2,7 @@
 
 //@Filename: file.tsx
 // @jsx: preserve
-// @noLib: true
+// @skipLibCheck: true
 
 //// declare module JSX {
 ////     interface Element { }

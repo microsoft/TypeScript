@@ -6,7 +6,7 @@ declare module "foobar" { export const x: number; }
 foobar;
 
 declare module 'barfoo' { export const x: number; }
->'barfoo' : Symbol('barfoo', Decl(spellingSuggestionModule.ts, 1, 7))
+>'barfoo' : Symbol("barfoo", Decl(spellingSuggestionModule.ts, 1, 7))
 >x : Symbol(x, Decl(spellingSuggestionModule.ts, 3, 38))
 
 barfoo;

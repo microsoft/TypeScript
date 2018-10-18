@@ -5,6 +5,8 @@ namespace ts.server {
 
     // tslint:disable variable-name
     export const ProjectsUpdatedInBackgroundEvent = "projectsUpdatedInBackground";
+    export const ProjectLoadingStartEvent = "projectLoadingStart";
+    export const ProjectLoadingFinishEvent = "projectLoadingFinish";
     export const SurveyReady = "surveyReady";
     export const LargeFileReferencedEvent = "largeFileReferenced";
     export const ConfigFileDiagEvent = "configFileDiag";
@@ -16,6 +18,16 @@ namespace ts.server {
     export interface ProjectsUpdatedInBackgroundEvent {
         eventName: typeof ProjectsUpdatedInBackgroundEvent;
         data: { openFiles: string[]; };
+    }
+
+    export interface ProjectLoadingStartEvent {
+        eventName: typeof ProjectLoadingStartEvent;
+        data: { project: Project; reason: string; };
+    }
+
+    export interface ProjectLoadingFinishEvent {
+        eventName: typeof ProjectLoadingFinishEvent;
+        data: { project: Project; };
     }
 
     export interface SurveyReady {
@@ -44,6 +56,24 @@ namespace ts.server {
         readonly data: ProjectInfoTelemetryEventData;
     }
 
+/* __GDPR__
+   "projectInfo" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
+        "projectId": { "classification": "EndUserPseudonymizedInformation", "purpose": "FeatureInsight", "endpoint": "ProjectId" },
+        "fileStats": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "compilerOptions": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "extends": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "files": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "include": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "exclude": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "compileOnSave": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "typeAcquisition": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "configFileName": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "projectType": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "languageServiceEnabled": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
+        "version": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }
+   }
+ */
     export interface ProjectInfoTelemetryEventData {
         /** Cryptographically secure hash of project file location. */
         readonly projectId: string;
@@ -104,7 +134,15 @@ namespace ts.server {
         readonly checkJs: boolean;
     }
 
-    export type ProjectServiceEvent = LargeFileReferencedEvent | SurveyReady | ProjectsUpdatedInBackgroundEvent | ConfigFileDiagEvent | ProjectLanguageServiceStateEvent | ProjectInfoTelemetryEvent | OpenFileInfoTelemetryEvent;
+    export type ProjectServiceEvent = LargeFileReferencedEvent |
+        SurveyReady |
+        ProjectsUpdatedInBackgroundEvent |
+        ProjectLoadingStartEvent |
+        ProjectLoadingFinishEvent |
+        ConfigFileDiagEvent |
+        ProjectLanguageServiceStateEvent |
+        ProjectInfoTelemetryEvent |
+        OpenFileInfoTelemetryEvent;
 
     export type ProjectServiceEventHandler = (event: ProjectServiceEvent) => void;
 
@@ -291,7 +329,8 @@ namespace ts.server {
         ClosedScriptInfo = "Closed Script info",
         ConfigFileForInferredRoot = "Config file for the inferred project root",
         FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
-        TypeRoots = "Type root directory"
+        TypeRoots = "Type root directory",
+        NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
     }
 
     const enum ConfigFileWatcherStatus {
@@ -353,8 +392,16 @@ namespace ts.server {
         return !!(infoOrFileName as ScriptInfo).containingProjects;
     }
 
+    interface ScriptInfoInNodeModulesWatcher extends FileWatcher {
+        refCount: number;
+    }
+
     function getDetailWatchInfo(watchType: WatchType, project: Project | undefined) {
         return `Project: ${project ? project.getProjectName() : ""} WatchType: ${watchType}`;
+    }
+
+    function isScriptInfoWatchedFromNodeModules(info: ScriptInfo) {
+        return !info.isScriptOpen() && info.mTime !== undefined;
     }
 
     /*@internal*/
@@ -380,6 +427,7 @@ namespace ts.server {
          * Container of all known scripts
          */
         private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
          * it does not reset when creating script info again
@@ -438,7 +486,7 @@ namespace ts.server {
 
         private readonly hostConfiguration: HostConfiguration;
         private safelist: SafeList = defaultTypeSafeList;
-        private legacySafelist: { [key: string]: string } = {};
+        private readonly legacySafelist = createMap<string>();
 
         private pendingProjectUpdates = createMap<Project>();
         /* @internal */
@@ -590,14 +638,14 @@ namespace ts.server {
                 this.safelist = raw.typesMap;
                 for (const key in raw.simpleMap) {
                     if (raw.simpleMap.hasOwnProperty(key)) {
-                        this.legacySafelist[key] = raw.simpleMap[key].toLowerCase();
+                        this.legacySafelist.set(key, raw.simpleMap[key].toLowerCase());
                     }
                 }
             }
             catch (e) {
                 this.logger.info(`Error loading types map: ${e}`);
                 this.safelist = defaultTypeSafeList;
-                this.legacySafelist = {};
+                this.legacySafelist.clear();
             }
         }
 
@@ -689,6 +737,33 @@ namespace ts.server {
             const event: LargeFileReferencedEvent = {
                 eventName: LargeFileReferencedEvent,
                 data: { file, fileSize, maxFileSize }
+            };
+            this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendProjectLoadingStartEvent(project: ConfiguredProject, reason: string) {
+            if (!this.eventHandler) {
+                return;
+            }
+            project.sendLoadingProjectFinish = true;
+            const event: ProjectLoadingStartEvent = {
+                eventName: ProjectLoadingStartEvent,
+                data: { project, reason }
+            };
+            this.eventHandler(event);
+        }
+
+        /* @internal */
+        sendProjectLoadingFinishEvent(project: ConfiguredProject) {
+            if (!this.eventHandler || !project.sendLoadingProjectFinish) {
+                return;
+            }
+
+            project.sendLoadingProjectFinish = false;
+            const event: ProjectLoadingFinishEvent = {
+                eventName: ProjectLoadingFinishEvent,
+                data: { project }
             };
             this.eventHandler(event);
         }
@@ -927,6 +1002,7 @@ namespace ts.server {
             else {
                 this.logConfigFileWatchUpdate(project.getConfigFilePath(), project.canonicalConfigFilePath, configFileExistenceInfo, ConfigFileWatcherStatus.ReloadingInferredRootFiles);
                 project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                project.pendingReloadReason = "Change in config file detected";
                 this.delayUpdateProjectGraph(project);
                 // As we scheduled the update on configured project graph,
                 // we would need to schedule the project reload for only the root of inferred projects
@@ -1447,14 +1523,14 @@ namespace ts.server {
 
             for (const f of fileNames) {
                 const fileName = propertyReader.getFileName(f);
-                if (hasTypeScriptFileExtension(fileName)) {
+                if (hasTSFileExtension(fileName)) {
                     continue;
                 }
 
                 totalNonTsFileSize += this.host.getFileSize(fileName);
 
                 if (totalNonTsFileSize > maxProgramSizeForNonTsFiles || totalNonTsFileSize > availableSpace) {
-                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTypeScriptFileExtension, host: this.host }, totalNonTsFileSize));
+                    this.logger.info(getExceedLimitMessage({ propertyReader, hasTSFileExtension, host: this.host }, totalNonTsFileSize));
                     // Keep the size as zero since it's disabled
                     return fileName;
                 }
@@ -1464,14 +1540,14 @@ namespace ts.server {
 
             return;
 
-            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
+            function getExceedLimitMessage(context: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }, totalNonTsFileSize: number) {
                 const files = getTop5LargestFiles(context);
 
                 return `Non TS file size exceeded limit (${totalNonTsFileSize}). Largest files: ${files.map(file => `${file.name}:${file.size}`).join(", ")}`;
             }
-            function getTop5LargestFiles({ propertyReader, hasTypeScriptFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTypeScriptFileExtension: (filename: string) => boolean, host: ServerHost }) {
+            function getTop5LargestFiles({ propertyReader, hasTSFileExtension, host }: { propertyReader: FilePropertyReader<any>, hasTSFileExtension: (filename: string) => boolean, host: ServerHost }) {
                 return fileNames.map(f => propertyReader.getFileName(f))
-                    .filter(name => hasTypeScriptFileExtension(name))
+                    .filter(name => hasTSFileExtension(name))
                     .map(name => ({ name, size: host.getFileSize!(name) })) // TODO: GH#18217
                     .sort((a, b) => b.size - a.size)
                     .slice(0, 5);
@@ -1585,22 +1661,23 @@ namespace ts.server {
         }
 
         /* @internal */
-        private createConfiguredProjectWithDelayLoad(configFileName: NormalizedPath) {
+        private createConfiguredProjectWithDelayLoad(configFileName: NormalizedPath, reason: string) {
             const project = this.createConfiguredProject(configFileName);
             project.pendingReload = ConfigFileProgramReloadLevel.Full;
+            project.pendingReloadReason = reason;
             return project;
         }
 
         /* @internal */
-        private createAndLoadConfiguredProject(configFileName: NormalizedPath) {
+        private createAndLoadConfiguredProject(configFileName: NormalizedPath, reason: string) {
             const project = this.createConfiguredProject(configFileName);
-            this.loadConfiguredProject(project);
+            this.loadConfiguredProject(project, reason);
             return project;
         }
 
         /* @internal */
-        private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath) {
-            const project = this.createAndLoadConfiguredProject(configFileName);
+        private createLoadAndUpdateConfiguredProject(configFileName: NormalizedPath, reason: string) {
+            const project = this.createAndLoadConfiguredProject(configFileName, reason);
             project.updateGraph();
             return project;
         }
@@ -1609,7 +1686,9 @@ namespace ts.server {
          * Read the config file of the project, and update the project root file names.
          */
         /* @internal */
-        private loadConfiguredProject(project: ConfiguredProject) {
+        private loadConfiguredProject(project: ConfiguredProject, reason: string) {
+            this.sendProjectLoadingStartEvent(project, reason);
+
             // Read updated contents from disk
             const configFilename = normalizePath(project.getConfigFilePath());
 
@@ -1646,6 +1725,7 @@ namespace ts.server {
                 };
             }
             project.configFileSpecs = parsedCommandLine.configFileSpecs;
+            project.canConfigFileJsonReportNoInputFiles = canJsonReportNoInutFiles(parsedCommandLine.raw);
             project.setProjectErrors(configFileErrors);
             project.updateReferences(parsedCommandLine.projectReferences);
             const lastFileExceededProgramSize = this.getFilenameForExceededTotalSizeLimitForNonTsFiles(project.canonicalConfigFilePath, compilerOptions, parsedCommandLine.fileNames, fileNamePropertyReader);
@@ -1738,7 +1818,7 @@ namespace ts.server {
             const configFileSpecs = project.configFileSpecs!; // TODO: GH#18217
             const configFileName = project.getConfigFilePath();
             const fileNamesResult = getFileNamesFromConfigSpecs(configFileSpecs, getDirectoryPath(configFileName), project.getCompilationSettings(), project.getCachedDirectoryStructureHost(), this.hostConfiguration.extraFileExtensions);
-            project.updateErrorOnNoInputFiles(fileNamesResult.fileNames.length !== 0);
+            project.updateErrorOnNoInputFiles(fileNamesResult);
             this.updateNonInferredProjectFiles(project, fileNamesResult.fileNames.concat(project.getExternalFiles()), fileNamePropertyReader);
             return project.updateGraph();
         }
@@ -1747,7 +1827,7 @@ namespace ts.server {
          * Read the config file of the project again by clearing the cache and update the project graph
          */
         /* @internal */
-        reloadConfiguredProject(project: ConfiguredProject) {
+        reloadConfiguredProject(project: ConfiguredProject, reason: string) {
             // At this point, there is no reason to not have configFile in the host
             const host = project.getCachedDirectoryStructureHost();
 
@@ -1757,7 +1837,7 @@ namespace ts.server {
             this.logger.info(`Reloading configured project ${configFileName}`);
 
             // Load project from the disk
-            this.loadConfiguredProject(project);
+            this.loadConfiguredProject(project, reason);
             project.updateGraph();
 
             this.sendConfigFileDiagEvent(project, configFileName);
@@ -1923,16 +2003,95 @@ namespace ts.server {
             if (!info.isDynamicOrHasMixedContent() &&
                 (!this.globalCacheLocationDirectoryPath ||
                     !startsWith(info.path, this.globalCacheLocationDirectoryPath))) {
-                const { fileName } = info;
-                info.fileWatcher = this.watchFactory.watchFilePath(
-                    this.host,
-                    fileName,
-                    (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
-                    PollingInterval.Medium,
-                    info.path,
-                    WatchType.ClosedScriptInfo
-                );
+                const indexOfNodeModules = info.path.indexOf("/node_modules/");
+                if (!this.host.getModifiedTime || indexOfNodeModules === -1) {
+                    info.fileWatcher = this.watchFactory.watchFilePath(
+                        this.host,
+                        info.fileName,
+                        (fileName, eventKind, path) => this.onSourceFileChanged(fileName, eventKind, path),
+                        PollingInterval.Medium,
+                        info.path,
+                        WatchType.ClosedScriptInfo
+                    );
+                }
+                else {
+                    info.mTime = this.getModifiedTime(info);
+                    info.fileWatcher = this.watchClosedScriptInfoInNodeModules(info.path.substr(0, indexOfNodeModules) as Path);
+                }
             }
+        }
+
+        private watchClosedScriptInfoInNodeModules(dir: Path): ScriptInfoInNodeModulesWatcher {
+            // Watch only directory
+            const existing = this.scriptInfoInNodeModulesWatchers.get(dir);
+            if (existing) {
+                existing.refCount++;
+                return existing;
+            }
+
+            const watchDir = dir + "/node_modules" as Path;
+            const watcher = this.watchFactory.watchDirectory(
+                this.host,
+                watchDir,
+                (fileOrDirectory) => {
+                    const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    // Has extension
+                    Debug.assert(result.refCount > 0);
+                    if (watchDir === fileOrDirectoryPath) {
+                        this.refreshScriptInfosInDirectory(watchDir);
+                    }
+                    else {
+                        const info = this.getScriptInfoForPath(fileOrDirectoryPath);
+                        if (info) {
+                            if (isScriptInfoWatchedFromNodeModules(info)) {
+                                this.refreshScriptInfo(info);
+                            }
+                        }
+                        // Folder
+                        else if (!hasExtension(fileOrDirectoryPath)) {
+                            this.refreshScriptInfosInDirectory(fileOrDirectoryPath);
+                        }
+                    }
+                },
+                WatchDirectoryFlags.Recursive,
+                WatchType.NodeModulesForClosedScriptInfo
+            );
+            const result: ScriptInfoInNodeModulesWatcher = {
+                close: () => {
+                    if (result.refCount === 1) {
+                        watcher.close();
+                        this.scriptInfoInNodeModulesWatchers.delete(dir);
+                    }
+                    else {
+                        result.refCount--;
+                    }
+                },
+                refCount: 1
+            };
+            this.scriptInfoInNodeModulesWatchers.set(dir, result);
+            return result;
+        }
+
+        private getModifiedTime(info: ScriptInfo) {
+            return (this.host.getModifiedTime!(info.path) || missingFileModifiedTime).getTime();
+        }
+
+        private refreshScriptInfo(info: ScriptInfo) {
+            const mTime = this.getModifiedTime(info);
+            if (mTime !== info.mTime) {
+                const eventKind = getFileWatcherEventKind(info.mTime!, mTime);
+                info.mTime = mTime;
+                this.onSourceFileChanged(info.fileName, eventKind, info.path);
+            }
+        }
+
+        private refreshScriptInfosInDirectory(dir: Path) {
+            dir = dir + directorySeparator as Path;
+            this.filenameToScriptInfo.forEach(info => {
+                if (isScriptInfoWatchedFromNodeModules(info) && startsWith(info.path, dir)) {
+                    this.refreshScriptInfo(info);
+                }
+            });
         }
 
         private stopWatchingScriptInfo(info: ScriptInfo) {
@@ -2031,7 +2190,6 @@ namespace ts.server {
                             if (project.hasExternalProjectRef() &&
                                 project.pendingReload === ConfigFileProgramReloadLevel.Full &&
                                 !this.pendingProjectUpdates.has(project.getProjectName())) {
-                                this.loadConfiguredProject(project);
                                 project.updateGraph();
                             }
                         });
@@ -2063,7 +2221,7 @@ namespace ts.server {
             // as there is no need to load contents of the files from the disk
 
             // Reload Projects
-            this.reloadConfiguredProjectForFiles(this.openFiles, /*delayReload*/ false, returnTrue);
+            this.reloadConfiguredProjectForFiles(this.openFiles, /*delayReload*/ false, returnTrue, "User requested reload projects");
             this.ensureProjectForOpenFiles();
         }
 
@@ -2074,7 +2232,8 @@ namespace ts.server {
                 /*delayReload*/ true,
                 ignoreIfNotRootOfInferredProject ?
                     isRootOfInferredProject => isRootOfInferredProject : // Reload open files if they are root of inferred project
-                    returnTrue // Reload all the open files impacted by config file
+                    returnTrue, // Reload all the open files impacted by config file
+                "Change in config file detected"
             );
             this.delayEnsureProjectForOpenFiles();
         }
@@ -2086,7 +2245,7 @@ namespace ts.server {
          * If the there is no existing project it just opens the configured project for the config file
          * reloadForInfo provides a way to filter out files to reload configured project for
          */
-        private reloadConfiguredProjectForFiles<T>(openFiles: Map<T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean) {
+        private reloadConfiguredProjectForFiles<T>(openFiles: Map<T>, delayReload: boolean, shouldReloadProjectFor: (openFileValue: T) => boolean, reason: string) {
             const updatedProjects = createMap<true>();
             // try to reload config file for all open files
             openFiles.forEach((openFileValue, path) => {
@@ -2107,11 +2266,12 @@ namespace ts.server {
                     if (!updatedProjects.has(configFileName)) {
                         if (delayReload) {
                             project.pendingReload = ConfigFileProgramReloadLevel.Full;
+                            project.pendingReloadReason = reason;
                             this.delayUpdateProjectGraph(project);
                         }
                         else {
                             // reload from the disk
-                            this.reloadConfiguredProject(project);
+                            this.reloadConfiguredProject(project, reason);
                         }
                         updatedProjects.set(configFileName, true);
                     }
@@ -2198,7 +2358,8 @@ namespace ts.server {
             const configFileName = this.getConfigFileNameForFile(originalFileInfo);
             if (!configFileName) return undefined;
 
-            const configuredProject = this.findConfiguredProjectByProjectName(configFileName) || this.createAndLoadConfiguredProject(configFileName);
+            const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
+                this.createAndLoadConfiguredProject(configFileName, `Creating project for original file: ${originalFileInfo.fileName} for location: ${location.fileName}`);
             updateProjectIfDirty(configuredProject);
             // Keep this configured project as referenced from project
             addOriginalConfiguredProject(configuredProject);
@@ -2248,7 +2409,7 @@ namespace ts.server {
                 if (configFileName) {
                     project = this.findConfiguredProjectByProjectName(configFileName);
                     if (!project) {
-                        project = this.createLoadAndUpdateConfiguredProject(configFileName);
+                        project = this.createLoadAndUpdateConfiguredProject(configFileName, `Creating possible configured project for ${fileName} to open`);
                         // Send the event only if the project got created as part of this open request and info is part of the project
                         if (info.isOrphan()) {
                             // Since the file isnt part of configured project, do not send config file info
@@ -2560,13 +2721,13 @@ namespace ts.server {
                         if (fileExtensionIs(baseName, "js")) {
                             const inferredTypingName = removeFileExtension(baseName);
                             const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);
-                            if (this.legacySafelist[cleanedTypingName]) {
+                            const typeName = this.legacySafelist.get(cleanedTypingName);
+                            if (typeName !== undefined) {
                                 this.logger.info(`Excluded '${normalizedNames[i]}' because it matched ${cleanedTypingName} from the legacy safelist`);
                                 excludedFiles.push(normalizedNames[i]);
                                 // *exclude* it from the project...
                                 exclude = true;
                                 // ... but *include* it in the list of types to acquire
-                                const typeName = this.legacySafelist[cleanedTypingName];
                                 // Same best-effort dedupe as above
                                 if (typeAcqInclude.indexOf(typeName) < 0) {
                                     typeAcqInclude.push(typeName);
@@ -2689,8 +2850,8 @@ namespace ts.server {
                     if (!project) {
                         // errors are stored in the project, do not need to update the graph
                         project = this.getHostPreferences().lazyConfiguredProjectsFromExternalProject ?
-                            this.createConfiguredProjectWithDelayLoad(tsconfigFile) :
-                            this.createLoadAndUpdateConfiguredProject(tsconfigFile);
+                            this.createConfiguredProjectWithDelayLoad(tsconfigFile, `Creating configured project in external project: ${proj.projectFileName}`) :
+                            this.createLoadAndUpdateConfiguredProject(tsconfigFile, `Creating configured project in external project: ${proj.projectFileName}`);
                     }
                     if (project && !contains(exisingConfigFiles, tsconfigFile)) {
                         // keep project alive even if no documents are opened - its lifetime is bound to the lifetime of containing external project

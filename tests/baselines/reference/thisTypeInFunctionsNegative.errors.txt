@@ -188,6 +188,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     ok.f(); // not enough arguments
     ~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:61:46: An argument for 'x' was not provided.
     ok.f('wrong type');
          ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
@@ -208,6 +209,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.explicitC(); // not enough arguments
     ~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:9:24: An argument for 'm' was not provided.
     c.explicitC('wrong type');
                 ~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type"' is not assignable to parameter of type 'number'.
@@ -217,6 +219,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.explicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:3:30: An argument for 'm' was not provided.
     c.explicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
@@ -226,6 +229,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.implicitThis(); // not enough arguments
     ~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:6:18: An argument for 'm' was not provided.
     c.implicitThis('wrong type 2');
                    ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 2"' is not assignable to parameter of type 'number'.
@@ -235,6 +239,7 @@ tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts(178,22): e
     c.explicitProperty(); // not enough arguments
     ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/types/thisType/thisTypeInFunctionsNegative.ts:12:41: An argument for 'm' was not provided.
     c.explicitProperty('wrong type 3');
                        ~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '"wrong type 3"' is not assignable to parameter of type 'number'.

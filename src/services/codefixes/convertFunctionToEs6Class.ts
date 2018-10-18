@@ -138,7 +138,7 @@ namespace ts.codefix {
 
                     default: {
                         // Don't try to declare members in JavaScript files
-                        if (isSourceFileJavaScript(sourceFile)) {
+                        if (isSourceFileJS(sourceFile)) {
                             return;
                         }
                         const prop = createProperty(/*decorators*/ undefined, modifiers, memberDeclaration.name, /*questionToken*/ undefined,

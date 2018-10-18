@@ -9,6 +9,7 @@
     "files": [
         "core.ts",
         "performance.ts",
+        "semver.ts",
 
         "types.ts",
         "sys.ts",
@@ -51,6 +52,7 @@
         "resolutionCache.ts",
         "moduleSpecifiers.ts",
         "watch.ts",
-        "tsbuild.ts"
+        "tsbuild.ts",
+        "inspectValue.ts",
     ]
 }

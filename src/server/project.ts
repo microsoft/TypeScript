@@ -254,6 +254,11 @@ namespace ts.server {
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
+        /* @internal */
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            return this.typingsCache.inspectValue(options);
+        }
+
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
         }
@@ -350,6 +355,10 @@ namespace ts.server {
 
         readFile(fileName: string): string | undefined {
             return this.projectService.host.readFile(fileName);
+        }
+
+        writeFile(fileName: string, content: string): void {
+            return this.projectService.host.writeFile(fileName, content);
         }
 
         fileExists(file: string): boolean {
@@ -574,7 +583,7 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
-                const projectReferences = this.program.getProjectReferences();
+                const projectReferences = this.program.getResolvedProjectReferences();
                 if (projectReferences) {
                     for (const ref of projectReferences) {
                         if (ref) {
@@ -653,7 +662,7 @@ namespace ts.server {
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
-                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath || sourceFile.path);
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
             });
@@ -1311,9 +1320,14 @@ namespace ts.server {
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel;
+        /* @internal */
+        pendingReloadReason: string | undefined;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
+
+        /*@internal*/
+        canConfigFileJsonReportNoInputFiles: boolean;
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
@@ -1326,6 +1340,9 @@ namespace ts.server {
         projectOptions?: ProjectOptions | true;
 
         protected isInitialLoadPending: () => boolean = returnTrue;
+
+        /*@internal*/
+        sendLoadingProjectFinish = false;
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
@@ -1359,12 +1376,15 @@ namespace ts.server {
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
-                    this.projectService.reloadConfiguredProject(this);
+                    const reason = Debug.assertDefined(this.pendingReloadReason);
+                    this.pendingReloadReason = undefined;
+                    this.projectService.reloadConfiguredProject(this, reason);
                     result = true;
                     break;
                 default:
                     result = super.updateGraph();
             }
+            this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             this.projectService.sendSurveyReady(this);
             return result;
@@ -1390,7 +1410,7 @@ namespace ts.server {
         /*@internal*/
         getResolvedProjectReferences() {
             const program = this.getCurrentProgram();
-            return program && program.getProjectReferences();
+            return program && program.getResolvedProjectReferences();
         }
 
         enablePlugins() {
@@ -1531,13 +1551,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(hasFileNames: boolean) {
-            if (hasFileNames) {
-                filterMutate(this.projectErrors!, error => !isErrorNoInputFiles(error)); // TODO: GH#18217
-            }
-            else if (!this.configFileSpecs!.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) { // TODO: GH#18217
-                this.projectErrors!.push(getErrorForNoInputFiles(this.configFileSpecs!, this.getConfigFilePath()));
-            }
+        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
+            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

@@ -31,10 +31,10 @@
 //// let opt = <[|Main/*sixthTarget*/Button|] wrong />;
 
 verify.goToDefinition({
-    firstTarget: "thirdSource",
-    secondTarget: "thirdSource",
+    firstTarget: "firstSource",
+    secondTarget: "firstSource",
     thirdTarget: "firstSource",
     fourthTarget: "firstSource",
     fifthTarget: "secondSource",
-    sixthTarget: "thirdSource"
+    sixthTarget: "firstSource"
 });
