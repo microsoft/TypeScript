@@ -14,6 +14,7 @@ namespace ts.refactor.convertArrowFunctionOrFunction {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     interface Info {
+        token: Node;
         func: FunctionExpression | ArrowFunction;
     }
 
@@ -23,11 +24,22 @@ namespace ts.refactor.convertArrowFunctionOrFunction {
         const info = getInfo(file, startPosition);
 
         if (!info) return undefined;
-        const { func } = info;
+        const { token, func } = info;
 
         const possibleActions: RefactorActionInfo[] = [];
 
-        if (isArrowFunction(func)) {
+        const parent = token.parent;
+
+        if (isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1)) {
+            const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
+            if (isArrowFunction(variableDeclaration.initializer!)) {
+                possibleActions.push({
+                    name: toNamedFunctionActionName,
+                    description: toNamedFunctionActionDescription
+                });
+            }
+        }
+        else if (isArrowFunction(func)) {
             if (isVariableDeclaration(func.parent)) {
                 possibleActions.push({
                     name: toNamedFunctionActionName,
@@ -130,11 +142,28 @@ namespace ts.refactor.convertArrowFunctionOrFunction {
     }
 
     function getInfo(file: SourceFile, startPosition: number): Info | undefined {
-        const node = getTokenAtPosition(file, startPosition);
-        const func = getContainingFunction(node);
-        if (!func || !(isFunctionExpression(func) || isArrowFunction(func)) || rangeContainsRange(func.body, node)) return undefined;
+        const token = getTokenAtPosition(file, startPosition);
+        let func: FunctionExpression | ArrowFunction;
+        const parent = token.parent;
 
-        return { func };
+        if (isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1)) {
+            const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
+
+            if (!variableDeclaration.initializer) return undefined;
+            const initializer = variableDeclaration.initializer;
+
+            if (!isArrowFunction(initializer)) return undefined;
+            func = initializer;
+        }
+        else {
+            const tmpFunc = getContainingFunction(token);
+            if (!tmpFunc || !(isFunctionExpression(tmpFunc) || isArrowFunction(tmpFunc)) || rangeContainsRange(tmpFunc.body, token)) return undefined;
+            func = tmpFunc;
+        }
+
+
+
+        return { token, func };
     }
 
 }
