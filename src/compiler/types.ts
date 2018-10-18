@@ -24,7 +24,84 @@ namespace ts {
         | SyntaxKind.DotToken
         | SyntaxKind.Identifier
         | SyntaxKind.NoSubstitutionTemplateLiteral
-        | SyntaxKind.Unknown;
+        | SyntaxKind.Unknown
+        | KeywordSyntaxKind;
+
+    export type KeywordSyntaxKind =
+        | SyntaxKind.AbstractKeyword
+        | SyntaxKind.AnyKeyword
+        | SyntaxKind.AsKeyword
+        | SyntaxKind.BooleanKeyword
+        | SyntaxKind.BreakKeyword
+        | SyntaxKind.CaseKeyword
+        | SyntaxKind.CatchKeyword
+        | SyntaxKind.ClassKeyword
+        | SyntaxKind.ContinueKeyword
+        | SyntaxKind.ConstKeyword
+        | SyntaxKind.ConstructorKeyword
+        | SyntaxKind.DebuggerKeyword
+        | SyntaxKind.DeclareKeyword
+        | SyntaxKind.DefaultKeyword
+        | SyntaxKind.DeleteKeyword
+        | SyntaxKind.DoKeyword
+        | SyntaxKind.ElseKeyword
+        | SyntaxKind.EnumKeyword
+        | SyntaxKind.ExportKeyword
+        | SyntaxKind.ExtendsKeyword
+        | SyntaxKind.FalseKeyword
+        | SyntaxKind.FinallyKeyword
+        | SyntaxKind.ForKeyword
+        | SyntaxKind.FromKeyword
+        | SyntaxKind.FunctionKeyword
+        | SyntaxKind.GetKeyword
+        | SyntaxKind.IfKeyword
+        | SyntaxKind.ImplementsKeyword
+        | SyntaxKind.ImportKeyword
+        | SyntaxKind.InKeyword
+        | SyntaxKind.InferKeyword
+        | SyntaxKind.InstanceOfKeyword
+        | SyntaxKind.InterfaceKeyword
+        | SyntaxKind.IsKeyword
+        | SyntaxKind.KeyOfKeyword
+        | SyntaxKind.LetKeyword
+        | SyntaxKind.ModuleKeyword
+        | SyntaxKind.NamespaceKeyword
+        | SyntaxKind.NeverKeyword
+        | SyntaxKind.NewKeyword
+        | SyntaxKind.NullKeyword
+        | SyntaxKind.NumberKeyword
+        | SyntaxKind.ObjectKeyword
+        | SyntaxKind.PackageKeyword
+        | SyntaxKind.PrivateKeyword
+        | SyntaxKind.ProtectedKeyword
+        | SyntaxKind.PublicKeyword
+        | SyntaxKind.ReadonlyKeyword
+        | SyntaxKind.RequireKeyword
+        | SyntaxKind.GlobalKeyword
+        | SyntaxKind.ReturnKeyword
+        | SyntaxKind.SetKeyword
+        | SyntaxKind.StaticKeyword
+        | SyntaxKind.StringKeyword
+        | SyntaxKind.SuperKeyword
+        | SyntaxKind.SwitchKeyword
+        | SyntaxKind.SymbolKeyword
+        | SyntaxKind.ThisKeyword
+        | SyntaxKind.ThrowKeyword
+        | SyntaxKind.TrueKeyword
+        | SyntaxKind.TryKeyword
+        | SyntaxKind.TypeKeyword
+        | SyntaxKind.TypeOfKeyword
+        | SyntaxKind.UndefinedKeyword
+        | SyntaxKind.UniqueKeyword
+        | SyntaxKind.UnknownKeyword
+        | SyntaxKind.VarKeyword
+        | SyntaxKind.VoidKeyword
+        | SyntaxKind.WhileKeyword
+        | SyntaxKind.WithKeyword
+        | SyntaxKind.YieldKeyword
+        | SyntaxKind.AsyncKeyword
+        | SyntaxKind.AwaitKeyword
+        | SyntaxKind.OfKeyword;
 
     export type JsxTokenSyntaxKind =
         | SyntaxKind.LessThanSlashToken
@@ -2908,7 +2985,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TypeCheckerHost {
+    export interface TypeCheckerHost extends ModuleSpecifierResolutionHost {
         getCompilerOptions(): CompilerOptions;
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
@@ -3026,8 +3103,6 @@ namespace ts {
         getExportsOfModule(moduleSymbol: Symbol): Symbol[];
         /** Unlike `getExportsOfModule`, this includes properties of an `export =` value. */
         /* @internal */ getExportsAndPropertiesOfModule(moduleSymbol: Symbol): Symbol[];
-
-        getAllAttributesTypeFromJsxOpeningLikeElement(elementNode: JsxOpeningLikeElement): Type | undefined;
         getJsxIntrinsicTagNamesAt(location: Node): Symbol[];
         isOptionalParameter(node: ParameterDeclaration): boolean;
         getAmbientModules(): Symbol[];
@@ -3094,7 +3169,7 @@ namespace ts {
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
          */
-        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression): boolean;
+        /* @internal */ isTypeInvalidDueToUnionDiscriminant(contextualType: Type, obj: ObjectLiteralExpression | JsxAttributes): boolean;
         /**
          * For a union, will include a property if it's defined in *any* of the member types.
          * So for `{ a } | { b }`, this will include both `a` and `b`.
@@ -3183,6 +3258,8 @@ namespace ts {
         InTypeAlias                             = 1 << 23,    // Writing type in type alias declaration
         InInitialEntityName                     = 1 << 24,    // Set when writing the LHS of an entity name or entity name expression
         InReverseMappedType                     = 1 << 25,
+
+        /* @internal */ DoNotIncludeSymbolChain                 = 1 << 26,    // Skip looking up and printing an accessible symbol chain
     }
 
     // Ensure the shared flags between this and `NodeBuilderFlags` stay in alignment
@@ -3245,6 +3322,9 @@ namespace ts {
 
         // Prefer aliases which are not directly visible
         UseAliasDefinedOutsideCurrentScope = 0x00000008,
+
+        // Skip building an accessible symbol chain
+        /* @internal */ DoNotIncludeSymbolChain = 0x00000010,
     }
 
     /* @internal */
@@ -3536,6 +3616,7 @@ namespace ts {
         type?: Type;                        // Type of value symbol
         uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
         declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
+        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
         typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
         outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
         inferredClassType?: Type;           // Type of an inferred ES5 class
@@ -3686,7 +3767,6 @@ namespace ts {
         resolvedType?: Type;              // Cached type of type node
         resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
         resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSignatures?: Map<Signature[]>;   // Cached signatures of jsx node
         resolvedSymbol?: Symbol;          // Cached name resolution result
         resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
         maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
@@ -3702,6 +3782,7 @@ namespace ts {
         switchTypes?: Type[];             // Cached array of switch case expression types
         jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
         contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
+        deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
         capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
@@ -3990,6 +4071,7 @@ namespace ts {
         templateType?: Type;
         modifiersType?: Type;
         resolvedApparentType?: Type;
+        instantiating?: boolean;
     }
 
     export interface EvolvingArrayType extends ObjectType {
@@ -4908,25 +4990,21 @@ namespace ts {
 
         // Markers
         // - Flags used to indicate that a subtree contains a specific transformation.
-        ContainsDecorators = 1 << 12,
-        ContainsPropertyInitializer = 1 << 13,
-        ContainsLexicalThis = 1 << 14,
-        ContainsCapturedLexicalThis = 1 << 15,
-        ContainsLexicalThisInComputedPropertyName = 1 << 16,
-        ContainsDefaultValueAssignments = 1 << 17,
-        ContainsParameterPropertyAssignments = 1 << 18,
-        ContainsSpread = 1 << 19,
-        ContainsObjectSpread = 1 << 20,
-        ContainsRest = ContainsSpread,
-        ContainsObjectRest = ContainsObjectSpread,
-        ContainsComputedPropertyName = 1 << 21,
-        ContainsBlockScopedBinding = 1 << 22,
-        ContainsBindingPattern = 1 << 23,
-        ContainsYield = 1 << 24,
-        ContainsHoistedDeclarationOrCompletion = 1 << 25,
-        ContainsDynamicImport = 1 << 26,
-        Super = 1 << 27,
-        ContainsSuper = 1 << 28,
+        ContainsTypeScriptClassSyntax = 1 << 12,                // Decorators, Property Initializers, Parameter Property Initializers
+        ContainsLexicalThis = 1 << 13,
+        ContainsCapturedLexicalThis = 1 << 14,
+        ContainsLexicalThisInComputedPropertyName = 1 << 15,
+        ContainsDefaultValueAssignments = 1 << 16,
+        ContainsRestOrSpread = 1 << 17,
+        ContainsObjectRestOrSpread = 1 << 18,
+        ContainsComputedPropertyName = 1 << 19,
+        ContainsBlockScopedBinding = 1 << 20,
+        ContainsBindingPattern = 1 << 21,
+        ContainsYield = 1 << 22,
+        ContainsHoistedDeclarationOrCompletion = 1 << 23,
+        ContainsDynamicImport = 1 << 24,
+        Super = 1 << 25,
+        ContainsSuper = 1 << 26,
 
         // Please leave this as 1 << 29.
         // It is the maximum bit we can set before we outgrow the size of a v8 small integer (SMI) on an x86 system.
@@ -4950,23 +5028,22 @@ namespace ts {
         OuterExpressionExcludes = TypeScript | ES2015 | DestructuringAssignment | Generator | HasComputedFlags,
         PropertyAccessExcludes = OuterExpressionExcludes | Super,
         NodeExcludes = PropertyAccessExcludes | ContainsSuper,
-        ArrowFunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        FunctionExcludes = NodeExcludes | ContainsDecorators | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsParameterPropertyAssignments | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRest,
-        ClassExcludes = NodeExcludes | ContainsDecorators | ContainsPropertyInitializer | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsParameterPropertyAssignments | ContainsLexicalThisInComputedPropertyName,
-        ModuleExcludes = NodeExcludes | ContainsDecorators | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
+        ArrowFunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        FunctionExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsDefaultValueAssignments | ContainsCapturedLexicalThis | ContainsLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ConstructorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        MethodOrAccessorExcludes = NodeExcludes | ContainsDefaultValueAssignments | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsYield | ContainsHoistedDeclarationOrCompletion | ContainsBindingPattern | ContainsObjectRestOrSpread,
+        ClassExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName,
+        ModuleExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsLexicalThis | ContainsCapturedLexicalThis | ContainsBlockScopedBinding | ContainsHoistedDeclarationOrCompletion,
         TypeExcludes = ~ContainsTypeScript,
-        ObjectLiteralExcludes = NodeExcludes | ContainsDecorators | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectSpread,
-        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsSpread,
-        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRest,
+        ObjectLiteralExcludes = NodeExcludes | ContainsTypeScriptClassSyntax | ContainsComputedPropertyName | ContainsLexicalThisInComputedPropertyName | ContainsObjectRestOrSpread,
+        ArrayLiteralOrCallOrNewExcludes = NodeExcludes | ContainsRestOrSpread,
+        VariableDeclarationListExcludes = NodeExcludes | ContainsBindingPattern | ContainsObjectRestOrSpread,
         ParameterExcludes = NodeExcludes,
-        CatchClauseExcludes = NodeExcludes | ContainsObjectRest,
-        BindingPatternExcludes = NodeExcludes | ContainsRest,
+        CatchClauseExcludes = NodeExcludes | ContainsObjectRestOrSpread,
+        BindingPatternExcludes = NodeExcludes | ContainsRestOrSpread,
 
         // Masks
         // - Additional bitmasks
-        TypeScriptClassSyntaxMask = ContainsParameterPropertyAssignments | ContainsPropertyInitializer | ContainsDecorators,
         ES2015FunctionSyntaxMask = ContainsCapturedLexicalThis | ContainsDefaultValueAssignments,
     }
 
@@ -5382,7 +5459,7 @@ namespace ts {
         reportInaccessibleThisError?(): void;
         reportPrivateInBaseOfClassExpression?(propertyName: string): void;
         reportInaccessibleUniqueSymbolError?(): void;
-        moduleResolverHost?: EmitHost;
+        moduleResolverHost?: ModuleSpecifierResolutionHost & { getSourceFiles(): ReadonlyArray<SourceFile>, getCommonSourceDirectory(): string };
         trackReferencedAmbientModule?(decl: ModuleDeclaration, symbol: Symbol): void;
         trackExternalModuleSymbolOfImportTypeNode?(symbol: Symbol): void;
     }

@@ -1066,6 +1066,9 @@ namespace ts {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
+            if (options.watch) {
+                diagnostics.removeKey(proj);
+            }
             projectStatus.setValue(proj, status);
             return resultFlags;
 

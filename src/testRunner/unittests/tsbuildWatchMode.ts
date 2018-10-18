@@ -97,7 +97,7 @@ namespace ts.tscWatch {
         const tests = subProjectFiles(SubProject.tests);
         const ui = subProjectFiles(SubProject.ui);
         const allFiles: ReadonlyArray<File> = [libFile, ...core, ...logic, ...tests, ...ui];
-        const testProjectExpectedWatchedFiles = [core[0], core[1], core[2], ...logic, ...tests].map(f => f.path);
+        const testProjectExpectedWatchedFiles = [core[0], core[1], core[2]!, ...logic, ...tests].map(f => f.path); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
         const testProjectExpectedWatchedDirectoriesRecursive = [projectPath(SubProject.core), projectPath(SubProject.logic)];
 
         function createSolutionInWatchMode(allFiles: ReadonlyArray<File>, defaultOptions?: BuildOptions, disableConsoleClears?: boolean) {
@@ -244,7 +244,7 @@ export class someClass2 { }`);
             const allFiles = [libFile, ...core, logic[1], ...tests];
             const host = createWatchedSystem(allFiles, { currentDirectory: projectsLocation });
             createSolutionBuilderWithWatch(host, [`${project}/${SubProject.tests}`]);
-            checkWatchedFiles(host, [core[0], core[1], core[2], logic[0], ...tests].map(f => f.path));
+            checkWatchedFiles(host, [core[0], core[1], core[2]!, logic[0], ...tests].map(f => f.path)); // tslint:disable-line no-unnecessary-type-assertion (TODO: type assertion should be necessary)
             checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
             checkWatchedDirectories(host, [projectPath(SubProject.core)], /*recursive*/ true);
             checkOutputErrorsInitial(host, [
@@ -354,6 +354,58 @@ function myFunc() { return 100; }`);
                 checkWatchedDirectories(host, emptyArray, /*recursive*/ false);
                 checkWatchedDirectories(host, testProjectExpectedWatchedDirectoriesRecursive, /*recursive*/ true);
             }
+        });
+
+        it("when referenced project change introduces error in the down stream project and then fixes it", () => {
+            const subProjectLibrary = `${projectsLocation}/${project}/Library`;
+            const libraryTs: File = {
+                path: `${subProjectLibrary}/library.ts`,
+                content: `
+interface SomeObject
+{
+	message: string;
+}
+
+export function createSomeObject(): SomeObject
+{
+	return {
+		message: "new Object"
+	};
+}`
+            };
+            const libraryTsconfig: File = {
+                path: `${subProjectLibrary}/tsconfig.json`,
+                content: JSON.stringify({ compilerOptions: { composite: true } })
+            };
+            const subProjectApp = `${projectsLocation}/${project}/App`;
+            const appTs: File = {
+                path: `${subProjectApp}/app.ts`,
+                content: `import { createSomeObject } from "../Library/library";
+createSomeObject().message;`
+            };
+            const appTsconfig: File = {
+                path: `${subProjectApp}/tsconfig.json`,
+                content: JSON.stringify({ references: [{ path: "../Library" }] })
+            };
+
+            const files = [libFile, libraryTs, libraryTsconfig, appTs, appTsconfig];
+            const host = createWatchedSystem(files, { currentDirectory: `${projectsLocation}/${project}` });
+            createSolutionBuilderWithWatch(host, ["App"]);
+            checkOutputErrorsInitial(host, emptyArray);
+
+            // Change message in library to message2
+            host.writeFile(libraryTs.path, libraryTs.content.replace(/message/g, "message2"));
+            host.checkTimeoutQueueLengthAndRun(1); // Build library
+            host.checkTimeoutQueueLengthAndRun(1); // Build App
+            checkOutputErrorsIncremental(host, [
+                "App/app.ts(2,20): error TS2551: Property 'message' does not exist on type 'SomeObject'. Did you mean 'message2'?\n"
+            ]);
+
+            // Revert library changes
+            host.writeFile(libraryTs.path, libraryTs.content);
+            host.checkTimeoutQueueLengthAndRun(1); // Build library
+            host.checkTimeoutQueueLengthAndRun(1); // Build App
+            checkOutputErrorsIncremental(host, emptyArray);
         });
 
         describe("reports errors in all projects on incremental compile", () => {

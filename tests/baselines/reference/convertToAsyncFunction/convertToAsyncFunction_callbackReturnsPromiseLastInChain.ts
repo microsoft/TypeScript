@@ -8,5 +8,5 @@ function /*[#|*/f/*|]*/() {
 
 async function f() {
     const s = await fetch('https://typescriptlang.org');
-    return Promise.resolve(s.statusText.length);
+    return await Promise.resolve(s.statusText.length);
 }
