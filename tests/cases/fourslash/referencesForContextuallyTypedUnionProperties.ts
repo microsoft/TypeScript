@@ -30,11 +30,11 @@
 ////// Widened type
 ////var w: A|B = { a:0, [|{| "isWriteAccess": true, "isDefinition": true, "type": "undefined" |}common|]: undefined };
 ////
-////// Untped -- should not be included
-////var u1 = { a: 0, b: 0, common: "" };
-////var u2 = { b: 0, common: 0 };
+////var u1 = { a: 0, b: 0, common: "" }; // Does not match 'A or 'B'
+////var u2 = { b: 0, [|{| "isWriteAccess": true, "isDefinition": true |}common|]: 0 }; // Matches 'B'
 
-const [aCommon, bCommon, ...unionRefs] = test.ranges();
+const [aCommon, bCommon, u0, u1, u2, u3, u4, u5, u6, u7, last] = test.ranges();
+const unionRefs = [u0, u1, u2, u3, u4, u5, u6, u7];
 verify.referenceGroups(aCommon, [
     { definition: "(property) A.common: string", ranges: [aCommon] },
     { definition: "(property) common: string | number", ranges: unionRefs },
@@ -42,9 +42,15 @@ verify.referenceGroups(aCommon, [
 verify.referenceGroups(bCommon, [
     { definition: "(property) B.common: number", ranges: [bCommon] },
     { definition: "(property) common: string | number", ranges: unionRefs },
+    { definition: "(property) common: number", ranges: [last] },
 ]);
 verify.referenceGroups(unionRefs, [
     { definition: "(property) A.common: string", ranges: [aCommon] },
     { definition: "(property) B.common: number", ranges: [bCommon] },
     { definition: `(property) common: string | number`, ranges: unionRefs },
+    { definition: "(property) common: number", ranges: [last] },
+]);
+verify.referenceGroups(last, [
+    { definition: "(property) B.common: number", ranges: [bCommon] },
+    { definition: "(property) common: number", ranges: [u1, u3, u5, u6, last] },
 ]);

@@ -1560,13 +1560,32 @@ namespace ts.FindAllReferences.Core {
     }
     function getRelatedSymbol(search: Search, referenceSymbol: Symbol, referenceLocation: Node, state: State): RelatedSymbol | undefined {
         const { checker } = state;
-        return forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
+        const fromRelatedSymbol = forEachRelatedSymbol(referenceSymbol, referenceLocation, checker, /*isForRenamePopulateSearchSymbolSet*/ false,
             (sym, rootSymbol, baseSymbol, kind): RelatedSymbol | undefined => search.includes(baseSymbol || rootSymbol || sym)
                 // For a base type, use the symbol for the derived type. For a synthetic (e.g. union) property, use the union symbol.
                 ? { symbol: rootSymbol && !(getCheckFlags(sym) & CheckFlags.Synthetic) ? rootSymbol : sym, kind }
                 : undefined,
             /*allowBaseTypes*/ rootSymbol =>
                 !(search.parents && !search.parents.some(parent => explicitlyInheritsFrom(rootSymbol.parent!, parent, state.inheritsFromCache, checker))));
+        if (fromRelatedSymbol) return fromRelatedSymbol;
+
+        const referenceParent = referenceSymbol.parent;
+        if (referenceParent && (referenceParent.flags & (SymbolFlags.Interface | SymbolFlags.ObjectLiteral))) {
+            return firstDefined(search.allSearchSymbols, (searchSymbol): RelatedSymbol | undefined => {
+                const searchParent = searchSymbol.parent;
+                if (searchParent && (searchParent.flags & (SymbolFlags.Interface | SymbolFlags.ObjectLiteral))) {
+                    const searchContainingType = getTypeOrDeclaredType(searchParent);
+                    const referenceContainingType = getTypeOrDeclaredType(referenceParent);
+                    if (checker.isTypeIdenticalTo(referenceContainingType, searchContainingType)) {
+                        const symbol = (searchParent.flags & SymbolFlags.ObjectLiteral) && (referenceParent.flags & SymbolFlags.ObjectLiteral) ? searchSymbol : referenceSymbol;
+                        return { symbol, kind: EntryKind.Node };
+                    }
+                }
+                function getTypeOrDeclaredType(symbol: Symbol): Type {
+                    return symbol.flags & SymbolFlags.Interface ? checker.getDeclaredTypeOfSymbol(symbol) : checker.getTypeOfSymbol(symbol);
+                }
+            });
+        }
     }
 
     /**

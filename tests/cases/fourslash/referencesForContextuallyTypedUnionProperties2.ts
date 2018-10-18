@@ -30,8 +30,15 @@
 ////// Widened type
 ////var w: A|B = { [|{| "isWriteAccess": true, "isDefinition": true, "type": "undefined" |}b|]:undefined, common: undefined };
 ////
-////// Untped -- should not be included
-////var u1 = { a: 0, b: 0, common: "" };
-////var u2 = { b: 0, common: 0 };
+////var u1 = { a: 0, b: 0, common: "" }; // Object type doesn't match 'B'
+////var u2 = { [|{| "isWriteAccess": true, "isDefinition": true |}b|]: 0, common: 0 }; // Object type matches 'B'
 
-verify.singleReferenceGroup("(property) B.b: number");
+const [r0, r1, r2, r3, r4, r5, r6, r7, r8] = test.ranges();
+verify.referenceGroups([r0, r1, r2, r3, r4, r5, r6], [
+    { definition: "(property) B.b: number", ranges: [r0, r1, r2, r3, r4, r5, r6] },
+    { definition: "(property) b: number", ranges: [r7] },
+]);
+verify.referenceGroups(r7, [
+    { definition: "(property) B.b: number", ranges: [r0] },
+    { definition: "(property) b: number", ranges: [r1, r3, r4, r5, r7] }
+]);

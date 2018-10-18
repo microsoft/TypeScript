@@ -22,7 +22,14 @@
 ////// Widened type
 ////var w: IFoo = { [|{| "isWriteAccess": true, "isDefinition": true, "type": "undefined" |}xy|]: undefined };
 ////
-////// Untped -- should not be included
-////var u = { xy: 0 };
+////var u = { [|{| "isWriteAccess": true, "isDefinition": true |}xy|]: 0 };
 
-verify.singleReferenceGroup("(property) IFoo.xy: number");
+const [r0, r1, r2, r3, r4, r5, r6, r7, r8, r9] = test.ranges();
+verify.referenceGroups([r0, r1, r2, r3, r4, r5, r6, r7, r8], [
+    { definition: "(property) IFoo.xy: number", ranges: [r0, r1, r2, r3, r4, r5, r6, r7, r8] },
+    { definition: "(property) xy: number", ranges: [r9] },
+]);
+verify.referenceGroups(r9, [
+    { definition: "(property) IFoo.xy: number", ranges: [r0] },
+    { definition: "(property) xy: number", ranges: [r1, r2, r3, r4, r5, r6, r7, r9] },
+]);
