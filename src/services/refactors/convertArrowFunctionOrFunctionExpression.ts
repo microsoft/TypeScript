@@ -121,7 +121,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
                         const edits1 = textChanges.ChangeTracker.with(context, t => {
                             t.delete(file, variableDeclaration);
-                            t.insertNodeAfter(file, statement!, newNode1);
+                            t.insertNodeAfter(file, statement, newNode1);
                         });
                         return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
                     }
