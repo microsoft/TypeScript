@@ -339,19 +339,16 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public replaceExistingJsdocComments(sourceFile: SourceFile, parent: HasJSDoc, tag: JSDoc) {
-            if (!parent.jsDoc) {
-                return Debug.fail("Parent node must have jsdoc to replace");
+        public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc) {
+            if (node.jsDoc) {
+                this.replaceNodeRange(sourceFile, first(node.jsDoc), last(node.jsDoc), tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}` });
             }
-            const firstOldTag = first(parent.jsDoc);
-            const lastOldTag = last(parent.jsDoc);
-            this.replaceNodeRange(sourceFile, firstOldTag, lastOldTag, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}` });
-        }
-
-        public insertJsdocCommentBefore(sourceFile: SourceFile, node: Node, tag: JSDoc) {
-            const fnStart = node.getStart(sourceFile);
-            const indent = getIndent(sourceFile, fnStart);
-            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
+            else {
+                const fnStart = node.getStart(sourceFile);
+                const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
+                const indent = sourceFile.text.slice(startPosition + 1, fnStart);
+                this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
+            }
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
@@ -735,11 +732,6 @@ namespace ts.textChanges {
         }
     }
 
-    function getIndent(sourceFile: SourceFile, position: number): string {
-        const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, position - 1);
-        return sourceFile.text.slice(startPosition + 1, position);
-    }
-
     // find first non-whitespace position in the leading trivia of the node
     function startPositionToDeleteNodeInList(sourceFile: SourceFile, node: Node): number {
         return skipTrivia(sourceFile.text, getAdjustedStartPosition(sourceFile, node, {}, Position.FullStart), /*stopAfterLineBreak*/ false, /*stopAtComments*/ true);
@@ -809,20 +801,20 @@ namespace ts.textChanges {
 
         /** Note: this may mutate `nodeIn`. */
         function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
-                const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
-                if (validate) validate(node, text);
-                const { options: formatOptions } = formatContext;
-                const initialIndentation =
-                    indentation !== undefined
-                    ? indentation
-                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
-                if (delta === undefined) {
-                    delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
-                }
+            const { node, text } = getNonformattedText(nodeIn, sourceFile, newLineCharacter);
+            if (validate) validate(node, text);
+            const { options: formatOptions } = formatContext;
+            const initialIndentation =
+                indentation !== undefined
+                ? indentation
+                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+            if (delta === undefined) {
+                delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
+            }
 
-                const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
-                const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
-                return applyChanges(text, changes);
+            const file: SourceFileLike = { text, getLineAndCharacterOfPosition(pos) { return getLineAndCharacterOfPosition(this, pos); } };
+            const changes = formatting.formatNodeGivenIndentation(node, file, sourceFile.languageVariant, initialIndentation, delta, formatContext);
+            return applyChanges(text, changes);
         }
 
         /** Note: output node may be mutated input node. */

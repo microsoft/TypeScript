@@ -80,7 +80,7 @@ namespace ts.codefix {
                             // TODO: Merge multiple parent JSDoc comments
                             const tags = createNodeArray(existingJSDoc.tags ? [...existingJSDoc.tags, typeTag] : [typeTag]);
                             const tag = createJSDocComment(existingJSDoc.comment, tags);
-                            changes.replaceExistingJsdocComments(sourceFile, assignment, tag);
+                            changes.insertJsdocCommentBefore(sourceFile, assignment, tag);
                         }
                         else {
                             const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
@@ -205,6 +205,12 @@ namespace ts.codefix {
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
                 const parent = isVariableDeclaration(declaration) ? declaration.parent.parent : declaration;
+                if (parent.kind === SyntaxKind.ForStatement ||
+                    parent.kind === SyntaxKind.ForInStatement ||
+                    parent.kind === SyntaxKind.ForOfStatement ||
+                    parent.kind === SyntaxKind.TryStatement) {
+                    return;
+                }
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
                 let found = false;
                 const tags = [];
@@ -231,7 +237,7 @@ namespace ts.codefix {
                         tags.push(typeTag);
                     }
                     const tag = createJSDocComment(parentComments.join(" "), createNodeArray(tags));
-                    changes.replaceExistingJsdocComments(sourceFile, parent, tag);
+                    changes.insertJsdocCommentBefore(sourceFile, parent, tag);
                 }
                 else {
                     const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
@@ -289,7 +295,7 @@ namespace ts.codefix {
             paramTags.forEach(v => things.push(v));
 
             tag = createJSDocComment(parentComments.join(" "), createNodeArray(things));
-            changes.replaceExistingJsdocComments(sourceFile, signature, tag);
+            changes.insertJsdocCommentBefore(sourceFile, signature, tag);
         }
         else {
             tag = createJSDocComment(/*comment*/ undefined, createNodeArray(arrayFrom(paramTags.values())));
