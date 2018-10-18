@@ -417,30 +417,9 @@ namespace ts.formatting {
 
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
-            let indentNextTokenOrTrivia = false;
             if (leadingTrivia) {
-                const commentIndentation = initialIndentation;
-                for (const triviaItem of leadingTrivia) {
-                    const triviaInRange = rangeContainsRange(originalRange, triviaItem);
-                    switch (triviaItem.kind) {
-                        case SyntaxKind.MultiLineCommentTrivia:
-                            if (triviaInRange) {
-                                indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                            }
-                            indentNextTokenOrTrivia = false;
-                            break;
-                        case SyntaxKind.SingleLineCommentTrivia:
-                            if (indentNextTokenOrTrivia && triviaInRange) {
-                                const triviaItemStart = sourceFile.getLineAndCharacterOfPosition(triviaItem.pos);
-                                processRange(triviaItem, triviaItemStart, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!);
-                            }
-                            indentNextTokenOrTrivia = false;
-                            break;
-                        case SyntaxKind.NewLineTrivia:
-                            indentNextTokenOrTrivia = true;
-                            break;
-                    }
-                }
+                indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
+                                  (item, _indent) => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
@@ -841,27 +820,8 @@ namespace ts.formatting {
                     let indentNextTokenOrTrivia = true;
                     if (currentTokenInfo.leadingTrivia) {
                         const commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
-
-                        for (const triviaItem of currentTokenInfo.leadingTrivia) {
-                            const triviaInRange = rangeContainsRange(originalRange, triviaItem);
-                            switch (triviaItem.kind) {
-                                case SyntaxKind.MultiLineCommentTrivia:
-                                    if (triviaInRange) {
-                                        indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                                    }
-                                    indentNextTokenOrTrivia = false;
-                                    break;
-                                case SyntaxKind.SingleLineCommentTrivia:
-                                    if (indentNextTokenOrTrivia && triviaInRange) {
-                                        insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
-                                    }
-                                    indentNextTokenOrTrivia = false;
-                                    break;
-                                case SyntaxKind.NewLineTrivia:
-                                    indentNextTokenOrTrivia = true;
-                                    break;
-                            }
-                        }
+                        indentNextTokenOrTrivia = indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia,
+                                                                    (item, indent) => insertIndentation(item.pos, indent, /*lineAdded*/ false));
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
@@ -877,6 +837,34 @@ namespace ts.formatting {
 
                 childContextNode = parent;
             }
+        }
+
+        function indentTriviaItems(
+            trivia: TextRangeWithKind[],
+            commentIndentation: number,
+            indentNextTokenOrTrivia: boolean,
+            indentSingleLine: (item: TextRangeWithKind, indentation: number) => void) {
+            for (const triviaItem of trivia) {
+                const triviaInRange = rangeContainsRange(originalRange, triviaItem);
+                switch (triviaItem.kind) {
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        if (triviaInRange) {
+                            indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                        }
+                        indentNextTokenOrTrivia = false;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                        if (indentNextTokenOrTrivia && triviaInRange) {
+                            indentSingleLine(triviaItem, commentIndentation);
+                        }
+                        indentNextTokenOrTrivia = false;
+                        break;
+                    case SyntaxKind.NewLineTrivia:
+                        indentNextTokenOrTrivia = true;
+                        break;
+                }
+            }
+            return indentNextTokenOrTrivia;
         }
 
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {

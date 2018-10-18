@@ -341,13 +341,13 @@ namespace ts.textChanges {
 
         public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc) {
             if (node.jsDoc) {
-                this.replaceNodeRange(sourceFile, first(node.jsDoc), last(node.jsDoc), tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}` });
+                this.replaceNodeRange(sourceFile, first(node.jsDoc), last(node.jsDoc), tag, { preserveLeadingWhitespace: true, suffix: this.newLineCharacter });
             }
             else {
                 const fnStart = node.getStart(sourceFile);
                 const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
                 const indent = sourceFile.text.slice(startPosition + 1, fnStart);
-                this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: `${this.newLineCharacter}${indent}` });
+                this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: this.newLineCharacter + indent });
             }
         }
 
@@ -806,8 +806,8 @@ namespace ts.textChanges {
             const { options: formatOptions } = formatContext;
             const initialIndentation =
                 indentation !== undefined
-                ? indentation
-                : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
+                    ? indentation
+                    : formatting.SmartIndenter.getIndentation(pos, sourceFile, formatOptions, prefix === newLineCharacter || getLineStartPositionForPosition(pos, sourceFile) === pos);
             if (delta === undefined) {
                 delta = formatting.SmartIndenter.shouldIndentChildNode(formatContext.options, nodeIn) ? (formatOptions.indentSize || 0) : 0;
             }
