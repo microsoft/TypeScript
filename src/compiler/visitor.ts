@@ -1111,6 +1111,7 @@ namespace ts {
 
             case SyntaxKind.TaggedTemplateExpression:
                 result = reduceNode((<TaggedTemplateExpression>node).tag, cbNode, result);
+                result = reduceNodes((<NewExpression>node).typeArguments, cbNodes, result);
                 result = reduceNode((<TaggedTemplateExpression>node).template, cbNode, result);
                 break;
 

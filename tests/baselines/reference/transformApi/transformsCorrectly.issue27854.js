@@ -1,3 +1,1 @@
-newName<{
-    a: string;
-}> ` ... `;
+newName ` ... `;

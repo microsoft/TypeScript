@@ -45,9 +45,8 @@ namespace ts {
                 if (isIdentifier(node) && node.text === "oldName") {
                     return createIdentifier("newName");
                 }
-        
                 return visitEachChild(node, visitor, context);
-            }
+            };
             return (node: SourceFile) => visitNode(node, visitor);
         }
 
@@ -99,7 +98,7 @@ namespace ts {
                 },
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed,
-                    target: ts.ScriptTarget.Latest
+                    target: ScriptTarget.Latest
                 }
             }).outputText;
         });
