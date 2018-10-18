@@ -1,0 +1,3 @@
+newName<{
+    a: string;
+}> ` ... `;
