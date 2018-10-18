@@ -207,9 +207,9 @@ namespace ts.codefix {
                 const parent = isVariableDeclaration(declaration) ? declaration.parent.parent : declaration;
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
                 let found = false;
-                let tags = [];
+                const tags = [];
                 if (hasJSDocNodes(parent)) {
-                    let parentComments = [];
+                    const parentComments = [];
                     for (const existingJSDoc of parent.jsDoc!) {
                         if (existingJSDoc.comment) {
                             parentComments.push(existingJSDoc.comment);
@@ -260,8 +260,8 @@ namespace ts.codefix {
         const signature = parameterInferences[0].declaration.parent;
         let tag;
         if (hasJSDocNodes(signature)) {
-            let parentComments = [];
-            let things: JSDocTag[] = [];
+            const parentComments = [];
+            const things: JSDocTag[] = [];
             for (const jsdoc of signature.jsDoc!) {
                 if (jsdoc.comment) {
                     parentComments.push(jsdoc.comment);

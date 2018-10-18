@@ -864,7 +864,8 @@ namespace ts {
 
                     // JSDoc nodes
                     case SyntaxKind.JSDocParameterTag:
-                        return emitJSDocParameterTag(node as JSDocParameterTag);
+                    case SyntaxKind.JSDocPropertyTag:
+                        return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
                     case SyntaxKind.JSDocReturnTag:
                         return emitJSDocReturnTag(node as JSDocReturnTag);
                     case SyntaxKind.JSDocTypeTag:
@@ -879,6 +880,14 @@ namespace ts {
                         return emitJSDocEnumTag(node as JSDocEnumTag);
                     case SyntaxKind.JSDocTemplateTag:
                         return emitJSDocTemplateTag(node as JSDocTemplateTag);
+                    case SyntaxKind.JSDocTypedefTag:
+                        return emitJSDocTypedefTag(node as JSDocTypedefTag);
+                    case SyntaxKind.JSDocCallbackTag:
+                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                    case SyntaxKind.JSDocSignature:
+                        return emitJSDocSignature(node as JSDocSignature);
+                    case SyntaxKind.JSDocTypeLiteral:
+                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
                     case SyntaxKind.JSDocTag:
                         return emitJSDocTag(node as JSDocTag);
                     case SyntaxKind.JSDocComment:
@@ -2647,7 +2656,9 @@ namespace ts {
         function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
             write("@extends");
             writeSpace();
+            writePunctuation("{");
             emit(tag.class);
+            writePunctuation("}");
             if (tag.comment) {
                 writeSpace();
                 write(tag.comment);
@@ -2695,8 +2706,69 @@ namespace ts {
             if (tag.constraint) {
                 writeSpace();
                 writePunctuation("{");
-                emit(tag.constraint);
+                emit(tag.constraint.type);
                 writePunctuation("}");
+            }
+            writeSpace();
+            emitList(tag, tag.typeParameters, ListFormat.CommaListElements);
+        }
+
+        function emitJSDocTypedefTag(tag: JSDocTypedefTag) {
+            write("@typedef");
+            if (tag.typeExpression) {
+                writeSpace();
+                writePunctuation("{");
+                if (tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+                    emit(tag.typeExpression.type);
+                }
+                else {
+                    write("Object");
+                    if (tag.typeExpression.isArrayType) {
+                        writePunctuation("[");
+                        writePunctuation("]");
+                    }
+                }
+                writePunctuation("}");
+            }
+            if (tag.fullName) {
+                writeSpace();
+                emit(tag.fullName);
+            }
+            if (tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeLiteral) {
+                emit(tag.typeExpression);
+            }
+        }
+
+        function emitJSDocCallbackTag(tag: JSDocCallbackTag) {
+            write("@callback");
+            if (tag.name) {
+                writeSpace();
+                emit(tag.name);
+            }
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
+            emit(tag.typeExpression);
+        }
+
+        function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
+            emitList(lit, createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
+        }
+
+        function emitJSDocSignature(sig: JSDocSignature) {
+            if (sig.typeParameters) {
+                emitList(sig, createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
+            }
+            if (sig.parameters) {
+                emitList(sig, createNodeArray(sig.parameters), ListFormat.JSDocComment);
+            }
+            if (sig.type) {
+                writeLine();
+                writeSpace();
+                writePunctuation("*");
+                writeSpace();
+                emit(sig.type);
             }
         }
 
@@ -2714,8 +2786,8 @@ namespace ts {
             }
         }
 
-        function emitJSDocParameterTag(param: JSDocParameterTag) {
-            write("@param");
+        function emitJSDocPropertyLikeTag(param: JSDocPropertyLikeTag) {
+            write(param.kind === SyntaxKind.JSDocParameterTag ? "@param" : "@property");
             writeSpace();
             if (param.typeExpression) {
                 writePunctuation("{");

@@ -28,13 +28,21 @@
 ////     */
 ////    /** 3
 ////     * @return Second one
-////     * @extends {*} nothing really
+////     * @extends {C<number>} nothing really
 ////     * @class
-////     * @this doesn't make sense here
+////     * @this {*} doesn't make sense here
 ////     * @enum wat
-////     * @template {string} T
+////     */
+////    /**
 ////     * @typedef {number} Meter
-////     * @callback Thunk not sure what this will do
+////     * @typedef {Object} Position
+////     * @property {number} x what a horrible place for a type
+////     * @property {number} y please don't do this
+////     */
+////    /**
+////     * @template {string} T
+////     * @callback Action not sure what this will do
+////     * @param {T} thing
 ////     */
 ////    get m() { return undefined }
 ////}
@@ -61,13 +69,17 @@ var o = {
      * @returns {number} First one
      * @see also
      * @returns Second one
-     * @extends {*} nothing really
+     * @extends {C<number>} nothing really
      * @class
-     * @this doesn't make sense here
-     * @enum wat
-     * @template {string} T
+     * @this {*} doesn't make sense here
+     * @enum {wat}
      * @typedef {number} Meter
-     * @callback Thunk not sure what this will do
+     * @typedef {Object} Position
+     * @property {number} x what a horrible place for a type
+     * @property {number} y please don't do this
+     * @template {string} T
+     * @callback Action not sure what this will do
+     * @param {T} thing
      */
     get m() { return undefined }
 }
