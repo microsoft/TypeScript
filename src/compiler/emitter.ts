@@ -2711,6 +2711,10 @@ namespace ts {
             }
             writeSpace();
             emitList(tag, tag.typeParameters, ListFormat.CommaListElements);
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
         }
 
         function emitJSDocTypedefTag(tag: JSDocTypedefTag) {
@@ -2733,6 +2737,10 @@ namespace ts {
             if (tag.fullName) {
                 writeSpace();
                 emit(tag.fullName);
+            }
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
             }
             if (tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeLiteral) {
                 emit(tag.typeExpression);

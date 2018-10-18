@@ -224,7 +224,9 @@ namespace ts.codefix {
             const param = inference.declaration;
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
             if (typeNode && !param.initializer && !getJSDocType(param) && isIdentifier(inference.declaration.name)) {
-                paramTags.set(inference.declaration.name.escapedText as string, createJSDocParamTag(typeNode, inference.declaration.name as EntityName, !!inference.isOptional, ""));
+                paramTags.set(
+                    inference.declaration.name.escapedText as string,
+                    createJSDocParamTag(typeNode, inference.declaration.name as EntityName, !!inference.isOptional, ""));
             }
         });
 
@@ -242,7 +244,7 @@ namespace ts.codefix {
     }
 
     /**
-     * @param getKey When key returns a string, it is also asserting that `t`, the existing tag whose key is returned,
+     * @param getKey When getKey returns a string, it is also asserting that `t`, the existing tag whose key is returned,
      * is of type T, where T is the type of the new, synthetic tags.
      */
     function insertMergedJSDoc<T extends JSDocTag>(

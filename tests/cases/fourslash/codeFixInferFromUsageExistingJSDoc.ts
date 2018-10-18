@@ -34,15 +34,16 @@
 ////     * @enum wat
 ////     */
 ////    /**
-////     * @typedef {number} Meter
-////     * @typedef {Object} Position
+////     * @typedef {number} Meter or something
+////     * @typedef {Object} Position Comment!
 ////     * @property {number} x what a horrible place for a type
 ////     * @property {number} y please don't do this
 ////     */
 ////    /**
-////     * @template {string} T
+////     * @template {string} T postfix comment
 ////     * @callback Action not sure what this will do
 ////     * @param {T} thing
+////     * @returns {string} oh no
 ////     */
 ////    get m() { return undefined }
 ////}
@@ -73,13 +74,14 @@ var o = {
      * @class
      * @this {*} doesn't make sense here
      * @enum {wat}
-     * @typedef {number} Meter
-     * @typedef {Object} Position
+     * @typedef {number} Meter or something
+     * @typedef {Object} Position Comment!
      * @property {number} x what a horrible place for a type
      * @property {number} y please don't do this
-     * @template {string} T
+     * @template {string} T postfix comment
      * @callback Action not sure what this will do
      * @param {T} thing
+     * @returns {string} oh no
      */
     get m() { return undefined }
 }
