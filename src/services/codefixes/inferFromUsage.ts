@@ -73,19 +73,11 @@ namespace ts.codefix {
                     const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
                     const typeNode = type && getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
+                        // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
+                        const typeTags = createMap<JSDocTypeTag>();
                         const typeTag = createJSDocTypeTag(typeNode, /*comment*/ "");
-                        const assignment = parent.parent.parent as ExpressionStatement;
-                        const existingJSDoc = assignment.jsDoc && firstOrUndefined(assignment.jsDoc);
-                        if (existingJSDoc) {
-                            // TODO: Merge multiple parent JSDoc comments
-                            const tags = createNodeArray(existingJSDoc.tags ? [...existingJSDoc.tags, typeTag] : [typeTag]);
-                            const tag = createJSDocComment(existingJSDoc.comment, tags);
-                            changes.insertJsdocCommentBefore(sourceFile, assignment, tag);
-                        }
-                        else {
-                            const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
-                            changes.insertJsdocCommentBefore(sourceFile, assignment, tag);
-                        }
+                        typeTags.set("UNUSED", typeTag);
+                        insertMergedJSDoc(typeTags, changes, sourceFile, parent.parent.parent as ExpressionStatement, () => false, () => void 0);
                     }
                     return parent;
                 }
@@ -211,39 +203,13 @@ namespace ts.codefix {
                     parent.kind === SyntaxKind.TryStatement) {
                     return;
                 }
+                const typeTags = createMap<JSDocTypeTag | JSDocReturnTag>();
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
-                let found = false;
-                const tags = [];
-                if (hasJSDocNodes(parent)) {
-                    const parentComments = [];
-                    for (const existingJSDoc of parent.jsDoc!) {
-                        if (existingJSDoc.comment) {
-                            parentComments.push(existingJSDoc.comment);
-                        }
-                        if (existingJSDoc.tags) {
-                            for (const t of existingJSDoc.tags) {
-                                if (t.kind === typeTag.kind && !found) {
-                                    found = true;
-                                    typeTag.comment = t.comment;
-                                    tags.push(typeTag);
-                                }
-                                else {
-                                    tags.push(t);
-                                }
-                            }
-                        }
-                    }
-                    if (!found) {
-                        tags.push(typeTag);
-                    }
-                    const tag = createJSDocComment(parentComments.join(" "), createNodeArray(tags));
-                    changes.insertJsdocCommentBefore(sourceFile, parent, tag);
-                }
-                else {
-                    const tag = createJSDocComment(/*comment*/ undefined, createNodeArray([typeTag]));
-                    changes.insertJsdocCommentBefore(sourceFile, parent, tag);
-                }
-
+                typeTags.set("TAG", typeTag);
+                insertMergedJSDoc(
+                    typeTags, changes, sourceFile, parent,
+                    t => t.kind === typeTag.kind && "TAG",
+                    (synthetic, existing) => synthetic.comment = existing.comment);
             }
             else {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
@@ -263,50 +229,58 @@ namespace ts.codefix {
         });
 
         // resolve
-        const signature = parameterInferences[0].declaration.parent;
-        let tag;
-        if (hasJSDocNodes(signature)) {
-            const parentComments = [];
-            const things: JSDocTag[] = [];
-            for (const jsdoc of signature.jsDoc!) {
+        const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
+        if (signature) {
+            insertMergedJSDoc(
+                paramTags, changes, sourceFile, signature,
+                t => isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText as string,
+                (synthetic, existing) => {
+                    synthetic.comment = existing.comment;
+                    synthetic.isBracketed = existing.isBracketed;
+                });
+        }
+    }
+
+    /**
+     * @param getKey When key returns a string, it is also asserting that `t`, the existing tag whose key is returned,
+     * is of type T, where T is the type of the new, synthetic tags.
+     */
+    function insertMergedJSDoc<T extends JSDocTag>(
+        syntheticTags: Map<T>,
+        changes: textChanges.ChangeTracker,
+        sourceFile: SourceFile,
+        parent: HasJSDoc,
+        getKey: (tag: JSDocTag) => string | false,
+        merge: (synthetic: T, existing: T) => void) {
+        const comments = [];
+        const tags: JSDocTag[] = [];
+        if (hasJSDocNodes(parent)) {
+            for (const jsdoc of parent.jsDoc!) {
                 if (jsdoc.comment) {
-                    parentComments.push(jsdoc.comment);
+                    comments.push(jsdoc.comment);
                 }
                 if (jsdoc.tags) {
-                    for (const t of jsdoc.tags) {
-                        if (isJSDocParameterTag(t) && isIdentifier(t.name)) {
-                            const x = paramTags.get(t.name.escapedText as string);
-                            if (x) {
-                                x.comment = t.comment;
-                                x.isBracketed = x.isBracketed || t.isBracketed;
-                                things.push(x);
-                                paramTags.delete(t.name.escapedText as string);
-                            }
-                            else {
-                                things.push(t);
-                            }
+                    for (const existing of jsdoc.tags) {
+                        const key = getKey(existing);
+                        const synthetic = key && syntheticTags.get(key);
+                        if (synthetic) {
+                            merge(synthetic, existing as T);
+                            tags.push(synthetic);
+                            syntheticTags.delete(key as string);
                         }
                         else {
-                            things.push(t);
+                            tags.push(existing);
                         }
                     }
                 }
             }
-            paramTags.forEach(v => things.push(v));
-
-            tag = createJSDocComment(parentComments.join(" "), createNodeArray(things));
-            changes.insertJsdocCommentBefore(sourceFile, signature, tag);
         }
-        else {
-            tag = createJSDocComment(/*comment*/ undefined, createNodeArray(arrayFrom(paramTags.values())));
-            // emit
-            if (parameterInferences.length) {
-                changes.insertJsdocCommentBefore(sourceFile, signature, tag);
-            }
-        }
+        syntheticTags.forEach(v => tags.push(v));
+        const tag = createJSDocComment(comments.join(" "), createNodeArray(tags));
+        changes.insertJsdocCommentBefore(sourceFile, parent, tag);
     }
 
-   function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
+    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };

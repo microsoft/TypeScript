@@ -419,7 +419,7 @@ namespace ts.formatting {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
                 indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
-                                  (item, _indent) => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
+                                  item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
@@ -821,7 +821,7 @@ namespace ts.formatting {
                     if (currentTokenInfo.leadingTrivia) {
                         const commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
                         indentNextTokenOrTrivia = indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia,
-                                                                    (item, indent) => insertIndentation(item.pos, indent, /*lineAdded*/ false));
+                                                                    item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false));
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
@@ -843,7 +843,7 @@ namespace ts.formatting {
             trivia: TextRangeWithKind[],
             commentIndentation: number,
             indentNextTokenOrTrivia: boolean,
-            indentSingleLine: (item: TextRangeWithKind, indentation: number) => void) {
+            indentSingleLine: (item: TextRangeWithKind) => void) {
             for (const triviaItem of trivia) {
                 const triviaInRange = rangeContainsRange(originalRange, triviaItem);
                 switch (triviaItem.kind) {
@@ -855,7 +855,7 @@ namespace ts.formatting {
                         break;
                     case SyntaxKind.SingleLineCommentTrivia:
                         if (indentNextTokenOrTrivia && triviaInRange) {
-                            indentSingleLine(triviaItem, commentIndentation);
+                            indentSingleLine(triviaItem);
                         }
                         indentNextTokenOrTrivia = false;
                         break;
