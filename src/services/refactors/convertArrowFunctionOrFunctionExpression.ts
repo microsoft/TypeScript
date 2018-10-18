@@ -106,16 +106,18 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                     const varDeclList = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableDeclarationList)!;
                     if (!isVariableDeclarationList(varDeclList)) return undefined;
 
+                    const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement)!;
+                    if (!isVariableStatement(statement)) return undefined;
+
                     if (varDeclList.declarations.length === 0) return undefined;
                     if (varDeclList.declarations.length === 1) {
-                        const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement);
-                        const newNode1 = createFunctionDeclaration(func.decorators, func.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
-                        const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement!, newNode1));
+
+                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+                        const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode1));
                         return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
                     }
                     else {
-                        const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement);
-                        const newNode1 = createFunctionDeclaration(func.decorators, func.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
 
                         const edits1 = textChanges.ChangeTracker.with(context, t => {
                             t.delete(file, variableDeclaration);
