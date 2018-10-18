@@ -143,7 +143,7 @@ namespace ts.FindAllReferences {
 
     function getDefinitionKindAndDisplayParts(symbol: Symbol, checker: TypeChecker, node: Node): { displayParts: SymbolDisplayPart[], kind: ScriptElementKind } {
         const meaning = Core.getIntersectingMeaningFromDeclarations(node, symbol);
-        const enclosingDeclaration = firstOrUndefined(symbol.declarations) || node;
+        const enclosingDeclaration = symbol.declarations && firstOrUndefined(symbol.declarations) || node;
         const { displayParts, symbolKind } =
             SymbolDisplay.getSymbolDisplayPartsDocumentationAndSymbolKind(checker, symbol, enclosingDeclaration.getSourceFile(), enclosingDeclaration, enclosingDeclaration, meaning);
         return { displayParts, kind: symbolKind };
