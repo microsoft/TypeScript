@@ -869,10 +869,20 @@ namespace ts {
                         return emitJSDocReturnTag(node as JSDocReturnTag);
                     case SyntaxKind.JSDocTypeTag:
                         return emitJSDocTypeTag(node as JSDocTypeTag);
-                    case SyntaxKind.JSDocComment:
-                        return emitJSDocComment(node as JSDoc);
+                    case SyntaxKind.JSDocAugmentsTag:
+                        return emitJSDocAugmentsTag(node as JSDocAugmentsTag);
+                    case SyntaxKind.JSDocClassTag:
+                        return emitJSDocClassTag(node as JSDocClassTag);
+                    case SyntaxKind.JSDocThisTag:
+                        return emitJSDocThisTag(node as JSDocThisTag);
+                    case SyntaxKind.JSDocEnumTag:
+                        return emitJSDocEnumTag(node as JSDocEnumTag);
+                    case SyntaxKind.JSDocTemplateTag:
+                        return emitJSDocTemplateTag(node as JSDocTemplateTag);
                     case SyntaxKind.JSDocTag:
                         return emitJSDocTag(node as JSDocTag);
+                    case SyntaxKind.JSDocComment:
+                        return emitJSDocComment(node as JSDoc);
 
                     // Transformation nodes (ignored)
                 }
@@ -2622,8 +2632,8 @@ namespace ts {
 
         function emitJSDocTypeTag(type: JSDocTypeTag) {
             write("@type");
-            writeSpace();
             if (type.typeExpression) {
+                writeSpace();
                 writePunctuation("{");
                 emit(type.typeExpression.type);
                 writePunctuation("}");
@@ -2634,12 +2644,59 @@ namespace ts {
             }
         }
 
-        function emitJSDocTag(tag: JSDocTag) {
-            writePunctuation("@");
-            emit(tag.tagName);
+        function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
+            write("@extends");
+            writeSpace();
+            emit(tag.class);
             if (tag.comment) {
                 writeSpace();
                 write(tag.comment);
+            }
+        }
+
+        function emitJSDocClassTag(tag: JSDocClassTag) {
+            write("@class");
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
+        }
+
+        function emitJSDocThisTag(tag: JSDocThisTag) {
+            write("@this");
+            if (tag.typeExpression) {
+                writeSpace();
+                writePunctuation("{");
+                emit(tag.typeExpression.type);
+                writePunctuation("}");
+            }
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
+        }
+
+        function emitJSDocEnumTag(tag: JSDocEnumTag) {
+            write("@enum");
+            if (tag.typeExpression) {
+                writeSpace();
+                writePunctuation("{");
+                emit(tag.typeExpression.type);
+                writePunctuation("}");
+            }
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
+            }
+        }
+
+        function emitJSDocTemplateTag(tag: JSDocTemplateTag) {
+            write("@template");
+            if (tag.constraint) {
+                writeSpace();
+                writePunctuation("{");
+                emit(tag.constraint);
+                writePunctuation("}");
             }
         }
 
@@ -2676,6 +2733,15 @@ namespace ts {
             if (param.comment) {
                 writeSpace();
                 write(param.comment);
+            }
+        }
+
+        function emitJSDocTag(tag: JSDocTag) {
+            writePunctuation("@");
+            emit(tag.tagName);
+            if (tag.comment) {
+                writeSpace();
+                write(tag.comment);
             }
         }
 
