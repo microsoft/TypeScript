@@ -4,13 +4,13 @@
 ////    /*ctr*/constructor() {}
 ////    x() {}
 ////}
-/////*B*/class B extends A {}
+////class /*B*/B extends A {}
 ////class C extends B {
 ////    constructor() {
-////        /*super*/super();
+////        [|/*super*/super|]();
 ////    }
 ////    method() {
-////        /*superExpression*/super.x();
+////        [|/*superExpression*/super|].x();
 ////    }
 ////}
 ////class D {
@@ -22,7 +22,7 @@
 
 verify.goToDefinition({
     // Super in call position goes to constructor.
-    super: "ctr",
+    super: ["ctr", "B"],
     // Super in any other position goes to the superclass.
     superExpression: "B",
     superBroken: []

@@ -102,19 +102,19 @@ function foo15(x: any) { }
 
 //// [objectTypesIdentityWithGenericCallSignatures2.js]
 // object types are identical structurally
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.prototype.foo = function (x, y) { return null; };
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
     }
     B.prototype.foo = function (x, y) { return null; };
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x, y) { return null; };

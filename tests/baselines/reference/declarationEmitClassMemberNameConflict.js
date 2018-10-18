@@ -1,5 +1,4 @@
 //// [declarationEmitClassMemberNameConflict.ts]
-
 export class C1 {
     C1() { } // has to be the same as the class name
 
@@ -38,7 +37,8 @@ export class C4 {
 
 //// [declarationEmitClassMemberNameConflict.js]
 "use strict";
-var C1 = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var C1 = /** @class */ (function () {
     function C1() {
     }
     C1.prototype.C1 = function () { }; // has to be the same as the class name
@@ -49,7 +49,7 @@ var C1 = (function () {
     return C1;
 }());
 exports.C1 = C1;
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     C2.prototype.bar = function () {
@@ -59,7 +59,7 @@ var C2 = (function () {
     return C2;
 }());
 exports.C2 = C2;
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
     Object.defineProperty(C3.prototype, "C3", {
@@ -75,7 +75,7 @@ var C3 = (function () {
     return C3;
 }());
 exports.C3 = C3;
-var C4 = (function () {
+var C4 = /** @class */ (function () {
     function C4() {
     }
     Object.defineProperty(C4.prototype, "C4", {

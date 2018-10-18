@@ -1,5 +1,4 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS1.ts ===
-
 var array0 = [1, 2, 3]
 >array0 : number[]
 >[1, 2, 3] : number[]

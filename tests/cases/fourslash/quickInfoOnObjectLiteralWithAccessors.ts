@@ -17,8 +17,8 @@ verify.quickInfos({
 });
 
 goTo.marker('3');
-verify.memberListContains("x", "(property) x: number", undefined);
-verify.memberListContains("b", "(property) b: number", undefined);
+verify.completionListContains("x", "(property) x: number", undefined);
+verify.completionListContains("b", "(property) b: number", undefined);
 verify.quickInfoIs("(property) x: number");
 
 verify.quickInfoAt("4", "var point: {\n    b: number;\n    x: number;\n}");

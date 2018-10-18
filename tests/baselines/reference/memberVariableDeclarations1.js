@@ -29,7 +29,7 @@ e2 = e1;
 
 //// [memberVariableDeclarations1.js]
 // from spec
-var Employee = (function () {
+var Employee = /** @class */ (function () {
     function Employee() {
         this.retired = false;
         this.manager = null;
@@ -37,7 +37,7 @@ var Employee = (function () {
     }
     return Employee;
 }());
-var Employee2 = (function () {
+var Employee2 = /** @class */ (function () {
     function Employee2() {
         this.retired = false;
         this.manager = null;

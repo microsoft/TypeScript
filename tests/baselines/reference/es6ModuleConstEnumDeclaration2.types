@@ -1,5 +1,4 @@
 === tests/cases/compiler/es6ModuleConstEnumDeclaration2.ts ===
-
 export const enum e1 {
 >e1 : e1
 

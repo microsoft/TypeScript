@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 ////var /*localVariableDefinition*/localVariable;
-/////*localFunctionDefinition*/function localFunction() { }
-/////*localClassDefinition*/class localClass { }
-/////*localInterfaceDefinition*/interface localInterface{ }
-/////*localModuleDefinition*/module localModule{ export var foo = 1;}
+////function /*localFunctionDefinition*/localFunction() { }
+////class /*localClassDefinition*/localClass { }
+////interface /*localInterfaceDefinition*/localInterface{ }
+////module /*localModuleDefinition*/localModule{ export var foo = 1;}
 ////
 ////
 /////*localVariableReference*/localVariable = 1;

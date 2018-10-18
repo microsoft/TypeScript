@@ -9,6 +9,6 @@
 //@Filename: c.ts
 /////// <reference path="a.ts" />
 /////// <reference path="b.ts" />
-/////*use*/x++;
+////[|/*use*/x|]++;
 
 verify.goToDefinition("use", ["def1", "def2"]);

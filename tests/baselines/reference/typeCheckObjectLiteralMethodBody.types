@@ -1,0 +1,7 @@
+=== tests/cases/compiler/typeCheckObjectLiteralMethodBody.ts ===
+var foo = { bar() { return undefined } };
+>foo : { bar(): any; }
+>{ bar() { return undefined } } : { bar(): any; }
+>bar : () => any
+>undefined : undefined
+

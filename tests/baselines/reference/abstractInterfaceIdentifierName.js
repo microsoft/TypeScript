@@ -1,5 +1,4 @@
 //// [abstractInterfaceIdentifierName.ts]
-
 interface abstract {
     abstract(): void;
 }

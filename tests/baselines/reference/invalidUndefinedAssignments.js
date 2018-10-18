@@ -29,7 +29,7 @@ var E;
 })(E || (E = {}));
 E = x;
 E.A = x;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

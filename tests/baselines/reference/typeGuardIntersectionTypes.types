@@ -1,22 +1,15 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardIntersectionTypes.ts ===
-
 interface X {
->X : X
-
     x: string;
 >x : string
 }
 
 interface Y {
->Y : Y
-
     y: string;
 >y : string
 }
 
 interface Z {
->Z : Z
-
     z: string;
 >z : string
 }
@@ -24,25 +17,18 @@ interface Z {
 declare function isX(obj: any): obj is X;
 >isX : (obj: any) => obj is X
 >obj : any
->obj : any
->X : X
 
 declare function isY(obj: any): obj is Y;
 >isY : (obj: any) => obj is Y
 >obj : any
->obj : any
->Y : Y
 
 declare function isZ(obj: any): obj is Z;
 >isZ : (obj: any) => obj is Z
 >obj : any
->obj : any
->Z : Z
 
 function f1(obj: Object) {
 >f1 : (obj: Object) => void
 >obj : Object
->Object : Object
 
     if (isX(obj) || isY(obj) || isZ(obj)) {
 >isX(obj) || isY(obj) || isZ(obj) : boolean
@@ -82,15 +68,11 @@ function f1(obj: Object) {
 
 // two interfaces
 interface A {
->A : A
-
   a: string;
 >a : string
 }
 
 interface B {
->B : B
-
   b: string;
 >b : string
 }
@@ -99,8 +81,6 @@ interface B {
 function isB(toTest: any): toTest is B {
 >isB : (toTest: any) => toTest is B
 >toTest : any
->toTest : any
->B : B
 
   return toTest && toTest.b;
 >toTest && toTest.b : any
@@ -114,9 +94,6 @@ function isB(toTest: any): toTest is B {
 function union(a: A): A & B | null {
 >union : (a: A) => (A & B) | null
 >a : A
->A : A
->A : A
->B : B
 >null : null
 
   if (isB(a)) {
@@ -141,29 +118,23 @@ declare function log(s: string): void;
 
 // Supported beast features
 interface Beast     { wings?: boolean; legs?: number }
->Beast : Beast
 >wings : boolean | undefined
 >legs : number | undefined
 
 interface Legged    { legs: number; }
->Legged : Legged
 >legs : number
 
 interface Winged    { wings: boolean; }
->Winged : Winged
 >wings : boolean
 
 // Beast feature detection via user-defined type guards
 function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'; }
 >hasLegs : (x: Beast) => x is Legged
 >x : Beast
->Beast : Beast
->x : any
->Legged : Legged
 >x && typeof x.legs === 'number' : boolean
 >x : Beast
 >typeof x.legs === 'number' : boolean
->typeof x.legs : string
+>typeof x.legs : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x.legs : number | undefined
 >x : Beast
 >legs : number | undefined
@@ -172,9 +143,6 @@ function hasLegs(x: Beast): x is Legged { return x && typeof x.legs === 'number'
 function hasWings(x: Beast): x is Winged { return x && !!x.wings; }
 >hasWings : (x: Beast) => x is Winged
 >x : Beast
->Beast : Beast
->x : any
->Winged : Winged
 >x && !!x.wings : boolean
 >x : Beast
 >!!x.wings : boolean
@@ -187,7 +155,6 @@ function hasWings(x: Beast): x is Winged { return x && !!x.wings; }
 function identifyBeast(beast: Beast) {
 >identifyBeast : (beast: Beast) => void
 >beast : Beast
->Beast : Beast
 
     // All beasts with legs
     if (hasLegs(beast)) {
@@ -211,7 +178,7 @@ function identifyBeast(beast: Beast) {
                 log(`pegasus - 4 legs, wings`);
 >log(`pegasus - 4 legs, wings`) : void
 >log : (s: string) => void
->`pegasus - 4 legs, wings` : string
+>`pegasus - 4 legs, wings` : "pegasus - 4 legs, wings"
             }
             else if (beast.legs === 2) {
 >beast.legs === 2 : boolean
@@ -223,7 +190,7 @@ function identifyBeast(beast: Beast) {
                 log(`bird - 2 legs, wings`);
 >log(`bird - 2 legs, wings`) : void
 >log : (s: string) => void
->`bird - 2 legs, wings` : string
+>`bird - 2 legs, wings` : "bird - 2 legs, wings"
             }
             else {
                 log(`unknown - ${beast.legs} legs, wings`);
@@ -258,13 +225,13 @@ function identifyBeast(beast: Beast) {
             log(`quetzalcoatl - no legs, wings`)
 >log(`quetzalcoatl - no legs, wings`) : void
 >log : (s: string) => void
->`quetzalcoatl - no legs, wings` : string
+>`quetzalcoatl - no legs, wings` : "quetzalcoatl - no legs, wings"
         }
         else {
             log(`snake - no legs, no wings`)
 >log(`snake - no legs, no wings`) : void
 >log : (s: string) => void
->`snake - no legs, no wings` : string
+>`snake - no legs, no wings` : "snake - no legs, no wings"
         }
     }
 }
@@ -272,7 +239,6 @@ function identifyBeast(beast: Beast) {
 function beastFoo(beast: Object) {
 >beastFoo : (beast: Object) => void
 >beast : Object
->Object : Object
 
     if (hasWings(beast) && hasLegs(beast)) {
 >hasWings(beast) && hasLegs(beast) : boolean

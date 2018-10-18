@@ -21,14 +21,4 @@
 ////    }
 ////}
 
-goTo.marker("1");
-verify.referencesAre([]);
-
-goTo.marker("2");
-verify.referencesAre([]);
-
-goTo.marker("3");
-verify.referencesAre([]);
-
-goTo.marker("4");
-verify.referencesAre([]);
+goTo.eachMarker(() => verify.noReferences());

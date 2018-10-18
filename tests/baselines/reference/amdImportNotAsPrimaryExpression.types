@@ -11,12 +11,10 @@ import f = foo.M1;
 var i: f.I2;
 >i : f.I2
 >f : any
->I2 : f.I2
 
 var x: foo.C1 = <{m1: number}>{};
 >x : foo.C1
 >foo : any
->C1 : foo.C1
 ><{m1: number}>{} : { m1: number; }
 >m1 : number
 >{} : {}
@@ -34,13 +32,11 @@ var z: foo.M1.I2;
 >z : f.I2
 >foo : any
 >M1 : any
->I2 : f.I2
 
 var e: number = <foo.E1>0;
 >e : number
 ><foo.E1>0 : foo.E1
 >foo : any
->E1 : foo.E1
 >0 : 0
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
@@ -57,8 +53,6 @@ export class C1 {
 }
 
 export interface I1 {
->I1 : I1
-
 	name: string;
 >name : string
 
@@ -67,11 +61,7 @@ export interface I1 {
 }
 
 export module M1 {
->M1 : any
-
 	export interface I2 {
->I2 : I2
-
 		foo: string;
 >foo : string
 	}

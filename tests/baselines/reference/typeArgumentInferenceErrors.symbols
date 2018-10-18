@@ -1,0 +1,69 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceErrors.ts ===
+// Generic call with multiple type parameters and only one used in parameter type annotation
+function someGenerics1<T, U>(n: T, m: number) { }
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceErrors.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 1, 23))
+>U : Symbol(U, Decl(typeArgumentInferenceErrors.ts, 1, 25))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 1, 29))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 1, 23))
+>m : Symbol(m, Decl(typeArgumentInferenceErrors.ts, 1, 34))
+
+someGenerics1<string, number>(3, 4); // Error
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceErrors.ts, 0, 0))
+
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U>(n: T, f: (x: U) => void) { }
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceErrors.ts, 2, 36))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 5, 23))
+>U : Symbol(U, Decl(typeArgumentInferenceErrors.ts, 5, 25))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 5, 29))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 5, 23))
+>f : Symbol(f, Decl(typeArgumentInferenceErrors.ts, 5, 34))
+>x : Symbol(x, Decl(typeArgumentInferenceErrors.ts, 5, 39))
+>U : Symbol(U, Decl(typeArgumentInferenceErrors.ts, 5, 25))
+
+someGenerics4<string, number>('', (x: string) => ''); // Error
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceErrors.ts, 2, 36))
+>x : Symbol(x, Decl(typeArgumentInferenceErrors.ts, 6, 35))
+
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U, T>(n: T, f: (x: U) => void) { }
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceErrors.ts, 6, 53))
+>U : Symbol(U, Decl(typeArgumentInferenceErrors.ts, 9, 23))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 9, 25))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 9, 29))
+>T : Symbol(T, Decl(typeArgumentInferenceErrors.ts, 9, 25))
+>f : Symbol(f, Decl(typeArgumentInferenceErrors.ts, 9, 34))
+>x : Symbol(x, Decl(typeArgumentInferenceErrors.ts, 9, 39))
+>U : Symbol(U, Decl(typeArgumentInferenceErrors.ts, 9, 23))
+
+someGenerics5<number, string>('', (x: string) => ''); // Error
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceErrors.ts, 6, 53))
+>x : Symbol(x, Decl(typeArgumentInferenceErrors.ts, 10, 35))
+
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceErrors.ts, 10, 53))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>a : Symbol(a, Decl(typeArgumentInferenceErrors.ts, 13, 26))
+>a : Symbol(a, Decl(typeArgumentInferenceErrors.ts, 13, 30))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>b : Symbol(b, Decl(typeArgumentInferenceErrors.ts, 13, 41))
+>b : Symbol(b, Decl(typeArgumentInferenceErrors.ts, 13, 46))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>c : Symbol(c, Decl(typeArgumentInferenceErrors.ts, 13, 57))
+>c : Symbol(c, Decl(typeArgumentInferenceErrors.ts, 13, 62))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceErrors.ts, 13, 23))
+
+someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceErrors.ts, 10, 53))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 59))
+>n : Symbol(n, Decl(typeArgumentInferenceErrors.ts, 14, 59))
+

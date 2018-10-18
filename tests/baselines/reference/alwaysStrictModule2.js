@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/alwaysStrictModule2.ts] ////
 
 //// [a.ts]
-
 module M {
     export function f() {
         var arguments = [];
@@ -24,7 +23,6 @@ var M;
     }
     M.f = f;
 })(M || (M = {}));
-"use strict";
 var M;
 (function (M) {
     function f2() {

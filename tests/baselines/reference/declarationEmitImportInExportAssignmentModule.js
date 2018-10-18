@@ -1,5 +1,4 @@
 //// [declarationEmitImportInExportAssignmentModule.ts]
-
 module m {
     export module c {
         export class c {
@@ -16,7 +15,7 @@ var m;
 (function (m) {
     var c;
     (function (c_1) {
-        var c = (function () {
+        var c = /** @class */ (function () {
             function c() {
             }
             return c;

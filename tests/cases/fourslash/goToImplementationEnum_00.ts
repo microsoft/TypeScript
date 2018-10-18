@@ -3,7 +3,7 @@
 // Should handle calls made on members of an enum
 
 //// enum Foo {
-////     [|Foo1 = function initializer() { return 5 } ()|],
+////     [|Foo1|] = function initializer() { return 5 } (),
 ////     Foo2 = 6
 //// }
 ////

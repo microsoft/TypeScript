@@ -1,5 +1,4 @@
 //// [emitClassDeclarationWithSuperMethodCall01.ts]
-
 class Parent {
     foo() {
     }

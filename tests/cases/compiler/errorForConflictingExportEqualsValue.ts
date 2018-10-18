@@ -1,2 +1,5 @@
+// @lib: es6
+// @Filename: /a.ts
 export var x;
-export = {};
+export = x;
+import("./a");

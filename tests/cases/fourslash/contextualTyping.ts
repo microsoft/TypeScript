@@ -32,7 +32,7 @@
 ////var /*13*/c3t5: (n: number) => IFoo = function(/*14*/n) { return <IFoo>({}) };
 ////var /*15*/c3t6: (n: number, s: string) => IFoo = function(/*16*/n, /*17*/s) { return <IFoo>({}) };
 ////var /*18*/c3t7: {
-////    (n: number): number;    
+////    (n: number): number;
 ////    (s1: string): number;
 ////};
 ////var /*20*/c3t8: (n: number, s: string) => number = function(/*21*/n) { return n; };
@@ -79,7 +79,7 @@
 ////    t5: (n: number) => IFoo;
 ////    t6: (n: number, s: string) => IFoo;
 ////    t7: {
-////            (n: number, s: string): number;    
+////            (n: number, s: string): number;
 ////            //(s1: string, s2: string): number;
 ////        };
 ////    t8: (n: number, s: string) => number;
@@ -98,7 +98,7 @@
 ////    t5: (n: number) => IFoo;
 ////    t6: (n: number, s: string) => IFoo;
 ////    t7: {
-////            (n: number, s: string): number;    
+////            (n: number, s: string): number;
 ////            //(s1: string, s2: string): number;
 ////        };
 ////    t8: (n: number, s: string) => number;
@@ -152,7 +152,7 @@
 ////var /*80*/c12t5 = <(n: number) => IFoo> function(/*81*/n) { return <IFoo>({}) };
 ////var /*82*/c12t6 = <(n: number, s: string) => IFoo> function(/*83*/n, /*84*/s) { return <IFoo>({}) };
 ////var /*85*/c12t7 = <{
-////    (n: number, s: string): number;    
+////    (n: number, s: string): number;
 ////    //(s1: string, s2: string): number;
 ////}> function(n:number) { return n };
 ////var /*86*/c12t8 = <(n: number, s: string) => number> function (/*87*/n) { return n; };
@@ -221,13 +221,13 @@ verify.quickInfos({
     25: "(parameter) n: number",
     26: "(parameter) s: string",
     27: "var c3t12: IBar",
-    28: "(property) foo: IFoo",
+    28: "(property) IBar.foo: IFoo",
     29: "var c3t13: IFoo",
-    30: "(property) f: (i: number, s: string) => string",
+    30: "(method) IFoo.f(i: number, s: string): string",
     31: "(parameter) i: number",
     32: "(parameter) s: string",
     33: "var c3t14: IFoo",
-    34: "(property) a: undefined[]",
+    34: "(property) IFoo.a: number[]",
     35: "(property) C4T5.foo: (i: number, s: string) => string",
     36: "(parameter) i: number",
     37: "(parameter) s: string",
@@ -257,13 +257,13 @@ verify.quickInfos({
     61: "(parameter) n: number",
     62: "(parameter) s: string",
     63: "(property) t12: IBar",
-    64: "(property) foo: IFoo",
+    64: "(property) IBar.foo: IFoo",
     65: "(property) t13: IFoo",
-    66: "(property) f: (i: number, s: string) => string",
+    66: "(method) IFoo.f(i: number, s: string): string",
     67: "(parameter) i: number",
     68: "(parameter) s: string",
     69: "(property) t14: IFoo",
-    70: "(property) a: undefined[]",
+    70: "(property) IFoo.a: number[]",
     71: "(parameter) n: number",
     72: "var c10t5: () => (n: number) => IFoo",
     73: "(parameter) n: number",
@@ -287,13 +287,13 @@ verify.quickInfos({
     91: "(parameter) n: number",
     92: "(parameter) s: string",
     93: "var c12t12: IBar",
-    94: "(property) foo: IFoo",
+    94: "(property) IBar.foo: IFoo",
     95: "var c12t13: IFoo",
-    96: "(property) f: (i: number, s: string) => string",
+    96: "(method) IFoo.f(i: number, s: string): string",
     97: "(parameter) i: number",
     98: "(parameter) s: string",
     99: "var c12t14: IFoo",
-    100: "(property) a: undefined[]",
+    100: "(property) IFoo.a: number[]",
     101: "function EF1(a: number, b: number): number",
     102: "(parameter) a: any",
     103: "(parameter) b: any",
@@ -302,7 +302,7 @@ verify.quickInfos({
     112: "(method) Point.add(dx: number, dy: number): Point",
     113: "(parameter) dx: number",
     114: "(parameter) dy: number",
-    115: "(property) add: (dx: number, dy: number) => Point",
+    115: "(method) Point.add(dx: number, dy: number): Point",
     116: "(parameter) dx: number",
     117: "(parameter) dy: number"
 });

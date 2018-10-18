@@ -1,0 +1,27 @@
+=== tests/cases/conformance/types/objectTypeLiteral/objectTypeLiteralSyntax2.ts ===
+var x: {
+>x : { foo: string; bar: string; }
+
+    foo: string,
+>foo : string
+
+    bar: string
+>bar : string
+}
+
+// ASI makes this work
+var y: {
+>y : { foo: string; bar: string; }
+
+    foo: string
+>foo : string
+
+    bar: string
+>bar : string
+}
+
+var z: { foo: string bar: string }
+>z : { foo: string; bar: string; }
+>foo : string
+>bar : string
+

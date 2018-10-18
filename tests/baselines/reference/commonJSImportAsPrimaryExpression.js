@@ -15,16 +15,19 @@ if(foo.C1.s1){
 
 //// [foo_0.js]
 "use strict";
-var C1 = (function () {
+exports.__esModule = true;
+var C1 = /** @class */ (function () {
     function C1() {
         this.m1 = 42;
     }
+    C1.s1 = true;
     return C1;
 }());
 exports.C1 = C1;
-C1.s1 = true;
 //// [foo_1.js]
 "use strict";
+exports.__esModule = true;
 var foo = require("./foo_0");
 if (foo.C1.s1) {
+    // Should cause runtime import
 }

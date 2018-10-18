@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target11.ts]
-
 declare function foo(...args: any[]): any;
 @foo
 export default class C {
@@ -16,16 +15,18 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p = 1;
     }
-    C.x = function () { return C.y; };
+    C_1 = C;
+    C.x = function () { return C_1.y; };
     C.prototype.method = function () { };
+    var C_1;
+    C.y = 1;
+    C = C_1 = __decorate([
+        foo
+    ], C);
     return C;
 }());
-C.y = 1;
-C = __decorate([
-    foo
-], C);
 export default C;

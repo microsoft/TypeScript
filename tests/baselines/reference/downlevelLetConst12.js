@@ -1,5 +1,4 @@
 //// [downlevelLetConst12.ts]
-
 'use strict'
 // top level let\const should not be renamed
 let foo;

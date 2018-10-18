@@ -1,5 +1,4 @@
-=== tests/cases/compiler/es6modulekindWithES5Target7.ts ===
-
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target7.ts ===
 export namespace N {
 >N : typeof N
 
@@ -9,9 +8,6 @@ export namespace N {
 }
 
 export namespace N2 {
->N2 : any
-
     export interface I { }
->I : I
 }
 

@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript6/ShorthandPropertyAssignment/parserShorthandPropertyAssignment2.ts ===
+var v = { class };
+>v : { class: any; }
+>{ class } : { class: any; }
+>class : any
+> : any
+

@@ -1,6 +1,7 @@
 define("subfolder/b", ["require", "exports"], function (require, exports) {
     "use strict";
-    var B = (function () {
+    exports.__esModule = true;
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;
@@ -9,7 +10,8 @@ define("subfolder/b", ["require", "exports"], function (require, exports) {
 });
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    exports.__esModule = true;
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -18,7 +20,8 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("subfolder/c", ["require", "exports"], function (require, exports) {
     "use strict";
-    var C = (function () {
+    exports.__esModule = true;
+    var C = /** @class */ (function () {
         function C() {
         }
         return C;

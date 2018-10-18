@@ -1,0 +1,143 @@
+=== tests/cases/compiler/collisionArgumentsClassMethod.ts ===
+class c1 {
+>c1 : Symbol(c1, Decl(collisionArgumentsClassMethod.ts, 0, 0))
+
+    public foo(i: number, ...arguments) { //arguments is error
+>foo : Symbol(c1.foo, Decl(collisionArgumentsClassMethod.ts, 0, 10))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 1, 15))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 1, 25), Decl(collisionArgumentsClassMethod.ts, 2, 11))
+
+        var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 1, 25), Decl(collisionArgumentsClassMethod.ts, 2, 11))
+    }
+    public foo1(arguments: number, ...rest) { //arguments is error
+>foo1 : Symbol(c1.foo1, Decl(collisionArgumentsClassMethod.ts, 3, 5))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 4, 16), Decl(collisionArgumentsClassMethod.ts, 5, 11))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 4, 34))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 4, 16), Decl(collisionArgumentsClassMethod.ts, 5, 11))
+    }
+    public fooNoError(arguments: number) { // no error
+>fooNoError : Symbol(c1.fooNoError, Decl(collisionArgumentsClassMethod.ts, 6, 5))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 7, 22), Decl(collisionArgumentsClassMethod.ts, 8, 11))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 7, 22), Decl(collisionArgumentsClassMethod.ts, 8, 11))
+    }
+    public f4(i: number, ...arguments); // no codegen no error
+>f4 : Symbol(c1.f4, Decl(collisionArgumentsClassMethod.ts, 9, 5), Decl(collisionArgumentsClassMethod.ts, 10, 39), Decl(collisionArgumentsClassMethod.ts, 11, 39))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 10, 14))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 10, 24))
+
+    public f4(i: string, ...arguments); // no codegen no error
+>f4 : Symbol(c1.f4, Decl(collisionArgumentsClassMethod.ts, 9, 5), Decl(collisionArgumentsClassMethod.ts, 10, 39), Decl(collisionArgumentsClassMethod.ts, 11, 39))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 11, 14))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 11, 24))
+
+    public f4(i: any, ...arguments) { // error
+>f4 : Symbol(c1.f4, Decl(collisionArgumentsClassMethod.ts, 9, 5), Decl(collisionArgumentsClassMethod.ts, 10, 39), Decl(collisionArgumentsClassMethod.ts, 11, 39))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 12, 14))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 12, 21), Decl(collisionArgumentsClassMethod.ts, 13, 11))
+
+        var arguments: any[]; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 12, 21), Decl(collisionArgumentsClassMethod.ts, 13, 11))
+    }
+    public f41(arguments: number, ...rest); // no codegen no error
+>f41 : Symbol(c1.f41, Decl(collisionArgumentsClassMethod.ts, 14, 5), Decl(collisionArgumentsClassMethod.ts, 15, 43), Decl(collisionArgumentsClassMethod.ts, 16, 43))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 15, 15))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 15, 33))
+
+    public f41(arguments: string, ...rest); // no codegen no error
+>f41 : Symbol(c1.f41, Decl(collisionArgumentsClassMethod.ts, 14, 5), Decl(collisionArgumentsClassMethod.ts, 15, 43), Decl(collisionArgumentsClassMethod.ts, 16, 43))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 16, 15))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 16, 33))
+
+    public f41(arguments: any, ...rest) { // error
+>f41 : Symbol(c1.f41, Decl(collisionArgumentsClassMethod.ts, 14, 5), Decl(collisionArgumentsClassMethod.ts, 15, 43), Decl(collisionArgumentsClassMethod.ts, 16, 43))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 17, 15), Decl(collisionArgumentsClassMethod.ts, 18, 11))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 17, 30))
+
+        var arguments: any; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 17, 15), Decl(collisionArgumentsClassMethod.ts, 18, 11))
+    }
+    public f4NoError(arguments: number); // no error
+>f4NoError : Symbol(c1.f4NoError, Decl(collisionArgumentsClassMethod.ts, 19, 5), Decl(collisionArgumentsClassMethod.ts, 20, 40), Decl(collisionArgumentsClassMethod.ts, 21, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 20, 21))
+
+    public f4NoError(arguments: string); // no error
+>f4NoError : Symbol(c1.f4NoError, Decl(collisionArgumentsClassMethod.ts, 19, 5), Decl(collisionArgumentsClassMethod.ts, 20, 40), Decl(collisionArgumentsClassMethod.ts, 21, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 21, 21))
+
+    public f4NoError(arguments: any) { // no error
+>f4NoError : Symbol(c1.f4NoError, Decl(collisionArgumentsClassMethod.ts, 19, 5), Decl(collisionArgumentsClassMethod.ts, 20, 40), Decl(collisionArgumentsClassMethod.ts, 21, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 22, 21), Decl(collisionArgumentsClassMethod.ts, 23, 11))
+
+        var arguments: any; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 22, 21), Decl(collisionArgumentsClassMethod.ts, 23, 11))
+    }
+}
+
+declare class c2 {
+>c2 : Symbol(c2, Decl(collisionArgumentsClassMethod.ts, 25, 1))
+
+    public foo(i: number, ...arguments); // No error - no code gen
+>foo : Symbol(c2.foo, Decl(collisionArgumentsClassMethod.ts, 27, 18))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 28, 15))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 28, 25))
+
+    public foo1(arguments: number, ...rest); // No error - no code gen
+>foo1 : Symbol(c2.foo1, Decl(collisionArgumentsClassMethod.ts, 28, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 29, 16))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 29, 34))
+
+    public fooNoError(arguments: number); // No error - no code gen
+>fooNoError : Symbol(c2.fooNoError, Decl(collisionArgumentsClassMethod.ts, 29, 44))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 30, 22))
+
+    public f4(i: number, ...arguments); // no codegen no error
+>f4 : Symbol(c2.f4, Decl(collisionArgumentsClassMethod.ts, 30, 41), Decl(collisionArgumentsClassMethod.ts, 32, 39))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 32, 14))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 32, 24))
+
+    public f4(i: string, ...arguments); // no codegen no error
+>f4 : Symbol(c2.f4, Decl(collisionArgumentsClassMethod.ts, 30, 41), Decl(collisionArgumentsClassMethod.ts, 32, 39))
+>i : Symbol(i, Decl(collisionArgumentsClassMethod.ts, 33, 14))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 33, 24))
+
+    public f41(arguments: number, ...rest); // no codegen no error
+>f41 : Symbol(c2.f41, Decl(collisionArgumentsClassMethod.ts, 33, 39), Decl(collisionArgumentsClassMethod.ts, 34, 43))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 34, 15))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 34, 33))
+
+    public f41(arguments: string, ...rest); // no codegen no error
+>f41 : Symbol(c2.f41, Decl(collisionArgumentsClassMethod.ts, 33, 39), Decl(collisionArgumentsClassMethod.ts, 34, 43))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 35, 15))
+>rest : Symbol(rest, Decl(collisionArgumentsClassMethod.ts, 35, 33))
+
+    public f4NoError(arguments: number); // no error
+>f4NoError : Symbol(c2.f4NoError, Decl(collisionArgumentsClassMethod.ts, 35, 43), Decl(collisionArgumentsClassMethod.ts, 36, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 36, 21))
+
+    public f4NoError(arguments: string); // no error
+>f4NoError : Symbol(c2.f4NoError, Decl(collisionArgumentsClassMethod.ts, 35, 43), Decl(collisionArgumentsClassMethod.ts, 36, 40))
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 37, 21))
+}
+
+class c3 {
+>c3 : Symbol(c3, Decl(collisionArgumentsClassMethod.ts, 38, 1))
+
+    public foo(...restParameters) {
+>foo : Symbol(c3.foo, Decl(collisionArgumentsClassMethod.ts, 40, 10))
+>restParameters : Symbol(restParameters, Decl(collisionArgumentsClassMethod.ts, 41, 15))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 42, 11))
+    }
+    public fooNoError() {
+>fooNoError : Symbol(c3.fooNoError, Decl(collisionArgumentsClassMethod.ts, 43, 5))
+
+        var arguments = 10; // no error
+>arguments : Symbol(arguments, Decl(collisionArgumentsClassMethod.ts, 45, 11))
+    }
+}

@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsOnStaticMembers.ts ===
-
 class test {
 >test : test
 

@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments04_ES6.ts]
-
 function f() {
     var arguments;
     var a = () => arguments;

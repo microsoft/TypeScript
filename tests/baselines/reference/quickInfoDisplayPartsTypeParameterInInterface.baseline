@@ -2036,16 +2036,20 @@
           "kind": "space"
         },
         {
+          "text": "I",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "new",
           "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "I",
-          "kind": "interfaceName"
         },
         {
           "text": "<",
@@ -2163,6 +2167,10 @@
         {
           "text": "I",
           "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         },
         {
           "text": "<",
@@ -5408,16 +5416,20 @@
           "kind": "space"
         },
         {
+          "text": "I1",
+          "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
+        },
+        {
           "text": "new",
           "kind": "keyword"
         },
         {
           "text": " ",
           "kind": "space"
-        },
-        {
-          "text": "I1",
-          "kind": "interfaceName"
         },
         {
           "text": "<",
@@ -5689,6 +5701,10 @@
         {
           "text": "I1",
           "kind": "interfaceName"
+        },
+        {
+          "text": "\n",
+          "kind": "lineBreak"
         },
         {
           "text": "<",

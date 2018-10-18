@@ -4,7 +4,6 @@ tests/cases/conformance/es6/modules/t4.ts(3,1): error TS2308: Module "./t1" has 
 
 
 ==== tests/cases/conformance/es6/modules/t1.ts (0 errors) ====
-    
     export var x = 1;
     export var y = 2;
     

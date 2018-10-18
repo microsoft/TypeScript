@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importWithTrailingSlash.ts] ////
 
 //// [a.ts]
-
 export default { a: 0 };
 
 //// [index.ts]
@@ -30,13 +29,15 @@ exports.__esModule = true;
 exports["default"] = { aIndex: 0 };
 //// [test.js]
 "use strict";
+exports.__esModule = true;
 var _1 = require(".");
 var _2 = require("./");
 _1["default"].a;
 _2["default"].aIndex;
 //// [test.js]
 "use strict";
+exports.__esModule = true;
 var __1 = require("..");
-var _1 = require("../");
+var __2 = require("../");
 __1["default"].a;
-_1["default"].aIndex;
+__2["default"].aIndex;

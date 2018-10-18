@@ -1,4 +1,4 @@
-tests/cases/compiler/file2.ts(6,16): error TS2671: Cannot augment module './file1' because it resolves to a non-module entity.
+tests/cases/compiler/file2.ts(5,16): error TS2671: Cannot augment module './file1' because it resolves to a non-module entity.
 tests/cases/compiler/file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
 
 
@@ -13,7 +13,6 @@ tests/cases/compiler/file3.ts(3,8): error TS2503: Cannot find namespace 'x'.
     export = x;
     
 ==== tests/cases/compiler/file2.ts (1 errors) ====
-    
     import x = require("./file1"); 
     
     // augmentation for './file1'

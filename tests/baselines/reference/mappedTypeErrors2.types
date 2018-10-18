@@ -1,0 +1,43 @@
+=== tests/cases/conformance/types/mapped/mappedTypeErrors2.ts ===
+// Repros from #17238
+
+type AB = {
+>AB : AB
+
+    a: 'a'
+>a : "a"
+
+    b: 'a'
+>b : "a"
+
+};
+
+type T1<K extends keyof AB> = { [key in AB[K]]: true };
+>T1 : T1<K>
+>true : true
+
+type T2<K extends 'a'|'b'> = T1<K>[K]; // Error
+>T2 : T1<K>[K]
+
+type R = AB[keyof AB]; // "a"
+>R : "a"
+
+type T3 = { [key in R]: true };
+>T3 : T3
+>true : true
+
+type T4<K extends 'a'|'b'> = T3[K] // Error
+>T4 : T3[K]
+
+type T5<S extends 'a'|'b'|'extra'> = {[key in AB[S]]: true}[S]; // Error
+>T5 : { [key in AB[S]]: true; }[S]
+>true : true
+
+type T6<S extends 'a'|'b', L extends 'a'|'b'> = {[key in AB[S]]: true}[L]; // Error
+>T6 : { [key in AB[S]]: true; }[L]
+>true : true
+
+type T7<S extends 'a'|'b', L extends 'a'> = {[key in AB[S]]: true}[L];
+>T7 : { [key in AB[S]]: true; }[L]
+>true : true
+

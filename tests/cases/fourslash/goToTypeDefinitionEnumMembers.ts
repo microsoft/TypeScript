@@ -8,6 +8,4 @@
 ////
 /////*reference*/x;
 
-goTo.marker('reference');
-goTo.type();
-verify.caretAtMarker('definition');
+verify.goToType("reference", "definition");

@@ -12,6 +12,12 @@ class C {
     }
 }
 
+function id<T>(x: T) {
+    return x;
+}
+
+export const result = id`hello world`;
+
 //// [script.ts]
 class A { }
 class B extends A { }
@@ -24,6 +30,12 @@ class C {
     }
 }
 
+function id<T>(x: T) {
+    return x;
+}
+
+const result = id`hello world`;
+
 //// [tslib.d.ts]
 export declare function __extends(d: Function, b: Function): void;
 export declare function __assign(t: any, ...sources: any[]): any;
@@ -31,47 +43,65 @@ export declare function __decorate(decorators: Function[], target: any, key?: st
 export declare function __param(paramIndex: number, decorator: Function): Function;
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
+export declare function __makeTemplateObject(cooked: string[], raw: string[]): TemplateStringsArray;
 
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 exports.A = A;
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 exports.B = B;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
-], C);
+function id(x) {
+    return x;
+}
+exports.result = id(templateObject_1 || (templateObject_1 = tslib_1.__makeTemplateObject(["hello world"], ["hello world"])));
+var templateObject_1;
 //// [script.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
 };
 var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
     var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
@@ -85,32 +115,35 @@ var __metadata = (this && this.__metadata) || function (k, v) {
 var __param = (this && this.__param) || function (paramIndex, decorator) {
     return function (target, key) { decorator(target, key, paramIndex); }
 };
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {
     };
+    __decorate([
+        __param(0, dec),
+        __metadata("design:type", Function),
+        __metadata("design:paramtypes", [Number]),
+        __metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = __decorate([
+        dec
+    ], C);
     return C;
 }());
-__decorate([
-    __param(0, dec),
-    __metadata("design:type", Function),
-    __metadata("design:paramtypes", [Number]),
-    __metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = __decorate([
-    dec,
-    __metadata("design:paramtypes", [])
-], C);
+function id(x) {
+    return x;
+}
+var result = id(__makeTemplateObject(["hello world"], ["hello world"]));

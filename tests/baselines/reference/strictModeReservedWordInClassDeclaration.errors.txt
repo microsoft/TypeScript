@@ -16,9 +16,9 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(21,9): error TS
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(21,17): error TS1213: Identifier expected. 'private' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(23,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS2693: 'public' only refers to a type, but is being used as a value here.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(25,20): error TS2702: 'public' only refers to a type, but is being used as a namespace here.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
-tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS2693: 'public' only refers to a type, but is being used as a value here.
+tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(26,21): error TS2702: 'public' only refers to a type, but is being used as a namespace here.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(27,17): error TS2304: Cannot find name 'package'.
 tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.
@@ -88,12 +88,12 @@ tests/cases/compiler/strictModeReservedWordInClassDeclaration.ts(28,17): error T
                        ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                        ~~~~~~
-!!! error TS2693: 'public' only refers to a type, but is being used as a value here.
+!!! error TS2702: 'public' only refers to a type, but is being used as a namespace here.
     class F1 implements public.private.implements { }
                         ~~~~~~
 !!! error TS1213: Identifier expected. 'public' is a reserved word in strict mode. Class definitions are automatically in strict mode.
                         ~~~~~~
-!!! error TS2693: 'public' only refers to a type, but is being used as a value here.
+!!! error TS2702: 'public' only refers to a type, but is being used as a namespace here.
     class G extends package { }
                     ~~~~~~~
 !!! error TS1213: Identifier expected. 'package' is a reserved word in strict mode. Class definitions are automatically in strict mode.

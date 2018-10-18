@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/decorators/missingDecoratorType.ts] ////
 
 //// [a.ts]
-
 interface Object { }
 interface Array<T> { }
 interface String { }
@@ -29,12 +28,12 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function () { };
+    __decorate([
+        dec
+    ], C.prototype, "method", null);
     return C;
 }());
-__decorate([
-    dec
-], C.prototype, "method", null);

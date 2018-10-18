@@ -25,13 +25,13 @@ var enumValue = MyEnumType.foo;
 var x = _arr.map(o => MyEnumType[o.key] === enumValue); // these are not same type
 >x : boolean[]
 >_arr.map(o => MyEnumType[o.key] === enumValue) : boolean[]
->_arr.map : { <U>(this: [{ key: string; }, { key: string; }, { key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [{ key: string; }, { key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [{ key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U]; <U>(this: [{ key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): U[]; }
+>_arr.map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
 >_arr : { key: string; }[]
->map : { <U>(this: [{ key: string; }, { key: string; }, { key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [{ key: string; }, { key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [{ key: string; }, { key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U, U]; <U>(this: [{ key: string; }, { key: string; }], callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: { key: string; }, index: number, array: { key: string; }[]) => U, thisArg?: any) => U[]
 >o => MyEnumType[o.key] === enumValue : (o: { key: string; }) => boolean
 >o : { key: string; }
 >MyEnumType[o.key] === enumValue : boolean
->MyEnumType[o.key] : any
+>MyEnumType[o.key] : error
 >MyEnumType : typeof MyEnumType
 >o.key : string
 >o : { key: string; }

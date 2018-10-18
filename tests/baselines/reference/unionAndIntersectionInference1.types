@@ -2,41 +2,28 @@
 // Repro from #2264
 
 interface Y { 'i am a very certain type': Y }
->Y : Y
->Y : Y
+>'i am a very certain type' : Y
 
 var y: Y = <Y>undefined;
 >y : Y
->Y : Y
 ><Y>undefined : Y
->Y : Y
 >undefined : undefined
 
 function destructure<a, r>(
 >destructure : <a, r>(something: Y | a, haveValue: (value: a) => r, haveY: (value: Y) => r) => r
->a : a
->r : r
 
     something: a | Y,
 >something : Y | a
->a : a
->Y : Y
 
     haveValue: (value: a) => r,
 >haveValue : (value: a) => r
 >value : a
->a : a
->r : r
 
     haveY: (value: Y) => r
 >haveY : (value: Y) => r
 >value : Y
->Y : Y
->r : r
 
 ): r {
->r : r
-
     return something === y ? haveY(y) : haveValue(<a>something);
 >something === y ? haveY(y) : haveValue(<a>something) : r
 >something === y : boolean
@@ -48,7 +35,6 @@ function destructure<a, r>(
 >haveValue(<a>something) : r
 >haveValue : (value: a) => r
 ><a>something : a
->a : a
 >something : Y | a
 }
 
@@ -63,7 +49,6 @@ var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >0.5 : 0.5
 >'hey!' : "hey!"
 ><Y>undefined : Y
->Y : Y
 >undefined : undefined
 
 var result = destructure(value, text => 'string', y => 'other one'); // text: string, y: Y
@@ -82,10 +67,7 @@ var result = destructure(value, text => 'string', y => 'other one'); // text: st
 
 function isVoid<a>(value: void | a): value is void {
 >isVoid : <a>(value: void | a) => value is void
->a : a
 >value : void | a
->a : a
->value : any
 
     return undefined;
 >undefined : undefined
@@ -93,11 +75,7 @@ function isVoid<a>(value: void | a): value is void {
 
 function isNonVoid<a>(value: void | a) : value is a {
 >isNonVoid : <a>(value: void | a) => value is a
->a : a
 >value : void | a
->a : a
->value : any
->a : a
 
     return undefined;
 >undefined : undefined
@@ -105,9 +83,7 @@ function isNonVoid<a>(value: void | a) : value is a {
 
 function foo1<a>(value: void|a): void {
 >foo1 : <a>(value: void | a) => void
->a : a
 >value : void | a
->a : a
 
     if (isVoid(value)) {
 >isVoid(value) : boolean
@@ -125,9 +101,7 @@ function foo1<a>(value: void|a): void {
 
 function baz1<a>(value: void|a): void {
 >baz1 : <a>(value: void | a) => void
->a : a
 >value : void | a
->a : a
 
       if (isNonVoid(value)) {
 >isNonVoid(value) : boolean
@@ -147,15 +121,10 @@ function baz1<a>(value: void|a): void {
 
 type Maybe<T> = T | void;
 >Maybe : Maybe<T>
->T : T
->T : T
 
 function get<U>(x: U | void): U {
 >get : <U>(x: void | U) => U
->U : U
 >x : void | U
->U : U
->U : U
 
    return null; // just an example
 >null : null
@@ -163,7 +132,6 @@ function get<U>(x: U | void): U {
 
 let foo: Maybe<string>;
 >foo : Maybe<string>
->Maybe : Maybe<T>
 
 get(foo).toUpperCase(); // Ok
 >get(foo).toUpperCase() : string
@@ -176,39 +144,26 @@ get(foo).toUpperCase(); // Ok
 // Repro from #5456
 
 interface Man {
->Man : Man
-
     walks: boolean;
 >walks : boolean
 }
 
 interface Bear {
->Bear : Bear
-
     roars: boolean;
 >roars : boolean
 }
 
 interface Pig {
->Pig : Pig
-
     oinks: boolean;
 >oinks : boolean
 }
 
 declare function pigify<T>(y: T & Bear): T & Pig;
 >pigify : <T>(y: T & Bear) => T & Pig
->T : T
 >y : T & Bear
->T : T
->Bear : Bear
->T : T
->Pig : Pig
 
 declare var mbp: Man & Bear;
 >mbp : Man & Bear
->Man : Man
->Bear : Bear
 
 pigify(mbp).oinks; // OK, mbp is treated as Pig
 >pigify(mbp).oinks : boolean

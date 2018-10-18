@@ -1,5 +1,6 @@
 {
     "kind": "JSDocAllType",
     "pos": 1,
-    "end": 2
+    "end": 2,
+    "flags": "JSDoc"
 }

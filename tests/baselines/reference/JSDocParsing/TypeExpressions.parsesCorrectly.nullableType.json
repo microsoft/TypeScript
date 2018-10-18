@@ -2,9 +2,11 @@
     "kind": "JSDocNullableType",
     "pos": 1,
     "end": 8,
+    "flags": "JSDoc",
     "type": {
         "kind": "NumberKeyword",
         "pos": 2,
-        "end": 8
+        "end": 8,
+        "flags": "JSDoc"
     }
 }

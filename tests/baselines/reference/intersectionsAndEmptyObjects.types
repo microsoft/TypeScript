@@ -1,0 +1,60 @@
+=== tests/cases/conformance/types/intersection/intersectionsAndEmptyObjects.ts ===
+// Empty object type literals are removed from intersections types
+// that contain other object types
+
+type A = { a: number };
+>A : A
+>a : number
+
+type B = { b: string };
+>B : B
+>b : string
+
+type C = {};
+>C : C
+
+let x01: A & B;
+>x01 : A & B
+
+let x02: A & C;
+>x02 : A
+
+let x03: B & C;
+>x03 : B
+
+let x04: A & B & C;
+>x04 : A & B
+
+let x05: string & C;
+>x05 : string & {}
+
+let x06: C & string;
+>x06 : string & {}
+
+let x07: C;
+>x07 : C
+
+let x08: C & {};
+>x08 : {}
+
+let x09: {} & A & {} & B & {} & C & {};
+>x09 : A & B
+
+interface D {}
+interface E {}
+
+let x10: A & D;
+>x10 : A & D
+
+let x11: C & D;
+>x11 : D
+
+let x12: A & B & C & D;
+>x12 : A & B & D
+
+let x13: D & E;
+>x13 : D & E
+
+let x14: A & B & C & D & E;
+>x14 : A & B & D & E
+

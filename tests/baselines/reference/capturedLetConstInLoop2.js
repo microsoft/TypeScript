@@ -1,6 +1,4 @@
 //// [capturedLetConstInLoop2.ts]
-
-
 // ========let
 function foo0(x) {
     for (let x of []) {

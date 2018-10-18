@@ -1,0 +1,37 @@
+=== tests/cases/conformance/salsa/index.js ===
+First.Item = class I {}
+>First.Item : Symbol(First.Item, Decl(index.js, 0, 0))
+>First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Item : Symbol(First.Item, Decl(index.js, 0, 0))
+>I : Symbol(I, Decl(index.js, 0, 12))
+
+Common.Object = class extends First.Item {}
+>Common.Object : Symbol(Common.Object, Decl(index.js, 0, 23))
+>Common : Symbol(Common, Decl(index.js, 0, 23), Decl(roots.js, 1, 3))
+>Object : Symbol(Common.Object, Decl(index.js, 0, 23))
+>First.Item : Symbol(First.Item, Decl(index.js, 0, 0))
+>First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+>Item : Symbol(First.Item, Decl(index.js, 0, 0))
+
+Workspace.Object = class extends Common.Object {}
+>Workspace.Object : Symbol(Workspace.Object, Decl(index.js, 1, 43))
+>Workspace : Symbol(Workspace, Decl(index.js, 1, 43), Decl(roots.js, 2, 3))
+>Object : Symbol(Workspace.Object, Decl(index.js, 1, 43))
+>Common.Object : Symbol(Common.Object, Decl(index.js, 0, 23))
+>Common : Symbol(Common, Decl(index.js, 0, 23), Decl(roots.js, 1, 3))
+>Object : Symbol(Common.Object, Decl(index.js, 0, 23))
+
+/** @type {Workspace.Object} */
+var am;
+>am : Symbol(am, Decl(index.js, 6, 3))
+
+=== tests/cases/conformance/salsa/roots.js ===
+var First = {};
+>First : Symbol(First, Decl(index.js, 0, 0), Decl(roots.js, 0, 3))
+
+var Common = {};
+>Common : Symbol(Common, Decl(index.js, 0, 23), Decl(roots.js, 1, 3))
+
+var Workspace = {};
+>Workspace : Symbol(Workspace, Decl(index.js, 1, 43), Decl(roots.js, 2, 3))
+

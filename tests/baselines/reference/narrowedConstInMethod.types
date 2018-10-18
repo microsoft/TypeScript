@@ -1,5 +1,5 @@
 === tests/cases/compiler/narrowedConstInMethod.ts ===
-
+// Fixes #10501, possibly null 'x'
 function f() {
 >f : () => { bar(): number; } | undefined
 
@@ -15,9 +15,9 @@ function f() {
 >null : null
 
         return {
->{            bar() { return x.length; }  // Error: possibly null x        } : { bar(): number; }
+>{            bar() { return x.length; }  // ok        } : { bar(): number; }
 
-            bar() { return x.length; }  // Error: possibly null x
+            bar() { return x.length; }  // ok
 >bar : () => number
 >x.length : number
 >x : string
@@ -42,9 +42,9 @@ function f2() {
 >null : null
 
         return class {
->class {            bar() { return x.length; }  // Error: possibly null x        } : typeof (Anonymous class)
+>class {            bar() { return x.length; }  // ok        } : typeof (Anonymous class)
 
-            bar() { return x.length; }  // Error: possibly null x
+            bar() { return x.length; }  // ok
 >bar : () => number
 >x.length : number
 >x : string
@@ -53,3 +53,4 @@ function f2() {
         };
     }
 }
+

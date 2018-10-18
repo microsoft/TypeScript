@@ -1,0 +1,12 @@
+=== tests/cases/compiler/recursiveGetterAccess.ts ===
+class MyClass {
+>MyClass : Symbol(MyClass, Decl(recursiveGetterAccess.ts, 0, 0))
+
+get testProp() { return this.testProp; }
+>testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+>this.testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+>this : Symbol(MyClass, Decl(recursiveGetterAccess.ts, 0, 0))
+>testProp : Symbol(MyClass.testProp, Decl(recursiveGetterAccess.ts, 0, 15))
+}
+ 
+

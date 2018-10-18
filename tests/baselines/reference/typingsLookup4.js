@@ -18,19 +18,33 @@ export const k: number;
 //// [lquery.ts]
 export const l = 2;
 
+//// [package.json]
+{ "typings": "mquery" }
+
+//// [index.tsx]
+export const m = 3;
+
 //// [a.ts]
 import { j } from "jquery";
 import { k } from "kquery";
 import { l } from "lquery";
-j + k + l;
+import { m } from "mquery";
+j + k + l + m;
 
 
 //// [lquery.js]
 "use strict";
+exports.__esModule = true;
 exports.l = 2;
+//// [index.js]
+"use strict";
+exports.__esModule = true;
+exports.m = 3;
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var jquery_1 = require("jquery");
 var kquery_1 = require("kquery");
 var lquery_1 = require("lquery");
-jquery_1.j + kquery_1.k + lquery_1.l;
+var mquery_1 = require("mquery");
+jquery_1.j + kquery_1.k + lquery_1.l + mquery_1.m;

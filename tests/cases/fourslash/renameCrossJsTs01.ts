@@ -6,7 +6,6 @@
 
 // @Filename: b.ts
 ////import { [|area|] } from './a';
-////var t = /**/[|area|](10);
+////var t = [|area|](10);
 
-goTo.marker();
-verify.renameLocations( /*findInStrings*/ false, /*findInComments*/ false);
+verify.rangesAreRenameLocations()

@@ -1,6 +1,16 @@
 importHigher/root.ts(6,1): error TS2322: Type '"10"' is not assignable to type 'number'.
 
 
+==== importHigher/tsconfig.json (0 errors) ====
+    {
+      "compilerOptions": { 
+        "allowJs": true,
+        "declaration": false,
+        "moduleResolution": "node",
+        "maxNodeModuleJsDepth": 2
+      }
+    }
+    
 ==== entry.js (0 errors) ====
     var m3 = require("m3");
     

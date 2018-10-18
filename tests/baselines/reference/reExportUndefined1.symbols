@@ -1,0 +1,4 @@
+=== tests/cases/compiler/a.ts ===
+export { undefined };
+>undefined : Symbol(undefined, Decl(a.ts, 0, 8))
+

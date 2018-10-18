@@ -1,10 +1,11 @@
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
-tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(49,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(34,24): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(35,24): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(46,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(47,26): error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.
+tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts(48,26): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts (3 errors) ====
-    
+==== tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNotOperatorWithAnyOtherType.ts (5 errors) ====
     // ~ operator on any type
     
     var ANY: any;
@@ -39,7 +40,11 @@ tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNot
     
     // any type literal
     var ResultIsNumber6 = ~undefined;
+                           ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
     var ResultIsNumber7 = ~null;
+                           ~~~~
+!!! error TS2531: Object is possibly 'null'.
     
     // any type expressions
     var ResultIsNumber8 = ~ANY2[0]
@@ -52,7 +57,7 @@ tests/cases/conformance/expressions/unaryOperators/bitwiseNotOperator/bitwiseNot
     var ResultIsNumber15 = ~(ANY + ANY1);
     var ResultIsNumber16 = ~(null + undefined);
                              ~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '+' cannot be applied to types 'undefined' and 'undefined'.
+!!! error TS2365: Operator '+' cannot be applied to types 'null' and 'undefined'.
     var ResultIsNumber17 = ~(null + null);
                              ~~~~~~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types 'null' and 'null'.

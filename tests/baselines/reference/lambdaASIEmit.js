@@ -1,5 +1,4 @@
 //// [lambdaASIEmit.ts]
-
 function Foo(x: any)
 {
 }

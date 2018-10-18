@@ -1,0 +1,17 @@
+/a.ts(1,16): error TS2665: Invalid module name in augmentation. Module 'foo' resolves to an untyped module at '/node_modules/foo/index.js', which cannot be augmented.
+
+
+==== /a.ts (1 errors) ====
+    declare module "foo" {
+                   ~~~~~
+!!! error TS2665: Invalid module name in augmentation. Module 'foo' resolves to an untyped module at '/node_modules/foo/index.js', which cannot be augmented.
+        export const x: number;
+    }
+    import { x } from "foo";
+    x;
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    // This tests that augmenting an untyped module is forbidden.
+    
+    This file is not processed.
+    

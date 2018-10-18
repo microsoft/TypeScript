@@ -33,7 +33,7 @@ function foo(x) {
 }
 foo(1);
 foo();
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function (x) {

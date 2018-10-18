@@ -1,0 +1,170 @@
+=== tests/cases/compiler/arrayAssignmentTest2.ts ===
+interface I1 {
+	IM1():void[];
+>IM1 : () => void[]
+}
+
+class C1 implements I1 { 
+>C1 : C1
+
+	IM1():void[] {return null;}
+>IM1 : () => void[]
+>null : null
+
+	C1M1():C1[] {return null;}
+>C1M1 : () => C1[]
+>null : null
+ }
+class C2 extends C1 {
+>C2 : C2
+>C1 : C1
+
+	C2M1():C2[] { return null;}
+>C2M1 : () => C2[]
+>null : null
+}
+
+class C3 {
+>C3 : C3
+
+	CM3M1() { return 3;}
+>CM3M1 : () => number
+>3 : 3
+}
+
+
+/*
+
+This behaves unexpectedly with the following types:
+
+Type 1 of any[]:
+
+* Type 2 of the following throws an error but shouldn't: () => void[], SomeClass[], and {one: 1}[].
+
+* Type 2 of the following doesn't throw an error but should: {one: 1}, new() => SomeClass, SomeClass.
+
+*/
+var a1 : any = null;
+>a1 : any
+>null : null
+
+var c1 : C1 = new C1();
+>c1 : C1
+>new C1() : C1
+>C1 : typeof C1
+
+var i1 : I1 = c1;
+>i1 : I1
+>c1 : C1
+
+var c2 : C2 = new C2();
+>c2 : C2
+>new C2() : C2
+>C2 : typeof C2
+
+var c3 : C3 = new C3();
+>c3 : C3
+>new C3() : C3
+>C3 : typeof C3
+
+var o1 = {one : 1};
+>o1 : { one: number; }
+>{one : 1} : { one: number; }
+>one : number
+>1 : 1
+
+var f1 = function () { return new C1();}
+>f1 : () => C1
+>function () { return new C1();} : () => C1
+>new C1() : C1
+>C1 : typeof C1
+
+var arr_any: any[] = [];
+>arr_any : any[]
+>[] : undefined[]
+
+var arr_i1: I1[] = [];
+>arr_i1 : I1[]
+>[] : undefined[]
+
+var arr_c1: C1[] = [];
+>arr_c1 : C1[]
+>[] : undefined[]
+
+var arr_c2: C2[] = [];
+>arr_c2 : C2[]
+>[] : undefined[]
+
+var arr_i1_2: I1[] = [];
+>arr_i1_2 : I1[]
+>[] : undefined[]
+
+var arr_c1_2: C1[] = [];
+>arr_c1_2 : C1[]
+>[] : undefined[]
+
+var arr_c2_2: C2[] = [];
+>arr_c2_2 : C2[]
+>[] : undefined[]
+
+var arr_c3: C3[] = [];
+>arr_c3 : C3[]
+>[] : undefined[]
+
+// "clean up error" occurs at this point
+arr_c3 = arr_c2_2; // should be an error - is
+>arr_c3 = arr_c2_2 : C2[]
+>arr_c3 : C3[]
+>arr_c2_2 : C2[]
+
+arr_c3 = arr_c1_2; // should be an error - is
+>arr_c3 = arr_c1_2 : C1[]
+>arr_c3 : C3[]
+>arr_c1_2 : C1[]
+
+arr_c3 = arr_i1_2; // should be an error - is
+>arr_c3 = arr_i1_2 : I1[]
+>arr_c3 : C3[]
+>arr_i1_2 : I1[]
+
+arr_any = f1; // should be an error - is
+>arr_any = f1 : () => C1
+>arr_any : any[]
+>f1 : () => C1
+
+arr_any = function () { return null;} // should be an error - is
+>arr_any = function () { return null;} : () => any
+>arr_any : any[]
+>function () { return null;} : () => any
+>null : null
+
+arr_any = o1; // should be an error - is
+>arr_any = o1 : { one: number; }
+>arr_any : any[]
+>o1 : { one: number; }
+
+arr_any = a1; // should be ok - is
+>arr_any = a1 : any
+>arr_any : any[]
+>a1 : any
+
+arr_any = c1; // should be an error - is
+>arr_any = c1 : C1
+>arr_any : any[]
+>c1 : C1
+
+arr_any = c2; // should be an error - is
+>arr_any = c2 : C2
+>arr_any : any[]
+>c2 : C2
+
+arr_any = c3; // should be an error - is
+>arr_any = c3 : C3
+>arr_any : any[]
+>c3 : C3
+
+arr_any = i1; // should be an error - is
+>arr_any = i1 : I1
+>arr_any : any[]
+>i1 : I1
+

@@ -1,0 +1,186 @@
+=== tests/cases/compiler/tupleTypes.ts ===
+var v1: [];  // Error
+>v1 : Symbol(v1, Decl(tupleTypes.ts, 0, 3))
+
+var v2: [number];
+>v2 : Symbol(v2, Decl(tupleTypes.ts, 1, 3))
+
+var v3: [number, string];
+>v3 : Symbol(v3, Decl(tupleTypes.ts, 2, 3))
+
+var v4: [number, [string, string]];
+>v4 : Symbol(v4, Decl(tupleTypes.ts, 3, 3))
+
+var t: [number, string];
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+var t0 = t[0];   // number
+>t0 : Symbol(t0, Decl(tupleTypes.ts, 6, 3), Decl(tupleTypes.ts, 7, 3))
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+>0 : Symbol(0)
+
+var t0: number;
+>t0 : Symbol(t0, Decl(tupleTypes.ts, 6, 3), Decl(tupleTypes.ts, 7, 3))
+
+var t1 = t[1];   // string
+>t1 : Symbol(t1, Decl(tupleTypes.ts, 8, 3), Decl(tupleTypes.ts, 9, 3))
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+>1 : Symbol(1)
+
+var t1: string;
+>t1 : Symbol(t1, Decl(tupleTypes.ts, 8, 3), Decl(tupleTypes.ts, 9, 3))
+
+var t2 = t[2];   // number|string
+>t2 : Symbol(t2, Decl(tupleTypes.ts, 10, 3), Decl(tupleTypes.ts, 11, 3))
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+var t2: number|string;
+>t2 : Symbol(t2, Decl(tupleTypes.ts, 10, 3), Decl(tupleTypes.ts, 11, 3))
+
+t = [];               // Error
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+t = [1];              // Error
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+t = [1, "hello"];     // Ok
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+t = ["hello", 1];     // Error
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+t = [1, "hello", 2];  // Error
+>t : Symbol(t, Decl(tupleTypes.ts, 5, 3))
+
+var tf: [string, (x: string) => number] = ["hello", x => x.length];
+>tf : Symbol(tf, Decl(tupleTypes.ts, 19, 3))
+>x : Symbol(x, Decl(tupleTypes.ts, 19, 18))
+>x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(tupleTypes.ts, 19, 51))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+>ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
+>T : Symbol(T, Decl(tupleTypes.ts, 21, 20))
+>U : Symbol(U, Decl(tupleTypes.ts, 21, 22))
+>a : Symbol(a, Decl(tupleTypes.ts, 21, 26))
+>T : Symbol(T, Decl(tupleTypes.ts, 21, 20))
+>b : Symbol(b, Decl(tupleTypes.ts, 21, 31))
+>T : Symbol(T, Decl(tupleTypes.ts, 21, 20))
+>x : Symbol(x, Decl(tupleTypes.ts, 21, 40))
+>T : Symbol(T, Decl(tupleTypes.ts, 21, 20))
+>U : Symbol(U, Decl(tupleTypes.ts, 21, 22))
+>U : Symbol(U, Decl(tupleTypes.ts, 21, 22))
+
+var ff1 = ff("hello", ["foo", x => x.length]);
+>ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
+>ff : Symbol(ff, Decl(tupleTypes.ts, 19, 67))
+>x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(tupleTypes.ts, 22, 29))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+var ff1: number;
+>ff1 : Symbol(ff1, Decl(tupleTypes.ts, 22, 3), Decl(tupleTypes.ts, 23, 3))
+
+function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
+>tuple2 : Symbol(tuple2, Decl(tupleTypes.ts, 23, 16))
+>T0 : Symbol(T0, Decl(tupleTypes.ts, 25, 16))
+>T1 : Symbol(T1, Decl(tupleTypes.ts, 25, 19))
+>item0 : Symbol(item0, Decl(tupleTypes.ts, 25, 24))
+>T0 : Symbol(T0, Decl(tupleTypes.ts, 25, 16))
+>item1 : Symbol(item1, Decl(tupleTypes.ts, 25, 34))
+>T1 : Symbol(T1, Decl(tupleTypes.ts, 25, 19))
+>T0 : Symbol(T0, Decl(tupleTypes.ts, 25, 16))
+>T1 : Symbol(T1, Decl(tupleTypes.ts, 25, 19))
+
+    return [item0, item1];
+>item0 : Symbol(item0, Decl(tupleTypes.ts, 25, 24))
+>item1 : Symbol(item1, Decl(tupleTypes.ts, 25, 34))
+}
+
+var tt = tuple2(1, "string");
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>tuple2 : Symbol(tuple2, Decl(tupleTypes.ts, 23, 16))
+
+var tt0 = tt[0];
+>tt0 : Symbol(tt0, Decl(tupleTypes.ts, 30, 3), Decl(tupleTypes.ts, 31, 3))
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>0 : Symbol(0)
+
+var tt0: number;
+>tt0 : Symbol(tt0, Decl(tupleTypes.ts, 30, 3), Decl(tupleTypes.ts, 31, 3))
+
+var tt1 = tt[1];
+>tt1 : Symbol(tt1, Decl(tupleTypes.ts, 32, 3), Decl(tupleTypes.ts, 33, 3))
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>1 : Symbol(1)
+
+var tt1: string;
+>tt1 : Symbol(tt1, Decl(tupleTypes.ts, 32, 3), Decl(tupleTypes.ts, 33, 3))
+
+var tt2 = tt[2]; 
+>tt2 : Symbol(tt2, Decl(tupleTypes.ts, 34, 3), Decl(tupleTypes.ts, 35, 3))
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+
+var tt2: number | string;
+>tt2 : Symbol(tt2, Decl(tupleTypes.ts, 34, 3), Decl(tupleTypes.ts, 35, 3))
+
+tt = tuple2(1, undefined);
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>tuple2 : Symbol(tuple2, Decl(tupleTypes.ts, 23, 16))
+>undefined : Symbol(undefined)
+
+tt = [1, undefined];
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>undefined : Symbol(undefined)
+
+tt = [undefined, undefined];
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+>undefined : Symbol(undefined)
+>undefined : Symbol(undefined)
+
+tt = [];  // Error
+>tt : Symbol(tt, Decl(tupleTypes.ts, 29, 3))
+
+var a: number[];
+>a : Symbol(a, Decl(tupleTypes.ts, 42, 3))
+
+var a1: [number, string];
+>a1 : Symbol(a1, Decl(tupleTypes.ts, 43, 3))
+
+var a2: [number, number];
+>a2 : Symbol(a2, Decl(tupleTypes.ts, 44, 3))
+
+var a3: [number, {}];
+>a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
+
+a = a1;   // Error
+>a : Symbol(a, Decl(tupleTypes.ts, 42, 3))
+>a1 : Symbol(a1, Decl(tupleTypes.ts, 43, 3))
+
+a = a2;
+>a : Symbol(a, Decl(tupleTypes.ts, 42, 3))
+>a2 : Symbol(a2, Decl(tupleTypes.ts, 44, 3))
+
+a = a3;   // Error
+>a : Symbol(a, Decl(tupleTypes.ts, 42, 3))
+>a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
+
+a1 = a2;  // Error
+>a1 : Symbol(a1, Decl(tupleTypes.ts, 43, 3))
+>a2 : Symbol(a2, Decl(tupleTypes.ts, 44, 3))
+
+a1 = a3;  // Error
+>a1 : Symbol(a1, Decl(tupleTypes.ts, 43, 3))
+>a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
+
+a3 = a1;
+>a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
+>a1 : Symbol(a1, Decl(tupleTypes.ts, 43, 3))
+
+a3 = a2;
+>a3 : Symbol(a3, Decl(tupleTypes.ts, 45, 3))
+>a2 : Symbol(a2, Decl(tupleTypes.ts, 44, 3))
+

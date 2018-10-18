@@ -1,0 +1,45 @@
+=== tests/cases/compiler/numericIndexExpressions.ts ===
+interface Numbers1 {
+    1: string;
+>1 : string
+}
+interface Strings1 {
+    '1': string;
+>'1' : string
+}
+ 
+ 
+var x: Numbers1;
+>x : Numbers1
+
+x[1] = 4; // error
+>x[1] = 4 : 4
+>x[1] : string
+>x : Numbers1
+>1 : 1
+>4 : 4
+
+x['1'] = 4; // error
+>x['1'] = 4 : 4
+>x['1'] : string
+>x : Numbers1
+>'1' : "1"
+>4 : 4
+
+var y: Strings1;
+>y : Strings1
+
+y['1'] = 4; // should be error
+>y['1'] = 4 : 4
+>y['1'] : string
+>y : Strings1
+>'1' : "1"
+>4 : 4
+
+y[1] = 4; // should be error
+>y[1] = 4 : 4
+>y[1] : string
+>y : Strings1
+>1 : 1
+>4 : 4
+

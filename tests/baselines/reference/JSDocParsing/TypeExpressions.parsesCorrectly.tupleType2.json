@@ -1,17 +1,20 @@
 {
-    "kind": "JSDocTupleType",
+    "kind": "TupleType",
     "pos": 1,
     "end": 16,
-    "types": {
+    "flags": "JSDoc",
+    "elementTypes": {
         "0": {
             "kind": "NumberKeyword",
             "pos": 2,
-            "end": 8
+            "end": 8,
+            "flags": "JSDoc"
         },
         "1": {
             "kind": "StringKeyword",
             "pos": 9,
-            "end": 15
+            "end": 15,
+            "flags": "JSDoc"
         },
         "length": 2,
         "pos": 2,

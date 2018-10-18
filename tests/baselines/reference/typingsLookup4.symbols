@@ -8,10 +8,14 @@ import { k } from "kquery";
 import { l } from "lquery";
 >l : Symbol(l, Decl(a.ts, 2, 8))
 
-j + k + l;
+import { m } from "mquery";
+>m : Symbol(m, Decl(a.ts, 3, 8))
+
+j + k + l + m;
 >j : Symbol(j, Decl(a.ts, 0, 8))
 >k : Symbol(k, Decl(a.ts, 1, 8))
 >l : Symbol(l, Decl(a.ts, 2, 8))
+>m : Symbol(m, Decl(a.ts, 3, 8))
 
 === /node_modules/@types/jquery/jquery.d.ts ===
 export const j: number;
@@ -24,4 +28,8 @@ export const k: number;
 === /node_modules/@types/lquery/lquery.ts ===
 export const l = 2;
 >l : Symbol(l, Decl(lquery.ts, 0, 12))
+
+=== /node_modules/@types/mquery/mquery/index.tsx ===
+export const m = 3;
+>m : Symbol(m, Decl(index.tsx, 0, 12))
 

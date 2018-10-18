@@ -7,10 +7,10 @@ class C {
 }
 
 //// [staticsInConstructorBodies.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.m1 = function () { }; // ERROR
+    C.p1 = 0; // ERROR
     return C;
 }());
-C.p1 = 0; // ERROR

@@ -17,10 +17,12 @@ fn(a); // Error: property 'x' is missing from 'a'
 //// [moduleAliasAsFunctionArgument_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
 });
 //// [moduleAliasAsFunctionArgument_1.js]
 define(["require", "exports", "moduleAliasAsFunctionArgument_0"], function (require, exports, a) {
     "use strict";
+    exports.__esModule = true;
     function fn(arg) {
     }
     a.x; // OK

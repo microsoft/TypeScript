@@ -1,5 +1,4 @@
 //// [es6modulekindWithES5Target8.ts]
-
 export const c = 0;
 export let l = 1;
 

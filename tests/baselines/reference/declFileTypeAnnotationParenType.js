@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationParenType.ts]
-
 class c {
     private p: string;
 }
@@ -11,7 +10,7 @@ var k: (() => c) | string = (() => new c()) || "";
 var l = (() => new c()) || "";
 
 //// [declFileTypeAnnotationParenType.js]
-var c = (function () {
+var c = /** @class */ (function () {
     function c() {
     }
     return c;

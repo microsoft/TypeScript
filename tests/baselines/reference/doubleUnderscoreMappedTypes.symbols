@@ -1,0 +1,52 @@
+=== tests/cases/compiler/doubleUnderscoreMappedTypes.ts ===
+interface Properties {
+>Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+
+    property1: string;
+>property1 : Symbol(Properties.property1, Decl(doubleUnderscoreMappedTypes.ts, 0, 22))
+
+    __property2: string;
+>__property2 : Symbol(Properties.__property2, Decl(doubleUnderscoreMappedTypes.ts, 1, 22))
+}
+
+// As expected, I can make an object satisfying this interface
+const ok: Properties = {
+>ok : Symbol(ok, Decl(doubleUnderscoreMappedTypes.ts, 6, 5))
+>Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+
+    property1: "",
+>property1 : Symbol(property1, Decl(doubleUnderscoreMappedTypes.ts, 6, 24))
+
+    __property2: ""
+>__property2 : Symbol(__property2, Decl(doubleUnderscoreMappedTypes.ts, 7, 18))
+
+};
+
+// As expected, "__property2" is indeed a key of the type
+type Keys = keyof Properties;
+>Keys : Symbol(Keys, Decl(doubleUnderscoreMappedTypes.ts, 9, 2))
+>Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+
+const k: Keys = "__property2"; // ok
+>k : Symbol(k, Decl(doubleUnderscoreMappedTypes.ts, 13, 5))
+>Keys : Symbol(Keys, Decl(doubleUnderscoreMappedTypes.ts, 9, 2))
+
+// This should be valid
+type Property2Type = Properties["__property2"];
+>Property2Type : Symbol(Property2Type, Decl(doubleUnderscoreMappedTypes.ts, 13, 30))
+>Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+
+// And should work with partial
+const partial: Partial<Properties> = {
+>partial : Symbol(partial, Decl(doubleUnderscoreMappedTypes.ts, 19, 5))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Properties : Symbol(Properties, Decl(doubleUnderscoreMappedTypes.ts, 0, 0))
+
+    property1: "",
+>property1 : Symbol(property1, Decl(doubleUnderscoreMappedTypes.ts, 19, 38))
+
+    __property2: ""
+>__property2 : Symbol(__property2, Decl(doubleUnderscoreMappedTypes.ts, 20, 18))
+
+};
+

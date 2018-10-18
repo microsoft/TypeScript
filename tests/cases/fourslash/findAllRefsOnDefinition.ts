@@ -7,7 +7,7 @@
 ////
 ////    }
 ////
-////    public [|start|](){
+////    public [|{| "isWriteAccess": true, "isDefinition": true |}start|](){
 ////        return this;
 ////    }
 ////
@@ -23,4 +23,4 @@
 ////second.[|start|]();
 ////second.stop();
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(method) Test.start(): this");

@@ -1,0 +1,124 @@
+=== tests/cases/conformance/types/intersection/intersectionThisTypes.ts ===
+interface Thing1 {
+    a: number;
+>a : number
+
+    self(): this;
+>self : () => this
+}
+
+interface Thing2 {
+    b: number;
+>b : number
+
+    me(): this;
+>me : () => this
+}
+
+type Thing3 = Thing1 & Thing2;
+>Thing3 : Thing3
+
+type Thing4 = Thing3 & string[];
+>Thing4 : Thing4
+
+function f1(t: Thing3) {
+>f1 : (t: Thing3) => void
+>t : Thing3
+
+    t = t.self();
+>t = t.self() : Thing3
+>t : Thing3
+>t.self() : Thing3
+>t.self : () => Thing3
+>t : Thing3
+>self : () => Thing3
+
+    t = t.me().self().me();
+>t = t.me().self().me() : Thing3
+>t : Thing3
+>t.me().self().me() : Thing3
+>t.me().self().me : () => Thing3
+>t.me().self() : Thing3
+>t.me().self : () => Thing3
+>t.me() : Thing3
+>t.me : () => Thing3
+>t : Thing3
+>me : () => Thing3
+>self : () => Thing3
+>me : () => Thing3
+}
+
+interface Thing5 extends Thing4 {
+    c: string;
+>c : string
+}
+
+function f2(t: Thing5) {
+>f2 : (t: Thing5) => void
+>t : Thing5
+
+    t = t.self();
+>t = t.self() : Thing5
+>t : Thing5
+>t.self() : Thing5
+>t.self : () => Thing5
+>t : Thing5
+>self : () => Thing5
+
+    t = t.me().self().me();
+>t = t.me().self().me() : Thing5
+>t : Thing5
+>t.me().self().me() : Thing5
+>t.me().self().me : () => Thing5
+>t.me().self() : Thing5
+>t.me().self : () => Thing5
+>t.me() : Thing5
+>t.me : () => Thing5
+>t : Thing5
+>me : () => Thing5
+>self : () => Thing5
+>me : () => Thing5
+}
+
+interface Component {
+    extend<T>(props: T): this & T;
+>extend : <T>(props: T) => this & T
+>props : T
+}
+
+interface Label extends Component {
+    title: string;
+>title : string
+}
+
+function test(label: Label) {
+>test : (label: Label) => void
+>label : Label
+
+    const extended = label.extend({ id: 67 }).extend({ tag: "hello" });
+>extended : Label & { id: number; } & { tag: string; }
+>label.extend({ id: 67 }).extend({ tag: "hello" }) : Label & { id: number; } & { tag: string; }
+>label.extend({ id: 67 }).extend : <T>(props: T) => Label & { id: number; } & T
+>label.extend({ id: 67 }) : Label & { id: number; }
+>label.extend : <T>(props: T) => Label & T
+>label : Label
+>extend : <T>(props: T) => Label & T
+>{ id: 67 } : { id: number; }
+>id : number
+>67 : 67
+>extend : <T>(props: T) => Label & { id: number; } & T
+>{ tag: "hello" } : { tag: string; }
+>tag : string
+>"hello" : "hello"
+
+    extended.id;  // Ok
+>extended.id : number
+>extended : Label & { id: number; } & { tag: string; }
+>id : number
+
+    extended.tag;  // Ok
+>extended.tag : string
+>extended : Label & { id: number; } & { tag: string; }
+>tag : string
+}
+

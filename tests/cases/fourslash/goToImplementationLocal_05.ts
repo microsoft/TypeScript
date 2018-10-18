@@ -6,7 +6,7 @@
 ////     public hello() {}
 //// }
 ////
-//// var [|someVar = new Bar()|];
+//// var [|someVar|] = new Bar();
 //// someVa/*reference*/r.hello();
 
 verify.allRangesAppearInImplementationList("reference");

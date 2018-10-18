@@ -6,7 +6,7 @@ class Outer {
 
 
 //// [staticMustPrecedePublic.js]
-var Outer = (function () {
+var Outer = /** @class */ (function () {
     function Outer() {
     }
     return Outer;

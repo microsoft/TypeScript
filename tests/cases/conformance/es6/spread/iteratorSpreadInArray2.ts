@@ -1,6 +1,4 @@
 //@target: ES6
-var array = [...new NumberIterator, ...new SymbolIterator];
-
 class SymbolIterator {
     next() {
         return {
@@ -26,3 +24,5 @@ class NumberIterator {
         return this;
     }
 }
+
+var array = [...new NumberIterator, ...new SymbolIterator];

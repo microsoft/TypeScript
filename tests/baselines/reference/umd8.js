@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd8.ts] ////
 
 //// [foo.d.ts]
-
 declare class Thing {
 	foo(): number;
 }
@@ -23,6 +22,7 @@ let x: any = Foo; // Not OK in value position
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var y; // OK in type position
 y.foo();
 var z; // OK in ns position

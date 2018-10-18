@@ -1,0 +1,94 @@
+=== tests/cases/compiler/superErrors.ts ===
+function foo() {
+>foo : Symbol(foo, Decl(superErrors.ts, 0, 0))
+
+    // super in a non class context
+    var x = super;
+>x : Symbol(x, Decl(superErrors.ts, 2, 7))
+
+    var y = () => super;
+>y : Symbol(y, Decl(superErrors.ts, 3, 7))
+
+    var z = () => () => () => super;
+>z : Symbol(z, Decl(superErrors.ts, 4, 7))
+}
+
+class User {
+>User : Symbol(User, Decl(superErrors.ts, 5, 1))
+
+    name: string = "Bob";
+>name : Symbol(User.name, Decl(superErrors.ts, 7, 12))
+
+    sayHello(): void {
+>sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
+
+        //console.log("Hello, " + this.name);
+    }
+}
+
+class RegisteredUser extends User {
+>RegisteredUser : Symbol(RegisteredUser, Decl(superErrors.ts, 12, 1))
+>User : Symbol(User, Decl(superErrors.ts, 5, 1))
+
+    name: string = "Frank";
+>name : Symbol(RegisteredUser.name, Decl(superErrors.ts, 14, 35))
+
+    constructor() {
+        super();
+>super : Symbol(User, Decl(superErrors.ts, 5, 1))
+
+        // super call in an inner function in a constructor
+        function inner() {
+>inner : Symbol(inner, Decl(superErrors.ts, 17, 16))
+
+            super.sayHello();
+        }
+
+        // super call in a lambda in an inner function in a constructor 
+        function inner2() {
+>inner2 : Symbol(inner2, Decl(superErrors.ts, 22, 9))
+
+            var x = () => super.sayHello();
+>x : Symbol(x, Decl(superErrors.ts, 26, 15))
+        }
+
+        // super call in a lambda in a function expression in a constructor 
+        (function() { return () => super; })();
+    }
+    sayHello(): void {
+>sayHello : Symbol(RegisteredUser.sayHello, Decl(superErrors.ts, 31, 5))
+
+        // super call in a method
+        super.sayHello();
+>super.sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
+>super : Symbol(User, Decl(superErrors.ts, 5, 1))
+>sayHello : Symbol(User.sayHello, Decl(superErrors.ts, 8, 25))
+
+        // super call in a lambda in an inner function in a method
+        function inner() {
+>inner : Symbol(inner, Decl(superErrors.ts, 34, 25))
+
+            var x = () => super.sayHello();
+>x : Symbol(x, Decl(superErrors.ts, 38, 15))
+        }
+
+        // super call in a lambda in a function expression in a constructor 
+        (function() { return () => super; })();
+    }
+    static staticFunction(): void {
+>staticFunction : Symbol(RegisteredUser.staticFunction, Decl(superErrors.ts, 43, 5))
+
+        // super in static functions
+        var s = super;
+>s : Symbol(s, Decl(superErrors.ts, 46, 11))
+>super : Symbol(User, Decl(superErrors.ts, 5, 1))
+
+        var x = () => super;
+>x : Symbol(x, Decl(superErrors.ts, 47, 11))
+>super : Symbol(User, Decl(superErrors.ts, 5, 1))
+
+        var y = () => () => () => super;
+>y : Symbol(y, Decl(superErrors.ts, 48, 11))
+>super : Symbol(User, Decl(superErrors.ts, 5, 1))
+    }
+}

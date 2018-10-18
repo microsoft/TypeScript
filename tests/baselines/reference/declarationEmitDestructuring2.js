@@ -20,12 +20,12 @@ function h1(_a) {
 
 
 //// [declarationEmitDestructuring2.d.ts]
-declare function f({x, y: [a, b, c, d]}?: {
+declare function f({ x, y: [a, b, c, d] }?: {
     x?: number;
     y?: [number, number, number, number];
 }): void;
 declare function g([a, b, c, d]?: [number, number, number, number]): void;
-declare function h([a, [b], [[c]], {x, y: [a, b, c], z: {a1, b1}}]: [any, [any], [[any]], {
+declare function h([a, [b], [[c]], { x, y: [a, b, c], z: { a1, b1 } }]: [any, [any], [[any]], {
     x?: number;
     y: [any, any, any];
     z: {
@@ -33,7 +33,7 @@ declare function h([a, [b], [[c]], {x, y: [a, b, c], z: {a1, b1}}]: [any, [any],
         b1: any;
     };
 }]): void;
-declare function h1([a, [b], [[c]], {x, y, z: {a1, b1}}]: [any, [any], [[any]], {
+declare function h1([a, [b], [[c]], { x, y, z: { a1, b1 } }]: [any, [any], [[any]], {
     x?: number;
     y?: number[];
     z: {

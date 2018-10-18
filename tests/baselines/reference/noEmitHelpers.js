@@ -1,19 +1,18 @@
 //// [noEmitHelpers.ts]
-
 class A { }
 class B extends A { }
 
 
 //// [noEmitHelpers.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));

@@ -1,0 +1,19 @@
+=== tests/cases/conformance/statements/for-ofStatements/ES5For-of30.ts ===
+var a: string, b: number;
+>a : Symbol(a, Decl(ES5For-of30.ts, 0, 3))
+>b : Symbol(b, Decl(ES5For-of30.ts, 0, 14))
+
+var tuple: [number, string] = [2, "3"];
+>tuple : Symbol(tuple, Decl(ES5For-of30.ts, 1, 3))
+
+for ([a = 1, b = ""] of tuple) {
+>a : Symbol(a, Decl(ES5For-of30.ts, 0, 3))
+>b : Symbol(b, Decl(ES5For-of30.ts, 0, 14))
+>tuple : Symbol(tuple, Decl(ES5For-of30.ts, 1, 3))
+
+    a;
+>a : Symbol(a, Decl(ES5For-of30.ts, 0, 3))
+
+    b;
+>b : Symbol(b, Decl(ES5For-of30.ts, 0, 14))
+}

@@ -1,5 +1,4 @@
 === tests/cases/compiler/test.d.ts ===
-
 declare var S: typeof A; // no error
 >S : number
 >A : number

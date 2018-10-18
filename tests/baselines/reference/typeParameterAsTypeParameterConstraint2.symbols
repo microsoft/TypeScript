@@ -1,0 +1,61 @@
+=== tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts ===
+// using a type parameter as a constraint for a type parameter is invalid
+// these should be errors unless otherwise noted
+
+function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
+>foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraint2.ts, 0, 0))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 13))
+>U : Symbol(U, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 15))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 13))
+>x : Symbol(x, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 29))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 13))
+>y : Symbol(y, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 34))
+>U : Symbol(U, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 15))
+>U : Symbol(U, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 15))
+>y : Symbol(y, Decl(typeParameterAsTypeParameterConstraint2.ts, 3, 34))
+
+foo(1, '');
+>foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraint2.ts, 0, 0))
+
+foo(1, {});
+>foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraint2.ts, 0, 0))
+
+interface NumberVariant extends Number {
+>NumberVariant : Symbol(NumberVariant, Decl(typeParameterAsTypeParameterConstraint2.ts, 6, 11))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x: number;
+>x : Symbol(NumberVariant.x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))
+}
+var n: NumberVariant;
+>n : Symbol(n, Decl(typeParameterAsTypeParameterConstraint2.ts, 11, 3))
+>NumberVariant : Symbol(NumberVariant, Decl(typeParameterAsTypeParameterConstraint2.ts, 6, 11))
+
+var r3 = foo(1, n);
+>r3 : Symbol(r3, Decl(typeParameterAsTypeParameterConstraint2.ts, 12, 3))
+>foo : Symbol(foo, Decl(typeParameterAsTypeParameterConstraint2.ts, 0, 0))
+>n : Symbol(n, Decl(typeParameterAsTypeParameterConstraint2.ts, 11, 3))
+
+function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
+>foo2 : Symbol(foo2, Decl(typeParameterAsTypeParameterConstraint2.ts, 12, 19))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 14))
+>U : Symbol(U, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 16))
+>length : Symbol(length, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 28))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 14))
+>x : Symbol(x, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 42))
+>T : Symbol(T, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 14))
+>y : Symbol(y, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 47))
+>U : Symbol(U, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 16))
+>y : Symbol(y, Decl(typeParameterAsTypeParameterConstraint2.ts, 14, 47))
+
+foo2(1, { length: '' });
+>foo2 : Symbol(foo2, Decl(typeParameterAsTypeParameterConstraint2.ts, 12, 19))
+>length : Symbol(length, Decl(typeParameterAsTypeParameterConstraint2.ts, 15, 9))
+
+foo2(1, { length: {} });
+>foo2 : Symbol(foo2, Decl(typeParameterAsTypeParameterConstraint2.ts, 12, 19))
+>length : Symbol(length, Decl(typeParameterAsTypeParameterConstraint2.ts, 16, 9))
+
+foo2([], ['']);
+>foo2 : Symbol(foo2, Decl(typeParameterAsTypeParameterConstraint2.ts, 12, 19))
+

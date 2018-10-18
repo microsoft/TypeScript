@@ -1,11 +1,9 @@
 === tests/cases/compiler/genericClassesInModule.ts ===
-
 module Foo {
 >Foo : typeof Foo
 
     export class B<T>{ }
 >B : B<T>
->T : T
 
     export class A { }
 >A : A
@@ -18,5 +16,4 @@ var a = new Foo.B<Foo.A>();
 >Foo : typeof Foo
 >B : typeof Foo.B
 >Foo : any
->A : Foo.A
 

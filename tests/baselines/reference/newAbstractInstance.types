@@ -1,0 +1,11 @@
+=== tests/cases/compiler/newAbstractInstance.ts ===
+abstract class B { }
+>B : B
+
+declare const b: B;
+>b : B
+
+new b();
+>new b() : any
+>b : B
+

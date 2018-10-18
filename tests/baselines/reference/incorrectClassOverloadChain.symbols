@@ -1,0 +1,14 @@
+=== tests/cases/compiler/incorrectClassOverloadChain.ts ===
+class C {
+>C : Symbol(C, Decl(incorrectClassOverloadChain.ts, 0, 0))
+
+    foo(): string;
+>foo : Symbol(C.foo, Decl(incorrectClassOverloadChain.ts, 0, 9), Decl(incorrectClassOverloadChain.ts, 1, 18))
+
+    foo(x): number;
+>foo : Symbol(C.foo, Decl(incorrectClassOverloadChain.ts, 0, 9), Decl(incorrectClassOverloadChain.ts, 1, 18))
+>x : Symbol(x, Decl(incorrectClassOverloadChain.ts, 2, 8))
+
+    x = 1;
+>x : Symbol(C.x, Decl(incorrectClassOverloadChain.ts, 2, 19))
+}

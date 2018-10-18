@@ -1,0 +1,22 @@
+=== tests/cases/conformance/types/import/importTypeAmbientMissing.ts ===
+declare module "foo" {
+>"foo" : Symbol("foo", Decl(importTypeAmbientMissing.ts, 0, 0))
+
+    interface Point {
+>Point : Symbol(Point, Decl(importTypeAmbientMissing.ts, 0, 22))
+
+        x: number;
+>x : Symbol(Point.x, Decl(importTypeAmbientMissing.ts, 1, 21))
+
+        y: number;
+>y : Symbol(Point.y, Decl(importTypeAmbientMissing.ts, 2, 18))
+    }
+    export = Point;
+>Point : Symbol(Point, Decl(importTypeAmbientMissing.ts, 0, 22))
+}
+const x: import("fo") = { x: 0, y: 0 }; // typo, error
+>x : Symbol(x, Decl(importTypeAmbientMissing.ts, 7, 5))
+>x : Symbol(x, Decl(importTypeAmbientMissing.ts, 7, 25))
+>y : Symbol(y, Decl(importTypeAmbientMissing.ts, 7, 31))
+
+

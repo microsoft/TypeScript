@@ -8,8 +8,6 @@ module Alpha {
 }
 
 module Beta {
->Beta : any
-
     import p = Alpha.x;
 >p : number
 >Alpha : typeof Alpha

@@ -22,7 +22,7 @@ var r3 = a.foo;
 var r4 = b.foo;
 
 //// [propertyNameWithoutTypeAnnotation.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;

@@ -1,5 +1,4 @@
 //// [undeclaredMethod.ts]
-
 module M {
     export class C {
         public salt() {}
@@ -16,7 +15,7 @@ c.saltbar();	// crash
 //// [undeclaredMethod.js]
 var M;
 (function (M) {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
         }
         C.prototype.salt = function () { };

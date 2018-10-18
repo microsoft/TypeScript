@@ -1,0 +1,91 @@
+=== tests/cases/conformance/es6/destructuring/destructuringParameterProperties1.ts ===
+class C1 {
+>C1 : Symbol(C1, Decl(destructuringParameterProperties1.ts, 0, 0))
+
+    constructor(public [x, y, z]: string[]) {
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 1, 24))
+>y : Symbol(y, Decl(destructuringParameterProperties1.ts, 1, 26))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 1, 29))
+    }
+}
+
+type TupleType1 = [string, number, boolean];
+>TupleType1 : Symbol(TupleType1, Decl(destructuringParameterProperties1.ts, 3, 1))
+
+class C2 {
+>C2 : Symbol(C2, Decl(destructuringParameterProperties1.ts, 5, 44))
+
+    constructor(public [x, y, z]: TupleType1) {
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 8, 24))
+>y : Symbol(y, Decl(destructuringParameterProperties1.ts, 8, 26))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 8, 29))
+>TupleType1 : Symbol(TupleType1, Decl(destructuringParameterProperties1.ts, 3, 1))
+    }
+}
+
+type ObjType1 = { x: number; y: string; z: boolean }
+>ObjType1 : Symbol(ObjType1, Decl(destructuringParameterProperties1.ts, 10, 1))
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 12, 17))
+>y : Symbol(y, Decl(destructuringParameterProperties1.ts, 12, 28))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 12, 39))
+
+class C3 {
+>C3 : Symbol(C3, Decl(destructuringParameterProperties1.ts, 12, 52))
+
+    constructor(public { x, y, z }: ObjType1) {
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 15, 24))
+>y : Symbol(y, Decl(destructuringParameterProperties1.ts, 15, 27))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 15, 30))
+>ObjType1 : Symbol(ObjType1, Decl(destructuringParameterProperties1.ts, 10, 1))
+    }
+}
+
+var c1 = new C1([]);
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+>C1 : Symbol(C1, Decl(destructuringParameterProperties1.ts, 0, 0))
+
+c1 = new C1(["larry", "{curly}", "moe"]);
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+>C1 : Symbol(C1, Decl(destructuringParameterProperties1.ts, 0, 0))
+
+var useC1Properties = c1.x === c1.y && c1.y === c1.z;
+>useC1Properties : Symbol(useC1Properties, Decl(destructuringParameterProperties1.ts, 21, 3))
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+>c1 : Symbol(c1, Decl(destructuringParameterProperties1.ts, 19, 3))
+
+var c2 = new C2(["10", 10, !!10]);
+>c2 : Symbol(c2, Decl(destructuringParameterProperties1.ts, 23, 3))
+>C2 : Symbol(C2, Decl(destructuringParameterProperties1.ts, 5, 44))
+
+var [c2_x, c2_y, c2_z] = [c2.x, c2.y, c2.z];
+>c2_x : Symbol(c2_x, Decl(destructuringParameterProperties1.ts, 24, 5))
+>c2_y : Symbol(c2_y, Decl(destructuringParameterProperties1.ts, 24, 10))
+>c2_z : Symbol(c2_z, Decl(destructuringParameterProperties1.ts, 24, 16))
+>c2 : Symbol(c2, Decl(destructuringParameterProperties1.ts, 23, 3))
+>c2 : Symbol(c2, Decl(destructuringParameterProperties1.ts, 23, 3))
+>c2 : Symbol(c2, Decl(destructuringParameterProperties1.ts, 23, 3))
+
+var c3 = new C3({x: 0, y: "", z: false});
+>c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
+>C3 : Symbol(C3, Decl(destructuringParameterProperties1.ts, 12, 52))
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 26, 17))
+>y : Symbol(y, Decl(destructuringParameterProperties1.ts, 26, 22))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 26, 29))
+
+c3 = new C3({x: 0, "y": "y", z: true});
+>c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
+>C3 : Symbol(C3, Decl(destructuringParameterProperties1.ts, 12, 52))
+>x : Symbol(x, Decl(destructuringParameterProperties1.ts, 27, 13))
+>"y" : Symbol("y", Decl(destructuringParameterProperties1.ts, 27, 18))
+>z : Symbol(z, Decl(destructuringParameterProperties1.ts, 27, 28))
+
+var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];
+>c3_x : Symbol(c3_x, Decl(destructuringParameterProperties1.ts, 28, 5))
+>c3_y : Symbol(c3_y, Decl(destructuringParameterProperties1.ts, 28, 10))
+>c3_z : Symbol(c3_z, Decl(destructuringParameterProperties1.ts, 28, 16))
+>c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
+>c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
+>c3 : Symbol(c3, Decl(destructuringParameterProperties1.ts, 26, 3))
+

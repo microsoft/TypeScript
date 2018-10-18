@@ -15,4 +15,4 @@
 
 goTo.marker();
 verify.completionListIsEmpty();
-verify.memberListIsEmpty();
+verify.completionListIsEmpty();

@@ -2,7 +2,7 @@
 namespace ts {
     declare const performance: { now?(): number } | undefined;
     /** Gets a timestamp with (at least) ms resolution */
-    export const timestamp = typeof performance !== "undefined" && performance.now ? () => performance.now() : Date.now ? Date.now : () => +(new Date());
+    export const timestamp = typeof performance !== "undefined" && performance.now ? () => performance.now!() : Date.now ? Date.now : () => +(new Date());
 }
 
 /*@internal*/
@@ -10,9 +10,8 @@ namespace ts {
 namespace ts.performance {
     declare const onProfilerEvent: { (markName: string): void; profiler: boolean; };
 
-    const profilerEvent = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true
-            ? onProfilerEvent
-            : (markName: string) => { };
+    // NOTE: cannot use ts.noop as core.ts loads after this
+    const profilerEvent: (markName: string) => void = typeof onProfilerEvent === "function" && onProfilerEvent.profiler === true ? onProfilerEvent : () => { /*empty*/ };
 
     let enabled = false;
     let profilerStart = 0;
@@ -27,8 +26,8 @@ namespace ts.performance {
      */
     export function mark(markName: string) {
         if (enabled) {
-            marks[markName] = timestamp();
-            counts[markName] = (counts[markName] || 0) + 1;
+            marks.set(markName, timestamp());
+            counts.set(markName, (counts.get(markName) || 0) + 1);
             profilerEvent(markName);
         }
     }
@@ -44,9 +43,9 @@ namespace ts.performance {
      */
     export function measure(measureName: string, startMarkName?: string, endMarkName?: string) {
         if (enabled) {
-            const end = endMarkName && marks[endMarkName] || timestamp();
-            const start = startMarkName && marks[startMarkName] || profilerStart;
-            measures[measureName] = (measures[measureName] || 0) + (end - start);
+            const end = endMarkName && marks.get(endMarkName) || timestamp();
+            const start = startMarkName && marks.get(startMarkName) || profilerStart;
+            measures.set(measureName, (measures.get(measureName) || 0) + (end - start));
         }
     }
 
@@ -56,7 +55,7 @@ namespace ts.performance {
      * @param markName The name of the mark.
      */
     export function getCount(markName: string) {
-        return counts && counts[markName] || 0;
+        return counts && counts.get(markName) || 0;
     }
 
     /**
@@ -65,7 +64,7 @@ namespace ts.performance {
      * @param measureName The name of the measure whose durations should be accumulated.
      */
     export function getDuration(measureName: string) {
-        return measures && measures[measureName] || 0;
+        return measures && measures.get(measureName) || 0;
     }
 
     /**
@@ -74,9 +73,9 @@ namespace ts.performance {
      * @param cb The action to perform for each measure
      */
     export function forEachMeasure(cb: (measureName: string, duration: number) => void) {
-        for (const key in measures) {
-            cb(key, measures[key]);
-        }
+        measures.forEach((measure, key) => {
+            cb(key, measure);
+        });
     }
 
     /** Enables (and resets) performance measurements for the compiler. */

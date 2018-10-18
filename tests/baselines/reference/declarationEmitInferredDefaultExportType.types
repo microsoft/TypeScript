@@ -1,0 +1,17 @@
+=== tests/cases/compiler/declarationEmitInferredDefaultExportType.ts ===
+// test.ts
+export default {
+>{  foo: [],  bar: undefined,  baz: null} : { foo: undefined[]; bar: undefined; baz: null; }
+
+  foo: [],
+>foo : undefined[]
+>[] : undefined[]
+
+  bar: undefined,
+>bar : undefined
+>undefined : undefined
+
+  baz: null
+>baz : null
+>null : null
+}

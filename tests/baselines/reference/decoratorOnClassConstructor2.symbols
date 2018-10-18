@@ -1,14 +1,13 @@
 === tests/cases/conformance/decorators/class/constructor/0.ts ===
-
 export class base { }
 >base : Symbol(base, Decl(0.ts, 0, 0))
 
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
->foo : Symbol(foo, Decl(0.ts, 1, 21))
->target : Symbol(target, Decl(0.ts, 2, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->propertyKey : Symbol(propertyKey, Decl(0.ts, 2, 35))
->parameterIndex : Symbol(parameterIndex, Decl(0.ts, 2, 65))
+>foo : Symbol(foo, Decl(0.ts, 0, 21))
+>target : Symbol(target, Decl(0.ts, 1, 20))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>propertyKey : Symbol(propertyKey, Decl(0.ts, 1, 35))
+>parameterIndex : Symbol(parameterIndex, Decl(0.ts, 1, 65))
 
 === tests/cases/conformance/decorators/class/constructor/2.ts ===
 import {base} from "./0.ts"
@@ -26,6 +25,5 @@ export class C  extends base{
 >prop : Symbol(prop, Decl(2.ts, 3, 16))
 
         super();
->super : Symbol(base, Decl(0.ts, 0, 0))
     }
 }

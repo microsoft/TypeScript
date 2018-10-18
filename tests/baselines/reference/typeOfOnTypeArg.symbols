@@ -1,0 +1,17 @@
+=== tests/cases/compiler/typeOfOnTypeArg.ts ===
+var A = { '': 3 };
+>A : Symbol(A, Decl(typeOfOnTypeArg.ts, 0, 3))
+>'' : Symbol('', Decl(typeOfOnTypeArg.ts, 0, 9))
+
+function fill<B extends typeof A>(f: B) {
+>fill : Symbol(fill, Decl(typeOfOnTypeArg.ts, 0, 18))
+>B : Symbol(B, Decl(typeOfOnTypeArg.ts, 2, 14))
+>A : Symbol(A, Decl(typeOfOnTypeArg.ts, 0, 3))
+>f : Symbol(f, Decl(typeOfOnTypeArg.ts, 2, 34))
+>B : Symbol(B, Decl(typeOfOnTypeArg.ts, 2, 14))
+
+} 
+
+fill(32);
+>fill : Symbol(fill, Decl(typeOfOnTypeArg.ts, 0, 18))
+

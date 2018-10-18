@@ -1,0 +1,66 @@
+=== tests/cases/conformance/types/tuple/strictTupleLength.ts ===
+var t0: [];
+>t0 : Symbol(t0, Decl(strictTupleLength.ts, 0, 3))
+
+var t1: [number];
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+
+var t2: [number, number];
+>t2 : Symbol(t2, Decl(strictTupleLength.ts, 2, 3), Decl(strictTupleLength.ts, 11, 3))
+
+var arr: number[];
+>arr : Symbol(arr, Decl(strictTupleLength.ts, 3, 3))
+
+var len0: 0 = t0.length;
+>len0 : Symbol(len0, Decl(strictTupleLength.ts, 5, 3))
+>t0.length : Symbol(length)
+>t0 : Symbol(t0, Decl(strictTupleLength.ts, 0, 3))
+>length : Symbol(length)
+
+var len1: 1 = t1.length;
+>len1 : Symbol(len1, Decl(strictTupleLength.ts, 6, 3))
+>t1.length : Symbol(length)
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+>length : Symbol(length)
+
+var len2: 2 = t2.length;
+>len2 : Symbol(len2, Decl(strictTupleLength.ts, 7, 3))
+>t2.length : Symbol(length)
+>t2 : Symbol(t2, Decl(strictTupleLength.ts, 2, 3), Decl(strictTupleLength.ts, 11, 3))
+>length : Symbol(length)
+
+var lena: number = arr.length;
+>lena : Symbol(lena, Decl(strictTupleLength.ts, 8, 3))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(strictTupleLength.ts, 3, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+var t1 = t2; // error
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+>t2 : Symbol(t2, Decl(strictTupleLength.ts, 2, 3), Decl(strictTupleLength.ts, 11, 3))
+
+var t2 = t1; // error
+>t2 : Symbol(t2, Decl(strictTupleLength.ts, 2, 3), Decl(strictTupleLength.ts, 11, 3))
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+
+type A<T extends any[]> = T['length'];
+>A : Symbol(A, Decl(strictTupleLength.ts, 11, 12))
+>T : Symbol(T, Decl(strictTupleLength.ts, 13, 7))
+>T : Symbol(T, Decl(strictTupleLength.ts, 13, 7))
+
+var b: A<[boolean]>;
+>b : Symbol(b, Decl(strictTupleLength.ts, 14, 3))
+>A : Symbol(A, Decl(strictTupleLength.ts, 11, 12))
+
+var c: 1 = b;
+>c : Symbol(c, Decl(strictTupleLength.ts, 15, 3))
+>b : Symbol(b, Decl(strictTupleLength.ts, 14, 3))
+
+t1 = arr; // error with or without strict
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+>arr : Symbol(arr, Decl(strictTupleLength.ts, 3, 3))
+
+arr = t1; // ok with or without strict
+>arr : Symbol(arr, Decl(strictTupleLength.ts, 3, 3))
+>t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))
+

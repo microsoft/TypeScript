@@ -1,5 +1,5 @@
 tests/cases/compiler/world.ts(4,1): error TS2693: 'HelloInterface' only refers to a type, but is being used as a value here.
-tests/cases/compiler/world.ts(5,1): error TS2304: Cannot find name 'HelloNamespace'.
+tests/cases/compiler/world.ts(5,1): error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 
 
 ==== tests/cases/compiler/world.ts (2 errors) ====
@@ -11,7 +11,7 @@ tests/cases/compiler/world.ts(5,1): error TS2304: Cannot find name 'HelloNamespa
 !!! error TS2693: 'HelloInterface' only refers to a type, but is being used as a value here.
     HelloNamespace.world;
     ~~~~~~~~~~~~~~
-!!! error TS2304: Cannot find name 'HelloNamespace'.
+!!! error TS2708: Cannot use namespace 'HelloNamespace' as a value.
 ==== tests/cases/compiler/helloInterface.ts (0 errors) ====
     interface HelloInterface {
         world: any;

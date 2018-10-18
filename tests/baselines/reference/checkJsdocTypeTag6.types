@@ -1,0 +1,44 @@
+=== tests/cases/conformance/jsdoc/test.js ===
+/** @type {number} */
+function f() {
+>f : () => number
+
+    return 1
+>1 : 1
+}
+
+/** @type {{ prop: string }} */
+var g = function (prop) {
+>g : { prop: string; }
+>function (prop) {} : (prop: any) => void
+>prop : any
+}
+
+/** @type {(a: number) => number} */
+function add1(a, b) { return a + b; }
+>add1 : (a: number, b: any) => number
+>a : number
+>b : any
+>a + b : any
+>a : number
+>b : any
+
+/** @type {(a: number, b: number) => number} */
+function add2(a, b) { return a + b; }
+>add2 : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+
+// TODO: Should be an error since signature doesn't match.
+/** @type {(a: number, b: number, c: number) => number} */
+function add3(a, b) { return a + b; }
+>add3 : (a: number, b: number) => number
+>a : number
+>b : number
+>a + b : number
+>a : number
+>b : number
+

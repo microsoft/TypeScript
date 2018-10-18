@@ -1,8 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty23.ts ===
 interface I {
->I : I
-
     [Symbol.toPrimitive]: () => boolean;
+>[Symbol.toPrimitive] : () => boolean
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
@@ -10,9 +9,9 @@ interface I {
 
 class C implements I {
 >C : C
->I : I
 
     [Symbol.toPrimitive]() {
+>[Symbol.toPrimitive] : () => boolean
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol

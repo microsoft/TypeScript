@@ -1,12 +1,12 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(10,29): error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-  Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(10,51): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => number'.
+  Types of parameters 'x' and 'x' are incompatible.
+    Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(15,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(16,22): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(25,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
   Types of parameters 'a' and 'x' are incompatible.
     Type 'Date' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,36): error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
-  Type 'F' is not assignable to type 'E'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(37,43): error TS2322: Type 'F' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(50,21): error TS2345: Argument of type 'Date' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(51,22): error TS2345: Argument of type '1' is not assignable to parameter of type 'T'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts(60,23): error TS2345: Argument of type '(a: T) => T' is not assignable to parameter of type '(x: Date) => Date'.
@@ -27,9 +27,10 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         }
     
         var r1: (x: {}) => {} = foo((x: number) => 1, (x: string) => '');
-                                ~~~
-!!! error TS2453: The type argument for type parameter 'T' cannot be inferred from the usage. Consider specifying the type arguments explicitly.
-!!! error TS2453:   Type argument candidate 'number' is not a valid type argument because it is not a supertype of candidate 'string'.
+                                                      ~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => number'.
+!!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type 'string'.
     
         function other2<T extends Date>(x: T) {
             var r7 = foo((a: T) => a, (b: T) => b); // T => T
@@ -65,9 +66,9 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGen
         }
     
         var r7 = foo3(E.A, (x) => E.A, (x) => F.A); // error
-                                       ~~~~~~~~~~
-!!! error TS2345: Argument of type '(x: E) => F' is not assignable to parameter of type '(x: E) => E'.
-!!! error TS2345:   Type 'F' is not assignable to type 'E'.
+                                              ~~~
+!!! error TS2322: Type 'F' is not assignable to type 'E'.
+!!! related TS6502 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithGenericSignatureArguments2.ts:32:47: The expected type comes from the return type of this signature.
     }
     
     module TU {

@@ -83,4 +83,6 @@ namespace N {
     var x;
 }
 
-    
+for (let x: y) {
+    z(x);
+}

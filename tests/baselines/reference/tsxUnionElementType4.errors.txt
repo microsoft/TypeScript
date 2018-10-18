@@ -1,0 +1,51 @@
+tests/cases/conformance/jsx/file.tsx(32,10): error TS2604: JSX element type 'RCComp' does not have any construct or call signatures.
+tests/cases/conformance/jsx/file.tsx(33,10): error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+  Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+tests/cases/conformance/jsx/file.tsx(34,10): error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+  Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+
+
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+    import React = require('react');
+    
+    class RC1 extends React.Component<{x : number}, {}> {
+        render() {
+            return null;
+        }
+    }
+    
+    class RC2 extends React.Component<{ x: string }, {}> {
+        render() {
+            return null;
+        }
+        private method() { }
+    }
+    
+    class RC3 extends React.Component<{}, {}> {
+        render() {
+            return null;
+        }
+    }
+    
+    class RC4 extends React.Component<{}, {}> {
+        render() {
+            return null;
+        }
+    }
+    
+    var RCComp = RC1 || RC2;
+    var EmptyRCComp = RC3 || RC4;
+    var PartRCComp = RC1 || RC4;
+    // Error
+    let a = <RCComp x />;
+             ~~~~~~
+!!! error TS2604: JSX element type 'RCComp' does not have any construct or call signatures.
+    let b = <PartRCComp x={10} />
+             ~~~~~~~~~~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+!!! error TS2322:   Property 'x' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC4> & { children?: ReactNode; }'.
+    let c = <EmptyRCComp prop />;
+             ~~~~~~~~~~~
+!!! error TS2322: Type '{ prop: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+!!! error TS2322:   Property 'prop' does not exist on type 'IntrinsicAttributes & IntrinsicClassAttributes<RC3> & { children?: ReactNode; }'.
+    

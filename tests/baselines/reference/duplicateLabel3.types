@@ -1,5 +1,4 @@
 === tests/cases/compiler/duplicateLabel3.ts ===
-
 target:
 >target : any
 

@@ -1,0 +1,18 @@
+=== tests/cases/conformance/externalModules/foo_1.ts ===
+import foo = require("./foo_0");
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+
+// Import should fail.  foo_0 not an external module
+if(foo.answer === 42){
+>foo : Symbol(foo, Decl(foo_1.ts, 0, 0))
+
+}
+
+=== tests/cases/conformance/externalModules/foo_0.ts ===
+module foo {
+>foo : Symbol(foo, Decl(foo_0.ts, 0, 0))
+
+	export var answer = 42;
+>answer : Symbol(answer, Decl(foo_0.ts, 1, 11))
+}
+

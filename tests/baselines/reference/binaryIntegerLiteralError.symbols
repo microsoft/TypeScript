@@ -1,0 +1,22 @@
+=== tests/cases/conformance/es6/binaryAndOctalIntegerLiteral/binaryIntegerLiteralError.ts ===
+// error
+var bin1 = 0B1102110;
+>bin1 : Symbol(bin1, Decl(binaryIntegerLiteralError.ts, 1, 3), Decl(binaryIntegerLiteralError.ts, 2, 3))
+
+var bin1 = 0b11023410;
+>bin1 : Symbol(bin1, Decl(binaryIntegerLiteralError.ts, 1, 3), Decl(binaryIntegerLiteralError.ts, 2, 3))
+
+var obj1 = {
+>obj1 : Symbol(obj1, Decl(binaryIntegerLiteralError.ts, 4, 3))
+
+    0b11010: "hi",
+>0b11010 : Symbol(0b11010, Decl(binaryIntegerLiteralError.ts, 4, 12), Decl(binaryIntegerLiteralError.ts, 5, 18), Decl(binaryIntegerLiteralError.ts, 6, 16))
+
+    26: "Hello",
+>26 : Symbol(0b11010, Decl(binaryIntegerLiteralError.ts, 4, 12), Decl(binaryIntegerLiteralError.ts, 5, 18), Decl(binaryIntegerLiteralError.ts, 6, 16))
+
+    "26": "world",
+>"26" : Symbol(0b11010, Decl(binaryIntegerLiteralError.ts, 4, 12), Decl(binaryIntegerLiteralError.ts, 5, 18), Decl(binaryIntegerLiteralError.ts, 6, 16))
+
+};
+

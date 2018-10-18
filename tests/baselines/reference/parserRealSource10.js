@@ -458,14 +458,23 @@ module TypeScript {
 //// [parserRealSource10.js]
 // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
 // See LICENSE.txt in the project root for complete license information.
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 ///<reference path='typescript.ts' />
 var TypeScript;
 (function (TypeScript) {
+    var TokenID;
     (function (TokenID) {
         // Keywords
         TokenID[TokenID["Any"] = 0] = "Any";
@@ -584,8 +593,7 @@ var TypeScript;
         TokenID[TokenID["Lim"] = 112] = "Lim";
         TokenID[TokenID["LimFixed"] = 105] = "LimFixed";
         TokenID[TokenID["LimKeyword"] = 53] = "LimKeyword";
-    })(TypeScript.TokenID || (TypeScript.TokenID = {}));
-    var TokenID = TypeScript.TokenID;
+    })(TokenID = TypeScript.TokenID || (TypeScript.TokenID = {}));
     TypeScript.tokenTable = new TokenInfo[];
     TypeScript.nodeTypeTable = new string[];
     TypeScript.nodeTypeToTokTable = new number[];
@@ -602,6 +610,7 @@ var TypeScript;
     TypeScript.noRegexTable[TokenID.CloseBrace] = true;
     TypeScript.noRegexTable[TokenID.True] = true;
     TypeScript.noRegexTable[TokenID.False] = true;
+    var OperatorPrecedence;
     (function (OperatorPrecedence) {
         OperatorPrecedence[OperatorPrecedence["None"] = 0] = "None";
         OperatorPrecedence[OperatorPrecedence["Comma"] = 1] = "Comma";
@@ -619,8 +628,8 @@ var TypeScript;
         OperatorPrecedence[OperatorPrecedence["Multiplicative"] = 13] = "Multiplicative";
         OperatorPrecedence[OperatorPrecedence["Unary"] = 14] = "Unary";
         OperatorPrecedence[OperatorPrecedence["Lim"] = 15] = "Lim";
-    })(TypeScript.OperatorPrecedence || (TypeScript.OperatorPrecedence = {}));
-    var OperatorPrecedence = TypeScript.OperatorPrecedence;
+    })(OperatorPrecedence = TypeScript.OperatorPrecedence || (TypeScript.OperatorPrecedence = {}));
+    var Reservation;
     (function (Reservation) {
         Reservation[Reservation["None"] = 0] = "None";
         Reservation[Reservation["Javascript"] = 1] = "Javascript";
@@ -630,9 +639,8 @@ var TypeScript;
         Reservation[Reservation["TypeScriptAndJS"] = 5] = "TypeScriptAndJS";
         Reservation[Reservation["TypeScriptAndJSFuture"] = 6] = "TypeScriptAndJSFuture";
         Reservation[Reservation["TypeScriptAndJSFutureStrict"] = 12] = "TypeScriptAndJSFutureStrict";
-    })(TypeScript.Reservation || (TypeScript.Reservation = {}));
-    var Reservation = TypeScript.Reservation;
-    var TokenInfo = (function () {
+    })(Reservation = TypeScript.Reservation || (TypeScript.Reservation = {}));
+    var TokenInfo = /** @class */ (function () {
         function TokenInfo(tokenId, reservation, binopPrecedence, binopNodeType, unopPrecedence, unopNodeType, text, ers) {
             this.tokenId = tokenId;
             this.reservation = reservation;
@@ -773,6 +781,7 @@ var TypeScript;
         return TypeScript.tokenTable[tokenId];
     }
     TypeScript.lookupToken = lookupToken;
+    var TokenClass;
     (function (TokenClass) {
         TokenClass[TokenClass["Punctuation"] = 0] = "Punctuation";
         TokenClass[TokenClass["Keyword"] = 1] = "Keyword";
@@ -781,9 +790,8 @@ var TypeScript;
         TokenClass[TokenClass["Whitespace"] = 4] = "Whitespace";
         TokenClass[TokenClass["Identifier"] = 5] = "Identifier";
         TokenClass[TokenClass["Literal"] = 6] = "Literal";
-    })(TypeScript.TokenClass || (TypeScript.TokenClass = {}));
-    var TokenClass = TypeScript.TokenClass;
-    var SavedToken = (function () {
+    })(TokenClass = TypeScript.TokenClass || (TypeScript.TokenClass = {}));
+    var SavedToken = /** @class */ (function () {
         function SavedToken(tok, minChar, limChar) {
             this.tok = tok;
             this.minChar = minChar;
@@ -792,7 +800,7 @@ var TypeScript;
         return SavedToken;
     }());
     TypeScript.SavedToken = SavedToken;
-    var Token = (function () {
+    var Token = /** @class */ (function () {
         function Token(tokenId) {
             this.tokenId = tokenId;
         }
@@ -823,7 +831,7 @@ var TypeScript;
         return Token;
     }());
     TypeScript.Token = Token;
-    var NumberLiteralToken = (function (_super) {
+    var NumberLiteralToken = /** @class */ (function (_super) {
         __extends(NumberLiteralToken, _super);
         function NumberLiteralToken(value, hasEmptyFraction) {
             var _this = _super.call(this, TokenID.NumberLiteral) || this;
@@ -840,7 +848,7 @@ var TypeScript;
         return NumberLiteralToken;
     }(Token));
     TypeScript.NumberLiteralToken = NumberLiteralToken;
-    var StringLiteralToken = (function (_super) {
+    var StringLiteralToken = /** @class */ (function (_super) {
         __extends(StringLiteralToken, _super);
         function StringLiteralToken(value) {
             var _this = _super.call(this, TokenID.StringLiteral) || this;
@@ -856,7 +864,7 @@ var TypeScript;
         return StringLiteralToken;
     }(Token));
     TypeScript.StringLiteralToken = StringLiteralToken;
-    var IdentifierToken = (function (_super) {
+    var IdentifierToken = /** @class */ (function (_super) {
         __extends(IdentifierToken, _super);
         function IdentifierToken(value, hasEscapeSequence) {
             var _this = _super.call(this, TokenID.Identifier) || this;
@@ -873,7 +881,7 @@ var TypeScript;
         return IdentifierToken;
     }(Token));
     TypeScript.IdentifierToken = IdentifierToken;
-    var WhitespaceToken = (function (_super) {
+    var WhitespaceToken = /** @class */ (function (_super) {
         __extends(WhitespaceToken, _super);
         function WhitespaceToken(tokenId, value) {
             var _this = _super.call(this, tokenId) || this;
@@ -889,7 +897,7 @@ var TypeScript;
         return WhitespaceToken;
     }(Token));
     TypeScript.WhitespaceToken = WhitespaceToken;
-    var CommentToken = (function (_super) {
+    var CommentToken = /** @class */ (function (_super) {
         __extends(CommentToken, _super);
         function CommentToken(tokenID, value, isBlock, startPos, line, endsLine) {
             var _this = _super.call(this, tokenID) || this;
@@ -909,7 +917,7 @@ var TypeScript;
         return CommentToken;
     }(Token));
     TypeScript.CommentToken = CommentToken;
-    var RegularExpressionLiteralToken = (function (_super) {
+    var RegularExpressionLiteralToken = /** @class */ (function (_super) {
         __extends(RegularExpressionLiteralToken, _super);
         function RegularExpressionLiteralToken(regex) {
             var _this = _super.call(this, TokenID.RegularExpressionLiteral) || this;

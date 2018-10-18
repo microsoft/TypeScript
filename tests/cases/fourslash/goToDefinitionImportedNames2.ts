@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import {/*classAliasDefinition*/Class} from "./a";
+////import {[|/*classAliasDefinition*/Class|]} from "./a";
 
 
 // @Filename: a.ts
 ////export module Module {
 ////}
-/////*classDefinition*/export class Class {
+////export class /*classDefinition*/Class {
 ////    private f;
 ////}
 ////export interface Interface {

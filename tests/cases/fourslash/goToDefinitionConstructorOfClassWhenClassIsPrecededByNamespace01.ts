@@ -9,6 +9,6 @@
 ////    }
 ////}
 ////
-////var x = new /*usage*/Foo();
+////var x = new [|/*usage*/Foo|]();
 
 verify.goToDefinition("usage", "definition");

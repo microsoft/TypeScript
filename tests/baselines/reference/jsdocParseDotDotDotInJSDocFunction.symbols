@@ -1,0 +1,21 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+// from bcryptjs
+/** @param {function(...[*])} callback */
+function g(callback) {
+>g : Symbol(g, Decl(a.js, 0, 0))
+>callback : Symbol(callback, Decl(a.js, 2, 11))
+
+    callback([1], [2], [3])
+>callback : Symbol(callback, Decl(a.js, 2, 11))
+}
+
+/**
+ * @type {!function(...number):string}
+ * @inner
+ */
+var stringFromCharCode = String.fromCharCode;
+>stringFromCharCode : Symbol(stringFromCharCode, Decl(a.js, 10, 3))
+>String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+

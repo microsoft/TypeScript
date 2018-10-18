@@ -1,0 +1,20 @@
+=== tests/cases/compiler/exportingContainingVisibleType.ts ===
+class Foo {
+>Foo : Foo
+
+    public get foo() {
+>foo : Foo
+
+        var i: Foo;
+>i : Foo
+
+        return i; // Should be fine (previous bug report visibility error).
+>i : Foo
+ 
+    }
+}
+ 
+export var x = 5;
+>x : number
+>5 : 5
+

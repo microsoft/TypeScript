@@ -1,0 +1,112 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts ===
+// generic type argument inference where inference leads to two candidates that are both supertypes of all candidates
+// we choose the first candidate so the result is dependent on the order of the arguments provided
+
+function foo<T>(x: T, y: T) {
+>foo : <T>(x: T, y: T) => T
+>x : T
+>y : T
+
+    var r: T;
+>r : T
+
+    return r;
+>r : T
+}
+
+var a: { x: number; y?: number; };
+>a : { x: number; y?: number; }
+>x : number
+>y : number
+
+var b: { x: number; z?: number; };
+>b : { x: number; z?: number; }
+>x : number
+>z : number
+
+var r = foo(a, b); // { x: number; y?: number; };
+>r : { x: number; y?: number; }
+>foo(a, b) : { x: number; y?: number; }
+>foo : <T>(x: T, y: T) => T
+>a : { x: number; y?: number; }
+>b : { x: number; z?: number; }
+
+var r2 = foo(b, a); // { x: number; z?: number; };
+>r2 : { x: number; z?: number; }
+>foo(b, a) : { x: number; z?: number; }
+>foo : <T>(x: T, y: T) => T
+>b : { x: number; z?: number; }
+>a : { x: number; y?: number; }
+
+var x: { x: number; };
+>x : { x: number; }
+>x : number
+
+var y: { x?: number; };
+>y : { x?: number; }
+>x : number
+
+var r3 = foo(a, x); // { x: number; y?: number; };
+>r3 : { x: number; }
+>foo(a, x) : { x: number; }
+>foo : <T>(x: T, y: T) => T
+>a : { x: number; y?: number; }
+>x : { x: number; }
+
+var r4 = foo(x, a); // { x: number; };
+>r4 : { x: number; }
+>foo(x, a) : { x: number; }
+>foo : <T>(x: T, y: T) => T
+>x : { x: number; }
+>a : { x: number; y?: number; }
+
+var r5 = foo(a, y); // { x?: number; };
+>r5 : { x?: number; }
+>foo(a, y) : { x?: number; }
+>foo : <T>(x: T, y: T) => T
+>a : { x: number; y?: number; }
+>y : { x?: number; }
+
+var r5 = foo(y, a); // { x?: number; };
+>r5 : { x?: number; }
+>foo(y, a) : { x?: number; }
+>foo : <T>(x: T, y: T) => T
+>y : { x?: number; }
+>a : { x: number; y?: number; }
+
+var r6 = foo(x, y); // { x?: number; };
+>r6 : { x?: number; }
+>foo(x, y) : { x?: number; }
+>foo : <T>(x: T, y: T) => T
+>x : { x: number; }
+>y : { x?: number; }
+
+var r6 = foo(y, x); // { x?: number; };
+>r6 : { x?: number; }
+>foo(y, x) : { x?: number; }
+>foo : <T>(x: T, y: T) => T
+>y : { x?: number; }
+>x : { x: number; }
+
+var s1: (x: Object) => string;
+>s1 : (x: Object) => string
+>x : Object
+
+var s2: (x: string) => string;
+>s2 : (x: string) => string
+>x : string
+
+var r7 = foo(s1, s2); // (x: Object) => string;
+>r7 : (x: string) => string
+>foo(s1, s2) : (x: string) => string
+>foo : <T>(x: T, y: T) => T
+>s1 : (x: Object) => string
+>s2 : (x: string) => string
+
+var r8 = foo(s2, s1); // (x: string) => string;
+>r8 : (x: Object) => string
+>foo(s2, s1) : (x: Object) => string
+>foo : <T>(x: T, y: T) => T
+>s2 : (x: string) => string
+>s1 : (x: Object) => string
+

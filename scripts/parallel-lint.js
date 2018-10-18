@@ -1,26 +1,30 @@
-var Linter = require("tslint");
+var tslint = require("tslint");
 var fs = require("fs");
+var path = require("path");
 
 function getLinterOptions() {
     return {
-        configuration: require("../tslint.json"),
         formatter: "prose",
         formattersDirectory: undefined,
         rulesDirectory: "built/local/tslint"
     };
 }
-
-function lintFileContents(options, path, contents) {
-    var ll = new Linter(path, contents, options);
-    return ll.lint();
+function getLinterConfiguration() {
+    return tslint.Configuration.loadConfigurationFromPath(path.join(__dirname, "../tslint.json"));
 }
 
-function lintFileAsync(options, path, cb) {
+function lintFileContents(options, configuration, path, contents) {
+    var ll = new tslint.Linter(options);
+    ll.lint(path, contents, configuration);
+    return ll.getResult();
+}
+
+function lintFileAsync(options, configuration, path, cb) {
     fs.readFile(path, "utf8", function (err, contents) {
         if (err) {
             return cb(err);
         }
-        var result = lintFileContents(options, path, contents);
+        var result = lintFileContents(options, configuration, path, contents);
         cb(undefined, result);
     });
 }
@@ -30,7 +34,8 @@ process.on("message", function (data) {
         case "file":
             var target = data.name;
             var lintOptions = getLinterOptions();
-            lintFileAsync(lintOptions, target, function (err, result) {
+            var lintConfiguration = getLinterConfiguration();
+            lintFileAsync(lintOptions, lintConfiguration, target, function (err, result) {
                 if (err) {
                     process.send({ kind: "error", error: err.toString() });
                     return;

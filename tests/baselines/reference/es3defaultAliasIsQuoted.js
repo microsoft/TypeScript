@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es3defaultAliasIsQuoted.ts] ////
 
 //// [es3defaultAliasQuoted_file0.ts]
-
 export class Foo {
     static CONSTANT = "Foo";
 }
@@ -16,20 +15,21 @@ assert(Foo.CONSTANT === "Foo");
 
 //// [es3defaultAliasQuoted_file0.js]
 "use strict";
-var Foo = (function () {
+exports.__esModule = true;
+var Foo = /** @class */ (function () {
     function Foo() {
     }
+    Foo.CONSTANT = "Foo";
     return Foo;
 }());
 exports.Foo = Foo;
-Foo.CONSTANT = "Foo";
 function assert(value) {
     if (!value)
         throw new Error("Assertion failed!");
 }
-exports.__esModule = true;
 exports["default"] = assert;
 //// [es3defaultAliasQuoted_file1.js]
 "use strict";
+exports.__esModule = true;
 var es3defaultAliasQuoted_file0_1 = require("./es3defaultAliasQuoted_file0");
 es3defaultAliasQuoted_file0_1["default"](es3defaultAliasQuoted_file0_1.Foo.CONSTANT === "Foo");

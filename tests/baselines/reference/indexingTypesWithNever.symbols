@@ -1,0 +1,412 @@
+=== tests/cases/compiler/indexingTypesWithNever.ts ===
+type TestObj = {
+>TestObj : Symbol(TestObj, Decl(indexingTypesWithNever.ts, 0, 0))
+
+  a: string;
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 0, 16))
+
+  b: number;
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 1, 12))
+
+};
+
+// Should be never but without an error
+type Result1 = TestObj[never];
+>Result1 : Symbol(Result1, Decl(indexingTypesWithNever.ts, 3, 2))
+>TestObj : Symbol(TestObj, Decl(indexingTypesWithNever.ts, 0, 0))
+
+type EmptyObj = {};
+>EmptyObj : Symbol(EmptyObj, Decl(indexingTypesWithNever.ts, 6, 30))
+
+// Should be never but without an error
+type Result2 = EmptyObj[keyof EmptyObj];
+>Result2 : Symbol(Result2, Decl(indexingTypesWithNever.ts, 8, 19))
+>EmptyObj : Symbol(EmptyObj, Decl(indexingTypesWithNever.ts, 6, 30))
+>EmptyObj : Symbol(EmptyObj, Decl(indexingTypesWithNever.ts, 6, 30))
+
+declare function genericFn1<T>(obj: T): T[never];
+>genericFn1 : Symbol(genericFn1, Decl(indexingTypesWithNever.ts, 11, 40))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 13, 28))
+>obj : Symbol(obj, Decl(indexingTypesWithNever.ts, 13, 31))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 13, 28))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 13, 28))
+
+// Should be never
+const result3 = genericFn1({ c: "ctest", d: "dtest" });
+>result3 : Symbol(result3, Decl(indexingTypesWithNever.ts, 16, 5))
+>genericFn1 : Symbol(genericFn1, Decl(indexingTypesWithNever.ts, 11, 40))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 16, 28))
+>d : Symbol(d, Decl(indexingTypesWithNever.ts, 16, 40))
+
+declare function genericFn2<T extends { [ind: string]: string }>(
+>genericFn2 : Symbol(genericFn2, Decl(indexingTypesWithNever.ts, 16, 55))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 18, 28))
+>ind : Symbol(ind, Decl(indexingTypesWithNever.ts, 18, 41))
+
+  obj: T
+>obj : Symbol(obj, Decl(indexingTypesWithNever.ts, 18, 65))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 18, 28))
+
+): T[never];
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 18, 28))
+
+// Should be never
+const result4 = genericFn2({ e: "etest", f: "ftest" });
+>result4 : Symbol(result4, Decl(indexingTypesWithNever.ts, 23, 5))
+>genericFn2 : Symbol(genericFn2, Decl(indexingTypesWithNever.ts, 16, 55))
+>e : Symbol(e, Decl(indexingTypesWithNever.ts, 23, 28))
+>f : Symbol(f, Decl(indexingTypesWithNever.ts, 23, 40))
+
+declare function genericFn3<
+>genericFn3 : Symbol(genericFn3, Decl(indexingTypesWithNever.ts, 23, 55))
+
+  T extends { [K in keyof T]: T[K] },
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+>K : Symbol(K, Decl(indexingTypesWithNever.ts, 26, 15))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+>K : Symbol(K, Decl(indexingTypesWithNever.ts, 26, 15))
+
+  U extends keyof T,
+>U : Symbol(U, Decl(indexingTypesWithNever.ts, 26, 37))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+
+  V extends keyof T
+>V : Symbol(V, Decl(indexingTypesWithNever.ts, 27, 20))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+
+>(obj: T, u: U, v: V): T[U & V];
+>obj : Symbol(obj, Decl(indexingTypesWithNever.ts, 29, 2))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+>u : Symbol(u, Decl(indexingTypesWithNever.ts, 29, 9))
+>U : Symbol(U, Decl(indexingTypesWithNever.ts, 26, 37))
+>v : Symbol(v, Decl(indexingTypesWithNever.ts, 29, 15))
+>V : Symbol(V, Decl(indexingTypesWithNever.ts, 27, 20))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 25, 28))
+>U : Symbol(U, Decl(indexingTypesWithNever.ts, 26, 37))
+>V : Symbol(V, Decl(indexingTypesWithNever.ts, 27, 20))
+
+// Should be never
+const result5 = genericFn3({ g: "gtest", h: "htest" }, "g", "h"); // 'g' & 'h' will reduce to never
+>result5 : Symbol(result5, Decl(indexingTypesWithNever.ts, 32, 5))
+>genericFn3 : Symbol(genericFn3, Decl(indexingTypesWithNever.ts, 23, 55))
+>g : Symbol(g, Decl(indexingTypesWithNever.ts, 32, 28))
+>h : Symbol(h, Decl(indexingTypesWithNever.ts, 32, 40))
+
+
+declare const obj: {a: string, b: number}
+>obj : Symbol(obj, Decl(indexingTypesWithNever.ts, 35, 13))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 35, 20))
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 35, 30))
+
+declare const key: never
+>key : Symbol(key, Decl(indexingTypesWithNever.ts, 36, 13))
+
+const result6 = obj[key]
+>result6 : Symbol(result6, Decl(indexingTypesWithNever.ts, 38, 5))
+>obj : Symbol(obj, Decl(indexingTypesWithNever.ts, 35, 13))
+>key : Symbol(key, Decl(indexingTypesWithNever.ts, 36, 13))
+
+// Expanded examples from https://github.com/Microsoft/TypeScript/issues/21988
+type RequiredPropNames<T> = {
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 41, 23))
+
+  [P in keyof T]-?: undefined extends T[P] ? never : P
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 42, 3))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 41, 23))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 41, 23))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 42, 3))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 42, 3))
+
+}[keyof T];
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 41, 23))
+
+type OptionalPropNames<T> = {
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 45, 23))
+
+  [P in keyof T]-?: undefined extends T[P] ? P : never
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 46, 3))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 45, 23))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 45, 23))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 46, 3))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 46, 3))
+
+}[keyof T];
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 45, 23))
+
+type RequiredProps<T> = { [P in RequiredPropNames<T>]: T[P] };
+>RequiredProps : Symbol(RequiredProps, Decl(indexingTypesWithNever.ts, 47, 11))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 49, 19))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 49, 27))
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 49, 19))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 49, 19))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 49, 27))
+
+type OptionalProps<T> = { [P in OptionalPropNames<T>]?: T[P] };
+>OptionalProps : Symbol(OptionalProps, Decl(indexingTypesWithNever.ts, 49, 62))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 50, 19))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 50, 27))
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 50, 19))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 50, 19))
+>P : Symbol(P, Decl(indexingTypesWithNever.ts, 50, 27))
+
+type Match<Exp, Act> = [Exp] extends [Act]
+>Match : Symbol(Match, Decl(indexingTypesWithNever.ts, 50, 63))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 52, 11))
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 52, 15))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 52, 11))
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 52, 15))
+
+  ? ([Act] extends [Exp] ? "Match" : "Did not match 2")
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 52, 15))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 52, 11))
+
+  : "Did not match 1";
+
+type ExpectType<Exp, Act> = Match<Exp, Act> extends "Match"
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 56, 20))
+>Match : Symbol(Match, Decl(indexingTypesWithNever.ts, 50, 63))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 56, 20))
+
+  ? ({} extends Exp ? Match<Required<Exp>, Required<Act>> : "Match")
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
+>Match : Symbol(Match, Decl(indexingTypesWithNever.ts, 50, 63))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Exp : Symbol(Exp, Decl(indexingTypesWithNever.ts, 56, 16))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
+>Act : Symbol(Act, Decl(indexingTypesWithNever.ts, 56, 20))
+
+  : "Did not match";
+
+type P3 = { a: string; b: number; c?: boolean };
+>P3 : Symbol(P3, Decl(indexingTypesWithNever.ts, 58, 20))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 60, 11))
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 60, 22))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 60, 33))
+
+type P2 = { a: string; c?: boolean };
+>P2 : Symbol(P2, Decl(indexingTypesWithNever.ts, 60, 48))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 61, 11))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 61, 22))
+
+type P1 = { c?: boolean };
+>P1 : Symbol(P1, Decl(indexingTypesWithNever.ts, 61, 37))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 62, 11))
+
+type P0 = {};
+>P0 : Symbol(P0, Decl(indexingTypesWithNever.ts, 62, 26))
+
+type P3Names = RequiredPropNames<P3>; // expect 'a' | 'b'
+>P3Names : Symbol(P3Names, Decl(indexingTypesWithNever.ts, 63, 13))
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>P3 : Symbol(P3, Decl(indexingTypesWithNever.ts, 58, 20))
+
+type P2Names = RequiredPropNames<P2>; // expect 'a'
+>P2Names : Symbol(P2Names, Decl(indexingTypesWithNever.ts, 65, 37))
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>P2 : Symbol(P2, Decl(indexingTypesWithNever.ts, 60, 48))
+
+type P1Names = RequiredPropNames<P1>; // expect never
+>P1Names : Symbol(P1Names, Decl(indexingTypesWithNever.ts, 66, 37))
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>P1 : Symbol(P1, Decl(indexingTypesWithNever.ts, 61, 37))
+
+type P0Names = RequiredPropNames<P0>; // expect never
+>P0Names : Symbol(P0Names, Decl(indexingTypesWithNever.ts, 67, 37))
+>RequiredPropNames : Symbol(RequiredPropNames, Decl(indexingTypesWithNever.ts, 38, 24))
+>P0 : Symbol(P0, Decl(indexingTypesWithNever.ts, 62, 26))
+
+declare const p3NameTest: ExpectType<"a" | "b", P3Names>;
+>p3NameTest : Symbol(p3NameTest, Decl(indexingTypesWithNever.ts, 70, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P3Names : Symbol(P3Names, Decl(indexingTypesWithNever.ts, 63, 13))
+
+declare const p2NameTest: ExpectType<"a", P2Names>;
+>p2NameTest : Symbol(p2NameTest, Decl(indexingTypesWithNever.ts, 71, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P2Names : Symbol(P2Names, Decl(indexingTypesWithNever.ts, 65, 37))
+
+declare const p1NameTest: ExpectType<never, P1Names>;
+>p1NameTest : Symbol(p1NameTest, Decl(indexingTypesWithNever.ts, 72, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P1Names : Symbol(P1Names, Decl(indexingTypesWithNever.ts, 66, 37))
+
+declare const p0NameTest: ExpectType<never, P0Names>;
+>p0NameTest : Symbol(p0NameTest, Decl(indexingTypesWithNever.ts, 73, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P0Names : Symbol(P0Names, Decl(indexingTypesWithNever.ts, 67, 37))
+
+type P3Props = RequiredProps<P3>; // expect { a: string; b: number }
+>P3Props : Symbol(P3Props, Decl(indexingTypesWithNever.ts, 73, 53))
+>RequiredProps : Symbol(RequiredProps, Decl(indexingTypesWithNever.ts, 47, 11))
+>P3 : Symbol(P3, Decl(indexingTypesWithNever.ts, 58, 20))
+
+type P2Props = RequiredProps<P2>; // expect { a: string; }
+>P2Props : Symbol(P2Props, Decl(indexingTypesWithNever.ts, 75, 33))
+>RequiredProps : Symbol(RequiredProps, Decl(indexingTypesWithNever.ts, 47, 11))
+>P2 : Symbol(P2, Decl(indexingTypesWithNever.ts, 60, 48))
+
+type P1Props = RequiredProps<P1>; // expect {}
+>P1Props : Symbol(P1Props, Decl(indexingTypesWithNever.ts, 76, 33))
+>RequiredProps : Symbol(RequiredProps, Decl(indexingTypesWithNever.ts, 47, 11))
+>P1 : Symbol(P1, Decl(indexingTypesWithNever.ts, 61, 37))
+
+type P0Props = RequiredProps<P0>; // expect {}
+>P0Props : Symbol(P0Props, Decl(indexingTypesWithNever.ts, 77, 33))
+>RequiredProps : Symbol(RequiredProps, Decl(indexingTypesWithNever.ts, 47, 11))
+>P0 : Symbol(P0, Decl(indexingTypesWithNever.ts, 62, 26))
+
+declare const p3Test: ExpectType<{ a: string; b: number }, P3Props>;
+>p3Test : Symbol(p3Test, Decl(indexingTypesWithNever.ts, 80, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 80, 34))
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 80, 45))
+>P3Props : Symbol(P3Props, Decl(indexingTypesWithNever.ts, 73, 53))
+
+declare const p2Test: ExpectType<{ a: string }, P2Props>;
+>p2Test : Symbol(p2Test, Decl(indexingTypesWithNever.ts, 81, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 81, 34))
+>P2Props : Symbol(P2Props, Decl(indexingTypesWithNever.ts, 75, 33))
+
+declare const p1Test: ExpectType<{}, P1Props>;
+>p1Test : Symbol(p1Test, Decl(indexingTypesWithNever.ts, 82, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P1Props : Symbol(P1Props, Decl(indexingTypesWithNever.ts, 76, 33))
+
+declare const p0Test: ExpectType<{}, P0Props>;
+>p0Test : Symbol(p0Test, Decl(indexingTypesWithNever.ts, 83, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>P0Props : Symbol(P0Props, Decl(indexingTypesWithNever.ts, 77, 33))
+
+type O3 = { a?: string; b?: number; c: boolean };
+>O3 : Symbol(O3, Decl(indexingTypesWithNever.ts, 83, 46))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 85, 11))
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 85, 23))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 85, 35))
+
+type O2 = { a?: string; c: boolean };
+>O2 : Symbol(O2, Decl(indexingTypesWithNever.ts, 85, 49))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 86, 11))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 86, 23))
+
+type O1 = { c: boolean };
+>O1 : Symbol(O1, Decl(indexingTypesWithNever.ts, 86, 37))
+>c : Symbol(c, Decl(indexingTypesWithNever.ts, 87, 11))
+
+type O0 = {};
+>O0 : Symbol(O0, Decl(indexingTypesWithNever.ts, 87, 25))
+
+type O3Names = OptionalPropNames<O3>; // expect 'a' | 'b'
+>O3Names : Symbol(O3Names, Decl(indexingTypesWithNever.ts, 88, 13))
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>O3 : Symbol(O3, Decl(indexingTypesWithNever.ts, 83, 46))
+
+type O2Names = OptionalPropNames<O2>; // expect 'a'
+>O2Names : Symbol(O2Names, Decl(indexingTypesWithNever.ts, 90, 37))
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>O2 : Symbol(O2, Decl(indexingTypesWithNever.ts, 85, 49))
+
+type O1Names = OptionalPropNames<O1>; // expect never
+>O1Names : Symbol(O1Names, Decl(indexingTypesWithNever.ts, 91, 37))
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>O1 : Symbol(O1, Decl(indexingTypesWithNever.ts, 86, 37))
+
+type O0Names = OptionalPropNames<O0>; // expect never
+>O0Names : Symbol(O0Names, Decl(indexingTypesWithNever.ts, 92, 37))
+>OptionalPropNames : Symbol(OptionalPropNames, Decl(indexingTypesWithNever.ts, 43, 11))
+>O0 : Symbol(O0, Decl(indexingTypesWithNever.ts, 87, 25))
+
+declare const o3NameTest: ExpectType<"a" | "b", O3Names>;
+>o3NameTest : Symbol(o3NameTest, Decl(indexingTypesWithNever.ts, 95, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O3Names : Symbol(O3Names, Decl(indexingTypesWithNever.ts, 88, 13))
+
+declare const o2NameTest: ExpectType<"a", O2Names>;
+>o2NameTest : Symbol(o2NameTest, Decl(indexingTypesWithNever.ts, 96, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O2Names : Symbol(O2Names, Decl(indexingTypesWithNever.ts, 90, 37))
+
+declare const o1NameTest: ExpectType<never, O1Names>;
+>o1NameTest : Symbol(o1NameTest, Decl(indexingTypesWithNever.ts, 97, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O1Names : Symbol(O1Names, Decl(indexingTypesWithNever.ts, 91, 37))
+
+declare const o0NameTest: ExpectType<never, O0Names>;
+>o0NameTest : Symbol(o0NameTest, Decl(indexingTypesWithNever.ts, 98, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O0Names : Symbol(O0Names, Decl(indexingTypesWithNever.ts, 92, 37))
+
+type O3Props = OptionalProps<O3>; // expect { a?: string | undefined; b?: number | undefined }
+>O3Props : Symbol(O3Props, Decl(indexingTypesWithNever.ts, 98, 53))
+>OptionalProps : Symbol(OptionalProps, Decl(indexingTypesWithNever.ts, 49, 62))
+>O3 : Symbol(O3, Decl(indexingTypesWithNever.ts, 83, 46))
+
+type O2Props = OptionalProps<O2>; // expect { a?: string | undefined; }
+>O2Props : Symbol(O2Props, Decl(indexingTypesWithNever.ts, 100, 33))
+>OptionalProps : Symbol(OptionalProps, Decl(indexingTypesWithNever.ts, 49, 62))
+>O2 : Symbol(O2, Decl(indexingTypesWithNever.ts, 85, 49))
+
+type O1Props = OptionalProps<O1>; // expect {}
+>O1Props : Symbol(O1Props, Decl(indexingTypesWithNever.ts, 101, 33))
+>OptionalProps : Symbol(OptionalProps, Decl(indexingTypesWithNever.ts, 49, 62))
+>O1 : Symbol(O1, Decl(indexingTypesWithNever.ts, 86, 37))
+
+type O0Props = OptionalProps<O0>; // expect {}
+>O0Props : Symbol(O0Props, Decl(indexingTypesWithNever.ts, 102, 33))
+>OptionalProps : Symbol(OptionalProps, Decl(indexingTypesWithNever.ts, 49, 62))
+>O0 : Symbol(O0, Decl(indexingTypesWithNever.ts, 87, 25))
+
+declare const o3Test: ExpectType<{ a?: string; b?: number }, O3Props>;
+>o3Test : Symbol(o3Test, Decl(indexingTypesWithNever.ts, 105, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 105, 34))
+>b : Symbol(b, Decl(indexingTypesWithNever.ts, 105, 46))
+>O3Props : Symbol(O3Props, Decl(indexingTypesWithNever.ts, 98, 53))
+
+declare const o2Test: ExpectType<{ a?: string }, O2Props>;
+>o2Test : Symbol(o2Test, Decl(indexingTypesWithNever.ts, 106, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 106, 34))
+>O2Props : Symbol(O2Props, Decl(indexingTypesWithNever.ts, 100, 33))
+
+declare const o1Test: ExpectType<{}, O1Props>;
+>o1Test : Symbol(o1Test, Decl(indexingTypesWithNever.ts, 107, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O1Props : Symbol(O1Props, Decl(indexingTypesWithNever.ts, 101, 33))
+
+declare const o0Test: ExpectType<{}, O0Props>;
+>o0Test : Symbol(o0Test, Decl(indexingTypesWithNever.ts, 108, 13))
+>ExpectType : Symbol(ExpectType, Decl(indexingTypesWithNever.ts, 54, 22))
+>O0Props : Symbol(O0Props, Decl(indexingTypesWithNever.ts, 102, 33))
+
+// Repro from #23005
+
+type Example<T extends Record<'a', string>> = T['a'];
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexingTypesWithNever.ts, 112, 13))
+
+type Res1 = Example<{ a: "x" } | { a: "y" }>;  // "x" | "y"
+>Res1 : Symbol(Res1, Decl(indexingTypesWithNever.ts, 112, 53))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 114, 21))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 114, 34))
+
+type Res2 = Example<{ a: "x" }>;  // "x"
+>Res2 : Symbol(Res2, Decl(indexingTypesWithNever.ts, 114, 45))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+>a : Symbol(a, Decl(indexingTypesWithNever.ts, 115, 21))
+
+type Res3 = Example<never>;  // never 
+>Res3 : Symbol(Res3, Decl(indexingTypesWithNever.ts, 115, 32))
+>Example : Symbol(Example, Decl(indexingTypesWithNever.ts, 108, 46))
+

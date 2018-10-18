@@ -1,0 +1,12 @@
+=== tests/cases/compiler/functionOverloads5.ts ===
+class baz { 
+>baz : Symbol(baz, Decl(functionOverloads5.ts, 0, 0))
+
+  public foo();
+>foo : Symbol(baz.foo, Decl(functionOverloads5.ts, 0, 11), Decl(functionOverloads5.ts, 1, 15))
+
+  private foo(bar?:any){ }
+>foo : Symbol(baz.foo, Decl(functionOverloads5.ts, 0, 11), Decl(functionOverloads5.ts, 1, 15))
+>bar : Symbol(bar, Decl(functionOverloads5.ts, 2, 14))
+}
+

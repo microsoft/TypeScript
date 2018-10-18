@@ -1,5 +1,4 @@
 === tests/cases/conformance/es6/modules/m1.ts ===
-
 declare var console: any;
 >console : any
 

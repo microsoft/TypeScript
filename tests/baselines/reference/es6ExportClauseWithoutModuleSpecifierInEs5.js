@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ExportClauseWithoutModuleSpecifierInEs5.ts] ////
 
 //// [server.ts]
-
 export class c {
 }
 export interface i {
@@ -22,7 +21,8 @@ export { x } from "./server";
 
 //// [server.js]
 "use strict";
-var c = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var c = /** @class */ (function () {
     function c() {
     }
     return c;
@@ -35,6 +35,7 @@ var m;
 exports.x = 10;
 //// [client.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var server_1 = require("./server");
 exports.c = server_1.c;
 var server_2 = require("./server");

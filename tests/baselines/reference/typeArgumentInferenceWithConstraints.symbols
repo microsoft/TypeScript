@@ -1,0 +1,408 @@
+=== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceWithConstraints.ts ===
+// Generic call with no parameters
+function noParams<T extends {}>() { }
+>noParams : Symbol(noParams, Decl(typeArgumentInferenceWithConstraints.ts, 0, 0))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 1, 18))
+
+noParams();
+>noParams : Symbol(noParams, Decl(typeArgumentInferenceWithConstraints.ts, 0, 0))
+
+noParams<string>();
+>noParams : Symbol(noParams, Decl(typeArgumentInferenceWithConstraints.ts, 0, 0))
+
+noParams<{}>();
+>noParams : Symbol(noParams, Decl(typeArgumentInferenceWithConstraints.ts, 0, 0))
+
+// Generic call with parameters but none use type parameter type
+function noGenericParams<T extends number>(n: string) { }
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInferenceWithConstraints.ts, 4, 15))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 7, 25))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 7, 43))
+
+noGenericParams(''); // Valid
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInferenceWithConstraints.ts, 4, 15))
+
+noGenericParams<number>('');
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInferenceWithConstraints.ts, 4, 15))
+
+noGenericParams<{}>(''); // Error
+>noGenericParams : Symbol(noGenericParams, Decl(typeArgumentInferenceWithConstraints.ts, 4, 15))
+
+// Generic call with multiple type parameters and only one used in parameter type annotation
+function someGenerics1<T, U extends T>(n: T, m: number) { }
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceWithConstraints.ts, 10, 24))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 13, 23))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 13, 25))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 13, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 13, 39))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 13, 23))
+>m : Symbol(m, Decl(typeArgumentInferenceWithConstraints.ts, 13, 44))
+
+someGenerics1(3, 4); // Valid
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceWithConstraints.ts, 10, 24))
+
+someGenerics1<string, number>(3, 4); // Error
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceWithConstraints.ts, 10, 24))
+
+someGenerics1<number, {}>(3, 4); // Error
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceWithConstraints.ts, 10, 24))
+
+someGenerics1<number, number>(3, 4);
+>someGenerics1 : Symbol(someGenerics1, Decl(typeArgumentInferenceWithConstraints.ts, 10, 24))
+
+// Generic call with argument of function type whose parameter is of type parameter type
+function someGenerics2a<T extends string>(n: (x: T) => void) { }
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 20, 24))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 20, 42))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 20, 46))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 20, 24))
+
+someGenerics2a((n: string) => n);
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 21, 16))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 21, 16))
+
+someGenerics2a<string>((n: string) => n);
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 22, 24))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 22, 24))
+
+someGenerics2a<string>((n) => n.substr(0));
+>someGenerics2a : Symbol(someGenerics2a, Decl(typeArgumentInferenceWithConstraints.ts, 17, 36))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 23, 24))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+
+function someGenerics2b<T extends string, U extends number>(n: (x: T, y: U) => void) { }
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 25, 24))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 25, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 25, 60))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 25, 64))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 25, 24))
+>y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 25, 69))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 25, 41))
+
+someGenerics2b((n: string, x: number) => n);
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 26, 16))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 26, 26))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 26, 16))
+
+someGenerics2b<string, number>((n: string, t: number) => n);
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 27, 32))
+>t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 27, 42))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 27, 32))
+
+someGenerics2b<string, number>((n, t) => n.substr(t * t));
+>someGenerics2b : Symbol(someGenerics2b, Decl(typeArgumentInferenceWithConstraints.ts, 23, 43))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
+>t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+>n.substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 28, 32))
+>substr : Symbol(String.substr, Decl(lib.es5.d.ts, --, --))
+>t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+>t : Symbol(t, Decl(typeArgumentInferenceWithConstraints.ts, 28, 34))
+
+// Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
+function someGenerics3<T extends Window>(producer: () => T) { }
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 31, 23))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>producer : Symbol(producer, Decl(typeArgumentInferenceWithConstraints.ts, 31, 41))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 31, 23))
+
+someGenerics3(() => ''); // Error
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
+
+someGenerics3<Window>(() => undefined);
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>undefined : Symbol(undefined)
+
+someGenerics3<number>(() => 3); // Error
+>someGenerics3 : Symbol(someGenerics3, Decl(typeArgumentInferenceWithConstraints.ts, 28, 58))
+
+// 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
+function someGenerics4<T, U extends number>(n: T, f: (x: U) => void) { }
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceWithConstraints.ts, 34, 31))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 37, 23))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 37, 25))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 37, 44))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 37, 23))
+>f : Symbol(f, Decl(typeArgumentInferenceWithConstraints.ts, 37, 49))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 37, 54))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 37, 25))
+
+someGenerics4(4, () => null); // Valid
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceWithConstraints.ts, 34, 31))
+
+someGenerics4<string, number>('', () => 3);
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceWithConstraints.ts, 34, 31))
+
+someGenerics4<string, number>('', (x: string) => ''); // Error
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceWithConstraints.ts, 34, 31))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 40, 35))
+
+someGenerics4<string, number>(null, null);
+>someGenerics4 : Symbol(someGenerics4, Decl(typeArgumentInferenceWithConstraints.ts, 34, 31))
+
+// 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
+function someGenerics5<U extends number, T>(n: T, f: (x: U) => void) { }
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceWithConstraints.ts, 41, 42))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 44, 23))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 44, 40))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 44, 44))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 44, 40))
+>f : Symbol(f, Decl(typeArgumentInferenceWithConstraints.ts, 44, 49))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 44, 54))
+>U : Symbol(U, Decl(typeArgumentInferenceWithConstraints.ts, 44, 23))
+
+someGenerics5(4, () => null); // Valid
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceWithConstraints.ts, 41, 42))
+
+someGenerics5<number, string>('', () => 3);
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceWithConstraints.ts, 41, 42))
+
+someGenerics5<number, string>('', (x: string) => ''); // Error
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceWithConstraints.ts, 41, 42))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 47, 35))
+
+someGenerics5<string, number>(null, null); // Error
+>someGenerics5 : Symbol(someGenerics5, Decl(typeArgumentInferenceWithConstraints.ts, 41, 42))
+
+// Generic call with multiple arguments of function types that each have parameters of the same generic type
+function someGenerics6<A extends number>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A) { }
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceWithConstraints.ts, 48, 42))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 51, 41))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 51, 45))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 51, 56))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 51, 61))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>c : Symbol(c, Decl(typeArgumentInferenceWithConstraints.ts, 51, 72))
+>c : Symbol(c, Decl(typeArgumentInferenceWithConstraints.ts, 51, 77))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 51, 23))
+
+someGenerics6(n => n, n => n, n => n); // Valid
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceWithConstraints.ts, 48, 42))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 14))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 14))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 21))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 21))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 29))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 52, 29))
+
+someGenerics6<number>(n => n, n => n, n => n);
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceWithConstraints.ts, 48, 42))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 22))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 22))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 29))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 29))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 37))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 53, 37))
+
+someGenerics6<number>((n: number) => n, (n: string) => n, (n: number) => n); // Error
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceWithConstraints.ts, 48, 42))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 59))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 54, 59))
+
+someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
+>someGenerics6 : Symbol(someGenerics6, Decl(typeArgumentInferenceWithConstraints.ts, 48, 42))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 41))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 59))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 55, 59))
+
+// Generic call with multiple arguments of function types that each have parameters of different generic type
+function someGenerics7<A, B extends string, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C) { }
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInferenceWithConstraints.ts, 55, 76))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 58, 23))
+>B : Symbol(B, Decl(typeArgumentInferenceWithConstraints.ts, 58, 25))
+>C : Symbol(C, Decl(typeArgumentInferenceWithConstraints.ts, 58, 43))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 58, 47))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 58, 51))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 58, 23))
+>A : Symbol(A, Decl(typeArgumentInferenceWithConstraints.ts, 58, 23))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 58, 62))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 58, 67))
+>B : Symbol(B, Decl(typeArgumentInferenceWithConstraints.ts, 58, 25))
+>B : Symbol(B, Decl(typeArgumentInferenceWithConstraints.ts, 58, 25))
+>c : Symbol(c, Decl(typeArgumentInferenceWithConstraints.ts, 58, 78))
+>c : Symbol(c, Decl(typeArgumentInferenceWithConstraints.ts, 58, 83))
+>C : Symbol(C, Decl(typeArgumentInferenceWithConstraints.ts, 58, 43))
+>C : Symbol(C, Decl(typeArgumentInferenceWithConstraints.ts, 58, 43))
+
+someGenerics7(n => n, n => n, n => n); // Valid, types of n are <any, string, any> respectively
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInferenceWithConstraints.ts, 55, 76))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 14))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 14))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 21))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 21))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 29))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 59, 29))
+
+someGenerics7<number, string, number>(n => n, n => n, n => n);
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInferenceWithConstraints.ts, 55, 76))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 38))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 38))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 45))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 45))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 53))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 60, 53))
+
+someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n: number) => n);
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInferenceWithConstraints.ts, 55, 76))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 39))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 39))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 57))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 57))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 75))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 61, 75))
+
+// Generic call with argument of generic function type
+function someGenerics8<T extends string>(n: T): T { return n; }
+>someGenerics8 : Symbol(someGenerics8, Decl(typeArgumentInferenceWithConstraints.ts, 61, 92))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 64, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 64, 41))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 64, 23))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 64, 23))
+>n : Symbol(n, Decl(typeArgumentInferenceWithConstraints.ts, 64, 41))
+
+var x = someGenerics8<string>(someGenerics7); // Error
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 65, 3))
+>someGenerics8 : Symbol(someGenerics8, Decl(typeArgumentInferenceWithConstraints.ts, 61, 92))
+>someGenerics7 : Symbol(someGenerics7, Decl(typeArgumentInferenceWithConstraints.ts, 55, 76))
+
+x<string, string, string>(null, null, null); // Error
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 65, 3))
+
+// Generic call with multiple parameters of generic type passed arguments with no best common type
+function someGenerics9<T extends any>(a: T, b: T, c: T): T {
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 69, 23))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 69, 38))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 69, 23))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 69, 43))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 69, 23))
+>c : Symbol(c, Decl(typeArgumentInferenceWithConstraints.ts, 69, 49))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 69, 23))
+>T : Symbol(T, Decl(typeArgumentInferenceWithConstraints.ts, 69, 23))
+
+    return null;
+}
+var a9a = someGenerics9('', 0, []);
+>a9a : Symbol(a9a, Decl(typeArgumentInferenceWithConstraints.ts, 72, 3), Decl(typeArgumentInferenceWithConstraints.ts, 73, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+
+var a9a: {};
+>a9a : Symbol(a9a, Decl(typeArgumentInferenceWithConstraints.ts, 72, 3), Decl(typeArgumentInferenceWithConstraints.ts, 73, 3))
+
+var a9b = someGenerics9<{ a?: number; b?: string; }>({ a: 0 }, { b: '' }, null);
+>a9b : Symbol(a9b, Decl(typeArgumentInferenceWithConstraints.ts, 74, 3), Decl(typeArgumentInferenceWithConstraints.ts, 75, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 74, 25))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 74, 37))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 74, 54))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 74, 64))
+
+var a9b: { a?: number; b?: string; };
+>a9b : Symbol(a9b, Decl(typeArgumentInferenceWithConstraints.ts, 74, 3), Decl(typeArgumentInferenceWithConstraints.ts, 75, 3))
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 75, 10))
+>b : Symbol(b, Decl(typeArgumentInferenceWithConstraints.ts, 75, 22))
+
+// Generic call with multiple parameters of generic type passed arguments with multiple best common types
+interface A91 {
+>A91 : Symbol(A91, Decl(typeArgumentInferenceWithConstraints.ts, 75, 37))
+
+    x: number;
+>x : Symbol(A91.x, Decl(typeArgumentInferenceWithConstraints.ts, 78, 15))
+
+    y?: string;
+>y : Symbol(A91.y, Decl(typeArgumentInferenceWithConstraints.ts, 79, 14))
+}
+interface A92 {
+>A92 : Symbol(A92, Decl(typeArgumentInferenceWithConstraints.ts, 81, 1))
+
+    x: number;
+>x : Symbol(A92.x, Decl(typeArgumentInferenceWithConstraints.ts, 82, 15))
+
+    z?: Window;
+>z : Symbol(A92.z, Decl(typeArgumentInferenceWithConstraints.ts, 83, 14))
+>Window : Symbol(Window, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+}
+var a9e = someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
+>a9e : Symbol(a9e, Decl(typeArgumentInferenceWithConstraints.ts, 86, 3), Decl(typeArgumentInferenceWithConstraints.ts, 87, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 86, 36))
+>z : Symbol(z, Decl(typeArgumentInferenceWithConstraints.ts, 86, 42))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 86, 57))
+>y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 86, 63))
+
+var a9e: {};
+>a9e : Symbol(a9e, Decl(typeArgumentInferenceWithConstraints.ts, 86, 3), Decl(typeArgumentInferenceWithConstraints.ts, 87, 3))
+
+var a9f = someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
+>a9f : Symbol(a9f, Decl(typeArgumentInferenceWithConstraints.ts, 88, 3), Decl(typeArgumentInferenceWithConstraints.ts, 89, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>A92 : Symbol(A92, Decl(typeArgumentInferenceWithConstraints.ts, 81, 1))
+>undefined : Symbol(undefined)
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 88, 41))
+>z : Symbol(z, Decl(typeArgumentInferenceWithConstraints.ts, 88, 47))
+>window : Symbol(window, Decl(lib.dom.d.ts, --, --))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 88, 62))
+>y : Symbol(y, Decl(typeArgumentInferenceWithConstraints.ts, 88, 68))
+
+var a9f: A92;
+>a9f : Symbol(a9f, Decl(typeArgumentInferenceWithConstraints.ts, 88, 3), Decl(typeArgumentInferenceWithConstraints.ts, 89, 3))
+>A92 : Symbol(A92, Decl(typeArgumentInferenceWithConstraints.ts, 81, 1))
+
+// Generic call with multiple parameters of generic type passed arguments with a single best common type
+var a9d = someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });
+>a9d : Symbol(a9d, Decl(typeArgumentInferenceWithConstraints.ts, 92, 3), Decl(typeArgumentInferenceWithConstraints.ts, 93, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 92, 25))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 92, 35))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 92, 45))
+
+var a9d: { x: number; };
+>a9d : Symbol(a9d, Decl(typeArgumentInferenceWithConstraints.ts, 92, 3), Decl(typeArgumentInferenceWithConstraints.ts, 93, 3))
+>x : Symbol(x, Decl(typeArgumentInferenceWithConstraints.ts, 93, 10))
+
+// Generic call with multiple parameters of generic type where one argument is of type 'any'
+var anyVar: any;
+>anyVar : Symbol(anyVar, Decl(typeArgumentInferenceWithConstraints.ts, 96, 3))
+
+var a = someGenerics9(7, anyVar, 4);
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 97, 3), Decl(typeArgumentInferenceWithConstraints.ts, 98, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>anyVar : Symbol(anyVar, Decl(typeArgumentInferenceWithConstraints.ts, 96, 3))
+
+var a: any;
+>a : Symbol(a, Decl(typeArgumentInferenceWithConstraints.ts, 97, 3), Decl(typeArgumentInferenceWithConstraints.ts, 98, 3))
+
+// Generic call with multiple parameters of generic type where one argument is [] and the other is not 'any'
+var arr = someGenerics9([], null, undefined);
+>arr : Symbol(arr, Decl(typeArgumentInferenceWithConstraints.ts, 101, 3), Decl(typeArgumentInferenceWithConstraints.ts, 102, 3))
+>someGenerics9 : Symbol(someGenerics9, Decl(typeArgumentInferenceWithConstraints.ts, 66, 44))
+>undefined : Symbol(undefined)
+
+var arr: any[];
+>arr : Symbol(arr, Decl(typeArgumentInferenceWithConstraints.ts, 101, 3), Decl(typeArgumentInferenceWithConstraints.ts, 102, 3))
+
+

@@ -1,0 +1,18 @@
+=== tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts ===
+// unused
+type handler1 = () => void;
+>handler1 : handler1
+
+
+function foo() {
+>foo : () => void
+
+    type handler2 = () => void;
+>handler2 : () => void
+
+    foo();
+>foo() : void
+>foo : () => void
+}
+
+export {}

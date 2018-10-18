@@ -1,0 +1,3 @@
+=== tests/cases/compiler/typecheckCommaExpression.ts ===
+(a, b)
+No type information for this code.

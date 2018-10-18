@@ -1,11 +1,10 @@
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(14,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(15,12): error TS2476: A const enum member can only be accessed using a string literal.
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(17,1): error TS2322: Type '"string"' is not assignable to type 'G'.
-tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(19,1): error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(13,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(14,12): error TS2476: A const enum member can only be accessed using a string literal.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(16,1): error TS2322: Type '"string"' is not assignable to type 'G'.
+tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(18,3): error TS2540: Cannot assign to 'B' because it is a constant or a read-only property.
 
 
 ==== tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts (4 errors) ====
-    
     // constant enum declarations are completely erased in the emitted JavaScript code.
     // it is an error to reference a constant enum object in any other context
     // than a property access that selects one of the enum's members
@@ -20,7 +19,7 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(19,1): error TS24
     // Error from referring constant enum in any other context than a property access
     var z = G;
             ~
-!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
     var z1 = G[G.A];
                ~~~
 !!! error TS2476: A const enum member can only be accessed using a string literal.
@@ -30,6 +29,6 @@ tests/cases/conformance/constEnums/constEnumPropertyAccess2.ts(19,1): error TS24
 !!! error TS2322: Type '"string"' is not assignable to type 'G'.
     function foo(x: G) { }
     G.B = 3;
-    ~~~
-!!! error TS2450: Left-hand side of assignment expression cannot be a constant or a read-only property.
+      ~
+!!! error TS2540: Cannot assign to 'B' because it is a constant or a read-only property.
     

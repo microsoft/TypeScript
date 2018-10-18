@@ -1,0 +1,44 @@
+=== tests/cases/compiler/libMembers.ts ===
+var s="hello";
+>s : Symbol(s, Decl(libMembers.ts, 0, 3))
+
+s.substring(0);
+>s.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(libMembers.ts, 0, 3))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+
+s.substring(3,4);
+>s.substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(libMembers.ts, 0, 3))
+>substring : Symbol(String.substring, Decl(lib.es5.d.ts, --, --))
+
+s.subby(12);   // error unresolved
+>s : Symbol(s, Decl(libMembers.ts, 0, 3))
+
+String.fromCharCode(12);
+>String.fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>fromCharCode : Symbol(StringConstructor.fromCharCode, Decl(lib.es5.d.ts, --, --))
+
+module M {
+>M : Symbol(M, Decl(libMembers.ts, 4, 24))
+
+    export class C {
+>C : Symbol(C, Decl(libMembers.ts, 5, 10))
+    }
+    var a=new C[];
+>a : Symbol(a, Decl(libMembers.ts, 8, 7))
+>C : Symbol(C, Decl(libMembers.ts, 5, 10))
+
+    a.length;
+>a : Symbol(a, Decl(libMembers.ts, 8, 7))
+
+    a.push(new C());
+>a : Symbol(a, Decl(libMembers.ts, 8, 7))
+>C : Symbol(C, Decl(libMembers.ts, 5, 10))
+
+    (new C()).prototype;
+>C : Symbol(C, Decl(libMembers.ts, 5, 10))
+}
+
+

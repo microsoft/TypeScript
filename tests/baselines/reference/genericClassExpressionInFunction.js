@@ -32,32 +32,40 @@ s.genericVar = 12;
 
 
 //// [genericClassExpressionInFunction.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var A = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 function B1() {
     // class expression can use T
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(class_1, _super);
         function class_1() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return class_1;
     }(A));
 }
-var B2 = (function () {
+var B2 = /** @class */ (function () {
     function B2() {
-        this.anon = (function (_super) {
+        this.anon = /** @class */ (function (_super) {
             __extends(class_2, _super);
             function class_2() {
-                return _super.apply(this, arguments) || this;
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             return class_2;
         }(A));
@@ -65,34 +73,34 @@ var B2 = (function () {
     return B2;
 }());
 function B3() {
-    return (function (_super) {
+    return /** @class */ (function (_super) {
         __extends(Inner, _super);
         function Inner() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Inner;
     }(A));
 }
 // extends can call B
-var K = (function (_super) {
+var K = /** @class */ (function (_super) {
     __extends(K, _super);
     function K() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return K;
 }(B1()));
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     function C() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return C;
 }((new B2().anon)));
 var b3Number = B3();
-var S = (function (_super) {
+var S = /** @class */ (function (_super) {
     __extends(S, _super);
     function S() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return S;
 }(b3Number));

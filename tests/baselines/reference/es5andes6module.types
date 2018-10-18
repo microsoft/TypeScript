@@ -1,5 +1,4 @@
 === tests/cases/compiler/es5andes6module.ts ===
-
 export default class A
 >A : A
 {

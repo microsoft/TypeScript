@@ -1,0 +1,6 @@
+=== tests/cases/conformance/es6/functionExpressions/FunctionExpression2_es6.ts ===
+var v = function * foo() { }
+>v : () => IterableIterator<any>
+>function * foo() { } : () => IterableIterator<any>
+>foo : () => IterableIterator<any>
+

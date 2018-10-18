@@ -1,5 +1,4 @@
 === tests/cases/conformance/constEnums/constEnumPropertyAccess1.ts ===
-
 // constant enum declarations are completely erased in the emitted JavaScript code.
 // it is an error to reference a constant enum object in any other context
 // than a property access that selects one of the enum's members
@@ -38,6 +37,7 @@ var o: {
 >{        1: true    } : { 1: true; }
 
         1: true
+>1 : true
 >true : true
 
     };
@@ -66,11 +66,13 @@ class C {
 >C : C
 
     [G.A]() { }
+>[G.A] : () => void
 >G.A : G
 >G : typeof G
 >A : G
 
     get [G.B]() {
+>[G.B] : boolean
 >G.B : G
 >G : typeof G
 >B : G
@@ -79,6 +81,7 @@ class C {
 >true : true
     }
     set [G.B](x: number) { }
+>[G.B] : number
 >G.B : G
 >G : typeof G
 >B : G

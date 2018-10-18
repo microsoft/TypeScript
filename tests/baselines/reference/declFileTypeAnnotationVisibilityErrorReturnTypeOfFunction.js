@@ -1,5 +1,4 @@
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.ts]
-
 module m {
     class private1 {
     }
@@ -60,12 +59,12 @@ module m {
 //// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.js]
 var m;
 (function (m) {
-    var private1 = (function () {
+    var private1 = /** @class */ (function () {
         function private1() {
         }
         return private1;
     }());
-    var public1 = (function () {
+    var public1 = /** @class */ (function () {
         function public1() {
         }
         return public1;
@@ -102,7 +101,7 @@ var m;
     m.foo14 = foo14;
     var m2;
     (function (m2) {
-        var public2 = (function () {
+        var public2 = /** @class */ (function () {
             function public2() {
             }
             return public2;
@@ -124,3 +123,22 @@ var m;
     }
     m.foo114 = foo114;
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorReturnTypeOfFunction.d.ts]
+declare module m {
+    class private1 {
+    }
+    class public1 {
+    }
+    function foo3(): private1;
+    function foo4(): private1;
+    function foo13(): public1;
+    function foo14(): public1;
+    module m2 {
+        class public2 {
+        }
+    }
+    function foo113(): m2.public2;
+    function foo114(): m2.public2;
+}

@@ -2,6 +2,6 @@
 
 ////let p, b;
 ////
-////p, [{ [|a|]: p, b }] = [{ [|a|]: 10, b: true }];
+////p, [{ [|{| "isDefinition": true |}a|]: p, b }] = [{ [|{| "isWriteAccess": true, "isDefinition": true |}a|]: 10, b: true }];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) a: any");

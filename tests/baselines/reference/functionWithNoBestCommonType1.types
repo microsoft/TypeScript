@@ -1,5 +1,4 @@
 === tests/cases/compiler/functionWithNoBestCommonType1.ts ===
-
 function foo() {
 >foo : () => true | void
 

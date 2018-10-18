@@ -1,15 +1,4 @@
 === tests/cases/conformance/es6/destructuring/iterableArrayPattern13.ts ===
-function fun([a, ...b]) { }
->fun : ([a, ...b]: Iterable<any>) => void
->a : any
->b : any[]
-
-fun(new FooIterator);
->fun(new FooIterator) : void
->fun : ([a, ...b]: Iterable<any>) => void
->new FooIterator : FooIterator
->FooIterator : typeof FooIterator
-
 class Bar { x }
 >Bar : Bar
 >x : any
@@ -41,6 +30,7 @@ class FooIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -49,3 +39,15 @@ class FooIterator {
 >this : this
     }
 }
+
+function fun([a, ...b]) { }
+>fun : ([a, ...b]: [any, ...any[]]) => void
+>a : any
+>b : any[]
+
+fun(new FooIterator);
+>fun(new FooIterator) : void
+>fun : ([a, ...b]: [any, ...any[]]) => void
+>new FooIterator : FooIterator
+>FooIterator : typeof FooIterator
+

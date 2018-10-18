@@ -1,5 +1,4 @@
 //// [stripInternal1.ts]
-
 class C {
   foo(): void { }
   // @internal
@@ -7,7 +6,7 @@ class C {
 }
 
 //// [stripInternal1.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () { };

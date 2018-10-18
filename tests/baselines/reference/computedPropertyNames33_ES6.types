@@ -1,12 +1,10 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames33_ES6.ts ===
 function foo<T>() { return '' }
 >foo : <T>() => string
->T : T
 >'' : ""
 
 class C<T> {
 >C : C<T>
->T : T
 
     bar() {
 >bar : () => number
@@ -16,9 +14,9 @@ class C<T> {
 >{            [foo<T>()]() { }        } : { [x: string]: () => void; }
 
             [foo<T>()]() { }
+>[foo<T>()] : () => void
 >foo<T>() : string
 >foo : <T>() => string
->T : T
 
         };
         return 0;

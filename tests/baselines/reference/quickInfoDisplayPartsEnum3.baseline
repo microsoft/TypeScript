@@ -34,7 +34,7 @@
       "position": 13
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 13,
@@ -99,7 +99,7 @@
       "position": 23
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 23,
@@ -164,7 +164,7 @@
       "position": 38
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 38,
@@ -369,7 +369,7 @@
       "position": 77
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 77,
@@ -504,7 +504,7 @@
       "position": 98
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 98,
@@ -639,7 +639,7 @@
       "position": 119
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 119,
@@ -741,7 +741,7 @@
       "position": 150
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 150,
@@ -806,7 +806,7 @@
       "position": 160
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 160,
@@ -871,7 +871,7 @@
       "position": 175
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 175,
@@ -1092,7 +1092,7 @@
       "position": 226
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 226,
@@ -1235,7 +1235,7 @@
       "position": 253
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 253,
@@ -1378,7 +1378,7 @@
       "position": 280
     },
     "quickInfo": {
-      "kind": "var",
+      "kind": "enum member",
       "kindModifiers": "",
       "textSpan": {
         "start": 280,

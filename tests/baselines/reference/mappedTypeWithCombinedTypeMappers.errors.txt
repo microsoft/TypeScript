@@ -1,0 +1,25 @@
+tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts(18,7): error TS2322: Type 'string' is not assignable to type '{ important: boolean; }'.
+
+
+==== tests/cases/compiler/mappedTypeWithCombinedTypeMappers.ts (1 errors) ====
+    // Repro from #13351
+    
+    type Meta<T, A> = {
+        readonly[P in keyof T]: {
+            value: T[P];
+            also: A;
+            readonly children: Meta<T[P], A>;
+        };
+    }
+    
+    interface Input {
+        x: string;
+        y: number;
+    }
+    
+    declare const output: Meta<Input, boolean>;
+    
+    const shouldFail: { important: boolean } = output.x.children;
+          ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type '{ important: boolean; }'.
+    

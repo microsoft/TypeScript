@@ -7,18 +7,16 @@ type TreeNode = {
 
     parent: TreeNode;
 >parent : TreeNode
->TreeNode : TreeNode
 }
 
 var nodes: TreeNode[];
 >nodes : TreeNode[]
->TreeNode : TreeNode
 
 nodes.map(n => n.name);
 >nodes.map(n => n.name) : string[]
->nodes.map : { <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): U[]; }
+>nodes.map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
 >nodes : TreeNode[]
->map : { <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [TreeNode, TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U, U]; <U>(this: [TreeNode, TreeNode], callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: TreeNode, index: number, array: TreeNode[]) => U, thisArg?: any) => U[]
 >n => n.name : (n: TreeNode) => string
 >n : TreeNode
 >n.name : string

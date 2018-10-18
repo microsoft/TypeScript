@@ -7,3 +7,4 @@ declare module "m1" {
 
 //// [importDeclRefereingExternalModuleWithNoResolve.js]
 "use strict";
+exports.__esModule = true;

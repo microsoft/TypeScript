@@ -1,0 +1,31 @@
+=== tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts ===
+type Style = StyleBase | StyleArray;
+>Style : Style
+
+interface StyleArray extends Array<Style> {}
+interface StyleBase {
+    foo: string;
+>foo : string
+}
+
+const blah: Style = [
+>blah : Style
+>[    [[{        foo: 'asdf',        jj: 1 // intentional error    }]]] : { foo: string; jj: number; }[][][]
+
+    [[{
+>[[{        foo: 'asdf',        jj: 1 // intentional error    }]] : { foo: string; jj: number; }[][]
+>[{        foo: 'asdf',        jj: 1 // intentional error    }] : { foo: string; jj: number; }[]
+>{        foo: 'asdf',        jj: 1 // intentional error    } : { foo: string; jj: number; }
+
+        foo: 'asdf',
+>foo : string
+>'asdf' : "asdf"
+
+        jj: 1 // intentional error
+>jj : number
+>1 : 1
+
+    }]]
+];
+
+

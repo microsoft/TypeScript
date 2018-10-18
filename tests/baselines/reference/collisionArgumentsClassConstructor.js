@@ -88,7 +88,7 @@ declare class c6NoError {
 
 //// [collisionArgumentsClassConstructor.js]
 // Constructors
-var c1 = (function () {
+var c1 = /** @class */ (function () {
     function c1(i) {
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -98,7 +98,7 @@ var c1 = (function () {
     }
     return c1;
 }());
-var c12 = (function () {
+var c12 = /** @class */ (function () {
     function c12(arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -108,29 +108,29 @@ var c12 = (function () {
     }
     return c12;
 }());
-var c1NoError = (function () {
+var c1NoError = /** @class */ (function () {
     function c1NoError(arguments) {
         var arguments = 10; // no error
     }
     return c1NoError;
 }());
-var c2 = (function () {
+var c2 = /** @class */ (function () {
     function c2() {
         var restParameters = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            restParameters[_i - 0] = arguments[_i];
+            restParameters[_i] = arguments[_i];
         }
         var arguments = 10; // no error
     }
     return c2;
 }());
-var c2NoError = (function () {
+var c2NoError = /** @class */ (function () {
     function c2NoError() {
         var arguments = 10; // no error
     }
     return c2NoError;
 }());
-var c3 = (function () {
+var c3 = /** @class */ (function () {
     function c3(arguments) {
         var restParameters = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -141,14 +141,14 @@ var c3 = (function () {
     }
     return c3;
 }());
-var c3NoError = (function () {
+var c3NoError = /** @class */ (function () {
     function c3NoError(arguments) {
         this.arguments = arguments;
         var arguments = 10; // no error
     }
     return c3NoError;
 }());
-var c5 = (function () {
+var c5 = /** @class */ (function () {
     function c5(i) {
         var arguments = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -158,7 +158,7 @@ var c5 = (function () {
     }
     return c5;
 }());
-var c52 = (function () {
+var c52 = /** @class */ (function () {
     function c52(arguments) {
         var rest = [];
         for (var _i = 1; _i < arguments.length; _i++) {
@@ -168,7 +168,7 @@ var c52 = (function () {
     }
     return c52;
 }());
-var c5NoError = (function () {
+var c5NoError = /** @class */ (function () {
     function c5NoError(arguments) {
         var arguments; // no error
     }

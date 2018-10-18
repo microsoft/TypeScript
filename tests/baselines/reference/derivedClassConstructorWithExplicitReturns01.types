@@ -1,5 +1,4 @@
 === tests/cases/compiler/derivedClassConstructorWithExplicitReturns01.ts ===
-
 class C {
 >C : C
 

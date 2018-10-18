@@ -1,0 +1,72 @@
+=== tests/cases/compiler/objectCreate.ts ===
+declare var union: null | { a: number, b: string };
+>union : Symbol(union, Decl(objectCreate.ts, 0, 11))
+>a : Symbol(a, Decl(objectCreate.ts, 0, 27))
+>b : Symbol(b, Decl(objectCreate.ts, 0, 38))
+
+var n = Object.create(null);             // object
+>n : Symbol(n, Decl(objectCreate.ts, 2, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var t = Object.create({ a: 1, b: "" });  // {a: number, b: string }
+>t : Symbol(t, Decl(objectCreate.ts, 3, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectCreate.ts, 3, 23))
+>b : Symbol(b, Decl(objectCreate.ts, 3, 29))
+
+var u = Object.create(union);            // object | {a: number, b: string }
+>u : Symbol(u, Decl(objectCreate.ts, 4, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>union : Symbol(union, Decl(objectCreate.ts, 0, 11))
+
+var e = Object.create({});               // {}
+>e : Symbol(e, Decl(objectCreate.ts, 5, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var o = Object.create(<object>{});       // object
+>o : Symbol(o, Decl(objectCreate.ts, 6, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a = Object.create(null, {});           // any
+>a : Symbol(a, Decl(objectCreate.ts, 8, 3), Decl(objectCreate.ts, 9, 3), Decl(objectCreate.ts, 10, 3), Decl(objectCreate.ts, 11, 3), Decl(objectCreate.ts, 12, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a = Object.create({ a: 1, b: "" }, {});
+>a : Symbol(a, Decl(objectCreate.ts, 8, 3), Decl(objectCreate.ts, 9, 3), Decl(objectCreate.ts, 10, 3), Decl(objectCreate.ts, 11, 3), Decl(objectCreate.ts, 12, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(objectCreate.ts, 9, 23))
+>b : Symbol(b, Decl(objectCreate.ts, 9, 29))
+
+var a = Object.create(union, {});
+>a : Symbol(a, Decl(objectCreate.ts, 8, 3), Decl(objectCreate.ts, 9, 3), Decl(objectCreate.ts, 10, 3), Decl(objectCreate.ts, 11, 3), Decl(objectCreate.ts, 12, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>union : Symbol(union, Decl(objectCreate.ts, 0, 11))
+
+var a = Object.create({}, {});
+>a : Symbol(a, Decl(objectCreate.ts, 8, 3), Decl(objectCreate.ts, 9, 3), Decl(objectCreate.ts, 10, 3), Decl(objectCreate.ts, 11, 3), Decl(objectCreate.ts, 12, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var a = Object.create(<object>{}, {});
+>a : Symbol(a, Decl(objectCreate.ts, 8, 3), Decl(objectCreate.ts, 9, 3), Decl(objectCreate.ts, 10, 3), Decl(objectCreate.ts, 11, 3), Decl(objectCreate.ts, 12, 3))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

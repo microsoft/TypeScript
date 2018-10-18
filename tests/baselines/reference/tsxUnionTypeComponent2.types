@@ -1,0 +1,18 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+type Invalid1 = React.ComponentClass<any> | number;
+>Invalid1 : Invalid1
+>React : any
+
+const X: Invalid1 = 1;
+>X : Invalid1
+>1 : 1
+
+<X />;
+><X /> : JSX.Element
+>X : number
+
+
+

@@ -1,5 +1,4 @@
 //// [enumLiteralTypes2.ts]
-
 const enum Choice { Unknown, Yes, No };
 
 type YesNo = Choice.Yes | Choice.No;

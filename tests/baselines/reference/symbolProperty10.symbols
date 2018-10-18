@@ -1,0 +1,36 @@
+=== tests/cases/conformance/es6/Symbols/symbolProperty10.ts ===
+class C {
+>C : Symbol(C, Decl(symbolProperty10.ts, 0, 0))
+
+    [Symbol.iterator]: { x; y };
+>[Symbol.iterator] : Symbol(C[Symbol.iterator], Decl(symbolProperty10.ts, 0, 9))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty10.ts, 1, 24))
+>y : Symbol(y, Decl(symbolProperty10.ts, 1, 27))
+}
+interface I {
+>I : Symbol(I, Decl(symbolProperty10.ts, 2, 1))
+
+    [Symbol.iterator]?: { x };
+>[Symbol.iterator] : Symbol(I[Symbol.iterator], Decl(symbolProperty10.ts, 3, 13))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>x : Symbol(x, Decl(symbolProperty10.ts, 4, 25))
+}
+
+var i: I;
+>i : Symbol(i, Decl(symbolProperty10.ts, 7, 3))
+>I : Symbol(I, Decl(symbolProperty10.ts, 2, 1))
+
+i = new C;
+>i : Symbol(i, Decl(symbolProperty10.ts, 7, 3))
+>C : Symbol(C, Decl(symbolProperty10.ts, 0, 0))
+
+var c: C = i;
+>c : Symbol(c, Decl(symbolProperty10.ts, 9, 3))
+>C : Symbol(C, Decl(symbolProperty10.ts, 0, 0))
+>i : Symbol(i, Decl(symbolProperty10.ts, 7, 3))
+

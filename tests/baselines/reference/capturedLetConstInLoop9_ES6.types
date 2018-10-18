@@ -1,5 +1,4 @@
 === tests/cases/compiler/capturedLetConstInLoop9_ES6.ts ===
-
 for (let x = 0; x < 1; ++x) {
 >x : number
 >0 : 0
@@ -40,7 +39,7 @@ for (let x = 0; x < 1; ++x) {
     }
 
     switch (x) {
->x : undefined
+>x : any
 
         case 1:
 >1 : 1

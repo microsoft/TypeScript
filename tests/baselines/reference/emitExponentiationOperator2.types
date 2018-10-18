@@ -1,5 +1,4 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitExponentiationOperator2.ts ===
-
 var temp = 10;
 >temp : number
 >10 : 10

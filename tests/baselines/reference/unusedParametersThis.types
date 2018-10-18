@@ -1,5 +1,4 @@
 === tests/cases/compiler/unusedParametersThis.ts ===
-
 class A {
 >A : A
 
@@ -19,7 +18,6 @@ class A {
     public method2(this: A): number {
 >method2 : (this: A) => number
 >this : A
->A : A
 
         return this.a;
 >this.a : number
@@ -46,7 +44,6 @@ class A {
     public method4(this: A): number {
 >method4 : (this: A) => number
 >this : A
->A : A
 
         var fn = () => this.a;
 >fn : () => number
@@ -63,7 +60,6 @@ class A {
     static staticMethod(this: A): number {
 >staticMethod : (this: A) => number
 >this : A
->A : A
 
         return this.a;
 >this.a : number
@@ -75,7 +71,6 @@ class A {
 function f(this: A): number {
 >f : (this: A) => number
 >this : A
->A : A
 
     return this.a
 >this.a : number
@@ -88,7 +83,6 @@ var f2 = function f2(this: A): number {
 >function f2(this: A): number {    return this.a;} : (this: A) => number
 >f2 : (this: A) => number
 >this : A
->A : A
 
     return this.a;
 >this.a : number

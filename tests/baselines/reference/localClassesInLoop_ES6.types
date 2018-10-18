@@ -1,5 +1,4 @@
 === tests/cases/compiler/localClassesInLoop_ES6.ts ===
-
 declare function use(a: any);
 >use : (a: any) => any
 >a : any
@@ -36,12 +35,12 @@ use(data[0]() === data[1]());
 >use(data[0]() === data[1]()) : any
 >use : (a: any) => any
 >data[0]() === data[1]() : boolean
->data[0]() : typeof C
->data[0] : () => typeof C
->data : (() => typeof C)[]
+>data[0]() : any
+>data[0] : any
+>data : any[]
 >0 : 0
->data[1]() : typeof C
->data[1] : () => typeof C
->data : (() => typeof C)[]
+>data[1]() : any
+>data[1] : any
+>data : any[]
 >1 : 1
 

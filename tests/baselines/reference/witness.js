@@ -1,8 +1,4 @@
 //// [witness.ts]
-
-
-
-
 // Initializers
 var varInit = varInit; // any
 var pInit: any;
@@ -148,7 +144,7 @@ function fn(pInit) {
     if (pInit === void 0) { pInit = pInit; }
     var pInit;
 }
-var InitClass = (function () {
+var InitClass = /** @class */ (function () {
     function InitClass() {
         this.x = this.x;
     }
@@ -217,7 +213,7 @@ function fnArg2() {
 }
 var t = fnArg2(); // t: should be 'any', but is 'string'
 // New operator
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.fn1 = function () {
@@ -250,7 +246,7 @@ var M2;
     var y;
 })(M2 || (M2 = {}));
 // Property access of class instance type
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
         this.n = this.n; // n: any
     }
@@ -259,12 +255,12 @@ var C2 = (function () {
 var c2inst = new C2().n;
 var c2inst;
 // Constructor function property access
-var C3 = (function () {
+var C3 = /** @class */ (function () {
     function C3() {
     }
+    C3.q = C3.q;
     return C3;
 }());
-C3.q = C3.q;
 var qq = C3.q;
 var qq;
 // Parentheses - tested a bunch above

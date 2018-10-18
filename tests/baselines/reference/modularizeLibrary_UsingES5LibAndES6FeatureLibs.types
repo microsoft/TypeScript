@@ -1,5 +1,4 @@
 === tests/cases/compiler/modularizeLibrary_UsingES5LibAndES6FeatureLibs.ts ===
-
 var s = Symbol();
 >s : symbol
 >Symbol() : symbol
@@ -17,10 +16,10 @@ var p = new Proxy(t, {});
 >{} : {}
 
 Reflect.ownKeys({});
->Reflect.ownKeys({}) : PropertyKey[]
->Reflect.ownKeys : (target: any) => PropertyKey[]
+>Reflect.ownKeys({}) : (string | number | symbol)[]
+>Reflect.ownKeys : (target: object) => (string | number | symbol)[]
 >Reflect : typeof Reflect
->ownKeys : (target: any) => PropertyKey[]
+>ownKeys : (target: object) => (string | number | symbol)[]
 >{} : {}
 
 function* idGen() {

@@ -1,18 +1,17 @@
-tests/cases/compiler/reachabilityChecks5.ts(6,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(19,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/compiler/reachabilityChecks5.ts(31,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(41,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(52,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(80,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(86,13): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks5.ts(94,17): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(97,13): error TS7027: Unreachable code detected.
-tests/cases/compiler/reachabilityChecks5.ts(116,18): error TS7030: Not all code paths return a value.
-tests/cases/compiler/reachabilityChecks5.ts(123,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks5.ts(5,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(18,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+tests/cases/compiler/reachabilityChecks5.ts(30,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(40,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(51,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(79,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(85,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks5.ts(93,17): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(96,13): error TS7027: Unreachable code detected.
+tests/cases/compiler/reachabilityChecks5.ts(115,18): error TS7030: Not all code paths return a value.
+tests/cases/compiler/reachabilityChecks5.ts(122,13): error TS7027: Unreachable code detected.
 
 
 ==== tests/cases/compiler/reachabilityChecks5.ts (11 errors) ====
-    
     function f0(x): number {
         while (true);
     }
@@ -110,7 +109,7 @@ tests/cases/compiler/reachabilityChecks5.ts(123,13): error TS7027: Unreachable c
             }
             else {
                 return 1;
-                ~~~~~~
+                ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
             }
         }
@@ -125,7 +124,7 @@ tests/cases/compiler/reachabilityChecks5.ts(123,13): error TS7027: Unreachable c
         try {
             while (false) {
                 return 1;
-                ~~~~~~
+                ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
             }
         }
@@ -155,7 +154,7 @@ tests/cases/compiler/reachabilityChecks5.ts(123,13): error TS7027: Unreachable c
                     break test;
                 } while (true);
                 x++;
-                ~
+                ~~~~
 !!! error TS7027: Unreachable code detected.
             } while (true);
         }

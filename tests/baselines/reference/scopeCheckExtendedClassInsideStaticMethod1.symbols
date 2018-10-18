@@ -1,0 +1,21 @@
+=== tests/cases/compiler/scopeCheckExtendedClassInsideStaticMethod1.ts ===
+class C { private v; public p; static s; }
+>C : Symbol(C, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 0))
+>v : Symbol(C.v, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 9))
+>p : Symbol(C.p, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 20))
+>s : Symbol(C.s, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 30))
+
+class D extends C {
+>D : Symbol(D, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 42))
+>C : Symbol(C, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 0))
+
+   static c() {
+>c : Symbol(D.c, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 1, 19))
+
+      v = 1;
+      this.p = 1;
+>this : Symbol(D, Decl(scopeCheckExtendedClassInsideStaticMethod1.ts, 0, 42))
+
+      s = 1;
+   }
+}

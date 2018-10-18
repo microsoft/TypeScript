@@ -1,5 +1,4 @@
 //// [es5-commonjs2.ts]
-
 export default 1;
 
 

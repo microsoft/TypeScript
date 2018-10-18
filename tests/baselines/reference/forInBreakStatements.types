@@ -1,5 +1,4 @@
 === tests/cases/conformance/statements/breakStatements/forInBreakStatements.ts ===
-
 for(var x in {}) {
 >x : string
 >{} : {}

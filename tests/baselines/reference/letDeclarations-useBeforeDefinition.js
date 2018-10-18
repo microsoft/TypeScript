@@ -1,5 +1,4 @@
 //// [letDeclarations-useBeforeDefinition.ts]
-
 {
     l1;
     let l1;

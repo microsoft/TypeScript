@@ -10,7 +10,7 @@ if (i == 10) {
 
     i++;
 >i++ : number
->i : 10
+>i : number
 
 } else
 {
@@ -22,7 +22,7 @@ if (i == 10)
 {
     i++;
 >i++ : number
->i : 10
+>i : number
 }
 else if (i == 20) {
 >i == 20 : boolean
@@ -31,7 +31,7 @@ else if (i == 20) {
 
     i--;
 >i-- : number
->i : 20
+>i : number
 
 } else if (i == 30) {
 >i == 30 : boolean

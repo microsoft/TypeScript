@@ -1,0 +1,58 @@
+=== tests/cases/conformance/types/mapped/mappedTypeWithAny.ts ===
+type Item = { value: string };
+>Item : Item
+>value : string
+
+type ItemMap<T> = { [P in keyof T]: Item };
+>ItemMap : ItemMap<T>
+
+declare let x0: keyof any;
+>x0 : string | number | symbol
+
+declare let x1: { [P in any]: Item };
+>x1 : { [x: string]: Item; }
+
+declare let x2: { [P in string]: Item };
+>x2 : { [x: string]: Item; }
+
+declare let x3: { [P in keyof any]: Item };
+>x3 : { [x: string]: Item; }
+
+declare let x4: ItemMap<any>;
+>x4 : ItemMap<any>
+
+// Repro from #19152
+
+type Data = {
+>Data : Data
+
+  value: string;
+>value : string
+}
+
+type StrictDataMap<T> = {
+>StrictDataMap : StrictDataMap<T>
+
+  [P in keyof T]: Data
+}
+
+declare let z: StrictDataMap<any>;
+>z : StrictDataMap<any>
+
+for (let id in z) {
+>id : string
+>z : StrictDataMap<any>
+
+  let data = z[id];
+>data : Data
+>z[id] : Data
+>z : StrictDataMap<any>
+>id : string
+
+  let x = data.notAValue;  // Error
+>x : any
+>data.notAValue : any
+>data : Data
+>notAValue : any
+}
+

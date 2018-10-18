@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/Expressions/parserMemberAccessAfterPostfixExpression1.ts ===
+a--.toString()
+>a-- : number
+>a : any
+>toString() : any
+>toString : any
+

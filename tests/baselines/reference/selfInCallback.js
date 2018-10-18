@@ -8,7 +8,7 @@ class C {
 }
 
 //// [selfInCallback.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.p1 = 0;
     }

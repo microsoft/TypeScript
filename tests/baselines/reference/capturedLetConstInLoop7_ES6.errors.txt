@@ -1,18 +1,14 @@
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(227,19): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(230,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(233,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(236,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(239,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(283,19): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(302,26): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(305,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(308,9): error TS2365: Operator '==' cannot be applied to types '0' and '1'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(311,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(314,9): error TS2365: Operator '==' cannot be applied to types '0' and '2'.
-tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(359,19): error TS2365: Operator '<' cannot be applied to types '0' and '1'.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(230,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(233,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(236,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(239,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(305,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(308,9): error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(311,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
+tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(314,9): error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
 
 
-==== tests/cases/compiler/capturedLetConstInLoop7_ES6.ts (12 errors) ====
+==== tests/cases/compiler/capturedLetConstInLoop7_ES6.ts (8 errors) ====
     //===let
     l0:
     for (let x of []) {
@@ -240,28 +236,26 @@ tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(359,19): error TS2365: Opera
     
     l1_c:
     for (const x = 0; x < 1;) {
-                      ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
         (function() { return x});
         (() => x);
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
             break;
         }
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
             break l1_c;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
             continue;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
             continue l1_c;
         }
     }
@@ -306,8 +300,6 @@ tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(359,19): error TS2365: Opera
     
     l4_c:
     for (const y = 0; y < 1;) {
-                      ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
         const x = 1;
         (function() { return x});
         (() => x);
@@ -327,28 +319,26 @@ tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(359,19): error TS2365: Opera
     
     l5_c:
     for (const x = 0, y = 1; x < 1;) {
-                             ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
         (function() { return x + y});
         (() => x + y);
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
             break;
         }
         if (x == 1) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '1'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '1' have no overlap.
             break l5_c;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
             continue;
         }
         if (x == 2) {
             ~~~~~~
-!!! error TS2365: Operator '==' cannot be applied to types '0' and '2'.
+!!! error TS2367: This condition will always return 'false' since the types '0' and '2' have no overlap.
             continue l5_c;
         }
     }
@@ -394,8 +384,6 @@ tests/cases/compiler/capturedLetConstInLoop7_ES6.ts(359,19): error TS2365: Opera
     
     l8_c:
     for (const y = 0; y < 1;) {
-                      ~~~~~
-!!! error TS2365: Operator '<' cannot be applied to types '0' and '1'.
         const x = 1;
         (function() { return x + y});
         (() => x + y);

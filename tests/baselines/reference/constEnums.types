@@ -103,6 +103,12 @@ const enum Enum1 {
 >E : Enum1
 >1 : 1
 
+    PQ = E ** 2,
+>PQ : Enum1
+>E ** 2 : number
+>E : Enum1
+>2 : 2
+
     Q = -D,
 >Q : Enum1
 >-D : number
@@ -170,14 +176,8 @@ const enum Enum1 {
 
 
 module A {
->A : typeof A
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -204,14 +204,8 @@ module A {
 }
 
 module A {
->A : typeof A
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -234,14 +228,8 @@ module A {
 }
 
 module A1 {
->A1 : typeof A1
-
     export module B {
->B : typeof B
-
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -264,8 +252,6 @@ module A2 {
 >B : typeof B
 
         export module C {
->C : typeof C
-
             export const enum E {
 >E : E
 
@@ -309,7 +295,6 @@ import I2 = A2.B;
 function foo0(e: I): void {
 >foo0 : (e: I) => void
 >e : I
->I : I
 
     if (e === I.V1) {
 >e === I.V1 : boolean
@@ -332,7 +317,6 @@ function foo1(e: I1.C.E): void {
 >e : I1.C.E
 >I1 : any
 >C : any
->E : I1.C.E
 
     if (e === I1.C.E.V1) {
 >e === I1.C.E.V1 : boolean
@@ -363,7 +347,6 @@ function foo2(e: I2.C.E): void {
 >e : I2.C.E
 >I2 : any
 >C : any
->E : I2.C.E
 
     if (e === I2.C.E.V1) {
 >e === I2.C.E.V1 : boolean
@@ -393,7 +376,6 @@ function foo2(e: I2.C.E): void {
 function foo(x: Enum1) {
 >foo : (x: Enum1) => void
 >x : Enum1
->Enum1 : Enum1
 
     switch (x) {
 >x : Enum1
@@ -478,6 +460,11 @@ function foo(x: Enum1) {
 >Enum1 : typeof Enum1
 >P : Enum1
 
+        case Enum1.PQ:
+>Enum1.PQ : Enum1
+>Enum1 : typeof Enum1
+>PQ : Enum1
+
         case Enum1.Q:
 >Enum1.Q : Enum1
 >Enum1 : typeof Enum1
@@ -543,7 +530,6 @@ function bar(e: A.B.C.E): number {
 >A : any
 >B : any
 >C : any
->E : I
 
     switch (e) {
 >e : I

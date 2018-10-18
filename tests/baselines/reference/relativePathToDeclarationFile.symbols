@@ -18,13 +18,13 @@ if(foo.M2.x){
 	var x = new relMod(other.M2.x.charCodeAt(0));
 >x : Symbol(x, Decl(file1.ts, 5, 4))
 >relMod : Symbol(relMod, Decl(file1.ts, 1, 34))
->other.M2.x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>other.M2.x.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >other.M2.x : Symbol(other.M2.x, Decl(other.d.ts, 1, 11))
 >other.M2 : Symbol(other.M2, Decl(other.d.ts, 0, 0))
 >other : Symbol(other, Decl(file1.ts, 0, 28))
 >M2 : Symbol(other.M2, Decl(other.d.ts, 0, 0))
 >x : Symbol(other.M2.x, Decl(other.d.ts, 1, 11))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 }
 
 === tests/cases/conformance/externalModules/test/foo.d.ts ===

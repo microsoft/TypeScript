@@ -1,0 +1,22 @@
+=== tests/cases/compiler/file.ts ===
+const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
+>IGNORE_EXTRA_VARIABLES : Symbol(IGNORE_EXTRA_VARIABLES, Decl(file.ts, 0, 5))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+//This is exported
+export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (ctor : CtorT) {
+>ignoreExtraVariables : Symbol(ignoreExtraVariables, Decl(file.ts, 0, 40))
+>CtorT : Symbol(CtorT, Decl(file.ts, 3, 37))
+>args : Symbol(args, Decl(file.ts, 3, 56))
+>ctor : Symbol(ctor, Decl(file.ts, 3, 77))
+>CtorT : Symbol(CtorT, Decl(file.ts, 3, 37))
+
+    return class extends ctor {
+>ctor : Symbol(ctor, Decl(file.ts, 3, 77))
+
+        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
+>[IGNORE_EXTRA_VARIABLES] : Symbol((Anonymous class)[IGNORE_EXTRA_VARIABLES], Decl(file.ts, 4, 31))
+>IGNORE_EXTRA_VARIABLES : Symbol(IGNORE_EXTRA_VARIABLES, Decl(file.ts, 0, 5))
+
+    };
+}

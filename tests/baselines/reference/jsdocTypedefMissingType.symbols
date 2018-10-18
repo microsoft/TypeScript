@@ -1,0 +1,18 @@
+=== /a.js ===
+// Bad: missing a type
+/** @typedef T */
+
+const t = 0;
+>t : Symbol(t, Decl(a.js, 3, 5))
+
+// OK: missing a type, but have property tags.
+/**
+ * @typedef Person
+ * @property {string} name
+ */
+
+/** @type Person */
+const person = { name: "" };
+>person : Symbol(person, Decl(a.js, 12, 5))
+>name : Symbol(name, Decl(a.js, 12, 16))
+

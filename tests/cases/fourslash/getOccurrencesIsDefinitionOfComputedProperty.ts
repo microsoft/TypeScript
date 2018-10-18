@@ -1,7 +1,6 @@
 /// <reference path='fourslash.ts' />
-////let o = { ["/**/[|{| "isDefinition": true |}foo|]"]: 12 };
-////let y = o.[|{| "isDefinition": false |}foo|];
-////let z = o['[|{| "isDefinition": false |}foo|]'];
+////let o = { ["[|{| "isWriteAccess": true, "isDefinition": true |}foo|]"]: 12 };
+////let y = o.[|foo|];
+////let z = o['[|foo|]'];
 
-goTo.marker();
-verify.referencesAre(test.ranges());
+verify.singleReferenceGroup('(property) ["foo"]: number');

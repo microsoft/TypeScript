@@ -3,5 +3,4 @@
 ////var f = <T>(a: T) => a;
 ////f(/**/
 
-goTo.marker();
-verify.currentSignatureHelpIs('f<T>(a: T): T');
+verify.signatureHelp({ marker: "", text: "f(a: {}): {}" });

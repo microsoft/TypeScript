@@ -1,0 +1,19 @@
+=== tests/cases/conformance/classes/classDeclarations/classAbstractKeyword/classAbstractImportInstantiation.ts ===
+module M {
+>M : Symbol(M, Decl(classAbstractImportInstantiation.ts, 0, 0))
+
+    export abstract class A {}
+>A : Symbol(A, Decl(classAbstractImportInstantiation.ts, 0, 10))
+    
+    new A;
+>A : Symbol(A, Decl(classAbstractImportInstantiation.ts, 0, 10))
+}
+
+import myA = M.A;
+>myA : Symbol(myA, Decl(classAbstractImportInstantiation.ts, 4, 1))
+>M : Symbol(M, Decl(classAbstractImportInstantiation.ts, 0, 0))
+>A : Symbol(myA, Decl(classAbstractImportInstantiation.ts, 0, 10))
+
+new myA;
+>myA : Symbol(myA, Decl(classAbstractImportInstantiation.ts, 4, 1))
+

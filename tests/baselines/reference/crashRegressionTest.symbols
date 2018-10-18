@@ -1,0 +1,61 @@
+=== tests/cases/compiler/crashRegressionTest.ts ===
+module MsPortal.Util.TemplateEngine {
+>MsPortal : Symbol(MsPortal, Decl(crashRegressionTest.ts, 0, 0))
+>Util : Symbol(Util, Decl(crashRegressionTest.ts, 0, 16))
+>TemplateEngine : Symbol(TemplateEngine, Decl(crashRegressionTest.ts, 0, 21))
+
+    "use strict";
+ 
+    interface TemplateKeyValue {
+>TemplateKeyValue : Symbol(TemplateKeyValue, Decl(crashRegressionTest.ts, 1, 17))
+
+        [name: string]: string;
+>name : Symbol(name, Decl(crashRegressionTest.ts, 4, 9))
+    }
+ 
+    class StringTemplate {
+>StringTemplate : Symbol(StringTemplate, Decl(crashRegressionTest.ts, 5, 5))
+
+        private _templateStorage: TemplateStorage;
+>_templateStorage : Symbol(StringTemplate._templateStorage, Decl(crashRegressionTest.ts, 7, 26))
+>TemplateStorage : Symbol(TemplateStorage, Decl(crashRegressionTest.ts, 17, 5))
+ 
+        constructor(templateStorage: TemplateStorage) {
+>templateStorage : Symbol(templateStorage, Decl(crashRegressionTest.ts, 10, 20))
+>TemplateStorage : Symbol(TemplateStorage, Decl(crashRegressionTest.ts, 17, 5))
+
+            this._templateStorage = templateStorage;
+>this._templateStorage : Symbol(StringTemplate._templateStorage, Decl(crashRegressionTest.ts, 7, 26))
+>this : Symbol(StringTemplate, Decl(crashRegressionTest.ts, 5, 5))
+>_templateStorage : Symbol(StringTemplate._templateStorage, Decl(crashRegressionTest.ts, 7, 26))
+>templateStorage : Symbol(templateStorage, Decl(crashRegressionTest.ts, 10, 20))
+        }
+ 
+        public text(value?: string): any {
+>text : Symbol(StringTemplate.text, Decl(crashRegressionTest.ts, 12, 9))
+>value : Symbol(value, Decl(crashRegressionTest.ts, 14, 20))
+
+            this._templateStorage.templateSources[this._name] = value;
+>this._templateStorage.templateSources : Symbol(TemplateStorage.templateSources, Decl(crashRegressionTest.ts, 19, 34))
+>this._templateStorage : Symbol(StringTemplate._templateStorage, Decl(crashRegressionTest.ts, 7, 26))
+>this : Symbol(StringTemplate, Decl(crashRegressionTest.ts, 5, 5))
+>_templateStorage : Symbol(StringTemplate._templateStorage, Decl(crashRegressionTest.ts, 7, 26))
+>templateSources : Symbol(TemplateStorage.templateSources, Decl(crashRegressionTest.ts, 19, 34))
+>this : Symbol(StringTemplate, Decl(crashRegressionTest.ts, 5, 5))
+>value : Symbol(value, Decl(crashRegressionTest.ts, 14, 20))
+        }
+    }
+ 
+    export class TemplateStorage {
+>TemplateStorage : Symbol(TemplateStorage, Decl(crashRegressionTest.ts, 17, 5))
+
+        public templateSources: TemplateKeyValue = {};
+>templateSources : Symbol(TemplateStorage.templateSources, Decl(crashRegressionTest.ts, 19, 34))
+>TemplateKeyValue : Symbol(TemplateKeyValue, Decl(crashRegressionTest.ts, 1, 17))
+
+        public templateData: TemplateKeyValue = {};
+>templateData : Symbol(TemplateStorage.templateData, Decl(crashRegressionTest.ts, 20, 54))
+>TemplateKeyValue : Symbol(TemplateKeyValue, Decl(crashRegressionTest.ts, 1, 17))
+    }
+}
+

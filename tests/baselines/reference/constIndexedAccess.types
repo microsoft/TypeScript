@@ -1,5 +1,4 @@
 === tests/cases/compiler/constIndexedAccess.ts ===
-
 const enum numbers {
 >numbers : numbers
 
@@ -11,15 +10,15 @@ const enum numbers {
 }
 
 interface indexAccess {
->indexAccess : indexAccess
-
     0: string;
+>0 : string
+
     1: number;
+>1 : number
 }
 
 let test: indexAccess;
 >test : indexAccess
->indexAccess : indexAccess
 
 let s = test[0];
 >s : string
@@ -76,16 +75,16 @@ enum numbersNotConst {
 }
 
 let s3 = test[numbersNotConst.zero];
->s3 : any
->test[numbersNotConst.zero] : any
+>s3 : string
+>test[numbersNotConst.zero] : string
 >test : indexAccess
 >numbersNotConst.zero : numbersNotConst.zero
 >numbersNotConst : typeof numbersNotConst
 >zero : numbersNotConst.zero
 
 let n3 = test[numbersNotConst.one];
->n3 : any
->test[numbersNotConst.one] : any
+>n3 : number
+>test[numbersNotConst.one] : number
 >test : indexAccess
 >numbersNotConst.one : numbersNotConst.one
 >numbersNotConst : typeof numbersNotConst

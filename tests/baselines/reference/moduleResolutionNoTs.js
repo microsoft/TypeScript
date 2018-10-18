@@ -25,9 +25,10 @@ import z2 from "./z";
 "use strict";
 exports.__esModule = true;
 exports["default"] = 0;
-//// [y.js]
+//// [y.jsx]
 "use strict";
 exports.__esModule = true;
 exports["default"] = 0;
 //// [user.js]
 "use strict";
+exports.__esModule = true;

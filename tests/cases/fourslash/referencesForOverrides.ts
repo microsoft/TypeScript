@@ -3,59 +3,59 @@
 ////module FindRef3 {
 ////	module SimpleClassTest {
 ////		export class Foo {
-////			public [|foo|](): void {
+////			public [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {
 ////			}
 ////		}
 ////		export class Bar extends Foo {
-////			public [|foo|](): void {
+////			public [|{| "isWriteAccess": true, "isDefinition": true |}foo|](): void {
 ////			}
 ////		}
 ////	}
 ////
 ////	module SimpleInterfaceTest {
 ////		export interface IFoo {
-////			[|ifoo|](): void;
+////			[|{| "isDefinition": true |}ifoo|](): void;
 ////		}
 ////		export interface IBar extends IFoo {
-////			[|ifoo|](): void;
+////			[|{| "isDefinition": true |}ifoo|](): void;
 ////		}
 ////	}
 ////
 ////	module SimpleClassInterfaceTest {
 ////		export interface IFoo {
-////			[|icfoo|](): void;
+////			[|{| "isDefinition": true |}icfoo|](): void;
 ////		}
 ////		export class Bar implements IFoo {
-////			public [|icfoo|](): void {
+////			public [|{| "isWriteAccess": true, "isDefinition": true |}icfoo|](): void {
 ////			}
 ////		}
 ////	}
 ////
 ////	module Test {
 ////		export interface IBase {
-////			[|field|]: string;
-////			[|method|](): void;
+////			[|{| "isDefinition": true |}field|]: string;
+////			[|{| "isDefinition": true |}method|](): void;
 ////		}
 ////
 ////		export interface IBlah extends IBase {
-////			[|field|]: string;
+////			[|{| "isDefinition": true |}field|]: string;
 ////		}
 ////
 ////		export interface IBlah2 extends IBlah {
-////			[|field|]: string;
+////			[|{| "isDefinition": true |}field|]: string;
 ////		}
 ////
 ////		export interface IDerived extends IBlah2 {
-////			[|method|](): void;
+////			[|{| "isDefinition": true |}method|](): void;
 ////		}
 ////
 ////		export class Bar implements IDerived {
-////			public [|field|]: string;
-////			public [|method|](): void { }
+////			public [|{| "isDefinition": true |}field|]: string;
+////			public [|{| "isWriteAccess": true, "isDefinition": true |}method|](): void { }
 ////		}
 ////
 ////		export class BarBlah extends Bar {
-////			public [|field|]: string;
+////			public [|{| "isDefinition": true |}field|]: string;
 ////		}
 ////	}
 ////
@@ -70,9 +70,48 @@
 ////        w.[|icfoo|]();
 ////
 ////		var z = new Test.BarBlah();
-////		z.[|field|] = "";
+////		z.[|{| "isWriteAccess": true |}field|] = "";
 ////        z.[|method|]();
 ////	}
 ////}
 
-verify.rangesWithSameTextReferenceEachOther();
+const ranges = test.rangesByText();
+
+const fooRanges = ranges.get("foo");
+const [foo0, foo1, foo2] = fooRanges;
+verify.referenceGroups(fooRanges, [
+    { definition: "(method) SimpleClassTest.Foo.foo(): void", ranges: [foo0] },
+    { definition: "(method) SimpleClassTest.Bar.foo(): void", ranges: [foo1, foo2] },
+]);
+
+const ifooRanges = ranges.get("ifoo");
+const [ifoo0, ifoo1, ifoo2] = ifooRanges;
+verify.referenceGroups(ifooRanges, [
+    { definition: "(method) SimpleInterfaceTest.IFoo.ifoo(): void", ranges: [ifoo0] },
+    { definition: "(method) SimpleInterfaceTest.IBar.ifoo(): void", ranges: [ifoo1, ifoo2] }
+]);
+
+const icfooRanges = ranges.get("icfoo");
+const [icfoo0, icfoo1, icfoo2] = icfooRanges;
+verify.referenceGroups(icfooRanges, [
+    { definition: "(method) SimpleClassInterfaceTest.IFoo.icfoo(): void", ranges: [icfoo0] },
+    { definition: "(method) SimpleClassInterfaceTest.Bar.icfoo(): void", ranges: [icfoo1, icfoo2] }
+]);
+
+const fieldRanges = ranges.get("field");
+const [field0, field1, field2, field3, field4, field5] = fieldRanges;
+verify.referenceGroups(fieldRanges, [
+    { definition: "(property) Test.IBase.field: string", ranges: [field0] },
+    { definition: "(property) Test.IBlah.field: string", ranges: [field1] },
+    { definition: "(property) Test.IBlah2.field: string", ranges: [field2] },
+    { definition: "(property) Test.Bar.field: string", ranges: [field3] },
+    { definition: "(property) Test.BarBlah.field: string", ranges: [field4, field5] },
+]);
+
+const methodRanges = ranges.get("method");
+const [method0, method1, method2, method3] = methodRanges;
+verify.referenceGroups(methodRanges, [
+    { definition: "(method) Test.IBase.method(): void", ranges: [method0] },
+    { definition: "(method) Test.IDerived.method(): void", ranges: [method1] },
+    { definition: "(method) Test.Bar.method(): void", ranges: [method2, method3] },
+]);

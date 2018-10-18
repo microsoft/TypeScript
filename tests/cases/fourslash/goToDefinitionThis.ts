@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////function f(/*fnDecl*/this: number) {
-////    return /*fnUse*/this;
+////    return [|/*fnUse*/this|];
 ////}
-/////*cls*/class C {
-////    constructor() { return /*clsUse*/this; }
-////    get self(/*getterDecl*/this: number) { return /*getterUse*/this; }
+////class /*cls*/C {
+////    constructor() { return [|/*clsUse*/this|]; }
+////    get self(/*getterDecl*/this: number) { return [|/*getterUse*/this|]; }
 ////}
 
 verify.goToDefinition({

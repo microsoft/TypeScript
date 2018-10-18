@@ -1,0 +1,60 @@
+=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_1.ts ===
+///<reference path='propertyIdentityWithPrivacyMismatch_0.ts'/>
+import m1 = require('mod1');
+>m1 : Symbol(m1, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 0, 0))
+
+import m2 = require('mod2');
+>m2 : Symbol(m2, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 1, 28))
+
+var x: m1.Foo;
+>x : Symbol(x, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 3, 3), Decl(propertyIdentityWithPrivacyMismatch_1.ts, 4, 3))
+>m1 : Symbol(m1, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 0, 0))
+>Foo : Symbol(m1.Foo, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 0, 23))
+
+var x: m2.Foo; // Should be error (mod1.Foo !== mod2.Foo)
+>x : Symbol(x, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 3, 3), Decl(propertyIdentityWithPrivacyMismatch_1.ts, 4, 3))
+>m2 : Symbol(m2, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 1, 28))
+>Foo : Symbol(m2.Foo, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 5, 23))
+
+class Foo1 {
+>Foo1 : Symbol(Foo1, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 4, 14))
+
+    private n;
+>n : Symbol(Foo1.n, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 5, 12))
+}
+class Foo2 {
+>Foo2 : Symbol(Foo2, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 7, 1))
+
+    private n;
+>n : Symbol(Foo2.n, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 8, 12))
+}
+var y: Foo1;
+>y : Symbol(y, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 11, 3), Decl(propertyIdentityWithPrivacyMismatch_1.ts, 12, 3))
+>Foo1 : Symbol(Foo1, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 4, 14))
+
+var y: Foo2;
+>y : Symbol(y, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 11, 3), Decl(propertyIdentityWithPrivacyMismatch_1.ts, 12, 3))
+>Foo2 : Symbol(Foo2, Decl(propertyIdentityWithPrivacyMismatch_1.ts, 7, 1))
+
+=== tests/cases/compiler/propertyIdentityWithPrivacyMismatch_0.ts ===
+declare module 'mod1' {
+>'mod1' : Symbol("mod1", Decl(propertyIdentityWithPrivacyMismatch_0.ts, 0, 0))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 0, 23))
+
+        private n;
+>n : Symbol(Foo.n, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 1, 15))
+    }
+}
+declare module 'mod2' {
+>'mod2' : Symbol("mod2", Decl(propertyIdentityWithPrivacyMismatch_0.ts, 4, 1))
+
+    class Foo {
+>Foo : Symbol(Foo, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 5, 23))
+
+        private n;
+>n : Symbol(Foo.n, Decl(propertyIdentityWithPrivacyMismatch_0.ts, 6, 15))
+    }
+}
+

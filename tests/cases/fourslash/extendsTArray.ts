@@ -11,4 +11,4 @@
 ////y.length;
 
 verify.quickInfoAt("", "var y: Date[]");
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

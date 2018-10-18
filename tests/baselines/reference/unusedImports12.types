@@ -1,0 +1,23 @@
+=== tests/cases/compiler/a.ts ===
+import { Member } from './b';
+>Member : typeof Member
+
+import d, { Member as M } from './b';
+>d : typeof Member
+>Member : typeof Member
+>M : typeof Member
+
+import * as ns from './b';
+>ns : typeof ns
+
+import r = require("./b");
+>r : typeof ns
+
+=== tests/cases/compiler/b.ts ===
+export class Member {}
+>Member : Member
+
+export default Member;
+>Member : Member
+
+

@@ -5,8 +5,6 @@
 ////a = { [|e|] };
 ////export { [|e|] };
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+const [r0, r1, r2, r3] = test.ranges();
+//TODO: export should have prefix/suffix too
+verify.renameLocations([r0, r1, r2, r3], [r0, r1, { range: r2, prefixText: "e: " }, r3]);

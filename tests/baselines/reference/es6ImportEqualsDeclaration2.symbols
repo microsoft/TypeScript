@@ -1,23 +1,26 @@
 === tests/cases/compiler/server.d.ts ===
-
 declare module "other" {
+>"other" : Symbol("other", Decl(server.d.ts, 0, 0))
+
     export class C { }
->C : Symbol(C, Decl(server.d.ts, 1, 24))
+>C : Symbol(C, Decl(server.d.ts, 0, 24))
 }
 
 declare module "server" {
+>"server" : Symbol("server", Decl(server.d.ts, 2, 1))
+
     import events = require("other"); // Ambient declaration, no error expected.
->events : Symbol(events, Decl(server.d.ts, 5, 25))
+>events : Symbol(events, Decl(server.d.ts, 4, 25))
 
     module S {
->S : Symbol(S, Decl(server.d.ts, 6, 37))
+>S : Symbol(S, Decl(server.d.ts, 5, 37))
 
         export var a: number;
->a : Symbol(a, Decl(server.d.ts, 9, 18))
+>a : Symbol(a, Decl(server.d.ts, 8, 18))
     }
 
     export = S; // Ambient declaration, no error expected.
->S : Symbol(S, Decl(server.d.ts, 6, 37))
+>S : Symbol(S, Decl(server.d.ts, 5, 37))
 }
 
 === tests/cases/compiler/client.ts ===

@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts'/>
 
 ////var x = {
-////    [|property|]: {}
+////    [|{| "isWriteAccess": true, "isDefinition": true |}property|]: {}
 ////};
 ////
 ////x.[|property|];
 ////
 ////let {[|property|]: pVar} = x;
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(property) property: {}");

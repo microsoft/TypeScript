@@ -89,19 +89,24 @@ extend2({
     init() {
 >init : Symbol(init, Decl(thisTypeInFunctions2.ts, 32, 9))
 
-        this  // this: any because the contextual signature of init doesn't specify this' type
+        this // this: IndexedWithoutThis because of contextual typing
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
         this.mine
-        this.willDestroy
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
     },
     mine: 13,
->mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 37, 6))
+>mine : Symbol(mine, Decl(thisTypeInFunctions2.ts, 36, 6))
 
     foo() {
->foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 38, 13))
+>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 37, 13))
 
-        this // this: any because of the string indexer
+        this // this: IndexedWithoutThis because of contextual typing
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
+
         this.mine
-        this.willDestroy
+>this : Symbol(IndexedWithoutThis, Decl(thisTypeInFunctions2.ts, 5, 1))
     }
 });
 
@@ -109,17 +114,20 @@ simple({
 >simple : Symbol(simple, Decl(thisTypeInFunctions2.ts, 17, 57))
 
     foo(n) {
->foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 46, 8))
->n : Symbol(n, Decl(thisTypeInFunctions2.ts, 47, 8))
+>foo : Symbol(foo, Decl(thisTypeInFunctions2.ts, 44, 8))
+>n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
 
         return n.length + this.bar();
->n.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->n : Symbol(n, Decl(thisTypeInFunctions2.ts, 47, 8))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>n.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>n : Symbol(n, Decl(thisTypeInFunctions2.ts, 45, 8))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>this.bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
+>this : Symbol(SimpleInterface, Decl(thisTypeInFunctions2.ts, 11, 1))
+>bar : Symbol(SimpleInterface.bar, Decl(thisTypeInFunctions2.ts, 13, 19))
 
     },
     bar() {
->bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 49, 6))
+>bar : Symbol(bar, Decl(thisTypeInFunctions2.ts, 47, 6))
 
         return 14;
     }

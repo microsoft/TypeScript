@@ -1,0 +1,150 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+function EmptyPropSFC() {
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+
+    return <div> Default Greeting </div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+function Greet(x: {name: string}) {
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 1))
+>x : Symbol(x, Decl(file.tsx, 4, 15))
+>name : Symbol(name, Decl(file.tsx, 4, 19))
+
+	return <div>Hello, {x}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>x : Symbol(x, Decl(file.tsx, 4, 15))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+function Meet({name = 'world'}) {
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+>name : Symbol(name, Decl(file.tsx, 7, 15))
+
+	return <div>Hello, {name}</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>name : Symbol(name, Decl(file.tsx, 7, 15))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+function MeetAndGreet(k: {"prop-name": string}) {
+>MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 9, 1))
+>k : Symbol(k, Decl(file.tsx, 10, 22))
+>"prop-name" : Symbol("prop-name", Decl(file.tsx, 10, 26))
+
+	return <div>Hi Hi</div>;
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+>div : Symbol(JSX.IntrinsicElements.div, Decl(react.d.ts, 2400, 45))
+}
+
+// OK
+let a = <Greet name='world' />;
+>a : Symbol(a, Decl(file.tsx, 15, 3))
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 1))
+>name : Symbol(name, Decl(file.tsx, 15, 14))
+
+let a1 = <Greet name='world' extra-prop />;
+>a1 : Symbol(a1, Decl(file.tsx, 16, 3))
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 1))
+>name : Symbol(name, Decl(file.tsx, 16, 15))
+>extra-prop : Symbol(extra-prop, Decl(file.tsx, 16, 28))
+
+// Error
+let b = <Greet naaame='world' />;
+>b : Symbol(b, Decl(file.tsx, 18, 3))
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 1))
+>naaame : Symbol(naaame, Decl(file.tsx, 18, 14))
+
+// OK
+let c = <Meet />;
+>c : Symbol(c, Decl(file.tsx, 21, 3))
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+
+let c1 = <Meet extra-prop/>;
+>c1 : Symbol(c1, Decl(file.tsx, 22, 3))
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+>extra-prop : Symbol(extra-prop, Decl(file.tsx, 22, 14))
+
+// OK
+let d = <Meet name='me' />;
+>d : Symbol(d, Decl(file.tsx, 24, 3))
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+>name : Symbol(name, Decl(file.tsx, 24, 13))
+
+// Error
+let e = <Meet name={42} />;
+>e : Symbol(e, Decl(file.tsx, 26, 3))
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+>name : Symbol(name, Decl(file.tsx, 26, 13))
+
+// Error
+let f = <Meet naaaaaaame='no' />;
+>f : Symbol(f, Decl(file.tsx, 28, 3))
+>Meet : Symbol(Meet, Decl(file.tsx, 6, 1))
+>naaaaaaame : Symbol(naaaaaaame, Decl(file.tsx, 28, 13))
+
+// OK
+let g = <MeetAndGreet prop-name="Bob" />;
+>g : Symbol(g, Decl(file.tsx, 31, 3))
+>MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 9, 1))
+>prop-name : Symbol(prop-name, Decl(file.tsx, 31, 21))
+
+// Error
+let h = <MeetAndGreet extra-prop-name="World" />;
+>h : Symbol(h, Decl(file.tsx, 33, 3))
+>MeetAndGreet : Symbol(MeetAndGreet, Decl(file.tsx, 9, 1))
+>extra-prop-name : Symbol(extra-prop-name, Decl(file.tsx, 33, 21))
+
+// Error
+let i = <EmptyPropSFC prop1 />
+>i : Symbol(i, Decl(file.tsx, 36, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>prop1 : Symbol(prop1, Decl(file.tsx, 36, 21))
+
+let i1 = <EmptyPropSFC ref={x => x.greeting.substr(10)} />
+>i1 : Symbol(i1, Decl(file.tsx, 37, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>ref : Symbol(ref, Decl(file.tsx, 37, 22))
+>x : Symbol(x, Decl(file.tsx, 37, 28))
+>x : Symbol(x, Decl(file.tsx, 37, 28))
+
+let o = {
+>o : Symbol(o, Decl(file.tsx, 39, 3))
+
+    prop1: true;
+>prop1 : Symbol(prop1, Decl(file.tsx, 39, 9))
+}
+
+// OK as access properties are allow when spread
+let i2 = <EmptyPropSFC {...o} />
+>i2 : Symbol(i2, Decl(file.tsx, 44, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>o : Symbol(o, Decl(file.tsx, 39, 3))
+
+let o1: any;
+>o1 : Symbol(o1, Decl(file.tsx, 46, 3))
+
+// OK
+let j = <EmptyPropSFC {...o1} />
+>j : Symbol(j, Decl(file.tsx, 48, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>o1 : Symbol(o1, Decl(file.tsx, 46, 3))
+
+let j1 = <EmptyPropSFC />
+>j1 : Symbol(j1, Decl(file.tsx, 49, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+
+let j2 = <EmptyPropSFC data-prop />
+>j2 : Symbol(j2, Decl(file.tsx, 50, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>data-prop : Symbol(data-prop, Decl(file.tsx, 50, 22))
+
+let j3 = <EmptyPropSFC {...{}} />
+>j3 : Symbol(j3, Decl(file.tsx, 51, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+
+let j4 = <EmptyPropSFC {...{ "data-info": "hi"}} />
+>j4 : Symbol(j4, Decl(file.tsx, 52, 3))
+>EmptyPropSFC : Symbol(EmptyPropSFC, Decl(file.tsx, 0, 0))
+>"data-info" : Symbol("data-info", Decl(file.tsx, 52, 28))
+
+

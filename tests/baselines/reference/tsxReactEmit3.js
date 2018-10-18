@@ -1,5 +1,4 @@
 //// [test.tsx]
-
 declare module JSX { interface Element { } }
 declare var React: any;
 

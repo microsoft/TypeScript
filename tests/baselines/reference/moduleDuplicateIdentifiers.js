@@ -42,6 +42,7 @@ export enum Utensils { // Shouldn't error
 
 //// [moduleDuplicateIdentifiers.js]
 "use strict";
+exports.__esModule = true;
 exports.Foo = 2;
 exports.Foo = 42; // Should error
 var FooBar;
@@ -51,14 +52,14 @@ var FooBar;
 (function (FooBar) {
     FooBar.member2 = 42;
 })(FooBar = exports.FooBar || (exports.FooBar = {}));
-var Kettle = (function () {
+var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member1 = 2;
     }
     return Kettle;
 }());
 exports.Kettle = Kettle;
-var Kettle = (function () {
+var Kettle = /** @class */ (function () {
     function Kettle() {
         this.member2 = 42;
     }
@@ -67,12 +68,12 @@ var Kettle = (function () {
 exports.Kettle = Kettle;
 exports.Pot = 2;
 exports.Pot = 42; // Shouldn't error
+var Utensils;
 (function (Utensils) {
     Utensils[Utensils["Spoon"] = 0] = "Spoon";
     Utensils[Utensils["Fork"] = 1] = "Fork";
     Utensils[Utensils["Knife"] = 2] = "Knife";
-})(exports.Utensils || (exports.Utensils = {}));
-var Utensils = exports.Utensils;
+})(Utensils = exports.Utensils || (exports.Utensils = {}));
 (function (Utensils) {
     Utensils[Utensils["Spork"] = 3] = "Spork";
-})(exports.Utensils || (exports.Utensils = {}));
+})(Utensils = exports.Utensils || (exports.Utensils = {}));

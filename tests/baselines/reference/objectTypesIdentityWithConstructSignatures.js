@@ -89,17 +89,17 @@ function foo15(x: any) { }
 
 //// [objectTypesIdentityWithConstructSignatures.js]
 // object types are identical structurally
-var A = (function () {
+var A = /** @class */ (function () {
     function A(x) {
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x) {
     }
     return B;
 }());
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
     }
     return C;

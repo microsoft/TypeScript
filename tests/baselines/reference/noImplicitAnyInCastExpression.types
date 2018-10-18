@@ -1,0 +1,37 @@
+=== tests/cases/compiler/noImplicitAnyInCastExpression.ts ===
+// verify no noImplictAny errors reported with cast expression
+
+interface IFoo {
+    a: number;
+>a : number
+
+    b: string;
+>b : string
+}
+
+// Expr type not assignable to target type
+(<IFoo>{ a: null });
+>(<IFoo>{ a: null }) : IFoo
+><IFoo>{ a: null } : IFoo
+>{ a: null } : { a: null; }
+>a : null
+>null : null
+
+// Expr type assignable to target type
+(<IFoo>{ a: 2, b: undefined });
+>(<IFoo>{ a: 2, b: undefined }) : IFoo
+><IFoo>{ a: 2, b: undefined } : IFoo
+>{ a: 2, b: undefined } : { a: number; b: undefined; }
+>a : number
+>2 : 2
+>b : undefined
+>undefined : undefined
+
+// Neither types is assignable to each other
+(<IFoo>{ c: null });
+>(<IFoo>{ c: null }) : IFoo
+><IFoo>{ c: null } : IFoo
+>{ c: null } : { c: null; }
+>c : null
+>null : null
+

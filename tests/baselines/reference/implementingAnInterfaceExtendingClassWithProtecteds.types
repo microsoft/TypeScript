@@ -1,0 +1,76 @@
+=== tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts ===
+class Foo {
+>Foo : Foo
+
+    protected x: string;
+>x : string
+}
+
+interface I extends Foo {
+    y: number;
+>y : number
+}
+
+class Bar implements I { // error
+>Bar : Bar
+}
+
+class Bar2 implements I { // error
+>Bar2 : Bar2
+
+    y: number;
+>y : number
+}
+
+class Bar3 implements I { // error
+>Bar3 : Bar3
+
+    x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+class Bar4 implements I { // error
+>Bar4 : Bar4
+
+    protected x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+class Bar5 extends Foo implements I { // error
+>Bar5 : Bar5
+>Foo : Foo
+}
+
+class Bar6 extends Foo implements I { // error
+>Bar6 : Bar6
+>Foo : Foo
+
+    protected y: number;
+>y : number
+}
+
+class Bar7 extends Foo implements I {
+>Bar7 : Bar7
+>Foo : Foo
+
+    y: number;
+>y : number
+}
+
+class Bar8 extends Foo implements I {
+>Bar8 : Bar8
+>Foo : Foo
+
+    x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+

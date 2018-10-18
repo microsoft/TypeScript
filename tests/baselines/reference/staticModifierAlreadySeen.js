@@ -5,10 +5,10 @@ class C {
 }
 
 //// [staticModifierAlreadySeen.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.bar = function () { };
+    C.foo = 1;
     return C;
 }());
-C.foo = 1;

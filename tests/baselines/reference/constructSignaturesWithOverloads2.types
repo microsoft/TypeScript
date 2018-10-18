@@ -1,0 +1,100 @@
+=== tests/cases/conformance/types/objectTypeLiteral/constructSignatures/constructSignaturesWithOverloads2.ts ===
+// No errors expected for basic overloads of construct signatures with merged declarations
+
+// clodules
+class C {
+>C : C
+
+    constructor(x: number, y?: string);
+>x : number
+>y : string
+
+    constructor(x: number, y: string);
+>x : number
+>y : string
+
+    constructor(x: number) { }
+>x : number
+}
+module C {
+>C : typeof C
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+
+var r1 = new C(1, '');
+>r1 : C
+>new C(1, '') : C
+>C : typeof C
+>1 : 1
+>'' : ""
+
+class C2<T> {
+>C2 : C2<T>
+
+    constructor(x: T, y?: string);
+>x : T
+>y : string
+
+    constructor(x: T, y: string);
+>x : T
+>y : string
+
+    constructor(x: T) { }
+>x : T
+}
+module C2 {
+>C2 : typeof C2
+
+    export var x = 1;
+>x : number
+>1 : 1
+}
+
+var r2 = new C2(1, '');
+>r2 : C2<number>
+>new C2(1, '') : C2<number>
+>C2 : typeof C2
+>1 : 1
+>'' : ""
+
+// merged interfaces
+interface I {
+    new (x: number, y?: string): C;
+>x : number
+>y : string
+
+    new (x: number, y: string): C;
+>x : number
+>y : string
+}
+
+interface I<T> {
+    new (x: T, y?: number): C2<T>;
+>x : T
+>y : number
+
+    new (x: T, y: number): C2<T>;
+>x : T
+>y : number
+}
+
+var i2: I<number>;
+>i2 : I<number>
+
+var r4 = new i2(1, '');
+>r4 : C
+>new i2(1, '') : C
+>i2 : I<number>
+>1 : 1
+>'' : ""
+
+var r5 = new i2(1, 1);
+>r5 : C2<number>
+>new i2(1, 1) : C2<number>
+>i2 : I<number>
+>1 : 1
+>1 : 1
+

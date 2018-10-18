@@ -1,4 +1,4 @@
-interface IPromise<T> {
+export interface IPromise<T> {
     then<U>(callback: (x: T) => IPromise<U>): IPromise<U>;
 }
 interface Promise<T> {

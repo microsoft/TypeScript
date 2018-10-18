@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public "[|ss|]": any;
+////    public "[|{| "isDefinition": true |}ss|]": any;
 ////}
 ////
 ////var x: Foo;
 ////x.[|ss|];
 ////x["[|ss|]"];
-////x = { "[|ss|]": 0 };
-////x = { [|ss|]: 0 };
+////x = { "[|{| "isWriteAccess": true, "isDefinition": true |}ss|]": 0 };
+////x = { [|{| "isWriteAccess": true, "isDefinition": true |}ss|]: 0 };
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup('(property) Foo["ss"]: any');

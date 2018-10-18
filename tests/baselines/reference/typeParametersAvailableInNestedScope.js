@@ -22,7 +22,7 @@ c.data = c.foo();
 
 
 //// [typeParametersAvailableInNestedScope.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         this.x = function (a) {
             var y;

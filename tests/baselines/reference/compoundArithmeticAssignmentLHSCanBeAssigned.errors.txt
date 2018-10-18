@@ -1,0 +1,47 @@
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(11,7): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(12,7): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(18,7): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(19,7): error TS2532: Object is possibly 'undefined'.
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(25,7): error TS2531: Object is possibly 'null'.
+tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts(26,7): error TS2532: Object is possibly 'undefined'.
+
+
+==== tests/cases/conformance/expressions/assignmentOperator/compoundArithmeticAssignmentLHSCanBeAssigned.ts (6 errors) ====
+    enum E { a, b, c }
+    
+    var a: any;
+    var b: number;
+    var c: E;
+    
+    var x1: any;
+    x1 *= a;
+    x1 *= b;
+    x1 *= c;
+    x1 *= null;
+          ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x1 *= undefined;
+          ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x2: number;
+    x2 *= a;
+    x2 *= b;
+    x2 *= c;
+    x2 *= null;
+          ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x2 *= undefined;
+          ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.
+    
+    var x3: E;
+    x3 *= a;
+    x3 *= b;
+    x3 *= c;
+    x3 *= null;
+          ~~~~
+!!! error TS2531: Object is possibly 'null'.
+    x3 *= undefined;
+          ~~~~~~~~~
+!!! error TS2532: Object is possibly 'undefined'.

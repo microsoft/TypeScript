@@ -41,19 +41,27 @@ class E extends D {
 
 //// [readonlyConstructorAssignment.js]
 // Tests that readonly parameter properties behave like regular readonly properties
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var A = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var A = /** @class */ (function () {
     function A(x) {
         this.x = x;
         this.x = 0;
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     __extends(B, _super);
     function B(x) {
         var _this = _super.call(this, x) || this;
@@ -63,7 +71,7 @@ var B = (function (_super) {
     }
     return B;
 }(A));
-var C = (function (_super) {
+var C = /** @class */ (function (_super) {
     __extends(C, _super);
     // This is the usual behavior of readonly properties:
     // if one is redeclared in a base class, then it can be assigned to.
@@ -75,7 +83,7 @@ var C = (function (_super) {
     }
     return C;
 }(A));
-var D = (function () {
+var D = /** @class */ (function () {
     function D(x) {
         this.x = x;
         this.x = 0;
@@ -83,7 +91,7 @@ var D = (function () {
     return D;
 }());
 // Fails, can't redeclare readonly property
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E(x) {
         var _this = _super.call(this, x) || this;

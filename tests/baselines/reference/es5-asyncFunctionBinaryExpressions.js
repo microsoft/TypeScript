@@ -169,8 +169,7 @@ function binaryLogicalAnd1() {
             switch (_b.label) {
                 case 0:
                     _a = x;
-                    if (!_a)
-                        return [3 /*break*/, 2];
+                    if (!_a) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a = (_b.sent());
@@ -519,19 +518,19 @@ function binaryCompoundAssignment8() {
 }
 function binaryExponentiation() {
     return __awaiter(this, void 0, void 0, function () {
-        var _a, _b, _c, _d, _e, _f;
-        return __generator(this, function (_g) {
-            switch (_g.label) {
+        var _a, _b, _c, _d, _e;
+        return __generator(this, function (_f) {
+            switch (_f.label) {
                 case 0:
                     _b = (_a = Math).pow;
                     return [4 /*yield*/, x];
                 case 1:
-                    _b.apply(_a, [(_g.sent()), y]);
-                    _e = (_d = Math).pow;
-                    _f = [x];
+                    _b.apply(_a, [(_f.sent()), y]);
+                    _d = (_c = Math).pow;
+                    _e = [x];
                     return [4 /*yield*/, y];
                 case 2:
-                    _e.apply(_d, _f.concat([_g.sent()]));
+                    _d.apply(_c, _e.concat([_f.sent()]));
                     return [2 /*return*/];
             }
         });

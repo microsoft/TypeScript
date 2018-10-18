@@ -1,5 +1,4 @@
 //// [multipleExports.ts]
-
 export module M {
     export var v = 0;
     export let x;
@@ -14,6 +13,7 @@ export module M {
 
 //// [multipleExports.js]
 "use strict";
+exports.__esModule = true;
 var M;
 (function (M) {
     M.v = 0;

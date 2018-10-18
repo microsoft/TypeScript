@@ -1,48 +1,42 @@
 /// <reference path="fourslash.ts"/>
 
-/////**/
+////
 
-goTo.marker();
-verify.memberListContains("break");
-verify.memberListContains("case");
-verify.memberListContains("catch");
-verify.memberListContains("class");
-verify.memberListContains("constructor");
-verify.memberListContains("continue");
-verify.memberListContains("debugger");
-verify.memberListContains("declare");
-verify.memberListContains("default");
-verify.memberListContains("delete");
-verify.memberListContains("do");
-verify.memberListContains("else");
-verify.memberListContains("enum");
-verify.memberListContains("export");
-verify.memberListContains("extends");
-verify.memberListContains("false");
-verify.memberListContains("finally");
-verify.memberListContains("for");
-verify.memberListContains("function");
-verify.memberListContains("get");
-verify.memberListContains("if");
-verify.memberListContains("implements");
-verify.memberListContains("import");
-verify.memberListContains("in");
-verify.memberListContains("instanceof");
-verify.memberListContains("interface");
-verify.memberListContains("module");
-verify.memberListContains("new");
-verify.memberListContains("private");
-verify.memberListContains("public");
-verify.memberListContains("return");
-verify.memberListContains("set");
-verify.memberListContains("static");
-verify.memberListContains("super");
-verify.memberListContains("switch");
-verify.memberListContains("this");
-verify.memberListContains("throw");
-verify.memberListContains("true");
-verify.memberListContains("try");
-verify.memberListContains("typeof");
-verify.memberListContains("var");
-verify.memberListContains("while");
-verify.memberListContains("with");
+verify.completions({
+    includes: [
+        "break",
+        "case",
+        "catch",
+        "class",
+        "continue",
+        "debugger",
+        "declare",
+        "default",
+        "delete",
+        "do",
+        "else",
+        "enum",
+        "export",
+        "extends",
+        "false",
+        "finally",
+        "for",
+        "function",
+        "if",
+        "instanceof",
+        "interface",
+        "module",
+        "new",
+        "return",
+        "super",
+        "switch",
+        "this",
+        "throw",
+        "true",
+        "try",
+        "typeof",
+        "var",
+        "while",
+        "with",
+    ],
+});

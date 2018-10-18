@@ -1,9 +1,9 @@
 ﻿/// <reference path="fourslash.ts"/>
 
-////interface [|Base|] { }
+////interface [|{| "isWriteAccess": true, "isDefinition": true |}Base|] { }
 ////namespace n {
 ////    var Base = class { };
 ////    interface I extends [|Base|] { }
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("interface Base");

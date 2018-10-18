@@ -1,5 +1,4 @@
 === tests/cases/compiler/utils.ts ===
-
 export function foo() { }
 >foo : () => void
 
@@ -7,7 +6,6 @@ export function bar() { }
 >bar : () => void
 
 export interface Buzz { }
->Buzz : Buzz
 
 === tests/cases/compiler/index.ts ===
 import {foo, bar, Buzz} from "./utils";
@@ -21,7 +19,6 @@ foo();
 
 let obj: Buzz;
 >obj : Buzz
->Buzz : Buzz
 
 export {bar};
 >bar : () => void

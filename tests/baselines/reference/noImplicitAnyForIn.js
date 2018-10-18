@@ -1,5 +1,4 @@
 //// [noImplicitAnyForIn.ts]
-
 var x: {}[] = [[1, 2, 3], ["hello"]];
 
 for (var i in x) {

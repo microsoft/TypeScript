@@ -15,8 +15,6 @@
 ////    console.log([|primary|]);
 ////}
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+const [r0, r1, r2, r3] = test.ranges();
+verify.renameLocations([r0, r1], [r0, r1, { range: r2, suffixText: ": primary" }]);
+verify.renameLocations([r2, r3], [{ range: r2, prefixText: "primary: " }, r3]);

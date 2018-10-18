@@ -28,22 +28,22 @@
 
 // Sub class, everything but private is visible
 goTo.marker("1");
-verify.not.memberListContains('privateMethod');
-verify.not.memberListContains('privateProperty');
-verify.memberListContains('protectedMethod');
-verify.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.memberListContains('protectedOverriddenMethod');
-verify.memberListContains('protectedOverriddenProperty');
+verify.not.completionListContains('privateMethod');
+verify.not.completionListContains('privateProperty');
+verify.completionListContains('protectedMethod');
+verify.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.completionListContains('protectedOverriddenMethod');
+verify.completionListContains('protectedOverriddenProperty');
 
 // Can see protected methods elevated to public
 goTo.marker("2");
-verify.not.memberListContains('privateMethod');
-verify.not.memberListContains('privateProperty');
-verify.not.memberListContains('protectedMethod');
-verify.not.memberListContains('protectedProperty');
-verify.memberListContains('publicMethod');
-verify.memberListContains('publicProperty');
-verify.memberListContains('protectedOverriddenMethod');
-verify.memberListContains('protectedOverriddenProperty');
+verify.not.completionListContains('privateMethod');
+verify.not.completionListContains('privateProperty');
+verify.not.completionListContains('protectedMethod');
+verify.not.completionListContains('protectedProperty');
+verify.completionListContains('publicMethod');
+verify.completionListContains('publicProperty');
+verify.completionListContains('protectedOverriddenMethod');
+verify.completionListContains('protectedOverriddenProperty');

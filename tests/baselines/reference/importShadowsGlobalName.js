@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/importShadowsGlobalName.ts] ////
 
 //// [Foo.ts]
-
 class Foo {}
 export = Foo;
 
@@ -13,7 +12,7 @@ export = Bar;
 //// [Foo.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Foo = (function () {
+    var Foo = /** @class */ (function () {
         function Foo() {
         }
         return Foo;
@@ -21,17 +20,25 @@ define(["require", "exports"], function (require, exports) {
     return Foo;
 });
 //// [Bar.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 define(["require", "exports", "Foo"], function (require, exports, Error) {
     "use strict";
-    var Bar = (function (_super) {
+    var Bar = /** @class */ (function (_super) {
         __extends(Bar, _super);
         function Bar() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return Bar;
     }(Error));

@@ -1,12 +1,11 @@
 === tests/cases/compiler/unusedGetterInClass.ts ===
-
 class Employee {
 >Employee : Employee
 
     private _fullName: string;
 >_fullName : string
 
-    get fullName(): string {
+    private get fullName(): string {
 >fullName : string
 
         return this._fullName;
@@ -14,4 +13,8 @@ class Employee {
 >this : this
 >_fullName : string
     }
+    // Will not also error on the setter
+    private set fullName(_: string) {}
+>fullName : string
+>_ : string
 }

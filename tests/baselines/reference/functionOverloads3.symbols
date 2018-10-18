@@ -1,0 +1,4 @@
+=== tests/cases/compiler/functionOverloads3.ts ===
+function foo():string;
+>foo : Symbol(foo, Decl(functionOverloads3.ts, 0, 0))
+

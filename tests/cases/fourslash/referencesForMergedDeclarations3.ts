@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts'/>
 
-// class and uninstanciated module
+// class and uninstantiated module
 
-////class [|testClass|] {
+////class [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
 ////    static staticMethod() { }
 ////    method() { }
 ////}
 ////
-////module [|testClass|] {
+////module [|{| "isWriteAccess": true, "isDefinition": true |}testClass|] {
 ////    export interface Bar {
 ////
 ////    }
@@ -21,5 +21,6 @@
 ////new [|testClass|]();
 
 const [class0, module0, class1, module1, class2, class3, class4, class5] = test.ranges();
-verify.rangesReferenceEachOther([module0, module1]);
-verify.rangesReferenceEachOther([class0, class1, class2, class3, class4, class5]);
+verify.singleReferenceGroup("class testClass\nnamespace testClass", [module0, module1]);
+const classes = [class0, class1, class2, class3, class4, class5];
+verify.referenceGroups(classes, [{ definition: "class testClass\nnamespace testClass", ranges: classes }]);

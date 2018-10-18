@@ -1,9 +1,7 @@
 === tests/cases/conformance/async/es5/asyncArrowFunction/asyncUnParenthesizedArrowFunction_es5.ts ===
-
 declare function someOtherFunction(i: any): Promise<void>;
 >someOtherFunction : (i: any) => Promise<void>
 >i : any
->Promise : Promise<T>
 
 const x = async i => await someOtherFunction(i)
 >x : (i: any) => Promise<void>

@@ -11,7 +11,7 @@ let Foo = class {
 }
 
 //// [functionsInClassExpressions.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function class_1() {
         var _this = this;
         this.bar = 0;

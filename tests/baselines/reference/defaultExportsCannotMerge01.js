@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/defaultExportsCannotMerge01.ts] ////
 
 //// [m1.ts]
-
 export default function Decl() {
     return 0;
 }
@@ -32,18 +31,18 @@ Entity.y;
 
 //// [m1.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 function Decl() {
     return 0;
 }
-Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = Decl;
-var Decl;
 (function (Decl) {
     Decl.x = 10;
     Decl.y = 20;
 })(Decl = exports.Decl || (exports.Decl = {}));
 //// [m2.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var m1_1 = require("m1");
 m1_1.default();
 var x;

@@ -1,5 +1,5 @@
 tests/cases/compiler/objectLiteralExcessProperties.ts(9,18): error TS2322: Type '{ forword: string; }' is not assignable to type 'Book'.
-  Object literal may only specify known properties, and 'forword' does not exist in type 'Book'.
+  Object literal may only specify known properties, but 'forword' does not exist in type 'Book'. Did you mean to write 'foreword'?
 tests/cases/compiler/objectLiteralExcessProperties.ts(11,27): error TS2322: Type '{ foreward: string; }' is not assignable to type 'string | Book'.
   Object literal may only specify known properties, and 'foreward' does not exist in type 'string | Book'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(13,53): error TS2322: Type '({ foreword: string; } | { forwards: string; })[]' is not assignable to type 'Book | Book[]'.
@@ -8,9 +8,9 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(13,53): error TS2322: Type
       Type '{ forwards: string; }' is not assignable to type 'Book'.
         Object literal may only specify known properties, and 'forwards' does not exist in type 'Book'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(15,42): error TS2322: Type '{ foreword: string; colour: string; }' is not assignable to type 'Book & Cover'.
-  Object literal may only specify known properties, and 'colour' does not exist in type 'Book & Cover'.
+  Object literal may only specify known properties, but 'colour' does not exist in type 'Book & Cover'. Did you mean to write 'color'?
 tests/cases/compiler/objectLiteralExcessProperties.ts(17,26): error TS2322: Type '{ foreward: string; color: string; }' is not assignable to type 'Book & Cover'.
-  Object literal may only specify known properties, and 'foreward' does not exist in type 'Book & Cover'.
+  Object literal may only specify known properties, but 'foreward' does not exist in type 'Book & Cover'. Did you mean to write 'foreword'?
 tests/cases/compiler/objectLiteralExcessProperties.ts(19,57): error TS2322: Type '{ foreword: string; color: string; price: number; }' is not assignable to type 'Book & Cover'.
   Object literal may only specify known properties, and 'price' does not exist in type 'Book & Cover'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(21,43): error TS2322: Type '{ foreword: string; price: number; }' is not assignable to type 'Book & number'.
@@ -19,10 +19,8 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(23,29): error TS2322: Type
   Object literal may only specify known properties, and 'couleur' does not exist in type 'Cover | Cover[]'.
 tests/cases/compiler/objectLiteralExcessProperties.ts(25,27): error TS2322: Type '{ forewarned: string; }' is not assignable to type 'Book | Book[]'.
   Object literal may only specify known properties, and 'forewarned' does not exist in type 'Book | Book[]'.
-tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type '{ 0: { colour: string; }; }' is not assignable to type 'Indexed'.
-  Property '0' is incompatible with index signature.
-    Type '{ colour: string; }' is not assignable to type 'Cover'.
-      Object literal may only specify known properties, and 'colour' does not exist in type 'Cover'.
+tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
+  Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
 
 
 ==== tests/cases/compiler/objectLiteralExcessProperties.ts (10 errors) ====
@@ -37,7 +35,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
     var b1: Book = { forword: "oops" };
                      ~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ forword: string; }' is not assignable to type 'Book'.
-!!! error TS2322:   Object literal may only specify known properties, and 'forword' does not exist in type 'Book'.
+!!! error TS2322:   Object literal may only specify known properties, but 'forword' does not exist in type 'Book'. Did you mean to write 'foreword'?
     
     var b2: Book | string = { foreward: "nope" };
                               ~~~~~~~~~~~~~~~~
@@ -55,12 +53,12 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
     var b4: Book & Cover = { foreword: "hi", colour: "blue" };
                                              ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ foreword: string; colour: string; }' is not assignable to type 'Book & Cover'.
-!!! error TS2322:   Object literal may only specify known properties, and 'colour' does not exist in type 'Book & Cover'.
+!!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Book & Cover'. Did you mean to write 'color'?
     
     var b5: Book & Cover = { foreward: "hi", color: "blue" };
                              ~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ foreward: string; color: string; }' is not assignable to type 'Book & Cover'.
-!!! error TS2322:   Object literal may only specify known properties, and 'foreward' does not exist in type 'Book & Cover'.
+!!! error TS2322:   Object literal may only specify known properties, but 'foreward' does not exist in type 'Book & Cover'. Did you mean to write 'foreword'?
     
     var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
                                                             ~~~~~~~~~~~~
@@ -90,8 +88,7 @@ tests/cases/compiler/objectLiteralExcessProperties.ts(33,27): error TS2322: Type
     
     var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
                               ~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ 0: { colour: string; }; }' is not assignable to type 'Indexed'.
-!!! error TS2322:   Property '0' is incompatible with index signature.
-!!! error TS2322:     Type '{ colour: string; }' is not assignable to type 'Cover'.
-!!! error TS2322:       Object literal may only specify known properties, and 'colour' does not exist in type 'Cover'.
+!!! error TS2322: Type '{ colour: string; }' is not assignable to type 'Cover'.
+!!! error TS2322:   Object literal may only specify known properties, but 'colour' does not exist in type 'Cover'. Did you mean to write 'color'?
+!!! related TS6501 tests/cases/compiler/objectLiteralExcessProperties.ts:28:5: The expected type comes from this index signature.
     

@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/externalModules/umd-augmentation-3.ts] ////
 
 //// [index.d.ts]
-
 export as namespace Math2d;
 
 export = M2D;
@@ -47,6 +46,7 @@ var t = p.x;
 
 //// [b.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="math2d-augment.d.ts" />
 var m = require("math2d");
 var v = new m.Vector(3, 2);

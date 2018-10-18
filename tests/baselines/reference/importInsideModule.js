@@ -11,6 +11,7 @@ export module myModule {
 
 //// [importInsideModule_file2.js]
 "use strict";
+exports.__esModule = true;
 var myModule;
 (function (myModule) {
     var a = foo.x;

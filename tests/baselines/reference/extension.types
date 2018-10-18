@@ -1,0 +1,65 @@
+=== tests/cases/compiler/extension.ts ===
+interface I {
+    x;
+>x : any
+}
+
+interface I {
+    y;
+>y : any
+}
+
+declare module M {
+>M : typeof M
+
+    export class C {
+>C : C
+
+        public p:number;
+>p : number
+    }
+}
+
+declare module M {
+>M : typeof M
+
+    export extension class C {
+>extension : any
+>C : M.C
+
+        public pe:string;
+>pe : string
+    }
+}
+
+var c=new M.C();
+>c : M.C
+>new M.C() : M.C
+>M.C : typeof M.C
+>M : typeof M
+>C : typeof M.C
+
+c.pe;
+>c.pe : any
+>c : M.C
+>pe : any
+
+c.p;
+>c.p : number
+>c : M.C
+>p : number
+
+var i:I;
+>i : I
+
+i.x;
+>i.x : any
+>i : I
+>x : any
+
+i.y;
+>i.y : any
+>i : I
+>y : any
+
+

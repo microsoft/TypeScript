@@ -1,0 +1,29 @@
+=== tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
+var x: Number;
+>x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var y: Number;
+>y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var z = x + y;
+>z : Symbol(z, Decl(arithmeticOnInvalidTypes.ts, 2, 3))
+>x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
+>y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
+
+var z2 = x - y;
+>z2 : Symbol(z2, Decl(arithmeticOnInvalidTypes.ts, 3, 3))
+>x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
+>y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
+
+var z3 = x * y;
+>z3 : Symbol(z3, Decl(arithmeticOnInvalidTypes.ts, 4, 3))
+>x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
+>y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
+
+var z4 = x / y;
+>z4 : Symbol(z4, Decl(arithmeticOnInvalidTypes.ts, 5, 3))
+>x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
+>y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
+

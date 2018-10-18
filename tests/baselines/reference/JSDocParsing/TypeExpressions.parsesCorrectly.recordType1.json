@@ -1,15 +1,11 @@
 {
-    "kind": "JSDocRecordType",
+    "kind": "TypeLiteral",
     "pos": 1,
     "end": 3,
-    "literal": {
-        "kind": "TypeLiteral",
-        "pos": 1,
-        "end": 3,
-        "members": {
-            "length": 0,
-            "pos": 2,
-            "end": 2
-        }
+    "flags": "JSDoc",
+    "members": {
+        "length": 0,
+        "pos": 2,
+        "end": 2
     }
 }

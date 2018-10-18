@@ -4,13 +4,12 @@ export default class C {}
 
 //// [multipleExportDefault5.js]
 "use strict";
-function bar() { }
 exports.__esModule = true;
+function bar() { }
 exports["default"] = bar;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
-exports.__esModule = true;
 exports["default"] = C;

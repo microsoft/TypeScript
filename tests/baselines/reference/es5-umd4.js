@@ -1,5 +1,4 @@
 //// [es5-umd4.ts]
-
 class A
 {
     constructor ()
@@ -17,16 +16,17 @@ export = A;
 
 
 //// [es5-umd4.js]
-(function (dependencies, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+(function (factory) {
+    if (typeof module === "object" && typeof module.exports === "object") {
+        var v = factory(require, exports);
+        if (v !== undefined) module.exports = v;
     }
-    else if (typeof define === 'function' && define.amd) {
-        define(dependencies, factory);
+    else if (typeof define === "function" && define.amd) {
+        define(["require", "exports"], factory);
     }
-})(["require", "exports"], function (require, exports) {
+})(function (require, exports) {
     "use strict";
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         A.prototype.B = function () {

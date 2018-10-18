@@ -6,6 +6,6 @@
 ////}
 ////
 ////var foo: I;
-////var { /*use*/property1: prop1 } = foo;
+////var { [|/*use*/property1|]: prop1 } = foo;
 
 verify.goToDefinition("use", "def");

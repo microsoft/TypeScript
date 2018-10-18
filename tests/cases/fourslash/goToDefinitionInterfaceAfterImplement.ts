@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-/////*interfaceDefinition*/interface sInt {
+////interface /*interfaceDefinition*/sInt {
 ////    sVar: number;
 ////    sFn: () => void;
 ////}

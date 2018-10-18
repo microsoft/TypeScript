@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -88,7 +82,7 @@ var p = 0;
    </div>;
 >div : any
 
-// Emit "foo" + ' ' + "bar"
+// Emit "foo bar"
 <div>  
 ><div>     foo bar     </div> : JSX.Element
 >div : any
@@ -100,4 +94,23 @@ var p = 0;
   </div>;
 >div : any
 
+// Emit "hello\\ world"
+<div>
+><div>    hello\world</div> : JSX.Element
+>div : any
+
+    hello\
+
+world
+</div>;
+>div : any
+
+// Emit "  a b  c d  "
+<div>  a
+><div>  a    b  c    d  </div> : JSX.Element
+>div : any
+
+    b  c
+    d  </div>;
+>div : any
 

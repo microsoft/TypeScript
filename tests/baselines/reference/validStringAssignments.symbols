@@ -8,7 +8,7 @@ var a: any = x;
 
 var b: Object = x;
 >b : Symbol(b, Decl(validStringAssignments.ts, 3, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 
 var c: string = x;
@@ -17,6 +17,6 @@ var c: string = x;
 
 var d: String = x;
 >d : Symbol(d, Decl(validStringAssignments.ts, 5, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(validStringAssignments.ts, 0, 3))
 

@@ -155,8 +155,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 6 >                                                
 7 >                                                  primarySkillA
 8 >                                                                       , 
-9 >                                                                         secondarySkillA
-10>                                                                                                ]] = multiRobotA;
+9 >                                                                         secondarySkillA]
+10>                                                                                                ] = multiRobotA;
 1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
 2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
 3 >Emitted(5, 28) Source(10, 12) + SourceIndex(0)
@@ -165,7 +165,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 6 >Emitted(5, 51) Source(10, 15) + SourceIndex(0)
 7 >Emitted(5, 72) Source(10, 28) + SourceIndex(0)
 8 >Emitted(5, 74) Source(10, 30) + SourceIndex(0)
-9 >Emitted(5, 97) Source(10, 45) + SourceIndex(0)
+9 >Emitted(5, 97) Source(10, 46) + SourceIndex(0)
 10>Emitted(5, 98) Source(10, 62) + SourceIndex(0)
 ---
 >>>var nameMC = ["roomba", ["vaccum", "mopping"]][0];
@@ -209,8 +209,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 8 >                                                                       
 9 >                                                                         primarySkillC
 10>                                                                                              , 
-11>                                                                                                secondarySkillC
-12>                                                                                                                       ]] = ["roomba", ["vaccum", "mopping"]];
+11>                                                                                                secondarySkillC]] = ["roomba", ["vaccum", "mopping"]]
+12>                                                                                                                       ;
 1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 84) + SourceIndex(0)
@@ -221,7 +221,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 8 >Emitted(7, 74) Source(13, 16) + SourceIndex(0)
 9 >Emitted(7, 95) Source(13, 29) + SourceIndex(0)
 10>Emitted(7, 97) Source(13, 31) + SourceIndex(0)
-11>Emitted(7, 120) Source(13, 46) + SourceIndex(0)
+11>Emitted(7, 120) Source(13, 84) + SourceIndex(0)
 12>Emitted(7, 121) Source(13, 85) + SourceIndex(0)
 ---
 >>>var multiRobotAInfo = multiRobotA.slice(0);
@@ -242,38 +242,26 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 ---
 >>>if (nameMB == nameMA) {
 1 >
-2 >^^
-3 >  ^
-4 >   ^
-5 >    ^^^^^^
-6 >          ^^^^
-7 >              ^^^^^^
-8 >                    ^
-9 >                     ^
-10>                      ^
-11>                       ^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^^
+5 >              ^^^^^^
+6 >                    ^^
+7 >                      ^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >if
-3 >   
-4 >   (
-5 >    nameMB
-6 >           == 
-7 >              nameMA
-8 >                    )
-9 >                      
-10>                      {
+2 >if (
+3 >    nameMB
+4 >           == 
+5 >              nameMA
+6 >                    ) 
 1 >Emitted(9, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(9, 3) Source(17, 3) + SourceIndex(0)
-3 >Emitted(9, 4) Source(17, 4) + SourceIndex(0)
-4 >Emitted(9, 5) Source(17, 5) + SourceIndex(0)
-5 >Emitted(9, 11) Source(17, 11) + SourceIndex(0)
-6 >Emitted(9, 15) Source(17, 15) + SourceIndex(0)
-7 >Emitted(9, 21) Source(17, 21) + SourceIndex(0)
-8 >Emitted(9, 22) Source(17, 22) + SourceIndex(0)
-9 >Emitted(9, 23) Source(17, 23) + SourceIndex(0)
-10>Emitted(9, 24) Source(17, 24) + SourceIndex(0)
+2 >Emitted(9, 5) Source(17, 5) + SourceIndex(0)
+3 >Emitted(9, 11) Source(17, 11) + SourceIndex(0)
+4 >Emitted(9, 15) Source(17, 15) + SourceIndex(0)
+5 >Emitted(9, 21) Source(17, 21) + SourceIndex(0)
+6 >Emitted(9, 23) Source(17, 23) + SourceIndex(0)
 ---
 >>>    console.log(skillA[0] + skillA[1]);
 1->^^^^
@@ -292,7 +280,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 14>                                    ^
 15>                                     ^
 16>                                      ^
-1->
+1->{
   >    
 2 >    console
 3 >           .
@@ -327,13 +315,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPattern2
 16>Emitted(10, 40) Source(18, 40) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(11, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(11, 2) Source(19, 2) + SourceIndex(0)
+  >}
+1 >Emitted(11, 2) Source(19, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern2.js.map

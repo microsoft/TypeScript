@@ -1,0 +1,30 @@
+=== tests/cases/compiler/numericIndexerTyping2.ts ===
+class I {
+>I : Symbol(I, Decl(numericIndexerTyping2.ts, 0, 0))
+
+    [x: string]: Date
+>x : Symbol(x, Decl(numericIndexerTyping2.ts, 1, 5))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+}
+
+class I2 extends I {
+>I2 : Symbol(I2, Decl(numericIndexerTyping2.ts, 2, 1))
+>I : Symbol(I, Decl(numericIndexerTyping2.ts, 0, 0))
+}
+
+var i: I;
+>i : Symbol(i, Decl(numericIndexerTyping2.ts, 7, 3))
+>I : Symbol(I, Decl(numericIndexerTyping2.ts, 0, 0))
+
+var r: string = i[1]; // error: numeric indexer returns the type of the string indexer
+>r : Symbol(r, Decl(numericIndexerTyping2.ts, 8, 3))
+>i : Symbol(i, Decl(numericIndexerTyping2.ts, 7, 3))
+
+var i2: I2;
+>i2 : Symbol(i2, Decl(numericIndexerTyping2.ts, 10, 3))
+>I2 : Symbol(I2, Decl(numericIndexerTyping2.ts, 2, 1))
+
+var r2: string = i2[1]; // error: numeric indexer returns the type of the string indexere
+>r2 : Symbol(r2, Decl(numericIndexerTyping2.ts, 11, 3))
+>i2 : Symbol(i2, Decl(numericIndexerTyping2.ts, 10, 3))
+

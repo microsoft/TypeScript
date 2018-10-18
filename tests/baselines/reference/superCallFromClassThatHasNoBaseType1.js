@@ -1,5 +1,4 @@
 //// [superCallFromClassThatHasNoBaseType1.ts]
-
 class A {
     constructor(private map: (value: number) => string) {
 
@@ -11,13 +10,13 @@ class B {
 }
 
 //// [superCallFromClassThatHasNoBaseType1.js]
-var A = (function () {
+var A = /** @class */ (function () {
     function A(map) {
         this.map = map;
     }
     return A;
 }());
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         _this = _super.call(this, function (value) { return String(value); }) || this;
     }

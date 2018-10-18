@@ -1,5 +1,4 @@
 //// [templateStringMultiline3_ES6.ts]
-
 // newlines are <CR>
 `
 \

@@ -10,17 +10,8 @@
 ////x1('hi'/*2*/);
 ////x1('bye'/*3*/);
 
-goTo.marker('1');
-verify.signatureHelpCountIs(3);
-verify.currentParameterHelpArgumentNameIs("z");
-verify.currentParameterSpanIs("z: string");
-
-goTo.marker('2');
-verify.signatureHelpCountIs(3);
-verify.currentParameterHelpArgumentNameIs("x");
-verify.currentParameterSpanIs("x: \"hi\"");
-
-goTo.marker('3');
-verify.signatureHelpCountIs(3);
-verify.currentParameterHelpArgumentNameIs("y");
-verify.currentParameterSpanIs("y: \"bye\"");
+verify.signatureHelp(
+    { marker: "1", overloadsCount: 3, parameterName: "z", parameterSpan: "z: string" },
+    { marker: "2", overloadsCount: 3, parameterName: "x", parameterSpan: 'x: "hi"' },
+    { marker: "3", overloadsCount: 3, parameterName: "y", parameterSpan: 'y: "bye"' },
+);

@@ -5,7 +5,7 @@
 
 //// /**
 ////  * @typedef {Object} Person
-////  * /*1*/@property {string} personName
+////  * @property {string} /*1*/personName
 ////  * @property {number} personAge
 ////  */
 ////
@@ -14,10 +14,10 @@
 ////  */
 ////
 //// /** @type {Person} */
-//// var person; person.personName/*3*/
+//// var person; person.[|personName/*3*/|]
 ////
 //// /** @type {Animal} */
-//// var animal; animal.animalName/*4*/
+//// var animal; animal.[|animalName/*4*/|]
 
 verify.goToDefinition({
     3: "1",

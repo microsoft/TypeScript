@@ -4,4 +4,4 @@
 /////**/
 
 goTo.marker();
-verify.memberListContains("a");
+verify.completionListContains("a");

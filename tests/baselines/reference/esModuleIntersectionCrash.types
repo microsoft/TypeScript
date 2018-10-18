@@ -1,0 +1,31 @@
+=== tests/cases/compiler/mod.d.ts ===
+export = modObj;
+>modObj : modObj.A & modObj.B
+
+declare const modObj: modObj.A & modObj.B;
+>modObj : modObj.A & modObj.B
+>modObj : any
+>modObj : any
+
+declare namespace modObj {
+    interface A { (): void; a: string; }
+>a : string
+
+    interface B { (x: string): void; b: string; }
+>x : string
+>b : string
+}
+=== tests/cases/compiler/idx.ts ===
+import * as mod from "./mod";
+>mod : { default: mod.A & mod.B; a: string; b: string; }
+
+mod.a;
+>mod.a : string
+>mod : { default: mod.A & mod.B; a: string; b: string; }
+>a : string
+
+mod.b;
+>mod.b : string
+>mod : { default: mod.A & mod.B; a: string; b: string; }
+>b : string
+

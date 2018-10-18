@@ -1,0 +1,129 @@
+=== tests/cases/compiler/letDeclarations-scopes-duplicates.ts ===
+// Errors: redeclaration
+let var1 = 0;
+>var1 : Symbol(var1, Decl(letDeclarations-scopes-duplicates.ts, 1, 3))
+
+let var1 = 0; // error
+>var1 : Symbol(var1, Decl(letDeclarations-scopes-duplicates.ts, 2, 3))
+
+let var2 = 0;
+>var2 : Symbol(var2, Decl(letDeclarations-scopes-duplicates.ts, 4, 3))
+
+const var2 = 0;
+>var2 : Symbol(var2, Decl(letDeclarations-scopes-duplicates.ts, 5, 5))
+
+const var3 = 0;
+>var3 : Symbol(var3, Decl(letDeclarations-scopes-duplicates.ts, 7, 5))
+
+let var3 = 0;
+>var3 : Symbol(var3, Decl(letDeclarations-scopes-duplicates.ts, 8, 3))
+
+const var4 = 0;
+>var4 : Symbol(var4, Decl(letDeclarations-scopes-duplicates.ts, 10, 5))
+
+const var4 = 0;
+>var4 : Symbol(var4, Decl(letDeclarations-scopes-duplicates.ts, 11, 5))
+
+var var5 = 0;
+>var5 : Symbol(var5, Decl(letDeclarations-scopes-duplicates.ts, 13, 3))
+
+let var5 = 0;
+>var5 : Symbol(var5, Decl(letDeclarations-scopes-duplicates.ts, 14, 3))
+
+let var6 = 0;
+>var6 : Symbol(var6, Decl(letDeclarations-scopes-duplicates.ts, 16, 3))
+
+var var6 = 0;
+>var6 : Symbol(var6, Decl(letDeclarations-scopes-duplicates.ts, 17, 3))
+
+{
+    let var7 = 0;
+>var7 : Symbol(var7, Decl(letDeclarations-scopes-duplicates.ts, 20, 7))
+
+    let var7 = 0;
+>var7 : Symbol(var7, Decl(letDeclarations-scopes-duplicates.ts, 21, 7))
+    {
+        let var8 = 0;
+>var8 : Symbol(var8, Decl(letDeclarations-scopes-duplicates.ts, 23, 11))
+
+        const var8 = 0;
+>var8 : Symbol(var8, Decl(letDeclarations-scopes-duplicates.ts, 24, 13))
+    }
+}
+
+switch (0) {
+    default:
+        let var9 = 0;
+>var9 : Symbol(var9, Decl(letDeclarations-scopes-duplicates.ts, 30, 11))
+
+        let var9 = 0;
+>var9 : Symbol(var9, Decl(letDeclarations-scopes-duplicates.ts, 31, 11))
+}
+
+try {
+    const var10 = 0;
+>var10 : Symbol(var10, Decl(letDeclarations-scopes-duplicates.ts, 35, 9))
+
+    const var10 = 0;
+>var10 : Symbol(var10, Decl(letDeclarations-scopes-duplicates.ts, 36, 9))
+}
+catch (e) {
+>e : Symbol(e, Decl(letDeclarations-scopes-duplicates.ts, 38, 7))
+
+    let var11 = 0;
+>var11 : Symbol(var11, Decl(letDeclarations-scopes-duplicates.ts, 39, 7))
+
+    let var11 = 0;
+>var11 : Symbol(var11, Decl(letDeclarations-scopes-duplicates.ts, 40, 7))
+}
+
+function F1() {
+>F1 : Symbol(F1, Decl(letDeclarations-scopes-duplicates.ts, 41, 1))
+
+    let var12;
+>var12 : Symbol(var12, Decl(letDeclarations-scopes-duplicates.ts, 44, 7))
+
+    let var12;
+>var12 : Symbol(var12, Decl(letDeclarations-scopes-duplicates.ts, 45, 7))
+}
+
+// OK
+var var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 49, 3), Decl(letDeclarations-scopes-duplicates.ts, 51, 3))
+
+var var20 = 0
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 49, 3), Decl(letDeclarations-scopes-duplicates.ts, 51, 3))
+{
+    let var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 53, 7))
+    {
+        let var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 55, 11))
+    }
+}
+
+switch (0) {
+    default:
+        let var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 61, 11))
+}
+
+try {
+    let var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 65, 7))
+}
+catch (e) {
+>e : Symbol(e, Decl(letDeclarations-scopes-duplicates.ts, 67, 7))
+
+    let var20 = 0;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 68, 7))
+}
+
+function F() {
+>F : Symbol(F, Decl(letDeclarations-scopes-duplicates.ts, 69, 1))
+
+    let var20;
+>var20 : Symbol(var20, Decl(letDeclarations-scopes-duplicates.ts, 72, 7))
+}
+
+

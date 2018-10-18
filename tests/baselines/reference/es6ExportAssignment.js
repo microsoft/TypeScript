@@ -1,5 +1,4 @@
 //// [es6ExportAssignment.ts]
-
 var a = 10;
 export = a;
 

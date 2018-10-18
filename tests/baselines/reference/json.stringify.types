@@ -1,7 +1,6 @@
 === tests/cases/compiler/json.stringify.ts ===
-
 var value = null;
->value : any
+>value : null
 >null : null
 
 JSON.stringify(value, undefined, 2);

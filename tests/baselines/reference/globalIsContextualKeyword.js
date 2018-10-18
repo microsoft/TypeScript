@@ -21,7 +21,7 @@ function a() {
     var global = 1;
 }
 function b() {
-    var global = (function () {
+    var global = /** @class */ (function () {
         function global() {
         }
         return global;

@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/LeftShifts/parserErrorRecovery_LeftShift1.ts ===
+retValue = bfs.VARIABLES >> );
+No type information for this code.

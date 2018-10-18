@@ -1,0 +1,32 @@
+=== tests/cases/compiler/typeofUsedBeforeBlockScoped.ts ===
+type T = typeof C & typeof C.s & typeof o & typeof o.n;
+>T : Symbol(T, Decl(typeofUsedBeforeBlockScoped.ts, 0, 0))
+>C : Symbol(C, Decl(typeofUsedBeforeBlockScoped.ts, 0, 55))
+>C.s : Symbol(C.s, Decl(typeofUsedBeforeBlockScoped.ts, 1, 9))
+>C : Symbol(C, Decl(typeofUsedBeforeBlockScoped.ts, 0, 55))
+>s : Symbol(C.s, Decl(typeofUsedBeforeBlockScoped.ts, 1, 9))
+>o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
+>o.n : Symbol(n, Decl(typeofUsedBeforeBlockScoped.ts, 6, 9))
+>o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
+>n : Symbol(n, Decl(typeofUsedBeforeBlockScoped.ts, 6, 9))
+
+class C {
+>C : Symbol(C, Decl(typeofUsedBeforeBlockScoped.ts, 0, 55))
+
+    static s = 2;
+>s : Symbol(C.s, Decl(typeofUsedBeforeBlockScoped.ts, 1, 9))
+}
+type W = typeof o.n;
+>W : Symbol(W, Decl(typeofUsedBeforeBlockScoped.ts, 3, 1))
+>o.n : Symbol(n, Decl(typeofUsedBeforeBlockScoped.ts, 6, 9))
+>o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
+>n : Symbol(n, Decl(typeofUsedBeforeBlockScoped.ts, 6, 9))
+
+let o2: typeof o;
+>o2 : Symbol(o2, Decl(typeofUsedBeforeBlockScoped.ts, 5, 3))
+>o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
+
+let o = { n: 12 };
+>o : Symbol(o, Decl(typeofUsedBeforeBlockScoped.ts, 6, 3))
+>n : Symbol(n, Decl(typeofUsedBeforeBlockScoped.ts, 6, 9))
+

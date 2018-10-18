@@ -1,0 +1,104 @@
+=== tests/cases/compiler/nonIdenticalTypeConstraints.ts ===
+class Different {
+>Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
+
+    a: number;
+>a : Symbol(Different.a, Decl(nonIdenticalTypeConstraints.ts, 0, 17))
+
+    b: string;
+>b : Symbol(Different.b, Decl(nonIdenticalTypeConstraints.ts, 1, 14))
+
+    c: boolean;
+>c : Symbol(Different.c, Decl(nonIdenticalTypeConstraints.ts, 2, 14))
+}
+
+class Foo<T extends Function> {
+>Foo : Symbol(Foo, Decl(nonIdenticalTypeConstraints.ts, 4, 1), Decl(nonIdenticalTypeConstraints.ts, 8, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    n: T;
+>n : Symbol(Foo.n, Decl(nonIdenticalTypeConstraints.ts, 6, 31))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
+}
+interface Foo<T extends Different> {
+>Foo : Symbol(Foo, Decl(nonIdenticalTypeConstraints.ts, 4, 1), Decl(nonIdenticalTypeConstraints.ts, 8, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
+>Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
+
+    y: T;
+>y : Symbol(Foo.y, Decl(nonIdenticalTypeConstraints.ts, 9, 36))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 6, 10), Decl(nonIdenticalTypeConstraints.ts, 9, 14))
+}
+interface Qux<T extends Different> {
+>Qux : Symbol(Qux, Decl(nonIdenticalTypeConstraints.ts, 11, 1), Decl(nonIdenticalTypeConstraints.ts, 14, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
+>Different : Symbol(Different, Decl(nonIdenticalTypeConstraints.ts, 0, 0))
+
+    y: T;
+>y : Symbol(Qux.y, Decl(nonIdenticalTypeConstraints.ts, 12, 36))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
+}
+class Qux<T extends Function> {
+>Qux : Symbol(Qux, Decl(nonIdenticalTypeConstraints.ts, 11, 1), Decl(nonIdenticalTypeConstraints.ts, 14, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    n: T;
+>n : Symbol(Qux.n, Decl(nonIdenticalTypeConstraints.ts, 15, 31))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 12, 14), Decl(nonIdenticalTypeConstraints.ts, 15, 10))
+}
+
+class Bar<T extends Function> {
+>Bar : Symbol(Bar, Decl(nonIdenticalTypeConstraints.ts, 17, 1), Decl(nonIdenticalTypeConstraints.ts, 21, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    n: T;
+>n : Symbol(Bar.n, Decl(nonIdenticalTypeConstraints.ts, 19, 31))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
+}
+interface Bar<T extends Function> {
+>Bar : Symbol(Bar, Decl(nonIdenticalTypeConstraints.ts, 17, 1), Decl(nonIdenticalTypeConstraints.ts, 21, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    y: T;
+>y : Symbol(Bar.y, Decl(nonIdenticalTypeConstraints.ts, 22, 35))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 19, 10), Decl(nonIdenticalTypeConstraints.ts, 22, 14))
+}
+interface Baz<T extends Function> {
+>Baz : Symbol(Baz, Decl(nonIdenticalTypeConstraints.ts, 24, 1), Decl(nonIdenticalTypeConstraints.ts, 27, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    y: T;
+>y : Symbol(Baz.y, Decl(nonIdenticalTypeConstraints.ts, 25, 35))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
+}
+class Baz<T extends Function> {
+>Baz : Symbol(Baz, Decl(nonIdenticalTypeConstraints.ts, 24, 1), Decl(nonIdenticalTypeConstraints.ts, 27, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    n: T;
+>n : Symbol(Baz.n, Decl(nonIdenticalTypeConstraints.ts, 28, 31))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 25, 14), Decl(nonIdenticalTypeConstraints.ts, 28, 10))
+}
+
+class Quux<T> {
+>Quux : Symbol(Quux, Decl(nonIdenticalTypeConstraints.ts, 30, 1), Decl(nonIdenticalTypeConstraints.ts, 34, 1))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 32, 11))
+
+    n: T;
+>n : Symbol(Quux.n, Decl(nonIdenticalTypeConstraints.ts, 32, 15))
+>T : Symbol(T, Decl(nonIdenticalTypeConstraints.ts, 32, 11))
+}
+interface Quux<U> {
+>Quux : Symbol(Quux, Decl(nonIdenticalTypeConstraints.ts, 30, 1), Decl(nonIdenticalTypeConstraints.ts, 34, 1))
+>U : Symbol(U, Decl(nonIdenticalTypeConstraints.ts, 35, 15))
+
+    m: U;
+>m : Symbol(Quux.m, Decl(nonIdenticalTypeConstraints.ts, 35, 19))
+>U : Symbol(U, Decl(nonIdenticalTypeConstraints.ts, 35, 15))
+}

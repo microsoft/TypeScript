@@ -1,5 +1,4 @@
 === tests/cases/compiler/elidingImportNames_test.ts ===
-
 import a = require('./elidingImportNames_main'); // alias used in typeof
 >a : typeof a
 

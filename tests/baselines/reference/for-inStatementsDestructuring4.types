@@ -1,0 +1,11 @@
+=== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring4.ts ===
+var a, b;
+>a : any
+>b : any
+
+for ({a, b} in []) { }
+>{a, b} : { a: any; b: any; }
+>a : any
+>b : any
+>[] : undefined[]
+

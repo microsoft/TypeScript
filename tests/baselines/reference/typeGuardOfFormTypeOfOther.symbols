@@ -57,7 +57,7 @@ if (typeof strOrC === "Object") {
 }
 else {
     var r2: string = strOrC; // string
->r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 50, 7))
+>r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
 >strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
 }
 if (typeof numOrC === "Object") {
@@ -69,7 +69,7 @@ if (typeof numOrC === "Object") {
 }
 else {
     var r3: number  = numOrC; // number
->r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
+>r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
 >numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
 }
 if (typeof boolOrC === "Object") {
@@ -81,20 +81,32 @@ if (typeof boolOrC === "Object") {
 }
 else {
     var r4: boolean = boolOrC; // boolean
->r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
+>r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 68, 7))
 >boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
+}
+if (typeof strOrC === "Object" as string) { // comparison is OK with cast
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+
+    c = strOrC; // error: but no narrowing to C
+>c : Symbol(c, Decl(typeGuardOfFormTypeOfOther.ts, 13, 3))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
+}
+else {
+    var r5: string = strOrC; // error: no narrowing to string
+>r5 : Symbol(r5, Decl(typeGuardOfFormTypeOfOther.ts, 42, 7))
+>strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
 }
 
 if (typeof strOrNumOrBool === "Object") {
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 
     let q1: {} = strOrNumOrBool; // {}
->q1 : Symbol(q1, Decl(typeGuardOfFormTypeOfOther.ts, 40, 7))
+>q1 : Symbol(q1, Decl(typeGuardOfFormTypeOfOther.ts, 46, 7))
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 }
 else {
     let q2: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q2 : Symbol(q2, Decl(typeGuardOfFormTypeOfOther.ts, 43, 7))
+>q2 : Symbol(q2, Decl(typeGuardOfFormTypeOfOther.ts, 49, 7))
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 }
 
@@ -105,7 +117,7 @@ if (typeof strOrC !== "Object") {
 >strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
 
     var r2: string = strOrC; // string
->r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 50, 7))
+>r2 : Symbol(r2, Decl(typeGuardOfFormTypeOfOther.ts, 24, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
 >strOrC : Symbol(strOrC, Decl(typeGuardOfFormTypeOfOther.ts, 9, 3))
 }
 else {
@@ -117,7 +129,7 @@ if (typeof numOrC !== "Object") {
 >numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
 
     var r3: number = numOrC; // number
->r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 56, 7))
+>r3 : Symbol(r3, Decl(typeGuardOfFormTypeOfOther.ts, 30, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
 >numOrC : Symbol(numOrC, Decl(typeGuardOfFormTypeOfOther.ts, 10, 3))
 }
 else {
@@ -129,7 +141,7 @@ if (typeof boolOrC !== "Object") {
 >boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
 
     var r4: boolean = boolOrC; // boolean
->r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 62, 7))
+>r4 : Symbol(r4, Decl(typeGuardOfFormTypeOfOther.ts, 36, 7), Decl(typeGuardOfFormTypeOfOther.ts, 68, 7))
 >boolOrC : Symbol(boolOrC, Decl(typeGuardOfFormTypeOfOther.ts, 11, 3))
 }
 else {
@@ -142,12 +154,12 @@ if (typeof strOrNumOrBool !== "Object") {
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 
     let q1: string | number | boolean = strOrNumOrBool; // string | number | boolean
->q1 : Symbol(q1, Decl(typeGuardOfFormTypeOfOther.ts, 69, 7))
+>q1 : Symbol(q1, Decl(typeGuardOfFormTypeOfOther.ts, 75, 7))
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 }
 else {
     let q2: {} = strOrNumOrBool; // {}
->q2 : Symbol(q2, Decl(typeGuardOfFormTypeOfOther.ts, 72, 7))
+>q2 : Symbol(q2, Decl(typeGuardOfFormTypeOfOther.ts, 78, 7))
 >strOrNumOrBool : Symbol(strOrNumOrBool, Decl(typeGuardOfFormTypeOfOther.ts, 8, 3))
 }
 

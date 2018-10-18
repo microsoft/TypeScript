@@ -39,15 +39,15 @@ var M;
         (function (plop_1) {
             function gunk() { }
             function buz() { }
-            var fudge = (function () {
+            var fudge = /** @class */ (function () {
                 function fudge() {
                 }
                 return fudge;
             }());
             plop_1.fudge = fudge;
+            var plop;
             (function (plop) {
-            })(plop_1.plop || (plop_1.plop = {}));
-            var plop = plop_1.plop;
+            })(plop = plop_1.plop || (plop_1.plop = {}));
             // Emit these references as follows
             var v1 = gunk; // gunk
             var v2 = buz; // buz

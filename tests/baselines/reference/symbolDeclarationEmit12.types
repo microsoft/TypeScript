@@ -1,0 +1,45 @@
+=== tests/cases/conformance/es6/Symbols/symbolDeclarationEmit12.ts ===
+module M {
+>M : typeof M
+
+    interface I { }
+    export class C {
+>C : C
+
+        [Symbol.iterator]: I;
+>[Symbol.iterator] : I
+>Symbol.iterator : symbol
+>Symbol : SymbolConstructor
+>iterator : symbol
+
+        [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : (x: I) => void
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : I
+
+        [Symbol.isConcatSpreadable](): I {
+>[Symbol.isConcatSpreadable] : () => I
+>Symbol.isConcatSpreadable : symbol
+>Symbol : SymbolConstructor
+>isConcatSpreadable : symbol
+
+            return undefined
+>undefined : undefined
+        }
+        get [Symbol.toPrimitive]() { return undefined; }
+>[Symbol.toPrimitive] : any
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>undefined : undefined
+
+        set [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : I
+>Symbol.toPrimitive : symbol
+>Symbol : SymbolConstructor
+>toPrimitive : symbol
+>x : I
+    }
+}

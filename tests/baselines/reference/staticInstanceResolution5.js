@@ -19,7 +19,8 @@ function z(w3: WinJS) { }
 //// [staticInstanceResolution5_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
-    var Promise = (function () {
+    exports.__esModule = true;
+    var Promise = /** @class */ (function () {
         function Promise() {
         }
         Promise.timeout = function (delay) {
@@ -32,6 +33,7 @@ define(["require", "exports"], function (require, exports) {
 //// [staticInstanceResolution5_1.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     // these 3 should be errors
     var x = function (w1) { };
     var y = function (w2) { };

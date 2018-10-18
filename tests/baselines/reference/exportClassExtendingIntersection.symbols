@@ -1,0 +1,79 @@
+=== tests/cases/compiler/BaseClass.ts ===
+export type Constructor<T> = new (...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(BaseClass.ts, 0, 0))
+>T : Symbol(T, Decl(BaseClass.ts, 0, 24))
+>args : Symbol(args, Decl(BaseClass.ts, 0, 34))
+>T : Symbol(T, Decl(BaseClass.ts, 0, 24))
+
+export class MyBaseClass<T> {
+>MyBaseClass : Symbol(MyBaseClass, Decl(BaseClass.ts, 0, 55))
+>T : Symbol(T, Decl(BaseClass.ts, 2, 25))
+
+    baseProperty: string;
+>baseProperty : Symbol(MyBaseClass.baseProperty, Decl(BaseClass.ts, 2, 29))
+
+    constructor(value: T) {}
+>value : Symbol(value, Decl(BaseClass.ts, 4, 16))
+>T : Symbol(T, Decl(BaseClass.ts, 2, 25))
+}
+=== tests/cases/compiler/MixinClass.ts ===
+import { Constructor, MyBaseClass } from './BaseClass';
+>Constructor : Symbol(Constructor, Decl(MixinClass.ts, 0, 8))
+>MyBaseClass : Symbol(MyBaseClass, Decl(MixinClass.ts, 0, 21))
+
+export interface MyMixin {
+>MyMixin : Symbol(MyMixin, Decl(MixinClass.ts, 4, 1), Decl(MixinClass.ts, 0, 55))
+
+    mixinProperty: string;
+>mixinProperty : Symbol(MyMixin.mixinProperty, Decl(MixinClass.ts, 2, 26))
+}
+
+export function MyMixin<T extends Constructor<MyBaseClass<any>>>(base: T): T & Constructor<MyMixin> {
+>MyMixin : Symbol(MyMixin, Decl(MixinClass.ts, 4, 1), Decl(MixinClass.ts, 0, 55))
+>T : Symbol(T, Decl(MixinClass.ts, 6, 24))
+>Constructor : Symbol(Constructor, Decl(MixinClass.ts, 0, 8))
+>MyBaseClass : Symbol(MyBaseClass, Decl(MixinClass.ts, 0, 21))
+>base : Symbol(base, Decl(MixinClass.ts, 6, 65))
+>T : Symbol(T, Decl(MixinClass.ts, 6, 24))
+>T : Symbol(T, Decl(MixinClass.ts, 6, 24))
+>Constructor : Symbol(Constructor, Decl(MixinClass.ts, 0, 8))
+>MyMixin : Symbol(MyMixin, Decl(MixinClass.ts, 4, 1), Decl(MixinClass.ts, 0, 55))
+
+    return class extends base {
+>base : Symbol(base, Decl(MixinClass.ts, 6, 65))
+
+        mixinProperty: string;
+>mixinProperty : Symbol((Anonymous class).mixinProperty, Decl(MixinClass.ts, 7, 31))
+    }
+}
+=== tests/cases/compiler/FinalClass.ts ===
+import { MyBaseClass } from './BaseClass';
+>MyBaseClass : Symbol(MyBaseClass, Decl(FinalClass.ts, 0, 8))
+
+import { MyMixin } from './MixinClass';
+>MyMixin : Symbol(MyMixin, Decl(FinalClass.ts, 1, 8))
+
+export class MyExtendedClass extends MyMixin(MyBaseClass)<string> {
+>MyExtendedClass : Symbol(MyExtendedClass, Decl(FinalClass.ts, 1, 39))
+>MyMixin : Symbol(MyMixin, Decl(FinalClass.ts, 1, 8))
+>MyBaseClass : Symbol(MyBaseClass, Decl(FinalClass.ts, 0, 8))
+
+    extendedClassProperty: number;
+>extendedClassProperty : Symbol(MyExtendedClass.extendedClassProperty, Decl(FinalClass.ts, 3, 67))
+}
+=== tests/cases/compiler/Main.ts ===
+import { MyExtendedClass } from './FinalClass';
+>MyExtendedClass : Symbol(MyExtendedClass, Decl(Main.ts, 0, 8))
+
+import { MyMixin } from './MixinClass';
+>MyMixin : Symbol(MyMixin, Decl(Main.ts, 1, 8))
+
+const myExtendedClass = new MyExtendedClass('string');
+>myExtendedClass : Symbol(myExtendedClass, Decl(Main.ts, 3, 5))
+>MyExtendedClass : Symbol(MyExtendedClass, Decl(Main.ts, 0, 8))
+
+const AnotherMixedClass = MyMixin(MyExtendedClass);
+>AnotherMixedClass : Symbol(AnotherMixedClass, Decl(Main.ts, 5, 5))
+>MyMixin : Symbol(MyMixin, Decl(Main.ts, 1, 8))
+>MyExtendedClass : Symbol(MyExtendedClass, Decl(Main.ts, 0, 8))
+

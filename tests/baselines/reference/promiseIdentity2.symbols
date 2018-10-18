@@ -1,0 +1,50 @@
+=== tests/cases/compiler/promiseIdentity2.ts ===
+export interface IPromise<T, V> {
+>IPromise : Symbol(IPromise, Decl(promiseIdentity2.ts, 0, 0))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 0, 26))
+>V : Symbol(V, Decl(promiseIdentity2.ts, 0, 28))
+
+    then<U, W>(callback: (x: T) => IPromise<U, W>): IPromise<U, W>;
+>then : Symbol(IPromise.then, Decl(promiseIdentity2.ts, 0, 33))
+>U : Symbol(U, Decl(promiseIdentity2.ts, 1, 9))
+>W : Symbol(W, Decl(promiseIdentity2.ts, 1, 11))
+>callback : Symbol(callback, Decl(promiseIdentity2.ts, 1, 15))
+>x : Symbol(x, Decl(promiseIdentity2.ts, 1, 26))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 0, 26))
+>IPromise : Symbol(IPromise, Decl(promiseIdentity2.ts, 0, 0))
+>U : Symbol(U, Decl(promiseIdentity2.ts, 1, 9))
+>W : Symbol(W, Decl(promiseIdentity2.ts, 1, 11))
+>IPromise : Symbol(IPromise, Decl(promiseIdentity2.ts, 0, 0))
+>U : Symbol(U, Decl(promiseIdentity2.ts, 1, 9))
+>W : Symbol(W, Decl(promiseIdentity2.ts, 1, 11))
+}
+export interface Promise<T, V> {
+>Promise : Symbol(Promise, Decl(promiseIdentity2.ts, 2, 1))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 3, 25))
+>V : Symbol(V, Decl(promiseIdentity2.ts, 3, 27))
+
+    then<U, W>(callback: (x: T) => Promise<T, U>): Promise<T, W>;
+>then : Symbol(Promise.then, Decl(promiseIdentity2.ts, 3, 32))
+>U : Symbol(U, Decl(promiseIdentity2.ts, 4, 9))
+>W : Symbol(W, Decl(promiseIdentity2.ts, 4, 11))
+>callback : Symbol(callback, Decl(promiseIdentity2.ts, 4, 15))
+>x : Symbol(x, Decl(promiseIdentity2.ts, 4, 26))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 3, 25))
+>Promise : Symbol(Promise, Decl(promiseIdentity2.ts, 2, 1))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 3, 25))
+>U : Symbol(U, Decl(promiseIdentity2.ts, 4, 9))
+>Promise : Symbol(Promise, Decl(promiseIdentity2.ts, 2, 1))
+>T : Symbol(T, Decl(promiseIdentity2.ts, 3, 25))
+>W : Symbol(W, Decl(promiseIdentity2.ts, 4, 11))
+}
+
+// error because T is string in the first declaration, and T is boolean in the second
+// Return type and callback return type are ok because T is any in this particular Promise
+var x: IPromise<string, number>;
+>x : Symbol(x, Decl(promiseIdentity2.ts, 9, 3), Decl(promiseIdentity2.ts, 10, 3))
+>IPromise : Symbol(IPromise, Decl(promiseIdentity2.ts, 0, 0))
+
+var x: Promise<any, string>;
+>x : Symbol(x, Decl(promiseIdentity2.ts, 9, 3), Decl(promiseIdentity2.ts, 10, 3))
+>Promise : Symbol(Promise, Decl(promiseIdentity2.ts, 2, 1))
+

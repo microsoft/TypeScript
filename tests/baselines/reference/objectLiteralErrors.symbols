@@ -1,0 +1,205 @@
+=== tests/cases/conformance/expressions/objectLiterals/objectLiteralErrors.ts ===
+// Multiple properties with the same name
+var e1 = { a: 0, a: 0 };
+>e1 : Symbol(e1, Decl(objectLiteralErrors.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 1, 10), Decl(objectLiteralErrors.ts, 1, 16))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 1, 10), Decl(objectLiteralErrors.ts, 1, 16))
+
+var e2 = { a: '', a: '' };
+>e2 : Symbol(e2, Decl(objectLiteralErrors.ts, 2, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 2, 10), Decl(objectLiteralErrors.ts, 2, 17))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 2, 10), Decl(objectLiteralErrors.ts, 2, 17))
+
+var e3 = { a: 0, a: '' };
+>e3 : Symbol(e3, Decl(objectLiteralErrors.ts, 3, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 3, 10), Decl(objectLiteralErrors.ts, 3, 16))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 3, 10), Decl(objectLiteralErrors.ts, 3, 16))
+
+var e4 = { a: true, a: false };
+>e4 : Symbol(e4, Decl(objectLiteralErrors.ts, 4, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 4, 10), Decl(objectLiteralErrors.ts, 4, 19))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 4, 10), Decl(objectLiteralErrors.ts, 4, 19))
+
+var e5 = { a: {}, a: {} };
+>e5 : Symbol(e5, Decl(objectLiteralErrors.ts, 5, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 5, 10), Decl(objectLiteralErrors.ts, 5, 17))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 5, 10), Decl(objectLiteralErrors.ts, 5, 17))
+
+var e6 = { a: 0, 'a': 0 };
+>e6 : Symbol(e6, Decl(objectLiteralErrors.ts, 6, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 6, 10), Decl(objectLiteralErrors.ts, 6, 16))
+>'a' : Symbol(a, Decl(objectLiteralErrors.ts, 6, 10), Decl(objectLiteralErrors.ts, 6, 16))
+
+var e7 = { 'a': 0, a: 0 };
+>e7 : Symbol(e7, Decl(objectLiteralErrors.ts, 7, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
+>a : Symbol('a', Decl(objectLiteralErrors.ts, 7, 10), Decl(objectLiteralErrors.ts, 7, 18))
+
+var e8 = { 'a': 0, "a": 0 };
+>e8 : Symbol(e8, Decl(objectLiteralErrors.ts, 8, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
+>"a" : Symbol('a', Decl(objectLiteralErrors.ts, 8, 10), Decl(objectLiteralErrors.ts, 8, 18))
+
+var e9 = { 'a': 0, 'a': 0 };
+>e9 : Symbol(e9, Decl(objectLiteralErrors.ts, 9, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 9, 10), Decl(objectLiteralErrors.ts, 9, 18))
+
+var e10 = { "a": 0, 'a': 0 };
+>e10 : Symbol(e10, Decl(objectLiteralErrors.ts, 10, 3))
+>"a" : Symbol("a", Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
+>'a' : Symbol("a", Decl(objectLiteralErrors.ts, 10, 11), Decl(objectLiteralErrors.ts, 10, 19))
+
+var e11 = { 1.0: 0, '1': 0 };
+>e11 : Symbol(e11, Decl(objectLiteralErrors.ts, 11, 3))
+>1.0 : Symbol(1.0, Decl(objectLiteralErrors.ts, 11, 11), Decl(objectLiteralErrors.ts, 11, 19))
+>'1' : Symbol(1.0, Decl(objectLiteralErrors.ts, 11, 11), Decl(objectLiteralErrors.ts, 11, 19))
+
+var e12 = { 0: 0, 0: 0 };
+>e12 : Symbol(e12, Decl(objectLiteralErrors.ts, 12, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 12, 11), Decl(objectLiteralErrors.ts, 12, 17))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 12, 11), Decl(objectLiteralErrors.ts, 12, 17))
+
+var e13 = { 0: 0, 0: 0 };
+>e13 : Symbol(e13, Decl(objectLiteralErrors.ts, 13, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 13, 11), Decl(objectLiteralErrors.ts, 13, 17))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 13, 11), Decl(objectLiteralErrors.ts, 13, 17))
+
+var e14 = { 0: 0, 0x0: 0 };
+>e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
+>0x0 : Symbol(0, Decl(objectLiteralErrors.ts, 14, 11), Decl(objectLiteralErrors.ts, 14, 17))
+
+var e14 = { 0: 0, 000: 0 };
+>e14 : Symbol(e14, Decl(objectLiteralErrors.ts, 14, 3), Decl(objectLiteralErrors.ts, 15, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+>000 : Symbol(0, Decl(objectLiteralErrors.ts, 15, 11), Decl(objectLiteralErrors.ts, 15, 17))
+
+var e15 = { "100": 0, 1e2: 0 };
+>e15 : Symbol(e15, Decl(objectLiteralErrors.ts, 16, 3))
+>"100" : Symbol("100", Decl(objectLiteralErrors.ts, 16, 11), Decl(objectLiteralErrors.ts, 16, 21))
+>1e2 : Symbol("100", Decl(objectLiteralErrors.ts, 16, 11), Decl(objectLiteralErrors.ts, 16, 21))
+
+var e16 = { 0x20: 0, 3.2e1: 0 };
+>e16 : Symbol(e16, Decl(objectLiteralErrors.ts, 17, 3))
+>0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
+>3.2e1 : Symbol(0x20, Decl(objectLiteralErrors.ts, 17, 11), Decl(objectLiteralErrors.ts, 17, 20))
+
+var e17 = { a: 0, b: 1, a: 0 };
+>e17 : Symbol(e17, Decl(objectLiteralErrors.ts, 18, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 18, 11), Decl(objectLiteralErrors.ts, 18, 23))
+>b : Symbol(b, Decl(objectLiteralErrors.ts, 18, 17))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 18, 11), Decl(objectLiteralErrors.ts, 18, 23))
+
+// Accessor and property with the same name
+var f1 = { a: 0, get a() { return 0; } };
+>f1 : Symbol(f1, Decl(objectLiteralErrors.ts, 21, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 21, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 21, 16))
+
+var f2 = { a: '', get a() { return ''; } };
+>f2 : Symbol(f2, Decl(objectLiteralErrors.ts, 22, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 22, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 22, 17))
+
+var f3 = { a: 0, get a() { return ''; } };
+>f3 : Symbol(f3, Decl(objectLiteralErrors.ts, 23, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 23, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 23, 16))
+
+var f4 = { a: true, get a() { return false; } };
+>f4 : Symbol(f4, Decl(objectLiteralErrors.ts, 24, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 24, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 24, 19))
+
+var f5 = { a: {}, get a() { return {}; } };
+>f5 : Symbol(f5, Decl(objectLiteralErrors.ts, 25, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 25, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 25, 17))
+
+var f6 = { a: 0, get 'a'() { return 0; } };
+>f6 : Symbol(f6, Decl(objectLiteralErrors.ts, 26, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 26, 10))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 26, 16))
+
+var f7 = { 'a': 0, get a() { return 0; } };
+>f7 : Symbol(f7, Decl(objectLiteralErrors.ts, 27, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 27, 10))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 27, 18))
+
+var f8 = { 'a': 0, get "a"() { return 0; } };
+>f8 : Symbol(f8, Decl(objectLiteralErrors.ts, 28, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 28, 10))
+>"a" : Symbol("a", Decl(objectLiteralErrors.ts, 28, 18))
+
+var f9 = { 'a': 0, get 'a'() { return 0; } };
+>f9 : Symbol(f9, Decl(objectLiteralErrors.ts, 29, 3))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 29, 10))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 29, 18))
+
+var f10 = { "a": 0, get 'a'() { return 0; } };
+>f10 : Symbol(f10, Decl(objectLiteralErrors.ts, 30, 3))
+>"a" : Symbol("a", Decl(objectLiteralErrors.ts, 30, 11))
+>'a' : Symbol('a', Decl(objectLiteralErrors.ts, 30, 19))
+
+var f11 = { 1.0: 0, get '1'() { return 0; } };
+>f11 : Symbol(f11, Decl(objectLiteralErrors.ts, 31, 3))
+>1.0 : Symbol(1.0, Decl(objectLiteralErrors.ts, 31, 11))
+>'1' : Symbol('1', Decl(objectLiteralErrors.ts, 31, 19))
+
+var f12 = { 0: 0, get 0() { return 0; } };
+>f12 : Symbol(f12, Decl(objectLiteralErrors.ts, 32, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 32, 11))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 32, 17))
+
+var f13 = { 0: 0, get 0() { return 0; } };
+>f13 : Symbol(f13, Decl(objectLiteralErrors.ts, 33, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 33, 11))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 33, 17))
+
+var f14 = { 0: 0, get 0x0() { return 0; } };
+>f14 : Symbol(f14, Decl(objectLiteralErrors.ts, 34, 3), Decl(objectLiteralErrors.ts, 35, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 34, 11))
+>0x0 : Symbol(0x0, Decl(objectLiteralErrors.ts, 34, 17))
+
+var f14 = { 0: 0, get 000() { return 0; } };
+>f14 : Symbol(f14, Decl(objectLiteralErrors.ts, 34, 3), Decl(objectLiteralErrors.ts, 35, 3))
+>0 : Symbol(0, Decl(objectLiteralErrors.ts, 35, 11))
+>000 : Symbol(000, Decl(objectLiteralErrors.ts, 35, 17))
+
+var f15 = { "100": 0, get 1e2() { return 0; } };
+>f15 : Symbol(f15, Decl(objectLiteralErrors.ts, 36, 3))
+>"100" : Symbol("100", Decl(objectLiteralErrors.ts, 36, 11))
+>1e2 : Symbol(1e2, Decl(objectLiteralErrors.ts, 36, 21))
+
+var f16 = { 0x20: 0, get 3.2e1() { return 0; } };
+>f16 : Symbol(f16, Decl(objectLiteralErrors.ts, 37, 3))
+>0x20 : Symbol(0x20, Decl(objectLiteralErrors.ts, 37, 11))
+>3.2e1 : Symbol(3.2e1, Decl(objectLiteralErrors.ts, 37, 20))
+
+var f17 = { a: 0, get b() { return 1; }, get a() { return 0; } };
+>f17 : Symbol(f17, Decl(objectLiteralErrors.ts, 38, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 38, 11))
+>b : Symbol(b, Decl(objectLiteralErrors.ts, 38, 17))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 38, 40))
+
+// Get and set accessor with mismatched type annotations
+var g1 = { get a(): number { return 4; }, set a(n: string) { } };
+>g1 : Symbol(g1, Decl(objectLiteralErrors.ts, 41, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 41, 10), Decl(objectLiteralErrors.ts, 41, 41))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 41, 10), Decl(objectLiteralErrors.ts, 41, 41))
+>n : Symbol(n, Decl(objectLiteralErrors.ts, 41, 48))
+
+var g2 = { get a() { return 4; }, set a(n: string) { } };
+>g2 : Symbol(g2, Decl(objectLiteralErrors.ts, 42, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 42, 10), Decl(objectLiteralErrors.ts, 42, 33))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 42, 10), Decl(objectLiteralErrors.ts, 42, 33))
+>n : Symbol(n, Decl(objectLiteralErrors.ts, 42, 40))
+
+var g3 = { get a(): number { return undefined; }, set a(n: string) { } };
+>g3 : Symbol(g3, Decl(objectLiteralErrors.ts, 43, 3))
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 43, 10), Decl(objectLiteralErrors.ts, 43, 49))
+>undefined : Symbol(undefined)
+>a : Symbol(a, Decl(objectLiteralErrors.ts, 43, 10), Decl(objectLiteralErrors.ts, 43, 49))
+>n : Symbol(n, Decl(objectLiteralErrors.ts, 43, 56))
+

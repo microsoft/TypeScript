@@ -1,5 +1,4 @@
 === tests/cases/compiler/sourceMapValidationDestructuringVariableStatementObjectBindingPattern4.ts ===
-
 var {x = 500,
 >x : number
 >500 : 500

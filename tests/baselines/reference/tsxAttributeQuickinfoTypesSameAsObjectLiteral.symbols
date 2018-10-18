@@ -1,0 +1,40 @@
+=== tests/cases/compiler/tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx ===
+namespace JSX {
+>JSX : Symbol(JSX, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 0, 0))
+
+    export interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 0, 15))
+
+        span: {};
+>span : Symbol(IntrinsicElements.span, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 1, 40))
+    }
+    export interface Element {
+>Element : Symbol(Element, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 3, 5))
+
+		something?: any;
+>something : Symbol(Element.something, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 4, 30))
+    }
+}
+
+const Foo = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</span>;
+>Foo : Symbol(Foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 5))
+>props : Symbol(props, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 13))
+>foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 1, 40))
+>props.foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
+>props : Symbol(props, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 13))
+>foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 21))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 1, 40))
+
+Foo({
+>Foo : Symbol(Foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 5))
+
+    foo: "B"
+>foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 11, 5))
+
+});
+
+<Foo foo="B" />
+>Foo : Symbol(Foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 9, 5))
+>foo : Symbol(foo, Decl(tsxAttributeQuickinfoTypesSameAsObjectLiteral.tsx, 15, 4))
+

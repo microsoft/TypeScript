@@ -6,8 +6,6 @@ import moduleA = require("./aliasUsageInOrExpression_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
 >Backbone.Model : typeof Backbone.Model
@@ -16,7 +14,6 @@ interface IHasVisualizationModel {
 }
 var i: IHasVisualizationModel;
 >i : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 
 var d1 = i || moduleA;
 >d1 : IHasVisualizationModel
@@ -26,14 +23,12 @@ var d1 = i || moduleA;
 
 var d2: IHasVisualizationModel = i || moduleA;
 >d2 : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >i || moduleA : IHasVisualizationModel
 >i : IHasVisualizationModel
 >moduleA : typeof moduleA
 
 var d2: IHasVisualizationModel = moduleA || i;
 >d2 : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >moduleA || i : IHasVisualizationModel
 >moduleA : typeof moduleA
 >i : IHasVisualizationModel
@@ -41,11 +36,9 @@ var d2: IHasVisualizationModel = moduleA || i;
 var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { x: moduleA };
 >e : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 ><{ x: IHasVisualizationModel }>null || { x: moduleA } : { x: IHasVisualizationModel; }
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >null : null
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
@@ -54,11 +47,9 @@ var e: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null || { 
 var f: { x: IHasVisualizationModel } = <{ x: IHasVisualizationModel }>null ? { x: moduleA } : null;
 >f : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 ><{ x: IHasVisualizationModel }>null ? { x: moduleA } : null : { x: typeof moduleA; }
 ><{ x: IHasVisualizationModel }>null : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >null : null
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA

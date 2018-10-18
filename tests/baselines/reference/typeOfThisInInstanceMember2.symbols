@@ -1,0 +1,129 @@
+=== tests/cases/conformance/classes/members/instanceAndStaticMembers/typeOfThisInInstanceMember2.ts ===
+class C<T> {
+>C : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+>T : Symbol(T, Decl(typeOfThisInInstanceMember2.ts, 0, 8))
+
+    x = this;
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>this : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+
+        return this;
+>this : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+    }
+    constructor(x: T) {
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 5, 16))
+>T : Symbol(T, Decl(typeOfThisInInstanceMember2.ts, 0, 8))
+
+        var t = this;
+>t : Symbol(t, Decl(typeOfThisInInstanceMember2.ts, 6, 11))
+>this : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+
+        t.x;
+>t.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>t : Symbol(t, Decl(typeOfThisInInstanceMember2.ts, 6, 11))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+
+        t.y;
+>t.y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+>t : Symbol(t, Decl(typeOfThisInInstanceMember2.ts, 6, 11))
+>y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+
+        t.z;
+>t.z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+>t : Symbol(t, Decl(typeOfThisInInstanceMember2.ts, 6, 11))
+>z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+
+        var r = t.foo();
+>r : Symbol(r, Decl(typeOfThisInInstanceMember2.ts, 10, 11))
+>t.foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+>t : Symbol(t, Decl(typeOfThisInInstanceMember2.ts, 6, 11))
+>foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+    }
+
+    get y() {
+>y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+
+        return this;
+>this : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+    }
+
+    z: T;
+>z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+>T : Symbol(T, Decl(typeOfThisInInstanceMember2.ts, 0, 8))
+}
+
+var c: C<string>;
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>C : Symbol(C, Decl(typeOfThisInInstanceMember2.ts, 0, 0))
+
+// all ok
+var r = c.x;
+>r : Symbol(r, Decl(typeOfThisInInstanceMember2.ts, 22, 3))
+>c.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+
+var ra = c.x.x.x;
+>ra : Symbol(ra, Decl(typeOfThisInInstanceMember2.ts, 23, 3))
+>c.x.x.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>c.x.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>c.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+
+var r2 = c.y;
+>r2 : Symbol(r2, Decl(typeOfThisInInstanceMember2.ts, 24, 3))
+>c.y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+
+var r3 = c.foo();
+>r3 : Symbol(r3, Decl(typeOfThisInInstanceMember2.ts, 25, 3))
+>c.foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+
+var r4 = c.z;
+>r4 : Symbol(r4, Decl(typeOfThisInInstanceMember2.ts, 26, 3))
+>c.z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+>c : Symbol(c, Decl(typeOfThisInInstanceMember2.ts, 20, 3))
+>z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+
+var rs = [r, r2, r3];
+>rs : Symbol(rs, Decl(typeOfThisInInstanceMember2.ts, 27, 3))
+>r : Symbol(r, Decl(typeOfThisInInstanceMember2.ts, 22, 3))
+>r2 : Symbol(r2, Decl(typeOfThisInInstanceMember2.ts, 24, 3))
+>r3 : Symbol(r3, Decl(typeOfThisInInstanceMember2.ts, 25, 3))
+
+rs.forEach(x => {
+>rs.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>rs : Symbol(rs, Decl(typeOfThisInInstanceMember2.ts, 27, 3))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
+
+    x.foo;
+>x.foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
+>foo : Symbol(C.foo, Decl(typeOfThisInInstanceMember2.ts, 1, 13))
+
+    x.x;
+>x.x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
+>x : Symbol(C.x, Decl(typeOfThisInInstanceMember2.ts, 0, 12))
+
+    x.y;
+>x.y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
+>y : Symbol(C.y, Decl(typeOfThisInInstanceMember2.ts, 11, 5))
+
+    x.z;
+>x.z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+>x : Symbol(x, Decl(typeOfThisInInstanceMember2.ts, 29, 11))
+>z : Symbol(C.z, Decl(typeOfThisInInstanceMember2.ts, 15, 5))
+
+});

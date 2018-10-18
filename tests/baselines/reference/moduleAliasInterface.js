@@ -58,7 +58,7 @@ module B1 {
 //// [moduleAliasInterface.js]
 var _modes;
 (function (_modes) {
-    var Mode = (function () {
+    var Mode = /** @class */ (function () {
         function Mode() {
         }
         return Mode;
@@ -70,7 +70,7 @@ var editor;
 (function (editor) {
     var i;
     // If you just use p1:modes, the compiler accepts it - should be an error
-    var Bug = (function () {
+    var Bug = /** @class */ (function () {
         function Bug(p1, p2) {
         } // should be an error on p2 - it's not exported
         Bug.prototype.foo = function (p1) {
@@ -82,21 +82,21 @@ var modesOuter = _modes;
 var editor2;
 (function (editor2) {
     var i;
-    var Bug = (function () {
+    var Bug = /** @class */ (function () {
         function Bug(p1, p2) {
         } // no error here, since modesOuter is declared externally
         return Bug;
     }());
     var Foo;
     (function (Foo) {
-        var Bar = (function () {
+        var Bar = /** @class */ (function () {
             function Bar() {
             }
             return Bar;
         }());
         Foo.Bar = Bar;
     })(Foo || (Foo = {}));
-    var Bug2 = (function () {
+    var Bug2 = /** @class */ (function () {
         function Bug2(p1, p2) {
         }
         return Bug2;
@@ -104,7 +104,7 @@ var editor2;
 })(editor2 || (editor2 = {}));
 var A1;
 (function (A1) {
-    var A1C1 = (function () {
+    var A1C1 = /** @class */ (function () {
         function A1C1() {
         }
         return A1C1;

@@ -1,0 +1,143 @@
+=== tests/cases/compiler/super1.ts ===
+// Case 1
+class Base1 {
+>Base1 : Base1
+
+    public foo() {
+>foo : () => string
+
+        return "base";
+>"base" : "base"
+    }
+}
+
+class Sub1 extends Base1 {
+>Sub1 : Sub1
+>Base1 : Base1
+
+    public bar() {
+>bar : () => string
+
+        return "base";
+>"base" : "base"
+    }
+}
+
+class SubSub1 extends Sub1 {
+>SubSub1 : SubSub1
+>Sub1 : Sub1
+
+    public bar() {
+>bar : () => any
+
+        return super.super.foo;
+>super.super.foo : any
+>super.super : any
+>super : Sub1
+>super : any
+>foo : any
+    }
+}
+
+// Case 2
+class Base2 {
+>Base2 : Base2
+
+    public foo() {
+>foo : () => string
+
+        return "base";
+>"base" : "base"
+    }
+}
+
+class SubE2 extends Base2 {
+>SubE2 : SubE2
+>Base2 : Base2
+
+    public bar() {
+>bar : () => any
+
+        return super.prototype.foo = null;
+>super.prototype.foo = null : null
+>super.prototype.foo : any
+>super.prototype : any
+>super : Base2
+>prototype : any
+>foo : any
+>null : null
+    }
+}
+
+// Case 3
+class Base3 {
+>Base3 : Base3
+
+    public foo() {
+>foo : () => string
+
+        return "base";
+>"base" : "base"
+    }
+}
+
+class SubE3 extends Base3 {
+>SubE3 : SubE3
+>Base3 : Base3
+
+    public bar() {
+>bar : () => any
+
+        return super.bar();
+>super.bar() : any
+>super.bar : any
+>super : Base3
+>bar : any
+    }
+}
+
+// Case 4
+module Base4 {
+>Base4 : typeof Base4
+
+    class Sub4 {
+>Sub4 : Sub4
+
+        public x(){
+>x : () => string
+
+            return "hello";
+>"hello" : "hello"
+        }
+    }
+    
+    export class SubSub4 extends Sub4{
+>SubSub4 : SubSub4
+>Sub4 : Sub4
+
+        public x(){
+>x : () => string
+
+            return super.x();
+>super.x() : string
+>super.x : () => string
+>super : Sub4
+>x : () => string
+        }
+    }
+    
+    export class Sub4E {
+>Sub4E : Sub4E
+
+        public x() {
+>x : () => any
+
+            return super.x();
+>super.x() : any
+>super.x : any
+>super : any
+>x : any
+        }
+    }
+}
+

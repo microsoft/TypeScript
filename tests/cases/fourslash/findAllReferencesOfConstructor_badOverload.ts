@@ -5,4 +5,4 @@
 ////    [|constructor|](){}
 ////}
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("class C");

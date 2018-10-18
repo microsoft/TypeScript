@@ -1,0 +1,13 @@
+=== tests/cases/compiler/taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts ===
+function f(x: TemplateStringsArray, y: string, z: string) {
+>f : Symbol(f, Decl(taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts, 0, 0))
+>x : Symbol(x, Decl(taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts, 0, 11))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>y : Symbol(y, Decl(taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts, 0, 35))
+>z : Symbol(z, Decl(taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts, 0, 46))
+}
+
+// Incomplete call, not enough parameters.
+f `123qdawdrqw
+>f : Symbol(f, Decl(taggedTemplatesWithIncompleteNoSubstitutionTemplate1.ts, 0, 0))
+

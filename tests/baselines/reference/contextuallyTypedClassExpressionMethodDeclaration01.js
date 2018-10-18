@@ -1,5 +1,4 @@
 //// [contextuallyTypedClassExpressionMethodDeclaration01.ts]
-
 interface A {
     numProp: number;
 }
@@ -48,7 +47,7 @@ function getFoo3(): Foo {
 
 //// [contextuallyTypedClassExpressionMethodDeclaration01.js]
 function getFoo1() {
-    return (function () {
+    return /** @class */ (function () {
         function class_1() {
         }
         class_1.method1 = function (arg) {
@@ -61,7 +60,8 @@ function getFoo1() {
     }());
 }
 function getFoo2() {
-    return _a = (function () {
+    var _a;
+    return _a = /** @class */ (function () {
             function class_2() {
             }
             return class_2;
@@ -73,10 +73,10 @@ function getFoo2() {
             arg.strProp = "hello";
         },
         _a;
-    var _a;
 }
 function getFoo3() {
-    return _a = (function () {
+    var _a;
+    return _a = /** @class */ (function () {
             function class_3() {
             }
             return class_3;
@@ -88,5 +88,4 @@ function getFoo3() {
             arg.strProp = "hello";
         },
         _a;
-    var _a;
 }

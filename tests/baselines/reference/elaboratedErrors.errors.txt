@@ -1,6 +1,5 @@
-tests/cases/compiler/elaboratedErrors.ts(10,7): error TS2420: Class 'WorkerFS' incorrectly implements interface 'FileSystem'.
-  Types of property 'read' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+  Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
   Property 'x' is missing in type 'Beta'.
 tests/cases/compiler/elaboratedErrors.ts(21,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
@@ -20,11 +19,10 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     
     // This should issue a large error, not a small one
     class WorkerFS implements FileSystem {
-          ~~~~~~~~
-!!! error TS2420: Class 'WorkerFS' incorrectly implements interface 'FileSystem'.
-!!! error TS2420:   Types of property 'read' are incompatible.
-!!! error TS2420:     Type 'string' is not assignable to type 'number'.
       read: string;
+      ~~~~
+!!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     
     interface Alpha { x: string; }

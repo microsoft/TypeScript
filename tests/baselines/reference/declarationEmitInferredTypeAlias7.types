@@ -1,0 +1,18 @@
+=== tests/cases/compiler/0.ts ===
+export type Data = string | boolean;
+>Data : Data
+
+let obj: Data = true;
+>obj : Data
+>true : true
+
+=== tests/cases/compiler/1.ts ===
+let v = "str" || true;
+>v : import("tests/cases/compiler/0").Data
+>"str" || true : true | "str"
+>"str" : "str"
+>true : true
+
+export { v }
+>v : import("tests/cases/compiler/0").Data
+

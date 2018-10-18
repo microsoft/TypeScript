@@ -18,15 +18,4 @@
 ////    }
 ////}
 
-test.ranges().forEach(r => {
-    goTo.position(r.start);
-
-    test.ranges().forEach(range => {
-        verify.occurrencesAtPositionContains(range, false);
-    });
-});
-
-goTo.marker();
-test.ranges().forEach(range => {
-    verify.occurrencesAtPositionContains(range, false);
-});
+verify.rangesAreOccurrences(false);

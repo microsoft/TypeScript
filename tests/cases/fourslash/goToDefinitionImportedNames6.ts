@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: b.ts
-////import /*moduleAliasDefinition*/alias = require("./a");
+////import [|/*moduleAliasDefinition*/alias|] = require("./a");
 
 
 // @Filename: a.ts

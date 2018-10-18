@@ -13,12 +13,5 @@
 ////    '/*1*/': ''
 //// }
 
-goTo.marker('0');
-verify.completionListContains("jspm");
-verify.completionListAllowsNewIdentifier();
-verify.memberListCount(1);
-
-goTo.marker('1');
-verify.completionListContains("jspm:dev");
-verify.completionListAllowsNewIdentifier();
-verify.memberListCount(4);
+verify.completionsAt("0", ["jspm", '"jspm:browser"', '"jspm:dev"', '"jspm:node"']);
+verify.completionsAt("1", ["jspm", "jspm:browser", "jspm:dev", "jspm:node"]);

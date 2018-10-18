@@ -10,9 +10,11 @@ export type E = E;
 
 //// [f1.js]
 "use strict";
+exports.__esModule = true;
+var E;
 (function (E) {
     E[E["X"] = 0] = "X";
-})(exports.E || (exports.E = {}));
-var E = exports.E;
+})(E = exports.E || (exports.E = {}));
 //// [f2.js]
 "use strict";
+exports.__esModule = true;

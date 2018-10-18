@@ -16,7 +16,7 @@ module clodule {
 
 
 //// [ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.js]
-var clodule = (function () {
+var clodule = /** @class */ (function () {
     function clodule() {
     }
     clodule.sfn = function (id) { return 42; };

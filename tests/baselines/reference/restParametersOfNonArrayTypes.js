@@ -30,13 +30,13 @@ var b = {
 function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
 var f = function foo() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 };
 var f2 = function () {
@@ -45,13 +45,13 @@ var f2 = function () {
         y[_i - 1] = arguments[_i];
     }
 };
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.foo = function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     };
     return C;
@@ -61,7 +61,7 @@ var b = {
     foo: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     },
     a: function foo() {
@@ -73,7 +73,7 @@ var b = {
     b: function () {
         var x = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            x[_i - 0] = arguments[_i];
+            x[_i] = arguments[_i];
         }
     }
 };

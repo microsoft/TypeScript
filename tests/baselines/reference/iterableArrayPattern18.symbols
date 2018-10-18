@@ -1,0 +1,48 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern18.ts ===
+class Bar { x }
+>Bar : Symbol(Bar, Decl(iterableArrayPattern18.ts, 0, 0))
+>x : Symbol(Bar.x, Decl(iterableArrayPattern18.ts, 0, 11))
+
+class Foo extends Bar { y }
+>Foo : Symbol(Foo, Decl(iterableArrayPattern18.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern18.ts, 0, 0))
+>y : Symbol(Foo.y, Decl(iterableArrayPattern18.ts, 1, 23))
+
+class FooIterator {
+>FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern18.ts, 1, 27))
+
+    next() {
+>next : Symbol(FooIterator.next, Decl(iterableArrayPattern18.ts, 2, 19))
+
+        return {
+            value: new Foo,
+>value : Symbol(value, Decl(iterableArrayPattern18.ts, 4, 16))
+>Foo : Symbol(Foo, Decl(iterableArrayPattern18.ts, 0, 15))
+
+            done: false
+>done : Symbol(done, Decl(iterableArrayPattern18.ts, 5, 27))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(FooIterator[Symbol.iterator], Decl(iterableArrayPattern18.ts, 8, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(FooIterator, Decl(iterableArrayPattern18.ts, 1, 27))
+    }
+}
+
+function fun([a, b]: Bar[]) { }
+>fun : Symbol(fun, Decl(iterableArrayPattern18.ts, 13, 1))
+>a : Symbol(a, Decl(iterableArrayPattern18.ts, 15, 14))
+>b : Symbol(b, Decl(iterableArrayPattern18.ts, 15, 16))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern18.ts, 0, 0))
+
+fun(new FooIterator);
+>fun : Symbol(fun, Decl(iterableArrayPattern18.ts, 13, 1))
+>FooIterator : Symbol(FooIterator, Decl(iterableArrayPattern18.ts, 1, 27))
+

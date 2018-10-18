@@ -1,5 +1,4 @@
 //// [emitArrowFunctionWhenUsingArguments16.ts]
-
 function f() {
     var arguments = "hello";
     if (Math.random()) {

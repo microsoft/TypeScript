@@ -1,5 +1,4 @@
 //// [literalTypes3.ts]
-
 function f1(s: string) {
     if (s === "foo") {
         s;  // "foo"

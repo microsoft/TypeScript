@@ -1,5 +1,4 @@
 === tests/cases/conformance/expressions/commaOperator/commaOperatorOtherValidOperation.ts ===
-
 //Comma operator in for loop
 for (var i = 0, j = 10; i < j; i++, j--)
 >i : number
@@ -38,16 +37,12 @@ var resultIsString = foo(1, "123");
 //TypeParameters
 function foo1<T1, T2>()
 >foo1 : <T1, T2>() => void
->T1 : T1
->T2 : T2
 {
     var x: T1;
 >x : T1
->T1 : T1
 
     var y: T2;
 >y : T2
->T2 : T2
 
     x, y;
 >x, y : T2

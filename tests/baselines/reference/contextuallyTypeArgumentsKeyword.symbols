@@ -1,0 +1,14 @@
+=== tests/cases/compiler/foo.js ===
+// Repro for #16585
+const x = {
+>x : Symbol(x, Decl(foo.js, 1, 5))
+
+    bar() {
+>bar : Symbol(bar, Decl(foo.js, 1, 11))
+
+        setTimeout(function() { arguments }, 0);
+>setTimeout : Symbol(setTimeout, Decl(lib.dom.d.ts, --, --))
+>arguments : Symbol(arguments)
+    }
+}
+

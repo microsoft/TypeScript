@@ -1,5 +1,4 @@
 === tests/cases/compiler/controlFlowArrays.ts ===
-
 declare function cond(): boolean;
 >cond : () => boolean
 

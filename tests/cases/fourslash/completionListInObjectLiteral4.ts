@@ -20,9 +20,7 @@
 ////funcE({ /*E*/ });
 ////funcF({ /*F*/ });
 
-
-for (const marker of test.markers()) {
-    goTo.position(marker.position);
+goTo.eachMarker(() => {
     verify.completionListContains("hello");
     verify.completionListContains("world");
-}
+});

@@ -20,13 +20,14 @@ class C {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 7, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     0: number;
+>0 : Symbol(C[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 8, 24))
 }
 
 interface I {
@@ -44,13 +45,14 @@ interface I {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 16, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     [x: number]: Object;
 >x : Symbol(x, Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     0: number;
+>0 : Symbol(I[0], Decl(classWithOnlyPublicMembersEquivalentToInterface.ts, 17, 24))
 }
 
 var c: C;

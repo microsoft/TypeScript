@@ -42,9 +42,9 @@ class C extends CBase<string> {
 >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
 
                 p.length;
->p.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>p.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 17, 19))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
             }
         });
 
@@ -60,9 +60,9 @@ class C extends CBase<string> {
 >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
 
                 p.length;
->p.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>p.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >p : Symbol(p, Decl(superCallParameterContextualTyping3.ts, 25, 19))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
             }
         });
     }

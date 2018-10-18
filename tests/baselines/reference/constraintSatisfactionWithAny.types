@@ -3,52 +3,40 @@
 
 function foo<T extends String>(x: T): T { return null; }
 >foo : <T extends String>(x: T) => T
->T : T
->String : String
 >x : T
->T : T
->T : T
 >null : null
 
 function foo2<T extends { x: number }>(x: T): T { return null; }
 >foo2 : <T extends { x: number; }>(x: T) => T
->T : T
 >x : number
 >x : T
->T : T
->T : T
 >null : null
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
 >foo4 : <T extends <T>(x: T) => void>(x: T) => T
->T : T
->T : T
 >x : T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 
 var a;
 >a : any
 
 foo(a);
->foo(a) : undefined
+>foo(a) : any
 >foo : <T extends String>(x: T) => T
->a : undefined
+>a : any
 
 foo2(a);
->foo2(a) : undefined
+>foo2(a) : any
 >foo2 : <T extends { x: number; }>(x: T) => T
->a : undefined
+>a : any
 
 //foo3(a);
 foo4(a);
->foo4(a) : undefined
+>foo4(a) : any
 >foo4 : <T extends <T>(x: T) => void>(x: T) => T
->a : undefined
+>a : any
 
 var b: number;
 >b : number
@@ -75,19 +63,16 @@ foo4<any>(b);
 
 class C<T extends String> {
 >C : C<T>
->T : T
->String : String
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c1 = new C(a);
->c1 : C<undefined>
->new C(a) : C<undefined>
+>c1 : C<any>
+>new C(a) : C<any>
 >C : typeof C
->a : undefined
+>a : any
 
 var c2 = new C<any>(b);
 >c2 : C<any>
@@ -97,19 +82,17 @@ var c2 = new C<any>(b);
 
 class C2<T extends { x: number }> {
 >C2 : C2<T>
->T : T
 >x : number
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c3 = new C2(a);
->c3 : C2<undefined>
->new C2(a) : C2<undefined>
+>c3 : C2<any>
+>new C2(a) : C2<any>
 >C2 : typeof C2
->a : undefined
+>a : any
 
 var c4 = new C2<any>(b);
 >c4 : C2<any>
@@ -126,22 +109,17 @@ var c4 = new C2<any>(b);
 
 class C4<T extends <T>(x:T) => T> {
 >C4 : C4<T>
->T : T
->T : T
 >x : T
->T : T
->T : T
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c7 = new C4(a);
->c7 : C4<undefined>
->new C4(a) : C4<undefined>
+>c7 : C4<any>
+>new C4(a) : C4<any>
 >C4 : typeof C4
->a : undefined
+>a : any
 
 var c8 = new C4<any>(b);
 >c8 : C4<any>

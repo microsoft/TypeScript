@@ -1,10 +1,11 @@
-tests/cases/compiler/derivedClasses.ts(1,19): error TS2690: A class must be declared after its base class.
+tests/cases/compiler/derivedClasses.ts(1,19): error TS2449: Class 'Color' used before its declaration.
 
 
 ==== tests/cases/compiler/derivedClasses.ts (1 errors) ====
     class Red extends Color {
                       ~~~~~
-!!! error TS2690: A class must be declared after its base class.
+!!! error TS2449: Class 'Color' used before its declaration.
+!!! related TS2728 tests/cases/compiler/derivedClasses.ts:8:7: 'Color' is declared here.
         public shade() { 
         	var getHue = () => { return this.hue(); };
         	return getHue() + " red"; 

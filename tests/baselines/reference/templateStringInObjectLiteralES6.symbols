@@ -1,0 +1,9 @@
+=== tests/cases/conformance/es6/templates/templateStringInObjectLiteralES6.ts ===
+var x = {
+>x : Symbol(x, Decl(templateStringInObjectLiteralES6.ts, 0, 3))
+
+    a: `abc${ 123 }def`,
+>a : Symbol(a, Decl(templateStringInObjectLiteralES6.ts, 0, 9))
+
+    `b`: 321
+}

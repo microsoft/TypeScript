@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts'/>
 
 ////class Foo {
-////    public [|__bar|]() { return 0; }
+////    public [|{| "isWriteAccess": true, "isDefinition": true |}__bar|]() { return 0; }
 ////}
 ////
 ////var x: Foo;
 ////x.[|__bar|];
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup("(method) Foo.__bar(): number");

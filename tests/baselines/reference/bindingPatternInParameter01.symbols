@@ -1,0 +1,20 @@
+=== tests/cases/compiler/bindingPatternInParameter01.ts ===
+const nestedArray = [[[1, 2]], [[3, 4]]];
+>nestedArray : Symbol(nestedArray, Decl(bindingPatternInParameter01.ts, 0, 5))
+
+nestedArray.forEach(([[a, b]]) => {
+>nestedArray.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>nestedArray : Symbol(nestedArray, Decl(bindingPatternInParameter01.ts, 0, 5))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(bindingPatternInParameter01.ts, 2, 23))
+>b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
+
+  console.log(a, b);
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>a : Symbol(a, Decl(bindingPatternInParameter01.ts, 2, 23))
+>b : Symbol(b, Decl(bindingPatternInParameter01.ts, 2, 25))
+
+});
+

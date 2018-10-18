@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeRelationships/bestCommonType/functionWithMultipleReturnStatements.ts ===
-
 // return type of a function with multiple returns is the BCT of each return statement
 // it is an error if there is no single BCT, these are error cases
 
@@ -83,12 +82,8 @@ function f5() {
 
 function f6<T, U>(x: T, y:U) {
 >f6 : <T, U>(x: T, y: U) => T | U
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
     if (true) {
 >true : true
@@ -104,15 +99,8 @@ function f6<T, U>(x: T, y:U) {
 
 function f8<T extends U, U extends V, V>(x: T, y: U) {
 >f8 : <T extends U, U extends V, V>(x: T, y: U) => U
->T : T
->U : U
->U : U
->V : V
->V : V
 >x : T
->T : T
 >y : U
->U : U
 
     if (true) {
 >true : true

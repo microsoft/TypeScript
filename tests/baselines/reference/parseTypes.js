@@ -1,5 +1,4 @@
 //// [parseTypes.ts]
-
 var x = <() => number>null;
 var y = <{(): number; }>null;
 var z = <{new(): number; }>null

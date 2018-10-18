@@ -1,0 +1,227 @@
+=== tests/cases/compiler/blockScopedVariablesUseBeforeDef.ts ===
+function foo0() {
+>foo0 : () => void
+
+    let a = x;
+>a : any
+>x : any
+
+    let x;
+>x : any
+}
+
+function foo1() {
+>foo1 : () => void
+
+    let a = () => x;
+>a : () => any
+>() => x : () => any
+>x : any
+
+    let x;
+>x : any
+}
+
+function foo2() {
+>foo2 : () => void
+
+    let a = function () { return x; }
+>a : () => any
+>function () { return x; } : () => any
+>x : any
+
+    let x;
+>x : any
+}
+
+function foo3() {
+>foo3 : () => void
+
+    class X {
+>X : X
+
+        m() { return x;}
+>m : () => any
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo4() {
+>foo4 : () => void
+
+    let y = class {
+>y : typeof y
+>class {        m() { return x; }    } : typeof y
+
+        m() { return x; }
+>m : () => any
+>x : any
+
+    };
+    let x;
+>x : any
+}
+
+function foo5() {
+>foo5 : () => void
+
+    let x = () => y;
+>x : () => () => any
+>() => y : () => () => any
+>y : () => () => any
+
+    let y = () => x;
+>y : () => () => any
+>() => x : () => () => any
+>x : () => () => any
+}
+
+function foo6() {
+>foo6 : () => void
+
+    function f() {
+>f : () => any
+
+        return x;
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo7() {
+>foo7 : () => void
+
+    class A {
+>A : A
+
+        a = x;
+>a : any
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo8() {
+>foo8 : () => void
+
+    let y = class {
+>y : typeof y
+>class {        a = x;    } : typeof y
+
+        a = x;
+>a : any
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo9() {
+>foo9 : () => void
+
+    let y = class {
+>y : typeof y
+>class {        static a = x;    } : typeof y
+
+        static a = x;
+>a : any
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo10() {
+>foo10 : () => void
+
+    class A {
+>A : A
+
+        static a = x;
+>a : any
+>x : any
+    }
+    let x;
+>x : any
+}
+
+function foo11() {
+>foo11 : () => void
+
+    function f () {
+>f : () => void
+
+        let y = class {
+>y : typeof y
+>class {            static a = x;        } : typeof y
+
+            static a = x;
+>a : any
+>x : any
+        }
+    }
+    let x;
+>x : any
+}
+
+function foo12() {
+>foo12 : () => void
+
+    function f () {
+>f : () => void
+
+        let y = class {
+>y : typeof y
+>class {            a;            constructor() {                this.a = x;            }        } : typeof y
+
+            a;
+>a : any
+
+            constructor() {
+                this.a = x;
+>this.a = x : any
+>this.a : any
+>this : this
+>a : any
+>x : any
+            }
+        }
+    }
+    let x;
+>x : any
+}
+
+function foo13() {
+>foo13 : () => void
+
+    let a = {
+>a : { readonly a: any; }
+>{        get a() { return x }     } : { readonly a: any; }
+
+        get a() { return x } 
+>a : any
+>x : any
+    }
+    let x
+>x : any
+}
+
+function foo14() {
+>foo14 : () => void
+
+    let a = {
+>a : { a: any; }
+>{        a: x     } : { a: any; }
+
+        a: x 
+>a : any
+>x : any
+    }
+    let x
+>x : any
+}
+

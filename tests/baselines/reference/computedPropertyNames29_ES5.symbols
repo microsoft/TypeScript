@@ -10,6 +10,7 @@ class C {
 >obj : Symbol(obj, Decl(computedPropertyNames29_ES5.ts, 3, 15))
 
                 [this.bar()]() { } // needs capture
+>[this.bar()] : Symbol([this.bar()], Decl(computedPropertyNames29_ES5.ts, 3, 23))
 >this.bar : Symbol(C.bar, Decl(computedPropertyNames29_ES5.ts, 0, 9))
 >this : Symbol(C, Decl(computedPropertyNames29_ES5.ts, 0, 0))
 >bar : Symbol(C.bar, Decl(computedPropertyNames29_ES5.ts, 0, 9))

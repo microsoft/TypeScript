@@ -1,5 +1,4 @@
 === tests/cases/conformance/es7/trailingCommasInFunctionParametersAndArguments.ts ===
-
 function f1(x,) {}
 >f1 : (x: any) => void
 >x : any
@@ -11,6 +10,11 @@ f1(1,);
 
 function f2(...args,) {}
 >f2 : (...args: any[]) => void
+>args : any[]
+
+// Allowed for ambient declarations
+declare function f25(...args,): void;
+>f25 : (...args: any[]) => void
 >args : any[]
 
 f2(...[],);
@@ -55,8 +59,6 @@ class X {
 >value : any
 }
 interface Y {
->Y : Y
-
     new(x,);
 >x : any
 

@@ -1,4 +1,4 @@
-tests/cases/compiler/functionCall8.ts(3,1): error TS2346: Supplied parameters do not match any signature of call target.
+tests/cases/compiler/functionCall8.ts(3,1): error TS2554: Expected 0-1 arguments, but got 2.
 tests/cases/compiler/functionCall8.ts(4,5): error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.
 
 
@@ -7,7 +7,7 @@ tests/cases/compiler/functionCall8.ts(4,5): error TS2345: Argument of type '4' i
     foo('foo'); 
     foo('foo', 'bar'); 
     ~~~~~~~~~~~~~~~~~
-!!! error TS2346: Supplied parameters do not match any signature of call target.
+!!! error TS2554: Expected 0-1 arguments, but got 2.
     foo(4);
         ~
 !!! error TS2345: Argument of type '4' is not assignable to parameter of type 'string'.

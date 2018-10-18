@@ -12,7 +12,7 @@ class TestFile {
 }
 
 //// [detachedCommentAtStartOfLambdaFunction2.js]
-var TestFile = (function () {
+var TestFile = /** @class */ (function () {
     function TestFile() {
     }
     TestFile.prototype.foo = function (message) {
@@ -23,7 +23,7 @@ var TestFile = (function () {
             /// <returns type="Function" />
             var x = [];
             for (var _i = 0; _i < arguments.length; _i++) {
-                x[_i - 0] = arguments[_i];
+                x[_i] = arguments[_i];
             }
             return message + _this.name;
         };

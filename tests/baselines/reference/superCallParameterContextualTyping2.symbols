@@ -1,0 +1,26 @@
+=== tests/cases/conformance/expressions/contextualTyping/superCallParameterContextualTyping2.ts ===
+class A<T1, T2> {
+>A : Symbol(A, Decl(superCallParameterContextualTyping2.ts, 0, 0))
+>T1 : Symbol(T1, Decl(superCallParameterContextualTyping2.ts, 0, 8))
+>T2 : Symbol(T2, Decl(superCallParameterContextualTyping2.ts, 0, 11))
+
+    constructor(private map: (value: T1) => T2) {
+>map : Symbol(A.map, Decl(superCallParameterContextualTyping2.ts, 1, 16))
+>value : Symbol(value, Decl(superCallParameterContextualTyping2.ts, 1, 30))
+>T1 : Symbol(T1, Decl(superCallParameterContextualTyping2.ts, 0, 8))
+>T2 : Symbol(T2, Decl(superCallParameterContextualTyping2.ts, 0, 11))
+
+    }
+}
+
+class C extends A<number, string> {
+>C : Symbol(C, Decl(superCallParameterContextualTyping2.ts, 4, 1))
+>A : Symbol(A, Decl(superCallParameterContextualTyping2.ts, 0, 0))
+
+    // Ensure 'value' is not of type 'any' by invoking it with type arguments.
+    constructor() { super(value => String(value<string>())); }
+>super : Symbol(A, Decl(superCallParameterContextualTyping2.ts, 0, 0))
+>value : Symbol(value, Decl(superCallParameterContextualTyping2.ts, 8, 26))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>value : Symbol(value, Decl(superCallParameterContextualTyping2.ts, 8, 26))
+}

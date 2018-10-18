@@ -1,5 +1,4 @@
 === tests/cases/compiler/concatError.ts ===
-
 var n1: number[];
 >n1 : number[]
 
@@ -16,9 +15,9 @@ fa = fa.concat([0]);
 >fa = fa.concat([0]) : number[]
 >fa : number[]
 >fa.concat([0]) : number[]
->fa.concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >fa : number[]
->concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >[0] : number[]
 >0 : 0
 
@@ -26,9 +25,9 @@ fa = fa.concat(0);
 >fa = fa.concat(0) : number[]
 >fa : number[]
 >fa.concat(0) : number[]
->fa.concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>fa.concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >fa : number[]
->concat : { (...items: number[][]): number[]; (...items: (number | number[])[]): number[]; }
+>concat : { (...items: ConcatArray<number>[]): number[]; (...items: (number | ConcatArray<number>)[]): number[]; }
 >0 : 0
 
 

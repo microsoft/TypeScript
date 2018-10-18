@@ -11,5 +11,5 @@
 ////c./**/ // test on c.
 
 goTo.marker();
-verify.memberListCount(1);
-verify.memberListContains('pub', '(property) M.C.pub: number');
+verify.completionListCount(1);
+verify.completionListContains('pub', '(property) M.C.pub: number');

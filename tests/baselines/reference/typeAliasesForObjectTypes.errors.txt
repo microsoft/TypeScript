@@ -1,19 +1,13 @@
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(4,22): error TS2312: An interface may only extend a class or another interface.
-tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(5,21): error TS2422: A class may only implement another class or interface.
 tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(10,6): error TS2300: Duplicate identifier 'T2'.
 tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts(11,6): error TS2300: Duplicate identifier 'T2'.
 
 
-==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (4 errors) ====
+==== tests/cases/conformance/types/typeAliases/typeAliasesForObjectTypes.ts (2 errors) ====
     type T1 = { x: string }
     
     // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
     interface I1 extends T1 { y: string }
-                         ~~
-!!! error TS2312: An interface may only extend a class or another interface.
     class C1 implements T1 {
-                        ~~
-!!! error TS2422: A class may only implement another class or interface.
         x: string;
     }
     

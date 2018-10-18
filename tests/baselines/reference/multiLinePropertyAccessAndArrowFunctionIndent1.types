@@ -1,0 +1,35 @@
+=== tests/cases/compiler/multiLinePropertyAccessAndArrowFunctionIndent1.ts ===
+return this.edit(role)
+>this.edit(role)    .then((role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data)) : any
+>this.edit(role)    .then : any
+>this.edit(role) : any
+>this.edit : any
+>this : any
+>edit : any
+>role : any
+
+    .then((role: Role) =>
+>then : any
+>(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: any) => any
+>role : any
+
+        this.roleService.add(role)
+>this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : any
+>this.roleService.add(role)            .then : any
+>this.roleService.add(role) : any
+>this.roleService.add : any
+>this.roleService : any
+>this : any
+>roleService : any
+>add : any
+>role : any
+
+            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data));
+>then : any
+>(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: any) => any
+>data : any
+>ng : any
+>data.data : any
+>data : any
+>data : any
+

@@ -1,0 +1,3 @@
+=== tests/cases/conformance/parser/ecmascript5/parserAdditiveExpression1.ts ===
+m.index+1+m[0].length;
+No type information for this code.

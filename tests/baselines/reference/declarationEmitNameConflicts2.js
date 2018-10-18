@@ -24,7 +24,7 @@ var X;
         (function (base) {
             function f() { }
             base.f = f;
-            var C = (function () {
+            var C = /** @class */ (function () {
                 function C() {
                 }
                 return C;
@@ -33,9 +33,9 @@ var X;
             var M;
             (function (M) {
             })(M = base.M || (base.M = {}));
+            var E;
             (function (E) {
-            })(base.E || (base.E = {}));
-            var E = base.E;
+            })(E = base.E || (base.E = {}));
         })(base = Y.base || (Y.base = {}));
     })(Y = X.Y || (X.Y = {}));
 })(X || (X = {}));

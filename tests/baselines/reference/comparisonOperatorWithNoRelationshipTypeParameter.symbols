@@ -1,0 +1,647 @@
+=== tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipTypeParameter.ts ===
+enum E { a, b, c }
+>E : Symbol(E, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 0))
+>a : Symbol(E.a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 8))
+>b : Symbol(E.b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 11))
+>c : Symbol(E.c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 14))
+
+var a: boolean;
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+var b: number;
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+var c: string;
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+var d: void;
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+var e: E;
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>E : Symbol(E, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 0, 0))
+
+var f: { a: string };
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 8))
+
+var g: any[];
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+function foo<T, U>(t: T, u: U) {
+>foo : Symbol(foo, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 13))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 13))
+>U : Symbol(U, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 15))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>T : Symbol(T, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 13))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+>U : Symbol(U, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 15))
+
+    var r1 = t < u;
+>r1 : Symbol(r1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 11, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r2 = t > u;
+>r2 : Symbol(r2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 12, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r3 = t <= u;
+>r3 : Symbol(r3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 13, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r4 = t >= u;
+>r4 : Symbol(r4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 14, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r5 = t == u;
+>r5 : Symbol(r5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 15, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r6 = t != u;
+>r6 : Symbol(r6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 16, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r7 = t === u;
+>r7 : Symbol(r7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 17, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    var r8 = t !== u;
+>r8 : Symbol(r8, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 18, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>u : Symbol(u, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 24))
+
+    // operator <
+    var r1a1 = t < a;
+>r1a1 : Symbol(r1a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 21, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r1a2 = t < b;
+>r1a2 : Symbol(r1a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 22, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r1a3 = t < c;
+>r1a3 : Symbol(r1a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 23, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r1a4 = t < d;
+>r1a4 : Symbol(r1a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 24, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r1a5 = t < e;
+>r1a5 : Symbol(r1a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 25, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r1a6 = t < f;
+>r1a6 : Symbol(r1a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 26, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r1a7 = t < g;
+>r1a7 : Symbol(r1a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 27, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r1b1 = a < t;
+>r1b1 : Symbol(r1b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 29, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b2 = b < t;
+>r1b2 : Symbol(r1b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 30, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b3 = c < t;
+>r1b3 : Symbol(r1b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 31, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b4 = d < t;
+>r1b4 : Symbol(r1b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 32, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b5 = e < t;
+>r1b5 : Symbol(r1b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 33, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b6 = f < t;
+>r1b6 : Symbol(r1b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 34, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r1b7 = g < t;
+>r1b7 : Symbol(r1b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 35, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator >
+    var r2a1 = t < a;
+>r2a1 : Symbol(r2a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 38, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r2a2 = t < b;
+>r2a2 : Symbol(r2a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 39, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r2a3 = t < c;
+>r2a3 : Symbol(r2a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 40, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r2a4 = t < d;
+>r2a4 : Symbol(r2a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 41, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r2a5 = t < e;
+>r2a5 : Symbol(r2a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 42, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r2a6 = t < f;
+>r2a6 : Symbol(r2a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 43, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r2a7 = t < g;
+>r2a7 : Symbol(r2a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 44, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r2b1 = a < t;
+>r2b1 : Symbol(r2b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 46, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b2 = b < t;
+>r2b2 : Symbol(r2b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 47, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b3 = c < t;
+>r2b3 : Symbol(r2b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 48, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b4 = d < t;
+>r2b4 : Symbol(r2b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 49, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b5 = e < t;
+>r2b5 : Symbol(r2b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 50, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b6 = f < t;
+>r2b6 : Symbol(r2b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 51, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r2b7 = g < t;
+>r2b7 : Symbol(r2b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 52, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator <=
+    var r3a1 = t < a;
+>r3a1 : Symbol(r3a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 55, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r3a2 = t < b;
+>r3a2 : Symbol(r3a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 56, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r3a3 = t < c;
+>r3a3 : Symbol(r3a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 57, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r3a4 = t < d;
+>r3a4 : Symbol(r3a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 58, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r3a5 = t < e;
+>r3a5 : Symbol(r3a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 59, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r3a6 = t < f;
+>r3a6 : Symbol(r3a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 60, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r3a7 = t < g;
+>r3a7 : Symbol(r3a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 61, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r3b1 = a < t;
+>r3b1 : Symbol(r3b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 63, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b2 = b < t;
+>r3b2 : Symbol(r3b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 64, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b3 = c < t;
+>r3b3 : Symbol(r3b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 65, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b4 = d < t;
+>r3b4 : Symbol(r3b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 66, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b5 = e < t;
+>r3b5 : Symbol(r3b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 67, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b6 = f < t;
+>r3b6 : Symbol(r3b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 68, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r3b7 = g < t;
+>r3b7 : Symbol(r3b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 69, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator >=
+    var r4a1 = t < a;
+>r4a1 : Symbol(r4a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 72, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r4a2 = t < b;
+>r4a2 : Symbol(r4a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 73, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r4a3 = t < c;
+>r4a3 : Symbol(r4a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 74, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r4a4 = t < d;
+>r4a4 : Symbol(r4a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 75, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r4a5 = t < e;
+>r4a5 : Symbol(r4a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 76, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r4a6 = t < f;
+>r4a6 : Symbol(r4a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 77, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r4a7 = t < g;
+>r4a7 : Symbol(r4a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 78, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r4b1 = a < t;
+>r4b1 : Symbol(r4b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 80, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b2 = b < t;
+>r4b2 : Symbol(r4b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 81, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b3 = c < t;
+>r4b3 : Symbol(r4b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 82, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b4 = d < t;
+>r4b4 : Symbol(r4b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 83, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b5 = e < t;
+>r4b5 : Symbol(r4b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 84, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b6 = f < t;
+>r4b6 : Symbol(r4b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 85, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r4b7 = g < t;
+>r4b7 : Symbol(r4b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 86, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator ==
+    var r5a1 = t < a;
+>r5a1 : Symbol(r5a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 89, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r5a2 = t < b;
+>r5a2 : Symbol(r5a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 90, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r5a3 = t < c;
+>r5a3 : Symbol(r5a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 91, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r5a4 = t < d;
+>r5a4 : Symbol(r5a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 92, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r5a5 = t < e;
+>r5a5 : Symbol(r5a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 93, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r5a6 = t < f;
+>r5a6 : Symbol(r5a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 94, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r5a7 = t < g;
+>r5a7 : Symbol(r5a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 95, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r5b1 = a < t;
+>r5b1 : Symbol(r5b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 97, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b2 = b < t;
+>r5b2 : Symbol(r5b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 98, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b3 = c < t;
+>r5b3 : Symbol(r5b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 99, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b4 = d < t;
+>r5b4 : Symbol(r5b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 100, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b5 = e < t;
+>r5b5 : Symbol(r5b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 101, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b6 = f < t;
+>r5b6 : Symbol(r5b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 102, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r5b7 = g < t;
+>r5b7 : Symbol(r5b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 103, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator !=
+    var r6a1 = t < a;
+>r6a1 : Symbol(r6a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 106, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r6a2 = t < b;
+>r6a2 : Symbol(r6a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 107, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r6a3 = t < c;
+>r6a3 : Symbol(r6a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 108, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r6a4 = t < d;
+>r6a4 : Symbol(r6a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 109, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r6a5 = t < e;
+>r6a5 : Symbol(r6a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 110, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r6a6 = t < f;
+>r6a6 : Symbol(r6a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 111, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r6a7 = t < g;
+>r6a7 : Symbol(r6a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 112, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r6b1 = a < t;
+>r6b1 : Symbol(r6b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 114, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b2 = b < t;
+>r6b2 : Symbol(r6b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 115, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b3 = c < t;
+>r6b3 : Symbol(r6b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 116, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b4 = d < t;
+>r6b4 : Symbol(r6b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 117, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b5 = e < t;
+>r6b5 : Symbol(r6b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 118, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b6 = f < t;
+>r6b6 : Symbol(r6b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 119, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r6b7 = g < t;
+>r6b7 : Symbol(r6b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 120, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator ===
+    var r7a1 = t < a;
+>r7a1 : Symbol(r7a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 123, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r7a2 = t < b;
+>r7a2 : Symbol(r7a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 124, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r7a3 = t < c;
+>r7a3 : Symbol(r7a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 125, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r7a4 = t < d;
+>r7a4 : Symbol(r7a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 126, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r7a5 = t < e;
+>r7a5 : Symbol(r7a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 127, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r7a6 = t < f;
+>r7a6 : Symbol(r7a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 128, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r7a7 = t < g;
+>r7a7 : Symbol(r7a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 129, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r7b1 = a < t;
+>r7b1 : Symbol(r7b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 131, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b2 = b < t;
+>r7b2 : Symbol(r7b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 132, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b3 = c < t;
+>r7b3 : Symbol(r7b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 133, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b4 = d < t;
+>r7b4 : Symbol(r7b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 134, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b5 = e < t;
+>r7b5 : Symbol(r7b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 135, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b6 = f < t;
+>r7b6 : Symbol(r7b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 136, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r7b7 = g < t;
+>r7b7 : Symbol(r7b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 137, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    // operator !==
+    var r8a1 = t < a;
+>r8a1 : Symbol(r8a1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 140, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+
+    var r8a2 = t < b;
+>r8a2 : Symbol(r8a2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 141, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+
+    var r8a3 = t < c;
+>r8a3 : Symbol(r8a3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 142, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+
+    var r8a4 = t < d;
+>r8a4 : Symbol(r8a4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 143, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+
+    var r8a5 = t < e;
+>r8a5 : Symbol(r8a5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 144, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+
+    var r8a6 = t < f;
+>r8a6 : Symbol(r8a6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 145, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+
+    var r8a7 = t < g;
+>r8a7 : Symbol(r8a7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 146, 7))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+
+    var r8b1 = a < t;
+>r8b1 : Symbol(r8b1, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 148, 7))
+>a : Symbol(a, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 2, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b2 = b < t;
+>r8b2 : Symbol(r8b2, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 149, 7))
+>b : Symbol(b, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 3, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b3 = c < t;
+>r8b3 : Symbol(r8b3, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 150, 7))
+>c : Symbol(c, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 4, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b4 = d < t;
+>r8b4 : Symbol(r8b4, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 151, 7))
+>d : Symbol(d, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 5, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b5 = e < t;
+>r8b5 : Symbol(r8b5, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 152, 7))
+>e : Symbol(e, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 6, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b6 = f < t;
+>r8b6 : Symbol(r8b6, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 153, 7))
+>f : Symbol(f, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 7, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+
+    var r8b7 = g < t;
+>r8b7 : Symbol(r8b7, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 154, 7))
+>g : Symbol(g, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 8, 3))
+>t : Symbol(t, Decl(comparisonOperatorWithNoRelationshipTypeParameter.ts, 10, 19))
+}

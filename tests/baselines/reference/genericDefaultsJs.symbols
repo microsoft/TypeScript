@@ -1,0 +1,226 @@
+=== tests/cases/compiler/decls.d.ts ===
+declare function f0<T>(x?: T): T;
+>f0 : Symbol(f0, Decl(decls.d.ts, 0, 0))
+>T : Symbol(T, Decl(decls.d.ts, 0, 20))
+>x : Symbol(x, Decl(decls.d.ts, 0, 23))
+>T : Symbol(T, Decl(decls.d.ts, 0, 20))
+>T : Symbol(T, Decl(decls.d.ts, 0, 20))
+
+declare function f1<T, U = number>(x?: T): [T, U];
+>f1 : Symbol(f1, Decl(decls.d.ts, 0, 33))
+>T : Symbol(T, Decl(decls.d.ts, 1, 20))
+>U : Symbol(U, Decl(decls.d.ts, 1, 22))
+>x : Symbol(x, Decl(decls.d.ts, 1, 35))
+>T : Symbol(T, Decl(decls.d.ts, 1, 20))
+>T : Symbol(T, Decl(decls.d.ts, 1, 20))
+>U : Symbol(U, Decl(decls.d.ts, 1, 22))
+
+declare class C0<T> {
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+>T : Symbol(T, Decl(decls.d.ts, 2, 17))
+
+    y: T;
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>T : Symbol(T, Decl(decls.d.ts, 2, 17))
+
+    constructor(x?: T);
+>x : Symbol(x, Decl(decls.d.ts, 4, 16))
+>T : Symbol(T, Decl(decls.d.ts, 2, 17))
+}
+declare class C1<T, U = number> {
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+>T : Symbol(T, Decl(decls.d.ts, 6, 17))
+>U : Symbol(U, Decl(decls.d.ts, 6, 19))
+
+    y: [T, U];
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>T : Symbol(T, Decl(decls.d.ts, 6, 17))
+>U : Symbol(U, Decl(decls.d.ts, 6, 19))
+
+    constructor(x?: T);
+>x : Symbol(x, Decl(decls.d.ts, 8, 16))
+>T : Symbol(T, Decl(decls.d.ts, 6, 17))
+}
+=== tests/cases/compiler/main.js ===
+const f0_v0 = f0();
+>f0_v0 : Symbol(f0_v0, Decl(main.js, 0, 5))
+>f0 : Symbol(f0, Decl(decls.d.ts, 0, 0))
+
+const f0_v1 = f0(1);
+>f0_v1 : Symbol(f0_v1, Decl(main.js, 1, 5))
+>f0 : Symbol(f0, Decl(decls.d.ts, 0, 0))
+
+const f1_c0 = f1();
+>f1_c0 : Symbol(f1_c0, Decl(main.js, 3, 5))
+>f1 : Symbol(f1, Decl(decls.d.ts, 0, 33))
+
+const f1_c1 = f1(1);
+>f1_c1 : Symbol(f1_c1, Decl(main.js, 4, 5))
+>f1 : Symbol(f1, Decl(decls.d.ts, 0, 33))
+
+const C0_v0 = new C0();
+>C0_v0 : Symbol(C0_v0, Decl(main.js, 6, 5))
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+
+const C0_v0_y = C0_v0.y;
+>C0_v0_y : Symbol(C0_v0_y, Decl(main.js, 7, 5))
+>C0_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_v0 : Symbol(C0_v0, Decl(main.js, 6, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+const C0_v1 = new C0(1);
+>C0_v1 : Symbol(C0_v1, Decl(main.js, 9, 5))
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+
+const C0_v1_y = C0_v1.y;
+>C0_v1_y : Symbol(C0_v1_y, Decl(main.js, 10, 5))
+>C0_v1.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_v1 : Symbol(C0_v1, Decl(main.js, 9, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+const C1_v0 = new C1();
+>C1_v0 : Symbol(C1_v0, Decl(main.js, 12, 5))
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+
+const C1_v0_y = C1_v0.y;
+>C1_v0_y : Symbol(C1_v0_y, Decl(main.js, 13, 5))
+>C1_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_v0 : Symbol(C1_v0, Decl(main.js, 12, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+
+const C1_v1 = new C1(1);
+>C1_v1 : Symbol(C1_v1, Decl(main.js, 15, 5))
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+
+const C1_v1_y = C1_v1.y;
+>C1_v1_y : Symbol(C1_v1_y, Decl(main.js, 16, 5))
+>C1_v1.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_v1 : Symbol(C1_v1, Decl(main.js, 15, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+
+class C0_B0 extends C0 {}
+>C0_B0 : Symbol(C0_B0, Decl(main.js, 16, 24))
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+
+class C0_B1 extends C0 {
+>C0_B1 : Symbol(C0_B1, Decl(main.js, 18, 25))
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+
+    constructor() {
+        super();
+>super : Symbol(C0, Decl(decls.d.ts, 1, 50))
+    }
+}
+class C0_B2 extends C0 {
+>C0_B2 : Symbol(C0_B2, Decl(main.js, 23, 1))
+>C0 : Symbol(C0, Decl(decls.d.ts, 1, 50))
+
+    constructor() {
+        super(1);
+>super : Symbol(C0, Decl(decls.d.ts, 1, 50))
+    }
+}
+
+const C0_B0_v0 = new C0_B0();
+>C0_B0_v0 : Symbol(C0_B0_v0, Decl(main.js, 30, 5))
+>C0_B0 : Symbol(C0_B0, Decl(main.js, 16, 24))
+
+const C0_B0_v0_y = C0_B0_v0.y;
+>C0_B0_v0_y : Symbol(C0_B0_v0_y, Decl(main.js, 31, 5))
+>C0_B0_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_B0_v0 : Symbol(C0_B0_v0, Decl(main.js, 30, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+const C0_B0_v1 = new C0_B0(1);
+>C0_B0_v1 : Symbol(C0_B0_v1, Decl(main.js, 33, 5))
+>C0_B0 : Symbol(C0_B0, Decl(main.js, 16, 24))
+
+const C0_B0_v1_y = C0_B0_v1.y;
+>C0_B0_v1_y : Symbol(C0_B0_v1_y, Decl(main.js, 34, 5))
+>C0_B0_v1.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_B0_v1 : Symbol(C0_B0_v1, Decl(main.js, 33, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+const C0_B1_v0 = new C0_B1();
+>C0_B1_v0 : Symbol(C0_B1_v0, Decl(main.js, 36, 5))
+>C0_B1 : Symbol(C0_B1, Decl(main.js, 18, 25))
+
+const C0_B1_v0_y = C0_B1_v0.y;
+>C0_B1_v0_y : Symbol(C0_B1_v0_y, Decl(main.js, 37, 5))
+>C0_B1_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_B1_v0 : Symbol(C0_B1_v0, Decl(main.js, 36, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+const C0_B2_v0 = new C0_B2();
+>C0_B2_v0 : Symbol(C0_B2_v0, Decl(main.js, 39, 5))
+>C0_B2 : Symbol(C0_B2, Decl(main.js, 23, 1))
+
+const C0_B2_v0_y = C0_B2_v0.y;
+>C0_B2_v0_y : Symbol(C0_B2_v0_y, Decl(main.js, 40, 5))
+>C0_B2_v0.y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+>C0_B2_v0 : Symbol(C0_B2_v0, Decl(main.js, 39, 5))
+>y : Symbol(C0.y, Decl(decls.d.ts, 2, 21))
+
+class C1_B0 extends C1 {}
+>C1_B0 : Symbol(C1_B0, Decl(main.js, 40, 30))
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+
+class C1_B1 extends C1 {
+>C1_B1 : Symbol(C1_B1, Decl(main.js, 42, 25))
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+
+    constructor() {
+        super();
+>super : Symbol(C1, Decl(decls.d.ts, 5, 1))
+    }
+}
+class C1_B2 extends C1 {
+>C1_B2 : Symbol(C1_B2, Decl(main.js, 47, 1))
+>C1 : Symbol(C1, Decl(decls.d.ts, 5, 1))
+
+    constructor() {
+        super(1);
+>super : Symbol(C1, Decl(decls.d.ts, 5, 1))
+    }
+}
+
+const C1_B0_v0 = new C1_B0();
+>C1_B0_v0 : Symbol(C1_B0_v0, Decl(main.js, 54, 5))
+>C1_B0 : Symbol(C1_B0, Decl(main.js, 40, 30))
+
+const C1_B0_v0_y = C1_B0_v0.y;
+>C1_B0_v0_y : Symbol(C1_B0_v0_y, Decl(main.js, 55, 5))
+>C1_B0_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_B0_v0 : Symbol(C1_B0_v0, Decl(main.js, 54, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+
+const C1_B0_v1 = new C1_B0(1);
+>C1_B0_v1 : Symbol(C1_B0_v1, Decl(main.js, 57, 5))
+>C1_B0 : Symbol(C1_B0, Decl(main.js, 40, 30))
+
+const C1_B0_v1_y = C1_B0_v1.y;
+>C1_B0_v1_y : Symbol(C1_B0_v1_y, Decl(main.js, 58, 5))
+>C1_B0_v1.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_B0_v1 : Symbol(C1_B0_v1, Decl(main.js, 57, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+
+const C1_B1_v0 = new C1_B1();
+>C1_B1_v0 : Symbol(C1_B1_v0, Decl(main.js, 60, 5))
+>C1_B1 : Symbol(C1_B1, Decl(main.js, 42, 25))
+
+const C1_B1_v0_y = C1_B1_v0.y;
+>C1_B1_v0_y : Symbol(C1_B1_v0_y, Decl(main.js, 61, 5))
+>C1_B1_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_B1_v0 : Symbol(C1_B1_v0, Decl(main.js, 60, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+
+const C1_B2_v0 = new C1_B2();
+>C1_B2_v0 : Symbol(C1_B2_v0, Decl(main.js, 63, 5))
+>C1_B2 : Symbol(C1_B2, Decl(main.js, 47, 1))
+
+const C1_B2_v0_y = C1_B2_v0.y;
+>C1_B2_v0_y : Symbol(C1_B2_v0_y, Decl(main.js, 64, 5))
+>C1_B2_v0.y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+>C1_B2_v0 : Symbol(C1_B2_v0, Decl(main.js, 63, 5))
+>y : Symbol(C1.y, Decl(decls.d.ts, 6, 33))
+

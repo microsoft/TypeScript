@@ -15,6 +15,6 @@
 ////x./**/
 
 goTo.marker();
-verify.memberListContains("commonProperty", "(property) commonProperty: string | number");
-verify.memberListContains("commonFunction", "(method) commonFunction(): number");
-verify.memberListCount(2);
+verify.completionListContains("commonProperty", "(property) commonProperty: string | number");
+verify.completionListContains("commonFunction", "(method) commonFunction(): number");
+verify.completionListCount(2);

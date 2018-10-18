@@ -1,5 +1,4 @@
 //// [unusedLocalsOnFunctionExpressionWithinFunctionExpression1.ts]
-
 var greeter = function (person: string, person2: string) {
     var unused = 20;
     var maker = function (child: string): void {

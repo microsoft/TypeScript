@@ -131,18 +131,17 @@ x3 += E.a;
 >a : E.a
 
 x3 += null;
->x3 += null : number
+>x3 += null : any
 >x3 : number
 >null : null
 
 x3 += undefined;
->x3 += undefined : number
+>x3 += undefined : any
 >x3 : number
 >undefined : undefined
 
 var x4: E;
 >x4 : E
->E : E
 
 x4 += a;
 >x4 += a : any
@@ -162,12 +161,12 @@ x4 += E.a;
 >a : E.a
 
 x4 += null;
->x4 += null : number
+>x4 += null : any
 >x4 : E
 >null : null
 
 x4 += undefined;
->x4 += undefined : number
+>x4 += undefined : any
 >x4 : E
 >undefined : undefined
 

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/genericArrayExtenstions.ts ===
+export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
+>ObservableArray : Symbol(ObservableArray, Decl(genericArrayExtenstions.ts, 0, 0))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+
+concat<U extends T[]>(...items: U[]): T[];
+>concat : Symbol(ObservableArray.concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
+>U : Symbol(U, Decl(genericArrayExtenstions.ts, 1, 7))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+>items : Symbol(items, Decl(genericArrayExtenstions.ts, 1, 22))
+>U : Symbol(U, Decl(genericArrayExtenstions.ts, 1, 7))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+
+concat(...items: T[]): T[];
+>concat : Symbol(ObservableArray.concat, Decl(genericArrayExtenstions.ts, 0, 61), Decl(genericArrayExtenstions.ts, 1, 42))
+>items : Symbol(items, Decl(genericArrayExtenstions.ts, 2, 7))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+>T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
+}
+

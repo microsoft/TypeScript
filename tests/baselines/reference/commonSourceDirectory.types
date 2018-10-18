@@ -1,0 +1,29 @@
+=== /app/index.ts ===
+/// <reference path="../types/bar.d.ts"/>
+import { x } from "foo";
+>x : 0
+
+import { y } from "bar";
+>y : 0
+
+x + y;
+>x + y : number
+>x : 0
+>y : 0
+
+=== /node_modules/foo/index.ts ===
+// Test that importing a file from `node_modules` does not affect calculation of the common source directory.
+
+export const x = 0;
+>x : 0
+>0 : 0
+
+=== /types/bar.d.ts ===
+declare module "bar" {
+>"bar" : typeof import("bar")
+
+    export const y = 0;
+>y : 0
+>0 : 0
+}
+

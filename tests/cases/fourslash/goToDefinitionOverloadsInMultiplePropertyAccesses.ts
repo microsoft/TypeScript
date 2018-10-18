@@ -5,10 +5,10 @@
 ////namespace A {
 ////    export namespace B {
 ////        export function f(value: number): void;
-////        /*1*/export function f(value: string): void;
+////        export function /*1*/f(value: string): void;
 ////        export function f(value: number | string) {}
 ////    }
 ////}
-////A.B./*2*/f("");
+////A.B.[|/*2*/f|]("");
 
 verify.goToDefinition("2", "1");

@@ -295,18 +295,18 @@ export class HTMLtoJSX {
 >text = text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
 >text : string
 >text        .replace(/\r/g, '')        .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        }) : string
->text        .replace(/\r/g, '')        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace(/\r/g, '')        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text        .replace(/\r/g, '') : string
->text        .replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>text        .replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >text : string
 
         .replace(/\r/g, '')
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/\r/g : RegExp
 >'' : ""
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >/( {2,}|\n|\t|\{|\})/g : RegExp
 >function(whitespace) {          return '{' + JSON.stringify(whitespace) + '}';        } : (whitespace: string) => string
 >whitespace : string
@@ -371,11 +371,11 @@ export class StyleParser {
       if (!this.styles.hasOwnProperty(key)) {
 >!this.styles.hasOwnProperty(key) : boolean
 >this.styles.hasOwnProperty(key) : boolean
->this.styles.hasOwnProperty : (v: string) => boolean
+>this.styles.hasOwnProperty : (v: string | number | symbol) => boolean
 >this.styles : {}
 >this : this
 >styles : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >key : string
       }
     }

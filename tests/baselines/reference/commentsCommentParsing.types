@@ -1,5 +1,4 @@
 === tests/cases/compiler/commentsCommentParsing.ts ===
-
 /// This is simple /// comments
 function simple() {
 >simple : () => void

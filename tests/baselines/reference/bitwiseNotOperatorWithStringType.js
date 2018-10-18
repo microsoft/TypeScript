@@ -1,5 +1,4 @@
 //// [bitwiseNotOperatorWithStringType.ts]
-
 // ~ operator on string type
 var STRING: string;
 var STRING1: string[] = ["", "abc"];
@@ -49,7 +48,7 @@ var ResultIsNumber14 = ~~~(STRING + STRING);
 var STRING;
 var STRING1 = ["", "abc"];
 function foo() { return "abc"; }
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     A.foo = function () { return ""; };

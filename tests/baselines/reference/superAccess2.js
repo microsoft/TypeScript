@@ -25,25 +25,33 @@ class Q extends P {
 }
 
 //// [superAccess2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var P = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var P = /** @class */ (function () {
     function P() {
     }
     P.prototype.x = function () { };
     P.y = function () { };
     return P;
 }());
-var Q = (function (_super) {
+var Q = /** @class */ (function (_super) {
     __extends(Q, _super);
     // Super is not allowed in constructor args
     function Q(z, zz, zzz) {
-        if (z === void 0) { z = _super.; }
-        if (zz === void 0) { zz = _super.; }
-        if (zzz === void 0) { zzz = function () { return _super.; }; }
+        if (z === void 0) { z = _super.prototype.; }
+        if (zz === void 0) { zz = _super.prototype.; }
+        if (zzz === void 0) { zzz = function () { return _super.prototype.; }; }
         var _this = _super.call(this) || this;
         _this.z = z;
         _this.xx = _super.prototype.;
@@ -59,6 +67,6 @@ var Q = (function (_super) {
         _super.x.call(this); // error
         _super.y.call(this);
     };
+    Q.yy = _super.; // error for static initializer accessing super
     return Q;
 }(P));
-Q.yy = _super.; // error for static initializer accessing super

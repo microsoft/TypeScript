@@ -1,0 +1,43 @@
+=== tests/cases/compiler/callOverloads1.ts ===
+class Foo { // error
+>Foo : Foo
+
+    bar1() { /*WScript.Echo("bar1");*/ }
+>bar1 : () => void
+
+    constructor(x: any) {
+>x : any
+
+        // WScript.Echo("Constructor function has executed");
+    }
+}
+
+function Foo(); // error
+>Foo : () => any
+
+function F1(s:string);
+>F1 : (s: string) => any
+>s : string
+
+function F1(a:any) { return a;}
+>F1 : (s: string) => any
+>a : any
+>a : any
+
+var f1 = new Foo("hey");
+>f1 : any
+>new Foo("hey") : any
+>Foo : () => any
+>"hey" : "hey"
+
+
+f1.bar1();
+>f1.bar1() : any
+>f1.bar1 : any
+>f1 : any
+>bar1 : any
+
+Foo();
+>Foo() : any
+>Foo : () => any
+

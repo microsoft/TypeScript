@@ -1,0 +1,12 @@
+[
+    "======== Resolving type reference directive '@beep/boop', containing file '/a.ts', root directory 'types'. ========",
+    "Resolving with primary search path 'types'.",
+    "Directory 'types/@beep' does not exist, skipping all lookups in it.",
+    "Looking up in 'node_modules' folder, initial location '/'.",
+    "Scoped package detected, looking in 'beep__boop'",
+    "File '/node_modules/@types/beep__boop/package.json' does not exist.",
+    "File '/node_modules/@types/beep__boop.d.ts' does not exist.",
+    "File '/node_modules/@types/beep__boop/index.d.ts' exist - use it as a name resolution result.",
+    "Resolving real path for '/node_modules/@types/beep__boop/index.d.ts', result '/node_modules/@types/beep__boop/index.d.ts'.",
+    "======== Type reference directive '@beep/boop' was successfully resolved to '/node_modules/@types/beep__boop/index.d.ts', primary: false. ========"
+]

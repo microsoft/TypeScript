@@ -1,34 +1,34 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: a.ts
-/////*interfaceDefinition1*/interface IFoo {
+////interface /*interfaceDefinition1*/IFoo {
 ////    instance1: number;
 ////}
 
 // @Filename: b.ts
-/////*interfaceDefinition2*/interface IFoo {
+////interface /*interfaceDefinition2*/IFoo {
 ////    instance2: number;
 ////}
 ////
-/////*interfaceDefinition3*/interface IFoo {
+////interface /*interfaceDefinition3*/IFoo {
 ////    instance3: number;
 ////}
 ////
-////var ifoo: IFo/*interfaceReference*/o;
+////var ifoo: [|IFo/*interfaceReference*/o|];
 
 verify.goToDefinition("interfaceReference", ["interfaceDefinition1", "interfaceDefinition2", "interfaceDefinition3"]);
 
 // @Filename: c.ts
-/////*moduleDefinition1*/module Module {
+////module /*moduleDefinition1*/Module {
 ////    export class c1 { }
 ////}
 
 // @Filename: d.ts
-/////*moduleDefinition2*/module Module {
+////module /*moduleDefinition2*/Module {
 ////    export class c2 { }
 ////}
 
 // @Filename: e.ts
-////Modul/*moduleReference*/e;
+////[|Modul/*moduleReference*/e|];
 
 verify.goToDefinition("moduleReference", ["moduleDefinition1", "moduleDefinition2"]);

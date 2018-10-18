@@ -8,7 +8,7 @@ class WebControls {
 }
 
 //// [commentOnClassMethod1.js]
-var WebControls = (function () {
+var WebControls = /** @class */ (function () {
     function WebControls() {
     }
     /**

@@ -1,0 +1,352 @@
+=== tests/cases/conformance/types/witness/witness.ts ===
+// Initializers
+var varInit = varInit; // any
+>varInit : Symbol(varInit, Decl(witness.ts, 1, 3))
+>varInit : Symbol(varInit, Decl(witness.ts, 1, 3))
+
+var pInit: any;
+>pInit : Symbol(pInit, Decl(witness.ts, 2, 3))
+
+function fn(pInit = pInit) {
+>fn : Symbol(fn, Decl(witness.ts, 2, 15))
+>pInit : Symbol(pInit, Decl(witness.ts, 3, 12), Decl(witness.ts, 4, 7))
+>pInit : Symbol(pInit, Decl(witness.ts, 3, 12), Decl(witness.ts, 4, 7))
+
+    var pInit: any;
+>pInit : Symbol(pInit, Decl(witness.ts, 3, 12), Decl(witness.ts, 4, 7))
+}
+class InitClass {
+>InitClass : Symbol(InitClass, Decl(witness.ts, 5, 1))
+
+    x = this.x;
+>x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+>this.x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+>this : Symbol(InitClass, Decl(witness.ts, 5, 1))
+>x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+
+    fn() {
+>fn : Symbol(InitClass.fn, Decl(witness.ts, 7, 15))
+
+        var y = this.x;
+>y : Symbol(y, Decl(witness.ts, 9, 11), Decl(witness.ts, 10, 11))
+>this.x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+>this : Symbol(InitClass, Decl(witness.ts, 5, 1))
+>x : Symbol(InitClass.x, Decl(witness.ts, 6, 17))
+
+        var y: any;
+>y : Symbol(y, Decl(witness.ts, 9, 11), Decl(witness.ts, 10, 11))
+    }
+}
+
+// Return type
+function fnReturn1() {
+>fnReturn1 : Symbol(fnReturn1, Decl(witness.ts, 12, 1))
+
+    return fnReturn1();
+>fnReturn1 : Symbol(fnReturn1, Decl(witness.ts, 12, 1))
+}
+var a: any;
+>a : Symbol(a, Decl(witness.ts, 18, 3), Decl(witness.ts, 19, 3))
+
+var a = fnReturn1();
+>a : Symbol(a, Decl(witness.ts, 18, 3), Decl(witness.ts, 19, 3))
+>fnReturn1 : Symbol(fnReturn1, Decl(witness.ts, 12, 1))
+
+function fnReturn2() {
+>fnReturn2 : Symbol(fnReturn2, Decl(witness.ts, 19, 20))
+
+    return fnReturn2;
+>fnReturn2 : Symbol(fnReturn2, Decl(witness.ts, 19, 20))
+}
+var fnr2: () => any = fnReturn2();
+>fnr2 : Symbol(fnr2, Decl(witness.ts, 24, 3))
+>fnReturn2 : Symbol(fnReturn2, Decl(witness.ts, 19, 20))
+
+// Comma
+var co1 = (co1, 3);
+>co1 : Symbol(co1, Decl(witness.ts, 27, 3), Decl(witness.ts, 28, 3))
+>co1 : Symbol(co1, Decl(witness.ts, 27, 3), Decl(witness.ts, 28, 3))
+
+var co1: number;
+>co1 : Symbol(co1, Decl(witness.ts, 27, 3), Decl(witness.ts, 28, 3))
+
+var co2 = (3, 4, co2);
+>co2 : Symbol(co2, Decl(witness.ts, 29, 3), Decl(witness.ts, 30, 3))
+>co2 : Symbol(co2, Decl(witness.ts, 29, 3), Decl(witness.ts, 30, 3))
+
+var co2: any;
+>co2 : Symbol(co2, Decl(witness.ts, 29, 3), Decl(witness.ts, 30, 3))
+
+var co3 = (co1, co2, co3, co1);
+>co3 : Symbol(co3, Decl(witness.ts, 31, 3), Decl(witness.ts, 32, 3))
+>co1 : Symbol(co1, Decl(witness.ts, 27, 3), Decl(witness.ts, 28, 3))
+>co2 : Symbol(co2, Decl(witness.ts, 29, 3), Decl(witness.ts, 30, 3))
+>co3 : Symbol(co3, Decl(witness.ts, 31, 3), Decl(witness.ts, 32, 3))
+>co1 : Symbol(co1, Decl(witness.ts, 27, 3), Decl(witness.ts, 28, 3))
+
+var co3: number;
+>co3 : Symbol(co3, Decl(witness.ts, 31, 3), Decl(witness.ts, 32, 3))
+
+// Assignment
+var as1 = (as1 = 2);
+>as1 : Symbol(as1, Decl(witness.ts, 35, 3), Decl(witness.ts, 36, 3))
+>as1 : Symbol(as1, Decl(witness.ts, 35, 3), Decl(witness.ts, 36, 3))
+
+var as1: number;
+>as1 : Symbol(as1, Decl(witness.ts, 35, 3), Decl(witness.ts, 36, 3))
+
+var as2 = (as2 = as2 = 2);
+>as2 : Symbol(as2, Decl(witness.ts, 37, 3), Decl(witness.ts, 38, 3))
+>as2 : Symbol(as2, Decl(witness.ts, 37, 3), Decl(witness.ts, 38, 3))
+>as2 : Symbol(as2, Decl(witness.ts, 37, 3), Decl(witness.ts, 38, 3))
+
+var as2: number;
+>as2 : Symbol(as2, Decl(witness.ts, 37, 3), Decl(witness.ts, 38, 3))
+
+// Conditional
+var cnd1 = cnd1 ? 0 : 1;
+>cnd1 : Symbol(cnd1, Decl(witness.ts, 41, 3), Decl(witness.ts, 42, 3))
+>cnd1 : Symbol(cnd1, Decl(witness.ts, 41, 3), Decl(witness.ts, 42, 3))
+
+var cnd1: number;
+>cnd1 : Symbol(cnd1, Decl(witness.ts, 41, 3), Decl(witness.ts, 42, 3))
+
+var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
+>cnd2 : Symbol(cnd2, Decl(witness.ts, 43, 3), Decl(witness.ts, 44, 3))
+>cnd1 : Symbol(cnd1, Decl(witness.ts, 41, 3), Decl(witness.ts, 42, 3))
+>cnd1 : Symbol(cnd1, Decl(witness.ts, 41, 3), Decl(witness.ts, 42, 3))
+
+var cnd2: string;
+>cnd2 : Symbol(cnd2, Decl(witness.ts, 43, 3), Decl(witness.ts, 44, 3))
+
+// ||
+var or1 = or1 || '';
+>or1 : Symbol(or1, Decl(witness.ts, 47, 3), Decl(witness.ts, 48, 3))
+>or1 : Symbol(or1, Decl(witness.ts, 47, 3), Decl(witness.ts, 48, 3))
+
+var or1: any;
+>or1 : Symbol(or1, Decl(witness.ts, 47, 3), Decl(witness.ts, 48, 3))
+
+var or2 = '' || or2;
+>or2 : Symbol(or2, Decl(witness.ts, 49, 3), Decl(witness.ts, 50, 3))
+>or2 : Symbol(or2, Decl(witness.ts, 49, 3), Decl(witness.ts, 50, 3))
+
+var or2: any;
+>or2 : Symbol(or2, Decl(witness.ts, 49, 3), Decl(witness.ts, 50, 3))
+
+var or3 = or3 || or3;
+>or3 : Symbol(or3, Decl(witness.ts, 51, 3), Decl(witness.ts, 52, 3))
+>or3 : Symbol(or3, Decl(witness.ts, 51, 3), Decl(witness.ts, 52, 3))
+>or3 : Symbol(or3, Decl(witness.ts, 51, 3), Decl(witness.ts, 52, 3))
+
+var or3: any;
+>or3 : Symbol(or3, Decl(witness.ts, 51, 3), Decl(witness.ts, 52, 3))
+
+// &&
+var and1 = and1 && '';
+>and1 : Symbol(and1, Decl(witness.ts, 55, 3), Decl(witness.ts, 56, 3))
+>and1 : Symbol(and1, Decl(witness.ts, 55, 3), Decl(witness.ts, 56, 3))
+
+var and1: string;
+>and1 : Symbol(and1, Decl(witness.ts, 55, 3), Decl(witness.ts, 56, 3))
+
+var and2 = '' && and2;
+>and2 : Symbol(and2, Decl(witness.ts, 57, 3), Decl(witness.ts, 58, 3))
+>and2 : Symbol(and2, Decl(witness.ts, 57, 3), Decl(witness.ts, 58, 3))
+
+var and2: any;
+>and2 : Symbol(and2, Decl(witness.ts, 57, 3), Decl(witness.ts, 58, 3))
+
+var and3 = and3 && and3;
+>and3 : Symbol(and3, Decl(witness.ts, 59, 3), Decl(witness.ts, 60, 3))
+>and3 : Symbol(and3, Decl(witness.ts, 59, 3), Decl(witness.ts, 60, 3))
+>and3 : Symbol(and3, Decl(witness.ts, 59, 3), Decl(witness.ts, 60, 3))
+
+var and3: any;
+>and3 : Symbol(and3, Decl(witness.ts, 59, 3), Decl(witness.ts, 60, 3))
+
+// function call return type
+function fnCall() {
+>fnCall : Symbol(fnCall, Decl(witness.ts, 60, 14))
+
+    return fnCall();
+>fnCall : Symbol(fnCall, Decl(witness.ts, 60, 14))
+}
+var fnCallResult = fnCall();
+>fnCallResult : Symbol(fnCallResult, Decl(witness.ts, 66, 3), Decl(witness.ts, 67, 3))
+>fnCall : Symbol(fnCall, Decl(witness.ts, 60, 14))
+
+var fnCallResult: any;
+>fnCallResult : Symbol(fnCallResult, Decl(witness.ts, 66, 3), Decl(witness.ts, 67, 3))
+
+// Call argument
+function fnArg1(x: typeof fnArg1, y: number) {
+>fnArg1 : Symbol(fnArg1, Decl(witness.ts, 67, 22))
+>x : Symbol(x, Decl(witness.ts, 70, 16), Decl(witness.ts, 71, 7))
+>fnArg1 : Symbol(fnArg1, Decl(witness.ts, 67, 22))
+>y : Symbol(y, Decl(witness.ts, 70, 33))
+
+    var x: (n: typeof fnArg1, m: number) => void;
+>x : Symbol(x, Decl(witness.ts, 70, 16), Decl(witness.ts, 71, 7))
+>n : Symbol(n, Decl(witness.ts, 71, 12))
+>fnArg1 : Symbol(fnArg1, Decl(witness.ts, 67, 22))
+>m : Symbol(m, Decl(witness.ts, 71, 29))
+
+    fnArg1(fnArg1, 0);
+>fnArg1 : Symbol(fnArg1, Decl(witness.ts, 67, 22))
+>fnArg1 : Symbol(fnArg1, Decl(witness.ts, 67, 22))
+}
+
+function overload1(x: (n: string) => string): string;
+>overload1 : Symbol(overload1, Decl(witness.ts, 73, 1), Decl(witness.ts, 75, 53), Decl(witness.ts, 76, 53), Decl(witness.ts, 77, 44))
+>x : Symbol(x, Decl(witness.ts, 75, 19))
+>n : Symbol(n, Decl(witness.ts, 75, 23))
+
+function overload1(x: (n: number) => number): number;
+>overload1 : Symbol(overload1, Decl(witness.ts, 73, 1), Decl(witness.ts, 75, 53), Decl(witness.ts, 76, 53), Decl(witness.ts, 77, 44))
+>x : Symbol(x, Decl(witness.ts, 76, 19))
+>n : Symbol(n, Decl(witness.ts, 76, 23))
+
+function overload1(x: (n: any) => any): any;
+>overload1 : Symbol(overload1, Decl(witness.ts, 73, 1), Decl(witness.ts, 75, 53), Decl(witness.ts, 76, 53), Decl(witness.ts, 77, 44))
+>x : Symbol(x, Decl(witness.ts, 77, 19))
+>n : Symbol(n, Decl(witness.ts, 77, 23))
+
+function overload1() { return undefined; };
+>overload1 : Symbol(overload1, Decl(witness.ts, 73, 1), Decl(witness.ts, 75, 53), Decl(witness.ts, 76, 53), Decl(witness.ts, 77, 44))
+>undefined : Symbol(undefined)
+
+function fnArg2() {
+>fnArg2 : Symbol(fnArg2, Decl(witness.ts, 78, 43))
+
+    return overload1(fnArg2);
+>overload1 : Symbol(overload1, Decl(witness.ts, 73, 1), Decl(witness.ts, 75, 53), Decl(witness.ts, 76, 53), Decl(witness.ts, 77, 44))
+>fnArg2 : Symbol(fnArg2, Decl(witness.ts, 78, 43))
+}
+var t = fnArg2(); // t: should be 'any', but is 'string'
+>t : Symbol(t, Decl(witness.ts, 83, 3))
+>fnArg2 : Symbol(fnArg2, Decl(witness.ts, 78, 43))
+
+// New operator
+class C {
+>C : Symbol(C, Decl(witness.ts, 83, 17))
+
+    fn1() {
+>fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
+
+        return new (this.fn1())();
+>this.fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
+>this : Symbol(C, Decl(witness.ts, 83, 17))
+>fn1 : Symbol(C.fn1, Decl(witness.ts, 86, 9))
+    }
+    fn2() {
+>fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
+
+        return new (this.fn2());
+>this.fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
+>this : Symbol(C, Decl(witness.ts, 83, 17))
+>fn2 : Symbol(C.fn2, Decl(witness.ts, 89, 5))
+    }
+    fn3() {
+>fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
+
+        var a: new(x) => number;
+>a : Symbol(a, Decl(witness.ts, 94, 11))
+>x : Symbol(x, Decl(witness.ts, 94, 19))
+
+        return new a(this.fn3);
+>a : Symbol(a, Decl(witness.ts, 94, 11))
+>this.fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
+>this : Symbol(C, Decl(witness.ts, 83, 17))
+>fn3 : Symbol(C.fn3, Decl(witness.ts, 92, 5))
+    }
+}
+
+function fn5() {
+>fn5 : Symbol(fn5, Decl(witness.ts, 97, 1))
+
+    var a: new (x) => number;
+>a : Symbol(a, Decl(witness.ts, 100, 7))
+>x : Symbol(x, Decl(witness.ts, 100, 16))
+
+    return new a(fn5);
+>a : Symbol(a, Decl(witness.ts, 100, 7))
+>fn5 : Symbol(fn5, Decl(witness.ts, 97, 1))
+}
+var fn5r = fn5(); // fn5r: should be 'any', but is 'number'
+>fn5r : Symbol(fn5r, Decl(witness.ts, 103, 3))
+>fn5 : Symbol(fn5, Decl(witness.ts, 97, 1))
+
+// Property access
+var propAcc1 = {
+>propAcc1 : Symbol(propAcc1, Decl(witness.ts, 106, 3), Decl(witness.ts, 109, 3))
+
+    m: propAcc1.m
+>m : Symbol(m, Decl(witness.ts, 106, 16))
+>propAcc1 : Symbol(propAcc1, Decl(witness.ts, 106, 3), Decl(witness.ts, 109, 3))
+
+};
+var propAcc1: { m: any; }
+>propAcc1 : Symbol(propAcc1, Decl(witness.ts, 106, 3), Decl(witness.ts, 109, 3))
+>m : Symbol(m, Decl(witness.ts, 109, 15))
+
+// Property access of module member
+module M2 {
+>M2 : Symbol(M2, Decl(witness.ts, 109, 25))
+
+    export var x = M2.x;
+>x : Symbol(x, Decl(witness.ts, 113, 14))
+>M2.x : Symbol(x, Decl(witness.ts, 113, 14))
+>M2 : Symbol(M2, Decl(witness.ts, 109, 25))
+>x : Symbol(x, Decl(witness.ts, 113, 14))
+
+    var y = x;
+>y : Symbol(y, Decl(witness.ts, 114, 7), Decl(witness.ts, 115, 7))
+>x : Symbol(x, Decl(witness.ts, 113, 14))
+
+    var y: any;
+>y : Symbol(y, Decl(witness.ts, 114, 7), Decl(witness.ts, 115, 7))
+}
+
+// Property access of class instance type
+class C2 {
+>C2 : Symbol(C2, Decl(witness.ts, 116, 1))
+
+    n = this.n; // n: any
+>n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+>this.n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+>this : Symbol(C2, Decl(witness.ts, 116, 1))
+>n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+}
+var c2inst = new C2().n;
+>c2inst : Symbol(c2inst, Decl(witness.ts, 122, 3), Decl(witness.ts, 123, 3))
+>new C2().n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+>C2 : Symbol(C2, Decl(witness.ts, 116, 1))
+>n : Symbol(C2.n, Decl(witness.ts, 119, 10))
+
+var c2inst: any;
+>c2inst : Symbol(c2inst, Decl(witness.ts, 122, 3), Decl(witness.ts, 123, 3))
+
+// Constructor function property access
+class C3 {
+>C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+
+    static q = C3.q;
+>q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+>C3.q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+>C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+>q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+}
+var qq = C3.q;
+>qq : Symbol(qq, Decl(witness.ts, 129, 3), Decl(witness.ts, 130, 3))
+>C3.q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+>C3 : Symbol(C3, Decl(witness.ts, 123, 16))
+>q : Symbol(C3.q, Decl(witness.ts, 126, 10))
+
+var qq: any;
+>qq : Symbol(qq, Decl(witness.ts, 129, 3), Decl(witness.ts, 130, 3))
+
+// Parentheses - tested a bunch above
+
+
+

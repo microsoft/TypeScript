@@ -22,7 +22,7 @@ var p: M.D.Point;
 //// [exportImportAndClodule.js]
 var K;
 (function (K) {
-    var L = (function () {
+    var L = /** @class */ (function () {
         function L(name) {
             this.name = name;
         }

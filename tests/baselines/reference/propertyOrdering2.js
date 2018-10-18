@@ -9,7 +9,7 @@ class Foo {
 
 
 //// [propertyOrdering2.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo(x, y) {
         this.x = x;
     }

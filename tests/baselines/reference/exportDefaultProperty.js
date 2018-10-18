@@ -43,9 +43,10 @@ fooLength + 1;
 
 //// [a.js]
 "use strict";
+exports.__esModule = true;
 var A;
 (function (A) {
-    var B = (function () {
+    var B = /** @class */ (function () {
         function B(b) {
         }
         return B;
@@ -55,7 +56,6 @@ var A;
         B.b = 0;
     })(B = A.B || (A.B = {}));
 })(A || (A = {}));
-exports.__esModule = true;
 exports["default"] = A.B;
 //// [b.js]
 "use strict";
@@ -63,6 +63,7 @@ exports.__esModule = true;
 exports["default"] = "foo".length;
 //// [index.js]
 "use strict";
+exports.__esModule = true;
 /// <reference path="declarations.d.ts" />
 var foobar_1 = require("foobar");
 var X = foobar_1["default"].X;

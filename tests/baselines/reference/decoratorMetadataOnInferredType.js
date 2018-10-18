@@ -1,5 +1,4 @@
 //// [decoratorMetadataOnInferredType.ts]
-
 declare var console: {
     log(msg: string): void;
 };
@@ -19,7 +18,8 @@ export class B {
 
 //// [decoratorMetadataOnInferredType.js]
 "use strict";
-var A = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var A = /** @class */ (function () {
     function A() {
         console.log('new A');
     }
@@ -27,14 +27,14 @@ var A = (function () {
 }());
 function decorator(target, propertyKey) {
 }
-var B = (function () {
+var B = /** @class */ (function () {
     function B() {
         this.x = new A();
     }
+    __decorate([
+        decorator,
+        __metadata("design:type", Object)
+    ], B.prototype, "x", void 0);
     return B;
 }());
 exports.B = B;
-__decorate([
-    decorator,
-    __metadata("design:type", Object)
-], B.prototype, "x", void 0);

@@ -1,5 +1,4 @@
 === tests/cases/compiler/noImplicitAnyInContextuallyTypesFunctionParamter.ts ===
-
 var regexMatchList = ['', ''];
 >regexMatchList : string[]
 >['', ''] : string[]
@@ -14,9 +13,9 @@ regexMatchList.forEach(match => ''.replace(match, ''));
 >match => ''.replace(match, '') : (match: string) => string
 >match : string
 >''.replace(match, '') : string
->''.replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>''.replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >'' : ""
->replace : { (searchValue: string, replaceValue: string): string; (searchValue: string, replacer: (substring: string, ...args: any[]) => string): string; (searchValue: RegExp, replaceValue: string): string; (searchValue: RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
+>replace : { (searchValue: string | RegExp, replaceValue: string): string; (searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; }
 >match : string
 >'' : ""
 

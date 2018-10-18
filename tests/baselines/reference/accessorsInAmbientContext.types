@@ -1,0 +1,44 @@
+=== tests/cases/compiler/accessorsInAmbientContext.ts ===
+declare module M {
+>M : typeof M
+
+    class C {
+>C : C
+
+        get X() { return 1; }
+>X : number
+>1 : 1
+
+        set X(v) { }
+>X : number
+>v : number
+
+        static get Y() { return 1; }
+>Y : number
+>1 : 1
+
+        static set Y(v) { }
+>Y : number
+>v : number
+    }
+}
+
+declare class C {
+>C : C
+
+    get X() { return 1; }
+>X : number
+>1 : 1
+
+    set X(v) { }
+>X : number
+>v : number
+
+    static get Y() { return 1; }
+>Y : number
+>1 : 1
+
+    static set Y(v) { }
+>Y : number
+>v : number
+}

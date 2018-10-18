@@ -1,5 +1,4 @@
 === tests/cases/conformance/es7/exponentiationOperator/emitCompoundExponentiationAssignmentWithIndexingOnLHS4.ts ===
-
 var globalCounter = 0;
 >globalCounter : number
 >0 : 0

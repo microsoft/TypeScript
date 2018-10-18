@@ -1,0 +1,51 @@
+=== tests/cases/conformance/internalModules/DeclarationMerging/module.ts ===
+module A {
+>A : Symbol(A, Decl(module.ts, 0, 0), Decl(function.ts, 0, 0))
+
+    export module Point {
+>Point : Symbol(Point, Decl(module.ts, 0, 10), Decl(function.ts, 0, 10))
+
+        export var Origin = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(module.ts, 2, 18))
+>x : Symbol(x, Decl(module.ts, 2, 29))
+>y : Symbol(y, Decl(module.ts, 2, 35))
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/function.ts ===
+module A {
+>A : Symbol(A, Decl(module.ts, 0, 0), Decl(function.ts, 0, 0))
+
+    // duplicate identifier error
+    export function Point() {
+>Point : Symbol(Point, Decl(module.ts, 0, 10), Decl(function.ts, 0, 10))
+
+        return { x: 0, y: 0 };
+>x : Symbol(x, Decl(function.ts, 3, 16))
+>y : Symbol(y, Decl(function.ts, 3, 22))
+    }
+}
+
+=== tests/cases/conformance/internalModules/DeclarationMerging/simple.ts ===
+module B {
+>B : Symbol(B, Decl(simple.ts, 0, 0))
+
+    export module Point {
+>Point : Symbol(Point, Decl(simple.ts, 4, 5), Decl(simple.ts, 0, 10))
+
+        export var Origin = { x: 0, y: 0 };
+>Origin : Symbol(Origin, Decl(simple.ts, 3, 18))
+>x : Symbol(x, Decl(simple.ts, 3, 29))
+>y : Symbol(y, Decl(simple.ts, 3, 35))
+    }
+
+    // duplicate identifier error
+    export function Point() {
+>Point : Symbol(Point, Decl(simple.ts, 4, 5), Decl(simple.ts, 0, 10))
+
+        return { x: 0, y: 0 };
+>x : Symbol(x, Decl(simple.ts, 8, 16))
+>y : Symbol(y, Decl(simple.ts, 8, 22))
+    }
+}
+

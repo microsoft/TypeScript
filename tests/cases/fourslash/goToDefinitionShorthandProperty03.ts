@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 ////var /*varDef*/x = {
-////    /*varProp*/x
+////    [|/*varProp*/x|]
 ////}
 ////let /*letDef*/y = {
-////    /*letProp*/y
+////    [|/*letProp*/y|]
 ////}
 
 verify.goToDefinition({

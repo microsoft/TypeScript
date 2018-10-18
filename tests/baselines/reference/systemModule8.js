@@ -1,5 +1,4 @@
 //// [systemModule8.ts]
-
 export var x;
 x = 1;
 x++;
@@ -33,11 +32,11 @@ for ([x] of [[1]]) {}
 //// [systemModule8.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
+    var _a, x, y, z0, z1;
     var __moduleName = context_1 && context_1.id;
     function foo() {
         exports_1("x", x = 100);
     }
-    var x, y, z0, z1, _a;
     return {
         setters: [],
         execute: function () {
@@ -62,7 +61,7 @@ System.register([], function (exports_1, context_1) {
             for (exports_1("x", x = 18);; exports_1("x", --x)) { }
             for (var x_1 = 50;;) { }
             exports_1("y", y = [1][0]);
-            _a = { a: true, b: { c: "123" } }, exports_1("z0", z0 = _a.a), exports_1("z1", z1 = _a.b.c);
+            exports_1("z0", z0 = (_a = { a: true, b: { c: "123" } }, _a.a)), exports_1("z1", z1 = _a.b.c);
             for (var _i = 0, _a = [[1]]; _i < _a.length; _i++) {
                 exports_1("x", x = _a[_i][0]);
             }

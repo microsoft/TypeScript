@@ -1,0 +1,13 @@
+=== tests/cases/compiler/unknownPropertiesAreAssignableToObjectUnion.ts ===
+const x: Object | string = { x: 0 };
+>x : string | Object
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+
+const y: Object | undefined = { x: 0 };
+>y : Object | undefined
+>{ x: 0 } : { x: number; }
+>x : number
+>0 : 0
+

@@ -105,6 +105,14 @@
 ////  * second time information about the param again
 ////  */
 ////function /*l*/l(param1: string) { /*9*/param1 = "hello"; }
+////     /** 
+////       * This is firstLine
+//// This is second Line
+//// [1]: third * line
+//// @param param1 first Line text
+//// second line text
+//// */
+////function /*m*/m(param1: string) { /*10*/param1 = "hello"; }
 
 verify.quickInfos({
     a: ["var a: string", "This is firstLine\nThis is second Line\n\nThis is fourth Line"],
@@ -133,8 +141,11 @@ verify.quickInfos({
     7: ["(parameter) param1: string", "param information first line\n\nparam information third line"],
 
     k: ["function k(param1: string): void", "This is firstLine\nThis is second Line"],
-    8: ["(parameter) param1: string", "hello   "],
+    8: ["(parameter) param1: string", "hello"],
 
     l: ["function l(param1: string): void", "This is firstLine\nThis is second Line"],
-    9: ["(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"]
+    9: ["(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"],
+
+    m: ["function m(param1: string): void", "This is firstLine\nThis is second Line\n[1]: third * line"],
+    10: ["(parameter) param1: string", "first Line text\nsecond line text"]
 });

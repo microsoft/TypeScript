@@ -1,0 +1,69 @@
+=== tests/cases/compiler/interfaceImplementation8.ts ===
+/*
+    1
+*/
+interface i1 {
+    name: string;
+>name : string
+}
+
+class C1 implements i1 {
+>C1 : C1
+
+    public name:string;
+>name : string
+}
+
+class C2 implements i1 {
+>C2 : C2
+
+    private name:string;
+>name : string
+}
+
+class C3 {
+>C3 : C3
+
+    private name:any;
+>name : any
+}
+
+class C4 extends C1 implements i1{ }
+>C4 : C4
+>C1 : C1
+
+class C5 extends C2 implements i1{ }
+>C5 : C5
+>C2 : C2
+
+class C6 extends C3 implements i1{ }
+>C6 : C6
+>C3 : C3
+
+/*
+    2
+*/
+
+interface i2 {
+    name: string;
+>name : string
+
+    age: number;
+>age : number
+}
+
+class C7 {
+>C7 : C7
+
+    public name:string;
+>name : string
+}
+
+class C8 extends C7 implements i2{
+>C8 : C8
+>C7 : C7
+
+    public age:number;
+>age : number
+}
+

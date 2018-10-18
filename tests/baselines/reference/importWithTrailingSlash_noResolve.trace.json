@@ -1,10 +1,9 @@
 [
     "======== Resolving module './foo/' from '/a.ts'. ========",
     "Explicitly specified module resolution kind: 'NodeJs'.",
-    "Loading module as file / folder, candidate module location '/foo/'.",
-    "File '/foo/package.json' does not exist.",
-    "File '/foo/index.ts' does not exist.",
-    "File '/foo/index.tsx' does not exist.",
-    "File '/foo/index.d.ts' does not exist.",
+    "Loading module as file / folder, candidate module location '/foo/', target file type 'TypeScript'.",
+    "Directory '/foo/' does not exist, skipping all lookups in it.",
+    "Loading module as file / folder, candidate module location '/foo/', target file type 'JavaScript'.",
+    "Directory '/foo/' does not exist, skipping all lookups in it.",
     "======== Module name './foo/' was not resolved. ========"
 ]

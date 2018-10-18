@@ -1,0 +1,129 @@
+=== tests/cases/compiler/controlFlowLoopAnalysis.ts ===
+// Repro from #8418
+
+let cond: boolean;
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+function foo(x: number): number { return 1; }
+>foo : Symbol(foo, Decl(controlFlowLoopAnalysis.ts, 2, 18))
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 4, 13))
+
+function test1() {
+>test1 : Symbol(test1, Decl(controlFlowLoopAnalysis.ts, 4, 45))
+
+    let x: number | undefined;
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 7, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+        while (cond) {
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+            while (cond) {
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+                x = foo(x);
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 7, 7))
+>foo : Symbol(foo, Decl(controlFlowLoopAnalysis.ts, 2, 18))
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 7, 7))
+            }
+        }
+        x = 1;
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 7, 7))
+    }
+}
+
+// Repro from #8418
+
+function test2() {
+>test2 : Symbol(test2, Decl(controlFlowLoopAnalysis.ts, 16, 1))
+
+    let x: number | undefined;
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 21, 7))
+
+    x = 1;
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 21, 7))
+
+    while (cond) {
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+        while (cond) {
+>cond : Symbol(cond, Decl(controlFlowLoopAnalysis.ts, 2, 3))
+
+            x = foo(x);
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 21, 7))
+>foo : Symbol(foo, Decl(controlFlowLoopAnalysis.ts, 2, 18))
+>x : Symbol(x, Decl(controlFlowLoopAnalysis.ts, 21, 7))
+        }
+    }
+}
+
+// Repro from #8511
+
+function mapUntilCant<a, b>(
+>mapUntilCant : Symbol(mapUntilCant, Decl(controlFlowLoopAnalysis.ts, 28, 1))
+>a : Symbol(a, Decl(controlFlowLoopAnalysis.ts, 32, 22))
+>b : Symbol(b, Decl(controlFlowLoopAnalysis.ts, 32, 24))
+
+    values: a[],
+>values : Symbol(values, Decl(controlFlowLoopAnalysis.ts, 32, 28))
+>a : Symbol(a, Decl(controlFlowLoopAnalysis.ts, 32, 22))
+
+    canTake: (value: a, index: number) => boolean,
+>canTake : Symbol(canTake, Decl(controlFlowLoopAnalysis.ts, 33, 16))
+>value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 34, 14))
+>a : Symbol(a, Decl(controlFlowLoopAnalysis.ts, 32, 22))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 34, 23))
+
+    mapping: (value: a, index: number) => b
+>mapping : Symbol(mapping, Decl(controlFlowLoopAnalysis.ts, 34, 50))
+>value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 35, 14))
+>a : Symbol(a, Decl(controlFlowLoopAnalysis.ts, 32, 22))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 35, 23))
+>b : Symbol(b, Decl(controlFlowLoopAnalysis.ts, 32, 24))
+
+): b[] {
+>b : Symbol(b, Decl(controlFlowLoopAnalysis.ts, 32, 24))
+
+    let result: b[] = [];
+>result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
+>b : Symbol(b, Decl(controlFlowLoopAnalysis.ts, 32, 24))
+
+    for (let index = 0, length = values.length; index < length; index++) {
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+>length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>values : Symbol(values, Decl(controlFlowLoopAnalysis.ts, 32, 28))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+>length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+
+        let value = values[index];
+>value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 39, 11))
+>values : Symbol(values, Decl(controlFlowLoopAnalysis.ts, 32, 28))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+
+        if (canTake(value, index)) {
+>canTake : Symbol(canTake, Decl(controlFlowLoopAnalysis.ts, 33, 16))
+>value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 39, 11))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+
+            result.push(mapping(value, index));
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>mapping : Symbol(mapping, Decl(controlFlowLoopAnalysis.ts, 34, 50))
+>value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 39, 11))
+>index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
+
+        } else {
+            return result;
+>result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
+        }
+    }
+    return result;
+>result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
+}
+

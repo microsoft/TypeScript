@@ -1,5 +1,4 @@
 //// [capturedLetConstInLoop9_ES6.ts]
-
 for (let x = 0; x < 1; ++x) {
     let x;
     (function() { return x });

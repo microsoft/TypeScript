@@ -1,5 +1,4 @@
 //// [jsxReactTestSuite.tsx]
-
 declare var React: any;
 declare var Component:any;
 declare var Composite:any;

@@ -1,0 +1,25 @@
+=== tests/cases/compiler/unusedTypeParameterInMethod1.ts ===
+class A {
+>A : Symbol(A, Decl(unusedTypeParameterInMethod1.ts, 0, 0))
+
+    public f1<X, Y, Z>() {
+>f1 : Symbol(A.f1, Decl(unusedTypeParameterInMethod1.ts, 0, 9))
+>X : Symbol(X, Decl(unusedTypeParameterInMethod1.ts, 1, 14))
+>Y : Symbol(Y, Decl(unusedTypeParameterInMethod1.ts, 1, 16))
+>Z : Symbol(Z, Decl(unusedTypeParameterInMethod1.ts, 1, 19))
+
+        var a: Y;
+>a : Symbol(a, Decl(unusedTypeParameterInMethod1.ts, 2, 11))
+>Y : Symbol(Y, Decl(unusedTypeParameterInMethod1.ts, 1, 16))
+
+        var b: Z;
+>b : Symbol(b, Decl(unusedTypeParameterInMethod1.ts, 3, 11))
+>Z : Symbol(Z, Decl(unusedTypeParameterInMethod1.ts, 1, 19))
+
+        a;
+>a : Symbol(a, Decl(unusedTypeParameterInMethod1.ts, 2, 11))
+
+        b;
+>b : Symbol(b, Decl(unusedTypeParameterInMethod1.ts, 3, 11))
+    }
+}

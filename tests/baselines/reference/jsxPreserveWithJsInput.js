@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/jsxPreserveWithJsInput.ts] ////
 
 //// [a.js]
-
 var elemA = 42;
 
 //// [b.jsx]

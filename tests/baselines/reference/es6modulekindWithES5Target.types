@@ -1,5 +1,4 @@
-=== tests/cases/compiler/es6modulekindWithES5Target.ts ===
-
+=== tests/cases/conformance/externalModules/es6/es6modulekindWithES5Target.ts ===
 export class C {
 >C : C
 

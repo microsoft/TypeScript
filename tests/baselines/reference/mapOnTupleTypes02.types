@@ -1,18 +1,16 @@
 === tests/cases/compiler/mapOnTupleTypes02.ts ===
-
 export type Point = [number, number];
 >Point : [number, number]
 
 export function increment(point: Point) {
->increment : (point: [number, number]) => [number, number]
+>increment : (point: [number, number]) => number[]
 >point : [number, number]
->Point : [number, number]
 
   return point.map(d => d + 1);
->point.map(d => d + 1) : [number, number]
->point.map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>point.map(d => d + 1) : number[]
+>point.map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >point : [number, number]
->map : { <U>(this: [number, number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U, U]; <U>(this: [number, number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U, U]; <U>(this: [number, number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U, U]; <U>(this: [number, number], callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): [U, U]; <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any): U[]; }
+>map : <U>(callbackfn: (value: number, index: number, array: number[]) => U, thisArg?: any) => U[]
 >d => d + 1 : (d: number) => number
 >d : number
 >d + 1 : number

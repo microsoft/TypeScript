@@ -1,5 +1,4 @@
 //// [superPropertyAccess_ES6.ts]
-
 class MyBase {
   getValue(): number { return 1; }
   get value(): number { return 1; }

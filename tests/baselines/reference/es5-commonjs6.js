@@ -1,5 +1,4 @@
 //// [es5-commonjs6.ts]
-
 export default "test";
 var __esModule = 1;
 

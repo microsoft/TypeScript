@@ -12,7 +12,8 @@ class Hello extends Greeter { }
 
 //// [importAsBaseClass_0.js]
 "use strict";
-var Greeter = (function () {
+exports.__esModule = true;
+var Greeter = /** @class */ (function () {
     function Greeter() {
     }
     Greeter.prototype.greet = function () { return 'greet'; };
@@ -21,16 +22,25 @@ var Greeter = (function () {
 exports.Greeter = Greeter;
 //// [importAsBaseClass_1.js]
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
 var Greeter = require("./importAsBaseClass_0");
-var Hello = (function (_super) {
+var Hello = /** @class */ (function (_super) {
     __extends(Hello, _super);
     function Hello() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return Hello;
 }(Greeter));

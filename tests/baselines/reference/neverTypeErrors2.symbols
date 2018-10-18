@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/never/neverTypeErrors2.ts ===
+function f1() {
+>f1 : Symbol(f1, Decl(neverTypeErrors2.ts, 0, 0))
+
+    let x: never;
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x = 1;
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x = "abc";
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x = false;
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x = undefined;
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+>undefined : Symbol(undefined)
+
+    x = null;
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x = {};
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+
+    x();
+>x : Symbol(x, Decl(neverTypeErrors2.ts, 1, 7))
+}
+
+function f2(): never {
+>f2 : Symbol(f2, Decl(neverTypeErrors2.ts, 9, 1))
+
+    return;
+}
+
+function f3(): never {
+>f3 : Symbol(f3, Decl(neverTypeErrors2.ts, 13, 1))
+
+    return 1;
+}
+
+function f4(): never {
+>f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
+}
+
+for (const n of f4()) {}
+>n : Symbol(n, Decl(neverTypeErrors2.ts, 22, 10))
+>f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
+
+for (const n in f4()) {}
+>n : Symbol(n, Decl(neverTypeErrors2.ts, 23, 10))
+>f4 : Symbol(f4, Decl(neverTypeErrors2.ts, 17, 1))
+

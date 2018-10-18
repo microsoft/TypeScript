@@ -1,0 +1,5 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/parserStrictMode6-negative.ts ===
+eval++;
+>eval++ : number
+>eval : any
+

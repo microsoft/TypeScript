@@ -1,0 +1,5 @@
+=== tests/cases/conformance/ambient/ambientExternalModuleInsideNonAmbient.ts ===
+module M {
+    export declare module "M" { }
+>"M" : typeof import("M")
+}

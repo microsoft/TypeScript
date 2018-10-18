@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/moduleAugmentationsImports3.ts] ////
 
 //// [a.ts]
-
 export class A {}
 
 //// [b.ts]
@@ -49,7 +48,8 @@ let c = a.getCls().y.toLowerCase();
 //// [f.js]
 define("a", ["require", "exports"], function (require, exports) {
     "use strict";
-    var A = (function () {
+    exports.__esModule = true;
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -58,7 +58,8 @@ define("a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports"], function (require, exports) {
     "use strict";
-    var B = (function () {
+    exports.__esModule = true;
+    var B = /** @class */ (function () {
         function B() {
         }
         return B;
@@ -67,10 +68,12 @@ define("b", ["require", "exports"], function (require, exports) {
 });
 define("e", ["require", "exports", "a"], function (require, exports, a_1) {
     "use strict";
+    exports.__esModule = true;
     a_1.A.prototype.getCls = function () { return undefined; };
 });
 define("main", ["require", "exports", "D", "e"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var a;
     var b = a.getB().x.toFixed();
     var c = a.getCls().y.toLowerCase();

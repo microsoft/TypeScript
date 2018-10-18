@@ -1,5 +1,4 @@
 === tests/cases/compiler/noImplicitReturnsInAsync1.ts ===
-
 async function test(isError: boolean = false) {
 >test : (isError?: boolean) => Promise<void>
 >isError : boolean

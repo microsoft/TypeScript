@@ -10,4 +10,4 @@
 
 goTo.file("memberListOfEnumFromExternalModule_file1.ts");
 goTo.marker('1');
-verify.memberListContains("One");
+verify.completionListContains("One");

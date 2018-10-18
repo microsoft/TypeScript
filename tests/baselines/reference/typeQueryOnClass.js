@@ -57,7 +57,7 @@ var r3: typeof D;
 var r4: typeof d;
 
 //// [typeQueryOnClass.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         var _this = this;
         this.x = x;
@@ -99,15 +99,15 @@ var C = (function () {
         enumerable: true,
         configurable: true
     });
+    C.sa = 1;
+    C.sb = function () { return 1; };
     return C;
 }());
-C.sa = 1;
-C.sb = function () { return 1; };
 var c;
 // BUG 820454
 var r1;
 var r2;
-var D = (function () {
+var D = /** @class */ (function () {
     function D(y) {
         this.y = y;
     }

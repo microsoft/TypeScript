@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/StrictMode/octalLiteralInStrictModeES3.ts ===
+"use strict";
+>"use strict" : "use strict"
+
+03;
+>03 : 3
+

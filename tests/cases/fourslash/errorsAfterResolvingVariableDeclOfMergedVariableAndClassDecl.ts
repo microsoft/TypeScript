@@ -10,7 +10,7 @@
 ////    }
 ////}
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 
 // Edit and bind and resolve only var decl
 goTo.marker("1");
@@ -18,5 +18,4 @@ edit.backspace(1);
 edit.insert(" ");
 verify.quickInfoIs("var M.C.C: typeof M.C");
 
-// Verify there are no errors
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -1,5 +1,4 @@
 //// [systemModule16.ts]
-
 import * as x from "foo";
 import * as y from "bar";
 export * from "foo";
@@ -15,8 +14,8 @@ x,y,a1,b1,d1;
 //// [systemModule16.js]
 System.register(["foo", "bar"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var x, y, foo_1;
+    var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "x": true,
         "y": true,
@@ -27,8 +26,7 @@ System.register(["foo", "bar"], function (exports_1, context_1) {
     function exportStar_1(m) {
         var exports = {};
         for (var n in m) {
-            if (n !== "default" && !exportedNames_1.hasOwnProperty(n))
-                exports[n] = m[n];
+            if (n !== "default" && !exportedNames_1.hasOwnProperty(n)) exports[n] = m[n];
         }
         exports_1(exports);
     }

@@ -1,0 +1,12 @@
+=== /src/index.ts ===
+import { x } from "../node_modules/foo";
+>x : number
+
+=== /node_modules/foo/index.js ===
+exports.x = 0;
+>exports.x = 0 : 0
+>exports.x : number
+>exports : typeof import("/node_modules/foo/index")
+>x : number
+>0 : 0
+

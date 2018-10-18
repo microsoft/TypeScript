@@ -1,0 +1,29 @@
+=== tests/cases/compiler/ThingA.ts ===
+// https://github.com/Microsoft/TypeScript/issues/8612
+export class ThingA { } 
+>ThingA : ThingA
+
+=== tests/cases/compiler/ThingB.ts ===
+export class ThingB { }
+>ThingB : ThingB
+
+=== tests/cases/compiler/Things.ts ===
+export {ThingA} from "./ThingA";
+>ThingA : typeof import("tests/cases/compiler/ThingA").ThingA
+
+export {ThingB} from "./ThingB";
+>ThingB : typeof import("tests/cases/compiler/ThingB").ThingB
+
+=== tests/cases/compiler/Test.ts ===
+import * as things from "./Things";
+>things : typeof things
+
+export class Test {
+>Test : Test
+
+    public method = (input: things.ThingA)  => { };
+>method : (input: things.ThingA) => void
+>(input: things.ThingA)  => { } : (input: things.ThingA) => void
+>input : things.ThingA
+>things : any
+}

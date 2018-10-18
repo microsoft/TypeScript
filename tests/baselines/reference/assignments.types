@@ -1,0 +1,72 @@
+=== tests/cases/conformance/expressions/valuesAndReferences/assignments.ts ===
+// In this file:
+//  Assign to a module
+//  Assign to a class
+//  Assign to an enum
+//  Assign to a function
+//  Assign to a variable
+//  Assign to a parameter
+//  Assign to an interface
+
+module M { }
+M = null; // Error
+>M = null : null
+>M : any
+>null : null
+
+class C { }
+>C : C
+
+C = null; // Error
+>C = null : null
+>C : any
+>null : null
+
+enum E { A }
+>E : E
+>A : E.A
+
+E = null; // Error
+>E = null : null
+>E : any
+>null : null
+
+E.A = null; // OK per spec, Error per implementation (509581)
+>E.A = null : null
+>E.A : any
+>E : typeof E
+>A : any
+>null : null
+
+function fn() { }
+>fn : () => void
+
+fn = null; // Should be error
+>fn = null : null
+>fn : any
+>null : null
+
+var v;
+>v : any
+
+v = null; // OK
+>v = null : null
+>v : any
+>null : null
+
+function fn2(p) {
+>fn2 : (p: any) => void
+>p : any
+
+    p = null; // OK
+>p = null : null
+>p : any
+>null : null
+}
+
+interface I { }
+I = null; // Error
+>I = null : null
+>I : any
+>null : null
+

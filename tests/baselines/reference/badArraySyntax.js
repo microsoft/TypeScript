@@ -12,7 +12,7 @@ var a6: Z[][] = new   Z     [      ]   [  ];
 
 
 //// [badArraySyntax.js]
-var Z = (function () {
+var Z = /** @class */ (function () {
     function Z() {
         this.x = "";
     }

@@ -6,12 +6,12 @@ export class Foo {}
 //// [modulePrologueSystem.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var Foo;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            Foo = (function () {
+            Foo = /** @class */ (function () {
                 function Foo() {
                 }
                 return Foo;

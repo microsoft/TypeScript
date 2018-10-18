@@ -1,0 +1,228 @@
+=== tests/cases/compiler/tupleTypes.ts ===
+var v1: [];  // Error
+>v1 : []
+
+var v2: [number];
+>v2 : [number]
+
+var v3: [number, string];
+>v3 : [number, string]
+
+var v4: [number, [string, string]];
+>v4 : [number, [string, string]]
+
+var t: [number, string];
+>t : [number, string]
+
+var t0 = t[0];   // number
+>t0 : number
+>t[0] : number
+>t : [number, string]
+>0 : 0
+
+var t0: number;
+>t0 : number
+
+var t1 = t[1];   // string
+>t1 : string
+>t[1] : string
+>t : [number, string]
+>1 : 1
+
+var t1: string;
+>t1 : string
+
+var t2 = t[2];   // number|string
+>t2 : undefined
+>t[2] : undefined
+>t : [number, string]
+>2 : 2
+
+var t2: number|string;
+>t2 : undefined
+
+t = [];               // Error
+>t = [] : []
+>t : [number, string]
+>[] : []
+
+t = [1];              // Error
+>t = [1] : [number]
+>t : [number, string]
+>[1] : [number]
+>1 : 1
+
+t = [1, "hello"];     // Ok
+>t = [1, "hello"] : [number, string]
+>t : [number, string]
+>[1, "hello"] : [number, string]
+>1 : 1
+>"hello" : "hello"
+
+t = ["hello", 1];     // Error
+>t = ["hello", 1] : [string, number]
+>t : [number, string]
+>["hello", 1] : [string, number]
+>"hello" : "hello"
+>1 : 1
+
+t = [1, "hello", 2];  // Error
+>t = [1, "hello", 2] : [number, string, number]
+>t : [number, string]
+>[1, "hello", 2] : [number, string, number]
+>1 : 1
+>"hello" : "hello"
+>2 : 2
+
+var tf: [string, (x: string) => number] = ["hello", x => x.length];
+>tf : [string, (x: string) => number]
+>x : string
+>["hello", x => x.length] : [string, (x: string) => number]
+>"hello" : "hello"
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+declare function ff<T, U>(a: T, b: [T, (x: T) => U]): U;
+>ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
+>a : T
+>b : [T, (x: T) => U]
+>x : T
+
+var ff1 = ff("hello", ["foo", x => x.length]);
+>ff1 : number
+>ff("hello", ["foo", x => x.length]) : number
+>ff : <T, U>(a: T, b: [T, (x: T) => U]) => U
+>"hello" : "hello"
+>["foo", x => x.length] : [string, (x: string) => number]
+>"foo" : "foo"
+>x => x.length : (x: string) => number
+>x : string
+>x.length : number
+>x : string
+>length : number
+
+var ff1: number;
+>ff1 : number
+
+function tuple2<T0, T1>(item0: T0, item1: T1): [T0, T1]{
+>tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
+>item0 : T0
+>item1 : T1
+
+    return [item0, item1];
+>[item0, item1] : [T0, T1]
+>item0 : T0
+>item1 : T1
+}
+
+var tt = tuple2(1, "string");
+>tt : [number, string]
+>tuple2(1, "string") : [number, string]
+>tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
+>1 : 1
+>"string" : "string"
+
+var tt0 = tt[0];
+>tt0 : number
+>tt[0] : number
+>tt : [number, string]
+>0 : 0
+
+var tt0: number;
+>tt0 : number
+
+var tt1 = tt[1];
+>tt1 : string
+>tt[1] : string
+>tt : [number, string]
+>1 : 1
+
+var tt1: string;
+>tt1 : string
+
+var tt2 = tt[2]; 
+>tt2 : undefined
+>tt[2] : undefined
+>tt : [number, string]
+>2 : 2
+
+var tt2: number | string;
+>tt2 : undefined
+
+tt = tuple2(1, undefined);
+>tt = tuple2(1, undefined) : [number, any]
+>tt : [number, string]
+>tuple2(1, undefined) : [number, any]
+>tuple2 : <T0, T1>(item0: T0, item1: T1) => [T0, T1]
+>1 : 1
+>undefined : undefined
+
+tt = [1, undefined];
+>tt = [1, undefined] : [number, undefined]
+>tt : [number, string]
+>[1, undefined] : [number, undefined]
+>1 : 1
+>undefined : undefined
+
+tt = [undefined, undefined];
+>tt = [undefined, undefined] : [undefined, undefined]
+>tt : [number, string]
+>[undefined, undefined] : [undefined, undefined]
+>undefined : undefined
+>undefined : undefined
+
+tt = [];  // Error
+>tt = [] : []
+>tt : [number, string]
+>[] : []
+
+var a: number[];
+>a : number[]
+
+var a1: [number, string];
+>a1 : [number, string]
+
+var a2: [number, number];
+>a2 : [number, number]
+
+var a3: [number, {}];
+>a3 : [number, {}]
+
+a = a1;   // Error
+>a = a1 : [number, string]
+>a : number[]
+>a1 : [number, string]
+
+a = a2;
+>a = a2 : [number, number]
+>a : number[]
+>a2 : [number, number]
+
+a = a3;   // Error
+>a = a3 : [number, {}]
+>a : number[]
+>a3 : [number, {}]
+
+a1 = a2;  // Error
+>a1 = a2 : [number, number]
+>a1 : [number, string]
+>a2 : [number, number]
+
+a1 = a3;  // Error
+>a1 = a3 : [number, {}]
+>a1 : [number, string]
+>a3 : [number, {}]
+
+a3 = a1;
+>a3 = a1 : [number, string]
+>a3 : [number, {}]
+>a1 : [number, string]
+
+a3 = a2;
+>a3 = a2 : [number, number]
+>a3 : [number, {}]
+>a2 : [number, number]
+

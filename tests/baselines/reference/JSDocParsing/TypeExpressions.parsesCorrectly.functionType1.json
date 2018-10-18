@@ -2,6 +2,7 @@
     "kind": "JSDocFunctionType",
     "pos": 1,
     "end": 11,
+    "flags": "JSDoc",
     "parameters": {
         "length": 0,
         "pos": 10,

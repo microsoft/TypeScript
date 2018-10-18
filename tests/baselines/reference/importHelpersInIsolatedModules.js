@@ -35,67 +35,65 @@ export declare function __awaiter(thisArg: any, _arguments: any, P: Function, ge
 
 //// [external.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var tslib_1 = require("tslib");
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
 exports.A = A;
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
 exports.B = B;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
-], C);
 //// [script.js]
-"use strict";
 var tslib_1 = require("tslib");
-var A = (function () {
+var A = /** @class */ (function () {
     function A() {
     }
     return A;
 }());
-var B = (function (_super) {
+var B = /** @class */ (function (_super) {
     tslib_1.__extends(B, _super);
     function B() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return B;
 }(A));
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.prototype.method = function (x) {
     };
+    tslib_1.__decorate([
+        tslib_1.__param(0, dec),
+        tslib_1.__metadata("design:type", Function),
+        tslib_1.__metadata("design:paramtypes", [Number]),
+        tslib_1.__metadata("design:returntype", void 0)
+    ], C.prototype, "method", null);
+    C = tslib_1.__decorate([
+        dec
+    ], C);
     return C;
 }());
-tslib_1.__decorate([
-    tslib_1.__param(0, dec),
-    tslib_1.__metadata("design:type", Function),
-    tslib_1.__metadata("design:paramtypes", [Number]),
-    tslib_1.__metadata("design:returntype", void 0)
-], C.prototype, "method", null);
-C = tslib_1.__decorate([
-    dec,
-    tslib_1.__metadata("design:paramtypes", [])
-], C);

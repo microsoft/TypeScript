@@ -17,11 +17,12 @@ export module X {
 
 //// [mergedModuleDeclarationCodeGen.js]
 "use strict";
+exports.__esModule = true;
 var X;
 (function (X) {
     var Y;
     (function (Y_1) {
-        var A = (function () {
+        var A = /** @class */ (function () {
             function A(Y) {
                 new Y_1.B();
             }
@@ -32,7 +33,7 @@ var X;
 (function (X) {
     var Y;
     (function (Y) {
-        var B = (function () {
+        var B = /** @class */ (function () {
             function B() {
             }
             return B;

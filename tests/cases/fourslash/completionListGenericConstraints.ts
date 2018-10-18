@@ -52,26 +52,26 @@
 ////}
 
 goTo.marker("objectMembers");
-verify.memberListContains("hasOwnProperty");
-verify.memberListContains("isPrototypeOf");
-verify.memberListContains("toString");
+verify.completionListContains("hasOwnProperty");
+verify.completionListContains("isPrototypeOf");
+verify.completionListContains("toString");
 
 goTo.marker("interfaceMembers");
-verify.memberListContains("bar11");
-verify.memberListContains("bar12");
-verify.memberListContains("bar21");
-verify.memberListContains("bar22");
+verify.completionListContains("bar11");
+verify.completionListContains("bar12");
+verify.completionListContains("bar21");
+verify.completionListContains("bar22");
 
 goTo.marker("callableMembers");
-verify.memberListContains("name");
-verify.memberListContains("apply");
-verify.memberListContains("call");
-verify.memberListContains("bind");
+verify.completionListContains("name");
+verify.completionListContains("apply");
+verify.completionListContains("call");
+verify.completionListContains("bind");
 
 goTo.marker("publicOnlyMemebers");
-verify.memberListContains("publicProperty");
-verify.memberListContains("publicMethod");
-verify.not.memberListContains("privateProperty");
-verify.not.memberListContains("privateMethod");
-verify.not.memberListContains("publicStaticMethod");
-verify.not.memberListContains("privateStaticMethod");
+verify.completionListContains("publicProperty");
+verify.completionListContains("publicMethod");
+verify.not.completionListContains("privateProperty");
+verify.not.completionListContains("privateMethod");
+verify.not.completionListContains("publicStaticMethod");
+verify.not.completionListContains("privateStaticMethod");

@@ -4,16 +4,15 @@ class C {
 
     [x: number]: Date;
 >x : number
->Date : Date
 
     [x: string]: Object;
 >x : string
->Object : Object
 
     1: Date;
->Date : Date
+>1 : Date
 
     'a': {}
+>'a' : {}
 
     fn() {
 >fn : () => this

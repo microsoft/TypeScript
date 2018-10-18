@@ -1,0 +1,6 @@
+=== tests/cases/compiler/unusedNamespaceInModule.ts ===
+module A {
+No type information for this code.    namespace B { }
+No type information for this code.    export namespace C {}
+No type information for this code.}
+No type information for this code.

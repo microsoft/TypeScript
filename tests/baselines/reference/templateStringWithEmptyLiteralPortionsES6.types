@@ -1,7 +1,7 @@
 === tests/cases/conformance/es6/templates/templateStringWithEmptyLiteralPortionsES6.ts ===
 var a = ``;
 >a : string
->`` : string
+>`` : ""
 
 var b = `${ 0 }`;
 >b : string

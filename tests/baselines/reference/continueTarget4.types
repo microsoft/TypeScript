@@ -1,5 +1,4 @@
 === tests/cases/compiler/continueTarget4.ts ===
-
 target1:
 >target1 : any
 

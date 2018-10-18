@@ -1,0 +1,16 @@
+=== tests/cases/compiler/detachedCommentAtStartOfFunctionBody1.ts ===
+class TestFile {
+>TestFile : Symbol(TestFile, Decl(detachedCommentAtStartOfFunctionBody1.ts, 0, 0))
+
+    foo(message: string): () => string {
+>foo : Symbol(TestFile.foo, Decl(detachedCommentAtStartOfFunctionBody1.ts, 0, 16))
+>message : Symbol(message, Decl(detachedCommentAtStartOfFunctionBody1.ts, 1, 8))
+
+        /// <summary>Test summary</summary>
+        /// <param name="message" type="String" />
+        /// <returns type="Function" />
+        return () => message + this.name;
+>message : Symbol(message, Decl(detachedCommentAtStartOfFunctionBody1.ts, 1, 8))
+>this : Symbol(TestFile, Decl(detachedCommentAtStartOfFunctionBody1.ts, 0, 0))
+    }
+}

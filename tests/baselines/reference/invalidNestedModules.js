@@ -36,7 +36,7 @@ var A;
     (function (B) {
         var C;
         (function (C) {
-            var Point = (function () {
+            var Point = /** @class */ (function () {
                 function Point() {
                 }
                 return Point;
@@ -48,7 +48,7 @@ var A;
 (function (A) {
     var B;
     (function (B) {
-        var C = (function () {
+        var C = /** @class */ (function () {
             function C() {
             }
             return C;
@@ -60,7 +60,7 @@ var M2;
 (function (M2) {
     var X;
     (function (X) {
-        var Point = (function () {
+        var Point = /** @class */ (function () {
             function Point() {
             }
             return Point;

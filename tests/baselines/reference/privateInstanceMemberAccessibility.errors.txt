@@ -2,12 +2,11 @@ tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAcces
   Property 'foo' is private in type 'Base' but not in type 'Derived'.
 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(6,15): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(8,22): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,15): error TS1003: Identifier expected.
-tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,21): error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(10,15): error TS2304: Cannot find name 'super'.
 tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts(12,12): error TS1005: ';' expected.
 
 
-==== tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts (6 errors) ====
+==== tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAccessibility.ts (5 errors) ====
     class Base {
         private foo: string;
     }
@@ -26,9 +25,7 @@ tests/cases/conformance/classes/members/accessibility/privateInstanceMemberAcces
         }
         z: typeof super.foo; // error
                   ~~~~~
-!!! error TS1003: Identifier expected.
-                        ~~~
-!!! error TS2340: Only public and protected methods of the base class are accessible via the 'super' keyword.
+!!! error TS2304: Cannot find name 'super'.
     
         a: this.foo; // error
                ~

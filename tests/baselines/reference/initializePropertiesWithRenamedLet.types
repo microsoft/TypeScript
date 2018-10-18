@@ -1,5 +1,4 @@
 === tests/cases/compiler/initializePropertiesWithRenamedLet.ts ===
-
 var x0;
 >x0 : any
 
@@ -10,15 +9,15 @@ if (true) {
 >x0 : any
 
     var obj1 = { x0: x0 };
->obj1 : { x0: undefined; }
->{ x0: x0 } : { x0: undefined; }
->x0 : undefined
->x0 : undefined
+>obj1 : { x0: any; }
+>{ x0: x0 } : { x0: any; }
+>x0 : any
+>x0 : any
 
     var obj2 = { x0 };
->obj2 : { x0: undefined; }
->{ x0 } : { x0: undefined; }
->x0 : undefined
+>obj2 : { x0: any; }
+>{ x0 } : { x0: any; }
+>x0 : any
 }
 
 var x, y, z;

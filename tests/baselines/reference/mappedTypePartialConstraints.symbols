@@ -1,0 +1,36 @@
+=== tests/cases/compiler/mappedTypePartialConstraints.ts ===
+// Repro from #16985
+
+interface MyInterface {
+>MyInterface : Symbol(MyInterface, Decl(mappedTypePartialConstraints.ts, 0, 0))
+
+  something: number;
+>something : Symbol(MyInterface.something, Decl(mappedTypePartialConstraints.ts, 2, 23))
+}
+
+class MyClass<T extends MyInterface> {
+>MyClass : Symbol(MyClass, Decl(mappedTypePartialConstraints.ts, 4, 1))
+>T : Symbol(T, Decl(mappedTypePartialConstraints.ts, 6, 14))
+>MyInterface : Symbol(MyInterface, Decl(mappedTypePartialConstraints.ts, 0, 0))
+
+  doIt(data : Partial<T>) {}
+>doIt : Symbol(MyClass.doIt, Decl(mappedTypePartialConstraints.ts, 6, 38))
+>data : Symbol(data, Decl(mappedTypePartialConstraints.ts, 7, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypePartialConstraints.ts, 6, 14))
+}
+
+class MySubClass extends MyClass<MyInterface> {}
+>MySubClass : Symbol(MySubClass, Decl(mappedTypePartialConstraints.ts, 8, 1))
+>MyClass : Symbol(MyClass, Decl(mappedTypePartialConstraints.ts, 4, 1))
+>MyInterface : Symbol(MyInterface, Decl(mappedTypePartialConstraints.ts, 0, 0))
+
+function fn(arg: typeof MyClass) {};
+>fn : Symbol(fn, Decl(mappedTypePartialConstraints.ts, 10, 48))
+>arg : Symbol(arg, Decl(mappedTypePartialConstraints.ts, 12, 12))
+>MyClass : Symbol(MyClass, Decl(mappedTypePartialConstraints.ts, 4, 1))
+
+fn(MySubClass);
+>fn : Symbol(fn, Decl(mappedTypePartialConstraints.ts, 10, 48))
+>MySubClass : Symbol(MySubClass, Decl(mappedTypePartialConstraints.ts, 8, 1))
+

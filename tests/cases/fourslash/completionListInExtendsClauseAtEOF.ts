@@ -6,5 +6,5 @@
 ////class Bar extends mod./**/
 
 goTo.marker();
-verify.memberListContains("Foo");
-verify.memberListCount(1);
+verify.completionListContains("Foo");
+verify.completionListCount(1);

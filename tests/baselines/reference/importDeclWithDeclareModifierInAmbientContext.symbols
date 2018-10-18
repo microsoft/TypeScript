@@ -1,0 +1,21 @@
+=== tests/cases/compiler/importDeclWithDeclareModifierInAmbientContext.ts ===
+declare module "m" {
+>"m" : Symbol("m", Decl(importDeclWithDeclareModifierInAmbientContext.ts, 0, 0))
+
+    module x {
+>x : Symbol(x, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 0, 20))
+
+        interface c {
+>c : Symbol(c, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 1, 14))
+        }
+    }
+    declare export import a = x.c;
+>a : Symbol(a, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 4, 5))
+>x : Symbol(x, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 0, 20))
+>c : Symbol(a, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 1, 14))
+
+    var b: a;
+>b : Symbol(b, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 6, 7))
+>a : Symbol(a, Decl(importDeclWithDeclareModifierInAmbientContext.ts, 4, 5))
+}
+

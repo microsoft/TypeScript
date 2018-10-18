@@ -1,0 +1,271 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubtypeIfEveryConstituentTypeIsSubtype.ts ===
+enum e {
+>e : e
+
+    e1,
+>e1 : e.e1
+
+    e2
+>e2 : e.e2
+}
+
+// A union type U is a subtype of a type T if each type in U is a subtype of T
+interface I {
+    [x: string]: any;
+>x : string
+
+    foo: string | number; // ok
+>foo : string | number
+
+    foo2: e | number; // ok
+>foo2 : number
+}
+interface I2 {
+    [x: string]: number;
+>x : string
+
+    // S is union type and each constituent type of S is a subtype of T
+    foo: string | number; // error string is not subtype of number
+>foo : string | number
+
+    foo2: e | number; // ok e and number both subtype of number
+>foo2 : number
+}
+
+interface I3 {
+    [x: string]: string;
+>x : string
+
+    foo: string | number; // error numer is not subtype of string
+>foo : string | number
+
+    foo2: e | number; // error e and number both not subtype of string
+>foo2 : number
+}
+
+// error cases
+interface I4 {
+    [x: string]: boolean;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I5 {
+    [x: string]: Date;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I6 {
+    [x: string]: RegExp;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I7 {
+    [x: string]: { bar: number };
+>x : string
+>bar : number
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I8 {
+    [x: string]: number[];
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I9 {
+    [x: string]: I8;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+class A { foo: number; }
+>A : A
+>foo : number
+
+interface I10 {
+    [x: string]: A;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+class A2<T> { foo: T; }
+>A2 : A2<T>
+>foo : T
+
+interface I11 {
+    [x: string]: A2<number>;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I12 {
+    [x: string]: (x) => number;
+>x : string
+>x : any
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I13 {
+    [x: string]: <T>(x: T) => T;
+>x : string
+>x : T
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+enum E2 { A }
+>E2 : E2
+>A : E2.A
+
+interface I14 {
+    [x: string]: E2;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+function f() { }
+>f : typeof f
+
+module f {
+>f : typeof f
+
+    export var bar = 1;
+>bar : number
+>1 : 1
+}
+interface I15 {
+    [x: string]: typeof f;
+>x : string
+>f : typeof f
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+class c { baz: string }
+>c : c
+>baz : string
+
+module c {
+>c : typeof c
+
+    export var bar = 1;
+>bar : number
+>1 : 1
+}
+interface I16 {
+    [x: string]: typeof c;
+>x : string
+>c : typeof c
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I17<T> {
+    [x: string]: T;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+interface I19 {
+    [x: string]: Object;
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}
+
+
+interface I20 {
+    [x: string]: {};
+>x : string
+
+    foo: string | number;
+>foo : string | number
+
+    foo2: e | number;
+>foo2 : number
+}

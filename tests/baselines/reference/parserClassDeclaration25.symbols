@@ -1,0 +1,26 @@
+=== tests/cases/conformance/parser/ecmascript5/ClassDeclarations/parserClassDeclaration25.ts ===
+interface IList<T> {
+>IList : Symbol(IList, Decl(parserClassDeclaration25.ts, 0, 0))
+>T : Symbol(T, Decl(parserClassDeclaration25.ts, 0, 16))
+
+    data(): T;
+>data : Symbol(IList.data, Decl(parserClassDeclaration25.ts, 0, 20))
+>T : Symbol(T, Decl(parserClassDeclaration25.ts, 0, 16))
+
+    next(): string;
+>next : Symbol(IList.next, Decl(parserClassDeclaration25.ts, 1, 14))
+}
+class List<U> implements IList<U> {
+>List : Symbol(List, Decl(parserClassDeclaration25.ts, 3, 1))
+>U : Symbol(U, Decl(parserClassDeclaration25.ts, 4, 11))
+>IList : Symbol(IList, Decl(parserClassDeclaration25.ts, 0, 0))
+>U : Symbol(U, Decl(parserClassDeclaration25.ts, 4, 11))
+
+    data(): U;
+>data : Symbol(List.data, Decl(parserClassDeclaration25.ts, 4, 35))
+>U : Symbol(U, Decl(parserClassDeclaration25.ts, 4, 11))
+
+    next(): string;
+>next : Symbol(List.next, Decl(parserClassDeclaration25.ts, 5, 14))
+}
+

@@ -1,5 +1,4 @@
 //// [await_unaryExpression_es2017_3.ts]
-
 async function bar1() {
     ++await 42; // Error
 }

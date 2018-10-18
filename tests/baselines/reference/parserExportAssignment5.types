@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/ExportAssignments/parserExportAssignment5.ts ===
+module M {
+>M : typeof M
+
+    export = A;
+>A : any
+}

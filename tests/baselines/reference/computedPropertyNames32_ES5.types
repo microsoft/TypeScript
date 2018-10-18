@@ -1,0 +1,19 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames32_ES5.ts ===
+function foo<T>() { return '' }
+>foo : <T>() => string
+>'' : ""
+
+class C<T> {
+>C : C<T>
+
+    bar() {
+>bar : () => number
+
+        return 0;
+>0 : 0
+    }
+    [foo<T>()]() { }
+>[foo<T>()] : () => void
+>foo<T>() : string
+>foo : <T>() => string
+}

@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature8.ts ===
+var foo: { [index: any]; }; // expect an error here
+>foo : Symbol(foo, Decl(parserIndexSignature8.ts, 0, 3))
+>index : Symbol(index, Decl(parserIndexSignature8.ts, 0, 12))
+
+var foo2: { [index: RegExp]; }; // expect an error here
+>foo2 : Symbol(foo2, Decl(parserIndexSignature8.ts, 1, 3))
+>index : Symbol(index, Decl(parserIndexSignature8.ts, 1, 13))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+

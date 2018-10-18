@@ -1,5 +1,4 @@
 //// [functionReturn.ts]
-
 function f0(): void { }
 function f1() {
     var n: any = f0();

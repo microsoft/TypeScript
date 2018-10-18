@@ -9,7 +9,7 @@ export interface Foo {
 
 export const obj = {
     m(): this is Foo {
-        let dis = this as Foo;
+        let dis = this as {} as Foo;
         return dis.a != null && dis.b != null && dis.c != null;
     }
 }

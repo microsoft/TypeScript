@@ -1,4 +1,4 @@
-/node_modules/bar/index.d.ts(1,1): message TS4090: Conflicting definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Consider installing a specific version of this library to resolve the conflict.
+/node_modules/bar/index.d.ts(1,23): error TS4090: Conflicting definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Consider installing a specific version of this library to resolve the conflict.
 
 
 ==== /src/root.ts (0 errors) ====
@@ -6,7 +6,6 @@
     /// <reference types="bar" />
     
 ==== /node_modules/foo/index.d.ts (0 errors) ====
-    
     // Secondary references may not be duplicated if they disagree in content
     
     /// <reference types="alpha" />
@@ -17,8 +16,8 @@
     
 ==== /node_modules/bar/index.d.ts (1 errors) ====
     /// <reference types="alpha" />
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! message TS4090: Conflicting definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Consider installing a specific version of this library to resolve the conflict.
+                          ~~~~~
+!!! error TS4090: Conflicting definitions for 'alpha' found at '/node_modules/bar/node_modules/alpha/index.d.ts' and '/node_modules/foo/node_modules/alpha/index.d.ts'. Consider installing a specific version of this library to resolve the conflict.
     declare var bar: any;
     
 ==== /node_modules/bar/node_modules/alpha/index.d.ts (0 errors) ====

@@ -1,5 +1,4 @@
 //// [constDeclarations-ambient.ts]
-
 // No error
 declare const c1: boolean;
 declare const c2: number;

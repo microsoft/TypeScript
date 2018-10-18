@@ -1,5 +1,4 @@
 //// [reachabilityChecks1.ts]
-
 while (true);
 var x = 1;
 
@@ -126,7 +125,7 @@ function f1(x) {
 }
 function f2() {
     return;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;

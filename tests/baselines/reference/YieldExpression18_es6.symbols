@@ -1,0 +1,4 @@
+=== tests/cases/conformance/es6/yieldExpressions/YieldExpression18_es6.ts ===
+"use strict";
+No type information for this code.yield(foo);
+No type information for this code.

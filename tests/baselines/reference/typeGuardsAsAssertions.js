@@ -1,5 +1,4 @@
 //// [typeGuardsAsAssertions.ts]
-
 // Repro from #8513
 
 let cond: boolean;
@@ -121,10 +120,16 @@ function f6() {
     x!.slice();
 }
 
+function f7() {
+    let x: string;
+    x!.slice();
+}
+
 
 //// [typeGuardsAsAssertions.js]
-// Repro from #8513
 "use strict";
+// Repro from #8513
+exports.__esModule = true;
 var cond;
 exports.none = { none: '' };
 function isSome(value) {
@@ -225,5 +230,9 @@ function f6() {
     x = "";
     x.slice();
     x = "";
+    x.slice();
+}
+function f7() {
+    var x;
     x.slice();
 }

@@ -21,7 +21,6 @@ module enumdule {
 
 var x: enumdule;
 >x : enumdule
->enumdule : enumdule
 
 var x = enumdule.Red;
 >x : enumdule

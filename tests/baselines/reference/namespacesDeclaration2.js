@@ -1,5 +1,4 @@
 //// [namespacesDeclaration2.ts]
-
 namespace N {
     function S() {}
 }

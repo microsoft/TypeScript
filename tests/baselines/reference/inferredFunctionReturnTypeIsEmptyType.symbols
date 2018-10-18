@@ -1,5 +1,4 @@
 === tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
-
 function foo() {
 >foo : Symbol(foo, Decl(inferredFunctionReturnTypeIsEmptyType.ts, 0, 0))
 

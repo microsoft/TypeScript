@@ -1,0 +1,28 @@
+=== tests/cases/compiler/tooManyTypeParameters1.ts ===
+function f<T>() { }
+>f : <T>() => void
+
+f<string, string>();
+>f<string, string>() : any
+>f : <T>() => void
+
+var x = <T>() => {};
+>x : <T>() => void
+><T>() => {} : <T>() => void
+
+x<number,number>();
+>x<number,number>() : any
+>x : <T>() => void
+
+class C<T> {}
+>C : C<T>
+
+var c = new C<Date,Date>();
+>c : any
+>new C<Date,Date>() : any
+>C : typeof C
+
+interface I<T> {}
+var i: I<number,number>;
+>i : any
+

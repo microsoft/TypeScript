@@ -1,27 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-const CRLF = "\r\n";
-/**
- * @returns the given value with '\n' normalized to '\r\n' and with no leading newline
- */
-function useCRLFAndStripLeadingNewline(str: string): string {
-    str = str.replace(/\r?\n/g, CRLF);
-    if (str.indexOf(CRLF) === 0) {
-        str = str.slice(CRLF.length);
-    }
-    return str;
-}
-
-function confirmNormalizedJsDoc(markerName: string, indentation: number, template: string): void {
-    goTo.marker(markerName);
-    const normalized = useCRLFAndStripLeadingNewline(template);
-    verify.DocCommentTemplate(normalized, indentation);
-}
-
-const enum Indentation {
-    Standard = 8,
-    Indented = 12,
-}
+const singleLineOffset = 3;
+const multiLineOffset = 12;
 
 
 ////class C {
@@ -29,31 +9,27 @@ const enum Indentation {
 ////    foo();
 ////    /*2*/foo(a);
 ////    /*3*/foo(a, b);
-////    /*4*/ foo(a, {x: string}, [c]);
+////    /*4*/foo(a, {x: string}, [c]);
 ////    /*5*/foo(a?, b?, ...args) {
 ////    }
 ////}
 
-confirmNormalizedJsDoc("0", Indentation.Standard, `
-/**
- * 
- */`);
+verify.docCommentTemplateAt("0", singleLineOffset,
+"/** */");
 
 
-confirmNormalizedJsDoc("1", Indentation.Indented,
-   `/**
-     * 
-     */`);
+verify.docCommentTemplateAt("1", singleLineOffset,
+"/** */");
 
 
-confirmNormalizedJsDoc("2", Indentation.Indented,
+verify.docCommentTemplateAt("2", multiLineOffset,
    `/**
      * 
      * @param a
      */
     `);
 
-confirmNormalizedJsDoc("3", Indentation.Indented,
+verify.docCommentTemplateAt("3", multiLineOffset,
    `/**
      * 
      * @param a
@@ -61,15 +37,16 @@ confirmNormalizedJsDoc("3", Indentation.Indented,
      */
     `);
 
-confirmNormalizedJsDoc("4", Indentation.Indented,
+verify.docCommentTemplateAt("4", multiLineOffset,
    `/**
      * 
      * @param a
      * @param param1
      * @param param2
-     */`);
+     */
+    `);
 
-confirmNormalizedJsDoc("5", Indentation.Indented, 
+verify.docCommentTemplateAt("5", multiLineOffset,
     `/**
      * 
      * @param a

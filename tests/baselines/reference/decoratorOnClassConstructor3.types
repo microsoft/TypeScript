@@ -1,12 +1,10 @@
 === tests/cases/conformance/decorators/class/constructor/0.ts ===
-
 export class base { }
 >base : base
 
 export function foo(target: Object, propertyKey: string | symbol, parameterIndex: number) { }
 >foo : (target: Object, propertyKey: string | symbol, parameterIndex: number) => void
 >target : Object
->Object : Object
 >propertyKey : string | symbol
 >parameterIndex : number
 

@@ -1,5 +1,4 @@
 //// [typedArrays.ts]
-
 function CreateTypedArrayTypes() {
     var typedArrays = [];
     typedArrays[0] = Int8Array;

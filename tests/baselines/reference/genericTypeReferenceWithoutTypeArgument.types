@@ -1,0 +1,95 @@
+=== tests/cases/conformance/types/specifyingTypes/typeReferences/genericTypeReferenceWithoutTypeArgument.ts ===
+// it is an error to use a generic type without type arguments
+// all of these are errors 
+
+class C<T> {
+>C : C<T>
+
+    foo: T;
+>foo : T
+}
+
+var c: C;
+>c : any
+
+var a: { x: C };
+>a : { x: any; }
+>x : any
+
+var b: { (x: C): C };
+>b : (x: any) => any
+>x : any
+
+var d: { [x: C]: C };
+>d : {}
+>x : any
+
+var e = (x: C) => { var y: C; return y; }
+>e : (x: any) => any
+>(x: C) => { var y: C; return y; } : (x: any) => any
+>x : any
+>y : any
+>y : any
+
+function f(x: C): C { var y: C; return y; }
+>f : (x: any) => any
+>x : any
+>y : any
+>y : any
+
+var g = function f(x: C): C { var y: C; return y; }
+>g : (x: any) => any
+>function f(x: C): C { var y: C; return y; } : (x: any) => any
+>f : (x: any) => any
+>x : any
+>y : any
+>y : any
+
+class D extends C {
+>D : D
+>C : typeof C
+}
+
+interface I extends C {}
+
+module M {
+>M : typeof M
+
+    export class E<T> { foo: T }
+>E : E<T>
+>foo : T
+}
+
+class D2 extends M.E { }
+>D2 : D2
+>M.E : typeof M.E
+>M : typeof M
+>E : typeof M.E
+
+class D3<T extends M.E> { }
+>D3 : D3<T>
+>M : any
+
+interface I2 extends M.E { }
+>M : typeof M
+
+function h<T extends C>(x: T) { }
+>h : <T extends any>(x: T) => void
+>x : T
+
+function i<T extends M.E>(x: T) { }
+>i : <T extends any>(x: T) => void
+>M : any
+>x : T
+
+var j = <C>null;
+>j : any
+><C>null : any
+>null : null
+
+var k = <M.E>null;
+>k : any
+><M.E>null : any
+>M : any
+>null : null
+

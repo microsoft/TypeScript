@@ -5,12 +5,9 @@
 ////export = [|SomeModule|];
 
 // @Filename: b.ts
-////import M = require("./a");
-////import C = M.SomeClass;
+////import [|M|] = require("./a");
+////import C = [|M|].SomeClass;
 
-let ranges = test.ranges()
-for (let range of ranges) {
-    goTo.file(range.fileName);
-    goTo.position(range.start);
-    verify.renameLocations(/*findInStrings*/ false, /*findInComments*/ false);
-}
+const [r0, r1, r2, r3] = test.ranges();
+verify.rangesAreRenameLocations([r0, r1]);
+verify.rangesAreRenameLocations([r2, r3]);

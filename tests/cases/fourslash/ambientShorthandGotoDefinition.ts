@@ -1,32 +1,32 @@
 /// <reference path='fourslash.ts' />
 
 // @Filename: declarations.d.ts
-/////*module*/declare module "jquery"
+////declare module /*module*/"jquery"
 
 // @Filename: user.ts
 ///////<reference path="declarations.d.ts"/>
-////import /*importFoo*/foo, {bar} from "jquery";
-////import /*importBaz*/* as /*idBaz*/baz from "jquery";
-/////*importBang*/import /*idBang*/bang = require("jquery");
-////foo/*useFoo*/(bar/*useBar*/, baz/*useBaz*/, bang/*useBang*/);
+////import [|/*importFoo*/foo|], {bar} from "jquery";
+////import * as [|/*importBaz*/baz|] from "jquery";
+////import [|/*importBang*/bang|] = require("jquery");
+////[|foo/*useFoo*/|]([|bar/*useBar*/|], [|baz/*useBaz*/|], [|bang/*useBang*/|]);
 
-verify.quickInfoAt("useFoo", "import foo");
+verify.quickInfoAt("useFoo", "(alias) module \"jquery\"\nimport foo");
 verify.goToDefinition({
-    useFoo: "importFoo",
+    useFoo: "module",
     importFoo: "module"
 });
 
-verify.quickInfoAt("useBar", "import bar");
+verify.quickInfoAt("useBar", "(alias) module \"jquery\"\nimport bar");
 verify.goToDefinition("useBar", "module");
 
-verify.quickInfoAt("useBaz", "import baz");
+verify.quickInfoAt("useBaz", "(alias) module \"jquery\"\nimport baz");
 verify.goToDefinition({
     useBaz: "importBaz",
-    idBaz: "module"
+    importBaz: "module"
 });
 
-verify.quickInfoAt("useBang", "import bang = require(\"jquery\")");
+verify.quickInfoAt("useBang", "(alias) module \"jquery\"\nimport bang = require(\"jquery\")");
 verify.goToDefinition({
-    useBang: "importBang",
-    idBang: "module"
+    useBang: "module",
+    importBang: "module"
 });

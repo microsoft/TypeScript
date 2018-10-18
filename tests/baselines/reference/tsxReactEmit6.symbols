@@ -1,16 +1,15 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 declare module JSX {
 >JSX : Symbol(JSX, Decl(file.tsx, 0, 0))
 
 	interface Element { }
->Element : Symbol(Element, Decl(file.tsx, 1, 20))
+>Element : Symbol(Element, Decl(file.tsx, 0, 20))
 
 	interface IntrinsicElements {
->IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 2, 22))
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(file.tsx, 1, 22))
 
 		[s: string]: any;
->s : Symbol(s, Decl(file.tsx, 4, 3))
+>s : Symbol(s, Decl(file.tsx, 3, 3))
 	}
 }
 
@@ -27,21 +26,21 @@ namespace M {
 
 	// Should emit M.React.createElement
 	//  and M.React.__spread
-	var foo;
+	var foo: any;
 >foo : Symbol(foo, Decl(react-consumer.tsx, 7, 4))
 
 	var spread1 = <div x='' {...foo} y='' />;
 >spread1 : Symbol(spread1, Decl(react-consumer.tsx, 8, 4))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 2, 22))
->x : Symbol(unknown)
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>x : Symbol(x, Decl(react-consumer.tsx, 8, 19))
 >foo : Symbol(foo, Decl(react-consumer.tsx, 7, 4))
->y : Symbol(unknown)
+>y : Symbol(y, Decl(react-consumer.tsx, 8, 33))
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;
 >x : Symbol(x, Decl(react-consumer.tsx, 11, 4))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 2, 22))
->div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 2, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
+>div : Symbol(JSX.IntrinsicElements, Decl(file.tsx, 1, 22))
 }
 
 

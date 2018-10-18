@@ -8,9 +8,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
   Property 'id' is missing in type 'D<{}>'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(42,5): error TS2322: Type 'C' is not assignable to type 'D<string>'.
   Property 'source' is missing in type 'C'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(43,5): error TS2322: Type '{ id: string; }' is not assignable to type 'I'.
-  Types of property 'id' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(43,28): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(44,5): error TS2322: Type 'C' is not assignable to type '{ id: string; }'.
   Types of property 'id' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -20,8 +18,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(47,5): error TS2322: Type '(x: number) => boolean' is not assignable to type '(x: string) => number'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(48,5): error TS2322: Type '(x: string) => string' is not assignable to type '(x: string) => number'.
-  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(48,32): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts(50,5): error TS2322: Type 'typeof N' is not assignable to type 'typeof M'.
   Types of property 'A' are incompatible.
     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
@@ -93,10 +90,9 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322: Type 'C' is not assignable to type 'D<string>'.
 !!! error TS2322:   Property 'source' is missing in type 'C'.
     var anObjectLiteral: I = { id: 'a string' };
-        ~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: string; }' is not assignable to type 'I'.
-!!! error TS2322:   Types of property 'id' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+                               ~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: The expected type comes from property 'id' which is declared here on type 'I'
     var anOtherObjectLiteral: { id: string } = new C();
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type '{ id: string; }'.
@@ -114,9 +110,9 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322:   Types of parameters 'x' and 'x' are incompatible.
 !!! error TS2322:     Type 'string' is not assignable to type 'number'.
     var aLambda: typeof F = (x) => 'a string';
-        ~~~~~~~
-!!! error TS2322: Type '(x: string) => string' is not assignable to type '(x: string) => number'.
-!!! error TS2322:   Type 'string' is not assignable to type 'number'.
+                                   ~~~~~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6502 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:15:10: The expected type comes from the return type of this signature.
     
     var aModule: typeof M = N;
         ~~~~~~~

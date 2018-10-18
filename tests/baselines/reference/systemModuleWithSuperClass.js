@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemModuleWithSuperClass.ts] ////
 
 //// [foo.ts]
-
 export class Foo {
     a: string;
 }
@@ -15,12 +14,12 @@ export class Bar extends Foo {
 //// [foo.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var Foo;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            Foo = (function () {
+            Foo = /** @class */ (function () {
                 function Foo() {
                 }
                 return Foo;
@@ -32,13 +31,21 @@ System.register([], function (exports_1, context_1) {
 //// [bar.js]
 System.register(["./foo"], function (exports_1, context_1) {
     "use strict";
-    var __extends = (this && this.__extends) || function (d, b) {
-        for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-        function __() { this.constructor = d; }
-        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-    };
-    var __moduleName = context_1 && context_1.id;
+    var __extends = (this && this.__extends) || (function () {
+        var extendStatics = function (d, b) {
+            extendStatics = Object.setPrototypeOf ||
+                ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+                function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+            return extendStatics(d, b);
+        };
+        return function (d, b) {
+            extendStatics(d, b);
+            function __() { this.constructor = d; }
+            d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+        };
+    })();
     var foo_1, Bar;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [
             function (foo_1_1) {
@@ -46,10 +53,10 @@ System.register(["./foo"], function (exports_1, context_1) {
             }
         ],
         execute: function () {
-            Bar = (function (_super) {
+            Bar = /** @class */ (function (_super) {
                 __extends(Bar, _super);
                 function Bar() {
-                    return _super.apply(this, arguments) || this;
+                    return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return Bar;
             }(foo_1.Foo));

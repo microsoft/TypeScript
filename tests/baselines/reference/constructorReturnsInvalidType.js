@@ -10,7 +10,7 @@ var x = new X();
 
 
 //// [constructorReturnsInvalidType.js]
-var X = (function () {
+var X = /** @class */ (function () {
     function X() {
         return 1;
     }

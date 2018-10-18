@@ -1,11 +1,10 @@
 //// [declarationEmitReadonly.ts]
-
 class C {
     constructor(readonly x: number) {}
 }
 
 //// [declarationEmitReadonly.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C(x) {
         this.x = x;
     }

@@ -1,0 +1,98 @@
+=== tests/cases/compiler/indexSignatureAndMappedType.ts ===
+// A mapped type { [P in K]: X }, where K is a generic type, is related to
+// { [key: string]: Y } if X is related to Y.
+
+function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
+>f1 : Symbol(f1, Decl(indexSignatureAndMappedType.ts, 0, 0))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 3, 12))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 3, 14))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 3, 33))
+>key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 3, 39))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 3, 12))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 3, 57))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 3, 14))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 3, 12))
+
+    x = y;
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 3, 33))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 3, 57))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 3, 57))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 3, 33))
+}
+
+function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
+>f2 : Symbol(f2, Decl(indexSignatureAndMappedType.ts, 6, 1))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 8, 12))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 8, 15))
+>key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 8, 21))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 8, 12))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 8, 39))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 8, 12))
+
+    x = y;
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 8, 15))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 8, 39))
+
+    y = x;
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 8, 39))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 8, 15))
+}
+
+function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
+>f3 : Symbol(f3, Decl(indexSignatureAndMappedType.ts, 11, 1))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 13, 12))
+>U : Symbol(U, Decl(indexSignatureAndMappedType.ts, 13, 14))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 13, 17))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 13, 36))
+>key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 13, 42))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 13, 12))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 13, 60))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 13, 17))
+>U : Symbol(U, Decl(indexSignatureAndMappedType.ts, 13, 14))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 13, 36))
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 13, 60))
+
+    y = x;  // Error
+>y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 13, 60))
+>x : Symbol(x, Decl(indexSignatureAndMappedType.ts, 13, 36))
+}
+
+// Repro from #14548
+
+type Dictionary = {
+>Dictionary : Symbol(Dictionary, Decl(indexSignatureAndMappedType.ts, 16, 1))
+
+    [key: string]: string;
+>key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 21, 5))
+
+};
+
+interface IBaseEntity {
+>IBaseEntity : Symbol(IBaseEntity, Decl(indexSignatureAndMappedType.ts, 22, 2))
+
+    name: string;
+>name : Symbol(IBaseEntity.name, Decl(indexSignatureAndMappedType.ts, 24, 23))
+
+    properties: Dictionary;
+>properties : Symbol(IBaseEntity.properties, Decl(indexSignatureAndMappedType.ts, 25, 17))
+>Dictionary : Symbol(Dictionary, Decl(indexSignatureAndMappedType.ts, 16, 1))
+}
+
+interface IEntity<T extends string> extends IBaseEntity {
+>IEntity : Symbol(IEntity, Decl(indexSignatureAndMappedType.ts, 27, 1))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 29, 18))
+>IBaseEntity : Symbol(IBaseEntity, Decl(indexSignatureAndMappedType.ts, 22, 2))
+
+    properties: Record<T, string>;
+>properties : Symbol(IEntity.properties, Decl(indexSignatureAndMappedType.ts, 29, 57))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 29, 18))
+}
+

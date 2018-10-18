@@ -1,0 +1,12 @@
+=== tests/cases/compiler/noImplicitAnyInBareInterface.ts ===
+interface Entry {
+>Entry : Symbol(Entry, Decl(noImplicitAnyInBareInterface.ts, 0, 0))
+
+    // Should return error for implicit any on `new` and `foo`.
+    new ();
+    few() : any;
+>few : Symbol(Entry.few, Decl(noImplicitAnyInBareInterface.ts, 2, 11))
+
+    foo();
+>foo : Symbol(Entry.foo, Decl(noImplicitAnyInBareInterface.ts, 3, 16))
+}

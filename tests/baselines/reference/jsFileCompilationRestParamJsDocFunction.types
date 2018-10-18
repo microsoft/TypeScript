@@ -1,5 +1,4 @@
 === tests/cases/compiler/_apply.js ===
-
 /**
  * A faster alternative to `Function#apply`, this function invokes `func`
  * with the `this` binding of `thisArg` and the arguments of `args`.
@@ -10,7 +9,7 @@
  * @param {...*} args The arguments to invoke `func` with.
  * @returns {*} Returns the result of `func`.
  */
-function apply(func, thisArg, args) {
+function apply(func, thisArg, ...args) {
 >apply : (func: Function, thisArg: any, ...args: any[]) => any
 >func : Function
 >thisArg : any

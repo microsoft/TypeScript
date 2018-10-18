@@ -2,7 +2,7 @@
 
 ////module M {
 ////   export class C<T extends Date> {
-////      static foo(): C<Date> { 
+////      static foo(): C<Date> {
 ////          return null;
 ////           }
 ////     }
@@ -15,4 +15,4 @@
 
 goTo.marker();
 edit.insert('super();');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

@@ -4,7 +4,7 @@ class C<T> {
 }
 
 //// [staticMethodsReferencingClassTypeParameters.js]
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     C.s = function (p) { return p; };

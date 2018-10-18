@@ -1,5 +1,4 @@
 //// [templateStringsArrayTypeDefinedInES5Mode.ts]
-
 class TemplateStringsArray {
 }
 
@@ -11,7 +10,11 @@ f({}, 10, 10);
 f `abcdef${ 1234 }${ 5678 }ghijkl`;
 
 //// [templateStringsArrayTypeDefinedInES5Mode.js]
-var TemplateStringsArray = (function () {
+var __makeTemplateObject = (this && this.__makeTemplateObject) || function (cooked, raw) {
+    if (Object.defineProperty) { Object.defineProperty(cooked, "raw", { value: raw }); } else { cooked.raw = raw; }
+    return cooked;
+};
+var TemplateStringsArray = /** @class */ (function () {
     function TemplateStringsArray() {
     }
     return TemplateStringsArray;
@@ -19,5 +22,4 @@ var TemplateStringsArray = (function () {
 function f(x, y, z) {
 }
 f({}, 10, 10);
-(_a = ["abcdef", "", "ghijkl"], _a.raw = ["abcdef", "", "ghijkl"], f(_a, 1234, 5678));
-var _a;
+f(__makeTemplateObject(["abcdef", "", "ghijkl"], ["abcdef", "", "ghijkl"]), 1234, 5678);

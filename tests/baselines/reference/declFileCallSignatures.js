@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/declFileCallSignatures.ts] ////
 
 //// [declFileCallSignatures_0.ts]
-
 export interface ICallSignature {
     /** This comment should appear for foo*/
     (): string;
@@ -67,6 +66,7 @@ interface IGlobalCallSignatureWithOwnTypeParametes {
 
 //// [declFileCallSignatures_0.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 //// [declFileCallSignatures_1.js]
 
 
@@ -78,8 +78,8 @@ export interface ICallSignature {
 export interface ICallSignatureWithParameters {
     /** This is comment for function signature*/
     (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): void;
+    /** this is comment for b*/
+    b: number): void;
 }
 export interface ICallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;
@@ -103,8 +103,8 @@ interface IGlobalCallSignature {
 interface IGlobalCallSignatureWithParameters {
     /** This is comment for function signature*/
     (/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number): void;
+    /** this is comment for b*/
+    b: number): void;
 }
 interface IGlobalCallSignatureWithRestParameters {
     (a: string, ...rests: string[]): string;

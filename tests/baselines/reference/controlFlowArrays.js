@@ -1,5 +1,4 @@
 //// [controlFlowArrays.ts]
-
 declare function cond(): boolean;
 
 function f1() {
@@ -284,7 +283,7 @@ function f10() {
 }
 function f11() {
     var x = [];
-    if (x.length === 0) {
+    if (x.length === 0) { // x.length ok on implicit any[]
         x.push("hello");
     }
     return x;
@@ -292,7 +291,7 @@ function f11() {
 function f12() {
     var x;
     x = [];
-    if (x.length === 0) {
+    if (x.length === 0) { // x.length ok on implicit any[]
         x.push("hello");
     }
     return x;

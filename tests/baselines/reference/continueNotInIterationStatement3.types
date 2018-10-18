@@ -1,0 +1,7 @@
+=== tests/cases/compiler/continueNotInIterationStatement3.ts ===
+switch (0) {
+>0 : 0
+
+  default:
+    continue;
+}

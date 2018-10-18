@@ -38,7 +38,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",
@@ -306,7 +306,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",
@@ -375,7 +375,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",

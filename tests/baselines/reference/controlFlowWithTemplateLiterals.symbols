@@ -1,0 +1,28 @@
+=== tests/cases/conformance/controlFlow/controlFlowWithTemplateLiterals.ts ===
+declare const envVar: string | undefined;
+>envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
+
+if (typeof envVar === `string`) {
+>envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
+
+  envVar.slice(0)
+>envVar.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>envVar : Symbol(envVar, Decl(controlFlowWithTemplateLiterals.ts, 0, 13))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+}
+
+declare const obj: {test: string} | {}
+>obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
+>test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
+
+if (`test` in obj) {
+>obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
+
+  obj.test.slice(0)
+>obj.test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+>obj.test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
+>obj : Symbol(obj, Decl(controlFlowWithTemplateLiterals.ts, 5, 13))
+>test : Symbol(test, Decl(controlFlowWithTemplateLiterals.ts, 5, 20))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
+}
+

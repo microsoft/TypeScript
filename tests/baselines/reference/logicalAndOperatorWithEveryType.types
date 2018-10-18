@@ -25,7 +25,6 @@ var a5: void;
 
 var a6: E;
 >a6 : E
->E : E
 
 var a7: {};
 >a7 : {}
@@ -365,7 +364,7 @@ var rf5 = a5 && a6;
 
 var rf6 = a6 && a6;
 >rf6 : E
->a6 && a6 : E.b | E.c
+>a6 && a6 : E
 >a6 : E
 >a6 : E.b | E.c
 

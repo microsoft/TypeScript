@@ -7,9 +7,15 @@ function endsWith(s: string, suffix: string) {
     return s.lastIndexOf(suffix, s.length - suffix.length) !== -1;
 }
 
+function isStringEnum(declaration: ts.EnumDeclaration) {
+    return declaration.members.length && declaration.members.every(m => !!m.initializer && m.initializer.kind === ts.SyntaxKind.StringLiteral);
+}
+
 class DeclarationsWalker {
     private visitedTypes: ts.Type[] = [];
     private text = "";
+    private removedTypes: ts.Type[] = [];
+
     private constructor(private typeChecker: ts.TypeChecker, private protocolFile: ts.SourceFile) {
     }
 
@@ -17,9 +23,18 @@ class DeclarationsWalker {
         let text = "declare namespace ts.server.protocol {\n";
         var walker = new DeclarationsWalker(typeChecker, protocolFile);
         walker.visitTypeNodes(protocolFile);
-        return walker.text 
+        text = walker.text
             ? `declare namespace ts.server.protocol {\n${walker.text}}`
             : "";
+        if (walker.removedTypes) {
+            text += "\ndeclare namespace ts {\n";
+            text += "    // these types are empty stubs for types from services and should not be used directly\n"
+            for (const type of walker.removedTypes) {
+                text += `    export type ${type.symbol!.name} = never;\n`;
+            }
+            text += "}"
+        }
+        return text;
     }
 
     private processType(type: ts.Type): void {
@@ -31,29 +46,31 @@ class DeclarationsWalker {
         if (!s) {
             return;
         }
-        if (s.name === "Array") {
+        if (s.name === "Array" || s.name === "ReadOnlyArray") {
             // we should process type argument instead
             return this.processType((<any>type).typeArguments[0]);
         }
         else {
-            for (const decl of s.getDeclarations()) {
-                const sourceFile = decl.getSourceFile();
-                if (sourceFile === this.protocolFile || path.basename(sourceFile.fileName) === "lib.d.ts") {
-                    return;
-                }
-                // splice declaration in final d.ts file
-                let text = decl.getFullText();
-                if (decl.kind === ts.SyntaxKind.EnumDeclaration && !(decl.flags & ts.NodeFlags.Const)) {
-                    // patch enum declaration to make them constan
-                    const declStart = decl.getStart() - decl.getFullStart();
-                    const prefix = text.substring(0, declStart);
-                    const suffix = text.substring(declStart + "enum".length, decl.getEnd() - decl.getFullStart());
-                    text = prefix + "const enum" + suffix;
-                }
-                this.text += `${text}\n`;
+            const declarations = s.getDeclarations();
+            if (declarations) {
+                for (const decl of declarations) {
+                    const sourceFile = decl.getSourceFile();
+                    if (sourceFile === this.protocolFile || /lib(\..+)?\.d.ts/.test(path.basename(sourceFile.fileName))) {
+                        return;
+                    }
+                    if (decl.kind === ts.SyntaxKind.EnumDeclaration && !isStringEnum(decl as ts.EnumDeclaration)) {
+                        this.removedTypes.push(type);
+                        return;
+                    }
+                    else {
+                        // splice declaration in final d.ts file
+                        let text = decl.getFullText();
+                        this.text += `${text}\n`;
+                        // recursively pull all dependencies into result dts file
 
-                // recursively pull all dependencies into result dts file
-                this.visitTypeNodes(decl);
+                        this.visitTypeNodes(decl);
+                    }
+                }
             }
         }
     }
@@ -69,36 +86,65 @@ class DeclarationsWalker {
                 case ts.SyntaxKind.Parameter:
                 case ts.SyntaxKind.IndexSignature:
                     if (((<ts.VariableDeclaration | ts.MethodDeclaration | ts.PropertyDeclaration | ts.ParameterDeclaration | ts.PropertySignature | ts.MethodSignature | ts.IndexSignatureDeclaration>node.parent).type) === node) {
-                        const type = this.typeChecker.getTypeAtLocation(node);
-                        if (type && !(type.flags & ts.TypeFlags.TypeParameter)) {
-                            this.processType(type);
+                        this.processTypeOfNode(node);
+                    }
+                    break;
+                case ts.SyntaxKind.InterfaceDeclaration:
+                    const heritageClauses = (<ts.InterfaceDeclaration>node.parent).heritageClauses;
+                    if (heritageClauses) {
+                        if (heritageClauses[0].token !== ts.SyntaxKind.ExtendsKeyword) {
+                            throw new Error(`Unexpected kind of heritage clause: ${ts.SyntaxKind[heritageClauses[0].kind]}`);
+                        }
+                        for (const type of heritageClauses[0].types) {
+                            this.processTypeOfNode(type);
                         }
                     }
                     break;
             }
         }
         ts.forEachChild(node, n => this.visitTypeNodes(n));
-    } 
+    }
+
+    private processTypeOfNode(node: ts.Node): void {
+        if (node.kind === ts.SyntaxKind.UnionType) {
+            for (const t of (<ts.UnionTypeNode>node).types) {
+                this.processTypeOfNode(t);
+            }
+        }
+        else {
+            const type = this.typeChecker.getTypeAtLocation(node);
+            if (type && !(type.flags & (ts.TypeFlags.TypeParameter))) {
+                this.processType(type);
+            }
+        }
+    }
 }
 
-function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string): string {
-    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: true, types: <string[]>[], stripInternal: true };
+function writeProtocolFile(outputFile: string, protocolTs: string, typeScriptServicesDts: string) {
+    const options = { target: ts.ScriptTarget.ES5, declaration: true, noResolve: false, types: <string[]>[], stripInternal: true };
 
     /**
      * 1st pass - generate a program from protocol.ts and typescriptservices.d.ts and emit core version of protocol.d.ts with all internal members stripped
      * @return text of protocol.d.t.s
      */
     function getInitialDtsFileForProtocol() {
-        const program = ts.createProgram([protocolTs, typeScriptServicesDts], options);
+        const program = ts.createProgram([protocolTs, typeScriptServicesDts, path.join(typeScriptServicesDts, "../lib.es5.d.ts")], options);
 
-        let protocolDts: string;
-        program.emit(program.getSourceFile(protocolTs), (file, content) => {
+        let protocolDts: string | undefined;
+        const emitResult = program.emit(program.getSourceFile(protocolTs), (file, content) => {
             if (endsWith(file, ".d.ts")) {
                 protocolDts = content;
             }
         });
+
         if (protocolDts === undefined) {
-            throw new Error(`Declaration file for protocol.ts is not generated`)
+            const diagHost: ts.FormatDiagnosticsHost = {
+                getCanonicalFileName: function (f) { return f; },
+                getCurrentDirectory: function() { return '.'; },
+                getNewLine: function() { return "\r\n"; }
+            }
+            const diags = emitResult.diagnostics.map(d => ts.formatDiagnostic(d, diagHost)).join("\r\n");
+            throw new Error(`Declaration file for protocol.ts is not generated:\r\n${diags}`);
         }
         return protocolDts;
     }
@@ -123,19 +169,25 @@ function generateProtocolFile(protocolTs: string, typeScriptServicesDts: string)
     let protocolDts = getInitialDtsFileForProtocol();
     const program = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ true);
 
-    const protocolFile = program.getSourceFile("protocol.d.ts");
+    const protocolFile = program.getSourceFile("protocol.d.ts")!;
     const extraDeclarations = DeclarationsWalker.getExtraDeclarations(program.getTypeChecker(), protocolFile);
     if (extraDeclarations) {
         protocolDts += extraDeclarations;
     }
+    protocolDts += "\nimport protocol = ts.server.protocol;";
+    protocolDts += "\nexport = protocol;";
+    protocolDts += "\nexport as namespace protocol;";
+
     // do sanity check and try to compile generated text as standalone program
     const sanityCheckProgram = getProgramWithProtocolText(protocolDts, /*includeTypeScriptServices*/ false);
-    const diagnostics = [...program.getSyntacticDiagnostics(), ...program.getSemanticDiagnostics(), ...program.getGlobalDiagnostics()];
+    const diagnostics = [...sanityCheckProgram.getSyntacticDiagnostics(), ...sanityCheckProgram.getSemanticDiagnostics(), ...sanityCheckProgram.getGlobalDiagnostics()];
+
+    ts.sys.writeFile(outputFile, protocolDts);
+
     if (diagnostics.length) {
-        const flattenedDiagnostics = diagnostics.map(d => ts.flattenDiagnosticMessageText(d.messageText, "\n")).join("\n");
+        const flattenedDiagnostics = diagnostics.map(d => `${ts.flattenDiagnosticMessageText(d.messageText, "\n")} at ${d.file ? d.file.fileName : "<unknown>"} line ${d.start}`).join("\n");
         throw new Error(`Unexpected errors during sanity check: ${flattenedDiagnostics}`);
     }
-    return protocolDts;
 }
 
 if (process.argv.length < 5) {
@@ -146,5 +198,4 @@ if (process.argv.length < 5) {
 const protocolTs = process.argv[2];
 const typeScriptServicesDts = process.argv[3];
 const outputFile = process.argv[4];
-const generatedProtocolDts = generateProtocolFile(protocolTs, typeScriptServicesDts);
-ts.sys.writeFile(outputFile, generatedProtocolDts);
+writeProtocolFile(outputFile, protocolTs, typeScriptServicesDts);

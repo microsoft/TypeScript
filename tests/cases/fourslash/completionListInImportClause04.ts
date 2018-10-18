@@ -11,10 +11,7 @@
 // @Filename: app.ts
 ////import {/*1*/} from './foo';
 
-goTo.marker('1');
-verify.completionListContains('prop1');
-verify.completionListContains('prop2');
-verify.not.completionListContains('Foo');
-verify.numberOfErrorsInCurrentFile(0);
+verify.completionsAt("1", ["prototype", "prop1", "prop2"]);
+verify.noErrors();
 goTo.marker('2');
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();

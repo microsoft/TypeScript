@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 declare namespace JSX { interface Element { } }
 
 function foo() {
@@ -15,5 +14,5 @@ function foo() {
 }
 // Shouldn't see any errors down here
 var y = {a} 1 };
-</>;
+    </>;
 }

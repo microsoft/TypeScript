@@ -1,0 +1,50 @@
+=== tests/cases/conformance/es6/destructuring/iterableArrayPattern20.ts ===
+class Bar { x }
+>Bar : Symbol(Bar, Decl(iterableArrayPattern20.ts, 0, 0))
+>x : Symbol(Bar.x, Decl(iterableArrayPattern20.ts, 0, 11))
+
+class Foo extends Bar { y }
+>Foo : Symbol(Foo, Decl(iterableArrayPattern20.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern20.ts, 0, 0))
+>y : Symbol(Foo.y, Decl(iterableArrayPattern20.ts, 1, 23))
+
+class FooArrayIterator {
+>FooArrayIterator : Symbol(FooArrayIterator, Decl(iterableArrayPattern20.ts, 1, 27))
+
+    next() {
+>next : Symbol(FooArrayIterator.next, Decl(iterableArrayPattern20.ts, 2, 24))
+
+        return {
+            value: [new Foo],
+>value : Symbol(value, Decl(iterableArrayPattern20.ts, 4, 16))
+>Foo : Symbol(Foo, Decl(iterableArrayPattern20.ts, 0, 15))
+
+            done: false
+>done : Symbol(done, Decl(iterableArrayPattern20.ts, 5, 29))
+
+        };
+    }
+
+    [Symbol.iterator]() {
+>[Symbol.iterator] : Symbol(FooArrayIterator[Symbol.iterator], Decl(iterableArrayPattern20.ts, 8, 5))
+>Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
+
+        return this;
+>this : Symbol(FooArrayIterator, Decl(iterableArrayPattern20.ts, 1, 27))
+    }
+}
+
+function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
+>fun : Symbol(fun, Decl(iterableArrayPattern20.ts, 13, 1))
+>a : Symbol(a, Decl(iterableArrayPattern20.ts, 15, 18))
+>Foo : Symbol(Foo, Decl(iterableArrayPattern20.ts, 0, 15))
+>b : Symbol(b, Decl(iterableArrayPattern20.ts, 15, 31))
+>Foo : Symbol(Foo, Decl(iterableArrayPattern20.ts, 0, 15))
+>Bar : Symbol(Bar, Decl(iterableArrayPattern20.ts, 0, 0))
+
+fun(...new FooArrayIterator);
+>fun : Symbol(fun, Decl(iterableArrayPattern20.ts, 13, 1))
+>FooArrayIterator : Symbol(FooArrayIterator, Decl(iterableArrayPattern20.ts, 1, 27))
+

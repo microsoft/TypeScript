@@ -1,0 +1,312 @@
+=== tests/cases/compiler/discriminantPropertyCheck.ts ===
+type Item = Item1 | Item2;
+>Item : Item
+
+interface Base {
+    bar: boolean;
+>bar : boolean
+}
+
+interface Item1 extends Base {
+    kind: "A";
+>kind : "A"
+
+    foo: string | undefined;
+>foo : string | undefined
+
+    baz: boolean;
+>baz : boolean
+
+    qux: true;
+>qux : true
+>true : true
+}
+
+interface Item2 extends Base {
+    kind: "B";
+>kind : "B"
+
+    foo: string | undefined;
+>foo : string | undefined
+
+    baz: boolean;
+>baz : boolean
+
+    qux: false;
+>qux : false
+>false : false
+}
+
+function goo1(x: Item) {
+>goo1 : (x: Item) => void
+>x : Item
+
+    if (x.kind === "A" && x.foo !== undefined) {
+>x.kind === "A" && x.foo !== undefined : boolean
+>x.kind === "A" : boolean
+>x.kind : "A" | "B"
+>x : Item
+>kind : "A" | "B"
+>"A" : "A"
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item1
+>foo : string | undefined
+>undefined : undefined
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item1
+>foo : string
+>length : number
+    }
+}
+
+function goo2(x: Item) {
+>goo2 : (x: Item) => void
+>x : Item
+
+    if (x.foo !== undefined && x.kind === "A") {
+>x.foo !== undefined && x.kind === "A" : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+>x.kind === "A" : boolean
+>x.kind : "A" | "B"
+>x : Item
+>kind : "A" | "B"
+>"A" : "A"
+
+        x.foo.length;  // Error, intervening discriminant guard
+>x.foo.length : number
+>x.foo : string | undefined
+>x : Item1
+>foo : string | undefined
+>length : number
+    }
+}
+
+function foo1(x: Item) {
+>foo1 : (x: Item) => void
+>x : Item
+
+    if (x.bar && x.foo !== undefined) {
+>x.bar && x.foo !== undefined : boolean
+>x.bar : boolean
+>x : Item
+>bar : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item
+>foo : string
+>length : number
+    }
+}
+
+function foo2(x: Item) {
+>foo2 : (x: Item) => void
+>x : Item
+
+    if (x.foo !== undefined && x.bar) {
+>x.foo !== undefined && x.bar : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+>x.bar : boolean
+>x : Item
+>bar : boolean
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item
+>foo : string
+>length : number
+    }
+}
+
+function foo3(x: Item) {
+>foo3 : (x: Item) => void
+>x : Item
+
+    if (x.baz && x.foo !== undefined) {
+>x.baz && x.foo !== undefined : boolean
+>x.baz : boolean
+>x : Item
+>baz : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item
+>foo : string
+>length : number
+    }
+}
+
+function foo4(x: Item) {
+>foo4 : (x: Item) => void
+>x : Item
+
+    if (x.foo !== undefined && x.baz) {
+>x.foo !== undefined && x.baz : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+>x.baz : boolean
+>x : Item
+>baz : boolean
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item
+>foo : string
+>length : number
+    }
+}
+
+function foo5(x: Item) {
+>foo5 : (x: Item) => void
+>x : Item
+
+    if (x.qux && x.foo !== undefined) {
+>x.qux && x.foo !== undefined : boolean
+>x.qux : boolean
+>x : Item
+>qux : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item1
+>foo : string | undefined
+>undefined : undefined
+
+        x.foo.length;
+>x.foo.length : number
+>x.foo : string
+>x : Item1
+>foo : string
+>length : number
+    }
+}
+
+function foo6(x: Item) {
+>foo6 : (x: Item) => void
+>x : Item
+
+    if (x.foo !== undefined && x.qux) {
+>x.foo !== undefined && x.qux : boolean
+>x.foo !== undefined : boolean
+>x.foo : string | undefined
+>x : Item
+>foo : string | undefined
+>undefined : undefined
+>x.qux : boolean
+>x : Item
+>qux : boolean
+
+        x.foo.length;  // Error, intervening discriminant guard
+>x.foo.length : number
+>x.foo : string | undefined
+>x : Item1
+>foo : string | undefined
+>length : number
+    }
+}
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+>Types : Types
+>Str : Types.Str
+>1 : 1
+>Num : Types.Num
+>2 : 2
+
+type Instance = StrType | NumType;
+>Instance : Instance
+
+interface StrType {
+    type: Types.Str;
+>type : Types.Str
+>Types : any
+
+    value: string;
+>value : string
+
+    length: number;
+>length : number
+}
+
+interface NumType {
+    type: Types.Num;
+>type : Types.Num
+>Types : any
+
+    value: number;
+>value : number
+}
+
+function func2(inst: Instance) {
+>func2 : (inst: Instance) => void
+>inst : Instance
+
+    while (true) {
+>true : true
+
+        switch (inst.type) {
+>inst.type : Types
+>inst : Instance
+>type : Types
+
+            case Types.Str: {
+>Types.Str : Types.Str
+>Types : typeof Types
+>Str : Types.Str
+
+                inst.value.length;
+>inst.value.length : number
+>inst.value : string
+>inst : StrType
+>value : string
+>length : number
+
+                break;
+            }
+            case Types.Num: {
+>Types.Num : Types.Num
+>Types : typeof Types
+>Num : Types.Num
+
+                inst.value.toExponential;
+>inst.value.toExponential : (fractionDigits?: number | undefined) => string
+>inst.value : number
+>inst : NumType
+>value : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+                break;
+            }
+        }
+    }
+}
+

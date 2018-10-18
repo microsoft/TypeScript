@@ -1,16 +1,11 @@
 === tests/cases/compiler/specializedLambdaTypeArguments.ts ===
 class X<A> {
 >X : X<A>
->A : A
 
 	prop: X< <Tany>() => Tany >;
 >prop : X<(<Tany>() => Tany)>
->X : X<A>
->Tany : Tany
->Tany : Tany
 }
 var a: X<boolean>;
 >a : X<boolean>
->X : X<A>
  
 

@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleConcatSystem.ts] ////
 
 //// [a.ts]
-
 export class A { }
 
 //// [b.ts]
@@ -9,19 +8,27 @@ import {A} from "./ref/a";
 export class B extends A { }
 
 //// [all.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 System.register("ref/a", [], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var A;
+    var __moduleName = context_1 && context_1.id;
     return {
         setters: [],
         execute: function () {
-            A = (function () {
+            A = /** @class */ (function () {
                 function A() {
                 }
                 return A;
@@ -32,8 +39,8 @@ System.register("ref/a", [], function (exports_1, context_1) {
 });
 System.register("b", ["ref/a"], function (exports_2, context_2) {
     "use strict";
-    var __moduleName = context_2 && context_2.id;
     var a_1, B;
+    var __moduleName = context_2 && context_2.id;
     return {
         setters: [
             function (a_1_1) {
@@ -41,10 +48,10 @@ System.register("b", ["ref/a"], function (exports_2, context_2) {
             }
         ],
         execute: function () {
-            B = (function (_super) {
+            B = /** @class */ (function (_super) {
                 __extends(B, _super);
                 function B() {
-                    return _super.apply(this, arguments) || this;
+                    return _super !== null && _super.apply(this, arguments) || this;
                 }
                 return B;
             }(a_1.A));

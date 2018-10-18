@@ -1,0 +1,31 @@
+=== tests/cases/compiler/typeParametersShouldNotBeEqual.ts ===
+function ff<T, U>(x: T, y: U) {
+>ff : Symbol(ff, Decl(typeParametersShouldNotBeEqual.ts, 0, 0))
+>T : Symbol(T, Decl(typeParametersShouldNotBeEqual.ts, 0, 12))
+>U : Symbol(U, Decl(typeParametersShouldNotBeEqual.ts, 0, 14))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+>T : Symbol(T, Decl(typeParametersShouldNotBeEqual.ts, 0, 12))
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual.ts, 0, 23))
+>U : Symbol(U, Decl(typeParametersShouldNotBeEqual.ts, 0, 14))
+
+    var z: Object;
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual.ts, 1, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    x = x;  // Ok
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+
+    x = y;  // Error
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+>y : Symbol(y, Decl(typeParametersShouldNotBeEqual.ts, 0, 23))
+
+    x = z;  // Error
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual.ts, 1, 7))
+
+    z = x;  // Ok
+>z : Symbol(z, Decl(typeParametersShouldNotBeEqual.ts, 1, 7))
+>x : Symbol(x, Decl(typeParametersShouldNotBeEqual.ts, 0, 18))
+}
+

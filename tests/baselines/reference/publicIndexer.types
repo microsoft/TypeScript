@@ -1,0 +1,23 @@
+=== tests/cases/conformance/classes/indexMemberDeclarations/publicIndexer.ts ===
+// public indexers not allowed
+
+class C {
+>C : C
+
+    public [x: string]: string;
+>x : string
+}
+
+class D {
+>D : D
+
+    public [x: number]: string;
+>x : number
+}
+
+class E<T> {
+>E : E<T>
+
+    public [x: string]: T;
+>x : string
+}

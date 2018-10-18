@@ -1,0 +1,12 @@
+=== tests/cases/compiler/accessorParameterAccessibilityModifier.ts ===
+class C {
+>C : Symbol(C, Decl(accessorParameterAccessibilityModifier.ts, 0, 0))
+
+    set X(public v) { }
+>X : Symbol(C.X, Decl(accessorParameterAccessibilityModifier.ts, 0, 9))
+>v : Symbol(v, Decl(accessorParameterAccessibilityModifier.ts, 1, 10))
+
+    static set X(public v2) { }
+>X : Symbol(C.X, Decl(accessorParameterAccessibilityModifier.ts, 1, 23))
+>v2 : Symbol(v2, Decl(accessorParameterAccessibilityModifier.ts, 2, 17))
+}

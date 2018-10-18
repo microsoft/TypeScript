@@ -21,7 +21,6 @@ class A {
 
     foo: Base;
 >foo : Base
->Base : Base
 }
 
 class B extends A {
@@ -30,14 +29,13 @@ class B extends A {
 
     fooo: Derived; // ok, inherits foo
 >fooo : Derived
->Derived : Derived
 }
 
 class A2 {
 >A2 : A2
 
     1: Base; 
->Base : Base
+>1 : Base
 }
 
 class B2 extends A2 {
@@ -45,14 +43,14 @@ class B2 extends A2 {
 >A2 : A2
 
     1.1: Derived; // ok, inherits 1
->Derived : Derived
+>1.1 : Derived
 }
 
 class A3 {
 >A3 : A3
 
     '1': Base;
->Base : Base
+>'1' : Base
 }
 
 class B3 extends A3 {
@@ -60,5 +58,5 @@ class B3 extends A3 {
 >A3 : A3
 
     '1.1': Derived; // ok, inherits '1'
->Derived : Derived
+>'1.1' : Derived
 }

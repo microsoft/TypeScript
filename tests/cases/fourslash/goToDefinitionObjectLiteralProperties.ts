@@ -2,8 +2,8 @@
 
 ////var o = {
 ////    /*valueDefinition*/value: 0,
-////    /*getterDefinition*/get getter() {return 0 },
-////    /*setterDefinition*/set setter(v: number) { },
+////    get /*getterDefinition*/getter() {return 0 },
+////    set /*setterDefinition*/setter(v: number) { },
 ////    /*methodDefinition*/method: () => { },
 ////    /*es6StyleMethodDefinition*/es6StyleMethod() { }
 ////};

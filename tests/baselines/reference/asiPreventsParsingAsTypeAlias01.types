@@ -1,5 +1,4 @@
 === tests/cases/conformance/types/typeAliases/asiPreventsParsingAsTypeAlias01.ts ===
-
 var type;
 >type : any
 
@@ -10,10 +9,10 @@ var Foo;
 >Foo : any
 
 type
->type : undefined
+>type : any
 
 Foo = string;
->Foo = string : undefined
+>Foo = string : any
 >Foo : any
->string : undefined
+>string : any
 

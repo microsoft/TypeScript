@@ -3,12 +3,12 @@ module M {
 >M : typeof M
 
     interface Symbol { }
->Symbol : Symbol
 
     class C {
 >C : C
 
         [Symbol.iterator]() { }
+>[Symbol.iterator] : () => void
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

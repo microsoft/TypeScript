@@ -1,14 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
-
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -27,16 +20,16 @@ namespace M {
 
 	// Should emit M.React.createElement
 	//  and M.React.__spread
-	var foo;
+	var foo: any;
 >foo : any
 
 	var spread1 = <div x='' {...foo} y='' />;
 >spread1 : JSX.Element
 ><div x='' {...foo} y='' /> : JSX.Element
 >div : any
->x : any
->foo : undefined
->y : any
+>x : string
+>foo : any
+>y : string
 
 	// Quotes
 	var x = <div>This "quote" thing</div>;

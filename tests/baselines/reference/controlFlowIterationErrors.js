@@ -1,5 +1,4 @@
 //// [controlFlowIterationErrors.ts]
-
 let cond: boolean;
 
 function len(s: string) {

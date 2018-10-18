@@ -1,0 +1,20 @@
+=== tests/cases/conformance/salsa/mod.js ===
+// #24111 -- shouldn't assert
+C.prototype = {}
+>C.prototype = {} : typeof C.prototype
+>C.prototype : typeof C.prototype
+>C : typeof C
+>prototype : typeof C.prototype
+>{} : {}
+
+C.prototype.bar.foo = {};
+>C.prototype.bar.foo = {} : {}
+>C.prototype.bar.foo : {}
+>C.prototype.bar : typeof C.prototype.bar
+>C.prototype : typeof C.prototype
+>C : typeof C
+>prototype : typeof C.prototype
+>bar : typeof C.prototype.bar
+>foo : {}
+>{} : {}
+

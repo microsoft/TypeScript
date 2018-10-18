@@ -1,0 +1,17 @@
+=== /a/node_modules/@types/node/index.d.ts ===
+interface Error {
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(index.d.ts, 0, 0))
+
+    stack2: string;
+>stack2 : Symbol(Error.stack2, Decl(index.d.ts, 0, 17))
+}
+
+=== /a/app.ts ===
+/// <reference types="node"/>
+function foo(): Error {
+>foo : Symbol(foo, Decl(app.ts, 0, 0))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(index.d.ts, 0, 0))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}

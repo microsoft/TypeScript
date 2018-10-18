@@ -5,7 +5,6 @@ class C { foo: string; }
 
 var c: C;
 >c : C
->C : C
 
 var r = c.toString();
 >r : string
@@ -17,14 +16,13 @@ var r = c.toString();
 var r2 = c.hasOwnProperty('');
 >r2 : boolean
 >c.hasOwnProperty('') : boolean
->c.hasOwnProperty : (v: string) => boolean
+>c.hasOwnProperty : (v: string | number | symbol) => boolean
 >c : C
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >'' : ""
 
 var o: Object = c;
 >o : Object
->Object : Object
 >c : C
 
 var o2: {} = c;

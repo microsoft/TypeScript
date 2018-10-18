@@ -1,5 +1,4 @@
 //// [es2017basicAsync.ts]
-
 async (): Promise<void> => {
     await 0;
 }

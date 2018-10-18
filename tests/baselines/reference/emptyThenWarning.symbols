@@ -1,0 +1,10 @@
+=== tests/cases/compiler/emptyThenWarning.ts ===
+if(1);
+
+let x = 0;
+>x : Symbol(x, Decl(emptyThenWarning.ts, 2, 3))
+
+if (true === true); {  
+    x = 1;
+>x : Symbol(x, Decl(emptyThenWarning.ts, 2, 3))
+}

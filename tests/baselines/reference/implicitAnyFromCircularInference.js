@@ -1,5 +1,4 @@
 //// [implicitAnyFromCircularInference.ts]
-
 // Error expected
 var a: typeof a;
 
@@ -75,14 +74,14 @@ function h() {
     }
 }
 function foo(x) { return "abc"; }
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         // Error expected
         this.s = foo(this);
     }
     return C;
 }());
-var D = (function () {
+var D = /** @class */ (function () {
     function D() {
     }
     Object.defineProperty(D.prototype, "x", {

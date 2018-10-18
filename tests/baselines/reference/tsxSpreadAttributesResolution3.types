@@ -1,0 +1,57 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : typeof React
+
+interface PoisonedProp {
+    x: string;
+>x : string
+
+    y: number;
+>y : number
+}
+
+class Poisoned extends React.Component<PoisonedProp, {}> {
+>Poisoned : Poisoned
+>React.Component : React.Component<PoisonedProp, {}>
+>React : typeof React
+>Component : typeof React.Component
+
+    render() {
+>render : () => JSX.Element
+
+        return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+    }
+}
+
+const obj = {
+>obj : { x: string; y: number; }
+>{    x: "hello world",    y: 2} : { x: string; y: number; }
+
+    x: "hello world",
+>x : string
+>"hello world" : "hello world"
+
+    y: 2
+>y : number
+>2 : 2
+
+};
+
+// OK
+let p = <Poisoned {...obj} />;
+>p : JSX.Element
+><Poisoned {...obj} /> : JSX.Element
+>Poisoned : typeof Poisoned
+>obj : { x: string; y: number; }
+
+let y = <Poisoned x="hi" y={2} />;
+>y : JSX.Element
+><Poisoned x="hi" y={2} /> : JSX.Element
+>Poisoned : typeof Poisoned
+>x : string
+>y : number
+>2 : 2
+

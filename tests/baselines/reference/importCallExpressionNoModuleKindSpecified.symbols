@@ -1,0 +1,67 @@
+=== tests/cases/conformance/dynamicImport/0.ts ===
+export class B {
+>B : Symbol(B, Decl(0.ts, 0, 0))
+
+    print() { return "I am B"}
+>print : Symbol(B.print, Decl(0.ts, 0, 16))
+}
+
+export function foo() { return "foo" }
+>foo : Symbol(foo, Decl(0.ts, 2, 1))
+
+=== tests/cases/conformance/dynamicImport/1.ts ===
+export function backup() { return "backup"; }
+>backup : Symbol(backup, Decl(1.ts, 0, 0))
+
+=== tests/cases/conformance/dynamicImport/2.ts ===
+declare var console: any;
+>console : Symbol(console, Decl(2.ts, 0, 11))
+
+class C {
+>C : Symbol(C, Decl(2.ts, 0, 25))
+
+    private myModule = import("./0");
+>myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
+>"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+
+    method() {
+>method : Symbol(C.method, Decl(2.ts, 2, 37))
+
+        const loadAsync = import("./0");
+>loadAsync : Symbol(loadAsync, Decl(2.ts, 4, 13))
+>"./0" : Symbol("tests/cases/conformance/dynamicImport/0", Decl(0.ts, 0, 0))
+
+        this.myModule.then(Zero => {
+>this.myModule.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>this.myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
+>this : Symbol(C, Decl(2.ts, 0, 25))
+>myModule : Symbol(C.myModule, Decl(2.ts, 1, 9))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>Zero : Symbol(Zero, Decl(2.ts, 5, 27))
+
+            console.log(Zero.foo());
+>console : Symbol(console, Decl(2.ts, 0, 11))
+>Zero.foo : Symbol(foo, Decl(0.ts, 2, 1))
+>Zero : Symbol(Zero, Decl(2.ts, 5, 27))
+>foo : Symbol(foo, Decl(0.ts, 2, 1))
+
+        }, async err => {
+>err : Symbol(err, Decl(2.ts, 7, 16))
+
+            console.log(err);
+>console : Symbol(console, Decl(2.ts, 0, 11))
+>err : Symbol(err, Decl(2.ts, 7, 16))
+
+            let one = await import("./1");
+>one : Symbol(one, Decl(2.ts, 9, 15))
+>"./1" : Symbol("tests/cases/conformance/dynamicImport/1", Decl(1.ts, 0, 0))
+
+            console.log(one.backup());
+>console : Symbol(console, Decl(2.ts, 0, 11))
+>one.backup : Symbol(backup, Decl(1.ts, 0, 0))
+>one : Symbol(one, Decl(2.ts, 9, 15))
+>backup : Symbol(backup, Decl(1.ts, 0, 0))
+
+        });
+    }
+}

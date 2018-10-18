@@ -1,11 +1,15 @@
-tests/cases/conformance/jsx/file.tsx(21,16): error TS2606: Property 'x' of JSX spread attribute is not assignable to target property.
-  Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/jsx/file.tsx(25,9): error TS2324: Property 'x' is missing in type 'Attribs1'.
-tests/cases/conformance/jsx/file.tsx(29,1): error TS2324: Property 'x' is missing in type 'Attribs1'.
-tests/cases/conformance/jsx/file.tsx(30,1): error TS2324: Property 'toString' is missing in type 'Attribs2'.
+tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+  Type '{ x: number; }' is not assignable to type 'Attribs1'.
+    Types of property 'x' are incompatible.
+      Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/jsx/file.tsx(25,10): error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+  Type '{ y: string; }' is not assignable to type 'Attribs1'.
+    Property 'x' is missing in type '{ y: string; }'.
+tests/cases/conformance/jsx/file.tsx(29,2): error TS2322: Type '{}' is not assignable to type 'Attribs1'.
+  Property 'x' is missing in type '{}'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (4 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
     declare module JSX {
     	interface Element { }
     	interface IntrinsicElements {
@@ -27,22 +31,25 @@ tests/cases/conformance/jsx/file.tsx(30,1): error TS2324: Property 'toString' is
     
     function make2<T extends {x: number}> (obj: T) {
     	return <test1 {...obj} />; // Error (x is number, not string)
-    	              ~~~~~~~~
-!!! error TS2606: Property 'x' of JSX spread attribute is not assignable to target property.
-!!! error TS2606:   Type 'number' is not assignable to type 'string'.
+    	        ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Type '{ x: number; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:     Types of property 'x' are incompatible.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
     }
     
     function make3<T extends {y: string}> (obj: T) {
     	return <test1 {...obj} />; // Error, missing x
-    	       ~~~~~~~~~~~~~~~~~~
-!!! error TS2324: Property 'x' is missing in type 'Attribs1'.
+    	        ~~~~~
+!!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Type '{ y: string; }' is not assignable to type 'Attribs1'.
+!!! error TS2322:     Property 'x' is missing in type '{ y: string; }'.
     }
     
     
     <test1 {...{}} />; // Error, missing x
-    ~~~~~~~~~~~~~~~~~
-!!! error TS2324: Property 'x' is missing in type 'Attribs1'.
+     ~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'Attribs1'.
+!!! error TS2322:   Property 'x' is missing in type '{}'.
     <test2 {...{}} />; // Error, missing toString
-    ~~~~~~~~~~~~~~~~~
-!!! error TS2324: Property 'toString' is missing in type 'Attribs2'.
     

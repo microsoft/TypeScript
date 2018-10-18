@@ -1,0 +1,59 @@
+=== tests/cases/compiler/errorMessagesIntersectionTypes03.ts ===
+interface A {
+    a;
+>a : any
+}
+
+interface B {
+    b;
+>b : any
+}
+
+function f<T, U extends A, V extends U>(): void {
+>f : <T, U extends A, V extends U>() => void
+
+    let t: T;
+>t : T
+
+    let u: U;
+>u : U
+
+    let v: V;
+>v : V
+
+    let a_and_b: A & B;
+>a_and_b : A & B
+
+    let t_and_b: T & B;
+>t_and_b : T & B
+
+    t = a_and_b;
+>t = a_and_b : A & B
+>t : T
+>a_and_b : A & B
+
+    u = a_and_b;
+>u = a_and_b : A & B
+>u : U
+>a_and_b : A & B
+
+    v = a_and_b;
+>v = a_and_b : A & B
+>v : V
+>a_and_b : A & B
+
+    t = t_and_b;
+>t = t_and_b : T & B
+>t : T
+>t_and_b : T & B
+
+    u = t_and_b;
+>u = t_and_b : T & B
+>u : U
+>t_and_b : T & B
+
+    v = t_and_b;
+>v = t_and_b : T & B
+>v : V
+>t_and_b : T & B
+}

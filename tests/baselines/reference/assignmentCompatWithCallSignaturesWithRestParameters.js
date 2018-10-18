@@ -52,14 +52,14 @@ a = function () { return 1; }; // ok, same number of required params
 a = function () {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return 1;
 }; // ok, same number of required params
 a = function () {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return 1;
 }; // error, type mismatch
@@ -72,7 +72,7 @@ a2 = function () { return 1; }; // ok, fewer required params
 a2 = function () {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return 1;
 }; // ok, fewer required params

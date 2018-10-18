@@ -1,0 +1,7 @@
+=== tests/cases/conformance/parser/ecmascript5/Generics/parserMemberAccessExpression1.ts ===
+Foo<T>();
+No type information for this code.Foo.Bar<T>();
+No type information for this code.Foo<T>.Bar();
+No type information for this code.Foo<T>.Bar<T>();
+No type information for this code.
+No type information for this code.

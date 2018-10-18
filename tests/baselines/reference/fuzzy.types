@@ -1,0 +1,65 @@
+=== tests/cases/compiler/fuzzy.ts ===
+module M {
+>M : typeof M
+
+    export interface I {
+        works:()=>R;
+>works : () => R
+
+        alsoWorks:()=>R;
+>alsoWorks : () => R
+
+        doesntWork:()=>R;
+>doesntWork : () => R
+    }
+
+    export interface R {
+        anything:number;
+>anything : number
+
+        oneI:I;
+>oneI : I
+    }
+
+    export class C implements I {
+>C : C
+
+        constructor(public x:number) {
+>x : number
+        }
+        works():R {
+>works : () => R
+
+            return <R>({ anything: 1 });
+><R>({ anything: 1 }) : R
+>({ anything: 1 }) : { anything: number; }
+>{ anything: 1 } : { anything: number; }
+>anything : number
+>1 : 1
+        }
+
+        doesntWork():R {
+>doesntWork : () => R
+
+            return { anything:1, oneI:this };
+>{ anything:1, oneI:this } : { anything: number; oneI: this; }
+>anything : number
+>1 : 1
+>oneI : this
+>this : this
+        }
+
+        worksToo():R {
+>worksToo : () => R
+
+            return <R>({ oneI: this });
+><R>({ oneI: this }) : R
+>({ oneI: this }) : { oneI: this; }
+>{ oneI: this } : { oneI: this; }
+>oneI : this
+>this : this
+        }
+    }
+}
+
+

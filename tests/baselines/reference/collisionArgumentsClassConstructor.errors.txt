@@ -13,9 +13,6 @@ tests/cases/compiler/collisionArgumentsClassConstructor.ts(30,24): error TS1210:
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(31,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(35,24): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(36,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(41,31): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(44,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(47,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(51,31): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(52,31): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(53,25): error TS2396: Duplicate identifier 'arguments'. Compiler uses 'arguments' to initialize rest parameters.
@@ -30,15 +27,9 @@ tests/cases/compiler/collisionArgumentsClassConstructor.ts(67,17): error TS1210:
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(68,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(69,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 tests/cases/compiler/collisionArgumentsClassConstructor.ts(70,13): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(75,31): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(76,31): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(79,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(80,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(84,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
-tests/cases/compiler/collisionArgumentsClassConstructor.ts(85,17): error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
 
 
-==== tests/cases/compiler/collisionArgumentsClassConstructor.ts (38 errors) ====
+==== tests/cases/compiler/collisionArgumentsClassConstructor.ts (29 errors) ====
     // Constructors
     class c1 {
         constructor(i: number, ...arguments) { // error
@@ -110,18 +101,12 @@ tests/cases/compiler/collisionArgumentsClassConstructor.ts(85,17): error TS1210:
     
     declare class c4 {
         constructor(i: number, ...arguments); // No error - no code gen
-                                  ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     declare class c42 {
         constructor(arguments: number, ...rest); // No error - no code gen
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     declare class c4NoError {
         constructor(arguments: number);  // no error
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     
     class c5 {
@@ -178,26 +163,14 @@ tests/cases/compiler/collisionArgumentsClassConstructor.ts(85,17): error TS1210:
     
     declare class c6 {
         constructor(i: number, ...arguments); // no codegen no error
-                                  ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         constructor(i: string, ...arguments); // no codegen no error
-                                  ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     declare class c62 {
         constructor(arguments: number, ...rest); // no codegen no error
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         constructor(arguments: string, ...rest); // no codegen no error
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }
     
     declare class c6NoError {
         constructor(arguments: number); // no error
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
         constructor(arguments: string); // no error
-                    ~~~~~~~~~
-!!! error TS1210: Invalid use of 'arguments'. Class definitions are automatically in strict mode.
     }

@@ -1,0 +1,72 @@
+=== tests/cases/conformance/internalModules/importDeclarations/shadowedInternalModule.ts ===
+// all errors imported modules conflict with local variables
+
+module A {
+>A : typeof A
+
+    export var Point = { x: 0, y: 0 }
+>Point : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    export interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+} 
+
+module B {
+>B : typeof B
+
+    var A = { x: 0, y: 0 };
+>A : { x: number; y: number; }
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+    import Point = A;
+>Point : typeof Point
+>A : typeof Point
+}
+
+module X {
+>X : typeof X
+
+    export module Y {
+        export interface Point{
+            x: number;
+>x : number
+
+            y: number
+>y : number
+        }
+    }
+
+    export class Y {
+>Y : Y
+
+        name: string;
+>name : string
+    }
+}
+
+module Z {
+>Z : typeof Z
+
+    import Y = X.Y;
+>Y : number
+>X : typeof X
+>Y : Y
+
+    var Y = 12;
+>Y : number
+>12 : 12
+}

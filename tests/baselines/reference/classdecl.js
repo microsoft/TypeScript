@@ -94,12 +94,20 @@ class e {
 }
 
 //// [classdecl.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var a = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var a = /** @class */ (function () {
     function a(ns) {
     }
     a.prototype.pgF = function () { };
@@ -133,22 +141,22 @@ var a = (function () {
     };
     return a;
 }());
-var b = (function (_super) {
+var b = /** @class */ (function (_super) {
     __extends(b, _super);
     function b() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return b;
 }(a));
 var m1;
 (function (m1) {
-    var b = (function () {
+    var b = /** @class */ (function () {
         function b() {
         }
         return b;
     }());
     m1.b = b;
-    var d = (function () {
+    var d = /** @class */ (function () {
         function d() {
         }
         return d;
@@ -158,15 +166,15 @@ var m2;
 (function (m2) {
     var m3;
     (function (m3) {
-        var c = (function (_super) {
+        var c = /** @class */ (function (_super) {
             __extends(c, _super);
             function c() {
-                return _super.apply(this, arguments) || this;
+                return _super !== null && _super.apply(this, arguments) || this;
             }
             return c;
         }(b));
         m3.c = c;
-        var ib2 = (function () {
+        var ib2 = /** @class */ (function () {
             function ib2() {
             }
             return ib2;
@@ -174,19 +182,19 @@ var m2;
         m3.ib2 = ib2;
     })(m3 = m2.m3 || (m2.m3 = {}));
 })(m2 || (m2 = {}));
-var c = (function (_super) {
+var c = /** @class */ (function (_super) {
     __extends(c, _super);
     function c() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return c;
 }(m1.b));
-var ib2 = (function () {
+var ib2 = /** @class */ (function () {
     function ib2() {
     }
     return ib2;
 }());
-var d = (function () {
+var d = /** @class */ (function () {
     function d() {
     }
     d.prototype.foo = function (ns) {
@@ -194,7 +202,7 @@ var d = (function () {
     };
     return d;
 }());
-var e = (function () {
+var e = /** @class */ (function () {
     function e() {
     }
     e.prototype.foo = function (ns) {
@@ -215,11 +223,10 @@ declare class a {
         x: number;
         y: number;
     };
-    private static d2();
+    private static d2;
     private static readonly p3;
     private pv3;
-    private foo(n);
-    private foo(s);
+    private foo;
 }
 declare class b extends a {
 }
@@ -254,13 +261,11 @@ declare class aAmbient {
     static d2(): any;
     static p3: any;
     private pv3;
-    private foo(s);
+    private foo;
 }
 declare class d {
-    private foo(n);
-    private foo(s);
+    private foo;
 }
 declare class e {
-    private foo(s);
-    private foo(n);
+    private foo;
 }

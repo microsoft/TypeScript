@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/outModuleTripleSlashRefs.ts] ////
 
 //// [a.ts]
-
 /// <reference path="./b.ts" />
 export class A {
 	member: typeof GlobalFoo;
@@ -31,21 +30,30 @@ export class B extends A { }
 
 
 //// [all.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 /// <reference path="./c.d.ts" />
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     return Foo;
 }());
 define("ref/a", ["require", "exports"], function (require, exports) {
     "use strict";
+    Object.defineProperty(exports, "__esModule", { value: true });
     /// <reference path="./b.ts" />
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -54,10 +62,11 @@ define("ref/a", ["require", "exports"], function (require, exports) {
 });
 define("b", ["require", "exports", "ref/a"], function (require, exports, a_1) {
     "use strict";
-    var B = (function (_super) {
+    Object.defineProperty(exports, "__esModule", { value: true });
+    var B = /** @class */ (function (_super) {
         __extends(B, _super);
         function B() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         return B;
     }(a_1.A));

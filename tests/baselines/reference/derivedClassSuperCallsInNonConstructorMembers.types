@@ -1,0 +1,86 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassSuperCallsInNonConstructorMembers.ts ===
+// error to use super calls outside a constructor
+
+class Base {
+>Base : Base
+
+    x: string;
+>x : string
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    a: super();
+>a : any
+>() : any
+> : any
+
+    b() {
+>b() : any
+>b : any
+
+        super();
+>super() : void
+>super : any
+    }
+    get C() {
+>get : any
+>C() : any
+>C : any
+
+        super();
+>super() : void
+>super : any
+
+        return 1;
+>1 : 1
+    }
+    set C(v) {
+>set : any
+>C(v) : any
+>C : any
+>v : any
+
+        super();
+>super() : void
+>super : any
+    }
+
+    static a: super();
+>a : any
+>super() : void
+>super : any
+
+    static b() {
+>b() : any
+>b : any
+
+        super();
+>super() : void
+>super : any
+    }
+    static get C() {
+>get : any
+>C() : any
+>C : any
+
+        super();
+>super() : void
+>super : any
+
+        return 1;
+>1 : 1
+    }
+    static set C(v) {
+>set : any
+>C(v) : any
+>C : any
+>v : any
+
+        super();
+>super() : void
+>super : any
+    }
+}

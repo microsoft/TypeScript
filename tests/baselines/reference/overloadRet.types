@@ -1,7 +1,5 @@
 === tests/cases/compiler/overloadRet.ts ===
 interface I {
->I : I
-
     f(s:string):number;  
 >f : { (s: string): number; (n: number): string; }
 >s : string
@@ -22,7 +20,6 @@ interface I {
     h(n:number):I;  
 >h : { (n: number): I; (b: boolean): number; }
 >n : number
->I : I
 
     h(b:boolean):number;
 >h : { (n: number): I; (b: boolean): number; }

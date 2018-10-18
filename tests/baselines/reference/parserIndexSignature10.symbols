@@ -1,0 +1,8 @@
+=== tests/cases/conformance/parser/ecmascript5/IndexSignatures/parserIndexSignature10.ts ===
+interface I {
+>I : Symbol(I, Decl(parserIndexSignature10.ts, 0, 0))
+
+   [a, b]: number
+>a : Symbol(a, Decl(parserIndexSignature10.ts, 1, 4))
+>b : Symbol(b, Decl(parserIndexSignature10.ts, 1, 6))
+}

@@ -8,6 +8,7 @@ void log(foo).toString();
 //// [topLevelExports.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.foo = 3;
     function log(n) { return n; }
     void log(exports.foo).toString();

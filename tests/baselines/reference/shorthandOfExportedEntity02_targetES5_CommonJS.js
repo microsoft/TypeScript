@@ -1,5 +1,4 @@
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.ts]
-
 export const test = "test";
 
 export function foo () {
@@ -9,6 +8,7 @@ export function foo () {
 
 //// [shorthandOfExportedEntity02_targetES5_CommonJS.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 exports.test = "test";
 function foo() {
     var x = { test: exports.test };

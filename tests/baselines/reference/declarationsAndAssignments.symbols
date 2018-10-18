@@ -1,0 +1,613 @@
+=== tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts ===
+function f0() {
+>f0 : Symbol(f0, Decl(declarationsAndAssignments.ts, 0, 0))
+
+    var [] = [1, "hello"];
+    var [x] = [1, "hello"];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 2, 9), Decl(declarationsAndAssignments.ts, 3, 9), Decl(declarationsAndAssignments.ts, 4, 9), Decl(declarationsAndAssignments.ts, 5, 11), Decl(declarationsAndAssignments.ts, 6, 7))
+
+    var [x, y] = [1, "hello"];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 2, 9), Decl(declarationsAndAssignments.ts, 3, 9), Decl(declarationsAndAssignments.ts, 4, 9), Decl(declarationsAndAssignments.ts, 5, 11), Decl(declarationsAndAssignments.ts, 6, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 3, 11), Decl(declarationsAndAssignments.ts, 4, 11), Decl(declarationsAndAssignments.ts, 7, 7))
+
+    var [x, y, z] = [1, "hello"];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 2, 9), Decl(declarationsAndAssignments.ts, 3, 9), Decl(declarationsAndAssignments.ts, 4, 9), Decl(declarationsAndAssignments.ts, 5, 11), Decl(declarationsAndAssignments.ts, 6, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 3, 11), Decl(declarationsAndAssignments.ts, 4, 11), Decl(declarationsAndAssignments.ts, 7, 7))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 4, 14))
+
+    var [,, x] = [0, 1, 2];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 2, 9), Decl(declarationsAndAssignments.ts, 3, 9), Decl(declarationsAndAssignments.ts, 4, 9), Decl(declarationsAndAssignments.ts, 5, 11), Decl(declarationsAndAssignments.ts, 6, 7))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 2, 9), Decl(declarationsAndAssignments.ts, 3, 9), Decl(declarationsAndAssignments.ts, 4, 9), Decl(declarationsAndAssignments.ts, 5, 11), Decl(declarationsAndAssignments.ts, 6, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 3, 11), Decl(declarationsAndAssignments.ts, 4, 11), Decl(declarationsAndAssignments.ts, 7, 7))
+}
+
+function f1() {
+>f1 : Symbol(f1, Decl(declarationsAndAssignments.ts, 8, 1))
+
+    var a = [1, "hello"];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 11, 7))
+
+    var [x] = a;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 12, 9), Decl(declarationsAndAssignments.ts, 13, 9), Decl(declarationsAndAssignments.ts, 14, 9), Decl(declarationsAndAssignments.ts, 15, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 11, 7))
+
+    var [x, y] = a;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 12, 9), Decl(declarationsAndAssignments.ts, 13, 9), Decl(declarationsAndAssignments.ts, 14, 9), Decl(declarationsAndAssignments.ts, 15, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 13, 11), Decl(declarationsAndAssignments.ts, 14, 11), Decl(declarationsAndAssignments.ts, 16, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 11, 7))
+
+    var [x, y, z] = a;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 12, 9), Decl(declarationsAndAssignments.ts, 13, 9), Decl(declarationsAndAssignments.ts, 14, 9), Decl(declarationsAndAssignments.ts, 15, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 13, 11), Decl(declarationsAndAssignments.ts, 14, 11), Decl(declarationsAndAssignments.ts, 16, 7))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 14, 14), Decl(declarationsAndAssignments.ts, 17, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 11, 7))
+
+    var x: number | string;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 12, 9), Decl(declarationsAndAssignments.ts, 13, 9), Decl(declarationsAndAssignments.ts, 14, 9), Decl(declarationsAndAssignments.ts, 15, 7))
+
+    var y: number | string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 13, 11), Decl(declarationsAndAssignments.ts, 14, 11), Decl(declarationsAndAssignments.ts, 16, 7))
+
+    var z: number | string;
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 14, 14), Decl(declarationsAndAssignments.ts, 17, 7))
+}
+
+function f2() {
+>f2 : Symbol(f2, Decl(declarationsAndAssignments.ts, 18, 1))
+
+    var { } = { x: 5, y: "hello" };       // Error, no x and y in target
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 21, 15))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 21, 21))
+
+    var { x } = { x: 5, y: "hello" };     // Error, no y in target
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 22, 9), Decl(declarationsAndAssignments.ts, 24, 9), Decl(declarationsAndAssignments.ts, 25, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 22, 17))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 22, 23))
+
+    var { y } = { x: 5, y: "hello" };     // Error, no x in target
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 23, 9), Decl(declarationsAndAssignments.ts, 24, 12), Decl(declarationsAndAssignments.ts, 26, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 23, 17))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 23, 23))
+
+    var { x, y } = { x: 5, y: "hello" };
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 22, 9), Decl(declarationsAndAssignments.ts, 24, 9), Decl(declarationsAndAssignments.ts, 25, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 23, 9), Decl(declarationsAndAssignments.ts, 24, 12), Decl(declarationsAndAssignments.ts, 26, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 24, 20))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 24, 26))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 22, 9), Decl(declarationsAndAssignments.ts, 24, 9), Decl(declarationsAndAssignments.ts, 25, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 23, 9), Decl(declarationsAndAssignments.ts, 24, 12), Decl(declarationsAndAssignments.ts, 26, 7))
+
+    var { x: a } = { x: 5, y: "hello" };  // Error, no y in target
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 27, 20))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 27, 9), Decl(declarationsAndAssignments.ts, 29, 9), Decl(declarationsAndAssignments.ts, 30, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 27, 20))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 27, 26))
+
+    var { y: b } = { x: 5, y: "hello" };  // Error, no x in target
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 28, 26))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 28, 9), Decl(declarationsAndAssignments.ts, 29, 15), Decl(declarationsAndAssignments.ts, 31, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 28, 20))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 28, 26))
+
+    var { x: a, y: b } = { x: 5, y: "hello" };
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 29, 26))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 27, 9), Decl(declarationsAndAssignments.ts, 29, 9), Decl(declarationsAndAssignments.ts, 30, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 29, 32))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 28, 9), Decl(declarationsAndAssignments.ts, 29, 15), Decl(declarationsAndAssignments.ts, 31, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 29, 26))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 29, 32))
+
+    var a: number;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 27, 9), Decl(declarationsAndAssignments.ts, 29, 9), Decl(declarationsAndAssignments.ts, 30, 7))
+
+    var b: string;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 28, 9), Decl(declarationsAndAssignments.ts, 29, 15), Decl(declarationsAndAssignments.ts, 31, 7))
+}
+
+function f3() {
+>f3 : Symbol(f3, Decl(declarationsAndAssignments.ts, 32, 1))
+
+    var [x, [y, [z]]] = [1, ["hello", [true]]];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 35, 9), Decl(declarationsAndAssignments.ts, 36, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 35, 13), Decl(declarationsAndAssignments.ts, 37, 7))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 35, 17), Decl(declarationsAndAssignments.ts, 38, 7))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 35, 9), Decl(declarationsAndAssignments.ts, 36, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 35, 13), Decl(declarationsAndAssignments.ts, 37, 7))
+
+    var z: boolean;
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 35, 17), Decl(declarationsAndAssignments.ts, 38, 7))
+}
+
+function f4() {
+>f4 : Symbol(f4, Decl(declarationsAndAssignments.ts, 39, 1))
+
+    var { a: x, b: { a: y, b: { a: z }}} = { a: 1, b: { a: "hello", b: { a: true } } };
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 44))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 42, 9), Decl(declarationsAndAssignments.ts, 43, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 42, 50))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 55))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 42, 20), Decl(declarationsAndAssignments.ts, 44, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 42, 67))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 72))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 42, 31), Decl(declarationsAndAssignments.ts, 45, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 44))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 42, 50))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 55))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 42, 67))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 42, 72))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 42, 9), Decl(declarationsAndAssignments.ts, 43, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 42, 20), Decl(declarationsAndAssignments.ts, 44, 7))
+
+    var z: boolean;
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 42, 31), Decl(declarationsAndAssignments.ts, 45, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(declarationsAndAssignments.ts, 46, 1))
+
+    var [x = 0, y = ""] = [1, "hello"];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 49, 9), Decl(declarationsAndAssignments.ts, 50, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 49, 15), Decl(declarationsAndAssignments.ts, 51, 7))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 49, 9), Decl(declarationsAndAssignments.ts, 50, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 49, 15), Decl(declarationsAndAssignments.ts, 51, 7))
+}
+
+function f7() {
+>f7 : Symbol(f7, Decl(declarationsAndAssignments.ts, 52, 1))
+
+    var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 55, 9), Decl(declarationsAndAssignments.ts, 56, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 55, 15), Decl(declarationsAndAssignments.ts, 57, 7))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 55, 9), Decl(declarationsAndAssignments.ts, 56, 7))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 55, 15), Decl(declarationsAndAssignments.ts, 57, 7))
+}
+
+function f8() {
+>f8 : Symbol(f8, Decl(declarationsAndAssignments.ts, 58, 1))
+
+    var [a, b, c] = [];   // Error, [] is an empty tuple
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 61, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 61, 11))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 61, 14))
+
+    var [d, e, f] = [1];  // Error, [1] is a tuple
+>d : Symbol(d, Decl(declarationsAndAssignments.ts, 62, 9))
+>e : Symbol(e, Decl(declarationsAndAssignments.ts, 62, 11))
+>f : Symbol(f, Decl(declarationsAndAssignments.ts, 62, 14))
+}
+
+function f9() {
+>f9 : Symbol(f9, Decl(declarationsAndAssignments.ts, 63, 1))
+
+    var [a, b] = {};                // Error, not array type
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 66, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 66, 11))
+
+    var [c, d] = { 0: 10, 1: 20 };  // Error, not array type
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 67, 9))
+>d : Symbol(d, Decl(declarationsAndAssignments.ts, 67, 11))
+>0 : Symbol(0, Decl(declarationsAndAssignments.ts, 67, 18))
+>1 : Symbol(1, Decl(declarationsAndAssignments.ts, 67, 25))
+
+    var [e, f] = [10, 20];
+>e : Symbol(e, Decl(declarationsAndAssignments.ts, 68, 9))
+>f : Symbol(f, Decl(declarationsAndAssignments.ts, 68, 11))
+}
+
+function f10() {
+>f10 : Symbol(f10, Decl(declarationsAndAssignments.ts, 69, 1))
+
+    var { a, b } = {};  // Error
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 72, 9), Decl(declarationsAndAssignments.ts, 73, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 72, 12), Decl(declarationsAndAssignments.ts, 73, 12))
+
+    var { a, b } = [];  // Error
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 72, 9), Decl(declarationsAndAssignments.ts, 73, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 72, 12), Decl(declarationsAndAssignments.ts, 73, 12))
+}
+
+function f11() {
+>f11 : Symbol(f11, Decl(declarationsAndAssignments.ts, 74, 1))
+
+    var { x: a, y: b } = { x: 10, y: "hello" };
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 77, 26))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 77, 33))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 77, 26))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 77, 33))
+
+    var { 0: a, 1: b } = { 0: 10, 1: "hello" };
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+>0 : Symbol(0, Decl(declarationsAndAssignments.ts, 78, 26))
+>1 : Symbol(1, Decl(declarationsAndAssignments.ts, 78, 33))
+
+    var { "<": a, ">": b } = { "<": 10, ">": "hello" };
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+>"<" : Symbol("<", Decl(declarationsAndAssignments.ts, 79, 30))
+>">" : Symbol(">", Decl(declarationsAndAssignments.ts, 79, 39))
+
+    var { 0: a, 1: b } = [10, "hello"];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+
+    var a: number;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 77, 9), Decl(declarationsAndAssignments.ts, 78, 9), Decl(declarationsAndAssignments.ts, 79, 9), Decl(declarationsAndAssignments.ts, 80, 9), Decl(declarationsAndAssignments.ts, 81, 7))
+
+    var b: string;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 77, 15), Decl(declarationsAndAssignments.ts, 78, 15), Decl(declarationsAndAssignments.ts, 79, 17), Decl(declarationsAndAssignments.ts, 80, 15), Decl(declarationsAndAssignments.ts, 82, 7))
+}
+
+function f12() {
+>f12 : Symbol(f12, Decl(declarationsAndAssignments.ts, 83, 1))
+
+    var [a, [b, { x, y: c }] = ["abc", { x: 10, y: false }]] = [1, ["hello", { x: 5, y: true }]];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 86, 9), Decl(declarationsAndAssignments.ts, 87, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 86, 13), Decl(declarationsAndAssignments.ts, 88, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 17), Decl(declarationsAndAssignments.ts, 89, 7))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 47))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 86, 20), Decl(declarationsAndAssignments.ts, 90, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 40))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 47))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 78))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 86, 84))
+
+    var a: number;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 86, 9), Decl(declarationsAndAssignments.ts, 87, 7))
+
+    var b: string;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 86, 13), Decl(declarationsAndAssignments.ts, 88, 7))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 86, 17), Decl(declarationsAndAssignments.ts, 89, 7))
+
+    var c: boolean;
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 86, 20), Decl(declarationsAndAssignments.ts, 90, 7))
+}
+
+function f13() {
+>f13 : Symbol(f13, Decl(declarationsAndAssignments.ts, 91, 1))
+
+    var [x, y] = [1, "hello"];
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 94, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 94, 11))
+
+    var [a, b] = [[x, y], { x: x, y: y }];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 95, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 95, 11))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 94, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 94, 11))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 95, 27))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 94, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 95, 33))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 94, 11))
+}
+
+function f14([a = 1, [b = "hello", { x, y: c = false }]]) {
+>f14 : Symbol(f14, Decl(declarationsAndAssignments.ts, 96, 1))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 98, 14), Decl(declarationsAndAssignments.ts, 99, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 98, 22), Decl(declarationsAndAssignments.ts, 100, 7))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 98, 36))
+>y : Symbol(y)
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 98, 39), Decl(declarationsAndAssignments.ts, 101, 7))
+
+    var a: number;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 98, 14), Decl(declarationsAndAssignments.ts, 99, 7))
+
+    var b: string;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 98, 22), Decl(declarationsAndAssignments.ts, 100, 7))
+
+    var c: boolean;
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 98, 39), Decl(declarationsAndAssignments.ts, 101, 7))
+}
+f14([2, ["abc", { x: 0, y: true }]]);
+>f14 : Symbol(f14, Decl(declarationsAndAssignments.ts, 96, 1))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 103, 17))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 103, 23))
+
+f14([2, ["abc", { x: 0 }]]);
+>f14 : Symbol(f14, Decl(declarationsAndAssignments.ts, 96, 1))
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 104, 17))
+
+f14([2, ["abc", { y: false }]]);  // Error, no x
+>f14 : Symbol(f14, Decl(declarationsAndAssignments.ts, 96, 1))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 105, 17))
+
+module M {
+>M : Symbol(M, Decl(declarationsAndAssignments.ts, 105, 32))
+
+    export var [a, b] = [1, 2];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 108, 16))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 108, 18))
+}
+
+function f15() {
+>f15 : Symbol(f15, Decl(declarationsAndAssignments.ts, 109, 1))
+
+    var a = "hello";
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 112, 7))
+
+    var b = 1;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 113, 7))
+
+    var c = true;
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 114, 7))
+
+    return { a, b, c };
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 115, 12))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 115, 15))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 115, 18))
+}
+
+function f16() {
+>f16 : Symbol(f16, Decl(declarationsAndAssignments.ts, 116, 1))
+
+    var { a, b, c } = f15();
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 119, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 119, 12))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 119, 15))
+>f15 : Symbol(f15, Decl(declarationsAndAssignments.ts, 109, 1))
+}
+
+function f17({ a = "", b = 0, c = false }) {
+>f17 : Symbol(f17, Decl(declarationsAndAssignments.ts, 120, 1))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 122, 14))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 122, 22))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 122, 29))
+}
+
+f17({});
+>f17 : Symbol(f17, Decl(declarationsAndAssignments.ts, 120, 1))
+
+f17({ a: "hello" });
+>f17 : Symbol(f17, Decl(declarationsAndAssignments.ts, 120, 1))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 126, 5))
+
+f17({ c: true });
+>f17 : Symbol(f17, Decl(declarationsAndAssignments.ts, 120, 1))
+>c : Symbol(c, Decl(declarationsAndAssignments.ts, 127, 5))
+
+f17(f15());
+>f17 : Symbol(f17, Decl(declarationsAndAssignments.ts, 120, 1))
+>f15 : Symbol(f15, Decl(declarationsAndAssignments.ts, 109, 1))
+
+function f18() {
+>f18 : Symbol(f18, Decl(declarationsAndAssignments.ts, 128, 11))
+
+    var a: number;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 131, 7))
+
+    var b: string;
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+
+    var aa: number[];
+>aa : Symbol(aa, Decl(declarationsAndAssignments.ts, 133, 7))
+
+    ({ a, b } = { a, b });
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 134, 6))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 134, 9))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 134, 17))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 134, 20))
+
+    ({ a, b } = { b, a });
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 135, 6))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 135, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 135, 17))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 135, 20))
+
+    [aa[0], b] = [a, b];
+>aa : Symbol(aa, Decl(declarationsAndAssignments.ts, 133, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 131, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+
+    [a, b] = [b, a];  // Error
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 131, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 131, 7))
+
+    [a = 1, b = "abc"] = [2, "def"];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 131, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 132, 7))
+}
+
+function f19() {
+>f19 : Symbol(f19, Decl(declarationsAndAssignments.ts, 139, 1))
+
+    var a, b;
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+
+    [a, b] = [1, 2];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+
+    [a, b] = [b, a];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+
+    ({ a, b } = { b, a });
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 145, 6))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 145, 9))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 145, 17))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 145, 20))
+
+    [[a, b] = [1, 2]] = [[2, 3]];
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+
+    var x = ([a, b] = [1, 2]);
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 147, 7))
+>a : Symbol(a, Decl(declarationsAndAssignments.ts, 142, 7))
+>b : Symbol(b, Decl(declarationsAndAssignments.ts, 142, 10))
+}
+
+function f20(v: [number, number, number]) {
+>f20 : Symbol(f20, Decl(declarationsAndAssignments.ts, 148, 1))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+
+    var y: number;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 152, 7), Decl(declarationsAndAssignments.ts, 160, 11), Decl(declarationsAndAssignments.ts, 161, 11))
+
+    var z: number;
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 153, 7), Decl(declarationsAndAssignments.ts, 161, 14))
+
+    var a0: [];
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 154, 7), Decl(declarationsAndAssignments.ts, 161, 17))
+
+    var a1: [number];
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 155, 7), Decl(declarationsAndAssignments.ts, 160, 14))
+
+    var a2: [number, number];
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 156, 7), Decl(declarationsAndAssignments.ts, 159, 11))
+
+    var a3: [number, number, number];
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 157, 7), Decl(declarationsAndAssignments.ts, 158, 9))
+
+    var [...a3] = v;
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 157, 7), Decl(declarationsAndAssignments.ts, 158, 9))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    var [x, ...a2] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 156, 7), Decl(declarationsAndAssignments.ts, 159, 11))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    var [x, y, ...a1] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 152, 7), Decl(declarationsAndAssignments.ts, 160, 11), Decl(declarationsAndAssignments.ts, 161, 11))
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 155, 7), Decl(declarationsAndAssignments.ts, 160, 14))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    var [x, y, z, ...a0] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 152, 7), Decl(declarationsAndAssignments.ts, 160, 11), Decl(declarationsAndAssignments.ts, 161, 11))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 153, 7), Decl(declarationsAndAssignments.ts, 161, 14))
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 154, 7), Decl(declarationsAndAssignments.ts, 161, 17))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    [...a3] = v;
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 157, 7), Decl(declarationsAndAssignments.ts, 158, 9))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    [x, ...a2] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 156, 7), Decl(declarationsAndAssignments.ts, 159, 11))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    [x, y, ...a1] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 152, 7), Decl(declarationsAndAssignments.ts, 160, 11), Decl(declarationsAndAssignments.ts, 161, 11))
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 155, 7), Decl(declarationsAndAssignments.ts, 160, 14))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+
+    [x, y, z, ...a0] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 151, 7), Decl(declarationsAndAssignments.ts, 159, 9), Decl(declarationsAndAssignments.ts, 160, 9), Decl(declarationsAndAssignments.ts, 161, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 152, 7), Decl(declarationsAndAssignments.ts, 160, 11), Decl(declarationsAndAssignments.ts, 161, 11))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 153, 7), Decl(declarationsAndAssignments.ts, 161, 14))
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 154, 7), Decl(declarationsAndAssignments.ts, 161, 17))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 150, 13))
+}
+
+function f21(v: [number, string, boolean]) {
+>f21 : Symbol(f21, Decl(declarationsAndAssignments.ts, 166, 1))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    var x: number;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+
+    var y: string;
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 170, 7), Decl(declarationsAndAssignments.ts, 178, 11), Decl(declarationsAndAssignments.ts, 179, 11))
+
+    var z: boolean;
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 171, 7), Decl(declarationsAndAssignments.ts, 179, 14))
+
+    var a0: [number, string, boolean];
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 172, 7), Decl(declarationsAndAssignments.ts, 176, 9))
+
+    var a1: [string, boolean];
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 173, 7), Decl(declarationsAndAssignments.ts, 177, 11))
+
+    var a2: [boolean];
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 174, 7), Decl(declarationsAndAssignments.ts, 178, 14))
+
+    var a3: [];
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 175, 7), Decl(declarationsAndAssignments.ts, 179, 17))
+
+    var [...a0] = v;
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 172, 7), Decl(declarationsAndAssignments.ts, 176, 9))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    var [x, ...a1] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 173, 7), Decl(declarationsAndAssignments.ts, 177, 11))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    var [x, y, ...a2] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 170, 7), Decl(declarationsAndAssignments.ts, 178, 11), Decl(declarationsAndAssignments.ts, 179, 11))
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 174, 7), Decl(declarationsAndAssignments.ts, 178, 14))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    var [x, y, z, ...a3] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 170, 7), Decl(declarationsAndAssignments.ts, 178, 11), Decl(declarationsAndAssignments.ts, 179, 11))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 171, 7), Decl(declarationsAndAssignments.ts, 179, 14))
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 175, 7), Decl(declarationsAndAssignments.ts, 179, 17))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    [...a0] = v;
+>a0 : Symbol(a0, Decl(declarationsAndAssignments.ts, 172, 7), Decl(declarationsAndAssignments.ts, 176, 9))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    [x, ...a1] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>a1 : Symbol(a1, Decl(declarationsAndAssignments.ts, 173, 7), Decl(declarationsAndAssignments.ts, 177, 11))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    [x, y, ...a2] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 170, 7), Decl(declarationsAndAssignments.ts, 178, 11), Decl(declarationsAndAssignments.ts, 179, 11))
+>a2 : Symbol(a2, Decl(declarationsAndAssignments.ts, 174, 7), Decl(declarationsAndAssignments.ts, 178, 14))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+
+    [x, y, z, ...a3] = v;
+>x : Symbol(x, Decl(declarationsAndAssignments.ts, 169, 7), Decl(declarationsAndAssignments.ts, 177, 9), Decl(declarationsAndAssignments.ts, 178, 9), Decl(declarationsAndAssignments.ts, 179, 9))
+>y : Symbol(y, Decl(declarationsAndAssignments.ts, 170, 7), Decl(declarationsAndAssignments.ts, 178, 11), Decl(declarationsAndAssignments.ts, 179, 11))
+>z : Symbol(z, Decl(declarationsAndAssignments.ts, 171, 7), Decl(declarationsAndAssignments.ts, 179, 14))
+>a3 : Symbol(a3, Decl(declarationsAndAssignments.ts, 175, 7), Decl(declarationsAndAssignments.ts, 179, 17))
+>v : Symbol(v, Decl(declarationsAndAssignments.ts, 168, 13))
+}
+

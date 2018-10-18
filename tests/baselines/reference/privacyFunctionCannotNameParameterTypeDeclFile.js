@@ -1,8 +1,6 @@
 //// [tests/cases/compiler/privacyFunctionCannotNameParameterTypeDeclFile.ts] ////
 
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts]
-
-
 declare module "GlobalWidgets" {
     export class Widget3 {
         name: string;
@@ -159,7 +157,8 @@ function privateFunctionWithPrivateModuleParameterTypes1(param= exporter.createE
 //// [privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.js]
 //// [privacyFunctionCannotNameParameterTypeDeclFile_Widgets.js]
 "use strict";
-var Widget1 = (function () {
+exports.__esModule = true;
+var Widget1 = /** @class */ (function () {
     function Widget1() {
         this.name = 'one';
     }
@@ -172,7 +171,7 @@ function createWidget1() {
 exports.createWidget1 = createWidget1;
 var SpecializedWidget;
 (function (SpecializedWidget) {
-    var Widget2 = (function () {
+    var Widget2 = /** @class */ (function () {
         function Widget2() {
             this.name = 'one';
         }
@@ -186,6 +185,7 @@ var SpecializedWidget;
 })(SpecializedWidget = exports.SpecializedWidget || (exports.SpecializedWidget = {}));
 //// [privacyFunctionCannotNameParameterTypeDeclFile_exporter.js]
 "use strict";
+exports.__esModule = true;
 ///<reference path='privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.ts'/>
 var Widgets = require("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets");
 var Widgets1 = require("GlobalWidgets");
@@ -207,8 +207,9 @@ function createExportedWidget4() {
 exports.createExportedWidget4 = createExportedWidget4;
 //// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.js]
 "use strict";
+exports.__esModule = true;
 var exporter = require("./privacyFunctionCannotNameParameterTypeDeclFile_exporter");
-var publicClassWithWithPrivateParmeterTypes = (function () {
+var publicClassWithWithPrivateParmeterTypes = /** @class */ (function () {
     function publicClassWithWithPrivateParmeterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget1(); }
@@ -231,7 +232,7 @@ var publicClassWithWithPrivateParmeterTypes = (function () {
     return publicClassWithWithPrivateParmeterTypes;
 }());
 exports.publicClassWithWithPrivateParmeterTypes = publicClassWithWithPrivateParmeterTypes;
-var publicClassWithWithPrivateParmeterTypes1 = (function () {
+var publicClassWithWithPrivateParmeterTypes1 = /** @class */ (function () {
     function publicClassWithWithPrivateParmeterTypes1(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget3(); }
@@ -254,7 +255,7 @@ var publicClassWithWithPrivateParmeterTypes1 = (function () {
     return publicClassWithWithPrivateParmeterTypes1;
 }());
 exports.publicClassWithWithPrivateParmeterTypes1 = publicClassWithWithPrivateParmeterTypes1;
-var privateClassWithWithPrivateParmeterTypes = (function () {
+var privateClassWithWithPrivateParmeterTypes = /** @class */ (function () {
     function privateClassWithWithPrivateParmeterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget1(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget1(); }
@@ -276,7 +277,7 @@ var privateClassWithWithPrivateParmeterTypes = (function () {
     };
     return privateClassWithWithPrivateParmeterTypes;
 }());
-var privateClassWithWithPrivateParmeterTypes2 = (function () {
+var privateClassWithWithPrivateParmeterTypes2 = /** @class */ (function () {
     function privateClassWithWithPrivateParmeterTypes2(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget3(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget3(); }
@@ -312,7 +313,7 @@ exports.publicFunctionWithPrivateParmeterTypes1 = publicFunctionWithPrivateParme
 function privateFunctionWithPrivateParmeterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget3(); }
 }
-var publicClassWithPrivateModuleParameterTypes = (function () {
+var publicClassWithPrivateModuleParameterTypes = /** @class */ (function () {
     function publicClassWithPrivateModuleParameterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget2(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget2(); }
@@ -329,7 +330,7 @@ var publicClassWithPrivateModuleParameterTypes = (function () {
     return publicClassWithPrivateModuleParameterTypes;
 }());
 exports.publicClassWithPrivateModuleParameterTypes = publicClassWithPrivateModuleParameterTypes;
-var publicClassWithPrivateModuleParameterTypes2 = (function () {
+var publicClassWithPrivateModuleParameterTypes2 = /** @class */ (function () {
     function publicClassWithPrivateModuleParameterTypes2(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget4(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget4(); }
@@ -354,7 +355,7 @@ function publicFunctionWithPrivateModuleParameterTypes1(param) {
     if (param === void 0) { param = exporter.createExportedWidget4(); }
 }
 exports.publicFunctionWithPrivateModuleParameterTypes1 = publicFunctionWithPrivateModuleParameterTypes1;
-var privateClassWithPrivateModuleParameterTypes = (function () {
+var privateClassWithPrivateModuleParameterTypes = /** @class */ (function () {
     function privateClassWithPrivateModuleParameterTypes(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget2(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget2(); }
@@ -370,7 +371,7 @@ var privateClassWithPrivateModuleParameterTypes = (function () {
     };
     return privateClassWithPrivateModuleParameterTypes;
 }());
-var privateClassWithPrivateModuleParameterTypes1 = (function () {
+var privateClassWithPrivateModuleParameterTypes1 = /** @class */ (function () {
     function privateClassWithPrivateModuleParameterTypes1(param, param1, param2) {
         if (param === void 0) { param = exporter.createExportedWidget4(); }
         if (param1 === void 0) { param1 = exporter.createExportedWidget4(); }
@@ -426,3 +427,41 @@ export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+//// [privacyFunctionCannotNameParameterTypeDeclFile_consumer.d.ts]
+/// <reference path="privacyFunctionCannotNameParameterTypeDeclFile_GlobalWidgets.d.ts" />
+export declare class publicClassWithWithPrivateParmeterTypes {
+    private param1;
+    param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1;
+    static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+    private static myPrivateStaticMethod;
+    myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+    private myPrivateMethod;
+    constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1);
+}
+export declare class publicClassWithWithPrivateParmeterTypes1 {
+    private param1;
+    param2: import("GlobalWidgets").Widget3;
+    static myPublicStaticMethod(param?: import("GlobalWidgets").Widget3): void;
+    private static myPrivateStaticMethod;
+    myPublicMethod(param?: import("GlobalWidgets").Widget3): void;
+    private myPrivateMethod;
+    constructor(param?: import("GlobalWidgets").Widget3, param1?: import("GlobalWidgets").Widget3, param2?: import("GlobalWidgets").Widget3);
+}
+export declare function publicFunctionWithPrivateParmeterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").Widget1): void;
+export declare function publicFunctionWithPrivateParmeterTypes1(param?: import("GlobalWidgets").Widget3): void;
+export declare class publicClassWithPrivateModuleParameterTypes {
+    private param1;
+    param2: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+    static myPublicStaticMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+    myPublicMethod(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+    constructor(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param1?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2, param2?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2);
+}
+export declare class publicClassWithPrivateModuleParameterTypes2 {
+    private param1;
+    param2: import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    static myPublicStaticMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+    myPublicMethod(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;
+    constructor(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param1?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4, param2?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4);
+}
+export declare function publicFunctionWithPrivateModuleParameterTypes(param?: import("./privacyFunctionCannotNameParameterTypeDeclFile_Widgets").SpecializedWidget.Widget2): void;
+export declare function publicFunctionWithPrivateModuleParameterTypes1(param?: import("GlobalWidgets").SpecializedGlobalWidget.Widget4): void;

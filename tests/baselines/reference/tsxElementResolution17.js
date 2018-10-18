@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/jsx/tsxElementResolution17.tsx] ////
 
 //// [file.tsx]
-
 declare module JSX {
 	interface Element { }
 	interface IntrinsicElements { }
@@ -31,5 +30,6 @@ import s2 = require('elements2');
 //// [consumer.jsx]
 define(["require", "exports", "elements1"], function (require, exports, s1) {
     "use strict";
+    exports.__esModule = true;
     <s1.MyElement />;
 });

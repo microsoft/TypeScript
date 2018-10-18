@@ -1,0 +1,10 @@
+=== tests/cases/conformance/externalModules/esnext/esnextmodulekindWithES5Target10.ts ===
+import i = require("mod"); // Error;
+>i : any
+
+
+namespace N {
+}
+export = N; // Error
+>N : any
+

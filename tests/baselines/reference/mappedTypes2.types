@@ -1,0 +1,271 @@
+=== tests/cases/conformance/types/mapped/mappedTypes2.ts ===
+function verifyLibTypes<T, K extends keyof T, U>() {
+>verifyLibTypes : <T, K extends keyof T, U>() => void
+
+    var x1: Partial<T>;
+>x1 : Partial<T>
+
+    var x1: { [P in keyof T]?: T[P] };
+>x1 : Partial<T>
+
+    var x2: Readonly<T>;
+>x2 : Readonly<T>
+
+    var x2: { readonly [P in keyof T]: T[P] };
+>x2 : Readonly<T>
+
+    var x3: Pick<T, K>;
+>x3 : Pick<T, K>
+
+    var x3: { [P in K]: T[P] };
+>x3 : Pick<T, K>
+
+    var x4: Record<K, U>;
+>x4 : Record<K, U>
+
+    var x4: { [P in K]: U };
+>x4 : Record<K, U>
+}
+
+type Proxy<T> = {
+>Proxy : Proxy<T>
+
+    get(): T;
+>get : () => T
+
+    set(value: T): void;
+>set : (value: T) => void
+>value : T
+}
+
+type Proxify<T> = {
+>Proxify : Proxify<T>
+
+    [P in keyof T]: Proxy<T[P]>;
+}
+
+type DeepReadonly<T> = {
+>DeepReadonly : DeepReadonly<T>
+
+    readonly [P in keyof T]: DeepReadonly<T[P]>;
+};
+
+declare function assign<T>(obj: T, props: Partial<T>): void;
+>assign : <T>(obj: T, props: Partial<T>) => void
+>obj : T
+>props : Partial<T>
+
+declare function freeze<T>(obj: T): Readonly<T>;
+>freeze : <T>(obj: T) => Readonly<T>
+>obj : T
+
+declare function pick<T, K extends keyof T>(obj: T, ...keys: K[]): Pick<T, K>;
+>pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
+>obj : T
+>keys : K[]
+
+declare function mapObject<K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U): Record<K, U>;
+>mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
+>obj : Record<K, T>
+>f : (x: T) => U
+>x : T
+
+declare function proxify<T>(obj: T): Proxify<T>;
+>proxify : <T>(obj: T) => Proxify<T>
+>obj : T
+
+interface Point {
+    x: number;
+>x : number
+
+    y: number;
+>y : number
+}
+
+interface Shape {
+    name: string;
+>name : string
+
+    width: number;
+>width : number
+
+    height: number;
+>height : number
+
+    location: Point;
+>location : Point
+}
+
+interface PartialShape {
+    name?: string;
+>name : string | undefined
+
+    width?: number;
+>width : number | undefined
+
+    height?: number;
+>height : number | undefined
+
+    location?: Point;
+>location : Point | undefined
+}
+
+interface ReadonlyShape {
+    readonly name: string;
+>name : string
+
+    readonly width: number;
+>width : number
+
+    readonly height: number;
+>height : number
+
+    readonly location: Point;
+>location : Point
+}
+
+function f0(s1: Shape, s2: Shape) {
+>f0 : (s1: Shape, s2: Shape) => void
+>s1 : Shape
+>s2 : Shape
+
+    assign(s1, { name: "circle" });
+>assign(s1, { name: "circle" }) : void
+>assign : <T>(obj: T, props: Partial<T>) => void
+>s1 : Shape
+>{ name: "circle" } : { name: string; }
+>name : string
+>"circle" : "circle"
+
+    assign(s2, { width: 10, height: 20 });
+>assign(s2, { width: 10, height: 20 }) : void
+>assign : <T>(obj: T, props: Partial<T>) => void
+>s2 : Shape
+>{ width: 10, height: 20 } : { width: number; height: number; }
+>width : number
+>10 : 10
+>height : number
+>20 : 20
+}
+
+function f1(shape: Shape) {
+>f1 : (shape: Shape) => void
+>shape : Shape
+
+    var frozen: ReadonlyShape;
+>frozen : ReadonlyShape
+
+    var frozen: Readonly<Shape>;
+>frozen : ReadonlyShape
+
+    var frozen = freeze(shape);
+>frozen : ReadonlyShape
+>freeze(shape) : Readonly<Shape>
+>freeze : <T>(obj: T) => Readonly<T>
+>shape : Shape
+}
+
+function f2(shape: Shape) {
+>f2 : (shape: Shape) => void
+>shape : Shape
+
+    var partial: PartialShape;
+>partial : PartialShape
+
+    var partial: Partial<Shape>;
+>partial : PartialShape
+
+    var partial: Partial<Shape> = {};
+>partial : PartialShape
+>{} : {}
+}
+
+function f3(shape: Shape) {
+>f3 : (shape: Shape) => void
+>shape : Shape
+
+    const x = pick(shape, "name", "location");  // { name: string, location: Point }
+>x : Pick<Shape, "name" | "location">
+>pick(shape, "name", "location") : Pick<Shape, "name" | "location">
+>pick : <T, K extends keyof T>(obj: T, ...keys: K[]) => Pick<T, K>
+>shape : Shape
+>"name" : "name"
+>"location" : "location"
+}
+
+function f4() {
+>f4 : () => void
+
+    const rec = { foo: "hello", bar: "world", baz: "bye" };
+>rec : { foo: string; bar: string; baz: string; }
+>{ foo: "hello", bar: "world", baz: "bye" } : { foo: string; bar: string; baz: string; }
+>foo : string
+>"hello" : "hello"
+>bar : string
+>"world" : "world"
+>baz : string
+>"bye" : "bye"
+
+    const lengths = mapObject(rec, s => s.length);  // { foo: number, bar: number, baz: number }
+>lengths : Record<"foo" | "bar" | "baz", number>
+>mapObject(rec, s => s.length) : Record<"foo" | "bar" | "baz", number>
+>mapObject : <K extends string, T, U>(obj: Record<K, T>, f: (x: T) => U) => Record<K, U>
+>rec : { foo: string; bar: string; baz: string; }
+>s => s.length : (s: string) => number
+>s : string
+>s.length : number
+>s : string
+>length : number
+}
+
+function f5(shape: Shape) {
+>f5 : (shape: Shape) => void
+>shape : Shape
+
+    const p = proxify(shape);
+>p : Proxify<Shape>
+>proxify(shape) : Proxify<Shape>
+>proxify : <T>(obj: T) => Proxify<T>
+>shape : Shape
+
+    let name = p.name.get();
+>name : string
+>p.name.get() : string
+>p.name.get : () => string
+>p.name : Proxy<string>
+>p : Proxify<Shape>
+>name : Proxy<string>
+>get : () => string
+
+    p.width.set(42);
+>p.width.set(42) : void
+>p.width.set : (value: number) => void
+>p.width : Proxy<number>
+>p : Proxify<Shape>
+>width : Proxy<number>
+>set : (value: number) => void
+>42 : 42
+}
+
+function f6(shape: DeepReadonly<Shape>) {
+>f6 : (shape: DeepReadonly<Shape>) => void
+>shape : DeepReadonly<Shape>
+
+    let name = shape.name;  // string
+>name : string
+>shape.name : string
+>shape : DeepReadonly<Shape>
+>name : string
+
+    let location = shape.location;  // DeepReadonly<Point>
+>location : DeepReadonly<Point>
+>shape.location : DeepReadonly<Point>
+>shape : DeepReadonly<Shape>
+>location : DeepReadonly<Point>
+
+    let x = location.x;  // number
+>x : number
+>location.x : number
+>location : DeepReadonly<Point>
+>x : number
+}

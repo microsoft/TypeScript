@@ -1,5 +1,4 @@
 //// [discriminantsAndPrimitives.ts]
-
 // Repro from #10257 plus other tests
 
 interface Foo {

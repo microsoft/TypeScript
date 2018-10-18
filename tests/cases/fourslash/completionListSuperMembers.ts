@@ -23,13 +23,16 @@
 ////    }
 ////}
 
-
-goTo.marker();
-verify.not.memberListContains("publicProperty");
-verify.memberListContains("publicInstanceMethod");
-// No statics
-verify.not.memberListContains("publicStaticProperty");
-verify.not.memberListContains("publicStaticMethod");
-// No privates
-verify.not.memberListContains("privateProperty");
-verify.not.memberListContains("privateInstanceMethod");
+verify.completions({
+    marker: "",
+    includes: "publicInstanceMethod",
+    excludes: [
+        "publicProperty",
+        // No statics
+        "publicStaticProperty",
+        "publicStaticMethod",
+        // No privates
+        "privateProperty",
+        "privateInstanceMethod",
+    ]
+});

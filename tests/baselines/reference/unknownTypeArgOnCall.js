@@ -9,7 +9,7 @@ var r = f.clone<Uhhhh>()
 
 
 //// [unknownTypeArgOnCall.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
     }
     Foo.prototype.clone = function () {

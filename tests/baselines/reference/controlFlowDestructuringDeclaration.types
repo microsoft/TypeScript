@@ -1,5 +1,4 @@
 === tests/cases/conformance/controlFlow/controlFlowDestructuringDeclaration.ts ===
-
 function f1() {
 >f1 : () => void
 

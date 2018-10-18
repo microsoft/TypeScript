@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/es6ImportNamedImportAmd.ts] ////
 
 //// [es6ImportNamedImportAmd_0.ts]
-
 export var a = 10;
 export var x = a;
 export var m = a;
@@ -44,6 +43,7 @@ import { aaaa as bbbb } from "es6ImportNamedImportAmd_0";
 //// [es6ImportNamedImportAmd_0.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     exports.a = 10;
     exports.x = exports.a;
     exports.m = exports.a;
@@ -56,6 +56,7 @@ define(["require", "exports"], function (require, exports) {
 //// [es6ImportNamedImportAmd_1.js]
 define(["require", "exports", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0", "es6ImportNamedImportAmd_0"], function (require, exports, es6ImportNamedImportAmd_0_1, es6ImportNamedImportAmd_0_2, es6ImportNamedImportAmd_0_3, es6ImportNamedImportAmd_0_4, es6ImportNamedImportAmd_0_5, es6ImportNamedImportAmd_0_6, es6ImportNamedImportAmd_0_7, es6ImportNamedImportAmd_0_8, es6ImportNamedImportAmd_0_9) {
     "use strict";
+    exports.__esModule = true;
     var xxxx = es6ImportNamedImportAmd_0_1.a;
     var xxxx = es6ImportNamedImportAmd_0_2.a;
     var xxxx = es6ImportNamedImportAmd_0_3.x;
@@ -81,3 +82,4 @@ export declare var z1: number;
 export declare var z2: number;
 export declare var aaaa: number;
 //// [es6ImportNamedImportAmd_1.d.ts]
+export {};

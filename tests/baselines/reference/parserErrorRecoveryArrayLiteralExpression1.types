@@ -1,0 +1,14 @@
+=== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrayLiteralExpressions/parserErrorRecoveryArrayLiteralExpression1.ts ===
+var v = [1, 2, 3
+>v : number[]
+>[1, 2, 34, 5, 6, 7] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+4, 5, 6, 7];
+>4 : 4
+>5 : 5
+>6 : 6
+>7 : 7
+

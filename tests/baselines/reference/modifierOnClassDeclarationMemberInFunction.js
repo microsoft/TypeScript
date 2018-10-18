@@ -1,5 +1,4 @@
 //// [modifierOnClassDeclarationMemberInFunction.ts]
-
 function f() {
     class C {
         public baz = 1;
@@ -10,7 +9,7 @@ function f() {
 
 //// [modifierOnClassDeclarationMemberInFunction.js]
 function f() {
-    var C = (function () {
+    var C = /** @class */ (function () {
         function C() {
             this.baz = 1;
         }

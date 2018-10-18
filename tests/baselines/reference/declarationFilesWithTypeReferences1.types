@@ -1,0 +1,13 @@
+=== /node_modules/@types/node/index.d.ts ===
+interface Error {
+    stack2: string;
+>stack2 : string
+}
+
+=== /app.ts ===
+function foo(): Error {
+>foo : () => Error
+
+    return undefined;
+>undefined : undefined
+}

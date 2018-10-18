@@ -33,18 +33,18 @@
 ////ci1./*2*/b;
 
 goTo.marker('1');
-verify.memberListCount(6);
-verify.memberListContains("a");
-verify.memberListContains("b");
-verify.memberListContains("c");
-verify.memberListContains("i1");
-verify.memberListContains("i2");
-verify.memberListContains("i3");
+verify.completionListCount(6);
+verify.completionListContains("a");
+verify.completionListContains("b");
+verify.completionListContains("c");
+verify.completionListContains("i1");
+verify.completionListContains("i2");
+verify.completionListContains("i3");
 
 goTo.marker('2');
-verify.memberListCount(5);
-verify.memberListContains("a");
-verify.memberListContains("b");
-verify.memberListContains("b1");
-verify.memberListContains("i11");
-verify.memberListContains("i12");
+verify.completionListCount(5);
+verify.completionListContains("a");
+verify.completionListContains("b");
+verify.completionListContains("b1");
+verify.completionListContains("i11");
+verify.completionListContains("i12");

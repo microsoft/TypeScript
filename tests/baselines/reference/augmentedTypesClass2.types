@@ -1,0 +1,49 @@
+=== tests/cases/compiler/augmentedTypesClass2.ts ===
+// Checking class with other things in type space not value space
+
+// class then interface
+class c11 {
+>c11 : c11
+
+    foo() {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+interface c11 {
+    bar(): void;
+>bar : () => void
+}
+
+// class then class - covered
+// class then enum 
+class c33 {
+>c33 : c33
+
+    foo() {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+enum c33 { One };
+>c33 : c33
+>One : c33.One
+
+// class then import
+class c44 {
+>c44 : c44
+
+    foo() {
+>foo : () => number
+
+        return 1;
+>1 : 1
+    }
+}
+
+

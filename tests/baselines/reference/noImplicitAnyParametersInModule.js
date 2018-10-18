@@ -1,5 +1,4 @@
 //// [noImplicitAnyParametersInModule.ts]
-
 module M {
     // No implicit-'any' errors.
     function m_f1(): void { }
@@ -63,7 +62,7 @@ var M;
     function m_f6() {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i - 0] = arguments[_i];
+            r[_i] = arguments[_i];
         }
     }
     // Implicit-'any'/'any[]' errors for x and r.
@@ -86,7 +85,7 @@ var M;
     var m_f13 = function () {
         var r = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            r[_i - 0] = arguments[_i];
+            r[_i] = arguments[_i];
         }
         return "";
     };

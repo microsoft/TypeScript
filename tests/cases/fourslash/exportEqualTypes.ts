@@ -15,10 +15,10 @@
 ////var /*3*/r2 = t./*4*/foo; // t should have 'foo' in dropdown list and be of type 'string'
 
 verify.quickInfos({
-    1: "import test = require('./exportEqualTypes_file0')",
+    1: "(alias) interface test\nimport test = require('./exportEqualTypes_file0')",
     2: "var r1: Date",
     3: "var r2: string"
 });
 goTo.marker('4');
-verify.memberListContains('foo');
-verify.numberOfErrorsInCurrentFile(0);
+verify.completionListContains('foo');
+verify.noErrors();

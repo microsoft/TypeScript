@@ -6,6 +6,6 @@
 ////(y) => y;
 ////x => x;
 
-verify.numberOfErrorsInCurrentFile(0);
+verify.noErrors();
 verify.not.errorExistsBeforeMarker();
 verify.not.errorExistsAfterMarker();

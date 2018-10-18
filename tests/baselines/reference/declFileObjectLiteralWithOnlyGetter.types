@@ -1,5 +1,4 @@
 === tests/cases/compiler/declFileObjectLiteralWithOnlyGetter.ts ===
-
 function /*1*/makePoint(x: number) { 
 >makePoint : (x: number) => { readonly x: number; }
 >x : number

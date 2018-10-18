@@ -30,24 +30,32 @@ function f() {
 
 
 //// [baseCheck.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
     function C(x, y) {
     }
     return C;
 }());
-var ELoc = (function (_super) {
+var ELoc = /** @class */ (function (_super) {
     __extends(ELoc, _super);
     function ELoc(x) {
         return _super.call(this, 0, x) || this;
     }
     return ELoc;
 }(C));
-var ELocVar = (function (_super) {
+var ELocVar = /** @class */ (function (_super) {
     __extends(ELocVar, _super);
     function ELocVar(x) {
         return _super.call(this, 0, loc) || this;
@@ -57,7 +65,7 @@ var ELocVar = (function (_super) {
     };
     return ELocVar;
 }(C));
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D(z) {
         var _this = _super.call(this, _this.z) || this;
@@ -66,7 +74,7 @@ var D = (function (_super) {
     }
     return D;
 }(C)); // too few params
-var E = (function (_super) {
+var E = /** @class */ (function (_super) {
     __extends(E, _super);
     function E(z) {
         var _this = _super.call(this, 0, _this.z) || this;
@@ -75,7 +83,7 @@ var E = (function (_super) {
     }
     return E;
 }(C));
-var F = (function (_super) {
+var F = /** @class */ (function (_super) {
     __extends(F, _super);
     function F(z) {
         var _this = _super.call(this, "hello", _this.z) || this;

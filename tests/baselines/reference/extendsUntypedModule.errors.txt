@@ -1,0 +1,18 @@
+/a.ts(2,1): error TS6133: 'Bar' is declared but its value is never read.
+
+
+==== /a.ts (1 errors) ====
+    import Foo from "foo";
+    import Bar from "bar"; // error: unused
+    ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS6133: 'Bar' is declared but its value is never read.
+    export class A extends Foo { }
+    
+==== /node_modules/foo/index.js (0 errors) ====
+    // Test that extending an untyped module is an error, unlike extending unknownSymbol.
+    
+    This file is not read.
+    
+==== /node_modules/bar/index.js (0 errors) ====
+    Nor is this one.
+    

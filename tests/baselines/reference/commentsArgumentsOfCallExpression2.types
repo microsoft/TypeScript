@@ -17,7 +17,7 @@ foo(/*c2*/ 1, /*d2*/ 1 + 2, /*e1*/ a + b);
 >1 : 1
 >2 : 2
 >a + b : any
->a : undefined
+>a : any
 >b : any
 
 foo(/*c3*/ function () { }, /*d2*/() => { }, /*e2*/ a + /*e3*/ b);
@@ -26,7 +26,7 @@ foo(/*c3*/ function () { }, /*d2*/() => { }, /*e2*/ a + /*e3*/ b);
 >function () { } : () => void
 >() => { } : () => void
 >a + /*e3*/ b : any
->a : undefined
+>a : any
 >b : any
 
 foo(/*c3*/ function () { }, /*d3*/() => { }, /*e3*/(a + b));
@@ -36,7 +36,7 @@ foo(/*c3*/ function () { }, /*d3*/() => { }, /*e3*/(a + b));
 >() => { } : () => void
 >(a + b) : any
 >a + b : any
->a : undefined
+>a : any
 >b : any
 
 foo(

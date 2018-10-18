@@ -1,5 +1,4 @@
 === tests/cases/compiler/inferredFunctionReturnTypeIsEmptyType.ts ===
-
 function foo() {
 >foo : () => 42 | "42"
 

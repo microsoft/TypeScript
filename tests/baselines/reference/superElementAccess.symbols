@@ -1,0 +1,91 @@
+=== tests/cases/compiler/superElementAccess.ts ===
+class MyBase {
+>MyBase : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+
+    m1(a: string) { return a; }
+>m1 : Symbol(MyBase.m1, Decl(superElementAccess.ts, 0, 14))
+>a : Symbol(a, Decl(superElementAccess.ts, 1, 7))
+>a : Symbol(a, Decl(superElementAccess.ts, 1, 7))
+
+    private p1() { }
+>p1 : Symbol(MyBase.p1, Decl(superElementAccess.ts, 1, 31))
+
+    m2: () => void = function () { }
+>m2 : Symbol(MyBase.m2, Decl(superElementAccess.ts, 2, 20))
+
+    d1: number = 42;
+>d1 : Symbol(MyBase.d1, Decl(superElementAccess.ts, 3, 36))
+
+    private d2: number = 42;
+>d2 : Symbol(MyBase.d2, Decl(superElementAccess.ts, 4, 20))
+
+    get value() {return 0 }
+>value : Symbol(MyBase.value, Decl(superElementAccess.ts, 5, 28), Decl(superElementAccess.ts, 6, 27))
+
+    set value(v: number) { }
+>value : Symbol(MyBase.value, Decl(superElementAccess.ts, 5, 28), Decl(superElementAccess.ts, 6, 27))
+>v : Symbol(v, Decl(superElementAccess.ts, 7, 14))
+}
+
+
+class MyDerived extends MyBase {
+>MyDerived : Symbol(MyDerived, Decl(superElementAccess.ts, 8, 1))
+>MyBase : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+
+    foo() {
+>foo : Symbol(MyDerived.foo, Decl(superElementAccess.ts, 11, 32))
+
+        super["m1"]("hi");                                     // Should be allowed, method on base prototype
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"m1" : Symbol(MyBase.m1, Decl(superElementAccess.ts, 0, 14))
+
+        var l2 = super["m1"].bind(this);                       // Should be allowed, can access properties as well as invoke
+>l2 : Symbol(l2, Decl(superElementAccess.ts, 16, 11))
+>super["m1"].bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"m1" : Symbol(MyBase.m1, Decl(superElementAccess.ts, 0, 14))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(MyDerived, Decl(superElementAccess.ts, 8, 1))
+
+        var x: (a: string) => string = super["m1"];            // Should be allowed, can assign to var with compatible signature
+>x : Symbol(x, Decl(superElementAccess.ts, 18, 11))
+>a : Symbol(a, Decl(superElementAccess.ts, 18, 16))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"m1" : Symbol(MyBase.m1, Decl(superElementAccess.ts, 0, 14))
+
+        super["m2"].bind(this);                                // Should error, instance property, not a public instance member function
+>super["m2"].bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"m2" : Symbol(MyBase.m2, Decl(superElementAccess.ts, 2, 20))
+>bind : Symbol(Function.bind, Decl(lib.es5.d.ts, --, --))
+>this : Symbol(MyDerived, Decl(superElementAccess.ts, 8, 1))
+
+        super["p1"]();                                         // Should error, private not public instance member function
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"p1" : Symbol(MyBase.p1, Decl(superElementAccess.ts, 1, 31))
+
+        var l1 = super["d1"];                                  // Should error, instance data property not a public instance member function
+>l1 : Symbol(l1, Decl(superElementAccess.ts, 24, 11), Decl(superElementAccess.ts, 26, 11))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"d1" : Symbol(MyBase.d1, Decl(superElementAccess.ts, 3, 36))
+
+        var l1 = super["d2"];                                  // Should error, instance data property not a public instance member function
+>l1 : Symbol(l1, Decl(superElementAccess.ts, 24, 11), Decl(superElementAccess.ts, 26, 11))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"d2" : Symbol(MyBase.d2, Decl(superElementAccess.ts, 4, 20))
+
+        super["m1"] = function (a: string) { return ""; };     // Should be allowed, we will not restrict assignment
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"m1" : Symbol(MyBase.m1, Decl(superElementAccess.ts, 0, 14))
+>a : Symbol(a, Decl(superElementAccess.ts, 28, 32))
+
+        super["value"] = 0;                                    // Should error, instance data property not a public instance member function
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"value" : Symbol(MyBase.value, Decl(superElementAccess.ts, 5, 28), Decl(superElementAccess.ts, 6, 27))
+        
+        var z = super["value"];                                // Should error, instance data property not a public instance member function
+>z : Symbol(z, Decl(superElementAccess.ts, 32, 11))
+>super : Symbol(MyBase, Decl(superElementAccess.ts, 0, 0))
+>"value" : Symbol(MyBase.value, Decl(superElementAccess.ts, 5, 28), Decl(superElementAccess.ts, 6, 27))
+    }
+}

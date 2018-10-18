@@ -1,5 +1,4 @@
 //// [letDeclarations-scopes2.ts]
-
 let global = 0;
 
 { 

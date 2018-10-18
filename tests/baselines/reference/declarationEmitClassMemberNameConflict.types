@@ -1,5 +1,4 @@
 === tests/cases/compiler/declarationEmitClassMemberNameConflict.ts ===
-
 export class C1 {
 >C1 : C1
 

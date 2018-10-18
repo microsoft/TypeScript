@@ -1,0 +1,112 @@
+Exit Code: 1
+Standard output:
+index.js(3,25): error TS2732: Cannot find module './package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+index.js(138,21): error TS2532: Object is possibly 'undefined'.
+src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 'Ignore'.
+src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
+src/cli/util.js(396,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
+src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
+src/cli/util.js(454,16): error TS2339: Property 'type' does not exist on type 'never'.
+src/cli/util.js(455,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
+src/cli/util.js(456,17): error TS2339: Property 'name' does not exist on type 'never'.
+src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
+src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
+  Property 'cache' is missing in type '{ sync: false; }'.
+src/config/resolve-config.js(82,32): error TS2345: Argument of type '{ sync: true; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
+  Property 'cache' is missing in type '{ sync: true; }'.
+src/doc/doc-printer.js(213,17): error TS2532: Object is possibly 'undefined'.
+src/doc/doc-printer.js(214,18): error TS2532: Object is possibly 'undefined'.
+src/doc/doc-printer.js(215,17): error TS2532: Object is possibly 'undefined'.
+src/doc/doc-printer.js(447,37): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'never[]'.
+  Type 'any[]' is not assignable to type 'never'.
+src/language-css/clean.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
+src/language-css/parser-postcss.js(78,32): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
+src/language-css/parser-postcss.js(88,30): error TS2345: Argument of type '{ open: null; close: null; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
+src/language-css/parser-postcss.js(93,30): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
+src/language-css/parser-postcss.js(100,30): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/language-css/parser-postcss.js(104,28): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
+src/language-css/parser-postcss.js(407,32): error TS2531: Object is possibly 'null'.
+src/language-css/printer-postcss.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
+src/language-handlebars/parser-glimmer.js(27,26): error TS2345: Argument of type '{ plugins: { ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }; }' is not assignable to parameter of type 'PreprocessOptions'.
+  Types of property 'plugins' are incompatible.
+    Type '{ ast: (() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]; }' is not assignable to type '{ ast?: ASTPluginBuilder[] | undefined; }'.
+      Types of property 'ast' are incompatible.
+        Type '(() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; })[]' is not assignable to type 'ASTPluginBuilder[]'.
+          Type '() => { visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' is not assignable to type 'ASTPluginBuilder'.
+            Type '{ visitor: { Program(node: any): void; ElementNode(node: any): void; }; }' is not assignable to type 'ASTPlugin'.
+              Property 'name' is missing in type '{ visitor: { Program(node: any): void; ElementNode(node: any): void; }; }'.
+src/language-handlebars/printer-glimmer.js(270,7): error TS2554: Expected 0-1 arguments, but got 2.
+src/language-js/printer-estree.js(99,9): error TS2322: Type '{ type: string; }' is not assignable to type '{ type: string; parts: any; }'.
+  Property 'parts' is missing in type '{ type: string; }'.
+src/language-js/printer-estree.js(302,9): error TS2345: Argument of type '{ type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'ConcatArray<never>'.
+  Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<never>'.
+    Property 'length' is missing in type '{ type: string; parts: any; }'.
+src/language-js/printer-estree.js(1224,28): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string | ConcatArray<string>'.
+  Type '{ type: string; parts: any; }' is not assignable to type 'ConcatArray<string>'.
+    Property 'length' is missing in type '{ type: string; parts: any; }'.
+src/language-js/printer-estree.js(1601,20): error TS2345: Argument of type '" "' is not assignable to parameter of type '{ type: string; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1603,20): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type '{ type: string; contents: any; break: boolean; expandedStates: any; }'.
+  Property 'contents' is missing in type '{ type: string; parts: any; }'.
+src/language-js/printer-estree.js(1605,18): error TS2345: Argument of type '"while ("' is not assignable to parameter of type '{ type: string; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(1614,9): error TS2345: Argument of type '")"' is not assignable to parameter of type '{ type: string; contents: any; break: boolean; expandedStates: any; }'.
+src/language-js/printer-estree.js(3293,23): error TS2532: Object is possibly 'undefined'.
+src/language-js/printer-estree.js(3294,24): error TS2532: Object is possibly 'undefined'.
+src/language-js/printer-estree.js(3647,5): error TS2345: Argument of type '"" | { type: string; parts: any; } | { type: string; contents: any; }' is not assignable to parameter of type 'string'.
+  Type '{ type: string; parts: any; }' is not assignable to type 'string'.
+src/language-js/printer-estree.js(3651,16): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
+src/language-js/printer-estree.js(3693,9): error TS2345: Argument of type '{ type: string; parts: any; }' is not assignable to parameter of type 'string'.
+src/language-js/printer-estree.js(3995,14): error TS2554: Expected 0-2 arguments, but got 3.
+src/language-js/printer-estree.js(5034,9): error TS2554: Expected 0-1 arguments, but got 2.
+src/language-js/printer-estree.js(5070,7): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type '((childPath: any) => any) | ConcatArray<(childPath: any) => any>'.
+  Type '(string | number)[]' is not assignable to type 'ConcatArray<(childPath: any) => any>'.
+    Types of property 'slice' are incompatible.
+      Type '(start?: number | undefined, end?: number | undefined) => (string | number)[]' is not assignable to type '(start?: number | undefined, end?: number | undefined) => ((childPath: any) => any)[]'.
+        Type '(string | number)[]' is not assignable to type '((childPath: any) => any)[]'.
+          Type 'string | number' is not assignable to type '(childPath: any) => any'.
+            Type 'string' is not assignable to type '(childPath: any) => any'.
+src/language-markdown/printer-markdown.js(258,18): error TS2532: Object is possibly 'undefined'.
+src/language-markdown/printer-markdown.js(259,17): error TS2532: Object is possibly 'undefined'.
+src/language-markdown/printer-markdown.js(283,14): error TS2532: Object is possibly 'undefined'.
+src/language-vue/parser-vue.js(54,23): error TS2345: Argument of type '(m: string, g: any) => void' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
+  Type 'void' is not assignable to type 'string'.
+src/language-vue/parser-vue.js(180,34): error TS2339: Property 'toLowerCase' does not exist on type 'never'.
+src/language-vue/parser-vue.js(244,26): error TS2345: Argument of type 'any' is not assignable to parameter of type 'never'.
+src/language-vue/parser-vue.js(393,25): error TS2345: Argument of type '{ tag: any; attrs: any; unary: any; start: any; children: never[]; }' is not assignable to parameter of type 'never'.
+src/language-vue/parser-vue.js(398,23): error TS2345: Argument of type '{ tag: any; attrs: any; unary: any; start: any; children: never[]; }' is not assignable to parameter of type '{ tag: string; attrs: never[]; unary: boolean; start: number; contentStart: number; contentEnd: any; end: any; children: never[]; comments: never[]; }'.
+  Property 'contentStart' is missing in type '{ tag: any; attrs: any; unary: any; start: any; children: never[]; }'.
+src/language-vue/parser-vue.js(399,9): error TS2322: Type '{ tag: any; attrs: any; unary: any; start: any; children: never[]; }' is not assignable to type '{ tag: string; attrs: never[]; unary: boolean; start: number; contentStart: number; contentEnd: any; end: any; children: never[]; comments: never[]; }'.
+src/main/core-options.js(51,43): error TS1005: '}' expected.
+src/main/core-options.js(63,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: number; step: number; }; description: any; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(69,5): error TS2322: Type 'undefined' is not assignable to type 'string | number | boolean | { since: string; value: string | number | boolean; }[] | [{ value: (string | number | boolean)[]; }]'.
+src/main/core-options.js(82,5): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(92,5): error TS2322: Type '({ value: string; description: string; } | { value: string; since: string; description: string; } | { value: string; since: string; description: string; deprecated: string; redirect: string; })[]' is not assignable to type 'OptionChoiceInfo'.
+  Property 'value' is missing in type '({ value: string; description: string; } | { value: string; since: string; description: string; } | { value: string; since: string; description: string; deprecated: string; redirect: string; })[]'.
+src/main/core-options.js(122,5): error TS2322: Type '{ since: string; type: "path"; array: true; default: [{ value: never[]; }]; category: string; description: string; exception: (value: any) => boolean; cliName: string; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliName' does not exist in type 'OptionInfo'.
+src/main/core-options.js(125,3): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; description: string; range: { start: number; end: number; step: number; }; }' is not assignable to type 'OptionInfo'.
+  Property 'array' is missing in type '{ since: string; category: string; type: "int"; default: number; description: string; range: { start: number; end: number; step: number; }; }'.
+src/main/core-options.js(144,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: number; step: number; }; description: any; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(157,5): error TS2322: Type '{ since: string; category: string; type: "int"; default: number; range: { start: number; end: number; step: number; }; description: any; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(168,5): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: any; cliCategory: string; }' is not assignable to type 'OptionInfo'.
+  Object literal may only specify known properties, and 'cliCategory' does not exist in type 'OptionInfo'.
+src/main/core-options.js(170,3): error TS2322: Type '{ type: "int"; category: string; default: number; description: string; range: { start: number; end: number; step: number; }; }' is not assignable to type 'OptionInfo'.
+  Property 'since' is missing in type '{ type: "int"; category: string; default: number; description: string; range: { start: number; end: number; step: number; }; }'.
+src/main/core-options.js(182,5): error TS2322: Type 'string' is not assignable to type 'boolean | null'.
+src/main/core-options.js(187,3): error TS2322: Type '{ since: string; category: string; type: "boolean"; default: false; description: string; }' is not assignable to type 'OptionInfo'.
+  Property 'array' is missing in type '{ since: string; category: string; type: "boolean"; default: false; description: string; }'.
+src/main/parser.js(61,9): error TS2345: Argument of type 'PropertyDescriptor | undefined' is not assignable to parameter of type 'PropertyDescriptor & ThisType<any>'.
+  Type 'undefined' is not assignable to type 'PropertyDescriptor & ThisType<any>'.
+    Type 'undefined' is not assignable to type 'PropertyDescriptor'.
+src/main/support.js(5,32): error TS2732: Cannot find module '../../package.json'. Consider using '--resolveJsonModule' to import module with '.json' extension
+src/main/support.js(36,24): error TS2339: Property 'name' does not exist on type 'never'.
+src/main/support.js(36,35): error TS2339: Property 'name' does not exist on type 'never'.
+src/main/support.js(36,48): error TS2339: Property 'name' does not exist on type 'never'.
+src/main/support.js(36,57): error TS2339: Property 'name' does not exist on type 'never'.
+
+
+
+Standard error:

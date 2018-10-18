@@ -7,16 +7,11 @@
 //// class Foo {
 ////    constructor() {
 ////        this.[|union|] = 'foo';
-////        this./*1*/[|union|] = 100;
+////        this.[|union|] = 100;
 ////    }
-////    method() { return this./*2*/[|union|]; }
+////    method() { return this.[|union|]; }
 //// }
 //// var x = new Foo();
-//// x./*3*/[|union|];
+//// x.[|union|];
 
-goTo.marker('1');
-verify.renameLocations(/*findInStrings*/false, /*findInComments*/false);
-goTo.marker('2');
-verify.renameLocations(/*findInStrings*/false, /*findInComments*/false);
-goTo.marker('3');
-verify.renameLocations(/*findInStrings*/false, /*findInComments*/false);
+verify.rangesAreRenameLocations();

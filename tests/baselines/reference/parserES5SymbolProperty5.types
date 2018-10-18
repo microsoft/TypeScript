@@ -1,0 +1,10 @@
+=== tests/cases/conformance/parser/ecmascript5/Symbols/parserES5SymbolProperty5.ts ===
+class C {
+>C : C
+
+    [Symbol.isRegExp]: string;
+>[Symbol.isRegExp] : string
+>Symbol.isRegExp : any
+>Symbol : any
+>isRegExp : any
+}

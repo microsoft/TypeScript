@@ -1,0 +1,61 @@
+=== tests/cases/compiler/requiredInitializedParameter1.ts ===
+function f1(a, b = 0, c) { }
+>f1 : Symbol(f1, Decl(requiredInitializedParameter1.ts, 0, 0))
+>a : Symbol(a, Decl(requiredInitializedParameter1.ts, 0, 12))
+>b : Symbol(b, Decl(requiredInitializedParameter1.ts, 0, 14))
+>c : Symbol(c, Decl(requiredInitializedParameter1.ts, 0, 21))
+
+function f2(a, b = 0, c = 0) { }
+>f2 : Symbol(f2, Decl(requiredInitializedParameter1.ts, 0, 28))
+>a : Symbol(a, Decl(requiredInitializedParameter1.ts, 1, 12))
+>b : Symbol(b, Decl(requiredInitializedParameter1.ts, 1, 14))
+>c : Symbol(c, Decl(requiredInitializedParameter1.ts, 1, 21))
+
+function f3(a, b = 0, c?) { }
+>f3 : Symbol(f3, Decl(requiredInitializedParameter1.ts, 1, 32))
+>a : Symbol(a, Decl(requiredInitializedParameter1.ts, 2, 12))
+>b : Symbol(b, Decl(requiredInitializedParameter1.ts, 2, 14))
+>c : Symbol(c, Decl(requiredInitializedParameter1.ts, 2, 21))
+
+function f4(a, b = 0, ...c) { }
+>f4 : Symbol(f4, Decl(requiredInitializedParameter1.ts, 2, 29))
+>a : Symbol(a, Decl(requiredInitializedParameter1.ts, 3, 12))
+>b : Symbol(b, Decl(requiredInitializedParameter1.ts, 3, 14))
+>c : Symbol(c, Decl(requiredInitializedParameter1.ts, 3, 21))
+
+f1(0, 1, 2);
+>f1 : Symbol(f1, Decl(requiredInitializedParameter1.ts, 0, 0))
+
+f2(0, 1, 2);
+>f2 : Symbol(f2, Decl(requiredInitializedParameter1.ts, 0, 28))
+
+f3(0, 1, 2);
+>f3 : Symbol(f3, Decl(requiredInitializedParameter1.ts, 1, 32))
+
+f4(0, 1, 2);
+>f4 : Symbol(f4, Decl(requiredInitializedParameter1.ts, 2, 29))
+
+f1(0, 1);
+>f1 : Symbol(f1, Decl(requiredInitializedParameter1.ts, 0, 0))
+
+f2(0, 1);
+>f2 : Symbol(f2, Decl(requiredInitializedParameter1.ts, 0, 28))
+
+f3(0, 1);
+>f3 : Symbol(f3, Decl(requiredInitializedParameter1.ts, 1, 32))
+
+f4(0, 1);
+>f4 : Symbol(f4, Decl(requiredInitializedParameter1.ts, 2, 29))
+
+f1(0);
+>f1 : Symbol(f1, Decl(requiredInitializedParameter1.ts, 0, 0))
+
+f2(0);
+>f2 : Symbol(f2, Decl(requiredInitializedParameter1.ts, 0, 28))
+
+f3(0);
+>f3 : Symbol(f3, Decl(requiredInitializedParameter1.ts, 1, 32))
+
+f4(0);
+>f4 : Symbol(f4, Decl(requiredInitializedParameter1.ts, 2, 29))
+

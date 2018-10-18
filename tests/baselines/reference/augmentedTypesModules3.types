@@ -1,0 +1,15 @@
+=== tests/cases/compiler/augmentedTypesModules3.ts ===
+//// module then class
+module m3 { }
+class m3 { } // ok since the module is not instantiated
+>m3 : m3
+
+module m3a { var y = 2; }
+>m3a : typeof m3a
+>y : number
+>2 : 2
+
+class m3a { foo() { } } // error, class isn't ambient or declared before the module
+>m3a : m3a
+>foo : () => void
+

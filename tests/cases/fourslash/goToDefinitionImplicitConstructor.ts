@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-/////*constructorDefinition*/class ImplicitConstructor {
+////class /*constructorDefinition*/ImplicitConstructor {
 ////}
 ////var implicitConstructor = new /*constructorReference*/ImplicitConstructor();
 

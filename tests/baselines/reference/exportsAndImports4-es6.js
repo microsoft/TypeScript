@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports4-es6.ts] ////
 
 //// [t1.ts]
-
 export default "hello";
 
 //// [t2.ts]
@@ -45,6 +44,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.default = "hello";
 //// [t3.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 const a = require("./t1");
 exports.a = a;
 a.default;

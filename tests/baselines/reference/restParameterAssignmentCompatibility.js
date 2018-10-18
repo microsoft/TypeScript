@@ -27,18 +27,18 @@ var t1: T1;
 t1 = s; // Similar to above, but optionality does not matter here.
 
 //// [restParameterAssignmentCompatibility.js]
-var T = (function () {
+var T = /** @class */ (function () {
     function T() {
     }
     T.prototype.m = function () {
         var p3 = [];
         for (var _i = 0; _i < arguments.length; _i++) {
-            p3[_i - 0] = arguments[_i];
+            p3[_i] = arguments[_i];
         }
     };
     return T;
 }());
-var S = (function () {
+var S = /** @class */ (function () {
     function S() {
     }
     S.prototype.m = function (p1, p2) {
@@ -50,7 +50,7 @@ var s;
 // M is a non - specialized call or construct signature and S' contains a call or construct signature N where,
 //  the number of non-optional parameters in N is less than or equal to the total number of parameters in M,
 t = s; // Should be valid (rest params correspond to an infinite expansion of parameters)
-var T1 = (function () {
+var T1 = /** @class */ (function () {
     function T1() {
     }
     T1.prototype.m = function (p1, p2) {

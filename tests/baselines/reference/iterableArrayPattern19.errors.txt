@@ -1,13 +1,8 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(2,5): error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(17,5): error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
   Property 'length' is missing in type 'FooArrayIterator'.
 
 
 ==== tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts (1 errors) ====
-    function fun([[a], b]: Bar[][]) { }
-    fun(new FooArrayIterator);
-        ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
-!!! error TS2345:   Property 'length' is missing in type 'FooArrayIterator'.
     class Bar { x }
     class Foo extends Bar { y }
     class FooArrayIterator {
@@ -22,3 +17,9 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(2,5): error 
             return this;
         }
     }
+    
+    function fun([[a], b]: Bar[][]) { }
+    fun(new FooArrayIterator);
+        ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2345: Argument of type 'FooArrayIterator' is not assignable to parameter of type 'Bar[][]'.
+!!! error TS2345:   Property 'length' is missing in type 'FooArrayIterator'.

@@ -1,0 +1,46 @@
+=== tests/cases/compiler/nestedLoops.ts ===
+export class Test  {
+>Test : Symbol(Test, Decl(nestedLoops.ts, 0, 0))
+
+    constructor() {
+
+        let outerArray: Array<number> = [1, 2, 3];
+>outerArray : Symbol(outerArray, Decl(nestedLoops.ts, 3, 11))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        let innerArray: Array<number> = [1, 2, 3];
+>innerArray : Symbol(innerArray, Decl(nestedLoops.ts, 4, 11))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+        for (let outer of outerArray)
+>outer : Symbol(outer, Decl(nestedLoops.ts, 6, 16))
+>outerArray : Symbol(outerArray, Decl(nestedLoops.ts, 3, 11))
+
+            for (let inner of innerArray) {
+>inner : Symbol(inner, Decl(nestedLoops.ts, 7, 20))
+>innerArray : Symbol(innerArray, Decl(nestedLoops.ts, 4, 11))
+
+                this.aFunction((newValue, oldValue) => {
+>this.aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
+>this : Symbol(Test, Decl(nestedLoops.ts, 0, 0))
+>aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
+>newValue : Symbol(newValue, Decl(nestedLoops.ts, 8, 32))
+>oldValue : Symbol(oldValue, Decl(nestedLoops.ts, 8, 41))
+
+                    let x = outer + inner + newValue;
+>x : Symbol(x, Decl(nestedLoops.ts, 9, 23))
+>outer : Symbol(outer, Decl(nestedLoops.ts, 6, 16))
+>inner : Symbol(inner, Decl(nestedLoops.ts, 7, 20))
+>newValue : Symbol(newValue, Decl(nestedLoops.ts, 8, 32))
+
+                });
+            }
+    }
+
+    public aFunction(func: (newValue: any, oldValue: any) => void): void {
+>aFunction : Symbol(Test.aFunction, Decl(nestedLoops.ts, 12, 5))
+>func : Symbol(func, Decl(nestedLoops.ts, 14, 21))
+>newValue : Symbol(newValue, Decl(nestedLoops.ts, 14, 28))
+>oldValue : Symbol(oldValue, Decl(nestedLoops.ts, 14, 42))
+    }
+}

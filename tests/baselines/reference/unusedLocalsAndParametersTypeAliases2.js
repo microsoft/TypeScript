@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersTypeAliases2.ts]
-
 // unused
 type handler1 = () => void;
 
@@ -13,6 +12,7 @@ export {}
 
 //// [unusedLocalsAndParametersTypeAliases2.js]
 "use strict";
+exports.__esModule = true;
 function foo() {
     foo();
 }

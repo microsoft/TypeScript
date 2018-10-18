@@ -49,7 +49,7 @@ module M { // Shouldnt be _M
 var M;
 (function (M_1) {
     M_1.x = 3;
-    var c = (function () {
+    var c = /** @class */ (function () {
         function c() {
         }
         Object.defineProperty(c.prototype, "Z", {
@@ -63,7 +63,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M_2) {
-    var d = (function () {
+    var d = /** @class */ (function () {
         function d() {
         }
         Object.defineProperty(d.prototype, "Z", {
@@ -78,7 +78,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M) {
-    var e = (function () {
+    var e = /** @class */ (function () {
         function e() {
         }
         Object.defineProperty(e.prototype, "M", {
@@ -92,7 +92,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M_3) {
-    var f = (function () {
+    var f = /** @class */ (function () {
         function f() {
         }
         Object.defineProperty(f.prototype, "Z", {
@@ -107,7 +107,7 @@ var M;
     }());
 })(M || (M = {}));
 (function (M) {
-    var e = (function () {
+    var e = /** @class */ (function () {
         function e() {
         }
         Object.defineProperty(e.prototype, "M", {

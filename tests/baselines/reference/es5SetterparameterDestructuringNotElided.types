@@ -1,0 +1,20 @@
+=== tests/cases/compiler/es5SetterparameterDestructuringNotElided.ts ===
+const foo = {
+>foo : { foo: [any, any]; }
+>{    set foo([start, end]: [any, any]) {        void start;        void end;    },} : { foo: [any, any]; }
+
+    set foo([start, end]: [any, any]) {
+>foo : [any, any]
+>start : any
+>end : any
+
+        void start;
+>void start : undefined
+>start : any
+
+        void end;
+>void end : undefined
+>end : any
+
+    },
+};

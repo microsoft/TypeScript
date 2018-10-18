@@ -27,8 +27,9 @@ function tryCatch() {
 //// [narrowExceptionVariableInCatchClause.js]
 function tryCatch() {
     try {
+        // do stuff...
     }
-    catch (err) {
+    catch (err) { // err is implicitly 'any' and cannot be annotated
         if (isFooError(err)) {
             err.dontPanic(); // OK
             err.doPanic(); // ERROR: Property 'doPanic' does not exist on type '{...}'

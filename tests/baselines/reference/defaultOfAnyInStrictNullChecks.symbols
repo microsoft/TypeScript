@@ -1,5 +1,4 @@
 === tests/cases/compiler/defaultOfAnyInStrictNullChecks.ts ===
-
 // Regression test for #8295
 
 function foo() {
@@ -8,11 +7,11 @@ function foo() {
     try {
     }
     catch (e) {
->e : Symbol(e, Decl(defaultOfAnyInStrictNullChecks.ts, 6, 11))
+>e : Symbol(e, Decl(defaultOfAnyInStrictNullChecks.ts, 5, 11))
 
         let s = e.message; 
->s : Symbol(s, Decl(defaultOfAnyInStrictNullChecks.ts, 7, 11))
->e : Symbol(e, Decl(defaultOfAnyInStrictNullChecks.ts, 6, 11))
+>s : Symbol(s, Decl(defaultOfAnyInStrictNullChecks.ts, 6, 11))
+>e : Symbol(e, Decl(defaultOfAnyInStrictNullChecks.ts, 5, 11))
     }
 }
 

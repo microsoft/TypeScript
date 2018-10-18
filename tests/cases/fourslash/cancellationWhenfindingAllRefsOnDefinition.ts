@@ -7,7 +7,7 @@
 ////
 ////    }
 ////
-////    public /**/[|start|](){
+////    public /**/[|{| "isWriteAccess": true, "isDefinition": true |}start|](){
 ////        return this;
 ////    }
 ////
@@ -23,11 +23,15 @@
 ////second.[|start|]();
 ////second.stop();
 
-verify.rangesReferenceEachOther();
+checkRefs();
 
 cancellation.setCancelled();
-verifyOperationIsCancelled(() => verify.rangesReferenceEachOther());
+verifyOperationIsCancelled(checkRefs);
 
 // verify that internal state is still correct
 cancellation.resetCancelled();
-verify.rangesReferenceEachOther();
+checkRefs();
+
+function checkRefs() {
+    verify.singleReferenceGroup("(method) Test.start(): this");
+}

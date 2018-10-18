@@ -1,0 +1,127 @@
+=== tests/cases/compiler/vararg.ts ===
+module M {
+>M : Symbol(M, Decl(vararg.ts, 0, 0))
+
+    export class C {
+>C : Symbol(C, Decl(vararg.ts, 0, 10))
+
+        public f(x:string,...rest:number[]) {
+>f : Symbol(C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 2, 17))
+>rest : Symbol(rest, Decl(vararg.ts, 2, 26))
+
+            var sum=0;
+>sum : Symbol(sum, Decl(vararg.ts, 3, 15))
+
+            for (var i=0;i<rest.length;i++) {
+>i : Symbol(i, Decl(vararg.ts, 4, 20))
+>i : Symbol(i, Decl(vararg.ts, 4, 20))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(vararg.ts, 2, 26))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(vararg.ts, 4, 20))
+
+                sum+=rest[i];
+>sum : Symbol(sum, Decl(vararg.ts, 3, 15))
+>rest : Symbol(rest, Decl(vararg.ts, 2, 26))
+>i : Symbol(i, Decl(vararg.ts, 4, 20))
+            }
+            result+=(x+": "+sum);
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x : Symbol(x, Decl(vararg.ts, 2, 17))
+>sum : Symbol(sum, Decl(vararg.ts, 3, 15))
+
+            return result;
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+        }
+
+        public fnope(x:string,...rest:number) {
+>fnope : Symbol(C.fnope, Decl(vararg.ts, 9, 9))
+>x : Symbol(x, Decl(vararg.ts, 11, 21))
+>rest : Symbol(rest, Decl(vararg.ts, 11, 30))
+    
+        }
+
+        public fonly(...rest:string[]) {
+>fonly : Symbol(C.fonly, Decl(vararg.ts, 13, 9))
+>rest : Symbol(rest, Decl(vararg.ts, 15, 21))
+
+            builder="";
+            for (var i=0;i<rest.length;i++) {
+>i : Symbol(i, Decl(vararg.ts, 17, 20))
+>i : Symbol(i, Decl(vararg.ts, 17, 20))
+>rest.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>rest : Symbol(rest, Decl(vararg.ts, 15, 21))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(vararg.ts, 17, 20))
+
+                builder+=rest[i];
+>rest : Symbol(rest, Decl(vararg.ts, 15, 21))
+>i : Symbol(i, Decl(vararg.ts, 17, 20))
+            }
+            return builder;
+        }
+    }
+}
+
+var x=new M.C();
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>M.C : Symbol(M.C, Decl(vararg.ts, 0, 10))
+>M : Symbol(M, Decl(vararg.ts, 0, 0))
+>C : Symbol(M.C, Decl(vararg.ts, 0, 10))
+
+var result="";
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+
+result+=x.f(x,3,3); // bad first param
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+
+result+=x.f(3,"hello",3); // bad second param
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+
+result+=x.f("hello",3,3,3,3,3); // ok
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+
+result+=x.f("hello"); // ok varargs length 0
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>f : Symbol(M.C.f, Decl(vararg.ts, 1, 20))
+
+result+=x.fonly(3); // ok conversion
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+
+result+=x.fonly(x); // bad param
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+
+result+=x.fonly("a"); // ok 
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+
+result+=x.fonly("a","b","c","d"); //ok 
+>result : Symbol(result, Decl(vararg.ts, 26, 3))
+>x.fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+>x : Symbol(x, Decl(vararg.ts, 25, 3))
+>fonly : Symbol(M.C.fonly, Decl(vararg.ts, 13, 9))
+
+
+

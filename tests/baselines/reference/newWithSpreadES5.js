@@ -1,5 +1,4 @@
 //// [newWithSpreadES5.ts]
-
 function f(x: number, y: number, ...z: string[]) {
 }
 
@@ -97,6 +96,7 @@ new i["a-b"][1](1, 2, ...a);
 new i["a-b"][1](1, 2, ...a, "string");
 
 //// [newWithSpreadES5.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;
 function f(x, y) {
     var z = [];
     for (var _i = 2; _i < arguments.length; _i++) {
@@ -106,10 +106,10 @@ function f(x, y) {
 function f2() {
     var x = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        x[_i - 0] = arguments[_i];
+        x[_i] = arguments[_i];
     }
 }
-var B = (function () {
+var B = /** @class */ (function () {
     function B(x, y) {
         var z = [];
         for (var _i = 2; _i < arguments.length; _i++) {
@@ -177,4 +177,3 @@ new ((_r = h["a-b"]["a-b"]).bind.apply(_r, [void 0, 1, 2].concat(a, ["string"]))
 new i["a-b"][1](1, 2, "string");
 new ((_s = i["a-b"][1]).bind.apply(_s, [void 0, 1, 2].concat(a)))();
 new ((_t = i["a-b"][1]).bind.apply(_t, [void 0, 1, 2].concat(a, ["string"])))();
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t;

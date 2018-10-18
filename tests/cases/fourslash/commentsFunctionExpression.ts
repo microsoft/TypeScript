@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // test arrow doc comments
-/////** lamdaFoo var comment*/
+/////** lambdaFoo var comment*/
 ////var lamb/*1*/daFoo = /** this is lambda comment*/ (/**param a*/a: number, /**param b*/b: number) => /*2*/a + b;
 ////var lambddaN/*3*/oVarComment = /** this is lambda multiplication*/ (/**param a*/a: number, /**param b*/b: number) => a * b;
 /////*4*/lambdaFoo(/*5*/10, /*6*/20);
@@ -32,9 +32,7 @@
 ////}
 ////assig/*16*/ned/*17*/(/*18*/"hey");
 
-
-
-verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "lamdaFoo var comment\nthis is lambda comment");
+verify.quickInfoAt("1", "var lambdaFoo: (a: number, b: number) => number", "this is lambda comment\nlambdaFoo var comment");
 
 goTo.marker('2');
 verify.completionListContains('a', '(parameter) a: number', 'param a');
@@ -44,39 +42,50 @@ verify.completionListContains('b', '(parameter) b: number', 'param b');
 verify.quickInfoAt("3", "var lambddaNoVarComment: (a: number, b: number) => number", "this is lambda multiplication");
 
 goTo.marker('4');
-verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', 'lamdaFoo var comment\nthis is lambda comment');
+verify.completionListContains('lambdaFoo', 'var lambdaFoo: (a: number, b: number) => number', "this is lambda comment\nlambdaFoo var comment");
 verify.completionListContains('lambddaNoVarComment', 'var lambddaNoVarComment: (a: number, b: number) => number', 'this is lambda multiplication');
 
-goTo.marker('5');
-verify.currentParameterHelpArgumentDocCommentIs("param a");
-
-goTo.marker('6');
-verify.currentParameterHelpArgumentDocCommentIs("param b");
-
-
-
+verify.signatureHelp(
+    {
+        marker: "5",
+        docComment: "this is lambda comment\nlambdaFoo var comment",
+        parameterDocComment: "param a",
+    },
+    {
+        marker: "6",
+        docComment: "this is lambda comment\nlambdaFoo var comment",
+        parameterDocComment: "param b",
+    },
+);
 
 // no documentation from nested lambda
 verify.quickInfos({
     7: "function anotherFunc(a: number): string",
-    8: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
-    9: ["(parameter) b: string", "inner parameter "],
+    8: ["(local var) lambdaVar: (b: string) => string", "inner docs\ndocumentation"],
+    9: ["(parameter) b: string", "inner parameter"],
     10: "(local var) localVar: string",
     11: "(local var) localVar: string",
-    12: ["(parameter) b: string", "inner parameter "],
-    13: ["(local var) lambdaVar: (b: string) => string", "documentation\ninner docs "],
+    12: ["(parameter) b: string", "inner parameter"],
+    13: ["(local var) lambdaVar: (b: string) => string", "inner docs\ndocumentation"],
     14: [
         "var assigned: (s: string) => number",
-        "On variable\nSummary on expression"
+        "Summary on expression\nOn variable"
     ]
 });
 
 goTo.marker('15');
-verify.completionListContains('s', '(parameter) s: string', "the first parameter!\nparam on expression\nOn parameter ");
-verify.quickInfoAt("16", "var assigned: (s: string) => number", "On variable\nSummary on expression");
+verify.completionListContains('s', '(parameter) s: string', "On parameter\nparam on expression\nthe first parameter!");
+verify.quickInfoAt("16", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
 goTo.marker('17');
-verify.completionListContains("assigned", "var assigned: (s: string) => number", "On variable\nSummary on expression");
-goTo.marker('18');
-verify.currentSignatureHelpDocCommentIs("On variable\nSummary on expression");
-verify.currentParameterHelpArgumentDocCommentIs("the first parameter!\nparam on expression\nOn parameter ");
-
+verify.completionListContains("assigned", "var assigned: (s: string) => number", "Summary on expression\nOn variable");
+verify.signatureHelp({
+    marker: "18",
+    docComment: "Summary on expression\nOn variable",
+    parameterDocComment: "On parameter\nparam on expression\nthe first parameter!",
+    tags: [
+        { name: "param", text: "s param on expression" },
+        { name: "returns", text: "return on expression" },
+        { name: "param", text: "s the first parameter!" },
+        { name: "returns", text: "the parameter's length" },
+    ],
+});

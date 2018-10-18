@@ -24,22 +24,30 @@ class D2 extends C implements I { // error
 } 
 
 //// [interfaceExtendsClassWithPrivate2.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var C = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var C = /** @class */ (function () {
     function C() {
         this.x = 1;
     }
     C.prototype.foo = function (x) { return x; };
     return C;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = 3;
         return _this;
@@ -49,10 +57,10 @@ var D = (function (_super) {
     D.prototype.bar = function () { };
     return D;
 }(C));
-var D2 = (function (_super) {
+var D2 = /** @class */ (function (_super) {
     __extends(D2, _super);
     function D2() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = "";
         return _this;
     }

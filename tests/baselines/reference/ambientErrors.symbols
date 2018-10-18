@@ -1,0 +1,113 @@
+=== tests/cases/conformance/ambient/ambientErrors.ts ===
+// Ambient variable with an initializer 
+declare var x = 4;
+>x : Symbol(x, Decl(ambientErrors.ts, 1, 11))
+
+// Ambient functions with invalid overloads
+declare function fn(x: number): string;
+>fn : Symbol(fn, Decl(ambientErrors.ts, 1, 18), Decl(ambientErrors.ts, 4, 39))
+>x : Symbol(x, Decl(ambientErrors.ts, 4, 20))
+
+declare function fn(x: 'foo'): number;
+>fn : Symbol(fn, Decl(ambientErrors.ts, 1, 18), Decl(ambientErrors.ts, 4, 39))
+>x : Symbol(x, Decl(ambientErrors.ts, 5, 20))
+
+// Ambient functions with duplicate signatures
+declare function fn1(x: number): string;
+>fn1 : Symbol(fn1, Decl(ambientErrors.ts, 5, 38), Decl(ambientErrors.ts, 8, 40))
+>x : Symbol(x, Decl(ambientErrors.ts, 8, 21))
+
+declare function fn1(x: number): string;
+>fn1 : Symbol(fn1, Decl(ambientErrors.ts, 5, 38), Decl(ambientErrors.ts, 8, 40))
+>x : Symbol(x, Decl(ambientErrors.ts, 9, 21))
+
+// Ambient function overloads that differ only by return type
+declare function fn2(x: number): string;
+>fn2 : Symbol(fn2, Decl(ambientErrors.ts, 9, 40), Decl(ambientErrors.ts, 12, 40))
+>x : Symbol(x, Decl(ambientErrors.ts, 12, 21))
+
+declare function fn2(x: number): number;
+>fn2 : Symbol(fn2, Decl(ambientErrors.ts, 9, 40), Decl(ambientErrors.ts, 12, 40))
+>x : Symbol(x, Decl(ambientErrors.ts, 13, 21))
+
+// Ambient function with default parameter values
+declare function fn3(x = 3);
+>fn3 : Symbol(fn3, Decl(ambientErrors.ts, 13, 40))
+>x : Symbol(x, Decl(ambientErrors.ts, 16, 21))
+
+// Ambient function with function body
+declare function fn4() { };
+>fn4 : Symbol(fn4, Decl(ambientErrors.ts, 16, 28))
+
+// Ambient enum with non - integer literal constant member
+declare enum E1 {
+>E1 : Symbol(E1, Decl(ambientErrors.ts, 19, 27))
+
+    y = 4.23
+>y : Symbol(E1.y, Decl(ambientErrors.ts, 22, 17))
+}
+
+// Ambient enum with computer member
+declare enum E2 {
+>E2 : Symbol(E2, Decl(ambientErrors.ts, 24, 1))
+
+    x = 'foo'.length
+>x : Symbol(E2.x, Decl(ambientErrors.ts, 27, 17))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+// Ambient module with initializers for values, bodies for functions / classes
+declare module M1 {
+>M1 : Symbol(M1, Decl(ambientErrors.ts, 29, 1))
+
+    var x = 3;
+>x : Symbol(x, Decl(ambientErrors.ts, 33, 7))
+
+    function fn() { }
+>fn : Symbol(fn, Decl(ambientErrors.ts, 33, 14))
+
+    class C {
+>C : Symbol(C, Decl(ambientErrors.ts, 34, 21))
+
+        static x = 3;
+>x : Symbol(C.x, Decl(ambientErrors.ts, 35, 13))
+
+        y = 4;
+>y : Symbol(C.y, Decl(ambientErrors.ts, 36, 21))
+
+        constructor() { }
+        fn() { }
+>fn : Symbol(C.fn, Decl(ambientErrors.ts, 38, 25))
+
+        static sfn() { }
+>sfn : Symbol(C.sfn, Decl(ambientErrors.ts, 39, 16))
+    }
+}
+
+// Ambient external module not in the global module
+module M2 {
+>M2 : Symbol(M2, Decl(ambientErrors.ts, 42, 1))
+
+    declare module 'nope' { }
+>'nope' : Symbol("nope", Decl(ambientErrors.ts, 45, 11))
+}
+
+// Ambient external module with a string literal name that isn't a top level external module name
+declare module '../foo' { }
+>'../foo' : Symbol("../foo", Decl(ambientErrors.ts, 47, 1))
+
+// Ambient external module with export assignment and other exported members
+declare module 'bar' {
+>'bar' : Symbol("bar", Decl(ambientErrors.ts, 50, 27))
+
+    var n;
+>n : Symbol(n, Decl(ambientErrors.ts, 54, 7))
+
+    export var q;
+>q : Symbol(q, Decl(ambientErrors.ts, 55, 14))
+
+    export = n;
+>n : Symbol(n, Decl(ambientErrors.ts, 54, 7))
+}
+

@@ -1,0 +1,270 @@
+=== tests/cases/conformance/classes/constructorDeclarations/superCalls/derivedClassParameterProperties.ts ===
+// ordering of super calls in derived constructors matters depending on other class contents
+
+class Base {
+>Base : Base
+
+    x: string;
+>x : string
+}
+
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    constructor(y: string) {
+>y : string
+
+        var a = 1;
+>a : number
+>1 : 1
+
+        super(); // ok
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived2 extends Base {
+>Derived2 : Derived2
+>Base : Base
+
+    constructor(public y: string) {
+>y : string
+
+        var a = 1;
+>a : number
+>1 : 1
+
+        super(); // error
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived3 extends Base {
+>Derived3 : Derived3
+>Base : Base
+
+    constructor(public y: string) {
+>y : string
+
+        super(); // ok
+>super() : void
+>super : typeof Base
+
+        var a = 1;
+>a : number
+>1 : 1
+    }
+}
+
+class Derived4 extends Base {
+>Derived4 : Derived4
+>Base : Base
+
+    a = 1;
+>a : number
+>1 : 1
+
+    constructor(y: string) {
+>y : string
+
+        var b = 2;
+>b : number
+>2 : 2
+
+        super(); // error
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived5 extends Base {
+>Derived5 : Derived5
+>Base : Base
+
+    a = 1;
+>a : number
+>1 : 1
+
+    constructor(y: string) {
+>y : string
+
+        super(); // ok
+>super() : void
+>super : typeof Base
+
+        var b = 2;
+>b : number
+>2 : 2
+    }
+}
+
+class Derived6 extends Base {
+>Derived6 : Derived6
+>Base : Base
+
+    a: number;
+>a : number
+
+    constructor(y: string) {
+>y : string
+
+        this.a = 1;
+>this.a = 1 : 1
+>this.a : number
+>this : this
+>a : number
+>1 : 1
+
+        var b = 2;
+>b : number
+>2 : 2
+
+        super(); // error: "super" has to be called before "this" accessing
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived7 extends Base {
+>Derived7 : Derived7
+>Base : Base
+
+    a = 1;
+>a : number
+>1 : 1
+
+    b: number;
+>b : number
+
+    constructor(y: string) {
+>y : string
+
+        this.a = 3;
+>this.a = 3 : 3
+>this.a : number
+>this : this
+>a : number
+>3 : 3
+
+        this.b = 3;
+>this.b = 3 : 3
+>this.b : number
+>this : this
+>b : number
+>3 : 3
+
+        super(); // error
+>super() : void
+>super : typeof Base
+    }
+}
+
+class Derived8 extends Base {
+>Derived8 : Derived8
+>Base : Base
+
+    a = 1;
+>a : number
+>1 : 1
+
+    b: number;
+>b : number
+
+    constructor(y: string) {
+>y : string
+
+        super(); // ok
+>super() : void
+>super : typeof Base
+
+        this.a = 3;
+>this.a = 3 : 3
+>this.a : number
+>this : this
+>a : number
+>3 : 3
+
+        this.b = 3;        
+>this.b = 3 : 3
+>this.b : number
+>this : this
+>b : number
+>3 : 3
+    }
+}
+
+// generic cases of Derived7 and Derived8
+class Base2<T> { x: T; }
+>Base2 : Base2<T>
+>x : T
+
+class Derived9<T> extends Base2<T> {
+>Derived9 : Derived9<T>
+>Base2 : Base2<T>
+
+    a = 1;
+>a : number
+>1 : 1
+
+    b: number;
+>b : number
+
+    constructor(y: string) {
+>y : string
+
+        this.a = 3;
+>this.a = 3 : 3
+>this.a : number
+>this : this
+>a : number
+>3 : 3
+
+        this.b = 3;
+>this.b = 3 : 3
+>this.b : number
+>this : this
+>b : number
+>3 : 3
+
+        super(); // error
+>super() : void
+>super : typeof Base2
+    }
+}
+
+class Derived10<T> extends Base2<T> {
+>Derived10 : Derived10<T>
+>Base2 : Base2<T>
+
+    a = 1;
+>a : number
+>1 : 1
+
+    b: number;
+>b : number
+
+    constructor(y: string) {
+>y : string
+
+        super(); // ok
+>super() : void
+>super : typeof Base2
+
+        this.a = 3;
+>this.a = 3 : 3
+>this.a : number
+>this : this
+>a : number
+>3 : 3
+
+        this.b = 3;
+>this.b = 3 : 3
+>this.b : number
+>this : this
+>b : number
+>3 : 3
+    }
+}

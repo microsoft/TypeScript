@@ -1,22 +1,13 @@
-error TS2318: Cannot find global type 'Promise'.
-tests/cases/compiler/asyncFunctionNoReturnType.ts(1,1): error TS1057: An async function or method must have a valid awaitable return type.
-tests/cases/compiler/asyncFunctionNoReturnType.ts(1,1): error TS7030: Not all code paths return a value.
-tests/cases/compiler/asyncFunctionNoReturnType.ts(2,9): error TS2304: Cannot find name 'window'.
-tests/cases/compiler/asyncFunctionNoReturnType.ts(3,9): error TS7030: Not all code paths return a value.
+error TS2468: Cannot find global value 'Promise'.
+tests/cases/compiler/asyncFunctionNoReturnType.ts(1,1): error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
 
 
-!!! error TS2318: Cannot find global type 'Promise'.
-==== tests/cases/compiler/asyncFunctionNoReturnType.ts (4 errors) ====
+!!! error TS2468: Cannot find global value 'Promise'.
+==== tests/cases/compiler/asyncFunctionNoReturnType.ts (1 errors) ====
     async () => {
     ~~~~~~~~~~~~~
-!!! error TS1057: An async function or method must have a valid awaitable return type.
-    ~~~~~~~~~~~~~
-!!! error TS7030: Not all code paths return a value.
+!!! error TS2705: An async function or method in ES5/ES3 requires the 'Promise' constructor.  Make sure you have a declaration for the 'Promise' constructor or include 'ES2015' in your `--lib` option.
         if (window)
-            ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
             return;
-            ~~~~~~~
-!!! error TS7030: Not all code paths return a value.
     }
     

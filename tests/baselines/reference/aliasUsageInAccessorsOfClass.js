@@ -29,7 +29,8 @@ class C2 {
 
 //// [aliasUsage1_backbone.js]
 "use strict";
-var Model = (function () {
+Object.defineProperty(exports, "__esModule", { value: true });
+var Model = /** @class */ (function () {
     function Model() {
     }
     return Model;
@@ -37,24 +38,34 @@ var Model = (function () {
 exports.Model = Model;
 //// [aliasUsage1_moduleA.js]
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+Object.defineProperty(exports, "__esModule", { value: true });
 var Backbone = require("./aliasUsage1_backbone");
-var VisualizationModel = (function (_super) {
+var VisualizationModel = /** @class */ (function (_super) {
     __extends(VisualizationModel, _super);
     function VisualizationModel() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return VisualizationModel;
 }(Backbone.Model));
 exports.VisualizationModel = VisualizationModel;
 //// [aliasUsage1_main.js]
 "use strict";
+Object.defineProperty(exports, "__esModule", { value: true });
 var moduleA = require("./aliasUsage1_moduleA");
-var C2 = (function () {
+var C2 = /** @class */ (function () {
     function C2() {
     }
     Object.defineProperty(C2.prototype, "A", {

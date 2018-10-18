@@ -1,5 +1,4 @@
 //// [file.tsx]
-
 import React = require('react');
 
 interface ComponentProps {
@@ -26,16 +25,25 @@ class MyButtonComponent extends React.Component<{},{}> {
 
 //// [file.js]
 "use strict";
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+exports.__esModule = true;
 var React = require("react");
-var MyComponent = (function (_super) {
+var MyComponent = /** @class */ (function (_super) {
     __extends(MyComponent, _super);
     function MyComponent() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     MyComponent.prototype.render = function () {
         var AnyComponent = this.props.AnyComponent;
@@ -46,10 +54,10 @@ var MyComponent = (function (_super) {
 // Stateless Component As Props
 React.createElement(MyComponent, { AnyComponent: function () { return React.createElement("button", null, "test"); } });
 // Component Class as Props
-var MyButtonComponent = (function (_super) {
+var MyButtonComponent = /** @class */ (function (_super) {
     __extends(MyButtonComponent, _super);
     function MyButtonComponent() {
-        return _super.apply(this, arguments) || this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
     return MyButtonComponent;
 }(React.Component));

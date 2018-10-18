@@ -1,0 +1,189 @@
+=== tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts ===
+type T1 = { a: number };
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 11))
+
+type T2 = T1 & { b: number };
+>T2 : Symbol(T2, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 24))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>b : Symbol(b, Decl(interfaceExtendsObjectIntersectionErrors.ts, 1, 16))
+
+type T3 = number[];
+>T3 : Symbol(T3, Decl(interfaceExtendsObjectIntersectionErrors.ts, 1, 29))
+
+type T4 = [string, number];
+>T4 : Symbol(T4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 2, 19))
+
+type T5 = { [P in 'a' | 'b' | 'c']: string };
+>T5 : Symbol(T5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 3, 27))
+>P : Symbol(P, Decl(interfaceExtendsObjectIntersectionErrors.ts, 4, 13))
+
+interface I1 extends T1 { a: string }
+>I1 : Symbol(I1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 4, 45))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(I1.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 6, 25))
+
+interface I2 extends T2 { b: string }
+>I2 : Symbol(I2, Decl(interfaceExtendsObjectIntersectionErrors.ts, 6, 37))
+>T2 : Symbol(T2, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 24))
+>b : Symbol(I2.b, Decl(interfaceExtendsObjectIntersectionErrors.ts, 7, 25))
+
+interface I3 extends T3 { length: string }
+>I3 : Symbol(I3, Decl(interfaceExtendsObjectIntersectionErrors.ts, 7, 37))
+>T3 : Symbol(T3, Decl(interfaceExtendsObjectIntersectionErrors.ts, 1, 29))
+>length : Symbol(I3.length, Decl(interfaceExtendsObjectIntersectionErrors.ts, 8, 25))
+
+interface I4 extends T4 { 0: number }
+>I4 : Symbol(I4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 8, 42))
+>T4 : Symbol(T4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 2, 19))
+>0 : Symbol(I4[0], Decl(interfaceExtendsObjectIntersectionErrors.ts, 9, 25))
+
+interface I5 extends T5 { c: number }
+>I5 : Symbol(I5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 9, 37))
+>T5 : Symbol(T5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 3, 27))
+>c : Symbol(I5.c, Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 25))
+
+type Constructor<T> = new () => T;
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 17))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 17))
+
+declare function Constructor<T>(): Constructor<T>;
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 13, 29))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 13, 29))
+
+class C1 extends Constructor<T1>() { a: string }
+>C1 : Symbol(C1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 13, 50))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(C1.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 15, 36))
+
+class C2 extends Constructor<T2>() { b: string }
+>C2 : Symbol(C2, Decl(interfaceExtendsObjectIntersectionErrors.ts, 15, 48))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T2 : Symbol(T2, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 24))
+>b : Symbol(C2.b, Decl(interfaceExtendsObjectIntersectionErrors.ts, 16, 36))
+
+class C3 extends Constructor<T3>() { length: string }
+>C3 : Symbol(C3, Decl(interfaceExtendsObjectIntersectionErrors.ts, 16, 48))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T3 : Symbol(T3, Decl(interfaceExtendsObjectIntersectionErrors.ts, 1, 29))
+>length : Symbol(C3.length, Decl(interfaceExtendsObjectIntersectionErrors.ts, 17, 36))
+
+class C4 extends Constructor<T4>() { 0: number }
+>C4 : Symbol(C4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 17, 53))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T4 : Symbol(T4, Decl(interfaceExtendsObjectIntersectionErrors.ts, 2, 19))
+>0 : Symbol(C4[0], Decl(interfaceExtendsObjectIntersectionErrors.ts, 18, 36))
+
+class C5 extends Constructor<T5>() { c: number }
+>C5 : Symbol(C5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 18, 48))
+>Constructor : Symbol(Constructor, Decl(interfaceExtendsObjectIntersectionErrors.ts, 12, 34), Decl(interfaceExtendsObjectIntersectionErrors.ts, 10, 37))
+>T5 : Symbol(T5, Decl(interfaceExtendsObjectIntersectionErrors.ts, 3, 27))
+>c : Symbol(C5.c, Decl(interfaceExtendsObjectIntersectionErrors.ts, 19, 36))
+
+declare class CX { static a: string }
+>CX : Symbol(CX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 19, 48))
+>a : Symbol(CX.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 21, 18))
+
+declare enum EX { A, B, C }
+>EX : Symbol(EX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 21, 37))
+>A : Symbol(EX.A, Decl(interfaceExtendsObjectIntersectionErrors.ts, 22, 17))
+>B : Symbol(EX.B, Decl(interfaceExtendsObjectIntersectionErrors.ts, 22, 20))
+>C : Symbol(EX.C, Decl(interfaceExtendsObjectIntersectionErrors.ts, 22, 23))
+
+declare namespace NX { export const a = "hello" }
+>NX : Symbol(NX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 22, 27))
+>a : Symbol(a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 23, 35))
+
+type TCX = typeof CX;
+>TCX : Symbol(TCX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 23, 49))
+>CX : Symbol(CX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 19, 48))
+
+type TEX = typeof EX;
+>TEX : Symbol(TEX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 25, 21))
+>EX : Symbol(EX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 21, 37))
+
+type TNX = typeof NX;
+>TNX : Symbol(TNX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 26, 21))
+>NX : Symbol(NX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 22, 27))
+
+interface I10 extends TCX { a: number }
+>I10 : Symbol(I10, Decl(interfaceExtendsObjectIntersectionErrors.ts, 27, 21))
+>TCX : Symbol(TCX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 23, 49))
+>a : Symbol(I10.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 29, 27))
+
+interface I11 extends TEX { C: string }
+>I11 : Symbol(I11, Decl(interfaceExtendsObjectIntersectionErrors.ts, 29, 39))
+>TEX : Symbol(TEX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 25, 21))
+>C : Symbol(I11.C, Decl(interfaceExtendsObjectIntersectionErrors.ts, 30, 27))
+
+interface I12 extends TNX { a: number }
+>I12 : Symbol(I12, Decl(interfaceExtendsObjectIntersectionErrors.ts, 30, 39))
+>TNX : Symbol(TNX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 26, 21))
+>a : Symbol(I12.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 31, 27))
+
+interface I14 extends TCX { [x: string]: number }
+>I14 : Symbol(I14, Decl(interfaceExtendsObjectIntersectionErrors.ts, 31, 39))
+>TCX : Symbol(TCX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 23, 49))
+>x : Symbol(x, Decl(interfaceExtendsObjectIntersectionErrors.ts, 32, 29))
+
+interface I15 extends TEX { [x: string]: number }
+>I15 : Symbol(I15, Decl(interfaceExtendsObjectIntersectionErrors.ts, 32, 49))
+>TEX : Symbol(TEX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 25, 21))
+>x : Symbol(x, Decl(interfaceExtendsObjectIntersectionErrors.ts, 33, 29))
+
+interface I16 extends TNX { [x: string]: number }
+>I16 : Symbol(I16, Decl(interfaceExtendsObjectIntersectionErrors.ts, 33, 49))
+>TNX : Symbol(TNX, Decl(interfaceExtendsObjectIntersectionErrors.ts, 26, 21))
+>x : Symbol(x, Decl(interfaceExtendsObjectIntersectionErrors.ts, 34, 29))
+
+type Identifiable<T> = { _id: string } & T;
+>Identifiable : Symbol(Identifiable, Decl(interfaceExtendsObjectIntersectionErrors.ts, 34, 49))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 36, 18))
+>_id : Symbol(_id, Decl(interfaceExtendsObjectIntersectionErrors.ts, 36, 24))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 36, 18))
+
+interface I20 extends Partial<T1> { a: string }
+>I20 : Symbol(I20, Decl(interfaceExtendsObjectIntersectionErrors.ts, 36, 43))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(I20.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 38, 35))
+
+interface I21 extends Readonly<T1> { a: string }
+>I21 : Symbol(I21, Decl(interfaceExtendsObjectIntersectionErrors.ts, 38, 47))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(I21.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 39, 36))
+
+interface I22 extends Identifiable<T1> { a: string }
+>I22 : Symbol(I22, Decl(interfaceExtendsObjectIntersectionErrors.ts, 39, 48))
+>Identifiable : Symbol(Identifiable, Decl(interfaceExtendsObjectIntersectionErrors.ts, 34, 49))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>a : Symbol(I22.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 40, 40))
+
+interface I23 extends Identifiable<T1 & { b: number}> { a: string }
+>I23 : Symbol(I23, Decl(interfaceExtendsObjectIntersectionErrors.ts, 40, 52))
+>Identifiable : Symbol(Identifiable, Decl(interfaceExtendsObjectIntersectionErrors.ts, 34, 49))
+>T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
+>b : Symbol(b, Decl(interfaceExtendsObjectIntersectionErrors.ts, 41, 41))
+>a : Symbol(I23.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 41, 55))
+
+type U = { a: number } | { b: string };
+>U : Symbol(U, Decl(interfaceExtendsObjectIntersectionErrors.ts, 41, 67))
+>a : Symbol(a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 43, 10))
+>b : Symbol(b, Decl(interfaceExtendsObjectIntersectionErrors.ts, 43, 26))
+
+interface I30 extends U { x: string }
+>I30 : Symbol(I30, Decl(interfaceExtendsObjectIntersectionErrors.ts, 43, 39))
+>U : Symbol(U, Decl(interfaceExtendsObjectIntersectionErrors.ts, 41, 67))
+>x : Symbol(I30.x, Decl(interfaceExtendsObjectIntersectionErrors.ts, 45, 25))
+
+interface I31<T> extends T { x: string }
+>I31 : Symbol(I31, Decl(interfaceExtendsObjectIntersectionErrors.ts, 45, 37))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 46, 14))
+>T : Symbol(T, Decl(interfaceExtendsObjectIntersectionErrors.ts, 46, 14))
+>x : Symbol(I31.x, Decl(interfaceExtendsObjectIntersectionErrors.ts, 46, 28))
+

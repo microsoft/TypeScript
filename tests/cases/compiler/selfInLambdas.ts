@@ -1,3 +1,7 @@
+// @lib: es5
+// @noImplicitAny: true
+// @noImplicitThis: true
+
 interface MouseEvent {
     x: number;
     y: number;

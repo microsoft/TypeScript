@@ -1,5 +1,6 @@
 {
     "kind": "NullKeyword",
     "pos": 1,
-    "end": 5
+    "end": 5,
+    "flags": "JSDoc"
 }

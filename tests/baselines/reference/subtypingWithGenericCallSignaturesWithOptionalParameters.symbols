@@ -1,0 +1,813 @@
+=== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithGenericCallSignaturesWithOptionalParameters.ts ===
+// call signatures in derived types must have the same or fewer optional parameters as the base type
+
+module ClassTypeParam {
+>ClassTypeParam : Symbol(ClassTypeParam, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 0, 0))
+
+    interface Base<T> {
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+
+        a: () => T;
+>a : Symbol(Base.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+
+        a2: (x?: T) => T;
+>a2 : Symbol(Base.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 4, 19))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 5, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+
+        a3: (x: T) => T;
+>a3 : Symbol(Base.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 5, 25))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 6, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+
+        a4: (x: T, y?: T) => T;
+>a4 : Symbol(Base.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 6, 24))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 7, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 7, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+
+        a5: (x?: T, y?: T) => T;
+>a5 : Symbol(Base.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 7, 31))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 8, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 8, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 3, 19))
+    }
+
+    interface I1<T> extends Base<T> {
+>I1 : Symbol(I1, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 9, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 11, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 11, 17))
+
+        a: () => T; // ok, same T of required params
+>a : Symbol(I1.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 11, 37))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 11, 17))
+    }
+
+    interface I2<T> extends Base<T> {
+>I2 : Symbol(I2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 13, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 15, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 15, 17))
+
+        a: (x?: T) => T; // ok, same T of required params
+>a : Symbol(I2.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 15, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 16, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 15, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 15, 17))
+    }
+
+    interface I3<T> extends Base<T> {
+>I3 : Symbol(I3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 17, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 19, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 19, 17))
+
+        a: (x: T) => T; // error, too many required params
+>a : Symbol(I3.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 19, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 20, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 19, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 19, 17))
+    }
+
+
+    interface I4<T> extends Base<T> {
+>I4 : Symbol(I4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 21, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 24, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 24, 17))
+
+        a2: () => T; // ok, same T of required params
+>a2 : Symbol(I4.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 24, 37))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 24, 17))
+    }
+
+    interface I5<T> extends Base<T> {
+>I5 : Symbol(I5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 26, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 28, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 28, 17))
+
+        a2: (x?: T) => T; // ok, same T of required params
+>a2 : Symbol(I5.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 28, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 29, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 28, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 28, 17))
+    }
+
+    interface I6<T> extends Base<T> {
+>I6 : Symbol(I6, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 30, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 32, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 32, 17))
+
+        a2: (x: T) => T; // ok, same number of params
+>a2 : Symbol(I6.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 32, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 33, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 32, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 32, 17))
+    }
+
+
+    interface I7<T> extends Base<T> {
+>I7 : Symbol(I7, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 34, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 37, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 37, 17))
+
+        a3: () => T; // ok, fewer required params
+>a3 : Symbol(I7.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 37, 37))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 37, 17))
+    }
+
+    interface I8<T> extends Base<T> {
+>I8 : Symbol(I8, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 39, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 41, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 41, 17))
+
+        a3: (x?: T) => T; // ok, fewer required params
+>a3 : Symbol(I8.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 41, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 42, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 41, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 41, 17))
+    }
+
+    interface I9<T> extends Base<T> {
+>I9 : Symbol(I9, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 43, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 45, 17))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 45, 17))
+
+        a3: (x: T) => T; // ok, same T of required params
+>a3 : Symbol(I9.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 45, 37))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 46, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 45, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 45, 17))
+    }
+
+    interface I10<T> extends Base<T> {
+>I10 : Symbol(I10, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 47, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 18))
+
+        a3: (x: T, y: T) => T;  // error, too many required params
+>a3 : Symbol(I10.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 50, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 50, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 49, 18))
+    }
+
+
+    interface I11<T> extends Base<T> {
+>I11 : Symbol(I11, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 51, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 54, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 54, 18))
+
+        a4: () => T; // ok, fewer required params
+>a4 : Symbol(I11.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 54, 38))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 54, 18))
+    }
+
+    interface I12<T> extends Base<T> {
+>I12 : Symbol(I12, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 56, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 18))
+
+        a4: (x?: T, y?: T) => T; // ok, fewer required params
+>a4 : Symbol(I12.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 59, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 59, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 58, 18))
+    }
+
+    interface I13<T> extends Base<T> {
+>I13 : Symbol(I13, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 60, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 62, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 62, 18))
+
+        a4: (x: T) => T; // ok, same T of required params
+>a4 : Symbol(I13.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 62, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 63, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 62, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 62, 18))
+    }
+
+    interface I14<T> extends Base<T> {
+>I14 : Symbol(I14, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 64, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 18))
+
+        a4: (x: T, y: T) => T;  // ok, same number of params
+>a4 : Symbol(I14.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 67, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 67, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 66, 18))
+    }
+
+
+    interface I15<T> extends Base<T> {
+>I15 : Symbol(I15, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 68, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 71, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 71, 18))
+
+        a5: () => T; // ok, fewer required params
+>a5 : Symbol(I15.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 71, 38))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 71, 18))
+    }
+
+    interface I16<T> extends Base<T> {
+>I16 : Symbol(I16, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 73, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 18))
+
+        a5: (x?: T, y?: T) => T; // ok, fewer required params
+>a5 : Symbol(I16.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 76, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 76, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 75, 18))
+    }
+
+    interface I17<T> extends Base<T> {
+>I17 : Symbol(I17, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 77, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 79, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 79, 18))
+
+        a5: (x: T) => T; // ok, all present params match
+>a5 : Symbol(I17.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 79, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 80, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 79, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 79, 18))
+    }
+
+    interface I18<T> extends Base<T> {
+>I18 : Symbol(I18, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 81, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 18))
+>Base : Symbol(Base, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 2, 23))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 18))
+
+        a5: (x: T, y: T) => T;  // ok, same number of params
+>a5 : Symbol(I18.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 38))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 84, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 84, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 83, 18))
+    }
+}
+
+module GenericSignaturesInvalid {
+>GenericSignaturesInvalid : Symbol(GenericSignaturesInvalid, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 86, 1))
+
+    // all of these are errors
+    interface Base2 {
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a: <T>() => T;
+>a : Symbol(Base2.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 91, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 92, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 92, 12))
+
+        a2: <T>(x?: T) => T;
+>a2 : Symbol(Base2.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 92, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 93, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 93, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 93, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 93, 13))
+
+        a3: <T>(x: T) => T;
+>a3 : Symbol(Base2.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 93, 28))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 94, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 94, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 94, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 94, 13))
+
+        a4: <T>(x: T, y?: T) => T;
+>a4 : Symbol(Base2.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 94, 27))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 13))
+
+        a5: <T>(x?: T, y?: T) => T;
+>a5 : Symbol(Base2.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 95, 34))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 96, 13))
+    }
+
+    interface I1<T> extends Base2 {
+>I1 : Symbol(I1, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 97, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 99, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a: () => T; 
+>a : Symbol(I1.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 99, 35))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 99, 17))
+    }
+
+    interface I2<T> extends Base2 {
+>I2 : Symbol(I2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 101, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 103, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a: (x?: T) => T;
+>a : Symbol(I2.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 103, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 104, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 103, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 103, 17))
+    }
+
+    interface I3<T> extends Base2 {
+>I3 : Symbol(I3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 105, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 107, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a: (x: T) => T; 
+>a : Symbol(I3.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 107, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 108, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 107, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 107, 17))
+    }
+
+
+    interface I4<T> extends Base2 {
+>I4 : Symbol(I4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 109, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 112, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a2: () => T; 
+>a2 : Symbol(I4.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 112, 35))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 112, 17))
+    }
+
+    interface I5<T> extends Base2 {
+>I5 : Symbol(I5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 114, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 116, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a2: (x?: T) => T
+>a2 : Symbol(I5.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 116, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 117, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 116, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 116, 17))
+    }
+
+    interface I6<T> extends Base2 {
+>I6 : Symbol(I6, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 118, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 120, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a2: (x: T) => T;
+>a2 : Symbol(I6.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 120, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 121, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 120, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 120, 17))
+    }
+
+
+    interface I7<T> extends Base2 {
+>I7 : Symbol(I7, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 122, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 125, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a3: () => T;
+>a3 : Symbol(I7.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 125, 35))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 125, 17))
+    }
+
+    interface I8<T> extends Base2 {
+>I8 : Symbol(I8, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 127, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 129, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a3: (x?: T) => T; 
+>a3 : Symbol(I8.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 129, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 130, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 129, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 129, 17))
+    }
+
+    interface I9<T> extends Base2 {
+>I9 : Symbol(I9, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 131, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 133, 17))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a3: (x: T) => T; 
+>a3 : Symbol(I9.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 133, 35))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 134, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 133, 17))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 133, 17))
+    }
+
+    interface I10<T> extends Base2 {
+>I10 : Symbol(I10, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 135, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 137, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a3: (x: T, y: T) => T;  
+>a3 : Symbol(I10.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 137, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 138, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 137, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 138, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 137, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 137, 18))
+    }
+
+
+    interface I11<T> extends Base2 {
+>I11 : Symbol(I11, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 139, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 142, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a4: () => T; 
+>a4 : Symbol(I11.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 142, 36))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 142, 18))
+    }
+
+    interface I12<T> extends Base2 {
+>I12 : Symbol(I12, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 144, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 146, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a4: (x?: T, y?: T) => T; 
+>a4 : Symbol(I12.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 146, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 147, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 146, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 147, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 146, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 146, 18))
+    }
+
+    interface I13<T> extends Base2 {
+>I13 : Symbol(I13, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 148, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 150, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a4: (x: T) => T; 
+>a4 : Symbol(I13.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 150, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 151, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 150, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 150, 18))
+    }
+
+    interface I14<T> extends Base2 {
+>I14 : Symbol(I14, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 152, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 154, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a4: (x: T, y: T) => T; 
+>a4 : Symbol(I14.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 154, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 155, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 154, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 155, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 154, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 154, 18))
+    }
+
+
+    interface I15<T> extends Base2 {
+>I15 : Symbol(I15, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 156, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 159, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a5: () => T; 
+>a5 : Symbol(I15.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 159, 36))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 159, 18))
+    }
+
+    interface I16<T> extends Base2 {
+>I16 : Symbol(I16, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 161, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 163, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a5: (x?: T, y?: T) => T; 
+>a5 : Symbol(I16.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 163, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 164, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 163, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 164, 19))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 163, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 163, 18))
+    }
+
+    interface I17<T> extends Base2 {
+>I17 : Symbol(I17, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 165, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 167, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a5: (x: T) => T;
+>a5 : Symbol(I17.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 167, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 168, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 167, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 167, 18))
+    }
+
+    interface I18<T> extends Base2 {
+>I18 : Symbol(I18, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 169, 5))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 171, 18))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 88, 33))
+
+        a5: (x: T, y: T) => T; 
+>a5 : Symbol(I18.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 171, 36))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 172, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 171, 18))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 172, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 171, 18))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 171, 18))
+    }
+}
+
+module GenericSignaturesValid {
+>GenericSignaturesValid : Symbol(GenericSignaturesValid, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 174, 1))
+
+    interface Base2 {
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a: <T>() => T;
+>a : Symbol(Base2.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 178, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 179, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 179, 12))
+
+        a2: <T>(x?: T) => T;
+>a2 : Symbol(Base2.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 179, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 180, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 180, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 180, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 180, 13))
+
+        a3: <T>(x: T) => T;
+>a3 : Symbol(Base2.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 180, 28))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 181, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 181, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 181, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 181, 13))
+
+        a4: <T>(x: T, y?: T) => T;
+>a4 : Symbol(Base2.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 181, 27))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 13))
+
+        a5: <T>(x?: T, y?: T) => T;
+>a5 : Symbol(Base2.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 182, 34))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 183, 13))
+    }
+
+    // BUG 833350
+    interface I1 extends Base2 {
+>I1 : Symbol(I1, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 184, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a: <T>() => T; // ok, same number of required params
+>a : Symbol(I1.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 187, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 188, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 188, 12))
+    }
+
+    interface I2 extends Base2 {
+>I2 : Symbol(I2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 189, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a: <T>(x?: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+>a : Symbol(I2.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 191, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 192, 12))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 192, 15))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 192, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 192, 12))
+    }
+
+    interface I3 extends Base2 {
+>I3 : Symbol(I3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 193, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a: <T>(x: T) => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+>a : Symbol(I3.a, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 195, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 196, 12))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 196, 15))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 196, 12))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 196, 12))
+    }
+
+
+    interface I4 extends Base2 {
+>I4 : Symbol(I4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 197, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a2: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+>a2 : Symbol(I4.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 200, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 201, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 201, 13))
+    }
+
+    interface I5 extends Base2 {
+>I5 : Symbol(I5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 202, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a2: <T>(x?: T) => T; // ok, identical
+>a2 : Symbol(I5.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 204, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 205, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 205, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 205, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 205, 13))
+    }
+
+    interface I6 extends Base2 {
+>I6 : Symbol(I6, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 206, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a2: <T>(x: T) => T; // ok, same number of params
+>a2 : Symbol(I6.a2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 208, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 209, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 209, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 209, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 209, 13))
+    }
+
+
+    interface I7 extends Base2 {
+>I7 : Symbol(I7, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 210, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a3: <T>() => T; // error, no inferences for T so {} not assignable to {} in return type
+>a3 : Symbol(I7.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 213, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 214, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 214, 13))
+    }
+
+    interface I8 extends Base2 {
+>I8 : Symbol(I8, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 215, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a3: <T>(x?: T) => T; // ok, fewer required params
+>a3 : Symbol(I8.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 217, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 218, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 218, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 218, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 218, 13))
+    }
+
+    interface I9 extends Base2 {
+>I9 : Symbol(I9, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 219, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a3: <T>(x: T) => T; // ok, identical, same number of required params
+>a3 : Symbol(I9.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 221, 32))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 222, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 222, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 222, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 222, 13))
+    }
+
+    interface I10 extends Base2 {
+>I10 : Symbol(I10, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 223, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a3: <T>(x: T, y: T) => T;  // error, too many required params
+>a3 : Symbol(I10.a3, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 225, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 226, 13))
+    }
+
+
+    interface I11 extends Base2 {
+>I11 : Symbol(I11, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 227, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a4: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+>a4 : Symbol(I11.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 230, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 231, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 231, 13))
+    }
+
+    interface I12 extends Base2 {
+>I12 : Symbol(I12, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 232, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a4: <T>(x?: T, y?: T) => T; // ok, fewer required params
+>a4 : Symbol(I12.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 234, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 235, 13))
+    }
+
+    interface I13 extends Base2 {
+>I13 : Symbol(I13, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 236, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a4: <T>(x: T) => T; // ok, same T of required params
+>a4 : Symbol(I13.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 238, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 239, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 239, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 239, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 239, 13))
+    }
+
+    interface I14 extends Base2 {
+>I14 : Symbol(I14, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 240, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a4: <T>(x: T, y: T) => T;  // error, too many required params
+>a4 : Symbol(I14.a4, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 242, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 243, 13))
+    }
+
+
+    interface I15 extends Base2 {
+>I15 : Symbol(I15, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 244, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a5: <T>() => T; // error, not identical and contextual signature instatiation can't make inference from T to T
+>a5 : Symbol(I15.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 247, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 248, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 248, 13))
+    }
+
+    interface I16 extends Base2 {
+>I16 : Symbol(I16, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 249, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a5: <T>(x?: T, y?: T) => T; // ok, fewer required params
+>a5 : Symbol(I16.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 251, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 22))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 252, 13))
+    }
+
+    interface I17 extends Base2 {
+>I17 : Symbol(I17, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 253, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a5: <T>(x: T) => T; // ok, all present params match
+>a5 : Symbol(I17.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 255, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 256, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 256, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 256, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 256, 13))
+    }
+
+    interface I18 extends Base2 {
+>I18 : Symbol(I18, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 257, 5))
+>Base2 : Symbol(Base2, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 176, 31))
+
+        a5: <T>(x: T, y: T) => T;  // ok, same number of params
+>a5 : Symbol(I18.a5, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 259, 33))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 13))
+>x : Symbol(x, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 16))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 13))
+>y : Symbol(y, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 21))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 13))
+>T : Symbol(T, Decl(subtypingWithGenericCallSignaturesWithOptionalParameters.ts, 260, 13))
+    }
+}

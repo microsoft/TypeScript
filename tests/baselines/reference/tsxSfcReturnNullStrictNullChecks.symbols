@@ -1,0 +1,24 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+const Foo = (props: any) => null;
+>Foo : Symbol(Foo, Decl(file.tsx, 2, 5))
+>props : Symbol(props, Decl(file.tsx, 2, 13))
+
+function Greet(x: {name?: string}) {
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 33))
+>x : Symbol(x, Decl(file.tsx, 4, 15))
+>name : Symbol(name, Decl(file.tsx, 4, 19))
+
+	return null;
+}
+
+const foo = <Foo />;
+>foo : Symbol(foo, Decl(file.tsx, 8, 5))
+>Foo : Symbol(Foo, Decl(file.tsx, 2, 5))
+
+const G = <Greet />;
+>G : Symbol(G, Decl(file.tsx, 9, 5))
+>Greet : Symbol(Greet, Decl(file.tsx, 2, 33))
+

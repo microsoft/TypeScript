@@ -1,0 +1,12 @@
+{
+    "references": [
+        { "path": "../core" },
+    ],
+    "files": [],
+    "compilerOptions": {
+        "composite": true,
+        "declaration": true,
+        "forceConsistentCasingInFileNames": true,
+        "skipDefaultLibCheck": true
+    }
+}

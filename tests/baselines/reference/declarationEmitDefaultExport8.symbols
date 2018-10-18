@@ -1,11 +1,10 @@
 === tests/cases/compiler/declarationEmitDefaultExport8.ts ===
-
 var _default = 1;
->_default : Symbol(_default, Decl(declarationEmitDefaultExport8.ts, 1, 3))
+>_default : Symbol(_default, Decl(declarationEmitDefaultExport8.ts, 0, 3))
 
 export {_default as d}
->_default : Symbol(d, Decl(declarationEmitDefaultExport8.ts, 2, 8))
->d : Symbol(d, Decl(declarationEmitDefaultExport8.ts, 2, 8))
+>_default : Symbol(d, Decl(declarationEmitDefaultExport8.ts, 1, 8))
+>d : Symbol(d, Decl(declarationEmitDefaultExport8.ts, 1, 8))
 
 export default 1 + 2;
 

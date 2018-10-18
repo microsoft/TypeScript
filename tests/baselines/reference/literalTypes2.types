@@ -153,7 +153,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >true : true
 >p4 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -181,7 +180,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
     var v5: E.A = E.A;
 >v5 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -209,7 +207,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
     let x5: E.A = E.A;
 >x5 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -262,7 +259,7 @@ function f3() {
 >c6 : { kind: 123; }
 >kind : 123
 >{ kind: 123 } : { kind: 123; }
->kind : number
+>kind : 123
 >123 : 123
 
     const c7: [1 | 2, "foo" | "bar"] = [1, "bar"];
@@ -290,7 +287,7 @@ function f3() {
 >c2 : 1 | "two"
 
     let x3 = c3;
->x3 : number | boolean | E
+>x3 : number | boolean
 >c3 : true | E.A | 123
 
     let x4 = c4;
@@ -412,9 +409,9 @@ function f4() {
 >a : 0 | 1
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
->a : number
+>a : 1
 >1 : 1
->b : string
+>b : "foo"
 >"foo" : "foo"
 
     let x1 = { a: 1, b: "foo" };
@@ -430,9 +427,9 @@ function f4() {
 >a : 0 | 1
 >b : "foo" | "bar"
 >{ a: 1, b: "foo" } : { a: 1; b: "foo"; }
->a : number
+>a : 1
 >1 : 1
->b : string
+>b : "foo"
 >"foo" : "foo"
 }
 
@@ -487,11 +484,11 @@ function f6() {
 >c3 : "foo" | "bar"
 >"foo" : "foo"
 >{ c1: false, c2: 1, c3: "bar" } : { c1?: false; c2?: 1; c3?: "bar"; }
->c1 : boolean
+>c1 : false
 >false : false
->c2 : number
+>c2 : 1
 >1 : 1
->c3 : string
+>c3 : "bar"
 >"bar" : "bar"
 
     let { x1 = true, x2 = 0, x3 = "foo" } = { x1: false, x2: 1, x3: "bar" };
@@ -502,7 +499,7 @@ function f6() {
 >x3 : string
 >"foo" : "foo"
 >{ x1: false, x2: 1, x3: "bar" } : { x1?: false; x2?: number; x3?: string; }
->x1 : boolean
+>x1 : false
 >false : false
 >x2 : number
 >1 : 1
@@ -555,7 +552,7 @@ class C2 {
 >bar : () => 1 | 0
 
         return cond ? 0 : 1;
->cond ? 0 : 1 : 1 | 0
+>cond ? 0 : 1 : 0 | 1
 >cond : boolean
 >0 : 0
 >1 : 1
@@ -605,71 +602,40 @@ function f20() {
 
 declare function g1<T>(x: T): T;
 >g1 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 declare function g2<T>(x: T, y: T): T;
 >g2 : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 declare function g3<T, U>(x: T, y: U): T | U;
 >g3 : <T, U>(x: T, y: U) => T | U
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
->U : U
 
 declare function g4<T>(x: T): T[];
 >g4 : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 declare function g5<T extends number>(x: T, y: T): T[];
 >g5 : <T extends number>(x: T, y: T) => T[]
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 declare function g6<T>(x: T[]): T;
 >g6 : <T>(x: T[]) => T
->T : T
 >x : T[]
->T : T
->T : T
 
 declare function g7<T>(x: T[]): T[];
 >g7 : <T>(x: T[]) => T[]
->T : T
 >x : T[]
->T : T
->T : T
 
 declare function g8<T>(x: T, f: (p: T) => T): T;
 >g8 : <T>(x: T, f: (p: T) => T) => T
->T : T
 >x : T
->T : T
 >f : (p: T) => T
 >p : T
->T : T
->T : T
->T : T
 
 const a: (1 | 2)[] = [1, 2];
 >a : (1 | 2)[]
@@ -759,10 +725,7 @@ const x11 = g8(1, x => x + 1);  // Type number
 
 function makeArray<T>(x: T): T[] {
 >makeArray : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
     return [x];
 >[x] : T[]
@@ -771,12 +734,8 @@ function makeArray<T>(x: T): T[] {
 
 function append<T>(a: T[], x: T): T[] {
 >append : <T>(a: T[], x: T) => T[]
->T : T
 >a : T[]
->T : T
 >x : T
->T : T
->T : T
 
     let result = a.slice();
 >result : T[]
@@ -803,7 +762,6 @@ let aa = makeArray<Bit>(0);
 >aa : (0 | 1)[]
 >makeArray<Bit>(0) : (0 | 1)[]
 >makeArray : <T>(x: T) => T[]
->Bit : 0 | 1
 >0 : 0
 
 aa = append(aa, 1);

@@ -1,5 +1,4 @@
 //// [controlFlowLoopAnalysis.ts]
-
 // Repro from #8418
 
 let cond: boolean;
@@ -78,7 +77,7 @@ function test2() {
 // Repro from #8511
 function mapUntilCant(values, canTake, mapping) {
     var result = [];
-    for (var index = 0, length = values.length; index < length; index++) {
+    for (var index = 0, length_1 = values.length; index < length_1; index++) {
         var value = values[index];
         if (canTake(value, index)) {
             result.push(mapping(value, index));

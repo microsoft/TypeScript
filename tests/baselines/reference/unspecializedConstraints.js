@@ -154,22 +154,30 @@ module ts {
 
 
 //// [unspecializedConstraints.js]
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
 var ts;
 (function (ts) {
-    var Symbol = (function () {
+    var Symbol = /** @class */ (function () {
         function Symbol() {
         }
         return Symbol;
     }());
-    var Type = (function (_super) {
+    var Type = /** @class */ (function (_super) {
         __extends(Type, _super);
         function Type() {
-            return _super.apply(this, arguments) || this;
+            return _super !== null && _super.apply(this, arguments) || this;
         }
         Type.prototype.equals = function (that) {
             if (this === that)
@@ -230,7 +238,7 @@ var ts;
         };
         return Type;
     }(Symbol));
-    var Property = (function (_super) {
+    var Property = /** @class */ (function (_super) {
         __extends(Property, _super);
         function Property(name, type, flags) {
             var _this = _super.call(this) || this;
@@ -251,7 +259,7 @@ var ts;
         PropertyFlags[PropertyFlags["Optional"] = 1] = "Optional";
         PropertyFlags[PropertyFlags["Private"] = 2] = "Private";
     })(PropertyFlags || (PropertyFlags = {}));
-    var Signature = (function (_super) {
+    var Signature = /** @class */ (function (_super) {
         __extends(Signature, _super);
         function Signature(typeParameters, parameters, returnType) {
             var _this = _super.call(this) || this;
@@ -272,7 +280,7 @@ var ts;
         };
         return Signature;
     }(Symbol));
-    var Parameter = (function (_super) {
+    var Parameter = /** @class */ (function (_super) {
         __extends(Parameter, _super);
         function Parameter(name, type, flags) {
             var _this = _super.call(this) || this;

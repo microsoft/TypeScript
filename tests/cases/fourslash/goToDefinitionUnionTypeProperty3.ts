@@ -7,6 +7,6 @@
 ////var strings: string[];
 ////var numbers: number[];
 ////
-////var x = (strings || numbers)./*usage*/specialPop()
+////var x = (strings || numbers).[|/*usage*/specialPop|]()
 
 verify.goToDefinition("usage", "definition");

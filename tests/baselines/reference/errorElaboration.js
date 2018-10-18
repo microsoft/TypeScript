@@ -12,8 +12,18 @@ declare function foo(x: () => Container<Ref<number>>): void;
 let a: () => Container<Ref<string>>;
 foo(a);
 
+// Repro for #25498
+
+function test(): {[A in "foo"]: A} {
+  return {foo: "bar"};
+}
+
 
 //// [errorElaboration.js]
 // Repro for #5712
 var a;
 foo(a);
+// Repro for #25498
+function test() {
+    return { foo: "bar" };
+}

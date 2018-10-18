@@ -1,0 +1,23 @@
+=== tests/cases/compiler/numberToString.ts ===
+function f1(n:number):string {
+>f1 : Symbol(f1, Decl(numberToString.ts, 0, 0))
+>n : Symbol(n, Decl(numberToString.ts, 0, 12))
+
+    return n; // error return type mismatch
+>n : Symbol(n, Decl(numberToString.ts, 0, 12))
+}
+
+function f2(s:string):void {
+>f2 : Symbol(f2, Decl(numberToString.ts, 2, 1))
+>s : Symbol(s, Decl(numberToString.ts, 4, 12))
+}
+
+f1(3);
+>f1 : Symbol(f1, Decl(numberToString.ts, 0, 0))
+
+f2(3); // error no coercion to string
+>f2 : Symbol(f2, Decl(numberToString.ts, 2, 1))
+
+f2(3+""); // ok + operator promotes
+>f2 : Symbol(f2, Decl(numberToString.ts, 2, 1))
+

@@ -1,0 +1,15 @@
+tests/cases/compiler/promiseEmptyTupleNoException.ts(3,3): error TS2322: Type 'any[]' is not assignable to type '[]'.
+  Types of property 'length' are incompatible.
+    Type 'number' is not assignable to type '0'.
+
+
+==== tests/cases/compiler/promiseEmptyTupleNoException.ts (1 errors) ====
+    export async function get(): Promise<[]> {
+      let emails = [];
+      return emails;
+      ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'any[]' is not assignable to type '[]'.
+!!! error TS2322:   Types of property 'length' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type '0'.
+    }
+    

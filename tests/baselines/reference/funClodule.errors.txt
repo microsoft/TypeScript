@@ -2,14 +2,13 @@ tests/cases/compiler/funClodule.ts(1,18): error TS2300: Duplicate identifier 'fo
 tests/cases/compiler/funClodule.ts(2,16): error TS2300: Duplicate identifier 'foo'.
 tests/cases/compiler/funClodule.ts(5,15): error TS2300: Duplicate identifier 'foo'.
 tests/cases/compiler/funClodule.ts(8,15): error TS2300: Duplicate identifier 'foo2'.
-tests/cases/compiler/funClodule.ts(9,16): error TS2300: Duplicate identifier 'foo2'.
 tests/cases/compiler/funClodule.ts(12,18): error TS2300: Duplicate identifier 'foo2'.
 tests/cases/compiler/funClodule.ts(15,10): error TS2300: Duplicate identifier 'foo3'.
 tests/cases/compiler/funClodule.ts(16,8): error TS2300: Duplicate identifier 'foo3'.
 tests/cases/compiler/funClodule.ts(19,7): error TS2300: Duplicate identifier 'foo3'.
 
 
-==== tests/cases/compiler/funClodule.ts (9 errors) ====
+==== tests/cases/compiler/funClodule.ts (8 errors) ====
     declare function foo();
                      ~~~
 !!! error TS2300: Duplicate identifier 'foo'.
@@ -27,8 +26,6 @@ tests/cases/compiler/funClodule.ts(19,7): error TS2300: Duplicate identifier 'fo
                   ~~~~
 !!! error TS2300: Duplicate identifier 'foo2'.
     declare module foo2 {
-                   ~~~~
-!!! error TS2300: Duplicate identifier 'foo2'.
         export function x(): any;
     }
     declare function foo2(); // Should error

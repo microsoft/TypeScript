@@ -1,0 +1,21 @@
+=== tests/cases/compiler/commentLeadingCloseBrace.ts ===
+declare function commentedParameters(...args): any;
+>commentedParameters : Symbol(commentedParameters, Decl(commentLeadingCloseBrace.ts, 0, 0))
+>args : Symbol(args, Decl(commentLeadingCloseBrace.ts, 0, 37))
+
+function ifelse() {
+>ifelse : Symbol(ifelse, Decl(commentLeadingCloseBrace.ts, 0, 51))
+
+    if (commentedParameters(1, 2)) {
+>commentedParameters : Symbol(commentedParameters, Decl(commentLeadingCloseBrace.ts, 0, 0))
+
+        /*comment1*/
+        commentedParameters(3, 4);
+>commentedParameters : Symbol(commentedParameters, Decl(commentLeadingCloseBrace.ts, 0, 0))
+
+        /*comment2*/
+    } else {
+        commentedParameters(5, 6);
+>commentedParameters : Symbol(commentedParameters, Decl(commentLeadingCloseBrace.ts, 0, 0))
+    }
+}

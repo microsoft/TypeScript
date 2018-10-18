@@ -1,5 +1,4 @@
 //// [typeArgumentsWithStringLiteralTypes01.ts]
-
 declare function randBool(): boolean;
 declare function takeReturnString(str: string): string;
 declare function takeReturnHello(str: "Hello"): "Hello";
@@ -122,7 +121,7 @@ function fun2(x, y) {
 function fun3() {
     var args = [];
     for (var _i = 0; _i < arguments.length; _i++) {
-        args[_i - 0] = arguments[_i];
+        args[_i] = arguments[_i];
     }
     return args[+randBool()];
 }

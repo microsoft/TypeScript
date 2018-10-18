@@ -1,7 +1,6 @@
 //// [tests/cases/conformance/es6/modules/exportsAndImports3.ts] ////
 
 //// [t1.ts]
-
 export var v = 1;
 export function f() { }
 export class C {
@@ -36,24 +35,25 @@ export { v, f, C, I, E, D, M, N, T, a };
 
 //// [t1.js]
 "use strict";
+exports.__esModule = true;
 exports.v = 1;
 exports.v1 = exports.v;
 function f() { }
 exports.f = f;
 exports.f1 = f;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
     return C;
 }());
 exports.C = C;
 exports.C1 = C;
+var E;
 (function (E) {
     E[E["A"] = 0] = "A";
     E[E["B"] = 1] = "B";
     E[E["C"] = 2] = "C";
-})(exports.E || (exports.E = {}));
-var E = exports.E;
+})(E = exports.E || (exports.E = {}));
 exports.E1 = E;
 var M;
 (function (M) {
@@ -63,6 +63,7 @@ exports.a = M.x;
 exports.a1 = exports.a;
 //// [t2.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;
@@ -72,6 +73,7 @@ exports.M = t1_1.M1;
 exports.a = t1_1.a1;
 //// [t3.js]
 "use strict";
+exports.__esModule = true;
 var t1_1 = require("./t1");
 exports.v = t1_1.v1;
 exports.f = t1_1.f1;

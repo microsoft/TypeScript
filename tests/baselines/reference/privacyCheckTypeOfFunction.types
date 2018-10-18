@@ -1,0 +1,12 @@
+=== tests/cases/compiler/privacyCheckTypeOfFunction.ts ===
+function foo() {
+>foo : () => void
+}
+export var x: typeof foo;
+>x : () => void
+>foo : () => void
+
+export var b = foo;
+>b : () => void
+>foo : () => void
+

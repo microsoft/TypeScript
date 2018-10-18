@@ -3,8 +3,4 @@
 ////var x = "[|string|]";
 ////function f(a = "[|initial value|]") { }
 
-const ranges = test.ranges();
-for (let r of ranges) {
-    goTo.position(r.start);
-    verify.occurrencesAtPositionCount(1);
-}
+goTo.eachRange(() => verify.occurrencesAtPositionCount(1));

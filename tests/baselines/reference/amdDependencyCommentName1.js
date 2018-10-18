@@ -5,7 +5,8 @@ import m1 = require("m2")
 m1.f();
 
 //// [amdDependencyCommentName1.js]
-///<amd-dependency path='bar' name='b'/>
 "use strict";
+///<amd-dependency path='bar' name='b'/>
+exports.__esModule = true;
 var m1 = require("m2");
 m1.f();

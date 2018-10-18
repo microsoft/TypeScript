@@ -1,0 +1,22 @@
+=== tests/cases/compiler/reachabilityChecks2.ts ===
+while (true) { }
+>true : true
+
+const enum E { X }
+>E : E
+>X : E.X
+
+module A4 {
+>A4 : typeof A4
+
+    while (true);
+>true : true
+
+    module A {
+        const enum E { X }
+>E : E
+>X : E.X
+    }
+}
+
+

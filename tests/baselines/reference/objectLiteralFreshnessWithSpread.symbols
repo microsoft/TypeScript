@@ -1,0 +1,14 @@
+=== tests/cases/compiler/objectLiteralFreshnessWithSpread.ts ===
+let x = { b: 1, extra: 2 }
+>x : Symbol(x, Decl(objectLiteralFreshnessWithSpread.ts, 0, 3))
+>b : Symbol(b, Decl(objectLiteralFreshnessWithSpread.ts, 0, 9))
+>extra : Symbol(extra, Decl(objectLiteralFreshnessWithSpread.ts, 0, 15))
+
+let xx: { a, b }  = { a: 1, ...x, z: 3 } // error for 'z', no error for 'extra'
+>xx : Symbol(xx, Decl(objectLiteralFreshnessWithSpread.ts, 1, 3))
+>a : Symbol(a, Decl(objectLiteralFreshnessWithSpread.ts, 1, 9))
+>b : Symbol(b, Decl(objectLiteralFreshnessWithSpread.ts, 1, 12))
+>a : Symbol(a, Decl(objectLiteralFreshnessWithSpread.ts, 1, 21))
+>x : Symbol(x, Decl(objectLiteralFreshnessWithSpread.ts, 0, 3))
+>z : Symbol(z, Decl(objectLiteralFreshnessWithSpread.ts, 1, 33))
+

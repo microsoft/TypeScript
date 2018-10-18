@@ -1,10 +1,9 @@
 === tests/cases/compiler/importDeclWithExportModifierInAmbientContext.ts ===
 declare module "m" {
-    module x {
->x : any
+>"m" : typeof import("m")
 
+    module x {
         interface c {
->c : c
         }
     }
     export import a = x.c;
@@ -14,6 +13,5 @@ declare module "m" {
 
     var b: a;
 >b : a
->a : a
 }
 

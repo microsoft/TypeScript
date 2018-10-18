@@ -1,5 +1,4 @@
 //// [declFileTypeofFunction.ts]
-
 function f(n: typeof f): string;
 function f(n: typeof g): string;
 function f() { return undefined; }

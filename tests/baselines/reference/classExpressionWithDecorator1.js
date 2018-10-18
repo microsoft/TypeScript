@@ -9,13 +9,13 @@ var __decorate = (this && this.__decorate) || function (decorators, target, key,
     return c > 3 && r && Object.defineProperty(target, key, r), r;
 };
 var v = ;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
     }
+    C.p = 1;
+    C = __decorate([
+        decorate
+    ], C);
     return C;
 }());
-C.p = 1;
-C = __decorate([
-    decorate
-], C);
 ;

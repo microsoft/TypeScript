@@ -1,0 +1,14 @@
+=== tests/cases/compiler/declarationEmitIndexTypeArray.ts ===
+function doSomethingWithKeys<T>(...keys: (keyof T)[]) { }
+>doSomethingWithKeys : <T>(...keys: (keyof T)[]) => void
+>keys : (keyof T)[]
+
+const utilityFunctions = {
+>utilityFunctions : { doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void; }
+>{  doSomethingWithKeys} : { doSomethingWithKeys: <T>(...keys: (keyof T)[]) => void; }
+
+  doSomethingWithKeys
+>doSomethingWithKeys : <T>(...keys: (keyof T)[]) => void
+
+};
+

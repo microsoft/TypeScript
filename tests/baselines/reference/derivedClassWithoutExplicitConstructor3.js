@@ -48,19 +48,27 @@ var d3 = new D2(new Date(), new Date()); // ok
 
 //// [derivedClassWithoutExplicitConstructor3.js]
 // automatic constructors with a class hieararchy of depth > 2
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};
-var Base = (function () {
+var __extends = (this && this.__extends) || (function () {
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
+    return function (d, b) {
+        extendStatics(d, b);
+        function __() { this.constructor = d; }
+        d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
+    };
+})();
+var Base = /** @class */ (function () {
     function Base(x) {
         this.a = 1;
         this.a = x;
     }
     return Base;
 }());
-var Derived = (function (_super) {
+var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived(y, z) {
         var _this = _super.call(this, 2) || this;
@@ -70,10 +78,10 @@ var Derived = (function (_super) {
     }
     return Derived;
 }(Base));
-var Derived2 = (function (_super) {
+var Derived2 = /** @class */ (function (_super) {
     __extends(Derived2, _super);
     function Derived2() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 1;
         _this.y = 'hello';
         return _this;
@@ -83,13 +91,13 @@ var Derived2 = (function (_super) {
 var r = new Derived(); // error
 var r2 = new Derived2(1); // error
 var r3 = new Derived('', '');
-var Base2 = (function () {
+var Base2 = /** @class */ (function () {
     function Base2(x) {
         this.a = x;
     }
     return Base2;
 }());
-var D = (function (_super) {
+var D = /** @class */ (function (_super) {
     __extends(D, _super);
     function D(y, z) {
         var _this = _super.call(this, 2) || this;
@@ -99,10 +107,10 @@ var D = (function (_super) {
     }
     return D;
 }(Base));
-var D2 = (function (_super) {
+var D2 = /** @class */ (function (_super) {
     __extends(D2, _super);
     function D2() {
-        var _this = _super.apply(this, arguments) || this;
+        var _this = _super !== null && _super.apply(this, arguments) || this;
         _this.x = 2;
         _this.y = null;
         return _this;

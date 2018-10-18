@@ -14,6 +14,6 @@ verify.quickInfos({
 });
 
 goTo.marker('3');
-verify.memberListContains("x", "(property) x: number", undefined);
+verify.completionListContains("x", "(property) x: number", undefined);
 
 verify.quickInfoAt("4", "var point: {\n    readonly x: number;\n}");

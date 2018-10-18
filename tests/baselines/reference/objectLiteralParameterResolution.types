@@ -1,0 +1,67 @@
+=== tests/cases/compiler/objectLiteralParameterResolution.ts ===
+interface Foo{
+    extend<T>(target: T, ...objs: any[]): T;
+>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>target : T
+>objs : any[]
+
+    extend<T>(deep: boolean, target: T, ...objs: any[]): T;
+>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>deep : boolean
+>target : T
+>objs : any[]
+}
+declare var $: Foo;
+>$ : Foo
+
+var s = $.extend({
+>s : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
+>$.extend({    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    }, "") : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
+>$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>$ : Foo
+>extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
+>{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
+
+    type: "GET" ,
+>type : string
+>"GET" : "GET"
+
+    data: "data" ,
+>data : string
+>"data" : "data"
+
+    success: wrapSuccessCallback(requestContext, callback) ,
+>success : any
+>wrapSuccessCallback(requestContext, callback) : any
+>wrapSuccessCallback : any
+>requestContext : any
+>callback : any
+
+    error: wrapErrorCallback(requestContext, errorCallback) ,
+>error : any
+>wrapErrorCallback(requestContext, errorCallback) : any
+>wrapErrorCallback : any
+>requestContext : any
+>errorCallback : any
+
+    dataType: "json" ,
+>dataType : string
+>"json" : "json"
+
+    converters: { "text json": "" },
+>converters : { "text json": string; }
+>{ "text json": "" } : { "text json": string; }
+>"text json" : string
+>"" : ""
+
+    traditional: true ,
+>traditional : true
+>true : true
+
+    timeout: 12,
+>timeout : number
+>12 : 12
+
+    }, "");
+>"" : ""
+

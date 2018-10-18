@@ -1,0 +1,107 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithNonSymmetricSubtypes.ts ===
+// generic type argument inference where inference leads to two candidates that are both supertypes of all candidates
+// we choose the first candidate so the result is dependent on the order of the arguments provided
+
+function foo<T>(x: T, y: T) {
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>T : Symbol(T, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 13))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 16))
+>T : Symbol(T, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 13))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 21))
+>T : Symbol(T, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 13))
+
+    var r: T;
+>r : Symbol(r, Decl(genericCallWithNonSymmetricSubtypes.ts, 4, 7))
+>T : Symbol(T, Decl(genericCallWithNonSymmetricSubtypes.ts, 3, 13))
+
+    return r;
+>r : Symbol(r, Decl(genericCallWithNonSymmetricSubtypes.ts, 4, 7))
+}
+
+var a: { x: number; y?: number; };
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 8))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 19))
+
+var b: { x: number; z?: number; };
+>b : Symbol(b, Decl(genericCallWithNonSymmetricSubtypes.ts, 9, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 9, 8))
+>z : Symbol(z, Decl(genericCallWithNonSymmetricSubtypes.ts, 9, 19))
+
+var r = foo(a, b); // { x: number; y?: number; };
+>r : Symbol(r, Decl(genericCallWithNonSymmetricSubtypes.ts, 11, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+>b : Symbol(b, Decl(genericCallWithNonSymmetricSubtypes.ts, 9, 3))
+
+var r2 = foo(b, a); // { x: number; z?: number; };
+>r2 : Symbol(r2, Decl(genericCallWithNonSymmetricSubtypes.ts, 12, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>b : Symbol(b, Decl(genericCallWithNonSymmetricSubtypes.ts, 9, 3))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+
+var x: { x: number; };
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 8))
+
+var y: { x?: number; };
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 8))
+
+var r3 = foo(a, x); // { x: number; y?: number; };
+>r3 : Symbol(r3, Decl(genericCallWithNonSymmetricSubtypes.ts, 17, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 3))
+
+var r4 = foo(x, a); // { x: number; };
+>r4 : Symbol(r4, Decl(genericCallWithNonSymmetricSubtypes.ts, 18, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 3))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+
+var r5 = foo(a, y); // { x?: number; };
+>r5 : Symbol(r5, Decl(genericCallWithNonSymmetricSubtypes.ts, 20, 3), Decl(genericCallWithNonSymmetricSubtypes.ts, 21, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 3))
+
+var r5 = foo(y, a); // { x?: number; };
+>r5 : Symbol(r5, Decl(genericCallWithNonSymmetricSubtypes.ts, 20, 3), Decl(genericCallWithNonSymmetricSubtypes.ts, 21, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 3))
+>a : Symbol(a, Decl(genericCallWithNonSymmetricSubtypes.ts, 8, 3))
+
+var r6 = foo(x, y); // { x?: number; };
+>r6 : Symbol(r6, Decl(genericCallWithNonSymmetricSubtypes.ts, 23, 3), Decl(genericCallWithNonSymmetricSubtypes.ts, 24, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 3))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 3))
+
+var r6 = foo(y, x); // { x?: number; };
+>r6 : Symbol(r6, Decl(genericCallWithNonSymmetricSubtypes.ts, 23, 3), Decl(genericCallWithNonSymmetricSubtypes.ts, 24, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>y : Symbol(y, Decl(genericCallWithNonSymmetricSubtypes.ts, 15, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 14, 3))
+
+var s1: (x: Object) => string;
+>s1 : Symbol(s1, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 9))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+var s2: (x: string) => string;
+>s2 : Symbol(s2, Decl(genericCallWithNonSymmetricSubtypes.ts, 27, 3))
+>x : Symbol(x, Decl(genericCallWithNonSymmetricSubtypes.ts, 27, 9))
+
+var r7 = foo(s1, s2); // (x: Object) => string;
+>r7 : Symbol(r7, Decl(genericCallWithNonSymmetricSubtypes.ts, 29, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>s1 : Symbol(s1, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 3))
+>s2 : Symbol(s2, Decl(genericCallWithNonSymmetricSubtypes.ts, 27, 3))
+
+var r8 = foo(s2, s1); // (x: string) => string;
+>r8 : Symbol(r8, Decl(genericCallWithNonSymmetricSubtypes.ts, 30, 3))
+>foo : Symbol(foo, Decl(genericCallWithNonSymmetricSubtypes.ts, 0, 0))
+>s2 : Symbol(s2, Decl(genericCallWithNonSymmetricSubtypes.ts, 27, 3))
+>s1 : Symbol(s1, Decl(genericCallWithNonSymmetricSubtypes.ts, 26, 3))
+

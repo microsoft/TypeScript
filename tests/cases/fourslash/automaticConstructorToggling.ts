@@ -20,7 +20,7 @@ verify.quickInfos({
     Asig: "constructor A<string>(): A<string>",
     Bsig: "constructor B<string>(val: string): B<string>",
     Csig: "constructor C<string>(val: string): C<string>",
-    Dsig: "constructor D<T>(val: T): D<T>" // Cannot resolve signature
+    Dsig: "constructor D<string>(val: string): D<string>" // Cannot resolve signature. Still fill in generics based on explicit type arguments.
 });
 
 goTo.marker(C);
@@ -28,8 +28,8 @@ edit.deleteAtCaret('constructor(val: T) { }'.length);
 verify.quickInfos({
     Asig: "constructor A<string>(): A<string>",
     Bsig: "constructor B<string>(val: string): B<string>",
-    Csig: "constructor C<T>(): C<T>", // Cannot resolve signature
-    Dsig: "constructor D<T>(val: T): D<T>" // Cannot resolve signature
+    Csig: "constructor C<{}>(): C<{}>", // Cannot resolve signature
+    Dsig: "constructor D<string>(val: string): D<string>" // Cannot resolve signature
 });
 
 goTo.marker(D);
@@ -37,6 +37,6 @@ edit.deleteAtCaret("val: T".length);
 verify.quickInfos({
     Asig: "constructor A<string>(): A<string>",
     Bsig: "constructor B<string>(val: string): B<string>",
-    Csig: "constructor C<T>(): C<T>", // Cannot resolve signature
+    Csig: "constructor C<{}>(): C<{}>", // Cannot resolve signature
     Dsig: "constructor D<string>(): D<string>"
 });

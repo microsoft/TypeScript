@@ -6,5 +6,5 @@
 /////*1*/var bar;
 
 goTo.marker();
-verify.memberListContains("fun");
+verify.completionListContains("fun");
 verify.not.errorExistsAfterMarker("1");

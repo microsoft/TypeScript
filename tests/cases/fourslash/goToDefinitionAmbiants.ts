@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
 ////declare var /*ambientVariableDefinition*/ambientVar;
-/////*ambientFunctionDefinition*/declare function ambientFunction();
+////declare function /*ambientFunctionDefinition*/ambientFunction();
 ////declare class ambientClass {
 ////    /*constructorDefinition*/constructor();
-////    /*staticMethodDefinition*/static method();
-////    /*instanceMethodDefinition*/public method();
+////    static /*staticMethodDefinition*/method();
+////    public /*instanceMethodDefinition*/method();
 ////}
 ////
 /////*ambientVariableReference*/ambientVar = 1;

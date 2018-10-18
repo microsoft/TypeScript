@@ -41,7 +41,7 @@ var Foo;
     var Bar;
     (function (Bar) {
         "use strict";
-        var Greeter = (function () {
+        var Greeter = /** @class */ (function () {
             function Greeter(greeting) {
                 this.greeting = greeting;
             }

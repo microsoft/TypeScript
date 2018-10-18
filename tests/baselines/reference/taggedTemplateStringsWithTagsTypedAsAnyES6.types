@@ -5,7 +5,7 @@ var f: any;
 f `abc`
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 
 f `abc${1}def${2}ghi`;
 >f `abc${1}def${2}ghi` : any
@@ -21,7 +21,7 @@ f.g.h `abc`
 >f : any
 >g : any
 >h : any
->`abc` : string
+>`abc` : "abc"
 
 f.g.h `abc${1}def${2}ghi`;
 >f.g.h `abc${1}def${2}ghi` : any
@@ -38,7 +38,7 @@ f `abc`.member
 >f `abc`.member : any
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 >member : any
 
 f `abc${1}def${2}ghi`.member;
@@ -54,7 +54,7 @@ f `abc`["member"];
 >f `abc`["member"] : any
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 >"member" : "member"
 
 f `abc${1}def${2}ghi`["member"];
@@ -72,7 +72,7 @@ f `abc`["member"].someOtherTag `abc${1}def${2}ghi`;
 >f `abc`["member"] : any
 >f `abc` : any
 >f : any
->`abc` : string
+>`abc` : "abc"
 >"member" : "member"
 >someOtherTag : any
 >`abc${1}def${2}ghi` : string
@@ -99,7 +99,7 @@ f.thisIsNotATag(`abc`);
 >f.thisIsNotATag : any
 >f : any
 >thisIsNotATag : any
->`abc` : string
+>`abc` : "abc"
 
 f.thisIsNotATag(`abc${1}def${2}ghi`);
 >f.thisIsNotATag(`abc${1}def${2}ghi`) : any

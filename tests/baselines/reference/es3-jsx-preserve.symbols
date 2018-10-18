@@ -1,0 +1,8 @@
+=== tests/cases/compiler/es3-jsx-preserve.tsx ===
+const React: any = null;
+>React : Symbol(React, Decl(es3-jsx-preserve.tsx, 0, 5))
+
+const elem = <div></div>;
+>elem : Symbol(elem, Decl(es3-jsx-preserve.tsx, 2, 5))
+
+

@@ -1,5 +1,4 @@
 //// [unusedPrivateMembers.ts]
-
 class Test1 {
     private initializeInternal() {
     }
@@ -50,7 +49,7 @@ class Test5<T> {
 
 
 //// [unusedPrivateMembers.js]
-var Test1 = (function () {
+var Test1 = /** @class */ (function () {
     function Test1() {
     }
     Test1.prototype.initializeInternal = function () {
@@ -61,7 +60,7 @@ var Test1 = (function () {
     };
     return Test1;
 }());
-var Test2 = (function () {
+var Test2 = /** @class */ (function () {
     function Test2() {
         this.p = 0;
     }
@@ -71,7 +70,7 @@ var Test2 = (function () {
     };
     return Test2;
 }());
-var Test3 = (function () {
+var Test3 = /** @class */ (function () {
     function Test3() {
     }
     Object.defineProperty(Test3.prototype, "x", {
@@ -87,7 +86,7 @@ var Test3 = (function () {
     };
     return Test3;
 }());
-var Test4 = (function () {
+var Test4 = /** @class */ (function () {
     function Test4() {
     }
     Object.defineProperty(Test4.prototype, "x", {
@@ -103,7 +102,7 @@ var Test4 = (function () {
     };
     return Test4;
 }());
-var Test5 = (function () {
+var Test5 = /** @class */ (function () {
     function Test5() {
     }
     Test5.prototype.test = function () {

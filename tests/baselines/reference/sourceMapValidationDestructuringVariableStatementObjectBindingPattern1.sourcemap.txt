@@ -14,14 +14,13 @@ sourceFile:sourceMapValidationDestructuringVariableStatementObjectBindingPattern
 3 >    ^^^^^^^^^^^^^^^
 4 >                   ^
 5 >                    ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >var {
+1 >var {
 2 >
 3 >    x
 4 >                   } = { x: 20 };
-1 >Emitted(1, 1) Source(2, 6) + SourceIndex(0)
-2 >Emitted(1, 5) Source(2, 6) + SourceIndex(0)
-3 >Emitted(1, 20) Source(2, 7) + SourceIndex(0)
-4 >Emitted(1, 21) Source(2, 21) + SourceIndex(0)
+1 >Emitted(1, 1) Source(1, 6) + SourceIndex(0)
+2 >Emitted(1, 5) Source(1, 6) + SourceIndex(0)
+3 >Emitted(1, 20) Source(1, 7) + SourceIndex(0)
+4 >Emitted(1, 21) Source(1, 21) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementObjectBindingPattern1.js.map

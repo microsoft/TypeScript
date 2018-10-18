@@ -1,0 +1,19 @@
+=== tests/cases/compiler/deleteOperator1.ts ===
+var a;
+>a : any
+
+var x: boolean = delete a;
+>x : boolean
+>delete a : boolean
+>a : any
+
+var y: any = delete a;
+>y : any
+>delete a : boolean
+>a : any
+
+var z: number = delete a;
+>z : number
+>delete a : boolean
+>a : any
+

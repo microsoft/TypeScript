@@ -1,0 +1,21 @@
+=== tests/cases/compiler/typecheckIfCondition.ts ===
+// both uses of module should be an undefined symbol
+function myWrapper()
+>myWrapper : () => void
+{
+    if (!module.exports) module.exports = "";
+>!module.exports : boolean
+>module.exports : any
+>module : any
+>exports : any
+>module.exports = "" : ""
+>module.exports : any
+>module : any
+>exports : any
+>"" : ""
+
+    var x = null; // don't want to baseline output
+>x : any
+>null : null
+}
+

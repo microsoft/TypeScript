@@ -1,0 +1,5 @@
+=== tests/cases/compiler/reactNamespaceMissingDeclaration.tsx ===
+// Error myReactLib not declared
+<foo data/>
+>data : Symbol(data, Decl(reactNamespaceMissingDeclaration.tsx, 1, 4))
+

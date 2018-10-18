@@ -1,18 +1,17 @@
 === tests/cases/compiler/null.ts ===
-
 var x=null; 
 >x : any
 >null : null
 
 var y=3+x;  
->y : number
->3+x : number
+>y : any
+>3+x : any
 >3 : 3
->x : null
+>x : any
 
 var z=3+null; 
->z : number
->3+null : number
+>z : any
+>3+null : any
 >3 : 3
 >null : null
 
@@ -39,8 +38,6 @@ function g() {
 >3 : 3
 }
 interface I {
->I : I
-
     x:any;
 >x : any
 
@@ -49,7 +46,6 @@ interface I {
 }
 var w:I={x:null,y:3};
 >w : I
->I : I
 >{x:null,y:3} : { x: null; y: number; }
 >x : null
 >null : null

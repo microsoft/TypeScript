@@ -3,11 +3,13 @@ class C {
 >C : C
 
     "a b": number;
+>"a b" : number
+
     static "c d": number;
+>"c d" : number
 }
 var c: C;
 >c : C
->C : C
 
 var r1 = c["a b"];
 >r1 : number
@@ -22,13 +24,11 @@ var r1b = C['c d'];
 >'c d' : "c d"
 
 interface I {
->I : I
-
     "a b": number;
+>"a b" : number
 }
 var i: I;
 >i : I
->I : I
 
 var r2 = i["a b"];
 >r2 : number
@@ -40,6 +40,7 @@ var a: {
 >a : { "a b": number; }
 
     "a b": number;
+>"a b" : number
 }
 var r3 = a["a b"];
 >r3 : number
@@ -52,6 +53,7 @@ var b = {
 >{    "a b": 1} : { "a b": number; }
 
     "a b": 1
+>"a b" : number
 >1 : 1
 }
 var r4 = b["a b"];

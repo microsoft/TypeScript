@@ -2,10 +2,10 @@
 
 // @Filename: goToDefinitionDifferentFile_Definition.ts
 ////var /*remoteVariableDefinition*/remoteVariable;
-/////*remoteFunctionDefinition*/function remoteFunction() { }
-/////*remoteClassDefinition*/class remoteClass { }
-/////*remoteInterfaceDefinition*/interface remoteInterface{ }
-/////*remoteModuleDefinition*/module remoteModule{ export var foo = 1;}
+////function /*remoteFunctionDefinition*/remoteFunction() { }
+////class /*remoteClassDefinition*/remoteClass { }
+////interface /*remoteInterfaceDefinition*/remoteInterface{ }
+////module /*remoteModuleDefinition*/remoteModule{ export var foo = 1;}
 
 // @Filename: goToDefinitionDifferentFile_Consumption.ts
 /////*remoteVariableReference*/remoteVariable = 1;

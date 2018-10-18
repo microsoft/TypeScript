@@ -6,9 +6,10 @@ x;
 >x : Symbol(x, Decl(a.ts, 0, 8))
 
 === /node_modules/@types/foo/index.d.ts ===
-
 declare module "xyz" {
+>"xyz" : Symbol("xyz", Decl(index.d.ts, 0, 0))
+
     export const x: number;
->x : Symbol(x, Decl(index.d.ts, 2, 16))
+>x : Symbol(x, Decl(index.d.ts, 1, 16))
 }
 

@@ -1,0 +1,139 @@
+=== tests/cases/conformance/expressions/binaryOperators/additionOperator/additionOperatorWithTypeParameter.ts ===
+// type parameter type is not a valid operand of addition operator
+enum E { a, b }
+>E : Symbol(E, Decl(additionOperatorWithTypeParameter.ts, 0, 0))
+>a : Symbol(E.a, Decl(additionOperatorWithTypeParameter.ts, 1, 8))
+>b : Symbol(E.b, Decl(additionOperatorWithTypeParameter.ts, 1, 11))
+
+function foo<T, U>(t: T, u: U) {
+>foo : Symbol(foo, Decl(additionOperatorWithTypeParameter.ts, 1, 15))
+>T : Symbol(T, Decl(additionOperatorWithTypeParameter.ts, 3, 13))
+>U : Symbol(U, Decl(additionOperatorWithTypeParameter.ts, 3, 15))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>T : Symbol(T, Decl(additionOperatorWithTypeParameter.ts, 3, 13))
+>u : Symbol(u, Decl(additionOperatorWithTypeParameter.ts, 3, 24))
+>U : Symbol(U, Decl(additionOperatorWithTypeParameter.ts, 3, 15))
+
+    var a: any;
+>a : Symbol(a, Decl(additionOperatorWithTypeParameter.ts, 4, 7))
+
+    var b: boolean;
+>b : Symbol(b, Decl(additionOperatorWithTypeParameter.ts, 5, 7))
+
+    var c: number;
+>c : Symbol(c, Decl(additionOperatorWithTypeParameter.ts, 6, 7))
+
+    var d: string;
+>d : Symbol(d, Decl(additionOperatorWithTypeParameter.ts, 7, 7))
+
+    var e: Object;
+>e : Symbol(e, Decl(additionOperatorWithTypeParameter.ts, 8, 7))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    var g: E;
+>g : Symbol(g, Decl(additionOperatorWithTypeParameter.ts, 9, 7))
+>E : Symbol(E, Decl(additionOperatorWithTypeParameter.ts, 0, 0))
+
+    var f: void;
+>f : Symbol(f, Decl(additionOperatorWithTypeParameter.ts, 10, 7))
+
+    // type parameter as left operand
+    var r1: any = t + a; // ok, one operand is any
+>r1 : Symbol(r1, Decl(additionOperatorWithTypeParameter.ts, 13, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>a : Symbol(a, Decl(additionOperatorWithTypeParameter.ts, 4, 7))
+
+    var r2 = t + b;
+>r2 : Symbol(r2, Decl(additionOperatorWithTypeParameter.ts, 14, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>b : Symbol(b, Decl(additionOperatorWithTypeParameter.ts, 5, 7))
+
+    var r3 = t + c;
+>r3 : Symbol(r3, Decl(additionOperatorWithTypeParameter.ts, 15, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>c : Symbol(c, Decl(additionOperatorWithTypeParameter.ts, 6, 7))
+
+    var r4 = t + d; // ok, one operand is string
+>r4 : Symbol(r4, Decl(additionOperatorWithTypeParameter.ts, 16, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>d : Symbol(d, Decl(additionOperatorWithTypeParameter.ts, 7, 7))
+
+    var r5 = t + e;
+>r5 : Symbol(r5, Decl(additionOperatorWithTypeParameter.ts, 17, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>e : Symbol(e, Decl(additionOperatorWithTypeParameter.ts, 8, 7))
+
+    var r6 = t + g;
+>r6 : Symbol(r6, Decl(additionOperatorWithTypeParameter.ts, 18, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>g : Symbol(g, Decl(additionOperatorWithTypeParameter.ts, 9, 7))
+
+    var r7 = t + f;
+>r7 : Symbol(r7, Decl(additionOperatorWithTypeParameter.ts, 19, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>f : Symbol(f, Decl(additionOperatorWithTypeParameter.ts, 10, 7))
+
+    // type parameter as right operand
+    var r8 = a + t; // ok, one operand is any
+>r8 : Symbol(r8, Decl(additionOperatorWithTypeParameter.ts, 22, 7))
+>a : Symbol(a, Decl(additionOperatorWithTypeParameter.ts, 4, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r9 = b + t;
+>r9 : Symbol(r9, Decl(additionOperatorWithTypeParameter.ts, 23, 7))
+>b : Symbol(b, Decl(additionOperatorWithTypeParameter.ts, 5, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r10 = c + t;
+>r10 : Symbol(r10, Decl(additionOperatorWithTypeParameter.ts, 24, 7))
+>c : Symbol(c, Decl(additionOperatorWithTypeParameter.ts, 6, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r11 = d + t; // ok, one operand is string
+>r11 : Symbol(r11, Decl(additionOperatorWithTypeParameter.ts, 25, 7))
+>d : Symbol(d, Decl(additionOperatorWithTypeParameter.ts, 7, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r12 = e + t;
+>r12 : Symbol(r12, Decl(additionOperatorWithTypeParameter.ts, 26, 7))
+>e : Symbol(e, Decl(additionOperatorWithTypeParameter.ts, 8, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r13 = g + t;
+>r13 : Symbol(r13, Decl(additionOperatorWithTypeParameter.ts, 27, 7))
+>g : Symbol(g, Decl(additionOperatorWithTypeParameter.ts, 9, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r14 = f + t;
+>r14 : Symbol(r14, Decl(additionOperatorWithTypeParameter.ts, 28, 7))
+>f : Symbol(f, Decl(additionOperatorWithTypeParameter.ts, 10, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    // other cases
+    var r15 = t + null;
+>r15 : Symbol(r15, Decl(additionOperatorWithTypeParameter.ts, 31, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r16 = t + undefined;
+>r16 : Symbol(r16, Decl(additionOperatorWithTypeParameter.ts, 32, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>undefined : Symbol(undefined)
+
+    var r17 = t + t;
+>r17 : Symbol(r17, Decl(additionOperatorWithTypeParameter.ts, 33, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r18 = t + u;
+>r18 : Symbol(r18, Decl(additionOperatorWithTypeParameter.ts, 34, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+>u : Symbol(u, Decl(additionOperatorWithTypeParameter.ts, 3, 24))
+
+    var r19 = t + (() => { });
+>r19 : Symbol(r19, Decl(additionOperatorWithTypeParameter.ts, 35, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+
+    var r20 = t + [];
+>r20 : Symbol(r20, Decl(additionOperatorWithTypeParameter.ts, 36, 7))
+>t : Symbol(t, Decl(additionOperatorWithTypeParameter.ts, 3, 19))
+}

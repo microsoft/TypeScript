@@ -94,8 +94,7 @@ function whileStatement1() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    if (!_a.sent())
-                        return [3 /*break*/, 2];
+                    if (!_a.sent()) return [3 /*break*/, 2];
                     y;
                     return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
@@ -108,8 +107,7 @@ function whileStatement2() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -135,8 +133,7 @@ function whileStatement4() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    if (!_a.sent())
-                        return [3 /*break*/, 2];
+                    if (!_a.sent()) return [3 /*break*/, 2];
                     return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
@@ -148,8 +145,7 @@ function whileStatement5() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -164,8 +160,7 @@ function whileStatement6() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     if (1)
                         return [3 /*break*/, 0];
                     return [4 /*yield*/, y];
@@ -193,8 +188,7 @@ function whileStatement8() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    if (!_a.sent())
-                        return [3 /*break*/, 2];
+                    if (!_a.sent()) return [3 /*break*/, 2];
                     return [3 /*break*/, 0];
                 case 2: return [2 /*return*/];
             }
@@ -206,8 +200,7 @@ function whileStatement9() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -222,8 +215,7 @@ function whileStatement10() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     if (1)
                         return [3 /*break*/, 0];
                     return [4 /*yield*/, y];
@@ -251,8 +243,7 @@ function whileStatement12() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    if (!_a.sent())
-                        return [3 /*break*/, 2];
+                    if (!_a.sent()) return [3 /*break*/, 2];
                     return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
@@ -264,8 +255,7 @@ function whileStatement13() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -280,8 +270,7 @@ function whileStatement14() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     if (1)
                         return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
@@ -309,8 +298,7 @@ function whileStatement16() {
             switch (_a.label) {
                 case 0: return [4 /*yield*/, x];
                 case 1:
-                    if (!_a.sent())
-                        return [3 /*break*/, 2];
+                    if (!_a.sent()) return [3 /*break*/, 2];
                     return [3 /*break*/, 2];
                 case 2: return [2 /*return*/];
             }
@@ -322,8 +310,7 @@ function whileStatement17() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     return [4 /*yield*/, y];
                 case 1:
                     _a.sent();
@@ -338,8 +325,7 @@ function whileStatement18() {
         return __generator(this, function (_a) {
             switch (_a.label) {
                 case 0:
-                    if (!x)
-                        return [3 /*break*/, 2];
+                    if (!x) return [3 /*break*/, 2];
                     if (1)
                         return [3 /*break*/, 2];
                     return [4 /*yield*/, y];

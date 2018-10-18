@@ -1,5 +1,4 @@
 //// [exportNonInitializedVariablesAMD.ts]
-
 var;
 let;
 const;
@@ -37,10 +36,11 @@ export let h1: D = new D;
 //// [exportNonInitializedVariablesAMD.js]
 define(["require", "exports"], function (require, exports) {
     "use strict";
+    exports.__esModule = true;
     var ;
     let;
     var ;
-    var A = (function () {
+    var A = /** @class */ (function () {
         function A() {
         }
         return A;
@@ -58,7 +58,7 @@ define(["require", "exports"], function (require, exports) {
     exports.b1 = 1;
     exports.c1 = 'a';
     exports.d1 = 1;
-    var D = (function () {
+    var D = /** @class */ (function () {
         function D() {
         }
         return D;

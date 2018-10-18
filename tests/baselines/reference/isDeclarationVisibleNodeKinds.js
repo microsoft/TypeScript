@@ -1,5 +1,4 @@
 //// [isDeclarationVisibleNodeKinds.ts]
-
 // Function types
 module schema {
     export function createValidator1(schema: any): <T>(data: T) => T {
@@ -128,7 +127,7 @@ var schema;
     schema_8.createValidator8 = createValidator8;
 })(schema || (schema = {}));
 (function (schema) {
-    var T = (function () {
+    var T = /** @class */ (function () {
         function T() {
         }
         Object.defineProperty(T.prototype, "createValidator9", {

@@ -1,0 +1,17 @@
+=== /a/node_modules/@types/node/index.d.ts ===
+interface Error2 {
+>Error2 : Symbol(Error2, Decl(index.d.ts, 0, 0))
+
+    stack2: string;
+>stack2 : Symbol(Error2.stack2, Decl(index.d.ts, 0, 18))
+}
+
+=== /a/app.ts ===
+/// <reference types="node"/>
+function foo(): Error2 {
+>foo : Symbol(foo, Decl(app.ts, 0, 0))
+>Error2 : Symbol(Error2, Decl(index.d.ts, 0, 0))
+
+    return undefined;
+>undefined : Symbol(undefined)
+}

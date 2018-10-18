@@ -1,20 +1,15 @@
 === tests/cases/compiler/f1.ts ===
-
-
 export class A {}
 >A : A
 
 export interface I {}
->I : I
 
 === tests/cases/compiler/f2.ts ===
-
 var x = 1;
 >x : number
 >1 : 1
 
 interface I { }
->I : I
 
 namespace N {
 >N : typeof N
@@ -24,7 +19,6 @@ namespace N {
 >1 : 1
 
 	export interface I { }	
->I : I
 }
 
 import IX = N.x;

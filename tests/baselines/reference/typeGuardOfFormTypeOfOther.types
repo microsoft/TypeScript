@@ -26,22 +26,18 @@ var strOrNumOrBool: string | number | boolean;
 
 var strOrC: string | C;
 >strOrC : string | C
->C : C
 
 var numOrC: number | C;
 >numOrC : number | C
->C : C
 
 var boolOrC: boolean | C;
 >boolOrC : boolean | C
->C : C
 
 var emptyObj: {};
 >emptyObj : {}
 
 var c: C;
 >c : C
->C : C
 
 // A type guard of the form typeof x === s, 
 // where s is a string literal with any value but 'string', 'number' or 'boolean',
@@ -50,7 +46,7 @@ var c: C;
 
 if (typeof strOrC === "Object") {
 >typeof strOrC === "Object" : boolean
->typeof strOrC : string
+>typeof strOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrC : string | C
 >"Object" : "Object"
 
@@ -66,7 +62,7 @@ else {
 }
 if (typeof numOrC === "Object") {
 >typeof numOrC === "Object" : boolean
->typeof numOrC : string
+>typeof numOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrC : number | C
 >"Object" : "Object"
 
@@ -82,7 +78,7 @@ else {
 }
 if (typeof boolOrC === "Object") {
 >typeof boolOrC === "Object" : boolean
->typeof boolOrC : string
+>typeof boolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >boolOrC : boolean | C
 >"Object" : "Object"
 
@@ -96,10 +92,27 @@ else {
 >r4 : boolean
 >boolOrC : boolean
 }
+if (typeof strOrC === "Object" as string) { // comparison is OK with cast
+>typeof strOrC === "Object" as string : boolean
+>typeof strOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>strOrC : string | C
+>"Object" as string : string
+>"Object" : "Object"
+
+    c = strOrC; // error: but no narrowing to C
+>c = strOrC : string | C
+>c : C
+>strOrC : string | C
+}
+else {
+    var r5: string = strOrC; // error: no narrowing to string
+>r5 : string
+>strOrC : string | C
+}
 
 if (typeof strOrNumOrBool === "Object") {
 >typeof strOrNumOrBool === "Object" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"Object" : "Object"
 
@@ -118,7 +131,7 @@ else {
 //  - when false, narrows the type of x by typeof x === s when true.
 if (typeof strOrC !== "Object") {
 >typeof strOrC !== "Object" : boolean
->typeof strOrC : string
+>typeof strOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrC : string | C
 >"Object" : "Object"
 
@@ -134,7 +147,7 @@ else {
 }
 if (typeof numOrC !== "Object") {
 >typeof numOrC !== "Object" : boolean
->typeof numOrC : string
+>typeof numOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >numOrC : number | C
 >"Object" : "Object"
 
@@ -150,7 +163,7 @@ else {
 }
 if (typeof boolOrC !== "Object") {
 >typeof boolOrC !== "Object" : boolean
->typeof boolOrC : string
+>typeof boolOrC : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >boolOrC : boolean | C
 >"Object" : "Object"
 
@@ -167,7 +180,7 @@ else {
 
 if (typeof strOrNumOrBool !== "Object") {
 >typeof strOrNumOrBool !== "Object" : boolean
->typeof strOrNumOrBool : string
+>typeof strOrNumOrBool : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >strOrNumOrBool : string | number | boolean
 >"Object" : "Object"
 

@@ -1,0 +1,142 @@
+=== tests/cases/compiler/errorsInGenericTypeReference.ts ===
+interface IFoo<T> { }
+
+class Foo<T> { }
+>Foo : Foo<T>
+
+
+// in call type arguments
+class testClass1 {
+>testClass1 : testClass1
+
+    method<T>(): void { }
+>method : <T>() => void
+}
+var tc1 = new testClass1();
+>tc1 : testClass1
+>new testClass1() : testClass1
+>testClass1 : typeof testClass1
+
+tc1.method<{ x: V }>(); // error: could not find symbol V
+>tc1.method<{ x: V }>() : void
+>tc1.method : <T>() => void
+>tc1 : testClass1
+>method : <T>() => void
+>x : any
+
+
+// in constructor type arguments
+class testClass2<T> {
+>testClass2 : testClass2<T>
+}
+var tc2 = new testClass2<{ x: V }>(); // error: could not find symbol V
+>tc2 : testClass2<{ x: any; }>
+>new testClass2<{ x: V }>() : testClass2<{ x: any; }>
+>testClass2 : typeof testClass2
+>x : any
+
+
+// in method return type annotation
+class testClass3 {
+>testClass3 : testClass3
+
+    testMethod1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+>testMethod1 : () => Foo<{ x: any; }>
+>x : any
+>null : null
+
+    static testMethod2(): Foo<{ x: V }> { return null } // error: could not find symbol V
+>testMethod2 : () => Foo<{ x: any; }>
+>x : any
+>null : null
+
+    set a(value: Foo<{ x: V }>) { } // error: could not find symbol V
+>a : Foo<{ x: any; }>
+>value : Foo<{ x: any; }>
+>x : any
+
+    property: Foo<{ x: V }>; // error: could not find symbol V
+>property : Foo<{ x: any; }>
+>x : any
+}
+
+
+// in function return type annotation
+function testFunction1(): Foo<{ x: V }> { return null; } // error: could not find symbol V
+>testFunction1 : () => Foo<{ x: any; }>
+>x : any
+>null : null
+
+
+// in paramter types
+function testFunction2(p: Foo<{ x: V }>) { }// error: could not find symbol V
+>testFunction2 : (p: Foo<{ x: any; }>) => void
+>p : Foo<{ x: any; }>
+>x : any
+
+
+// in var type annotation
+var f: Foo<{ x: V }>; // error: could not find symbol V
+>f : Foo<{ x: any; }>
+>x : any
+
+
+// in constraints
+class testClass4<T extends { x: V }> { } // error: could not find symbol V
+>testClass4 : testClass4<T>
+>x : any
+
+interface testClass5<T extends Foo<{ x: V }>> { } // error: could not find symbol V
+>x : any
+
+class testClass6<T> {
+>testClass6 : testClass6<T>
+
+    method<M extends { x: V }>(): void { } // error: could not find symbol V
+>method : <M extends { x: any; }>() => void
+>x : any
+}
+
+interface testInterface1 {
+    new <M extends { x: V }>(a: M); // error: could not find symbol V
+>x : any
+>a : M
+}
+
+
+// in extends clause
+class testClass7 extends Foo<{ x: V }> { } // error: could not find symbol V
+>testClass7 : testClass7
+>Foo : Foo<{ x: any; }>
+>x : any
+
+
+// in implements clause
+class testClass8 implements IFoo<{ x: V }> { } // error: could not find symbol V
+>testClass8 : testClass8
+>x : any
+
+
+// in signatures
+interface testInterface2 {
+    new (a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+>a : Foo<{ x: any; }>
+>x : any
+>x : any
+
+    [x: string]: Foo<{ x: V }>; // error: could not find symbol V
+>x : string
+>x : any
+
+    method(a: Foo<{ x: V }>): Foo<{ x: V }>; //2x: error: could not find symbol V
+>method : (a: Foo<{ x: any; }>) => Foo<{ x: any; }>
+>a : Foo<{ x: any; }>
+>x : any
+>x : any
+
+    property: Foo<{ x: V }>; // error: could not find symbol V
+>property : Foo<{ x: any; }>
+>x : any
+}
+
+

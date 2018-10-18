@@ -125,10 +125,6 @@ declare var a;
 >a : any
 >x : any
 
-declare var A;
->A : any
-
-// should keep the parentheses in emit
 (<any>1).foo;
 >(<any>1).foo : any
 >(<any>1) : any
@@ -164,6 +160,10 @@ declare var A;
 >0xff : 255
 >foo : any
 
+declare var A;
+>A : any
+
+// should keep the parentheses in emit
 (<any>(1.0)); 
 >(<any>(1.0)) : any
 ><any>(1.0) : any
@@ -182,7 +182,7 @@ declare var A;
 >(<any>typeof A).x : any
 >(<any>typeof A) : any
 ><any>typeof A : any
->typeof A : string
+>typeof A : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >A : any
 >x : any
 
@@ -205,7 +205,6 @@ new (<any>A());
 >(<Tany>()=> {})() : void
 >(<Tany>()=> {}) : <Tany>() => void
 ><Tany>()=> {} : <Tany>() => void
->Tany : Tany
 
 (<any>function foo() { })();
 >(<any>function foo() { })() : any

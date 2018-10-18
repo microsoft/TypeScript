@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts'/>
 
 // @Filename: a.ts
-/////*2*/declare module "external/*1*/" {
+////declare module /*2*/[|"external/*1*/"|] {
 ////    class Foo { }
 ////}
 

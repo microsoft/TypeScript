@@ -1,0 +1,60 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react')
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+declare function OverloadComponent<U>(): JSX.Element;
+>OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
+>U : Symbol(U, Decl(file.tsx, 2, 35))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function OverloadComponent<U>(attr: {b: U, a: string, "ignore-prop": boolean}): JSX.Element;
+>OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
+>U : Symbol(U, Decl(file.tsx, 3, 35))
+>attr : Symbol(attr, Decl(file.tsx, 3, 38))
+>b : Symbol(b, Decl(file.tsx, 3, 45))
+>U : Symbol(U, Decl(file.tsx, 3, 35))
+>a : Symbol(a, Decl(file.tsx, 3, 50))
+>"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 3, 61))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+>OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
+>T : Symbol(T, Decl(file.tsx, 4, 35))
+>U : Symbol(U, Decl(file.tsx, 4, 37))
+>attr : Symbol(attr, Decl(file.tsx, 4, 41))
+>b : Symbol(b, Decl(file.tsx, 4, 48))
+>U : Symbol(U, Decl(file.tsx, 4, 37))
+>a : Symbol(a, Decl(file.tsx, 4, 53))
+>T : Symbol(T, Decl(file.tsx, 4, 35))
+>JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
+>Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
+
+// Error
+function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
+>Baz : Symbol(Baz, Decl(file.tsx, 4, 74))
+>T : Symbol(T, Decl(file.tsx, 7, 13))
+>b : Symbol(b, Decl(file.tsx, 7, 24))
+>U : Symbol(U, Decl(file.tsx, 7, 35))
+>a : Symbol(a, Decl(file.tsx, 7, 47))
+>b : Symbol(b, Decl(file.tsx, 7, 58))
+>arg1 : Symbol(arg1, Decl(file.tsx, 7, 70))
+>T : Symbol(T, Decl(file.tsx, 7, 13))
+>arg2 : Symbol(arg2, Decl(file.tsx, 7, 78))
+>U : Symbol(U, Decl(file.tsx, 7, 35))
+
+    let a0 = <OverloadComponent a={arg1.b}/>
+>a0 : Symbol(a0, Decl(file.tsx, 8, 7))
+>OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
+>a : Symbol(a, Decl(file.tsx, 8, 31))
+>arg1.b : Symbol(b, Decl(file.tsx, 7, 24))
+>arg1 : Symbol(arg1, Decl(file.tsx, 7, 70))
+>b : Symbol(b, Decl(file.tsx, 7, 24))
+
+    let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
+>a2 : Symbol(a2, Decl(file.tsx, 9, 7))
+>OverloadComponent : Symbol(OverloadComponent, Decl(file.tsx, 0, 31), Decl(file.tsx, 2, 53), Decl(file.tsx, 3, 100))
+>arg1 : Symbol(arg1, Decl(file.tsx, 7, 70))
+>ignore-prop : Symbol(ignore-prop, Decl(file.tsx, 9, 41))
+}

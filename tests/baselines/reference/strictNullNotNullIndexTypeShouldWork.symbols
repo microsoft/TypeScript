@@ -1,0 +1,86 @@
+=== tests/cases/compiler/strictNullNotNullIndexTypeShouldWork.ts ===
+interface A {
+>A : Symbol(A, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 0))
+
+    params?: { name: string; };
+>params : Symbol(A.params, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 13))
+>name : Symbol(name, Decl(strictNullNotNullIndexTypeShouldWork.ts, 1, 14))
+}
+
+class Test<T extends A> {
+>Test : Symbol(Test, Decl(strictNullNotNullIndexTypeShouldWork.ts, 2, 1))
+>T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 11))
+>A : Symbol(A, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 0))
+
+    attrs: Readonly<T>;
+>attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 25))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 11))
+
+    m() {
+>m : Symbol(Test.m, Decl(strictNullNotNullIndexTypeShouldWork.ts, 5, 23))
+
+        this.attrs.params!.name;
+>this.attrs.params!.name : Symbol(name, Decl(strictNullNotNullIndexTypeShouldWork.ts, 1, 14))
+>this.attrs.params : Symbol(params, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 13))
+>this.attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 25))
+>this : Symbol(Test, Decl(strictNullNotNullIndexTypeShouldWork.ts, 2, 1))
+>attrs : Symbol(Test.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 4, 25))
+>params : Symbol(params, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 13))
+>name : Symbol(name, Decl(strictNullNotNullIndexTypeShouldWork.ts, 1, 14))
+    }
+}
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 10, 1))
+
+    foo?: number;
+>foo : Symbol(Foo.foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 12, 15))
+}
+
+class FooClass<P extends Foo = Foo> {
+>FooClass : Symbol(FooClass, Decl(strictNullNotNullIndexTypeShouldWork.ts, 14, 1))
+>P : Symbol(P, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 15))
+>Foo : Symbol(Foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 10, 1))
+>Foo : Symbol(Foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 10, 1))
+
+    properties: Readonly<P>;
+>properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 37))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>P : Symbol(P, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 15))
+
+    foo(): number {
+>foo : Symbol(FooClass.foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 17, 28))
+
+        const { foo = 42 } = this.properties;
+>foo : Symbol(foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 20, 15))
+>this.properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 37))
+>this : Symbol(FooClass, Decl(strictNullNotNullIndexTypeShouldWork.ts, 14, 1))
+>properties : Symbol(FooClass.properties, Decl(strictNullNotNullIndexTypeShouldWork.ts, 16, 37))
+
+        return foo;
+>foo : Symbol(foo, Decl(strictNullNotNullIndexTypeShouldWork.ts, 20, 15))
+    }
+}
+
+class Test2<T extends A> {
+>Test2 : Symbol(Test2, Decl(strictNullNotNullIndexTypeShouldWork.ts, 23, 1))
+>T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 12))
+>A : Symbol(A, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 0))
+
+    attrs: Readonly<T>;
+>attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 26))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 12))
+
+    m() {
+>m : Symbol(Test2.m, Decl(strictNullNotNullIndexTypeShouldWork.ts, 26, 23))
+
+        return this.attrs.params!; // Return type should maintain relationship with `T` after being not-null-asserted, ideally
+>this.attrs.params : Symbol(params, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 13))
+>this.attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 26))
+>this : Symbol(Test2, Decl(strictNullNotNullIndexTypeShouldWork.ts, 23, 1))
+>attrs : Symbol(Test2.attrs, Decl(strictNullNotNullIndexTypeShouldWork.ts, 25, 26))
+>params : Symbol(params, Decl(strictNullNotNullIndexTypeShouldWork.ts, 0, 13))
+    }
+}

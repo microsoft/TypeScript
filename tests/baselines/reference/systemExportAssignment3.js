@@ -1,7 +1,6 @@
 //// [tests/cases/compiler/systemExportAssignment3.ts] ////
 
 //// [modules.d.ts]
-
 declare module "a" {
     var a: number;
     export = a;  // OK, in ambient context

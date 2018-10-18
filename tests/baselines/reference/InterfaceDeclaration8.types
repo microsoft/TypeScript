@@ -1,0 +1,4 @@
+=== tests/cases/compiler/InterfaceDeclaration8.ts ===
+interface string {
+No type information for this code.}
+No type information for this code.

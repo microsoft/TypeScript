@@ -1,5 +1,4 @@
 //// [unusedLocalsInMethod1.ts]
-
 class greeter {
     public function1() {
         var x = 10;
@@ -7,7 +6,7 @@ class greeter {
 }
 
 //// [unusedLocalsInMethod1.js]
-var greeter = (function () {
+var greeter = /** @class */ (function () {
     function greeter() {
     }
     greeter.prototype.function1 = function () {

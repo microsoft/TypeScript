@@ -1,5 +1,4 @@
 //// [systemModule5.ts]
-
 export function foo() {}
 
 

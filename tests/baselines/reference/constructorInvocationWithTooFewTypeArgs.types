@@ -1,0 +1,17 @@
+=== tests/cases/compiler/constructorInvocationWithTooFewTypeArgs.ts ===
+class D<T, U> {
+>D : D<T, U>
+
+   x: T
+>x : T
+
+   y: U
+>y : U
+
+}
+ 
+var d = new D<number>();
+>d : any
+>new D<number>() : any
+>D : typeof D
+

@@ -23,4 +23,4 @@ goTo.eof();
 edit.insert("x.");
 verify.completionListContains('enable');
 verify.completionListContains('post');
-verify.memberListCount(2);
+verify.completionListCount(2);

@@ -1,5 +1,4 @@
 === tests/cases/compiler/server.ts ===
-
 export class c { };  
 >c : c
 

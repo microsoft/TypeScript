@@ -1,0 +1,21 @@
+=== tests/cases/compiler/capturedParametersInInitializers2.ts ===
+function foo(y = class {static c = x}, x = 1) {
+>foo : Symbol(foo, Decl(capturedParametersInInitializers2.ts, 0, 0))
+>y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 0, 13))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 0, 24))
+>x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 0, 38))
+>x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 0, 38))
+
+    y.c
+>y.c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 0, 24))
+>y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 0, 13))
+>c : Symbol((Anonymous class).c, Decl(capturedParametersInInitializers2.ts, 0, 24))
+}
+function foo2(y = class {[x] = x}, x = 1) {
+>foo2 : Symbol(foo2, Decl(capturedParametersInInitializers2.ts, 2, 1))
+>y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 3, 14))
+>[x] : Symbol((Anonymous class)[x], Decl(capturedParametersInInitializers2.ts, 3, 25))
+>x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))
+>x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))
+>x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))
+}

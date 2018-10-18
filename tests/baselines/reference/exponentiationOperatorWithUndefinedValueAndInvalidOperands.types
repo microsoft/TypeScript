@@ -1,0 +1,86 @@
+=== tests/cases/conformance/es7/exponentiationOperator/exponentiationOperatorWithUndefinedValueAndInvalidOperands.ts ===
+// If one operand is the undefined or undefined value, it is treated as having the type of the
+// other operand.
+
+var a: boolean;
+>a : boolean
+
+var b: string;
+>b : string
+
+var c: Object;
+>c : Object
+
+// operator **
+var r1a1 = undefined ** a;
+>r1a1 : number
+>undefined ** a : number
+>undefined : undefined
+>a : boolean
+
+var r1a2 = undefined ** b;
+>r1a2 : number
+>undefined ** b : number
+>undefined : undefined
+>b : string
+
+var r1a3 = undefined ** c;
+>r1a3 : number
+>undefined ** c : number
+>undefined : undefined
+>c : Object
+
+var r1b1 = a ** undefined;
+>r1b1 : number
+>a ** undefined : number
+>a : boolean
+>undefined : undefined
+
+var r1b2 = b ** undefined;
+>r1b2 : number
+>b ** undefined : number
+>b : string
+>undefined : undefined
+
+var r1b3 = c ** undefined;
+>r1b3 : number
+>c ** undefined : number
+>c : Object
+>undefined : undefined
+
+var r1c1 = undefined ** true;
+>r1c1 : number
+>undefined ** true : number
+>undefined : undefined
+>true : true
+
+var r1c2 = undefined ** '';
+>r1c2 : number
+>undefined ** '' : number
+>undefined : undefined
+>'' : ""
+
+var r1c3 = undefined ** {};
+>r1c3 : number
+>undefined ** {} : number
+>undefined : undefined
+>{} : {}
+
+var r1d1 = true ** undefined;
+>r1d1 : number
+>true ** undefined : number
+>true : true
+>undefined : undefined
+
+var r1d2 = '' ** undefined;
+>r1d2 : number
+>'' ** undefined : number
+>'' : ""
+>undefined : undefined
+
+var r1d3 = {} ** undefined;
+>r1d3 : number
+>{} ** undefined : number
+>{} : {}
+>undefined : undefined
+

@@ -11,5 +11,6 @@ fn("a" in { "a": true });
 >"a" in { "a": true } : boolean
 >"a" : "a"
 >{ "a": true } : { "a": boolean; }
+>"a" : boolean
 >true : true
 

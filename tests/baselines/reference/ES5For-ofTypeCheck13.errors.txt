@@ -1,0 +1,10 @@
+tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts(4,19): error TS2569: Type 'Set<string>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.
+
+
+==== tests/cases/conformance/statements/for-ofStatements/ES5For-ofTypeCheck13.ts (1 errors) ====
+    const strSet: Set<string> = new Set()
+    strSet.add('Hello')
+    strSet.add('World')
+    for (const str of strSet) { }
+                      ~~~~~~
+!!! error TS2569: Type 'Set<string>' is not an array type or a string type. Use compiler option '--downlevelIteration' to allow iterating of iterators.

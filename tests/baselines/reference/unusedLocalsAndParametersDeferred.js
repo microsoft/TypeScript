@@ -1,5 +1,4 @@
 //// [unusedLocalsAndParametersDeferred.ts]
-
 export { };
 
 function defered<T>(a: () => T): T {
@@ -162,6 +161,7 @@ N;
 
 //// [unusedLocalsAndParametersDeferred.js]
 "use strict";
+exports.__esModule = true;
 function defered(a) {
     return a();
 }
@@ -187,7 +187,7 @@ var farrow = function (a) {
 };
 farrow(2);
 var prop1;
-var C = (function () {
+var C = /** @class */ (function () {
     function C() {
         // in a property initalizer
         this.p = defered(function () {
@@ -214,7 +214,7 @@ var C = (function () {
 }());
 new C();
 var prop2;
-var E = (function () {
+var E = /** @class */ (function () {
     function class_1() {
         // in a property initalizer
         this.p = defered(function () {

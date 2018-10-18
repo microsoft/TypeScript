@@ -1,5 +1,4 @@
 //// [computedPropertyNames49_ES6.ts]
-
 var x = {
     p1: 10,
     get [1 + 1]() {

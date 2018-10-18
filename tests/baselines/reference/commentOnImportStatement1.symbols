@@ -1,0 +1,6 @@
+=== tests/cases/compiler/commentOnImportStatement1.ts ===
+/* Copyright */
+
+import foo = require('./foo');
+>foo : Symbol(foo, Decl(commentOnImportStatement1.ts, 0, 0))
+

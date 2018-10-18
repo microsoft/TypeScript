@@ -1,0 +1,6 @@
+=== tests/cases/conformance/expressions/typeGuards/typePredicateOnVariableDeclaration02.ts ===
+var y: z is number;
+>y : Symbol(y, Decl(typePredicateOnVariableDeclaration02.ts, 0, 3))
+>is : Symbol(is, Decl(typePredicateOnVariableDeclaration02.ts, 0, 8))
+>number : Symbol(number, Decl(typePredicateOnVariableDeclaration02.ts, 0, 11))
+

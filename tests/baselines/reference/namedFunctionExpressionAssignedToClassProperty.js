@@ -15,7 +15,7 @@ class Foo{
 
 
 //// [namedFunctionExpressionAssignedToClassProperty.js]
-var Foo = (function () {
+var Foo = /** @class */ (function () {
     function Foo() {
         this.a = function bar() {
         }; // this shouldn't crash the compiler...

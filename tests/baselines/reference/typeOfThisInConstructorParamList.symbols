@@ -1,0 +1,11 @@
+=== tests/cases/conformance/expressions/thisKeyword/typeOfThisInConstructorParamList.ts ===
+//type of 'this' in constructor param list is the class instance type (error)
+class ErrClass {
+>ErrClass : Symbol(ErrClass, Decl(typeOfThisInConstructorParamList.ts, 0, 0))
+
+    // Should be an error
+    constructor(f = this) { }
+>f : Symbol(f, Decl(typeOfThisInConstructorParamList.ts, 3, 16))
+>this : Symbol(ErrClass, Decl(typeOfThisInConstructorParamList.ts, 0, 0))
+}
+

@@ -1,5 +1,4 @@
 === tests/cases/conformance/functions/functionImplementations.ts ===
-
 // FunctionExpression with no return type annotation and no return statement returns void
 var v: void = function () { } ();
 >v : void
@@ -141,9 +140,7 @@ var n = function <T>(x: T) {
 >n : number
 >function <T>(x: T) {    return x;} (4) : 4
 >function <T>(x: T) {    return x;} : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -156,9 +153,7 @@ var n = function <T extends {}>(x: T) {
 >n : number
 >function <T extends {}>(x: T) {    return x;} (4) : 4
 >function <T extends {}>(x: T) {    return x;} : <T extends {}>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -196,7 +191,6 @@ class Derived extends Base { private q; }
 
 var b: Base;
 >b : Base
->Base : Base
 
 var b = function () {
 >b : Base

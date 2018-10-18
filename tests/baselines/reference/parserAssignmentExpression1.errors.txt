@@ -1,4 +1,4 @@
-tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts(1,1): error TS2364: Invalid left-hand side of assignment expression.
+tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts(1,1): error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
 tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts(1,2): error TS2304: Cannot find name 'foo'.
 tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts(1,11): error TS2304: Cannot find name 'bar'.
 
@@ -6,7 +6,7 @@ tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpressio
 ==== tests/cases/conformance/parser/ecmascript5/Expressions/parserAssignmentExpression1.ts (3 errors) ====
     (foo()) = bar;
     ~~~~~~~
-!!! error TS2364: Invalid left-hand side of assignment expression.
+!!! error TS2364: The left-hand side of an assignment expression must be a variable or a property access.
      ~~~
 !!! error TS2304: Cannot find name 'foo'.
               ~~~

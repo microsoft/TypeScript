@@ -1,0 +1,38 @@
+=== tests/cases/compiler/typeofClass.ts ===
+class K {
+>K : K
+
+    foo: number;
+>foo : number
+
+    static bar: string;
+>bar : string
+}
+
+var k1: K;
+>k1 : K
+
+k1.foo;
+>k1.foo : number
+>k1 : K
+>foo : number
+
+k1.bar;
+>k1.bar : any
+>k1 : K
+>bar : any
+
+var k2: typeof K;
+>k2 : typeof K
+>K : typeof K
+
+k2.foo;
+>k2.foo : any
+>k2 : typeof K
+>foo : any
+
+k2.bar;
+>k2.bar : string
+>k2 : typeof K
+>bar : string
+

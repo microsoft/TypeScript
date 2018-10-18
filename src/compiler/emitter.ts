@@ -1,844 +1,1039 @@
-/// <reference path="checker.ts"/>
-/// <reference path="transformer.ts" />
-/// <reference path="declarationEmitter.ts"/>
-/// <reference path="sourcemap.ts"/>
-/// <reference path="comments.ts" />
-
-/* @internal */
 namespace ts {
-    // Flags enum to track count of temp variables and a few dedicated names
-    const enum TempFlags {
-        Auto      = 0x00000000,  // No preferred name
-        CountMask = 0x0FFFFFFF,  // Temp variable counter
-        _i        = 0x10000000,  // Use/preference flag for '_i'
-    }
+    const infoExtension = ".tsbundleinfo";
+    const brackets = createBracketsMap();
 
-    const id = (s: SourceFile) => s;
-    const nullTransformers: Transformer[] = [ctx => id];
-
-    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
-    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean): EmitResult {
-        const delimiters = createDelimiterMap();
-        const brackets = createBracketsMap();
-
-        // emit output for the __extends helper function
-        const extendsHelper = `
-var __extends = (this && this.__extends) || function (d, b) {
-    for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
-    function __() { this.constructor = d; }
-    d.prototype = b === null ? Object.create(b) : (__.prototype = b.prototype, new __());
-};`;
-
-        // Emit output for the __assign helper function.
-        // This is typically used for JSX spread attributes,
-        // and can be used for object literal spread properties.
-        const assignHelper = `
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
-};`;
-
-        // emit output for the __decorate helper function
-        const decorateHelper = `
-var __decorate = (this && this.__decorate) || function (decorators, target, key, desc) {
-    var c = arguments.length, r = c < 3 ? target : desc === null ? desc = Object.getOwnPropertyDescriptor(target, key) : desc, d;
-    if (typeof Reflect === "object" && typeof Reflect.decorate === "function") r = Reflect.decorate(decorators, target, key, desc);
-    else for (var i = decorators.length - 1; i >= 0; i--) if (d = decorators[i]) r = (c < 3 ? d(r) : c > 3 ? d(target, key, r) : d(target, key)) || r;
-    return c > 3 && r && Object.defineProperty(target, key, r), r;
-};`;
-
-        // emit output for the __metadata helper function
-        const metadataHelper = `
-var __metadata = (this && this.__metadata) || function (k, v) {
-    if (typeof Reflect === "object" && typeof Reflect.metadata === "function") return Reflect.metadata(k, v);
-};`;
-
-        // emit output for the __param helper function
-        const paramHelper = `
-var __param = (this && this.__param) || function (paramIndex, decorator) {
-    return function (target, key) { decorator(target, key, paramIndex); }
-};`;
-
-        // emit output for the __awaiter helper function
-        const awaiterHelper = `
-var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
-    return new (P || (P = Promise))(function (resolve, reject) {
-        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
-        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
-        function step(result) { result.done ? resolve(result.value) : new P(function (resolve) { resolve(result.value); }).then(fulfilled, rejected); }
-        step((generator = generator.apply(thisArg, _arguments)).next());
-    });
-};`;
-
-        // The __generator helper is used by down-level transformations to emulate the runtime
-        // semantics of an ES2015 generator function. When called, this helper returns an
-        // object that implements the Iterator protocol, in that it has `next`, `return`, and
-        // `throw` methods that step through the generator when invoked.
-        //
-        // parameters:
-        //  thisArg  The value to use as the `this` binding for the transformed generator body.
-        //  body     A function that acts as the transformed generator body.
-        //
-        // variables:
-        //  _       Persistent state for the generator that is shared between the helper and the
-        //          generator body. The state object has the following members:
-        //            sent() - A method that returns or throws the current completion value.
-        //            label  - The next point at which to resume evaluation of the generator body.
-        //            trys   - A stack of protected regions (try/catch/finally blocks).
-        //            ops    - A stack of pending instructions when inside of a finally block.
-        //  f       A value indicating whether the generator is executing.
-        //  y       An iterator to delegate for a yield*.
-        //  t       A temporary variable that holds one of the following values (note that these
-        //          cases do not overlap):
-        //          - The completion value when resuming from a `yield` or `yield*`.
-        //          - The error value for a catch block.
-        //          - The current protected region (array of try/catch/finally/end labels).
-        //          - The verb (`next`, `throw`, or `return` method) to delegate to the expression
-        //            of a `yield*`.
-        //          - The result of evaluating the verb delegated to the expression of a `yield*`.
-        //
-        // functions:
-        //  verb(n)     Creates a bound callback to the `step` function for opcode `n`.
-        //  step(op)    Evaluates opcodes in a generator body until execution is suspended or
-        //              completed.
-        //
-        // The __generator helper understands a limited set of instructions:
-        //  0: next(value?)     - Start or resume the generator with the specified value.
-        //  1: throw(error)     - Resume the generator with an exception. If the generator is
-        //                        suspended inside of one or more protected regions, evaluates
-        //                        any intervening finally blocks between the current label and
-        //                        the nearest catch block or function boundary. If uncaught, the
-        //                        exception is thrown to the caller.
-        //  2: return(value?)   - Resume the generator as if with a return. If the generator is
-        //                        suspended inside of one or more protected regions, evaluates any
-        //                        intervening finally blocks.
-        //  3: break(label)     - Jump to the specified label. If the label is outside of the
-        //                        current protected region, evaluates any intervening finally
-        //                        blocks.
-        //  4: yield(value?)    - Yield execution to the caller with an optional value. When
-        //                        resumed, the generator will continue at the next label.
-        //  5: yield*(value)    - Delegates evaluation to the supplied iterator. When
-        //                        delegation completes, the generator will continue at the next
-        //                        label.
-        //  6: catch(error)     - Handles an exception thrown from within the generator body. If
-        //                        the current label is inside of one or more protected regions,
-        //                        evaluates any intervening finally blocks between the current
-        //                        label and the nearest catch block or function boundary. If
-        //                        uncaught, the exception is thrown to the caller.
-        //  7: endfinally       - Ends a finally block, resuming the last instruction prior to
-        //                        entering a finally block.
-        //
-        // For examples of how these are used, see the comments in ./transformers/generators.ts
-        const generatorHelper = `
-var __generator = (this && this.__generator) || function (thisArg, body) {
-    var _ = { label: 0, sent: function() { if (t[0] & 1) throw t[1]; return t[1]; }, trys: [], ops: [] }, f, y, t;
-    return { next: verb(0), "throw": verb(1), "return": verb(2) };
-    function verb(n) { return function (v) { return step([n, v]); }; }
-    function step(op) {
-        if (f) throw new TypeError("Generator is already executing.");
-        while (_) try {
-            if (f = 1, y && (t = y[op[0] & 2 ? "return" : op[0] ? "throw" : "next"]) && !(t = t.call(y, op[1])).done) return t;
-            if (y = 0, t) op = [0, t.value];
-            switch (op[0]) {
-                case 0: case 1: t = op; break;
-                case 4: _.label++; return { value: op[1], done: false };
-                case 5: _.label++; y = op[1]; op = [0]; continue;
-                case 7: op = _.ops.pop(); _.trys.pop(); continue;
-                default:
-                    if (!(t = _.trys, t = t.length > 0 && t[t.length - 1]) && (op[0] === 6 || op[0] === 2)) { _ = 0; continue; }
-                    if (op[0] === 3 && (!t || (op[1] > t[0] && op[1] < t[3]))) { _.label = op[1]; break; }
-                    if (op[0] === 6 && _.label < t[1]) { _.label = t[1]; t = op; break; }
-                    if (t && _.label < t[2]) { _.label = t[2]; _.ops.push(op); break; }
-                    if (t[2]) _.ops.pop();
-                    _.trys.pop(); continue;
+    /*@internal*/
+    /**
+     * Iterates over the source files that are expected to have an emit output.
+     *
+     * @param host An EmitHost.
+     * @param action The action to execute.
+     * @param sourceFilesOrTargetSourceFile
+     *   If an array, the full list of source files to emit.
+     *   Else, calls `getSourceFilesToEmit` with the (optional) target source file to determine the list of source files to emit.
+     */
+    export function forEachEmittedFile<T>(
+        host: EmitHost, action: (emitFileNames: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) => T,
+        sourceFilesOrTargetSourceFile?: ReadonlyArray<SourceFile> | SourceFile,
+        emitOnlyDtsFiles = false) {
+        const sourceFiles = isArray(sourceFilesOrTargetSourceFile) ? sourceFilesOrTargetSourceFile : getSourceFilesToEmit(host, sourceFilesOrTargetSourceFile);
+        const options = host.getCompilerOptions();
+        if (options.outFile || options.out) {
+            if (sourceFiles.length) {
+                const bundle = createBundle(sourceFiles, host.getPrependNodes());
+                const result = action(getOutputPathsFor(bundle, host, emitOnlyDtsFiles), bundle);
+                if (result) {
+                    return result;
+                }
             }
-            op = body.call(thisArg, _);
-        } catch (e) { op = [6, e]; y = 0; } finally { f = t = 0; }
-        if (op[0] & 5) throw op[1]; return { value: op[0] ? op[1] : void 0, done: true };
+        }
+        else {
+            for (const sourceFile of sourceFiles) {
+                const result = action(getOutputPathsFor(sourceFile, host, emitOnlyDtsFiles), sourceFile);
+                if (result) {
+                    return result;
+                }
+            }
+        }
     }
-};`;
 
-        // emit output for the __export helper function
-        const exportStarHelper = `
-function __export(m) {
-    for (var p in m) if (!exports.hasOwnProperty(p)) exports[p] = m[p];
-}`;
-
-        // emit output for the UMD helper function.
-        const umdHelper = `
-(function (dependencies, factory) {
-    if (typeof module === 'object' && typeof module.exports === 'object') {
-        var v = factory(require, exports); if (v !== undefined) module.exports = v;
+    /*@internal*/
+    export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
+        const options = host.getCompilerOptions();
+        if (sourceFile.kind === SyntaxKind.Bundle) {
+            const outPath = options.outFile || options.out!;
+            const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
+            const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
+            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
+        }
+        else {
+            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
+            const isJsonEmittedToSameLocation = isJsonSourceFile(sourceFile) &&
+                comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+            const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
+            const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
+            // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
+            const isJs = isSourceFileJS(sourceFile);
+            const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath: undefined };
+        }
     }
-    else if (typeof define === 'function' && define.amd) {
-        define(dependencies, factory);
+
+    function getSourceMapFilePath(jsFilePath: string, options: CompilerOptions) {
+        return (options.sourceMap && !options.inlineSourceMap) ? jsFilePath + ".map" : undefined;
     }
-})`;
 
-        const superHelper = `
-const _super = name => super[name];`;
+    function createDefaultBundleInfo(): BundleInfo {
+        return {
+            originalOffset: -1,
+            totalLength: -1
+        };
+    }
 
-        const advancedSuperHelper = `
-const _super = (function (geti, seti) {
-    const cache = Object.create(null);
-    return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
-})(name => super[name], (name, value) => super[name] = value);`;
+    // JavaScript files are always LanguageVariant.JSX, as JSX syntax is allowed in .js files also.
+    // So for JavaScript files, '.jsx' is only emitted if the input was '.jsx', and JsxEmit.Preserve.
+    // For TypeScript, the only time to emit with a '.jsx' extension, is on JSX input, and JsxEmit.Preserve
+    /* @internal */
+    export function getOutputExtension(sourceFile: SourceFile, options: CompilerOptions): Extension {
+        if (isJsonSourceFile(sourceFile)) {
+            return Extension.Json;
+        }
 
+        if (options.jsx === JsxEmit.Preserve) {
+            if (isSourceFileJS(sourceFile)) {
+                if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
+                    return Extension.Jsx;
+                }
+            }
+            else if (sourceFile.languageVariant === LanguageVariant.JSX) {
+                // TypeScript source file preserving JSX syntax
+                return Extension.Jsx;
+            }
+        }
+        return Extension.Js;
+    }
+
+    /*@internal*/
+    // targetSourceFile is when users only want one file in entire project to be emitted. This is used in compileOnSave feature
+    export function emitFiles(resolver: EmitResolver, host: EmitHost, targetSourceFile: SourceFile, emitOnlyDtsFiles?: boolean, transformers?: TransformerFactory<Bundle | SourceFile>[], declarationTransformers?: TransformerFactory<Bundle | SourceFile>[]): EmitResult {
         const compilerOptions = host.getCompilerOptions();
-        const languageVersion = getEmitScriptTarget(compilerOptions);
-        const moduleKind = getEmitModuleKind(compilerOptions);
-        const sourceMapDataList: SourceMapData[] = compilerOptions.sourceMap || compilerOptions.inlineSourceMap ? [] : undefined;
-        const emittedFilesList: string[] = compilerOptions.listEmittedFiles ? [] : undefined;
+        const sourceMapDataList: SourceMapData[] | undefined = (compilerOptions.sourceMap || compilerOptions.inlineSourceMap || getAreDeclarationMapsEnabled(compilerOptions)) ? [] : undefined;
+        const emittedFilesList: string[] | undefined = compilerOptions.listEmittedFiles ? [] : undefined;
         const emitterDiagnostics = createDiagnosticCollection();
         const newLine = host.getNewLine();
-        const transformers: Transformer[] = emitOnlyDtsFiles ? nullTransformers : getTransformers(compilerOptions);
         const writer = createTextWriter(newLine);
-        const {
-            write,
-            writeLine,
-            increaseIndent,
-            decreaseIndent
-        } = writer;
-
         const sourceMap = createSourceMapWriter(host, writer);
-        const {
-            emitNodeWithSourceMap,
-            emitTokenWithSourceMap
-        } = sourceMap;
+        const declarationSourceMap = createSourceMapWriter(host, writer, {
+            sourceMap: compilerOptions.declarationMap,
+            sourceRoot: compilerOptions.sourceRoot,
+            mapRoot: compilerOptions.mapRoot,
+            extendedDiagnostics: compilerOptions.extendedDiagnostics,
+            // Explicitly do not passthru either `inline` option
+        });
 
-        const comments = createCommentWriter(host, writer, sourceMap);
-        const {
-            emitNodeWithComments,
-            emitBodyWithDetachedComments,
-            emitTrailingCommentsOfPosition
-        } = comments;
-
-        let nodeIdToGeneratedName: string[];
-        let autoGeneratedIdToGeneratedName: string[];
-        let generatedNameSet: Map<string>;
-        let tempFlags: TempFlags;
-        let currentSourceFile: SourceFile;
-        let currentText: string;
-        let currentFileIdentifiers: Map<string>;
-        let extendsEmitted: boolean;
-        let assignEmitted: boolean;
-        let decorateEmitted: boolean;
-        let paramEmitted: boolean;
-        let awaiterEmitted: boolean;
-        let isOwnFileEmit: boolean;
+        let bundleInfo: BundleInfo = createDefaultBundleInfo();
         let emitSkipped = false;
-
-        const sourceFiles = getSourceFilesToEmit(host, targetSourceFile);
-
-        // Transform the source files
-        performance.mark("beforeTransform");
-        const {
-            transformed,
-            emitNodeWithSubstitution,
-            emitNodeWithNotification
-        } = transformFiles(resolver, host, sourceFiles, transformers);
-        performance.measure("transformTime", "beforeTransform");
+        let exportedModulesFromDeclarationEmit: ExportedModulesFromDeclarationEmit | undefined;
 
         // Emit each output file
         performance.mark("beforePrint");
-        forEachTransformedEmitFile(host, transformed, emitFile, emitOnlyDtsFiles);
+        forEachEmittedFile(host, emitSourceFileOrBundle, getSourceFilesToEmit(host, targetSourceFile), emitOnlyDtsFiles);
         performance.measure("printTime", "beforePrint");
 
-        // Clean up emit nodes on parse tree
-        for (const sourceFile of sourceFiles) {
-            disposeEmitNodes(sourceFile);
-        }
 
         return {
             emitSkipped,
             diagnostics: emitterDiagnostics.getDiagnostics(),
             emittedFiles: emittedFilesList,
-            sourceMaps: sourceMapDataList
+            sourceMaps: sourceMapDataList,
+            exportedModulesFromDeclarationEmit
         };
 
-        function emitFile(jsFilePath: string, sourceMapFilePath: string, declarationFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (!host.isEmitBlocked(jsFilePath) && !compilerOptions.noEmit) {
-                if (!emitOnlyDtsFiles) {
-                    printFile(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-                }
-            }
-            else {
-                emitSkipped = true;
-            }
-
-            if (declarationFilePath) {
-                emitSkipped = writeDeclarationFile(declarationFilePath, getOriginalSourceFiles(sourceFiles), isBundledEmit, host, resolver, emitterDiagnostics, emitOnlyDtsFiles) || emitSkipped;
-            }
+        function emitSourceFileOrBundle({ jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath }: EmitFileNames, sourceFileOrBundle: SourceFile | Bundle) {
+            emitJsFileOrBundle(sourceFileOrBundle, jsFilePath, sourceMapFilePath, bundleInfoPath);
+            emitDeclarationFileOrBundle(sourceFileOrBundle, declarationFilePath, declarationMapPath);
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
+                    if (jsFilePath) {
+                        emittedFilesList.push(jsFilePath);
+                    }
+                    if (sourceMapFilePath) {
+                        emittedFilesList.push(sourceMapFilePath);
+                    }
+                    if (bundleInfoPath) {
+                        emittedFilesList.push(bundleInfoPath);
+                    }
                 }
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
+                }
             }
         }
 
-        function printFile(jsFilePath: string, sourceMapFilePath: string, sourceFiles: SourceFile[], isBundledEmit: boolean) {
-            sourceMap.initialize(jsFilePath, sourceMapFilePath, sourceFiles, isBundledEmit);
-            nodeIdToGeneratedName = [];
-            autoGeneratedIdToGeneratedName = [];
-            generatedNameSet = createMap<string>();
-            isOwnFileEmit = !isBundledEmit;
-
-            // Emit helpers from all the files
-            if (isBundledEmit && moduleKind) {
-                for (const sourceFile of sourceFiles) {
-                    emitEmitHelpers(sourceFile);
-                }
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
+            if (emitOnlyDtsFiles || !jsFilePath) {
+                return;
             }
 
-            // Print each transformed source file.
-            forEach(sourceFiles, printSourceFile);
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || compilerOptions.noEmit) {
+                emitSkipped = true;
+                return;
+            }
+            // Transform the source files
+            const transform = transformNodes(resolver, host, compilerOptions, [sourceFileOrBundle], transformers!, /*allowDtsFiles*/ false);
 
-            writeLine();
+            // Create a printer to print the nodes
+            const printer = createPrinter({ ...compilerOptions, noEmitHelpers: compilerOptions.noEmitHelpers } as PrinterOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
 
-            const sourceMappingURL = sourceMap.getSourceMappingURL();
+                // transform hooks
+                onEmitNode: transform.emitNodeWithNotification,
+                substituteNode: transform.substituteNode,
+
+                // sourcemap hooks
+                onEmitSourceMapOfNode: sourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: sourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: sourceMap.emitPos,
+
+                // emitter hooks
+                onSetSourceFile: setSourceFile,
+            });
+
+            Debug.assert(transform.transformed.length === 1, "Should only see one output from the transform");
+            printSourceFileOrBundle(jsFilePath, sourceMapFilePath, transform.transformed[0], bundleInfoPath, printer, sourceMap);
+
+            // Clean up emit nodes on parse tree
+            transform.dispose();
+        }
+
+        function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
+            if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
+                return;
+            }
+            const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
+            // Setup and perform the transformation to retrieve declarations from the input files
+            const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
+            const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
+            if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
+                // Checker wont collect the linked aliases since thats only done when declaration is enabled.
+                // Do that here when emitting only dts files
+                nonJsFiles.forEach(collectLinkedAliases);
+            }
+            const declarationTransform = transformNodes(resolver, host, compilerOptions, inputListOrBundle, concatenate([transformDeclarations], declarationTransformers), /*allowDtsFiles*/ false);
+            if (length(declarationTransform.diagnostics)) {
+                for (const diagnostic of declarationTransform.diagnostics!) {
+                    emitterDiagnostics.add(diagnostic);
+                }
+            }
+            const declarationPrinter = createPrinter({ ...compilerOptions, onlyPrintJsDocStyle: true, noEmitHelpers: true } as PrinterOptions, {
+                // resolver hooks
+                hasGlobalName: resolver.hasGlobalName,
+
+                // sourcemap hooks
+                onEmitSourceMapOfNode: declarationSourceMap.emitNodeWithSourceMap,
+                onEmitSourceMapOfToken: declarationSourceMap.emitTokenWithSourceMap,
+                onEmitSourceMapOfPosition: declarationSourceMap.emitPos,
+                onSetSourceFile: setSourceFileForDeclarationSourceMaps,
+
+                // transform hooks
+                onEmitNode: declarationTransform.emitNodeWithNotification,
+                substituteNode: declarationTransform.substituteNode,
+            });
+            const declBlocked = (!!declarationTransform.diagnostics && !!declarationTransform.diagnostics.length) || !!host.isEmitBlocked(declarationFilePath) || !!compilerOptions.noEmit;
+            emitSkipped = emitSkipped || declBlocked;
+            if (!declBlocked || emitOnlyDtsFiles) {
+                Debug.assert(declarationTransform.transformed.length === 1, "Should only see one output from the decl transform");
+                printSourceFileOrBundle(declarationFilePath, declarationMapPath, declarationTransform.transformed[0], /* bundleInfopath*/ undefined, declarationPrinter, declarationSourceMap);
+                if (emitOnlyDtsFiles && declarationTransform.transformed[0].kind === SyntaxKind.SourceFile) {
+                    const sourceFile = declarationTransform.transformed[0] as SourceFile;
+                    exportedModulesFromDeclarationEmit = sourceFile.exportedModulesFromDeclarationEmit;
+                }
+            }
+            declarationTransform.dispose();
+        }
+
+        function collectLinkedAliases(node: Node) {
+            if (isExportAssignment(node)) {
+                if (node.expression.kind === SyntaxKind.Identifier) {
+                    resolver.collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
+                }
+                return;
+            }
+            else if (isExportSpecifier(node)) {
+                resolver.collectLinkedAliases(node.propertyName || node.name, /*setVisibility*/ true);
+                return;
+            }
+            forEachChild(node, collectLinkedAliases);
+        }
+
+        function printSourceFileOrBundle(jsFilePath: string, sourceMapFilePath: string | undefined, sourceFileOrBundle: SourceFile | Bundle, bundleInfoPath: string | undefined, printer: Printer, mapRecorder: SourceMapWriter) {
+            const bundle = sourceFileOrBundle.kind === SyntaxKind.Bundle ? sourceFileOrBundle : undefined;
+            const sourceFile = sourceFileOrBundle.kind === SyntaxKind.SourceFile ? sourceFileOrBundle : undefined;
+            const sourceFiles = bundle ? bundle.sourceFiles : [sourceFile!];
+            mapRecorder.initialize(jsFilePath, sourceMapFilePath || "", sourceFileOrBundle, sourceMapDataList);
+
+            if (bundle) {
+                printer.writeBundle(bundle, writer, bundleInfo);
+            }
+            else {
+                printer.writeFile(sourceFile!, writer);
+            }
+
+            writer.writeLine();
+
+            const sourceMappingURL = mapRecorder.getSourceMappingURL();
             if (sourceMappingURL) {
-                write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
+                writer.write(`//# ${"sourceMappingURL"}=${sourceMappingURL}`); // Sometimes tools can sometimes see this line as a source mapping url comment
             }
 
             // Write the source map
-            if (compilerOptions.sourceMap && !compilerOptions.inlineSourceMap) {
-                writeFile(host, emitterDiagnostics, sourceMapFilePath, sourceMap.getText(),  /*writeByteOrderMark*/ false);
-            }
-
-            // Record source map data for the test harness.
-            if (sourceMapDataList) {
-                sourceMapDataList.push(sourceMap.getSourceMapData());
+            if (sourceMapFilePath) {
+                writeFile(host, emitterDiagnostics, sourceMapFilePath, mapRecorder.getText(), /*writeByteOrderMark*/ false, sourceFiles);
             }
 
             // Write the output file
-            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), compilerOptions.emitBOM);
+            writeFile(host, emitterDiagnostics, jsFilePath, writer.getText(), !!compilerOptions.emitBOM, sourceFiles);
+
+            // Write bundled offset information if applicable
+            if (bundleInfoPath) {
+                bundleInfo.totalLength = writer.getTextPos();
+                writeFile(host, emitterDiagnostics, bundleInfoPath, JSON.stringify(bundleInfo, undefined, 2), /*writeByteOrderMark*/ false);
+            }
 
             // Reset state
-            sourceMap.reset();
-            comments.reset();
-            writer.reset();
+            mapRecorder.reset();
+            writer.clear();
 
-            tempFlags = TempFlags.Auto;
-            currentSourceFile = undefined;
-            currentText = undefined;
-            extendsEmitted = false;
-            assignEmitted = false;
-            decorateEmitted = false;
-            paramEmitted = false;
-            awaiterEmitted = false;
-            isOwnFileEmit = false;
+            bundleInfo = createDefaultBundleInfo();
         }
 
-        function printSourceFile(node: SourceFile) {
-            currentSourceFile = node;
-            currentText = node.text;
-            currentFileIdentifiers = node.identifiers;
+        function setSourceFile(node: SourceFile) {
             sourceMap.setSourceFile(node);
-            comments.setSourceFile(node);
-            pipelineEmitWithNotification(EmitContext.SourceFile, node);
+        }
+
+        function setSourceFileForDeclarationSourceMaps(node: SourceFile) {
+            declarationSourceMap.setSourceFile(node);
+        }
+    }
+
+    const enum PipelinePhase {
+        Notification,
+        Comments,
+        SourceMaps,
+        Emit
+    }
+
+    export function createPrinter(printerOptions: PrinterOptions = {}, handlers: PrintHandlers = {}): Printer {
+        const {
+            hasGlobalName,
+            onEmitSourceMapOfNode,
+            onEmitSourceMapOfToken,
+            onEmitSourceMapOfPosition,
+            onEmitNode,
+            onSetSourceFile,
+            substituteNode,
+            onBeforeEmitNodeArray,
+            onAfterEmitNodeArray,
+            onBeforeEmitToken,
+            onAfterEmitToken
+        } = handlers;
+
+        const newLine = getNewLineCharacter(printerOptions);
+        const comments = createCommentWriter(printerOptions, onEmitSourceMapOfPosition);
+        const {
+            emitNodeWithComments,
+            emitBodyWithDetachedComments,
+            emitTrailingCommentsOfPosition,
+            emitLeadingCommentsOfPosition,
+        } = comments;
+
+        let currentSourceFile!: SourceFile;
+        let nodeIdToGeneratedName: string[]; // Map of generated names for specific nodes.
+        let autoGeneratedIdToGeneratedName: string[]; // Map of generated names for temp and loop variables.
+        let generatedNames: Map<true>; // Set of names generated by the NameGenerator.
+        let tempFlagsStack: TempFlags[]; // Stack of enclosing name generation scopes.
+        let tempFlags: TempFlags; // TempFlags for the current name generation scope.
+        let reservedNamesStack: Map<true>[]; // Stack of TempFlags reserved in enclosing name generation scopes.
+        let reservedNames: Map<true>; // TempFlags to reserve in nested name generation scopes.
+
+        let writer: EmitTextWriter;
+        let ownWriter: EmitTextWriter;
+        let write = writeBase;
+        let commitPendingSemicolon: typeof commitPendingSemicolonInternal = noop;
+        let writeSemicolon: typeof writeSemicolonInternal = writeSemicolonInternal;
+        let pendingSemicolon = false;
+        if (printerOptions.omitTrailingSemicolon) {
+            commitPendingSemicolon = commitPendingSemicolonInternal;
+            writeSemicolon = deferWriteSemicolon;
+        }
+        const syntheticParent: TextRange = { pos: -1, end: -1 };
+        const moduleKind = getEmitModuleKind(printerOptions);
+        const bundledHelpers = createMap<boolean>();
+        let isOwnFileEmit: boolean;
+
+        reset();
+        return {
+            // public API
+            printNode,
+            printList,
+            printFile,
+            printBundle,
+
+            // internal API
+            writeNode,
+            writeList,
+            writeFile,
+            writeBundle
+        };
+
+        function printNode(hint: EmitHint, node: Node, sourceFile: SourceFile): string {
+            switch (hint) {
+                case EmitHint.SourceFile:
+                    Debug.assert(isSourceFile(node), "Expected a SourceFile node.");
+                    break;
+                case EmitHint.IdentifierName:
+                    Debug.assert(isIdentifier(node), "Expected an Identifier node.");
+                    break;
+                case EmitHint.Expression:
+                    Debug.assert(isExpression(node), "Expected an Expression node.");
+                    break;
+            }
+            switch (node.kind) {
+                case SyntaxKind.SourceFile: return printFile(<SourceFile>node);
+                case SyntaxKind.Bundle: return printBundle(<Bundle>node);
+                case SyntaxKind.UnparsedSource: return printUnparsedSource(<UnparsedSource>node);
+            }
+            writeNode(hint, node, sourceFile, beginPrint());
+            return endPrint();
+        }
+
+        function printList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile) {
+            writeList(format, nodes, sourceFile, beginPrint());
+            return endPrint();
+        }
+
+        function printBundle(bundle: Bundle): string {
+            writeBundle(bundle, beginPrint());
+            return endPrint();
+        }
+
+        function printFile(sourceFile: SourceFile): string {
+            writeFile(sourceFile, beginPrint());
+            return endPrint();
+        }
+
+        function printUnparsedSource(unparsed: UnparsedSource): string {
+            writeUnparsedSource(unparsed, beginPrint());
+            return endPrint();
         }
 
         /**
-         * Emits a node.
+         * If `sourceFile` is `undefined`, `node` must be a synthesized `TypeNode`.
          */
-        function emit(node: Node) {
-            pipelineEmitWithNotification(EmitContext.Unspecified, node);
+        function writeNode(hint: EmitHint, node: TypeNode, sourceFile: undefined, output: EmitTextWriter): void;
+        function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile, output: EmitTextWriter): void;
+        function writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
+            const previousWriter = writer;
+            setWriter(output);
+            print(hint, node, sourceFile);
+            reset();
+            writer = previousWriter;
         }
 
-        /**
-         * Emits an IdentifierName.
-         */
-        function emitIdentifierName(node: Identifier) {
-            pipelineEmitWithNotification(EmitContext.IdentifierName, node);
+        function writeList<T extends Node>(format: ListFormat, nodes: NodeArray<T>, sourceFile: SourceFile | undefined, output: EmitTextWriter) {
+            const previousWriter = writer;
+            setWriter(output);
+            if (sourceFile) {
+                setSourceFile(sourceFile);
+            }
+            emitList(syntheticParent, nodes, format);
+            reset();
+            writer = previousWriter;
         }
 
-        /**
-         * Emits an expression node.
-         */
-        function emitExpression(node: Expression) {
-            pipelineEmitWithNotification(EmitContext.Expression, node);
+        function writeBundle(bundle: Bundle, output: EmitTextWriter, bundleInfo?: BundleInfo) {
+            isOwnFileEmit = false;
+            const previousWriter = writer;
+            setWriter(output);
+            emitShebangIfNeeded(bundle);
+            emitPrologueDirectivesIfNeeded(bundle);
+            emitHelpers(bundle);
+            emitSyntheticTripleSlashReferencesIfNeeded(bundle);
+
+            for (const prepend of bundle.prepends) {
+                print(EmitHint.Unspecified, prepend, /*sourceFile*/ undefined);
+                writeLine();
+            }
+
+            if (bundleInfo) {
+                bundleInfo.originalOffset = writer.getTextPos();
+            }
+
+            for (const sourceFile of bundle.sourceFiles) {
+                print(EmitHint.SourceFile, sourceFile, sourceFile);
+            }
+            reset();
+            writer = previousWriter;
         }
 
-        /**
-         * Emits a node with possible notification.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called from printSourceFile, emit, emitExpression, or
-         * emitIdentifierName.
-         */
-        function pipelineEmitWithNotification(emitContext: EmitContext, node: Node) {
-            emitNodeWithNotification(emitContext, node, pipelineEmitWithComments);
+        function writeUnparsedSource(unparsed: UnparsedSource, output: EmitTextWriter) {
+            const previousWriter = writer;
+            setWriter(output);
+            print(EmitHint.Unspecified, unparsed, /*sourceFile*/ undefined);
+            reset();
+            writer = previousWriter;
         }
 
-        /**
-         * Emits a node with comments.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitWithNotification.
-         */
-        function pipelineEmitWithComments(emitContext: EmitContext, node: Node) {
-            // Do not emit comments for SourceFile
-            if (emitContext === EmitContext.SourceFile) {
-                pipelineEmitWithSourceMap(emitContext, node);
+        function writeFile(sourceFile: SourceFile, output: EmitTextWriter) {
+            isOwnFileEmit = true;
+            const previousWriter = writer;
+            setWriter(output);
+            emitShebangIfNeeded(sourceFile);
+            emitPrologueDirectivesIfNeeded(sourceFile);
+            print(EmitHint.SourceFile, sourceFile, sourceFile);
+            reset();
+            writer = previousWriter;
+        }
+
+        function beginPrint() {
+            return ownWriter || (ownWriter = createTextWriter(newLine));
+        }
+
+        function endPrint() {
+            const text = ownWriter.getText();
+            ownWriter.clear();
+            return text;
+        }
+
+        function print(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined) {
+            if (sourceFile) {
+                setSourceFile(sourceFile);
+            }
+
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, hint);
+            pipelinePhase(hint, node);
+        }
+
+        function setSourceFile(sourceFile: SourceFile) {
+            currentSourceFile = sourceFile;
+            comments.setSourceFile(sourceFile);
+            if (onSetSourceFile) {
+                onSetSourceFile(sourceFile);
+            }
+        }
+
+        function setWriter(output: EmitTextWriter | undefined) {
+            writer = output!; // TODO: GH#18217
+            comments.setWriter(output!);
+        }
+
+        function reset() {
+            nodeIdToGeneratedName = [];
+            autoGeneratedIdToGeneratedName = [];
+            generatedNames = createMap<true>();
+            tempFlagsStack = [];
+            tempFlags = TempFlags.Auto;
+            reservedNamesStack = [];
+            comments.reset();
+            setWriter(/*output*/ undefined);
+        }
+
+        function emit(node: Node | undefined) {
+            if (!node) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Unspecified);
+            pipelinePhase(EmitHint.Unspecified, node);
+        }
+
+        function emitIdentifierName(node: Identifier | undefined) {
+            if (!node) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.IdentifierName);
+            pipelinePhase(EmitHint.IdentifierName, node);
+        }
+
+        function emitExpression(node: Expression | undefined) {
+            if (!node) return;
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.Expression);
+            pipelinePhase(EmitHint.Expression, node);
+        }
+
+        function getPipelinePhase(phase: PipelinePhase, hint: EmitHint) {
+            switch (phase) {
+                case PipelinePhase.Notification:
+                    if (onEmitNode) {
+                        return pipelineEmitWithNotification;
+                    }
+                    // falls through
+
+                case PipelinePhase.Comments:
+                    if (emitNodeWithComments && hint !== EmitHint.SourceFile) {
+                        return pipelineEmitWithComments;
+                    }
+                    return pipelineEmitWithoutComments;
+
+                case PipelinePhase.SourceMaps:
+                    if (onEmitSourceMapOfNode && hint !== EmitHint.SourceFile) {
+                        return pipelineEmitWithSourceMap;
+                    }
+                    // falls through
+
+                case PipelinePhase.Emit:
+                    return pipelineEmitWithHint;
+
+                default:
+                    return Debug.assertNever(phase, `Unexpected value for PipelinePhase: ${phase}`);
+            }
+        }
+
+        function getNextPipelinePhase(currentPhase: PipelinePhase, hint: EmitHint) {
+            return getPipelinePhase(currentPhase + 1, hint);
+        }
+
+        function pipelineEmitWithNotification(hint: EmitHint, node: Node) {
+            Debug.assertDefined(onEmitNode)(hint, node, getNextPipelinePhase(PipelinePhase.Notification, hint));
+        }
+
+        function pipelineEmitWithComments(hint: EmitHint, node: Node) {
+            Debug.assertDefined(emitNodeWithComments);
+            Debug.assert(hint !== EmitHint.SourceFile);
+            emitNodeWithComments(hint, trySubstituteNode(hint, node), getNextPipelinePhase(PipelinePhase.Comments, hint));
+        }
+
+        function pipelineEmitWithoutComments(hint: EmitHint, node: Node) {
+            const pipelinePhase = getNextPipelinePhase(PipelinePhase.Comments, hint);
+            pipelinePhase(hint, trySubstituteNode(hint, node));
+        }
+
+        function pipelineEmitWithSourceMap(hint: EmitHint, node: Node) {
+            Debug.assert(hint !== EmitHint.SourceFile);
+            Debug.assertDefined(onEmitSourceMapOfNode)(hint, node, pipelineEmitWithHint);
+        }
+
+        function pipelineEmitWithHint(hint: EmitHint, node: Node): void {
+            if (hint === EmitHint.SourceFile) return emitSourceFile(cast(node, isSourceFile));
+            if (hint === EmitHint.IdentifierName) return emitIdentifier(cast(node, isIdentifier));
+            if (hint === EmitHint.MappedTypeParameter) return emitMappedTypeParameter(cast(node, isTypeParameterDeclaration));
+            if (hint === EmitHint.Unspecified) {
+                if (isKeyword(node.kind)) return writeTokenNode(node, writeKeyword);
+
+                switch (node.kind) {
+                    // Pseudo-literals
+                    case SyntaxKind.TemplateHead:
+                    case SyntaxKind.TemplateMiddle:
+                    case SyntaxKind.TemplateTail:
+                        return emitLiteral(<LiteralExpression>node);
+
+                    case SyntaxKind.UnparsedSource:
+                        return emitUnparsedSource(<UnparsedSource>node);
+
+                    // Identifiers
+                    case SyntaxKind.Identifier:
+                        return emitIdentifier(<Identifier>node);
+
+                    // Parse tree nodes
+
+                    // Names
+                    case SyntaxKind.QualifiedName:
+                        return emitQualifiedName(<QualifiedName>node);
+                    case SyntaxKind.ComputedPropertyName:
+                        return emitComputedPropertyName(<ComputedPropertyName>node);
+
+                    // Signature elements
+                    case SyntaxKind.TypeParameter:
+                        return emitTypeParameter(<TypeParameterDeclaration>node);
+                    case SyntaxKind.Parameter:
+                        return emitParameter(<ParameterDeclaration>node);
+                    case SyntaxKind.Decorator:
+                        return emitDecorator(<Decorator>node);
+
+                    // Type members
+                    case SyntaxKind.PropertySignature:
+                        return emitPropertySignature(<PropertySignature>node);
+                    case SyntaxKind.PropertyDeclaration:
+                        return emitPropertyDeclaration(<PropertyDeclaration>node);
+                    case SyntaxKind.MethodSignature:
+                        return emitMethodSignature(<MethodSignature>node);
+                    case SyntaxKind.MethodDeclaration:
+                        return emitMethodDeclaration(<MethodDeclaration>node);
+                    case SyntaxKind.Constructor:
+                        return emitConstructor(<ConstructorDeclaration>node);
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        return emitAccessorDeclaration(<AccessorDeclaration>node);
+                    case SyntaxKind.CallSignature:
+                        return emitCallSignature(<CallSignatureDeclaration>node);
+                    case SyntaxKind.ConstructSignature:
+                        return emitConstructSignature(<ConstructSignatureDeclaration>node);
+                    case SyntaxKind.IndexSignature:
+                        return emitIndexSignature(<IndexSignatureDeclaration>node);
+
+                    // Types
+                    case SyntaxKind.TypePredicate:
+                        return emitTypePredicate(<TypePredicateNode>node);
+                    case SyntaxKind.TypeReference:
+                        return emitTypeReference(<TypeReferenceNode>node);
+                    case SyntaxKind.FunctionType:
+                        return emitFunctionType(<FunctionTypeNode>node);
+                    case SyntaxKind.JSDocFunctionType:
+                        return emitJSDocFunctionType(node as JSDocFunctionType);
+                    case SyntaxKind.ConstructorType:
+                        return emitConstructorType(<ConstructorTypeNode>node);
+                    case SyntaxKind.TypeQuery:
+                        return emitTypeQuery(<TypeQueryNode>node);
+                    case SyntaxKind.TypeLiteral:
+                        return emitTypeLiteral(<TypeLiteralNode>node);
+                    case SyntaxKind.ArrayType:
+                        return emitArrayType(<ArrayTypeNode>node);
+                    case SyntaxKind.TupleType:
+                        return emitTupleType(<TupleTypeNode>node);
+                    case SyntaxKind.OptionalType:
+                        return emitOptionalType(<OptionalTypeNode>node);
+                    case SyntaxKind.UnionType:
+                        return emitUnionType(<UnionTypeNode>node);
+                    case SyntaxKind.IntersectionType:
+                        return emitIntersectionType(<IntersectionTypeNode>node);
+                    case SyntaxKind.ConditionalType:
+                        return emitConditionalType(<ConditionalTypeNode>node);
+                    case SyntaxKind.InferType:
+                        return emitInferType(<InferTypeNode>node);
+                    case SyntaxKind.ParenthesizedType:
+                        return emitParenthesizedType(<ParenthesizedTypeNode>node);
+                    case SyntaxKind.ExpressionWithTypeArguments:
+                        return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
+                    case SyntaxKind.ThisType:
+                        return emitThisType();
+                    case SyntaxKind.TypeOperator:
+                        return emitTypeOperator(<TypeOperatorNode>node);
+                    case SyntaxKind.IndexedAccessType:
+                        return emitIndexedAccessType(<IndexedAccessTypeNode>node);
+                    case SyntaxKind.MappedType:
+                        return emitMappedType(<MappedTypeNode>node);
+                    case SyntaxKind.LiteralType:
+                        return emitLiteralType(<LiteralTypeNode>node);
+                    case SyntaxKind.ImportType:
+                        return emitImportTypeNode(<ImportTypeNode>node);
+                    case SyntaxKind.JSDocAllType:
+                        write("*");
+                        return;
+                    case SyntaxKind.JSDocUnknownType:
+                        write("?");
+                        return;
+                    case SyntaxKind.JSDocNullableType:
+                        return emitJSDocNullableType(node as JSDocNullableType);
+                    case SyntaxKind.JSDocNonNullableType:
+                        return emitJSDocNonNullableType(node as JSDocNonNullableType);
+                    case SyntaxKind.JSDocOptionalType:
+                        return emitJSDocOptionalType(node as JSDocOptionalType);
+                    case SyntaxKind.RestType:
+                    case SyntaxKind.JSDocVariadicType:
+                        return emitRestOrJSDocVariadicType(node as RestTypeNode | JSDocVariadicType);
+
+                    // Binding patterns
+                    case SyntaxKind.ObjectBindingPattern:
+                        return emitObjectBindingPattern(<ObjectBindingPattern>node);
+                    case SyntaxKind.ArrayBindingPattern:
+                        return emitArrayBindingPattern(<ArrayBindingPattern>node);
+                    case SyntaxKind.BindingElement:
+                        return emitBindingElement(<BindingElement>node);
+
+                    // Misc
+                    case SyntaxKind.TemplateSpan:
+                        return emitTemplateSpan(<TemplateSpan>node);
+                    case SyntaxKind.SemicolonClassElement:
+                        return emitSemicolonClassElement();
+
+                    // Statements
+                    case SyntaxKind.Block:
+                        return emitBlock(<Block>node);
+                    case SyntaxKind.VariableStatement:
+                        return emitVariableStatement(<VariableStatement>node);
+                    case SyntaxKind.EmptyStatement:
+                        return emitEmptyStatement();
+                    case SyntaxKind.ExpressionStatement:
+                        return emitExpressionStatement(<ExpressionStatement>node);
+                    case SyntaxKind.IfStatement:
+                        return emitIfStatement(<IfStatement>node);
+                    case SyntaxKind.DoStatement:
+                        return emitDoStatement(<DoStatement>node);
+                    case SyntaxKind.WhileStatement:
+                        return emitWhileStatement(<WhileStatement>node);
+                    case SyntaxKind.ForStatement:
+                        return emitForStatement(<ForStatement>node);
+                    case SyntaxKind.ForInStatement:
+                        return emitForInStatement(<ForInStatement>node);
+                    case SyntaxKind.ForOfStatement:
+                        return emitForOfStatement(<ForOfStatement>node);
+                    case SyntaxKind.ContinueStatement:
+                        return emitContinueStatement(<ContinueStatement>node);
+                    case SyntaxKind.BreakStatement:
+                        return emitBreakStatement(<BreakStatement>node);
+                    case SyntaxKind.ReturnStatement:
+                        return emitReturnStatement(<ReturnStatement>node);
+                    case SyntaxKind.WithStatement:
+                        return emitWithStatement(<WithStatement>node);
+                    case SyntaxKind.SwitchStatement:
+                        return emitSwitchStatement(<SwitchStatement>node);
+                    case SyntaxKind.LabeledStatement:
+                        return emitLabeledStatement(<LabeledStatement>node);
+                    case SyntaxKind.ThrowStatement:
+                        return emitThrowStatement(<ThrowStatement>node);
+                    case SyntaxKind.TryStatement:
+                        return emitTryStatement(<TryStatement>node);
+                    case SyntaxKind.DebuggerStatement:
+                        return emitDebuggerStatement(<DebuggerStatement>node);
+
+                    // Declarations
+                    case SyntaxKind.VariableDeclaration:
+                        return emitVariableDeclaration(<VariableDeclaration>node);
+                    case SyntaxKind.VariableDeclarationList:
+                        return emitVariableDeclarationList(<VariableDeclarationList>node);
+                    case SyntaxKind.FunctionDeclaration:
+                        return emitFunctionDeclaration(<FunctionDeclaration>node);
+                    case SyntaxKind.ClassDeclaration:
+                        return emitClassDeclaration(<ClassDeclaration>node);
+                    case SyntaxKind.InterfaceDeclaration:
+                        return emitInterfaceDeclaration(<InterfaceDeclaration>node);
+                    case SyntaxKind.TypeAliasDeclaration:
+                        return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
+                    case SyntaxKind.EnumDeclaration:
+                        return emitEnumDeclaration(<EnumDeclaration>node);
+                    case SyntaxKind.ModuleDeclaration:
+                        return emitModuleDeclaration(<ModuleDeclaration>node);
+                    case SyntaxKind.ModuleBlock:
+                        return emitModuleBlock(<ModuleBlock>node);
+                    case SyntaxKind.CaseBlock:
+                        return emitCaseBlock(<CaseBlock>node);
+                    case SyntaxKind.NamespaceExportDeclaration:
+                        return emitNamespaceExportDeclaration(<NamespaceExportDeclaration>node);
+                    case SyntaxKind.ImportEqualsDeclaration:
+                        return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
+                    case SyntaxKind.ImportDeclaration:
+                        return emitImportDeclaration(<ImportDeclaration>node);
+                    case SyntaxKind.ImportClause:
+                        return emitImportClause(<ImportClause>node);
+                    case SyntaxKind.NamespaceImport:
+                        return emitNamespaceImport(<NamespaceImport>node);
+                    case SyntaxKind.NamedImports:
+                        return emitNamedImports(<NamedImports>node);
+                    case SyntaxKind.ImportSpecifier:
+                        return emitImportSpecifier(<ImportSpecifier>node);
+                    case SyntaxKind.ExportAssignment:
+                        return emitExportAssignment(<ExportAssignment>node);
+                    case SyntaxKind.ExportDeclaration:
+                        return emitExportDeclaration(<ExportDeclaration>node);
+                    case SyntaxKind.NamedExports:
+                        return emitNamedExports(<NamedExports>node);
+                    case SyntaxKind.ExportSpecifier:
+                        return emitExportSpecifier(<ExportSpecifier>node);
+                    case SyntaxKind.MissingDeclaration:
+                        return;
+
+                    // Module references
+                    case SyntaxKind.ExternalModuleReference:
+                        return emitExternalModuleReference(<ExternalModuleReference>node);
+
+                    // JSX (non-expression)
+                    case SyntaxKind.JsxText:
+                        return emitJsxText(<JsxText>node);
+                    case SyntaxKind.JsxOpeningElement:
+                    case SyntaxKind.JsxOpeningFragment:
+                        return emitJsxOpeningElementOrFragment(<JsxOpeningElement>node);
+                    case SyntaxKind.JsxClosingElement:
+                    case SyntaxKind.JsxClosingFragment:
+                        return emitJsxClosingElementOrFragment(<JsxClosingElement>node);
+                    case SyntaxKind.JsxAttribute:
+                        return emitJsxAttribute(<JsxAttribute>node);
+                    case SyntaxKind.JsxAttributes:
+                        return emitJsxAttributes(<JsxAttributes>node);
+                    case SyntaxKind.JsxSpreadAttribute:
+                        return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
+                    case SyntaxKind.JsxExpression:
+                        return emitJsxExpression(<JsxExpression>node);
+
+                    // Clauses
+                    case SyntaxKind.CaseClause:
+                        return emitCaseClause(<CaseClause>node);
+                    case SyntaxKind.DefaultClause:
+                        return emitDefaultClause(<DefaultClause>node);
+                    case SyntaxKind.HeritageClause:
+                        return emitHeritageClause(<HeritageClause>node);
+                    case SyntaxKind.CatchClause:
+                        return emitCatchClause(<CatchClause>node);
+
+                    // Property assignments
+                    case SyntaxKind.PropertyAssignment:
+                        return emitPropertyAssignment(<PropertyAssignment>node);
+                    case SyntaxKind.ShorthandPropertyAssignment:
+                        return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
+                    case SyntaxKind.SpreadAssignment:
+                        return emitSpreadAssignment(node as SpreadAssignment);
+
+                    // Enum
+                    case SyntaxKind.EnumMember:
+                        return emitEnumMember(<EnumMember>node);
+
+                    // JSDoc nodes (ignored)
+                    // Transformation nodes (ignored)
+                }
+
+                if (isExpression(node)) {
+                    hint = EmitHint.Expression;
+                    node = trySubstituteNode(EmitHint.Expression, node);
+                }
+                else if (isToken(node)) {
+                    return writeTokenNode(node, writePunctuation);
+                }
+            }
+            if (hint === EmitHint.Expression) {
+                switch (node.kind) {
+                    // Literals
+                    case SyntaxKind.NumericLiteral:
+                        return emitNumericLiteral(<NumericLiteral>node);
+
+                    case SyntaxKind.StringLiteral:
+                    case SyntaxKind.RegularExpressionLiteral:
+                    case SyntaxKind.NoSubstitutionTemplateLiteral:
+                        return emitLiteral(<LiteralExpression>node);
+
+                    // Identifiers
+                    case SyntaxKind.Identifier:
+                        return emitIdentifier(<Identifier>node);
+
+                    // Reserved words
+                    case SyntaxKind.FalseKeyword:
+                    case SyntaxKind.NullKeyword:
+                    case SyntaxKind.SuperKeyword:
+                    case SyntaxKind.TrueKeyword:
+                    case SyntaxKind.ThisKeyword:
+                    case SyntaxKind.ImportKeyword:
+                        writeTokenNode(node, writeKeyword);
+                        return;
+
+                    // Expressions
+                    case SyntaxKind.ArrayLiteralExpression:
+                        return emitArrayLiteralExpression(<ArrayLiteralExpression>node);
+                    case SyntaxKind.ObjectLiteralExpression:
+                        return emitObjectLiteralExpression(<ObjectLiteralExpression>node);
+                    case SyntaxKind.PropertyAccessExpression:
+                        return emitPropertyAccessExpression(<PropertyAccessExpression>node);
+                    case SyntaxKind.ElementAccessExpression:
+                        return emitElementAccessExpression(<ElementAccessExpression>node);
+                    case SyntaxKind.CallExpression:
+                        return emitCallExpression(<CallExpression>node);
+                    case SyntaxKind.NewExpression:
+                        return emitNewExpression(<NewExpression>node);
+                    case SyntaxKind.TaggedTemplateExpression:
+                        return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
+                    case SyntaxKind.TypeAssertionExpression:
+                        return emitTypeAssertionExpression(<TypeAssertion>node);
+                    case SyntaxKind.ParenthesizedExpression:
+                        return emitParenthesizedExpression(<ParenthesizedExpression>node);
+                    case SyntaxKind.FunctionExpression:
+                        return emitFunctionExpression(<FunctionExpression>node);
+                    case SyntaxKind.ArrowFunction:
+                        return emitArrowFunction(<ArrowFunction>node);
+                    case SyntaxKind.DeleteExpression:
+                        return emitDeleteExpression(<DeleteExpression>node);
+                    case SyntaxKind.TypeOfExpression:
+                        return emitTypeOfExpression(<TypeOfExpression>node);
+                    case SyntaxKind.VoidExpression:
+                        return emitVoidExpression(<VoidExpression>node);
+                    case SyntaxKind.AwaitExpression:
+                        return emitAwaitExpression(<AwaitExpression>node);
+                    case SyntaxKind.PrefixUnaryExpression:
+                        return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
+                    case SyntaxKind.PostfixUnaryExpression:
+                        return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    case SyntaxKind.BinaryExpression:
+                        return emitBinaryExpression(<BinaryExpression>node);
+                    case SyntaxKind.ConditionalExpression:
+                        return emitConditionalExpression(<ConditionalExpression>node);
+                    case SyntaxKind.TemplateExpression:
+                        return emitTemplateExpression(<TemplateExpression>node);
+                    case SyntaxKind.YieldExpression:
+                        return emitYieldExpression(<YieldExpression>node);
+                    case SyntaxKind.SpreadElement:
+                        return emitSpreadExpression(<SpreadElement>node);
+                    case SyntaxKind.ClassExpression:
+                        return emitClassExpression(<ClassExpression>node);
+                    case SyntaxKind.OmittedExpression:
+                        return;
+                    case SyntaxKind.AsExpression:
+                        return emitAsExpression(<AsExpression>node);
+                    case SyntaxKind.NonNullExpression:
+                        return emitNonNullExpression(<NonNullExpression>node);
+                    case SyntaxKind.MetaProperty:
+                        return emitMetaProperty(<MetaProperty>node);
+
+                    // JSX
+                    case SyntaxKind.JsxElement:
+                        return emitJsxElement(<JsxElement>node);
+                    case SyntaxKind.JsxSelfClosingElement:
+                        return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
+                    case SyntaxKind.JsxFragment:
+                        return emitJsxFragment(<JsxFragment>node);
+
+                    // Transformation nodes
+                    case SyntaxKind.PartiallyEmittedExpression:
+                        return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
+
+                    case SyntaxKind.CommaListExpression:
+                        return emitCommaList(<CommaListExpression>node);
+                }
+            }
+        }
+
+        function emitMappedTypeParameter(node: TypeParameterDeclaration): void {
+            emit(node.name);
+            writeSpace();
+            writeKeyword("in");
+            writeSpace();
+            emit(node.constraint);
+        }
+
+        function trySubstituteNode(hint: EmitHint, node: Node) {
+            return node && substituteNode && substituteNode(hint, node) || node;
+        }
+
+        function emitHelpers(node: Node) {
+            let helpersEmitted = false;
+            const bundle = node.kind === SyntaxKind.Bundle ? <Bundle>node : undefined;
+            if (bundle && moduleKind === ModuleKind.None) {
                 return;
             }
 
-            emitNodeWithComments(emitContext, node, pipelineEmitWithSourceMap);
-        }
+            const numNodes = bundle ? bundle.sourceFiles.length : 1;
+            for (let i = 0; i < numNodes; i++) {
+                const currentNode = bundle ? bundle.sourceFiles[i] : node;
+                const sourceFile = isSourceFile(currentNode) ? currentNode : currentSourceFile;
+                const shouldSkip = printerOptions.noEmitHelpers || getExternalHelpersModuleName(sourceFile) !== undefined;
+                const shouldBundle = isSourceFile(currentNode) && !isOwnFileEmit;
+                const helpers = getEmitHelpers(currentNode);
+                if (helpers) {
+                    for (const helper of stableSort(helpers, compareEmitHelpers)) {
+                        if (!helper.scoped) {
+                            // Skip the helper if it can be skipped and the noEmitHelpers compiler
+                            // option is set, or if it can be imported and the importHelpers compiler
+                            // option is set.
+                            if (shouldSkip) continue;
 
-        /**
-         * Emits a node with source maps.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitWithComments.
-         */
-        function pipelineEmitWithSourceMap(emitContext: EmitContext, node: Node) {
-            // Do not emit source mappings for SourceFile or IdentifierName
-            if (emitContext === EmitContext.SourceFile
-                || emitContext === EmitContext.IdentifierName) {
-                pipelineEmitWithSubstitution(emitContext, node);
-                return;
+                            // Skip the helper if it can be bundled but hasn't already been emitted and we
+                            // are emitting a bundled module.
+                            if (shouldBundle) {
+                                if (bundledHelpers.get(helper.name)) {
+                                    continue;
+                                }
+
+                                bundledHelpers.set(helper.name, true);
+                            }
+                        }
+                        else if (bundle) {
+                            // Skip the helper if it is scoped and we are emitting bundled helpers
+                            continue;
+                        }
+
+                        if (typeof helper.text === "string") {
+                            writeLines(helper.text);
+                        }
+                        else {
+                            writeLines(helper.text(makeFileLevelOptimisticUniqueName));
+                        }
+                        helpersEmitted = true;
+                    }
+                }
             }
 
-            emitNodeWithSourceMap(emitContext, node, pipelineEmitWithSubstitution);
-        }
-
-        /**
-         * Emits a node with possible substitution.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitWithSourceMap or
-         * pipelineEmitInUnspecifiedContext (when picking a more specific context).
-         */
-        function pipelineEmitWithSubstitution(emitContext: EmitContext, node: Node) {
-            emitNodeWithSubstitution(emitContext, node, pipelineEmitForContext);
-        }
-
-        /**
-         * Emits a node.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitWithSubstitution.
-         */
-        function pipelineEmitForContext(emitContext: EmitContext, node: Node): void {
-            switch (emitContext) {
-                case EmitContext.SourceFile: return pipelineEmitInSourceFileContext(node);
-                case EmitContext.IdentifierName: return pipelineEmitInIdentifierNameContext(node);
-                case EmitContext.Unspecified: return pipelineEmitInUnspecifiedContext(node);
-                case EmitContext.Expression: return pipelineEmitInExpressionContext(node);
-            }
-        }
-
-        /**
-         * Emits a node in the SourceFile EmitContext.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitForContext.
-         */
-        function pipelineEmitInSourceFileContext(node: Node): void {
-            const kind = node.kind;
-            switch (kind) {
-                // Top-level nodes
-                case SyntaxKind.SourceFile:
-                    return emitSourceFile(<SourceFile>node);
-            }
-        }
-
-        /**
-         * Emits a node in the IdentifierName EmitContext.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitForContext.
-         */
-        function pipelineEmitInIdentifierNameContext(node: Node): void {
-            const kind = node.kind;
-            switch (kind) {
-                // Identifiers
-                case SyntaxKind.Identifier:
-                    return emitIdentifier(<Identifier>node);
-            }
-        }
-
-        /**
-         * Emits a node in the Unspecified EmitContext.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitForContext.
-         */
-        function pipelineEmitInUnspecifiedContext(node: Node): void {
-            const kind = node.kind;
-            switch (kind) {
-                // Pseudo-literals
-                case SyntaxKind.TemplateHead:
-                case SyntaxKind.TemplateMiddle:
-                case SyntaxKind.TemplateTail:
-                    return emitLiteral(<LiteralExpression>node);
-
-                // Identifiers
-                case SyntaxKind.Identifier:
-                    return emitIdentifier(<Identifier>node);
-
-                // Reserved words
-                case SyntaxKind.ConstKeyword:
-                case SyntaxKind.DefaultKeyword:
-                case SyntaxKind.ExportKeyword:
-                case SyntaxKind.VoidKeyword:
-
-                // Strict mode reserved words
-                case SyntaxKind.PrivateKeyword:
-                case SyntaxKind.ProtectedKeyword:
-                case SyntaxKind.PublicKeyword:
-                case SyntaxKind.StaticKeyword:
-
-                // Contextual keywords
-                case SyntaxKind.AbstractKeyword:
-                case SyntaxKind.AsKeyword:
-                case SyntaxKind.AnyKeyword:
-                case SyntaxKind.AsyncKeyword:
-                case SyntaxKind.AwaitKeyword:
-                case SyntaxKind.BooleanKeyword:
-                case SyntaxKind.ConstructorKeyword:
-                case SyntaxKind.DeclareKeyword:
-                case SyntaxKind.GetKeyword:
-                case SyntaxKind.IsKeyword:
-                case SyntaxKind.ModuleKeyword:
-                case SyntaxKind.NamespaceKeyword:
-                case SyntaxKind.NeverKeyword:
-                case SyntaxKind.ReadonlyKeyword:
-                case SyntaxKind.RequireKeyword:
-                case SyntaxKind.NumberKeyword:
-                case SyntaxKind.SetKeyword:
-                case SyntaxKind.StringKeyword:
-                case SyntaxKind.SymbolKeyword:
-                case SyntaxKind.TypeKeyword:
-                case SyntaxKind.UndefinedKeyword:
-                case SyntaxKind.FromKeyword:
-                case SyntaxKind.GlobalKeyword:
-                case SyntaxKind.OfKeyword:
-                    writeTokenText(kind);
-                    return;
-
-                // Parse tree nodes
-
-                // Names
-                case SyntaxKind.QualifiedName:
-                    return emitQualifiedName(<QualifiedName>node);
-                case SyntaxKind.ComputedPropertyName:
-                    return emitComputedPropertyName(<ComputedPropertyName>node);
-
-                // Signature elements
-                case SyntaxKind.TypeParameter:
-                    return emitTypeParameter(<TypeParameterDeclaration>node);
-                case SyntaxKind.Parameter:
-                    return emitParameter(<ParameterDeclaration>node);
-                case SyntaxKind.Decorator:
-                    return emitDecorator(<Decorator>node);
-
-                // Type members
-                case SyntaxKind.PropertySignature:
-                    return emitPropertySignature(<PropertySignature>node);
-                case SyntaxKind.PropertyDeclaration:
-                    return emitPropertyDeclaration(<PropertyDeclaration>node);
-                case SyntaxKind.MethodSignature:
-                    return emitMethodSignature(<MethodSignature>node);
-                case SyntaxKind.MethodDeclaration:
-                    return emitMethodDeclaration(<MethodDeclaration>node);
-                case SyntaxKind.Constructor:
-                    return emitConstructor(<ConstructorDeclaration>node);
-                case SyntaxKind.GetAccessor:
-                case SyntaxKind.SetAccessor:
-                    return emitAccessorDeclaration(<AccessorDeclaration>node);
-                case SyntaxKind.CallSignature:
-                    return emitCallSignature(<CallSignatureDeclaration>node);
-                case SyntaxKind.ConstructSignature:
-                    return emitConstructSignature(<ConstructSignatureDeclaration>node);
-                case SyntaxKind.IndexSignature:
-                    return emitIndexSignature(<IndexSignatureDeclaration>node);
-
-                // Types
-                case SyntaxKind.TypePredicate:
-                    return emitTypePredicate(<TypePredicateNode>node);
-                case SyntaxKind.TypeReference:
-                    return emitTypeReference(<TypeReferenceNode>node);
-                case SyntaxKind.FunctionType:
-                    return emitFunctionType(<FunctionTypeNode>node);
-                case SyntaxKind.ConstructorType:
-                    return emitConstructorType(<ConstructorTypeNode>node);
-                case SyntaxKind.TypeQuery:
-                    return emitTypeQuery(<TypeQueryNode>node);
-                case SyntaxKind.TypeLiteral:
-                    return emitTypeLiteral(<TypeLiteralNode>node);
-                case SyntaxKind.ArrayType:
-                    return emitArrayType(<ArrayTypeNode>node);
-                case SyntaxKind.TupleType:
-                    return emitTupleType(<TupleTypeNode>node);
-                case SyntaxKind.UnionType:
-                    return emitUnionType(<UnionTypeNode>node);
-                case SyntaxKind.IntersectionType:
-                    return emitIntersectionType(<IntersectionTypeNode>node);
-                case SyntaxKind.ParenthesizedType:
-                    return emitParenthesizedType(<ParenthesizedTypeNode>node);
-                case SyntaxKind.ExpressionWithTypeArguments:
-                    return emitExpressionWithTypeArguments(<ExpressionWithTypeArguments>node);
-                case SyntaxKind.ThisType:
-                    return emitThisType(<ThisTypeNode>node);
-                case SyntaxKind.LiteralType:
-                    return emitLiteralType(<LiteralTypeNode>node);
-
-                // Binding patterns
-                case SyntaxKind.ObjectBindingPattern:
-                    return emitObjectBindingPattern(<ObjectBindingPattern>node);
-                case SyntaxKind.ArrayBindingPattern:
-                    return emitArrayBindingPattern(<ArrayBindingPattern>node);
-                case SyntaxKind.BindingElement:
-                    return emitBindingElement(<BindingElement>node);
-
-                // Misc
-                case SyntaxKind.TemplateSpan:
-                    return emitTemplateSpan(<TemplateSpan>node);
-                case SyntaxKind.SemicolonClassElement:
-                    return emitSemicolonClassElement(<SemicolonClassElement>node);
-
-                // Statements
-                case SyntaxKind.Block:
-                    return emitBlock(<Block>node);
-                case SyntaxKind.VariableStatement:
-                    return emitVariableStatement(<VariableStatement>node);
-                case SyntaxKind.EmptyStatement:
-                    return emitEmptyStatement(<EmptyStatement>node);
-                case SyntaxKind.ExpressionStatement:
-                    return emitExpressionStatement(<ExpressionStatement>node);
-                case SyntaxKind.IfStatement:
-                    return emitIfStatement(<IfStatement>node);
-                case SyntaxKind.DoStatement:
-                    return emitDoStatement(<DoStatement>node);
-                case SyntaxKind.WhileStatement:
-                    return emitWhileStatement(<WhileStatement>node);
-                case SyntaxKind.ForStatement:
-                    return emitForStatement(<ForStatement>node);
-                case SyntaxKind.ForInStatement:
-                    return emitForInStatement(<ForInStatement>node);
-                case SyntaxKind.ForOfStatement:
-                    return emitForOfStatement(<ForOfStatement>node);
-                case SyntaxKind.ContinueStatement:
-                    return emitContinueStatement(<ContinueStatement>node);
-                case SyntaxKind.BreakStatement:
-                    return emitBreakStatement(<BreakStatement>node);
-                case SyntaxKind.ReturnStatement:
-                    return emitReturnStatement(<ReturnStatement>node);
-                case SyntaxKind.WithStatement:
-                    return emitWithStatement(<WithStatement>node);
-                case SyntaxKind.SwitchStatement:
-                    return emitSwitchStatement(<SwitchStatement>node);
-                case SyntaxKind.LabeledStatement:
-                    return emitLabeledStatement(<LabeledStatement>node);
-                case SyntaxKind.ThrowStatement:
-                    return emitThrowStatement(<ThrowStatement>node);
-                case SyntaxKind.TryStatement:
-                    return emitTryStatement(<TryStatement>node);
-                case SyntaxKind.DebuggerStatement:
-                    return emitDebuggerStatement(<DebuggerStatement>node);
-
-                // Declarations
-                case SyntaxKind.VariableDeclaration:
-                    return emitVariableDeclaration(<VariableDeclaration>node);
-                case SyntaxKind.VariableDeclarationList:
-                    return emitVariableDeclarationList(<VariableDeclarationList>node);
-                case SyntaxKind.FunctionDeclaration:
-                    return emitFunctionDeclaration(<FunctionDeclaration>node);
-                case SyntaxKind.ClassDeclaration:
-                    return emitClassDeclaration(<ClassDeclaration>node);
-                case SyntaxKind.InterfaceDeclaration:
-                    return emitInterfaceDeclaration(<InterfaceDeclaration>node);
-                case SyntaxKind.TypeAliasDeclaration:
-                    return emitTypeAliasDeclaration(<TypeAliasDeclaration>node);
-                case SyntaxKind.EnumDeclaration:
-                    return emitEnumDeclaration(<EnumDeclaration>node);
-                case SyntaxKind.ModuleDeclaration:
-                    return emitModuleDeclaration(<ModuleDeclaration>node);
-                case SyntaxKind.ModuleBlock:
-                    return emitModuleBlock(<ModuleBlock>node);
-                case SyntaxKind.CaseBlock:
-                    return emitCaseBlock(<CaseBlock>node);
-                case SyntaxKind.ImportEqualsDeclaration:
-                    return emitImportEqualsDeclaration(<ImportEqualsDeclaration>node);
-                case SyntaxKind.ImportDeclaration:
-                    return emitImportDeclaration(<ImportDeclaration>node);
-                case SyntaxKind.ImportClause:
-                    return emitImportClause(<ImportClause>node);
-                case SyntaxKind.NamespaceImport:
-                    return emitNamespaceImport(<NamespaceImport>node);
-                case SyntaxKind.NamedImports:
-                    return emitNamedImports(<NamedImports>node);
-                case SyntaxKind.ImportSpecifier:
-                    return emitImportSpecifier(<ImportSpecifier>node);
-                case SyntaxKind.ExportAssignment:
-                    return emitExportAssignment(<ExportAssignment>node);
-                case SyntaxKind.ExportDeclaration:
-                    return emitExportDeclaration(<ExportDeclaration>node);
-                case SyntaxKind.NamedExports:
-                    return emitNamedExports(<NamedExports>node);
-                case SyntaxKind.ExportSpecifier:
-                    return emitExportSpecifier(<ExportSpecifier>node);
-                case SyntaxKind.MissingDeclaration:
-                    return;
-
-                // Module references
-                case SyntaxKind.ExternalModuleReference:
-                    return emitExternalModuleReference(<ExternalModuleReference>node);
-
-                // JSX (non-expression)
-                case SyntaxKind.JsxText:
-                    return emitJsxText(<JsxText>node);
-                case SyntaxKind.JsxOpeningElement:
-                    return emitJsxOpeningElement(<JsxOpeningElement>node);
-                case SyntaxKind.JsxClosingElement:
-                    return emitJsxClosingElement(<JsxClosingElement>node);
-                case SyntaxKind.JsxAttribute:
-                    return emitJsxAttribute(<JsxAttribute>node);
-                case SyntaxKind.JsxSpreadAttribute:
-                    return emitJsxSpreadAttribute(<JsxSpreadAttribute>node);
-                case SyntaxKind.JsxExpression:
-                    return emitJsxExpression(<JsxExpression>node);
-
-                // Clauses
-                case SyntaxKind.CaseClause:
-                    return emitCaseClause(<CaseClause>node);
-                case SyntaxKind.DefaultClause:
-                    return emitDefaultClause(<DefaultClause>node);
-                case SyntaxKind.HeritageClause:
-                    return emitHeritageClause(<HeritageClause>node);
-                case SyntaxKind.CatchClause:
-                    return emitCatchClause(<CatchClause>node);
-
-                // Property assignments
-                case SyntaxKind.PropertyAssignment:
-                    return emitPropertyAssignment(<PropertyAssignment>node);
-                case SyntaxKind.ShorthandPropertyAssignment:
-                    return emitShorthandPropertyAssignment(<ShorthandPropertyAssignment>node);
-
-                // Enum
-                case SyntaxKind.EnumMember:
-                    return emitEnumMember(<EnumMember>node);
-
-                // JSDoc nodes (ignored)
-                // Transformation nodes (ignored)
-            }
-
-            // If the node is an expression, try to emit it as an expression with
-            // substitution.
-            if (isExpression(node)) {
-                return pipelineEmitWithSubstitution(EmitContext.Expression, node);
-            }
-        }
-
-        /**
-         * Emits a node in the Expression EmitContext.
-         *
-         * NOTE: Do not call this method directly. It is part of the emit pipeline
-         * and should only be called indirectly from pipelineEmitForContext.
-         */
-        function pipelineEmitInExpressionContext(node: Node): void {
-            const kind = node.kind;
-            switch (kind) {
-                // Literals
-                case SyntaxKind.NumericLiteral:
-                    return emitNumericLiteral(<NumericLiteral>node);
-
-                case SyntaxKind.StringLiteral:
-                case SyntaxKind.RegularExpressionLiteral:
-                case SyntaxKind.NoSubstitutionTemplateLiteral:
-                    return emitLiteral(<LiteralExpression>node);
-
-                // Identifiers
-                case SyntaxKind.Identifier:
-                    return emitIdentifier(<Identifier>node);
-
-                // Reserved words
-                case SyntaxKind.FalseKeyword:
-                case SyntaxKind.NullKeyword:
-                case SyntaxKind.SuperKeyword:
-                case SyntaxKind.TrueKeyword:
-                case SyntaxKind.ThisKeyword:
-                    writeTokenText(kind);
-                    return;
-
-                // Expressions
-                case SyntaxKind.ArrayLiteralExpression:
-                    return emitArrayLiteralExpression(<ArrayLiteralExpression>node);
-                case SyntaxKind.ObjectLiteralExpression:
-                    return emitObjectLiteralExpression(<ObjectLiteralExpression>node);
-                case SyntaxKind.PropertyAccessExpression:
-                    return emitPropertyAccessExpression(<PropertyAccessExpression>node);
-                case SyntaxKind.ElementAccessExpression:
-                    return emitElementAccessExpression(<ElementAccessExpression>node);
-                case SyntaxKind.CallExpression:
-                    return emitCallExpression(<CallExpression>node);
-                case SyntaxKind.NewExpression:
-                    return emitNewExpression(<NewExpression>node);
-                case SyntaxKind.TaggedTemplateExpression:
-                    return emitTaggedTemplateExpression(<TaggedTemplateExpression>node);
-                case SyntaxKind.TypeAssertionExpression:
-                    return emitTypeAssertionExpression(<TypeAssertion>node);
-                case SyntaxKind.ParenthesizedExpression:
-                    return emitParenthesizedExpression(<ParenthesizedExpression>node);
-                case SyntaxKind.FunctionExpression:
-                    return emitFunctionExpression(<FunctionExpression>node);
-                case SyntaxKind.ArrowFunction:
-                    return emitArrowFunction(<ArrowFunction>node);
-                case SyntaxKind.DeleteExpression:
-                    return emitDeleteExpression(<DeleteExpression>node);
-                case SyntaxKind.TypeOfExpression:
-                    return emitTypeOfExpression(<TypeOfExpression>node);
-                case SyntaxKind.VoidExpression:
-                    return emitVoidExpression(<VoidExpression>node);
-                case SyntaxKind.AwaitExpression:
-                    return emitAwaitExpression(<AwaitExpression>node);
-                case SyntaxKind.PrefixUnaryExpression:
-                    return emitPrefixUnaryExpression(<PrefixUnaryExpression>node);
-                case SyntaxKind.PostfixUnaryExpression:
-                    return emitPostfixUnaryExpression(<PostfixUnaryExpression>node);
-                case SyntaxKind.BinaryExpression:
-                    return emitBinaryExpression(<BinaryExpression>node);
-                case SyntaxKind.ConditionalExpression:
-                    return emitConditionalExpression(<ConditionalExpression>node);
-                case SyntaxKind.TemplateExpression:
-                    return emitTemplateExpression(<TemplateExpression>node);
-                case SyntaxKind.YieldExpression:
-                    return emitYieldExpression(<YieldExpression>node);
-                case SyntaxKind.SpreadElementExpression:
-                    return emitSpreadElementExpression(<SpreadElementExpression>node);
-                case SyntaxKind.ClassExpression:
-                    return emitClassExpression(<ClassExpression>node);
-                case SyntaxKind.OmittedExpression:
-                    return;
-                case SyntaxKind.AsExpression:
-                    return emitAsExpression(<AsExpression>node);
-                case SyntaxKind.NonNullExpression:
-                    return emitNonNullExpression(<NonNullExpression>node);
-
-                // JSX
-                case SyntaxKind.JsxElement:
-                    return emitJsxElement(<JsxElement>node);
-                case SyntaxKind.JsxSelfClosingElement:
-                    return emitJsxSelfClosingElement(<JsxSelfClosingElement>node);
-
-                // Transformation nodes
-                case SyntaxKind.PartiallyEmittedExpression:
-                    return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
-            }
+            return helpersEmitted;
         }
 
         //
@@ -848,9 +1043,6 @@ const _super = (function (geti, seti) {
         // SyntaxKind.NumericLiteral
         function emitNumericLiteral(node: NumericLiteral) {
             emitLiteral(node);
-            if (node.trailingComment) {
-                write(` /*${node.trailingComment}*/`);
-            }
         }
 
         // SyntaxKind.StringLiteral
@@ -860,14 +1052,20 @@ const _super = (function (geti, seti) {
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
         function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node);
-            if ((compilerOptions.sourceMap || compilerOptions.inlineSourceMap)
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
+            if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
-                writer.writeLiteral(text);
+                writeLiteral(text);
             }
             else {
-                write(text);
+                // Quick info expects all literals to be called with writeStringLiteral, as there's no specific type for numberLiterals
+                writeStringLiteral(text);
             }
+        }
+
+        // SyntaxKind.UnparsedSource
+        function emitUnparsedSource(unparsed: UnparsedSource) {
+            writer.rawWrite(unparsed.text);
         }
 
         //
@@ -875,12 +1073,9 @@ const _super = (function (geti, seti) {
         //
 
         function emitIdentifier(node: Identifier) {
-            if (getEmitFlags(node) & EmitFlags.UMDDefine) {
-                writeLines(umdHelper);
-            }
-            else {
-                write(getTextOfNode(node, /*includeTrivia*/ false));
-            }
+            const writeText = node.symbol ? writeSymbol : write;
+            writeText(getTextOfNode(node, /*includeTrivia*/ false), node.symbol);
+            emitList(node, node.typeArguments, ListFormat.TypeParameters); // Call emitList directly since it could be an array of TypeParameterDeclarations _or_ type arguments
         }
 
         //
@@ -889,13 +1084,13 @@ const _super = (function (geti, seti) {
 
         function emitQualifiedName(node: QualifiedName) {
             emitEntityName(node.left);
-            write(".");
+            writePunctuation(".");
             emit(node.right);
         }
 
         function emitEntityName(node: EntityName) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);
@@ -903,9 +1098,9 @@ const _super = (function (geti, seti) {
         }
 
         function emitComputedPropertyName(node: ComputedPropertyName) {
-            write("[");
+            writePunctuation("[");
             emitExpression(node.expression);
-            write("]");
+            writePunctuation("]");
         }
 
         //
@@ -914,21 +1109,38 @@ const _super = (function (geti, seti) {
 
         function emitTypeParameter(node: TypeParameterDeclaration) {
             emit(node.name);
-            emitWithPrefix(" extends ", node.constraint);
+            if (node.constraint) {
+                writeSpace();
+                writeKeyword("extends");
+                writeSpace();
+                emit(node.constraint);
+            }
+            if (node.default) {
+                writeSpace();
+                writeOperator("=");
+                writeSpace();
+                emit(node.default);
+            }
         }
 
         function emitParameter(node: ParameterDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            writeIfPresent(node.dotDotDotToken, "...");
-            emit(node.name);
-            writeIfPresent(node.questionToken, "?");
-            emitExpressionWithPrefix(" = ", node.initializer);
-            emitWithPrefix(": ", node.type);
+            emit(node.dotDotDotToken);
+            emitNodeWithWriter(node.name, writeParameter);
+            emit(node.questionToken);
+            if (node.parent && node.parent.kind === SyntaxKind.JSDocFunctionType && !node.name) {
+                emit(node.type);
+            }
+            else {
+                emitTypeAnnotation(node.type);
+            }
+            // The comment position has to fallback to any present node within the parameterdeclaration because as it turns out, the parser can make parameter declarations with _just_ an initializer.
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name ? node.name.end : node.modifiers ? node.modifiers.end : node.decorators ? node.decorators.end : node.pos, node);
         }
 
         function emitDecorator(decorator: Decorator) {
-            write("@");
+            writePunctuation("@");
             emitExpression(decorator.expression);
         }
 
@@ -939,83 +1151,94 @@ const _super = (function (geti, seti) {
         function emitPropertySignature(node: PropertySignature) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            emit(node.name);
-            writeIfPresent(node.questionToken, "?");
-            emitWithPrefix(": ", node.type);
-            write(";");
+            emitNodeWithWriter(node.name, writeProperty);
+            emit(node.questionToken);
+            emitTypeAnnotation(node.type);
+            writeSemicolon();
         }
 
         function emitPropertyDeclaration(node: PropertyDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            emitWithPrefix(": ", node.type);
-            emitExpressionWithPrefix(" = ", node.initializer);
-            write(";");
+            emit(node.questionToken);
+            emit(node.exclamationToken);
+            emitTypeAnnotation(node.type);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.questionToken ? node.questionToken.end : node.name.end, node);
+            writeSemicolon();
         }
 
         function emitMethodSignature(node: MethodSignature) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emit(node.name);
-            writeIfPresent(node.questionToken, "?");
+            emit(node.questionToken);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(": ", node.type);
-            write(";");
+            emitTypeAnnotation(node.type);
+            writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitMethodDeclaration(node: MethodDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            writeIfPresent(node.asteriskToken, "*");
+            emit(node.asteriskToken);
             emit(node.name);
+            emit(node.questionToken);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
         function emitConstructor(node: ConstructorDeclaration) {
             emitModifiers(node, node.modifiers);
-            write("constructor");
+            writeKeyword("constructor");
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
         function emitAccessorDeclaration(node: AccessorDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write(node.kind === SyntaxKind.GetAccessor ? "get " : "set ");
+            writeKeyword(node.kind === SyntaxKind.GetAccessor ? "get" : "set");
+            writeSpace();
             emit(node.name);
             emitSignatureAndBody(node, emitSignatureHead);
         }
 
         function emitCallSignature(node: CallSignatureDeclaration) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(": ", node.type);
-            write(";");
+            emitTypeAnnotation(node.type);
+            writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitConstructSignature(node: ConstructSignatureDeclaration) {
+            pushNameGenerationScope(node);
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write("new ");
+            writeKeyword("new");
+            writeSpace();
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(": ", node.type);
-            write(";");
+            emitTypeAnnotation(node.type);
+            writeSemicolon();
+            popNameGenerationScope(node);
         }
 
         function emitIndexSignature(node: IndexSignatureDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
             emitParametersForIndexSignature(node, node.parameters);
-            emitWithPrefix(": ", node.type);
-            write(";");
+            emitTypeAnnotation(node.type);
+            writeSemicolon();
         }
 
-        function emitSemicolonClassElement(node: SemicolonClassElement) {
-            write(";");
+        function emitSemicolonClassElement() {
+            writeSemicolon();
         }
 
         //
@@ -1024,7 +1247,9 @@ const _super = (function (geti, seti) {
 
         function emitTypePredicate(node: TypePredicateNode) {
             emit(node.parameterName);
-            write(" is ");
+            writeSpace();
+            writeKeyword("is");
+            writeSpace();
             emit(node.type);
         }
 
@@ -1034,40 +1259,85 @@ const _super = (function (geti, seti) {
         }
 
         function emitFunctionType(node: FunctionTypeNode) {
+            pushNameGenerationScope(node);
             emitTypeParameters(node, node.typeParameters);
             emitParametersForArrow(node, node.parameters);
-            write(" => ");
+            writeSpace();
+            writePunctuation("=>");
+            writeSpace();
             emit(node.type);
+            popNameGenerationScope(node);
+        }
+
+        function emitJSDocFunctionType(node: JSDocFunctionType) {
+            write("function");
+            emitParameters(node, node.parameters);
+            write(":");
+            emit(node.type);
+        }
+
+
+        function emitJSDocNullableType(node: JSDocNullableType) {
+            write("?");
+            emit(node.type);
+        }
+
+        function emitJSDocNonNullableType(node: JSDocNonNullableType) {
+            write("!");
+            emit(node.type);
+        }
+
+        function emitJSDocOptionalType(node: JSDocOptionalType) {
+            emit(node.type);
+            write("=");
         }
 
         function emitConstructorType(node: ConstructorTypeNode) {
-            write("new ");
+            pushNameGenerationScope(node);
+            writeKeyword("new");
+            writeSpace();
             emitTypeParameters(node, node.typeParameters);
-            emitParametersForArrow(node, node.parameters);
-            write(" => ");
+            emitParameters(node, node.parameters);
+            writeSpace();
+            writePunctuation("=>");
+            writeSpace();
             emit(node.type);
+            popNameGenerationScope(node);
         }
 
         function emitTypeQuery(node: TypeQueryNode) {
-            write("typeof ");
+            writeKeyword("typeof");
+            writeSpace();
             emit(node.exprName);
         }
 
         function emitTypeLiteral(node: TypeLiteralNode) {
-            write("{");
-            emitList(node, node.members, ListFormat.TypeLiteralMembers);
-            write("}");
+            writePunctuation("{");
+            const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
+            emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
+            writePunctuation("}");
         }
 
         function emitArrayType(node: ArrayTypeNode) {
             emit(node.elementType);
-            write("[]");
+            writePunctuation("[");
+            writePunctuation("]");
+        }
+
+        function emitRestOrJSDocVariadicType(node: RestTypeNode | JSDocVariadicType) {
+            write("...");
+            emit(node.type);
         }
 
         function emitTupleType(node: TupleTypeNode) {
-            write("[");
+            writePunctuation("[");
             emitList(node, node.elementTypes, ListFormat.TupleTypeElements);
-            write("]");
+            writePunctuation("]");
+        }
+
+        function emitOptionalType(node: OptionalTypeNode) {
+            emit(node.type);
+            write("?");
         }
 
         function emitUnionType(node: UnionTypeNode) {
@@ -1078,18 +1348,112 @@ const _super = (function (geti, seti) {
             emitList(node, node.types, ListFormat.IntersectionTypeConstituents);
         }
 
-        function emitParenthesizedType(node: ParenthesizedTypeNode) {
-            write("(");
-            emit(node.type);
-            write(")");
+        function emitConditionalType(node: ConditionalTypeNode) {
+            emit(node.checkType);
+            writeSpace();
+            writeKeyword("extends");
+            writeSpace();
+            emit(node.extendsType);
+            writeSpace();
+            writePunctuation("?");
+            writeSpace();
+            emit(node.trueType);
+            writeSpace();
+            writePunctuation(":");
+            writeSpace();
+            emit(node.falseType);
         }
 
-        function emitThisType(node: ThisTypeNode) {
-            write("this");
+        function emitInferType(node: InferTypeNode) {
+            writeKeyword("infer");
+            writeSpace();
+            emit(node.typeParameter);
+        }
+
+        function emitParenthesizedType(node: ParenthesizedTypeNode) {
+            writePunctuation("(");
+            emit(node.type);
+            writePunctuation(")");
+        }
+
+        function emitThisType() {
+            writeKeyword("this");
+        }
+
+        function emitTypeOperator(node: TypeOperatorNode) {
+            writeTokenText(node.operator, writeKeyword);
+            writeSpace();
+            emit(node.type);
+        }
+
+        function emitIndexedAccessType(node: IndexedAccessTypeNode) {
+            emit(node.objectType);
+            writePunctuation("[");
+            emit(node.indexType);
+            writePunctuation("]");
+        }
+
+        function emitMappedType(node: MappedTypeNode) {
+            const emitFlags = getEmitFlags(node);
+            writePunctuation("{");
+            if (emitFlags & EmitFlags.SingleLine) {
+                writeSpace();
+            }
+            else {
+                writeLine();
+                increaseIndent();
+            }
+            if (node.readonlyToken) {
+                emit(node.readonlyToken);
+                if (node.readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
+                    writeKeyword("readonly");
+                }
+                writeSpace();
+            }
+            writePunctuation("[");
+
+            const pipelinePhase = getPipelinePhase(PipelinePhase.Notification, EmitHint.MappedTypeParameter);
+            pipelinePhase(EmitHint.MappedTypeParameter, node.typeParameter);
+
+            writePunctuation("]");
+            if (node.questionToken) {
+                emit(node.questionToken);
+                if (node.questionToken.kind !== SyntaxKind.QuestionToken) {
+                    writePunctuation("?");
+                }
+            }
+            writePunctuation(":");
+            writeSpace();
+            emit(node.type);
+            writeSemicolon();
+            if (emitFlags & EmitFlags.SingleLine) {
+                writeSpace();
+            }
+            else {
+                writeLine();
+                decreaseIndent();
+            }
+            writePunctuation("}");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {
             emitExpression(node.literal);
+        }
+
+        function emitImportTypeNode(node: ImportTypeNode) {
+            if (node.isTypeOf) {
+                writeKeyword("typeof");
+                writeSpace();
+            }
+            writeKeyword("import");
+            writePunctuation("(");
+            emit(node.argument);
+            writePunctuation(")");
+            if (node.qualifier) {
+                writePunctuation(".");
+                emit(node.qualifier);
+            }
+            emitTypeArguments(node, node.typeArguments);
         }
 
         //
@@ -1097,34 +1461,26 @@ const _super = (function (geti, seti) {
         //
 
         function emitObjectBindingPattern(node: ObjectBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                write("{}");
-            }
-            else {
-                write("{");
-                emitList(node, elements, ListFormat.ObjectBindingPatternElements);
-                write("}");
-            }
+            writePunctuation("{");
+            emitList(node, node.elements, ListFormat.ObjectBindingPatternElements);
+            writePunctuation("}");
         }
 
         function emitArrayBindingPattern(node: ArrayBindingPattern) {
-            const elements = node.elements;
-            if (elements.length === 0) {
-                write("[]");
-            }
-            else {
-                write("[");
-                emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
-                write("]");
-            }
+            writePunctuation("[");
+            emitList(node, node.elements, ListFormat.ArrayBindingPatternElements);
+            writePunctuation("]");
         }
 
         function emitBindingElement(node: BindingElement) {
-            emitWithSuffix(node.propertyName, ": ");
-            writeIfPresent(node.dotDotDotToken, "...");
+            emit(node.dotDotDotToken);
+            if (node.propertyName) {
+                emit(node.propertyName);
+                writePunctuation(":");
+                writeSpace();
+            }
             emit(node.name);
-            emitExpressionWithPrefix(" = ", node.initializer);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
@@ -1133,33 +1489,24 @@ const _super = (function (geti, seti) {
 
         function emitArrayLiteralExpression(node: ArrayLiteralExpression) {
             const elements = node.elements;
-            if (elements.length === 0) {
-                write("[]");
-            }
-            else {
-                const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-                emitExpressionList(node, elements, ListFormat.ArrayLiteralExpressionElements | preferNewLine);
-            }
+            const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
+            emitExpressionList(node, elements, ListFormat.ArrayLiteralExpressionElements | preferNewLine);
         }
 
         function emitObjectLiteralExpression(node: ObjectLiteralExpression) {
-            const properties = node.properties;
-            if (properties.length === 0) {
-                write("{}");
+            forEach(node.properties, generateMemberNames);
+
+            const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
+            if (indentedFlag) {
+                increaseIndent();
             }
-            else {
-                const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
-                if (indentedFlag) {
-                    increaseIndent();
-                }
 
-                const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
-                const allowTrailingComma = languageVersion >= ScriptTarget.ES5 ? ListFormat.AllowTrailingComma : ListFormat.None;
-                emitList(node, properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
+            const preferNewLine = node.multiLine ? ListFormat.PreferNewLine : ListFormat.None;
+            const allowTrailingComma = currentSourceFile.languageVersion >= ScriptTarget.ES5 && !isJsonSourceFile(currentSourceFile) ? ListFormat.AllowTrailingComma : ListFormat.None;
+            emitList(node, node.properties, ListFormat.ObjectLiteralExpressionProperties | allowTrailingComma | preferNewLine);
 
-                if (indentedFlag) {
-                    decreaseIndent();
-                }
+            if (indentedFlag) {
+                decreaseIndent();
             }
         }
 
@@ -1168,8 +1515,10 @@ const _super = (function (geti, seti) {
             let indentAfterDot = false;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
                 const dotRangeStart = node.expression.end;
-                const dotRangeEnd = skipTrivia(currentText, node.expression.end) + 1;
-                const dotToken = <Node>{ kind: SyntaxKind.DotToken, pos: dotRangeStart, end: dotRangeEnd };
+                const dotRangeEnd = skipTrivia(currentSourceFile.text, node.expression.end) + 1;
+                const dotToken = createToken(SyntaxKind.DotToken);
+                dotToken.pos = dotRangeStart;
+                dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
             }
@@ -1178,7 +1527,10 @@ const _super = (function (geti, seti) {
             increaseIndentIf(indentBeforeDot);
 
             const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
-            write(shouldEmitDotDot ? ".." : ".");
+            if (shouldEmitDotDot) {
+                writePunctuation(".");
+            }
+            emitTokenWithComment(SyntaxKind.DotToken, node.expression.end, writePunctuation, node);
 
             increaseIndentIf(indentAfterDot);
             emit(node.name);
@@ -1188,26 +1540,28 @@ const _super = (function (geti, seti) {
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
         function needsDotDotForPropertyAccess(expression: Expression) {
-            if (expression.kind === SyntaxKind.NumericLiteral) {
-                // check if numeric literal was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression);
-                return text.indexOf(tokenToString(SyntaxKind.DotToken)) < 0;
+            expression = skipPartiallyEmittedExpressions(expression);
+            if (isNumericLiteral(expression)) {
+                // check if numeric literal is a decimal literal that was originally written with a dot
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
+                return !expression.numericLiteralFlags
+                    && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer
                 const constantValue = getConstantValue(expression);
                 // isFinite handles cases when constantValue is undefined
-                return isFinite(constantValue)
+                return typeof constantValue === "number" && isFinite(constantValue)
                     && Math.floor(constantValue) === constantValue
-                    && compilerOptions.removeComments;
+                    && printerOptions.removeComments;
             }
         }
 
         function emitElementAccessExpression(node: ElementAccessExpression) {
             emitExpression(node.expression);
-            write("[");
+            emitTokenWithComment(SyntaxKind.OpenBracketToken, node.expression.end, writePunctuation, node);
             emitExpression(node.argumentExpression);
-            write("]");
+            emitTokenWithComment(SyntaxKind.CloseBracketToken, node.argumentExpression.end, writePunctuation, node);
         }
 
         function emitCallExpression(node: CallExpression) {
@@ -1217,7 +1571,8 @@ const _super = (function (geti, seti) {
         }
 
         function emitNewExpression(node: NewExpression) {
-            write("new ");
+            emitTokenWithComment(SyntaxKind.NewKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
             emitTypeArguments(node, node.typeArguments);
             emitExpressionList(node, node.arguments, ListFormat.NewExpressionArguments);
@@ -1225,27 +1580,26 @@ const _super = (function (geti, seti) {
 
         function emitTaggedTemplateExpression(node: TaggedTemplateExpression) {
             emitExpression(node.tag);
-            write(" ");
+            emitTypeArguments(node, node.typeArguments);
+            writeSpace();
             emitExpression(node.template);
         }
 
         function emitTypeAssertionExpression(node: TypeAssertion) {
-            if (node.type) {
-                write("<");
-                emit(node.type);
-                write(">");
-            }
-
+            writePunctuation("<");
+            emit(node.type);
+            writePunctuation(">");
             emitExpression(node.expression);
         }
 
         function emitParenthesizedExpression(node: ParenthesizedExpression) {
-            write("(");
+            const openParenPos = emitTokenWithComment(SyntaxKind.OpenParenToken, node.pos, writePunctuation, node);
             emitExpression(node.expression);
-            write(")");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression ? node.expression.end : openParenPos, writePunctuation, node);
         }
 
         function emitFunctionExpression(node: FunctionExpression) {
+            generateNameIfNeeded(node.name);
             emitFunctionDeclarationOrExpression(node);
         }
 
@@ -1258,34 +1612,39 @@ const _super = (function (geti, seti) {
         function emitArrowFunctionHead(node: ArrowFunction) {
             emitTypeParameters(node, node.typeParameters);
             emitParametersForArrow(node, node.parameters);
-            emitWithPrefix(": ", node.type);
-            write(" =>");
+            emitTypeAnnotation(node.type);
+            writeSpace();
+            emit(node.equalsGreaterThanToken);
         }
 
         function emitDeleteExpression(node: DeleteExpression) {
-            write("delete ");
+            emitTokenWithComment(SyntaxKind.DeleteKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
         }
 
         function emitTypeOfExpression(node: TypeOfExpression) {
-            write("typeof ");
+            emitTokenWithComment(SyntaxKind.TypeOfKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
         }
 
         function emitVoidExpression(node: VoidExpression) {
-            write("void ");
+            emitTokenWithComment(SyntaxKind.VoidKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
         }
 
         function emitAwaitExpression(node: AwaitExpression) {
-            write("await ");
+            emitTokenWithComment(SyntaxKind.AwaitKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
         }
 
         function emitPrefixUnaryExpression(node: PrefixUnaryExpression) {
-            writeTokenText(node.operator);
+            writeTokenText(node.operator, writeOperator);
             if (shouldEmitWhitespaceBeforeOperand(node)) {
-                write(" ");
+                writeSpace();
             }
             emitExpression(node.operand);
         }
@@ -1306,12 +1665,12 @@ const _super = (function (geti, seti) {
             const operand = node.operand;
             return operand.kind === SyntaxKind.PrefixUnaryExpression
                 && ((node.operator === SyntaxKind.PlusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.PlusPlusToken))
-                || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
+                    || (node.operator === SyntaxKind.MinusToken && ((<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusToken || (<PrefixUnaryExpression>operand).operator === SyntaxKind.MinusMinusToken)));
         }
 
         function emitPostfixUnaryExpression(node: PostfixUnaryExpression) {
             emitExpression(node.operand);
-            writeTokenText(node.operator);
+            writeTokenText(node.operator, writeOperator);
         }
 
         function emitBinaryExpression(node: BinaryExpression) {
@@ -1321,7 +1680,9 @@ const _super = (function (geti, seti) {
 
             emitExpression(node.left);
             increaseIndentIf(indentBeforeOperator, isCommaOperator ? " " : undefined);
-            writeTokenText(node.operatorToken.kind);
+            emitLeadingCommentsOfPosition(node.operatorToken.pos);
+            writeTokenNode(node.operatorToken, writeOperator);
+            emitTrailingCommentsOfPosition(node.operatorToken.end, /*prefixSpace*/ true); // Binary operators should have a space before the comment starts
             increaseIndentIf(indentAfterOperator, " ");
             emitExpression(node.right);
             decreaseIndentIf(indentBeforeOperator, indentAfterOperator);
@@ -1335,13 +1696,13 @@ const _super = (function (geti, seti) {
 
             emitExpression(node.condition);
             increaseIndentIf(indentBeforeQuestion, " ");
-            write("?");
+            emit(node.questionToken);
             increaseIndentIf(indentAfterQuestion, " ");
             emitExpression(node.whenTrue);
             decreaseIndentIf(indentBeforeQuestion, indentAfterQuestion);
 
             increaseIndentIf(indentBeforeColon, " ");
-            write(":");
+            emit(node.colonToken);
             increaseIndentIf(indentAfterColon, " ");
             emitExpression(node.whenFalse);
             decreaseIndentIf(indentBeforeColon, indentAfterColon);
@@ -1353,16 +1714,18 @@ const _super = (function (geti, seti) {
         }
 
         function emitYieldExpression(node: YieldExpression) {
-            write(node.asteriskToken ? "yield*" : "yield");
-            emitExpressionWithPrefix(" ", node.expression);
+            emitTokenWithComment(SyntaxKind.YieldKeyword, node.pos, writeKeyword, node);
+            emit(node.asteriskToken);
+            emitExpressionWithLeadingSpace(node.expression);
         }
 
-        function emitSpreadElementExpression(node: SpreadElementExpression) {
-            write("...");
+        function emitSpreadExpression(node: SpreadElement) {
+            writePunctuation("...");
             emitExpression(node.expression);
         }
 
         function emitClassExpression(node: ClassExpression) {
+            generateNameIfNeeded(node.name);
             emitClassDeclarationOrExpression(node);
         }
 
@@ -1374,14 +1737,22 @@ const _super = (function (geti, seti) {
         function emitAsExpression(node: AsExpression) {
             emitExpression(node.expression);
             if (node.type) {
-                write(" as ");
+                writeSpace();
+                writeKeyword("as");
+                writeSpace();
                 emit(node.type);
             }
         }
 
         function emitNonNullExpression(node: NonNullExpression) {
             emitExpression(node.expression);
-            write("!");
+            writeOperator("!");
+        }
+
+        function emitMetaProperty(node: MetaProperty) {
+            writeToken(node.keywordToken, node.pos, writePunctuation);
+            writePunctuation(".");
+            emit(node.name);
         }
 
         //
@@ -1397,192 +1768,227 @@ const _super = (function (geti, seti) {
         // Statements
         //
 
-        function emitBlock(node: Block, format?: ListFormat) {
-            if (isSingleLineEmptyBlock(node)) {
-                writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
-                write(" ");
-                writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
-            }
-            else {
-                writeToken(SyntaxKind.OpenBraceToken, node.pos, /*contextNode*/ node);
-                emitBlockStatements(node);
-                writeToken(SyntaxKind.CloseBraceToken, node.statements.end, /*contextNode*/ node);
-            }
+        function emitBlock(node: Block) {
+            emitBlockStatements(node, /*forceSingleLine*/ !node.multiLine && isEmptyBlock(node));
         }
 
-        function emitBlockStatements(node: BlockLike) {
-            if (getEmitFlags(node) & EmitFlags.SingleLine) {
-                emitList(node, node.statements, ListFormat.SingleLineBlockStatements);
-            }
-            else {
-                emitList(node, node.statements, ListFormat.MultiLineBlockStatements);
-            }
+        function emitBlockStatements(node: BlockLike, forceSingleLine: boolean) {
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, /*contextNode*/ node);
+            const format = forceSingleLine || getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineBlockStatements : ListFormat.MultiLineBlockStatements;
+            emitList(node, node.statements, format);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.statements.end, writePunctuation, /*contextNode*/ node, /*indentLeading*/ !!(format & ListFormat.MultiLine));
         }
 
         function emitVariableStatement(node: VariableStatement) {
             emitModifiers(node, node.modifiers);
             emit(node.declarationList);
-            write(";");
+            writeSemicolon();
         }
 
-        function emitEmptyStatement(node: EmptyStatement) {
-            write(";");
+        function emitEmptyStatement() {
+            writeSemicolon();
         }
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
-            write(";");
+            // Emit semicolon in non json files
+            // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
+            if (!isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
+                writeSemicolon();
+            }
         }
 
         function emitIfStatement(node: IfStatement) {
-            const openParenPos = writeToken(SyntaxKind.IfKeyword, node.pos, node);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, node);
+            const openParenPos = emitTokenWithComment(SyntaxKind.IfKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end, node);
-            emitEmbeddedStatement(node.thenStatement);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitEmbeddedStatement(node, node.thenStatement);
             if (node.elseStatement) {
-                writeLine();
-                writeToken(SyntaxKind.ElseKeyword, node.thenStatement.end, node);
+                writeLineOrSpace(node);
+                emitTokenWithComment(SyntaxKind.ElseKeyword, node.thenStatement.end, writeKeyword, node);
                 if (node.elseStatement.kind === SyntaxKind.IfStatement) {
-                    write(" ");
+                    writeSpace();
                     emit(node.elseStatement);
                 }
                 else {
-                    emitEmbeddedStatement(node.elseStatement);
+                    emitEmbeddedStatement(node, node.elseStatement);
                 }
             }
         }
 
+        function emitWhileClause(node: WhileStatement | DoStatement, startPos: number) {
+            const openParenPos = emitTokenWithComment(SyntaxKind.WhileKeyword, startPos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+            emitExpression(node.expression);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+        }
+
         function emitDoStatement(node: DoStatement) {
-            write("do");
-            emitEmbeddedStatement(node.statement);
+            emitTokenWithComment(SyntaxKind.DoKeyword, node.pos, writeKeyword, node);
+            emitEmbeddedStatement(node, node.statement);
             if (isBlock(node.statement)) {
-                write(" ");
+                writeSpace();
             }
             else {
-                writeLine();
+                writeLineOrSpace(node);
             }
 
-            write("while (");
-            emitExpression(node.expression);
-            write(");");
+            emitWhileClause(node, node.statement.end);
+            writePunctuation(";");
         }
 
         function emitWhileStatement(node: WhileStatement) {
-            write("while (");
-            emitExpression(node.expression);
-            write(")");
-            emitEmbeddedStatement(node.statement);
+            emitWhileClause(node, node.pos);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForStatement(node: ForStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos, /*contextNode*/ node);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            let pos = emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, /*contextNode*/ node);
             emitForBinding(node.initializer);
-            write(";");
-            emitExpressionWithPrefix(" ", node.condition);
-            write(";");
-            emitExpressionWithPrefix(" ", node.incrementor);
-            write(")");
-            emitEmbeddedStatement(node.statement);
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.initializer ? node.initializer.end : pos, writeSemicolon, node);
+            emitExpressionWithLeadingSpace(node.condition);
+            pos = emitTokenWithComment(SyntaxKind.SemicolonToken, node.condition ? node.condition.end : pos, writeSemicolon, node);
+            emitExpressionWithLeadingSpace(node.incrementor);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.incrementor ? node.incrementor.end : pos, writePunctuation, node);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForInStatement(node: ForInStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
-            write(" in ");
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.InKeyword, node.initializer.end, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitForOfStatement(node: ForOfStatement) {
-            const openParenPos = writeToken(SyntaxKind.ForKeyword, node.pos);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
+            const openParenPos = emitTokenWithComment(SyntaxKind.ForKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            emitWithTrailingSpace(node.awaitModifier);
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitForBinding(node.initializer);
-            write(" of ");
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OfKeyword, node.initializer.end, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            emitEmbeddedStatement(node.statement);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitEmbeddedStatement(node, node.statement);
         }
 
-        function emitForBinding(node: VariableDeclarationList | Expression) {
+        function emitForBinding(node: VariableDeclarationList | Expression | undefined) {
             if (node !== undefined) {
                 if (node.kind === SyntaxKind.VariableDeclarationList) {
                     emit(node);
                 }
                 else {
-                    emitExpression(<Expression>node);
+                    emitExpression(node);
                 }
             }
         }
 
         function emitContinueStatement(node: ContinueStatement) {
-            writeToken(SyntaxKind.ContinueKeyword, node.pos);
-            emitWithPrefix(" ", node.label);
-            write(";");
+            emitTokenWithComment(SyntaxKind.ContinueKeyword, node.pos, writeKeyword, node);
+            emitWithLeadingSpace(node.label);
+            writeSemicolon();
         }
 
         function emitBreakStatement(node: BreakStatement) {
-            writeToken(SyntaxKind.BreakKeyword, node.pos);
-            emitWithPrefix(" ", node.label);
-            write(";");
+            emitTokenWithComment(SyntaxKind.BreakKeyword, node.pos, writeKeyword, node);
+            emitWithLeadingSpace(node.label);
+            writeSemicolon();
+        }
+
+        function emitTokenWithComment(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode: Node, indentLeading?: boolean) {
+            const node = getParseTreeNode(contextNode);
+            const isSimilarNode = node && node.kind === contextNode.kind;
+            const startPos = pos;
+            if (isSimilarNode) {
+                pos = skipTrivia(currentSourceFile.text, pos);
+            }
+            if (emitLeadingCommentsOfPosition && isSimilarNode && contextNode.pos !== startPos) {
+                const needsIndent = indentLeading && !positionsAreOnSameLine(startPos, pos, currentSourceFile);
+                if (needsIndent) {
+                    increaseIndent();
+                }
+                emitLeadingCommentsOfPosition(startPos);
+                if (needsIndent) {
+                    decreaseIndent();
+                }
+            }
+            pos = writeTokenText(token, writer, pos);
+            if (emitTrailingCommentsOfPosition && isSimilarNode && contextNode.end !== pos) {
+                emitTrailingCommentsOfPosition(pos, /*prefixSpace*/ true);
+            }
+            return pos;
         }
 
         function emitReturnStatement(node: ReturnStatement) {
-            writeToken(SyntaxKind.ReturnKeyword, node.pos, /*contextNode*/ node);
-            emitExpressionWithPrefix(" ", node.expression);
-            write(";");
+            emitTokenWithComment(SyntaxKind.ReturnKeyword, node.pos, writeKeyword, /*contextNode*/ node);
+            emitExpressionWithLeadingSpace(node.expression);
+            writeSemicolon();
         }
 
         function emitWithStatement(node: WithStatement) {
-            write("with (");
+            const openParenPos = emitTokenWithComment(SyntaxKind.WithKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            write(")");
-            emitEmbeddedStatement(node.statement);
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            emitEmbeddedStatement(node, node.statement);
         }
 
         function emitSwitchStatement(node: SwitchStatement) {
-            const openParenPos = writeToken(SyntaxKind.SwitchKeyword, node.pos);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
+            const openParenPos = emitTokenWithComment(SyntaxKind.SwitchKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
             emitExpression(node.expression);
-            writeToken(SyntaxKind.CloseParenToken, node.expression.end);
-            write(" ");
+            emitTokenWithComment(SyntaxKind.CloseParenToken, node.expression.end, writePunctuation, node);
+            writeSpace();
             emit(node.caseBlock);
         }
 
         function emitLabeledStatement(node: LabeledStatement) {
             emit(node.label);
-            write(": ");
+            emitTokenWithComment(SyntaxKind.ColonToken, node.label.end, writePunctuation, node);
+            writeSpace();
             emit(node.statement);
         }
 
         function emitThrowStatement(node: ThrowStatement) {
-            write("throw");
-            emitExpressionWithPrefix(" ", node.expression);
-            write(";");
+            emitTokenWithComment(SyntaxKind.ThrowKeyword, node.pos, writeKeyword, node);
+            emitExpressionWithLeadingSpace(node.expression);
+            writeSemicolon();
         }
 
         function emitTryStatement(node: TryStatement) {
-            write("try ");
+            emitTokenWithComment(SyntaxKind.TryKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emit(node.tryBlock);
-            emit(node.catchClause);
+            if (node.catchClause) {
+                writeLineOrSpace(node);
+                emit(node.catchClause);
+            }
             if (node.finallyBlock) {
-                writeLine();
-                write("finally ");
+                writeLineOrSpace(node);
+                emitTokenWithComment(SyntaxKind.FinallyKeyword, (node.catchClause || node.tryBlock).end, writeKeyword, node);
+                writeSpace();
                 emit(node.finallyBlock);
             }
         }
 
         function emitDebuggerStatement(node: DebuggerStatement) {
-            writeToken(SyntaxKind.DebuggerKeyword, node.pos);
-            write(";");
+            writeToken(SyntaxKind.DebuggerKeyword, node.pos, writeKeyword);
+            writeSemicolon();
         }
 
         //
@@ -1591,12 +1997,13 @@ const _super = (function (geti, seti) {
 
         function emitVariableDeclaration(node: VariableDeclaration) {
             emit(node.name);
-            emitWithPrefix(": ", node.type);
-            emitExpressionWithPrefix(" = ", node.initializer);
+            emitTypeAnnotation(node.type);
+            emitInitializer(node.initializer, node.type ? node.type.end : node.name.end, node);
         }
 
         function emitVariableDeclarationList(node: VariableDeclarationList) {
-            write(isLet(node) ? "let " : isConst(node) ? "const " : "var ");
+            writeKeyword(isLet(node) ? "let" : isVarConst(node) ? "const" : "var");
+            writeSpace();
             emitList(node, node.declarations, ListFormat.VariableDeclarationList);
         }
 
@@ -1607,9 +2014,15 @@ const _super = (function (geti, seti) {
         function emitFunctionDeclarationOrExpression(node: FunctionDeclaration | FunctionExpression) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write(node.asteriskToken ? "function* " : "function ");
-            emitIdentifierName(node.name);
+            writeKeyword("function");
+            emit(node.asteriskToken);
+            writeSpace();
+            emitIdentifierName(node.name!); // TODO: GH#18217
             emitSignatureAndBody(node, emitSignatureHead);
+        }
+
+        function emitBlockCallback(_hint: EmitHint, body: Node): void {
+            emitBlockFunctionBody(<Block>body);
         }
 
         function emitSignatureAndBody(node: FunctionLikeDeclaration, emitSignatureHead: (node: SignatureDeclaration) => void) {
@@ -1621,17 +2034,18 @@ const _super = (function (geti, seti) {
                         increaseIndent();
                     }
 
-                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
-                        emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
+                    pushNameGenerationScope(node);
+                    forEach(node.parameters, generateNames);
+                    generateNames(node.body);
+
+                    emitSignatureHead(node);
+                    if (onEmitNode) {
+                        onEmitNode(EmitHint.Unspecified, body, emitBlockCallback);
                     }
                     else {
-                        const savedTempFlags = tempFlags;
-                        tempFlags = 0;
-                        emitSignatureHead(node);
-                        emitBlockFunctionBody(node, body);
-                        tempFlags = savedTempFlags;
+                        emitBlockFunctionBody(body);
                     }
+                    popNameGenerationScope(node);
 
                     if (indentedFlag) {
                         decreaseIndent();
@@ -1639,13 +2053,13 @@ const _super = (function (geti, seti) {
                 }
                 else {
                     emitSignatureHead(node);
-                    write(" ");
+                    writeSpace();
                     emitExpression(body);
                 }
             }
             else {
                 emitSignatureHead(node);
-                write(";");
+                writeSemicolon();
             }
 
         }
@@ -1653,10 +2067,10 @@ const _super = (function (geti, seti) {
         function emitSignatureHead(node: FunctionDeclaration | FunctionExpression | MethodDeclaration | AccessorDeclaration | ConstructorDeclaration) {
             emitTypeParameters(node, node.typeParameters);
             emitParameters(node, node.parameters);
-            emitWithPrefix(": ", node.type);
+            emitTypeAnnotation(node.type);
         }
 
-        function shouldEmitBlockFunctionBodyOnSingleLine(parentNode: Node, body: Block) {
+        function shouldEmitBlockFunctionBodyOnSingleLine(body: Block) {
             // We must emit a function body as a single-line body in the following case:
             // * The body has NodeEmitFlags.SingleLine specified.
 
@@ -1682,7 +2096,7 @@ const _super = (function (geti, seti) {
                 return false;
             }
 
-            let previousStatement: Statement;
+            let previousStatement: Statement | undefined;
             for (const statement of body.statements) {
                 if (shouldWriteSeparatingLineTerminator(previousStatement, statement, ListFormat.PreserveLines)) {
                     return false;
@@ -1694,17 +2108,24 @@ const _super = (function (geti, seti) {
             return true;
         }
 
-        function emitBlockFunctionBody(parentNode: Node, body: Block) {
-            write(" {");
+        function emitBlockFunctionBody(body: Block) {
+            writeSpace();
+            writePunctuation("{");
             increaseIndent();
 
-            emitBodyWithDetachedComments(body, body.statements,
-                shouldEmitBlockFunctionBodyOnSingleLine(parentNode, body)
-                    ? emitBlockFunctionBodyOnSingleLine
-                    : emitBlockFunctionBodyWorker);
+            const emitBlockFunctionBody = shouldEmitBlockFunctionBodyOnSingleLine(body)
+                ? emitBlockFunctionBodyOnSingleLine
+                : emitBlockFunctionBodyWorker;
+
+            if (emitBodyWithDetachedComments) {
+                emitBodyWithDetachedComments(body, body.statements, emitBlockFunctionBody);
+            }
+            else {
+                emitBlockFunctionBody(body);
+            }
 
             decreaseIndent();
-            writeToken(SyntaxKind.CloseBraceToken, body.statements.end, body);
+            writeToken(SyntaxKind.CloseBraceToken, body.statements.end, writePunctuation, body);
         }
 
         function emitBlockFunctionBodyOnSingleLine(body: Block) {
@@ -1714,9 +2135,9 @@ const _super = (function (geti, seti) {
         function emitBlockFunctionBodyWorker(body: Block, emitBlockFunctionBodyOnSingleLine?: boolean) {
             // Emit all the prologue directives (like "use strict").
             const statementOffset = emitPrologueDirectives(body.statements, /*startWithNewLine*/ true);
-            const helpersEmitted = emitHelpers(body);
-
-            if (statementOffset === 0 && !helpersEmitted && emitBlockFunctionBodyOnSingleLine) {
+            const pos = writer.getTextPos();
+            emitHelpers(body);
+            if (statementOffset === 0 && pos === writer.getTextPos() && emitBlockFunctionBodyOnSingleLine) {
                 decreaseIndent();
                 emitList(body, body.statements, ListFormat.SingleLineFunctionBodyStatements);
                 increaseIndent();
@@ -1731,10 +2152,15 @@ const _super = (function (geti, seti) {
         }
 
         function emitClassDeclarationOrExpression(node: ClassDeclaration | ClassExpression) {
+            forEach(node.members, generateMemberNames);
+
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write("class");
-            emitNodeWithPrefix(" ", node.name, emitIdentifierName);
+            writeKeyword("class");
+            if (node.name) {
+                writeSpace();
+                emitIdentifierName(node.name);
+            }
 
             const indentedFlag = getEmitFlags(node) & EmitFlags.Indented;
             if (indentedFlag) {
@@ -1744,106 +2170,104 @@ const _super = (function (geti, seti) {
             emitTypeParameters(node, node.typeParameters);
             emitList(node, node.heritageClauses, ListFormat.ClassHeritageClauses);
 
-            const savedTempFlags = tempFlags;
-            tempFlags = 0;
-
-            write(" {");
+            writeSpace();
+            writePunctuation("{");
             emitList(node, node.members, ListFormat.ClassMembers);
-            write("}");
+            writePunctuation("}");
 
             if (indentedFlag) {
                 decreaseIndent();
             }
-
-            tempFlags = savedTempFlags;
         }
 
         function emitInterfaceDeclaration(node: InterfaceDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write("interface ");
+            writeKeyword("interface");
+            writeSpace();
             emit(node.name);
             emitTypeParameters(node, node.typeParameters);
             emitList(node, node.heritageClauses, ListFormat.HeritageClauses);
-            write(" {");
+            writeSpace();
+            writePunctuation("{");
             emitList(node, node.members, ListFormat.InterfaceMembers);
-            write("}");
+            writePunctuation("}");
         }
 
         function emitTypeAliasDeclaration(node: TypeAliasDeclaration) {
             emitDecorators(node, node.decorators);
             emitModifiers(node, node.modifiers);
-            write("type ");
+            writeKeyword("type");
+            writeSpace();
             emit(node.name);
             emitTypeParameters(node, node.typeParameters);
-            write(" = ");
+            writeSpace();
+            writePunctuation("=");
+            writeSpace();
             emit(node.type);
-            write(";");
+            writeSemicolon();
         }
 
         function emitEnumDeclaration(node: EnumDeclaration) {
             emitModifiers(node, node.modifiers);
-            write("enum ");
+            writeKeyword("enum");
+            writeSpace();
             emit(node.name);
 
-            const savedTempFlags = tempFlags;
-            tempFlags = 0;
-
-            write(" {");
+            writeSpace();
+            writePunctuation("{");
             emitList(node, node.members, ListFormat.EnumMembers);
-            write("}");
-            tempFlags = savedTempFlags;
+            writePunctuation("}");
         }
 
         function emitModuleDeclaration(node: ModuleDeclaration) {
             emitModifiers(node, node.modifiers);
-            write(node.flags & NodeFlags.Namespace ? "namespace " : "module ");
+            if (~node.flags & NodeFlags.GlobalAugmentation) {
+                writeKeyword(node.flags & NodeFlags.Namespace ? "namespace" : "module");
+                writeSpace();
+            }
             emit(node.name);
 
             let body = node.body;
+            if (!body) return writeSemicolon();
             while (body.kind === SyntaxKind.ModuleDeclaration) {
-                write(".");
+                writePunctuation(".");
                 emit((<ModuleDeclaration>body).name);
-                body = (<ModuleDeclaration>body).body;
+                body = (<ModuleDeclaration>body).body!;
             }
 
-            write(" ");
+            writeSpace();
             emit(body);
         }
 
         function emitModuleBlock(node: ModuleBlock) {
-            if (isEmptyBlock(node)) {
-                write("{ }");
-            }
-            else {
-                const savedTempFlags = tempFlags;
-                tempFlags = 0;
-                write("{");
-                increaseIndent();
-                emitBlockStatements(node);
-                write("}");
-                tempFlags = savedTempFlags;
-            }
+            pushNameGenerationScope(node);
+            forEach(node.statements, generateNames);
+            emitBlockStatements(node, /*forceSingleLine*/ isEmptyBlock(node));
+            popNameGenerationScope(node);
         }
 
         function emitCaseBlock(node: CaseBlock) {
-            writeToken(SyntaxKind.OpenBraceToken, node.pos);
+            emitTokenWithComment(SyntaxKind.OpenBraceToken, node.pos, writePunctuation, node);
             emitList(node, node.clauses, ListFormat.CaseBlockClauses);
-            writeToken(SyntaxKind.CloseBraceToken, node.clauses.end);
+            emitTokenWithComment(SyntaxKind.CloseBraceToken, node.clauses.end, writePunctuation, node, /*indentLeading*/ true);
         }
 
         function emitImportEqualsDeclaration(node: ImportEqualsDeclaration) {
             emitModifiers(node, node.modifiers);
-            write("import ");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
+            writeSpace();
             emit(node.name);
-            write(" = ");
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.EqualsToken, node.name.end, writePunctuation, node);
+            writeSpace();
             emitModuleReference(node.moduleReference);
-            write(";");
+            writeSemicolon();
         }
 
         function emitModuleReference(node: ModuleReference) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);
@@ -1852,25 +2276,32 @@ const _super = (function (geti, seti) {
 
         function emitImportDeclaration(node: ImportDeclaration) {
             emitModifiers(node, node.modifiers);
-            write("import ");
+            emitTokenWithComment(SyntaxKind.ImportKeyword, node.modifiers ? node.modifiers.end : node.pos, writeKeyword, node);
+            writeSpace();
             if (node.importClause) {
                 emit(node.importClause);
-                write(" from ");
+                writeSpace();
+                emitTokenWithComment(SyntaxKind.FromKeyword, node.importClause.end, writeKeyword, node);
+                writeSpace();
             }
             emitExpression(node.moduleSpecifier);
-            write(";");
+            writeSemicolon();
         }
 
         function emitImportClause(node: ImportClause) {
             emit(node.name);
             if (node.name && node.namedBindings) {
-                write(", ");
+                emitTokenWithComment(SyntaxKind.CommaToken, node.name.end, writePunctuation, node);
+                writeSpace();
             }
             emit(node.namedBindings);
         }
 
         function emitNamespaceImport(node: NamespaceImport) {
-            write("* as ");
+            const asPos = emitTokenWithComment(SyntaxKind.AsteriskToken, node.pos, writePunctuation, node);
+            writeSpace();
+            emitTokenWithComment(SyntaxKind.AsKeyword, asPos, writeKeyword, node);
+            writeSpace();
             emit(node.name);
         }
 
@@ -1883,24 +2314,47 @@ const _super = (function (geti, seti) {
         }
 
         function emitExportAssignment(node: ExportAssignment) {
-            write(node.isExportEquals ? "export = " : "export default ");
+            const nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            if (node.isExportEquals) {
+                emitTokenWithComment(SyntaxKind.EqualsToken, nextPos, writeOperator, node);
+            }
+            else {
+                emitTokenWithComment(SyntaxKind.DefaultKeyword, nextPos, writeKeyword, node);
+            }
+            writeSpace();
             emitExpression(node.expression);
-            write(";");
+            writeSemicolon();
         }
 
         function emitExportDeclaration(node: ExportDeclaration) {
-            write("export ");
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             if (node.exportClause) {
                 emit(node.exportClause);
             }
             else {
-                write("*");
+                nextPos = emitTokenWithComment(SyntaxKind.AsteriskToken, nextPos, writePunctuation, node);
             }
             if (node.moduleSpecifier) {
-                write(" from ");
+                writeSpace();
+                const fromPos = node.exportClause ? node.exportClause.end : nextPos;
+                emitTokenWithComment(SyntaxKind.FromKeyword, fromPos, writeKeyword, node);
+                writeSpace();
                 emitExpression(node.moduleSpecifier);
             }
-            write(";");
+            writeSemicolon();
+        }
+
+        function emitNamespaceExportDeclaration(node: NamespaceExportDeclaration) {
+            let nextPos = emitTokenWithComment(SyntaxKind.ExportKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            nextPos = emitTokenWithComment(SyntaxKind.AsKeyword, nextPos, writeKeyword, node);
+            writeSpace();
+            nextPos = emitTokenWithComment(SyntaxKind.NamespaceKeyword, nextPos, writeKeyword, node);
+            writeSpace();
+            emit(node.name);
+            writeSemicolon();
         }
 
         function emitNamedExports(node: NamedExports) {
@@ -1912,15 +2366,17 @@ const _super = (function (geti, seti) {
         }
 
         function emitNamedImportsOrExports(node: NamedImportsOrExports) {
-            write("{");
+            writePunctuation("{");
             emitList(node, node.elements, ListFormat.NamedImportsOrExportsElements);
-            write("}");
+            writePunctuation("}");
         }
 
         function emitImportOrExportSpecifier(node: ImportOrExportSpecifier) {
             if (node.propertyName) {
                 emit(node.propertyName);
-                write(" as ");
+                writeSpace();
+                emitTokenWithComment(SyntaxKind.AsKeyword, node.propertyName.end, writeKeyword, node);
+                writeSpace();
             }
 
             emit(node.name);
@@ -1931,9 +2387,10 @@ const _super = (function (geti, seti) {
         //
 
         function emitExternalModuleReference(node: ExternalModuleReference) {
-            write("require(");
+            writeKeyword("require");
+            writePunctuation("(");
             emitExpression(node.expression);
-            write(")");
+            writePunctuation(")");
         }
 
         //
@@ -1942,58 +2399,78 @@ const _super = (function (geti, seti) {
 
         function emitJsxElement(node: JsxElement) {
             emit(node.openingElement);
-            emitList(node, node.children, ListFormat.JsxElementChildren);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
             emit(node.closingElement);
         }
 
         function emitJsxSelfClosingElement(node: JsxSelfClosingElement) {
-            write("<");
+            writePunctuation("<");
             emitJsxTagName(node.tagName);
-            write(" ");
-            emitList(node, node.attributes, ListFormat.JsxElementAttributes);
-            write("/>");
+            writeSpace();
+            emit(node.attributes);
+            writePunctuation("/>");
         }
 
-        function emitJsxOpeningElement(node: JsxOpeningElement) {
-            write("<");
-            emitJsxTagName(node.tagName);
-            writeIfAny(node.attributes, " ");
-            emitList(node, node.attributes, ListFormat.JsxElementAttributes);
-            write(">");
+        function emitJsxFragment(node: JsxFragment) {
+            emit(node.openingFragment);
+            emitList(node, node.children, ListFormat.JsxElementOrFragmentChildren);
+            emit(node.closingFragment);
+        }
+
+        function emitJsxOpeningElementOrFragment(node: JsxOpeningElement | JsxOpeningFragment) {
+            writePunctuation("<");
+
+            if (isJsxOpeningElement(node)) {
+                emitJsxTagName(node.tagName);
+                if (node.attributes.properties && node.attributes.properties.length > 0) {
+                    writeSpace();
+                }
+                emit(node.attributes);
+            }
+
+            writePunctuation(">");
         }
 
         function emitJsxText(node: JsxText) {
+            commitPendingSemicolon();
             writer.writeLiteral(getTextOfNode(node, /*includeTrivia*/ true));
         }
 
-        function emitJsxClosingElement(node: JsxClosingElement) {
-            write("</");
-            emitJsxTagName(node.tagName);
-            write(">");
+        function emitJsxClosingElementOrFragment(node: JsxClosingElement | JsxClosingFragment) {
+            writePunctuation("</");
+            if (isJsxClosingElement(node)) {
+                emitJsxTagName(node.tagName);
+            }
+            writePunctuation(">");
+        }
+
+        function emitJsxAttributes(node: JsxAttributes) {
+            emitList(node, node.properties, ListFormat.JsxElementAttributes);
         }
 
         function emitJsxAttribute(node: JsxAttribute) {
             emit(node.name);
-            emitWithPrefix("=", node.initializer);
+            emitNodeWithPrefix("=", writePunctuation, node.initializer!, emit); // TODO: GH#18217
         }
 
         function emitJsxSpreadAttribute(node: JsxSpreadAttribute) {
-            write("{...");
+            writePunctuation("{...");
             emitExpression(node.expression);
-            write("}");
+            writePunctuation("}");
         }
 
         function emitJsxExpression(node: JsxExpression) {
             if (node.expression) {
-                write("{");
+                writePunctuation("{");
+                emit(node.dotDotDotToken);
                 emitExpression(node.expression);
-                write("}");
+                writePunctuation("}");
             }
         }
 
         function emitJsxTagName(node: JsxTagNameExpression) {
             if (node.kind === SyntaxKind.Identifier) {
-                emitExpression(<Identifier>node);
+                emitExpression(node);
             }
             else {
                 emit(node);
@@ -2005,19 +2482,19 @@ const _super = (function (geti, seti) {
         //
 
         function emitCaseClause(node: CaseClause) {
-            write("case ");
+            emitTokenWithComment(SyntaxKind.CaseKeyword, node.pos, writeKeyword, node);
+            writeSpace();
             emitExpression(node.expression);
-            write(":");
 
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            emitCaseOrDefaultClauseRest(node, node.statements, node.expression.end);
         }
 
         function emitDefaultClause(node: DefaultClause) {
-            write("default:");
-            emitCaseOrDefaultClauseStatements(node, node.statements);
+            const pos = emitTokenWithComment(SyntaxKind.DefaultKeyword, node.pos, writeKeyword, node);
+            emitCaseOrDefaultClauseRest(node, node.statements, pos);
         }
 
-        function emitCaseOrDefaultClauseStatements(parentNode: Node, statements: NodeArray<Statement>) {
+        function emitCaseOrDefaultClauseRest(parentNode: Node, statements: NodeArray<Statement>, colonPos: number) {
             const emitAsSingleStatement =
                 statements.length === 1 &&
                 (
@@ -2027,30 +2504,34 @@ const _super = (function (geti, seti) {
                     rangeStartPositionsAreOnSameLine(parentNode, statements[0], currentSourceFile)
                 );
 
+            let format = ListFormat.CaseOrDefaultClauseStatements;
             if (emitAsSingleStatement) {
-                write(" ");
-                emit(statements[0]);
+                writeToken(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
+                writeSpace();
+                format &= ~(ListFormat.MultiLine | ListFormat.Indented);
             }
             else {
-                emitList(parentNode, statements, ListFormat.CaseOrDefaultClauseStatements);
+                emitTokenWithComment(SyntaxKind.ColonToken, colonPos, writePunctuation, parentNode);
             }
+            emitList(parentNode, statements, format);
         }
 
         function emitHeritageClause(node: HeritageClause) {
-            write(" ");
-            writeTokenText(node.token);
-            write(" ");
+            writeSpace();
+            writeTokenText(node.token, writeKeyword);
+            writeSpace();
             emitList(node, node.types, ListFormat.HeritageClauseTypes);
         }
 
         function emitCatchClause(node: CatchClause) {
-            writeLine();
-            const openParenPos = writeToken(SyntaxKind.CatchKeyword, node.pos);
-            write(" ");
-            writeToken(SyntaxKind.OpenParenToken, openParenPos);
-            emit(node.variableDeclaration);
-            writeToken(SyntaxKind.CloseParenToken, node.variableDeclaration ? node.variableDeclaration.end : openParenPos);
-            write(" ");
+            const openParenPos = emitTokenWithComment(SyntaxKind.CatchKeyword, node.pos, writeKeyword, node);
+            writeSpace();
+            if (node.variableDeclaration) {
+                emitTokenWithComment(SyntaxKind.OpenParenToken, openParenPos, writePunctuation, node);
+                emit(node.variableDeclaration);
+                emitTokenWithComment(SyntaxKind.CloseParenToken, node.variableDeclaration.end, writePunctuation, node);
+                writeSpace();
+            }
             emit(node.block);
         }
 
@@ -2060,7 +2541,8 @@ const _super = (function (geti, seti) {
 
         function emitPropertyAssignment(node: PropertyAssignment) {
             emit(node.name);
-            write(": ");
+            writePunctuation(":");
+            writeSpace();
             // This is to ensure that we emit comment in the following case:
             //      For example:
             //          obj = {
@@ -2069,19 +2551,27 @@ const _super = (function (geti, seti) {
             // "comment1" is not considered to be leading comment for node.initializer
             // but rather a trailing comment on the previous node.
             const initializer = node.initializer;
-            if ((getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
+            if (emitTrailingCommentsOfPosition && (getEmitFlags(initializer) & EmitFlags.NoLeadingComments) === 0) {
                 const commentRange = getCommentRange(initializer);
                 emitTrailingCommentsOfPosition(commentRange.pos);
             }
-
             emitExpression(initializer);
         }
 
         function emitShorthandPropertyAssignment(node: ShorthandPropertyAssignment) {
             emit(node.name);
             if (node.objectAssignmentInitializer) {
-                write(" = ");
+                writeSpace();
+                writePunctuation("=");
+                writeSpace();
                 emitExpression(node.objectAssignmentInitializer);
+            }
+        }
+
+        function emitSpreadAssignment(node: SpreadAssignment) {
+            if (node.expression) {
+                writePunctuation("...");
+                emitExpression(node.expression);
             }
         }
 
@@ -2091,7 +2581,7 @@ const _super = (function (geti, seti) {
 
         function emitEnumMember(node: EnumMember) {
             emit(node.name);
-            emitExpressionWithPrefix(" = ", node.initializer);
+            emitInitializer(node.initializer, node.name.end, node);
         }
 
         //
@@ -2100,18 +2590,72 @@ const _super = (function (geti, seti) {
 
         function emitSourceFile(node: SourceFile) {
             writeLine();
-            emitShebang();
-            emitBodyWithDetachedComments(node, node.statements, emitSourceFileWorker);
+            const statements = node.statements;
+            if (emitBodyWithDetachedComments) {
+                // Emit detached comment if there are no prologue directives or if the first node is synthesized.
+                // The synthesized node will have no leading comment so some comments may be missed.
+                const shouldEmitDetachedComment = statements.length === 0 ||
+                    !isPrologueDirective(statements[0]) ||
+                    nodeIsSynthesized(statements[0]);
+                if (shouldEmitDetachedComment) {
+                    emitBodyWithDetachedComments(node, statements, emitSourceFileWorker);
+                    return;
+                }
+            }
+            emitSourceFileWorker(node);
+        }
+
+        function emitSyntheticTripleSlashReferencesIfNeeded(node: Bundle) {
+            emitTripleSlashDirectives(!!node.hasNoDefaultLib, node.syntheticFileReferences || [], node.syntheticTypeReferences || [], node.syntheticLibReferences || []);
+        }
+
+        function emitTripleSlashDirectivesIfNeeded(node: SourceFile) {
+            if (node.isDeclarationFile) emitTripleSlashDirectives(node.hasNoDefaultLib, node.referencedFiles, node.typeReferenceDirectives, node.libReferenceDirectives);
+        }
+
+        function emitTripleSlashDirectives(hasNoDefaultLib: boolean, files: ReadonlyArray<FileReference>, types: ReadonlyArray<FileReference>, libs: ReadonlyArray<FileReference>) {
+            if (hasNoDefaultLib) {
+                write(`/// <reference no-default-lib="true"/>`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.moduleName) {
+                write(`/// <amd-module name="${currentSourceFile.moduleName}" />`);
+                writeLine();
+            }
+            if (currentSourceFile && currentSourceFile.amdDependencies) {
+                for (const dep of currentSourceFile.amdDependencies) {
+                    if (dep.name) {
+                        write(`/// <amd-dependency name="${dep.name}" path="${dep.path}" />`);
+                    }
+                    else {
+                        write(`/// <amd-dependency path="${dep.path}" />`);
+                    }
+                    writeLine();
+                }
+            }
+            for (const directive of files) {
+                write(`/// <reference path="${directive.fileName}" />`);
+                writeLine();
+            }
+            for (const directive of types) {
+                write(`/// <reference types="${directive.fileName}" />`);
+                writeLine();
+            }
+            for (const directive of libs) {
+                write(`/// <reference lib="${directive.fileName}" />`);
+                writeLine();
+            }
         }
 
         function emitSourceFileWorker(node: SourceFile) {
             const statements = node.statements;
-            const statementOffset = emitPrologueDirectives(statements);
-            const savedTempFlags = tempFlags;
-            tempFlags = 0;
+            pushNameGenerationScope(node);
+            forEach(node.statements, generateNames);
             emitHelpers(node);
-            emitList(node, statements, ListFormat.MultiLine, statementOffset);
-            tempFlags = savedTempFlags;
+            const index = findIndex(statements, statement => !isPrologueDirective(statement));
+            emitTripleSlashDirectivesIfNeeded(node);
+            emitList(node, statements, ListFormat.MultiLine, index === -1 ? statements.length : index);
+            popNameGenerationScope(node);
         }
 
         // Transformation nodes
@@ -2120,17 +2664,28 @@ const _super = (function (geti, seti) {
             emitExpression(node.expression);
         }
 
+        function emitCommaList(node: CommaListExpression) {
+            emitExpressionList(node, node.elements, ListFormat.CommaListElements);
+        }
+
         /**
          * Emits any prologue directives at the start of a Statement list, returning the
          * number of prologue directives written to the output.
          */
-        function emitPrologueDirectives(statements: Node[], startWithNewLine?: boolean): number {
+        function emitPrologueDirectives(statements: ReadonlyArray<Node>, startWithNewLine?: boolean, seenPrologueDirectives?: Map<true>): number {
             for (let i = 0; i < statements.length; i++) {
-                if (isPrologueDirective(statements[i])) {
-                    if (startWithNewLine || i > 0) {
-                        writeLine();
+                const statement = statements[i];
+                if (isPrologueDirective(statement)) {
+                    const shouldEmitPrologueDirective = seenPrologueDirectives ? !seenPrologueDirectives.has(statement.expression.text) : true;
+                    if (shouldEmitPrologueDirective) {
+                        if (startWithNewLine || i > 0) {
+                            writeLine();
+                        }
+                        emit(statement);
+                        if (seenPrologueDirectives) {
+                            seenPrologueDirectives.set(statement.expression.text, true);
+                        }
                     }
-                    emit(statements[i]);
                 }
                 else {
                     // return index of the first non prologue directive
@@ -2141,103 +2696,35 @@ const _super = (function (geti, seti) {
             return statements.length;
         }
 
-        function emitHelpers(node: Node) {
-            const emitFlags = getEmitFlags(node);
-            let helpersEmitted = false;
-            if (emitFlags & EmitFlags.EmitEmitHelpers) {
-                helpersEmitted = emitEmitHelpers(currentSourceFile);
+        function emitPrologueDirectivesIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
+                setSourceFile(sourceFileOrBundle);
+                emitPrologueDirectives(sourceFileOrBundle.statements);
             }
-
-            if (emitFlags & EmitFlags.EmitExportStar) {
-                writeLines(exportStarHelper);
-                helpersEmitted = true;
+            else {
+                const seenPrologueDirectives = createMap<true>();
+                for (const sourceFile of sourceFileOrBundle.sourceFiles) {
+                    setSourceFile(sourceFile);
+                    emitPrologueDirectives(sourceFile.statements, /*startWithNewLine*/ true, seenPrologueDirectives);
+                }
             }
-
-            if (emitFlags & EmitFlags.EmitSuperHelper) {
-                writeLines(superHelper);
-                helpersEmitted = true;
-            }
-
-            if (emitFlags & EmitFlags.EmitAdvancedSuperHelper) {
-                writeLines(advancedSuperHelper);
-                helpersEmitted = true;
-            }
-
-            return helpersEmitted;
         }
 
-        function emitEmitHelpers(node: SourceFile) {
-            // Only emit helpers if the user did not say otherwise.
-            if (compilerOptions.noEmitHelpers) {
-                return false;
-            }
-
-            // Don't emit helpers if we can import them.
-            if (compilerOptions.importHelpers
-                && (isExternalModule(node) || compilerOptions.isolatedModules)) {
-                return false;
-            }
-
-            let helpersEmitted = false;
-
-            // Only Emit __extends function when target ES5.
-            // For target ES6 and above, we can emit classDeclaration as is.
-            if ((languageVersion < ScriptTarget.ES2015) && (!extendsEmitted && node.flags & NodeFlags.HasClassExtends)) {
-                writeLines(extendsHelper);
-                extendsEmitted = true;
-                helpersEmitted = true;
-            }
-
-            if (compilerOptions.jsx !== JsxEmit.Preserve && !assignEmitted && (node.flags & NodeFlags.HasJsxSpreadAttributes)) {
-                writeLines(assignHelper);
-                assignEmitted = true;
-            }
-
-            if (!decorateEmitted && node.flags & NodeFlags.HasDecorators) {
-                writeLines(decorateHelper);
-                if (compilerOptions.emitDecoratorMetadata) {
-                    writeLines(metadataHelper);
+        function emitShebangIfNeeded(sourceFileOrBundle: Bundle | SourceFile) {
+            if (isSourceFile(sourceFileOrBundle)) {
+                const shebang = getShebang(sourceFileOrBundle.text);
+                if (shebang) {
+                    write(shebang);
+                    writeLine();
+                    return true;
                 }
-
-                decorateEmitted = true;
-                helpersEmitted = true;
             }
-
-            if (!paramEmitted && node.flags & NodeFlags.HasParamDecorators) {
-                writeLines(paramHelper);
-                paramEmitted = true;
-                helpersEmitted = true;
-            }
-
-            // Only emit __awaiter function when target ES5/ES6.
-            // Only emit __generator function when target ES5.
-            // For target ES2017 and above, we can emit async/await as is.
-            if ((languageVersion < ScriptTarget.ES2017) && (!awaiterEmitted && node.flags & NodeFlags.HasAsyncFunctions)) {
-                writeLines(awaiterHelper);
-                if (languageVersion < ScriptTarget.ES2015) {
-                    writeLines(generatorHelper);
-                }
-
-                awaiterEmitted = true;
-                helpersEmitted = true;
-            }
-
-            if (helpersEmitted) {
-                writeLine();
-            }
-
-            return helpersEmitted;
-        }
-
-        function writeLines(text: string): void {
-            const lines = text.split(/\r\n|\r|\n/g);
-            for (let i = 0; i < lines.length; i++) {
-                const line = lines[i];
-                if (line.length) {
-                    if (i > 0) {
-                        writeLine();
+            else {
+                for (const sourceFile of sourceFileOrBundle.sourceFiles) {
+                    // Emit only the first encountered shebang
+                    if (emitShebangIfNeeded(sourceFile)) {
+                        break;
                     }
-                    write(line);
                 }
             }
         }
@@ -2246,46 +2733,69 @@ const _super = (function (geti, seti) {
         // Helpers
         //
 
-        function emitShebang() {
-            const shebang = getShebang(currentText);
-            if (shebang) {
-                write(shebang);
-                writeLine();
-            }
+        function emitNodeWithWriter(node: Node | undefined, writer: typeof write) {
+            if (!node) return;
+            const savedWrite = write;
+            write = writer;
+            emit(node);
+            write = savedWrite;
         }
 
-        function emitModifiers(node: Node, modifiers: NodeArray<Modifier>) {
+        function emitModifiers(node: Node, modifiers: NodeArray<Modifier> | undefined) {
             if (modifiers && modifiers.length) {
                 emitList(node, modifiers, ListFormat.Modifiers);
-                write(" ");
+                writeSpace();
             }
         }
 
-        function emitWithPrefix(prefix: string, node: Node) {
-            emitNodeWithPrefix(prefix, node, emit);
-        }
-
-        function emitExpressionWithPrefix(prefix: string, node: Node) {
-            emitNodeWithPrefix(prefix, node, emitExpression);
-        }
-
-        function emitNodeWithPrefix(prefix: string, node: Node, emit: (node: Node) => void) {
+        function emitTypeAnnotation(node: TypeNode | undefined) {
             if (node) {
-                write(prefix);
+                writePunctuation(":");
+                writeSpace();
                 emit(node);
             }
         }
 
-        function emitWithSuffix(node: Node, suffix: string) {
+        function emitInitializer(node: Expression | undefined, equalCommentStartPos: number, container: Node) {
             if (node) {
-                emit(node);
-                write(suffix);
+                writeSpace();
+                emitTokenWithComment(SyntaxKind.EqualsToken, equalCommentStartPos, writeOperator, container);
+                writeSpace();
+                emitExpression(node);
             }
         }
 
-        function emitEmbeddedStatement(node: Statement) {
-            if (isBlock(node)) {
-                write(" ");
+        function emitNodeWithPrefix(prefix: string, prefixWriter: (s: string) => void, node: Node, emit: (node: Node) => void) {
+            if (node) {
+                prefixWriter(prefix);
+                emit(node);
+            }
+        }
+
+        function emitWithLeadingSpace(node: Node | undefined) {
+            if (node) {
+                writeSpace();
+                emit(node);
+            }
+        }
+
+        function emitExpressionWithLeadingSpace(node: Expression | undefined) {
+            if (node) {
+                writeSpace();
+                emitExpression(node);
+            }
+        }
+
+        function emitWithTrailingSpace(node: Node | undefined) {
+            if (node) {
+                emit(node);
+                writeSpace();
+            }
+        }
+
+        function emitEmbeddedStatement(parent: Node, node: Statement) {
+            if (isBlock(node) || getEmitFlags(parent) & EmitFlags.SingleLine) {
+                writeSpace();
                 emit(node);
             }
             else {
@@ -2296,15 +2806,18 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator>) {
+        function emitDecorators(parentNode: Node, decorators: NodeArray<Decorator> | undefined) {
             emitList(parentNode, decorators, ListFormat.Decorators);
         }
 
-        function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode>) {
+        function emitTypeArguments(parentNode: Node, typeArguments: NodeArray<TypeNode> | undefined) {
             emitList(parentNode, typeArguments, ListFormat.TypeArguments);
         }
 
-        function emitTypeParameters(parentNode: Node, typeParameters: NodeArray<TypeParameterDeclaration>) {
+        function emitTypeParameters(parentNode: SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | ClassDeclaration | ClassExpression, typeParameters: NodeArray<TypeParameterDeclaration> | undefined) {
+            if (isFunctionLike(parentNode) && parentNode.typeArguments) { // Quick info uses type arguments in place of type parameters on instantiated signatures
+                return emitTypeArguments(parentNode, parentNode.typeArguments);
+            }
             emitList(parentNode, typeParameters, ListFormat.TypeParameters);
         }
 
@@ -2312,12 +2825,27 @@ const _super = (function (geti, seti) {
             emitList(parentNode, parameters, ListFormat.Parameters);
         }
 
-        function emitParametersForArrow(parentNode: Node, parameters: NodeArray<ParameterDeclaration>) {
-            if (parameters &&
-                parameters.length === 1 &&
-                parameters[0].type === undefined &&
-                parameters[0].pos === parentNode.pos) {
-                emit(parameters[0]);
+        function canEmitSimpleArrowHead(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
+            const parameter = singleOrUndefined(parameters);
+            return parameter
+                && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
+                && isArrowFunction(parentNode)      // only arrow functions may have simple arrow head
+                && !parentNode.type                 // arrow function may not have return type annotation
+                && !some(parentNode.decorators)     // parent may not have decorators
+                && !some(parentNode.modifiers)      // parent may not have modifiers
+                && !some(parentNode.typeParameters) // parent may not have type parameters
+                && !some(parameter.decorators)      // parameter may not have decorators
+                && !some(parameter.modifiers)       // parameter may not have modifiers
+                && !parameter.dotDotDotToken        // parameter may not be rest
+                && !parameter.questionToken         // parameter may not be optional
+                && !parameter.type                  // parameter may not have a type annotation
+                && !parameter.initializer           // parameter may not have an initializer
+                && isIdentifier(parameter.name);    // parameter name must be identifier
+        }
+
+        function emitParametersForArrow(parentNode: FunctionTypeNode | ArrowFunction, parameters: NodeArray<ParameterDeclaration>) {
+            if (canEmitSimpleArrowHead(parentNode, parameters)) {
+                emitList(parentNode, parameters, ListFormat.Parameters & ~ListFormat.Parenthesis);
             }
             else {
                 emitParameters(parentNode, parameters);
@@ -2328,27 +2856,59 @@ const _super = (function (geti, seti) {
             emitList(parentNode, parameters, ListFormat.IndexSignatureParameters);
         }
 
-        function emitList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
+        function emitList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
             emitNodeList(emit, parentNode, children, format, start, count);
         }
 
-        function emitExpressionList(parentNode: Node, children: NodeArray<Node>, format: ListFormat, start?: number, count?: number) {
-            emitNodeList(emitExpression, parentNode, children, format, start, count);
+        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
+            emitNodeList(emitExpression as (node: Node) => void, parentNode, children, format, start, count); // TODO: GH#18217
         }
 
-        function emitNodeList(emit: (node: Node) => void, parentNode: Node, children: NodeArray<Node>, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
+        function writeDelimiter(format: ListFormat) {
+            switch (format & ListFormat.DelimitersMask) {
+                case ListFormat.None:
+                    break;
+                case ListFormat.CommaDelimited:
+                    writePunctuation(",");
+                    break;
+                case ListFormat.BarDelimited:
+                    writeSpace();
+                    writePunctuation("|");
+                    break;
+                case ListFormat.AmpersandDelimited:
+                    writeSpace();
+                    writePunctuation("&");
+                    break;
+            }
+        }
+
+        function emitNodeList(emit: (node: Node) => void, parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
             }
 
-            const isEmpty = isUndefined || children.length === 0 || start >= children.length || count === 0;
+            const isEmpty = children === undefined || start >= children.length || count === 0;
             if (isEmpty && format & ListFormat.OptionalIfEmpty) {
+                if (onBeforeEmitNodeArray) {
+                    onBeforeEmitNodeArray(children);
+                }
+                if (onAfterEmitNodeArray) {
+                    onAfterEmitNodeArray(children);
+                }
                 return;
             }
 
             if (format & ListFormat.BracketsMask) {
-                write(getOpeningBracket(format));
+                writePunctuation(getOpeningBracket(format));
+                if (isEmpty && !isUndefined) {
+                    // TODO: GH#18217
+                    emitTrailingCommentsOfPosition(children!.pos, /*prefixSpace*/ true); // Emit comments within empty bracketed lists
+                }
+            }
+
+            if (onBeforeEmitNodeArray) {
+                onBeforeEmitNodeArray(children);
             }
 
             if (isEmpty) {
@@ -2356,20 +2916,20 @@ const _super = (function (geti, seti) {
                 if (format & ListFormat.MultiLine) {
                     writeLine();
                 }
-                else if (format & ListFormat.SpaceBetweenBraces) {
-                    write(" ");
+                else if (format & ListFormat.SpaceBetweenBraces && !(format & ListFormat.NoSpaceIfEmpty)) {
+                    writeSpace();
                 }
             }
             else {
                 // Write the opening line terminator or leading whitespace.
                 const mayEmitInterveningComments = (format & ListFormat.NoInterveningComments) === 0;
                 let shouldEmitInterveningComments = mayEmitInterveningComments;
-                if (shouldWriteLeadingLineTerminator(parentNode, children, format)) {
+                if (shouldWriteLeadingLineTerminator(parentNode, children!, format)) { // TODO: GH#18217
                     writeLine();
                     shouldEmitInterveningComments = false;
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
-                    write(" ");
+                    writeSpace();
                 }
 
                 // Increase the indent, if requested.
@@ -2378,15 +2938,23 @@ const _super = (function (geti, seti) {
                 }
 
                 // Emit each child.
-                let previousSibling: Node;
-                let shouldDecreaseIndentAfterEmit: boolean;
-                const delimiter = getDelimiter(format);
+                let previousSibling: Node | undefined;
+                let shouldDecreaseIndentAfterEmit = false;
                 for (let i = 0; i < count; i++) {
-                    const child = children[start + i];
+                    const child = children![start + i];
 
                     // Write the delimiter if this is not the first node.
                     if (previousSibling) {
-                        write(delimiter);
+                        // i.e
+                        //      function commentedParameters(
+                        //          /* Parameter a */
+                        //          a
+                        //          /* End of parameter a */ -> this comment isn't considered to be trailing comment of parameter "a" due to newline
+                        //          ,
+                        if (format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end) {
+                            emitLeadingCommentsOfPosition(previousSibling.end);
+                        }
+                        writeDelimiter(format);
 
                         // Write either a line terminator or whitespace to separate the elements.
                         if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {
@@ -2401,19 +2969,21 @@ const _super = (function (geti, seti) {
                             shouldEmitInterveningComments = false;
                         }
                         else if (previousSibling && format & ListFormat.SpaceBetweenSiblings) {
-                            write(" ");
+                            writeSpace();
                         }
                     }
 
+                    // Emit this child.
                     if (shouldEmitInterveningComments) {
-                        const commentRange = getCommentRange(child);
-                        emitTrailingCommentsOfPosition(commentRange.pos);
+                        if (emitTrailingCommentsOfPosition) {
+                            const commentRange = getCommentRange(child);
+                            emitTrailingCommentsOfPosition(commentRange.pos);
+                        }
                     }
                     else {
                         shouldEmitInterveningComments = mayEmitInterveningComments;
                     }
 
-                    // Emit this child.
                     emit(child);
 
                     if (shouldDecreaseIndentAfterEmit) {
@@ -2425,9 +2995,20 @@ const _super = (function (geti, seti) {
                 }
 
                 // Write a trailing comma, if requested.
-                const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children.hasTrailingComma;
+                const hasTrailingComma = (format & ListFormat.AllowTrailingComma) && children!.hasTrailingComma;
                 if (format & ListFormat.CommaDelimited && hasTrailingComma) {
-                    write(",");
+                    writePunctuation(",");
+                }
+
+
+                // Emit any trailing comment of the last element in the list
+                // i.e
+                //       var array = [...
+                //          2
+                //          /* end of element 2 */
+                //       ];
+                if (previousSibling && format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end && !(getEmitFlags(previousSibling) & EmitFlags.NoTrailingComments)) {
+                    emitLeadingCommentsOfPosition(previousSibling.end);
                 }
 
                 // Decrease the indent, if requested.
@@ -2436,39 +3017,151 @@ const _super = (function (geti, seti) {
                 }
 
                 // Write the closing line terminator or closing whitespace.
-                if (shouldWriteClosingLineTerminator(parentNode, children, format)) {
+                if (shouldWriteClosingLineTerminator(parentNode, children!, format)) {
                     writeLine();
                 }
                 else if (format & ListFormat.SpaceBetweenBraces) {
-                    write(" ");
+                    writeSpace();
                 }
             }
 
+            if (onAfterEmitNodeArray) {
+                onAfterEmitNodeArray(children);
+            }
+
             if (format & ListFormat.BracketsMask) {
-                write(getClosingBracket(format));
+                if (isEmpty && !isUndefined) {
+                    // TODO: GH#18217
+                    emitLeadingCommentsOfPosition(children!.end); // Emit leading comments within empty lists
+                }
+                writePunctuation(getClosingBracket(format));
             }
         }
 
-        function writeIfAny(nodes: NodeArray<Node>, text: string) {
-            if (nodes && nodes.length > 0) {
-                write(text);
+        function commitPendingSemicolonInternal() {
+            if (pendingSemicolon) {
+                writeSemicolonInternal();
+                pendingSemicolon = false;
             }
         }
 
-        function writeIfPresent(node: Node, text: string) {
-            if (node !== undefined) {
-                write(text);
+        function writeLiteral(s: string) {
+            commitPendingSemicolon();
+            writer.writeLiteral(s);
+        }
+
+        function writeStringLiteral(s: string) {
+            commitPendingSemicolon();
+            writer.writeStringLiteral(s);
+        }
+
+        function writeBase(s: string) {
+            commitPendingSemicolon();
+            writer.write(s);
+        }
+
+        function writeSymbol(s: string, sym: Symbol) {
+            commitPendingSemicolon();
+            writer.writeSymbol(s, sym);
+        }
+
+        function writePunctuation(s: string) {
+            commitPendingSemicolon();
+            writer.writePunctuation(s);
+        }
+
+        function deferWriteSemicolon() {
+            pendingSemicolon = true;
+        }
+
+        function writeSemicolonInternal() {
+            writer.writePunctuation(";");
+        }
+
+        function writeKeyword(s: string) {
+            commitPendingSemicolon();
+            writer.writeKeyword(s);
+        }
+
+        function writeOperator(s: string) {
+            commitPendingSemicolon();
+            writer.writeOperator(s);
+        }
+
+        function writeParameter(s: string) {
+            commitPendingSemicolon();
+            writer.writeParameter(s);
+        }
+
+        function writeSpace() {
+            commitPendingSemicolon();
+            writer.writeSpace(" ");
+        }
+
+        function writeProperty(s: string) {
+            commitPendingSemicolon();
+            writer.writeProperty(s);
+        }
+
+        function writeLine() {
+            commitPendingSemicolon();
+            writer.writeLine();
+        }
+
+        function increaseIndent() {
+            commitPendingSemicolon();
+            writer.increaseIndent();
+        }
+
+        function decreaseIndent() {
+            commitPendingSemicolon();
+            writer.decreaseIndent();
+        }
+
+        function writeToken(token: SyntaxKind, pos: number, writer: (s: string) => void, contextNode?: Node) {
+            return onEmitSourceMapOfToken
+                ? onEmitSourceMapOfToken(contextNode, token, writer, pos, writeTokenText)
+                : writeTokenText(token, writer, pos);
+        }
+
+        function writeTokenNode(node: Node, writer: (s: string) => void) {
+            if (onBeforeEmitToken) {
+                onBeforeEmitToken(node);
+            }
+            writer(tokenToString(node.kind)!);
+            if (onAfterEmitToken) {
+                onAfterEmitToken(node);
             }
         }
 
-        function writeToken(token: SyntaxKind, pos: number, contextNode?: Node) {
-            return emitTokenWithSourceMap(contextNode, token, pos, writeTokenText);
+        function writeTokenText(token: SyntaxKind, writer: (s: string) => void): void;
+        function writeTokenText(token: SyntaxKind, writer: (s: string) => void, pos: number): number;
+        function writeTokenText(token: SyntaxKind, writer: (s: string) => void, pos?: number): number {
+            const tokenString = tokenToString(token)!;
+            writer(tokenString);
+            return pos! < 0 ? pos! : pos! + tokenString.length;
         }
 
-        function writeTokenText(token: SyntaxKind, pos?: number) {
-            const tokenString = tokenToString(token);
-            write(tokenString);
-            return pos < 0 ? pos : pos + tokenString.length;
+        function writeLineOrSpace(node: Node) {
+            if (getEmitFlags(node) & EmitFlags.SingleLine) {
+                writeSpace();
+            }
+            else {
+                writeLine();
+            }
+        }
+
+        function writeLines(text: string): void {
+            const lines = text.split(/\r\n?|\n/g);
+            const indentation = guessIndentation(lines);
+            for (const lineText of lines) {
+                const line = indentation ? lineText.slice(indentation) : lineText;
+                if (line.length) {
+                    writeLine();
+                    write(line);
+                    writeLine();
+                }
+            }
         }
 
         function increaseIndentIf(value: boolean, valueToWriteWhenNotIndenting?: string) {
@@ -2494,7 +3187,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function shouldWriteLeadingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+        function shouldWriteLeadingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return true;
             }
@@ -2520,7 +3213,7 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function shouldWriteSeparatingLineTerminator(previousNode: Node, nextNode: Node, format: ListFormat) {
+        function shouldWriteSeparatingLineTerminator(previousNode: Node | undefined, nextNode: Node, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return true;
             }
@@ -2536,11 +3229,11 @@ const _super = (function (geti, seti) {
                 }
             }
             else {
-                return nextNode.startsOnNewLine;
+                return getStartsOnNewLine(nextNode);
             }
         }
 
-        function shouldWriteClosingLineTerminator(parentNode: Node, children: NodeArray<Node>, format: ListFormat) {
+        function shouldWriteClosingLineTerminator(parentNode: TextRange, children: NodeArray<Node>, format: ListFormat) {
             if (format & ListFormat.MultiLine) {
                 return (format & ListFormat.NoTrailingNewLine) === 0;
             }
@@ -2565,9 +3258,9 @@ const _super = (function (geti, seti) {
             }
         }
 
-        function synthesizedNodeStartsOnNewLine(node: Node, format?: ListFormat) {
+        function synthesizedNodeStartsOnNewLine(node: Node, format: ListFormat) {
             if (nodeIsSynthesized(node)) {
-                const startsOnNewLine = node.startsOnNewLine;
+                const startsOnNewLine = getStartsOnNewLine(node);
                 if (startsOnNewLine === undefined) {
                     return (format & ListFormat.PreferNewLine) !== 0;
                 }
@@ -2584,7 +3277,7 @@ const _super = (function (geti, seti) {
             node2 = skipSynthesizedParentheses(node2);
 
             // Always use a newline for synthesized code if the synthesizer desires it.
-            if (node2.startsOnNewLine) {
+            if (getStartsOnNewLine(node2)) {
                 return true;
             }
 
@@ -2592,6 +3285,11 @@ const _super = (function (geti, seti) {
                 && !nodeIsSynthesized(node1)
                 && !nodeIsSynthesized(node2)
                 && !rangeEndIsOnSameLineAsRangeStart(node1, node2, currentSourceFile);
+        }
+
+        function isEmptyBlock(block: BlockLike) {
+            return block.statements.length === 0
+                && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
         }
 
         function skipSynthesizedParentheses(node: Node) {
@@ -2604,13 +3302,13 @@ const _super = (function (geti, seti) {
 
         function getTextOfNode(node: Node, includeTrivia?: boolean): string {
             if (isGeneratedIdentifier(node)) {
-                return getGeneratedIdentifier(<Identifier>node);
+                return generateName(node);
             }
-            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent)) {
-                return unescapeIdentifier(node.text);
+            else if (isIdentifier(node) && (nodeIsSynthesized(node) || !node.parent || !currentSourceFile || (node.parent && currentSourceFile && getSourceFileOfNode(node) !== getOriginalNode(currentSourceFile)))) {
+                return idText(node);
             }
             else if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
-                return getTextOfNode((<StringLiteral>node).textSourceNode, includeTrivia);
+                return getTextOfNode((<StringLiteral>node).textSourceNode!, includeTrivia);
             }
             else if (isLiteralExpression(node) && (nodeIsSynthesized(node) || !node.parent)) {
                 return node.text;
@@ -2619,41 +3317,208 @@ const _super = (function (geti, seti) {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
-                const textSourceNode = (<StringLiteral>node).textSourceNode;
+                const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return "\"" + escapeNonAsciiCharacters(escapeString(getTextOfNode(textSourceNode))) + "\"";
+                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
+                        `"${escapeString(getTextOfNode(textSourceNode))}"` :
+                        `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile, languageVersion);
+            return getLiteralText(node, currentSourceFile, neverAsciiEscape);
         }
 
-        function isSingleLineEmptyBlock(block: Block) {
-            return !block.multiLine
-                && isEmptyBlock(block);
+        /**
+         * Push a new name generation scope.
+         */
+        function pushNameGenerationScope(node: Node | undefined) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                return;
+            }
+            tempFlagsStack.push(tempFlags);
+            tempFlags = 0;
+            reservedNamesStack.push(reservedNames);
         }
 
-        function isEmptyBlock(block: BlockLike) {
-            return block.statements.length === 0
-                && rangeEndIsOnSameLineAsRangeStart(block, block, currentSourceFile);
+        /**
+         * Pop the current name generation scope.
+         */
+        function popNameGenerationScope(node: Node | undefined) {
+            if (node && getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                return;
+            }
+            tempFlags = tempFlagsStack.pop()!;
+            reservedNames = reservedNamesStack.pop()!;
         }
 
+        function reserveNameInNestedScopes(name: string) {
+            if (!reservedNames || reservedNames === lastOrUndefined(reservedNamesStack)) {
+                reservedNames = createMap<true>();
+            }
+            reservedNames.set(name, true);
+        }
+
+        function generateNames(node: Node | undefined) {
+            if (!node) return;
+            switch (node.kind) {
+                case SyntaxKind.Block:
+                    forEach((<Block>node).statements, generateNames);
+                    break;
+                case SyntaxKind.LabeledStatement:
+                case SyntaxKind.WithStatement:
+                case SyntaxKind.DoStatement:
+                case SyntaxKind.WhileStatement:
+                    generateNames((<LabeledStatement | WithStatement | DoStatement | WhileStatement>node).statement);
+                    break;
+                case SyntaxKind.IfStatement:
+                    generateNames((<IfStatement>node).thenStatement);
+                    generateNames((<IfStatement>node).elseStatement);
+                    break;
+                case SyntaxKind.ForStatement:
+                case SyntaxKind.ForOfStatement:
+                case SyntaxKind.ForInStatement:
+                    generateNames((<ForStatement | ForInOrOfStatement>node).initializer);
+                    generateNames((<ForStatement | ForInOrOfStatement>node).statement);
+                    break;
+                case SyntaxKind.SwitchStatement:
+                    generateNames((<SwitchStatement>node).caseBlock);
+                    break;
+                case SyntaxKind.CaseBlock:
+                    forEach((<CaseBlock>node).clauses, generateNames);
+                    break;
+                case SyntaxKind.CaseClause:
+                case SyntaxKind.DefaultClause:
+                    forEach((<CaseOrDefaultClause>node).statements, generateNames);
+                    break;
+                case SyntaxKind.TryStatement:
+                    generateNames((<TryStatement>node).tryBlock);
+                    generateNames((<TryStatement>node).catchClause);
+                    generateNames((<TryStatement>node).finallyBlock);
+                    break;
+                case SyntaxKind.CatchClause:
+                    generateNames((<CatchClause>node).variableDeclaration);
+                    generateNames((<CatchClause>node).block);
+                    break;
+                case SyntaxKind.VariableStatement:
+                    generateNames((<VariableStatement>node).declarationList);
+                    break;
+                case SyntaxKind.VariableDeclarationList:
+                    forEach((<VariableDeclarationList>node).declarations, generateNames);
+                    break;
+                case SyntaxKind.VariableDeclaration:
+                case SyntaxKind.Parameter:
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.ClassDeclaration:
+                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    break;
+                case SyntaxKind.FunctionDeclaration:
+                    generateNameIfNeeded((<FunctionDeclaration>node).name);
+                    if (getEmitFlags(node) & EmitFlags.ReuseTempVariableScope) {
+                        forEach((<FunctionDeclaration>node).parameters, generateNames);
+                        generateNames((<FunctionDeclaration>node).body);
+                    }
+                    break;
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                    forEach((<BindingPattern>node).elements, generateNames);
+                    break;
+                case SyntaxKind.ImportDeclaration:
+                    generateNames((<ImportDeclaration>node).importClause);
+                    break;
+                case SyntaxKind.ImportClause:
+                    generateNameIfNeeded((<ImportClause>node).name);
+                    generateNames((<ImportClause>node).namedBindings);
+                    break;
+                case SyntaxKind.NamespaceImport:
+                    generateNameIfNeeded((<NamespaceImport>node).name);
+                    break;
+                case SyntaxKind.NamedImports:
+                    forEach((<NamedImports>node).elements, generateNames);
+                    break;
+                case SyntaxKind.ImportSpecifier:
+                    generateNameIfNeeded((<ImportSpecifier>node).propertyName || (<ImportSpecifier>node).name);
+                    break;
+            }
+        }
+
+        function generateMemberNames(node: Node | undefined) {
+            if (!node) return;
+            switch (node.kind) {
+                case SyntaxKind.PropertyAssignment:
+                case SyntaxKind.ShorthandPropertyAssignment:
+                case SyntaxKind.PropertyDeclaration:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    generateNameIfNeeded((<NamedDeclaration>node).name);
+                    break;
+            }
+        }
+
+        function generateNameIfNeeded(name: DeclarationName | undefined) {
+            if (name) {
+                if (isGeneratedIdentifier(name)) {
+                    generateName(name);
+                }
+                else if (isBindingPattern(name)) {
+                    generateNames(name);
+                }
+            }
+        }
+
+        /**
+         * Generate the text for a generated identifier.
+         */
+        function generateName(name: GeneratedIdentifier) {
+            if ((name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) === GeneratedIdentifierFlags.Node) {
+                // Node names generate unique names based on their original node
+                // and are cached based on that node's id.
+                return generateNameCached(getNodeForGeneratedName(name), name.autoGenerateFlags);
+            }
+            else {
+                // Auto, Loop, and Unique names are cached based on their unique
+                // autoGenerateId.
+                const autoGenerateId = name.autoGenerateId!;
+                return autoGeneratedIdToGeneratedName[autoGenerateId] || (autoGeneratedIdToGeneratedName[autoGenerateId] = makeName(name));
+            }
+        }
+
+        function generateNameCached(node: Node, flags?: GeneratedIdentifierFlags) {
+            const nodeId = getNodeId(node);
+            return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = generateNameForNode(node, flags));
+        }
+
+        /**
+         * Returns a value indicating whether a name is unique globally, within the current file,
+         * or within the NameGenerator.
+         */
         function isUniqueName(name: string): boolean {
-            return !resolver.hasGlobalName(name) &&
-                !hasProperty(currentFileIdentifiers, name) &&
-                !hasProperty(generatedNameSet, name);
+            return isFileLevelUniqueName(name)
+                && !generatedNames.has(name)
+                && !(reservedNames && reservedNames.has(name));
         }
 
+        /**
+         * Returns a value indicating whether a name is unique globally or within the current file.
+         */
+        function isFileLevelUniqueName(name: string) {
+            return currentSourceFile ? ts.isFileLevelUniqueName(currentSourceFile, name, hasGlobalName) : true;
+        }
+
+        /**
+         * Returns a value indicating whether a name is unique within a container.
+         */
         function isUniqueLocalName(name: string, container: Node): boolean {
-            for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer) {
-                if (node.locals && hasProperty(node.locals, name)) {
+            for (let node = container; isNodeDescendantOf(node, container); node = node.nextContainer!) {
+                if (node.locals) {
+                    const local = node.locals.get(escapeLeadingUnderscores(name));
                     // We conservatively include alias symbols to cover cases where they're emitted as locals
-                    if (node.locals[name].flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
+                    if (local && local.flags & (SymbolFlags.Value | SymbolFlags.ExportValue | SymbolFlags.Alias)) {
                         return false;
                     }
                 }
@@ -2662,15 +3527,18 @@ const _super = (function (geti, seti) {
         }
 
         /**
-        * Return the next available name in the pattern _a ... _z, _0, _1, ...
-        * TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
-        * Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
-        */
-        function makeTempVariableName(flags: TempFlags): string {
+         * Return the next available name in the pattern _a ... _z, _0, _1, ...
+         * TempFlags._i or TempFlags._n may be used to express a preference for that dedicated name.
+         * Note that names generated by makeTempVariableName and makeUniqueName will never conflict.
+         */
+        function makeTempVariableName(flags: TempFlags, reservedInNestedScopes?: boolean): string {
             if (flags && !(tempFlags & flags)) {
                 const name = flags === TempFlags._i ? "_i" : "_n";
                 if (isUniqueName(name)) {
                     tempFlags |= flags;
+                    if (reservedInNestedScopes) {
+                        reserveNameInNestedScopes(name);
+                    }
                     return name;
                 }
             }
@@ -2683,17 +3551,34 @@ const _super = (function (geti, seti) {
                         ? "_" + String.fromCharCode(CharacterCodes.a + count)
                         : "_" + (count - 26);
                     if (isUniqueName(name)) {
+                        if (reservedInNestedScopes) {
+                            reserveNameInNestedScopes(name);
+                        }
                         return name;
                     }
                 }
             }
         }
 
-        // Generate a name that is unique within the current file and doesn't conflict with any names
-        // in global scope. The name is formed by adding an '_n' suffix to the specified base name,
-        // where n is a positive integer. Note that names generated by makeTempVariableName and
-        // makeUniqueName are guaranteed to never conflict.
-        function makeUniqueName(baseName: string): string {
+        /**
+         * Generate a name that is unique within the current file and doesn't conflict with any names
+         * in global scope. The name is formed by adding an '_n' suffix to the specified base name,
+         * where n is a positive integer. Note that names generated by makeTempVariableName and
+         * makeUniqueName are guaranteed to never conflict.
+         * If `optimistic` is set, the first instance will use 'baseName' verbatim instead of 'baseName_1'
+         */
+        function makeUniqueName(baseName: string, checkFn: (name: string) => boolean = isUniqueName, optimistic?: boolean, scoped?: boolean): string {
+            if (optimistic) {
+                if (checkFn(baseName)) {
+                    if (scoped) {
+                        reserveNameInNestedScopes(baseName);
+                    }
+                    else {
+                        generatedNames.set(baseName, true);
+                    }
+                    return baseName;
+                }
+            }
             // Find the first unique 'name_n', where n is a positive number
             if (baseName.charCodeAt(baseName.length - 1) !== CharacterCodes._) {
                 baseName += "_";
@@ -2701,43 +3586,75 @@ const _super = (function (geti, seti) {
             let i = 1;
             while (true) {
                 const generatedName = baseName + i;
-                if (isUniqueName(generatedName)) {
-                    return generatedNameSet[generatedName] = generatedName;
+                if (checkFn(generatedName)) {
+                    if (scoped) {
+                        reserveNameInNestedScopes(generatedName);
+                    }
+                    else {
+                        generatedNames.set(generatedName, true);
+                    }
+                    return generatedName;
                 }
                 i++;
             }
         }
 
+        function makeFileLevelOptimisticUniqueName(name: string) {
+            return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
+        }
+
+        /**
+         * Generates a unique name for a ModuleDeclaration or EnumDeclaration.
+         */
         function generateNameForModuleOrEnum(node: ModuleDeclaration | EnumDeclaration) {
             const name = getTextOfNode(node.name);
             // Use module/enum name itself if it is unique, otherwise make a unique variation
             return isUniqueLocalName(name, node) ? name : makeUniqueName(name);
         }
 
+        /**
+         * Generates a unique name for an ImportDeclaration or ExportDeclaration.
+         */
         function generateNameForImportOrExportDeclaration(node: ImportDeclaration | ExportDeclaration) {
-            const expr = getExternalModuleName(node);
-            const baseName = expr.kind === SyntaxKind.StringLiteral ?
-                escapeIdentifier(makeIdentifierFromModuleName((<LiteralExpression>expr).text)) : "module";
+            const expr = getExternalModuleName(node)!; // TODO: GH#18217
+            const baseName = isStringLiteral(expr) ?
+                makeIdentifierFromModuleName(expr.text) : "module";
             return makeUniqueName(baseName);
         }
 
+        /**
+         * Generates a unique name for a default export.
+         */
         function generateNameForExportDefault() {
             return makeUniqueName("default");
         }
 
+        /**
+         * Generates a unique name for a class expression.
+         */
         function generateNameForClassExpression() {
             return makeUniqueName("class");
         }
 
+        function generateNameForMethodOrAccessor(node: MethodDeclaration | AccessorDeclaration) {
+            if (isIdentifier(node.name)) {
+                return generateNameCached(node.name);
+            }
+            return makeTempVariableName(TempFlags.Auto);
+        }
+
         /**
          * Generates a unique name from a node.
-         *
-         * @param node A node.
          */
-        function generateNameForNode(node: Node): string {
+        function generateNameForNode(node: Node, flags?: GeneratedIdentifierFlags): string {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return makeUniqueName(getTextOfNode(node));
+                    return makeUniqueName(
+                        getTextOfNode(node),
+                        isUniqueName,
+                        !!(flags! & GeneratedIdentifierFlags.Optimistic),
+                        !!(flags! & GeneratedIdentifierFlags.ReservedInNestedScopes)
+                    );
                 case SyntaxKind.ModuleDeclaration:
                 case SyntaxKind.EnumDeclaration:
                     return generateNameForModuleOrEnum(<ModuleDeclaration | EnumDeclaration>node);
@@ -2750,6 +3667,10 @@ const _super = (function (geti, seti) {
                     return generateNameForExportDefault();
                 case SyntaxKind.ClassExpression:
                     return generateNameForClassExpression();
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.GetAccessor:
+                case SyntaxKind.SetAccessor:
+                    return generateNameForMethodOrAccessor(<MethodDeclaration | AccessorDeclaration>node);
                 default:
                     return makeTempVariableName(TempFlags.Auto);
             }
@@ -2757,28 +3678,29 @@ const _super = (function (geti, seti) {
 
         /**
          * Generates a unique identifier for a node.
-         *
-         * @param name A generated name.
          */
-        function generateName(name: Identifier) {
-            switch (name.autoGenerateKind) {
-                case GeneratedIdentifierKind.Auto:
-                    return makeTempVariableName(TempFlags.Auto);
-                case GeneratedIdentifierKind.Loop:
-                    return makeTempVariableName(TempFlags._i);
-                case GeneratedIdentifierKind.Unique:
-                    return makeUniqueName(name.text);
+        function makeName(name: GeneratedIdentifier) {
+            switch (name.autoGenerateFlags & GeneratedIdentifierFlags.KindMask) {
+                case GeneratedIdentifierFlags.Auto:
+                    return makeTempVariableName(TempFlags.Auto, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
+                case GeneratedIdentifierFlags.Loop:
+                    return makeTempVariableName(TempFlags._i, !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes));
+                case GeneratedIdentifierFlags.Unique:
+                    return makeUniqueName(
+                        idText(name),
+                        (name.autoGenerateFlags & GeneratedIdentifierFlags.FileLevel) ? isFileLevelUniqueName : isUniqueName,
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.Optimistic),
+                        !!(name.autoGenerateFlags & GeneratedIdentifierFlags.ReservedInNestedScopes)
+                    );
             }
 
-            Debug.fail("Unsupported GeneratedIdentifierKind.");
+            return Debug.fail("Unsupported GeneratedIdentifierKind.");
         }
 
         /**
          * Gets the node from which a name should be generated.
-         *
-         * @param name A generated name wrapper.
          */
-        function getNodeForGeneratedName(name: Identifier) {
+        function getNodeForGeneratedName(name: GeneratedIdentifier) {
             const autoGenerateId = name.autoGenerateId;
             let node = name as Node;
             let original = node.original;
@@ -2788,7 +3710,7 @@ const _super = (function (geti, seti) {
                 // if "node" is a different generated name (having a different
                 // "autoGenerateId"), use it and stop traversing.
                 if (isIdentifier(node)
-                    && node.autoGenerateKind === GeneratedIdentifierKind.Node
+                    && !!(node.autoGenerateFlags! & GeneratedIdentifierFlags.Node)
                     && node.autoGenerateId !== autoGenerateId) {
                     break;
                 }
@@ -2799,132 +3721,29 @@ const _super = (function (geti, seti) {
             // otherwise, return the original node for the source;
             return node;
         }
-
-        /**
-         * Gets the generated identifier text from a generated identifier.
-         *
-         * @param name The generated identifier.
-         */
-        function getGeneratedIdentifier(name: Identifier) {
-            if (name.autoGenerateKind === GeneratedIdentifierKind.Node) {
-                // Generated names generate unique names based on their original node
-                // and are cached based on that node's id
-                const node = getNodeForGeneratedName(name);
-                const nodeId = getNodeId(node);
-                return nodeIdToGeneratedName[nodeId] || (nodeIdToGeneratedName[nodeId] = unescapeIdentifier(generateNameForNode(node)));
-            }
-            else {
-                // Auto, Loop, and Unique names are cached based on their unique
-                // autoGenerateId.
-                const autoGenerateId = name.autoGenerateId;
-                return autoGeneratedIdToGeneratedName[autoGenerateId] || (autoGeneratedIdToGeneratedName[autoGenerateId] = unescapeIdentifier(generateName(name)));
-            }
-        }
-
-        function createDelimiterMap() {
-            const delimiters: string[] = [];
-            delimiters[ListFormat.None] = "";
-            delimiters[ListFormat.CommaDelimited] = ",";
-            delimiters[ListFormat.BarDelimited] = " |";
-            delimiters[ListFormat.AmpersandDelimited] = " &";
-            return delimiters;
-        }
-
-        function getDelimiter(format: ListFormat) {
-            return delimiters[format & ListFormat.DelimitersMask];
-        }
-
-        function createBracketsMap() {
-            const brackets: string[][] = [];
-            brackets[ListFormat.Braces] = ["{", "}"];
-            brackets[ListFormat.Parenthesis] = ["(", ")"];
-            brackets[ListFormat.AngleBrackets] = ["<", ">"];
-            brackets[ListFormat.SquareBrackets] = ["[", "]"];
-            return brackets;
-        }
-
-        function getOpeningBracket(format: ListFormat) {
-            return brackets[format & ListFormat.BracketsMask][0];
-        }
-
-        function getClosingBracket(format: ListFormat) {
-            return brackets[format & ListFormat.BracketsMask][1];
-        }
     }
 
-    const enum ListFormat {
-        None = 0,
+    function createBracketsMap() {
+        const brackets: string[][] = [];
+        brackets[ListFormat.Braces] = ["{", "}"];
+        brackets[ListFormat.Parenthesis] = ["(", ")"];
+        brackets[ListFormat.AngleBrackets] = ["<", ">"];
+        brackets[ListFormat.SquareBrackets] = ["[", "]"];
+        return brackets;
+    }
 
-        // Line separators
-        SingleLine = 0,                 // Prints the list on a single line (default).
-        MultiLine = 1 << 0,             // Prints the list on multiple lines.
-        PreserveLines = 1 << 1,         // Prints the list using line preservation if possible.
-        LinesMask = SingleLine | MultiLine | PreserveLines,
+    function getOpeningBracket(format: ListFormat) {
+        return brackets[format & ListFormat.BracketsMask][0];
+    }
 
-        // Delimiters
-        NotDelimited = 0,               // There is no delimiter between list items (default).
-        BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
-        AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
-        CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
-        DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
+    function getClosingBracket(format: ListFormat) {
+        return brackets[format & ListFormat.BracketsMask][1];
+    }
 
-        AllowTrailingComma = 1 << 5,    // Write a trailing comma (",") if present.
-
-        // Whitespace
-        Indented = 1 << 6,              // The list should be indented.
-        SpaceBetweenBraces = 1 << 7,    // Inserts a space after the opening brace and before the closing brace.
-        SpaceBetweenSiblings = 1 << 8,  // Inserts a space between each sibling node.
-
-        // Brackets/Braces
-        Braces = 1 << 9,                 // The list is surrounded by "{" and "}".
-        Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
-        AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
-        SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
-        BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
-
-        OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
-        Optional = OptionalIfUndefined | OptionalIfEmpty,
-
-        // Other
-        PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
-        NoInterveningComments = 1 << 17, // Do not emit comments between each node
-
-        // Precomputed Formats
-        Modifiers = SingleLine | SpaceBetweenSiblings,
-        HeritageClauses = SingleLine | SpaceBetweenSiblings,
-        TypeLiteralMembers = MultiLine | Indented,
-        TupleTypeElements = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented,
-        UnionTypeConstituents = BarDelimited | SpaceBetweenSiblings | SingleLine,
-        IntersectionTypeConstituents = AmpersandDelimited | SpaceBetweenSiblings | SingleLine,
-        ObjectBindingPatternElements = SingleLine | AllowTrailingComma | SpaceBetweenBraces | CommaDelimited | SpaceBetweenSiblings,
-        ArrayBindingPatternElements = SingleLine | AllowTrailingComma | CommaDelimited | SpaceBetweenSiblings,
-        ObjectLiteralExpressionProperties = PreserveLines | CommaDelimited | SpaceBetweenSiblings | SpaceBetweenBraces | Indented | Braces,
-        ArrayLiteralExpressionElements = PreserveLines | CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | Indented | SquareBrackets,
-        CallExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
-        NewExpressionArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis | OptionalIfUndefined,
-        TemplateExpressionSpans = SingleLine | NoInterveningComments,
-        SingleLineBlockStatements = SpaceBetweenBraces | SpaceBetweenSiblings | SingleLine,
-        MultiLineBlockStatements = Indented | MultiLine,
-        VariableDeclarationList = CommaDelimited | SpaceBetweenSiblings | SingleLine,
-        SingleLineFunctionBodyStatements = SingleLine | SpaceBetweenSiblings | SpaceBetweenBraces,
-        MultiLineFunctionBodyStatements = MultiLine,
-        ClassHeritageClauses = SingleLine | SpaceBetweenSiblings,
-        ClassMembers = Indented | MultiLine,
-        InterfaceMembers = Indented | MultiLine,
-        EnumMembers = CommaDelimited | Indented | MultiLine,
-        CaseBlockClauses = Indented | MultiLine,
-        NamedImportsOrExportsElements = CommaDelimited | SpaceBetweenSiblings | AllowTrailingComma | SingleLine | SpaceBetweenBraces,
-        JsxElementChildren = SingleLine | NoInterveningComments,
-        JsxElementAttributes = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
-        CaseOrDefaultClauseStatements = Indented | MultiLine | NoTrailingNewLine | OptionalIfEmpty,
-        HeritageClauseTypes = CommaDelimited | SpaceBetweenSiblings | SingleLine,
-        SourceFileStatements = MultiLine | NoTrailingNewLine,
-        Decorators = MultiLine | Optional,
-        TypeArguments = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
-        TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | AngleBrackets | Optional,
-        Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | Parenthesis,
-        IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
+    // Flags enum to track count of temp variables and a few dedicated names
+    const enum TempFlags {
+        Auto = 0x00000000,  // No preferred name
+        CountMask = 0x0FFFFFFF,  // Temp variable counter
+        _i = 0x10000000,  // Use/preference flag for '_i'
     }
 }

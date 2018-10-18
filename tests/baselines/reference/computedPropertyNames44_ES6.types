@@ -1,0 +1,32 @@
+=== tests/cases/conformance/es6/computedProperties/computedPropertyNames44_ES6.ts ===
+class Foo { x }
+>Foo : Foo
+>x : any
+
+class Foo2 { x; y }
+>Foo2 : Foo2
+>x : any
+>y : any
+
+class C {
+>C : C
+
+    [s: string]: Foo2;
+>s : string
+
+    get ["get1"]() { return new Foo }
+>["get1"] : Foo
+>"get1" : "get1"
+>new Foo : Foo
+>Foo : typeof Foo
+}
+
+class D extends C {
+>D : D
+>C : C
+
+    set ["set1"](p: Foo) { }
+>["set1"] : Foo
+>"set1" : "set1"
+>p : Foo
+}

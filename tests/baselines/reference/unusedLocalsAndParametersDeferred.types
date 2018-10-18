@@ -1,0 +1,382 @@
+=== tests/cases/compiler/unusedLocalsAndParametersDeferred.ts ===
+export { };
+
+function defered<T>(a: () => T): T {
+>defered : <T>(a: () => T) => T
+>a : () => T
+
+    return a();
+>a() : T
+>a : () => T
+}
+
+// function declaration paramter
+function f(a) {
+>f : (a: any) => void
+>a : any
+
+    defered(() => {
+>defered(() => {        a;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        a;    } : () => void
+
+        a;
+>a : any
+
+    });
+}
+f(0);
+>f(0) : void
+>f : (a: any) => void
+>0 : 0
+
+// function expression paramter
+var fexp = function (a) {
+>fexp : (a: any) => void
+>function (a) {    defered(() => {        a;    });} : (a: any) => void
+>a : any
+
+    defered(() => {
+>defered(() => {        a;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        a;    } : () => void
+
+        a;
+>a : any
+
+    });
+};
+fexp(1);
+>fexp(1) : void
+>fexp : (a: any) => void
+>1 : 1
+
+// arrow function paramter
+var farrow = (a) => {
+>farrow : (a: any) => void
+>(a) => {    defered(() => {        a;    });} : (a: any) => void
+>a : any
+
+    defered(() => {
+>defered(() => {        a;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        a;    } : () => void
+
+        a;
+>a : any
+
+    });
+};
+farrow(2);
+>farrow(2) : void
+>farrow : (a: any) => void
+>2 : 2
+
+let prop1;
+>prop1 : any
+
+class C {
+>C : C
+
+    // Method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+
+        defered(() => {
+>defered(() => {            a;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            a;        } : () => void
+
+            a;
+>a : any
+
+        });
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+
+        defered(() => {
+>defered(() => {            v;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            v;        } : () => void
+
+            v;
+>v : number
+
+        });
+    }
+    // in a property initalizer
+    p = defered(() => {
+>p : void
+>defered(() => {        prop1;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        prop1;    } : () => void
+
+        prop1;
+>prop1 : any
+
+    });
+}
+
+new C();
+>new C() : C
+>C : typeof C
+
+let prop2;
+>prop2 : any
+
+var E = class {
+>E : typeof E
+>class {    // Method declaration paramter    method(a) {        defered(() => {            a;        });    }    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    }    // in a property initalizer    p = defered(() => {        prop2;    });} : typeof E
+
+    // Method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+
+        defered(() => {
+>defered(() => {            a;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            a;        } : () => void
+
+            a;
+>a : any
+
+        });
+    }
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+
+        defered(() => {
+>defered(() => {            v;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            v;        } : () => void
+
+            v;
+>v : number
+
+        });
+    }
+    // in a property initalizer
+    p = defered(() => {
+>p : void
+>defered(() => {        prop2;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        prop2;    } : () => void
+
+        prop2;
+>prop2 : any
+
+    });
+}
+
+new E();
+>new E() : E
+>E : typeof E
+
+
+var o = {
+>o : { method(a: any): void; x: number; p: void; }
+>{    // Object literal method declaration paramter    method(a) {        defered(() => {            a;        });    },    // Accessor declaration paramter    set x(v: number) {        defered(() => {            v;        });    },    // in a property initalizer    p: defered(() => {        prop1;    })} : { method(a: any): void; x: number; p: void; }
+
+    // Object literal method declaration paramter
+    method(a) {
+>method : (a: any) => void
+>a : any
+
+        defered(() => {
+>defered(() => {            a;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            a;        } : () => void
+
+            a;
+>a : any
+
+        });
+    },
+    // Accessor declaration paramter
+    set x(v: number) {
+>x : number
+>v : number
+
+        defered(() => {
+>defered(() => {            v;        }) : void
+>defered : <T>(a: () => T) => T
+>() => {            v;        } : () => void
+
+            v;
+>v : number
+
+        });
+    },
+    // in a property initalizer
+    p: defered(() => {
+>p : void
+>defered(() => {        prop1;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        prop1;    } : () => void
+
+        prop1;
+>prop1 : any
+
+    })
+};
+
+o;
+>o : { method(a: any): void; x: number; p: void; }
+
+// in a for..in statment
+for (let i in o) {
+>i : string
+>o : { method(a: any): void; x: number; p: void; }
+
+    defered(() => {
+>defered(() => {        i;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        i;    } : () => void
+
+        i;
+>i : string
+
+    });
+}
+
+// in a for..of statment
+for (let i of [1,2,3]) {
+>i : number
+>[1,2,3] : number[]
+>1 : 1
+>2 : 2
+>3 : 3
+
+    defered(() => {
+>defered(() => {        i;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        i;    } : () => void
+
+        i;
+>i : number
+
+    });
+}
+
+// in a for. statment
+for (let i = 0; i < 10; i++) {
+>i : number
+>0 : 0
+>i < 10 : boolean
+>i : number
+>10 : 10
+>i++ : number
+>i : number
+
+    defered(() => {
+>defered(() => {        i;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        i;    } : () => void
+
+        i;
+>i : number
+
+    });
+}
+
+// in a block
+
+const condition = false;
+>condition : false
+>false : false
+
+if (condition) {
+>condition : false
+
+    const c = 0;
+>c : 0
+>0 : 0
+
+    defered(() => {
+>defered(() => {        c;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        c;    } : () => void
+
+        c;
+>c : 0
+
+    });
+}
+
+// in try/catch/finally
+try {
+    const a = 0;
+>a : 0
+>0 : 0
+
+    defered(() => {
+>defered(() => {        a;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        a;    } : () => void
+
+        a;
+>a : 0
+
+    });
+}
+catch (e) {
+>e : any
+
+    const c = 1;
+>c : 1
+>1 : 1
+
+    defered(() => {
+>defered(() => {        c;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        c;    } : () => void
+
+        c;
+>c : 1
+
+    });
+}
+finally {
+    const c = 0;
+>c : 0
+>0 : 0
+
+    defered(() => {
+>defered(() => {        c;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        c;    } : () => void
+
+        c;
+>c : 0
+
+    });
+}
+
+
+// in a namespace
+namespace N {
+>N : typeof N
+
+    var x;
+>x : any
+
+    defered(() => {
+>defered(() => {        x;    }) : void
+>defered : <T>(a: () => T) => T
+>() => {        x;    } : () => void
+
+        x;
+>x : any
+
+    });
+}
+N;
+>N : typeof N
+    

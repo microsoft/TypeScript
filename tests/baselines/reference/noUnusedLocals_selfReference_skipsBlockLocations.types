@@ -1,0 +1,33 @@
+=== tests/cases/compiler/noUnusedLocals_selfReference_skipsBlockLocations.ts ===
+namespace n {
+>n : typeof n
+
+    function f() {
+>f : () => void
+
+        f;
+>f : () => void
+    }
+
+    switch (0) {
+>0 : 0
+
+        case 0:
+>0 : 0
+
+            function g() {
+>g : () => void
+
+                g;
+>g : () => void
+            }
+        default:
+            function h() {
+>h : () => void
+
+                h;
+>h : () => void
+            }
+    }
+}
+

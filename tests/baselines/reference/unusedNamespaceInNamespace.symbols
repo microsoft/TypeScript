@@ -1,0 +1,10 @@
+=== tests/cases/compiler/unusedNamespaceInNamespace.ts ===
+namespace A {
+>A : Symbol(A, Decl(unusedNamespaceInNamespace.ts, 0, 0))
+
+    namespace B { }
+>B : Symbol(B, Decl(unusedNamespaceInNamespace.ts, 0, 13))
+
+    export namespace C {}
+>C : Symbol(C, Decl(unusedNamespaceInNamespace.ts, 1, 19))
+}

@@ -4,4 +4,4 @@
 ////with(x./*1*/
 
 goTo.marker('1');
-verify.memberListContains("a");
+verify.completionListContains("a");

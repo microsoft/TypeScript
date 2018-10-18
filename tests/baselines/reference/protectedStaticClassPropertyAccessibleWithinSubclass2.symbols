@@ -1,0 +1,57 @@
+=== tests/cases/conformance/classes/members/accessibility/protectedStaticClassPropertyAccessibleWithinSubclass2.ts ===
+class Base {
+>Base : Symbol(Base, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 0))
+
+    protected static x: string;
+>x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+
+    static staticMethod() {
+>staticMethod : Symbol(Base.staticMethod, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 1, 31))
+
+        this.x;         // OK, accessed within their declaring class
+>this.x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+>this : Symbol(Base, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 0))
+>x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+    }
+}
+
+class Derived1 extends Base {
+>Derived1 : Symbol(Derived1, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 5, 1))
+>Base : Symbol(Base, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 0))
+
+    static staticMethod1() {
+>staticMethod1 : Symbol(Derived1.staticMethod1, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 7, 29))
+
+        this.x;         // OK, accessed within a class derived from their declaring class
+>this.x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+>this : Symbol(Derived1, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 5, 1))
+>x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+
+        super.x;        // Error, x is not public
+>super.x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+>super : Symbol(Base, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 0))
+>x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+    }
+}
+
+class Derived2 extends Derived1 {
+>Derived2 : Symbol(Derived2, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 12, 1))
+>Derived1 : Symbol(Derived1, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 5, 1))
+
+    protected static x: string;
+>x : Symbol(Derived2.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 14, 33))
+
+    static staticMethod3() {
+>staticMethod3 : Symbol(Derived2.staticMethod3, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 15, 31))
+
+        this.x;         // OK, accessed within a class derived from their declaring class
+>this.x : Symbol(Derived2.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 14, 33))
+>this : Symbol(Derived2, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 12, 1))
+>x : Symbol(Derived2.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 14, 33))
+
+        super.x;        // Error, x is not public
+>super.x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+>super : Symbol(Derived1, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 5, 1))
+>x : Symbol(Base.x, Decl(protectedStaticClassPropertyAccessibleWithinSubclass2.ts, 0, 12))
+    }
+}

@@ -1,0 +1,17 @@
+=== tests/cases/compiler/funduleSplitAcrossFiles_function.ts ===
+function D() { }
+>D : typeof D
+
+=== tests/cases/compiler/funduleSplitAcrossFiles_module.ts ===
+module D {
+>D : typeof D
+
+    export var y = "hi";
+>y : string
+>"hi" : "hi"
+}
+D.y;
+>D.y : string
+>D : typeof D
+>y : string
+

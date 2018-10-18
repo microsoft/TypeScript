@@ -1,0 +1,16 @@
+=== tests/cases/compiler/a.ts ===
+class c {
+>c : c
+}
+
+=== tests/cases/compiler/b.ts ===
+// this should be emitted
+class d {
+>d : d
+}
+
+=== tests/cases/compiler/a.js ===
+function foo() {
+>foo : () => void
+}
+
