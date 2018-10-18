@@ -102,11 +102,29 @@ namespace ts.refactor.convertArrowFunctionOrFunction {
 
                 const variableDeclaration = func.parent;
                 if (isVariableDeclaration(variableDeclaration) && isVariableDeclarationInVariableStatement(variableDeclaration) && isIdentifier(variableDeclaration.name)) {
-                    const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement);
 
-                    const newNode1 = createFunctionDeclaration(func.decorators, func.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
-                    const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement!, newNode1));
-                    return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
+                    const varDeclList = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableDeclarationList)!;
+                    if (!isVariableDeclarationList(varDeclList)) return undefined;
+
+                    if (varDeclList.declarations.length === 0) return undefined;
+                    if (varDeclList.declarations.length === 1) {
+                        const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement);
+                        const newNode1 = createFunctionDeclaration(func.decorators, func.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+                        const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement!, newNode1));
+                        return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
+                    }
+                    else {
+                        const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement);
+                        const newNode1 = createFunctionDeclaration(func.decorators, func.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+
+                        const edits1 = textChanges.ChangeTracker.with(context, t => {
+                            t.delete(file, variableDeclaration);
+                            t.insertNodeAfter(file, statement!, newNode1);
+                        });
+                        return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
+                    }
+
+
                 }
 
                 return undefined;
