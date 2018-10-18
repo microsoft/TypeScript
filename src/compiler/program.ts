@@ -1568,7 +1568,7 @@ namespace ts {
 
         function getSuggestionDiagnostics(sourceFile: SourceFile, cancellationToken: CancellationToken): ReadonlyArray<DiagnosticWithLocation> {
             return runWithCancellationToken(() => {
-                return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken);
+                return getDiagnosticsProducingTypeChecker().getSuggestionDiagnostics(sourceFile, cancellationToken).filter(shouldReportDiagnostic);
             });
         }
 
