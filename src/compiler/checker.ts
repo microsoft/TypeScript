@@ -7051,7 +7051,7 @@ namespace ts {
             if (!type.resolvedDefaultConstraint) {
                 const rootTrueType = type.root.trueType;
                 const rootTrueConstraint = rootTrueType.flags & TypeFlags.Substitution
-                    ? ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown ? (<SubstitutionType>rootTrueType).typeVariable : (<SubstitutionType>rootTrueType).substitute
+                    ? ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown ? (<SubstitutionType>rootTrueType).typeVariable : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable])
                     : rootTrueType;
                 type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
             }
