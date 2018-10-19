@@ -34,7 +34,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             });
         }
 
-        if (isArrowFunction(func) && !fromVarDecl) {
+        if (!fromVarDecl && isArrowFunction(func)) {
             possibleActions.push({
                 name: toAnonymousFunctionActionName,
                 description: toAnonymousFunctionActionDescription
@@ -62,9 +62,12 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         if (!info) return undefined;
         const { func } = info;
 
+        let body: Block | ConciseBody;
+        let newNode: ArrowFunction | FunctionExpression;
+        let edits: FileTextChanges[] = [];
+
         switch (actionName) {
             case toAnonymousFunctionActionName:
-                let body: Block;
 
                 if (isExpression(func.body)) {
                     const statements: Statement[] = [createReturn(func.body)];
@@ -74,19 +77,18 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                     body = func.body;
                 }
 
-                const newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
-                const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
-                return { renameFilename: undefined, renameLocation: undefined, edits };
+                newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
+                edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
+                break;
 
             case toNamedFunctionActionName:
-                let body2: Block;
 
                 if (isExpression(func.body)) {
                     const statements: Statement[] = [createReturn(func.body)];
-                    body2 = createBlock(statements, /* multiLine */ true);
+                    body = createBlock(statements, /* multiLine */ true);
                 }
                 else {
-                    body2 = func.body;
+                    body = func.body;
                 }
 
                 const variableDeclaration = func.parent;
@@ -101,12 +103,12 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                     if (varDeclList.declarations.length === 0) return undefined;
                     if (varDeclList.declarations.length === 1) {
 
-                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
                         const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode1));
                         return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
                     }
                     else {
-                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body2);
+                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
 
                         const edits1 = textChanges.ChangeTracker.with(context, t => {
                             t.delete(file, variableDeclaration);
@@ -121,32 +123,32 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 return undefined;
 
             case toArrowFunctionActionName:
-                let body1: ConciseBody;
 
-                if (isFunctionExpression(func)) {
-                    const statements = func.body.statements;
-                    const head = statements[0];
-                    if (func.body.statements.length === 1 && (isReturnStatement(head) || isExpressionStatement(head))) {
-                        body1 = head.expression!;
+                if (!isFunctionExpression(func)) return undefined;
 
-                        suppressLeadingAndTrailingTrivia(body1);
-                        copyComments(head, body1, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
-                    }
-                    else {
-                        body1 = func.body;
-                    }
+                const statements = func.body.statements;
+                const head = statements[0];
+                if (func.body.statements.length === 1 && (isReturnStatement(head) || isExpressionStatement(head))) {
+                    body = head.expression!;
 
-                    const newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, /* equalsGreaterThanToken */ undefined, body1);
-                    const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
-                    return { renameFilename: undefined, renameLocation: undefined, edits };
+                    suppressLeadingAndTrailingTrivia(body);
+                    copyComments(head, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
+                }
+                else {
+                    body = func.body;
                 }
 
-                return undefined;
+                newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, /* equalsGreaterThanToken */ undefined, body);
+                edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
+                break;
 
             default:
                 Debug.fail("invalid action");
                 break;
         }
+
+        return { renameFilename: undefined, renameLocation: undefined, edits };
+
 
     }
 
