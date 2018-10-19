@@ -1,0 +1,53 @@
+=== tests/cases/conformance/salsa/lovefield-ts.d.ts ===
+// bug #27352, crashes from github.com/google/lovefield
+declare namespace lf {
+  export interface Transaction {
+    attach(query: query.Builder): Promise<Array<Object>>
+>attach : (query: any) => Promise<Object[]>
+>query : any
+>query : any
+
+    begin(scope: Array<schema.Table>): Promise<void>
+>begin : (scope: any[]) => Promise<void>
+>scope : any[]
+>schema : any
+
+    commit(): Promise<void>
+>commit : () => Promise<void>
+
+    exec(queries: Array<query.Builder>): Promise<Array<Array<Object>>>
+>exec : (queries: any[]) => Promise<Object[][]>
+>queries : any[]
+>query : any
+
+    rollback(): Promise<void>
+>rollback : () => Promise<void>
+
+    stats(): TransactionStats
+>stats : () => any
+  }
+}
+=== tests/cases/conformance/salsa/lovefield.js ===
+lf.Transaction = function() {};
+>lf.Transaction = function() {} : typeof Transaction
+>lf.Transaction : typeof Transaction
+>lf : typeof lf
+>Transaction : typeof Transaction
+>function() {} : typeof Transaction
+
+/**
+ * @param {!Array<!lf.schema.Table>} scope
+ * @return {!IThenable}
+ */
+lf.Transaction.prototype.begin = function(scope) {};
+>lf.Transaction.prototype.begin = function(scope) {} : (scope: any[]) => any
+>lf.Transaction.prototype.begin : any
+>lf.Transaction.prototype : any
+>lf.Transaction : typeof Transaction
+>lf : typeof lf
+>Transaction : typeof Transaction
+>prototype : any
+>begin : any
+>function(scope) {} : (scope: any[]) => any
+>scope : any[]
+

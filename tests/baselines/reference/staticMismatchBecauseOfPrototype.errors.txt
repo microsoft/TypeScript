@@ -1,0 +1,19 @@
+tests/cases/compiler/staticMismatchBecauseOfPrototype.ts(10,5): error TS2416: Property 'n' in type 'B' is not assignable to the same property in base type 'A'.
+  Type 'string' is not assignable to type 'number'.
+
+
+==== tests/cases/compiler/staticMismatchBecauseOfPrototype.ts (1 errors) ====
+    interface A {
+        n: number;
+    }
+    declare var A: {
+        prototype: A;
+        new(): A;
+    };
+    
+    class B extends A {
+        n = "";
+        ~
+!!! error TS2416: Property 'n' in type 'B' is not assignable to the same property in base type 'A'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
+    }

@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.1";
+    export const versionMajorMinor = "3.2";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -1602,8 +1602,9 @@ namespace ts {
             return value;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
-            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
+        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
+            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
+            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: AnyFunction) {

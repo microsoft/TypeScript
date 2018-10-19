@@ -40,7 +40,7 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2322:
 !!! error TS2322: Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
 !!! error TS2322:   Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! error TS2322:     Type 'void' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedback<BaseProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<BaseProps>, "children" | "error"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<BaseProps>, "when">> & Partial<Pick<{ when: () => boolean; }, never>>'
     
     class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
       static defaultProps: BaseProps = {
@@ -61,7 +61,7 @@ tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx(64,37): error TS2322:
 !!! error TS2322: Type '(value: string) => void' is not assignable to type '"a" | "b" | ((value: string) => boolean) | undefined'.
 !!! error TS2322:   Type '(value: string) => void' is not assignable to type '(value: string) => boolean'.
 !!! error TS2322:     Type 'void' is not assignable to type 'boolean'.
-!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<Props>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<Props>, "when" | "error">> & Partial<Pick<BaseProps, never>>'
+!!! related TS6500 tests/cases/compiler/reactDefaultPropsInferenceSuccess.tsx:6:3: The expected type comes from property 'when' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<FieldFeedbackBeta<BaseProps>> & Pick<Readonly<{ children?: ReactNode; }> & Readonly<BaseProps>, "children"> & Partial<Pick<Readonly<{ children?: ReactNode; }> & Readonly<BaseProps>, "when" | "error">> & Partial<Pick<BaseProps, never>>'
     
     interface MyPropsProps extends Props {
       when: (value: string) => boolean;

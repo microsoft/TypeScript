@@ -20,7 +20,7 @@ var n: number;
 === tests/cases/conformance/ambient/decls.ts ===
 // Ambient external module with export assignment
 declare module 'equ' {
->'equ' : Symbol('equ', Decl(decls.ts, 0, 0))
+>'equ' : Symbol("equ", Decl(decls.ts, 0, 0))
 
     var x;
 >x : Symbol(x, Decl(decls.ts, 2, 7))
@@ -30,7 +30,7 @@ declare module 'equ' {
 }
 
 declare module 'equ2' {
->'equ2' : Symbol('equ2', Decl(decls.ts, 4, 1))
+>'equ2' : Symbol("equ2", Decl(decls.ts, 4, 1))
 
     var x: number;
 >x : Symbol(x, Decl(decls.ts, 7, 7))

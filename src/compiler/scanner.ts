@@ -60,81 +60,87 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken = createMapFromTemplate({
-        "abstract": SyntaxKind.AbstractKeyword,
-        "any": SyntaxKind.AnyKeyword,
-        "as": SyntaxKind.AsKeyword,
-        "boolean": SyntaxKind.BooleanKeyword,
-        "break": SyntaxKind.BreakKeyword,
-        "case": SyntaxKind.CaseKeyword,
-        "catch": SyntaxKind.CatchKeyword,
-        "class": SyntaxKind.ClassKeyword,
-        "continue": SyntaxKind.ContinueKeyword,
-        "const": SyntaxKind.ConstKeyword,
-        "constructor": SyntaxKind.ConstructorKeyword,
-        "debugger": SyntaxKind.DebuggerKeyword,
-        "declare": SyntaxKind.DeclareKeyword,
-        "default": SyntaxKind.DefaultKeyword,
-        "delete": SyntaxKind.DeleteKeyword,
-        "do": SyntaxKind.DoKeyword,
-        "else": SyntaxKind.ElseKeyword,
-        "enum": SyntaxKind.EnumKeyword,
-        "export": SyntaxKind.ExportKeyword,
-        "extends": SyntaxKind.ExtendsKeyword,
-        "false": SyntaxKind.FalseKeyword,
-        "finally": SyntaxKind.FinallyKeyword,
-        "for": SyntaxKind.ForKeyword,
-        "from": SyntaxKind.FromKeyword,
-        "function": SyntaxKind.FunctionKeyword,
-        "get": SyntaxKind.GetKeyword,
-        "if": SyntaxKind.IfKeyword,
-        "implements": SyntaxKind.ImplementsKeyword,
-        "import": SyntaxKind.ImportKeyword,
-        "in": SyntaxKind.InKeyword,
-        "infer": SyntaxKind.InferKeyword,
-        "instanceof": SyntaxKind.InstanceOfKeyword,
-        "interface": SyntaxKind.InterfaceKeyword,
-        "is": SyntaxKind.IsKeyword,
-        "keyof": SyntaxKind.KeyOfKeyword,
-        "let": SyntaxKind.LetKeyword,
-        "module": SyntaxKind.ModuleKeyword,
-        "namespace": SyntaxKind.NamespaceKeyword,
-        "never": SyntaxKind.NeverKeyword,
-        "new": SyntaxKind.NewKeyword,
-        "null": SyntaxKind.NullKeyword,
-        "number": SyntaxKind.NumberKeyword,
-        "object": SyntaxKind.ObjectKeyword,
-        "package": SyntaxKind.PackageKeyword,
-        "private": SyntaxKind.PrivateKeyword,
-        "protected": SyntaxKind.ProtectedKeyword,
-        "public": SyntaxKind.PublicKeyword,
-        "readonly": SyntaxKind.ReadonlyKeyword,
-        "require": SyntaxKind.RequireKeyword,
-        "global": SyntaxKind.GlobalKeyword,
-        "return": SyntaxKind.ReturnKeyword,
-        "set": SyntaxKind.SetKeyword,
-        "static": SyntaxKind.StaticKeyword,
-        "string": SyntaxKind.StringKeyword,
-        "super": SyntaxKind.SuperKeyword,
-        "switch": SyntaxKind.SwitchKeyword,
-        "symbol": SyntaxKind.SymbolKeyword,
-        "this": SyntaxKind.ThisKeyword,
-        "throw": SyntaxKind.ThrowKeyword,
-        "true": SyntaxKind.TrueKeyword,
-        "try": SyntaxKind.TryKeyword,
-        "type": SyntaxKind.TypeKeyword,
-        "typeof": SyntaxKind.TypeOfKeyword,
-        "undefined": SyntaxKind.UndefinedKeyword,
-        "unique": SyntaxKind.UniqueKeyword,
-        "unknown": SyntaxKind.UnknownKeyword,
-        "var": SyntaxKind.VarKeyword,
-        "void": SyntaxKind.VoidKeyword,
-        "while": SyntaxKind.WhileKeyword,
-        "with": SyntaxKind.WithKeyword,
-        "yield": SyntaxKind.YieldKeyword,
-        "async": SyntaxKind.AsyncKeyword,
-        "await": SyntaxKind.AwaitKeyword,
-        "of": SyntaxKind.OfKeyword,
+    const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
+        abstract: SyntaxKind.AbstractKeyword,
+        any: SyntaxKind.AnyKeyword,
+        as: SyntaxKind.AsKeyword,
+        boolean: SyntaxKind.BooleanKeyword,
+        break: SyntaxKind.BreakKeyword,
+        case: SyntaxKind.CaseKeyword,
+        catch: SyntaxKind.CatchKeyword,
+        class: SyntaxKind.ClassKeyword,
+        continue: SyntaxKind.ContinueKeyword,
+        const: SyntaxKind.ConstKeyword,
+        ["" + "constructor"]: SyntaxKind.ConstructorKeyword,
+        debugger: SyntaxKind.DebuggerKeyword,
+        declare: SyntaxKind.DeclareKeyword,
+        default: SyntaxKind.DefaultKeyword,
+        delete: SyntaxKind.DeleteKeyword,
+        do: SyntaxKind.DoKeyword,
+        else: SyntaxKind.ElseKeyword,
+        enum: SyntaxKind.EnumKeyword,
+        export: SyntaxKind.ExportKeyword,
+        extends: SyntaxKind.ExtendsKeyword,
+        false: SyntaxKind.FalseKeyword,
+        finally: SyntaxKind.FinallyKeyword,
+        for: SyntaxKind.ForKeyword,
+        from: SyntaxKind.FromKeyword,
+        function: SyntaxKind.FunctionKeyword,
+        get: SyntaxKind.GetKeyword,
+        if: SyntaxKind.IfKeyword,
+        implements: SyntaxKind.ImplementsKeyword,
+        import: SyntaxKind.ImportKeyword,
+        in: SyntaxKind.InKeyword,
+        infer: SyntaxKind.InferKeyword,
+        instanceof: SyntaxKind.InstanceOfKeyword,
+        interface: SyntaxKind.InterfaceKeyword,
+        is: SyntaxKind.IsKeyword,
+        keyof: SyntaxKind.KeyOfKeyword,
+        let: SyntaxKind.LetKeyword,
+        module: SyntaxKind.ModuleKeyword,
+        namespace: SyntaxKind.NamespaceKeyword,
+        never: SyntaxKind.NeverKeyword,
+        new: SyntaxKind.NewKeyword,
+        null: SyntaxKind.NullKeyword,
+        number: SyntaxKind.NumberKeyword,
+        object: SyntaxKind.ObjectKeyword,
+        package: SyntaxKind.PackageKeyword,
+        private: SyntaxKind.PrivateKeyword,
+        protected: SyntaxKind.ProtectedKeyword,
+        public: SyntaxKind.PublicKeyword,
+        readonly: SyntaxKind.ReadonlyKeyword,
+        require: SyntaxKind.RequireKeyword,
+        global: SyntaxKind.GlobalKeyword,
+        return: SyntaxKind.ReturnKeyword,
+        set: SyntaxKind.SetKeyword,
+        static: SyntaxKind.StaticKeyword,
+        string: SyntaxKind.StringKeyword,
+        super: SyntaxKind.SuperKeyword,
+        switch: SyntaxKind.SwitchKeyword,
+        symbol: SyntaxKind.SymbolKeyword,
+        this: SyntaxKind.ThisKeyword,
+        throw: SyntaxKind.ThrowKeyword,
+        true: SyntaxKind.TrueKeyword,
+        try: SyntaxKind.TryKeyword,
+        type: SyntaxKind.TypeKeyword,
+        typeof: SyntaxKind.TypeOfKeyword,
+        undefined: SyntaxKind.UndefinedKeyword,
+        unique: SyntaxKind.UniqueKeyword,
+        unknown: SyntaxKind.UnknownKeyword,
+        var: SyntaxKind.VarKeyword,
+        void: SyntaxKind.VoidKeyword,
+        while: SyntaxKind.WhileKeyword,
+        with: SyntaxKind.WithKeyword,
+        yield: SyntaxKind.YieldKeyword,
+        async: SyntaxKind.AsyncKeyword,
+        await: SyntaxKind.AwaitKeyword,
+        of: SyntaxKind.OfKeyword,
+    };
+
+    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+
+    const textToToken = createMapFromTemplate<SyntaxKind>({
+        ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
         "(": SyntaxKind.OpenParenToken,
@@ -1288,15 +1294,15 @@ namespace ts {
             return result;
         }
 
-        function getIdentifierToken(): SyntaxKind {
+        function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
             // Reserved words are between 2 and 11 characters long and start with a lowercase letter
             const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-                    token = textToToken.get(tokenValue)!;
-                    if (token !== undefined) {
-                        return token;
+                    const keyword = textToKeyword.get(tokenValue);
+                    if (keyword !== undefined) {
+                        return token = keyword;
                     }
                 }
             }
@@ -2016,7 +2022,7 @@ namespace ts {
                     pos++;
                 }
                 tokenValue = text.substring(tokenPos, pos);
-                return token = SyntaxKind.Identifier;
+                return token = getIdentifierToken();
             }
             else {
                 return token = SyntaxKind.Unknown;
