@@ -113,9 +113,9 @@ const b0 = <MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton>;  // ex
 ><MainButton to='/some/path' onClick={(e)=>{}}>GO</MainButton> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >to : string
->onClick : (e: React.MouseEvent<any>) => void
->(e)=>{} : (e: React.MouseEvent<any>) => void
->e : React.MouseEvent<any>
+>onClick : (e: any) => void
+>(e)=>{} : (e: any) => void
+>e : any
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 
 const b1 = <MainButton onClick={(e: any)=> {}} {...obj0}>Hello world</MainButton>;  // extra property;
