@@ -1,0 +1,6 @@
+=== tests/cases/conformance/jsdoc/eof.js ===
+/**
+No type information for this code. * @typedef {Array<bad>} Should have error here
+No type information for this code. */
+No type information for this code.
+No type information for this code.
