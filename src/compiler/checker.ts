@@ -2214,6 +2214,9 @@ namespace ts {
 
         function getDeclarationOfJSPrototypeContainer(symbol: Symbol) {
             const decl = symbol.parent!.valueDeclaration;
+            if (!decl) {
+                return undefined;
+            }
             const initializer = isAssignmentDeclaration(decl) ? getAssignedExpandoInitializer(decl) :
                 hasOnlyExpressionInitializer(decl) ? getDeclaredExpandoInitializer(decl) :
                 undefined;
@@ -5240,6 +5243,14 @@ namespace ts {
                      || isVariableDeclaration(declaration)
                      || isBindingElement(declaration)) {
                 type = getWidenedTypeForVariableLikeDeclaration(declaration, /*includeOptionality*/ true);
+            }
+            // getTypeOfSymbol dispatches some JS merges incorrectly because their symbol flags are not mutually exclusive.
+            // Re-dispatch based on valueDeclaration.kind instead.
+            else if (isEnumDeclaration(declaration)) {
+                type = getTypeOfFuncClassEnumModule(symbol);
+            }
+            else if (isEnumMember(declaration)) {
+                type = getTypeOfEnumMember(symbol);
             }
             else {
                 return Debug.fail("Unhandled declaration kind! " + Debug.showSyntaxKind(declaration) + " for " + Debug.showSymbol(symbol));
