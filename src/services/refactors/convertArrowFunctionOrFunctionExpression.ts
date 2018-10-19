@@ -1,21 +1,28 @@
 /* @internal */
 namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     const refactorName = "Convert arrow function or function expression";
-    const refactorDescription = Diagnostics.Convert_arrow_function_or_function_expression.message;
+    const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_arrow_function_or_function_expression);
 
     const toAnonymousFunctionActionName = "Convert to anonymous function";
     const toNamedFunctionActionName = "Convert to named function";
     const toArrowFunctionActionName = "Convert to arrow function";
 
-    const toAnonymousFunctionActionDescription = Diagnostics.Convert_to_anonymous_function.message;
-    const toNamedFunctionActionDescription = Diagnostics.Convert_to_named_function.message;
-    const toArrowFunctionActionDescription = Diagnostics.Convert_to_arrow_function.message;
+    const toAnonymousFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_anonymous_function);
+    const toNamedFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_named_function);
+    const toArrowFunctionActionDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_arrow_function);
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    interface Info {
-        fromVarDecl: boolean;
+    interface BasicInfo {
+        fromDeclaration: boolean;
         func: FunctionExpression | ArrowFunction;
+    }
+
+    interface HeaderInfo {
+        variableDeclaration: VariableDeclaration;
+        variableDeclarationList: VariableDeclarationList;
+        statement: VariableStatement;
+        name: Identifier;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -24,17 +31,17 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const info = getInfo(file, startPosition);
 
         if (!info) return undefined;
-        const { fromVarDecl, func } = info;
+        const { fromDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
 
-        if (fromVarDecl || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
+        if (fromDeclaration || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
             possibleActions.push({
                 name: toNamedFunctionActionName,
                 description: toNamedFunctionActionDescription
             });
         }
 
-        if (!fromVarDecl && isArrowFunction(func)) {
+        if (!fromDeclaration && isArrowFunction(func)) {
             possibleActions.push({
                 name: toAnonymousFunctionActionName,
                 description: toAnonymousFunctionActionDescription
@@ -70,7 +77,6 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             case toAnonymousFunctionActionName:
 
                 body = makeBlock(func);
-
                 newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
                 edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
                 break;
@@ -78,19 +84,13 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             case toNamedFunctionActionName:
 
                 body = makeBlock(func);
+                const headInfo = getHeaderInfo(func);
+                if (!headInfo) return undefined;
 
-                const variableDeclaration = func.parent;
-                if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration) || !isIdentifier(variableDeclaration.name)) return undefined;
+                const { variableDeclaration, variableDeclarationList, statement, name } = headInfo;
+                newNode = makeFunctionDeclaration(func, statement, name, body);
 
-                const varDeclList = findAncestor(variableDeclaration, n => isVariableDeclarationList(n))!;
-                if (!isVariableDeclarationList(varDeclList)) return undefined;
-
-                const statement = findAncestor(variableDeclaration, n => isVariableStatement(n))!;
-                if (!isVariableStatement(statement)) return undefined;
-
-                newNode = makeFuncDecl(func, statement, variableDeclaration.name, body);
-
-                if (varDeclList.declarations.length === 1) {
+                if (variableDeclarationList.declarations.length === 1) {
                     edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
                 }
                 else {
@@ -102,14 +102,12 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 break;
 
             case toArrowFunctionActionName:
-
                 if (!isFunctionExpression(func)) return undefined;
 
                 const statements = func.body.statements;
                 const head = statements[0];
                 if (func.body.statements.length === 1 && (isReturnStatement(head) || isExpressionStatement(head))) {
                     body = head.expression!;
-
                     suppressLeadingAndTrailingTrivia(body);
                     copyComments(head, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
                 }
@@ -129,26 +127,27 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getInfo(file: SourceFile, startPosition: number): Info | undefined {
+    function getInfo(file: SourceFile, startPosition: number): BasicInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
+        let maybeFunc;
 
-        const declFunc = extractArrowFnFromDecl(token.parent);
-        if (!!declFunc) return { fromVarDecl: true, func: declFunc };
+        maybeFunc = getArrowFunctionFromDeclaration(token.parent);
+        if (!!maybeFunc) return { fromDeclaration: true, func: maybeFunc };
 
-        const maybeFunc = getContainingFunction(token);
+        maybeFunc = getContainingFunction(token);
         if (!!maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
-                return { fromVarDecl: false, func: maybeFunc };
+                return { fromDeclaration: false, func: maybeFunc };
         }
 
         return undefined;
     }
 
-    function extractArrowFnFromDecl(parent: Node): ArrowFunction | undefined {
+    function getArrowFunctionFromDeclaration(parent: Node): ArrowFunction | undefined {
         if (!(isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1))) return undefined;
-        const varDecl = isVariableDeclaration(parent) ? parent : parent.declarations[0];
+        const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
 
-        if (!varDecl.initializer || !isArrowFunction(varDecl.initializer)) return undefined;
-        return varDecl.initializer;
+        if (!variableDeclaration.initializer || !isArrowFunction(variableDeclaration.initializer)) return undefined;
+        return variableDeclaration.initializer;
     }
 
     function makeBlock(func: ArrowFunction | FunctionExpression): Block {
@@ -161,7 +160,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         }
     }
 
-    function makeFuncDecl(func: FunctionExpression | ArrowFunction, statement: VariableStatement, name: Identifier, body: Block) {
+    function makeFunctionDeclaration(func: FunctionExpression | ArrowFunction, statement: VariableStatement, name: Identifier, body: Block) {
         return createFunctionDeclaration(
             func.decorators,
             statement.modifiers,
@@ -171,5 +170,16 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             func.parameters,
             func.type,
             body);
+    }
+
+    function getHeaderInfo(func: FunctionExpression | ArrowFunction): HeaderInfo | undefined {
+        const variableDeclaration = func.parent;
+        if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration)) return undefined;
+
+        const variableDeclarationList = findAncestor(variableDeclaration, n => isVariableDeclarationList(n))!;
+        const statement = findAncestor(variableDeclaration, n => isVariableStatement(n))!;
+        if (!isVariableDeclarationList(variableDeclarationList) || !isVariableStatement(statement) || !isIdentifier(variableDeclaration.name)) return undefined;
+
+        return { variableDeclaration, variableDeclarationList, statement, name: variableDeclaration.name };
     }
 }
