@@ -835,9 +835,9 @@ namespace ts.server {
 
         /* @internal */
         private forEachProject(cb: (project: Project) => void) {
-            this.inferredProjects.forEach(cb);
-            this.configuredProjects.forEach(cb);
             this.externalProjects.forEach(cb);
+            this.configuredProjects.forEach(cb);
+            this.inferredProjects.forEach(cb);
         }
 
         /* @internal */
