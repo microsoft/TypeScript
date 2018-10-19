@@ -53,7 +53,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
                                       ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     let c03 = foo.call(undefined, 10, "hello", 30);  // Error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                              ~~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     
     let a00 = foo.apply(undefined, [10, "hello"]);
@@ -103,7 +103,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
                                 ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     let c13 = c.foo.call(c, 10, "hello", 30);  // Error
-              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+                                        ~~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     let c14 = c.foo.call(undefined, 10, "hello");  // Error
                          ~~~~~~~~~
@@ -138,7 +138,7 @@ tests/cases/conformance/functions/strictBindCallApply1.ts(72,12): error TS2345: 
                   ~~
 !!! error TS2345: Argument of type '20' is not assignable to parameter of type 'string'.
     C.call(c, 10, "hello", 30);  // Error
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~
 !!! error TS2554: Expected 3 arguments, but got 4.
     
     C.apply(c, [10, "hello"]);
