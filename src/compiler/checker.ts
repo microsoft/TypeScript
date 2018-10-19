@@ -27215,6 +27215,7 @@ namespace ts {
                 clear(potentialNewTargetCollisions);
 
                 forEach(node.statements, checkSourceElement);
+                checkSourceElement(node.endOfFileToken);
 
                 checkDeferredNodes(node);
 
