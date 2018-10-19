@@ -14,7 +14,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     interface Info {
-        token: Node;
+        fromVarDecl: boolean;
         func: FunctionExpression | ArrowFunction;
     }
 
@@ -24,35 +24,24 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const info = getInfo(file, startPosition);
 
         if (!info) return undefined;
-        const { token, func } = info;
-
+        const { fromVarDecl, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
 
-        const parent = token.parent;
-
-        if (isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1)) {
-            const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
-            if (isArrowFunction(variableDeclaration.initializer!)) {
-                possibleActions.push({
-                    name: toNamedFunctionActionName,
-                    description: toNamedFunctionActionDescription
-                });
-            }
+        if (fromVarDecl || (isArrowFunction(func) && isVariableDeclaration(func.parent))) {
+            possibleActions.push({
+                name: toNamedFunctionActionName,
+                description: toNamedFunctionActionDescription
+            });
         }
-        else if (isArrowFunction(func)) {
-            if (isVariableDeclaration(func.parent)) {
-                possibleActions.push({
-                    name: toNamedFunctionActionName,
-                    description: toNamedFunctionActionDescription
-                });
-            }
 
+        if (isArrowFunction(func) && !fromVarDecl) {
             possibleActions.push({
                 name: toAnonymousFunctionActionName,
                 description: toAnonymousFunctionActionDescription
             });
         }
-        else {
+
+        if (isFunctionExpression(func)) {
             possibleActions.push({
                 name: toArrowFunctionActionName,
                 description: toArrowFunctionActionDescription
@@ -163,27 +152,23 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function getInfo(file: SourceFile, startPosition: number): Info | undefined {
         const token = getTokenAtPosition(file, startPosition);
-        let func: FunctionExpression | ArrowFunction;
-        const parent = token.parent;
 
-        if (isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1)) {
-            const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
+        const declFunc = extractArrowFnFromDecl(token.parent);
+        if (!!declFunc) return { fromVarDecl: true, func: declFunc };
 
-            if (!variableDeclaration.initializer) return undefined;
-            const initializer = variableDeclaration.initializer;
-
-            if (!isArrowFunction(initializer)) return undefined;
-            func = initializer;
-        }
-        else {
-            const tmpFunc = getContainingFunction(token);
-            if (!tmpFunc || !(isFunctionExpression(tmpFunc) || isArrowFunction(tmpFunc)) || rangeContainsRange(tmpFunc.body, token)) return undefined;
-            func = tmpFunc;
+        const maybeFunc = getContainingFunction(token);
+        if (!!maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
+                return { fromVarDecl: false, func: maybeFunc };
         }
 
-
-
-        return { token, func };
+        return undefined;
     }
 
+    function extractArrowFnFromDecl(parent: Node): ArrowFunction | undefined {
+        if (!(isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1))) return undefined;
+        const varDecl = isVariableDeclaration(parent) ? parent : parent.declarations[0];
+
+        if (!varDecl.initializer || !isArrowFunction(varDecl.initializer)) return undefined;
+        return varDecl.initializer;
+    }
 }
