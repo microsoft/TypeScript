@@ -298,34 +298,34 @@ namespace ts {
 
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
-            if (!options.preserveSymlinks) {
-                resolved = { ...resolved, fileName: realPath(resolved.fileName, host, traceEnabled) };
-            }
-
+            const { resolvedFile: { fileName, packageId }, isExternalLibraryImport } = resolved;
+            const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
             if (traceEnabled) {
-                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolved.fileName, primary);
+                trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
             }
-            resolvedTypeReferenceDirective = { primary, resolvedFileName: resolved.fileName, packageId: resolved.packageId };
+            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport };
         }
 
         return { resolvedTypeReferenceDirective, failedLookupLocations };
 
-        function primaryLookup(): PathAndPackageId | undefined {
+        interface ResolvedAndIsExternal { resolvedFile: PathAndPackageId; isExternalLibraryImport: boolean; }
+        function primaryLookup(): ResolvedAndIsExternal | undefined {
             // Check primary library paths
             if (typeRoots && typeRoots.length) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
                 }
-                return forEach(typeRoots, typeRoot => {
+                return firstDefined(typeRoots, (typeRoot): ResolvedAndIsExternal | undefined => {
                     const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                     const candidateDirectory = getDirectoryPath(candidate);
                     const directoryExists = directoryProbablyExists(candidateDirectory, host);
                     if (!directoryExists && traceEnabled) {
                         trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, candidateDirectory);
                     }
-                    return resolvedTypeScriptOnly(
+                    const resolvedFile = resolvedTypeScriptOnly(
                         loadNodeModuleFromDirectory(Extensions.DtsOnly, candidate,
                             !directoryExists, moduleResolutionState));
+                    return resolvedFile && { resolvedFile, isExternalLibraryImport: pathContainsNodeModules(typeRoot) };
                 });
             }
             else {
@@ -335,7 +335,7 @@ namespace ts {
             }
         }
 
-        function secondaryLookup(): PathAndPackageId | undefined {
+        function secondaryLookup(): ResolvedAndIsExternal | undefined {
             const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
             if (initialLocationForSecondaryLookup !== undefined) {
@@ -343,19 +343,23 @@ namespace ts {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
                 }
-                let result: SearchResult<Resolved> | undefined;
+                let result: Resolved | undefined;
+                let isExternalLibraryImport: boolean;
                 if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
-                    result = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
+                    const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
+                    result = searchResult && searchResult.value;
+                    isExternalLibraryImport = true;
                 }
                 else {
                     const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
-                    result = toSearchResult(nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true));
+                    result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
+                    isExternalLibraryImport = !!result && pathContainsNodeModules(result.path);
                 }
-                const resolvedFile = resolvedTypeScriptOnly(result && result.value);
+                const resolvedFile = resolvedTypeScriptOnly(result);
                 if (!resolvedFile && traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
                 }
-                return resolvedFile;
+                return resolvedFile && { resolvedFile, isExternalLibraryImport };
             }
             else {
                 if (traceEnabled) {
@@ -883,7 +887,7 @@ namespace ts {
             const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => nodeLoadModuleByRelativeName(extensions, candidate, onlyRecordFailures, state, /*considerPackageJson*/ true);
             const resolved = tryLoadModuleUsingOptionalResolutionSettings(extensions, moduleName, containingDirectory, loader, state);
             if (resolved) {
-                return toSearchResult({ resolved, isExternalLibraryImport: stringContains(resolved.path, nodeModulesPathPart) });
+                return toSearchResult({ resolved, isExternalLibraryImport: pathContainsNodeModules(resolved.path) });
             }
 
             if (!isExternalModuleNameRelative(moduleName)) {
@@ -960,6 +964,10 @@ namespace ts {
 
     /*@internal*/
     export const nodeModulesPathPart = "/node_modules/";
+    /*@internal*/
+    export function pathContainsNodeModules(path: string): boolean {
+        return stringContains(path, nodeModulesPathPart);
+    }
 
     /**
      * This will be called on the successfully resolved path from `loadModuleFromFile`.
