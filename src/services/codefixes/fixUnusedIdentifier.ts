@@ -200,8 +200,14 @@ namespace ts.codefix {
 
     function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
-            changes.delete(sourceFile, p);
-            deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+            const privateModifier = ts.findModifier(p, ts.SyntaxKind.PrivateKeyword);
+            if (privateModifier) {
+                changes.deleteModifier(sourceFile, p.modifiers![0]);
+            }
+            else {
+                changes.delete(sourceFile, p);
+                deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+            }
         }
     }
 
