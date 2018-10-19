@@ -1334,10 +1334,9 @@ namespace ts {
             !bindingElement.propertyName;
     }
 
-    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName) {
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName): Symbol | undefined {
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
-        return propSymbol;
+        return typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
     }
 
     /**
