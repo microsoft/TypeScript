@@ -1,4 +1,4 @@
-// @noEmit: true
+// @outFile: output.js
 // @allowJs: true
 // @checkJs: true
 // @Filename: eof.js
