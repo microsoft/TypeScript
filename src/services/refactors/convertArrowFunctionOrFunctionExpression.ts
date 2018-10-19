@@ -63,19 +63,13 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const { func } = info;
 
         let body: Block | ConciseBody;
-        let newNode: ArrowFunction | FunctionExpression;
+        let newNode: ArrowFunction | FunctionExpression | FunctionDeclaration;
         let edits: FileTextChanges[] = [];
 
         switch (actionName) {
             case toAnonymousFunctionActionName:
 
-                if (isExpression(func.body)) {
-                    const statements: Statement[] = [createReturn(func.body)];
-                    body = createBlock(statements, /* multiLine */ true);
-                }
-                else {
-                    body = func.body;
-                }
+                body = makeBlock(func);
 
                 newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
                 edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
@@ -83,44 +77,34 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
             case toNamedFunctionActionName:
 
-                if (isExpression(func.body)) {
-                    const statements: Statement[] = [createReturn(func.body)];
-                    body = createBlock(statements, /* multiLine */ true);
-                }
-                else {
-                    body = func.body;
-                }
+                body = makeBlock(func);
 
                 const variableDeclaration = func.parent;
-                if (isVariableDeclaration(variableDeclaration) && isVariableDeclarationInVariableStatement(variableDeclaration) && isIdentifier(variableDeclaration.name)) {
+                if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration) || !isIdentifier(variableDeclaration.name)) return undefined;
 
-                    const varDeclList = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableDeclarationList)!;
-                    if (!isVariableDeclarationList(varDeclList)) return undefined;
+                const varDeclList = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableDeclarationList)!;
+                if (!isVariableDeclarationList(varDeclList)) return undefined;
 
-                    const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement)!;
-                    if (!isVariableStatement(statement)) return undefined;
+                const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement)!;
+                if (!isVariableStatement(statement)) return undefined;
 
-                    if (varDeclList.declarations.length === 0) return undefined;
-                    if (varDeclList.declarations.length === 1) {
+                if (varDeclList.declarations.length === 0) return undefined;
+                if (varDeclList.declarations.length === 1) {
 
-                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
-                        const edits1 = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode1));
-                        return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
-                    }
-                    else {
-                        const newNode1 = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
+                    const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
+                    const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
+                    return { renameFilename: undefined, renameLocation: undefined, edits };
+                }
+                else {
+                    const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
 
-                        const edits1 = textChanges.ChangeTracker.with(context, t => {
-                            t.delete(file, variableDeclaration);
-                            t.insertNodeAfter(file, statement, newNode1);
-                        });
-                        return { renameFilename: undefined, renameLocation: undefined, edits: edits1 };
-                    }
-
-
+                    const edits = textChanges.ChangeTracker.with(context, t => {
+                        t.delete(file, variableDeclaration);
+                        t.insertNodeAfter(file, statement, newNode);
+                    });
+                    return { renameFilename: undefined, renameLocation: undefined, edits };
                 }
 
-                return undefined;
 
             case toArrowFunctionActionName:
 
@@ -172,5 +156,15 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         if (!varDecl.initializer || !isArrowFunction(varDecl.initializer)) return undefined;
         return varDecl.initializer;
+    }
+
+    function makeBlock(func: ArrowFunction | FunctionExpression): Block {
+        if (isExpression(func.body)) {
+            const statements: Statement[] = [createReturn(func.body)];
+            return createBlock(statements, /* multiLine */ true);
+        }
+        else {
+            return func.body;
+        }
     }
 }
