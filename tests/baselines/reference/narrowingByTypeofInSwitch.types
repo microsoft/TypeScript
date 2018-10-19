@@ -543,7 +543,7 @@ function multipleGenericFuse<X extends L | number, Y extends R | number>(xy: X |
 
         case 'function': return [xy, 1];
 >'function' : "function"
->[xy, 1] : [X, 1]
+>[xy, 1] : [X, number]
 >xy : X
 >1 : 1
 

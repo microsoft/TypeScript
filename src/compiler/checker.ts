@@ -16741,7 +16741,7 @@ namespace ts {
             }
         }
 
-        function getTypeOfPropertyOfContextualType(type: Type, name: __String) {
+        function getTypeOfPropertyOfContextualType(type: Type, name: __String, ignoreIndexSignatureWhenNoProp?: boolean) {
             return mapType(type, t => {
                 if (t.flags & TypeFlags.StructuredType) {
                     const prop = getPropertyOfType(t, name);
@@ -16754,8 +16754,10 @@ namespace ts {
                             return restType;
                         }
                     }
-                    return isNumericLiteralName(name) && getIndexTypeOfContextualType(t, IndexKind.Number) ||
-                        getIndexTypeOfContextualType(t, IndexKind.String);
+                    if (!ignoreIndexSignatureWhenNoProp) {
+                        return isNumericLiteralName(name) && getIndexTypeOfContextualType(t, IndexKind.Number) ||
+                            getIndexTypeOfContextualType(t, IndexKind.String);
+                    }
                 }
                 return undefined;
             }, /*noReductions*/ true);
@@ -16806,7 +16808,7 @@ namespace ts {
         // type of T.
         function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
             return arrayContextualType && (
-                getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
+                getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String, /*ignoreIndexSignatureWhenNoProp*/ true)
                 || getIndexTypeOfContextualType(arrayContextualType, IndexKind.Number)
                 || getIteratedTypeOrElementType(arrayContextualType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false));
         }
