@@ -18816,6 +18816,10 @@ namespace ts {
             return findIndex(args, isSpreadArgument);
         }
 
+        function acceptsVoid(t: Type): boolean {
+            return !!(t.flags & TypeFlags.Void);
+        }
+
         function hasCorrectArity(node: CallLikeExpression, args: ReadonlyArray<Expression>, signature: Signature, signatureHelpTrailingComma = false) {
             let argCount: number;
             let callIsIncomplete = false; // In incomplete call we want to be lenient when we have too few arguments
@@ -18877,8 +18881,16 @@ namespace ts {
 
             // If the call is incomplete, we should skip the lower bound check.
             // JSX signatures can have extra parameters provided by the library which we don't check
-            const hasEnoughArguments = argCount >= effectiveMinimumArguments;
-            return callIsIncomplete || hasEnoughArguments;
+            if (callIsIncomplete || argCount >= effectiveMinimumArguments) {
+                return true;
+            }
+            for (let i = argCount; i < effectiveMinimumArguments; i++) {
+                const type = getTypeAtPosition(signature, i);
+                if (filterType(type, acceptsVoid).flags & TypeFlags.Never) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function hasCorrectTypeArgumentArity(signature: Signature, typeArguments: NodeArray<TypeNode> | undefined) {
