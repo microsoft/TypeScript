@@ -368,6 +368,9 @@ namespace ts {
                 const kind = getAssignmentDeclarationKind(node as BinaryExpression);
                 const { right } = node as BinaryExpression;
                 switch (kind) {
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                     case AssignmentDeclarationKind.None:
                         return ScriptElementKind.unknown;
                     case AssignmentDeclarationKind.ExportsProperty:
