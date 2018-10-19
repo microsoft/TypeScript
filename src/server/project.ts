@@ -1351,10 +1351,14 @@ namespace ts.server {
 
         private projectReferences: ReadonlyArray<ProjectReference> | undefined;
 
+        /** Portentual project references before the project is actually loaded (read config file) */
+        private potentialProjectReferences: Map<true> | undefined;
+
         /*@internal*/
         projectOptions?: ProjectOptions | true;
 
-        protected isInitialLoadPending: () => boolean = returnTrue;
+        /*@internal*/
+        isInitialLoadPending: () => boolean = returnTrue;
 
         /*@internal*/
         sendLoadingProjectFinish = false;
@@ -1375,6 +1379,13 @@ namespace ts.server {
                 cachedDirectoryStructureHost,
                 getDirectoryPath(configFileName));
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
+        }
+
+        filesToString(writeProjectFileNames: boolean) {
+            if (this.isInitialLoadPending()) {
+                return "\tFiles (0) InitialLoadPending\n";
+            }
+            return super.filesToString(writeProjectFileNames);
         }
 
         /**
@@ -1420,12 +1431,30 @@ namespace ts.server {
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
             this.projectReferences = refs;
+            this.potentialProjectReferences = undefined;
+        }
+
+        setPotentialProjectRefence(path: Path) {
+            // We know the composites if we have read the config file
+            if (this.isInitialLoadPending()) {
+                (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(path, true);
+            }
         }
 
         /*@internal*/
-        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
+        forEachResolvedProjectReference<T>(
+            cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined,
+            cbProjectRef: (projectReference: ProjectReference) => T | undefined,
+            cbPotentialProjectRef: (path: Path) => T | undefined
+        ): T | undefined {
             const program = this.getCurrentProgram();
-            return program && program.forEachResolvedProjectReference(cb);
+            if (program) {
+                return program.forEachResolvedProjectReference(cb);
+            }
+            if (this.isInitialLoadPending()) {
+                return this.potentialProjectReferences && forEachKey(this.potentialProjectReferences, cbPotentialProjectRef);
+            }
+            return forEach(this.projectReferences, cbProjectRef);
         }
 
         /*@internal*/
