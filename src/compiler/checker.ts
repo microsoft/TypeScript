@@ -20187,7 +20187,9 @@ namespace ts {
                 argCount--;
             }
 
+            let diagnostic: DiagnosticWithLocation;
             let related: DiagnosticWithLocation | undefined;
+
             if (closestSignature && getMinArgumentCount(closestSignature) > argCount && closestSignature.declaration) {
                 const paramDecl = closestSignature.declaration.parameters[closestSignature.thisParameter ? argCount + 1 : argCount];
                 if (paramDecl) {
@@ -20198,20 +20200,27 @@ namespace ts {
                     );
                 }
             }
+            if (min < argCount && argCount < max) {
+                return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+            }
             if (hasRestParameter || hasSpreadArgument) {
                 const error = hasRestParameter && hasSpreadArgument ? Diagnostics.Expected_at_least_0_arguments_but_got_1_or_more :
                     hasRestParameter ? Diagnostics.Expected_at_least_0_arguments_but_got_1 :
                     Diagnostics.Expected_0_arguments_but_got_1_or_more;
-                const diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
-                return related ? addRelatedInfo(diagnostic, related) : diagnostic;
+                diagnostic = createDiagnosticForNode(node, error, paramRange, argCount);
+                if (hasSpreadArgument && argCount) {
+                    const nextArgument = args[getSpreadArgumentIndex(args) + 1] || undefined;
+                    diagnostic.start = nextArgument ? nextArgument.pos : args[getSpreadArgumentIndex(args)].end;
+                }
             }
-            if (min < argCount && argCount < max) {
-                return createDiagnosticForNode(node, Diagnostics.No_overload_expects_0_arguments_but_overloads_do_exist_that_expect_either_1_or_2_arguments, argCount, belowArgCount, aboveArgCount);
+            else {
+                diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
             }
-            const diagnostic = createDiagnosticForNode(node, Diagnostics.Expected_0_arguments_but_got_1, paramRange, argCount);
             if (argCount > max && args[max].pos !== args[argCount - 1].end) {
                diagnostic.start = args[max].pos;
-               diagnostic.length = args[argCount - 1].end - diagnostic.start;
+            }
+            if (argCount > max || (hasSpreadArgument && argCount)) {
+               diagnostic.length = args[args.length - 1].end - diagnostic.start;
             }
             return related ? addRelatedInfo(diagnostic, related) : diagnostic;
         }
