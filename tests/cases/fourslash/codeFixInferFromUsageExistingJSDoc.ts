@@ -54,7 +54,8 @@ verify.codeFixAll({
     fixAllDescription: "Infer all types from usage",
     newFileContent:
 `/**
- * 1 2
+ * 1
+ * 2
  * @param {number} x no types here!
  * @param x a duplicate!
  * @param y yy
@@ -66,7 +67,9 @@ function f(x) {
 
 var o = {
     /**
-     * 1 2 3
+     * 1
+     * 2
+     * 3
      * @returns {number} First one
      * @see also
      * @returns Second one

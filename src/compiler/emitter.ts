@@ -2620,11 +2620,14 @@ namespace ts {
         function emitJSDocComment(node: JSDoc) {
             write("/**");
             if (node.comment) {
-                writeLine();
-                writeSpace();
-                writePunctuation("*");
-                writeSpace();
-                write(node.comment);
+                const lines = node.comment.split(/\r\n?|\n/g);
+                for (const line of lines) {
+                    writeLine();
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
+                    write(line);
+                }
             }
             if (node.tags) {
                 if (node.tags.length === 1 && node.tags[0].kind === SyntaxKind.JSDocTypeTag && !node.comment) {

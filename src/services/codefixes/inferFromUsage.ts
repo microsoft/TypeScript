@@ -278,7 +278,7 @@ namespace ts.codefix {
             }
         }
         syntheticTags.forEach(v => tags.push(v));
-        const tag = createJSDocComment(comments.join(" "), createNodeArray(tags));
+        const tag = createJSDocComment(comments.join("\n"), createNodeArray(tags));
         changes.insertJsdocCommentBefore(sourceFile, parent, tag);
     }
 
