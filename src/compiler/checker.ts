@@ -2353,11 +2353,16 @@ namespace ts {
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol | undefined, dontResolveAlias?: boolean): Symbol | undefined;
         function resolveExternalModuleSymbol(moduleSymbol: Symbol, dontResolveAlias?: boolean): Symbol {
-            return moduleSymbol && getMergedSymbol(getCommonJsExportEquals(resolveSymbol(moduleSymbol.exports!.get(InternalSymbolName.ExportEquals), dontResolveAlias), moduleSymbol)) || moduleSymbol;
+            if (moduleSymbol) {
+                const exportEquals = resolveSymbol(moduleSymbol.exports!.get(InternalSymbolName.ExportEquals), dontResolveAlias);
+                const exported = getCommonJsExportEquals(exportEquals, moduleSymbol);
+                return getMergedSymbol(exported) || moduleSymbol;
+            }
+            return undefined!;
         }
 
         function getCommonJsExportEquals(exported: Symbol | undefined, moduleSymbol: Symbol): Symbol | undefined {
-            if (!exported || exported === unknownSymbol || moduleSymbol.exports!.size === 1) {
+            if (!exported || exported === unknownSymbol || exported === moduleSymbol || moduleSymbol.exports!.size === 1) {
                 return exported;
             }
             const merged = cloneSymbol(exported);
