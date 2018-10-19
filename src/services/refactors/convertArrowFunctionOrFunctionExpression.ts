@@ -82,29 +82,24 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
                 const variableDeclaration = func.parent;
                 if (!isVariableDeclaration(variableDeclaration) || !isVariableDeclarationInVariableStatement(variableDeclaration) || !isIdentifier(variableDeclaration.name)) return undefined;
 
-                const varDeclList = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableDeclarationList)!;
+                const varDeclList = findAncestor(variableDeclaration, n => isVariableDeclarationList(n))!;
                 if (!isVariableDeclarationList(varDeclList)) return undefined;
 
-                const statement = findAncestor(variableDeclaration, n => n.kind === SyntaxKind.VariableStatement)!;
+                const statement = findAncestor(variableDeclaration, n => isVariableStatement(n))!;
                 if (!isVariableStatement(statement)) return undefined;
 
-                if (varDeclList.declarations.length === 0) return undefined;
-                if (varDeclList.declarations.length === 1) {
+                newNode = makeFuncDecl(func, statement, variableDeclaration.name, body);
 
-                    const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
-                    const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
-                    return { renameFilename: undefined, renameLocation: undefined, edits };
+                if (varDeclList.declarations.length === 1) {
+                    edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
                 }
                 else {
-                    const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, variableDeclaration.name, func.typeParameters, func.parameters, func.type, body);
-
-                    const edits = textChanges.ChangeTracker.with(context, t => {
+                    edits = textChanges.ChangeTracker.with(context, t => {
                         t.delete(file, variableDeclaration);
                         t.insertNodeAfter(file, statement, newNode);
                     });
-                    return { renameFilename: undefined, renameLocation: undefined, edits };
                 }
-
+                break;
 
             case toArrowFunctionActionName:
 
@@ -132,8 +127,6 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         }
 
         return { renameFilename: undefined, renameLocation: undefined, edits };
-
-
     }
 
     function getInfo(file: SourceFile, startPosition: number): Info | undefined {
@@ -166,5 +159,17 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         else {
             return func.body;
         }
+    }
+
+    function makeFuncDecl(func: FunctionExpression | ArrowFunction, statement: VariableStatement, name: Identifier, body: Block) {
+        return createFunctionDeclaration(
+            func.decorators,
+            statement.modifiers,
+            func.asteriskToken,
+            name,
+            func.typeParameters,
+            func.parameters,
+            func.type,
+            body);
     }
 }
