@@ -8855,10 +8855,10 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
+        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type, noReduction: boolean) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
+                return addTypesToUnion(typeSet, includes, (<UnionType>type).types, noReduction);
             }
             // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
             // another form of 'never' (in that they have an empty value domain). We could in theory turn
@@ -8866,28 +8866,35 @@ namespace ts {
             // easier to reason about their origin.
             if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
                 includes |= flags & ~TypeFlags.ConstructionFlags;
-                if (flags & TypeFlags.AnyOrUnknown) {
+                if (noReduction) {
+                    addTypeToTypeSet(typeSet, type);
+                }
+                else if (flags & TypeFlags.AnyOrUnknown) {
                     if (type === wildcardType) includes |= TypeFlags.Wildcard;
                 }
                 else if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
                 }
                 else {
-                    const len = typeSet.length;
-                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-                    if (index < 0) {
-                        typeSet.splice(~index, 0, type);
-                    }
+                    addTypeToTypeSet(typeSet, type);
                 }
             }
             return includes;
         }
 
+        function addTypeToTypeSet(typeSet: Type[], type: Type) {
+            const len = typeSet.length;
+            const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+            if (index < 0) {
+                typeSet.splice(~index, 0, type);
+            }
+        }
+
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>): TypeFlags {
+        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>, noReduction: boolean): TypeFlags {
             for (const type of types) {
-                includes = addTypeToUnion(typeSet, includes, type);
+                includes = addTypeToUnion(typeSet, includes, type, noReduction);
             }
             return includes;
         }
@@ -8964,24 +8971,26 @@ namespace ts {
                 return types[0];
             }
             const typeSet: Type[] = [];
-            const includes = addTypesToUnion(typeSet, 0, types);
-            if (includes & TypeFlags.AnyOrUnknown) {
-                return includes & TypeFlags.Any ? includes & TypeFlags.Wildcard ? wildcardType : anyType : unknownType;
-            }
-            switch (unionReduction) {
-                case UnionReduction.Literal:
-                    if (includes & TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.BooleanLiteral) {
-                        removeRedundantLiteralTypes(typeSet, includes);
-                    }
-                    break;
-                case UnionReduction.Subtype:
-                    removeSubtypes(typeSet);
-                    break;
-            }
-            if (typeSet.length === 0) {
-                return includes & TypeFlags.Null ? includes & TypeFlags.NonWideningType ? nullType : nullWideningType :
-                    includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
-                        neverType;
+            const includes = addTypesToUnion(typeSet, 0, types, unionReduction === UnionReduction.None);
+            if (unionReduction !== UnionReduction.None) {
+                if (includes & TypeFlags.AnyOrUnknown) {
+                    return includes & TypeFlags.Any ? includes & TypeFlags.Wildcard ? wildcardType : anyType : unknownType;
+                }
+                switch (unionReduction) {
+                    case UnionReduction.Literal:
+                        if (includes & TypeFlags.StringOrNumberLiteralOrUnique | TypeFlags.BooleanLiteral) {
+                            removeRedundantLiteralTypes(typeSet, includes);
+                        }
+                        break;
+                    case UnionReduction.Subtype:
+                        removeSubtypes(typeSet);
+                        break;
+                }
+                if (typeSet.length === 0) {
+                    return includes & TypeFlags.Null ? includes & TypeFlags.NonWideningType ? nullType : nullWideningType :
+                        includes & TypeFlags.Undefined ? includes & TypeFlags.NonWideningType ? undefinedType : undefinedWideningType :
+                            neverType;
+                }
             }
             return getUnionTypeFromSortedList(typeSet, includes & TypeFlags.NotPrimitiveUnion ? 0 : TypeFlags.UnionOfPrimitiveTypes, aliasSymbol, aliasTypeArguments);
         }
@@ -16868,7 +16877,6 @@ namespace ts {
         function getContextualTypeForElementExpression(arrayContextualType: Type | undefined, index: number): Type | undefined {
             return arrayContextualType && (
                 getTypeOfPropertyOfContextualType(arrayContextualType, "" + index as __String)
-                || getIndexTypeOfContextualType(arrayContextualType, IndexKind.Number)
                 || getIteratedTypeOrElementType(arrayContextualType, /*errorNode*/ undefined, /*allowStringInput*/ false, /*allowAsyncIterables*/ false, /*checkAssignability*/ false));
         }
 
