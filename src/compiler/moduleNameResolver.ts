@@ -298,34 +298,32 @@ namespace ts {
 
         let resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective | undefined;
         if (resolved) {
-            const { resolvedFile: { fileName, packageId }, isExternalLibraryImport } = resolved;
+            const { fileName, packageId } = resolved;
             const resolvedFileName = options.preserveSymlinks ? fileName : realPath(fileName, host, traceEnabled);
             if (traceEnabled) {
                 trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
             }
-            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport };
+            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(resolvedFileName) };
         }
 
         return { resolvedTypeReferenceDirective, failedLookupLocations };
 
-        interface ResolvedAndIsExternal { resolvedFile: PathAndPackageId; isExternalLibraryImport: boolean; }
-        function primaryLookup(): ResolvedAndIsExternal | undefined {
+        function primaryLookup(): PathAndPackageId | undefined {
             // Check primary library paths
             if (typeRoots && typeRoots.length) {
                 if (traceEnabled) {
                     trace(host, Diagnostics.Resolving_with_primary_search_path_0, typeRoots.join(", "));
                 }
-                return firstDefined(typeRoots, (typeRoot): ResolvedAndIsExternal | undefined => {
+                return firstDefined(typeRoots, typeRoot => {
                     const candidate = combinePaths(typeRoot, typeReferenceDirectiveName);
                     const candidateDirectory = getDirectoryPath(candidate);
                     const directoryExists = directoryProbablyExists(candidateDirectory, host);
                     if (!directoryExists && traceEnabled) {
                         trace(host, Diagnostics.Directory_0_does_not_exist_skipping_all_lookups_in_it, candidateDirectory);
                     }
-                    const resolvedFile = resolvedTypeScriptOnly(
+                    return resolvedTypeScriptOnly(
                         loadNodeModuleFromDirectory(Extensions.DtsOnly, candidate,
                             !directoryExists, moduleResolutionState));
-                    return resolvedFile && { resolvedFile, isExternalLibraryImport: pathContainsNodeModules(typeRoot) };
                 });
             }
             else {
@@ -335,7 +333,7 @@ namespace ts {
             }
         }
 
-        function secondaryLookup(): ResolvedAndIsExternal | undefined {
+        function secondaryLookup(): PathAndPackageId | undefined {
             const initialLocationForSecondaryLookup = containingFile && getDirectoryPath(containingFile);
 
             if (initialLocationForSecondaryLookup !== undefined) {
@@ -344,22 +342,19 @@ namespace ts {
                     trace(host, Diagnostics.Looking_up_in_node_modules_folder_initial_location_0, initialLocationForSecondaryLookup);
                 }
                 let result: Resolved | undefined;
-                let isExternalLibraryImport: boolean;
                 if (!isExternalModuleNameRelative(typeReferenceDirectiveName)) {
                     const searchResult = loadModuleFromNearestNodeModulesDirectory(Extensions.DtsOnly, typeReferenceDirectiveName, initialLocationForSecondaryLookup, moduleResolutionState, /*cache*/ undefined, /*redirectedReference*/ undefined);
                     result = searchResult && searchResult.value;
-                    isExternalLibraryImport = true;
                 }
                 else {
                     const { path: candidate } = normalizePathAndParts(combinePaths(initialLocationForSecondaryLookup, typeReferenceDirectiveName));
                     result = nodeLoadModuleByRelativeName(Extensions.DtsOnly, candidate, /*onlyRecordFailures*/ false, moduleResolutionState, /*considerPackageJson*/ true);
-                    isExternalLibraryImport = !!result && pathContainsNodeModules(result.path);
                 }
                 const resolvedFile = resolvedTypeScriptOnly(result);
                 if (!resolvedFile && traceEnabled) {
                     trace(host, Diagnostics.Type_reference_directive_0_was_not_resolved, typeReferenceDirectiveName);
                 }
-                return resolvedFile && { resolvedFile, isExternalLibraryImport };
+                return resolvedFile;
             }
             else {
                 if (traceEnabled) {
