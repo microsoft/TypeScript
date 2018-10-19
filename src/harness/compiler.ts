@@ -64,8 +64,12 @@ namespace compiler {
             this.result = result;
             this.diagnostics = diagnostics;
             this.options = program ? program.getCompilerOptions() : options;
-
-            // collect outputs
+            _collectOutputs();
+            _correlateInputsAndOutputs(this);
+            this.diagnostics = diagnostics;
+        }
+        
+        _collectOuputs() {
             const js = this.js = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const dts = this.dts = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
             const maps = this.maps = new collections.SortedMap<string, documents.TextDocument>({ comparer: this.vfs.stringComparer, sort: "insertion" });
@@ -80,65 +84,66 @@ namespace compiler {
                     maps.set(document.file, document);
                 }
             }
-
-            // correlate inputs and outputs
-            this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
-            if (program) {
-                if (this.options.out || this.options.outFile) {
-                    const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
-                    const inputs: documents.TextDocument[] = [];
-                    for (const sourceFile of program.getSourceFiles()) {
-                        if (sourceFile) {
-                            const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
-                            this._inputs.push(input);
-                            if (!vpath.isDeclaration(sourceFile.fileName)) {
-                                inputs.push(input);
-                            }
-                        }
-                    }
-
-                    const outputs: CompilationOutput = {
-                        inputs,
-                        js: js.get(outFile),
-                        dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
-                        map: maps.get(outFile + ".map")
-                    };
-
-                    if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
-                    if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
-                    if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
-
-                    for (const input of inputs) {
-                        this._inputsAndOutputs.set(input.file, outputs);
-                    }
-                }
-                else {
-                    for (const sourceFile of program.getSourceFiles()) {
-                        if (sourceFile) {
-                            const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
-                            this._inputs.push(input);
-                            if (!vpath.isDeclaration(sourceFile.fileName)) {
-                                const extname = ts.getOutputExtension(sourceFile, this.options);
-                                const outputs: CompilationOutput = {
-                                    inputs: [input],
-                                    js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
-                                    dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts")),
-                                    map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
-                                };
-
-                                this._inputsAndOutputs.set(sourceFile.fileName, outputs);
-                                if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
-                                if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
-                                if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
-                            }
-                        }
-                    }
-                }
-            }
-
-            this.diagnostics = diagnostics;
         }
+        
+        _correlateInputsAndOutputs(self) {
+            this = self
+            this._inputsAndOutputs = new collections.SortedMap<string, CompilationOutput>({ comparer: this.vfs.stringComparer, sort: "insertion" });
+                if (program) {
+                    if (this.options.out || this.options.outFile) {
+                        const outFile = vpath.resolve(this.vfs.cwd(), this.options.outFile || this.options.out);
+                        const inputs: documents.TextDocument[] = [];
+                        for (const sourceFile of program.getSourceFiles()) {
+                            if (sourceFile) {
+                                const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                                this._inputs.push(input);
+                                if (!vpath.isDeclaration(sourceFile.fileName)) {
+                                    inputs.push(input);
+                                }
+                            }
+                        }
 
+                        const outputs: CompilationOutput = {
+                            inputs,
+                            js: js.get(outFile),
+                            dts: dts.get(vpath.changeExtension(outFile, ".d.ts")),
+                            map: maps.get(outFile + ".map")
+                        };
+
+                        if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
+                        if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                        if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+
+                        for (const input of inputs) {
+                            this._inputsAndOutputs.set(input.file, outputs);
+                        }
+                    }
+                    else {
+                        for (const sourceFile of program.getSourceFiles()) {
+                            if (sourceFile) {
+                                const input = new documents.TextDocument(sourceFile.fileName, sourceFile.text);
+                                this._inputs.push(input);
+                                if (!vpath.isDeclaration(sourceFile.fileName)) {
+                                    const extname = ts.getOutputExtension(sourceFile, this.options);
+                                    const outputs: CompilationOutput = {
+                                        inputs: [input],
+                                        js: js.get(this.getOutputPath(sourceFile.fileName, extname)),
+                                        dts: dts.get(this.getOutputPath(sourceFile.fileName, ".d.ts")),
+                                        map: maps.get(this.getOutputPath(sourceFile.fileName, extname + ".map"))
+                                    };
+
+                                    this._inputsAndOutputs.set(sourceFile.fileName, outputs);
+                                    if (outputs.js) this._inputsAndOutputs.set(outputs.js.file, outputs);
+                                    if (outputs.dts) this._inputsAndOutputs.set(outputs.dts.file, outputs);
+                                    if (outputs.map) this._inputsAndOutputs.set(outputs.map.file, outputs);
+                                }
+                            }
+                        }
+                    }
+                }    
+            }   
+        }
+        
         public get vfs(): vfs.FileSystem {
             return this.host.vfs;
         }
