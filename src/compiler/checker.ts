@@ -5831,7 +5831,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                                error(node, Diagnostics.An_interface_can_only_extend_an_object_or_intersection_type_with_statically_known_members);
                             }
                         }
                     }
@@ -25979,7 +25979,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                                error(typeRefNode, Diagnostics.A_class_can_only_implement_an_object_or_intersection_type_with_statically_known_members);
                             }
                         }
                     }
