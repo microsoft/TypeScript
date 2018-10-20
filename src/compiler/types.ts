@@ -4942,6 +4942,8 @@ namespace ts {
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
         packageId?: PackageId;
+        /** True if `resolvedFileName` comes from `node_modules`. */
+        isExternalLibraryImport?: boolean;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
