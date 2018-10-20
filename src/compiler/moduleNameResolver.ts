@@ -303,7 +303,7 @@ namespace ts {
             if (traceEnabled) {
                 trace(host, Diagnostics.Type_reference_directive_0_was_successfully_resolved_to_1_primary_Colon_2, typeReferenceDirectiveName, resolvedFileName, primary);
             }
-            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(resolvedFileName) };
+            resolvedTypeReferenceDirective = { primary, resolvedFileName, packageId, isExternalLibraryImport: pathContainsNodeModules(fileName) };
         }
 
         return { resolvedTypeReferenceDirective, failedLookupLocations };
