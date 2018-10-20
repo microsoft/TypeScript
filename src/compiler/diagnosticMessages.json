@@ -1056,7 +1056,7 @@
         "category": "Error",
         "code": 2311
     },
-    "An interface may only extend a class or another interface.": {
+    "An interface can only extend an object or intersection type with statically known members.": {
         "category": "Error",
         "code": 2312
     },
@@ -1484,7 +1484,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class may only implement another class or interface.": {
+    "A class can only implement an object or intersection type with statically known members.": {
         "category": "Error",
         "code": 2422
     },
