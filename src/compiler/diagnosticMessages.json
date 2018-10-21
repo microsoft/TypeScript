@@ -1292,7 +1292,7 @@
         "category": "Error",
         "code": 2366
     },
-    "This condition will always return '{0}' since the types '{1}' and '{2}' have no overlap.": {
+    "Comparison of expressions of types '{0}' and '{1}' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert one of the expressions to 'unknown' first.": {
         "category": "Error",
         "code": 2367
     },

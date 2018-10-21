@@ -22834,10 +22834,9 @@ namespace ts {
                 switch (operatorToken.kind) {
                     case SyntaxKind.EqualsEqualsEqualsToken:
                     case SyntaxKind.EqualsEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "false", leftStr, rightStr);
                     case SyntaxKind.ExclamationEqualsEqualsToken:
                     case SyntaxKind.ExclamationEqualsToken:
-                        return error(errNode, Diagnostics.This_condition_will_always_return_0_since_the_types_1_and_2_have_no_overlap, "true", leftStr, rightStr);
+                        return error(errNode, Diagnostics.Comparison_of_expressions_of_types_0_and_1_may_be_a_mistake_because_neither_type_sufficiently_overlaps_with_the_other_If_this_was_intentional_convert_one_of_the_expressions_to_unknown_first, leftStr, rightStr);
                     }
                 return undefined;
             }
