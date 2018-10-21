@@ -574,7 +574,7 @@ namespace ts {
         let diagnosticsProducingTypeChecker: TypeChecker;
         let noDiagnosticsTypeChecker: TypeChecker;
         let classifiableNames: UnderscoreEscapedMap<true>;
-        let unmodifiedSourceFilesWithAmbientModules: SourceFile[] | undefined;
+        const ambientModuleNameToUnmodifiedFileName = createMap<string>();
 
         const cachedSemanticDiagnosticsForFile: DiagnosticCache<Diagnostic> = {};
         const cachedDeclarationDiagnosticsForFile: DiagnosticCache<DiagnosticWithLocation> = {};
@@ -976,16 +976,14 @@ namespace ts {
                 }
 
                 // at least one of declarations should come from non-modified source file
-                const firstUnmodifiedFile = unmodifiedSourceFilesWithAmbientModules && unmodifiedSourceFilesWithAmbientModules.find(
-                    f => contains(f.ambientModuleNames, moduleName)
-                );
+                const unmodifiedFile = ambientModuleNameToUnmodifiedFileName.get(moduleName);
 
-                if (!firstUnmodifiedFile) {
+                if (!unmodifiedFile) {
                     return false;
                 }
 
                 if (isTraceEnabled(options, host)) {
-                    trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName, firstUnmodifiedFile.fileName);
+                    trace(host, Diagnostics.Module_0_was_resolved_as_ambient_module_declared_in_1_since_this_file_was_not_modified, moduleName, unmodifiedFile);
                 }
                 return true;
             }
@@ -1179,7 +1177,13 @@ namespace ts {
             }
 
             const modifiedFiles = modifiedSourceFiles.map(f => f.oldFile);
-            unmodifiedSourceFilesWithAmbientModules = oldSourceFiles.filter((f) => !!f.ambientModuleNames.length && !contains(modifiedFiles, f));
+            for (const oldFile of oldSourceFiles) {
+                if (!contains(modifiedFiles, oldFile)) {
+                    for (const moduleName of oldFile.ambientModuleNames) {
+                        ambientModuleNameToUnmodifiedFileName.set(moduleName, oldFile.fileName);
+                    }
+                }
+            }
             // try to verify results of module resolution
             for (const { oldFile: oldSourceFile, newFile: newSourceFile } of modifiedSourceFiles) {
                 const newSourceFilePath = getNormalizedAbsolutePath(newSourceFile.originalFileName, currentDirectory);
