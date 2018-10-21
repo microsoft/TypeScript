@@ -1007,7 +1007,6 @@
         "category": "Error",
         "code": 1349
     },
-
     "Duplicate identifier '{0}'.": {
         "category": "Error",
         "code": 2300
@@ -2489,7 +2488,6 @@
         "category": "Error",
         "code": 2734
     },
-
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
         "code": 4000
@@ -2790,7 +2788,6 @@
         "category": "Error",
         "code": 4094
     },
-
     "Public static method '{0}' of exported class has or is using name '{1}' from external module {2} but cannot be named.": {
         "category": "Error",
         "code": 4095
@@ -2823,7 +2820,6 @@
         "category": "Error",
         "code": 4102
     },
-
     "The current host does not support the '{0}' option.": {
         "category": "Error",
         "code": 5001
@@ -2956,7 +2952,6 @@
         "category": "Error",
         "code": 5073
     },
-
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
         "code": 6000
@@ -3767,7 +3762,6 @@
         "category": "Message",
         "code": 6215
     },
-
     "Projects to reference": {
         "category": "Message",
         "code": 6300
@@ -3820,7 +3814,6 @@
         "category": "Message",
         "code": 6353
     },
-
     "Project '{0}' is up to date with .d.ts files from its dependencies": {
         "category": "Message",
         "code": 6354
@@ -3889,7 +3882,6 @@
         "category": "Error",
         "code": 6370
     },
-
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
         "code": 6500
@@ -3902,7 +3894,6 @@
         "category": "Message",
         "code": 6502
     },
-
     "Variable '{0}' implicitly has an '{1}' type.": {
         "category": "Error",
         "code": 7005
@@ -4249,7 +4240,6 @@
         "category": "Error",
         "code": 17017
     },
-
     "Circularity detected while resolving configuration: {0}": {
         "category": "Error",
         "code": 18000
@@ -4266,7 +4256,6 @@
         "category": "Error",
         "code": 18003
     },
-
     "File is a CommonJS module; it may be converted to an ES6 module.": {
         "category": "Suggestion",
         "code": 80001
@@ -4663,7 +4652,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
