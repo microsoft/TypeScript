@@ -1056,7 +1056,7 @@
         "category": "Error",
         "code": 2311
     },
-    "An interface can only extend an object or intersection type with statically known members.": {
+    "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
     },
@@ -1484,7 +1484,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class can only implement an object or intersection type with statically known members.": {
+    "A class can only implement an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2422
     },
@@ -1816,7 +1816,7 @@
         "category": "Error",
         "code": 2508
     },
-    "Base constructor return type '{0}' is not a class or interface type.": {
+    "Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2509
     },
