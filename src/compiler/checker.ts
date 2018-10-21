@@ -3170,11 +3170,13 @@ namespace ts {
                     enclosingDeclaration,
                     flags: flags || NodeBuilderFlags.None,
                     // If no full tracker is provided, fake up a dummy one with a basic limited-functionality moduleResolverHost
-                    tracker: tracker && tracker.trackSymbol ? tracker : { trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
-                        getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
-                        getSourceFiles: () => host.getSourceFiles(),
-                        getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
-                    } : undefined },
+                    tracker: tracker && tracker.trackSymbol ? tracker : {
+                        trackSymbol: noop, moduleResolverHost: flags! & NodeBuilderFlags.DoNotIncludeSymbolChain ? {
+                            getCommonSourceDirectory: (host as Program).getCommonSourceDirectory ? () => (host as Program).getCommonSourceDirectory() : () => "",
+                            getSourceFiles: () => host.getSourceFiles(),
+                            getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
+                        } : undefined
+                    },
                     encounteredError: false,
                     visitedSymbols: undefined,
                     inferTypeParameters: undefined,
@@ -10902,7 +10904,7 @@ namespace ts {
             return reportedError;
         }
 
-        function *generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
+        function* generateJsxAttributes(node: JsxAttributes): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isJsxSpreadAttribute(prop)) continue;
@@ -10914,7 +10916,7 @@ namespace ts {
             return elaborateElementwise(generateJsxAttributes(node), source, target, relation);
         }
 
-        function *generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
+        function* generateLimitedTupleElements(node: ArrayLiteralExpression, target: Type): ElaborationIterator {
             const len = length(node.elements);
             if (!len) return;
             for (let i = 0; i < len; i++) {
@@ -10939,7 +10941,7 @@ namespace ts {
             return false;
         }
 
-        function *generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
+        function* generateObjectLiteralElements(node: ObjectLiteralExpression): ElaborationIterator {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
@@ -18282,7 +18284,7 @@ namespace ts {
             return true;
         }
 
-        function getThisParameterFromNodeContext (node: Node) {
+        function getThisParameterFromNodeContext(node: Node) {
             const thisContainer = getThisContainer(node, /* includeArrowFunctions */ false);
             return thisContainer && isFunctionLike(thisContainer) ? getThisParameter(thisContainer) : undefined;
         }
