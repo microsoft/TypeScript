@@ -8855,10 +8855,10 @@ namespace ts {
             return false;
         }
 
-        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type, noReduction: boolean) {
+        function addTypeToUnion(typeSet: Type[], includes: TypeFlags, type: Type) {
             const flags = type.flags;
             if (flags & TypeFlags.Union) {
-                return addTypesToUnion(typeSet, includes, (<UnionType>type).types, noReduction);
+                return addTypesToUnion(typeSet, includes, (<UnionType>type).types);
             }
             // We ignore 'never' types in unions. Likewise, we ignore intersections of unit types as they are
             // another form of 'never' (in that they have an empty value domain). We could in theory turn
@@ -8866,35 +8866,26 @@ namespace ts {
             // easier to reason about their origin.
             if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
                 includes |= flags & ~TypeFlags.ConstructionFlags;
-                if (noReduction) {
-                    addTypeToTypeSet(typeSet, type);
-                }
-                else if (flags & TypeFlags.AnyOrUnknown) {
-                    if (type === wildcardType) includes |= TypeFlags.Wildcard;
-                }
-                else if (!strictNullChecks && flags & TypeFlags.Nullable) {
+                if (type === wildcardType) includes |= TypeFlags.Wildcard;
+                if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
                 }
                 else {
-                    addTypeToTypeSet(typeSet, type);
+                    const len = typeSet.length;
+                    const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
+                    if (index < 0) {
+                        typeSet.splice(~index, 0, type);
+                    }
                 }
             }
             return includes;
         }
 
-        function addTypeToTypeSet(typeSet: Type[], type: Type) {
-            const len = typeSet.length;
-            const index = len && type.id > typeSet[len - 1].id ? ~len : binarySearch(typeSet, type, getTypeId, compareValues);
-            if (index < 0) {
-                typeSet.splice(~index, 0, type);
-            }
-        }
-
         // Add the given types to the given type set. Order is preserved, duplicates are removed,
         // and nested types of the given kind are flattened into the set.
-        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>, noReduction: boolean): TypeFlags {
+        function addTypesToUnion(typeSet: Type[], includes: TypeFlags, types: ReadonlyArray<Type>): TypeFlags {
             for (const type of types) {
-                includes = addTypeToUnion(typeSet, includes, type, noReduction);
+                includes = addTypeToUnion(typeSet, includes, type);
             }
             return includes;
         }
@@ -8971,7 +8962,7 @@ namespace ts {
                 return types[0];
             }
             const typeSet: Type[] = [];
-            const includes = addTypesToUnion(typeSet, 0, types, unionReduction === UnionReduction.None);
+            const includes = addTypesToUnion(typeSet, 0, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.Wildcard ? wildcardType : anyType : unknownType;
