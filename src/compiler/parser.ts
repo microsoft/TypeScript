@@ -1482,7 +1482,15 @@ namespace ts {
                     // which would be a candidate for improved error reporting.
                     return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
-                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.AsteriskToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                    switch (token()) {
+                        case SyntaxKind.OpenBracketToken:
+                        case SyntaxKind.AsteriskToken:
+                        case SyntaxKind.DotDotDotToken:
+                        case SyntaxKind.DotToken: // Not an object literal member, but don't want to close the object (see `tests/cases/fourslash/completionsDotInObjectLiteral.ts`)
+                            return true;
+                        default:
+                            return isLiteralPropertyName();
+                    }
                 case ParsingContext.RestProperties:
                     return isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
