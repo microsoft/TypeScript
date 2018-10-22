@@ -4306,6 +4306,9 @@ namespace ts {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
+                    if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
+                        return symbolName(symbol);
+                    }
                     return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {

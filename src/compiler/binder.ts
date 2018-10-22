@@ -2607,6 +2607,9 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
+            if (isCallExpression(node)) {
+                return !!getAssignedExpandoInitializer(node);
+            }
             let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
