@@ -39,6 +39,7 @@ interface Algorithm {
 }
 
 interface BlobPropertyBag {
+    endings?: EndingType;
     type?: string;
 }
 
@@ -1197,7 +1198,7 @@ interface FileReader extends EventTarget {
     readAsArrayBuffer(blob: Blob): void;
     readAsBinaryString(blob: Blob): void;
     readAsDataURL(blob: Blob): void;
-    readAsText(blob: Blob, label?: string): void;
+    readAsText(blob: Blob, encoding?: string): void;
     readonly DONE: number;
     readonly EMPTY: number;
     readonly LOADING: number;
@@ -1219,7 +1220,7 @@ interface FileReaderSync {
     readAsArrayBuffer(blob: Blob): ArrayBuffer;
     readAsBinaryString(blob: Blob): string;
     readAsDataURL(blob: Blob): string;
-    readAsText(blob: Blob, label?: string): string;
+    readAsText(blob: Blob, encoding?: string): string;
 }
 
 declare var FileReaderSync: {
@@ -2202,7 +2203,7 @@ declare var ReadableStreamReader: {
 interface Request extends Body {
     /**
      * Returns the cache mode associated with request, which is a string indicating
-     * how the the request will interact with the browser's cache when fetching.
+     * how the request will interact with the browser's cache when fetching.
      */
     readonly cache: RequestCache;
     /**
@@ -2522,6 +2523,29 @@ interface TextEncoder {
 declare var TextEncoder: {
     prototype: TextEncoder;
     new(): TextEncoder;
+};
+
+interface TextMetrics {
+    readonly actualBoundingBoxAscent: number;
+    readonly actualBoundingBoxDescent: number;
+    readonly actualBoundingBoxLeft: number;
+    readonly actualBoundingBoxRight: number;
+    readonly alphabeticBaseline: number;
+    readonly emHeightAscent: number;
+    readonly emHeightDescent: number;
+    readonly fontBoundingBoxAscent: number;
+    readonly fontBoundingBoxDescent: number;
+    readonly hangingBaseline: number;
+    /**
+     * Returns the measurement described below.
+     */
+    readonly ideographicBaseline: number;
+    readonly width: number;
+}
+
+declare var TextMetrics: {
+    prototype: TextMetrics;
+    new(): TextMetrics;
 };
 
 interface URL {
@@ -2967,6 +2991,7 @@ type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
 type Transferable = ArrayBuffer | MessagePort | ImageBitmap;
 type BinaryType = "blob" | "arraybuffer";
 type ClientTypes = "window" | "worker" | "sharedworker" | "all";
+type EndingType = "transparent" | "native";
 type IDBCursorDirection = "next" | "nextunique" | "prev" | "prevunique";
 type IDBRequestReadyState = "pending" | "done";
 type IDBTransactionMode = "readonly" | "readwrite" | "versionchange";
