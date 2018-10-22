@@ -1,10 +1,10 @@
 Exit Code: 1
 Standard output:
-node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(116,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(116,18): error TS2345: Argument of type 'Timeout | null' is not assignable to parameter of type 'number | undefined'.
   Type 'null' is not assignable to type 'number | undefined'.
-node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(129,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(129,18): error TS2345: Argument of type 'Timeout | null' is not assignable to parameter of type 'number | undefined'.
   Type 'null' is not assignable to type 'number | undefined'.
-node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(147,18): error TS2345: Argument of type 'Timer | null' is not assignable to parameter of type 'number | undefined'.
+node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(147,18): error TS2345: Argument of type 'Timeout | null' is not assignable to parameter of type 'number | undefined'.
   Type 'null' is not assignable to type 'number | undefined'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(176,19): error TS2322: Type 'null' is not assignable to type '(path: any, callback: any) => void'.
 node_modules/enhanced-resolve/lib/CachedInputFileSystem.js(179,23): error TS2322: Type 'null' is not assignable to type '(path: any) => any'.

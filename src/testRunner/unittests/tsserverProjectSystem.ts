@@ -58,12 +58,13 @@ namespace ts.projectSystem {
         getLogFileName: () => undefined,
     };
 
-    function createHasErrorMessageLogger() {
+    export function createHasErrorMessageLogger() {
         let hasErrorMsg = false;
         const { close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc } = nullLogger;
         const logger: server.Logger = {
             close, hasLevel, loggingEnabled, startGroup, endGroup, info, getLogFileName, perftrc,
-            msg: () => {
+            msg: (s, type) => {
+                Debug.fail(`Error: ${s}, type: ${type}`);
                 hasErrorMsg = true;
             }
         };
@@ -322,11 +323,24 @@ namespace ts.projectSystem {
             typingsInstaller: undefined!, // TODO: GH#18217
             byteLength: Utils.byteLength,
             hrtime: process.hrtime,
-            logger: opts.logger || nullLogger,
+            logger: opts.logger || createHasErrorMessageLogger().logger,
             canUseEvents: false
         };
 
         return new TestSession({ ...sessionOptions, ...opts });
+    }
+
+    function createSessionWithEventTracking<T extends server.ProjectServiceEvent, U extends server.ProjectServiceEvent = T>(host: server.ServerHost, eventName: T["eventName"], eventName2?: U["eventName"]) {
+        const events: (T | U)[] = [];
+        const session = createSession(host, {
+            eventHandler: e => {
+                if (e.eventName === eventName || (eventName2 && e.eventName === eventName2)) {
+                    events.push(e as T | U);
+                }
+            }
+        });
+
+        return { session, events };
     }
 
     interface CreateProjectServiceParameters {
@@ -359,7 +373,7 @@ namespace ts.projectSystem {
     }
     export function createProjectService(host: server.ServerHost, parameters: CreateProjectServiceParameters = {}, options?: Partial<server.ProjectServiceOptions>) {
         const cancellationToken = parameters.cancellationToken || server.nullCancellationToken;
-        const logger = parameters.logger || nullLogger;
+        const logger = parameters.logger || createHasErrorMessageLogger().logger;
         const useSingleInferredProject = parameters.useSingleInferredProject !== undefined ? parameters.useSingleInferredProject : false;
         return new TestProjectService(host, logger, cancellationToken, useSingleInferredProject, parameters.typingsInstaller!, parameters.eventHandler!, options); // TODO: GH#18217
     }
@@ -391,11 +405,11 @@ namespace ts.projectSystem {
         return values.next().value;
     }
 
-    export function checkProjectActualFiles(project: server.Project, expectedFiles: string[]) {
+    export function checkProjectActualFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    function checkProjectRootFiles(project: server.Project, expectedFiles: string[]) {
+    function checkProjectRootFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
         checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
     }
 
@@ -1812,6 +1826,63 @@ namespace ts.projectSystem {
             }
         });
 
+        it("file with name constructor.js doesnt cause issue with typeAcquisition when safe type list", () => {
+            const file1 = {
+                path: "/a/b/f1.js",
+                content: `export let x = 5; import { s } from "s"`
+            };
+            const constructorFile = {
+                path: "/a/b/constructor.js",
+                content: "const x = 10;"
+            };
+            const bliss = {
+                path: "/a/b/bliss.js",
+                content: "export function is() { return true; }"
+            };
+            const host = createServerHost([file1, libFile, constructorFile, bliss, customTypesMap]);
+            let request: string | undefined;
+            const cachePath = "/a/data";
+            const typingsInstaller: server.ITypingsInstaller = {
+                isKnownTypesPackageName: returnFalse,
+                installPackage: notImplemented,
+                inspectValue: notImplemented,
+                enqueueInstallTypingsRequest: (proj, typeAcquisition, unresolvedImports) => {
+                    assert.isUndefined(request);
+                    request = JSON.stringify(server.createInstallTypingsRequest(proj, typeAcquisition, unresolvedImports || server.emptyArray, cachePath));
+                },
+                attach: noop,
+                onProjectClosed: noop,
+                globalTypingsCacheLocation: cachePath
+            };
+
+            const projectName = "project";
+            const projectService = createProjectService(host, { typingsInstaller });
+            projectService.openExternalProject({ projectFileName: projectName, options: {}, rootFiles: toExternalFiles([file1.path, constructorFile.path, bliss.path]) });
+            assert.equal(request, JSON.stringify({
+                projectName,
+                fileNames: [libFile.path, file1.path, constructorFile.path, bliss.path],
+                compilerOptions: { allowNonTsExtensions: true, noEmitForJsFiles: true },
+                typeAcquisition: { include: ["blissfuljs"], exclude: [], enable: true },
+                unresolvedImports: ["s"],
+                projectRootPath: "/",
+                cachePath,
+                kind: "discover"
+            }));
+            const response = JSON.parse(request!);
+            request = undefined;
+            projectService.updateTypingsForProject({
+                kind: "action::set",
+                projectName: response.projectName,
+                typeAcquisition: response.typeAcquisition,
+                compilerOptions: response.compilerOptions,
+                typings: emptyArray,
+                unresolvedImports: response.unresolvedImports,
+            });
+
+            host.checkTimeoutQueueLengthAndRun(2);
+            assert.isUndefined(request);
+        });
+
         it("ignores files excluded by the default type list", () => {
             const file1 = {
                 path: "/a/b/f1.js",
@@ -2871,18 +2942,7 @@ namespace ts.projectSystem {
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
 
-            let lastEvent!: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectsUpdatedInBackgroundEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent || e.eventName === server.LargeFileReferencedEvent || e.eventName === server.SurveyReady) {
-                        return;
-                    }
-                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                    assert.equal(e.data.project.getProjectName(), config.path, "project name");
-                    lastEvent = e;
-                }
-            });
+            const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
                 type: "request",
@@ -2893,17 +2953,19 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-            assert.isTrue(!!lastEvent, "should receive event");
-            assert.equal(lastEvent.data.project, project, "project name");
-            assert.equal(lastEvent.data.project.getProjectName(), config.path, "config path");
-            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 1, "should receive event");
+            assert.equal(events[0].data.project, project, "project name");
+            assert.equal(events[0].data.project.getProjectName(), config.path, "config path");
+            assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
             host.reloadFS([f1, f2, configWithExclude]);
             host.checkTimeoutQueueLengthAndRun(2);
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             assert.isTrue(project.languageServiceEnabled, "Language service enabled");
-            assert.equal(lastEvent.data.project, project, "project");
-            assert.isTrue(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 2, "should receive event");
+            assert.equal(events[1].data.project, project, "project");
+            assert.equal(events[1].data.project.getProjectName(), config.path, "config path");
+            assert.isTrue(events[1].data.languageServiceEnabled, "Language service state");
         });
 
         it("syntactic features work even if language service is disabled", () => {
@@ -2923,17 +2985,7 @@ namespace ts.projectSystem {
             const originalGetFileSize = host.getFileSize;
             host.getFileSize = (filePath: string) =>
                 filePath === f2.path ? server.maxProgramSizeForNonTsFiles + 1 : originalGetFileSize.call(host, filePath);
-            let lastEvent!: server.ProjectLanguageServiceStateEvent;
-            const session = createSession(host, {
-                canUseEvents: true,
-                eventHandler: e => {
-                    if (e.eventName === server.ConfigFileDiagEvent || e.eventName === server.ProjectInfoTelemetryEvent || e.eventName === server.OpenFileInfoTelemetryEvent) {
-                        return;
-                    }
-                    assert.equal(e.eventName, server.ProjectLanguageServiceStateEvent);
-                    lastEvent = <server.ProjectLanguageServiceStateEvent>e;
-                }
-            });
+            const { session, events } = createSessionWithEventTracking<server.ProjectLanguageServiceStateEvent>(host, server.ProjectLanguageServiceStateEvent);
             session.executeCommand(<protocol.OpenRequest>{
                 seq: 0,
                 type: "request",
@@ -2945,9 +2997,9 @@ namespace ts.projectSystem {
             checkNumberOfProjects(projectService, { configuredProjects: 1 });
             const project = configuredProjectAt(projectService, 0);
             assert.isFalse(project.languageServiceEnabled, "Language service enabled");
-            assert.isTrue(!!lastEvent, "should receive event");
-            assert.equal(lastEvent.data.project, project, "project name");
-            assert.isFalse(lastEvent.data.languageServiceEnabled, "Language service state");
+            assert.equal(events.length, 1, "should receive event");
+            assert.equal(events[0].data.project, project, "project name");
+            assert.isFalse(events[0].data.languageServiceEnabled, "Language service state");
 
             const options = projectService.getFormatCodeOptions(f1.path as server.NormalizedPath);
             const edits = project.getLanguageService().getFormattingEditsForDocument(f1.path, options);
@@ -3552,14 +3604,7 @@ namespace ts.projectSystem {
         });
 
         function createSessionWithEventHandler(host: TestServerHost) {
-            const surveyEvents: server.SurveyReady[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.SurveyReady) {
-                        surveyEvents.push(e);
-                    }
-                }
-            });
+            const { session, events: surveyEvents } = createSessionWithEventTracking<server.SurveyReady>(host, server.SurveyReady);
 
             return { session, verifySurveyReadyEvent };
 
@@ -4936,7 +4981,7 @@ namespace ts.projectSystem {
             checkErrorMessage(session, "suggestionDiag", {
                 file: file.path,
                 diagnostics: [
-                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecssary*/ true)
+                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
                 ],
             });
             checkCompleteEvent(session, 2, expectedSequenceId);
@@ -5069,7 +5114,7 @@ namespace ts.projectSystem {
 
         function getFileNotFoundDiagnostic(configFile: File, relativeFileName: string): ConfigFileDiagnostic {
             const findString = `{"path":"./${relativeFileName}"}`;
-            const d = Diagnostics.File_0_does_not_exist;
+            const d = Diagnostics.File_0_not_found;
             const start = configFile.content.indexOf(findString);
             return {
                 fileName: configFile.path,
@@ -9294,14 +9339,7 @@ export const x = 10;`
             };
             files.push(largeFile);
             const host = createServerHost(files);
-            const largeFileReferencedEvents: server.LargeFileReferencedEvent[] = [];
-            const session = createSession(host, {
-                eventHandler: e => {
-                    if (e.eventName === server.LargeFileReferencedEvent) {
-                        largeFileReferencedEvents.push(e);
-                    }
-                }
-            });
+            const { session, events: largeFileReferencedEvents } = createSessionWithEventTracking<server.LargeFileReferencedEvent>(host, server.LargeFileReferencedEvent);
 
             return { session, verifyLargeFile };
 
@@ -9358,6 +9396,159 @@ export const x = 10;`
 
         describe("large file is js file", () => {
             verifyLargeFile(/*useLargeTsFile*/ false);
+        });
+    });
+
+    describe("tsserverProjectSystem ProjectLoadingStart and ProjectLoadingFinish events", () => {
+        const projectRoot = "/user/username/projects";
+        const aTs: File = {
+            path: `${projectRoot}/a/a.ts`,
+            content: "export class A { }"
+        };
+        const configA: File = {
+            path: `${projectRoot}/a/tsconfig.json`,
+            content: "{}"
+        };
+        const bTsPath = `${projectRoot}/b/b.ts`;
+        const configBPath = `${projectRoot}/b/tsconfig.json`;
+        const files = [libFile, aTs, configA];
+
+        function createSessionWithEventHandler(files: ReadonlyArray<File>) {
+            const host = createServerHost(files);
+
+            const originalReadFile = host.readFile;
+            host.readFile = file => {
+                if (file === configA.path || file === configBPath) {
+                    assert.equal(events.length, 1, "Event for loading is sent before reading config file");
+                }
+                return originalReadFile.call(host, file);
+            };
+            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+            const service = session.getProjectService();
+            return { host, session, verifyEvent, verifyEventWithOpenTs, service, events };
+
+            function verifyEvent(project: server.Project, reason: string) {
+                assert.deepEqual(events, [
+                    { eventName: server.ProjectLoadingStartEvent, data: { project, reason } },
+                    { eventName: server.ProjectLoadingFinishEvent, data: { project } }
+                ]);
+                events.length = 0;
+            }
+
+            function verifyEventWithOpenTs(file: File, configPath: string, configuredProjects: number) {
+                openFilesForSession([file], session);
+                checkNumberOfProjects(service, { configuredProjects });
+                const project = service.configuredProjects.get(configPath)!;
+                assert.isDefined(project);
+                verifyEvent(project, `Creating possible configured project for ${file.path} to open`);
+            }
+        }
+
+        it("when project is created by open file", () => {
+            const bTs: File = {
+                path: bTsPath,
+                content: "export class B {}"
+            };
+            const configB: File = {
+                path: configBPath,
+                content: "{}"
+            };
+            const { verifyEventWithOpenTs } = createSessionWithEventHandler(files.concat(bTs, configB));
+            verifyEventWithOpenTs(aTs, configA.path, 1);
+            verifyEventWithOpenTs(bTs, configB.path, 2);
+        });
+
+        it("when change is detected in the config file", () => {
+            const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionWithEventHandler(files);
+            verifyEventWithOpenTs(aTs, configA.path, 1);
+
+            host.writeFile(configA.path, configA.content);
+            host.checkTimeoutQueueLengthAndRun(2);
+            const project = service.configuredProjects.get(configA.path)!;
+            verifyEvent(project, `Change in config file detected`);
+        });
+
+        it("when opening original location project", () => {
+            const aDTs: File = {
+                path: `${projectRoot}/a/a.d.ts`,
+                content: `export declare class A {
+}
+//# sourceMappingURL=a.d.ts.map
+`
+            };
+            const aDTsMap: File = {
+                path: `${projectRoot}/a/a.d.ts.map`,
+                content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
+            };
+            const bTs: File = {
+                path: bTsPath,
+                content: `import {A} from "../a/a"; new A();`
+            };
+            const configB: File = {
+                path: configBPath,
+                content: JSON.stringify({
+                    references: [{ path: "../a" }]
+                })
+            };
+
+            const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionWithEventHandler(files.concat(aDTs, aDTsMap, bTs, configB));
+            verifyEventWithOpenTs(bTs, configB.path, 1);
+
+            session.executeCommandSeq<protocol.ReferencesRequest>({
+                command: protocol.CommandTypes.References,
+                arguments: {
+                    file: bTs.path,
+                    ...protocolLocationFromSubstring(bTs.content, "A()")
+                }
+            });
+
+            checkNumberOfProjects(service, { configuredProjects: 2 });
+            const project = service.configuredProjects.get(configA.path)!;
+            assert.isDefined(project);
+            verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
+        });
+
+        describe("with external projects and config files ", () => {
+            const projectFileName = `${projectRoot}/a/project.csproj`;
+
+            function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
+                const { session, service, verifyEvent: verifyEventWorker, events } = createSessionWithEventHandler(files);
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
+                service.openExternalProject(<protocol.ExternalProject>{
+                    projectFileName,
+                    rootFiles: toExternalFiles([aTs.path, configA.path]),
+                    options: {}
+                });
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                return { session, service, verifyEvent, events };
+
+                function verifyEvent() {
+                    const projectA = service.configuredProjects.get(configA.path)!;
+                    assert.isDefined(projectA);
+                    verifyEventWorker(projectA, `Creating configured project in external project: ${projectFileName}`);
+                }
+            }
+
+            it("when lazyConfiguredProjectsFromExternalProject is false", () => {
+                const { verifyEvent } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ false);
+                verifyEvent();
+            });
+
+            it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
+                const { verifyEvent, events, session } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                assert.equal(events.length, 0);
+
+                openFilesForSession([aTs], session);
+                verifyEvent();
+            });
+
+            it("when lazyConfiguredProjectsFromExternalProject is disabled", () => {
+                const { verifyEvent, events, service } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                assert.equal(events.length, 0);
+
+                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
+                verifyEvent();
+            });
         });
     });
 
@@ -9687,6 +9878,32 @@ declare class TestLib {
             checkProjectActualFiles(project, files.map(f => f.path));
             host.writeFile(appLib.path, appLib.content.replace("test()", "test2()"));
             host.checkTimeoutQueueLengthAndRun(2);
+        });
+
+        it("when typeReferenceDirective is relative path and in a sibling folder", () => {
+            const projectRootPath = "/user/username/projects/browser-addon";
+            const projectPath = `${projectRootPath}/background`;
+            const file: File = {
+                path: `${projectPath}/a.ts`,
+                content: "let x = 10;"
+            };
+            const tsconfig: File = {
+                path: `${projectPath}/tsconfig.json`,
+                content: JSON.stringify({
+                    compilerOptions: {
+                        types: [
+                            "../typedefs/filesystem"
+                        ]                    }
+                })
+            };
+            const filesystem: File = {
+                path: `${projectRootPath}/typedefs/filesystem.d.ts`,
+                content: `interface LocalFileSystem { someProperty: string; }`
+            };
+            const files = [file, tsconfig, filesystem, libFile];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file.path);
         });
     });
 

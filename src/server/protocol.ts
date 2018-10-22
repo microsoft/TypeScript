@@ -2452,6 +2452,30 @@ namespace ts.server.protocol {
         openFiles: string[];
     }
 
+    export type ProjectLoadingStartEventName = "projectLoadingStart";
+    export interface ProjectLoadingStartEvent extends Event {
+        event: ProjectLoadingStartEventName;
+        body: ProjectLoadingStartEventBody;
+    }
+
+    export interface ProjectLoadingStartEventBody {
+        /** name of the project */
+        projectName: string;
+        /** reason for loading */
+        reason: string;
+    }
+
+    export type ProjectLoadingFinishEventName = "projectLoadingFinish";
+    export interface ProjectLoadingFinishEvent extends Event {
+        event: ProjectLoadingFinishEventName;
+        body: ProjectLoadingFinishEventBody;
+    }
+
+    export interface ProjectLoadingFinishEventBody {
+        /** name of the project */
+        projectName: string;
+    }
+
     export type SurveyReadyEventName = "surveyReady";
 
     export interface SurveyReadyEvent extends Event {

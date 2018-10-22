@@ -1020,7 +1020,7 @@ namespace ts {
                                     i++;
                                     break;
                                 case "list":
-                                    const result = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i], errors);
+                                    const result = parseListTypeOption(opt, args[i], errors);
                                     options[opt.name] = result || [];
                                     if (result) {
                                         i++;
@@ -1300,6 +1300,9 @@ namespace ts {
 
         const result = parseJsonText(configFileName, configFileText);
         const cwd = host.getCurrentDirectory();
+        result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
+        result.resolvedPath = result.path;
+        result.originalFileName = result.fileName;
         return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 
@@ -1536,7 +1539,12 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            if (!returnValue) {
+                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+            }
+
+            // Filter out invalid values
+            return filter(elements.map(element => convertPropertyValueToJson(element, elementOption)), v => v !== undefined);
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
@@ -1726,7 +1734,7 @@ namespace ts {
             return undefined;
         }
         else if (optionDefinition.type === "list") {
-            return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
+            return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
         }
         else {
             return (<CommandLineOptionOfCustomType>optionDefinition).type;
@@ -1807,7 +1815,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
+                    return option.type.keys().next().value;
             }
         }
 
@@ -2030,7 +2038,7 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !hasProperty(raw, "references")) {
+            if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles(raw), resolutionStack)) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
@@ -2065,18 +2073,37 @@ namespace ts {
         }
     }
 
-    /*@internal*/
-    export function isErrorNoInputFiles(error: Diagnostic) {
+    function isErrorNoInputFiles(error: Diagnostic) {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
 
-    /*@internal*/
-    export function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
+    function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
         return createCompilerDiagnostic(
             Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
             configFileName || "tsconfig.json",
             JSON.stringify(includeSpecs || []),
             JSON.stringify(excludeSpecs || []));
+    }
+
+    function shouldReportNoInputFiles(result: ExpandResult, canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
+        return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
+    }
+
+     /*@internal*/
+    export function canJsonReportNoInutFiles(raw: any) {
+        return !hasProperty(raw, "files") && !hasProperty(raw, "references");
+    }
+
+     /*@internal*/
+    export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+        const existingErrors = configParseDiagnostics.length;
+        if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {
+            configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
+        }
+        else {
+            filterMutate(configParseDiagnostics, error => !isErrorNoInputFiles(error));
+        }
+        return existingErrors !== configParseDiagnostics.length;
     }
 
     interface ParsedTsconfig {
@@ -2395,7 +2422,7 @@ namespace ts {
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (isNullOrUndefined(value)) return undefined;
         if (option.type === "list") {
-            const listOption = <CommandLineOptionOfListType>option;
+            const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
                 return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
             }
@@ -2566,11 +2593,16 @@ namespace ts {
         // via wildcard, and to handle extension priority.
         const wildcardFileMap = createMap<string>();
 
+        // Wildcard paths of json files (provided via the "includes" array in tsconfig.json) are stored in a
+        // file map with a possibly case insensitive key. We use this map to store paths matched
+        // via wildcard of *.json kind
+        const wildCardJsonFileMap = createMap<string>();
         const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -2581,8 +2613,25 @@ namespace ts {
             }
         }
 
+        let jsonOnlyIncludeRegexes: ReadonlyArray<RegExp> | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+                if (fileExtensionIs(file, Extension.Json)) {
+                    // Valid only if *.json specified
+                    if (!jsonOnlyIncludeRegexes) {
+                        const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
+                        const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
+                        jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
+                    }
+                    const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
+                    if (includeIndex !== -1) {
+                        const key = keyMapper(file);
+                        if (!literalFileMap.has(key) && !wildCardJsonFileMap.has(key)) {
+                            wildCardJsonFileMap.set(key, file);
+                        }
+                    }
+                    continue;
+                }
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -2610,7 +2659,7 @@ namespace ts {
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
         return {
-            fileNames: literalFiles.concat(wildcardFiles),
+            fileNames: literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values())),
             wildcardDirectories,
             spec
         };
@@ -2780,7 +2829,7 @@ namespace ts {
             case "boolean":
                 return typeof value === "boolean" ? value : "";
             case "list":
-                const elementType = (option as CommandLineOptionOfListType).element;
+                const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {

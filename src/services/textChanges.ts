@@ -209,6 +209,12 @@ namespace ts.textChanges {
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
+    interface JSDocParameter {
+        declaration: ParameterDeclaration;
+        typeNode: TypeNode;
+        isOptional?: boolean;
+    }
+
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
@@ -295,7 +301,7 @@ namespace ts.textChanges {
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
-            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, options, nodes: newNodes, range: { pos, end: pos } });
+            this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
@@ -312,7 +318,17 @@ namespace ts.textChanges {
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
-            this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { suffix: " " });
+        }
+
+        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            if (!before.modifiers) {
+                this.insertModifierBefore(sourceFile, modifier, before);
+                return;
+            }
+
+            const pos = before.modifiers.end;
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -329,12 +345,35 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
+        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string): void {
+            const token = getTouchingToken(sourceFile, position);
+            const text = "/**" + commentText + "*/" + this.newLineCharacter + repeatString(" ", character);
+            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
 
         public insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
+        }
+
+        public tryInsertJSDocParameters(sourceFile: SourceFile, parameters: JSDocParameter[]) {
+            if (parameters.length === 0) {
+                return;
+            }
+            const parent = parameters[0].declaration.parent;
+            const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
+            let commentText = "\n";
+            for (const { declaration, typeNode, isOptional } of parameters) {
+                if (isIdentifier(declaration.name)) {
+                    const printed = changesToText.getNonformattedText(typeNode, sourceFile, this.newLineCharacter).text;
+                    commentText += this.printJSDocParameter(indent, printed, declaration.name, isOptional);
+                }
+            }
+            commentText += repeatString(" ", indent + 1);
+            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -353,6 +392,27 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
+        }
+
+        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
+            const printed = changesToText.getNonformattedText(type, sourceFile, this.newLineCharacter).text;
+            let commentText;
+            if (isGetAccessorDeclaration(node)) {
+                commentText = ` @return {${printed}} `;
+            }
+            else {
+                commentText = ` @type {${printed}} `;
+                node = node.parent;
+            }
+            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart(sourceFile)).character, node.getStart(sourceFile), commentText);
+        }
+
+        private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
+            let printName = unescapeLeadingUnderscores(name.escapedText);
+            if (isOptionalParameter) {
+                printName = `[${printName}]`;
+            }
+            return repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
@@ -403,7 +463,7 @@ namespace ts.textChanges {
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
             const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
-            this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
+            this.insertNodeAt(sourceFile, pos, newNode, {
                 prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });
@@ -796,7 +856,7 @@ namespace ts.textChanges {
         }
 
         /** Note: output node may be mutated input node. */
-        function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
+        export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = new Writer(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
             createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);

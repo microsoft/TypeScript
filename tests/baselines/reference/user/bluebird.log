@@ -20,7 +20,7 @@ node_modules/bluebird/js/release/debuggability.js(168,17): error TS2403: Subsequ
 node_modules/bluebird/js/release/debuggability.js(174,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(175,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any, desc: any) => any)' has no compatible call signatures.
 node_modules/bluebird/js/release/debuggability.js(176,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any) | ((o: any, key: any, desc: any) => any)' has no compatible call signatures.
-node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["removeListener", string, (...args: any[]) => void]'.
+node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
   Property '0' is missing in type 'IArguments'.
 node_modules/bluebird/js/release/debuggability.js(242,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
   Property 'pop' is missing in type 'IArguments'.
@@ -83,6 +83,9 @@ node_modules/bluebird/js/release/promise.js(305,10): error TS2339: Property '_fi
 node_modules/bluebird/js/release/promise.js(322,10): error TS2339: Property '_fireEvent' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(339,42): error TS2339: Property '_isBound' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(434,26): error TS2339: Property '_propagateFrom' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(454,31): error TS2339: Property '_value' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(456,30): error TS2339: Property '_reason' does not exist on type 'Promise'.
+node_modules/bluebird/js/release/promise.js(459,17): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(471,14): error TS2339: Property '_warn' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(473,10): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(480,10): error TS2339: Property '_captureStackTrace' does not exist on type 'Promise'.
@@ -90,6 +93,10 @@ node_modules/bluebird/js/release/promise.js(481,10): error TS2339: Property '_pu
 node_modules/bluebird/js/release/promise.js(483,18): error TS2339: Property '_execute' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(489,10): error TS2339: Property '_popContext' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(506,19): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
+node_modules/bluebird/js/release/promise.js(558,22): error TS2339: Property '_promiseCancelled' does not exist on type '{}'.
+node_modules/bluebird/js/release/promise.js(572,23): error TS2339: Property '_isResolved' does not exist on type '{}'.
+node_modules/bluebird/js/release/promise.js(574,26): error TS2339: Property '_promiseFulfilled' does not exist on type '{}'.
+node_modules/bluebird/js/release/promise.js(576,26): error TS2339: Property '_promiseRejected' does not exist on type '{}'.
 node_modules/bluebird/js/release/promise.js(630,14): error TS2339: Property '_attachExtraTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(642,14): error TS2339: Property '_dereferenceTrace' does not exist on type 'Promise'.
 node_modules/bluebird/js/release/promise.js(659,14): error TS2339: Property '_ensurePossibleRejectionHandled' does not exist on type 'Promise'.
