@@ -7082,9 +7082,11 @@ namespace ts {
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             if (!type.resolvedDefaultConstraint) {
                 const rootTrueType = type.root.trueType;
-                const rootTrueConstraint = rootTrueType.flags & TypeFlags.Substitution
-                    ? ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown ? (<SubstitutionType>rootTrueType).typeVariable : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable])
-                    : rootTrueType;
+                const rootTrueConstraint = !(rootTrueType.flags & TypeFlags.Substitution)
+                    ? rootTrueType
+                    : ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown
+                        ? (<SubstitutionType>rootTrueType).typeVariable
+                        : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable]);
                 type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
             }
             return type.resolvedDefaultConstraint;
