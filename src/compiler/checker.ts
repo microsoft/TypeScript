@@ -27802,6 +27802,9 @@ namespace ts {
                     ) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
                     }
+                    if (isCallExpression(parent) && isBindableObjectDefinePropertyCall(parent) && parent.arguments[1] === node) {
+                        return getSymbolOfNode(parent);
+                    }
                     // falls through
 
                 case SyntaxKind.NumericLiteral:

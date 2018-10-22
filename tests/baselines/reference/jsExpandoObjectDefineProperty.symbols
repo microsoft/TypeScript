@@ -7,6 +7,7 @@ Object.defineProperty(chrome, 'devtools', { value: {}, enumerable: true })
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >chrome : Symbol(chrome, Decl(index.js, 0, 3), Decl(index.js, 1, 22), Decl(index.js, 1, 74))
+>'devtools' : Symbol(chrome.devtools, Decl(index.js, 0, 15), Decl(index.js, 2, 7))
 >value : Symbol(value, Decl(index.js, 1, 43))
 >enumerable : Symbol(enumerable, Decl(index.js, 1, 54))
 
