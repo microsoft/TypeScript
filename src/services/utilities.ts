@@ -909,7 +909,7 @@ namespace ts {
     export function isInJSXText(sourceFile: SourceFile, position: number) {
         const token = getTokenAtPosition(sourceFile, position);
         if (isJsxText(token)) {
-            return position >= token.getStart(sourceFile);
+            return true;
         }
         if (token.kind === SyntaxKind.OpenBraceToken && isJsxExpression(token.parent) && isJsxElement(token.parent.parent)) {
             return true;
