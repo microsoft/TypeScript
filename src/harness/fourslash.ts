@@ -1328,8 +1328,10 @@ Actual: ${stringify(fullActual)}`);
             })));
         }
 
-        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
-            this.goToMarker(markerName);
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
+            if (typeof markerName === "string") this.goToMarker(markerName);
+            else this.goToRangeStart(markerName);
+
             this.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
@@ -4221,7 +4223,7 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
-        public quickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
         }
 
