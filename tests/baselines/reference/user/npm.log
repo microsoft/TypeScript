@@ -120,13 +120,11 @@ node_modules/npm/lib/config/bin-links.js(30,16): error TS2339: Property 'config'
 node_modules/npm/lib/config/core.js(17,1): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(18,1): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(19,1): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
-node_modules/npm/lib/config/core.js(23,21): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/config/core.js(77,7): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(87,3): error TS2323: Cannot redeclare exported variable 'usingBuiltin'.
 node_modules/npm/lib/config/core.js(88,12): error TS2323: Cannot redeclare exported variable 'rootConf'.
 node_modules/npm/lib/config/core.js(95,6): error TS2339: Property 'on' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(98,6): error TS2339: Property 'on' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(102,29): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/config/core.js(105,8): error TS2339: Property 'usingBuiltin' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(128,41): error TS2551: Property 'localPrefix' does not exist on type 'Conf'. Did you mean 'loadPrefix'?
 node_modules/npm/lib/config/core.js(130,35): error TS2339: Property 'get' does not exist on type 'Conf'.
@@ -142,7 +140,6 @@ node_modules/npm/lib/config/core.js(165,10): error TS2339: Property 'once' does 
 node_modules/npm/lib/config/core.js(176,23): error TS2339: Property 'get' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(190,5): error TS2323: Cannot redeclare exported variable 'loaded'.
 node_modules/npm/lib/config/core.js(208,24): error TS2339: Property 'list' does not exist on type 'Conf'.
-node_modules/npm/lib/config/core.js(213,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/config/core.js(237,21): error TS2339: Property 'sources' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(245,17): error TS2339: Property 'emit' does not exist on type 'Conf'.
 node_modules/npm/lib/config/core.js(279,8): error TS2339: Property '_saving' does not exist on type 'Conf'.
@@ -220,8 +217,6 @@ node_modules/npm/lib/config.js(84,19): error TS2339: Property 'config' does not 
 node_modules/npm/lib/config.js(85,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(87,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(93,25): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/config.js(105,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
-node_modules/npm/lib/config.js(107,28): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
 node_modules/npm/lib/config.js(135,19): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(136,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(137,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -241,7 +236,6 @@ node_modules/npm/lib/config.js(245,75): error TS2339: Property 'config' does not
 node_modules/npm/lib/config.js(248,47): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(248,79): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config.js(251,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
-node_modules/npm/lib/config.js(267,26): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/core")'.
 node_modules/npm/lib/config.js(273,29): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/dedupe.js(35,32): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/dedupe.js(37,11): error TS2339: Property 'command' does not exist on type 'typeof EventEmitter'.
@@ -283,7 +277,6 @@ node_modules/npm/lib/docs.js(40,38): error TS2339: Property 'config' does not ex
 node_modules/npm/lib/doctor/check-files-permission.js(11,14): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor/check-files-permission.js(11,38): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor/verify-cached-files.js(10,90): error TS2345: Argument of type '2' is not assignable to parameter of type '(string | number)[] | null | undefined'.
-node_modules/npm/lib/doctor.js(6,54): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/lib/doctor.js(23,41): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor.js(24,40): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/doctor.js(42,32): error TS2339: Property 'cache' does not exist on type 'typeof EventEmitter'.
@@ -1140,14 +1133,10 @@ node_modules/npm/test/tap/config-basic.js(1,20): error TS2307: Cannot find modul
 node_modules/npm/test/tap/config-basic.js(81,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-basic.js(81,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-basic.js(82,24): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-basic.js(82,60): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-basic.js(83,48): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-builtin.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-builtin.js(60,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-builtin.js(60,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-builtin.js(61,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-builtin.js(61,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-builtin.js(62,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-certfile.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-credentials.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-edit.js(6,20): error TS2307: Cannot find module 'tap'.
@@ -1157,15 +1146,12 @@ node_modules/npm/test/tap/config-malformed.js(1,20): error TS2307: Cannot find m
 node_modules/npm/test/tap/config-meta.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-meta.js(63,9): error TS2322: Type 'string | undefined' is not assignable to type 'string'.
   Type 'undefined' is not assignable to type 'string'.
-node_modules/npm/test/tap/config-meta.js(101,35): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-new-cafile.js(5,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-private.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-project.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/config-project.js(59,12): error TS2531: Object is possibly 'null'.
 node_modules/npm/test/tap/config-project.js(59,29): error TS2339: Property 'list' does not exist on type 'Conf'.
 node_modules/npm/test/tap/config-project.js(60,13): error TS2531: Object is possibly 'null'.
-node_modules/npm/test/tap/config-project.js(60,49): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
-node_modules/npm/test/tap/config-project.js(61,37): error TS2339: Property 'defaults' does not exist on type 'typeof import("/npm/node_modules/npm/lib/config/defaults")'.
 node_modules/npm/test/tap/config-save.js(3,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/correct-mkdir.js(1,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/correct-mkdir.js(4,29): error TS2307: Cannot find module 'require-inject'.

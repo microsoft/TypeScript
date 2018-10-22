@@ -1350,6 +1350,49 @@ export class B
             assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
         });
 
+        it("updates errors when deep import through declaration file changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `import {B} from './b';
+declare var console: any;
+let b = new B();
+console.log(b.c.d);`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.d.ts`,
+                content: `import {C} from './c';
+export class B
+{
+    c: C;
+}`
+            };
+            const cFile: File = {
+                path: `${currentDirectory}/c.d.ts`,
+                content: `export class C
+{
+    d: number;
+}`
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: `{}`
+            };
+            const files = [aFile, bFile, cFile, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, emptyArray);
+            const modifiedTimeOfAJs = host.getModifiedTime(`${currentDirectory}/a.js`);
+            host.writeFile(cFile.path, cFile.content.replace("d", "d2"));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, [
+                getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.lastIndexOf("d"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "d", "C")
+            ]);
+            // File a need not be rewritten
+            assert.equal(host.getModifiedTime(`${currentDirectory}/a.js`), modifiedTimeOfAJs);
+        });
+
         it("updates errors when strictNullChecks changes", () => {
             const currentDirectory = "/user/username/projects/myproject";
             const aFile: File = {

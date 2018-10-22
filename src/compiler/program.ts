@@ -2345,6 +2345,8 @@ namespace ts {
             }
             let saveResolution = true;
             if (resolvedTypeReferenceDirective) {
+                if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth++;
+
                 if (resolvedTypeReferenceDirective.primary) {
                     // resolved from the primary path
                     processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd); // TODO: GH#18217
@@ -2373,6 +2375,8 @@ namespace ts {
                         processSourceFile(resolvedTypeReferenceDirective.resolvedFileName!, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, resolvedTypeReferenceDirective.packageId, refFile, refPos, refEnd);
                     }
                 }
+
+                if (resolvedTypeReferenceDirective.isExternalLibraryImport) currentNodeModulesDepth--;
             }
             else {
                 fileProcessingDiagnostics.add(createDiagnostic(refFile!, refPos!, refEnd!, Diagnostics.Cannot_find_type_definition_file_for_0, typeReferenceDirective)); // TODO: GH#18217
