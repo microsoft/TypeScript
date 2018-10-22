@@ -1,5 +1,3 @@
-// tslint:disable no-unnecessary-type-assertion (TODO: tslint can't find node types)
-
 namespace ts.server.typingsInstaller {
     const fs: {
         appendFileSync(file: string, content: string): void
@@ -12,19 +10,20 @@ namespace ts.server.typingsInstaller {
     } = require("path");
 
     class FileLog implements Log {
-        private logEnabled = true;
-        constructor(private readonly logFile?: string) {
+        constructor(private logFile: string | undefined) {
         }
 
         isEnabled = () => {
-            return this.logEnabled && this.logFile !== undefined;
+            return typeof this.logFile === "string";
         }
         writeLine = (text: string) => {
+            if (typeof this.logFile !== "string") return;
+
             try {
-                fs.appendFileSync(this.logFile!, `[${nowString()}] ${text}${sys.newLine}`); // TODO: GH#18217
+                fs.appendFileSync(this.logFile, `[${nowString()}] ${text}${sys.newLine}`);
             }
             catch (e) {
-                this.logEnabled = false;
+                this.logFile = undefined;
             }
         }
     }
@@ -162,6 +161,11 @@ namespace ts.server.typingsInstaller {
                             const response: PackageInstalledResponse = { kind: ActionPackageInstalled, projectName, success: false, message: "Could not determine a project root path." };
                             this.sendResponse(response);
                         }
+                        break;
+                    }
+                    case "inspectValue": {
+                        const response: InspectValueResponse = { kind: ActionValueInspected, result: inspectModule(req.options.fileNameToRequire) };
+                        this.sendResponse(response);
                         break;
                     }
                     default:

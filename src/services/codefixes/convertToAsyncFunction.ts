@@ -14,32 +14,25 @@ namespace ts.codefix {
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, err) => convertToAsyncFunction(changes, err.file, err.start, context.program.getTypeChecker(), context)),
     });
 
-
-    /*
-        custom type to encapsulate information for variable declarations synthesized in the refactor
-        numberOfUsesOriginal - number of times the variable should be assigned in the refactor
-        numberOfUsesSynthesized - count of how many times the variable has been assigned so far
-        At the end of the refactor, numberOfUsesOriginal should === numberOfUsesSynthesized
-    */
     interface SynthIdentifier {
-        identifier: Identifier;
-        types: Type[];
-        numberOfAssignmentsOriginal: number;
+        readonly identifier: Identifier;
+        readonly types: Type[];
+        numberOfAssignmentsOriginal: number; // number of times the variable should be assigned in the refactor
     }
 
     interface SymbolAndIdentifier {
-        identifier: Identifier;
-        symbol: Symbol;
+        readonly identifier: Identifier;
+        readonly symbol: Symbol;
     }
 
     interface Transformer {
-        checker: TypeChecker;
-        synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
-        allVarNames: SymbolAndIdentifier[];
-        setOfExpressionsToReturn: Map<true>; // keys are the node ids of the expressions
-        constIdentifiers: Identifier[];
-        originalTypeMap: Map<Type>; // keys are the node id of the identifier
-        isInJSFile: boolean;
+        readonly checker: TypeChecker;
+        readonly synthNamesMap: Map<SynthIdentifier>; // keys are the symbol id of the identifier
+        readonly allVarNames: ReadonlyArray<SymbolAndIdentifier>;
+        readonly setOfExpressionsToReturn: ReadonlyMap<true>; // keys are the node ids of the expressions
+        readonly constIdentifiers: Identifier[];
+        readonly originalTypeMap: ReadonlyMap<Type>; // keys are the node id of the identifier
+        readonly isInJSFile: boolean;
     }
 
     function convertToAsyncFunction(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, checker: TypeChecker, context: CodeFixContextBase): void {
@@ -68,14 +61,14 @@ namespace ts.codefix {
         const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
         const returnStatements = getReturnStatementsWithPromiseHandlers(functionToConvertRenamed);
-        const transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile: isInJavascript };
+        const transformer: Transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile: isInJavascript };
 
         if (!returnStatements.length) {
             return;
         }
 
         // add the async keyword
-        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
+        changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
         function startTransformation(node: CallExpression, nodeToReplace: Node) {
             const newNodes = transformExpression(node, transformer, node);
@@ -95,7 +88,7 @@ namespace ts.codefix {
     }
 
     // Returns the identifiers that are never reassigned in the refactor
-    function getConstIdentifiers(synthNamesMap: Map<SynthIdentifier>): Identifier[] {
+    function getConstIdentifiers(synthNamesMap: ReadonlyMap<SynthIdentifier>): Identifier[] {
         const constIdentifiers: Identifier[] = [];
         synthNamesMap.forEach((val) => {
             if (val.numberOfAssignmentsOriginal === 0) {
@@ -179,9 +172,9 @@ namespace ts.codefix {
 
                 // if the identifier refers to a function we want to add the new synthesized variable for the declaration (ex. blob in let blob = res(arg))
                 // Note - the choice of the last call signature is arbitrary
-                if (lastCallSignature && lastCallSignature.parameters.length && !synthNamesMap.has(symbolIdString)) {
-                    const firstParameter = lastCallSignature.parameters[0];
-                    const ident = isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
+                if (lastCallSignature && !isFunctionLikeDeclaration(node.parent) && !synthNamesMap.has(symbolIdString)) {
+                    const firstParameter = firstOrUndefined(lastCallSignature.parameters);
+                    const ident = firstParameter && isParameter(firstParameter.valueDeclaration) && tryCast(firstParameter.valueDeclaration.name, isIdentifier) || createOptimisticUniqueName("result");
                     const synthName = getNewNameIfConflict(ident, collidingSymbolMap);
                     synthNamesMap.set(symbolIdString, synthName);
                     allVarNames.push({ identifier: synthName.identifier, symbol });
@@ -234,9 +227,7 @@ namespace ts.codefix {
 
                 if (renameInfo) {
                     const type = checker.getTypeAtLocation(node);
-                    if (type) {
-                        originalType.set(getNodeId(clone).toString(), type);
-                    }
+                    originalType.set(getNodeId(clone).toString(), type);
                 }
             }
 
@@ -258,8 +249,8 @@ namespace ts.codefix {
         }
     }
 
-    function getNewNameIfConflict(name: Identifier, originalNames: Map<Symbol[]>): SynthIdentifier {
-        const numVarsSameName = (originalNames.get(name.text) || []).length;
+    function getNewNameIfConflict(name: Identifier, originalNames: ReadonlyMap<Symbol[]>): SynthIdentifier {
+        const numVarsSameName = (originalNames.get(name.text) || emptyArray).length;
         const numberOfAssignmentsOriginal = 0;
         const identifier = numVarsSameName === 0 ? name : createIdentifier(name.text + "_" + numVarsSameName);
         return { identifier, types: [], numberOfAssignmentsOriginal };
@@ -267,9 +258,9 @@ namespace ts.codefix {
 
     // dispatch function to recursively build the refactoring
     // should be kept up to date with isFixablePromiseHandler in suggestionDiagnostics.ts
-    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
+    function transformExpression(node: Expression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
         if (!node) {
-            return [];
+            return emptyArray;
         }
 
         const originalType = isIdentifier(node) && transformer.originalTypeMap.get(getNodeId(node).toString());
@@ -289,10 +280,10 @@ namespace ts.codefix {
         }
 
         codeActionSucceeded = false;
-        return [];
+        return emptyArray;
     }
 
-    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
+    function transformCatch(node: CallExpression, transformer: Transformer, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
         const func = node.arguments[0];
         const argName = getArgName(func, transformer);
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
@@ -320,7 +311,7 @@ namespace ts.codefix {
         const tryBlock = createBlock(transformExpression(node.expression, transformer, node, prevArgName));
 
         const transformationBody = getTransformationBody(func, prevArgName, argName, node, transformer);
-        const catchArg = argName.identifier.text.length > 0 ? argName.identifier.text : "e";
+        const catchArg = argName ? argName.identifier.text : "e";
         const catchClause = createCatchClause(catchArg, createBlock(transformationBody));
 
         /*
@@ -345,7 +336,7 @@ namespace ts.codefix {
         return newSynthName;
     }
 
-    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): Statement[] {
+    function transformThen(node: CallExpression, transformer: Transformer, outermostParent: CallExpression, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
         const [res, rej] = node.arguments;
 
         if (!res) {
@@ -362,82 +353,91 @@ namespace ts.codefix {
 
             const transformationBody2 = getTransformationBody(rej, prevArgName, argNameRej, node, transformer);
 
-            const catchArg = argNameRej.identifier.text.length > 0 ? argNameRej.identifier.text : "e";
+            const catchArg = argNameRej ? argNameRej.identifier.text : "e";
             const catchClause = createCatchClause(catchArg, createBlock(transformationBody2));
 
-            return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined) as Statement];
+            return [createTry(tryBlock, catchClause, /* finallyBlock */ undefined)];
         }
 
         return transformExpression(node.expression, transformer, node, argNameRes).concat(transformationBody);
     }
 
-    function getFlagOfIdentifier(node: Identifier, constIdentifiers: Identifier[]): NodeFlags {
+    function getFlagOfIdentifier(node: Identifier, constIdentifiers: ReadonlyArray<Identifier>): NodeFlags {
         const inArr: boolean = constIdentifiers.some(elem => elem.text === node.text);
         return inArr ? NodeFlags.Const : NodeFlags.Let;
     }
 
-    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): Statement[] {
+    function transformPromiseCall(node: Expression, transformer: Transformer, prevArgName?: SynthIdentifier): ReadonlyArray<Statement> {
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(node).toString());
         // the identifier is empty when the handler (.then()) ignores the argument - In this situation we do not need to save the result of the promise returning call
-        const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
         const originalNodeParent = node.original ? node.original.parent : node.parent;
-        if (hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
-            return createVariableDeclarationOrAssignment(prevArgName!, createAwait(node), transformer).concat(); // hack to make the types match
+        if (prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
+            return createTransformedStatement(prevArgName, createAwait(node), transformer);
         }
-        else if (!hasPrevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
+        else if (!prevArgName && !shouldReturn && (!originalNodeParent || isPropertyAccessExpression(originalNodeParent))) {
             return [createStatement(createAwait(node))];
         }
 
         return [createReturn(getSynthesizedDeepClone(node))];
     }
 
-    function createVariableDeclarationOrAssignment(prevArgName: SynthIdentifier, rightHandSide: Expression, transformer: Transformer): NodeArray<Statement> {
-
-        if (prevArgName.types.length < prevArgName.numberOfAssignmentsOriginal) {
-            return createNodeArray([createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))]);
+    function createTransformedStatement(prevArgName: SynthIdentifier | undefined, rightHandSide: Expression, transformer: Transformer): ReadonlyArray<Statement> {
+        if (!prevArgName || prevArgName.identifier.text.length === 0) {
+            // if there's no argName to assign to, there still might be side effects
+            return [createStatement(rightHandSide)];
         }
 
-        return createNodeArray([createVariableStatement(/*modifiers*/ undefined,
-            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))]);
+        if (prevArgName.types.length < prevArgName.numberOfAssignmentsOriginal) {
+            // if the variable has already been declared, we don't need "let" or "const"
+            return [createStatement(createAssignment(getSynthesizedDeepClone(prevArgName.identifier), rightHandSide))];
+        }
+
+        return [createVariableStatement(/*modifiers*/ undefined,
+            (createVariableDeclarationList([createVariableDeclaration(getSynthesizedDeepClone(prevArgName.identifier), /*type*/ undefined, rightHandSide)], getFlagOfIdentifier(prevArgName.identifier, transformer.constIdentifiers))))];
     }
 
     // should be kept up to date with isFixablePromiseArgument in suggestionDiagnostics.ts
-    function getTransformationBody(func: Node, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier, parent: CallExpression, transformer: Transformer): NodeArray<Statement> {
+    function getTransformationBody(func: Expression, prevArgName: SynthIdentifier | undefined, argName: SynthIdentifier | undefined, parent: CallExpression, transformer: Transformer): ReadonlyArray<Statement> {
 
-        const hasPrevArgName = prevArgName && prevArgName.identifier.text.length > 0;
-        const hasArgName = argName && argName.identifier.text.length > 0;
         const shouldReturn = transformer.setOfExpressionsToReturn.get(getNodeId(parent).toString());
         switch (func.kind) {
             case SyntaxKind.NullKeyword:
                 // do not produce a transformed statement for a null argument
                 break;
-            case SyntaxKind.Identifier:
-                // identifier includes undefined
-                if (!hasArgName) break;
-
-                const synthCall = createCall(getSynthesizedDeepClone(func) as Identifier, /*typeArguments*/ undefined, [argName.identifier]);
-                if (shouldReturn) {
-                    return createNodeArray([createReturn(synthCall)]);
+            case SyntaxKind.Identifier: // identifier includes undefined
+                if (!argName) {
+                    // undefined was argument passed to promise handler
+                    break;
                 }
 
-                if (!hasPrevArgName) break;
+                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, [argName.identifier]);
+                if (shouldReturn) {
+                    return [createReturn(synthCall)];
+                }
 
-                const type = transformer.originalTypeMap.get(getNodeId(func).toString());
-                const callSignatures = type && transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
-                const returnType = callSignatures && callSignatures[0].getReturnType();
-                const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, createAwait(synthCall), transformer);
-                prevArgName!.types.push(returnType!);
+                const type = transformer.originalTypeMap.get(getNodeId(func).toString()) || transformer.checker.getTypeAtLocation(func);
+                const callSignatures = transformer.checker.getSignaturesOfType(type, SignatureKind.Call);
+                if (!callSignatures.length) {
+                    // if identifier in handler has no call signatures, it's invalid
+                    codeActionSucceeded = false;
+                    break;
+                }
+                const returnType = callSignatures[0].getReturnType();
+                const varDeclOrAssignment = createTransformedStatement(prevArgName, createAwait(synthCall), transformer);
+                if (prevArgName) {
+                    prevArgName.types.push(returnType);
+                }
                 return varDeclOrAssignment;
 
-            case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.FunctionExpression:
-            case SyntaxKind.ArrowFunction:
+            case SyntaxKind.ArrowFunction: {
+                const funcBody = (func as FunctionExpression | ArrowFunction).body;
                 // Arrow functions with block bodies { } will enter this control flow
-                if (isFunctionLikeDeclaration(func) && func.body && isBlock(func.body) && func.body.statements) {
+                if (isBlock(funcBody)) {
                     let refactoredStmts: Statement[] = [];
                     let seenReturnStatement = false;
 
-                    for (const statement of func.body.statements) {
+                    for (const statement of funcBody.statements) {
                         if (isReturnStatement(statement)) {
                             seenReturnStatement = true;
                         }
@@ -450,35 +450,43 @@ namespace ts.codefix {
                         }
                     }
 
-                    return shouldReturn ? getSynthesizedDeepClones(createNodeArray(refactoredStmts)) :
-                        removeReturns(createNodeArray(refactoredStmts), prevArgName!.identifier, transformer.constIdentifiers, seenReturnStatement);
+                    return shouldReturn ? refactoredStmts.map(s => getSynthesizedDeepClone(s)) :
+                        removeReturns(
+                            refactoredStmts,
+                            prevArgName === undefined ? undefined : prevArgName.identifier,
+                            transformer,
+                            seenReturnStatement);
                 }
                 else {
-                    const funcBody = (<ArrowFunction>func).body;
-                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody as Expression));
+                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody));
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
-                        return createNodeArray(innerCbBody);
+                        return innerCbBody;
                     }
 
-                    if (hasPrevArgName && !shouldReturn) {
-                        const type = transformer.checker.getTypeAtLocation(func);
-                        const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                        const varDeclOrAssignment = createVariableDeclarationOrAssignment(prevArgName!, getSynthesizedDeepClone(funcBody) as Expression, transformer);
-                        prevArgName!.types.push(returnType);
-                        return varDeclOrAssignment;
+                    const type = transformer.checker.getTypeAtLocation(func);
+                    const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
+                    const rightHandSide = getSynthesizedDeepClone(funcBody);
+                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
+                    if (!shouldReturn) {
+                        const transformedStatement = createTransformedStatement(prevArgName, possiblyAwaitedRightHandSide, transformer);
+                        if (prevArgName) {
+                            prevArgName.types.push(returnType);
+                        }
+                        return transformedStatement;
                     }
                     else {
-                        return createNodeArray([createReturn(getSynthesizedDeepClone(funcBody) as Expression)]);
+                        return [createReturn(possiblyAwaitedRightHandSide)];
                     }
                 }
+            }
             default:
-                // We've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
+                // If no cases apply, we've found a transformation body we don't know how to handle, so the refactoring should no-op to avoid deleting code.
                 codeActionSucceeded = false;
                 break;
         }
-        return createNodeArray([]);
+        return emptyArray;
     }
 
     function getLastCallSignature(type: Type, checker: TypeChecker): Signature | undefined {
@@ -487,13 +495,19 @@ namespace ts.codefix {
     }
 
 
-    function removeReturns(stmts: NodeArray<Statement>, prevArgName: Identifier, constIdentifiers: Identifier[], seenReturnStatement: boolean): NodeArray<Statement> {
+    function removeReturns(stmts: ReadonlyArray<Statement>, prevArgName: Identifier | undefined, transformer: Transformer, seenReturnStatement: boolean): ReadonlyArray<Statement> {
         const ret: Statement[] = [];
         for (const stmt of stmts) {
             if (isReturnStatement(stmt)) {
                 if (stmt.expression) {
-                    ret.push(createVariableStatement(/*modifiers*/ undefined,
-                        (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, stmt.expression)], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
+                    const possiblyAwaitedExpression = isPromiseReturningExpression(stmt.expression, transformer.checker) ? createAwait(stmt.expression) : stmt.expression;
+                    if (prevArgName === undefined) {
+                        ret.push(createExpressionStatement(possiblyAwaitedExpression));
+                    }
+                    else {
+                        ret.push(createVariableStatement(/*modifiers*/ undefined,
+                            (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, possiblyAwaitedExpression)], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
+                    }
                 }
             }
             else {
@@ -502,20 +516,20 @@ namespace ts.codefix {
         }
 
         // if block has no return statement, need to define prevArgName as undefined to prevent undeclared variables
-        if (!seenReturnStatement) {
+        if (!seenReturnStatement && prevArgName !== undefined) {
             ret.push(createVariableStatement(/*modifiers*/ undefined,
-                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, constIdentifiers)))));
+                (createVariableDeclarationList([createVariableDeclaration(prevArgName, /*type*/ undefined, createIdentifier("undefined"))], getFlagOfIdentifier(prevArgName, transformer.constIdentifiers)))));
         }
 
-        return createNodeArray(ret);
+        return ret;
     }
 
 
-    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: Node[], prevArgName?: SynthIdentifier) {
+    function getInnerTransformationBody(transformer: Transformer, innerRetStmts: ReadonlyArray<Node>, prevArgName?: SynthIdentifier) {
 
         let innerCbBody: Statement[] = [];
         for (const stmt of innerRetStmts) {
-            forEachChild(stmt, function visit(node: Node) {
+            forEachChild(stmt, function visit(node) {
                 if (isCallExpression(node)) {
                     const temp = transformExpression(node, transformer, node, prevArgName);
                     innerCbBody = innerCbBody.concat(temp);
@@ -531,7 +545,7 @@ namespace ts.codefix {
         return innerCbBody;
     }
 
-    function getArgName(funcNode: Node, transformer: Transformer): SynthIdentifier {
+    function getArgName(funcNode: Expression, transformer: Transformer): SynthIdentifier | undefined {
 
         const numberOfAssignmentsOriginal = 0;
         const types: Type[] = [];
@@ -541,20 +555,21 @@ namespace ts.codefix {
         if (isFunctionLikeDeclaration(funcNode)) {
             if (funcNode.parameters.length > 0) {
                 const param = funcNode.parameters[0].name as Identifier;
-                name = getMapEntryIfExists(param);
+                name = getMapEntryOrDefault(param);
             }
         }
         else if (isIdentifier(funcNode)) {
-            name = getMapEntryIfExists(funcNode);
+            name = getMapEntryOrDefault(funcNode);
         }
 
-        if (!name || name.identifier === undefined || name.identifier.text === "_" || name.identifier.text === "undefined") {
-            return { identifier: createIdentifier(""), types, numberOfAssignmentsOriginal };
+        // return undefined argName when arg is null or undefined
+        if (!name || name.identifier.text === "undefined") {
+            return undefined;
         }
 
         return name;
 
-        function getMapEntryIfExists(identifier: Identifier): SynthIdentifier {
+        function getMapEntryOrDefault(identifier: Identifier): SynthIdentifier {
             const originalNode = getOriginalNode(identifier);
             const symbol = getSymbol(originalNode);
 

@@ -254,6 +254,11 @@ namespace ts.server {
         installPackage(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult> {
             return this.typingsCache.installPackage({ ...options, projectName: this.projectName, projectRootPath: this.toPath(this.currentDirectory) });
         }
+        /* @internal */
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            return this.typingsCache.inspectValue(options);
+        }
+
         private get typingsCache(): TypingsCache {
             return this.projectService.typingsCache;
         }
@@ -276,8 +281,8 @@ namespace ts.server {
             return this.projectStateVersion.toString();
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return undefined;
         }
 
         getScriptFileNames() {
@@ -352,6 +357,10 @@ namespace ts.server {
             return this.projectService.host.readFile(fileName);
         }
 
+        writeFile(fileName: string, content: string): void {
+            return this.projectService.host.writeFile(fileName, content);
+        }
+
         fileExists(file: string): boolean {
             // As an optimization, don't hit the disks for files we already know don't exist
             // (because we're watching for their creation).
@@ -359,16 +368,16 @@ namespace ts.server {
             return !this.isWatchedMissingFile(path) && this.directoryStructureHost.fileExists(file);
         }
 
-        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModuleFull[] {
-            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames);
+        resolveModuleNames(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): ResolvedModuleFull[] {
+            return this.resolutionCache.resolveModuleNames(moduleNames, containingFile, reusedNames, redirectedReference);
         }
 
         getResolvedModuleWithFailedLookupLocationsFromCache(moduleName: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined {
             return this.resolutionCache.getResolvedModuleWithFailedLookupLocationsFromCache(moduleName, containingFile);
         }
 
-        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[] {
-            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile);
+        resolveTypeReferenceDirectives(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[] {
+            return this.resolutionCache.resolveTypeReferenceDirectives(typeDirectiveNames, containingFile, redirectedReference);
         }
 
         directoryExists(path: string): boolean {
@@ -574,14 +583,11 @@ namespace ts.server {
                 for (const f of this.program.getSourceFiles()) {
                     this.detachScriptInfoIfNotRoot(f.fileName);
                 }
-                const projectReferences = this.program.getResolvedProjectReferences();
-                if (projectReferences) {
-                    for (const ref of projectReferences) {
-                        if (ref) {
-                            this.detachScriptInfoFromProject(ref.sourceFile.fileName);
-                        }
+                this.program.forEachResolvedProjectReference(ref => {
+                    if (ref) {
+                        this.detachScriptInfoFromProject(ref.sourceFile.fileName);
                     }
-                }
+                });
             }
             // Release external files
             forEach(this.externalFiles, externalFile => this.detachScriptInfoIfNotRoot(externalFile));
@@ -653,7 +659,7 @@ namespace ts.server {
                 return this.rootFiles;
             }
             return map(this.program.getSourceFiles(), sourceFile => {
-                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath || sourceFile.path);
+                const scriptInfo = this.projectService.getScriptInfoForPath(sourceFile.resolvedPath);
                 Debug.assert(!!scriptInfo, "getScriptInfo", () => `scriptInfo for a file '${sourceFile.fileName}' Path: '${sourceFile.path}' / '${sourceFile.resolvedPath}' is missing.`);
                 return scriptInfo!;
             });
@@ -916,12 +922,19 @@ namespace ts.server {
             if (hasNewProgram) {
                 if (oldProgram) {
                     for (const f of oldProgram.getSourceFiles()) {
-                        if (this.program.getSourceFileByPath(f.path)) {
-                            continue;
+                        const newFile = this.program.getSourceFileByPath(f.resolvedPath);
+                        if (!newFile || (f.resolvedPath === f.path && newFile.resolvedPath !== f.path)) {
+                            // new program does not contain this file - detach it from the project
+                            // - remove resolutions only if the new program doesnt contain source file by the path (not resolvedPath since path is used for resolution)
+                            this.detachScriptInfoFromProject(f.fileName, !!this.program.getSourceFileByPath(f.path));
                         }
-                        // new program does not contain this file - detach it from the project
-                        this.detachScriptInfoFromProject(f.fileName);
                     }
+
+                    oldProgram.forEachResolvedProjectReference((resolvedProjectReference, resolvedProjectReferencePath) => {
+                        if (resolvedProjectReference && !this.program.getResolvedProjectReferenceByPath(resolvedProjectReferencePath)) {
+                            this.detachScriptInfoFromProject(resolvedProjectReference.sourceFile.fileName);
+                        }
+                    });
                 }
 
                 // Update the missing file paths watcher
@@ -955,11 +968,13 @@ namespace ts.server {
             return hasNewProgram;
         }
 
-        private detachScriptInfoFromProject(uncheckedFileName: string) {
+        private detachScriptInfoFromProject(uncheckedFileName: string, noRemoveResolution?: boolean) {
             const scriptInfoToDetach = this.projectService.getScriptInfo(uncheckedFileName);
             if (scriptInfoToDetach) {
                 scriptInfoToDetach.detachFromProject(this);
-                this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                if (!noRemoveResolution) {
+                    this.resolutionCache.removeResolutionsOfFile(scriptInfoToDetach.path);
+                }
             }
         }
 
@@ -1311,9 +1326,14 @@ namespace ts.server {
 
         /* @internal */
         pendingReload: ConfigFileProgramReloadLevel;
+        /* @internal */
+        pendingReloadReason: string | undefined;
 
         /*@internal*/
         configFileSpecs: ConfigFileSpecs | undefined;
+
+        /*@internal*/
+        canConfigFileJsonReportNoInputFiles: boolean;
 
         /** Ref count to the project when opened from external project */
         private externalProjectRefCount = 0;
@@ -1326,6 +1346,9 @@ namespace ts.server {
         projectOptions?: ProjectOptions | true;
 
         protected isInitialLoadPending: () => boolean = returnTrue;
+
+        /*@internal*/
+        sendLoadingProjectFinish = false;
 
         /*@internal*/
         constructor(configFileName: NormalizedPath,
@@ -1359,12 +1382,15 @@ namespace ts.server {
                     result = this.projectService.reloadFileNamesOfConfiguredProject(this);
                     break;
                 case ConfigFileProgramReloadLevel.Full:
-                    this.projectService.reloadConfiguredProject(this);
+                    const reason = Debug.assertDefined(this.pendingReloadReason);
+                    this.pendingReloadReason = undefined;
+                    this.projectService.reloadConfiguredProject(this, reason);
                     result = true;
                     break;
                 default:
                     result = super.updateGraph();
             }
+            this.projectService.sendProjectLoadingFinishEvent(this);
             this.projectService.sendProjectTelemetry(this);
             this.projectService.sendSurveyReady(this);
             return result;
@@ -1379,8 +1405,8 @@ namespace ts.server {
             return asNormalizedPath(this.getProjectName());
         }
 
-        getProjectReferences(): ReadonlyArray<ProjectReference> {
-            return this.projectReferences || emptyArray;
+        getProjectReferences(): ReadonlyArray<ProjectReference> | undefined {
+            return this.projectReferences;
         }
 
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined) {
@@ -1388,9 +1414,9 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getResolvedProjectReferences() {
+        forEachResolvedProjectReference<T>(cb: (resolvedProjectReference: ResolvedProjectReference | undefined, resolvedProjectReferencePath: Path) => T | undefined): T | undefined {
             const program = this.getCurrentProgram();
-            return program && program.getResolvedProjectReferences();
+            return program && program.forEachResolvedProjectReference(cb);
         }
 
         enablePlugins() {
@@ -1531,13 +1557,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        updateErrorOnNoInputFiles(hasFileNames: boolean) {
-            if (hasFileNames) {
-                filterMutate(this.projectErrors!, error => !isErrorNoInputFiles(error)); // TODO: GH#18217
-            }
-            else if (!this.configFileSpecs!.filesSpecs && !some(this.projectErrors, isErrorNoInputFiles)) { // TODO: GH#18217
-                this.projectErrors!.push(getErrorForNoInputFiles(this.configFileSpecs!, this.getConfigFilePath()));
-            }
+        updateErrorOnNoInputFiles(fileNameResult: ExpandResult) {
+            updateErrorForNoInputFiles(fileNameResult, this.getConfigFilePath(), this.configFileSpecs!, this.projectErrors!, this.canConfigFileJsonReportNoInputFiles);
         }
     }
 

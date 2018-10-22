@@ -248,7 +248,7 @@ namespace ts {
         return getOrCreateValueFromConfigFileMap<Map<T>>(configFileMap, resolved, createMap);
     }
 
-    function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
+    export function getOutputDeclarationFileName(inputFileName: string, configFile: ParsedCommandLine) {
         const relativePath = getRelativePathFromDirectory(rootDirOfOptions(configFile.options, configFile.options.configFilePath!), inputFileName, /*ignoreCase*/ true);
         const outputPath = resolvePath(configFile.options.declarationDir || configFile.options.outDir || getDirectoryPath(configFile.options.configFilePath!), relativePath);
         return changeExtension(outputPath, Extension.Dts);
@@ -285,16 +285,17 @@ namespace ts {
     }
 
     function getOutFileOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        if (!project.options.outFile) {
+        const out = project.options.outFile || project.options.out;
+        if (!out) {
             return Debug.fail("outFile must be set");
         }
         const outputs: string[] = [];
-        outputs.push(project.options.outFile);
+        outputs.push(out);
         if (project.options.sourceMap) {
-            outputs.push(`${project.options.outFile}.map`);
+            outputs.push(`${out}.map`);
         }
         if (getEmitDeclarations(project.options)) {
-            const dts = changeExtension(project.options.outFile, Extension.Dts);
+            const dts = changeExtension(out, Extension.Dts);
             outputs.push(dts);
             if (project.options.declarationMap) {
                 outputs.push(`${dts}.map`);
@@ -862,7 +863,7 @@ namespace ts {
             if (buildProject) {
                 buildSingleInvalidatedProject(buildProject.project, buildProject.reloadLevel);
                 if (hasPendingInvalidatedProjects()) {
-                    if (!timerToBuildInvalidatedProject) {
+                    if (options.watch && !timerToBuildInvalidatedProject) {
                         scheduleBuildInvalidatedProject();
                     }
                 }
@@ -901,12 +902,7 @@ namespace ts {
             else if (reloadLevel === ConfigFileProgramReloadLevel.Partial) {
                 // Update file names
                 const result = getFileNamesFromConfigSpecs(proj.configFileSpecs!, getDirectoryPath(resolved), proj.options, parseConfigFileHost);
-                if (result.fileNames.length !== 0) {
-                    filterMutate(proj.errors, error => !isErrorNoInputFiles(error));
-                }
-                else if (!proj.configFileSpecs!.filesSpecs && !some(proj.errors, isErrorNoInputFiles)) {
-                    proj.errors.push(getErrorForNoInputFiles(proj.configFileSpecs!, resolved));
-                }
+                updateErrorForNoInputFiles(result, resolved, proj.configFileSpecs!, proj.errors, canJsonReportNoInutFiles(proj.raw));
                 proj.fileNames = result.fileNames;
                 watchInputFiles(resolved, proj);
             }
@@ -1001,6 +997,7 @@ namespace ts {
                 return resultFlags;
             }
             if (configFile.fileNames.length === 0) {
+                reportAndStoreErrors(proj, configFile.errors);
                 // Nothing to build - must be a solution file, basically
                 return BuildResultFlags.None;
             }
@@ -1069,6 +1066,9 @@ namespace ts {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
+            if (options.watch) {
+                diagnostics.removeKey(proj);
+            }
             projectStatus.setValue(proj, status);
             return resultFlags;
 
@@ -1248,7 +1248,7 @@ namespace ts {
     }
 
     export function getAllProjectOutputs(project: ParsedCommandLine): ReadonlyArray<string> {
-        if (project.options.outFile) {
+        if (project.options.outFile || project.options.out) {
             return getOutFileOutputs(project);
         }
         else {

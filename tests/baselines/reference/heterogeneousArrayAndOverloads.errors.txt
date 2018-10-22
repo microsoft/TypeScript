@@ -1,9 +1,9 @@
-tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,19): error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type 'string[]'.
-  Type 'string | number' is not assignable to type 'string'.
-    Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,20): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,23): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,32): error TS2322: Type 'number' is not assignable to type 'string'.
 
 
-==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (1 errors) ====
+==== tests/cases/compiler/heterogeneousArrayAndOverloads.ts (3 errors) ====
     class arrTest {
         test(arg1: number[]);
         test(arg1: string[]);
@@ -13,9 +13,11 @@ tests/cases/compiler/heterogeneousArrayAndOverloads.ts(9,19): error TS2345: Argu
             this.test(["hi"]);
             this.test([]);
             this.test([1, 2, "hi", 5]); // Error
-                      ~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(string | number)[]' is not assignable to parameter of type 'string[]'.
-!!! error TS2345:   Type 'string | number' is not assignable to type 'string'.
-!!! error TS2345:     Type 'number' is not assignable to type 'string'.
+                       ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                          ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+                                   ~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
         }
     }

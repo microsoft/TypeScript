@@ -1,13 +1,12 @@
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(11,3): error TS2339: Property 'bar' does not exist on type 'Missing'.
   Property 'bar' does not exist on type '{ [s: string]: string; }'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(14,4): error TS2540: Cannot assign to 'foo' because it is a constant or a read-only property.
-tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(18,1): error TS2322: Type '"ok"' is not assignable to type 'number'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(24,1): error TS7017: Element implicitly has an 'any' type because type 'Both' has no index signature.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(25,1): error TS2322: Type '"not ok"' is not assignable to type 'number'.
 tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error TS7017: Element implicitly has an 'any' type because type 'Both' has no index signature.
 
 
-==== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts (6 errors) ====
+==== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts (5 errors) ====
     type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
     declare var u: Two
     u.foo = 'bye'
@@ -31,8 +30,6 @@ tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts(26,1): error 
     declare var num: Num
     num[0] = 1
     num['0'] = 'ok'
-    ~~~~~~~~
-!!! error TS2322: Type '"ok"' is not assignable to type 'number'.
     const sym = Symbol()
     type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
     declare var both: Both

@@ -39,47 +39,43 @@ namespace ts.Rename {
     }
 
     function getRenameInfoForModule(node: StringLiteralLike, sourceFile: SourceFile, moduleSymbol: Symbol): RenameInfo | undefined {
+        if (!isExternalModuleNameRelative(node.text)) {
+            return getRenameInfoError(Diagnostics.You_cannot_rename_a_module_via_a_global_import);
+        }
+
         const moduleSourceFile = find(moduleSymbol.declarations, isSourceFile);
         if (!moduleSourceFile) return undefined;
         const withoutIndex = node.text.endsWith("/index") || node.text.endsWith("/index.js") ? undefined : tryRemoveSuffix(removeFileExtension(moduleSourceFile.fileName), "/index");
         const name = withoutIndex === undefined ? moduleSourceFile.fileName : withoutIndex;
         const kind = withoutIndex === undefined ? ScriptElementKind.moduleElement : ScriptElementKind.directory;
+        const indexAfterLastSlash = node.text.lastIndexOf("/") + 1;
+        // Span should only be the last component of the path. + 1 to account for the quote character.
+        const triggerSpan = createTextSpan(node.getStart(sourceFile) + 1 + indexAfterLastSlash, node.text.length - indexAfterLastSlash);
         return {
             canRename: true,
             fileToRename: name,
             kind,
             displayName: name,
-            localizedErrorMessage: undefined,
             fullDisplayName: name,
             kindModifiers: ScriptElementKindModifier.none,
-            triggerSpan: createTriggerSpanForNode(node, sourceFile),
+            triggerSpan,
         };
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfoSuccess {
         return {
             canRename: true,
             fileToRename: undefined,
             kind,
             displayName,
-            localizedErrorMessage: undefined,
             fullDisplayName,
             kindModifiers,
             triggerSpan: createTriggerSpanForNode(node, sourceFile)
         };
     }
 
-    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
-        // TODO: GH#18217
-        return {
-            canRename: false,
-            localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined!,
-            fullDisplayName: undefined!,
-            kind: undefined!,
-            kindModifiers: undefined!,
-            triggerSpan: undefined!
-        };
+    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfoFailure {
+        return { canRename: false, localizedErrorMessage: getLocaleSpecificMessage(diagnostic) };
     }
 
     function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {

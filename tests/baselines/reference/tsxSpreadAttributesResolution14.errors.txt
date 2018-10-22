@@ -1,4 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(11,38): error TS2339: Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
+tests/cases/conformance/jsx/file.tsx(11,10): error TS2322: Type '{ Property1: true; property1: string; property2: number; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
+  Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -13,8 +14,9 @@ tests/cases/conformance/jsx/file.tsx(11,38): error TS2339: Property 'Property1' 
         return (
             // Error extra property
             <AnotherComponent {...props} Property1/>
-                                         ~~~~~~~~~
-!!! error TS2339: Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
+             ~~~~~~~~~~~~~~~~
+!!! error TS2322: Type '{ Property1: true; property1: string; property2: number; }' is not assignable to type 'IntrinsicAttributes & AnotherComponentProps'.
+!!! error TS2322:   Property 'Property1' does not exist on type 'IntrinsicAttributes & AnotherComponentProps'.
         );
     }
     

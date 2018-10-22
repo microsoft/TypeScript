@@ -74,7 +74,7 @@ var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { z: a => a };
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 39, 70))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 39, 70))
 
-var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be any
+var x: IWithNoStringIndexSignature | IWithStringIndexSignature1 = { foo: a => a }; // a should be number (because of index signature of IWithStringIndexSignature1)
 >x : Symbol(x, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 39, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 40, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 41, 3))
 >IWithNoStringIndexSignature : Symbol(IWithNoStringIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 7, 1))
 >IWithStringIndexSignature1 : Symbol(IWithStringIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 14, 1))
@@ -118,7 +118,7 @@ var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 1: a => a }
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 71))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 71))
 
-var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be any
+var x3: IWithNoNumberIndexSignature | IWithNumberIndexSignature1 = { 0: a => a }; // a should be number (because of index signature of IWithNumberIndexSignature1)
 >x3 : Symbol(x3, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 49, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 50, 3), Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 51, 3))
 >IWithNoNumberIndexSignature : Symbol(IWithNoNumberIndexSignature, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 11, 1))
 >IWithNumberIndexSignature1 : Symbol(IWithNumberIndexSignature1, Decl(contextualTypeWithUnionTypeIndexSignatures.ts, 20, 1))

@@ -226,7 +226,7 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         const { file, program, cancellationToken } = context;
 
         const referenceEntries = mapDefined(FindAllReferences.getReferenceEntriesForNode(originalName.parent.pos, originalName, program, [file], cancellationToken!), entry => // TODO: GH#18217
-            (entry.type === "node" && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined);
+            (entry.kind !== FindAllReferences.EntryKind.Span && rangeContainsRange(constructor, entry.node) && isIdentifier(entry.node) && isWriteAccess(entry.node)) ? entry.node : undefined);
 
         forEach(referenceEntries, entry => {
             const parent = entry.parent;

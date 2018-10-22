@@ -765,12 +765,13 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): __String {
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
@@ -978,6 +979,7 @@ namespace ts {
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.ObjectKeyword:
             case SyntaxKind.UndefinedKeyword:
             case SyntaxKind.NeverKeyword:
                 return true;
@@ -1769,7 +1771,7 @@ namespace ts {
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
+        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
@@ -1904,12 +1906,35 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getAssignmentDeclarationKind(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         const special = getAssignmentDeclarationKindWorker(expr);
         return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
-    function getAssignmentDeclarationKindWorker(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
+            return length(expr.arguments) === 3 &&
+                isPropertyAccessExpression(expr.expression) &&
+                isIdentifier(expr.expression.expression) &&
+                idText(expr.expression.expression) === "Object" &&
+                idText(expr.expression.name) === "defineProperty" &&
+                isStringOrNumericLiteralLike(expr.arguments[1]) &&
+                isEntityNameExpression(expr.arguments[0]);
+    }
+
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
+        if (isCallExpression(expr)) {
+            if (!isBindableObjectDefinePropertyCall(expr)) {
+                return AssignmentDeclarationKind.None;
+            }
+            const entityName = expr.arguments[0];
+            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
+                return AssignmentDeclarationKind.ObjectDefinePropertyExports;
+            }
+            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+                return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
+            }
+            return AssignmentDeclarationKind.ObjectDefinePropertyValue;
+        }
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
@@ -1926,7 +1951,7 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
+        else if (isModuleExportsPropertyAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
@@ -3244,7 +3269,7 @@ namespace ts {
     }
 
     export interface EmitFileNames {
-        jsFilePath: string;
+        jsFilePath: string | undefined;
         sourceMapFilePath: string | undefined;
         declarationFilePath: string | undefined;
         declarationMapPath: string | undefined;
@@ -3265,7 +3290,7 @@ namespace ts {
         const isSourceFileFromExternalLibrary = (file: SourceFile) => host.isSourceFileFromExternalLibrary(file);
         if (options.outFile || options.out) {
             const moduleKind = getEmitModuleKind(options);
-            const moduleEmitEnabled = moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
+            const moduleEmitEnabled = options.emitDeclarationOnly || moduleKind === ModuleKind.AMD || moduleKind === ModuleKind.System;
             // Can emit only sources that are not declaration file and are either non module code or module with --module or --target es6 specified
             return filter(host.getSourceFiles(), sourceFile =>
                 (moduleEmitEnabled || !isExternalModule(sourceFile)) && sourceFileMayBeEmitted(sourceFile, options, isSourceFileFromExternalLibrary));
@@ -3734,11 +3759,20 @@ namespace ts {
 
     /** Get `C` given `N` if `N` is in the position `class C extends N` where `N` is an ExpressionWithTypeArguments. */
     export function tryGetClassExtendingExpressionWithTypeArguments(node: Node): ClassLikeDeclaration | undefined {
-        if (isExpressionWithTypeArguments(node) &&
-            node.parent.token === SyntaxKind.ExtendsKeyword &&
-            isClassLike(node.parent.parent)) {
-            return node.parent.parent;
-        }
+        const cls = tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node);
+        return cls && !cls.isImplements ? cls.class : undefined;
+    }
+
+    export interface ClassImplementingOrExtendingExpressionWithTypeArguments {
+        readonly class: ClassLikeDeclaration;
+        readonly isImplements: boolean;
+    }
+    export function tryGetClassImplementingOrExtendingExpressionWithTypeArguments(node: Node): ClassImplementingOrExtendingExpressionWithTypeArguments | undefined {
+        return isExpressionWithTypeArguments(node)
+            && isHeritageClause(node.parent)
+            && isClassLike(node.parent.parent)
+            ? { class: node.parent.parent, isImplements: node.parent.token === SyntaxKind.ImplementsKeyword }
+            : undefined;
     }
 
     export function isAssignmentExpression(node: Node, excludeCompoundAssignment: true): node is AssignmentExpression<EqualsToken>;
@@ -3763,15 +3797,6 @@ namespace ts {
 
     export function isExpressionWithTypeArgumentsInClassExtendsClause(node: Node): node is ExpressionWithTypeArguments {
         return tryGetClassExtendingExpressionWithTypeArguments(node) !== undefined;
-    }
-
-    export function isExpressionWithTypeArgumentsInClassImplementsClause(node: Node): node is ExpressionWithTypeArguments {
-        return node.kind === SyntaxKind.ExpressionWithTypeArguments
-            && isEntityNameExpression((node as ExpressionWithTypeArguments).expression)
-            && node.parent
-            && (<HeritageClause>node.parent).token === SyntaxKind.ImplementsKeyword
-            && node.parent.parent
-            && isClassLike(node.parent.parent);
     }
 
     export function isEntityNameExpression(node: Node): node is EntityNameExpression {
@@ -4976,14 +5001,19 @@ namespace ts {
                 }
                 break;
             }
+            case SyntaxKind.CallExpression:
             case SyntaxKind.BinaryExpression: {
-                const expr = declaration as BinaryExpression;
+                const expr = declaration as BinaryExpression | CallExpression;
                 switch (getAssignmentDeclarationKind(expr)) {
                     case AssignmentDeclarationKind.ExportsProperty:
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return (expr.left as PropertyAccessExpression).name;
+                        return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
+                        return (expr as BindableObjectDefinePropertyCall).arguments[1];
                     default:
                         return undefined;
                 }
@@ -7077,16 +7107,15 @@ namespace ts {
         const moduleKind = getEmitModuleKind(compilerOptions);
         return compilerOptions.allowSyntheticDefaultImports !== undefined
             ? compilerOptions.allowSyntheticDefaultImports
-            : compilerOptions.esModuleInterop
-                ? moduleKind !== ModuleKind.None && moduleKind < ModuleKind.ES2015
-                : moduleKind === ModuleKind.System;
+            : compilerOptions.esModuleInterop ||
+            moduleKind === ModuleKind.System;
     }
 
     export function getEmitDeclarations(compilerOptions: CompilerOptions): boolean {
         return !!(compilerOptions.declaration || compilerOptions.composite);
     }
 
-    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictPropertyInitialization" | "alwaysStrict";
+    export type StrictOptionName = "noImplicitAny" | "noImplicitThis" | "strictNullChecks" | "strictFunctionTypes" | "strictBindCallApply" | "strictPropertyInitialization" | "alwaysStrict";
 
     export function getStrictOptionValue(compilerOptions: CompilerOptions, flag: StrictOptionName): boolean {
         return compilerOptions[flag] === undefined ? !!compilerOptions.strict : !!compilerOptions[flag];
@@ -7738,7 +7767,7 @@ namespace ts {
         return `^(${pattern})${terminator}`;
     }
 
-    function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
+    export function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }
@@ -8003,11 +8032,13 @@ namespace ts {
      *  List of supported extensions in order of file resolution precedence.
      */
     export const supportedTSExtensions: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts];
+    export const supportedTSExtensionsWithJson: ReadonlyArray<Extension> = [Extension.Ts, Extension.Tsx, Extension.Dts, Extension.Json];
     /** Must have ".d.ts" first because if ".ts" goes first, that will be detected as the extension instead of ".d.ts". */
     export const supportedTSExtensionsForExtractExtension: ReadonlyArray<Extension> = [Extension.Dts, Extension.Ts, Extension.Tsx];
     export const supportedJSExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx];
     export const supportedJSAndJsonExtensions: ReadonlyArray<Extension> = [Extension.Js, Extension.Jsx, Extension.Json];
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
+    const allSupportedExtensionsWithJson: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
@@ -8022,6 +8053,13 @@ namespace ts {
         ];
 
         return deduplicate<string>(extensions, equateStringsCaseSensitive, compareStringsCaseSensitive);
+    }
+
+    export function getSuppoertedExtensionsWithJsonIfResolveJsonModule(options: CompilerOptions | undefined, supportedExtensions: ReadonlyArray<string>): ReadonlyArray<string> {
+        if (!options || !options.resolveJsonModule) { return supportedExtensions; }
+        if (supportedExtensions === allSupportedExtensions) { return allSupportedExtensionsWithJson; }
+        if (supportedExtensions === supportedTSExtensions) { return supportedTSExtensionsWithJson; }
+        return [...supportedExtensions, Extension.Json];
     }
 
     function isJSLike(scriptKind: ScriptKind | undefined): boolean {
@@ -8043,7 +8081,8 @@ namespace ts {
     export function isSupportedSourceFileName(fileName: string, compilerOptions?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>) {
         if (!fileName) { return false; }
 
-        for (const extension of getSupportedExtensions(compilerOptions, extraFileExtensions)) {
+        const supportedExtensions = getSupportedExtensions(compilerOptions, extraFileExtensions);
+        for (const extension of getSuppoertedExtensionsWithJsonIfResolveJsonModule(compilerOptions, supportedExtensions)) {
             if (fileExtensionIs(fileName, extension)) {
                 return true;
             }
@@ -8369,5 +8408,17 @@ namespace ts {
 
     export function isJsonEqual(a: unknown, b: unknown): boolean {
         return a === b || typeof a === "object" && a !== null && typeof b === "object" && b !== null && equalOwnProperties(a as MapLike<unknown>, b as MapLike<unknown>, isJsonEqual);
+    }
+
+    export function getOrUpdate<T>(map: Map<T>, key: string, getDefault: () => T): T {
+        const got = map.get(key);
+        if (got === undefined) {
+            const value = getDefault();
+            map.set(key, value);
+            return value;
+        }
+        else {
+            return got;
+        }
     }
 }

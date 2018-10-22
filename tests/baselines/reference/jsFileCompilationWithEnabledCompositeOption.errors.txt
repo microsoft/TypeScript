@@ -1,0 +1,12 @@
+error TS5053: Option 'allowJs' cannot be specified with option 'composite'.
+
+
+!!! error TS5053: Option 'allowJs' cannot be specified with option 'composite'.
+==== tests/cases/compiler/a.ts (0 errors) ====
+    class c {
+    }
+    
+==== tests/cases/compiler/b.js (0 errors) ====
+    function foo() {
+    }
+    

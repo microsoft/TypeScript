@@ -12,7 +12,7 @@ function stringify1(anything: { toString(): string } | undefined): string {
 >"string" : "string"
 >anything.toUpperCase() : string
 >anything.toUpperCase : () => string
->anything : { toString(): string; } & string
+>anything : string
 >toUpperCase : () => string
 >"" : ""
 }
@@ -29,7 +29,7 @@ function stringify2(anything: {} | undefined): string {
 >"string" : "string"
 >anything.toUpperCase() : string
 >anything.toUpperCase : () => string
->anything : string & {}
+>anything : string
 >toUpperCase : () => string
 >"" : ""
 }
@@ -64,7 +64,7 @@ function stringify4(anything: { toString?(): string } | undefined): string {
 >"string" : "string"
 >anything.toUpperCase() : string
 >anything.toUpperCase : () => string
->anything : {} & string
+>anything : string
 >toUpperCase : () => string
 >"" : ""
 }

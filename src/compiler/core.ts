@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.1";
+    export const versionMajorMinor = "3.2";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -842,7 +842,7 @@ namespace ts {
         return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
     }
 
-    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T) => boolean = equateValues): boolean {
+    export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
         if (!array1 || !array2) {
             return array1 === array2;
         }
@@ -852,7 +852,7 @@ namespace ts {
         }
 
         for (let i = 0; i < array1.length; i++) {
-            if (!equalityComparer(array1[i], array2[i])) {
+            if (!equalityComparer(array1[i], array2[i], i)) {
                 return false;
             }
         }
@@ -1409,8 +1409,11 @@ namespace ts {
     /**
      * Tests whether a value is string
      */
-    export function isString(text: any): text is string {
+    export function isString(text: unknown): text is string {
         return typeof text === "string";
+    }
+    export function isNumber(x: unknown): x is number {
+        return typeof x === "number";
     }
 
     export function tryCast<TOut extends TIn, TIn = any>(value: TIn | undefined, test: (value: TIn) => value is TOut): TOut | undefined;
@@ -1534,6 +1537,7 @@ namespace ts {
      * Every function should be assignable to this, but this should not be assignable to every function.
      */
     export type AnyFunction = (...args: never[]) => void;
+    export type AnyConstructor = new (...args: unknown[]) => unknown;
 
     export namespace Debug {
         export let currentAssertionLevel = AssertionLevel.None;
@@ -1598,8 +1602,9 @@ namespace ts {
             return value;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
-            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
+        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
+            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
+            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: AnyFunction) {
@@ -2124,5 +2129,9 @@ namespace ts {
         while (oldIndex < oldLen) {
             deleted(oldItems[oldIndex++]);
         }
+    }
+
+    export function fill<T>(length: number, cb: (index: number) => T): T[] {
+        return new Array(length).fill(0).map((_, i) => cb(i));
     }
 }

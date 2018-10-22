@@ -6,6 +6,9 @@ src/cli/util.js(262,64): error TS2339: Property 'length' does not exist on type 
 src/cli/util.js(335,52): error TS2339: Property 'length' does not exist on type 'Ignore'.
 src/cli/util.js(396,46): error TS2345: Argument of type 'null' is not assignable to parameter of type 'number | undefined'.
 src/cli/util.js(403,39): error TS2339: Property 'grey' does not exist on type 'typeof import("../../../node_modules/chalk/types/index")'.
+src/cli/util.js(454,16): error TS2339: Property 'type' does not exist on type 'never'.
+src/cli/util.js(455,16): error TS2339: Property 'oppositeDescription' does not exist on type 'never'.
+src/cli/util.js(456,17): error TS2339: Property 'name' does not exist on type 'never'.
 src/common/parser-create-error.js(8,9): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 src/config/resolve-config.js(75,32): error TS2345: Argument of type '{ sync: false; }' is not assignable to parameter of type '{ cache: boolean; sync: boolean; }'.
   Property 'cache' is missing in type '{ sync: false; }'.
@@ -14,6 +17,8 @@ src/config/resolve-config.js(82,32): error TS2345: Argument of type '{ sync: tru
 src/doc/doc-printer.js(213,17): error TS2532: Object is possibly 'undefined'.
 src/doc/doc-printer.js(214,18): error TS2532: Object is possibly 'undefined'.
 src/doc/doc-printer.js(215,17): error TS2532: Object is possibly 'undefined'.
+src/doc/doc-printer.js(447,37): error TS2345: Argument of type 'any[][]' is not assignable to parameter of type 'never[]'.
+  Type 'any[]' is not assignable to type 'never'.
 src/language-css/clean.js(3,30): error TS2307: Cannot find module 'html-tag-names'.
 src/language-css/parser-postcss.js(78,32): error TS2345: Argument of type '{ groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
 src/language-css/parser-postcss.js(88,30): error TS2345: Argument of type '{ open: null; close: null; groups: never[]; type: string; }' is not assignable to parameter of type 'never'.
