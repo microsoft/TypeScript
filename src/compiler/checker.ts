@@ -11927,9 +11927,21 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
+
                 let result: Ternary;
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 const saveErrorInfo = errorInfo;
+
+                if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
+                    !(getAliasArgumentsContainsMarker(source) || getAliasArgumentsContainsMarker(target))) {
+                    const variances = getAliasVariances(source.aliasSymbol);
+                    if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
+                        return result;
+                    }
+                    originalErrorInfo = errorInfo;
+                    errorInfo = saveErrorInfo;
+                }
+
                 if (target.flags & TypeFlags.TypeParameter) {
                     // A source type { [P in keyof T]: X } is related to a target type T if X is related to T[P].
                     if (getObjectFlags(source) & ObjectFlags.Mapped && getConstraintTypeFromMappedType(<MappedType>source) === getIndexType(target)) {
@@ -12032,14 +12044,6 @@ namespace ts {
                 }
                 else if (source.flags & TypeFlags.Conditional) {
                     if (target.flags & TypeFlags.Conditional) {
-                        if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                            !(getAliasArgumentsContainsMarker(source) || getAliasArgumentsContainsMarker(target))) {
-                            const variances = getAliasVariances(source.aliasSymbol);
-                            if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
-                                errorInfo = saveErrorInfo;
-                                return result;
-                            }
-                        }
                         // Two conditional types 'T1 extends U1 ? X1 : Y1' and 'T2 extends U2 ? X2 : Y2' are related if
                         // one of T1 and T2 is related to the other, U1 and U2 are identical types, X1 is related to X2,
                         // and Y1 is related to Y2.
