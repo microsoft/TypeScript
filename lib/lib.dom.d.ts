@@ -14791,9 +14791,6 @@ interface WheelEvent extends MouseEvent {
     readonly deltaX: number;
     readonly deltaY: number;
     readonly deltaZ: number;
-    readonly wheelDelta: number;
-    readonly wheelDeltaX: number;
-    readonly wheelDeltaY: number;
     getCurrentPoint(element: Element): void;
     initWheelEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, buttonArg: number, relatedTargetArg: EventTarget, modifiersListArg: string, deltaXArg: number, deltaYArg: number, deltaZArg: number, deltaMode: number): void;
     readonly DOM_DELTA_LINE: number;
