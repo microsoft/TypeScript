@@ -2035,7 +2035,7 @@ namespace ts {
                     }
                 }
                 if (assignments) {
-                    updated = setTextRange(createExpressionStatement(inlineExpressions(assignments)), node);
+                    updated = setTextRange(createExpressionStatement(inlineCommas(assignments)), node);
                 }
                 else {
                     // none of declarations has initializer - the entire variable statement can be deleted
@@ -2615,7 +2615,7 @@ namespace ts {
                 // We need to clone the temporary identifier so that we can write it on a
                 // new line
                 expressions.push(node.multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
-                return inlineExpressions(expressions);
+                return inlineCommas(expressions);
             }
             return visitEachChild(node, visitor, context);
         }

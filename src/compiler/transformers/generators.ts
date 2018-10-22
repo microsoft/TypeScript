@@ -638,7 +638,7 @@ namespace ts {
 
                 return setSourceMapRange(
                     createExpressionStatement(
-                        inlineExpressions(
+                        inlineCommas(
                             map(variables, transformInitializedVariable)
                         )
                     ),
@@ -863,7 +863,7 @@ namespace ts {
             let pendingExpressions: Expression[] = [];
             visit(node.left);
             visit(node.right);
-            return inlineExpressions(pendingExpressions);
+            return inlineCommas(pendingExpressions);
 
             function visit(node: Expression) {
                 if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
@@ -872,7 +872,7 @@ namespace ts {
                 }
                 else {
                     if (containsYield(node) && pendingExpressions.length > 0) {
-                        emitWorker(OpCode.Statement, [createExpressionStatement(inlineExpressions(pendingExpressions))]);
+                        emitWorker(OpCode.Statement, [createExpressionStatement(inlineCommas(pendingExpressions))]);
                         pendingExpressions = [];
                     }
 
@@ -1063,11 +1063,11 @@ namespace ts {
 
             const expressions = reduceLeft(properties, reduceProperty, <Expression[]>[], numInitialProperties);
             expressions.push(multiLine ? startOnNewLine(getMutableClone(temp)) : temp);
-            return inlineExpressions(expressions);
+            return inlineCommas(expressions);
 
             function reduceProperty(expressions: Expression[], property: ObjectLiteralElementLike) {
                 if (containsYield(property) && expressions.length > 0) {
-                    emitStatement(createExpressionStatement(inlineExpressions(expressions)));
+                    emitStatement(createExpressionStatement(inlineCommas(expressions)));
                     expressions = [];
                 }
 
@@ -1270,7 +1270,7 @@ namespace ts {
                 }
 
                 if (pendingExpressions.length) {
-                    emitStatement(createExpressionStatement(inlineExpressions(pendingExpressions)));
+                    emitStatement(createExpressionStatement(inlineCommas(pendingExpressions)));
                     variablesWritten += pendingExpressions.length;
                     pendingExpressions = [];
                 }
@@ -1490,7 +1490,7 @@ namespace ts {
                 const variables = getInitializedVariables(initializer);
                 node = updateFor(node,
                     variables.length > 0
-                        ? inlineExpressions(map(variables, transformInitializedVariable))
+                        ? inlineCommas(map(variables, transformInitializedVariable))
                         : undefined,
                     visitNode(node.condition, visitor, isExpression),
                     visitNode(node.incrementor, visitor, isExpression),

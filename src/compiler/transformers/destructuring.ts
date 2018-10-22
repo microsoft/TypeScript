@@ -103,7 +103,7 @@ namespace ts {
             expressions.push(value);
         }
 
-        return aggregateTransformFlags(inlineExpressions(expressions!)) || createOmittedExpression();
+        return aggregateTransformFlags(inlineCommas(expressions!)) || createOmittedExpression();
 
         function emitExpression(expression: Expression) {
             // NOTE: this completely disables source maps, but aligns with the behavior of
@@ -196,7 +196,7 @@ namespace ts {
         if (pendingExpressions) {
             const temp = createTempVariable(/*recordTempVariable*/ undefined);
             if (hoistTempVariables) {
-                const value = inlineExpressions(pendingExpressions);
+                const value = inlineCommas(pendingExpressions);
                 pendingExpressions = undefined;
                 emitBindingOrAssignment(temp, value, /*location*/ undefined, /*original*/ undefined);
             }
@@ -215,7 +215,7 @@ namespace ts {
             const variable = createVariableDeclaration(
                 name,
                 /*type*/ undefined,
-                pendingExpressions ? inlineExpressions(append(pendingExpressions, value)) : value
+                pendingExpressions ? inlineCommas(append(pendingExpressions, value)) : value
             );
             variable.original = original;
             setTextRange(variable, location);
@@ -234,7 +234,7 @@ namespace ts {
         function emitBindingOrAssignment(target: BindingOrAssignmentElementTarget, value: Expression, location: TextRange | undefined, original: Node | undefined) {
             Debug.assertNode(target, isBindingName);
             if (pendingExpressions) {
-                value = inlineExpressions(append(pendingExpressions, value));
+                value = inlineCommas(append(pendingExpressions, value));
                 pendingExpressions = undefined;
             }
             pendingDeclarations.push({ pendingExpressions, name: <BindingName>target, value, location, original });

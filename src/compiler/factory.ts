@@ -2539,27 +2539,28 @@ namespace ts {
         return node;
     }
 
-    function flattenCommaElements(node: Expression): Expression | ReadonlyArray<Expression> {
+    function flattenOperatorListElements(node: Expression, operatorKind: BinaryOperator): Expression | ReadonlyArray<Expression> {
         if (nodeIsSynthesized(node) && !isParseTreeNode(node) && !node.original && !node.emitNode && !node.id) {
-            if (node.kind === SyntaxKind.CommaListExpression) {
-                return (<CommaListExpression>node).elements;
+            if (node.kind === SyntaxKind.OperatorListExpression && (node as OperatorListExpression).operatorToken.kind === operatorKind) {
+                return (<OperatorListExpression>node).elements;
             }
-            if (isBinaryExpression(node) && node.operatorToken.kind === SyntaxKind.CommaToken) {
+            if (isBinaryExpression(node) && node.operatorToken.kind === operatorKind) {
                 return [node.left, node.right];
             }
         }
         return node;
     }
 
-    export function createCommaList(elements: ReadonlyArray<Expression>) {
-        const node = <CommaListExpression>createSynthesizedNode(SyntaxKind.CommaListExpression);
-        node.elements = createNodeArray(sameFlatMap(elements, flattenCommaElements));
+    export function createOperatorList(elements: ReadonlyArray<Expression>, operator: Token<BinaryOperator>) {
+        const node = <OperatorListExpression>createSynthesizedNode(SyntaxKind.OperatorListExpression);
+        node.operatorToken = operator;
+        node.elements = createNodeArray(sameFlatMap(elements, flattenOperatorListElements));
         return node;
     }
 
-    export function updateCommaList(node: CommaListExpression, elements: ReadonlyArray<Expression>) {
+    export function updateOperatorList(node: OperatorListExpression, elements: ReadonlyArray<Expression>, operator: Token<BinaryOperator>) {
         return node.elements !== elements
-            ? updateNode(createCommaList(elements), node)
+            ? updateNode(createOperatorList(elements, operator), node)
             : node;
     }
 
@@ -3510,12 +3511,16 @@ namespace ts {
         return { target, thisArg };
     }
 
-    export function inlineExpressions(expressions: ReadonlyArray<Expression>) {
+    export function inlineCommas(expressions: ReadonlyArray<Expression>) {
+        return inlineExpressions(expressions, createToken(SyntaxKind.CommaToken));
+    }
+
+    export function inlineExpressions(expressions: ReadonlyArray<Expression>, operator: Token<BinaryOperator>) {
         // Avoid deeply nested comma expressions as traversing them during emit can result in "Maximum call
         // stack size exceeded" errors.
         return expressions.length > 10
-            ? createCommaList(expressions)
-            : reduceLeft(expressions, createComma)!;
+            ? createOperatorList(expressions, operator)
+            : reduceLeft(expressions, (l, r) => createBinary(l, operator, r))!;
     }
 
     export function createExpressionFromEntityName(node: EntityName | Expression): Expression {
@@ -4145,7 +4150,7 @@ namespace ts {
      * Basically, that means we need to parenthesize in the following cases:
      *
      * - BinaryExpression of CommaToken
-     * - CommaList (synthetic list of multiple comma expressions)
+     * - OperatorList of CommaToken (list of multiple comma expressions)
      * - FunctionExpression
      * - ClassExpression
      */
@@ -4355,9 +4360,9 @@ namespace ts {
         return body;
     }
 
-    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | CommaListExpression {
-        return node.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>node).operatorToken.kind === SyntaxKind.CommaToken ||
-            node.kind === SyntaxKind.CommaListExpression;
+    export function isCommaSequence(node: Expression): node is BinaryExpression & {operatorToken: Token<SyntaxKind.CommaToken>} | OperatorListExpression & {operatorToken: Token<SyntaxKind.CommaToken>} {
+        return (node.kind === SyntaxKind.BinaryExpression || node.kind === SyntaxKind.OperatorListExpression) &&
+            (<BinaryExpression | OperatorListExpression>node).operatorToken.kind === SyntaxKind.CommaToken;
     }
 
     export const enum OuterExpressionKinds {

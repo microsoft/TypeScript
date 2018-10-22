@@ -967,8 +967,8 @@ namespace ts {
                     case SyntaxKind.PartiallyEmittedExpression:
                         return emitPartiallyEmittedExpression(<PartiallyEmittedExpression>node);
 
-                    case SyntaxKind.CommaListExpression:
-                        return emitCommaList(<CommaListExpression>node);
+                    case SyntaxKind.OperatorListExpression:
+                        return emitOperatorList(node as OperatorListExpression);
                 }
             }
         }
@@ -2664,8 +2664,8 @@ namespace ts {
             emitExpression(node.expression);
         }
 
-        function emitCommaList(node: CommaListExpression) {
-            emitExpressionList(node, node.elements, ListFormat.CommaListElements);
+        function emitOperatorList(node: OperatorListExpression) {
+            emitExpressionList(node, node.elements, ListFormat.OperatorListElements, /*start*/ undefined, /*count*/ undefined, node.operatorToken);
         }
 
         /**
@@ -2856,15 +2856,15 @@ namespace ts {
             emitList(parentNode, parameters, ListFormat.IndexSignatureParameters);
         }
 
-        function emitList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
-            emitNodeList(emit, parentNode, children, format, start, count);
+        function emitList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number, delimiter?: Token<BinaryOperator>) {
+            emitNodeList(emit, parentNode, children, format, start, count, delimiter);
         }
 
-        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number) {
-            emitNodeList(emitExpression as (node: Node) => void, parentNode, children, format, start, count); // TODO: GH#18217
+        function emitExpressionList(parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start?: number, count?: number, delimiter?: Token<BinaryOperator>) {
+            emitNodeList(emitExpression as (node: Node) => void, parentNode, children, format, start, count, delimiter); // TODO: GH#18217
         }
 
-        function writeDelimiter(format: ListFormat) {
+        function writeDelimiter(format: ListFormat, delimiter?: Token<BinaryOperator>) {
             switch (format & ListFormat.DelimitersMask) {
                 case ListFormat.None:
                     break;
@@ -2879,10 +2879,15 @@ namespace ts {
                     writeSpace();
                     writePunctuation("&");
                     break;
+                case ListFormat.OperatorDelimited:
+                    if (delimiter) {
+                        emit(delimiter);
+                    }
+                    break;
             }
         }
 
-        function emitNodeList(emit: (node: Node) => void, parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start = 0, count = children ? children.length - start : 0) {
+        function emitNodeList(emit: (node: Node) => void, parentNode: TextRange, children: NodeArray<Node> | undefined, format: ListFormat, start = 0, count = children ? children.length - start : 0, delimiter?: Token<BinaryOperator>) {
             const isUndefined = children === undefined;
             if (isUndefined && format & ListFormat.OptionalIfUndefined) {
                 return;
@@ -2954,7 +2959,7 @@ namespace ts {
                         if (format & ListFormat.DelimitersMask && previousSibling.end !== parentNode.end) {
                             emitLeadingCommentsOfPosition(previousSibling.end);
                         }
-                        writeDelimiter(format);
+                        writeDelimiter(format, delimiter);
 
                         // Write either a line terminator or whitespace to separate the elements.
                         if (shouldWriteSeparatingLineTerminator(previousSibling, child, format)) {

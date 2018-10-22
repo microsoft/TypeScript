@@ -2826,9 +2826,6 @@ namespace ts {
 
     export function getOperatorPrecedence(nodeKind: SyntaxKind, operatorKind: SyntaxKind, hasArguments?: boolean) {
         switch (nodeKind) {
-            case SyntaxKind.CommaListExpression:
-                return 0;
-
             case SyntaxKind.SpreadElement:
                 return 1;
 
@@ -2839,6 +2836,7 @@ namespace ts {
                 return 4;
 
             case SyntaxKind.BinaryExpression:
+            case SyntaxKind.OperatorListExpression:
                 switch (operatorKind) {
                     case SyntaxKind.CommaToken:
                         return 0;
@@ -6450,7 +6448,7 @@ namespace ts {
             case SyntaxKind.SpreadElement:
             case SyntaxKind.AsExpression:
             case SyntaxKind.OmittedExpression:
-            case SyntaxKind.CommaListExpression:
+            case SyntaxKind.OperatorListExpression:
             case SyntaxKind.PartiallyEmittedExpression:
                 return true;
             default:

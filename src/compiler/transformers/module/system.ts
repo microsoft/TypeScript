@@ -759,7 +759,7 @@ namespace ts {
 
             let statements: Statement[] | undefined;
             if (expressions) {
-                statements = append(statements, setTextRange(createExpressionStatement(inlineExpressions(expressions)), node));
+                statements = append(statements, setTextRange(createExpressionStatement(inlineCommas(expressions)), node));
             }
 
             if (isMarkedDeclaration) {
@@ -1298,7 +1298,7 @@ namespace ts {
                     }
                 }
 
-                return expressions ? inlineExpressions(expressions) : createOmittedExpression();
+                return expressions ? inlineCommas(expressions) : createOmittedExpression();
             }
             else {
                 return visitEachChild(node, nestedElementVisitor, context);

@@ -250,6 +250,8 @@ namespace ts {
                 return visitNode(cbNode, (<BinaryExpression>node).left) ||
                     visitNode(cbNode, (<BinaryExpression>node).operatorToken) ||
                     visitNode(cbNode, (<BinaryExpression>node).right);
+            case SyntaxKind.OperatorListExpression:
+                return visitNodes(cbNode, cbNodes, (<OperatorListExpression>node).elements);
             case SyntaxKind.AsExpression:
                 return visitNode(cbNode, (<AsExpression>node).expression) ||
                     visitNode(cbNode, (<AsExpression>node).type);
@@ -418,8 +420,8 @@ namespace ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators);
-            case SyntaxKind.CommaListExpression:
-                return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
+            // case SyntaxKind.CommaListExpression:
+            //     return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (<JsxElement>node).openingElement) ||

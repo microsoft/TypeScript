@@ -27,7 +27,7 @@ namespace ts {
                 checkExpression(createTaggedTemplate(func, createNoSubstitutionTemplateLiteral("")));
 
                 checkExpression(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
-                checkExpression(createCommaList([createLiteral("a"), createLiteral("b")]));
+                checkExpression(createOperatorList([createLiteral("a"), createLiteral("b")], createToken(SyntaxKind.CommaToken)));
             });
         });
 
@@ -49,7 +49,7 @@ namespace ts {
                 checkBody(createPropertyAccess(createObjectLiteral(), "prop"));
                 checkBody(createAsExpression(createPropertyAccess(createObjectLiteral(), "prop"), createTypeReferenceNode("T", /*typeArguments*/ undefined)));
                 checkBody(createNonNullExpression(createPropertyAccess(createObjectLiteral(), "prop")));
-                checkBody(createCommaList([createLiteral("a"), createLiteral("b")]));
+                checkBody(createOperatorList([createLiteral("a"), createLiteral("b")], createToken(SyntaxKind.CommaToken)));
                 checkBody(createBinary(createLiteral("a"), SyntaxKind.CommaToken, createLiteral("b")));
             });
         });

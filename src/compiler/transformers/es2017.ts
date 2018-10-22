@@ -350,7 +350,7 @@ namespace ts {
                 return undefined;
             }
 
-            return inlineExpressions(map(variables, transformInitializedVariable));
+            return inlineCommas(map(variables, transformInitializedVariable));
         }
 
         function hoistVariableDeclarationList(node: VariableDeclarationList) {
