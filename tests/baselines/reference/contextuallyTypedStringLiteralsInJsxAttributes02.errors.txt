@@ -1,6 +1,6 @@
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(27,13): error TS2322: Type '{ extra: true; onClick: (k: "left" | "right") => void; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
-tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(28,13): error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(28,13): error TS2322: Type '{ onClick: (k: any) => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
 tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(29,13): error TS2322: Type '{ extra: true; goTo: "home"; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
@@ -45,7 +45,7 @@ tests/cases/conformance/types/contextualTypes/jsxAttributes/file.tsx(36,13): err
 !!! error TS2322:   Property 'extra' does not exist on type 'IntrinsicAttributes & LinkProps'.
     const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type "left" | "right"
                 ~~~~~~~~~~
-!!! error TS2322: Type '{ onClick: (k: "left" | "right") => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
+!!! error TS2322: Type '{ onClick: (k: any) => void; extra: true; }' is not assignable to type 'IntrinsicAttributes & LinkProps'.
 !!! error TS2322:   Property 'onClick' does not exist on type 'IntrinsicAttributes & LinkProps'.
     const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
                 ~~~~~~~~~~
