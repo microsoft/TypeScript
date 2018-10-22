@@ -1895,12 +1895,9 @@ namespace ts {
 
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
-                if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-                    collectDynamicImportOrRequireCalls(node);
-                }
             }
             if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-                collectDynamicImportOrRequireCalls(file.endOfFileToken);
+                collectDynamicImportOrRequireCalls(file);
             }
 
             file.imports = imports || emptyArray;
@@ -1952,25 +1949,38 @@ namespace ts {
                 }
             }
 
-            function collectDynamicImportOrRequireCalls(node: Node): void {
-                if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
-                    imports = append(imports, node.arguments[0]);
-                }
-                // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
-                else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
-                    imports = append(imports, node.arguments[0] as StringLiteralLike);
-                }
-                else if (isLiteralImportTypeNode(node)) {
-                    imports = append(imports, node.argument.literal);
-                }
-                collectDynamicImportOrRequireCallsForEachChild(node);
-                if (hasJSDocNodes(node)) {
-                    forEach(node.jsDoc, collectDynamicImportOrRequireCallsForEachChild);
+            function collectDynamicImportOrRequireCalls(file: SourceFile) {
+                const r = /import|require/g;
+                while (r.exec(file.text) !== null) {
+                    const node = getTokenAtPosition(file, r.lastIndex);
+                    if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
+                        imports = append(imports, node.arguments[0]);
+                    }
+                    // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
+                    else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                        imports = append(imports, node.arguments[0] as StringLiteralLike);
+                    }
+                    else if (isLiteralImportTypeNode(node)) {
+                        imports = append(imports, node.argument.literal);
+                    }
                 }
             }
 
-            function collectDynamicImportOrRequireCallsForEachChild(node: Node) {
-                forEachChild(node, collectDynamicImportOrRequireCalls);
+            /** Returns a token if position is in [start-of-leading-trivia, end) */
+            function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+                let current: Node = sourceFile;
+                const getContainingChild = (child: Node) => {
+                    if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
+                        return child;
+                    }
+                };
+                while (true) {
+                    const child = hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+                    if (!child) {
+                        return current;
+                    }
+                    current = child;
+                }
             }
         }
 
