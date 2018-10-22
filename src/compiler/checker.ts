@@ -11932,7 +11932,11 @@ namespace ts {
                 let originalErrorInfo: DiagnosticMessageChain | undefined;
                 const saveErrorInfo = errorInfo;
 
-                if (source.aliasSymbol && source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
+                // We limit alias variance probing to only object and conditional types since their alias behavior
+                // is more predictable than other, interned types, which may or may not have an alias depending on
+                // the order in which things were checked.
+                if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
+                    source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
                     !(getAliasArgumentsContainsMarker(source) || getAliasArgumentsContainsMarker(target))) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
