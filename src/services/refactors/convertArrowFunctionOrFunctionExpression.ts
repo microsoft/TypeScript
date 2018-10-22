@@ -172,7 +172,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const head = statements[0];
         let body: ConciseBody;
 
-        if (func.body.statements.length === 1 && (isReturnStatement(head) || isExpressionStatement(head))) {
+        if (func.body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression) || isExpressionStatement(head))) {
             body = head.expression!;
             suppressLeadingAndTrailingTrivia(body);
             copyComments(head, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
