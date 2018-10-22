@@ -568,9 +568,19 @@ namespace ts.server {
                     const { openFiles } = event.data;
                     this.projectsUpdatedInBackgroundEvent(openFiles);
                     break;
+                case ProjectLoadingStartEvent:
+                    const { project, reason } = event.data;
+                    this.event<protocol.ProjectLoadingStartEventBody>(
+                        { projectName: project.getProjectName(), reason },
+                        ProjectLoadingStartEvent);
+                    break;
+                case ProjectLoadingFinishEvent:
+                    const { project: finishProject } = event.data;
+                    this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingStartEvent);
+                    break;
                 case LargeFileReferencedEvent:
                     const { file, fileSize, maxFileSize } = event.data;
-                    this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, "largeFileReferenced");
+                    this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, LargeFileReferencedEvent);
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
@@ -579,14 +589,14 @@ namespace ts.server {
                         triggerFile,
                         configFile,
                         diagnostics: bakedDiags
-                    }, "configFileDiag");
+                    }, ConfigFileDiagEvent);
                     break;
                 case SurveyReady:
                     const { surveyId } = event.data;
-                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, "surveyReady");
+                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, SurveyReady);
                     break;
                 case ProjectLanguageServiceStateEvent: {
-                    const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+                    const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                     this.event<protocol.ProjectLanguageServiceStateEventBody>({
                         projectName: event.data.project.getProjectName(),
                         languageServiceEnabled: event.data.languageServiceEnabled
@@ -617,11 +627,15 @@ namespace ts.server {
                 // Send project changed event
                 this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
                     openFiles
-                }, "projectsUpdatedInBackground");
+                }, ProjectsUpdatedInBackgroundEvent);
             }
         }
 
-        public logError(err: Error, cmd: string) {
+        public logError(err: Error, cmd: string): void {
+            this.logErrorWorker(err, cmd);
+        }
+
+        private logErrorWorker(err: Error, cmd: string, fileRequest?: protocol.FileRequestArgs): void {
             let msg = "Exception on executing command " + cmd;
             if (err.message) {
                 msg += ":\n" + indent(err.message);
@@ -629,6 +643,19 @@ namespace ts.server {
                     msg += "\n" + indent((<StackTraceError>err).stack!);
                 }
             }
+
+            if (fileRequest && this.logger.hasLevel(LogLevel.verbose)) {
+                try {
+                    const { file, project } = this.getFileAndProject(fileRequest);
+                    const scriptInfo = project.getScriptInfoForNormalizedPath(file);
+                    if (scriptInfo) {
+                        const text = getSnapshotText(scriptInfo.getSnapshot());
+                        msg += `\n\nFile text of ${fileRequest.file}:${indent(text)}\n`;
+                    }
+                }
+                catch {} // tslint:disable-line no-empty
+            }
+
             this.logger.msg(msg, Msg.Err);
         }
 
@@ -1167,16 +1194,24 @@ namespace ts.server {
             return { info: renameInfo, locs: this.toSpanGroups(locations) };
         }
 
-        private mapRenameInfo({ canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan }: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
-            return { canRename, localizedErrorMessage, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) };
+        private mapRenameInfo(info: RenameInfo, scriptInfo: ScriptInfo): protocol.RenameInfo {
+            if (info.canRename) {
+                const { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan } = info;
+                return identity<protocol.RenameInfoSuccess>(
+                    { canRename, fileToRename, displayName, fullDisplayName, kind, kindModifiers, triggerSpan: this.toLocationTextSpan(triggerSpan, scriptInfo) });
+            }
+            else {
+                return info;
+            }
         }
 
         private toSpanGroups(locations: ReadonlyArray<RenameLocation>): ReadonlyArray<protocol.SpanGroup> {
             const map = createMap<protocol.SpanGroup>();
-            for (const { fileName, textSpan } of locations) {
+            for (const { fileName, textSpan, originalTextSpan: _, originalFileName: _1, ...prefixSuffixText } of locations) {
                 let group = map.get(fileName);
                 if (!group) map.set(fileName, group = { file: fileName, locs: [] });
-                group.locs.push(this.toLocationTextSpan(textSpan, Debug.assertDefined(this.projectService.getScriptInfo(fileName))));
+                const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
+                group.locs.push({ ...this.toLocationTextSpan(textSpan, scriptInfo), ...prefixSuffixText });
             }
             return arrayFrom(map.values());
         }
@@ -2323,8 +2358,10 @@ namespace ts.server {
             }
 
             let request: protocol.Request | undefined;
+            let relevantFile: protocol.FileRequestArgs | undefined;
             try {
                 request = <protocol.Request>JSON.parse(message);
+                relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2350,7 +2387,7 @@ namespace ts.server {
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
-                this.logError(err, message);
+                this.logErrorWorker(err, message, relevantFile);
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,

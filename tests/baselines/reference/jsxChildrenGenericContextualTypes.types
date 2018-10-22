@@ -116,17 +116,17 @@ const arg = <ElemLit prop="x" children={p => "y"} />
 >arg : JSX.Element
 ><ElemLit prop="x" children={p => "y"} /> : JSX.Element
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
->prop : "x"
->children : (p: LitProps<"x">) => "y"
->p => "y" : (p: LitProps<"x">) => "y"
->p : LitProps<"x">
+>prop : string
+>children : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
+>p => "y" : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
+>p : JSX.IntrinsicAttributes & LitProps<"x">
 >"y" : "y"
 
 const argchild = <ElemLit prop="x">{p => "y"}</ElemLit>
 >argchild : JSX.Element
 ><ElemLit prop="x">{p => "y"}</ElemLit> : JSX.Element
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
->prop : "x"
+>prop : string
 >p => "y" : (p: JSX.IntrinsicAttributes & LitProps<"x">) => "y"
 >p : JSX.IntrinsicAttributes & LitProps<"x">
 >"y" : "y"
@@ -136,7 +136,7 @@ const mismatched = <ElemLit prop="x">{() => 12}</ElemLit>
 >mismatched : JSX.Element
 ><ElemLit prop="x">{() => 12}</ElemLit> : JSX.Element
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element
->prop : "x"
+>prop : string
 >() => 12 : () => number
 >12 : 12
 >ElemLit : <T extends string>(p: LitProps<T>) => JSX.Element

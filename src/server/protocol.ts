@@ -1087,22 +1087,17 @@ namespace ts.server.protocol {
     /**
      * Information about the item to be renamed.
      */
-    export interface RenameInfo {
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
         /**
          * True if item can be renamed.
          */
-        canRename: boolean;
-
+        canRename: true;
         /**
          * File or directory to rename.
          * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
          */
         fileToRename?: string;
-
-        /**
-         * Error message if item can not be renamed.
-         */
-        localizedErrorMessage?: string;
 
         /**
          * Display name of the item to be renamed.
@@ -1127,6 +1122,13 @@ namespace ts.server.protocol {
         /** Span of text to rename. */
         triggerSpan: TextSpan;
     }
+    export interface RenameInfoFailure {
+        canRename: false;
+        /**
+         * Error message if item can not be renamed.
+         */
+        localizedErrorMessage: string;
+    }
 
     /**
      *  A group of text spans, all in 'file'.
@@ -1135,7 +1137,12 @@ namespace ts.server.protocol {
         /** The file to which the spans apply */
         file: string;
         /** The text spans in this group */
-        locs: TextSpan[];
+        locs: RenameTextSpan[];
+    }
+
+    export interface RenameTextSpan extends TextSpan {
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
 
     export interface RenameResponseBody {
@@ -2445,6 +2452,30 @@ namespace ts.server.protocol {
         openFiles: string[];
     }
 
+    export type ProjectLoadingStartEventName = "projectLoadingStart";
+    export interface ProjectLoadingStartEvent extends Event {
+        event: ProjectLoadingStartEventName;
+        body: ProjectLoadingStartEventBody;
+    }
+
+    export interface ProjectLoadingStartEventBody {
+        /** name of the project */
+        projectName: string;
+        /** reason for loading */
+        reason: string;
+    }
+
+    export type ProjectLoadingFinishEventName = "projectLoadingFinish";
+    export interface ProjectLoadingFinishEvent extends Event {
+        event: ProjectLoadingFinishEventName;
+        body: ProjectLoadingFinishEventBody;
+    }
+
+    export interface ProjectLoadingFinishEventBody {
+        /** name of the project */
+        projectName: string;
+    }
+
     export type SurveyReadyEventName = "surveyReady";
 
     export interface SurveyReadyEvent extends Event {
@@ -2739,6 +2770,7 @@ namespace ts.server.protocol {
 
 /* __GDPR__
    "typingsinstalled" : {
+        "${include}": ["${TypeScriptCommonProperties}"],
         "installedPackages": { "classification": "PublicNonPersonalData", "purpose": "FeatureInsight" },
         "installSuccess": { "classification": "SystemMetaData", "purpose": "FeatureInsight" },
         "typingsInstallerVersion": { "classification": "SystemMetaData", "purpose": "FeatureInsight" }

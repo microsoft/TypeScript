@@ -148,7 +148,38 @@ namespace ts.BuilderState {
             });
         }
 
+        // Add module augmentation as references
+        if (sourceFile.moduleAugmentations.length) {
+            const checker = program.getTypeChecker();
+            for (const moduleName of sourceFile.moduleAugmentations) {
+                if (!isStringLiteral(moduleName)) { continue; }
+                const symbol = checker.getSymbolAtLocation(moduleName);
+                if (!symbol) { continue; }
+
+                // Add any file other than our own as reference
+                addReferenceFromAmbientModule(symbol);
+            }
+        }
+
+        // From ambient modules
+        for (const ambientModule of program.getTypeChecker().getAmbientModules()) {
+            if (ambientModule.declarations.length > 1) {
+                addReferenceFromAmbientModule(ambientModule);
+            }
+        }
+
         return referencedFiles;
+
+        function addReferenceFromAmbientModule(symbol: Symbol) {
+            // Add any file other than our own as reference
+            for (const declaration of symbol.declarations) {
+                const declarationSourceFile = getSourceFileOfNode(declaration);
+                if (declarationSourceFile &&
+                    declarationSourceFile !== sourceFile) {
+                    addReferencedFile(declarationSourceFile.resolvedPath);
+                }
+            }
+        }
 
         function addReferencedFile(referencedPath: Path) {
             if (!referencedFiles) {
@@ -261,6 +292,11 @@ namespace ts.BuilderState {
         let latestSignature: string;
         if (sourceFile.isDeclarationFile) {
             latestSignature = sourceFile.version;
+            if (exportedModulesMapCache && latestSignature !== prevSignature) {
+                // All the references in this file are exported
+                const references = state.referencedMap ? state.referencedMap.get(sourceFile.path) : undefined;
+                exportedModulesMapCache.set(sourceFile.path, references || false);
+            }
         }
         else {
             const emitOutput = getFileEmitOutput(programOfThisState, sourceFile, /*emitOnlyDtsFiles*/ true, cancellationToken);

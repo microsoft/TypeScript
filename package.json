@@ -1,8 +1,8 @@
 {
     "name": "typescript",
     "author": "Microsoft Corp.",
-    "homepage": "http://typescriptlang.org/",
-    "version": "3.1.0",
+    "homepage": "https://www.typescriptlang.org/",
+    "version": "3.2.0",
     "license": "Apache-2.0",
     "description": "TypeScript is a language for application scale JavaScript development",
     "keywords": [

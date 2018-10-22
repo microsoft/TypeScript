@@ -184,7 +184,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_does_not_exist);
+                assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_not_found);
             });
         });
 

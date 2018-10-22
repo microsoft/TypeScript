@@ -83,8 +83,8 @@ var eleFromCDA1 = classCDATuple[2]; // A
 >2 : 2
 
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
->eleFromCDA2 : A | C | D
->classCDATuple[5] : A | C | D
+>eleFromCDA2 : undefined
+>classCDATuple[5] : undefined
 >classCDATuple : [C, D, A]
 >5 : 5
 
