@@ -1337,15 +1337,9 @@ namespace ts {
             !bindingElement.propertyName;
     }
 
-    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName) {
+    export function getPropertySymbolFromBindingElement(checker: TypeChecker, bindingElement: ObjectBindingElementWithoutPropertyName): Symbol | undefined {
         const typeOfPattern = checker.getTypeAtLocation(bindingElement.parent);
-        const propSymbol = typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
-        if (propSymbol && propSymbol.flags & SymbolFlags.Accessor) {
-            // See GH#16922
-            Debug.assert(!!(propSymbol.flags & SymbolFlags.Transient));
-            return (propSymbol as TransientSymbol).target;
-        }
-        return propSymbol;
+        return typeOfPattern && checker.getPropertyOfType(typeOfPattern, bindingElement.name.text);
     }
 
     /**
