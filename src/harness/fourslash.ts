@@ -2043,7 +2043,8 @@ Actual: ${stringify(fullActual)}`);
         private goToMarkerOrRange(markerOrRange: string | Range) {
             if (typeof markerOrRange === "string") {
                 this.goToMarker(markerOrRange);
-            } else {
+            }
+            else {
                 this.goToRangeStart(markerOrRange);
             }
         }
