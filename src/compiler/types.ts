@@ -2802,6 +2802,7 @@ namespace ts {
         fileExists(path: string): boolean;
 
         readFile(path: string): string | undefined;
+        trace?(s: string): void;
     }
 
     /**

@@ -2977,7 +2977,8 @@ namespace ts {
             readFile: f => host.readFile(f),
             useCaseSensitiveFileNames: host.useCaseSensitiveFileNames(),
             getCurrentDirectory: () => host.getCurrentDirectory(),
-            onUnRecoverableConfigFileDiagnostic: () => undefined
+            onUnRecoverableConfigFileDiagnostic: () => undefined,
+            trace: host.trace ? (s) => host.trace!(s) : undefined
         };
     }
 

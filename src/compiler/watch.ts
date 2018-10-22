@@ -484,7 +484,8 @@ namespace ts {
             fileExists: path => host.fileExists(path),
             readFile,
             getCurrentDirectory,
-            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic
+            onUnRecoverableConfigFileDiagnostic: host.onUnRecoverableConfigFileDiagnostic,
+            trace: host.trace ? s => host.trace!(s) : undefined
         };
 
         // From tsc we want to get already parsed result and hence check for rootFileNames
