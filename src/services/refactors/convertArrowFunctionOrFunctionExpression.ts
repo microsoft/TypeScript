@@ -14,15 +14,15 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     interface FunctionInfo {
-        selectedVariableDeclaration: boolean;
-        func: FunctionExpression | ArrowFunction;
+        readonly selectedVariableDeclaration: boolean;
+        readonly func: FunctionExpression | ArrowFunction;
     }
 
     interface VariableInfo {
-        variableDeclaration: VariableDeclaration;
-        variableDeclarationList: VariableDeclarationList;
-        statement: VariableStatement;
-        name: Identifier;
+        readonly variableDeclaration: VariableDeclaration;
+        readonly variableDeclarationList: VariableDeclarationList;
+        readonly statement: VariableStatement;
+        readonly name: Identifier;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -114,12 +114,12 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return initializer;
     }
 
-    function convertToBlock(func: ArrowFunction | FunctionExpression): Block {
-        if (isExpression(func.body)) {
-            return createBlock([createReturn(func.body)], /* multiLine */ true);
+    function convertToBlock(body: ConciseBody): Block {
+        if (isExpression(body)) {
+            return createBlock([createReturn(body)], /* multiLine */ true);
         }
         else {
-            return func.body;
+            return body;
         }
     }
 
@@ -136,7 +136,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): RefactorEditInfo {
         const { file } = context;
-        const body = convertToBlock(func);
+        const body = convertToBlock(func.body);
         const newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
         const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
         return { renameFilename: undefined, renameLocation: undefined, edits };
@@ -144,7 +144,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
     function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): RefactorEditInfo | undefined {
         const { file } = context;
-        const body = convertToBlock(func);
+        const body = convertToBlock(func.body);
         const variableInfo = getVariableInfo(func);
         if (!variableInfo) return undefined;
 
