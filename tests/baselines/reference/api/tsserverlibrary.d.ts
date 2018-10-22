@@ -2694,7 +2694,7 @@ declare namespace ts {
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         createHash?(data: string): string;
     }
@@ -4656,9 +4656,9 @@ declare namespace ts {
         realpath?(path: string): string;
         fileExists?(path: string): boolean;
         getTypeRootsVersion?(): number;
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         getDirectories?(directoryName: string): string[];
         /**
          * Gets a set of custom transformers to use during emit.
