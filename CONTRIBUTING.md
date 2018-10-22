@@ -72,7 +72,7 @@ Your pull request should:
     * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
 * It is desirable, but not necessary, for the tests to pass at each commit
 * Have clear commit messages 
-    * e.g. "Refactor feature", "Fix issue", "Add tests for issue"
+    * e.g. "Minor refactor in goToTypeDefinition", "Fix iterated type in for-await-of", "Add test for preserveWatchOutput on command line"
 * Include adequate tests 
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
@@ -104,7 +104,7 @@ To run all tests, invoke the `runtests-parallel` target using jake:
 jake runtests-parallel
 ```
 
-This run will all tests; to run only a specific subset of tests, use:
+This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
 jake runtests tests=<regex>
@@ -194,6 +194,6 @@ to establish the new baselines as the desired behavior. This will change the fil
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in [`diagnosticInformationMap.generated.ts`](./src/compiler/diagnosticInformationMap.generated.ts).
+If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

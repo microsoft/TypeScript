@@ -228,3 +228,86 @@ function foo6(x: Item) {
 >length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+type Instance = StrType | NumType;
+>Instance : Symbol(Instance, Decl(discriminantPropertyCheck.ts, 70, 31))
+>StrType : Symbol(StrType, Decl(discriminantPropertyCheck.ts, 72, 34))
+>NumType : Symbol(NumType, Decl(discriminantPropertyCheck.ts, 78, 1))
+
+interface StrType {
+>StrType : Symbol(StrType, Decl(discriminantPropertyCheck.ts, 72, 34))
+
+    type: Types.Str;
+>type : Symbol(StrType.type, Decl(discriminantPropertyCheck.ts, 74, 19))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+
+    value: string;
+>value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+
+    length: number;
+>length : Symbol(StrType.length, Decl(discriminantPropertyCheck.ts, 76, 18))
+}
+
+interface NumType {
+>NumType : Symbol(NumType, Decl(discriminantPropertyCheck.ts, 78, 1))
+
+    type: Types.Num;
+>type : Symbol(NumType.type, Decl(discriminantPropertyCheck.ts, 80, 19))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+    value: number;
+>value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+}
+
+function func2(inst: Instance) {
+>func2 : Symbol(func2, Decl(discriminantPropertyCheck.ts, 83, 1))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>Instance : Symbol(Instance, Decl(discriminantPropertyCheck.ts, 70, 31))
+
+    while (true) {
+        switch (inst.type) {
+>inst.type : Symbol(type, Decl(discriminantPropertyCheck.ts, 74, 19), Decl(discriminantPropertyCheck.ts, 80, 19))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>type : Symbol(type, Decl(discriminantPropertyCheck.ts, 74, 19), Decl(discriminantPropertyCheck.ts, 80, 19))
+
+            case Types.Str: {
+>Types.Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Str : Symbol(Types.Str, Decl(discriminantPropertyCheck.ts, 70, 12))
+
+                inst.value.length;
+>inst.value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>inst.value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>value : Symbol(StrType.value, Decl(discriminantPropertyCheck.ts, 75, 20))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+
+                break;
+            }
+            case Types.Num: {
+>Types.Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+>Types : Symbol(Types, Decl(discriminantPropertyCheck.ts, 66, 1))
+>Num : Symbol(Types.Num, Decl(discriminantPropertyCheck.ts, 70, 21))
+
+                inst.value.toExponential;
+>inst.value.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+>inst.value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+>inst : Symbol(inst, Decl(discriminantPropertyCheck.ts, 85, 15))
+>value : Symbol(NumType.value, Decl(discriminantPropertyCheck.ts, 81, 20))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
+
+                break;
+            }
+        }
+    }
+}
+

@@ -568,9 +568,19 @@ namespace ts.server {
                     const { openFiles } = event.data;
                     this.projectsUpdatedInBackgroundEvent(openFiles);
                     break;
+                case ProjectLoadingStartEvent:
+                    const { project, reason } = event.data;
+                    this.event<protocol.ProjectLoadingStartEventBody>(
+                        { projectName: project.getProjectName(), reason },
+                        ProjectLoadingStartEvent);
+                    break;
+                case ProjectLoadingFinishEvent:
+                    const { project: finishProject } = event.data;
+                    this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingStartEvent);
+                    break;
                 case LargeFileReferencedEvent:
                     const { file, fileSize, maxFileSize } = event.data;
-                    this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, "largeFileReferenced");
+                    this.event<protocol.LargeFileReferencedEventBody>({ file, fileSize, maxFileSize }, LargeFileReferencedEvent);
                     break;
                 case ConfigFileDiagEvent:
                     const { triggerFile, configFileName: configFile, diagnostics } = event.data;
@@ -579,14 +589,14 @@ namespace ts.server {
                         triggerFile,
                         configFile,
                         diagnostics: bakedDiags
-                    }, "configFileDiag");
+                    }, ConfigFileDiagEvent);
                     break;
                 case SurveyReady:
                     const { surveyId } = event.data;
-                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, "surveyReady");
+                    this.event<protocol.SurveyReadyEventBody>({ surveyId }, SurveyReady);
                     break;
                 case ProjectLanguageServiceStateEvent: {
-                    const eventName: protocol.ProjectLanguageServiceStateEventName = "projectLanguageServiceState";
+                    const eventName: protocol.ProjectLanguageServiceStateEventName = ProjectLanguageServiceStateEvent;
                     this.event<protocol.ProjectLanguageServiceStateEventBody>({
                         projectName: event.data.project.getProjectName(),
                         languageServiceEnabled: event.data.languageServiceEnabled
@@ -617,7 +627,7 @@ namespace ts.server {
                 // Send project changed event
                 this.event<protocol.ProjectsUpdatedInBackgroundEventBody>({
                     openFiles
-                }, "projectsUpdatedInBackground");
+                }, ProjectsUpdatedInBackgroundEvent);
             }
         }
 

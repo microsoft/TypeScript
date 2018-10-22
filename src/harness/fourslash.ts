@@ -1181,12 +1181,7 @@ namespace FourSlash {
             }));
 
             for (const start of toArray<string | Range>(starts)) {
-                if (typeof start === "string") {
-                    this.goToMarker(start);
-                }
-                else {
-                    this.goToRangeStart(start);
-                }
+                this.goToMarkerOrRange(start);
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -1203,15 +1198,7 @@ namespace FourSlash {
         }
 
         public verifyNoReferences(markerNameOrRange?: string | Range) {
-            if (markerNameOrRange) {
-                if (ts.isString(markerNameOrRange)) {
-                    this.goToMarker(markerNameOrRange);
-                }
-                else {
-                    this.goToRangeStart(markerNameOrRange);
-                }
-            }
-
+            if (markerNameOrRange) this.goToMarkerOrRange(markerNameOrRange);
             const refs = this.getReferencesAtCaret();
             if (refs && refs.length) {
                 this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
@@ -1328,8 +1315,10 @@ Actual: ${stringify(fullActual)}`);
             })));
         }
 
-        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
-            this.goToMarker(markerName);
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
+            if (typeof markerName === "string") this.goToMarker(markerName);
+            else this.goToRangeStart(markerName);
+
             this.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
@@ -2051,6 +2040,14 @@ Actual: ${stringify(fullActual)}`);
             this.goToPosition(len);
         }
 
+        private goToMarkerOrRange(markerOrRange: string | Range) {
+            if (typeof markerOrRange === "string") {
+                this.goToMarker(markerOrRange);
+            } else {
+                this.goToRangeStart(markerOrRange);
+            }
+        }
+
         public goToRangeStart({ fileName, pos }: Range) {
             this.openFile(fileName);
             this.goToPosition(pos);
@@ -2516,10 +2513,10 @@ Actual: ${stringify(fullActual)}`);
          * @param expectedContents The contents of the file after the fixes are applied.
          * @param fileName The file to check. If not supplied, the current open file is used.
          */
-        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
+        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
             fileName = fileName ? fileName : this.activeFile.fileName;
 
-            this.applyCodeActions(this.getCodeFixes(fileName));
+            this.applyCodeActions(this.getCodeFixes(fileName), index);
 
             const actualContents: string = this.getFileContent(fileName);
             if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
@@ -4221,7 +4218,7 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
-        public quickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
         }
 
@@ -4386,6 +4383,10 @@ namespace FourSlashInterface {
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
+        }
+
+        public fileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
+            this.state.verifyFileAfterCodeFix(expectedContents, fileName, index);
         }
 
         public codeFixAll(options: VerifyCodeFixAllOptions): void {

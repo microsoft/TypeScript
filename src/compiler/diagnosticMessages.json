@@ -2116,6 +2116,10 @@
         "category": "Error",
         "code": 2586
     },
+    "JSDoc type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2587
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2480,10 +2484,6 @@
     "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
         "category": "Error",
         "code": 2732
-    },
-    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
-        "category": "Error",
-        "code": 2733
     },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
@@ -3762,6 +3762,10 @@
     "Enable strict 'bind', 'call', and 'apply' methods on functions.": {
         "category": "Message",
         "code": 6214
+    },
+    "Using compiler options of project reference redirect '{0}'.": {
+        "category": "Message",
+        "code": 6215
     },
 
     "Projects to reference": {

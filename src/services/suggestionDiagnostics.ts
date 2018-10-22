@@ -82,7 +82,7 @@ namespace ts {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                        isRequireCall(propertyAccessLeftHandSide(decl.initializer!), /*checkArgumentIsStringLiteralLike*/ true)); // TODO: GH#18217
+                        !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
                 case SyntaxKind.ExpressionStatement: {
                     const { expression } = statement as ExpressionStatement;
                     if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
