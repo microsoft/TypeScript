@@ -23,6 +23,7 @@
 ////    /** 1
 ////     * @return First one
 ////     */
+////    // intrusive comment (should not be deleted)
 ////    /** 2
 ////     * @see also
 ////     */
@@ -66,13 +67,14 @@ function f(x) {
 }
 
 var o = {
+    // intrusive comment (should not be deleted)
     /**
      * 1
      * 2
      * 3
      * @returns {number} First one
      * @see also
-     * @returns Second one
+     * @return Second one
      * @extends {C<number>} nothing really
      * @class
      * @this {*} doesn't make sense here

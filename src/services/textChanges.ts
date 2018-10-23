@@ -340,15 +340,18 @@ namespace ts.textChanges {
         }
 
         public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc) {
+            const fnStart = node.getStart(sourceFile);
             if (node.jsDoc) {
-                this.replaceNodeRange(sourceFile, first(node.jsDoc), last(node.jsDoc), tag, { preserveLeadingWhitespace: true, suffix: this.newLineCharacter });
+                for (const jsdoc of node.jsDoc) {
+                    this.deleteRange(sourceFile, {
+                        pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
+                        end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
+                    });
+                }
             }
-            else {
-                const fnStart = node.getStart(sourceFile);
-                const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
-                const indent = sourceFile.text.slice(startPosition + 1, fnStart);
-                this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: true, suffix: this.newLineCharacter + indent });
-            }
+            const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
+            const indent = sourceFile.text.slice(startPosition + 1, fnStart);
+            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
