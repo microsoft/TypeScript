@@ -185,6 +185,10 @@ namespace ts.codefix {
             const widenedType = checker.getWidenedType(checker.getBaseTypeOfLiteralType(checker.getTypeAtLocation(otherExpression)));
             typeNode = checker.typeToTypeNode(widenedType, classDeclaration);
         }
+        else {
+            const contextualType = checker.getContextualType(token.parent as Expression);
+            typeNode = contextualType ? checker.typeToTypeNode(contextualType) : undefined;
+        }
         return typeNode || createKeywordTypeNode(SyntaxKind.AnyKeyword);
     }
 
