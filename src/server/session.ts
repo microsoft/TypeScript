@@ -412,7 +412,7 @@ namespace ts.server {
     ): void {
         const projectService = defaultProject.projectService;
         let toDo: ProjectAndLocation<TLocation>[] | undefined;
-        const seenProjects = createMap<true>();
+        const seenProjects = createMap<Project>();
         forEachProjectInProjects(projects, initialLocation && initialLocation.fileName, (project, path) => {
             // TLocation shoud be either `DocumentPosition` or `undefined`. Since `initialLocation` is `TLocation` this cast should be valid.
             const location = (initialLocation ? { fileName: path, pos: initialLocation.pos } : undefined) as TLocation;
@@ -421,9 +421,11 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (getDefinition) {
+            projectService.loadAncestorAndReferenceConfiguredProjects(seenProjects);
+
             const memGetDefinition = memoize(getDefinition);
             projectService.forEachEnabledProject(project => {
-                if (!addToSeen(seenProjects, project.projectName)) return;
+                if (!addToSeen(seenProjects, project)) return;
                 const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
                 if (definition) {
                     toDo = callbackProjectAndLocation<TLocation>({ project, location: definition as TLocation }, projectService, toDo, seenProjects, cb);
@@ -442,16 +444,24 @@ namespace ts.server {
         return mappedDefinition && project.containsFile(toNormalizedPath(mappedDefinition.fileName)) ? mappedDefinition : undefined;
     }
 
+    function addToSeen(seenProjects: Map<Project>, project: Project) {
+        return ts.addToSeen(seenProjects, getProjectKey(project), project);
+    }
+
+    function getProjectKey(project: Project) {
+        return project.projectKind === ProjectKind.Configured ? (project as ConfiguredProject).canonicalConfigFilePath : project.projectName;
+    }
+
     function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(
         projectAndLocation: ProjectAndLocation<TLocation>,
         projectService: ProjectService,
         toDo: ProjectAndLocation<TLocation>[] | undefined,
-        seenProjects: Map<true>,
+        seenProjects: Map<Project>,
         cb: CombineProjectOutputCallback<TLocation>,
     ): ProjectAndLocation<TLocation>[] | undefined {
         if (projectAndLocation.project.getCancellationToken().isCancellationRequested()) return undefined; // Skip rest of toDo if cancelled
         cb(projectAndLocation, (project, location) => {
-            seenProjects.set(projectAndLocation.project.projectName, true);
+            seenProjects.set(getProjectKey(projectAndLocation.project), projectAndLocation.project);
             const originalLocation = projectService.getOriginalLocationEnsuringConfiguredProject(project, location);
             if (!originalLocation) return undefined;
 
@@ -472,8 +482,8 @@ namespace ts.server {
         return toDo;
     }
 
-    function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<true>): void {
-        if (addToSeen(seenProjects, projectAndLocation.project.projectName)) toDo.push(projectAndLocation);
+    function addToTodo<TLocation extends DocumentPosition | undefined>(projectAndLocation: ProjectAndLocation<TLocation>, toDo: Push<ProjectAndLocation<TLocation>>, seenProjects: Map<Project>): void {
+        if (addToSeen(seenProjects, projectAndLocation.project)) toDo.push(projectAndLocation);
     }
 
     function documentSpanLocation({ fileName, textSpan }: DocumentSpan): DocumentPosition {

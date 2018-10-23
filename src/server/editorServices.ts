@@ -2533,6 +2533,28 @@ namespace ts.server {
             }
         }
 
+        /*@internal*/
+        loadAncestorAndReferenceConfiguredProjects(forProjects: ReadonlyMap<Project>) {
+            // Load all the projects ancestor projects for seen projects
+            this.configuredProjects.forEach(project => {
+                if (project.isInitialLoadPending() &&
+                    project.forEachProjectReference(returnFalse, returnFalse, path => forProjects.has(path))) {
+                    // Load the project
+                    project.updateGraph();
+                    // We want to also load the referenced projects
+                    // TODO:: Save them when project stays alive but at lower priority
+                    project.forEachProjectReference(ref => {
+                        if (ref) {
+                            const configFileName = toNormalizedPath(ref.sourceFile.fileName);
+                            const configuredProject = this.findConfiguredProjectByProjectName(configFileName) ||
+                                this.createAndLoadConfiguredProject(toNormalizedPath(configFileName), `Creating project for transitive reference of ancestor project: ${project.projectName}`);
+                            updateProjectIfDirty(configuredProject);
+                        }
+                    }, noop, noop);
+                }
+            });
+        }
+
         private removeOrphanConfiguredProjects() {
             const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
 
@@ -2546,7 +2568,7 @@ namespace ts.server {
                     markOriginalProjectsAsUsed(project);
                 }
                 else {
-                    project.forEachResolvedProjectReference(
+                    project.forEachProjectReference(
                         resolvedRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, resolvedRef && this.configuredProjects.get(resolvedRef.sourceFile.path)),
                         projectRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, this.configuredProjects.get(this.toPath(projectRef.path))),
                         potentialProjectRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, this.configuredProjects.get(potentialProjectRef))
