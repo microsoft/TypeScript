@@ -731,11 +731,11 @@ namespace ts {
         readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
 
-    export function getDefaultFormatCodeSettings(newLineCharacter = "\n"): FormatCodeSettings {
+    export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
         return {
             indentSize: 4,
             tabSize: 4,
-            newLineCharacter,
+            newLineCharacter: newLineCharacter || "\n",
             convertTabsToSpaces: true,
             indentStyle: IndentStyle.Smart,
             insertSpaceAfterConstructor: false,

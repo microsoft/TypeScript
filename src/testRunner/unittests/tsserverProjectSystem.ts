@@ -6834,7 +6834,7 @@ namespace ts.projectSystem {
                             {
                                 start: { line: 0, offset: 0 },
                                 end: { line: 0, offset: 0 },
-                                newText: "export const a = 0;",
+                                newText: "export const a = 0;\n",
                             },
                         ],
                     }
