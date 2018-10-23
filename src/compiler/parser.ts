@@ -3847,17 +3847,14 @@ namespace ts {
         }
 
         function makeOperatorListOrBinary(exprs: Expression[], leftOperand: Expression, operandTokens: Token<BinaryOperator>[], highestOperatorToken: BinaryOperator) {
-            // TODO: Skip the unroll for long lists
-            // if (exprs.length > 10) {
-            //     exprs.push(leftOperand);
-            //     const list = createNode(SyntaxKind.OperatorListExpression, exprs[0].pos) as OperatorListExpression;
-            //     list.elements = createNodeArray(exprs, exprs[0].pos);
-            //     list.operatorToken = operandTokens[0];
-            //     return finishNode(list);
-            // }
-
-           exprs.push(leftOperand);
-            if (highestOperatorToken === SyntaxKind.AsteriskAsteriskToken) {
+            exprs.push(leftOperand);
+            if (exprs.length > 10) {
+                const list = createNode(SyntaxKind.OperatorListExpression, exprs[0].pos) as OperatorListExpression;
+                list.elements = createNodeArray(exprs, exprs[0].pos);
+                list.operatorToken = operandTokens[0];
+                return finishNode(list);
+            }
+            else if (highestOperatorToken === SyntaxKind.AsteriskAsteriskToken) {
                 return reduceRight(exprs, (l, r, i) => makeBinaryExpression(l, operandTokens[i], r, r.end))!;
             }
             else {

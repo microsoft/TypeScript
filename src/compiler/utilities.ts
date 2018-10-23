@@ -1576,6 +1576,7 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
             case SyntaxKind.PostfixUnaryExpression:
             case SyntaxKind.BinaryExpression:
+            case SyntaxKind.OperatorListExpression:
             case SyntaxKind.ConditionalExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.TemplateExpression:
@@ -2243,9 +2244,11 @@ namespace ts {
         let parent = node.parent;
         while (true) {
             switch (parent.kind) {
+                case SyntaxKind.OperatorListExpression:
                 case SyntaxKind.BinaryExpression:
-                    const binaryOperator = (<BinaryExpression>parent).operatorToken.kind;
-                    return isAssignmentOperator(binaryOperator) && (<BinaryExpression>parent).left === node ?
+                    const binaryOperator = (<BinaryExpression | OperatorListExpression>parent).operatorToken.kind;
+                    const leftMost = isBinaryExpression(parent) ? parent.left : (parent as OperatorListExpression).elements[0];
+                    return isAssignmentOperator(binaryOperator) && leftMost === node ?
                         binaryOperator === SyntaxKind.EqualsToken ? AssignmentKind.Definite : AssignmentKind.Compound :
                         AssignmentKind.None;
                 case SyntaxKind.PrefixUnaryExpression:
@@ -2785,6 +2788,7 @@ namespace ts {
                 return Associativity.Right;
 
             case SyntaxKind.BinaryExpression:
+            case SyntaxKind.OperatorListExpression:
                 switch (operator) {
                     case SyntaxKind.AsteriskAsteriskToken:
                     case SyntaxKind.EqualsToken:
@@ -2813,8 +2817,8 @@ namespace ts {
     }
 
     export function getOperator(expression: Expression): SyntaxKind {
-        if (expression.kind === SyntaxKind.BinaryExpression) {
-            return (<BinaryExpression>expression).operatorToken.kind;
+        if (expression.kind === SyntaxKind.BinaryExpression || expression.kind === SyntaxKind.OperatorListExpression) {
+            return (<BinaryExpression | OperatorListExpression>expression).operatorToken.kind;
         }
         else if (expression.kind === SyntaxKind.PrefixUnaryExpression || expression.kind === SyntaxKind.PostfixUnaryExpression) {
             return (<PrefixUnaryExpression | PostfixUnaryExpression>expression).operator;
@@ -4282,8 +4286,10 @@ namespace ts {
             case SyntaxKind.PrefixUnaryExpression:
                 const { operator } = parent as PrefixUnaryExpression | PostfixUnaryExpression;
                 return operator === SyntaxKind.PlusPlusToken || operator === SyntaxKind.MinusMinusToken ? writeOrReadWrite() : AccessKind.Read;
+            case SyntaxKind.OperatorListExpression:
             case SyntaxKind.BinaryExpression:
-                const { left, operatorToken } = parent as BinaryExpression;
+                const left = isBinaryExpression(parent) ? parent.left : (parent as OperatorListExpression).elements[0];
+                const operatorToken = (parent as BinaryExpression | OperatorListExpression).operatorToken;
                 return left === node && isAssignmentOperator(operatorToken.kind) ?
                     operatorToken.kind === SyntaxKind.EqualsToken ? AccessKind.Write : writeOrReadWrite()
                     : AccessKind.Read;
@@ -6445,10 +6451,10 @@ namespace ts {
             case SyntaxKind.YieldExpression:
             case SyntaxKind.ArrowFunction:
             case SyntaxKind.BinaryExpression:
+            case SyntaxKind.OperatorListExpression:
             case SyntaxKind.SpreadElement:
             case SyntaxKind.AsExpression:
             case SyntaxKind.OmittedExpression:
-            case SyntaxKind.OperatorListExpression:
             case SyntaxKind.PartiallyEmittedExpression:
                 return true;
             default:
