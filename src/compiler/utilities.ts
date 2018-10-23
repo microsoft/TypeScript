@@ -227,9 +227,9 @@ namespace ts {
         sourceFile.resolvedModules.set(moduleNameText, resolvedModule);
     }
 
-    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective: ResolvedTypeReferenceDirective): void {
+    export function setResolvedTypeReferenceDirective(sourceFile: SourceFile, typeReferenceDirectiveName: string, resolvedTypeReferenceDirective?: ResolvedTypeReferenceDirective): void {
         if (!sourceFile.resolvedTypeReferenceDirectiveNames) {
-            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective>();
+            sourceFile.resolvedTypeReferenceDirectiveNames = createMap<ResolvedTypeReferenceDirective | undefined>();
         }
 
         sourceFile.resolvedTypeReferenceDirectiveNames.set(typeReferenceDirectiveName, resolvedTypeReferenceDirective);
@@ -765,12 +765,13 @@ namespace ts {
         return info.declaration ? declarationNameToString(info.declaration.parameters[0].name) : undefined;
     }
 
-    export function getTextOfPropertyName(name: PropertyName): __String {
+    export function getTextOfPropertyName(name: PropertyName | NoSubstitutionTemplateLiteral): __String {
         switch (name.kind) {
             case SyntaxKind.Identifier:
                 return name.escapedText;
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
                 return escapeLeadingUnderscores(name.text);
             case SyntaxKind.ComputedPropertyName:
                 return isStringOrNumericLiteralLike(name.expression) ? escapeLeadingUnderscores(name.expression.text) : undefined!; // TODO: GH#18217 Almost all uses of this assume the result to be defined!
@@ -1770,7 +1771,7 @@ namespace ts {
     }
 
     export function isAssignmentDeclaration(decl: Declaration) {
-        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl);
+        return isBinaryExpression(decl) || isPropertyAccessExpression(decl) || isIdentifier(decl) || isCallExpression(decl);
     }
 
     /** Get the initializer, taking into account defaulted Javascript initializers */
@@ -1789,15 +1790,25 @@ namespace ts {
         return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
     }
 
+    function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
+        return forEach(node.properties, p => isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === "value" && p.initializer && getExpandoInitializer(p.initializer, isPrototypeAssignment));
+    }
+
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedExpandoInitializer(node: Node) {
+    export function getAssignedExpandoInitializer(node: Node | undefined) {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
                 getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+        }
+        if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
+            const result = hasExpandoValueProperty(node.arguments[2], node.arguments[1].text === "prototype");
+            if (result) {
+                return result;
+            }
         }
     }
 
@@ -1905,12 +1916,35 @@ namespace ts {
 
     /// Given a BinaryExpression, returns SpecialPropertyAssignmentKind for the various kinds of property
     /// assignments we treat as special in the binder
-    export function getAssignmentDeclarationKind(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function getAssignmentDeclarationKind(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
         const special = getAssignmentDeclarationKindWorker(expr);
         return special === AssignmentDeclarationKind.Property || isInJSFile(expr) ? special : AssignmentDeclarationKind.None;
     }
 
-    function getAssignmentDeclarationKindWorker(expr: BinaryExpression): AssignmentDeclarationKind {
+    export function isBindableObjectDefinePropertyCall(expr: CallExpression): expr is BindableObjectDefinePropertyCall {
+            return length(expr.arguments) === 3 &&
+                isPropertyAccessExpression(expr.expression) &&
+                isIdentifier(expr.expression.expression) &&
+                idText(expr.expression.expression) === "Object" &&
+                idText(expr.expression.name) === "defineProperty" &&
+                isStringOrNumericLiteralLike(expr.arguments[1]) &&
+                isEntityNameExpression(expr.arguments[0]);
+    }
+
+    function getAssignmentDeclarationKindWorker(expr: BinaryExpression | CallExpression): AssignmentDeclarationKind {
+        if (isCallExpression(expr)) {
+            if (!isBindableObjectDefinePropertyCall(expr)) {
+                return AssignmentDeclarationKind.None;
+            }
+            const entityName = expr.arguments[0];
+            if (isExportsIdentifier(entityName) || isModuleExportsPropertyAccessExpression(entityName)) {
+                return AssignmentDeclarationKind.ObjectDefinePropertyExports;
+            }
+            if (isPropertyAccessExpression(entityName) && entityName.name.escapedText === "prototype" && isEntityNameExpression(entityName.expression)) {
+                return AssignmentDeclarationKind.ObjectDefinePrototypeProperty;
+            }
+            return AssignmentDeclarationKind.ObjectDefinePropertyValue;
+        }
         if (expr.operatorToken.kind !== SyntaxKind.EqualsToken ||
             !isPropertyAccessExpression(expr.left)) {
             return AssignmentDeclarationKind.None;
@@ -1927,7 +1961,7 @@ namespace ts {
         if (lhs.expression.kind === SyntaxKind.ThisKeyword) {
             return AssignmentDeclarationKind.ThisProperty;
         }
-        else if (isIdentifier(lhs.expression) && lhs.expression.escapedText === "module" && lhs.name.escapedText === "exports") {
+        else if (isModuleExportsPropertyAccessExpression(lhs)) {
             // module.exports = expr
             return AssignmentDeclarationKind.ModuleExports;
         }
@@ -1992,7 +2026,7 @@ namespace ts {
             case SyntaxKind.ExternalModuleReference:
                 return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
             case SyntaxKind.CallExpression:
-                return node.parent as AnyValidImportOrReExport;
+                return isImportCall(node.parent) || isRequireCall(node.parent, /*checkArg*/ false) ? node.parent as RequireOrImportCall : undefined;
             case SyntaxKind.LiteralType:
                 Debug.assert(isStringLiteral(node));
                 return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
@@ -3065,7 +3099,7 @@ namespace ts {
 
     export function isIntrinsicJsxName(name: __String | string) {
         const ch = (name as string).charCodeAt(0);
-        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || (name as string).indexOf("-") > -1;
+        return (ch >= CharacterCodes.a && ch <= CharacterCodes.z) || stringContains((name as string), "-");
     }
 
     function get16BitUnicodeEscapeSequence(charCode: number): string {
@@ -4977,14 +5011,19 @@ namespace ts {
                 }
                 break;
             }
+            case SyntaxKind.CallExpression:
             case SyntaxKind.BinaryExpression: {
-                const expr = declaration as BinaryExpression;
+                const expr = declaration as BinaryExpression | CallExpression;
                 switch (getAssignmentDeclarationKind(expr)) {
                     case AssignmentDeclarationKind.ExportsProperty:
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.PrototypeProperty:
-                        return (expr.left as PropertyAccessExpression).name;
+                        return ((expr as BinaryExpression).left as PropertyAccessExpression).name;
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
+                        return (expr as BindableObjectDefinePropertyCall).arguments[1];
                     default:
                         return undefined;
                 }
@@ -8011,6 +8050,8 @@ namespace ts {
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
     const allSupportedExtensionsWithJson: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
+    export function getSupportedExtensions(options?: CompilerOptions): ReadonlyArray<Extension>;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string>;
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
 

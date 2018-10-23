@@ -790,7 +790,7 @@ namespace ts {
 
     export type PropertyName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName;
 
-    export type DeclarationName = Identifier | StringLiteral | NumericLiteral | ComputedPropertyName | BindingPattern;
+    export type DeclarationName = Identifier | StringLiteralLike | NumericLiteral | ComputedPropertyName | BindingPattern;
 
     export interface Declaration extends Node {
         _declarationBrand: any;
@@ -1774,6 +1774,9 @@ namespace ts {
         arguments: NodeArray<Expression>;
     }
 
+    /** @internal */
+    export type BindableObjectDefinePropertyCall = CallExpression & { arguments: { 0: EntityNameExpression, 1: StringLiteralLike | NumericLiteral, 2: ObjectLiteralExpression } };
+
     // see: https://tc39.github.io/ecma262/#prod-SuperCall
     export interface SuperCall extends CallExpression {
         expression: SuperExpression;
@@ -2711,7 +2714,7 @@ namespace ts {
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules?: Map<ResolvedModuleFull | undefined>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         /**
          * When a file's references are redirected due to project reference directives,
@@ -2886,7 +2889,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -2994,7 +2997,7 @@ namespace ts {
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile | undefined;
-        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective | undefined>;
 
         readonly redirectTargetsMap: RedirectTargetsMap;
     }
@@ -3679,6 +3682,7 @@ namespace ts {
     export interface ReverseMappedSymbol extends TransientSymbol {
         propertyType: Type;
         mappedType: MappedType;
+        constraintType: IndexType;
     }
 
     export const enum InternalSymbolName {
@@ -4087,6 +4091,7 @@ namespace ts {
     export interface ReverseMappedType extends ObjectType {
         source: Type;
         mappedType: MappedType;
+        constraintType: IndexType;
     }
 
     /* @internal */
@@ -4347,6 +4352,15 @@ namespace ts {
         Property,
         // F.prototype = { ... }
         Prototype,
+        // Object.defineProperty(x, 'name', { value: any, writable?: boolean (false by default) });
+        // Object.defineProperty(x, 'name', { get: Function, set: Function });
+        // Object.defineProperty(x, 'name', { get: Function });
+        // Object.defineProperty(x, 'name', { set: Function });
+        ObjectDefinePropertyValue,
+        // Object.defineProperty(exports || module.exports, 'name', ...);
+        ObjectDefinePropertyExports,
+        // Object.defineProperty(Foo.prototype, 'name', ...);
+        ObjectDefinePrototypeProperty,
     }
 
     /** @deprecated Use FileExtensionInfo instead. */
@@ -4930,6 +4944,8 @@ namespace ts {
         // The location of the .d.ts file we located, or undefined if resolution failed
         resolvedFileName: string | undefined;
         packageId?: PackageId;
+        /** True if `resolvedFileName` comes from `node_modules`. */
+        isExternalLibraryImport?: boolean;
     }
 
     export interface ResolvedTypeReferenceDirectiveWithFailedLookupLocations {
@@ -4965,7 +4981,7 @@ namespace ts {
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
