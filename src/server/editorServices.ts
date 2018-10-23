@@ -1037,7 +1037,7 @@ namespace ts.server {
         }
 
         private removeProject(project: Project) {
-            this.logger.info(`remove project: ${project.getRootFiles().toString()}`);
+            this.logger.info(`remove project: ${project.projectName}\nFiles::${project.getRootFiles().toString()}`);
 
             project.close();
             if (Debug.shouldAssert(AssertionLevel.Normal)) {
