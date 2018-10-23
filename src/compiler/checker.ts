@@ -4306,6 +4306,9 @@ namespace ts {
                 const declaration = symbol.declarations[0];
                 const name = getNameOfDeclaration(declaration);
                 if (name) {
+                    if (isCallExpression(declaration) && isBindableObjectDefinePropertyCall(declaration)) {
+                        return symbolName(symbol);
+                    }
                     return declarationNameToString(name);
                 }
                 if (declaration.parent && declaration.parent.kind === SyntaxKind.VariableDeclaration) {
@@ -27818,6 +27821,9 @@ namespace ts {
                         (isLiteralTypeNode(node.parent) && isLiteralImportTypeNode(node.parent.parent) && node.parent.parent.argument === node.parent)
                     ) {
                         return resolveExternalModuleName(node, <LiteralExpression>node);
+                    }
+                    if (isCallExpression(parent) && isBindableObjectDefinePropertyCall(parent) && parent.arguments[1] === node) {
+                        return getSymbolOfNode(parent);
                     }
                     // falls through
 

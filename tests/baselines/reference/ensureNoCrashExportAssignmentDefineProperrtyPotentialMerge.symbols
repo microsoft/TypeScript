@@ -14,6 +14,7 @@ Object.defineProperty(module, "exports", { value: "oh no" });
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >module : Symbol(module, Decl(index.js, 0, 38), Decl(index.js, 2, 22))
+>"exports" : Symbol(module.exports, Decl(index.js, 1, 20))
 >value : Symbol(value, Decl(index.js, 2, 42))
 
 === tests/cases/compiler/namespacey.js ===
@@ -48,6 +49,7 @@ Object.defineProperty(B, "NS", { value: "why though", writable: true });
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(namespacer.js, 0, 5), Decl(namespacer.js, 0, 12))
+>"NS" : Symbol(B.NS, Decl(namespacer.js, 0, 12), Decl(namespacer.js, 1, 31))
 >value : Symbol(value, Decl(namespacer.js, 2, 32))
 >writable : Symbol(writable, Decl(namespacer.js, 2, 53))
 

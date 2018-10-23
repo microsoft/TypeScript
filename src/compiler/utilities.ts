@@ -1790,15 +1790,25 @@ namespace ts {
         return init && getExpandoInitializer(init, isPrototypeAccess(node.name));
     }
 
+    function hasExpandoValueProperty(node: ObjectLiteralExpression, isPrototypeAssignment: boolean) {
+        return forEach(node.properties, p => isPropertyAssignment(p) && isIdentifier(p.name) && p.name.escapedText === "value" && p.initializer && getExpandoInitializer(p.initializer, isPrototypeAssignment));
+    }
+
     /**
      * Get the assignment 'initializer' -- the righthand side-- when the initializer is container-like (See getExpandoInitializer).
      * We treat the right hand side of assignments with container-like initalizers as declarations.
      */
-    export function getAssignedExpandoInitializer(node: Node) {
+    export function getAssignedExpandoInitializer(node: Node | undefined) {
         if (node && node.parent && isBinaryExpression(node.parent) && node.parent.operatorToken.kind === SyntaxKind.EqualsToken) {
             const isPrototypeAssignment = isPrototypeAccess(node.parent.left);
             return getExpandoInitializer(node.parent.right, isPrototypeAssignment) ||
                 getDefaultedExpandoInitializer(node.parent.left as EntityNameExpression, node.parent.right, isPrototypeAssignment);
+        }
+        if (node && isCallExpression(node) && isBindableObjectDefinePropertyCall(node)) {
+            const result = hasExpandoValueProperty(node.arguments[2], node.arguments[1].text === "prototype");
+            if (result) {
+                return result;
+            }
         }
     }
 
@@ -2016,7 +2026,7 @@ namespace ts {
             case SyntaxKind.ExternalModuleReference:
                 return (node.parent as ExternalModuleReference).parent as AnyValidImportOrReExport;
             case SyntaxKind.CallExpression:
-                return node.parent as AnyValidImportOrReExport;
+                return isImportCall(node.parent) || isRequireCall(node.parent, /*checkArg*/ false) ? node.parent as RequireOrImportCall : undefined;
             case SyntaxKind.LiteralType:
                 Debug.assert(isStringLiteral(node));
                 return tryCast(node.parent.parent, isImportTypeNode) as ValidImportTypeNode | undefined;
