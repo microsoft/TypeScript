@@ -712,49 +712,51 @@ namespace ts {
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter?: boolean;
-        insertSpaceAfterSemicolonInForStatements?: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-        insertSpaceAfterConstructor?: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-        insertSpaceAfterTypeAssertion?: boolean;
-        insertSpaceBeforeFunctionParenthesis?: boolean;
-        placeOpenBraceOnNewLineForFunctions?: boolean;
-        placeOpenBraceOnNewLineForControlBlocks?: boolean;
-        insertSpaceBeforeTypeAnnotation?: boolean;
-        indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly insertSpaceAfterCommaDelimiter?: boolean;
+        readonly insertSpaceAfterSemicolonInForStatements?: boolean;
+        readonly insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        readonly insertSpaceAfterConstructor?: boolean;
+        readonly insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        readonly insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        readonly insertSpaceAfterTypeAssertion?: boolean;
+        readonly insertSpaceBeforeFunctionParenthesis?: boolean;
+        readonly placeOpenBraceOnNewLineForFunctions?: boolean;
+        readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+    }
+
+    export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
+        return {
+            indentSize: 4,
+            tabSize: 4,
+            newLineCharacter: newLineCharacter || "\n",
+            convertTabsToSpaces: true,
+            indentStyle: IndentStyle.Smart,
+            insertSpaceAfterConstructor: false,
+            insertSpaceAfterCommaDelimiter: true,
+            insertSpaceAfterSemicolonInForStatements: true,
+            insertSpaceBeforeAndAfterBinaryOperators: true,
+            insertSpaceAfterKeywordsInControlFlowStatements: true,
+            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+            insertSpaceBeforeFunctionParenthesis: false,
+            placeOpenBraceOnNewLineForFunctions: false,
+            placeOpenBraceOnNewLineForControlBlocks: false,
+        };
     }
 
     /* @internal */
-    export const testFormatSettings: FormatCodeSettings = {
-        baseIndentSize: 0,
-        indentSize: 4,
-        tabSize: 4,
-        newLineCharacter: "\n",
-        convertTabsToSpaces: true,
-        indentStyle: IndentStyle.Smart,
-        insertSpaceAfterCommaDelimiter: true,
-        insertSpaceAfterSemicolonInForStatements: true,
-        insertSpaceBeforeAndAfterBinaryOperators: true,
-        insertSpaceAfterConstructor: false,
-        insertSpaceAfterKeywordsInControlFlowStatements: true,
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-        insertSpaceAfterTypeAssertion: false,
-        placeOpenBraceOnNewLineForFunctions: false,
-        placeOpenBraceOnNewLineForControlBlocks: false,
-        insertSpaceBeforeTypeAnnotation: false
-    };
+    export const testFormatSettings = getDefaultFormatCodeSettings("\n");
 
     export interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;

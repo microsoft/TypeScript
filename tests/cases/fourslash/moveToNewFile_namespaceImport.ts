@@ -27,7 +27,8 @@ verify.moveToNewFile({
 `export const y = 0;`,
 
         "/x.ts":
-`export const x = 0;`,
+`export const x = 0;
+`,
 
         "/b.ts":
 `import * as a from "./a";
