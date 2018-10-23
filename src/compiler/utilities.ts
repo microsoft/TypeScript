@@ -8040,6 +8040,8 @@ namespace ts {
     const allSupportedExtensions: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions];
     const allSupportedExtensionsWithJson: ReadonlyArray<Extension> = [...supportedTSExtensions, ...supportedJSExtensions, Extension.Json];
 
+    export function getSupportedExtensions(options?: CompilerOptions): ReadonlyArray<Extension>;
+    export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string>;
     export function getSupportedExtensions(options?: CompilerOptions, extraFileExtensions?: ReadonlyArray<FileExtensionInfo>): ReadonlyArray<string> {
         const needJsExtensions = options && options.allowJs;
 
