@@ -2714,7 +2714,7 @@ namespace ts {
         // It is used to resolve module names in the checker.
         // Content of this field should never be used directly - use getResolvedModuleFileName/setResolvedModuleFileName functions instead
         /* @internal */ resolvedModules?: Map<ResolvedModuleFull | undefined>;
-        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ resolvedTypeReferenceDirectiveNames: Map<ResolvedTypeReferenceDirective | undefined>;
         /* @internal */ imports: ReadonlyArray<StringLiteralLike>;
         /**
          * When a file's references are redirected due to project reference directives,
@@ -2889,7 +2889,7 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ getFileProcessingDiagnostics(): DiagnosticCollection;
-        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective>;
+        /* @internal */ getResolvedTypeReferenceDirectives(): Map<ResolvedTypeReferenceDirective | undefined>;
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         isSourceFileDefaultLibrary(file: SourceFile): boolean;
 
@@ -2997,7 +2997,7 @@ namespace ts {
 
         getSourceFiles(): ReadonlyArray<SourceFile>;
         getSourceFile(fileName: string): SourceFile | undefined;
-        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective>;
+        getResolvedTypeReferenceDirectives(): ReadonlyMap<ResolvedTypeReferenceDirective | undefined>;
 
         readonly redirectTargetsMap: RedirectTargetsMap;
     }
@@ -4981,7 +4981,7 @@ namespace ts {
         /**
          * This method is a companion for 'resolveModuleNames' and is used to resolve 'types' references to actual type declaration files
          */
-        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeReferenceDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         getEnvironmentVariable?(name: string): string | undefined;
         /* @internal */ onReleaseOldSourceFile?(oldSourceFile: SourceFile, oldOptions: CompilerOptions, hasSourceFileByPath: boolean): void;
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
