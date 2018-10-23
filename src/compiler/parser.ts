@@ -420,8 +420,6 @@ namespace ts {
                 return visitNode(cbNode, (<ExternalModuleReference>node).expression);
             case SyntaxKind.MissingDeclaration:
                 return visitNodes(cbNode, cbNodes, node.decorators);
-            // case SyntaxKind.CommaListExpression:
-            //     return visitNodes(cbNode, cbNodes, (<CommaListExpression>node).elements);
 
             case SyntaxKind.JsxElement:
                 return visitNode(cbNode, (<JsxElement>node).openingElement) ||
@@ -3756,6 +3754,10 @@ namespace ts {
         }
 
         function parseBinaryExpressionRest(precedence: number, leftOperand: Expression): Expression {
+            // TODO: Initialise these lazily
+            let highestOperatorToken = token() as BinaryOperator;
+            let exprs: Expression[] = [];
+            let operandTokens: Token<BinaryOperator>[] = [];
             while (true) {
                 // We either have a binary operator here, or we're finished.  We call
                 // reScanGreaterToken so that we merge token sequences like > and = into >=
@@ -3764,7 +3766,7 @@ namespace ts {
                 const newPrecedence = getBinaryOperatorPrecedence(token());
 
                 // Check the precedence to see if we should "take" this operator
-                // - For left associative operator (all operator but **), consume the operator,
+                // - For left associative operators (all operators but **), consume the operator,
                 //   recursively call the function below, and parse binaryExpression as a rightOperand
                 //   of the caller if the new precedence of the operator is greater then or equal to the current precedence.
                 //   For example:
@@ -3806,16 +3808,34 @@ namespace ts {
                         break;
                     }
                     else {
+                        if (newPrecedence <= getBinaryOperatorPrecedence(highestOperatorToken)) {
+                            leftOperand = makeOperatorListOrBinary(exprs, leftOperand, operandTokens, highestOperatorToken);
+                            exprs = [];
+                            operandTokens = [];
+                        }
                         nextToken();
                         leftOperand = makeAsExpression(leftOperand, parseType());
                     }
                 }
                 else {
-                    leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    if (highestOperatorToken === token()) {
+                        exprs.push(leftOperand);
+                        operandTokens.push(parseTokenNode());
+                        leftOperand = parseUnaryExpressionOrHigher();
+                    }
+                    else if (newPrecedence <= getBinaryOperatorPrecedence(highestOperatorToken)) {
+                        highestOperatorToken = token() as BinaryOperator;
+                        leftOperand = makeOperatorListOrBinary(exprs, leftOperand, operandTokens, highestOperatorToken);
+                        exprs = [];
+                        operandTokens = [];
+                    }
+                    else {
+                        leftOperand = makeBinaryExpression(leftOperand, parseTokenNode(), parseBinaryExpressionOrHigher(newPrecedence));
+                    }
                 }
             }
 
-            return leftOperand;
+            return makeOperatorListOrBinary(exprs, leftOperand, operandTokens, highestOperatorToken);
         }
 
         function isBinaryOperator() {
@@ -3826,12 +3846,49 @@ namespace ts {
             return getBinaryOperatorPrecedence(token()) > 0;
         }
 
-        function makeBinaryExpression(left: Expression, operatorToken: BinaryOperatorToken, right: Expression): BinaryExpression {
+        function makeOperatorListOrBinary(exprs: Expression[], leftOperand: Expression, operandTokens: Token<BinaryOperator>[], highestOperatorToken: BinaryOperator) {
+            // TODO: Skip the unroll for long lists
+            // if (exprs.length > 10) {
+            //     exprs.push(leftOperand);
+            //     const list = createNode(SyntaxKind.OperatorListExpression, exprs[0].pos) as OperatorListExpression;
+            //     list.elements = createNodeArray(exprs, exprs[0].pos);
+            //     list.operatorToken = operandTokens[0];
+            //     return finishNode(list);
+            // }
+
+           exprs.push(leftOperand);
+            if (highestOperatorToken === SyntaxKind.AsteriskAsteriskToken) {
+                return reduceRight(exprs, (l, r, i) => makeBinaryExpression(l, operandTokens[i], r, r.end))!;
+            }
+            else {
+                return reduceLeft(exprs, (l, r, i) => makeBinaryExpression(l, operandTokens[i - 1], r, r.end))!;
+            }
+        }
+
+        function reduceRight<T>(array: ReadonlyArray<T>, f: (value: T, memo: T, i: number) => T): T | undefined {
+            if (array && array.length > 0) {
+                if (array.length > 0) {
+                    let end = array.length - 1;
+                    let result: T;
+                    result = array[end];
+                    end--;
+                    while (0 <= end) {
+                        result = f(array[end], result, end);
+                        end--;
+                    }
+                    return result;
+                }
+            }
+            return undefined;
+        }
+
+
+        function makeBinaryExpression(left: Expression, operatorToken: BinaryOperatorToken, right: Expression, end?: number | undefined): BinaryExpression {
             const node = <BinaryExpression>createNode(SyntaxKind.BinaryExpression, left.pos);
             node.left = left;
             node.operatorToken = operatorToken;
             node.right = right;
-            return finishNode(node);
+            return finishNode(node, end);
         }
 
         function makeAsExpression(left: Expression, right: TypeNode): AsExpression {
