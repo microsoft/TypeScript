@@ -561,7 +561,7 @@ namespace ts.server {
             this.typingsCache = new TypingsCache(this.typingsInstaller);
 
             this.hostConfiguration = {
-                formatCodeOptions: getDefaultFormatCodeSettings(this.host),
+                formatCodeOptions: getDefaultFormatCodeSettings(this.host.newLine),
                 preferences: emptyOptions,
                 hostInfo: "Unknown host",
                 extraFileExtensions: []

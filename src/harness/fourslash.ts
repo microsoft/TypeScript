@@ -329,29 +329,7 @@ namespace FourSlash {
                 });
             }
 
-            this.formatCodeSettings = {
-                baseIndentSize: 0,
-                indentSize: 4,
-                tabSize: 4,
-                newLineCharacter: "\n",
-                convertTabsToSpaces: true,
-                indentStyle: ts.IndentStyle.Smart,
-                insertSpaceAfterCommaDelimiter: true,
-                insertSpaceAfterSemicolonInForStatements: true,
-                insertSpaceBeforeAndAfterBinaryOperators: true,
-                insertSpaceAfterConstructor: false,
-                insertSpaceAfterKeywordsInControlFlowStatements: true,
-                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                insertSpaceAfterTypeAssertion: false,
-                placeOpenBraceOnNewLineForFunctions: false,
-                placeOpenBraceOnNewLineForControlBlocks: false,
-                insertSpaceBeforeTypeAnnotation: false
-            };
+            this.formatCodeSettings = ts.testFormatSettings;
 
             // Open the first file by default
             this.openFile(0);
@@ -3389,8 +3367,8 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public generateTypes(examples: ReadonlyArray<FourSlashInterface.GenerateTypesOptions>): void {
-            for (const { name = "example", value, output, outputBaseline } of examples) {
-                const actual = ts.generateTypesForModule(name, value, this.formatCodeSettings);
+            for (const { name = "example", value, global, output, outputBaseline } of examples) {
+                const actual = (global ? ts.generateTypesForGlobal : ts.generateTypesForModule)(name, value, this.formatCodeSettings);
                 if (outputBaseline) {
                     if (actual === undefined) throw ts.Debug.fail();
                     Harness.Baseline.runBaseline(ts.combinePaths("generateTypes", outputBaseline + ts.Extension.Dts), actual);
@@ -4536,6 +4514,7 @@ namespace FourSlashInterface {
     export interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         // Exactly one of these should be set:
         readonly output?: string;
         readonly outputBaseline?: string;
@@ -4689,7 +4668,7 @@ namespace FourSlashInterface {
         }
 
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
-            this.state.formatCodeSettings[name] = value;
+            this.state.formatCodeSettings = { ...this.state.formatCodeSettings, [name]: value };
         }
     }
 

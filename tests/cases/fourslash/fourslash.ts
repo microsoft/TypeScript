@@ -642,6 +642,7 @@ declare namespace FourSlashInterface {
     interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         readonly output?: string | undefined;
         readonly outputBaseline?: string;
     }
