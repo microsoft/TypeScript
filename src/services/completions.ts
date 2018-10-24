@@ -1407,14 +1407,16 @@ namespace ts.Completions {
                     // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
                     // This is just to avoid adding duplicate completion entries.
                     //
-                    // If `symbol.parent !== ...`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
-                    // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                    // If `symbol.parent !== ...`, this is an `export * from "foo"` re-export. Those don't create new symbols.
                     if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol
-                        || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
+                        || some(symbol.declarations, d =>
+                            // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
+                            // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                            isExportSpecifier(d) && (d.propertyName ? !!d.name.originalKeywordKind : !!d.parent.parent.moduleSpecifier))) {
                         continue;
                     }
 
-                    const isDefaultExport = symbol.name === InternalSymbolName.Default;
+                    const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                     if (isDefaultExport) {
                         symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }
