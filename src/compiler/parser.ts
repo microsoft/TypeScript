@@ -1518,8 +1518,10 @@ namespace ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArrayLiteralMembers:
-                    if (token() === SyntaxKind.CommaToken) {
-                        return true;
+                    switch (token()) {
+                        case SyntaxKind.CommaToken:
+                        case SyntaxKind.DotToken: // Not an array literal member, but don't want to close the array (see `tests/cases/fourslash/completionsDotInArrayLiteralInObjectLiteral.ts`)
+                            return true;
                     }
                     // falls through
                 case ParsingContext.ArgumentExpressions:
