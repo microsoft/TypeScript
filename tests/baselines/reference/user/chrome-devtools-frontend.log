@@ -1,16 +1,16 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2354,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2373,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3150,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(3153,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(4846,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(4905,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(11124,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(11819,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(11899,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(16316,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(16447,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2358,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2377,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3154,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(3157,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(4850,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(4909,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(11128,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(11823,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(11903,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(16320,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(16451,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1406,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1442,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
@@ -366,12 +366,9 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(4
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(450,37): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(457,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(484,36): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(566,10): error TS2322: Type '{ transform: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ transform: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(566,42): error TS2322: Type '{ transform: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ transform: string; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(571,18): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(587,44): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(588,9): error TS2367: This condition will always return 'false' since the types 'AnimationPlayState' and '"pending"' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(589,20): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(605,38): error TS2339: Property 'x' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(612,41): error TS2339: Property 'x' does not exist on type 'Event'.
@@ -3617,10 +3614,6 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(217,25)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(241,27): error TS2339: Property 'focus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(251,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(251,39): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(253,24): error TS2322: Type '{ opacity: number; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ opacity: number; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(253,38): error TS2322: Type '{ opacity: number; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ opacity: number; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(254,13): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(259,36): error TS2694: Namespace 'ColorPicker.Spectrum' has no exported member 'Palette'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(272,22): error TS2339: Property '__mutable' does not exist on type 'Element'.
@@ -5538,12 +5531,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(153
 node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(162,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(29,25): error TS2339: Property 'property' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(43,42): error TS2339: Property 'scrollIntoViewIfNeeded' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(46,11): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(47,11): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(47,69): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(35,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(50,51): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(69,32): error TS2339: Property '_instance' does not exist on type 'typeof StylesSidebarPane'.
@@ -6083,13 +6070,6 @@ node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(429,1
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(529,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(544,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(551,12): error TS2339: Property '_fire' does not exist on type 'EventSinkImpl'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(768,19): error TS2339: Property 'inspectedWindow' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(769,19): error TS2339: Property 'inspectedWindow' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(770,19): error TS2339: Property 'inspectedWindow' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(771,19): error TS2339: Property 'network' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(772,19): error TS2339: Property 'panels' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(773,19): error TS2339: Property 'panels' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(786,68): error TS2339: Property 'inspectedWindow' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(789,21): error TS2339: Property 'exposeWebInspectorNamespace' does not exist on type 'ExtensionDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionAPI.js(790,12): error TS2339: Property 'webInspector' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/extensions/ExtensionPanel.js(232,23): error TS2339: Property 'style' does not exist on type 'Element'.
