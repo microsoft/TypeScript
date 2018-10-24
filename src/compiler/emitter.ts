@@ -862,7 +862,7 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                         return emitEnumMember(<EnumMember>node);
 
-                    // JSDoc nodes (only for used in codefixes currently)
+                    // JSDoc nodes (only used in codefixes currently)
                     case SyntaxKind.JSDocParameterTag:
                     case SyntaxKind.JSDocPropertyTag:
                         return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);

@@ -15,6 +15,7 @@ verify.fileAfterCodeFix(
  * @param {number} a
  * @param {string} b
  * @param {{ a: number; }} c
+ * @param {{ shouldNotBeHere: number; }} d
  * @param {(string | number)[]} d
  */
 function f(a, b, c, d, e = 0, ...d ) {

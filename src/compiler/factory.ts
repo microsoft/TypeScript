@@ -2180,33 +2180,33 @@ namespace ts {
     }
 
     /* @internal */
-    export function createJSDocTypeTag(type: TypeNode, comment: string): JSDocTypeTag {
+    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
         const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
-        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.typeExpression = typeExpression;
         tag.comment = comment;
         return tag;
     }
 
     /* @internal */
-    export function createJSDocReturnTag(type: TypeNode, comment: string): JSDocReturnTag {
+    export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
         const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
-        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.typeExpression = typeExpression;
         tag.comment = comment;
         return tag;
     }
 
     /* @internal */
-    export function createJSDocParamTag(type: TypeNode, name: EntityName, isOptional: boolean, comment: string): JSDocParameterTag {
+    export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
         const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
-        tag.typeExpression = createJSDocTypeExpression(type);
+        tag.typeExpression = typeExpression;
         tag.name = name;
-        tag.isBracketed = isOptional;
+        tag.isBracketed = isBracketed;
         tag.comment = comment;
         return tag;
     }
 
     /* @internal */
-    export function createJSDocComment(comment: string | undefined, tags: NodeArray<JSDocTag> | undefined) {
+    export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
         const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
         node.comment = comment;
         node.tags = tags;
