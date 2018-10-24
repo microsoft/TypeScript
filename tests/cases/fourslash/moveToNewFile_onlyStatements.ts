@@ -11,6 +11,7 @@ verify.moveToNewFile({
 `,
 
         "/newFile.ts":
-`console.log("goodbye");`,
+`console.log("goodbye");
+`,
     },
 });

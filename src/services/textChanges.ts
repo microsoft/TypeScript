@@ -781,7 +781,7 @@ namespace ts.textChanges {
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
-            return applyChanges(nonFormattedText, changes);
+            return applyChanges(nonFormattedText, changes) + newLineCharacter;
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
