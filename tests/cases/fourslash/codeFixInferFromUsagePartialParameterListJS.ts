@@ -19,8 +19,6 @@ verify.codeFix({
     newFileContent:
 `/**
  * @param {*} y
- */
-/**
  * @param {number} x
  * @param {number} z
  */

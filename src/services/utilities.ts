@@ -1672,6 +1672,13 @@ namespace ts {
         return position;
     }
 
+    export function getPrecedingNonSpaceCharacterPosition(text: string, position: number) {
+        while (position > -1 && isWhiteSpaceSingleLine(text.charCodeAt(position))) {
+            position -= 1;
+        }
+        return position + 1;
+    }
+
     /**
      * Creates a deep, memberwise clone of a node with no source map location.
      *

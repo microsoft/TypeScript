@@ -14,9 +14,9 @@ verify.codeFix({
     index: 2,
     newFileContent:
 `class C {/**
-          * @param {number} x
-          */
-         m(x) {return x;}}
+ * @param {number} x
+ */
+m(x) {return x;}}
 var c = new C()
 c.m(1)`,
 });

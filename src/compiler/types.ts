@@ -2447,7 +2447,7 @@ namespace ts {
 
     export interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
-        constraint: TypeNode | undefined;
+        constraint: JSDocTypeExpression | undefined;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
 
@@ -5532,33 +5532,34 @@ namespace ts {
         BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
         AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
         CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
-        DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
+        AsteriskDelimited = 1 << 5,     // Each list item is asterisk ("\n *") delimited, used with JSDoc.
+        DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited | AsteriskDelimited,
 
-        AllowTrailingComma = 1 << 5,    // Write a trailing comma (",") if present.
+        AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.
 
         // Whitespace
-        Indented = 1 << 6,              // The list should be indented.
-        SpaceBetweenBraces = 1 << 7,    // Inserts a space after the opening brace and before the closing brace.
-        SpaceBetweenSiblings = 1 << 8,  // Inserts a space between each sibling node.
+        Indented = 1 << 7,              // The list should be indented.
+        SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
+        SpaceBetweenSiblings = 1 << 9,  // Inserts a space between each sibling node.
 
         // Brackets/Braces
-        Braces = 1 << 9,                // The list is surrounded by "{" and "}".
-        Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
-        AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
-        SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
+        Braces = 1 << 10,                // The list is surrounded by "{" and "}".
+        Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
+        AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
+        SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
         BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
 
-        OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
+        OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
+        OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
         Optional = OptionalIfUndefined | OptionalIfEmpty,
 
         // Other
-        PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
-        NoInterveningComments = 1 << 17, // Do not emit comments between each node
+        PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
+        NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
+        NoInterveningComments = 1 << 18, // Do not emit comments between each node
 
-        NoSpaceIfEmpty = 1 << 18,       // If the literal is empty, do not add spaces between braces.
-        SingleElement = 1 << 19,
+        NoSpaceIfEmpty = 1 << 19,       // If the literal is empty, do not add spaces between braces.
+        SingleElement = 1 << 20,
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
@@ -5598,6 +5599,7 @@ namespace ts {
         TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
+        JSDocComment = MultiLine | AsteriskDelimited,
     }
 
     /* @internal */

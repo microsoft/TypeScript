@@ -73,7 +73,9 @@ namespace ts.codefix {
                     const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
                     const typeNode = type && getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
-                        changes.tryInsertJSDocType(sourceFile, parent, typeNode);
+                        // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
+                        const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
+                        addJSDocTags(changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), [typeTag]);
                     }
                     return parent;
                 }
@@ -192,7 +194,13 @@ namespace ts.codefix {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-                changes.tryInsertJSDocType(sourceFile, declaration, typeNode);
+                const parent = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement) : declaration;
+                if (!parent) {
+                    return;
+                }
+                const typeExpression = createJSDocTypeExpression(typeNode);
+                const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeExpression, "") : createJSDocTypeTag(typeExpression, "");
+                addJSDocTags(changes, sourceFile, parent, [typeTag]);
             }
             else {
                 changes.tryInsertTypeAnnotation(sourceFile, declaration, typeNode);
@@ -200,16 +208,52 @@ namespace ts.codefix {
         }
     }
 
-    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ParameterInference[], program: Program, host: LanguageServiceHost): void {
-        const result = mapDefined(parameterInferences, inference => {
+    function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ReadonlyArray<ParameterInference>, program: Program, host: LanguageServiceHost): void {
+        const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
+        if (!signature) {
+            return;
+        }
+        const paramTags = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
+            // only infer parameters that have (1) no type and (2) an accessible inferred type
+            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
+
             const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            return typeNode && !param.initializer && !getJSDocType(param) ? { ...inference, typeNode } : undefined;
+            return typeNode && createJSDocParamTag(param.name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
         });
-        changes.tryInsertJSDocParameters(sourceFile, result);
+        addJSDocTags(changes, sourceFile, signature, paramTags);
     }
 
-   function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
+    function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {
+        const comments = mapDefined(parent.jsDoc, j => j.comment);
+        const oldTags = flatMap(parent.jsDoc, j => j.tags);
+        const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
+            const merged = tryMergeJsdocTags(tag, newTag);
+            if (merged) oldTags[i] = merged;
+            return !!merged;
+        }));
+        const tag = createJSDocComment(comments.join("\n"), createNodeArray([...(oldTags || emptyArray), ...unmergedNewTags]));
+        changes.insertJsdocCommentBefore(sourceFile, parent, tag);
+    }
+
+    function tryMergeJsdocTags(oldTag: JSDocTag, newTag: JSDocTag): JSDocTag | undefined {
+        if (oldTag.kind !== newTag.kind) {
+            return undefined;
+        }
+        switch (oldTag.kind) {
+            case SyntaxKind.JSDocParameterTag: {
+                const oldParam = oldTag as JSDocParameterTag;
+                const newParam = newTag as JSDocParameterTag;
+                return isIdentifier(oldParam.name) && isIdentifier(newParam.name) && oldParam.name.escapedText === newParam.name.escapedText
+                    ? createJSDocParamTag(newParam.name, newParam.isBracketed, newParam.typeExpression, oldParam.comment)
+                    : undefined;
+            }
+            case SyntaxKind.JSDocReturnTag:
+                return createJSDocReturnTag((newTag as JSDocReturnTag).typeExpression, oldTag.comment);
+        }
+    }
+
+    function getTypeNodeIfAccessible(type: Type, enclosingScope: Node, program: Program, host: LanguageServiceHost): TypeNode | undefined {
         const checker = program.getTypeChecker();
         let typeIsAccessible = true;
         const notAccessible = () => { typeIsAccessible = false; };
