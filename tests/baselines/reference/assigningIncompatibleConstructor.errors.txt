@@ -1,0 +1,10 @@
+tests/cases/compiler/assigningIncompatibleConstructor.ts(2,5): error TS2322: Type 'typeof Foo' is not assignable to type 'new () => Foo'.
+  Types of construct signature is incompatible.
+    Type 'new (a: string) => Foo' is not assignable to type 'new () => Foo'.
+ ==== tests/cases/compiler/assigningIncompatibleConstructor.ts (1 errors) ====
+    class Foo { constructor(a: string) { } }
+    let FooConstructor: { new(): Foo } = Foo;
+        ~~~~~~~~~~~~~~
+!!! error TS2322: Type 'typeof Foo' is not assignable to type 'new () => Foo'.
+!!! error TS2322:   Types of construct signature is incompatible.
+!!! error TS2322:     Type 'new (a: string) => Foo' is not assignable to type 'new () => Foo'.

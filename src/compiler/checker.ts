@@ -12389,6 +12389,13 @@ namespace ts {
                     // to the quadratic nature of the logic below.
                     const eraseGenerics = relation === comparableRelation || !!compilerOptions.noStrictGenericChecks;
                     result = signatureRelatedTo(sourceSignatures[0], targetSignatures[0], eraseGenerics, reportErrors);
+                    if (result === Ternary.False && reportErrors && targetSignatures[0].declaration && isConstructSignatureDeclaration(targetSignatures[0].declaration)) {
+                        const flags = TypeFormatFlags.WriteArrowStyleSignature;
+                        const sourceSignature = signatureToString(sourceSignatures[0], /*enclosingDeclaration*/ undefined, flags, kind);
+                        const targetSignature = signatureToString(targetSignatures[0], /*enclosingDeclaration*/ undefined, flags, kind);
+                        reportError(Diagnostics.Type_0_is_not_assignable_to_type_1, sourceSignature, targetSignature);
+                        reportError(Diagnostics.Types_of_construct_signature_is_incompatible);
+                    }
                 }
                 else {
                     outer: for (const t of targetSignatures) {

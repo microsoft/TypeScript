@@ -4687,5 +4687,9 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Types of construct signature is incompatible.": {
+        "category": "Error",
+        "code": 95069
     }
 }
