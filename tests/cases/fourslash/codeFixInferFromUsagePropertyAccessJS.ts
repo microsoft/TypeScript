@@ -16,7 +16,10 @@
 ////    return x.y.z
 ////}
 
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
 `/**
  * @param {{ b: { c: any; }; }} a
  * @param {{ n: () => number; }} m
@@ -31,4 +34,5 @@ function foo(a, m, x) {
     x.y.z
     x.y.z.push(0);
     return x.y.z
-}`, undefined, 2);
+}`,
+});

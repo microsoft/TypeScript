@@ -17,7 +17,6 @@
 ////    }
 ////}
 
-
 // Note: Should be number[] | undefined, but inference currently privileges assignments
 // over usage (even when the only result is undefined) and infers only undefined.
 verify.codeFixAll({

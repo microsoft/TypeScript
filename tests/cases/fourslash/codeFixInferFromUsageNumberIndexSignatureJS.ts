@@ -8,10 +8,14 @@
 ////    return a[0] + 1;
 ////}
 
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
 `/**
  * @param {number[]} a
  */
 function f(a) {
     return a[0] + 1;
-}`, undefined, 2);
+}`,
+});
