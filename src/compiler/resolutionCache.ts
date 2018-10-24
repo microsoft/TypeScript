@@ -69,7 +69,6 @@ namespace ts {
         dir: string;
         dirPath: Path;
         nonRecursive?: boolean;
-        ignore?: true;
     }
 
     export const maxNumberOfFilesToIterateForInvalidation = 256;
@@ -401,14 +400,7 @@ namespace ts {
             return true;
         }
 
-        function filterFSRootDirectoriesToWatch(watchPath: DirectoryOfFailedLookupWatch, dirPath: Path): DirectoryOfFailedLookupWatch {
-            if (!canWatchDirectory(dirPath)) {
-                watchPath.ignore = true;
-            }
-            return watchPath;
-        }
-
-        function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch {
+        function getDirectoryToWatchFailedLookupLocation(failedLookupLocation: string, failedLookupLocationPath: Path): DirectoryOfFailedLookupWatch | undefined {
             if (isInDirectoryPath(rootPath, failedLookupLocationPath)) {
                 // Ensure failed look up is normalized path
                 failedLookupLocation = isRootedDiskPath(failedLookupLocation) ? normalizePath(failedLookupLocation) : getNormalizedAbsolutePath(failedLookupLocation, getCurrentDirectory());
@@ -430,7 +422,7 @@ namespace ts {
             );
         }
 
-        function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path) {
+        function getDirectoryToWatchFromFailedLookupLocationDirectory(dir: string, dirPath: Path): DirectoryOfFailedLookupWatch | undefined {
             // If directory path contains node module, get the most parent node_modules directory for watching
             while (pathContainsNodeModules(dirPath)) {
                 dir = getDirectoryPath(dir);
@@ -439,7 +431,7 @@ namespace ts {
 
             // If the directory is node_modules use it to watch, always watch it recursively
             if (isNodeModulesDirectory(dirPath)) {
-                return filterFSRootDirectoriesToWatch({ dir, dirPath }, getDirectoryPath(dirPath));
+                return canWatchDirectory(getDirectoryPath(dirPath)) ? { dir, dirPath } : undefined;
             }
 
             let nonRecursive = true;
@@ -459,7 +451,7 @@ namespace ts {
                 }
             }
 
-            return filterFSRootDirectoriesToWatch({ dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive }, dirPath);
+            return canWatchDirectory(dirPath) ? { dir: subDirectory || dir, dirPath: subDirectoryPath || dirPath, nonRecursive } : undefined;
         }
 
         function isPathWithDefaultFailedLookupExtension(path: Path) {
@@ -491,8 +483,9 @@ namespace ts {
             let setAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                const { dir, dirPath, nonRecursive, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
-                if (!ignore) {
+                const toWatch = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                if (toWatch) {
+                    const { dir, dirPath, nonRecursive } = toWatch;
                     // If the failed lookup location path is not one of the supported extensions,
                     // store it in the custom path
                     if (!isPathWithDefaultFailedLookupExtension(failedLookupLocationPath)) {
@@ -551,8 +544,9 @@ namespace ts {
             let removeAtRoot = false;
             for (const failedLookupLocation of failedLookupLocations) {
                 const failedLookupLocationPath = resolutionHost.toPath(failedLookupLocation);
-                const { dirPath, ignore } = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
-                if (!ignore) {
+                const toWatch = getDirectoryToWatchFailedLookupLocation(failedLookupLocation, failedLookupLocationPath);
+                if (toWatch) {
+                    const { dirPath } = toWatch;
                     const refCount = customFailedLookupPaths.get(failedLookupLocationPath);
                     if (refCount) {
                         if (refCount === 1) {
@@ -738,8 +732,8 @@ namespace ts {
             if (isInDirectoryPath(rootPath, typeRootPath)) {
                 return rootPath;
             }
-            const { dirPath, ignore } = getDirectoryToWatchFromFailedLookupLocationDirectory(typeRoot, typeRootPath);
-            return !ignore && directoryWatchesOfFailedLookups.has(dirPath) ? dirPath : undefined;
+            const toWatch = getDirectoryToWatchFromFailedLookupLocationDirectory(typeRoot, typeRootPath);
+            return toWatch && directoryWatchesOfFailedLookups.has(toWatch.dirPath) ? toWatch.dirPath : undefined;
         }
 
         function createTypeRootsWatch(typeRootPath: Path, typeRoot: string): FileWatcher {
