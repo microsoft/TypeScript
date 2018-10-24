@@ -260,10 +260,9 @@ namespace ts.codefix {
     }
 
     interface ParameterInference {
-        declaration: ParameterDeclaration;
-        type?: Type;
-        typeNode?: TypeNode;
-        isOptional?: boolean;
+        readonly declaration: ParameterDeclaration;
+        readonly type?: Type;
+        readonly isOptional?: boolean;
     }
 
     namespace InferFromReference {
@@ -309,7 +308,7 @@ namespace ts.codefix {
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
+            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
                 const types: Type[] = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
