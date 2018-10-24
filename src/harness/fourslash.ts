@@ -2422,7 +2422,20 @@ Actual: ${stringify(fullActual)}`);
          */
         public getAndApplyCodeActions(errorCode?: number, index?: number) {
             const fileName = this.activeFile.fileName;
-            this.applyCodeActions(this.getCodeFixes(fileName, errorCode), index);
+            const fixes = this.getCodeFixes(fileName, errorCode);
+            if (index === undefined) {
+                if (!(fixes && fixes.length === 1)) {
+                    this.raiseError(`Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                }
+                index = 0;
+            }
+            else {
+                if (!(fixes && fixes.length >= index + 1)) {
+                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${fixes ? fixes.length : "none"} found.`);
+                }
+            }
+
+            this.applyChanges(fixes[index].changes);
         }
 
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
@@ -2433,12 +2446,12 @@ Actual: ${stringify(fullActual)}`);
             if (codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions.length}`);
             }
+            const codeAction = ts.first(codeActions);
 
-            if (codeActions[0].description !== options.description) {
+            if (codeAction.description !== options.description) {
                 this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${codeActions[0].description}`);
             }
-
-            this.applyCodeActions(codeActions);
+            this.applyChanges(codeAction.changes);
 
             this.verifyNewContentAfterChange(options, ts.flatMap(codeActions, a => a.changes.map(c => c.fileName)));
         }
@@ -2481,26 +2494,6 @@ Actual: ${stringify(fullActual)}`);
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
             assert.deepEqual<ReadonlyArray<{}> | undefined>(commands, expectedCommands);
             this.verifyNewContent({ newFileContent }, changes);
-        }
-
-        /**
-         * Applies fixes for the errors in fileName and compares the results to
-         * expectedContents after all fixes have been applied.
-         *
-         * Note: applying one codefix may generate another (eg: remove duplicate implements
-         * may generate an extends -> interface conversion fix).
-         * @param expectedContents The contents of the file after the fixes are applied.
-         * @param fileName The file to check. If not supplied, the current open file is used.
-         */
-        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
-            fileName = fileName ? fileName : this.activeFile.fileName;
-
-            this.applyCodeActions(this.getCodeFixes(fileName), index);
-
-            const actualContents: string = this.getFileContent(fileName);
-            if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
-            }
         }
 
         public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
@@ -2605,22 +2598,6 @@ Actual: ${stringify(fullActual)}`);
 
                 return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start!, diagnostic.start! + diagnostic.length!, [diagnostic.code], this.formatCodeSettings, preferences);
             });
-        }
-
-        private applyCodeActions(actions: ReadonlyArray<ts.CodeAction>, index?: number): void {
-            if (index === undefined) {
-                if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
-                }
-                index = 0;
-            }
-            else {
-                if (!(actions && actions.length >= index + 1)) {
-                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
-                }
-            }
-
-            this.applyChanges(actions[index].changes);
         }
 
         private applyChanges(changes: ReadonlyArray<ts.FileTextChanges>): void {
@@ -4362,10 +4339,6 @@ namespace FourSlashInterface {
 
         public rangeAfterCodeFix(expectedText: string, includeWhiteSpace?: boolean, errorCode?: number, index?: number): void {
             this.state.verifyRangeAfterCodeFix(expectedText, includeWhiteSpace, errorCode, index);
-        }
-
-        public fileAfterCodeFix(expectedContents: string, fileName?: string, index?: number) {
-            this.state.verifyFileAfterCodeFix(expectedContents, fileName, index);
         }
 
         public codeFixAll(options: VerifyCodeFixAllOptions): void {

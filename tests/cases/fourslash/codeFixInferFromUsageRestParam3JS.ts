@@ -5,12 +5,15 @@
 // @noImplicitAny: true
 // @Filename: important.js
 /////** @param {number} a */
-////function f(a, [|...rest |]){
+////function f(a, [|...rest|]){
 ////    a;
 ////    rest.push(22);
 ////}
 
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
 `/** @param {number} a */
 /**
  * @param {number[]} rest
@@ -18,4 +21,5 @@ verify.fileAfterCodeFix(
 function f(a, ...rest){
     a;
     rest.push(22);
-}`, undefined, 2);
+}`,
+});

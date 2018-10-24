@@ -9,11 +9,14 @@
 ////var c = new C()
 ////c.m(1)
 
-verify.fileAfterCodeFix(
-`
-class C {/**
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
+`class C {/**
           * @param {number} x
           */
          m(x) {return x;}}
 var c = new C()
-c.m(1)`, undefined, 2);
+c.m(1)`,
+});

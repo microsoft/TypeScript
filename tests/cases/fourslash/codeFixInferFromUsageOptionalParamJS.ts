@@ -10,12 +10,16 @@
 ////f();
 ////f(1);
 
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
 `/**
  * @param {number} [a]
  */
-function f(a) {
+function f(a){
     a;
 }
 f();
-f(1);`, undefined, 2);
+f(1);`,
+});

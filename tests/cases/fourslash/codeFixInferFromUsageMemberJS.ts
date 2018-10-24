@@ -14,10 +14,12 @@
 ////    }
 ////}
 
-
 // Note: Should be number[] | undefined, but inference currently privileges assignments
 // over usage (even when the only result is undefined) and infers only undefined.
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer type of 'p' from usage",
+    index: 2,
+    newFileContent:
 `class C {
     constructor() {
         /** @type {undefined} */
@@ -26,5 +28,5 @@ verify.fileAfterCodeFix(
     method() {
         this.p.push(1)
     }
-}
-`, undefined, 2);
+}`
+});
