@@ -1,3 +1,7 @@
+###Name:Neeshma C Paul
+ -Place:Kerala,India
+ -Github:[Neeshmacpaul](https://github.com/Neeshmacpaul)
+ -Linkedin:[Neeshma C Paul](https://www.linkedin.com/in/neeshma-c-paul-5b1526149/)
 # Instructions for Logging Issues
 
 ## 1. Read the FAQ
