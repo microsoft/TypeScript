@@ -11,9 +11,11 @@
 ////}
 ////(new C).x = 1;
 
-verify.fileAfterCodeFix(
-`
-class C {
+verify.codeFix({
+    description: "Infer type of \'x\' from usage",
+    index: 2,
+    newFileContent:
+`class C {
     /**
      * @param {number} v
      */
@@ -21,4 +23,5 @@ class C {
         v;
     }
 }
-(new C).x = 1;`, undefined, 2);
+(new C).x = 1;`,
+});

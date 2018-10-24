@@ -9,8 +9,10 @@
 //// }
 //// f(1, "string", { a: 1 }, {shouldNotBeHere: 2}, {shouldNotBeHere: 2}, 3, "string");
 
-
-verify.fileAfterCodeFix(
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 6,
+    newFileContent:
 `/**
  * @param {number} a
  * @param {string} b
@@ -20,4 +22,5 @@ verify.fileAfterCodeFix(
  */
 function f(a, b, c, d, e = 0, ...d ) {
 }
-f(1, "string", { a: 1 }, {shouldNotBeHere: 2}, {shouldNotBeHere: 2}, 3, "string");`, undefined, 6);
+f(1, "string", { a: 1 }, {shouldNotBeHere: 2}, {shouldNotBeHere: 2}, 3, "string");`,
+});
