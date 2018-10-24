@@ -2048,7 +2048,7 @@
         "category": "Error",
         "code": 2567
     },
-    "Type '{0}' is not an array type. Use compiler option '--downlevelIteration' to allow iterating of iterators.": {
+    "Type '{0}' is not an array type. Either use the '--downlevelIteration' compiler option to allow iterating on iterators, or set the '--target' option to es2015 or above.": {
         "category": "Error",
         "code": 2568
     },
