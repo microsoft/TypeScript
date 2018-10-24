@@ -74,10 +74,10 @@ namespace ts.codefix {
                     const typeNode = type && getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
-                        const typeTags = createMap<JSDocTypeTag>();
+                        const typeTags = createUnderscoreEscapedMap<JSDocTypeTag>();
                         const typeTag = createJSDocTypeTag(typeNode, /*comment*/ "");
-                        typeTags.set("UNUSED", typeTag);
-                        insertMergedJSDoc(typeTags, changes, sourceFile, parent.parent.parent as ExpressionStatement, () => false, () => void 0);
+                        typeTags.set("UNUSED" as __String, typeTag);
+                        insertMergedJSDoc(typeTags, changes, sourceFile, cast(parent.parent.parent, isExpressionStatement), () => false, () => void 0);
                     }
                     return parent;
                 }
@@ -196,19 +196,16 @@ namespace ts.codefix {
         const typeNode = type && getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
-                const parent = isVariableDeclaration(declaration) ? declaration.parent.parent : declaration;
-                if (parent.kind === SyntaxKind.ForStatement ||
-                    parent.kind === SyntaxKind.ForInStatement ||
-                    parent.kind === SyntaxKind.ForOfStatement ||
-                    parent.kind === SyntaxKind.TryStatement) {
+                const parent = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement) : declaration;
+                if (!parent) {
                     return;
                 }
-                const typeTags = createMap<JSDocTypeTag | JSDocReturnTag>();
+                const typeTags = createUnderscoreEscapedMap<JSDocTypeTag | JSDocReturnTag>();
                 const typeTag = isGetAccessorDeclaration(declaration) ? createJSDocReturnTag(typeNode, "") : createJSDocTypeTag(typeNode, "");
-                typeTags.set("TAG", typeTag);
+                typeTags.set("TAG" as __String, typeTag);
                 insertMergedJSDoc(
                     typeTags, changes, sourceFile, parent,
-                    t => t.kind === typeTag.kind && "TAG",
+                    t => t.kind === typeTag.kind && "TAG" as __String,
                     (synthetic, existing) => synthetic.comment = existing.comment);
             }
             else {
@@ -218,29 +215,28 @@ namespace ts.codefix {
     }
 
     function annotateJSDocParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterInferences: ParameterInference[], program: Program, host: LanguageServiceHost): void {
-        // find
-        const paramTags = createMap<JSDocParameterTag>();
+        const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
+        if (!signature) {
+            return;
+        }
+        const paramTags = createUnderscoreEscapedMap<JSDocParameterTag>();
         forEach(parameterInferences, inference => {
             const param = inference.declaration;
-            const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
-            if (typeNode && !param.initializer && !getJSDocType(param) && isIdentifier(inference.declaration.name)) {
-                paramTags.set(
-                    inference.declaration.name.escapedText as string,
-                    createJSDocParamTag(typeNode, inference.declaration.name as EntityName, !!inference.isOptional, ""));
+            // only infer parameters that have (1) no type and (2) an accessible inferred type
+            if (!param.initializer && !getJSDocType(param) && isIdentifier(param.name) && inference.type) {
+                const typeNode = getTypeNodeIfAccessible(inference.type, param, program, host);
+                if (typeNode) {
+                    paramTags.set(param.name.escapedText, createJSDocParamTag(typeNode, param.name, !!inference.isOptional, ""));
+                }
             }
         });
-
-        // resolve
-        const signature = parameterInferences.length && parameterInferences[0].declaration.parent;
-        if (signature) {
-            insertMergedJSDoc(
-                paramTags, changes, sourceFile, signature,
-                t => isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText as string,
-                (synthetic, existing) => {
-                    synthetic.comment = existing.comment;
-                    synthetic.isBracketed = existing.isBracketed;
-                });
-        }
+        insertMergedJSDoc(
+            paramTags, changes, sourceFile, signature,
+            t => isJSDocParameterTag(t) && isIdentifier(t.name) && t.name.escapedText,
+            (synthetic, existing) => {
+                synthetic.comment = existing.comment;
+                synthetic.isBracketed = existing.isBracketed;
+            });
     }
 
     /**
@@ -248,11 +244,11 @@ namespace ts.codefix {
      * is of type T, where T is the type of the new, synthetic tags.
      */
     function insertMergedJSDoc<T extends JSDocTag>(
-        syntheticTags: Map<T>,
+        syntheticTags: UnderscoreEscapedMap<T>,
         changes: textChanges.ChangeTracker,
         sourceFile: SourceFile,
         parent: HasJSDoc,
-        getKey: (tag: JSDocTag) => string | false,
+        getKey: (tag: JSDocTag) => __String | false,
         merge: (synthetic: T, existing: T) => void) {
         const comments = [];
         const tags: JSDocTag[] = [];
@@ -268,7 +264,7 @@ namespace ts.codefix {
                         if (synthetic) {
                             merge(synthetic, existing as T);
                             tags.push(synthetic);
-                            syntheticTags.delete(key as string);
+                            syntheticTags.delete(key as __String);
                         }
                         else {
                             tags.push(existing);

@@ -350,7 +350,7 @@ namespace ts.textChanges {
                 }
             }
             const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
-            const indent = sourceFile.text.slice(startPosition + 1, fnStart);
+            const indent = sourceFile.text.slice(startPosition, fnStart);
             this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 

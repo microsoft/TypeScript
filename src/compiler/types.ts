@@ -5532,7 +5532,7 @@ namespace ts {
         BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
         AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
         CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
-        AsteriskDelimited = 1 << 5,     // Each list item is asterisk (" *") delimited.
+        AsteriskDelimited = 1 << 5,     // Each list item is asterisk ("\n *") delimited, used with JSDoc.
         DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited | AsteriskDelimited,
 
         AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.

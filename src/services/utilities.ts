@@ -1387,7 +1387,7 @@ namespace ts {
     export function isMemberSymbolInBaseType(memberSymbol: Symbol, checker: TypeChecker): boolean {
         return getPropertySymbolsFromBaseTypes(memberSymbol.parent!, memberSymbol.name, checker, _ => true) || false;
     }
-
+
     export function getParentNodeInSpan(node: Node | undefined, file: SourceFile, span: TextSpan): Node | undefined {
         if (!node) return undefined;
 
@@ -1676,7 +1676,7 @@ namespace ts {
         while (position > -1 && isWhiteSpaceSingleLine(text.charCodeAt(position))) {
             position -= 1;
         }
-        return position;
+        return position + 1;
     }
 
     /**
