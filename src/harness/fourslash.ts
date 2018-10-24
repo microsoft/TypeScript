@@ -3867,7 +3867,7 @@ ${code}
         }
 
         // put ranges in the correct order
-        localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : 1);
+        localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
         localRanges.forEach((r) => { ranges.push(r); });
 
         return {
