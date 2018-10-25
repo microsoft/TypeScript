@@ -16,4 +16,8 @@
 ////    }
 ////}
 
-verify.completions({ marker: "", exact: ["x"], isNewIdentifierLocation: true });
+verify.completions({
+    marker: "",
+    exact: { name: "x", kind: "script", kindModifiers: ".ts" },
+    isNewIdentifierLocation: true,
+});

@@ -24,6 +24,14 @@
 ////const foo = require(`x//*4*/`);
 
 verify.completions(
-    { marker: "1", exact: ["y", "x"], isNewIdentifierLocation: true },
-    { marker: ["2", "3", "4"], exact: ["bar", "foo"], isNewIdentifierLocation: true },
+    {
+        marker: "1",
+        exact: ["y", "x"].map(name => ({ name, kind: "directory" })),
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: ["2", "3", "4"],
+        exact: ["bar", "foo"].map(name => ({ name, kind: "script", kindModifiers: ".d.ts" })),
+        isNewIdentifierLocation: true,
+    },
 );

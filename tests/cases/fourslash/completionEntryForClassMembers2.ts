@@ -189,18 +189,18 @@
 ////}
 
 const validInstanceMembersOfBaseClassB: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
-    { name: "protectedMethod", text: "(method) B.protectedMethod(): void" },
+    { name: "protectedMethod", text: "(method) B.protectedMethod(): void", kindModifiers: "protected" },
     { name: "getValue", text: "(method) B.getValue(): string | boolean" },
 ];
 const validStaticMembersOfBaseClassB: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
-    { name: "staticMethod", text: "(method) B.staticMethod(): void" },
+    { name: "staticMethod", text: "(method) B.staticMethod(): void", kindModifiers: "static" },
 ];
 const privateMembersOfBaseClassB: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
     { name: "privateMethod", text: "(method) B.privateMethod(): void" },
 ];
 const protectedPropertiesOfBaseClassB0: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
-    { name: "protectedMethod", text: "(method) B0.protectedMethod(): void" },
-    { name: "protectedMethod1", text: "(method) B0.protectedMethod1(): void" },
+    { name: "protectedMethod", text: "(method) B0.protectedMethod(): void", kindModifiers: "protected" },
+    { name: "protectedMethod1", text: "(method) B0.protectedMethod1(): void", kindModifiers: "protected" },
 ];
 const publicPropertiesOfBaseClassB0: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
     { name: "getValue", text: "(method) B0.getValue(): string | boolean" },
@@ -214,12 +214,12 @@ const validInstanceMembersOfBaseClassB0_2 : ReadonlyArray<FourSlashInterface.Exp
     publicPropertiesOfBaseClassB0[1],
 ];
 const validStaticMembersOfBaseClassB0: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
-    { name: "staticMethod", text: "(method) B0.staticMethod(): void" },
-    { name: "staticMethod1", text: "(method) B0.staticMethod1(): void" },
+    { name: "staticMethod", text: "(method) B0.staticMethod(): void", kindModifiers: "static" },
+    { name: "staticMethod1", text: "(method) B0.staticMethod1(): void", kindModifiers: "static" },
 ];
 const privateMembersOfBaseClassB0: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
-    { name: "privateMethod", text: "(method) B0.privateMethod(): void" },
-    { name: "privateMethod1", text: "(method) B0.privateMethod1(): void" },
+    { name: "privateMethod", text: "(method) B0.privateMethod(): void", kindModifiers: "private" },
+    { name: "privateMethod1", text: "(method) B0.privateMethod1(): void", kindModifiers: "private" },
 ];
 const membersOfI: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntryObject> = [
     { name: "methodOfInterface", text: "(method) I.methodOfInterface(): number" },

@@ -13,7 +13,15 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "const N.foo: 0", kind: "const", hasAction: true },
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "const N.foo: 0",
+        kind: "const",
+        kindModifiers: "export,declare",
+        hasAction: true,
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {

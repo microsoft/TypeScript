@@ -10,7 +10,15 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "function foo(): void", kind: "function", hasAction: true },
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "function foo(): void",
+        kind: "function",
+        kindModifiers: "export",
+        hasAction: true,
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {

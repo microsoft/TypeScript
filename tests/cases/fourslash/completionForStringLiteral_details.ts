@@ -18,7 +18,7 @@
 ////o["/*prop*/"];
 
 verify.completions(
-    { marker: "path", includes: { name: "other", text: "other", kind: "script" }, isNewIdentifierLocation: true },
+    { marker: "path", includes: { name: "other", text: "other", kind: "script", kindModifiers: ".ts" }, isNewIdentifierLocation: true },
     { marker: "type", exact: { name: "a", text: "a", kind: "string" } },
     {
         marker: "prop",
