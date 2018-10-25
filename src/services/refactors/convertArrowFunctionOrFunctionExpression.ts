@@ -95,18 +95,18 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         maybeFunc = getContainingFunction(token);
         if (!!maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
-                return { selectedVariableDeclaration: false, func: maybeFunc };
+            return { selectedVariableDeclaration: false, func: maybeFunc };
         }
 
         return undefined;
     }
 
     function isSingleVariableDeclaration(parent: Node): parent is VariableDeclarationList {
-        return isVariableDeclarationList(parent) && parent.declarations.length === 1;
+        return isVariableDeclaration(parent) || (isVariableDeclarationList(parent) && parent.declarations.length === 1);
     }
 
     function getArrowFunctionFromVariableDeclaration(parent: Node): ArrowFunction | undefined {
-        if (!(isVariableDeclaration(parent) || isSingleVariableDeclaration(parent))) return undefined;
+        if (!isSingleVariableDeclaration(parent)) return undefined;
         const variableDeclaration = isVariableDeclaration(parent) ? parent : parent.declarations[0];
 
         const initializer = variableDeclaration.initializer;
@@ -172,7 +172,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const head = statements[0];
         let body: ConciseBody;
 
-        if (func.body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression) || isExpressionStatement(head))) {
+        if (canBeConvertedToExpression(func.body, head)) {
             body = head.expression!;
             suppressLeadingAndTrailingTrivia(body);
             copyComments(head, body, file, SyntaxKind.MultiLineCommentTrivia, /* hasTrailingNewLine */ false);
@@ -184,5 +184,9 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         const newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, /* equalsGreaterThanToken */ undefined, body);
         const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
         return { renameFilename: undefined, renameLocation: undefined, edits };
+    }
+
+    function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement | ExpressionStatement {
+        return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression) || isExpressionStatement(head));
     }
 }
