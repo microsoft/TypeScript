@@ -2362,7 +2362,7 @@ namespace ts {
         }
 
         function getCommonJsExportEquals(exported: Symbol | undefined, moduleSymbol: Symbol): Symbol | undefined {
-            if (!exported || exported === unknownSymbol || exported === moduleSymbol || moduleSymbol.exports!.size === 1) {
+            if (!exported || exported === unknownSymbol || exported === moduleSymbol || moduleSymbol.exports!.size === 1 || exported.flags & SymbolFlags.Alias) {
                 return exported;
             }
             const merged = cloneSymbol(exported);
