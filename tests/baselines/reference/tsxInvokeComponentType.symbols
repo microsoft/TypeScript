@@ -13,8 +13,18 @@ const bad = <Elem />;
 >bad : Symbol(bad, Decl(tsxInvokeComponentType.tsx, 5, 5))
 >Elem : Symbol(Elem, Decl(tsxInvokeComponentType.tsx, 3, 13))
 
-const good = <Elem someKey= "ok" />;
+const good = <Elem someKey="ok" />;
 >good : Symbol(good, Decl(tsxInvokeComponentType.tsx, 7, 5))
 >Elem : Symbol(Elem, Decl(tsxInvokeComponentType.tsx, 3, 13))
 >someKey : Symbol(someKey, Decl(tsxInvokeComponentType.tsx, 7, 18))
+
+declare const Elem2: ComponentType<{ opt?: number }>;
+>Elem2 : Symbol(Elem2, Decl(tsxInvokeComponentType.tsx, 9, 13))
+>ComponentType : Symbol(ComponentType, Decl(tsxInvokeComponentType.tsx, 1, 15))
+>opt : Symbol(opt, Decl(tsxInvokeComponentType.tsx, 9, 36))
+
+const alsoOk = <Elem2>text</Elem2>;
+>alsoOk : Symbol(alsoOk, Decl(tsxInvokeComponentType.tsx, 10, 5))
+>Elem2 : Symbol(Elem2, Decl(tsxInvokeComponentType.tsx, 9, 13))
+>Elem2 : Symbol(Elem2, Decl(tsxInvokeComponentType.tsx, 9, 13))
 

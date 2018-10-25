@@ -12883,7 +12883,7 @@ namespace ts {
             for (let i = 0; i < targetLen; i++) {
                 const s = getTypeAtPosition(source, i);
                 const t = getTypeAtPosition(target, i);
-                const related = compareTypes(s, t);
+                const related = compareTypes(t, s);
                 if (!related) {
                     return Ternary.False;
                 }

@@ -6,7 +6,10 @@ declare const Elem: ComponentType<{ someKey: string }>;
 
 const bad = <Elem />;
 
-const good = <Elem someKey= "ok" />;
+const good = <Elem someKey="ok" />;
+
+declare const Elem2: ComponentType<{ opt?: number }>;
+const alsoOk = <Elem2>text</Elem2>;
 
 
 //// [tsxInvokeComponentType.js]
@@ -19,3 +22,4 @@ exports.__esModule = true;
 var react_1 = __importDefault(require("react"));
 var bad = react_1["default"].createElement(Elem, null);
 var good = react_1["default"].createElement(Elem, { someKey: "ok" });
+var alsoOk = react_1["default"].createElement(Elem2, null, "text");

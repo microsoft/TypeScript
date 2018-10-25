@@ -8,4 +8,7 @@ declare const Elem: ComponentType<{ someKey: string }>;
 
 const bad = <Elem />;
 
-const good = <Elem someKey= "ok" />;
+const good = <Elem someKey="ok" />;
+
+declare const Elem2: ComponentType<{ opt?: number }>;
+const alsoOk = <Elem2>text</Elem2>;
