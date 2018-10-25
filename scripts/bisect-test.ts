@@ -5,7 +5,7 @@
 import cp = require('child_process');
 import fs = require('fs');
 
-// Slice off 'node bisect-test.js' from the commandline args
+// Slice off 'node bisect-test.js' from the command line args
 var args = process.argv.slice(2);
 
 function tsc(tscArgs: string, onExit: (exitCode: number) => void) {
