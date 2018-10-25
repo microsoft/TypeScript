@@ -6786,7 +6786,7 @@ namespace ts {
             const modifiers = getMappedTypeModifiers(type.mappedType);
             const readonlyMask = modifiers & MappedTypeModifiers.IncludeReadonly ? false : true;
             const optionalMask = modifiers & MappedTypeModifiers.IncludeOptional ? 0 : SymbolFlags.Optional;
-            const stringIndexInfo = indexInfo && createIndexInfo(inferReverseMappedType(indexInfo.type, type.mappedType), readonlyMask && indexInfo.isReadonly);
+            const stringIndexInfo = indexInfo && createIndexInfo(inferReverseMappedType(indexInfo.type, type.mappedType, type.constraintType), readonlyMask && indexInfo.isReadonly);
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(type.source)) {
                 const checkFlags = CheckFlags.ReverseMapped | (readonlyMask && isReadonlySymbol(prop) ? CheckFlags.Readonly : 0);
@@ -6795,6 +6795,7 @@ namespace ts {
                 inferredProp.nameType = prop.nameType;
                 inferredProp.propertyType = getTypeOfSymbol(prop);
                 inferredProp.mappedType = type.mappedType;
+                inferredProp.constraintType = type.constraintType;
                 members.set(prop.escapedName, inferredProp);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, undefined);
@@ -7082,7 +7083,11 @@ namespace ts {
         function getDefaultConstraintOfConditionalType(type: ConditionalType) {
             if (!type.resolvedDefaultConstraint) {
                 const rootTrueType = type.root.trueType;
-                const rootTrueConstraint = rootTrueType.flags & TypeFlags.Substitution ? (<SubstitutionType>rootTrueType).substitute : rootTrueType;
+                const rootTrueConstraint = !(rootTrueType.flags & TypeFlags.Substitution)
+                    ? rootTrueType
+                    : ((<SubstitutionType>rootTrueType).substitute).flags & TypeFlags.AnyOrUnknown
+                        ? (<SubstitutionType>rootTrueType).typeVariable
+                        : getIntersectionType([(<SubstitutionType>rootTrueType).substitute, (<SubstitutionType>rootTrueType).typeVariable]);
                 type.resolvedDefaultConstraint = getUnionType([instantiateType(rootTrueConstraint, type.combinedMapper || type.mapper), getFalseTypeFromConditionalType(type)]);
             }
             return type.resolvedDefaultConstraint;
@@ -13527,18 +13532,18 @@ namespace ts {
          * property is computed by inferring from the source property type to X for the type
          * variable T[P] (i.e. we treat the type T[P] as the type variable we're inferring for).
          */
-        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType): Type | undefined {
-            const key = source.id + "," + target.id;
+        function inferTypeForHomomorphicMappedType(source: Type, target: MappedType, constraint: IndexType): Type | undefined {
+            const key = source.id + "," + target.id + "," + constraint.id;
             if (reverseMappedCache.has(key)) {
                 return reverseMappedCache.get(key);
             }
             reverseMappedCache.set(key, undefined);
-            const type = createReverseMappedType(source, target);
+            const type = createReverseMappedType(source, target, constraint);
             reverseMappedCache.set(key, type);
             return type;
         }
 
-        function createReverseMappedType(source: Type, target: MappedType) {
+        function createReverseMappedType(source: Type, target: MappedType, constraint: IndexType) {
             const properties = getPropertiesOfType(source);
             if (properties.length === 0 && !getIndexInfoOfType(source, IndexKind.String)) {
                 return undefined;
@@ -13553,13 +13558,13 @@ namespace ts {
             // For arrays and tuples we infer new arrays and tuples where the reverse mapping has been
             // applied to the element type(s).
             if (isArrayType(source)) {
-                return createArrayType(inferReverseMappedType((<TypeReference>source).typeArguments![0], target));
+                return createArrayType(inferReverseMappedType((<TypeReference>source).typeArguments![0], target, constraint));
             }
             if (isReadonlyArrayType(source)) {
-                return createReadonlyArrayType(inferReverseMappedType((<TypeReference>source).typeArguments![0], target));
+                return createReadonlyArrayType(inferReverseMappedType((<TypeReference>source).typeArguments![0], target, constraint));
             }
             if (isTupleType(source)) {
-                const elementTypes = map(source.typeArguments || emptyArray, t => inferReverseMappedType(t, target));
+                const elementTypes = map(source.typeArguments || emptyArray, t => inferReverseMappedType(t, target, constraint));
                 const minLength = getMappedTypeModifiers(target) & MappedTypeModifiers.IncludeOptional ?
                     getTypeReferenceArity(source) - (source.target.hasRestElement ? 1 : 0) : source.target.minLength;
                 return createTupleType(elementTypes, minLength, source.target.hasRestElement, source.target.associatedNames);
@@ -13569,15 +13574,16 @@ namespace ts {
             const reversed = createObjectType(ObjectFlags.ReverseMapped | ObjectFlags.Anonymous, /*symbol*/ undefined) as ReverseMappedType;
             reversed.source = source;
             reversed.mappedType = target;
+            reversed.constraintType = constraint;
             return reversed;
         }
 
         function getTypeOfReverseMappedSymbol(symbol: ReverseMappedSymbol) {
-            return inferReverseMappedType(symbol.propertyType, symbol.mappedType);
+            return inferReverseMappedType(symbol.propertyType, symbol.mappedType, symbol.constraintType);
         }
 
-        function inferReverseMappedType(sourceType: Type, target: MappedType): Type {
-            const typeParameter = <TypeParameter>getIndexedAccessType((<IndexType>getConstraintTypeFromMappedType(target)).type, getTypeParameterFromMappedType(target));
+        function inferReverseMappedType(sourceType: Type, target: MappedType, constraint: IndexType): Type {
+            const typeParameter = <TypeParameter>getIndexedAccessType(constraint.type, getTypeParameterFromMappedType(target));
             const templateType = getTemplateTypeFromMappedType(target);
             const inference = createInferenceInfo(typeParameter);
             inferTypes([inference], sourceType, templateType);
@@ -13693,7 +13699,7 @@ namespace ts {
                     // not contain anyFunctionType when we come back to this argument for its second round
                     // of inference. Also, we exclude inferences for silentNeverType (which is used as a wildcard
                     // when constructing types from type parameters that had no inference candidates).
-                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType) {
+                    if (source.flags & TypeFlags.ContainsAnyFunctionType || source === silentNeverType || (priority & InferencePriority.ReturnType && (source === autoType || source === autoArrayType))) {
                         return;
                     }
                     const inference = getInferenceInfoForType(target);
@@ -13875,6 +13881,44 @@ namespace ts {
                 return undefined;
             }
 
+            function inferFromMappedTypeConstraint(source: Type, target: Type, constraintType: Type): boolean {
+                if (constraintType.flags & TypeFlags.Union) {
+                    let result = false;
+                    for (const type of (constraintType as UnionType).types) {
+                        result = inferFromMappedTypeConstraint(source, target, type) || result;
+                    }
+                    return result;
+                }
+                if (constraintType.flags & TypeFlags.Index) {
+                    // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
+                    // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
+                    // type and then make a secondary inference from that type to T. We make a secondary inference
+                    // such that direct inferences to T get priority over inferences to Partial<T>, for example.
+                    const inference = getInferenceInfoForType((<IndexType>constraintType).type);
+                    if (inference && !inference.isFixed) {
+                        const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target, constraintType as IndexType);
+                        if (inferredType) {
+                            const savePriority = priority;
+                            priority |= InferencePriority.HomomorphicMappedType;
+                            inferFromTypes(inferredType, inference.typeParameter);
+                            priority = savePriority;
+                        }
+                    }
+                    return true;
+                }
+                if (constraintType.flags & TypeFlags.TypeParameter) {
+                    // We're inferring from some source type S to a mapped type { [P in T]: X }, where T is a type
+                    // parameter. Infer from 'keyof S' to T and infer from a union of each property type in S to X.
+                    const savePriority = priority;
+                    priority |= InferencePriority.MappedTypeConstraint;
+                    inferFromTypes(getIndexType(source), constraintType);
+                    priority = savePriority;
+                    inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
+                    return true;
+                }
+                return false;
+            }
+
             function inferFromObjectTypes(source: Type, target: Type) {
                 if (isGenericMappedType(source) && isGenericMappedType(target)) {
                     // The source and target types are generic types { [P in S]: X } and { [P in T]: Y }, so we infer
@@ -13884,31 +13928,7 @@ namespace ts {
                 }
                 if (getObjectFlags(target) & ObjectFlags.Mapped) {
                     const constraintType = getConstraintTypeFromMappedType(<MappedType>target);
-                    if (constraintType.flags & TypeFlags.Index) {
-                        // We're inferring from some source type S to a homomorphic mapped type { [P in keyof T]: X },
-                        // where T is a type variable. Use inferTypeForHomomorphicMappedType to infer a suitable source
-                        // type and then make a secondary inference from that type to T. We make a secondary inference
-                        // such that direct inferences to T get priority over inferences to Partial<T>, for example.
-                        const inference = getInferenceInfoForType((<IndexType>constraintType).type);
-                        if (inference && !inference.isFixed) {
-                            const inferredType = inferTypeForHomomorphicMappedType(source, <MappedType>target);
-                            if (inferredType) {
-                                const savePriority = priority;
-                                priority |= InferencePriority.HomomorphicMappedType;
-                                inferFromTypes(inferredType, inference.typeParameter);
-                                priority = savePriority;
-                            }
-                        }
-                        return;
-                    }
-                    if (constraintType.flags & TypeFlags.TypeParameter) {
-                        // We're inferring from some source type S to a mapped type { [P in T]: X }, where T is a type
-                        // parameter. Infer from 'keyof S' to T and infer from a union of each property type in S to X.
-                        const savePriority = priority;
-                        priority |= InferencePriority.MappedTypeConstraint;
-                        inferFromTypes(getIndexType(source), constraintType);
-                        priority = savePriority;
-                        inferFromTypes(getUnionType(map(getPropertiesOfType(source), getTypeOfSymbol)), getTemplateTypeFromMappedType(<MappedType>target));
+                    if (inferFromMappedTypeConstraint(source, target, constraintType)) {
                         return;
                     }
                 }
@@ -14918,7 +14938,7 @@ namespace ts {
             // we give type 'any[]' to 'x' instead of using the type determined by control flow analysis such that operations
             // on empty arrays are possible without implicit any errors and new element types can be inferred without
             // type mismatch errors.
-            const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? anyArrayType : finalizeEvolvingArrayType(evolvedType);
+            const resultType = getObjectFlags(evolvedType) & ObjectFlags.EvolvingArray && isEvolvingArrayOperationTarget(reference) ? autoArrayType : finalizeEvolvingArrayType(evolvedType);
             if (reference.parent && reference.parent.kind === SyntaxKind.NonNullExpression && getTypeWithFacts(resultType, TypeFacts.NEUndefinedOrNull).flags & TypeFlags.Never) {
                 return declaredType;
             }
@@ -15909,7 +15929,7 @@ namespace ts {
             // A variable is considered uninitialized when it is possible to analyze the entire control flow graph
             // from declaration to use, and when the variable's declared type doesn't include undefined but the
             // control flow based type does include undefined.
-            if (type === autoType || type === autoArrayType) {
+            if (!isEvolvingArrayOperationTarget(node) && (type === autoType || type === autoArrayType)) {
                 if (flowType === autoType || flowType === autoArrayType) {
                     if (noImplicitAny) {
                         error(getNameOfDeclaration(declaration), Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined, symbolToString(symbol), typeToString(flowType));
@@ -19181,12 +19201,12 @@ namespace ts {
          * @param relation a relationship to check parameter and argument type
          * @param excludeArgument
          */
-        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, reportErrors: boolean) {
+        function checkApplicableSignatureForJsxOpeningLikeElement(node: JsxOpeningLikeElement, signature: Signature, relation: Map<RelationComparisonResult>, excludeArgument: boolean[] | undefined, reportErrors: boolean) {
             // Stateless function components can have maximum of three arguments: "props", "context", and "updater".
             // However "context" and "updater" are implicit and can't be specify by users. Only the first parameter, props,
             // can be specified by users through attributes property.
             const paramType = getEffectiveFirstArgumentForJsxSignature(signature, node);
-            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, /*contextualMapper*/ undefined);
+            const attributesType = checkExpressionWithContextualType(node.attributes, paramType, excludeArgument && excludeArgument[0] ? identityMapper : undefined);
             return checkTypeRelatedToAndOptionallyElaborate(attributesType, paramType, relation, reportErrors ? node.tagName : undefined, node.attributes);
         }
 
@@ -19198,7 +19218,7 @@ namespace ts {
             excludeArgument: boolean[] | undefined,
             reportErrors: boolean) {
             if (isJsxOpeningLikeElement(node)) {
-                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, reportErrors);
+                return checkApplicableSignatureForJsxOpeningLikeElement(node, signature, relation, excludeArgument, reportErrors);
             }
             const thisType = getThisTypeOfSignature(signature);
             if (thisType && thisType !== voidType && node.kind !== SyntaxKind.NewExpression) {

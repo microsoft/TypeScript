@@ -3683,6 +3683,7 @@ namespace ts {
     export interface ReverseMappedSymbol extends TransientSymbol {
         propertyType: Type;
         mappedType: MappedType;
+        constraintType: IndexType;
     }
 
     export const enum InternalSymbolName {
@@ -4092,6 +4093,7 @@ namespace ts {
     export interface ReverseMappedType extends ObjectType {
         source: Type;
         mappedType: MappedType;
+        constraintType: IndexType;
     }
 
     /* @internal */
