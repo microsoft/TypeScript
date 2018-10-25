@@ -1412,7 +1412,7 @@ namespace ts.Completions {
                         || some(symbol.declarations, d =>
                             // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
                             // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
-                            isExportSpecifier(d) && (d.propertyName ? !!d.name.originalKeywordKind : !!d.parent.parent.moduleSpecifier))) {
+                            isExportSpecifier(d) && (d.propertyName ? isIdentifierANonContextualKeyword(d.name) : !!d.parent.parent.moduleSpecifier))) {
                         continue;
                     }
 

@@ -2585,6 +2585,10 @@ namespace ts {
         return token !== undefined && isNonContextualKeyword(token);
     }
 
+    export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+        return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
+    }
+
     export type TriviaKind = SyntaxKind.SingleLineCommentTrivia
         | SyntaxKind.MultiLineCommentTrivia
         | SyntaxKind.NewLineTrivia
