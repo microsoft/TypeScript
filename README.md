@@ -40,10 +40,11 @@ with any additional questions or comments.
 
 ## Documentation
 
+*  [Homepage](https://www.typescriptlang.org/)
 *  [Quick tutorial](https://www.typescriptlang.org/docs/tutorial.html)
 *  [Programming handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
 *  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
-*  [Homepage](https://www.typescriptlang.org/)
+
 
 ## Building
 
