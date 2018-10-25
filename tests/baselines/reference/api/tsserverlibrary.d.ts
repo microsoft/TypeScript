@@ -1762,6 +1762,7 @@ declare namespace ts {
          */
         fileExists(path: string): boolean;
         readFile(path: string): string | undefined;
+        trace?(s: string): void;
     }
     /**
      * Branded string for keeping track of when we've turned an ambiguous path

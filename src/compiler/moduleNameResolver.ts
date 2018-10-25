@@ -62,6 +62,7 @@ namespace ts {
         TypeScript, /** '.ts', '.tsx', or '.d.ts' */
         JavaScript, /** '.js' or '.jsx' */
         Json,       /** '.json' */
+        TSConfig,   /** '.json' with `tsconfig` used instead of `index` */
         DtsOnly /** Only '.d.ts' */
     }
 
@@ -98,6 +99,7 @@ namespace ts {
         types?: string;
         typesVersions?: MapLike<MapLike<string[]>>;
         main?: string;
+        tsconfig?: string;
     }
 
     interface PackageJson extends PackageJsonPathFields {
@@ -126,7 +128,7 @@ namespace ts {
         return value;
     }
 
-    function readPackageJsonPathField<K extends "typings" | "types" | "main">(jsonContent: PackageJson, fieldName: K, baseDirectory: string, state: ModuleResolutionState): PackageJson[K] | undefined {
+    function readPackageJsonPathField<K extends "typings" | "types" | "main" | "tsconfig">(jsonContent: PackageJson, fieldName: K, baseDirectory: string, state: ModuleResolutionState): PackageJson[K] | undefined {
         const fileName = readPackageJsonField(jsonContent, fieldName, "string", state);
         if (fileName === undefined) return;
         const path = normalizePath(combinePaths(baseDirectory, fileName));
@@ -139,6 +141,10 @@ namespace ts {
     function readPackageJsonTypesFields(jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState) {
         return readPackageJsonPathField(jsonContent, "typings", baseDirectory, state)
             || readPackageJsonPathField(jsonContent, "types", baseDirectory, state);
+    }
+
+    function readPackageJsonTSConfigField(jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState) {
+        return readPackageJsonPathField(jsonContent, "tsconfig", baseDirectory, state);
     }
 
     function readPackageJsonMainField(jsonContent: PackageJson, baseDirectory: string, state: ModuleResolutionState) {
@@ -853,25 +859,27 @@ namespace ts {
         return resolvedModule && resolvedModule.resolvedFileName;
     }
 
+    const jsOnlyExtensions = [Extensions.JavaScript];
+    const tsExtensions = [Extensions.TypeScript, Extensions.JavaScript];
+    const tsPlusJsonExtensions = [...tsExtensions, Extensions.Json];
+    const tsconfigExtensions = [Extensions.TSConfig];
     function tryResolveJSModuleWorker(moduleName: string, initialDir: string, host: ModuleResolutionHost): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, /*redirectedReference*/ undefined, /*jsOnly*/ true);
+        return nodeModuleNameResolverWorker(moduleName, initialDir, { moduleResolution: ModuleResolutionKind.NodeJs, allowJs: true }, host, /*cache*/ undefined, jsOnlyExtensions, /*redirectedReferences*/ undefined);
     }
 
-    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations {
-        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, redirectedReference, /*jsOnly*/ false);
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference): ResolvedModuleWithFailedLookupLocations;
+    /* @internal */ export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations; // tslint:disable-line unified-signatures
+    export function nodeModuleNameResolver(moduleName: string, containingFile: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache?: ModuleResolutionCache, redirectedReference?: ResolvedProjectReference, lookupConfig?: boolean): ResolvedModuleWithFailedLookupLocations {
+        return nodeModuleNameResolverWorker(moduleName, getDirectoryPath(containingFile), compilerOptions, host, cache, lookupConfig ? tsconfigExtensions : (compilerOptions.resolveJsonModule ? tsPlusJsonExtensions : tsExtensions), redirectedReference);
     }
 
-    function nodeModuleNameResolverWorker(moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, redirectedReference: ResolvedProjectReference | undefined, jsOnly: boolean): ResolvedModuleWithFailedLookupLocations {
+    function nodeModuleNameResolverWorker(moduleName: string, containingDirectory: string, compilerOptions: CompilerOptions, host: ModuleResolutionHost, cache: ModuleResolutionCache | undefined, extensions: Extensions[], redirectedReference: ResolvedProjectReference | undefined): ResolvedModuleWithFailedLookupLocations {
         const traceEnabled = isTraceEnabled(compilerOptions, host);
 
         const failedLookupLocations: string[] = [];
         const state: ModuleResolutionState = { compilerOptions, host, traceEnabled, failedLookupLocations };
 
-        const result = jsOnly ?
-            tryResolve(Extensions.JavaScript) :
-            (tryResolve(Extensions.TypeScript) ||
-                tryResolve(Extensions.JavaScript) ||
-                (compilerOptions.resolveJsonModule ? tryResolve(Extensions.Json) : undefined));
+        const result = forEach(extensions, ext => tryResolve(ext));
         if (result && result.value) {
             const { resolved, isExternalLibraryImport } = result.value;
             return createResolvedModuleWithFailedLookupLocations(resolved, isExternalLibraryImport, failedLookupLocations);
@@ -1019,9 +1027,9 @@ namespace ts {
      * in cases when we know upfront that all load attempts will fail (because containing folder does not exists) however we still need to record all failed lookup locations.
      */
     function loadModuleFromFile(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState): PathAndExtension | undefined {
-        if (extensions === Extensions.Json) {
+        if (extensions === Extensions.Json || extensions === Extensions.TSConfig) {
             const extensionLess = tryRemoveExtension(candidate, Extension.Json);
-            return extensionLess === undefined ? undefined : tryAddingExtensions(extensionLess, extensions, onlyRecordFailures, state);
+            return (extensionLess === undefined && extensions === Extensions.Json) ? undefined : tryAddingExtensions(extensionLess || candidate, extensions, onlyRecordFailures, state);
         }
 
         // First, try adding an extension. An import of "foo" could be matched by a file "foo.ts", or "foo.js" by "foo.js.ts"
@@ -1059,6 +1067,7 @@ namespace ts {
                 return tryExtension(Extension.Ts) || tryExtension(Extension.Tsx) || tryExtension(Extension.Dts);
             case Extensions.JavaScript:
                 return tryExtension(Extension.Js) || tryExtension(Extension.Jsx);
+            case Extensions.TSConfig:
             case Extensions.Json:
                 return tryExtension(Extension.Json);
         }
@@ -1156,11 +1165,27 @@ namespace ts {
     }
 
     function loadNodeModuleFromDirectoryWorker(extensions: Extensions, candidate: string, onlyRecordFailures: boolean, state: ModuleResolutionState, jsonContent: PackageJsonPathFields | undefined, versionPaths: VersionPaths | undefined): PathAndExtension | undefined {
-        const packageFile = jsonContent && (extensions !== Extensions.JavaScript && extensions !== Extensions.Json
-            ? readPackageJsonTypesFields(jsonContent, candidate, state) ||
-                // When resolving typescript modules, try resolving using main field as well
-                (extensions === Extensions.TypeScript ? readPackageJsonMainField(jsonContent, candidate, state) : undefined)
-            : readPackageJsonMainField(jsonContent, candidate, state));
+        let packageFile: string | undefined;
+        if (jsonContent) {
+            switch (extensions) {
+                case Extensions.JavaScript:
+                case Extensions.Json:
+                    packageFile = readPackageJsonMainField(jsonContent, candidate, state);
+                    break;
+                case Extensions.TypeScript:
+                    // When resolving typescript modules, try resolving using main field as well
+                    packageFile = readPackageJsonTypesFields(jsonContent, candidate, state) || readPackageJsonMainField(jsonContent, candidate, state);
+                    break;
+                case Extensions.DtsOnly:
+                    packageFile = readPackageJsonTypesFields(jsonContent, candidate, state);
+                    break;
+                case Extensions.TSConfig:
+                    packageFile = readPackageJsonTSConfigField(jsonContent, candidate, state);
+                    break;
+                default:
+                    return Debug.assertNever(extensions);
+            }
+        }
 
         const loader: ResolutionKindSpecificLoader = (extensions, candidate, onlyRecordFailures, state) => {
             const fromFile = tryFile(candidate, onlyRecordFailures, state);
@@ -1182,7 +1207,7 @@ namespace ts {
 
         const onlyRecordFailuresForPackageFile = packageFile ? !directoryProbablyExists(getDirectoryPath(packageFile), state.host) : undefined;
         const onlyRecordFailuresForIndex = onlyRecordFailures || !directoryProbablyExists(candidate, state.host);
-        const indexPath = combinePaths(candidate, "index");
+        const indexPath = combinePaths(candidate, extensions === Extensions.TSConfig ? "tsconfig" : "index");
 
         if (versionPaths && (!packageFile || containsPath(candidate, packageFile))) {
             const moduleName = getRelativePathFromDirectory(candidate, packageFile || indexPath, /*ignoreCase*/ false);
@@ -1213,6 +1238,7 @@ namespace ts {
         switch (extensions) {
             case Extensions.JavaScript:
                 return extension === Extension.Js || extension === Extension.Jsx;
+            case Extensions.TSConfig:
             case Extensions.Json:
                 return extension === Extension.Json;
             case Extensions.TypeScript:
@@ -1264,7 +1290,7 @@ namespace ts {
         if (packageResult) {
             return packageResult;
         }
-        if (extensions !== Extensions.JavaScript && extensions !== Extensions.Json) {
+        if (extensions === Extensions.TypeScript || extensions === Extensions.DtsOnly) {
             const nodeModulesAtTypes = combinePaths(nodeModulesFolder, "@types");
             let nodeModulesAtTypesExists = nodeModulesFolderExists;
             if (nodeModulesFolderExists && !directoryProbablyExists(nodeModulesAtTypes, state.host)) {
