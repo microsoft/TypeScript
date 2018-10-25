@@ -6,6 +6,6 @@ export = x;
 >x : any
 
 import("./a");
->import("./a") : Promise<typeof import("/a").x>
+>import("./a") : Promise<any>
 >"./a" : "./a"
 
