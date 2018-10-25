@@ -6567,7 +6567,7 @@ namespace ts {
 
         function findMatchingSignature(signatureList: ReadonlyArray<Signature>, signature: Signature, partialMatch: boolean, ignoreThisTypes: boolean, ignoreReturnTypes: boolean): Signature | undefined {
             for (const s of signatureList) {
-                if (compareSignaturesIdentical(s, signature, partialMatch, ignoreThisTypes, ignoreReturnTypes, compareTypesIdentical)) {
+                if (compareSignaturesIdentical(s, signature, partialMatch, ignoreThisTypes, ignoreReturnTypes, partialMatch ? compareTypesSubtypeOf : compareTypesIdentical)) {
                     return s;
                 }
             }
@@ -6603,8 +6603,7 @@ namespace ts {
         // Generic signatures must match exactly, but non-generic signatures are allowed to have extra optional
         // parameters and may differ in return types. When signatures differ in return types, the resulting return
         // type is the union of the constituent return types.
-        function getUnionSignatures(types: ReadonlyArray<Type>, kind: SignatureKind): Signature[] {
-            const signatureLists = map(types, t => getSignaturesOfType(t, kind));
+        function getUnionSignatures(signatureLists: ReadonlyArray<ReadonlyArray<Signature>>): Signature[] {
             let result: Signature[] | undefined;
             for (let i = 0; i < signatureLists.length; i++) {
                 for (const signature of signatureLists[i]) {
@@ -6650,8 +6649,8 @@ namespace ts {
         function resolveUnionTypeMembers(type: UnionType) {
             // The members and properties collections are empty for union types. To get all properties of a union
             // type use getPropertiesOfType (only the language service uses this).
-            const callSignatures = getUnionSignatures(type.types, SignatureKind.Call);
-            const constructSignatures = getUnionSignatures(type.types, SignatureKind.Construct);
+            const callSignatures = getUnionSignatures(map(type.types, t => getSignaturesOfType(t, SignatureKind.Call)));
+            const constructSignatures = getUnionSignatures(map(type.types, t => getSignaturesOfType(t, SignatureKind.Construct)));
             const stringIndexInfo = getUnionIndexInfo(type.types, IndexKind.String);
             const numberIndexInfo = getUnionIndexInfo(type.types, IndexKind.Number);
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
@@ -10689,6 +10688,10 @@ namespace ts {
 
         function compareTypesAssignable(source: Type, target: Type): Ternary {
             return isTypeRelatedTo(source, target, assignableRelation) ? Ternary.True : Ternary.False;
+        }
+
+        function compareTypesSubtypeOf(source: Type, target: Type): Ternary {
+            return isTypeRelatedTo(source, target, subtypeRelation) ? Ternary.True : Ternary.False;
         }
 
         function isTypeSubtypeOf(source: Type, target: Type): boolean {
@@ -17094,7 +17097,7 @@ namespace ts {
         }
 
         function getEffectiveFirstArgumentForJsxSignature(signature: Signature, node: JsxOpeningLikeElement) {
-            return isJsxStatelessFunctionReference(node) ? getJsxPropsTypeFromCallSignature(signature, node) : getJsxPropsTypeFromClassType(signature, node);
+            return getJsxReferenceKind(node) !== JsxReferenceKind.Component ? getJsxPropsTypeFromCallSignature(signature, node) : getJsxPropsTypeFromClassType(signature, node);
         }
 
         function getJsxPropsTypeFromCallSignature(sig: Signature, context: JsxOpeningLikeElement) {
@@ -17990,12 +17993,16 @@ namespace ts {
             return getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace);
         }
 
-        function getUninstantiatedJsxSignaturesOfType(elementType: Type) {
+        function getUninstantiatedJsxSignaturesOfType(elementType: Type): ReadonlyArray<Signature> {
             // Resolve the signatures, preferring constructor
             let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
             if (signatures.length === 0) {
                 // No construct signatures, try call signatures
                 signatures = getSignaturesOfType(elementType, SignatureKind.Call);
+            }
+            if (signatures.length === 0 && elementType.flags & TypeFlags.Union) {
+                // If each member has some combination of new/call signatures; make a union signature list for those
+                signatures = getUnionSignatures(map((elementType as UnionType).types, getUninstantiatedJsxSignaturesOfType));
             }
             return signatures;
         }
@@ -18022,19 +18029,28 @@ namespace ts {
                 return anyType;
         }
 
-        function checkJsxReturnAssignableToAppropriateBound(isSFC: boolean, elemInstanceType: Type, openingLikeElement: Node) {
-            if (isSFC) {
+        function checkJsxReturnAssignableToAppropriateBound(refKind: JsxReferenceKind, elemInstanceType: Type, openingLikeElement: Node) {
+            if (refKind === JsxReferenceKind.Function) {
                 const sfcReturnConstraint = getJsxStatelessElementTypeAt(openingLikeElement);
                 if (sfcReturnConstraint) {
                     checkTypeRelatedTo(elemInstanceType, sfcReturnConstraint, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                 }
             }
-            else {
+            else if (refKind === JsxReferenceKind.Component) {
                 const classConstraint = getJsxElementClassTypeAt(openingLikeElement);
                 if (classConstraint) {
                     // Issue an error if this return type isn't assignable to JSX.ElementClass or JSX.Element, failing that
                     checkTypeRelatedTo(elemInstanceType, classConstraint, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
                 }
+            }
+            else { // Mixed
+                const sfcReturnConstraint = getJsxStatelessElementTypeAt(openingLikeElement);
+                const classConstraint = getJsxElementClassTypeAt(openingLikeElement);
+                if (!sfcReturnConstraint || !classConstraint) {
+                    return;
+                }
+                const combined = getUnionType([sfcReturnConstraint, classConstraint]);
+                checkTypeRelatedTo(elemInstanceType, combined, assignableRelation, openingLikeElement, Diagnostics.JSX_element_type_0_is_not_a_constructor_function_for_JSX_elements);
             }
         }
 
@@ -18125,7 +18141,7 @@ namespace ts {
 
             if (isNodeOpeningLikeElement) {
                 const sig = getResolvedSignature(node as JsxOpeningLikeElement);
-                checkJsxReturnAssignableToAppropriateBound(isJsxStatelessFunctionReference(node as JsxOpeningLikeElement), getReturnTypeOfSignature(sig), node);
+                checkJsxReturnAssignableToAppropriateBound(getJsxReferenceKind(node as JsxOpeningLikeElement), getReturnTypeOfSignature(sig), node);
             }
         }
 
@@ -19160,12 +19176,18 @@ namespace ts {
             return typeArgumentTypes;
         }
 
-        function isJsxStatelessFunctionReference(node: JsxOpeningLikeElement) {
+        function getJsxReferenceKind(node: JsxOpeningLikeElement): JsxReferenceKind {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
-                return true;
+                return JsxReferenceKind.Mixed;
             }
-            const tagType = checkExpression(node.tagName);
-            return !length(getSignaturesOfType(getApparentType(tagType), SignatureKind.Construct));
+            const tagType = getApparentType(checkExpression(node.tagName));
+            if (length(getSignaturesOfType(tagType, SignatureKind.Construct))) {
+                return JsxReferenceKind.Component;
+            }
+            if (length(getSignaturesOfType(tagType, SignatureKind.Call))) {
+                return JsxReferenceKind.Function;
+            }
+            return JsxReferenceKind.Mixed;
         }
 
         /**
@@ -20168,13 +20190,11 @@ namespace ts {
                 }
             }
 
-            const callSignatures = getSignaturesOfType(apparentType, SignatureKind.Call);
-            const constructSignatures = getSignaturesOfType(apparentType, SignatureKind.Construct);
-            if (exprTypes.flags & TypeFlags.String || isUntypedFunctionCall(exprTypes, apparentType, callSignatures.length, constructSignatures.length)) {
+            const signatures = getUninstantiatedJsxSignaturesOfType(apparentType);
+            if (exprTypes.flags & TypeFlags.String || isUntypedFunctionCall(exprTypes, apparentType, signatures.length, /*constructSignatures*/ 0)) {
                 return resolveUntypedCall(node);
             }
 
-            const signatures = getUninstantiatedJsxSignaturesOfType(apparentType);
             if (signatures.length === 0) {
                 // We found no signatures at all, which is an error
                 error(node.tagName, Diagnostics.JSX_element_type_0_does_not_have_any_construct_or_call_signatures, getTextOfNode(node.tagName));

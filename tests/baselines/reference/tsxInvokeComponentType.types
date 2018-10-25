@@ -1,0 +1,21 @@
+=== tests/cases/compiler/tsxInvokeComponentType.tsx ===
+/// <reference path="react16.d.ts" />
+import React, { ComponentType } from "react";
+>React : typeof React
+>ComponentType : any
+
+declare const Elem: ComponentType<{ someKey: string }>;
+>Elem : React.ComponentType<{ someKey: string; }>
+>someKey : string
+
+const bad = <Elem />;
+>bad : JSX.Element
+><Elem /> : JSX.Element
+>Elem : React.ComponentType<{ someKey: string; }>
+
+const good = <Elem someKey= "ok" />;
+>good : JSX.Element
+><Elem someKey= "ok" /> : JSX.Element
+>Elem : React.ComponentType<{ someKey: string; }>
+>someKey : string
+
