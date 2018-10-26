@@ -768,7 +768,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21003,8): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21007,8): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21011,8): error TS2350: Only a void function can be called with the 'new' keyword.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21017,1): error TS2323: Cannot redeclare exported variable 'deflate'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21022,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21026,23): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(21034,19): error TS2350: Only a void function can be called with the 'new' keyword.
@@ -847,29 +846,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,18): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23247,37): error TS2339: Property 'length' does not exist on type 'Buffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23256,26): error TS2339: Property 'length' does not exist on type 'Buffer'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23459,1): error TS2323: Cannot redeclare exported variable 'isArray'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23464,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23469,1): error TS2323: Cannot redeclare exported variable 'isNull'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23474,1): error TS2323: Cannot redeclare exported variable 'isNullOrUndefined'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23479,1): error TS2323: Cannot redeclare exported variable 'isNumber'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23484,1): error TS2323: Cannot redeclare exported variable 'isString'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23489,1): error TS2323: Cannot redeclare exported variable 'isSymbol'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23494,1): error TS2323: Cannot redeclare exported variable 'isUndefined'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23499,1): error TS2323: Cannot redeclare exported variable 'isRegExp'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23504,1): error TS2323: Cannot redeclare exported variable 'isObject'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23509,1): error TS2323: Cannot redeclare exported variable 'isDate'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23514,1): error TS2323: Cannot redeclare exported variable 'isError'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23519,1): error TS2323: Cannot redeclare exported variable 'isFunction'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23529,1): error TS2323: Cannot redeclare exported variable 'isPrimitive'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23531,1): error TS2323: Cannot redeclare exported variable 'isBuffer'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(23601,5): error TS2339: Property 'context' does not exist on type 'Error'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24073,1): error TS2323: Cannot redeclare exported variable 'Buf8'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24074,1): error TS2323: Cannot redeclare exported variable 'Buf16'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24075,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24078,1): error TS2323: Cannot redeclare exported variable 'Buf8'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24079,1): error TS2323: Cannot redeclare exported variable 'Buf16'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(24080,1): error TS2323: Cannot redeclare exported variable 'Buf32'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(26059,1): error TS2323: Cannot redeclare exported variable 'deflate'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27915,27): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27918,30): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
@@ -880,7 +857,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
   Type 'number' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27929,20): error TS2345: Argument of type 'string | number' is not assignable to parameter of type 'string'.
   Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(27956,16): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28222,51): error TS2300: Duplicate identifier '_read'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28457,20): error TS2339: Property 'emit' does not exist on type 'Readable'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(28533,20): error TS2300: Duplicate identifier '_read'.
@@ -921,23 +897,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30311,40): error TS2345: Argument of type '(x: string) => string | number' is not assignable to parameter of type '(substring: string, ...args: any[]) => string'.
   Type 'string | number' is not assignable to type 'string'.
     Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30729,1): error TS2323: Cannot redeclare exported variable 'isArray'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30734,1): error TS2323: Cannot redeclare exported variable 'isBoolean'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30739,1): error TS2323: Cannot redeclare exported variable 'isNull'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30744,1): error TS2323: Cannot redeclare exported variable 'isNullOrUndefined'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30749,1): error TS2323: Cannot redeclare exported variable 'isNumber'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30754,1): error TS2323: Cannot redeclare exported variable 'isString'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30759,1): error TS2323: Cannot redeclare exported variable 'isSymbol'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30764,1): error TS2323: Cannot redeclare exported variable 'isUndefined'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30769,1): error TS2323: Cannot redeclare exported variable 'isRegExp'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30774,1): error TS2323: Cannot redeclare exported variable 'isObject'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30779,1): error TS2323: Cannot redeclare exported variable 'isDate'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30785,1): error TS2323: Cannot redeclare exported variable 'isError'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30790,1): error TS2323: Cannot redeclare exported variable 'isFunction'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30800,1): error TS2323: Cannot redeclare exported variable 'isPrimitive'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30802,1): error TS2323: Cannot redeclare exported variable 'isBuffer'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(30828,1): error TS2323: Cannot redeclare exported variable 'log'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31089,1): error TS2323: Cannot redeclare exported variable 'log'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31094,37): error TS2304: Cannot find name 'chrome'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31095,21): error TS2304: Cannot find name 'chrome'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31096,1): error TS2304: Cannot find name 'chrome'.
@@ -945,14 +904,10 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31124,56): error TS2339: Property 'process' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31130,128): error TS2551: Property 'WebkitAppearance' does not exist on type 'CSSStyleDeclaration'. Did you mean 'webkitAppearance'?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31132,62): error TS2339: Property 'firebug' does not exist on type 'Console'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31289,1): error TS2323: Cannot redeclare exported variable 'names'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31290,1): error TS2323: Cannot redeclare exported variable 'skips'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31343,6): error TS2339: Property 'diff' does not exist on type '{ (...args: any[]): void; namespace: any; enabled: any; useColors: any; color: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31344,6): error TS2339: Property 'prev' does not exist on type '{ (...args: any[]): void; namespace: any; enabled: any; useColors: any; color: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31345,6): error TS2339: Property 'curr' does not exist on type '{ (...args: any[]): void; namespace: any; enabled: any; useColors: any; color: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31382,17): error TS2339: Property 'log' does not exist on type '{ (...args: any[]): void; namespace: any; enabled: any; useColors: any; color: any; }'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31410,1): error TS2323: Cannot redeclare exported variable 'names'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(31411,1): error TS2323: Cannot redeclare exported variable 'skips'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39766,1): error TS2304: Cannot find name 'axe'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39802,8): error TS2339: Property 'requestFileSystem' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(39802,33): error TS2339: Property 'requestFileSystem' does not exist on type 'Window'.
@@ -2830,14 +2785,7 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,11): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,32): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60268,1): error TS2304: Cannot find name 'define'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60346,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60397,1): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60430,8): error TS2339: Property 'errors' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60436,1): error TS2323: Cannot redeclare exported variable 'Syntax'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60446,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60601,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60602,1): error TS2323: Cannot redeclare exported variable 'Syntax'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60688,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60728,13): error TS2339: Property 'match' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60732,6): error TS2339: Property 'scanner' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60732,25): error TS2339: Property 'startMarker' does not exist on type 'JSXParser'.
@@ -3000,11 +2948,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61200,9): error TS2339: Property 'config' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61201,6): error TS2339: Property 'tokens' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61209,62): error TS2339: Property 'match' does not exist on type 'JSXParser'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61221,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61281,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61386,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61407,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62087,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62832,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63482,12): error TS2339: Property 'message' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63483,39): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
@@ -3016,19 +2959,12 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64518,9): error TS2551: Property 'paramSet' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'. Did you mean 'params'?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64534,18): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64536,17): error TS2339: Property 'message' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65232,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65248,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65283,7): error TS2339: Property 'index' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65284,7): error TS2339: Property 'lineNumber' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65285,7): error TS2339: Property 'description' does not exist on type 'Error'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65310,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65379,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65468,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65533,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66529,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2322: Type 'string[]' is not assignable to type 'RegExpExecArray'.
   Property 'index' is missing in type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3058,7 +2994,6 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68209,38): error TS2339: Property 'componentsOrder' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68212,26): error TS2339: Property 'maxH' does not exist on type '{}'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(68213,26): error TS2339: Property 'maxV' does not exist on type '{}'.
-node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(69799,1): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,4): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70747,26): error TS2531: Object is possibly 'null'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(70753,6): error TS2531: Object is possibly 'null'.
@@ -11599,30 +11534,16 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,482): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,502): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,564): error TS2339: Property 'code' does not exist on type 'Error'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(166,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(293,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(337,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(398,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1330,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1370,101): error TS2339: Property 'TIME_BEFORE_LINKIFY' does not exist on type 'typeof Linkifier'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1550,11): error TS2339: Property 'TIME_BEFORE_LINKIFY' does not exist on type 'typeof Linkifier'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1557,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2037,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2281,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2359,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2378,16): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2397,20): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2398,27): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2450,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2476,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2503,41): error TS2339: Property '_document' does not exist on type 'CharMeasure'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2509,18): error TS2339: Property '_parentElement' does not exist on type 'CharMeasure'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2524,18): error TS2339: Property 'emit' does not exist on type 'CharMeasure'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2535,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2612,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2615,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2674,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2690,63): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2694,68): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2697,70): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
@@ -11630,9 +11551,6 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2704,51): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2713,22): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2714,22): error TS2339: Property '_objectCount' does not exist on type 'typeof DomElementObjectPool'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2721,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2732,1): error TS2323: Cannot redeclare exported variable '__esModule'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2766,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2925,9): error TS2322: Type 'number' is not assignable to type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3087,14): error TS2339: Property 'browser' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3151,54): error TS2339: Property 'theme' does not exist on type 'Terminal'.
