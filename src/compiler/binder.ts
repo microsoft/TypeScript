@@ -3098,8 +3098,8 @@ namespace ts {
 
         if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ObjectLiteralExpression) {
             // Destructuring object assignments with are ES2015 syntax
-            // and possibly ESNext if they contain rest
-            transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
+            // and possibly ES2018 if they contain rest
+            transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2015 | TransformFlags.AssertDestructuringAssignment;
         }
         else if (operatorTokenKind === SyntaxKind.EqualsToken && leftKind === SyntaxKind.ArrayLiteralExpression) {
             // Destructuring assignments are ES2015 syntax.
@@ -3135,9 +3135,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript | TransformFlags.ContainsTypeScriptClassSyntax;
         }
 
-        // parameters with object rest destructuring are ES Next syntax
+        // parameters with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // If a parameter has an initializer, a binding pattern or a dotDotDot token, then
@@ -3287,9 +3287,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3311,14 +3311,14 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // An async method declaration is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
         if (node.asteriskToken) {
@@ -3342,9 +3342,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertTypeScript;
         }
 
-        // function declarations with object rest destructuring are ES Next syntax
+        // function declarations with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3388,12 +3388,12 @@ namespace ts {
 
             // An async function declaration is ES2017 syntax.
             if (modifierFlags & ModifierFlags.Async) {
-                transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+                transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
             }
 
-            // function declarations with object rest destructuring are ES Next syntax
+            // function declarations with object rest destructuring are ES2018 syntax
             if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-                transformFlags |= TransformFlags.AssertESNext;
+                transformFlags |= TransformFlags.AssertES2018;
             }
 
             // If a FunctionDeclaration's subtree has marked the container as needing to capture the
@@ -3430,12 +3430,12 @@ namespace ts {
 
         // An async function expression is ES2017 syntax.
         if (hasModifier(node, ModifierFlags.Async)) {
-            transformFlags |= node.asteriskToken ? TransformFlags.AssertESNext : TransformFlags.AssertES2017;
+            transformFlags |= node.asteriskToken ? TransformFlags.AssertES2018 : TransformFlags.AssertES2017;
         }
 
-        // function expressions with object rest destructuring are ES Next syntax
+        // function expressions with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
 
@@ -3474,9 +3474,9 @@ namespace ts {
             transformFlags |= TransformFlags.AssertES2017;
         }
 
-        // arrow functions with object rest destructuring are ES Next syntax
+        // arrow functions with object rest destructuring are ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // If an ArrowFunction contains a lexical this, its container must capture the lexical this.
@@ -3496,8 +3496,8 @@ namespace ts {
         if (transformFlags & TransformFlags.Super) {
             transformFlags ^= TransformFlags.Super;
             // super inside of an async function requires hoisting the super access (ES2017).
-            // same for super inside of an async generator, which is ESNext.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
+            // same for super inside of an async generator, which is ES2018.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3514,8 +3514,8 @@ namespace ts {
         if (expressionFlags & TransformFlags.Super) {
             transformFlags &= ~TransformFlags.Super;
             // super inside of an async function requires hoisting the super access (ES2017).
-            // same for super inside of an async generator, which is ESNext.
-            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
+            // same for super inside of an async generator, which is ES2018.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsES2018;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3526,9 +3526,9 @@ namespace ts {
         let transformFlags = subtreeFlags;
         transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
 
-        // A VariableDeclaration containing ObjectRest is ESNext syntax
+        // A VariableDeclaration containing ObjectRest is ES2018 syntax
         if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
-            transformFlags |= TransformFlags.AssertESNext;
+            transformFlags |= TransformFlags.AssertES2018;
         }
 
         // Type annotations are TypeScript syntax.
@@ -3635,8 +3635,8 @@ namespace ts {
         switch (kind) {
             case SyntaxKind.AsyncKeyword:
             case SyntaxKind.AwaitExpression:
-                // async/await is ES2017 syntax, but may be ESNext syntax (for async generators)
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2017;
+                // async/await is ES2017 syntax, but may be ES2018 syntax (for async generators)
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2017;
                 break;
 
             case SyntaxKind.TypeAssertionExpression:
@@ -3708,7 +3708,7 @@ namespace ts {
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
                 if ((<ForOfStatement>node).awaitModifier) {
-                    transformFlags |= TransformFlags.AssertESNext;
+                    transformFlags |= TransformFlags.AssertES2018;
                 }
                 transformFlags |= TransformFlags.AssertES2015;
                 break;
@@ -3716,7 +3716,7 @@ namespace ts {
             case SyntaxKind.YieldExpression:
                 // This node is either ES2015 syntax (in a generator) or ES2017 syntax (in an async
                 // generator).
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.AssertES2015 | TransformFlags.ContainsYield;
                 break;
 
             case SyntaxKind.AnyKeyword:
@@ -3785,7 +3785,7 @@ namespace ts {
                 break;
 
             case SyntaxKind.SpreadAssignment:
-                transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
+                transformFlags |= TransformFlags.AssertES2018 | TransformFlags.ContainsObjectRestOrSpread;
                 break;
 
             case SyntaxKind.SuperKeyword:
@@ -3802,7 +3802,7 @@ namespace ts {
             case SyntaxKind.ObjectBindingPattern:
                 transformFlags |= TransformFlags.AssertES2015 | TransformFlags.ContainsBindingPattern;
                 if (subtreeFlags & TransformFlags.ContainsRestOrSpread) {
-                    transformFlags |= TransformFlags.AssertESNext | TransformFlags.ContainsObjectRestOrSpread;
+                    transformFlags |= TransformFlags.AssertES2018 | TransformFlags.ContainsObjectRestOrSpread;
                 }
                 excludeFlags = TransformFlags.BindingPatternExcludes;
                 break;
@@ -3840,8 +3840,8 @@ namespace ts {
 
                 if (subtreeFlags & TransformFlags.ContainsObjectRestOrSpread) {
                     // If an ObjectLiteralExpression contains a spread element, then it
-                    // is an ES next node.
-                    transformFlags |= TransformFlags.AssertESNext;
+                    // is an ES2018 node.
+                    transformFlags |= TransformFlags.AssertES2018;
                 }
 
                 break;
@@ -3876,8 +3876,8 @@ namespace ts {
                 break;
 
             case SyntaxKind.ReturnStatement:
-                // Return statements may require an `await` in ESNext.
-                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertESNext;
+                // Return statements may require an `await` in ES2018.
+                transformFlags |= TransformFlags.ContainsHoistedDeclarationOrCompletion | TransformFlags.AssertES2018;
                 break;
 
             case SyntaxKind.ContinueStatement:

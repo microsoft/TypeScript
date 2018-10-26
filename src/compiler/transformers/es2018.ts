@@ -5,7 +5,7 @@ namespace ts {
         AsyncMethodsWithSuper = 1 << 0
     }
 
-    export function transformESNext(context: TransformationContext) {
+    export function transformES2018(context: TransformationContext) {
         const {
             resumeLexicalEnvironment,
             endLexicalEnvironment,
@@ -61,7 +61,7 @@ namespace ts {
         }
 
         function visitorWorker(node: Node, noDestructuringValue: boolean): VisitResult<Node> {
-            if ((node.transformFlags & TransformFlags.ContainsESNext) === 0) {
+            if ((node.transformFlags & TransformFlags.ContainsES2018) === 0) {
                 return node;
             }
             switch (node.kind) {
@@ -105,8 +105,6 @@ namespace ts {
                     return visitExpressionStatement(node as ExpressionStatement);
                 case SyntaxKind.ParenthesizedExpression:
                     return visitParenthesizedExpression(node as ParenthesizedExpression, noDestructuringValue);
-                case SyntaxKind.CatchClause:
-                    return visitCatchClause(node as CatchClause);
                 case SyntaxKind.PropertyAccessExpression:
                     if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
                         capturedSuperProperties.set(node.name.escapedText, true);
@@ -247,17 +245,6 @@ namespace ts {
 
         function visitParenthesizedExpression(node: ParenthesizedExpression, noDestructuringValue: boolean): ParenthesizedExpression {
             return visitEachChild(node, noDestructuringValue ? visitorNoDestructuringValue : visitor, context);
-        }
-
-        function visitCatchClause(node: CatchClause): CatchClause {
-            if (!node.variableDeclaration) {
-                return updateCatchClause(
-                    node,
-                    createVariableDeclaration(createTempVariable(/*recordTempVariable*/ undefined)),
-                    visitNode(node.block, visitor, isBlock)
-                );
-            }
-            return visitEachChild(node, visitor, context);
         }
 
         /**
