@@ -1,8 +1,8 @@
 # TypeScript Language Specification
 
-Version 1.8
+Version 3.1
 
-January, 2016
+September, 2018
 
 <br/>
 
