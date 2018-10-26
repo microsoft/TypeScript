@@ -215,10 +215,10 @@ namespace ts.codefix {
         }
         const paramTags = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
-            // only infer parameters that have (1) no type and (2) an accessible inferred type
+            // only infer parameters that have (1) no type
             if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
 
-            const typeNode = inference.type && getTypeNodeIfAccessible(inference.type, param, program, host);
+            const typeNode = getTypeNodeIfAccessible(inference.type || program.getTypeChecker().getAnyType(), param, program, host);
             return typeNode && createJSDocParamTag(param.name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
