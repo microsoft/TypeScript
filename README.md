@@ -97,3 +97,6 @@ node built/local/tsc.js hello.ts
 ## Roadmap
 
 For details on our planned features and future direction please refer to our [roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap).
+
+## License
+This project is licensed under the Apache License - see the [LICENSE](LICENSE.txt) file for details
