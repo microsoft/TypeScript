@@ -1946,7 +1946,7 @@ namespace ts {
             function collectDynamicImportOrRequireCalls(file: SourceFile) {
                 const r = /import|require/g;
                 while (r.exec(file.text) !== null) {
-                    const node = getTokenAtPosition(file, r.lastIndex);
+                    const node = getNodeAtPosition(file, r.lastIndex);
                     if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                         imports = append(imports, node.arguments[0]);
                     }
@@ -1960,8 +1960,8 @@ namespace ts {
                 }
             }
 
-            /** Returns a token if position is in [start-of-leading-trivia, end) */
-            function getTokenAtPosition(sourceFile: SourceFile, position: number): Node {
+            /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
+            function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
                 let current: Node = sourceFile;
                 const getContainingChild = (child: Node) => {
                     if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
@@ -1969,7 +1969,7 @@ namespace ts {
                     }
                 };
                 while (true) {
-                    const child = hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+                    const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
                     if (!child) {
                         return current;
                     }
