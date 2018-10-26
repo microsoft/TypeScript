@@ -28285,7 +28285,8 @@ namespace ts {
                     return true;
                 }
                 const target = getSymbolLinks(symbol!).target; // TODO: GH#18217
-                if (target && getModifierFlags(node) & ModifierFlags.Export && target.flags & SymbolFlags.Value) {
+                if (target && getModifierFlags(node) & ModifierFlags.Export &&
+                    target.flags & SymbolFlags.Value && (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(target))) {
                     // An `export import ... =` of a value symbol is always considered referenced
                     return true;
                 }
