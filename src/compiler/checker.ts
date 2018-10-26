@@ -11942,7 +11942,7 @@ namespace ts {
                 // the order in which things were checked.
                 if (source.flags & (TypeFlags.Object | TypeFlags.Conditional) && source.aliasSymbol &&
                     source.aliasTypeArguments && source.aliasSymbol === target.aliasSymbol &&
-                    !(getAliasArgumentsContainsMarker(source) || getAliasArgumentsContainsMarker(target))) {
+                    !(source.aliasTypeArgumentsContainsMarker || target.aliasTypeArgumentsContainsMarker)) {
                     const variances = getAliasVariances(source.aliasSymbol);
                     if (result = typeArgumentsRelatedTo(source.aliasTypeArguments, target.aliasTypeArguments, variances, reportErrors)) {
                         return result;
@@ -12618,23 +12618,13 @@ namespace ts {
             return result;
         }
 
-        function isMarkerType(type: Type) {
-            return type === markerSuperType || type === markerSubType || type === markerOtherType;
-        }
-
-        function getAliasArgumentsContainsMarker(type: Type) {
-            if (!type.aliasSymbol || !type.aliasTypeArguments) {
-                return false;
-            }
-            if (type.aliasTypeArgumentsContainsMarker !== undefined) {
-                return type.aliasTypeArgumentsContainsMarker;
-            }
-            return type.aliasTypeArgumentsContainsMarker = some(type.aliasTypeArguments, isMarkerType);
-        }
-
         function getAliasVariances(symbol: Symbol) {
             const links = getSymbolLinks(symbol);
-            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker))));
+            return getVariancesWorker(links.typeParameters, links, (_links, param, marker) => {
+                const type = getTypeAliasInstantiation(symbol, instantiateTypes(links.typeParameters!, makeUnaryTypeMapper(param, marker)));
+                type.aliasTypeArgumentsContainsMarker = true;
+                return type;
+            });
         }
 
         // Return an array containing the variance of each type parameter. The variance is effectively
