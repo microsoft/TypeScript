@@ -1890,8 +1890,11 @@ namespace ts {
             for (const node of file.statements) {
                 collectModuleReferences(node, /*inAmbientModule*/ false);
             }
-            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport) || isJavaScriptFile) {
-                collectDynamicImportOrRequireCalls(file);
+            if ((file.flags & NodeFlags.PossiblyContainsDynamicImport)) {
+                collectDynamicImports();
+            }
+            if (isJavaScriptFile) {
+                collectRequireCalls();
             }
 
             file.imports = imports || emptyArray;
@@ -1943,15 +1946,22 @@ namespace ts {
                 }
             }
 
-            function collectDynamicImportOrRequireCalls(file: SourceFile) {
-                const r = /import|require/g;
+            function collectRequireCalls() {
+                const r = /\brequire\b/g;
                 while (r.exec(file.text) !== null) {
-                    const node = getNodeAtPosition(file, r.lastIndex);
+                    const node = getNodeAtPosition(r.lastIndex);
                     if (isRequireCall(node, /*checkArgumentIsStringLiteralLike*/ true)) {
                         imports = append(imports, node.arguments[0]);
                     }
+                }
+            }
+
+            function collectDynamicImports() {
+                const r = /\bimport\b/g;
+                while (r.exec(file.text) !== null) {
+                    const node = getNodeAtPosition(r.lastIndex, isJavaScriptFile);
                     // we have to check the argument list has length of 1. We will still have to process these even though we have parsing error.
-                    else if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
+                    if (isImportCall(node) && node.arguments.length === 1 && isStringLiteralLike(node.arguments[0])) {
                         imports = append(imports, node.arguments[0] as StringLiteralLike);
                     }
                     else if (isLiteralImportTypeNode(node)) {
@@ -1961,15 +1971,15 @@ namespace ts {
             }
 
             /** Returns a token if position is in [start-of-leading-trivia, end), includes JSDoc only in JS files */
-            function getNodeAtPosition(sourceFile: SourceFile, position: number): Node {
-                let current: Node = sourceFile;
+            function getNodeAtPosition(position: number, allowJsDoc?: boolean): Node {
+                let current: Node = file;
                 const getContainingChild = (child: Node) => {
                     if (child.pos <= position && (position < child.end || (position === child.end && (child.kind === SyntaxKind.EndOfFileToken)))) {
                         return child;
                     }
                 };
                 while (true) {
-                    const child = isJavaScriptFile && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
+                    const child = allowJsDoc && hasJSDocNodes(current) && forEach(current.jsDoc, getContainingChild) || forEachChild(current, getContainingChild);
                     if (!child) {
                         return current;
                     }
