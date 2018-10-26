@@ -219,7 +219,9 @@ namespace ts.codefix {
             if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
 
             const typeNode = getTypeNodeIfAccessible(inference.type || program.getTypeChecker().getAnyType(), param, program, host);
-            return typeNode && createJSDocParamTag(param.name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
+            const name = getSynthesizedClone(param.name);
+            setEmitFlags(name, EmitFlags.NoComments | EmitFlags.NoNestedComments);
+            return typeNode && createJSDocParamTag(name, !!inference.isOptional, createJSDocTypeExpression(typeNode), "");
         });
         addJSDocTags(changes, sourceFile, signature, paramTags);
     }
@@ -304,10 +306,9 @@ namespace ts.codefix {
     }
 
     interface ParameterInference {
-        declaration: ParameterDeclaration;
-        type?: Type;
-        typeNode?: TypeNode;
-        isOptional?: boolean;
+        readonly declaration: ParameterDeclaration;
+        readonly type?: Type;
+        readonly isOptional?: boolean;
     }
 
     namespace InferFromReference {
@@ -353,7 +354,7 @@ namespace ts.codefix {
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
             const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex) => {
+            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
                 const types: Type[] = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;

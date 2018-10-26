@@ -10,7 +10,6 @@ var x = {
 >x : any
 >string : any
 >string : any
-> : any
 }
 
 var y: {
