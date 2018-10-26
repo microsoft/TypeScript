@@ -215,8 +215,7 @@ namespace ts.codefix {
         }
         const paramTags = mapDefined(parameterInferences, inference => {
             const param = inference.declaration;
-            // only infer parameters that have (1) no type
-            if (param.initializer || getJSDocType(param) || !isIdentifier(param.name)) return;
+            if (!isIdentifier(param.name)) return;
 
             const typeNode = getTypeNodeIfAccessible(inference.type || program.getTypeChecker().getAnyType(), param, program, host);
             const name = getSynthesizedClone(param.name);
