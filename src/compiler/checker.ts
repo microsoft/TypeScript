@@ -15441,6 +15441,32 @@ namespace ts {
                 return caseType.flags & TypeFlags.Never ? defaultType : getUnionType([caseType, defaultType]);
             }
 
+            function getImpliedTypeFromTypeofCase(type: Type, text: string) {
+                switch (text) {
+                    case "function":
+                        return type.flags & TypeFlags.Any ? type : globalFunctionType;
+                    case "object":
+                        return type.flags & TypeFlags.Unknown ? getUnionType([nonPrimitiveType, nullType]) : type;
+                    default:
+                        return typeofTypesByName.get(text) || type;
+                }
+            }
+
+            function narrowTypeForTypeofSwitch(candidate: Type) {
+                return (type: Type) => {
+                    if (isTypeSubtypeOf(candidate, type)) {
+                        return candidate;
+                    }
+                    if (type.flags & TypeFlags.Instantiable) {
+                        const constraint = getBaseConstraintOfType(type) || anyType;
+                        if (isTypeSubtypeOf(candidate, constraint)) {
+                            return getIntersectionType([type, candidate]);
+                        }
+                    }
+                    return type;
+                };
+            }
+
             function narrowBySwitchOnTypeOf(type: Type, switchStatement: SwitchStatement, clauseStart: number, clauseEnd: number): Type {
                 const switchWitnesses = getSwitchClauseTypeOfWitnesses(switchStatement);
                 if (!switchWitnesses.length) {
@@ -15458,7 +15484,7 @@ namespace ts {
                     // that we don't have to worry about undefined
                     // in the witness array.
                     const witnesses = <string[]>switchWitnesses.filter(witness => witness !== undefined);
-                    // The adjust clause start and end after removing the `default` statement.
+                    // The adjusted clause start and end after removing the `default` statement.
                     const fixedClauseStart = defaultCaseLocation < clauseStart ? clauseStart - 1 : clauseStart;
                     const fixedClauseEnd = defaultCaseLocation < clauseEnd ? clauseEnd - 1 : clauseEnd;
                     clauseWitnesses = witnesses.slice(fixedClauseStart, fixedClauseEnd);
@@ -15467,6 +15493,9 @@ namespace ts {
                 else {
                     clauseWitnesses = <string[]>switchWitnesses.slice(clauseStart, clauseEnd);
                     switchFacts = getFactsFromTypeofSwitch(clauseStart, clauseEnd, <string[]>switchWitnesses, hasDefaultClause);
+                }
+                if (hasDefaultClause) {
+                    return filterType(type, t => (getTypeFacts(t) & switchFacts) === switchFacts);
                 }
                 /*
                   The implied type is the raw type suggested by a
@@ -15496,26 +15525,11 @@ namespace ts {
                   boolean. We know that number cannot be selected
                   because it is caught in the first clause.
                 */
-                if (!(hasDefaultClause || (type.flags & TypeFlags.Union))) {
-                    let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => typeofTypesByName.get(text) || neverType)), switchFacts);
-                    if (impliedType.flags & TypeFlags.Union) {
-                        impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOfType(type) || type);
-                    }
-                    if (!(impliedType.flags & TypeFlags.Never)) {
-                        if (isTypeSubtypeOf(impliedType, type)) {
-                            return impliedType;
-                        }
-                        if (type.flags & TypeFlags.Instantiable) {
-                            const constraint = getBaseConstraintOfType(type) || anyType;
-                            if (isTypeSubtypeOf(impliedType, constraint)) {
-                                return getIntersectionType([type, impliedType]);
-                            }
-                        }
-                    }
+                let impliedType = getTypeWithFacts(getUnionType(clauseWitnesses.map(text => getImpliedTypeFromTypeofCase(type, text))), switchFacts);
+                if (impliedType.flags & TypeFlags.Union) {
+                    impliedType = getAssignmentReducedType(impliedType as UnionType, getBaseConstraintOrType(type));
                 }
-                return hasDefaultClause ?
-                    filterType(type, t => (getTypeFacts(t) & switchFacts) === switchFacts) :
-                    getTypeWithFacts(type, switchFacts);
+                return getTypeWithFacts(mapType(type, narrowTypeForTypeofSwitch(impliedType)), switchFacts);
             }
 
             function narrowTypeByInstanceof(type: Type, expr: BinaryExpression, assumeTrue: boolean): Type {
