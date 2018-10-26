@@ -6832,11 +6832,9 @@ namespace ts {
                 }
             }
             else {
-                // First, if the constraint type is a type parameter, obtain the base constraint. Then,
-                // if the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
-                // Finally, iterate over the constituents of the resulting iteration type.
-                const keyType = constraintType.flags & TypeFlags.InstantiableNonPrimitive ? getApparentType(constraintType) : constraintType;
-                const iterationType = keyType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>keyType).type)) : keyType;
+                // If the key type is a 'keyof X', obtain 'keyof C' where C is the base constraint of X.
+                // Then iterate over the constituents of the key type.
+                const iterationType = constraintType.flags & TypeFlags.Index ? getIndexType(getApparentType((<IndexType>constraintType).type)) : constraintType;
                 forEachType(iterationType, addMemberForKeyType);
             }
             setStructuredTypeMembers(type, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
