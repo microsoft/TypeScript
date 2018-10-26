@@ -8,7 +8,6 @@
 
 
 ////function coll(callback /*, name1, name2, ... */) {
-//function coll(callback) {
 ////    return callback(this);
 ////}
 
