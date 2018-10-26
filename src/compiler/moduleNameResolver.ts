@@ -665,16 +665,23 @@ namespace ts {
                 }
             }
 
-            switch (moduleResolution) {
-                case ModuleResolutionKind.NodeJs:
-                    result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
-                    break;
-                case ModuleResolutionKind.Classic:
-                    result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
-                    break;
-                default:
-                    return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
+            try {
+                if (etwLogger) etwLogger.logStartResolveModule(moduleName /* , containingFile, ModuleResolutionKind[moduleResolution]*/);
+                switch (moduleResolution) {
+                    case ModuleResolutionKind.NodeJs:
+                        result = nodeModuleNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                        break;
+                    case ModuleResolutionKind.Classic:
+                        result = classicNameResolver(moduleName, containingFile, compilerOptions, host, cache, redirectedReference);
+                        break;
+                    default:
+                        return Debug.fail(`Unexpected moduleResolution: ${moduleResolution}`);
+                }
             }
+            finally {
+                if (etwLogger && result && result.resolvedModule) etwLogger.logInfoEvent(`Module "${moduleName}" resolved to "${result.resolvedModule.resolvedFileName}"`);
+                if (etwLogger) etwLogger.logStopResolveModule((result && result.resolvedModule) ? "" + result.resolvedModule.resolvedFileName : "null");
+             }
 
             if (perFolderCache) {
                 perFolderCache.set(moduleName, result);

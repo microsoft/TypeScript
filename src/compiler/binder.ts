@@ -105,10 +105,15 @@ namespace ts {
     const binder = createBinder();
 
     export function bindSourceFile(file: SourceFile, options: CompilerOptions) {
-        performance.mark("beforeBind");
-        binder(file, options);
-        performance.mark("afterBind");
-        performance.measure("Bind", "beforeBind", "afterBind");
+        try {
+            performance.mark("beforeBind");
+            if (etwLogger) etwLogger.logStartBindFile("" + file.fileName);
+            binder(file, options);
+        } finally {
+            if (etwLogger) etwLogger.logStopBindFile();
+            performance.mark("afterBind");
+            performance.measure("Bind", "beforeBind", "afterBind");
+        }
     }
 
     function createBinder(): (file: SourceFile, options: CompilerOptions) => void {

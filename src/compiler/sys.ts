@@ -1087,35 +1087,41 @@ namespace ts {
             }
 
             function readFile(fileName: string, _encoding?: string): string | undefined {
-                if (!fileExists(fileName)) {
-                    return undefined;
-                }
-                const buffer = _fs.readFileSync(fileName);
-                let len = buffer.length;
-                if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
-                    // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
-                    // flip all byte pairs and treat as little endian.
-                    len &= ~1; // Round down to a multiple of 2
-                    for (let i = 0; i < len; i += 2) {
-                        const temp = buffer[i];
-                        buffer[i] = buffer[i + 1];
-                        buffer[i + 1] = temp;
+                try {
+                    if (etwLogger) etwLogger.logStartReadFile(fileName);
+                    if (!fileExists(fileName)) {
+                        return undefined;
                     }
-                    return buffer.toString("utf16le", 2);
+                    const buffer = _fs.readFileSync(fileName);
+                    let len = buffer.length;
+                    if (len >= 2 && buffer[0] === 0xFE && buffer[1] === 0xFF) {
+                        // Big endian UTF-16 byte order mark detected. Since big endian is not supported by node.js,
+                        // flip all byte pairs and treat as little endian.
+                        len &= ~1; // Round down to a multiple of 2
+                        for (let i = 0; i < len; i += 2) {
+                            const temp = buffer[i];
+                            buffer[i] = buffer[i + 1];
+                            buffer[i + 1] = temp;
+                        }
+                        return buffer.toString("utf16le", 2);
+                    }
+                    if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
+                        // Little endian UTF-16 byte order mark detected
+                        return buffer.toString("utf16le", 2);
+                    }
+                    if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
+                        // UTF-8 byte order mark detected
+                        return buffer.toString("utf8", 3);
+                    }
+                    // Default is UTF-8 with no byte order mark
+                    return buffer.toString("utf8");
+                } finally {
+                    if (etwLogger) etwLogger.logStopReadFile();
                 }
-                if (len >= 2 && buffer[0] === 0xFF && buffer[1] === 0xFE) {
-                    // Little endian UTF-16 byte order mark detected
-                    return buffer.toString("utf16le", 2);
-                }
-                if (len >= 3 && buffer[0] === 0xEF && buffer[1] === 0xBB && buffer[2] === 0xBF) {
-                    // UTF-8 byte order mark detected
-                    return buffer.toString("utf8", 3);
-                }
-                // Default is UTF-8 with no byte order mark
-                return buffer.toString("utf8");
             }
 
             function writeFile(fileName: string, data: string, writeByteOrderMark?: boolean): void {
+                if (etwLogger) etwLogger.logEvent("WriteFile: " + fileName);
                 // If a BOM is required, emit one
                 if (writeByteOrderMark) {
                     data = byteOrderMarkIndicator + data;
@@ -1135,6 +1141,7 @@ namespace ts {
             }
 
             function getAccessibleFileSystemEntries(path: string): FileSystemEntries {
+                if (etwLogger) etwLogger.logEvent("ReadDir: " + (path || "."));
                 try {
                     const entries = _fs.readdirSync(path || ".").sort();
                     const files: string[] = [];
@@ -1196,6 +1203,7 @@ namespace ts {
             }
 
             function getDirectories(path: string): string[] {
+                if (etwLogger) etwLogger.logEvent("ReadDir: " + path);
                 return filter<string>(_fs.readdirSync(path), dir => fileSystemEntryExists(combinePaths(path, dir), FileSystemEntryKind.Directory));
             }
 

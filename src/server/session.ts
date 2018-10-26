@@ -731,7 +731,9 @@ namespace ts.server {
                 }
                 return;
             }
-            this.host.write(formatMessage(msg, this.logger, this.byteLength, this.host.newLine));
+            const msgText = formatMessage(msg, this.logger, this.byteLength, this.host.newLine);
+            if (etwLogger) etwLogger.logEvent(`Response message size: ${msgText.length}`);
+            this.host.write(msgText);
         }
 
         public event<T extends object>(body: T, eventName: string): void {
@@ -2506,9 +2508,12 @@ namespace ts.server {
 
             let request: protocol.Request | undefined;
             let relevantFile: protocol.FileRequestArgs | undefined;
+            let commandSucceeded = false;
             try {
                 request = <protocol.Request>JSON.parse(message);
                 relevantFile = request.arguments && (request as protocol.FileRequest).arguments.file ? (request as protocol.FileRequest).arguments : undefined;
+
+                if (etwLogger) etwLogger.logStartCommand("" + request.command, message.substring(0, 100));
                 const { response, responseRequired } = this.executeCommand(request);
 
                 if (this.logger.hasLevel(LogLevel.requestTime)) {
@@ -2521,6 +2526,10 @@ namespace ts.server {
                     }
                 }
 
+                // Note: Log before writing the response, else the editor can complete its activity before the server does
+                // Set 'commandSucceded' flag to ensure logStopCommand doesn't get called twice (e.g. if doOutput throws)
+                commandSucceeded = true;
+                if (etwLogger) etwLogger.logStopCommand("" + request.command, "Success");
                 if (response) {
                     this.doOutput(response, request.command, request.seq, /*success*/ true);
                 }
@@ -2531,10 +2540,14 @@ namespace ts.server {
             catch (err) {
                 if (err instanceof OperationCanceledException) {
                     // Handle cancellation exceptions
+                    if (etwLogger && !commandSucceeded) etwLogger.logStopCommand("" + (request && request.command), "Canceled: " + err);
                     this.doOutput({ canceled: true }, request!.command, request!.seq, /*success*/ true);
                     return;
                 }
+
                 this.logErrorWorker(err, message, relevantFile);
+                if (etwLogger && !commandSucceeded) etwLogger.logStopCommand("" + (request && request.command), "Error: " + err);
+
                 this.doOutput(
                     /*info*/ undefined,
                     request ? request.command : CommandNames.Unknown,

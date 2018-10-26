@@ -4,6 +4,24 @@ namespace ts {
     export const versionMajorMinor = "3.6";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
+
+    // Load optional module to enable Event Tracing for Windows
+    // See https://github.com/microsoft/typescript-etw for more information
+    let etwModule;
+    try {
+        // tslint:disable-next-line:no-implicit-dependencies
+        etwModule = require("@microsoft/typescript-etw");
+    }
+    catch (e) {
+        // Optional module not installed
+        etwModule = undefined;
+    }
+
+    /* @internal */
+    // tslint:disable-next-line:no-implicit-dependencies
+    export const etwLogger: typeof import("@microsoft/typescript-etw") | undefined = etwModule;
+
+    if (etwLogger) etwLogger.logInfoEvent(`Starting TypeScript v${versionMajorMinor} with command line: ${JSON.stringify(process.argv)}`);
 }
 
 namespace ts {

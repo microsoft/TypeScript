@@ -851,42 +851,47 @@ namespace ts.server {
          * @returns: true if set of files in the project stays the same and false - otherwise.
          */
         updateGraph(): boolean {
-            this.resolutionCache.startRecordingFilesWithChangedResolutions();
+            if (etwLogger) etwLogger.logStartUpdateGraph();
+            try {
+                this.resolutionCache.startRecordingFilesWithChangedResolutions();
 
-            const hasNewProgram = this.updateGraphWorker();
-            const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
-            this.hasAddedorRemovedFiles = false;
+                const hasNewProgram = this.updateGraphWorker();
+                const hasAddedorRemovedFiles = this.hasAddedorRemovedFiles;
+                this.hasAddedorRemovedFiles = false;
 
-            const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
+                const changedFiles: ReadonlyArray<Path> = this.resolutionCache.finishRecordingFilesWithChangedResolutions() || emptyArray;
 
-            for (const file of changedFiles) {
-                // delete cached information for changed files
-                this.cachedUnresolvedImportsPerFile.delete(file);
-            }
-
-            // update builder only if language service is enabled
-            // otherwise tell it to drop its internal state
-            if (this.languageServiceEnabled) {
-                // 1. no changes in structure, no changes in unresolved imports - do nothing
-                // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
-                // (can reuse cached imports for files that were not changed)
-                // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
-                // (can reuse cached imports for files that were not changed)
-                // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
-                if (hasNewProgram || changedFiles.length) {
-                    this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
+                for (const file of changedFiles) {
+                    // delete cached information for changed files
+                    this.cachedUnresolvedImportsPerFile.delete(file);
                 }
 
-                this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
-            }
-            else {
-                this.lastCachedUnresolvedImportsList = undefined;
-            }
+                // update builder only if language service is enabled
+                // otherwise tell it to drop its internal state
+                if (this.languageServiceEnabled) {
+                    // 1. no changes in structure, no changes in unresolved imports - do nothing
+                    // 2. no changes in structure, unresolved imports were changed - collect unresolved imports for all files
+                    // (can reuse cached imports for files that were not changed)
+                    // 3. new files were added/removed, but compilation settings stays the same - collect unresolved imports for all new/modified files
+                    // (can reuse cached imports for files that were not changed)
+                    // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
+                    if (hasNewProgram || changedFiles.length) {
+                        this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program!, this.cachedUnresolvedImportsPerFile);
+                    }
 
-            if (hasNewProgram) {
-                this.projectProgramVersion++;
+                    this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
+                }
+                else {
+                    this.lastCachedUnresolvedImportsList = undefined;
+                }
+
+                if (hasNewProgram) {
+                    this.projectProgramVersion++;
+                }
+                return !hasNewProgram;
+            } finally {
+                if (etwLogger) etwLogger.logStopUpdateGraph();
             }
-            return !hasNewProgram;
         }
 
         /*@internal*/

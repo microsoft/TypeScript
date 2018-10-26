@@ -150,11 +150,16 @@ namespace ts.server {
         }
 
         private static run(self: ThrottledOperations, operationId: string, cb: () => void) {
-            self.pendingTimeouts.delete(operationId);
-            if (self.logger) {
-                self.logger.info(`Running: ${operationId}`);
+            try {
+                if (etwLogger) etwLogger.logStartScheduledOperation(operationId);
+                self.pendingTimeouts.delete(operationId);
+                if (self.logger) {
+                    self.logger.info(`Running: ${operationId}`);
+                }
+                cb();
+            } finally {
+                if (etwLogger) etwLogger.logStopScheduledOperation();
             }
-            cb();
         }
     }
 
@@ -174,13 +179,18 @@ namespace ts.server {
         private static run(self: GcTimer) {
             self.timerId = undefined;
 
-            const log = self.logger.hasLevel(LogLevel.requestTime);
-            const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
+            try {
+                if (etwLogger) etwLogger.logStartScheduledOperation("GC collect");
+                const log = self.logger.hasLevel(LogLevel.requestTime);
+                const before = log && self.host.getMemoryUsage!(); // TODO: GH#18217
 
-            self.host.gc!(); // TODO: GH#18217
-            if (log) {
-                const after = self.host.getMemoryUsage!(); // TODO: GH#18217
-                self.logger.perftrc(`GC::before ${before}, after ${after}`);
+                self.host.gc!(); // TODO: GH#18217
+                if (log) {
+                    const after = self.host.getMemoryUsage!(); // TODO: GH#18217
+                    self.logger.perftrc(`GC::before ${before}, after ${after}`);
+                }
+            } finally {
+                if (etwLogger) etwLogger.logStopScheduledOperation();
             }
         }
     }
