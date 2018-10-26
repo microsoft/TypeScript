@@ -1,3 +1,4 @@
+/// <reference types="@types/node"/>
 /* @internal */
 namespace ts {
     export interface InspectValueOptions {
