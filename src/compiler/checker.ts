@@ -4796,6 +4796,10 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
+            if (isNamelessJSDocTypeDef(declaration)) {
+                return getDeclaredTypeOfTypeAlias(getSymbolOfNode(declaration));
+            }
+
             if ((noImplicitAny || isInJSFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
@@ -5271,6 +5275,9 @@ namespace ts {
             }
             else if (isObjectLiteralMethod(declaration)) {
                 type = tryGetTypeFromEffectiveTypeNode(declaration) || checkObjectLiteralMethod(declaration, CheckMode.Normal);
+            }
+            else if (isNamelessJSDocTypeDef(declaration)) {
+                type = getDeclaredTypeOfTypeAlias(symbol);
             }
             else if (isParameter(declaration)
                      || isPropertyDeclaration(declaration)
@@ -5910,8 +5917,10 @@ namespace ts {
                     return errorType;
                 }
 
-                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
+                let declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                if (!declaration) declaration = findMap(symbol.declarations, getJSDocNamelessTypedefTag);
+
                 const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;
@@ -24861,7 +24870,7 @@ namespace ts {
                     }
                 }
             }
-            else {
+            else if (!isNamelessJSDocTypeDef(node)) {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
                 // initializer is consistent with type associated with the node
                 const declarationType = convertAutoToAny(getWidenedTypeForVariableLikeDeclaration(node));
@@ -29950,6 +29959,9 @@ namespace ts {
             if (node.parent.parent.kind !== SyntaxKind.ForInStatement && node.parent.parent.kind !== SyntaxKind.ForOfStatement) {
                 if (node.flags & NodeFlags.Ambient) {
                     checkAmbientInitializer(node);
+                }
+                else if (node.initializer && isNamelessJSDocTypeDef(node)) {
+                    return grammarErrorOnNode(node, Diagnostics._0_only_refers_to_a_type_but_is_being_used_as_a_value_here, (node.name as Identifier).escapedText);
                 }
                 else if (!node.initializer) {
                     if (isBindingPattern(node.name) && !isBindingPattern(node.parent)) {

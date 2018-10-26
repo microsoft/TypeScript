@@ -7,6 +7,6 @@ export type foo = 5;
  * }}
  */
 export const foo = 5;
->foo : 5
+>foo : any
 >5 : 5
 

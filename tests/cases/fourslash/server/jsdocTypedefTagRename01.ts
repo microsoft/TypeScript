@@ -6,8 +6,6 @@
 //// /** @typedef {(string | number)} */
 //// var [|NumberLike|];
 ////
-//// [|NumberLike|] = 10;
-////
 //// /** @type {[|NumberLike|]} */
 //// var numberLike;
 

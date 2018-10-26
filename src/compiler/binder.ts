@@ -1755,7 +1755,7 @@ namespace ts {
                 bind(typeAlias.typeExpression);
                 if (!typeAlias.fullName || typeAlias.fullName.kind === SyntaxKind.Identifier) {
                     parent = typeAlias.parent;
-                    bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                    bindBlockScopedDeclaration(typeAlias, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes & ~SymbolFlags.TypeAlias);
                 }
                 else {
                     bind(typeAlias.fullName);
@@ -2713,7 +2713,11 @@ namespace ts {
                 const isEnum = isInJSFile(node) && !!getJSDocEnumTag(node);
                 const enumFlags = (isEnum ? SymbolFlags.RegularEnum : SymbolFlags.None);
                 const enumExcludes = (isEnum ? SymbolFlags.RegularEnumExcludes : SymbolFlags.None);
-                if (isBlockOrCatchScoped(node)) {
+                const jsdocTypeDef = isInJSFile(node) && getJSDocNamelessTypedefTag(node);
+                if (jsdocTypeDef && !jsdocTypeDef.name) {
+                    bindBlockScopedDeclaration(node, SymbolFlags.TypeAlias, SymbolFlags.TypeAliasExcludes);
+                }
+                else if (isBlockOrCatchScoped(node)) {
                     bindBlockScopedDeclaration(node, SymbolFlags.BlockScopedVariable | enumFlags, SymbolFlags.BlockScopedVariableExcludes | enumExcludes);
                 }
                 else if (isParameterDeclaration(node)) {

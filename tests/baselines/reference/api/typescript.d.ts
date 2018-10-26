@@ -3251,6 +3251,8 @@ declare namespace ts {
     function getJSDocClassTag(node: Node): JSDocClassTag | undefined;
     /** Gets the JSDoc enum tag for the node if present */
     function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined;
+    /** Gets the nameless JSDoc typedef tag for the node if present */
+    function getJSDocNamelessTypedefTag(node: Node): JSDocTypedefTag | undefined;
     /** Gets the JSDoc this tag for the node if present */
     function getJSDocThisTag(node: Node): JSDocThisTag | undefined;
     /** Gets the JSDoc return tag for the node if present */

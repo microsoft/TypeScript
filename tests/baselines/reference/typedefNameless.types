@@ -1,0 +1,85 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @typedef {number}
+ */
+var nameless;
+>nameless : any
+
+/**
+ * @typedef {number} named
+ */
+var this_is_not_the_name = true;
+>this_is_not_the_name : boolean
+>true : true
+
+nameless = 123; // nameless is not a value
+>nameless = 123 : 123
+>nameless : any
+>123 : 123
+
+/**
+ * @param {named} p1
+ * @param {nameless} p2
+ */
+function abc(p1, p2) {}
+>abc : (p1: number, p2: number) => void
+>p1 : number
+>p2 : number
+
+/**
+ * @param {named} p1
+ * @param {nameless} p2
+ */
+export function breakThings(p1, p2) {}
+>breakThings : (p1: number, p2: number) => void
+>p1 : number
+>p2 : number
+
+/** @typedef {number} */
+var notOK = 1;
+>notOK : any
+>1 : 1
+
+/** @typedef {string} */
+let thisIsOK;
+>thisIsOK : any
+
+/** @typedef {{L: number}} */
+const notLegalButShouldBe;
+>notLegalButShouldBe : any
+
+=== tests/cases/conformance/jsdoc/b.js ===
+/**
+ * @typedef {{
+ *   p: string
+ * }}
+ */
+export var type1;
+>type1 : any
+
+=== tests/cases/conformance/jsdoc/c.js ===
+import { type1 as aliased } from './b';
+>type1 : any
+>aliased : any
+
+/**
+ * @param {aliased} pt1
+ */
+function f1(pt1) {}
+>f1 : (pt1: { p: string; }) => void
+>pt1 : { p: string; }
+
+/** @type {{ p2?: any }} */
+var k = {};
+>k : { p2?: any; }
+>{} : {}
+
+/**
+ * @typedef {aliased}
+ */
+k.p2;
+>k.p2 : any
+>k : { p2?: any; }
+>p2 : any
+
+

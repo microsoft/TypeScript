@@ -4,9 +4,9 @@
 // @Filename: a.js
 
 /////** @typedef {number} */
-////const [|{| "isWriteAccess": true, "isDefinition": true |}T|] = 1;
+////var [|{| "isWriteAccess": false, "isDefinition": true |}T|];
 
 /////** @type {[|T|]} */
-////const n = [|T|];
+////const n = 2;
 
-verify.singleReferenceGroup("type T = number\nconst T: 1");
+verify.singleReferenceGroup("type T = number");

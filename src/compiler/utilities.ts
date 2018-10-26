@@ -1240,6 +1240,10 @@ namespace ts {
         return node && node.kind === SyntaxKind.MethodDeclaration && node.parent.kind === SyntaxKind.ObjectLiteralExpression;
     }
 
+    export function isNamelessJSDocTypeDef(node: Node): boolean {
+        return !!getJSDocNamelessTypedefTag(node);
+    }
+
     export function isObjectLiteralOrClassExpressionMethod(node: Node): node is MethodDeclaration {
         return node.kind === SyntaxKind.MethodDeclaration &&
             (node.parent.kind === SyntaxKind.ObjectLiteralExpression ||
@@ -5131,6 +5135,11 @@ namespace ts {
     /** Gets the JSDoc enum tag for the node if present */
     export function getJSDocEnumTag(node: Node): JSDocEnumTag | undefined {
         return getFirstJSDocTag(node, isJSDocEnumTag);
+    }
+
+    /** Gets the nameless JSDoc typedef tag for the node if present */
+    export function getJSDocNamelessTypedefTag(node: Node): JSDocTypedefTag | undefined {
+        return getFirstJSDocTag(node, (n): n is JSDocTypedefTag => isJSDocTypedefTag(n) && !n.name);
     }
 
     /** Gets the JSDoc this tag for the node if present */

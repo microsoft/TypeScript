@@ -1,0 +1,79 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @typedef {number}
+ */
+var nameless;
+>nameless : Symbol(nameless, Decl(a.js, 3, 3), Decl(a.js, 1, 3))
+
+/**
+ * @typedef {number} named
+ */
+var this_is_not_the_name = true;
+>this_is_not_the_name : Symbol(this_is_not_the_name, Decl(a.js, 8, 3))
+
+nameless = 123; // nameless is not a value
+
+/**
+ * @param {named} p1
+ * @param {nameless} p2
+ */
+function abc(p1, p2) {}
+>abc : Symbol(abc, Decl(a.js, 10, 15))
+>p1 : Symbol(p1, Decl(a.js, 16, 13))
+>p2 : Symbol(p2, Decl(a.js, 16, 16))
+
+/**
+ * @param {named} p1
+ * @param {nameless} p2
+ */
+export function breakThings(p1, p2) {}
+>breakThings : Symbol(breakThings, Decl(a.js, 16, 23))
+>p1 : Symbol(p1, Decl(a.js, 22, 28))
+>p2 : Symbol(p2, Decl(a.js, 22, 31))
+
+/** @typedef {number} */
+var notOK = 1;
+>notOK : Symbol(notOK, Decl(a.js, 25, 3), Decl(a.js, 24, 4))
+
+/** @typedef {string} */
+let thisIsOK;
+>thisIsOK : Symbol(thisIsOK, Decl(a.js, 28, 3), Decl(a.js, 27, 4))
+
+/** @typedef {{L: number}} */
+const notLegalButShouldBe;
+>notLegalButShouldBe : Symbol(notLegalButShouldBe, Decl(a.js, 31, 5), Decl(a.js, 30, 4))
+
+=== tests/cases/conformance/jsdoc/b.js ===
+/**
+ * @typedef {{
+ *   p: string
+ * }}
+ */
+export var type1;
+>type1 : Symbol(type1, Decl(b.js, 5, 10), Decl(b.js, 1, 3))
+
+=== tests/cases/conformance/jsdoc/c.js ===
+import { type1 as aliased } from './b';
+>type1 : Symbol(aliased, Decl(c.js, 0, 8))
+>aliased : Symbol(aliased, Decl(c.js, 0, 8))
+
+/**
+ * @param {aliased} pt1
+ */
+function f1(pt1) {}
+>f1 : Symbol(f1, Decl(c.js, 0, 39))
+>pt1 : Symbol(pt1, Decl(c.js, 5, 12))
+
+/** @type {{ p2?: any }} */
+var k = {};
+>k : Symbol(k, Decl(c.js, 8, 3))
+
+/**
+ * @typedef {aliased}
+ */
+k.p2;
+>k.p2 : Symbol(p2, Decl(c.js, 7, 12))
+>k : Symbol(k, Decl(c.js, 8, 3))
+>p2 : Symbol(p2, Decl(c.js, 7, 12))
+
+
