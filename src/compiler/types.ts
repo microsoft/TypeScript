@@ -4217,6 +4217,13 @@ namespace ts {
         substitute: Type;            // Type to substitute for type parameter
     }
 
+    /* @internal */
+    export const enum JsxReferenceKind {
+        Component,
+        Function,
+        Mixed
+    }
+
     export const enum SignatureKind {
         Call,
         Construct,
