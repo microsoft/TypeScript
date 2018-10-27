@@ -251,3 +251,4 @@ const o24 = {
 >x : Symbol(x, Decl(asyncGeneratorPropertyIsError.ts, 0, 13))
 
 };
+

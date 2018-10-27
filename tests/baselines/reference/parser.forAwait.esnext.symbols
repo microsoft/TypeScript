@@ -112,3 +112,4 @@ function* f12() {
 >y : Symbol(y, Decl(inGeneratorWithExprIsError.ts, 1, 15))
     }
 }
+

@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: esnext
 // @filename: F1.ts
 const f1 = async function * () {

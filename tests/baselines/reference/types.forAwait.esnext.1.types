@@ -70,3 +70,4 @@ async function * f2() {
 >iterableOfPromise : Iterable<Promise<number>>
     }
 }
+

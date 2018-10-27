@@ -135,3 +135,4 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingVa
     async function * f21() {
         const x = { [yield]: 1 };
     }
+    

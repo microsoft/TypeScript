@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: esnext
 // @noEmit: true
 declare const asyncIterable: AsyncIterable<number>;

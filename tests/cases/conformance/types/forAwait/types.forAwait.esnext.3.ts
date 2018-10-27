@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: es5
 // @noEmit: true
 async function f1() {

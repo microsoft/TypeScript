@@ -118,3 +118,4 @@ function* f12() {
 >y : any
     }
 }
+

@@ -138,3 +138,4 @@ async function * f21() {
 >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 1, 9))
 >[yield] : Symbol([yield], Decl(yieldInNestedComputedPropertyIsOk.ts, 1, 15))
 }
+

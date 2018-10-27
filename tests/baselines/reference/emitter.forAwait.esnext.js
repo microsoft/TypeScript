@@ -41,6 +41,7 @@ async function* f6() {
     }
 }
 
+
 //// [file1.js]
 async function f1() {
     let y;

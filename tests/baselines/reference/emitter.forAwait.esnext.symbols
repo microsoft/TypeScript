@@ -78,3 +78,4 @@ async function* f6() {
         continue outer;
     }
 }
+

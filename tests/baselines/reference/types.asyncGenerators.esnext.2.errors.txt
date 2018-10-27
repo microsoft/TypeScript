@@ -192,3 +192,4 @@ tests/cases/conformance/types/asyncGenerators/types.asyncGenerators.esnext.2.ts(
                ~~
 !!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
     }
+    

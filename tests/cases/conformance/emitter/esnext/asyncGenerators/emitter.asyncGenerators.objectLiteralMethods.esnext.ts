@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: esnext
 // @filename: O1.ts
 const o1 = {

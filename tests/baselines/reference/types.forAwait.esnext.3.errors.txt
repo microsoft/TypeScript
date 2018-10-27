@@ -29,3 +29,4 @@ tests/cases/conformance/types/forAwait/types.forAwait.esnext.3.ts(12,21): error 
 !!! error TS2504: Type '{}' must have a '[Symbol.asyncIterator]()' method that returns an async iterator.
         }
     }
+    

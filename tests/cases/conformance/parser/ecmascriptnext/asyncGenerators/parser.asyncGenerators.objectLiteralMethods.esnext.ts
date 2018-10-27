@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @skipLibCheck: true
 // @lib: esnext
 // @noEmit: true

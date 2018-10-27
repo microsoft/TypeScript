@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: esnext
 // @filename: C1.ts
 class C1 {

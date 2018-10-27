@@ -37,3 +37,4 @@ tests/cases/conformance/types/forAwait/types.forAwait.esnext.2.ts(16,15): error 
 !!! error TS2488: Type 'AsyncIterable<number>' must have a '[Symbol.iterator]()' method that returns an iterator.
         }
     }
+    

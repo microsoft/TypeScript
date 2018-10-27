@@ -74,3 +74,4 @@ async function * f2() {
 >iterableOfPromise : Symbol(iterableOfPromise, Decl(types.forAwait.esnext.1.ts, 2, 13))
     }
 }
+

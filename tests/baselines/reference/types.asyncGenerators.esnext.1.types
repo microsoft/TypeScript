@@ -430,3 +430,4 @@ async function * awaitedType2() {
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >1 : 1
 }
+

@@ -13,3 +13,4 @@ async function f<T>(source: Iterable<T> | AsyncIterable<T>) {
 >source : Symbol(source, Decl(forAwaitForUnion.ts, 0, 20))
     }
 }
+

@@ -160,3 +160,4 @@ async function * f21() {
 >yield : any
 >1 : 1
 }
+

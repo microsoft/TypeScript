@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es2018
 // @lib: esnext
 // @noEmit: true
 async function * inferReturnType1() {

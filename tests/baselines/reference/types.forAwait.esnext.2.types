@@ -39,3 +39,4 @@ async function f() {
 >asyncIterable : AsyncIterable<number>
     }
 }
+

@@ -39,3 +39,4 @@ async function f() {
 >asyncIterable : Symbol(asyncIterable, Decl(types.forAwait.esnext.2.ts, 0, 13))
     }
 }
+

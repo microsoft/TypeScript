@@ -149,3 +149,4 @@ async function * yieldStar() {
 
     yield* {};
 }
+

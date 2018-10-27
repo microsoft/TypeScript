@@ -222,3 +222,4 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingVa
                  ~
 !!! error TS1005: '(' expected.
     };
+    

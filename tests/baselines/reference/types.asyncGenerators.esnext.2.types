@@ -235,3 +235,4 @@ async function * yieldStar() {
 >yield* {} : any
 >{} : {}
 }
+

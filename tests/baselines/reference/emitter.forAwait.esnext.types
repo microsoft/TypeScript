@@ -82,3 +82,4 @@ async function* f6() {
 >outer : any
     }
 }
+

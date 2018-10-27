@@ -25,3 +25,4 @@ async function* f2() {
 >y : Symbol(y, Decl(types.forAwait.esnext.3.ts, 8, 7))
     }
 }
+
