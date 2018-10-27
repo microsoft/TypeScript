@@ -3400,6 +3400,10 @@ Actual: ${stringify(fullActual)}`);
                 }
             }
         }
+
+        public configurePlugin(pluginName: string, configuration: any): void {
+            (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
+        }
     }
 
     function updateTextRangeForTextChanges({ pos, end }: ts.TextRange, textChanges: ReadonlyArray<ts.TextChange>): ts.TextRange {
@@ -3463,19 +3467,20 @@ Actual: ${stringify(fullActual)}`);
     function runCode(code: string, state: TestState): void {
         // Compile and execute the test
         const wrappedCode =
-            `(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
+            `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
 ${code}
 })`;
         try {
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
+            const plugins = new FourSlashInterface.Plugins(state);
             const verify = new FourSlashInterface.Verify(state);
             const edit = new FourSlashInterface.Edit(state);
             const debug = new FourSlashInterface.Debug(state);
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
             const f = eval(wrappedCode);
-            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
+            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -3972,6 +3977,15 @@ namespace FourSlashInterface {
 
         public setTypesRegistry(map: ts.MapLike<void>): void {
             this.state.setTypesRegistry(map);
+        }
+    }
+
+    export class Plugins {
+        constructor (private state: FourSlash.TestState) {
+        }
+
+        public configurePlugin(pluginName: string, configuration: any): void {
+            this.state.configurePlugin(pluginName, configuration);
         }
     }
 

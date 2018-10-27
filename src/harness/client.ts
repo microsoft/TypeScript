@@ -684,6 +684,10 @@ namespace ts.server {
             return response.body!.map(entry => this.decodeSpan(entry, fileName)); // TODO: GH#18217
         }
 
+        configurePlugin(pluginName: string, configuration: any): void {
+            this.processRequest<protocol.ConfigurePluginRequest>("configurePlugin", { pluginName, configuration });
+        }
+
         getIndentationAtPosition(_fileName: string, _position: number, _options: EditorOptions): number {
             return notImplemented();
         }
