@@ -1,5 +1,5 @@
 [![Build Status](https://travis-ci.org/Microsoft/TypeScript.svg?branch=master)](https://travis-ci.org/Microsoft/TypeScript)
-[![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/latest?definitionId=4&view=logs) 
+[![VSTS Build Status](https://typescript.visualstudio.com/_apis/public/build/definitions/cf7ac146-d525-443c-b23c-0d58337efebc/4/badge)](https://typescript.visualstudio.com/TypeScript/_build/latest?definitionId=4&view=logs)
 [![npm version](https://badge.fury.io/js/typescript.svg)](https://www.npmjs.com/package/typescript)
 [![Downloads](https://img.shields.io/npm/dm/typescript.svg)](https://www.npmjs.com/package/typescript)
 
@@ -17,6 +17,12 @@ For the latest stable version:
 npm install -g typescript
 ```
 
+Or
+
+```bash
+make install
+```
+
 For our nightly builds:
 
 ```bash
@@ -28,14 +34,14 @@ npm install -g typescript@next
 There are many ways to [contribute](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md) to TypeScript.
 * [Submit bugs](https://github.com/Microsoft/TypeScript/issues) and help us verify fixes as they are checked in.
 * Review the [source code changes](https://github.com/Microsoft/TypeScript/pulls).
-* Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript). 
+* Engage with other TypeScript users and developers on [StackOverflow](https://stackoverflow.com/questions/tagged/typescript).
 * Join the [#typescript](https://twitter.com/#!/search/realtime/%23typescript) discussion on Twitter.
 * [Contribute bug fixes](https://github.com/Microsoft/TypeScript/blob/master/CONTRIBUTING.md).
 * Read the language specification ([docx](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.docx?raw=true),
  [pdf](https://github.com/Microsoft/TypeScript/blob/master/doc/TypeScript%20Language%20Specification.pdf?raw=true), [md](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)).
 
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see 
-the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) 
+This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see
+the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com)
 with any additional questions or comments.
 
 ## Documentation
@@ -68,22 +74,28 @@ npm install -g jake
 npm install
 ```
 
+Or building using Make
+
+```bash
+make build
+```
+
 Use one of the following to build and test:
 
 ```
-jake local            # Build the compiler into built/local 
-jake clean            # Delete the built compiler 
+jake local            # Build the compiler into built/local
+jake clean            # Delete the built compiler
 jake LKG              # Replace the last known good with the built one.
                       # Bootstrapping step to be executed when the built compiler reaches a stable state.
-jake tests            # Build the test infrastructure using the built compiler. 
-jake runtests         # Run tests using the built compiler and test infrastructure. 
-                      # You can override the host or specify a test for this command. 
-                      # Use host=<hostName> or tests=<testPath>. 
+jake tests            # Build the test infrastructure using the built compiler.
+jake runtests         # Run tests using the built compiler and test infrastructure.
+                      # You can override the host or specify a test for this command.
+                      # Use host=<hostName> or tests=<testPath>.
 jake runtests-browser # Runs the tests using the built run.js file. Syntax is jake runtests. Optional
                         parameters 'host=', 'tests=[regex], reporter=[list|spec|json|<more>]'.
 jake baseline-accept  # This replaces the baseline test results with the results obtained from jake runtests.
 jake lint             # Runs tslint on the TypeScript source.
-jake help             # List the above commands. 
+jake help             # List the above commands.
 ```
 
 
@@ -93,6 +105,11 @@ jake help             # List the above commands.
 node built/local/tsc.js hello.ts
 ```
 
+or
+
+```bash
+make usage
+```
 
 ## Roadmap
 
