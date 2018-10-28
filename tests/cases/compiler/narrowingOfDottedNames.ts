@@ -1,11 +1,13 @@
+// @strict: true
+
 // Repro from #8383
 
 class A {
-    prop: { a: string; };
+    prop!: { a: string; };
 }
 
 class B {
-    prop: { b: string; }
+    prop!: { b: string; }
 }
 
 function isA(x: any): x is A {
@@ -35,5 +37,23 @@ function f2(x: A | B) {
         else if (isB(x)) {
             x.prop.b;
         }
+    }
+}
+
+// Repro from #28100
+
+class Foo1
+{
+    x: number;  // Error
+    constructor() {
+        if (this instanceof Boolean) {
+        }
+    }
+}
+
+class Foo2
+{
+    x: number;  // Error
+    constructor() {
     }
 }

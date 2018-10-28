@@ -14,7 +14,7 @@ node_modules/uglify-js/lib/compress.js(817,18): error TS2554: Expected 0 argumen
 node_modules/uglify-js/lib/compress.js(1072,38): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
 node_modules/uglify-js/lib/compress.js(1086,51): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'true | ((node: any) => any)' has no compatible call signatures.
 node_modules/uglify-js/lib/compress.js(1150,53): error TS2339: Property 'parent' does not exist on type 'TreeTransformer'.
-node_modules/uglify-js/lib/compress.js(1192,112): error TS2532: Object is possibly 'undefined'.
+node_modules/uglify-js/lib/compress.js(1192,112): error TS2454: Variable 'args' is used before being assigned.
 node_modules/uglify-js/lib/compress.js(1193,29): error TS2532: Object is possibly 'undefined'.
 node_modules/uglify-js/lib/compress.js(1202,87): error TS2322: Type 'false' is not assignable to type 'number'.
 node_modules/uglify-js/lib/compress.js(1210,29): error TS2322: Type 'false' is not assignable to type 'never'.

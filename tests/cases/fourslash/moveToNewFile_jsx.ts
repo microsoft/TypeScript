@@ -9,6 +9,7 @@ verify.moveToNewFile({
 ``,
 
         "/newFile.tsx":
-`<div>a</div>;`,
+`<div>a</div>;
+`,
     }
 });

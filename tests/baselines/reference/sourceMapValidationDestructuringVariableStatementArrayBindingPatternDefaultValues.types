@@ -71,7 +71,7 @@ let [numberA3 = -1, ...robotAInfo] = robotA;
 >numberA3 : number
 >-1 : -1
 >1 : 1
->robotAInfo : string[]
+>robotAInfo : [string, string]
 >robotA : [number, string, string]
 
 if (nameA == nameA2) {

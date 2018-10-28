@@ -1,14 +1,22 @@
-/* @internal */
 namespace ts {
     export function generateTypesForModule(name: string, moduleValue: unknown, formatSettings: FormatCodeSettings): string {
-        return valueInfoToDeclarationFileText(inspectValue(name, moduleValue), formatSettings);
+        return generateTypesForModuleOrGlobal(name, moduleValue, formatSettings, OutputKind.ExportEquals);
     }
 
-    export function valueInfoToDeclarationFileText(valueInfo: ValueInfo, formatSettings: FormatCodeSettings): string {
-        return textChanges.getNewFileText(toStatements(valueInfo, OutputKind.ExportEquals), ScriptKind.TS, "\n", formatting.getFormatContext(formatSettings));
+    export function generateTypesForGlobal(name: string, globalValue: unknown, formatSettings: FormatCodeSettings): string {
+        return generateTypesForModuleOrGlobal(name, globalValue, formatSettings, OutputKind.Global);
     }
 
-    const enum OutputKind { ExportEquals, NamedExport, NamespaceMember }
+    function generateTypesForModuleOrGlobal(name: string, globalValue: unknown, formatSettings: FormatCodeSettings, outputKind: OutputKind.ExportEquals | OutputKind.Global): string {
+        return valueInfoToDeclarationFileText(inspectValue(name, globalValue), formatSettings, outputKind);
+    }
+
+    /* @internal */
+    export function valueInfoToDeclarationFileText(valueInfo: ValueInfo, formatSettings: FormatCodeSettings, outputKind: OutputKind.ExportEquals | OutputKind.Global = OutputKind.ExportEquals): string {
+        return textChanges.getNewFileText(toStatements(valueInfo, outputKind), ScriptKind.TS, formatSettings.newLineCharacter || "\n", formatting.getFormatContext(formatSettings));
+    }
+
+    const enum OutputKind { ExportEquals, NamedExport, NamespaceMember, Global }
     function toNamespaceMemberStatements(info: ValueInfo): ReadonlyArray<Statement> {
         return toStatements(info, OutputKind.NamespaceMember);
     }
@@ -18,7 +26,7 @@ namespace ts {
         if (!isValidIdentifier(name) || isDefault && kind !== OutputKind.NamedExport) return emptyArray;
 
         const modifiers = isDefault && info.kind === ValueKind.FunctionOrClass ? [createModifier(SyntaxKind.ExportKeyword), createModifier(SyntaxKind.DefaultKeyword)]
-            : kind === OutputKind.ExportEquals ? [createModifier(SyntaxKind.DeclareKeyword)]
+            : kind === OutputKind.Global || kind === OutputKind.ExportEquals ? [createModifier(SyntaxKind.DeclareKeyword)]
             : kind === OutputKind.NamedExport ? [createModifier(SyntaxKind.ExportKeyword)]
             : undefined;
         const exportEquals = () => kind === OutputKind.ExportEquals ? [exportEqualsOrDefault(info.name, /*isExportEquals*/ true)] : emptyArray;
@@ -132,10 +140,13 @@ namespace ts {
             case ValueKind.FunctionOrClass:
                 return createTypeReferenceNode("Function", /*typeArguments*/ undefined); // Normally we create a FunctionDeclaration, but this can happen for a function in an array.
             case ValueKind.Object:
-                return createTypeLiteralNode(info.members.map(m => createPropertySignature(/*modifiers*/ undefined, m.name, /*questionToken*/ undefined, toType(m), /*initializer*/ undefined)));
+                return createTypeLiteralNode(info.members.map(m => createPropertySignature(/*modifiers*/ undefined, toPropertyName(m.name), /*questionToken*/ undefined, toType(m), /*initializer*/ undefined)));
             default:
                 return Debug.assertNever(info);
         }
+    }
+    function toPropertyName(name: string): Identifier | StringLiteral {
+        return isIdentifierText(name, ScriptTarget.ESNext) ? createIdentifier(name) : createStringLiteral(name);
     }
 
     // Parses assignments to "this.x" in the constructor into class property declarations

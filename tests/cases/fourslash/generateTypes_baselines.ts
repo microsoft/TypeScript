@@ -6,14 +6,14 @@ verify.generateTypes(
     // would like to test against the real "global" but that may vary between node versions.
     {
         value: {
-            Array: ignore(Array, ["values"]),
+            Array: ignore(Array, ["values", "flat", "flatMap"]),
             Boolean,
             Date,
             Math,
             Number,
             RegExp,
             String: ignore(String, ["padStart", "padEnd", "trimStart", "trimEnd"]),
-            Symbol: ignore(Symbol, ["asyncIterator"]),
+            Symbol: ignore(Symbol, ["asyncIterator", "description"]),
         },
         outputBaseline: "global",
     },

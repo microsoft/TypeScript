@@ -295,7 +295,7 @@ namespace ts.textChanges {
         }
 
         private insertNodesAt(sourceFile: SourceFile, pos: number, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions = {}): void {
-            this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, options, nodes: newNodes, range: { pos, end: pos } });
+            this.replaceRangeWithNodes(sourceFile, createRange(pos), newNodes, options);
         }
 
         public insertNodeAtTopOfFile(sourceFile: SourceFile, newNode: Statement, blankLineBetween: boolean): void {
@@ -312,7 +312,17 @@ namespace ts.textChanges {
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
             const pos = before.getStart(sourceFile);
-            this.replaceRange(sourceFile, { pos, end: pos }, createToken(modifier), { suffix: " " });
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { suffix: " " });
+        }
+
+        public insertLastModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
+            if (!before.modifiers) {
+                this.insertModifierBefore(sourceFile, modifier, before);
+                return;
+            }
+
+            const pos = before.modifiers.end;
+            this.insertNodeAt(sourceFile, pos, createToken(modifier), { prefix: " " });
         }
 
         public insertCommentBeforeLine(sourceFile: SourceFile, lineNumber: number, position: number, commentText: string): void {
@@ -327,6 +337,21 @@ namespace ts.textChanges {
             const indent = sourceFile.text.slice(lineStartPosition, startPosition);
             const text = `${insertAtLineStart ? "" : this.newLineCharacter}//${commentText}${this.newLineCharacter}${indent}`;
             this.insertText(sourceFile, token.getStart(sourceFile), text);
+        }
+
+        public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc) {
+            const fnStart = node.getStart(sourceFile);
+            if (node.jsDoc) {
+                for (const jsdoc of node.jsDoc) {
+                    this.deleteRange(sourceFile, {
+                        pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
+                        end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
+                    });
+                }
+            }
+            const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
+            const indent = sourceFile.text.slice(startPosition, fnStart);
+            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
         public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
@@ -403,7 +428,7 @@ namespace ts.textChanges {
 
         public insertNodeAtEndOfScope(sourceFile: SourceFile, scope: Node, newNode: Node): void {
             const pos = getAdjustedStartPosition(sourceFile, scope.getLastToken()!, {}, Position.Start);
-            this.replaceRange(sourceFile, { pos, end: pos }, newNode, {
+            this.insertNodeAt(sourceFile, pos, newNode, {
                 prefix: isLineBreak(sourceFile.text.charCodeAt(scope.getLastToken()!.pos)) ? this.newLineCharacter : this.newLineCharacter + this.newLineCharacter,
                 suffix: this.newLineCharacter
             });
@@ -756,7 +781,7 @@ namespace ts.textChanges {
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
-            return applyChanges(nonFormattedText, changes);
+            return applyChanges(nonFormattedText, changes) + newLineCharacter;
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
@@ -796,7 +821,7 @@ namespace ts.textChanges {
         }
 
         /** Note: output node may be mutated input node. */
-        function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
+        export function getNonformattedText(node: Node, sourceFile: SourceFile | undefined, newLineCharacter: string): { text: string, node: Node } {
             const writer = new Writer(newLineCharacter);
             const newLine = newLineCharacter === "\n" ? NewLineKind.LineFeed : NewLineKind.CarriageReturnLineFeed;
             createPrinter({ newLine, neverAsciiEscape: true }, writer).writeNode(EmitHint.Unspecified, node, sourceFile, writer);
@@ -1015,7 +1040,7 @@ namespace ts.textChanges {
     }
 
     export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
-        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position) && !isInJSXText(sourceFile, position);
     }
 
     function needSemicolonBetween(a: Node, b: Node): boolean {

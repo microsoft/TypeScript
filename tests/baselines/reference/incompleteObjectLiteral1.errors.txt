@@ -1,8 +1,11 @@
-tests/cases/compiler/incompleteObjectLiteral1.ts(1,14): error TS1005: ':' expected.
+tests/cases/compiler/incompleteObjectLiteral1.ts(1,12): error TS2304: Cannot find name 'aa'.
+tests/cases/compiler/incompleteObjectLiteral1.ts(1,14): error TS1005: ',' expected.
 
 
-==== tests/cases/compiler/incompleteObjectLiteral1.ts (1 errors) ====
+==== tests/cases/compiler/incompleteObjectLiteral1.ts (2 errors) ====
     var tt = { aa; }
+               ~~
+!!! error TS2304: Cannot find name 'aa'.
                  ~
-!!! error TS1005: ':' expected.
+!!! error TS1005: ',' expected.
     var x = tt;

@@ -365,16 +365,21 @@ namespace ts.formatting {
     function formatSpan(originalRange: TextRange, sourceFile: SourceFile, formatContext: FormatContext, requestKind: FormattingRequestKind): TextChange[] {
         // find the smallest node that fully wraps the range and compute the initial indentation for the node
         const enclosingNode = findEnclosingNode(originalRange, sourceFile);
-        return getFormattingScanner(sourceFile.text, sourceFile.languageVariant, getScanStartPosition(enclosingNode, originalRange, sourceFile), originalRange.end, scanner => formatSpanWorker(
-            originalRange,
-            enclosingNode,
-            SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, formatContext.options),
-            getOwnOrInheritedDelta(enclosingNode, formatContext.options, sourceFile),
-            scanner,
-            formatContext,
-            requestKind,
-            prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
-            sourceFile));
+        return getFormattingScanner(
+            sourceFile.text,
+            sourceFile.languageVariant,
+            getScanStartPosition(enclosingNode, originalRange, sourceFile),
+            originalRange.end,
+            scanner => formatSpanWorker(
+                originalRange,
+                enclosingNode,
+                SmartIndenter.getIndentationForNode(enclosingNode, originalRange, sourceFile, formatContext.options),
+                getOwnOrInheritedDelta(enclosingNode, formatContext.options, sourceFile),
+                scanner,
+                formatContext,
+                requestKind,
+                prepareRangeContainsErrorFunction(sourceFile.parseDiagnostics, originalRange),
+                sourceFile));
     }
 
     function formatSpanWorker(originalRange: TextRange,
@@ -413,7 +418,8 @@ namespace ts.formatting {
         if (!formattingScanner.isOnToken()) {
             const leadingTrivia = formattingScanner.getCurrentLeadingTrivia();
             if (leadingTrivia) {
-                processTrivia(leadingTrivia, enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!); // TODO: GH#18217
+                indentTriviaItems(leadingTrivia, initialIndentation, /*indentNextTokenOrTrivia*/ false,
+                                  item => processRange(item, sourceFile.getLineAndCharacterOfPosition(item.pos), enclosingNode, enclosingNode, /*dynamicIndentation*/ undefined!));
                 trimTrailingWhitespacesForRemainingRange();
             }
         }
@@ -753,17 +759,17 @@ namespace ts.formatting {
 
                 const listEndToken = getCloseTokenForOpenToken(listStartToken);
                 if (listEndToken !== SyntaxKind.Unknown && formattingScanner.isOnToken()) {
-                    let tokenInfo = formattingScanner.readTokenInfo(parent);
+                    let tokenInfo: TokenInfo | undefined = formattingScanner.readTokenInfo(parent);
                     if (tokenInfo.token.kind === SyntaxKind.CommaToken && isCallLikeExpression(parent)) {
                         formattingScanner.advance();
-                        tokenInfo = formattingScanner.readTokenInfo(parent);
+                        tokenInfo = formattingScanner.isOnToken() ? formattingScanner.readTokenInfo(parent) : undefined;
                     }
 
                     // consume the list end token only if it is still belong to the parent
                     // there might be the case when current token matches end token but does not considered as one
                     // function (x: function) <--
                     // without this check close paren will be interpreted as list end token for function expression which is wrong
-                    if (tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
+                    if (tokenInfo && tokenInfo.token.kind === listEndToken && rangeContainsRange(parent, tokenInfo.token)) {
                         // consume list end token
                         consumeTokenAndAdvanceScanner(tokenInfo, parent, listDynamicIndentation, parent);
                     }
@@ -814,27 +820,8 @@ namespace ts.formatting {
                     let indentNextTokenOrTrivia = true;
                     if (currentTokenInfo.leadingTrivia) {
                         const commentIndentation = dynamicIndentation.getIndentationForComment(currentTokenInfo.token.kind, tokenIndentation, container);
-
-                        for (const triviaItem of currentTokenInfo.leadingTrivia) {
-                            const triviaInRange = rangeContainsRange(originalRange, triviaItem);
-                            switch (triviaItem.kind) {
-                                case SyntaxKind.MultiLineCommentTrivia:
-                                    if (triviaInRange) {
-                                        indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
-                                    }
-                                    indentNextTokenOrTrivia = false;
-                                    break;
-                                case SyntaxKind.SingleLineCommentTrivia:
-                                    if (indentNextTokenOrTrivia && triviaInRange) {
-                                        insertIndentation(triviaItem.pos, commentIndentation, /*lineAdded*/ false);
-                                    }
-                                    indentNextTokenOrTrivia = false;
-                                    break;
-                                case SyntaxKind.NewLineTrivia:
-                                    indentNextTokenOrTrivia = true;
-                                    break;
-                            }
-                        }
+                        indentNextTokenOrTrivia = indentTriviaItems(currentTokenInfo.leadingTrivia, commentIndentation, indentNextTokenOrTrivia,
+                                                                    item => insertIndentation(item.pos, commentIndentation, /*lineAdded*/ false));
                     }
 
                     // indent token only if is it is in target range and does not overlap with any error ranges
@@ -852,6 +839,34 @@ namespace ts.formatting {
             }
         }
 
+        function indentTriviaItems(
+            trivia: TextRangeWithKind[],
+            commentIndentation: number,
+            indentNextTokenOrTrivia: boolean,
+            indentSingleLine: (item: TextRangeWithKind) => void) {
+            for (const triviaItem of trivia) {
+                const triviaInRange = rangeContainsRange(originalRange, triviaItem);
+                switch (triviaItem.kind) {
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        if (triviaInRange) {
+                            indentMultilineCommentOrJsxText(triviaItem, commentIndentation, /*firstLineIsIndented*/ !indentNextTokenOrTrivia);
+                        }
+                        indentNextTokenOrTrivia = false;
+                        break;
+                    case SyntaxKind.SingleLineCommentTrivia:
+                        if (indentNextTokenOrTrivia && triviaInRange) {
+                            indentSingleLine(triviaItem);
+                        }
+                        indentNextTokenOrTrivia = false;
+                        break;
+                    case SyntaxKind.NewLineTrivia:
+                        indentNextTokenOrTrivia = true;
+                        break;
+                }
+            }
+            return indentNextTokenOrTrivia;
+        }
+
         function processTrivia(trivia: TextRangeWithKind[], parent: Node, contextNode: Node, dynamicIndentation: DynamicIndentation): void {
             for (const triviaItem of trivia) {
                 if (isComment(triviaItem.kind) && rangeContainsRange(originalRange, triviaItem)) {
@@ -861,7 +876,6 @@ namespace ts.formatting {
             }
         }
 
-        // TODO: GH#18217 use an enum instead of `boolean | undefined`
         function processRange(range: TextRangeWithKind,
             rangeStart: LineAndCharacter,
             parent: Node,
@@ -1072,7 +1086,10 @@ namespace ts.formatting {
          * Trimming will be done for lines after the previous range
          */
         function trimTrailingWhitespacesForRemainingRange() {
-            const startPosition = previousRange ? previousRange.end : originalRange.pos;
+            if (!previousRange) {
+                return;
+            }
+            const startPosition = previousRange.end;
 
             const startLine = sourceFile.getLineAndCharacterOfPosition(startPosition).line;
             const endLine = sourceFile.getLineAndCharacterOfPosition(originalRange.end).line;

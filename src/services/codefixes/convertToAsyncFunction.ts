@@ -58,9 +58,9 @@ namespace ts.codefix {
         const allVarNames: SymbolAndIdentifier[] = [];
         const isInJavascript = isInJSFile(functionToConvert);
         const setOfExpressionsToReturn = getAllPromiseExpressionsToReturn(functionToConvert, checker);
-        const functionToConvertRenamed: FunctionLikeDeclaration = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
+        const functionToConvertRenamed = renameCollidingVarNames(functionToConvert, checker, synthNamesMap, context, setOfExpressionsToReturn, originalTypeMap, allVarNames);
         const constIdentifiers = getConstIdentifiers(synthNamesMap);
-        const returnStatements = getReturnStatementsWithPromiseHandlers(functionToConvertRenamed);
+        const returnStatements = functionToConvertRenamed.body && isBlock(functionToConvertRenamed.body) ? getReturnStatementsWithPromiseHandlers(functionToConvertRenamed.body) : emptyArray;
         const transformer: Transformer = { checker, synthNamesMap, allVarNames, setOfExpressionsToReturn, constIdentifiers, originalTypeMap, isInJSFile: isInJavascript };
 
         if (!returnStatements.length) {
@@ -68,7 +68,7 @@ namespace ts.codefix {
         }
 
         // add the async keyword
-        changes.insertModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
+        changes.insertLastModifierBefore(sourceFile, SyntaxKind.AsyncKeyword, functionToConvert);
 
         function startTransformation(node: CallExpression, nodeToReplace: Node) {
             const newNodes = transformExpression(node, transformer, node);
@@ -85,6 +85,14 @@ namespace ts.codefix {
                 }
             });
         }
+    }
+
+    function getReturnStatementsWithPromiseHandlers(body: Block): ReadonlyArray<ReturnStatement> {
+        const res: ReturnStatement[] = [];
+        forEachReturnStatement(body, ret => {
+            if (isReturnStatementWithFixablePromiseHandler(ret)) res.push(ret);
+        });
+        return res;
     }
 
     // Returns the identifiers that are never reassigned in the refactor
@@ -410,7 +418,7 @@ namespace ts.codefix {
                     break;
                 }
 
-                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, argName ? [argName.identifier] : emptyArray);
+                const synthCall = createCall(getSynthesizedDeepClone(func as Identifier), /*typeArguments*/ undefined, [argName.identifier]);
                 if (shouldReturn) {
                     return [createReturn(synthCall)];
                 }
@@ -442,7 +450,7 @@ namespace ts.codefix {
                             seenReturnStatement = true;
                         }
 
-                        if (getReturnStatementsWithPromiseHandlers(statement).length) {
+                        if (isReturnStatementWithFixablePromiseHandler(statement)) {
                             refactoredStmts = refactoredStmts.concat(getInnerTransformationBody(transformer, [statement], prevArgName));
                         }
                         else {
@@ -458,18 +466,18 @@ namespace ts.codefix {
                             seenReturnStatement);
                 }
                 else {
-                    const innerRetStmts = getReturnStatementsWithPromiseHandlers(createReturn(funcBody));
+                    const innerRetStmts = isFixablePromiseHandler(funcBody) ? [createReturn(funcBody)] : emptyArray;
                     const innerCbBody = getInnerTransformationBody(transformer, innerRetStmts, prevArgName);
 
                     if (innerCbBody.length > 0) {
                         return innerCbBody;
                     }
 
+                    const type = transformer.checker.getTypeAtLocation(func);
+                    const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
+                    const rightHandSide = getSynthesizedDeepClone(funcBody);
+                    const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                     if (!shouldReturn) {
-                        const type = transformer.checker.getTypeAtLocation(func);
-                        const returnType = getLastCallSignature(type, transformer.checker)!.getReturnType();
-                        const rightHandSide = getSynthesizedDeepClone(funcBody);
-                        const possiblyAwaitedRightHandSide = !!transformer.checker.getPromisedTypeOfPromise(returnType) ? createAwait(rightHandSide) : rightHandSide;
                         const transformedStatement = createTransformedStatement(prevArgName, possiblyAwaitedRightHandSide, transformer);
                         if (prevArgName) {
                             prevArgName.types.push(returnType);
@@ -477,7 +485,7 @@ namespace ts.codefix {
                         return transformedStatement;
                     }
                     else {
-                        return [createReturn(getSynthesizedDeepClone(funcBody))];
+                        return [createReturn(possiblyAwaitedRightHandSide)];
                     }
                 }
             }

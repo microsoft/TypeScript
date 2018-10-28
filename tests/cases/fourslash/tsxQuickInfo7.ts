@@ -4,9 +4,9 @@
 // @jsx: preserve
 // @noLib: true
 
-//// declare function OverloadComponent(): JSX.Element;
 //// declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": boolean}): JSX.Element;
 //// declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
+//// declare function OverloadComponent(): JSX.Element; // effective argument type of `{}`, needs to be last
 
 //// function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
 ////     let a0 = <Overloa/*1*/dComponent {...arg1} a="hello" ignore-prop />;
@@ -22,7 +22,7 @@ verify.quickInfos({
     1: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
     2: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
     3: "function OverloadComponent<boolean, string>(attr: {\n    b: string;\n    a: boolean;\n}): any (+2 overloads)",
-    4: "function OverloadComponent<number>(attr: {\n    b: number;\n    a?: string;\n    \"ignore-prop\": boolean;\n}): any (+2 overloads)",
+    4: "function OverloadComponent(): any (+2 overloads)", // Subtype pass chooses this overload, since `a` is missing from the top overload, and `ignore-prop` is missing from the second (while T & {ignore-prop: true} is a proper subtype of `{}`)
     5: "function OverloadComponent(): any (+2 overloads)",
     6: "function OverloadComponent<boolean, string & number>(attr: {\n    b: string & number;\n    a: boolean;\n}): any (+2 overloads)",
     7: "function OverloadComponent<boolean, number & string>(attr: {\n    b: number & string;\n    a: boolean;\n}): any (+2 overloads)",

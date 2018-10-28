@@ -1,0 +1,241 @@
+=== tests/cases/conformance/types/tuple/unionsOfTupleTypes1.ts ===
+type T1 = [string, number];
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+
+type T2 = [boolean] | [string, number];
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+
+type T3 = [string, ...number[]];
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+
+type T4 = [boolean] | [string, ...number[]];
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+
+type T10 = T1[0];  // string
+>T10 : Symbol(T10, Decl(unionsOfTupleTypes1.ts, 3, 44))
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+
+type T11 = T1[1];  // number
+>T11 : Symbol(T11, Decl(unionsOfTupleTypes1.ts, 5, 17))
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+
+type T12 = T1[2];  // undefined
+>T12 : Symbol(T12, Decl(unionsOfTupleTypes1.ts, 6, 17))
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+
+type T1N = T1[number];  // string | number
+>T1N : Symbol(T1N, Decl(unionsOfTupleTypes1.ts, 7, 17))
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+
+type T20 = T2[0];  // string | boolean
+>T20 : Symbol(T20, Decl(unionsOfTupleTypes1.ts, 8, 22))
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+
+type T21 = T2[1];  // number | undefined
+>T21 : Symbol(T21, Decl(unionsOfTupleTypes1.ts, 10, 17))
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+
+type T22 = T2[2];  // undefined
+>T22 : Symbol(T22, Decl(unionsOfTupleTypes1.ts, 11, 17))
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+
+type T2N = T2[number];  // string | number | boolean
+>T2N : Symbol(T2N, Decl(unionsOfTupleTypes1.ts, 12, 17))
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+
+type T30 = T3[0];  // string
+>T30 : Symbol(T30, Decl(unionsOfTupleTypes1.ts, 13, 22))
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+
+type T31 = T3[1];  // number
+>T31 : Symbol(T31, Decl(unionsOfTupleTypes1.ts, 15, 17))
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+
+type T32 = T3[2];  // number
+>T32 : Symbol(T32, Decl(unionsOfTupleTypes1.ts, 16, 17))
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+
+type T3N = T3[number];  // string | number
+>T3N : Symbol(T3N, Decl(unionsOfTupleTypes1.ts, 17, 17))
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+
+type T40 = T4[0];  // string | boolean
+>T40 : Symbol(T40, Decl(unionsOfTupleTypes1.ts, 18, 22))
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+
+type T41 = T4[1];  // number | undefined
+>T41 : Symbol(T41, Decl(unionsOfTupleTypes1.ts, 20, 17))
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+
+type T42 = T4[2];  // number | undefined
+>T42 : Symbol(T42, Decl(unionsOfTupleTypes1.ts, 21, 17))
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+
+type T4N = T4[number];  // string | number | boolean
+>T4N : Symbol(T4N, Decl(unionsOfTupleTypes1.ts, 22, 17))
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+
+function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
+>f1 : Symbol(f1, Decl(unionsOfTupleTypes1.ts, 23, 22))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+>T1 : Symbol(T1, Decl(unionsOfTupleTypes1.ts, 0, 0))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+>T2 : Symbol(T2, Decl(unionsOfTupleTypes1.ts, 0, 27))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+>T3 : Symbol(T3, Decl(unionsOfTupleTypes1.ts, 1, 39))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+>T4 : Symbol(T4, Decl(unionsOfTupleTypes1.ts, 2, 32))
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 25, 43))
+
+    let [d10, d11, d12] = t1;  // string, number
+>d10 : Symbol(d10, Decl(unionsOfTupleTypes1.ts, 26, 9))
+>d11 : Symbol(d11, Decl(unionsOfTupleTypes1.ts, 26, 13))
+>d12 : Symbol(d12, Decl(unionsOfTupleTypes1.ts, 26, 18))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+
+    let [d20, d21, d22] = t2;  // string | boolean, number | undefined
+>d20 : Symbol(d20, Decl(unionsOfTupleTypes1.ts, 27, 9))
+>d21 : Symbol(d21, Decl(unionsOfTupleTypes1.ts, 27, 13))
+>d22 : Symbol(d22, Decl(unionsOfTupleTypes1.ts, 27, 18))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+
+    let [d30, d31, d32] = t3;  // string, number, number
+>d30 : Symbol(d30, Decl(unionsOfTupleTypes1.ts, 28, 9))
+>d31 : Symbol(d31, Decl(unionsOfTupleTypes1.ts, 28, 13))
+>d32 : Symbol(d32, Decl(unionsOfTupleTypes1.ts, 28, 18))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+
+    let [d40, d41, d42] = t4;  // string | boolean, number | undefined, number | undefined
+>d40 : Symbol(d40, Decl(unionsOfTupleTypes1.ts, 29, 9))
+>d41 : Symbol(d41, Decl(unionsOfTupleTypes1.ts, 29, 13))
+>d42 : Symbol(d42, Decl(unionsOfTupleTypes1.ts, 29, 18))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+
+    [d10, d11, d12] = t1;
+>d10 : Symbol(d10, Decl(unionsOfTupleTypes1.ts, 26, 9))
+>d11 : Symbol(d11, Decl(unionsOfTupleTypes1.ts, 26, 13))
+>d12 : Symbol(d12, Decl(unionsOfTupleTypes1.ts, 26, 18))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+
+    [d20, d21, d22] = t2;
+>d20 : Symbol(d20, Decl(unionsOfTupleTypes1.ts, 27, 9))
+>d21 : Symbol(d21, Decl(unionsOfTupleTypes1.ts, 27, 13))
+>d22 : Symbol(d22, Decl(unionsOfTupleTypes1.ts, 27, 18))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+
+    [d30, d31, d32] = t3;
+>d30 : Symbol(d30, Decl(unionsOfTupleTypes1.ts, 28, 9))
+>d31 : Symbol(d31, Decl(unionsOfTupleTypes1.ts, 28, 13))
+>d32 : Symbol(d32, Decl(unionsOfTupleTypes1.ts, 28, 18))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+
+    [d40, d41, d42] = t4;
+>d40 : Symbol(d40, Decl(unionsOfTupleTypes1.ts, 29, 9))
+>d41 : Symbol(d41, Decl(unionsOfTupleTypes1.ts, 29, 13))
+>d42 : Symbol(d42, Decl(unionsOfTupleTypes1.ts, 29, 18))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+
+    let t10 = t1[0];  // string
+>t10 : Symbol(t10, Decl(unionsOfTupleTypes1.ts, 34, 7))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+>0 : Symbol(0)
+
+    let t11 = t1[1];  // number
+>t11 : Symbol(t11, Decl(unionsOfTupleTypes1.ts, 35, 7))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+>1 : Symbol(1)
+
+    let t12 = t1[2];  // undefined
+>t12 : Symbol(t12, Decl(unionsOfTupleTypes1.ts, 36, 7))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+
+    let t1x = t1[x];  // string | number
+>t1x : Symbol(t1x, Decl(unionsOfTupleTypes1.ts, 37, 7))
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 25, 43))
+
+    let t20 = t2[0];  // string | boolean
+>t20 : Symbol(t20, Decl(unionsOfTupleTypes1.ts, 38, 7))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+>0 : Symbol(0)
+
+    let t21 = t2[1];  // number | undefined
+>t21 : Symbol(t21, Decl(unionsOfTupleTypes1.ts, 39, 7))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+>1 : Symbol(1)
+
+    let t22 = t2[2];  // undefined
+>t22 : Symbol(t22, Decl(unionsOfTupleTypes1.ts, 40, 7))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+
+    let t2x = t2[x];  // string | number | boolean
+>t2x : Symbol(t2x, Decl(unionsOfTupleTypes1.ts, 41, 7))
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 25, 43))
+
+    let t30 = t3[0];  // string
+>t30 : Symbol(t30, Decl(unionsOfTupleTypes1.ts, 42, 7))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+>0 : Symbol(0)
+
+    let t31 = t3[1];  // number
+>t31 : Symbol(t31, Decl(unionsOfTupleTypes1.ts, 43, 7))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+
+    let t32 = t3[2];  // number
+>t32 : Symbol(t32, Decl(unionsOfTupleTypes1.ts, 44, 7))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+
+    let t3x = t3[x];  // string | number
+>t3x : Symbol(t3x, Decl(unionsOfTupleTypes1.ts, 45, 7))
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 25, 43))
+
+    let t40 = t4[0];  // string | boolean
+>t40 : Symbol(t40, Decl(unionsOfTupleTypes1.ts, 46, 7))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+>0 : Symbol(0)
+
+    let t41 = t4[1];  // number | undefined
+>t41 : Symbol(t41, Decl(unionsOfTupleTypes1.ts, 47, 7))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+
+    let t42 = t4[2];  // number | undefined
+>t42 : Symbol(t42, Decl(unionsOfTupleTypes1.ts, 48, 7))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+
+    let t4x = t4[x];  // string | number | boolean
+>t4x : Symbol(t4x, Decl(unionsOfTupleTypes1.ts, 49, 7))
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 25, 43))
+
+    t1[1] = 42;
+>t1 : Symbol(t1, Decl(unionsOfTupleTypes1.ts, 25, 12))
+>1 : Symbol(1)
+
+    t2[1] = 42;
+>t2 : Symbol(t2, Decl(unionsOfTupleTypes1.ts, 25, 19))
+>1 : Symbol(1)
+
+    t3[1] = 42;
+>t3 : Symbol(t3, Decl(unionsOfTupleTypes1.ts, 25, 27))
+
+    t4[1] = 42;
+>t4 : Symbol(t4, Decl(unionsOfTupleTypes1.ts, 25, 35))
+}
+
+// Repro from #27543
+
+type Unioned = [string] | [string, number];
+>Unioned : Symbol(Unioned, Decl(unionsOfTupleTypes1.ts, 54, 1))
+
+const ex: Unioned = ["hi"] as Unioned;
+>ex : Symbol(ex, Decl(unionsOfTupleTypes1.ts, 59, 5))
+>Unioned : Symbol(Unioned, Decl(unionsOfTupleTypes1.ts, 54, 1))
+>Unioned : Symbol(Unioned, Decl(unionsOfTupleTypes1.ts, 54, 1))
+
+const [x, y] = ex;
+>x : Symbol(x, Decl(unionsOfTupleTypes1.ts, 61, 7))
+>y : Symbol(y, Decl(unionsOfTupleTypes1.ts, 61, 9))
+>ex : Symbol(ex, Decl(unionsOfTupleTypes1.ts, 59, 5))
+

@@ -141,7 +141,7 @@ namespace ts {
 
         it("returns object with error when json is invalid", () => {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
-            assert.deepEqual(parsed.config, { invalid: undefined });
+            assert.deepEqual(parsed.config, {});
             const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
             const error = parsed.error!;
             assert.equal(error.messageText, expected.messageText);

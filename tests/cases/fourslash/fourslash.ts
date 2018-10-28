@@ -322,7 +322,7 @@ declare namespace FourSlashInterface {
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         /** Goto a marker and call `quickInfoIs`. */
-        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string): void;
         /**
          * Call `quickInfoAt` for each pair in the object.
          * (If the value is an array, it is [expectedText, expectedDocumentation].)
@@ -642,6 +642,7 @@ declare namespace FourSlashInterface {
     interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         readonly output?: string | undefined;
         readonly outputBaseline?: string;
     }
