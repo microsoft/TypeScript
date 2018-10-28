@@ -215,7 +215,10 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine), shouldBePretty(options) ? numberOfErrors => {
+            const d = createCompilerDiagnostic(numberOfErrors === 1 ? Diagnostics.Found_1_issue : Diagnostics.Found_0_issues, numberOfErrors);
+            sys.write(`${sys.newLine}${flattenDiagnosticMessageText(d.messageText, sys.newLine)}${sys.newLine}${sys.newLine}`);
+        } : undefined);
         reportStatistics(program);
         return sys.exit(exitStatus);
     }

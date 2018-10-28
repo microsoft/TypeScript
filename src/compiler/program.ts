@@ -226,6 +226,7 @@ namespace ts {
         for (const diagnostic of diagnostics) {
             output += formatDiagnostic(diagnostic, host);
         }
+
         return output;
     }
 
@@ -377,6 +378,7 @@ namespace ts {
 
             output += host.getNewLine();
         }
+
         return output;
     }
 

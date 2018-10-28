@@ -4687,5 +4687,13 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Found 1 issue.": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Found {0} issues.": {
+        "category": "Message",
+        "code": 95070
     }
 }
