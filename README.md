@@ -105,11 +105,6 @@ jake help             # List the above commands.
 node built/local/tsc.js hello.ts
 ```
 
-or
-
-```bash
-make usage
-```
 
 ## Roadmap
 
