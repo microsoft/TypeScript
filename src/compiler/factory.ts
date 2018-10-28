@@ -2819,7 +2819,7 @@ namespace ts {
                     return node.emitNode = { annotatedNodes: [node] } as EmitNode;
                 }
 
-                const sourceFile = getSourceFileOfNode(node);
+                const sourceFile = getSourceFileOfNode(getParseTreeNode(getSourceFileOfNode(node)));
                 getOrCreateEmitNode(sourceFile).annotatedNodes!.push(node);
             }
 
