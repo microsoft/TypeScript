@@ -27906,6 +27906,9 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     return isLiteralImportTypeNode(node) ? getSymbolAtLocation(node.argument.literal) : undefined;
 
+                case SyntaxKind.ExportKeyword:
+                    return isExportAssignment(node.parent) ? Debug.assertDefined(node.parent.symbol) : undefined;
+
                 default:
                     return undefined;
             }
