@@ -995,6 +995,12 @@ namespace ts.server {
             return strBuilder;
         }
 
+        print(counter?: number) {
+            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]}) ${counter === undefined ? "" : counter}`);
+            this.writeLog(this.filesToString(this.projectService.logger.hasLevel(LogLevel.verbose)));
+            this.writeLog("-----------------------------------------------");
+        }
+
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
                 compilerOptions.allowNonTsExtensions = true;
