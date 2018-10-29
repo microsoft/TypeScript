@@ -317,12 +317,12 @@ declare namespace FourSlashInterface {
         }[]): void;
         renameInfoSucceeded(displayName?: string, fullDisplayName?: string, kind?: string, kindModifiers?: string, fileToRename?: string, range?: Range): void;
         renameInfoFailed(message?: string): void;
-        renameLocations(startRanges: ArrayOrSingle<Range>, options: Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: Range[] }): void;
+        renameLocations(startRanges: ArrayOrSingle<Range>, options: RenameLocationsOptions): void;
 
         /** Verify the quick info available at the current marker. */
         quickInfoIs(expectedText: string, expectedDocumentation?: string): void;
         /** Goto a marker and call `quickInfoIs`. */
-        quickInfoAt(markerName: string, expectedText?: string, expectedDocumentation?: string): void;
+        quickInfoAt(markerName: string | Range, expectedText?: string, expectedDocumentation?: string): void;
         /**
          * Call `quickInfoAt` for each pair in the object.
          * (If the value is an array, it is [expectedText, expectedDocumentation].)
@@ -642,12 +642,20 @@ declare namespace FourSlashInterface {
     interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         readonly output?: string | undefined;
         readonly outputBaseline?: string;
     }
 
     type ArrayOrSingle<T> = T | ReadonlyArray<T>;
     type NewFileContent = string | { readonly [fileName: string]: string };
+
+    type RenameLocationsOptions = ReadonlyArray<RenameLocationOptions> | {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly ranges: ReadonlyArray<RenameLocationOptions>;
+    }
+    type RenameLocationOptions = Range | { readonly range: Range, readonly prefixText?: string, readonly suffixText?: string };
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;

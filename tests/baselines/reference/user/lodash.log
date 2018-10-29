@@ -76,9 +76,11 @@ node_modules/lodash/_baseUniq.js(30,5): error TS2322: Type '(array?: any[] | und
 node_modules/lodash/_baseUniq.js(33,33): error TS2554: Expected 0 arguments, but got 1.
 node_modules/lodash/_baseUniq.js(39,5): error TS2322: Type 'SetCache' is not assignable to type 'any[]'.
 node_modules/lodash/_baseUniq.js(62,15): error TS2554: Expected 2 arguments, but got 3.
+node_modules/lodash/_baseWrapperValue.js(18,21): error TS2339: Property 'value' does not exist on type 'LazyWrapper'.
 node_modules/lodash/_cloneArrayBuffer.js(11,16): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 node_modules/lodash/_cloneBuffer.js(4,69): error TS2339: Property 'nodeType' does not exist on type '(buffer: any, isDeep?: boolean | undefined) => any'.
 node_modules/lodash/_cloneBuffer.js(7,80): error TS2339: Property 'nodeType' does not exist on type '{ "../../../tests/cases/user/lodash/node_modules/lodash/_cloneBuffer": (buffer: any, isDeep?: boolean | undefined) => any; }'.
+node_modules/lodash/_cloneBuffer.js(20,12): error TS2587: JSDoc type 'Buffer' circularly references itself.
 node_modules/lodash/_cloneBuffer.js(22,14): error TS2577: Return type annotation circularly references itself.
 node_modules/lodash/_cloneBuffer.js(24,22): error TS2502: 'buffer' is referenced directly or indirectly in its own type annotation.
 node_modules/lodash/_copySymbols.js(13,29): error TS2554: Expected 0 arguments, but got 1.
@@ -163,8 +165,11 @@ node_modules/lodash/_overRest.js(27,27): error TS2532: Object is possibly 'undef
 node_modules/lodash/_overRest.js(28,22): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_overRest.js(31,15): error TS2538: Type 'undefined' cannot be used as an index type.
 node_modules/lodash/_root.js(4,56): error TS2339: Property 'Object' does not exist on type 'Window'.
+node_modules/lodash/_stackSet.js(21,22): error TS2339: Property '__data__' does not exist on type 'ListCache'.
+node_modules/lodash/_stackSet.js(24,26): error TS2339: Property 'size' does not exist on type 'ListCache'.
 node_modules/lodash/_unicodeWords.js(62,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
 node_modules/lodash/_updateWrapDetails.js(34,5): error TS1223: 'returns' tag already specified.
+node_modules/lodash/_wrapperClone.js(14,20): error TS2339: Property 'clone' does not exist on type 'LazyWrapper'.
 node_modules/lodash/ary.js(16,10): error TS1003: Identifier expected.
 node_modules/lodash/ary.js(16,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
 node_modules/lodash/before.js(34,7): error TS2322: Type 'undefined' is not assignable to type 'Function'.
@@ -368,6 +373,7 @@ node_modules/lodash/parseInt.js(24,10): error TS8024: JSDoc '@param' tag has nam
 node_modules/lodash/partial.js(48,9): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/partialRight.js(47,14): error TS2339: Property 'placeholder' does not exist on type 'Function'.
 node_modules/lodash/pickBy.js(33,12): error TS2722: Cannot invoke an object which is possibly 'undefined'.
+node_modules/lodash/plant.js(42,21): error TS2339: Property '__wrapped__' does not exist on type '{}'.
 node_modules/lodash/property.js(29,37): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
   Type 'symbol' is not assignable to type 'string'.
 node_modules/lodash/pullAllBy.js(29,34): error TS2554: Expected 0-1 arguments, but got 2.
@@ -443,7 +449,9 @@ node_modules/lodash/unionWith.js(31,42): error TS2345: Argument of type '(value:
 node_modules/lodash/uniqBy.js(28,52): error TS2554: Expected 0-1 arguments, but got 2.
 node_modules/lodash/words.js(15,10): error TS1003: Identifier expected.
 node_modules/lodash/words.js(15,10): error TS8024: JSDoc '@param' tag has name '', but there is no parameter with that name.
+node_modules/lodash/wrapperAt.js(34,17): error TS2339: Property 'slice' does not exist on type 'LazyWrapper'.
 node_modules/lodash/wrapperAt.js(40,51): error TS2339: Property 'thru' does not exist on type 'LodashWrapper'.
+node_modules/lodash/wrapperReverse.js(33,23): error TS2339: Property 'reverse' does not exist on type 'LazyWrapper'.
 node_modules/lodash/xorBy.js(36,58): error TS2554: Expected 0-1 arguments, but got 2.
 
 

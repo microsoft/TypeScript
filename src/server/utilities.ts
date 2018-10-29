@@ -56,30 +56,6 @@ namespace ts.server {
         }
     }
 
-    export function getDefaultFormatCodeSettings(host: ServerHost): FormatCodeSettings {
-        return {
-            indentSize: 4,
-            tabSize: 4,
-            newLineCharacter: host.newLine || "\n",
-            convertTabsToSpaces: true,
-            indentStyle: IndentStyle.Smart,
-            insertSpaceAfterConstructor: false,
-            insertSpaceAfterCommaDelimiter: true,
-            insertSpaceAfterSemicolonInForStatements: true,
-            insertSpaceBeforeAndAfterBinaryOperators: true,
-            insertSpaceAfterKeywordsInControlFlowStatements: true,
-            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-            insertSpaceBeforeFunctionParenthesis: false,
-            placeOpenBraceOnNewLineForFunctions: false,
-            placeOpenBraceOnNewLineForControlBlocks: false,
-        };
-    }
-
     export type NormalizedPath = string & { __normalizedPathTag: any };
 
     export function toNormalizedPath(fileName: string): NormalizedPath {
@@ -246,14 +222,16 @@ namespace ts.server {
         return index === 0 || value !== array[index - 1];
     }
 
+    const indentStr = "\n    ";
+
     /* @internal */
     export function indent(str: string): string {
-        return "\n    " + str;
+        return indentStr + str.replace(/\n/g, indentStr);
     }
 
     /** Put stringified JSON on the next line, indented. */
     /* @internal */
     export function stringifyIndented(json: {}): string {
-        return "\n    " + JSON.stringify(json);
+        return indentStr + JSON.stringify(json);
     }
 }

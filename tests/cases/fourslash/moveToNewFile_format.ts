@@ -16,6 +16,7 @@ verify.moveToNewFile({
         "/f.ts":
 `function f() {
 	const x = 0;
-}`,
+}
+`,
     },
 });

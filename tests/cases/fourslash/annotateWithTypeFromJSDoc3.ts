@@ -6,14 +6,17 @@
 //// * @param alpha - the other best parameter
 //// * @param {*} beta - I have no idea how this got here
 //// */
-////function [|f|](x, y, z: string, alpha, beta) {
+////function [|f|]([|x|], [|y|], z: string, [|alpha|], [|beta|]) {
 ////    x; y; z; alpha; beta;
 ////}
 
-verify.getSuggestionDiagnostics([{
-    message: "JSDoc types may be moved to TypeScript types.",
-    code: 80004,
-}]);
+const [r0, r1, r2, r3, r4] = test.ranges();
+verify.getSuggestionDiagnostics([
+    {message: "JSDoc types may be moved to TypeScript types.", code: 80004, range: r0},
+    {message: "Parameter 'x' implicitly has an 'any' type.", code: 7006, range: r1 },
+    {message: "Parameter 'y' implicitly has an 'any' type.", code: 7006, range: r2 },
+    {message: "Parameter 'alpha' implicitly has an 'any' type.", code: 7006, range: r3 },
+    {message: "Parameter 'beta' implicitly has an 'any' type.", code: 7006, range: r4 }]);
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",

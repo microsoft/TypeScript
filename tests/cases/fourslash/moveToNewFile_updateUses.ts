@@ -17,7 +17,8 @@ verify.moveToNewFile({
 `,
 
         "/y.ts":
-`export const y = 0;`,
+`export const y = 0;
+`,
 
         "/user.ts":
 `import { x } from "./a";

@@ -1,0 +1,13 @@
+tests/cases/conformance/jsdoc/bug27342.js(3,11): error TS2709: Cannot use namespace 'exports' as a type.
+
+
+==== tests/cases/conformance/jsdoc/bug27342.js (1 errors) ====
+    module.exports = {}
+    /**
+     * @type {exports}
+              ~~~~~~~
+!!! error TS2709: Cannot use namespace 'exports' as a type.
+     */
+    var x
+    
+    

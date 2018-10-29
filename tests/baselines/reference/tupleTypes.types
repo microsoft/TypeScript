@@ -33,13 +33,13 @@ var t1: string;
 >t1 : string
 
 var t2 = t[2];   // number|string
->t2 : string | number
->t[2] : string | number
+>t2 : undefined
+>t[2] : undefined
 >t : [number, string]
 >2 : 2
 
 var t2: number|string;
->t2 : string | number
+>t2 : undefined
 
 t = [];               // Error
 >t = [] : []
@@ -144,13 +144,13 @@ var tt1: string;
 >tt1 : string
 
 var tt2 = tt[2]; 
->tt2 : string | number
->tt[2] : string | number
+>tt2 : undefined
+>tt[2] : undefined
 >tt : [number, string]
 >2 : 2
 
 var tt2: number | string;
->tt2 : string | number
+>tt2 : undefined
 
 tt = tuple2(1, undefined);
 >tt = tuple2(1, undefined) : [number, any]

@@ -26,14 +26,14 @@ namespace ts.Completions.PathCompletions {
         const scriptPath = sourceFile.path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
+        const extensionOptions = getExtensionOptions(compilerOptions);
         if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            const extensions = getSupportedExtensionsForModuleResolution(compilerOptions);
             if (compilerOptions.rootDirs) {
                 return getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, compilerOptions, host, scriptPath);
+                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
             }
             else {
-                return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensions, /*includeExtensions*/ false, host, scriptPath);
+                return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath);
             }
         }
         else {
@@ -41,7 +41,14 @@ namespace ts.Completions.PathCompletions {
         }
     }
 
-    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions) {
+    interface ExtensionOptions {
+        readonly extensions: ReadonlyArray<Extension>;
+        readonly includeExtensions: boolean;
+    }
+    function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensions = false): ExtensionOptions {
+        return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensions };
+    }
+    function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): ReadonlyArray<Extension> {
         const extensions = getSupportedExtensions(compilerOptions);
         return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?
             extensions.concat(Extension.Json) :
@@ -67,7 +74,7 @@ namespace ts.Completions.PathCompletions {
             compareStringsCaseSensitive);
     }
 
-    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): NameAndKind[] {
+    function getCompletionEntriesForDirectoryFragmentWithRootDirs(rootDirs: string[], fragment: string, scriptPath: string, extensionOptions: ExtensionOptions, compilerOptions: CompilerOptions, host: LanguageServiceHost, exclude?: string): NameAndKind[] {
         const basePath = compilerOptions.project || host.getCurrentDirectory();
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
         const baseDirectories = getBaseDirectoriesFromRootDirs(rootDirs, basePath, scriptPath, ignoreCase);
@@ -75,7 +82,7 @@ namespace ts.Completions.PathCompletions {
         const result: NameAndKind[] = [];
 
         for (const baseDirectory of baseDirectories) {
-            getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensions, includeExtensions, host, exclude, result);
+            getCompletionEntriesForDirectoryFragment(fragment, baseDirectory, extensionOptions, host, exclude, result);
         }
 
         return result;
@@ -84,7 +91,7 @@ namespace ts.Completions.PathCompletions {
     /**
      * Given a path ending at a directory, gets the completions for the path, and filters for those entries containing the basename.
      */
-    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, extensions: ReadonlyArray<string>, includeExtensions: boolean, host: LanguageServiceHost, exclude?: string, result: NameAndKind[] = []): NameAndKind[] {
+    function getCompletionEntriesForDirectoryFragment(fragment: string, scriptPath: string, { extensions, includeExtensions }: ExtensionOptions, host: LanguageServiceHost, exclude?: string, result: NameAndKind[] = []): NameAndKind[] {
         if (fragment === undefined) {
             fragment = "";
         }
@@ -108,62 +115,62 @@ namespace ts.Completions.PathCompletions {
         // const absolutePath = normalizeAndPreserveTrailingSlash(isRootedDiskPath(fragment) ? fragment : combinePaths(scriptPath, fragment)); // TODO(rbuckton): should use resolvePaths
         const absolutePath = resolvePath(scriptPath, fragment);
         const baseDirectory = hasTrailingDirectorySeparator(absolutePath) ? absolutePath : getDirectoryPath(absolutePath);
+
         const ignoreCase = !(host.useCaseSensitiveFileNames && host.useCaseSensitiveFileNames());
+        if (!tryDirectoryExists(host, baseDirectory)) return result;
 
-        if (tryDirectoryExists(host, baseDirectory)) {
-            // Enumerate the available files if possible
-            const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/ undefined, /*include*/ ["./*"]);
+        // Enumerate the available files if possible
+        const files = tryReadDirectory(host, baseDirectory, extensions, /*exclude*/ undefined, /*include*/ ["./*"]);
 
-            if (files) {
-                /**
-                 * Multiple file entries might map to the same truncated name once we remove extensions
-                 * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
-                 *
-                 * both foo.ts and foo.tsx become foo
-                 */
-                const foundFiles = createMap<true>();
-                for (let filePath of files) {
-                    filePath = normalizePath(filePath);
-                    if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
-                        continue;
-                    }
-
-                    const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
-
-                    if (!foundFiles.has(foundFileName)) {
-                        foundFiles.set(foundFileName, true);
-                    }
+        if (files) {
+            /**
+             * Multiple file entries might map to the same truncated name once we remove extensions
+             * (happens iff includeExtensions === false)so we use a set-like data structure. Eg:
+             *
+             * both foo.ts and foo.tsx become foo
+             */
+            const foundFiles = createMap<true>();
+            for (let filePath of files) {
+                filePath = normalizePath(filePath);
+                if (exclude && comparePaths(filePath, exclude, scriptPath, ignoreCase) === Comparison.EqualTo) {
+                    continue;
                 }
 
-                forEachKey(foundFiles, foundFile => {
-                    result.push(nameAndKind(foundFile, ScriptElementKind.scriptElement));
-                });
-            }
+                const foundFileName = includeExtensions || fileExtensionIs(filePath, Extension.Json) ? getBaseFileName(filePath) : removeFileExtension(getBaseFileName(filePath));
 
-            // If possible, get folder completion as well
-            const directories = tryGetDirectories(host, baseDirectory);
-
-            if (directories) {
-                for (const directory of directories) {
-                    const directoryName = getBaseFileName(normalizePath(directory));
-                    if (directoryName !== "@types") {
-                        result.push(nameAndKind(directoryName, ScriptElementKind.directory));
-                    }
+                if (!foundFiles.has(foundFileName)) {
+                    foundFiles.set(foundFileName, true);
                 }
             }
 
-            // check for a version redirect
-            const packageJsonPath = findPackageJson(baseDirectory, host);
-            if (packageJsonPath) {
-                const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
-                const typesVersions = (packageJson as any).typesVersions;
-                if (typeof typesVersions === "object") {
-                    const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
-                    const versionPaths = versionResult && versionResult.paths;
-                    const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
-                    if (versionPaths) {
-                        addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
-                    }
+            forEachKey(foundFiles, foundFile => {
+                result.push(nameAndKind(foundFile, ScriptElementKind.scriptElement));
+            });
+        }
+
+        // If possible, get folder completion as well
+        const directories = tryGetDirectories(host, baseDirectory);
+
+        if (directories) {
+            for (const directory of directories) {
+                const directoryName = getBaseFileName(normalizePath(directory));
+                if (directoryName !== "@types") {
+                    result.push(nameAndKind(directoryName, ScriptElementKind.directory));
+                }
+            }
+        }
+
+        // check for a version redirect
+        const packageJsonPath = findPackageJson(baseDirectory, host);
+        if (packageJsonPath) {
+            const packageJson = readJson(packageJsonPath, host as { readFile: (filename: string) => string | undefined });
+            const typesVersions = (packageJson as any).typesVersions;
+            if (typeof typesVersions === "object") {
+                const versionResult = getPackageJsonTypesVersionsPaths(typesVersions);
+                const versionPaths = versionResult && versionResult.paths;
+                const rest = absolutePath.slice(ensureTrailingDirectorySeparator(baseDirectory).length);
+                if (versionPaths) {
+                    addCompletionEntriesFromPaths(result, rest, baseDirectory, extensions, versionPaths, host);
                 }
             }
         }
@@ -198,22 +205,22 @@ namespace ts.Completions.PathCompletions {
 
         const result: NameAndKind[] = [];
 
-        const fileExtensions = getSupportedExtensionsForModuleResolution(compilerOptions);
+        const extensionOptions = getExtensionOptions(compilerOptions);
         if (baseUrl) {
             const projectDir = compilerOptions.project || host.getCurrentDirectory();
             const absolute = normalizePath(combinePaths(projectDir, baseUrl));
-            getCompletionEntriesForDirectoryFragment(fragment, absolute, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
+            getCompletionEntriesForDirectoryFragment(fragment, absolute, extensionOptions, host, /*exclude*/ undefined, result);
             if (paths) {
-                addCompletionEntriesFromPaths(result, fragment, absolute, fileExtensions, paths, host);
+                addCompletionEntriesFromPaths(result, fragment, absolute, extensionOptions.extensions, paths, host);
             }
         }
 
-        const fragmentDirectory = containsSlash(fragment) ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
+        const fragmentDirectory = getFragmentDirectory(fragment);
         for (const ambientName of getAmbientModuleCompletions(fragment, fragmentDirectory, typeChecker)) {
             result.push(nameAndKind(ambientName, ScriptElementKind.externalModuleName));
         }
 
-        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, result);
+        getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, fragmentDirectory, extensionOptions, result);
 
         if (getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs) {
             // If looking for a global package name, don't just include everything in `node_modules` because that includes dependencies' own dependencies.
@@ -231,13 +238,17 @@ namespace ts.Completions.PathCompletions {
                 forEachAncestorDirectory(scriptPath, ancestor => {
                     const nodeModules = combinePaths(ancestor, "node_modules");
                     if (tryDirectoryExists(host, nodeModules)) {
-                        getCompletionEntriesForDirectoryFragment(fragment, nodeModules, fileExtensions, /*includeExtensions*/ false, host, /*exclude*/ undefined, result);
+                        getCompletionEntriesForDirectoryFragment(fragment, nodeModules, extensionOptions, host, /*exclude*/ undefined, result);
                     }
                 });
             }
         }
 
         return result;
+    }
+
+    function getFragmentDirectory(fragment: string): string | undefined {
+        return containsSlash(fragment) ? hasTrailingDirectorySeparator(fragment) ? fragment : getDirectoryPath(fragment) : undefined;
     }
 
     function getCompletionsForPathMapping(
@@ -339,53 +350,45 @@ namespace ts.Completions.PathCompletions {
 
         const [, prefix, kind, toComplete] = match;
         const scriptPath = getDirectoryPath(sourceFile.path);
-        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getSupportedExtensions(compilerOptions), /*includeExtensions*/ true, host, sourceFile.path)
-            : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath)
-            : undefined;
-        return names && addReplacementSpans(toComplete, range.pos + prefix.length, names);
+        const names = kind === "path" ? getCompletionEntriesForDirectoryFragment(toComplete, scriptPath, getExtensionOptions(compilerOptions, /*includeExtensions*/ true), host, sourceFile.path)
+            : kind === "types" ? getCompletionEntriesFromTypings(host, compilerOptions, scriptPath, getFragmentDirectory(toComplete), getExtensionOptions(compilerOptions))
+            : Debug.fail();
+        return addReplacementSpans(toComplete, range.pos + prefix.length, names);
     }
 
-    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, result: NameAndKind[] = []): NameAndKind[] {
+    function getCompletionEntriesFromTypings(host: LanguageServiceHost, options: CompilerOptions, scriptPath: string, fragmentDirectory: string | undefined, extensionOptions: ExtensionOptions, result: NameAndKind[] = []): ReadonlyArray<NameAndKind> {
         // Check for typings specified in compiler options
         const seen = createMap<true>();
-        if (options.types) {
-            for (const typesName of options.types) {
-                const moduleName = unmangleScopedPackageName(typesName);
-                pushResult(moduleName);
-            }
+
+        const typeRoots = tryAndIgnoreErrors(() => getEffectiveTypeRoots(options, host)) || emptyArray;
+
+        for (const root of typeRoots) {
+            getCompletionEntriesFromDirectories(root);
         }
-        else if (host.getDirectories) {
-            let typeRoots: ReadonlyArray<string> | undefined;
-            try {
-                typeRoots = getEffectiveTypeRoots(options, host);
-            }
-            catch { /* Wrap in try catch because getEffectiveTypeRoots touches the filesystem */ }
 
-            if (typeRoots) {
-                for (const root of typeRoots) {
-                    getCompletionEntriesFromDirectories(root);
-                }
-            }
-
-            // Also get all @types typings installed in visible node_modules directories
-            for (const packageJson of findPackageJsons(scriptPath, host)) {
-                const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
-                getCompletionEntriesFromDirectories(typesDir);
-            }
+        // Also get all @types typings installed in visible node_modules directories
+        for (const packageJson of findPackageJsons(scriptPath, host)) {
+            const typesDir = combinePaths(getDirectoryPath(packageJson), "node_modules/@types");
+            getCompletionEntriesFromDirectories(typesDir);
         }
 
         return result;
 
-        function getCompletionEntriesFromDirectories(directory: string) {
-            Debug.assert(!!host.getDirectories);
-            if (tryDirectoryExists(host, directory)) {
-                const directories = tryGetDirectories(host, directory);
-                if (directories) {
-                    for (let typeDirectory of directories) {
-                        typeDirectory = normalizePath(typeDirectory);
-                        const directoryName = getBaseFileName(typeDirectory);
-                        const moduleName = unmangleScopedPackageName(directoryName);
-                        pushResult(moduleName);
+        function getCompletionEntriesFromDirectories(directory: string): void {
+            if (!tryDirectoryExists(host, directory)) return;
+
+            for (const typeDirectoryName of tryGetDirectories(host, directory)) {
+                const packageName = unmangleScopedPackageName(typeDirectoryName);
+                if (options.types && !contains(options.types, packageName)) continue;
+
+                if (fragmentDirectory === undefined) {
+                    pushResult(packageName);
+                }
+                else {
+                    const baseDirectory = combinePaths(directory, typeDirectoryName);
+                    const remainingFragment = tryRemoveDirectoryPrefix(fragmentDirectory, packageName, hostGetCanonicalFileName(host));
+                    if (remainingFragment !== undefined) {
+                        getCompletionEntriesForDirectoryFragment(remainingFragment, baseDirectory, extensionOptions, host, /*exclude*/ undefined, result);
                     }
                 }
             }
@@ -476,7 +479,7 @@ namespace ts.Completions.PathCompletions {
      */
     const tripleSlashDirectiveFragmentRegex = /^(\/\/\/\s*<reference\s+(path|types)\s*=\s*(?:'|"))([^\3"]*)$/;
 
-    const nodeModulesDependencyKeys = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
+    const nodeModulesDependencyKeys: ReadonlyArray<string> = ["dependencies", "devDependencies", "peerDependencies", "optionalDependencies"];
 
     function tryGetDirectories(host: LanguageServiceHost, directoryName: string): string[] {
         return tryIOAndConsumeErrors(host, host.getDirectories, directoryName) || [];
@@ -491,19 +494,16 @@ namespace ts.Completions.PathCompletions {
     }
 
     function tryDirectoryExists(host: LanguageServiceHost, path: string): boolean {
-        try {
-            return directoryProbablyExists(path, host);
-        }
-        catch { /*ignore*/ }
-        return false;
+        return tryAndIgnoreErrors(() => directoryProbablyExists(path, host)) || false;
     }
 
     function tryIOAndConsumeErrors<T>(host: LanguageServiceHost, toApply: ((...a: any[]) => T) | undefined, ...args: any[]) {
-        try {
-            return toApply && toApply.apply(host, args);
-        }
-        catch { /*ignore*/ }
-        return undefined;
+        return tryAndIgnoreErrors(() => toApply && toApply.apply(host, args));
+    }
+
+    function tryAndIgnoreErrors<T>(cb: () => T): T | undefined {
+        try { return cb(); }
+        catch { return undefined; }
     }
 
     function containsSlash(fragment: string) {

@@ -540,3 +540,34 @@ let f: Foo2<O, 'x'> = {
 
 };
 
+// Repro from #28170
+
+function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+>test1 : Symbol(test1, Decl(mappedTypeErrors.ts, 142, 2))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 146, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 146, 17))
+
+    let x = obj.foo;  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 147, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 146, 37))
+}
+
+function test2<T, K extends keyof T>(obj: Record<K, number>) {
+>test2 : Symbol(test2, Decl(mappedTypeErrors.ts, 148, 1))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
+>T : Symbol(T, Decl(mappedTypeErrors.ts, 150, 15))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(mappedTypeErrors.ts, 150, 17))
+
+    let x = obj.foo;  // Error
+>x : Symbol(x, Decl(mappedTypeErrors.ts, 151, 7))
+>obj : Symbol(obj, Decl(mappedTypeErrors.ts, 150, 37))
+}
+

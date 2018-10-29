@@ -1482,7 +1482,15 @@ namespace ts {
                     // which would be a candidate for improved error reporting.
                     return token() === SyntaxKind.OpenBracketToken || isLiteralPropertyName();
                 case ParsingContext.ObjectLiteralMembers:
-                    return token() === SyntaxKind.OpenBracketToken || token() === SyntaxKind.AsteriskToken || token() === SyntaxKind.DotDotDotToken || isLiteralPropertyName();
+                    switch (token()) {
+                        case SyntaxKind.OpenBracketToken:
+                        case SyntaxKind.AsteriskToken:
+                        case SyntaxKind.DotDotDotToken:
+                        case SyntaxKind.DotToken: // Not an object literal member, but don't want to close the object (see `tests/cases/fourslash/completionsDotInObjectLiteral.ts`)
+                            return true;
+                        default:
+                            return isLiteralPropertyName();
+                    }
                 case ParsingContext.RestProperties:
                     return isLiteralPropertyName();
                 case ParsingContext.ObjectBindingElements:
@@ -1510,8 +1518,10 @@ namespace ts {
                 case ParsingContext.TypeParameters:
                     return isIdentifier();
                 case ParsingContext.ArrayLiteralMembers:
-                    if (token() === SyntaxKind.CommaToken) {
-                        return true;
+                    switch (token()) {
+                        case SyntaxKind.CommaToken:
+                        case SyntaxKind.DotToken: // Not an array literal member, but don't want to close the array (see `tests/cases/fourslash/completionsDotInArrayLiteralInObjectLiteral.ts`)
+                            return true;
                     }
                     // falls through
                 case ParsingContext.ArgumentExpressions:
@@ -4728,8 +4738,7 @@ namespace ts {
             // CoverInitializedName[Yield] :
             //     IdentifierReference[?Yield] Initializer[In, ?Yield]
             // this is necessary because ObjectLiteral productions are also used to cover grammar for ObjectAssignmentPattern
-            const isShorthandPropertyAssignment =
-                tokenIsIdentifier && (token() === SyntaxKind.CommaToken || token() === SyntaxKind.CloseBraceToken || token() === SyntaxKind.EqualsToken);
+            const isShorthandPropertyAssignment = tokenIsIdentifier && (token() !== SyntaxKind.ColonToken);
             if (isShorthandPropertyAssignment) {
                 node.kind = SyntaxKind.ShorthandPropertyAssignment;
                 const equalsToken = parseOptionalToken(SyntaxKind.EqualsToken);
@@ -6308,7 +6317,7 @@ namespace ts {
 
             // Parses out a JSDoc type expression.
             export function parseJSDocTypeExpression(mayOmitBraces?: boolean): JSDocTypeExpression {
-                const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression, scanner.getTokenPos());
+                const result = <JSDocTypeExpression>createNode(SyntaxKind.JSDocTypeExpression);
 
                 const hasBrace = (mayOmitBraces ? parseOptional : parseExpected)(SyntaxKind.OpenBraceToken);
                 result.type = doInsideOfContext(NodeFlags.JSDoc, parseJSDocType);
@@ -6441,13 +6450,6 @@ namespace ts {
                                     indent += asterisk.length;
                                 }
                                 break;
-                            case SyntaxKind.Identifier:
-                                // Anything else is doc comment text. We just save it. Because it
-                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
-                                // line break.
-                                pushComment(scanner.getTokenText());
-                                state = JSDocState.SavingComments;
-                                break;
                             case SyntaxKind.WhitespaceTrivia:
                                 // only collect whitespace if we're already saving comments or have just crossed the comment indent margin
                                 const whitespace = scanner.getTokenText();
@@ -6462,7 +6464,9 @@ namespace ts {
                             case SyntaxKind.EndOfFileToken:
                                 break loop;
                             default:
-                                // anything other than whitespace or asterisk at the beginning of the line starts the comment text
+                                // Anything else is doc comment text. We just save it. Because it
+                                // wasn't a tag, we can no longer parse a tag on this line until we hit the next
+                                // line break.
                                 state = JSDocState.SavingComments;
                                 pushComment(scanner.getTokenText());
                                 break;
@@ -6517,7 +6521,7 @@ namespace ts {
                     }
                 }
 
-                function skipWhitespaceOrAsterisk(next: () => void): void {
+                function skipWhitespaceOrAsterisk(): void {
                     if (token() === SyntaxKind.WhitespaceTrivia || token() === SyntaxKind.NewLineTrivia) {
                         if (lookAhead(isNextNonwhitespaceTokenEndOfFile)) {
                             return; // Don't skip whitespace prior to EoF (or end of comment) - that shouldn't be included in any node's range
@@ -6532,7 +6536,7 @@ namespace ts {
                         else if (token() === SyntaxKind.AsteriskToken) {
                             precedingLineBreak = false;
                         }
-                        next();
+                        nextJSDocToken();
                     }
                 }
 
@@ -6542,9 +6546,8 @@ namespace ts {
                     atToken.end = scanner.getTextPos();
                     nextJSDocToken();
 
-                    // Use 'nextToken' instead of 'nextJsDocToken' so we can parse a type like 'number' in `@enum number`
-                    const tagName = parseJSDocIdentifierName(/*message*/ undefined, nextToken);
-                    skipWhitespaceOrAsterisk(nextToken);
+                    const tagName = parseJSDocIdentifierName(/*message*/ undefined);
+                    skipWhitespaceOrAsterisk();
 
                     let tag: JSDocTag | undefined;
                     switch (tagName.escapedText) {
@@ -6688,7 +6691,7 @@ namespace ts {
                 }
 
                 function tryParseTypeExpression(): JSDocTypeExpression | undefined {
-                    skipWhitespaceOrAsterisk(nextJSDocToken);
+                    skipWhitespaceOrAsterisk();
                     return token() === SyntaxKind.OpenBraceToken ? parseJSDocTypeExpression() : undefined;
                 }
 
@@ -6728,7 +6731,7 @@ namespace ts {
                 function parseParameterOrPropertyTag(atToken: AtToken, tagName: Identifier, target: PropertyLikeParse, indent: number): JSDocParameterTag | JSDocPropertyTag {
                     let typeExpression = tryParseTypeExpression();
                     let isNameFirst = !typeExpression;
-                    skipWhitespaceOrAsterisk(nextJSDocToken);
+                    skipWhitespaceOrAsterisk();
 
                     const { name, isBracketed } = parseBracketNameInPropertyAndParamTag();
                     skipWhitespace();
@@ -6862,7 +6865,7 @@ namespace ts {
 
                 function parseTypedefTag(atToken: AtToken, tagName: Identifier, indent: number): JSDocTypedefTag {
                     const typeExpression = tryParseTypeExpression();
-                    skipWhitespaceOrAsterisk(nextJSDocToken);
+                    skipWhitespaceOrAsterisk();
 
                     const typedefTag = <JSDocTypedefTag>createNode(SyntaxKind.JSDocTypedefTag, atToken.pos);
                     typedefTag.atToken = atToken;
@@ -7115,7 +7118,7 @@ namespace ts {
                     return entity;
                 }
 
-                function parseJSDocIdentifierName(message?: DiagnosticMessage, next: () => void = nextJSDocToken): Identifier {
+                function parseJSDocIdentifierName(message?: DiagnosticMessage): Identifier {
                     if (!tokenIsIdentifierOrKeyword(token())) {
                         return createMissingNode<Identifier>(SyntaxKind.Identifier, /*reportAtCurrentPosition*/ !message, message || Diagnostics.Identifier_expected);
                     }
@@ -7126,7 +7129,7 @@ namespace ts {
                     result.escapedText = escapeLeadingUnderscores(scanner.getTokenText());
                     finishNode(result, end);
 
-                    next();
+                    nextJSDocToken();
                     return result;
                 }
             }
@@ -7725,7 +7728,7 @@ namespace ts {
     /*@internal*/
     export function processCommentPragmas(context: PragmaContext, sourceText: string): void {
         const triviaScanner = createScanner(context.languageVersion, /*skipTrivia*/ false, LanguageVariant.Standard, sourceText);
-        const pragmas: PragmaPsuedoMapEntry[] = [];
+        const pragmas: PragmaPseudoMapEntry[] = [];
 
         // Keep scanning all the leading trivia in the file until we get to something that
         // isn't trivia.  Any single line comment will be analyzed to see if it is a
@@ -7780,7 +7783,7 @@ namespace ts {
                     const referencedFiles = context.referencedFiles;
                     const typeReferenceDirectives = context.typeReferenceDirectives;
                     const libReferenceDirectives = context.libReferenceDirectives;
-                    forEach(toArray(entryOrList), (arg: PragmaPsuedoMap["reference"]) => {
+                    forEach(toArray(entryOrList), (arg: PragmaPseudoMap["reference"]) => {
                         // TODO: GH#18217
                         if (arg!.arguments["no-default-lib"]) {
                             context.hasNoDefaultLib = true;
@@ -7803,7 +7806,7 @@ namespace ts {
                 case "amd-dependency": {
                     context.amdDependencies = map(
                         toArray(entryOrList),
-                        (x: PragmaPsuedoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
+                        (x: PragmaPseudoMap["amd-dependency"]) => ({ name: x!.arguments.name!, path: x!.arguments.path })); // TODO: GH#18217
                     break;
                 }
                 case "amd-module": {
@@ -7813,11 +7816,11 @@ namespace ts {
                                 // TODO: It's probably fine to issue this diagnostic on all instances of the pragma
                                 reportDiagnostic(entry!.range.pos, entry!.range.end - entry!.range.pos, Diagnostics.An_AMD_module_cannot_have_multiple_name_assignments);
                             }
-                            context.moduleName = (entry as PragmaPsuedoMap["amd-module"])!.arguments.name;
+                            context.moduleName = (entry as PragmaPseudoMap["amd-module"])!.arguments.name;
                         }
                     }
                     else {
-                        context.moduleName = (entryOrList as PragmaPsuedoMap["amd-module"])!.arguments.name;
+                        context.moduleName = (entryOrList as PragmaPseudoMap["amd-module"])!.arguments.name;
                     }
                     break;
                 }
@@ -7853,10 +7856,10 @@ namespace ts {
 
     const tripleSlashXMLCommentStartRegEx = /^\/\/\/\s*<(\S+)\s.*?\/>/im;
     const singleLinePragmaRegEx = /^\/\/\/?\s*@(\S+)\s*(.*)\s*$/im;
-    function extractPragmas(pragmas: PragmaPsuedoMapEntry[], range: CommentRange, text: string) {
+    function extractPragmas(pragmas: PragmaPseudoMapEntry[], range: CommentRange, text: string) {
         const tripleSlash = range.kind === SyntaxKind.SingleLineCommentTrivia && tripleSlashXMLCommentStartRegEx.exec(text);
         if (tripleSlash) {
-            const name = tripleSlash[1].toLowerCase() as keyof PragmaPsuedoMap; // Technically unsafe cast, but we do it so the below check to make it safe typechecks
+            const name = tripleSlash[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so the below check to make it safe typechecks
             const pragma = commentPragmas[name] as PragmaDefinition;
             if (!pragma || !(pragma.kind! & PragmaKindFlags.TripleSlashXML)) {
                 return;
@@ -7883,10 +7886,10 @@ namespace ts {
                         }
                     }
                 }
-                pragmas.push({ name, args: { arguments: argument, range } } as PragmaPsuedoMapEntry);
+                pragmas.push({ name, args: { arguments: argument, range } } as PragmaPseudoMapEntry);
             }
             else {
-                pragmas.push({ name, args: { arguments: {}, range } } as PragmaPsuedoMapEntry);
+                pragmas.push({ name, args: { arguments: {}, range } } as PragmaPseudoMapEntry);
             }
             return;
         }
@@ -7905,9 +7908,9 @@ namespace ts {
         }
     }
 
-    function addPragmaForMatch(pragmas: PragmaPsuedoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
+    function addPragmaForMatch(pragmas: PragmaPseudoMapEntry[], range: CommentRange, kind: PragmaKindFlags, match: RegExpExecArray) {
         if (!match) return;
-        const name = match[1].toLowerCase() as keyof PragmaPsuedoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
+        const name = match[1].toLowerCase() as keyof PragmaPseudoMap; // Technically unsafe cast, but we do it so they below check to make it safe typechecks
         const pragma = commentPragmas[name] as PragmaDefinition;
         if (!pragma || !(pragma.kind! & kind)) {
             return;
@@ -7915,7 +7918,7 @@ namespace ts {
         const args = match[2]; // Split on spaces and match up positionally with definition
         const argument = getNamedPragmaArguments(pragma, args);
         if (argument === "fail") return; // Missing required argument, fail to parse it
-        pragmas.push({ name, args: { arguments: argument, range } } as PragmaPsuedoMapEntry);
+        pragmas.push({ name, args: { arguments: argument, range } } as PragmaPseudoMapEntry);
         return;
     }
 
