@@ -1960,7 +1960,7 @@
         "category": "Error",
         "code": 2544
     },
-    "A mixin class must have a constructor with a single rest parameter of type 'any[]'.": {
+    "A mixin class must have a constructor with the same parameter types as the base class.": {
         "category": "Error",
         "code": 2545
     },

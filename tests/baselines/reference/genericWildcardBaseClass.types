@@ -1,0 +1,211 @@
+=== tests/cases/compiler/genericWildcardBaseClass.ts ===
+abstract class BaseClass {
+>BaseClass : BaseClass
+
+    constructor(s: string = '', ...args: any[]) { }
+>s : string
+>'' : ""
+>args : any[]
+
+    base() { return 0; }
+>base : () => number
+>0 : 0
+
+    static staticBase() { return ''; }
+>staticBase : () => string
+>'' : ""
+}
+
+function extendNoConstructor<T extends typeof BaseClass>(Base: T) {
+>extendNoConstructor : <T extends typeof BaseClass>(Base: T) => { new (s?: string, ...args: any[]): ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & T
+>BaseClass : typeof BaseClass
+>Base : T
+
+    return class ExN extends Base {
+>class ExN extends Base {        ext() { return 0; }        static staticExt() { return ''; }    } : { new (s?: string, ...args: any[]): ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & T
+>ExN : { new (s?: string, ...args: any[]): ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & T
+>Base : BaseClass
+
+        ext() { return 0; }
+>ext : () => number
+>0 : 0
+
+        static staticExt() { return ''; }
+>staticExt : () => string
+>'' : ""
+
+    };
+}
+
+function extendCompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+>extendCompatibleConstructor : <T extends typeof BaseClass>(Base: T) => { new (x?: string, ...args: any[]): ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & T
+>BaseClass : typeof BaseClass
+>Base : T
+
+    return class ExC extends Base {
+>class ExC extends Base {        constructor(x?: string, ...args: any[]) {            super(x, args);        }    } : { new (x?: string, ...args: any[]): ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & T
+>ExC : { new (x?: string, ...args: any[]): ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & T
+>Base : BaseClass
+
+        constructor(x?: string, ...args: any[]) {
+>x : string
+>args : any[]
+
+            super(x, args);
+>super(x, args) : void
+>super : T
+>x : string
+>args : any[]
+        }
+    };
+}
+
+function fails_IncompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+>fails_IncompatibleConstructor : <T extends typeof BaseClass>(Base: T) => { new (x?: string, ...args: string[]): Fail; prototype: fails_IncompatibleConstructor<any>.Fail; staticBase(): string; } & T
+>BaseClass : typeof BaseClass
+>Base : T
+
+    return class Fail extends Base {
+>class Fail extends Base {        constructor(x?: string, ...args: string[]) {            super(x, args);        }    } : { new (x?: string, ...args: string[]): Fail; prototype: fails_IncompatibleConstructor<any>.Fail; staticBase(): string; } & T
+>Fail : { new (x?: string, ...args: string[]): Fail; prototype: fails_IncompatibleConstructor<any>.Fail; staticBase(): string; } & T
+>Base : BaseClass
+
+        constructor(x?: string, ...args: string[]) {
+>x : string
+>args : string[]
+
+            super(x, args);
+>super(x, args) : void
+>super : T
+>x : string
+>args : string[]
+        }
+    };
+}
+
+abstract class ExtClass extends BaseClass {
+>ExtClass : ExtClass
+>BaseClass : BaseClass
+
+    thing() { return 0; }
+>thing : () => number
+>0 : 0
+
+    static staticThing() { return ''; }
+>staticThing : () => string
+>'' : ""
+}
+
+abstract class BadClass extends BaseClass {
+>BadClass : BadClass
+>BaseClass : BaseClass
+
+    constructor(n: number) {
+>n : number
+
+        super();
+>super() : void
+>super : typeof BaseClass
+    }
+}
+
+const Thing2 = extendCompatibleConstructor(extendNoConstructor(ExtClass));
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>extendCompatibleConstructor(extendNoConstructor(ExtClass)) : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>extendCompatibleConstructor : <T extends typeof BaseClass>(Base: T) => { new (x?: string, ...args: any[]): ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & T
+>extendNoConstructor(ExtClass) : { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>extendNoConstructor : <T extends typeof BaseClass>(Base: T) => { new (s?: string, ...args: any[]): ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & T
+>ExtClass : typeof ExtClass
+
+extendCompatibleConstructor(extendNoConstructor(BadClass));
+>extendCompatibleConstructor(extendNoConstructor(BadClass)) : any
+>extendCompatibleConstructor : <T extends typeof BaseClass>(Base: T) => { new (x?: string, ...args: any[]): ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & T
+>extendNoConstructor(BadClass) : any
+>extendNoConstructor : <T extends typeof BaseClass>(Base: T) => { new (s?: string, ...args: any[]): ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & T
+>BadClass : typeof BadClass
+
+const thing2 = new Thing2();
+>thing2 : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>new Thing2() : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+
+const thing2arg = new Thing2('');
+>thing2arg : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>new Thing2('') : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>'' : ""
+
+const fails_arg = new Thing2(2);
+>fails_arg : any
+>new Thing2(2) : any
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>2 : 2
+
+const str2 = Thing2.staticExt() + Thing2.staticThing() + Thing2.staticBase();
+>str2 : string
+>Thing2.staticExt() + Thing2.staticThing() + Thing2.staticBase() : string
+>Thing2.staticExt() + Thing2.staticThing() : string
+>Thing2.staticExt() : string
+>Thing2.staticExt : () => string
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>staticExt : () => string
+>Thing2.staticThing() : string
+>Thing2.staticThing : () => string
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>staticThing : () => string
+>Thing2.staticBase() : string
+>Thing2.staticBase : () => string
+>Thing2 : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>staticBase : () => string
+
+const num2 = thing2.ext() + thing2.thing() + thing2.base();
+>num2 : number
+>thing2.ext() + thing2.thing() + thing2.base() : number
+>thing2.ext() + thing2.thing() : number
+>thing2.ext() : number
+>thing2.ext : () => number
+>thing2 : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>ext : () => number
+>thing2.thing() : number
+>thing2.thing : () => number
+>thing2 : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>thing : () => number
+>thing2.base() : number
+>thing2.base : () => number
+>thing2 : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+>base : () => number
+
+class Thing3 extends Thing2 {
+>Thing3 : Thing3
+>Thing2 : extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC & extendNoConstructor<typeof ExtClass>.ExN & ExtClass
+
+    constructor() {
+        super('', 1, 2);
+>super('', 1, 2) : void
+>super : { new (x?: string, ...args: any[]): extendCompatibleConstructor<{ new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass>.ExC; prototype: extendCompatibleConstructor<any>.ExC; staticBase(): string; } & { new (s?: string, ...args: any[]): extendNoConstructor<typeof ExtClass>.ExN; prototype: extendNoConstructor<any>.ExN; staticExt(): string; staticBase(): string; } & typeof ExtClass
+>'' : ""
+>1 : 1
+>2 : 2
+
+        Math.round(this.base() + this.thing() + this.ext());
+>Math.round(this.base() + this.thing() + this.ext()) : number
+>Math.round : (x: number) => number
+>Math : Math
+>round : (x: number) => number
+>this.base() + this.thing() + this.ext() : number
+>this.base() + this.thing() : number
+>this.base() : number
+>this.base : () => number
+>this : this
+>base : () => number
+>this.thing() : number
+>this.thing : () => number
+>this : this
+>thing : () => number
+>this.ext() : number
+>this.ext : () => number
+>this : this
+>ext : () => number
+    }
+}
+

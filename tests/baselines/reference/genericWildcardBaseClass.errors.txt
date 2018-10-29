@@ -1,0 +1,73 @@
+tests/cases/compiler/genericWildcardBaseClass.ts(23,18): error TS2545: A mixin class must have a constructor with the same parameter types as the base class.
+tests/cases/compiler/genericWildcardBaseClass.ts(42,49): error TS2345: Argument of type 'typeof BadClass' is not assignable to parameter of type 'typeof BaseClass'.
+  Types of parameters 'n' and 's' are incompatible.
+    Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/genericWildcardBaseClass.ts(46,30): error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/compiler/genericWildcardBaseClass.ts (3 errors) ====
+    abstract class BaseClass {
+        constructor(s: string = '', ...args: any[]) { }
+        base() { return 0; }
+        static staticBase() { return ''; }
+    }
+    
+    function extendNoConstructor<T extends typeof BaseClass>(Base: T) {
+        return class ExN extends Base {
+            ext() { return 0; }
+            static staticExt() { return ''; }
+        };
+    }
+    
+    function extendCompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+        return class ExC extends Base {
+            constructor(x?: string, ...args: any[]) {
+                super(x, args);
+            }
+        };
+    }
+    
+    function fails_IncompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+        return class Fail extends Base {
+                     ~~~~
+!!! error TS2545: A mixin class must have a constructor with the same parameter types as the base class.
+            constructor(x?: string, ...args: string[]) {
+                super(x, args);
+            }
+        };
+    }
+    
+    abstract class ExtClass extends BaseClass {
+        thing() { return 0; }
+        static staticThing() { return ''; }
+    }
+    
+    abstract class BadClass extends BaseClass {
+        constructor(n: number) {
+            super();
+        }
+    }
+    
+    const Thing2 = extendCompatibleConstructor(extendNoConstructor(ExtClass));
+    extendCompatibleConstructor(extendNoConstructor(BadClass));
+                                                    ~~~~~~~~
+!!! error TS2345: Argument of type 'typeof BadClass' is not assignable to parameter of type 'typeof BaseClass'.
+!!! error TS2345:   Types of parameters 'n' and 's' are incompatible.
+!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+    
+    const thing2 = new Thing2();
+    const thing2arg = new Thing2('');
+    const fails_arg = new Thing2(2);
+                                 ~
+!!! error TS2345: Argument of type '2' is not assignable to parameter of type 'string'.
+    
+    const str2 = Thing2.staticExt() + Thing2.staticThing() + Thing2.staticBase();
+    const num2 = thing2.ext() + thing2.thing() + thing2.base();
+    
+    class Thing3 extends Thing2 {
+        constructor() {
+            super('', 1, 2);
+            Math.round(this.base() + this.thing() + this.ext());
+        }
+    }
+    

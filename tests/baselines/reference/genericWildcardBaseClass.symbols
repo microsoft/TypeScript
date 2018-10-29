@@ -1,0 +1,173 @@
+=== tests/cases/compiler/genericWildcardBaseClass.ts ===
+abstract class BaseClass {
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+
+    constructor(s: string = '', ...args: any[]) { }
+>s : Symbol(s, Decl(genericWildcardBaseClass.ts, 1, 16))
+>args : Symbol(args, Decl(genericWildcardBaseClass.ts, 1, 31))
+
+    base() { return 0; }
+>base : Symbol(BaseClass.base, Decl(genericWildcardBaseClass.ts, 1, 51))
+
+    static staticBase() { return ''; }
+>staticBase : Symbol(BaseClass.staticBase, Decl(genericWildcardBaseClass.ts, 2, 24))
+}
+
+function extendNoConstructor<T extends typeof BaseClass>(Base: T) {
+>extendNoConstructor : Symbol(extendNoConstructor, Decl(genericWildcardBaseClass.ts, 4, 1))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 6, 29))
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 6, 57))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 6, 29))
+
+    return class ExN extends Base {
+>ExN : Symbol(ExN, Decl(genericWildcardBaseClass.ts, 7, 10))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 6, 57))
+
+        ext() { return 0; }
+>ext : Symbol(ExN.ext, Decl(genericWildcardBaseClass.ts, 7, 35))
+
+        static staticExt() { return ''; }
+>staticExt : Symbol(ExN.staticExt, Decl(genericWildcardBaseClass.ts, 8, 27))
+
+    };
+}
+
+function extendCompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+>extendCompatibleConstructor : Symbol(extendCompatibleConstructor, Decl(genericWildcardBaseClass.ts, 11, 1))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 13, 37))
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 13, 65))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 13, 37))
+
+    return class ExC extends Base {
+>ExC : Symbol(ExC, Decl(genericWildcardBaseClass.ts, 14, 10))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 13, 65))
+
+        constructor(x?: string, ...args: any[]) {
+>x : Symbol(x, Decl(genericWildcardBaseClass.ts, 15, 20))
+>args : Symbol(args, Decl(genericWildcardBaseClass.ts, 15, 31))
+
+            super(x, args);
+>super : Symbol(T, Decl(genericWildcardBaseClass.ts, 13, 37))
+>x : Symbol(x, Decl(genericWildcardBaseClass.ts, 15, 20))
+>args : Symbol(args, Decl(genericWildcardBaseClass.ts, 15, 31))
+        }
+    };
+}
+
+function fails_IncompatibleConstructor<T extends typeof BaseClass>(Base: T) {
+>fails_IncompatibleConstructor : Symbol(fails_IncompatibleConstructor, Decl(genericWildcardBaseClass.ts, 19, 1))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 21, 39))
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 21, 67))
+>T : Symbol(T, Decl(genericWildcardBaseClass.ts, 21, 39))
+
+    return class Fail extends Base {
+>Fail : Symbol(Fail, Decl(genericWildcardBaseClass.ts, 22, 10))
+>Base : Symbol(Base, Decl(genericWildcardBaseClass.ts, 21, 67))
+
+        constructor(x?: string, ...args: string[]) {
+>x : Symbol(x, Decl(genericWildcardBaseClass.ts, 23, 20))
+>args : Symbol(args, Decl(genericWildcardBaseClass.ts, 23, 31))
+
+            super(x, args);
+>super : Symbol(T, Decl(genericWildcardBaseClass.ts, 21, 39))
+>x : Symbol(x, Decl(genericWildcardBaseClass.ts, 23, 20))
+>args : Symbol(args, Decl(genericWildcardBaseClass.ts, 23, 31))
+        }
+    };
+}
+
+abstract class ExtClass extends BaseClass {
+>ExtClass : Symbol(ExtClass, Decl(genericWildcardBaseClass.ts, 27, 1))
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+
+    thing() { return 0; }
+>thing : Symbol(ExtClass.thing, Decl(genericWildcardBaseClass.ts, 29, 43))
+
+    static staticThing() { return ''; }
+>staticThing : Symbol(ExtClass.staticThing, Decl(genericWildcardBaseClass.ts, 30, 25))
+}
+
+abstract class BadClass extends BaseClass {
+>BadClass : Symbol(BadClass, Decl(genericWildcardBaseClass.ts, 32, 1))
+>BaseClass : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+
+    constructor(n: number) {
+>n : Symbol(n, Decl(genericWildcardBaseClass.ts, 35, 16))
+
+        super();
+>super : Symbol(BaseClass, Decl(genericWildcardBaseClass.ts, 0, 0))
+    }
+}
+
+const Thing2 = extendCompatibleConstructor(extendNoConstructor(ExtClass));
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+>extendCompatibleConstructor : Symbol(extendCompatibleConstructor, Decl(genericWildcardBaseClass.ts, 11, 1))
+>extendNoConstructor : Symbol(extendNoConstructor, Decl(genericWildcardBaseClass.ts, 4, 1))
+>ExtClass : Symbol(ExtClass, Decl(genericWildcardBaseClass.ts, 27, 1))
+
+extendCompatibleConstructor(extendNoConstructor(BadClass));
+>extendCompatibleConstructor : Symbol(extendCompatibleConstructor, Decl(genericWildcardBaseClass.ts, 11, 1))
+>extendNoConstructor : Symbol(extendNoConstructor, Decl(genericWildcardBaseClass.ts, 4, 1))
+>BadClass : Symbol(BadClass, Decl(genericWildcardBaseClass.ts, 32, 1))
+
+const thing2 = new Thing2();
+>thing2 : Symbol(thing2, Decl(genericWildcardBaseClass.ts, 43, 5))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+
+const thing2arg = new Thing2('');
+>thing2arg : Symbol(thing2arg, Decl(genericWildcardBaseClass.ts, 44, 5))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+
+const fails_arg = new Thing2(2);
+>fails_arg : Symbol(fails_arg, Decl(genericWildcardBaseClass.ts, 45, 5))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+
+const str2 = Thing2.staticExt() + Thing2.staticThing() + Thing2.staticBase();
+>str2 : Symbol(str2, Decl(genericWildcardBaseClass.ts, 47, 5))
+>Thing2.staticExt : Symbol(ExN.staticExt, Decl(genericWildcardBaseClass.ts, 8, 27))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+>staticExt : Symbol(ExN.staticExt, Decl(genericWildcardBaseClass.ts, 8, 27))
+>Thing2.staticThing : Symbol(ExtClass.staticThing, Decl(genericWildcardBaseClass.ts, 30, 25))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+>staticThing : Symbol(ExtClass.staticThing, Decl(genericWildcardBaseClass.ts, 30, 25))
+>Thing2.staticBase : Symbol(staticBase, Decl(genericWildcardBaseClass.ts, 2, 24), Decl(genericWildcardBaseClass.ts, 2, 24), Decl(genericWildcardBaseClass.ts, 2, 24))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+>staticBase : Symbol(staticBase, Decl(genericWildcardBaseClass.ts, 2, 24), Decl(genericWildcardBaseClass.ts, 2, 24), Decl(genericWildcardBaseClass.ts, 2, 24))
+
+const num2 = thing2.ext() + thing2.thing() + thing2.base();
+>num2 : Symbol(num2, Decl(genericWildcardBaseClass.ts, 48, 5))
+>thing2.ext : Symbol(ExN.ext, Decl(genericWildcardBaseClass.ts, 7, 35))
+>thing2 : Symbol(thing2, Decl(genericWildcardBaseClass.ts, 43, 5))
+>ext : Symbol(ExN.ext, Decl(genericWildcardBaseClass.ts, 7, 35))
+>thing2.thing : Symbol(ExtClass.thing, Decl(genericWildcardBaseClass.ts, 29, 43))
+>thing2 : Symbol(thing2, Decl(genericWildcardBaseClass.ts, 43, 5))
+>thing : Symbol(ExtClass.thing, Decl(genericWildcardBaseClass.ts, 29, 43))
+>thing2.base : Symbol(BaseClass.base, Decl(genericWildcardBaseClass.ts, 1, 51))
+>thing2 : Symbol(thing2, Decl(genericWildcardBaseClass.ts, 43, 5))
+>base : Symbol(BaseClass.base, Decl(genericWildcardBaseClass.ts, 1, 51))
+
+class Thing3 extends Thing2 {
+>Thing3 : Symbol(Thing3, Decl(genericWildcardBaseClass.ts, 48, 59))
+>Thing2 : Symbol(Thing2, Decl(genericWildcardBaseClass.ts, 40, 5))
+
+    constructor() {
+        super('', 1, 2);
+        Math.round(this.base() + this.thing() + this.ext());
+>Math.round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>round : Symbol(Math.round, Decl(lib.es5.d.ts, --, --))
+>this.base : Symbol(BaseClass.base, Decl(genericWildcardBaseClass.ts, 1, 51))
+>this : Symbol(Thing3, Decl(genericWildcardBaseClass.ts, 48, 59))
+>base : Symbol(BaseClass.base, Decl(genericWildcardBaseClass.ts, 1, 51))
+>this.thing : Symbol(ExtClass.thing, Decl(genericWildcardBaseClass.ts, 29, 43))
+>this : Symbol(Thing3, Decl(genericWildcardBaseClass.ts, 48, 59))
+>thing : Symbol(ExtClass.thing, Decl(genericWildcardBaseClass.ts, 29, 43))
+>this.ext : Symbol(ExN.ext, Decl(genericWildcardBaseClass.ts, 7, 35))
+>this : Symbol(Thing3, Decl(genericWildcardBaseClass.ts, 48, 59))
+>ext : Symbol(ExN.ext, Decl(genericWildcardBaseClass.ts, 7, 35))
+    }
+}
+

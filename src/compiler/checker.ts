@@ -5634,15 +5634,23 @@ namespace ts {
             return concatenate(getOuterTypeParametersOfClassOrInterface(symbol), getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol));
         }
 
-        // A type is a mixin constructor if it has a single construct signature taking no type parameters and a single
-        // rest parameter of type any[].
+        // A type is a mixin constructor if it has all construct signatures taking no type parameters
+        // and the same parameter types.
         function isMixinConstructorType(type: Type) {
             const signatures = getSignaturesOfType(type, SignatureKind.Construct);
-            if (signatures.length === 1) {
-                const s = signatures[0];
-                return !s.typeParameters && s.parameters.length === 1 && s.hasRestParameter && getTypeOfParameter(s.parameters[0]) === anyArrayType;
+            if (signatures.length === 0) {
+                return false;
             }
-            return false;
+            for (let i = 0; i < signatures.length; ++i) {
+                const signature = signatures[i];
+                if (signature.typeParameters) {
+                    return false;
+                }
+                if ((i !== 0) && !compareSignaturesIdentical(signature, signatures[0], /*partialMatch*/ false, /*ignoreThisTypes*/ false, /*ignoreReturnTypes*/ false, compareTypesIdentical)) {
+                    return false;
+                }
+            }
+            return true;
         }
 
         function isConstructorType(type: Type): boolean {
@@ -5651,7 +5659,7 @@ namespace ts {
             }
             if (type.flags & TypeFlags.TypeVariable) {
                 const constraint = getBaseConstraintOfType(type);
-                return !!constraint && isValidBaseType(constraint) && isMixinConstructorType(constraint);
+                return !!constraint && isConstructorType(constraint);
             }
             return isJSConstructorType(type);
         }
@@ -6672,19 +6680,6 @@ namespace ts {
                 getUnionType([info1.type, info2.type]), info1.isReadonly || info2.isReadonly);
         }
 
-        function includeMixinType(type: Type, types: ReadonlyArray<Type>, index: number): Type {
-            const mixedTypes: Type[] = [];
-            for (let i = 0; i < types.length; i++) {
-                if (i === index) {
-                    mixedTypes.push(type);
-                }
-                else if (isMixinConstructorType(types[i])) {
-                    mixedTypes.push(getReturnTypeOfSignature(getSignaturesOfType(types[i], SignatureKind.Construct)[0]));
-                }
-            }
-            return getIntersectionType(mixedTypes);
-        }
-
         function resolveIntersectionTypeMembers(type: IntersectionType) {
             // The members and properties collections are empty for intersection types. To get all properties of an
             // intersection type use getPropertiesOfType (only the language service uses this).
@@ -6693,29 +6688,33 @@ namespace ts {
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
             const types = type.types;
-            const mixinCount = countWhere(types, isMixinConstructorType);
             for (let i = 0; i < types.length; i++) {
                 const t = type.types[i];
-                // When an intersection type contains mixin constructor types, the construct signatures from
-                // those types are discarded and their return types are mixed into the return types of all
-                // other construct signatures in the intersection type. For example, the intersection type
-                // '{ new(...args: any[]) => A } & { new(s: string) => B }' has a single construct signature
-                // 'new(s: string) => A & B'.
-                if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(t)) {
-                    let signatures = getSignaturesOfType(t, SignatureKind.Construct);
-                    if (signatures.length && mixinCount > 0) {
-                        signatures = map(signatures, s => {
-                            const clone = cloneSignature(s);
-                            clone.resolvedReturnType = includeMixinType(getReturnTypeOfSignature(s), types, i);
-                            return clone;
-                        });
-                    }
-                    constructSignatures = concatenate(constructSignatures, signatures);
-                }
+                constructSignatures = concatenate(constructSignatures, getSignaturesOfType(t, SignatureKind.Construct));
                 callSignatures = concatenate(callSignatures, getSignaturesOfType(t, SignatureKind.Call));
                 stringIndexInfo = intersectIndexInfos(stringIndexInfo, getIndexInfoOfType(t, IndexKind.String));
                 numberIndexInfo = intersectIndexInfos(numberIndexInfo, getIndexInfoOfType(t, IndexKind.Number));
             }
+
+            if (constructSignatures.length) {
+                // When an intersection type contains constructor types, the construct signature return types
+                // are replaced with the single intersection of all return types.
+                // For example, the intersection type
+                // '{ new(s: string) => A } & { new(s: string) => B }' has a single construct signature
+                // 'new(s: string) => A & B'.
+                const eq = (s0: Signature, s1: Signature) => compareSignaturesIdentical(s0, s1, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true, compareTypesIdentical) === Ternary.True;
+                const returnType = getIntersectionType(constructSignatures.map(s => getReturnTypeOfSignature(s)));
+                const uniqConstructSignatures = Array<Signature>();
+                for (const signature of constructSignatures) {
+                    if (!contains(uniqConstructSignatures, signature, eq)) {
+                        const clone = cloneSignature(signature);
+                        clone.resolvedReturnType = returnType;
+                        uniqConstructSignatures.push(clone);
+                    }
+                }
+                constructSignatures = uniqConstructSignatures;
+            }
+
             setStructuredTypeMembers(type, emptySymbols, callSignatures, constructSignatures, stringIndexInfo, numberIndexInfo);
         }
 
@@ -20004,20 +20003,13 @@ namespace ts {
             }
             const firstBase = baseTypes[0];
             if (firstBase.flags & TypeFlags.Intersection) {
-                const types = (firstBase as IntersectionType).types;
-                const mixinCount = countWhere(types, isMixinConstructorType);
-                let i = 0;
                 for (const intersectionMember of (firstBase as IntersectionType).types) {
-                    i++;
-                    // We want to ignore mixin ctors
-                    if (mixinCount === 0 || mixinCount === types.length && i === 0 || !isMixinConstructorType(intersectionMember)) {
-                        if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
-                            if (intersectionMember.symbol === target) {
-                                return true;
-                            }
-                            if (typeHasProtectedAccessibleBase(target, intersectionMember as InterfaceType)) {
-                                return true;
-                            }
+                    if (getObjectFlags(intersectionMember) & (ObjectFlags.Class | ObjectFlags.Interface)) {
+                        if (intersectionMember.symbol === target) {
+                            return true;
+                        }
+                        if (typeHasProtectedAccessibleBase(target, intersectionMember as InterfaceType)) {
+                            return true;
                         }
                     }
                 }
@@ -26017,7 +26009,7 @@ namespace ts {
                             Diagnostics.Class_static_side_0_incorrectly_extends_base_class_static_side_1);
                     }
                     if (baseConstructorType.flags & TypeFlags.TypeVariable && !isMixinConstructorType(staticType)) {
-                        error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_a_single_rest_parameter_of_type_any);
+                        error(node.name || node, Diagnostics.A_mixin_class_must_have_a_constructor_with_the_same_parameter_types_as_the_base_class);
                     }
 
                     if (!(staticBaseType.symbol && staticBaseType.symbol.flags & SymbolFlags.Class) && !(baseConstructorType.flags & TypeFlags.TypeVariable)) {
