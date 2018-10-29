@@ -9929,7 +9929,8 @@ namespace ts {
 
         /** We approximate own properties as non-methods plus methods that are inside the object literal */
         function isSpreadableProperty(prop: Symbol): boolean {
-            return !(prop.flags & SymbolFlags.Method) || !prop.declarations.some(decl => isClassLike(decl.parent));
+            return !(prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) ||
+                !prop.declarations.some(decl => isClassLike(decl.parent));
         }
 
         function getSpreadSymbol(prop: Symbol) {
