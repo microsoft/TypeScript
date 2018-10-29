@@ -228,12 +228,12 @@ spreadObj.a; // error 'a' is not in {}
 
 // generics
 function f<T, U>(t: T, u: U) {
->f : <T, U>(t: T, u: U) => any
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >t : T
 >u : U
 
     return { ...t, ...u, id: 'id' };
->{ ...t, ...u, id: 'id' } : any
+>{ ...t, ...u, id: 'id' } : T & U & { id: string; }
 >t : T
 >u : U
 >id : string
@@ -245,7 +245,7 @@ function override<U>(initial: U, override: U): U {
 >override : U
 
     return { ...initial, ...override };
->{ ...initial, ...override } : any
+>{ ...initial, ...override } : U
 >initial : U
 >override : U
 }
@@ -258,8 +258,8 @@ let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
 >d : boolean
 
     f({ a: 1, b: 'yes' }, { c: 'no', d: false })
->f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: boolean; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1, b: 'yes' } : { a: number; b: string; }
 >a : number
 >1 : 1
@@ -278,8 +278,8 @@ let overlap: { id: string, a: number, b: string } =
 >b : string
 
     f({ a: 1 }, { a: 2, b: 'extra' })
->f({ a: 1 }, { a: 2, b: 'extra' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1 }, { a: 2, b: 'extra' }) : { a: number; } & { a: number; b: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -295,8 +295,8 @@ let overlapConflict: { id:string, a: string } =
 >a : string
 
     f({ a: 1 }, { a: 'mismatch' })
->f({ a: 1 }, { a: 'mismatch' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1 }, { a: 'mismatch' }) : { a: number; } & { a: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1 } : { a: number; }
 >a : number
 >1 : 1
@@ -312,8 +312,8 @@ let overwriteId: { id: string, a: number, c: number, d: string } =
 >d : string
 
     f({ a: 1, id: true }, { c: 1, d: 'no' })
->f({ a: 1, id: true }, { c: 1, d: 'no' }) : any
->f : <T, U>(t: T, u: U) => any
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
 >{ a: 1, id: true } : { a: number; id: true; }
 >a : number
 >1 : 1

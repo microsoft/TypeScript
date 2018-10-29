@@ -5,11 +5,10 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(6,10): error TS2322: Ty
 tests/cases/conformance/types/rest/objectRestNegative.ts(9,31): error TS2462: A rest element must be last in a destructuring pattern.
 tests/cases/conformance/types/rest/objectRestNegative.ts(11,30): error TS7008: Member 'x' implicitly has an 'any' type.
 tests/cases/conformance/types/rest/objectRestNegative.ts(11,33): error TS7008: Member 'y' implicitly has an 'any' type.
-tests/cases/conformance/types/rest/objectRestNegative.ts(12,17): error TS2700: Rest types may only be created from object types.
 tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: The target of an object rest assignment must be a variable or a property access.
 
 
-==== tests/cases/conformance/types/rest/objectRestNegative.ts (7 errors) ====
+==== tests/cases/conformance/types/rest/objectRestNegative.ts (6 errors) ====
     let o = { a: 1, b: 'no' };
     var { ...mustBeLast, a } = o;
              ~~~~~~~~~~
@@ -34,8 +33,6 @@ tests/cases/conformance/types/rest/objectRestNegative.ts(17,9): error TS2701: Th
                                     ~
 !!! error TS7008: Member 'y' implicitly has an 'any' type.
         let { x, ...rest } = t;
-                    ~~~~
-!!! error TS2700: Rest types may only be created from object types.
         return rest;
     }
     
