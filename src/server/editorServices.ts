@@ -509,6 +509,8 @@ namespace ts.server {
         public readonly globalPlugins: ReadonlyArray<string>;
         public readonly pluginProbeLocations: ReadonlyArray<string>;
         public readonly allowLocalPluginLoads: boolean;
+        private currentPluginConfigOverrides: Map<any> | undefined;
+
         public readonly typesMapLocation: string | undefined;
 
         public readonly syntaxOnly?: boolean;
@@ -1742,7 +1744,7 @@ namespace ts.server {
                 project.enableLanguageService();
                 project.watchWildcards(createMapFromTemplate(parsedCommandLine.wildcardDirectories!)); // TODO: GH#18217
             }
-            project.enablePluginsWithOptions(compilerOptions);
+            project.enablePluginsWithOptions(compilerOptions, this.currentPluginConfigOverrides);
             const filesToAdd = parsedCommandLine.fileNames.concat(project.getExternalFiles());
             this.updateRootAndOptionsOfNonInferredProject(project, filesToAdd, fileNamePropertyReader, compilerOptions, parsedCommandLine.typeAcquisition!, parsedCommandLine.compileOnSave!); // TODO: GH#18217
         }
@@ -1932,7 +1934,7 @@ namespace ts.server {
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
             const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
-            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory);
+            const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);
             }
@@ -2879,6 +2881,16 @@ namespace ts.server {
             }
 
             return false;
+        }
+
+        configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
+            // For any projects that already have the plugin loaded, configure the plugin
+            this.forEachEnabledProject(project => project.onPluginConfigurationChanged(args.pluginName, args.configuration));
+
+            // Also save the current configuration to pass on to any projects that are yet to be loaded.
+            // If a plugin is configured twice, only the latest configuration will be remembered.
+            this.currentPluginConfigOverrides = this.currentPluginConfigOverrides || createMap();
+            this.currentPluginConfigOverrides.set(args.pluginName, args.configuration);
         }
     }
 
