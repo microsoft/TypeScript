@@ -5,7 +5,6 @@ var v = { a
 >a : any
 
 return;
-> : any
 >return : any
 > : any
 

@@ -11,5 +11,7 @@
 ////o["/*2*/ ;
 ////p["/*3*/"];
 
-verify.completionsAt(["1", "2"], ["foo", "bar", "some other name"]);
-verify.completionsAt("3", ["a"], { isNewIdentifierLocation: true });
+verify.completions(
+    { marker: ["1", "2"], exact: ["foo", "bar", "some other name"] },
+    { marker: "3", exact: "a", isNewIdentifierLocation: true },
+);

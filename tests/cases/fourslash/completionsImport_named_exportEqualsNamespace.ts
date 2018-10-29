@@ -11,12 +11,11 @@
 // @Filename: /b.ts
 ////f/**/;
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "const N.foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "const N.foo: 0", kind: "const", hasAction: true },
+    preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",

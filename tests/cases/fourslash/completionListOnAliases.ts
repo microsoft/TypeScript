@@ -8,8 +8,7 @@
 ////    x./*2*/
 ////}
 
-goTo.marker("1");
-verify.completionListContains("x", "(alias) namespace x\nimport x = M", undefined);
-
-goTo.marker("2");
-verify.completionListContains("value");
+verify.completions(
+    { marker: "1", includes: [{ name: "x", text: "(alias) namespace x\nimport x = M" }] },
+    { marker: "2", exact: "value" },
+);

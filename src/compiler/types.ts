@@ -2447,7 +2447,7 @@ namespace ts {
 
     export interface JSDocTemplateTag extends JSDocTag {
         kind: SyntaxKind.JSDocTemplateTag;
-        constraint: TypeNode | undefined;
+        constraint: JSDocTypeExpression | undefined;
         typeParameters: NodeArray<TypeParameterDeclaration>;
     }
 
@@ -2793,7 +2793,7 @@ namespace ts {
     export interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
 
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
 
         /**
          * Gets a value indicating whether the specified path exists and is a file.
@@ -2802,6 +2802,7 @@ namespace ts {
         fileExists(path: string): boolean;
 
         readFile(path: string): string | undefined;
+        trace?(s: string): void;
     }
 
     /**
@@ -3078,7 +3079,7 @@ namespace ts {
 
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
-        getRootSymbols(symbol: Symbol): Symbol[];
+        getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
         getContextualType(node: Expression): Type | undefined;
         /* @internal */ getContextualTypeForObjectLiteralElement(element: ObjectLiteralElementLike): Type | undefined;
         /* @internal */ getContextualTypeForArgumentAtIndex(call: CallLikeExpression, argIndex: number): Type | undefined;
@@ -3646,6 +3647,7 @@ namespace ts {
         originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
+        variances?: Variance[];             // Alias symbol type argument variance cache
     }
 
     /* @internal */
@@ -3898,6 +3900,7 @@ namespace ts {
         pattern?: DestructuringPattern;  // Destructuring pattern represented by type (if any)
         aliasSymbol?: Symbol;            // Alias associated with type
         aliasTypeArguments?: ReadonlyArray<Type>;     // Alias type arguments (if any)
+        /* @internal */ aliasTypeArgumentsContainsMarker?: boolean;   // Alias type arguments (if any)
         /* @internal */
         wildcardInstantiation?: Type;    // Instantiation with type parameters mapped to wildcard type
         /* @internal */
@@ -4214,6 +4217,13 @@ namespace ts {
     export interface SubstitutionType extends InstantiableType {
         typeVariable: TypeVariable;  // Target type variable
         substitute: Type;            // Type to substitute for type parameter
+    }
+
+    /* @internal */
+    export const enum JsxReferenceKind {
+        Component,
+        Function,
+        Mixed
     }
 
     export const enum SignatureKind {
@@ -5532,33 +5542,34 @@ namespace ts {
         BarDelimited = 1 << 2,          // Each list item is space-and-bar (" |") delimited.
         AmpersandDelimited = 1 << 3,    // Each list item is space-and-ampersand (" &") delimited.
         CommaDelimited = 1 << 4,        // Each list item is comma (",") delimited.
-        DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited,
+        AsteriskDelimited = 1 << 5,     // Each list item is asterisk ("\n *") delimited, used with JSDoc.
+        DelimitersMask = BarDelimited | AmpersandDelimited | CommaDelimited | AsteriskDelimited,
 
-        AllowTrailingComma = 1 << 5,    // Write a trailing comma (",") if present.
+        AllowTrailingComma = 1 << 6,    // Write a trailing comma (",") if present.
 
         // Whitespace
-        Indented = 1 << 6,              // The list should be indented.
-        SpaceBetweenBraces = 1 << 7,    // Inserts a space after the opening brace and before the closing brace.
-        SpaceBetweenSiblings = 1 << 8,  // Inserts a space between each sibling node.
+        Indented = 1 << 7,              // The list should be indented.
+        SpaceBetweenBraces = 1 << 8,    // Inserts a space after the opening brace and before the closing brace.
+        SpaceBetweenSiblings = 1 << 9,  // Inserts a space between each sibling node.
 
         // Brackets/Braces
-        Braces = 1 << 9,                // The list is surrounded by "{" and "}".
-        Parenthesis = 1 << 10,          // The list is surrounded by "(" and ")".
-        AngleBrackets = 1 << 11,        // The list is surrounded by "<" and ">".
-        SquareBrackets = 1 << 12,       // The list is surrounded by "[" and "]".
+        Braces = 1 << 10,                // The list is surrounded by "{" and "}".
+        Parenthesis = 1 << 11,          // The list is surrounded by "(" and ")".
+        AngleBrackets = 1 << 12,        // The list is surrounded by "<" and ">".
+        SquareBrackets = 1 << 13,       // The list is surrounded by "[" and "]".
         BracketsMask = Braces | Parenthesis | AngleBrackets | SquareBrackets,
 
-        OptionalIfUndefined = 1 << 13,  // Do not emit brackets if the list is undefined.
-        OptionalIfEmpty = 1 << 14,      // Do not emit brackets if the list is empty.
+        OptionalIfUndefined = 1 << 14,  // Do not emit brackets if the list is undefined.
+        OptionalIfEmpty = 1 << 15,      // Do not emit brackets if the list is empty.
         Optional = OptionalIfUndefined | OptionalIfEmpty,
 
         // Other
-        PreferNewLine = 1 << 15,        // Prefer adding a LineTerminator between synthesized nodes.
-        NoTrailingNewLine = 1 << 16,    // Do not emit a trailing NewLine for a MultiLine list.
-        NoInterveningComments = 1 << 17, // Do not emit comments between each node
+        PreferNewLine = 1 << 16,        // Prefer adding a LineTerminator between synthesized nodes.
+        NoTrailingNewLine = 1 << 17,    // Do not emit a trailing NewLine for a MultiLine list.
+        NoInterveningComments = 1 << 18, // Do not emit comments between each node
 
-        NoSpaceIfEmpty = 1 << 18,       // If the literal is empty, do not add spaces between braces.
-        SingleElement = 1 << 19,
+        NoSpaceIfEmpty = 1 << 19,       // If the literal is empty, do not add spaces between braces.
+        SingleElement = 1 << 20,
 
         // Precomputed Formats
         Modifiers = SingleLine | SpaceBetweenSiblings | NoInterveningComments,
@@ -5598,6 +5609,7 @@ namespace ts {
         TypeParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | AngleBrackets | Optional,
         Parameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Parenthesis,
         IndexSignatureParameters = CommaDelimited | SpaceBetweenSiblings | SingleLine | Indented | SquareBrackets,
+        JSDocComment = MultiLine | AsteriskDelimited,
     }
 
     /* @internal */

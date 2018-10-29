@@ -2,4 +2,4 @@
 var v = { a; b; c }
 
 //// [objectLiteralWithSemicolons1.js]
-var v = { a: , b: , c: c };
+var v = { a: a, b: b, c: c };

@@ -862,7 +862,34 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                         return emitEnumMember(<EnumMember>node);
 
-                    // JSDoc nodes (ignored)
+                    // JSDoc nodes (only used in codefixes currently)
+                    case SyntaxKind.JSDocParameterTag:
+                    case SyntaxKind.JSDocPropertyTag:
+                        return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
+                    case SyntaxKind.JSDocReturnTag:
+                    case SyntaxKind.JSDocTypeTag:
+                    case SyntaxKind.JSDocThisTag:
+                    case SyntaxKind.JSDocEnumTag:
+                        return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                    case SyntaxKind.JSDocAugmentsTag:
+                        return emitJSDocAugmentsTag(node as JSDocAugmentsTag);
+                    case SyntaxKind.JSDocTemplateTag:
+                        return emitJSDocTemplateTag(node as JSDocTemplateTag);
+                    case SyntaxKind.JSDocTypedefTag:
+                        return emitJSDocTypedefTag(node as JSDocTypedefTag);
+                    case SyntaxKind.JSDocCallbackTag:
+                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                    case SyntaxKind.JSDocSignature:
+                        return emitJSDocSignature(node as JSDocSignature);
+                    case SyntaxKind.JSDocTypeLiteral:
+                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
+                    case SyntaxKind.JSDocClassTag:
+                    case SyntaxKind.JSDocTag:
+                        return emitJSDocSimpleTag(node as JSDocTag);
+
+                    case SyntaxKind.JSDocComment:
+                        return emitJSDoc(node as JSDoc);
+
                     // Transformation nodes (ignored)
                 }
 
@@ -2585,6 +2612,154 @@ namespace ts {
         }
 
         //
+        // JSDoc
+        //
+        function emitJSDoc(node: JSDoc) {
+            write("/**");
+            if (node.comment) {
+                const lines = node.comment.split(/\r\n?|\n/g);
+                for (const line of lines) {
+                    writeLine();
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
+                    write(line);
+                }
+            }
+            if (node.tags) {
+                if (node.tags.length === 1 && node.tags[0].kind === SyntaxKind.JSDocTypeTag && !node.comment) {
+                    writeSpace();
+                    emit(node.tags[0]);
+                }
+                else {
+                    emitList(node, node.tags, ListFormat.JSDocComment);
+                }
+            }
+            writeSpace();
+            write("*/");
+        }
+
+        function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocTypeExpression(tag.typeExpression);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
+            emitJSDocTagName(tag.tagName);
+            writeSpace();
+            writePunctuation("{");
+            emit(tag.class);
+            writePunctuation("}");
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTemplateTag(tag: JSDocTemplateTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocTypeExpression(tag.constraint);
+            writeSpace();
+            emitList(tag, tag.typeParameters, ListFormat.CommaListElements);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTypedefTag(tag: JSDocTypedefTag) {
+            emitJSDocTagName(tag.tagName);
+            if (tag.typeExpression) {
+                if (tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+                    emitJSDocTypeExpression(tag.typeExpression);
+                }
+                else {
+                    writeSpace();
+                    writePunctuation("{");
+                    write("Object");
+                    if (tag.typeExpression.isArrayType) {
+                        writePunctuation("[");
+                        writePunctuation("]");
+                    }
+                    writePunctuation("}");
+                }
+            }
+            if (tag.fullName) {
+                writeSpace();
+                emit(tag.fullName);
+            }
+            emitJSDocComment(tag.comment);
+            if (tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeLiteral) {
+                emitJSDocTypeLiteral(tag.typeExpression);
+            }
+        }
+
+        function emitJSDocCallbackTag(tag: JSDocCallbackTag) {
+            emitJSDocTagName(tag.tagName);
+            if (tag.name) {
+                writeSpace();
+                emit(tag.name);
+            }
+            emitJSDocComment(tag.comment);
+            emitJSDocSignature(tag.typeExpression);
+        }
+
+        function emitJSDocSimpleTag(tag: JSDocTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
+            emitList(lit, createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
+        }
+
+        function emitJSDocSignature(sig: JSDocSignature) {
+            if (sig.typeParameters) {
+                emitList(sig, createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
+            }
+            if (sig.parameters) {
+                emitList(sig, createNodeArray(sig.parameters), ListFormat.JSDocComment);
+            }
+            if (sig.type) {
+                writeLine();
+                writeSpace();
+                writePunctuation("*");
+                writeSpace();
+                emit(sig.type);
+            }
+        }
+
+        function emitJSDocPropertyLikeTag(param: JSDocPropertyLikeTag) {
+            emitJSDocTagName(param.tagName);
+            emitJSDocTypeExpression(param.typeExpression);
+            writeSpace();
+            if (param.isBracketed) {
+                writePunctuation("[");
+            }
+            emit(param.name);
+            if (param.isBracketed) {
+                writePunctuation("]");
+            }
+            emitJSDocComment(param.comment);
+        }
+
+        function emitJSDocTagName(tagName: Identifier) {
+            writePunctuation("@");
+            emit(tagName);
+        }
+
+        function emitJSDocComment(comment: string | undefined) {
+            if (comment) {
+                writeSpace();
+                write(comment);
+            }
+        }
+
+        function emitJSDocTypeExpression(typeExpression: JSDocTypeExpression | undefined) {
+            if (typeExpression) {
+                writeSpace();
+                writePunctuation("{");
+                emit(typeExpression.type);
+                writePunctuation("}");
+            }
+        }
+
+        //
         // Top-level nodes
         //
 
@@ -2875,6 +3050,11 @@ namespace ts {
                     writeSpace();
                     writePunctuation("|");
                     break;
+                case ListFormat.AsteriskDelimited:
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
+                    break;
                 case ListFormat.AmpersandDelimited:
                     writeSpace();
                     writePunctuation("&");
@@ -2944,7 +3124,12 @@ namespace ts {
                     const child = children![start + i];
 
                     // Write the delimiter if this is not the first node.
-                    if (previousSibling) {
+                    if (format & ListFormat.AsteriskDelimited) {
+                        // always write JSDoc in the format "\n *"
+                        writeLine();
+                        writeDelimiter(format);
+                    }
+                    else if (previousSibling) {
                         // i.e
                         //      function commentedParameters(
                         //          /* Parameter a */

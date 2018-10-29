@@ -8,6 +8,4 @@
 ////var foo: I;
 ////var { property1: /**/ } = foo;
 
-goTo.marker();
-verify.completionListAllowsNewIdentifier();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined, isNewIdentifierLocation: true });

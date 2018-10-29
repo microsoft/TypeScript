@@ -3,4 +3,4 @@
 ////interface Foo { foo: string; bar: string; }
 ////type T = Pick<Foo, "/**/">;
 
-verify.completionsAt("", ["foo", "bar"]);
+verify.completions({ marker: "", exact: ["foo", "bar"] });

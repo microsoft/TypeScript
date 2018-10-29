@@ -35,9 +35,4 @@
 // @Filename: e2.js
 //// /*e2*/
 
-
-goTo.marker("0");
-
-verify.completionListContains("module0.ts");
-
-verify.not.completionListItemsCountIsGreaterThan(1);
+verify.completions({ marker: "0", exact: "module0.ts", isNewIdentifierLocation: true });

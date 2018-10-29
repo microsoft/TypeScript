@@ -17,8 +17,8 @@ verify.codeFix({
     description: "Infer parameter types from usage",
     index: 2,
     newFileContent:
-`/** @param {number} a */
-/**
+`/**
+ * @param {number} a
  * @param {(string | boolean)[]} rest
  */
 function f(a, ...rest){

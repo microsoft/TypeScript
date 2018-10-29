@@ -30,7 +30,4 @@
 ////    private a/*property7*/
 ////}
 
-goTo.eachMarker(() => {
-    verify.not.completionListIsEmpty();
-    verify.completionListAllowsNewIdentifier();
-});
+verify.completions({ marker: test.markers(), exact: completion.classElementKeywords, isNewIdentifierLocation: true });

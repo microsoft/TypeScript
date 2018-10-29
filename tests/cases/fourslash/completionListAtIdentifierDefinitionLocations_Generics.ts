@@ -11,4 +11,4 @@
 
 ////function A</*genericName5*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });

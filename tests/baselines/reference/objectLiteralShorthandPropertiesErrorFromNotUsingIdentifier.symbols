@@ -37,12 +37,17 @@ var x = {
 
     a.b,
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+> : Symbol((Missing), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 5))
 
     a["ss"],
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+>["ss"] : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
+>"ss" : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
 
     a[1],
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+>[1] : Symbol([1], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 16, 5))
+>1 : Symbol([1], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 16, 5))
 
 };
 

@@ -32,6 +32,4 @@
 ////import * as c from "C";
 ////var x: c.Inner./**/
 
-goTo.marker();
-verify.completionListContains("I3");
-verify.not.completionListContains("__export");
+verify.completions({ marker: "", exact: "I3" });

@@ -70,19 +70,29 @@
 ////	constructor(public a, /*afterConstructorParameterComma*/
 ////}
 
-for (const marker of ["afterPropertyName",
-    "inMethodParameter", "atMethodParameter", "afterMethodParameter",
-    "afterMethodParameterBeforeComma", "afterMethodParameterComma",
-    "afterConstructorParameter", "afterConstructorParameterBeforeComma"]) {
-
-    goTo.marker(marker);
-    verify.completionListIsEmpty();
-}
-
-for (const marker of ["inConstructorParameter", "inConstructorParameterAfterModifier",
-    "atConstructorParameter", "atConstructorParameterModifier", "atConstructorParameterAfterModifier",
-    "afterConstructorParameterComma"]) {
-    goTo.marker(marker);
-    verify.completionListContainsConstructorParameterKeywords();
-    verify.completionListCount(verify.allowedConstructorParameterKeywords.length);
-}
+verify.completions(
+    {
+        marker:[
+            "afterPropertyName",
+            "inMethodParameter",
+            "atMethodParameter",
+            "afterMethodParameter",
+            "afterMethodParameterBeforeComma",
+            "afterMethodParameterComma",
+            "afterConstructorParameter",
+        ],
+        exact: undefined,
+    },
+    {
+        marker: [
+            "inConstructorParameter",
+            "inConstructorParameterAfterModifier",
+            "atConstructorParameter",
+            "atConstructorParameterModifier",
+            "atConstructorParameterAfterModifier",
+            "afterConstructorParameterComma",
+        ],
+        exact: completion.constructorParameterKeywords,
+        isNewIdentifierLocation: true,
+    },
+);

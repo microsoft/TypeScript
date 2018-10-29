@@ -3038,7 +3038,7 @@ namespace ts {
                 return fileDiagnostics.get(fileName) || [];
             }
 
-            const fileDiags: Diagnostic[] = flatMap(filesWithDiagnostics, f => fileDiagnostics.get(f));
+            const fileDiags: Diagnostic[] = flatMapToMutable(filesWithDiagnostics, f => fileDiagnostics.get(f));
             if (!nonFileDiagnostics.length) {
                 return fileDiags;
             }
@@ -5234,7 +5234,7 @@ namespace ts {
         }
         if (isJSDocTypeAlias(node)) {
             Debug.assert(node.parent.kind === SyntaxKind.JSDocComment);
-            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined) as ReadonlyArray<TypeParameterDeclaration>;
+            return flatMap(node.parent.tags, tag => isJSDocTemplateTag(tag) ? tag.typeParameters : undefined);
         }
         if (node.typeParameters) {
             return node.typeParameters;
@@ -7777,7 +7777,7 @@ namespace ts {
         return `^(${pattern})${terminator}`;
     }
 
-    export function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): string[] | undefined {
+    export function getRegularExpressionsForWildcards(specs: ReadonlyArray<string> | undefined, basePath: string, usage: "files" | "directories" | "exclude"): ReadonlyArray<string> | undefined {
         if (specs === undefined || specs.length === 0) {
             return undefined;
         }

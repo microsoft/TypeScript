@@ -10,9 +10,12 @@
 ////    var x = E./*1*/
 ////}
 
-
-goTo.marker('1');
-verify.completionListContains('A', '(enum member) E.A = 0');
-verify.completionListContains('B', '(enum member) E.B = 1');
-verify.completionListContains('C', '(enum member) E.C = 0');
-verify.completionListContains('D', '(enum member) E.D = 1');
+verify.completions({
+    marker: "1",
+    exact: [
+        { name: "A", text: "(enum member) E.A = 0" },
+        { name: "B", text: "(enum member) E.B = 1" },
+        { name: "C", text: "(enum member) E.C = 0" },
+        { name: "D", text: "(enum member) E.D = 1" },
+    ],
+});

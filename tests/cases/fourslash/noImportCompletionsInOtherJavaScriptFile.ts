@@ -9,23 +9,21 @@
 // @Filename: /a.js
 //// export const x = 0;
 //// export class C {}
-//// 
+////
 
 // @Filename: /b.js
 //// /**/
 
-goTo.file("/b.js");
-goTo.marker();
-verify.not.completionListContains("fail", undefined, undefined, undefined, undefined, undefined, { includeCompletionsForModuleExports: true });
+verify.completions({ marker: "", excludes: "fail", preferences: { includeCompletionsForModuleExports: true } });
 edit.insert("export const k = 10;\r\nf");
-verify.completionListContains(
-    { name: "fail", source: "/node_modules/foo/index" },
-    "const fail: number",
-    "",
-    "const",
-    undefined,
-    true,
-    {
-        includeCompletionsForModuleExports: true,
-        sourceDisplay: "./node_modules/foo/index"
-    });
+verify.completions({
+    includes: {
+        name: "fail",
+        source: "/node_modules/foo/index",
+        sourceDisplay: "./node_modules/foo/index",
+        text: "const fail: number",
+        kind: "const",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
+});

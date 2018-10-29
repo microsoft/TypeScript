@@ -8,8 +8,4 @@
 ////    /**/
 ////}
 
-goTo.marker()
-verify.completionListContains('name');
-verify.completionListContains('children');
-verify.not.completionListContains('any');
-verify.not.completionListContains('number');
+verify.completions({ marker: "", exact: ["name", "children"] });

@@ -5,10 +5,9 @@
 ////
 ////declare var f1: (b: number, b2: /*2*/) => void;
 
-goTo.marker("1");
-verify.not.completionListContains("a");
-
-goTo.marker("2");
-verify.not.completionListContains("b");
+verify.completions(
+    { marker: "1", excludes: "a" },
+    { marker: "2", excludes: "b" },
+);
 edit.insert("typeof ");
-verify.completionListContains("b");
+verify.completions({ includes: "b" });

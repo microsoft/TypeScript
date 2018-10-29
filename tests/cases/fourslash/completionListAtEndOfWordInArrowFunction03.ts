@@ -2,8 +2,11 @@
 
 ////(d, defaultIsAnInvalidParameterName) => default/*1*/
 
-goTo.marker("1");
-verify.completionListContains("defaultIsAnInvalidParameterName");
-
-// This should probably stop working in the future.
-verify.completionListContains("default", "default", /*documentation*/ undefined, "keyword");
+verify.completions({
+    marker: "1",
+    includes: [
+        "defaultIsAnInvalidParameterName",
+        // This should probably stop working in the future.
+        { name: "default", text: "default", kind: "keyword" },
+    ],
+});

@@ -6,4 +6,4 @@
 
 ////class a/*className2*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });
