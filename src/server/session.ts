@@ -421,9 +421,8 @@ namespace ts.server {
 
         // After initial references are collected, go over every other project and see if it has a reference for the symbol definition.
         if (getDefinition) {
-            projectService.loadAncestorAndReferenceConfiguredProjects(seenProjects);
-
             const memGetDefinition = memoize(getDefinition);
+            projectService.loadAncestorAndReferenceConfiguredProjects(seenProjects);
             projectService.forEachEnabledProject(project => {
                 if (!addToSeen(seenProjects, project)) return;
                 const definition = getDefinitionInProject(memGetDefinition(), defaultProject, project);
@@ -449,7 +448,7 @@ namespace ts.server {
     }
 
     function getProjectKey(project: Project) {
-        return project.projectKind === ProjectKind.Configured ? (project as ConfiguredProject).canonicalConfigFilePath : project.projectName;
+        return isConfiguredProject(project) ? project.canonicalConfigFilePath : project.projectName;
     }
 
     function callbackProjectAndLocation<TLocation extends DocumentPosition | undefined>(

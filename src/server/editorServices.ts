@@ -410,8 +410,8 @@ namespace ts.server {
     }
 
     function setProjectOptionsUsed(project: ConfiguredProject | ExternalProject) {
-        if (project.projectKind === ProjectKind.Configured) {
-            (project as ConfiguredProject).projectOptions = true;
+        if (isConfiguredProject(project)) {
+            project.projectOptions = true;
         }
     }
 
@@ -1606,7 +1606,7 @@ namespace ts.server {
                 return;
             }
 
-            const projectOptions = project.projectKind === ProjectKind.Configured ? (project as ConfiguredProject).projectOptions as ProjectOptions : undefined;
+            const projectOptions = isConfiguredProject(project) ? project.projectOptions as ProjectOptions : undefined;
             setProjectOptionsUsed(project);
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createSHA256Hash(project.projectName),
@@ -2399,8 +2399,8 @@ namespace ts.server {
 
             // Add configured projects as referenced
             originalScriptInfo.containingProjects.forEach(project => {
-                if (project.projectKind === ProjectKind.Configured) {
-                    addOriginalConfiguredProject(project as ConfiguredProject);
+                if (isConfiguredProject(project)) {
+                    addOriginalConfiguredProject(project);
                 }
             });
             return originalLocation;
@@ -2536,7 +2536,9 @@ namespace ts.server {
         /*@internal*/
         loadAncestorAndReferenceConfiguredProjects(forProjects: ReadonlyMap<Project>) {
             // Load all the projects ancestor projects for seen projects
-            this.configuredProjects.forEach(project => {
+            // Because the configured projects can update in the callback, get the copy to iterate
+            const currentConfigProjects = arrayFrom(this.configuredProjects.values());
+            currentConfigProjects.forEach(project => {
                 if (project.isInitialLoadPending() &&
                     project.forEachProjectReference(returnFalse, returnFalse, path => forProjects.has(path))) {
                     // Load the project

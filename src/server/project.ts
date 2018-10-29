@@ -92,6 +92,10 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
+    export function isConfiguredProject(p: Project): p is ConfiguredProject {
+        return p.projectKind === ProjectKind.Configured;
+    }
+
     export abstract class Project implements LanguageServiceHost, ModuleResolutionHost {
         private rootFiles: ScriptInfo[] = [];
         private rootFilesMap: Map<ProjectRoot> = createMap<ProjectRoot>();
