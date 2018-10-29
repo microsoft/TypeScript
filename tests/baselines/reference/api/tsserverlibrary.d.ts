@@ -27,6 +27,9 @@ declare namespace ts {
     interface MapLike<T> {
         [index: string]: T;
     }
+    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
+    }
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
@@ -3126,7 +3129,7 @@ declare namespace ts {
 /** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
+    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
@@ -4153,7 +4156,7 @@ declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
-    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -4457,9 +4460,6 @@ declare namespace ts.server {
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
     type EventInitializationFailed = "event::initializationFailed";
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
     interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
