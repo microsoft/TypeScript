@@ -2489,6 +2489,10 @@
         "category": "Error",
         "code": 2734
     },
+    "Only numeric enums can have computed members, but this expression has type '{0}'. If you do not need exhaustiveness checks, consider using an object literal instead.": {
+        "category": "Error",
+        "code": 2735
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
