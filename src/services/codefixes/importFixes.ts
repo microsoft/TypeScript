@@ -289,7 +289,7 @@ namespace ts.codefix {
                 // `position` should only be undefined at a missing jsx namespace, in which case we shouldn't be looking for pure types.
                 exportedSymbolIsTypeOnly && isJs ? { kind: ImportFixKind.ImportType, moduleSpecifier, position: Debug.assertDefined(position) } : { kind: ImportFixKind.AddNew, moduleSpecifier, importKind }));
         // Sort to keep the shortest paths first
-        return choicesForEachExportingModule.sort((a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
+        return sort(choicesForEachExportingModule, (a, b) => a.moduleSpecifier.length - b.moduleSpecifier.length);
     }
 
     function getFixesForAddImport(

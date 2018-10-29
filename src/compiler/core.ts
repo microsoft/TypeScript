@@ -511,12 +511,27 @@ namespace ts {
      * @param array The array to map.
      * @param mapfn The callback used to map the result into one or more values.
      */
-    export function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined;
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined {
+    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): ReadonlyArray<U> {
         let result: U[] | undefined;
         if (array) {
-            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        result = addRange(result, v);
+                    }
+                    else {
+                        result = append(result, v);
+                    }
+                }
+            }
+        }
+        return result || emptyArray;
+    }
+
+    export function flatMapToMutable<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] {
+        const result: U[] = [];
+        if (array) {
             for (let i = 0; i < array.length; i++) {
                 const v = mapfn(array[i], i);
                 if (v) {
