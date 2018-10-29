@@ -2040,6 +2040,8 @@ namespace ts.server {
                 watchDir,
                 (fileOrDirectory) => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+
                     // Has extension
                     Debug.assert(result.refCount > 0);
                     if (watchDir === fileOrDirectoryPath) {

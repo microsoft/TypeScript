@@ -9039,6 +9039,33 @@ export const x = 10;`
                 verifyModuleResolution(/*useNodeFile*/ false);
             });
         });
+
+        it("ignores files/folder changes in node_modules that start with '.'", () => {
+            const projectPath = "/user/username/projects/project";
+            const file1: File = {
+                path: `${projectPath}/test.js`,
+                content: `import { x } from "somemodule";`
+            };
+            const file2: File = {
+                path: `${projectPath}/node_modules/somemodule/index.d.ts`,
+                content: `export const x = 10;`
+            };
+            const files = [libFile, file1, file2];
+            const host = createServerHost(files);
+            const service = createProjectService(host);
+            service.openClientFile(file1.path);
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            const project = service.inferredProjects[0];
+            (project as ResolutionCacheHost).maxNumberOfFilesToIterateForInvalidation = 1;
+            host.checkTimeoutQueueLength(0);
+
+            const npmCacheFile: File = {
+                path: `${projectPath}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.json`,
+                content: JSON.stringify({ something: 10 })
+            };
+            host.ensureFileOrFolder(npmCacheFile);
+            host.checkTimeoutQueueLength(0);
+        });
     });
 
     describe("tsserverProjectSystem watchDirectories implementation", () => {
