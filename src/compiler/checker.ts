@@ -13367,12 +13367,12 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
+                    diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.Parameter:
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?
-                        Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
-                        Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                        noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
+                        noImplicitAny ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
@@ -13388,7 +13388,7 @@ namespace ts {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
                     }
-                    diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
+                    diagnostic = noImplicitAny ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type : Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.MappedType:
                     if (noImplicitAny) {
@@ -13396,7 +13396,7 @@ namespace ts {
                     }
                     return;
                 default:
-                    diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
+                    diagnostic = noImplicitAny ? Diagnostics.Variable_0_implicitly_has_an_1_type : Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
             }
             errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }

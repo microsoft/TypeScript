@@ -21,6 +21,27 @@ namespace ts.codefix {
 
         // Property declarations
         Diagnostics.Member_0_implicitly_has_an_1_type.code,
+
+        //// Suggestions
+        // Variable declarations
+        Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_but_a_better_type_may_be_inferred_from_usage.code,
+
+        // Variable uses
+        Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code,
+
+        // Parameter declarations
+        Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code,
+        Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code,
+
+        // Get Accessor declarations
+        Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage.code,
+        Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage.code,
+
+        // Set Accessor declarations
+        Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage.code,
+
+        // Property declarations
+        Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code,
     ];
     registerCodeFix({
         errorCodes,
@@ -47,12 +68,37 @@ namespace ts.codefix {
     function getDiagnostic(errorCode: number, token: Node): DiagnosticMessage {
         switch (errorCode) {
             case Diagnostics.Parameter_0_implicitly_has_an_1_type.code:
+            case Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
                 return isSetAccessorDeclaration(getContainingFunction(token)!) ? Diagnostics.Infer_type_of_0_from_usage : Diagnostics.Infer_parameter_types_from_usage; // TODO: GH#18217
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
+            case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
                 return Diagnostics.Infer_parameter_types_from_usage;
             default:
                 return Diagnostics.Infer_type_of_0_from_usage;
         }
+    }
+
+    /** Map suggestion code to error code */
+    function mapSuggestionDiagnostic(errorCode: number) {
+        switch (errorCode) {
+            case Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics.Variable_0_implicitly_has_type_1_in_some_locations_where_its_type_cannot_be_determined.code;
+            case Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics.Variable_0_implicitly_has_an_1_type.code;
+            case Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics.Parameter_0_implicitly_has_an_1_type.code;
+            case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code;
+            case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_get_accessor_may_be_inferred_from_usage.code:
+                return Diagnostics.Property_0_implicitly_has_type_any_because_its_get_accessor_lacks_a_return_type_annotation.code;
+            case Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type.code;
+            case Diagnostics.Property_0_implicitly_has_type_any_but_a_better_type_for_its_set_accessor_may_be_inferred_from_usage.code:
+                return Diagnostics.Property_0_implicitly_has_type_any_because_its_set_accessor_lacks_a_parameter_type_annotation.code;
+            case Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage.code:
+                return Diagnostics.Member_0_implicitly_has_an_1_type.code;
+        }
+        return errorCode;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Node, errorCode: number, program: Program, cancellationToken: CancellationToken, markSeen: NodeSeenTracker, host: LanguageServiceHost): Declaration | undefined {
@@ -61,6 +107,7 @@ namespace ts.codefix {
         }
 
         const { parent } = token;
+        errorCode = mapSuggestionDiagnostic(errorCode);
         switch (errorCode) {
             // Variable and Property declarations
             case Diagnostics.Member_0_implicitly_has_an_1_type.code:
@@ -71,7 +118,7 @@ namespace ts.codefix {
                 }
                 if (isPropertyAccessExpression(parent)) {
                     const type = inferTypeForVariableFromUsage(parent.name, program, cancellationToken);
-                    const typeNode = type && getTypeNodeIfAccessible(type, parent, program, host);
+                    const typeNode = getTypeNodeIfAccessible(type, parent, program, host);
                     if (typeNode) {
                         // Note that the codefix will never fire with an existing `@type` tag, so there is no need to merge tags
                         const typeTag = createJSDocTypeTag(createJSDocTypeExpression(typeNode), /*comment*/ "");
@@ -107,7 +154,7 @@ namespace ts.codefix {
             case Diagnostics.Rest_parameter_0_implicitly_has_an_any_type.code:
                 if (markSeen(containingFunction)) {
                     const param = cast(parent, isParameter);
-                    annotateParameters(changes, param, containingFunction, sourceFile, program, host, cancellationToken);
+                    annotateParameters(changes, sourceFile, param, containingFunction, program, host, cancellationToken);
                     return param;
                 }
                 return undefined;
@@ -152,7 +199,7 @@ namespace ts.codefix {
         return false;
     }
 
-    function annotateParameters(changes: textChanges.ChangeTracker, parameterDeclaration: ParameterDeclaration, containingFunction: FunctionLike, sourceFile: SourceFile, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
+    function annotateParameters(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parameterDeclaration: ParameterDeclaration, containingFunction: FunctionLike, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
         if (!isIdentifier(parameterDeclaration.name) || !isApplicableFunctionForInference(containingFunction)) {
             return;
         }
@@ -160,7 +207,7 @@ namespace ts.codefix {
         const parameterInferences = inferTypeForParametersFromUsage(containingFunction, sourceFile, program, cancellationToken) ||
             containingFunction.parameters.map<ParameterInference>(p => ({
                 declaration: p,
-                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : undefined
+                type: isIdentifier(p.name) ? inferTypeForVariableFromUsage(p.name, program, cancellationToken) : program.getTypeChecker().getAnyType()
             }));
         Debug.assert(containingFunction.parameters.length === parameterInferences.length);
 
@@ -179,8 +226,10 @@ namespace ts.codefix {
     function annotateSetAccessor(changes: textChanges.ChangeTracker, sourceFile: SourceFile, setAccessorDeclaration: SetAccessorDeclaration, program: Program, host: LanguageServiceHost, cancellationToken: CancellationToken): void {
         const param = firstOrUndefined(setAccessorDeclaration.parameters);
         if (param && isIdentifier(setAccessorDeclaration.name) && isIdentifier(param.name)) {
-            const type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken) ||
-                inferTypeForVariableFromUsage(param.name, program, cancellationToken);
+            let type = inferTypeForVariableFromUsage(setAccessorDeclaration.name, program, cancellationToken);
+            if (type === program.getTypeChecker().getAnyType()) {
+                type = inferTypeForVariableFromUsage(param.name, program, cancellationToken);
+            }
             if (isInJSFile(setAccessorDeclaration)) {
                 annotateJSDocParameters(changes, sourceFile, [{ declaration: param, type }], program, host);
             }
@@ -190,8 +239,8 @@ namespace ts.codefix {
         }
     }
 
-    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type | undefined, program: Program, host: LanguageServiceHost): void {
-        const typeNode = type && getTypeNodeIfAccessible(type, declaration, program, host);
+    function annotate(changes: textChanges.ChangeTracker, sourceFile: SourceFile, declaration: textChanges.TypeAnnotatable, type: Type, program: Program, host: LanguageServiceHost): void {
+        const typeNode = getTypeNodeIfAccessible(type, declaration, program, host);
         if (typeNode) {
             if (isInJSFile(sourceFile) && declaration.kind !== SyntaxKind.PropertySignature) {
                 const parent = isVariableDeclaration(declaration) ? tryCast(declaration.parent.parent, isVariableStatement) : declaration;
@@ -285,7 +334,7 @@ namespace ts.codefix {
             entry.kind !== FindAllReferences.EntryKind.Span ? tryCast(entry.node, isIdentifier) : undefined);
     }
 
-    function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type | undefined {
+    function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type {
         return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
     }
 
@@ -307,7 +356,7 @@ namespace ts.codefix {
 
     interface ParameterInference {
         readonly declaration: ParameterDeclaration;
-        readonly type?: Type;
+        readonly type: Type;
         readonly isOptional?: boolean;
     }
 
@@ -329,13 +378,13 @@ namespace ts.codefix {
             stringIndexContext?: UsageContext;
         }
 
-        export function inferTypeFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type | undefined {
+        export function inferTypeFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type {
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            return getTypeFromUsageContext(usageContext, checker);
+            return getTypeFromUsageContext(usageContext, checker) || checker.getAnyType();
         }
 
         export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ParameterInference[] | undefined {
@@ -374,7 +423,7 @@ namespace ts.codefix {
                     }
                 }
                 if (!types.length) {
-                    return { declaration: parameter };
+                    return { declaration: parameter, type: checker.getAnyType() };
                 }
                 const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
                 return {

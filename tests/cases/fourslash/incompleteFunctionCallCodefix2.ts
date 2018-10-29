@@ -3,4 +3,6 @@
 // @noImplicitAny: true
 ////function f(new C(100, 3, undefined)
 
-verify.codeFixAvailable([]); // Parse error, so no unused diagnostics
+verify.codeFixAvailable([
+    { "description": "Infer parameter types from usage" }
+]); // Parse error, so no unused diagnostics
