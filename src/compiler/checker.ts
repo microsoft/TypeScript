@@ -12012,13 +12012,15 @@ namespace ts {
                             return Ternary.True;
                         }
                         // A source type T is related to a target type { [P in keyof T]: X } if T[P] is related to X.
-                        if (!isGenericMappedType(source) && getConstraintTypeFromMappedType(target) === getIndexType(source)) {
+                        if (!isGenericMappedType(source) && isRelatedTo(getConstraintTypeFromMappedType(target), getIndexType(source))) {
                             const indexedAccessType = getIndexedAccessType(source, getTypeParameterFromMappedType(target));
                             const templateType = getTemplateTypeFromMappedType(target);
                             if (result = isRelatedTo(indexedAccessType, templateType, reportErrors)) {
                                 return result;
                             }
                         }
+                        originalErrorInfo = errorInfo;
+                        errorInfo = saveErrorInfo;
                     }
                 }
 
