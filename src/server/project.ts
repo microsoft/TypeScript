@@ -548,7 +548,7 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedArray(flatMap(this.plugins, plugin => {
+            return toSortedArray(flatMapToMutable(this.plugins, plugin => {
                 if (typeof plugin.getExternalFiles !== "function") return;
                 try {
                     return plugin.getExternalFiles(this);

@@ -228,7 +228,7 @@ namespace ts.codefix {
 
     function addJSDocTags(changes: textChanges.ChangeTracker, sourceFile: SourceFile, parent: HasJSDoc, newTags: ReadonlyArray<JSDocTag>): void {
         const comments = mapDefined(parent.jsDoc, j => j.comment);
-        const oldTags = flatMap(parent.jsDoc, j => j.tags);
+        const oldTags = flatMapToMutable(parent.jsDoc, j => j.tags);
         const unmergedNewTags = newTags.filter(newTag => !oldTags || !oldTags.some((tag, i) => {
             const merged = tryMergeJsdocTags(tag, newTag);
             if (merged) oldTags[i] = merged;

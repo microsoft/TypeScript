@@ -62,7 +62,7 @@ namespace ts {
             return arrayFrom(errorCodeToFixes.keys());
         }
 
-        export function getFixes(context: CodeFixContext): CodeFixAction[] {
+        export function getFixes(context: CodeFixContext): ReadonlyArray<CodeFixAction> {
             return flatMap(errorCodeToFixes.get(String(context.errorCode)) || emptyArray, f => f.getCodeActions(context));
         }
 

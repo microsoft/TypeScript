@@ -1023,7 +1023,7 @@ namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReferencesResponseItem[];
+        refs: ReadonlyArray<ReferencesResponseItem>;
 
         /**
          * The name of the symbol.
