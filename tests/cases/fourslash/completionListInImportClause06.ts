@@ -12,4 +12,4 @@
 ////export declare let x: number;
 
 // Confirm that entries are de-dup'd.
-verify.completionsAt("1", ["@a/b"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "1", exact: "@a/b", isNewIdentifierLocation: true });

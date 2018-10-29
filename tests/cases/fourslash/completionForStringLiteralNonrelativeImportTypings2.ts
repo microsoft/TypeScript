@@ -21,12 +21,4 @@
 // @Filename: my_other_typings/module-z/index.d.ts
 //// export var z = 9;
 
-
-const kinds = ["types_ref", "import_as", "import_equals", "require"];
-
-for (const kind of kinds) {
-    goTo.marker(kind + "0");
-    verify.completionListContains("module-x");
-    verify.completionListContains("module-z");
-    verify.not.completionListItemsCountIsGreaterThan(2);
-}
+verify.completions({ marker: test.markers(), exact: ["module-x", "module-z"], isNewIdentifierLocation: true });

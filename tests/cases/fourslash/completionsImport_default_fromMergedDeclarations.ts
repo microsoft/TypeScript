@@ -15,12 +15,11 @@
 // @Filename: /c.ts
 /////**/
 
-goTo.marker("");
-verify.completionListContains({ name: "M", source: "m" }, "class M", "", "class", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeCompletionsForModuleExports: true,
-    sourceDisplay: "m",
+verify.completions({
+    marker: "",
+    includes: { name: "M", source: "m", sourceDisplay: "m", text: "class M", kind: "class", hasAction: true },
+    preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("", {
     name: "M",
     source: "m",

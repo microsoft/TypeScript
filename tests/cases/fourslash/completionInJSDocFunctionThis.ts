@@ -4,5 +4,4 @@
 /////** @type {function (this: string, string): string} */
 ////var f = function (s) { return this/**/; }
 
-goTo.marker();
-verify.completionListContains('this')
+verify.completions({ marker: "", includes: "this" });

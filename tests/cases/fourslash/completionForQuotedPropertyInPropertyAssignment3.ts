@@ -15,5 +15,7 @@
 ////         '/*1*/': ""
 ////  }
 
-verify.completionsAt("0", ["jspm", '"jspm:browser"']);
-verify.completionsAt("1", ["jspm", "jspm:browser"]);
+verify.completions(
+    { marker: "0", exact: ["jspm", '"jspm:browser"'] },
+    { marker: "1", exact: ["jspm", "jspm:browser"] },
+);

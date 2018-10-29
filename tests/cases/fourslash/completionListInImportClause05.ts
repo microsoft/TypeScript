@@ -12,4 +12,4 @@
 // NOTE: The node_modules folder is in "/", rather than ".", because it requires
 // less scaffolding to mock.  In particular, "/" is where we look for type roots.
 
-verify.completionsAt("1", ["@e/f", "@a/b", "@c/d"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "1", exact: ["@e/f", "@a/b", "@c/d"], isNewIdentifierLocation: true });

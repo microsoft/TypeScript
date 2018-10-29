@@ -17,6 +17,4 @@
 ////var a: string[];
 ////var e = a.map(x => x./**/);
 
-
-goTo.marker();
-verify.completionListContains("charAt");
+verify.completions({ marker: "", includes: "charAt" });

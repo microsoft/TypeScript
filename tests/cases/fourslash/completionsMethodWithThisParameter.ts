@@ -14,5 +14,7 @@
 ////s./*s*/;
 ////n./*n*/;
 
-verify.completionsAt("s", ["value", "ms", "mo", "mt", "mp", "mps"]);
-verify.completionsAt("n", ["value", "mo", "mt", "mp"]);
+verify.completions(
+    { marker: "s", exact: ["value", "ms", "mo", "mt", "mp", "mps"] },
+    { marker: "n", exact: ["value", "mo", "mt", "mp"] },
+);

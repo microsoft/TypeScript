@@ -21,11 +21,10 @@
 ////     return (
 ////         <FetchUser>
 ////             { user => (
-////                 <h1>{ user./**/ }</h1> 
+////                 <h1>{ user./**/ }</h1>
 ////             )}
 ////         </FetchUser>
 ////     );
 //// }
 
-goTo.marker();
-verify.completionListContains('Name');
+verify.completions({ marker: "", exact: "Name" });

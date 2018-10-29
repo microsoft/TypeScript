@@ -12,11 +12,11 @@
 ////f/**/;
 
 goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nexport default foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeCompletionsForModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport default foo", kind: "alias", hasAction: true },
+    preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",

@@ -17,7 +17,11 @@
 // @Filename: genericTypeWithMultipleBases_4.ts
 ////x./**/
 
-goTo.marker();
-verify.completionListContains('watch', '(property) iBaseScope.watch: () => void');
-verify.completionListContains('moveUp', '(property) iMover.moveUp: () => void');
-verify.completionListContains('family', '(property) iScope<number>.family: number');
+verify.completions({
+    marker: "",
+    includes: [
+        { name: "watch", text: "(property) iBaseScope.watch: () => void" },
+        { name: "moveUp", text: "(property) iMover.moveUp: () => void" },
+        { name: "family", text: "(property) iScope<number>.family: number" },
+    ],
+});

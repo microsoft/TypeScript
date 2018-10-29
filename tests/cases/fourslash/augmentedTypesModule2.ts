@@ -7,11 +7,10 @@
 
 verify.quickInfoAt("11", "function m2f(x: number): void\nnamespace m2f");
 
-goTo.marker('1');
-verify.completionListContains('I');
+verify.completions({ marker: "1", exact: "I" });
 
 edit.insert('I.');
-verify.not.completionListContains('foo');
+verify.completions({ exact: undefined });
 edit.backspace(1);
 
 verify.quickInfoAt("2", "var r: (x: number) => void");

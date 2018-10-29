@@ -146,27 +146,6 @@ declare namespace FourSlashInterface {
         allowedClassElementKeywords: string[];
         allowedConstructorParameterKeywords: string[];
         constructor(negative?: boolean);
-        completionListCount(expectedCount: number): void;
-        completionListContains(
-            entryId: string | { name: string, source?: string },
-            text?: string,
-            documentation?: string,
-            kind?: string | { kind?: string, kindModifiers?: string },
-            spanIndex?: number,
-            hasAction?: boolean,
-            options?: UserPreferences & {
-                triggerCharacter?: string,
-                sourceDisplay?: string,
-                isRecommended?: true,
-                insertText?: string,
-                replacementSpan?: Range,
-            },
-        ): void;
-        completionListItemsCountIsGreaterThan(count: number): void;
-        completionListIsEmpty(): void;
-        completionListContainsClassElementKeywords(): void;
-        completionListContainsConstructorParameterKeywords(): void;
-        completionListAllowsNewIdentifier(): void;
         errorExistsBetweenMarkers(startMarker: string, endMarker: string): void;
         errorExistsAfterMarker(markerName?: string): void;
         errorExistsBeforeMarker(markerName?: string): void;
@@ -201,16 +180,7 @@ declare namespace FourSlashInterface {
     class verify extends verifyNegatable {
         assertHasRanges(ranges: Range[]): void;
         caretAtMarker(markerName?: string): void;
-        completions(...options: {
-            readonly marker?: ArrayOrSingle<string | Marker>,
-            readonly isNewIdentifierLocation?: boolean;
-            readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
-            readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
-            readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
-            readonly preferences?: UserPreferences;
-            readonly triggerCharacter?: string;
-        }[]): void;
-        completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions): void;
+        completions(...options: CompletionsOptions[]): void;
         applyCodeActionFromCompletion(markerName: string, options: {
             name: string,
             source?: string,
@@ -299,7 +269,6 @@ declare namespace FourSlashInterface {
         rangesAreDocumentHighlights(ranges?: Range[], options?: VerifyDocumentHighlightsOptions): void;
         rangesWithSameTextAreDocumentHighlights(): void;
         documentHighlightsOf(startRange: Range, ranges: Range[], options?: VerifyDocumentHighlightsOptions): void;
-        completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: JSDocTagInfo[]): void;
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -536,25 +505,33 @@ declare namespace FourSlashInterface {
         readonly importModuleSpecifierPreference?: "relative" | "non-relative";
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
     }
-    interface CompletionsAtOptions extends UserPreferences {
-        triggerCharacter?: string;
-        isNewIdentifierLocation?: boolean;
+    interface CompletionsOptions {
+        readonly marker?: ArrayOrSingle<string | Marker>,
+        readonly isNewIdentifierLocation?: boolean;
+        readonly isGlobalCompletion?: boolean;
+        readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
+        readonly excludes?: ArrayOrSingle<string | { name: string, source: string }>;
+        readonly preferences?: UserPreferences;
+        readonly triggerCharacter?: string;
     }
-    type ExpectedCompletionEntry = string | {
-        readonly name: string,
-        readonly source?: string,
-        readonly insertText?: string,
-        readonly replacementSpan?: Range,
-        readonly hasAction?: boolean,
-        readonly isRecommended?: boolean,
-        readonly kind?: string,
+    type ExpectedCompletionEntry = string | ExpectedCompletionEntryObject;
+    interface ExpectedCompletionEntryObject {
+        readonly name: string;
+        readonly source?: string;
+        readonly insertText?: string;
+        readonly replacementSpan?: Range;
+        readonly hasAction?: boolean;
+        readonly isRecommended?: boolean;
+        readonly kind?: string;
+        readonly kindModifiers?: string;
 
         // details
-        readonly text?: string,
-        readonly documentation?: string,
+        readonly text?: string;
+        readonly documentation?: string;
         readonly tags?: ReadonlyArray<JSDocTagInfo>;
-        readonly sourceDisplay?: string,
-    };
+        readonly sourceDisplay?: string;
+    }
 
     interface VerifySignatureHelpOptions {
         marker?: ArrayOrSingle<string>;
@@ -666,3 +643,24 @@ declare var debug: FourSlashInterface.debug;
 declare var format: FourSlashInterface.format;
 declare var cancellation: FourSlashInterface.cancellation;
 declare var classification: typeof FourSlashInterface.classification;
+declare namespace completion {
+    export const globals: ReadonlyArray<string>;
+    export const globalKeywords: ReadonlyArray<string>;
+    export const insideMethodKeywords: ReadonlyArray<string>;
+    export const globalKeywordsPlusUndefined: ReadonlyArray<string>;
+    export const globalsVars: ReadonlyArray<string>;
+    export function globalsInsideFunction(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalsPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const keywordsWithUndefined: ReadonlyArray<string>;
+    export const keywords: ReadonlyArray<string>;
+    export const typeKeywords: ReadonlyArray<string>;
+    export const globalTypes: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export function globalTypesPlus(plus: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const classElementKeywords: ReadonlyArray<string>;
+    export const constructorParameterKeywords: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const functionMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const stringMembers: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const functionMembersWithPrototype: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>;
+    export const statementKeywordsWithTypes: ReadonlyArray<string>;
+    export const statementKeywords: ReadonlyArray<string>;
+}

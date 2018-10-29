@@ -13,4 +13,4 @@
 ////    }
 ////}
 
-verify.completionsAt("", ["src", "foo/"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "", exact: ["src", "foo/"], isNewIdentifierLocation: true });

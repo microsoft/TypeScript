@@ -8,4 +8,4 @@
 
 ////var x = 0; enum /*enumName4*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });

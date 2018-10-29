@@ -8,5 +8,4 @@
 ////    public n: number;
 ////}
 
-goTo.marker();
-verify.completionListContains('n');
+verify.completions({ marker: "", exact: "n" });

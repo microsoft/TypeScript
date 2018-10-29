@@ -7,7 +7,12 @@
 ////   private privProp = 0;
 ////}
 
-goTo.marker();
-verify.completionListContains('privMeth', '(method) C1.privMeth(): void');
-verify.completionListContains('pubMeth', '(method) C1.pubMeth(): void');
-verify.completionListContains('pubProp', '(property) C1.pubProp: number');
+verify.completions({
+    marker: "",
+    exact: [
+        { name: "pubMeth", text: "(method) C1.pubMeth(): void" },
+        { name: "privMeth", text: "(method) C1.privMeth(): void" },
+        { name: "pubProp", text: "(property) C1.pubProp: number" },
+        { name: "privProp", text: "(property) C1.privProp: number" },
+    ],
+})

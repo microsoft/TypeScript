@@ -9,16 +9,12 @@
 ////    export class Test3 {}
 ////}
 ////
-////TypeModule1./*dotedExpression*/
+////TypeModule1./*dottedExpression*/
 ////module TypeModule3 {
 ////    export class Test3 {}
 ////}
 
 // Verify the memberlist of module when the following line has a keyword
-goTo.marker('namedType');
-verify.completionListContains('C1');
-verify.completionListContains('C2');
-
-goTo.marker('dotedExpression');
-verify.completionListContains('C1');
-verify.completionListContains('C2');
+verify.completions(
+    { marker: test.markers(), exact: ["C1", "C2"] },
+);

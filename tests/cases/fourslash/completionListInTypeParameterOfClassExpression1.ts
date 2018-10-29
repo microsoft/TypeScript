@@ -2,17 +2,9 @@
 
 ////var C0 = class D</*0*/
 ////var C1 = class D</*1*/T> {}
-////var C3 = class D<T, /*2*/
-////var C4 = class D<T, /*3*/U>{}
-////var C5 = class D<T extends /*4*/>{}
+////var C2 = class D<T, /*2*/
+////var C3 = class D<T, /*3*/U>{}
+////var C4 = class D<T extends /*4*/>{}
 
-goTo.marker("0");
-verify.completionListIsEmpty();
-goTo.marker("1");
-verify.completionListIsEmpty();
-goTo.marker("2");
-verify.completionListIsEmpty();
-goTo.marker("3");
-verify.completionListIsEmpty();
-goTo.marker("4");
-verify.not.completionListIsEmpty();
+verify.completions({ marker: ["0", "1", "2", "3"], exact: undefined });
+verify.completions({ marker: "4", exact: ["D", ...completion.globalsPlus(["C0", "C1", "C2", "C3", "C4"])] });

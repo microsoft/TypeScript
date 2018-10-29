@@ -13,4 +13,4 @@ var overridingContent = "var t = 10; t.";
 goTo.file("test.ts", overridingContent);
 goTo.file("test1.ts");
 goTo.eof();
-verify.completionListContains("toExponential");
+verify.completions({ includes: "toExponential" });

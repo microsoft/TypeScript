@@ -5,9 +5,8 @@
 ////    x.forEach(function (y) { y./**/} );
 ////}
 
-goTo.marker();
-verify.completionListContains("charAt");
-verify.completionListContains("charCodeAt");
-verify.completionListContains("length");
-verify.completionListContains("concat");
-verify.not.completionListContains("toFixed");
+verify.completions({
+    marker: "",
+    includes: "charAt",
+    excludes: "toFixed",
+});

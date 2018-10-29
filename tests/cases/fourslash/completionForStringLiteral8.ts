@@ -4,9 +4,4 @@
 ////let a: As;
 ////if (a === '/**/
 
-goTo.marker();
-verify.completionListContains("arf");
-verify.completionListContains("abacus");
-verify.completionListContains("abaddon");
-verify.completionListCount(3);
-
+verify.completions({ marker: "", exact: ["arf", "abacus", "abaddon"] });

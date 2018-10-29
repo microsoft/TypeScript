@@ -10,7 +10,4 @@
 ////function Blah(x: Bar.Bleah) {
 ////}
 
-goTo.marker();
-verify.completionListContains("Bar");
-verify.completionListContains("Bleah");
-verify.completionListContains("Foo");
+verify.completions({ marker: "", includes: ["Bar", "Bleah", "Foo"] });

@@ -5,5 +5,4 @@
 //// * /**/
 //// */
 
-goTo.marker();
-verify.completionListContains("@property", "@property", "", "keyword");
+verify.completions({ marker: "", includes: { name: "@property", text: "@property", kind: "keyword" } });

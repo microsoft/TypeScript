@@ -4,5 +4,4 @@
 ////    /*1*/
 //// }
 
-goTo.marker("1");
-verify.completionListContains("foo", "(local function) foo(): void", /*documentation*/ undefined, "local function");
+verify.completions({ marker: "1", includes: { name: "foo", text: "(local function) foo(): void", kind: "local function" } });

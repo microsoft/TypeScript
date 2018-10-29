@@ -9,5 +9,4 @@
 //// import test = require("completionListForNonExportedMemberInAmbientModuleWithExportAssignment1_file0");
 //// test./**/
 
-goTo.marker();
-verify.not.completionListContains("x");
+verify.completions({ marker: "", exact: undefined });

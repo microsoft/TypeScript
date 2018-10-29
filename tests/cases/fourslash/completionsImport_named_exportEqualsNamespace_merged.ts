@@ -16,8 +16,8 @@
 // @Filename: /a.ts
 ////fo/**/
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "n" }, "const N.foo: number", "", "const", undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "n",
+verify.completions({
+    marker: "",
+    includes: { name: "foo", source: "n", sourceDisplay: "n", text: "const N.foo: number", kind: "const", hasAction: true },
+    preferences: { includeCompletionsForModuleExports: true },
 });

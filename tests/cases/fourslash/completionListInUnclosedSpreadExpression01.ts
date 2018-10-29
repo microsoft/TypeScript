@@ -3,5 +3,4 @@
 ////var x;
 ////var y = [1,2,.../*1*/
 
-goTo.marker("1");
-verify.completionListContains("x");
+verify.completions({ marker: "1", includes: "x" });
