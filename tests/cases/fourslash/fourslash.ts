@@ -124,6 +124,9 @@ declare namespace FourSlashInterface {
         symbolsInScope(range: Range): any[];
         setTypesRegistry(map: { [key: string]: void }): void;
     }
+    class plugins {
+        configurePlugin(pluginName: string, configuration: any): void;
+    }
     class goTo {
         marker(name?: string | Marker): void;
         eachMarker(markers: ReadonlyArray<string>, action: (marker: Marker, index: number) => void): void;
@@ -651,6 +654,7 @@ declare namespace FourSlashInterface {
 }
 declare function verifyOperationIsCancelled(f: any): void;
 declare var test: FourSlashInterface.test_;
+declare var plugins: FourSlashInterface.plugins;
 declare var goTo: FourSlashInterface.goTo;
 declare var verify: FourSlashInterface.verify;
 declare var edit: FourSlashInterface.edit;
