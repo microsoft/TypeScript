@@ -1,10 +1,10 @@
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts(1,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
-tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts(1,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts(1,6): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts(1,22): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/RegressionTests/parser509693.ts (2 errors) ====
     if (!module.exports) module.exports = "";
          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
                          ~~~~~~
-!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.

@@ -1,8 +1,8 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,9): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts(1,9): error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.
 
 
 ==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/parserCommaInTypeMemberList2.ts (1 errors) ====
     var s = $.extend< { workItem: any }, { workItem: any, width: string }>({ workItem: this._workItem }, {});
             ~
-!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.
+!!! error TS2581: Cannot find name '$'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.
     
