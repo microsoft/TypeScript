@@ -4608,7 +4608,7 @@ namespace ts {
                 if (!names.has(prop.escapedName)
                     && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
                     && isSpreadableProperty(prop)) {
-                    members.set(prop.escapedName, getNonReadonlySymbol(prop));
+                    members.set(prop.escapedName, getSpreadSymbol(prop));
                 }
             }
             const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
@@ -9887,7 +9887,7 @@ namespace ts {
                     skippedPrivateMembers.set(rightProp.escapedName, true);
                 }
                 else if (isSpreadableProperty(rightProp)) {
-                    members.set(rightProp.escapedName, getNonReadonlySymbol(rightProp));
+                    members.set(rightProp.escapedName, getSpreadSymbol(rightProp));
                 }
             }
 
@@ -9911,7 +9911,7 @@ namespace ts {
                     }
                 }
                 else {
-                    members.set(leftProp.escapedName, getNonReadonlySymbol(leftProp));
+                    members.set(leftProp.escapedName, getSpreadSymbol(leftProp));
                 }
             }
 
@@ -9929,18 +9929,19 @@ namespace ts {
 
         /** We approximate own properties as non-methods plus methods that are inside the object literal */
         function isSpreadableProperty(prop: Symbol): boolean {
-            return prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor)
-                ? !prop.declarations.some(decl => isClassLike(decl.parent))
-                : !(prop.flags & SymbolFlags.SetAccessor); // Setter without getter is not spreadable
+            return !(prop.flags & (SymbolFlags.Method | SymbolFlags.GetAccessor | SymbolFlags.SetAccessor)) ||
+                !prop.declarations.some(decl => isClassLike(decl.parent));
         }
 
-        function getNonReadonlySymbol(prop: Symbol) {
-            if (!isReadonlySymbol(prop)) {
+        function getSpreadSymbol(prop: Symbol) {
+            const isReadonly = isReadonlySymbol(prop);
+            const isSetonlyAccessor = prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor);
+            if (!isReadonly && !isSetonlyAccessor) {
                 return prop;
             }
             const flags = SymbolFlags.Property | (prop.flags & SymbolFlags.Optional);
             const result = createSymbol(flags, prop.escapedName);
-            result.type = getTypeOfSymbol(prop);
+            result.type = isSetonlyAccessor ? undefinedType : getTypeOfSymbol(prop);
             result.declarations = prop.declarations;
             result.nameType = prop.nameType;
             result.syntheticOrigin = prop;
@@ -13367,12 +13368,12 @@ namespace ts {
                 case SyntaxKind.BinaryExpression:
                 case SyntaxKind.PropertyDeclaration:
                 case SyntaxKind.PropertySignature:
-                    diagnostic = Diagnostics.Member_0_implicitly_has_an_1_type;
+                    diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.Parameter:
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?
-                        Diagnostics.Rest_parameter_0_implicitly_has_an_any_type :
-                        Diagnostics.Parameter_0_implicitly_has_an_1_type;
+                        noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
+                        noImplicitAny ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
@@ -13388,7 +13389,7 @@ namespace ts {
                         error(declaration, Diagnostics.Function_expression_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
                         return;
                     }
-                    diagnostic = Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type;
+                    diagnostic = noImplicitAny ? Diagnostics._0_which_lacks_return_type_annotation_implicitly_has_an_1_return_type : Diagnostics._0_implicitly_has_an_1_return_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.MappedType:
                     if (noImplicitAny) {
@@ -13396,7 +13397,7 @@ namespace ts {
                     }
                     return;
                 default:
-                    diagnostic = Diagnostics.Variable_0_implicitly_has_an_1_type;
+                    diagnostic = noImplicitAny ? Diagnostics.Variable_0_implicitly_has_an_1_type : Diagnostics.Variable_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
             }
             errorOrSuggestion(noImplicitAny, declaration, diagnostic, declarationNameToString(getNameOfDeclaration(declaration)), typeAsString);
         }

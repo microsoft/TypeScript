@@ -72,6 +72,12 @@ namespace ts.server {
     export interface PluginModule {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
+        onConfigurationChanged?(config: any): void;
+    }
+
+    export interface PluginModuleWithName {
+        name: string;
+        module: PluginModule;
     }
 
     export type PluginModuleFactory = (mod: { typescript: typeof ts }) => PluginModule;
@@ -92,7 +98,7 @@ namespace ts.server {
         private program: Program;
         private externalFiles: SortedReadonlyArray<string>;
         private missingFilesMap: Map<FileWatcher>;
-        private plugins: PluginModule[] = [];
+        private plugins: PluginModuleWithName[] = [];
 
         /*@internal*/
         /**
@@ -548,10 +554,10 @@ namespace ts.server {
         }
 
         getExternalFiles(): SortedReadonlyArray<string> {
-            return toSortedArray(flatMapToMutable(this.plugins, plugin => {
-                if (typeof plugin.getExternalFiles !== "function") return;
+            return sort(flatMap(this.plugins, plugin => {
+                if (typeof plugin.module.getExternalFiles !== "function") return;
                 try {
-                    return plugin.getExternalFiles(this);
+                    return plugin.module.getExternalFiles(this);
                 }
                 catch (e) {
                     this.projectService.logger.info(`A plugin threw an exception in getExternalFiles: ${e}`);
@@ -839,7 +845,7 @@ namespace ts.server {
 
         /*@internal*/
         updateTypingFiles(typingFiles: SortedReadonlyArray<string>) {
-            enumerateInsertsAndDeletes(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            enumerateInsertsAndDeletes<string, string>(typingFiles, this.typingFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 /*inserted*/ noop,
                 removed => this.detachScriptInfoFromProject(removed)
             );
@@ -910,7 +916,7 @@ namespace ts.server {
 
             const oldExternalFiles = this.externalFiles || emptyArray as SortedReadonlyArray<string>;
             this.externalFiles = this.getExternalFiles();
-            enumerateInsertsAndDeletes(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
+            enumerateInsertsAndDeletes<string, string>(this.externalFiles, oldExternalFiles, getStringComparer(!this.useCaseSensitiveFileNames()),
                 // Ensure a ScriptInfo is created for new external files. This is performed indirectly
                 // by the LSHost for files in the program when the program is retrieved above but
                 // the program doesn't contain external files so this must be done explicitly.
@@ -1068,7 +1074,7 @@ namespace ts.server {
             this.rootFilesMap.delete(info.path);
         }
 
-        protected enableGlobalPlugins(options: CompilerOptions) {
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -1091,12 +1097,13 @@ namespace ts.server {
 
                     // Provide global: true so plugins can detect why they can't find their config
                     this.projectService.logger.info(`Loading global plugin ${globalPluginName}`);
-                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths);
+
+                    this.enablePlugin({ name: globalPluginName, global: true } as PluginImport, searchPaths, pluginConfigOverrides);
                 }
             }
         }
 
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]) {
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined) {
             this.projectService.logger.info(`Enabling plugin ${pluginConfigEntry.name} from candidate paths: ${searchPaths.join(",")}`);
 
             const log = (message: string) => {
@@ -1106,16 +1113,19 @@ namespace ts.server {
             const resolvedModule = firstDefined(searchPaths, searchPath =>
                 <PluginModuleFactory | undefined>Project.resolveModule(pluginConfigEntry.name, searchPath, this.projectService.host, log));
             if (resolvedModule) {
+                const configurationOverride = pluginConfigOverrides && pluginConfigOverrides.get(pluginConfigEntry.name);
+                if (configurationOverride) {
+                    // Preserve the name property since it's immutable
+                    const pluginName = pluginConfigEntry.name;
+                    pluginConfigEntry = configurationOverride;
+                    pluginConfigEntry.name = pluginName;
+                }
+
                 this.enableProxy(resolvedModule, pluginConfigEntry);
             }
             else {
                 this.projectService.logger.info(`Couldn't find ${pluginConfigEntry.name}`);
             }
-        }
-
-        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
-        refreshDiagnostics() {
-            this.projectService.sendProjectsUpdatedInBackgroundEvent();
         }
 
         private enableProxy(pluginModuleFactory: PluginModuleFactory, configEntry: PluginImport) {
@@ -1143,17 +1153,31 @@ namespace ts.server {
                 }
                 this.projectService.logger.info(`Plugin validation succeded`);
                 this.languageService = newLS;
-                this.plugins.push(pluginModule);
+                this.plugins.push({ name: configEntry.name, module: pluginModule });
             }
             catch (e) {
                 this.projectService.logger.info(`Plugin activation failed: ${e}`);
             }
         }
+
+        /*@internal*/
+        onPluginConfigurationChanged(pluginName: string, configuration: any) {
+            this.plugins.filter(plugin => plugin.name === pluginName).forEach(plugin => {
+                if (plugin.module.onConfigurationChanged) {
+                    plugin.module.onConfigurationChanged(configuration);
+                }
+            });
+        }
+
+        /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
+        refreshDiagnostics() {
+            this.projectService.sendProjectsUpdatedInBackgroundEvent();
+        }
     }
 
     function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): SortedReadonlyArray<string> {
         const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-        return toDeduplicatedSortedArray(flatMapToMutable(program.getSourceFiles(), sourceFile =>
+        return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
             extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
     }
     function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: ReadonlyArray<string>, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): ReadonlyArray<string> {
@@ -1223,7 +1247,8 @@ namespace ts.server {
             documentRegistry: DocumentRegistry,
             compilerOptions: CompilerOptions,
             projectRootPath: NormalizedPath | undefined,
-            currentDirectory: string | undefined) {
+            currentDirectory: string | undefined,
+            pluginConfigOverrides: Map<any> | undefined) {
             super(InferredProject.newName(),
                 ProjectKind.Inferred,
                 projectService,
@@ -1239,7 +1264,7 @@ namespace ts.server {
             if (!projectRootPath && !projectService.useSingleInferredProject) {
                 this.canonicalCurrentDirectory = projectService.toCanonicalFileName(this.currentDirectory);
             }
-            this.enableGlobalPlugins(this.getCompilerOptions());
+            this.enableGlobalPlugins(this.getCompilerOptions(), pluginConfigOverrides);
         }
 
         addRoot(info: ScriptInfo) {
@@ -1395,12 +1420,8 @@ namespace ts.server {
             return program && program.forEachResolvedProjectReference(cb);
         }
 
-        enablePlugins() {
-            this.enablePluginsWithOptions(this.getCompilerOptions());
-        }
-
         /*@internal*/
-        enablePluginsWithOptions(options: CompilerOptions) {
+        enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
             if (!host.require) {
@@ -1421,11 +1442,11 @@ namespace ts.server {
             // Enable tsconfig-specified plugins
             if (options.plugins) {
                 for (const pluginConfigEntry of options.plugins) {
-                    this.enablePlugin(pluginConfigEntry, searchPaths);
+                    this.enablePlugin(pluginConfigEntry, searchPaths, pluginConfigOverrides);
                 }
             }
 
-            this.enableGlobalPlugins(options);
+            this.enableGlobalPlugins(options, pluginConfigOverrides);
         }
 
         /**

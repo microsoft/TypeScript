@@ -31,6 +31,10 @@
 ////takesCb((x, y) => { x; });
 ////takesCb((x, y) => { y; });
 ////
+////x => {
+////    const y = 0;
+////};
+////
 ////{
 ////    let a, b;
 ////}
@@ -71,6 +75,9 @@ declare function takesCb(cb: (x: number, y: string) => void): void;
 takesCb(() => {});
 takesCb((x) => { x; });
 takesCb((x, y) => { y; });
+
+() => {
+};
 
 {
 }

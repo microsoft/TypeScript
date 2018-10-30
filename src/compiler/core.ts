@@ -16,6 +16,10 @@ namespace ts {
         [index: string]: T;
     }
 
+    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
+    }
+
     export interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
@@ -815,8 +819,8 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
-        if (array.length === 0) return [];
+    function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): SortedReadonlyArray<T> {
+        if (array.length === 0) return emptyArray as any as SortedReadonlyArray<T>;
 
         let last = array[0];
         const deduplicated: T[] = [last];
@@ -838,7 +842,7 @@ namespace ts {
             deduplicated.push(last = next);
         }
 
-        return deduplicated;
+        return deduplicated as any as SortedReadonlyArray<T>;
     }
 
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
@@ -853,8 +857,10 @@ namespace ts {
         }
     }
 
-    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
-        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<string>): SortedReadonlyArray<string>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
+        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
     }
 
     export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
@@ -1035,8 +1041,8 @@ namespace ts {
     /**
      * Returns a new sorted array.
      */
-    export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[] {
-        return array.slice().sort(comparer);
+    export function sort<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>): SortedReadonlyArray<T> {
+        return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
     }
 
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
