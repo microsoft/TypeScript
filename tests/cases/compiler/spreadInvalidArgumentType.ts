@@ -27,18 +27,18 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var e: E;
 
-    var o1 = { ...p1 };   // Error, generic type paramterre
-    var o2 = { ...p2 };   // OK
-    var o3 = { ...t };   // Error, generic type paramter
-    var o4 = { ...i };   // Error, index access
+    var o1 = { ...p1 };  // OK, generic type paramterre
+    var o2 = { ...p2 };  // OK
+    var o3 = { ...t };   // OK, generic type paramter
+    var o4 = { ...i };   // OK, index access
     var o5 = { ...k };   // Error, index
-    var o6 = { ...mapped_generic }; // Error, generic mapped object type
+    var o6 = { ...mapped_generic }; // OK, generic mapped object type
     var o7 = { ...mapped };  // OK, non-generic mapped type
 
-    var o8 = { ...union_generic };  // Error, union with generic type parameter
+    var o8 = { ...union_generic };  // OK, union with generic type parameter
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
 
-    var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
+    var o10 = { ...intersection_generic };  // OK, intersection with generic type parameter
     var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
 
     var o12 = { ...num };  // Error
