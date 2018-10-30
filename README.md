@@ -97,3 +97,7 @@ node built/local/tsc.js hello.ts
 ## Roadmap
 
 For details on our planned features and future direction please refer to our [roadmap](https://github.com/Microsoft/TypeScript/wiki/Roadmap).
+
+
+## Stories
+[Learn how the development team at Wix used TypeScript](https://blogs.msdn.microsoft.com/typescript/2015/03/17/guest-post-gil-amran-talks-about-using-typescript-at-wix/)
