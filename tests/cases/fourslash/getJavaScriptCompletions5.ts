@@ -10,4 +10,4 @@
 //// let x = foo;
 //// foo(1)./**/
 
-verify.completions({ marker: "", includes: { name: "toExponential", kind: "method" } });
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

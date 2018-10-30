@@ -24,7 +24,7 @@
 ////var test1 = function(x) { return x./*4*/ }, test2 = function(a) { return a./*5*/ };
 
 verify.completions(
-    { marker: "1", includes: { name: "charCodeAt", kind: "method" } },
-    { marker: ["2", "3", "4"], includes: { name: "toExponential", kind: "method" } },
+    { marker: "1", includes: { name: "charCodeAt", kind: "method", kindModifiers: "declare" } },
+    { marker: ["2", "3", "4"], includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } },
     { marker: "5", includes: { name: "test1", kind: "warning" } },
 );

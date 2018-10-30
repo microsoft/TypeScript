@@ -349,7 +349,7 @@ namespace ts.codefix {
                     findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
                     containingFunction.name;
                 if (searchToken) {
-                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program.getTypeChecker(), cancellationToken);
+                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
                 }
         }
     }
@@ -387,7 +387,8 @@ namespace ts.codefix {
             return getTypeFromUsageContext(usageContext, checker) || checker.getAnyType();
         }
 
-        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, checker: TypeChecker, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+            const checker = program.getTypeChecker();
             if (references.length === 0) {
                 return undefined;
             }
@@ -422,10 +423,14 @@ namespace ts.codefix {
                         types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
                     }
                 }
-                if (!types.length) {
-                    return { declaration: parameter, type: checker.getAnyType() };
+
+                let type = types.length && checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
+                if ((!type || type.flags & TypeFlags.Any) && isIdentifier(parameter.name)) {
+                    type = inferTypeForVariableFromUsage(parameter.name, program, cancellationToken);
                 }
-                const type = checker.getWidenedType(checker.getUnionType(types, UnionReduction.Subtype));
+                if (!type) {
+                    type = checker.getAnyType();
+                }
                 return {
                     type: isRest ? checker.createArrayType(type) : type,
                     isOptional: isOptional && !isRest,

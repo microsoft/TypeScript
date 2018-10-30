@@ -8,4 +8,4 @@
 ////var v;
 ////new v()./**/
 
-verify.completions({ marker: "", includes: { name: "toExponential", kind: "method" } });
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

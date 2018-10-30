@@ -101,8 +101,22 @@ namespace ts.Completions {
     function convertPathCompletions(pathCompletions: ReadonlyArray<PathCompletions.PathCompletion>): CompletionInfo {
         const isGlobalCompletion = false; // We don't want the editor to offer any other completions, such as snippets, inside a comment.
         const isNewIdentifierLocation = true; // The user may type in a path that doesn't yet exist, creating a "new identifier" with respect to the collection of identifiers the server is aware of.
-        const entries = pathCompletions.map(({ name, kind, span }) => ({ name, kind, kindModifiers: ScriptElementKindModifier.none, sortText: "0", replacementSpan: span }));
+        const entries = pathCompletions.map(({ name, kind, span, extension }): CompletionEntry =>
+            ({ name, kind, kindModifiers: kindModifiersFromExtension(extension), sortText: "0", replacementSpan: span }));
         return { isGlobalCompletion, isMemberCompletion: false, isNewIdentifierLocation, entries };
+    }
+    function kindModifiersFromExtension(extension: Extension | undefined): ScriptElementKindModifier {
+        switch (extension) {
+            case Extension.Dts: return ScriptElementKindModifier.dtsModifier;
+            case Extension.Js: return ScriptElementKindModifier.jsModifier;
+            case Extension.Json: return ScriptElementKindModifier.jsonModifier;
+            case Extension.Jsx: return ScriptElementKindModifier.jsxModifier;
+            case Extension.Ts: return ScriptElementKindModifier.tsModifier;
+            case Extension.Tsx: return ScriptElementKindModifier.tsxModifier;
+            case undefined: return ScriptElementKindModifier.none;
+            default:
+                return Debug.assertNever(extension);
+        }
     }
 
     function jsdocCompletionInfo(entries: CompletionEntry[]): CompletionInfo {
@@ -638,7 +652,7 @@ namespace ts.Completions {
         switch (completion.kind) {
             case StringLiteralCompletionKind.Paths: {
                 const match = find(completion.paths, p => p.name === name);
-                return match && createCompletionDetails(name, ScriptElementKindModifier.none, match.kind, [textPart(name)]);
+                return match && createCompletionDetails(name, kindModifiersFromExtension(match.extension), match.kind, [textPart(name)]);
             }
             case StringLiteralCompletionKind.Properties: {
                 const match = find(completion.symbols, s => s.name === name);

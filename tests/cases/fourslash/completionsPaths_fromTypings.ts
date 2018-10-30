@@ -13,6 +13,9 @@
 
 verify.completions(
     { marker: "0", exact: [], isNewIdentifierLocation: true },
-    { marker: "1", exact: ["bar", "index"], isNewIdentifierLocation: true },
-    { marker: "2", exact: ["bar", "index"], isNewIdentifierLocation: true },
+    {
+        marker: ["1", "2"],
+        exact: ["bar", "index"].map(name => ({ name, kind: "script", kindModifiers: ".d.ts" })),
+        isNewIdentifierLocation: true,
+    },
 );

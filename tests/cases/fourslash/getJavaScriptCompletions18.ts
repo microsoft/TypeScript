@@ -13,8 +13,8 @@
 
 goTo.marker('a');
 edit.insert('.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 
 goTo.marker('b');
 edit.insert('.');
-verify.completions({ includes: { name: "substr", kind: "method" } });
+verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });

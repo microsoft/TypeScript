@@ -41,11 +41,11 @@ verify.completions(
     },
     {
         marker: "typeFooMember",
-        exact: { name: "Namespace", kind: "module" },
+        exact: { name: "Namespace", kind: "module", kindModifiers: "export" },
     },
     {
         marker: "NamespaceMember",
-        exact: { name: "SomeType", kind: "interface" },
+        exact: { name: "SomeType", kind: "interface", kindModifiers: "export" },
     },
     {
         marker: "globalValue",
@@ -71,7 +71,7 @@ verify.completions(
         marker: "valueMemberOfFoo",
         exact: [
             "prototype",
-            { name: "method1", kind: "method" },
+            { name: "method1", kind: "method", kindModifiers: "static" },
             ...completion.functionMembers,
         ],
     },

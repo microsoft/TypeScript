@@ -7,5 +7,5 @@
 
 verify.completions({
     marker: test.markers(),
-    includes: { name: "func", text: "function func(): void", kind: "function" },
+    includes: { name: "func", text: "function func(): void", kind: "function", kindModifiers: "export" },
 });

@@ -9,7 +9,7 @@
 verify.completions({
     marker: "",
     includes: [
-        { name: "toExponential", kind: "method" },
-        { name: "charCodeAt", kind: "method" },
+        { name: "toExponential", kind: "method", kindModifiers: "declare" },
+        { name: "charCodeAt", kind: "method", kindModifiers: "declare" },
     ],
 });

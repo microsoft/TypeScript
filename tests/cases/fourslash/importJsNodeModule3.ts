@@ -26,11 +26,11 @@ goTo.marker();
 edit.insert('.');
 verify.completions({ includes: ["n", "s", "b"].map(name => ({ name, kind: "property" })) });;
 edit.insert('n.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 
 edit.backspace(4);
 edit.insert('y.');
-verify.completions({ includes: { name: "toUpperCase", kind: "method" } });
+verify.completions({ includes: { name: "toUpperCase", kind: "method", kindModifiers: "declare" } });
 edit.backspace(2);
 edit.insert('z(');
 verify.signatureHelp({
