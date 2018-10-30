@@ -67,7 +67,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var {...r1} = p1;   // Error, generic type paramterre
->r1 : { b: string; }
+>r1 : any
 >p1 : T
 
     var {...r2} = p2;   // OK
@@ -75,11 +75,11 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 
     var {...r3} = t;   // Error, generic type paramter
->r3 : { b: string; }
+>r3 : any
 >t : T
 
     var {...r4} = i;   // Error, index access
->r4 : { readonly [index: number]: string; toString(): string; charAt(pos: number): string; charCodeAt(index: number): number; concat(...strings: string[]): string; indexOf(searchString: string, position?: number): number; lastIndexOf(searchString: string, position?: number): number; localeCompare(that: string): number; localeCompare(that: string, locales?: string | string[], options?: Intl.CollatorOptions): number; match(regexp: string | RegExp): RegExpMatchArray; replace(searchValue: string | RegExp, replaceValue: string): string; replace(searchValue: string | RegExp, replacer: (substring: string, ...args: any[]) => string): string; search(regexp: string | RegExp): number; slice(start?: number, end?: number): string; split(separator: string | RegExp, limit?: number): string[]; substring(start: number, end?: number): string; toLowerCase(): string; toLocaleLowerCase(): string; toUpperCase(): string; toLocaleUpperCase(): string; trim(): string; length: number; substr(from: number, length?: number): string; valueOf(): string; }
+>r4 : any
 >i : T["b"]
 
     var {...r5} = k;   // Error, index
@@ -87,7 +87,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >k : keyof T
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
->r6 : { b: T["b"]; }
+>r6 : any
 >mapped_generic : { [P in keyof T]: T[P]; }
 
     var {...r7} = mapped;  // OK, non-generic mapped type
@@ -95,7 +95,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >mapped : { b: T["b"]; }
 
     var {...r8} = union_generic;  // Error, union with generic type parameter
->r8 : { b: string; } | { a: number; }
+>r8 : any
 >union_generic : T | { a: number; }
 
     var {...r9} = union_primitive;  // Error, union with generic type parameter
@@ -103,7 +103,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >union_primitive : number | { a: number; }
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
->r10 : { b: string; a: number; }
+>r10 : any
 >intersection_generic : T & { a: number; }
 
     var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter
