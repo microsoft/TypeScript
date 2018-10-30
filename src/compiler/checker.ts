@@ -3222,15 +3222,17 @@ namespace ts {
                 }
                 if (type.flags & TypeFlags.EnumLiteral && !(type.flags & TypeFlags.Union)) {
                     const parentSymbol = getParentOfSymbol(type.symbol)!;
-                    const parentName = symbolToName(parentSymbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                    const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type ? parentName : createQualifiedName(parentName, symbolName(type.symbol));
-                    context.approximateLength += symbolName(type.symbol).length;
-                    return createTypeReferenceNode(enumLiteralName, /*typeArguments*/ undefined);
+                    const parentName = symbolToTypeNode(parentSymbol, context, SymbolFlags.Type);
+                    const enumLiteralName = getDeclaredTypeOfSymbol(parentSymbol) === type
+                        ? parentName
+                        : appendReferenceToType(
+                            parentName as TypeReferenceNode | ImportTypeNode,
+                            createTypeReferenceNode(symbolName(type.symbol), /*typeArguments*/ undefined)
+                        );
+                    return enumLiteralName;
                 }
                 if (type.flags & TypeFlags.EnumLike) {
-                    const name = symbolToName(type.symbol, context, SymbolFlags.Type, /*expectsIdentifier*/ false);
-                    context.approximateLength += symbolName(type.symbol).length;
-                    return createTypeReferenceNode(name, /*typeArguments*/ undefined);
+                    return symbolToTypeNode(type.symbol, context, SymbolFlags.Type);
                 }
                 if (type.flags & TypeFlags.StringLiteral) {
                     context.approximateLength += ((<StringLiteralType>type).value.length + 2);
