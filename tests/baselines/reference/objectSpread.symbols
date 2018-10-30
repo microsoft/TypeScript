@@ -452,3 +452,117 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 let spreadNonPrimitive = { ...<object>{}};
 >spreadNonPrimitive : Symbol(spreadNonPrimitive, Decl(objectSpread.ts, 119, 3))
 
+// generic spreads
+function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
+>genericSpread : Symbol(genericSpread, Decl(objectSpread.ts, 119, 42))
+>T : Symbol(T, Decl(objectSpread.ts, 122, 23))
+>U : Symbol(U, Decl(objectSpread.ts, 122, 25))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>T : Symbol(T, Decl(objectSpread.ts, 122, 23))
+>u : Symbol(u, Decl(objectSpread.ts, 122, 34))
+>U : Symbol(U, Decl(objectSpread.ts, 122, 25))
+>v : Symbol(v, Decl(objectSpread.ts, 122, 40))
+>T : Symbol(T, Decl(objectSpread.ts, 122, 23))
+>U : Symbol(U, Decl(objectSpread.ts, 122, 25))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+>T : Symbol(T, Decl(objectSpread.ts, 122, 23))
+>s : Symbol(s, Decl(objectSpread.ts, 122, 59))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+>x : Symbol(x, Decl(objectSpread.ts, 122, 79))
+
+    let x01 = { ...t };
+>x01 : Symbol(x01, Decl(objectSpread.ts, 123, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+
+    let x02 = { ...t, ...t };
+>x02 : Symbol(x02, Decl(objectSpread.ts, 124, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+
+    let x03 = { ...t, ...u };
+>x03 : Symbol(x03, Decl(objectSpread.ts, 125, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>u : Symbol(u, Decl(objectSpread.ts, 122, 34))
+
+    let x04 = { ...u, ...t };
+>x04 : Symbol(x04, Decl(objectSpread.ts, 126, 7))
+>u : Symbol(u, Decl(objectSpread.ts, 122, 34))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+
+    let x05 = { a: 5, b: 'hi', ...t };
+>x05 : Symbol(x05, Decl(objectSpread.ts, 127, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 127, 15))
+>b : Symbol(b, Decl(objectSpread.ts, 127, 21))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+
+    let x06 = { ...t, a: 5, b: 'hi' };
+>x06 : Symbol(x06, Decl(objectSpread.ts, 128, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>a : Symbol(a, Decl(objectSpread.ts, 128, 21))
+>b : Symbol(b, Decl(objectSpread.ts, 128, 27))
+
+    let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
+>x07 : Symbol(x07, Decl(objectSpread.ts, 129, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 129, 15))
+>b : Symbol(b, Decl(objectSpread.ts, 129, 21))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>c : Symbol(c, Decl(objectSpread.ts, 129, 36))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
+>x09 : Symbol(x09, Decl(objectSpread.ts, 130, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 130, 15))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>b : Symbol(b, Decl(objectSpread.ts, 130, 27))
+>c : Symbol(c, Decl(objectSpread.ts, 130, 36))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
+>x10 : Symbol(x10, Decl(objectSpread.ts, 131, 7))
+>a : Symbol(a, Decl(objectSpread.ts, 131, 15))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>b : Symbol(b, Decl(objectSpread.ts, 131, 27))
+>u : Symbol(u, Decl(objectSpread.ts, 122, 34))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x11 = { ...v };
+>x11 : Symbol(x11, Decl(objectSpread.ts, 132, 7))
+>v : Symbol(v, Decl(objectSpread.ts, 122, 40))
+
+    let x12 = { ...v, ...obj };
+>x12 : Symbol(x12, Decl(objectSpread.ts, 133, 7))
+>v : Symbol(v, Decl(objectSpread.ts, 122, 40))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x13 = { ...w };
+>x13 : Symbol(x13, Decl(objectSpread.ts, 134, 7))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+
+    let x14 = { ...w, ...obj };
+>x14 : Symbol(x14, Decl(objectSpread.ts, 135, 7))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x15 = { ...t, ...v };
+>x15 : Symbol(x15, Decl(objectSpread.ts, 136, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>v : Symbol(v, Decl(objectSpread.ts, 122, 40))
+
+    let x16 = { ...t, ...w };
+>x16 : Symbol(x16, Decl(objectSpread.ts, 137, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+
+    let x17 = { ...t, ...w, ...obj };
+>x17 : Symbol(x17, Decl(objectSpread.ts, 138, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+>obj : Symbol(obj, Decl(objectSpread.ts, 122, 72))
+
+    let x18 = { ...t, ...v, ...w };
+>x18 : Symbol(x18, Decl(objectSpread.ts, 139, 7))
+>t : Symbol(t, Decl(objectSpread.ts, 122, 29))
+>v : Symbol(v, Decl(objectSpread.ts, 122, 40))
+>w : Symbol(w, Decl(objectSpread.ts, 122, 50))
+}
+
