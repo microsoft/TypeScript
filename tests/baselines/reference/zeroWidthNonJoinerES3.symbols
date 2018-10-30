@@ -1,0 +1,6 @@
+=== tests/cases/compiler/zeroWidthNonJoinerES3.ts ===
+// identifier\u200C‌WithZWNJ
+const identifier‌WithZWNJ = "";
+>identifier : Symbol(identifier, Decl(zeroWidthNonJoinerES3.ts, 1, 5))
+>WithZWNJ : Symbol(WithZWNJ, Decl(zeroWidthNonJoinerES3.ts, 1, 17))
+
