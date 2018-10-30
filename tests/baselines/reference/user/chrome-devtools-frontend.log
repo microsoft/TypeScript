@@ -8939,7 +8939,6 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(198
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(48,37): error TS2339: Property 'deoptReason' does not exist on type 'ProfileNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(97,15): error TS2339: Property 'self' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property 'self' does not exist on type 'ProfileDataGridTree'.
-node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(118,27): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((key: any) => any) | ((key: string) => ProfileDataGridNode)' has no compatible call signatures.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(131,19): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(133,15): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
@@ -9077,7 +9076,6 @@ node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxControll
 node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxController.js(97,25): error TS2339: Property 'selectedIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(63,17): error TS2339: Property 'populate' does not exist on type 'TopDownProfileDataGridTree | TopDownProfileDataGridNode'.
   Property 'populate' does not exist on type 'TopDownProfileDataGridTree'.
-node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(73,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((key: any) => any) | ((key: string) => ProfileDataGridNode)' has no compatible call signatures.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(168,40): error TS2345: Argument of type 'S' is not assignable to parameter of type 'S'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(170,24): error TS2345: Argument of type 'S' is not assignable to parameter of type 'T'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(194,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
