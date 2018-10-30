@@ -173,17 +173,17 @@ spreadFunc(); // error, no call signature
 
 // write-only properties get skipped
 let setterOnly = { ...{ set b (bad: number) { } } };
->setterOnly : {}
->{ ...{ set b (bad: number) { } } } : {}
+>setterOnly : { b: undefined; }
+>{ ...{ set b (bad: number) { } } } : { b: undefined; }
 >{ set b (bad: number) { } } : { b: number; }
 >b : number
 >bad : number
 
 setterOnly.b = 12; // error, 'b' does not exist
 >setterOnly.b = 12 : 12
->setterOnly.b : any
->setterOnly : {}
->b : any
+>setterOnly.b : undefined
+>setterOnly : { b: undefined; }
+>b : undefined
 >12 : 12
 
 // methods are skipped because they aren't enumerable
