@@ -796,41 +796,6 @@ namespace ts.server {
         }
 
         /* @internal */
-        private extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: string[]): ReadonlyArray<string> {
-            const cached = this.cachedUnresolvedImportsPerFile.get(file.path);
-            if (cached) {
-                // found cached result, return
-                return cached;
-            }
-            let unresolvedImports: string[] | undefined;
-            if (file.resolvedModules) {
-                file.resolvedModules.forEach((resolvedModule, name) => {
-                    // pick unresolved non-relative names
-                    if (!resolvedModule && !isExternalModuleNameRelative(name) && !isAmbientlyDeclaredModule(name)) {
-                        // for non-scoped names extract part up-to the first slash
-                        // for scoped names - extract up to the second slash
-                        let trimmed = name.trim();
-                        let i = trimmed.indexOf("/");
-                        if (i !== -1 && trimmed.charCodeAt(0) === CharacterCodes.at) {
-                            i = trimmed.indexOf("/", i + 1);
-                        }
-                        if (i !== -1) {
-                            trimmed = trimmed.substr(0, i);
-                        }
-                        (unresolvedImports || (unresolvedImports = [])).push(trimmed);
-                    }
-                });
-            }
-
-            this.cachedUnresolvedImportsPerFile.set(file.path, unresolvedImports || emptyArray);
-            return unresolvedImports || emptyArray;
-
-            function isAmbientlyDeclaredModule(name: string) {
-                return ambientModules.some(m => m === name);
-            }
-        }
-
-        /* @internal */
         onFileAddedOrRemoved() {
             this.hasAddedorRemovedFiles = true;
         }
@@ -863,15 +828,7 @@ namespace ts.server {
                 // (can reuse cached imports for files that were not changed)
                 // 4. compilation settings were changed in the way that might affect module resolution - drop all caches and collect all data from the scratch
                 if (hasNewProgram || changedFiles.length) {
-                    let result: string[] | undefined;
-                    const ambientModules = this.program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
-                    for (const sourceFile of this.program.getSourceFiles()) {
-                        const unResolved = this.extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules);
-                        if (unResolved !== emptyArray) {
-                            (result || (result = [])).push(...unResolved);
-                        }
-                    }
-                    this.lastCachedUnresolvedImportsList = result ? sortAndDeduplicate(result) : emptyArray;
+                    this.lastCachedUnresolvedImportsList = getUnresolvedImports(this.program, this.cachedUnresolvedImportsPerFile);
                 }
 
                 this.projectService.typingsCache.enqueueInstallTypingsForProject(this, this.lastCachedUnresolvedImportsList, hasAddedorRemovedFiles);
@@ -1216,6 +1173,25 @@ namespace ts.server {
         refreshDiagnostics() {
             this.projectService.sendProjectsUpdatedInBackgroundEvent();
         }
+    }
+
+    function getUnresolvedImports(program: Program, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): SortedReadonlyArray<string> {
+        const ambientModules = program.getTypeChecker().getAmbientModules().map(mod => stripQuotes(mod.getName()));
+        return sortAndDeduplicate(flatMap(program.getSourceFiles(), sourceFile =>
+            extractUnresolvedImportsFromSourceFile(sourceFile, ambientModules, cachedUnresolvedImportsPerFile)));
+    }
+    function extractUnresolvedImportsFromSourceFile(file: SourceFile, ambientModules: ReadonlyArray<string>, cachedUnresolvedImportsPerFile: Map<ReadonlyArray<string>>): ReadonlyArray<string> {
+        return getOrUpdate(cachedUnresolvedImportsPerFile, file.path, () => {
+            if (!file.resolvedModules) return emptyArray;
+            let unresolvedImports: string[] | undefined;
+            file.resolvedModules.forEach((resolvedModule, name) => {
+                // pick unresolved non-relative names
+                if (!resolvedModule && !isExternalModuleNameRelative(name) && !ambientModules.some(m => m === name)) {
+                    unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
+                }
+            });
+            return unresolvedImports || emptyArray;
+        });
     }
 
     /**
