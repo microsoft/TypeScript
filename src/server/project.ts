@@ -1186,7 +1186,9 @@ namespace ts.server {
             let unresolvedImports: string[] | undefined;
             file.resolvedModules.forEach((resolvedModule, name) => {
                 // pick unresolved non-relative names
-                if (!resolvedModule && !isExternalModuleNameRelative(name) && !ambientModules.some(m => m === name)) {
+                if ((!resolvedModule || !resolutionExtensionIsTSOrJson(resolvedModule.extension)) &&
+                    !isExternalModuleNameRelative(name) &&
+                    !ambientModules.some(m => m === name)) {
                     unresolvedImports = append(unresolvedImports, parsePackageName(name).packageName);
                 }
             });
