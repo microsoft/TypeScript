@@ -9268,18 +9268,11 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
-        function getNumericLiteralValue(node: NumericLiteral): number | PseudoBigInt {
-            if (node.numericLiteralFlags & TokenFlags.BigInt) {
-                if (!compilerOptions.experimentalBigInt) {
-                    error(node, Diagnostics.Experimental_support_for_BigInt_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalBigInt_option_to_remove_this_warning);
-                }
-                return { negative: false, base10Value: parsePseudoBigInt(node.text) };
-            }
-            return +node.text;
-        }
-
-        function getNumericLiteralType(node: NumericLiteral): LiteralType {
-            return getLiteralType(getNumericLiteralValue(node));
+        function getBigIntLiteralType(node: BigIntLiteral): LiteralType {
+            return getLiteralType({
+                negative: false,
+                base10Value: parsePseudoBigInt(node.text)
+            });
         }
 
         function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
@@ -9287,8 +9280,8 @@ namespace ts {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
                     const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration);
-                    type = name && isNumericLiteral(name) ? getNumericLiteralType(name) :
-                        name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getNumericLiteralType(name.expression) :
+                    type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
+                        name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
                         getLiteralType(symbolName(prop));
                 }
                 if (type && type.flags & include) {
@@ -17077,6 +17070,7 @@ namespace ts {
             switch (node.kind) {
                 case SyntaxKind.StringLiteral:
                 case SyntaxKind.NumericLiteral:
+                case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
@@ -21503,22 +21497,22 @@ namespace ts {
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
-            if (node.operand.kind === SyntaxKind.NumericLiteral) {
-                if (node.operator === SyntaxKind.MinusToken) {
-                    const value = getNumericLiteralValue(node.operand as NumericLiteral);
-                    return getFreshTypeOfLiteralType(getLiteralType(
-                        // Keep number as number, bigint as bigint
-                        typeof value === "number"
-                            ? -value
-                            : { negative: !value.negative, base10Value: value.base10Value }
-                    ));
-                }
-                else if (node.operator === SyntaxKind.PlusToken) {
-                    if (isTypeAssignableToKind(operandType, TypeFlags.BigIntLike)) {
-                        error(node.operand, Diagnostics.Operator_0_cannot_be_applied_to_type_1, tokenToString(node.operator), typeToString(operandType));
+            switch (node.operand.kind) {
+                case SyntaxKind.NumericLiteral:
+                    switch (node.operator) {
+                        case SyntaxKind.MinusToken:
+                            return getFreshTypeOfLiteralType(getLiteralType(-(node.operand as NumericLiteral).text));
+                        case SyntaxKind.PlusToken:
+                            return getFreshTypeOfLiteralType(getLiteralType(+(node.operand as NumericLiteral).text));
                     }
-                    return getFreshTypeOfLiteralType(getNumericLiteralType(node.operand as NumericLiteral));
-                }
+                    break;
+                case SyntaxKind.BigIntLiteral:
+                    if (node.operator === SyntaxKind.MinusToken) {
+                        return getFreshTypeOfLiteralType(getLiteralType({
+                            negative: true,
+                            base10Value: parsePseudoBigInt((node.operand as BigIntLiteral).text)
+                        }));
+                    }
             }
             switch (node.operator) {
                 case SyntaxKind.PlusToken:
@@ -21860,6 +21854,7 @@ namespace ts {
                 case SyntaxKind.TemplateExpression:
                 case SyntaxKind.NoSubstitutionTemplateLiteral:
                 case SyntaxKind.NumericLiteral:
+                case SyntaxKind.BigIntLiteral:
                 case SyntaxKind.TrueKeyword:
                 case SyntaxKind.FalseKeyword:
                 case SyntaxKind.NullKeyword:
@@ -22002,7 +21997,6 @@ namespace ts {
                         }
                         return resultType;
                     }
-
                 case SyntaxKind.PlusToken:
                 case SyntaxKind.PlusEqualsToken:
                     if (leftType === silentNeverType || rightType === silentNeverType) {
@@ -22558,7 +22552,10 @@ namespace ts {
                     return getFreshTypeOfLiteralType(getLiteralType((node as StringLiteralLike).text));
                 case SyntaxKind.NumericLiteral:
                     checkGrammarNumericLiteral(node as NumericLiteral);
-                    return getFreshTypeOfLiteralType(getNumericLiteralType(node as NumericLiteral));
+                    return getFreshTypeOfLiteralType(getLiteralType(+(node as NumericLiteral).text));
+                case SyntaxKind.BigIntLiteral:
+                    checkGrammarBigIntLiteral(node as BigIntLiteral);
+                    return getFreshTypeOfLiteralType(getBigIntLiteralType(node as BigIntLiteral));
                 case SyntaxKind.TrueKeyword:
                     return trueType;
                 case SyntaxKind.FalseKeyword:
@@ -26595,8 +26592,7 @@ namespace ts {
                         return (<StringLiteral>expr).text;
                     case SyntaxKind.NumericLiteral:
                         checkGrammarNumericLiteral(<NumericLiteral>expr);
-                        const literalValue = getNumericLiteralValue(<NumericLiteral>expr);
-                        return typeof literalValue === "number" ? literalValue : undefined; // don't evaluate bigint
+                        return +(<NumericLiteral>expr).text;
                     case SyntaxKind.ParenthesizedExpression:
                         return evaluate((<ParenthesizedExpression>expr).expression);
                     case SyntaxKind.Identifier:
@@ -30458,6 +30454,18 @@ namespace ts {
                     const literal = (withMinus ? "-" : "") + "0o" + node.text;
                     return grammarErrorOnNode(withMinus ? node.parent : node, diagnosticMessage, literal);
                 }
+            }
+            return false;
+        }
+
+        function checkGrammarBigIntLiteral(node: BigIntLiteral): boolean {
+            if (languageVersion < ScriptTarget.ESNext) {
+                if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targetting_lower_than_ESNext)) {
+                    return true;
+                }
+            }
+            if (!compilerOptions.experimentalBigInt) {
+                return grammarErrorOnNode(node, Diagnostics.Experimental_support_for_BigInt_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalBigInt_option_to_remove_this_warning);
             }
             return false;
         }

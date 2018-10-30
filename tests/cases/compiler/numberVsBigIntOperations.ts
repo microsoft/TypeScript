@@ -1,4 +1,5 @@
 // @experimentalBigInt: true
+// @target: esnext
 
 // Cannot mix bigints and numbers
 let bigInt = 1n, num = 2;

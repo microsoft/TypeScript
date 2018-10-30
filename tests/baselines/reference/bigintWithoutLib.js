@@ -55,8 +55,8 @@ bigintVal = dataView.getBigUint64(2, true);
 var bigintVal = BigInt(123);
 bigintVal = BigInt("456");
 new BigInt(123);
-bigintVal = BigInt.asIntN(8, 0xFFFFn);
-bigintVal = BigInt.asUintN(8, 0xFFFFn);
+bigintVal = BigInt.asIntN(8, 0xffffn);
+bigintVal = BigInt.asUintN(8, 0xffffn);
 bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
 var stringVal = bigintVal.toString(); // should not error - bigintVal inferred as {}
 stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}

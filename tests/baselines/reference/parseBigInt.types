@@ -162,13 +162,13 @@ const leadingZeros: 0xFFn = 0x000000FFn;
 
 // Plus not allowed on literals
 const unaryPlus = +123n;
->unaryPlus : 123n
->+123n : 123n
+>unaryPlus : number
+>+123n : number
 >123n : 123n
 
 const unaryPlusHex = +0x123n;
->unaryPlusHex : 291n
->+0x123n : 291n
+>unaryPlusHex : number
+>+0x123n : number
 >0x123n : 291n
 
 // Parsing errors

@@ -2505,6 +2505,10 @@
         "category": "Error",
         "code": 2736
     },
+    "BigInt literals are not available when targetting lower than ESNext.": {
+        "category": "Error",
+        "code": 2737
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
@@ -3913,7 +3917,7 @@
         "category": "Error",
         "code": 6370
     },
-    "Enables experimental support for ESNext BigInt expressions.": {
+    "Enables experimental support for ESNext BigInt literals.": {
         "category": "Message",
         "code": 6371
     },

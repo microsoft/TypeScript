@@ -1,4 +1,4 @@
-// @target: es2015
+// @target: esnext
 // @experimentalBigInt: true
 
 interface BigIntIndex<E> {

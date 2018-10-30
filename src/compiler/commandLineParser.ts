@@ -588,7 +588,7 @@ namespace ts {
             name: "experimentalBigInt",
             type: "boolean",
             category: Diagnostics.Experimental_Options,
-            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_expressions
+            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_literals
         },
 
         // Advanced

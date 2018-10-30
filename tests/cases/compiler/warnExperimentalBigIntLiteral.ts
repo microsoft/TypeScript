@@ -1,3 +1,5 @@
+// @target: esnext
+
 const normalNumber = 123; // should not error
 let bigintType: bigint; // should not error
 let bigintLiteralType: 123n; // should error when used as type

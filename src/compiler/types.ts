@@ -129,6 +129,7 @@ namespace ts {
         ConflictMarkerTrivia,
         // Literals
         NumericLiteral,
+        BigIntLiteral,
         StringLiteral,
         JsxText,
         JsxTextAllWhiteSpaces,
@@ -1661,15 +1662,18 @@ namespace ts {
         BinarySpecifier = 1 << 7,   // e.g. `0b0110010000000000`
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
-        BigInt = 1 << 10,           // e.g. `123n`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
-        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator | BigInt
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
     }
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
         /* @internal */
         numericLiteralFlags: TokenFlags;
+    }
+
+    export interface BigIntLiteral extends LiteralExpression {
+        kind: SyntaxKind.BigIntLiteral;
     }
 
     export interface TemplateHead extends LiteralLikeNode {

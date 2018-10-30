@@ -3697,13 +3697,13 @@ namespace ts {
                 break;
 
             case SyntaxKind.NumericLiteral:
-                const flags = (<NumericLiteral>node).numericLiteralFlags;
-                if (flags & TokenFlags.BinaryOrOctalSpecifier) {
+                if ((<NumericLiteral>node).numericLiteralFlags & TokenFlags.BinaryOrOctalSpecifier) {
                     transformFlags |= TransformFlags.AssertES2015;
                 }
-                if (flags & TokenFlags.BigInt) {
-                    transformFlags |= TransformFlags.AssertESNext;
-                }
+                break;
+
+            case SyntaxKind.BigIntLiteral:
+                transformFlags |= TransformFlags.AssertESNext;
                 break;
 
             case SyntaxKind.ForOfStatement:

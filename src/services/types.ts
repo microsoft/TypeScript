@@ -978,6 +978,7 @@ namespace ts {
         Whitespace,
         Identifier,
         NumberLiteral,
+        BigIntLiteral,
         StringLiteral,
         RegExpLiteral,
     }
@@ -1141,6 +1142,7 @@ namespace ts {
         identifier = "identifier",
         keyword = "keyword",
         numericLiteral = "number",
+        bigintLiteral = "bigint",
         operator = "operator",
         stringLiteral = "string",
         whiteSpace = "whitespace",
@@ -1189,5 +1191,6 @@ namespace ts {
         jsxAttribute = 22,
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

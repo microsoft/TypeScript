@@ -52,8 +52,8 @@ bigintVal = dataView.getBigUint64(2, true);
 let bigintVal = BigInt(123);
 bigintVal = BigInt("456");
 new BigInt(123); // should error
-bigintVal = BigInt.asIntN(8, 0xFFFFn);
-bigintVal = BigInt.asUintN(8, 0xFFFFn);
+bigintVal = BigInt.asIntN(8, 0xffffn);
+bigintVal = BigInt.asUintN(8, 0xffffn);
 bigintVal = bigintVal.valueOf();
 let stringVal = bigintVal.toString();
 stringVal = bigintVal.toString(2);

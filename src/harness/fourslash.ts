@@ -4663,6 +4663,7 @@ namespace FourSlashInterface {
             "unknown",
             "from",
             "global",
+            "bigint",
             "of",
         ];
 
@@ -4838,6 +4839,7 @@ namespace FourSlashInterface {
             "unknown",
             "from",
             "global",
+            "bigint",
             "of",
         ];
 

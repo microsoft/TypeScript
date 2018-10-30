@@ -1901,6 +1901,9 @@ namespace ts {
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
 
+                        case SyntaxKind.BigIntLiteral:
+                            return getGlobalBigIntNameWithFallback();
+
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
                             return createIdentifier("Boolean");
@@ -1911,6 +1914,9 @@ namespace ts {
 
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");
+
+                case SyntaxKind.BigIntKeyword:
+                    return getGlobalBigIntNameWithFallback();
 
                 case SyntaxKind.SymbolKeyword:
                     return languageVersion < ScriptTarget.ES2015
@@ -2007,7 +2013,7 @@ namespace ts {
                     return createVoidZero();
 
                 case TypeReferenceSerializationKind.BigIntLikeType:
-                    return createIdentifier("BigInt");
+                    return getGlobalBigIntNameWithFallback();
 
                 case TypeReferenceSerializationKind.BooleanType:
                     return createIdentifier("Boolean");
@@ -2116,6 +2122,20 @@ namespace ts {
                 createIdentifier("Symbol"),
                 createIdentifier("Object")
             );
+        }
+
+        /**
+         * Gets an expression that points to the global "BigInt" constructor at runtime if it is
+         * available.
+         */
+        function getGlobalBigIntNameWithFallback(): SerializedTypeNode {
+            return languageVersion < ScriptTarget.ESNext
+                ? createConditional(
+                    createTypeCheck(createIdentifier("BigInt"), "function"),
+                    createIdentifier("BigInt"),
+                    createIdentifier("Object")
+                )
+                : createIdentifier("BigInt");
         }
 
         /**

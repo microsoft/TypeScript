@@ -527,7 +527,10 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator)) {
+        if (!nodeIsSynthesized(node) && node.parent && !(
+            (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
+            isBigIntLiteral(node)
+        )) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -554,6 +557,7 @@ namespace ts {
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
                 return node.text;
         }
@@ -1600,6 +1604,7 @@ namespace ts {
                 }
             // falls through
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
                 return isInExpressionContext(node);
@@ -2906,6 +2911,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ObjectLiteralExpression:
@@ -5272,6 +5278,10 @@ namespace ts {
         return node.kind === SyntaxKind.NumericLiteral;
     }
 
+    export function isBigIntLiteral(node: Node): node is BigIntLiteral {
+        return node.kind === SyntaxKind.BigIntLiteral;
+    }
+
     export function isStringLiteral(node: Node): node is StringLiteral {
         return node.kind === SyntaxKind.StringLiteral;
     }
@@ -6398,6 +6408,7 @@ namespace ts {
             case SyntaxKind.Identifier:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateExpression:
@@ -8430,20 +8441,11 @@ namespace ts {
         }
     }
 
-    // TODO: remove once tslint allows tsconfig.json to include lib "esnext.bigint"
-    /* @internal */
-    declare const BigInt: ((value: string) => number) | undefined;
-
     /**
      * Converts a bigint literal string, e.g. `0x1234n`,
      * to its decimal string representation, e.g. `4660`.
      */
     export function parsePseudoBigInt(stringValue: string): string {
-        // Use native BigInt if available
-        if (typeof BigInt !== "undefined") {
-            return "" + BigInt(stringValue.slice(0, -1)); // omit trailing "n"
-        }
-
         let log2Base: number;
         switch (stringValue.charCodeAt(1)) { // "x" in "0x123"
             case CharacterCodes.b:

@@ -76,9 +76,7 @@ namespace ts {
             return createNumericLiteral(value + "");
         }
         if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
-            const literal = createNumericLiteral(pseudoBigIntToString(value) + "n");
-            literal.numericLiteralFlags |= TokenFlags.BigInt;
-            return literal;
+            return createBigIntLiteral(pseudoBigIntToString(value) + "n");
         }
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
@@ -95,6 +93,12 @@ namespace ts {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
         node.numericLiteralFlags = 0;
+        return node;
+    }
+
+    export function createBigIntLiteral(value: string): BigIntLiteral {
+        const node = <BigIntLiteral>createSynthesizedNode(SyntaxKind.BigIntLiteral);
+        node.text = value;
         return node;
     }
 
@@ -3472,6 +3476,7 @@ namespace ts {
                 return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
             case SyntaxKind.ArrayLiteralExpression:
