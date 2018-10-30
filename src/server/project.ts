@@ -1440,9 +1440,8 @@ namespace ts.server {
 
         setPotentialProjectRefence(path: Path) {
             // We know the composites if we have read the config file
-            if (this.isInitialLoadPending()) {
-                (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(path, true);
-            }
+            Debug.assert(this.isInitialLoadPending());
+            (this.potentialProjectReferences || (this.potentialProjectReferences = createMap())).set(path, true);
         }
 
         /*@internal*/

@@ -2509,7 +2509,10 @@ namespace ts.server {
          *  Traverse till project Root and create those configured projects
          */
         private createAncestorConfiguredProjects(info: ScriptInfo, project: ConfiguredProject) {
-            if (!project.containsScriptInfo(info) || !project.getCompilerOptions().composite) return;
+            if (!project.containsScriptInfo(info) || !project.getCompilerOptions().composite) {
+                return;
+            }
+
             const configPath = this.toPath(project.canonicalConfigFilePath);
             const configInfo: OriginalFileInfo = {
                 fileName: project.getConfigFilePath(),
@@ -2522,11 +2525,14 @@ namespace ts.server {
                 const configFileName = this.getConfigFileNameForFile(configInfo);
                 if (!configFileName) return;
 
-                // TODO: may be we should create only first project and then once its loaded,
-                // do pending search if this is composite ?
                 const ancestor = this.findConfiguredProjectByProjectName(configFileName) ||
                     this.createConfiguredProjectWithDelayLoad(configFileName, `Project possibly referencing default composite project ${project.getProjectName()} of open file ${info.fileName}`);
-                ancestor.setPotentialProjectRefence(configPath);
+                if (ancestor.isInitialLoadPending()) {
+                    ancestor.setPotentialProjectRefence(configPath);
+                }
+                else if (!project.getCompilerOptions().composite) {
+                    return;
+                }
 
                 configInfo.fileName = configFileName;
                 configInfo.path = this.toPath(configFileName);
