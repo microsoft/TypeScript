@@ -18,7 +18,15 @@
 for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a"]]) {
     verify.completions({
         marker,
-        includes: { name: "x", source: "/src/a", sourceDisplay, text: "const x: 0", kind: "const", hasAction: true },
+        includes: {
+            name: "x",
+            source: "/src/a",
+            sourceDisplay,
+            text: "const x: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+        },
         preferences: { includeCompletionsForModuleExports: true },
     });
     verify.applyCodeActionFromCompletion(marker, {

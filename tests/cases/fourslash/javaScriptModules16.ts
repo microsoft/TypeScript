@@ -22,4 +22,4 @@ verify.completions({
     ],
 });
 edit.insert('n.');
-verify.completions({ includes: { name: "toFixed", kind: "method" } });
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

@@ -19,4 +19,13 @@
 ////    }
 ////}
 
-verify.completions({ marker: ["1", "2"], exact: { name: "foo", text: "(JSX attribute) foo: string", documentation: "Doc", kind: "JSX attribute" } });
+verify.completions({
+    marker: ["1", "2"],
+    exact: {
+        name: "foo",
+        text: "(JSX attribute) foo: string",
+        documentation: "Doc",
+        kind: "JSX attribute",
+        kindModifiers: "declare",
+    },
+});

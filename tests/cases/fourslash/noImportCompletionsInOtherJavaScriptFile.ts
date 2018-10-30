@@ -23,6 +23,7 @@ verify.completions({
         sourceDisplay: "./node_modules/foo/index",
         text: "const fail: number",
         kind: "const",
+        kindModifiers: "export,declare",
         hasAction: true,
     },
     preferences: { includeCompletionsForModuleExports: true },

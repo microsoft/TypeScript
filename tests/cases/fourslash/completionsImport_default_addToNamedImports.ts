@@ -16,6 +16,7 @@ verify.completions({
         sourceDisplay: "./a",
         text: "function foo(): void",
         kind: "function",
+        kindModifiers: "export",
         hasAction: true,
     },
     preferences: { includeCompletionsForModuleExports: true },
