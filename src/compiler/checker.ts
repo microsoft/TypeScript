@@ -7653,7 +7653,7 @@ namespace ts {
                 // If a type parameter does not have a default type, or if the default type
                 // is a forward reference, the empty object type is used.
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    result[i] = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                    result[i] = getConstraintFromTypeParameter(typeParameters![i]) || getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                 }
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
                     const mapper = createTypeMapper(typeParameters!, result);
