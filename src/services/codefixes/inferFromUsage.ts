@@ -665,7 +665,29 @@ namespace ts.codefix {
             }
         }
 
+        const inferrers: ((k: UsageContext, checker: TypeChecker, previous: Type | undefined) => Type | undefined)[] = [
+            inferFromPrimitive,
+            inferFromContext,
+            inferFromObject,
+            inferFromStructure,
+        ];
+
         function getTypeFromUsageContext(usageContext: UsageContext, checker: TypeChecker): Type | undefined {
+            let type: Type | undefined;
+            for (const inferrer of inferrers) {
+                type = inferrer(usageContext, checker, type) || type;
+                if (type && !isIncompleteInference(type, checker)) {
+                    return type;
+                }
+            }
+            return type;
+        }
+
+        function isIncompleteInference(type: Type, checker: TypeChecker) {
+            return type.flags & TypeFlags.Any || checker.isEmptyObjectType(type);
+        }
+
+        function inferFromPrimitive(usageContext: UsageContext, checker: TypeChecker) {
             if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
                 return checker.getUnionType([checker.getNumberType(), checker.getStringType()]);
             }
@@ -675,10 +697,16 @@ namespace ts.codefix {
             else if (usageContext.isString) {
                 return checker.getStringType();
             }
-            else if (usageContext.candidateTypes) {
+        }
+
+        function inferFromContext(usageContext: UsageContext, checker: TypeChecker) {
+            if (usageContext.candidateTypes) {
                 return checker.getWidenedType(checker.getUnionType(usageContext.candidateTypes.map(t => checker.getBaseTypeOfLiteralType(t)), UnionReduction.Subtype));
             }
-            else if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
+        }
+
+        function inferFromObject(usageContext: UsageContext, checker: TypeChecker) {
+            if (usageContext.properties && hasCallContext(usageContext.properties.get("then" as __String))) {
                 const paramType = getParameterTypeFromCallContexts(0, usageContext.properties.get("then" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!; // TODO: GH#18217
                 const types = paramType.getCallSignatures().map(c => c.getReturnType());
                 return checker.createPromiseType(types.length ? checker.getUnionType(types, UnionReduction.Subtype) : checker.getAnyType());
@@ -686,7 +714,10 @@ namespace ts.codefix {
             else if (usageContext.properties && hasCallContext(usageContext.properties.get("push" as __String))) {
                 return checker.createArrayType(getParameterTypeFromCallContexts(0, usageContext.properties.get("push" as __String)!.callContexts!, /*isRestParameter*/ false, checker)!);
             }
-            else if (usageContext.numberIndexContext) {
+        }
+
+        function inferFromStructure(usageContext: UsageContext, checker: TypeChecker, previous: Type | undefined) {
+            if (usageContext.numberIndexContext) {
                 return checker.createArrayType(recur(usageContext.numberIndexContext));
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
@@ -694,10 +725,11 @@ namespace ts.codefix {
                 const callSignatures: Signature[] = [];
                 const constructSignatures: Signature[] = [];
                 let stringIndexInfo: IndexInfo | undefined;
+                const optionalFlag = previous && checker.isEmptyObjectType(previous) ? SymbolFlags.Optional : 0;
 
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
-                        const symbol = checker.createSymbol(SymbolFlags.Property, name);
+                        const symbol = checker.createSymbol(SymbolFlags.Property | optionalFlag, name);
                         symbol.type = recur(context);
                         members.set(name, symbol);
                     });
@@ -719,10 +751,11 @@ namespace ts.codefix {
                     stringIndexInfo = checker.createIndexInfo(recur(usageContext.stringIndexContext), /*isReadonly*/ false);
                 }
 
-                return checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
-            }
-            else {
-                return undefined;
+                const structuralInference = checker.createAnonymousType(/*symbol*/ undefined!, members, callSignatures, constructSignatures, stringIndexInfo, /*numberIndexInfo*/ undefined); // TODO: GH#18217
+                if (previous && checker.isEmptyObjectType(previous)) {
+                    return checker.mapType(previous, t => checker.isEmptyObjectType(t) ? structuralInference : t);
+                }
+                return structuralInference;
             }
 
             function recur(innerContext: UsageContext): Type {

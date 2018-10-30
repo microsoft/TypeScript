@@ -3173,6 +3173,12 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ isEmptyObjectType(type: Type): boolean;
+
+        /* @internal */ mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
+        /* @internal */ mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+        /* @internal */ mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
+
         /**
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
