@@ -945,7 +945,7 @@ namespace ts.projectSystem {
         });
 
         it("should install typings for unresolved imports", () => {
-            const file = {
+            const file: TestFSWithWatch.File = {
                 path: "/a/b/app.js",
                 content: `
                 import * as fs from "fs";
@@ -954,36 +954,43 @@ namespace ts.projectSystem {
             const cachePath = "/a/cache";
             const node = {
                 path: cachePath + "/node_modules/@types/node/index.d.ts",
-                content: "export let x: number"
+                content: "export let x: number",
             };
-            const commander = {
-                path: cachePath + "/node_modules/@types/commander/index.d.ts",
-                content: "export let y: string"
+            const commanderJS: TestFSWithWatch.File = {
+                path: "/node_modules/commander/index.js",
+                content: "module.exports = 0",
             };
-            const host = createServerHost([file]);
+
+            const typeNames: ReadonlyArray<string> = ["node", "commander"];
+            const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
+            const host = createServerHost([file, node, commanderJS]);
             const installer = new (class extends Installer {
                 constructor() {
-                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry("node", "commander") });
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) });
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
-                    const installedTypings = ["@types/node", "@types/commander"];
-                    const typingFiles = [node, commander];
+                    const installedTypings = typeNames.map(name => `@types/${name}`);
+                    const typingFiles = typeNames.map((name): TestFSWithWatch.File => ({ path: typePath(name), content: "" }));
                     executeCommand(this, host, installedTypings, typingFiles, cb);
                 }
             })();
             const service = createProjectService(host, { typingsInstaller: installer });
             service.openClientFile(file.path);
 
+            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            // Does not include cachePath because that is handled by typingsInstaller
+            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+
             service.checkNumberOfProjects({ inferredProjects: 1 });
-            checkProjectActualFiles(service.inferredProjects[0], [file.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
 
             installer.installAll(/*expectedCount*/1);
-
-            assert.isTrue(host.fileExists(node.path), "typings for 'node' should be created");
-            assert.isTrue(host.fileExists(commander.path), "typings for 'commander' should be created");
-
+            for (const name of typeNames) {
+                assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
+            }
             host.checkTimeoutQueueLengthAndRun(2);
-            checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, ...typeNames.map(typePath)]);
         });
 
         it("should pick typing names from non-relative unresolved imports", () => {
