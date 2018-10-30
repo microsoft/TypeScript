@@ -8,7 +8,4 @@
 ////    export { /**/ } from "M1"
 ////}
 
-goTo.marker();
-verify.completionListContains("V");
-verify.not.completionListContains("W");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: "V" });

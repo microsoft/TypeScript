@@ -18,8 +18,7 @@
 
 const comment = "this is multi declare namespace\nthi is multi namespace 2";
 
-goTo.marker('1');
-verify.completionListContains("multiM", "namespace multiM", comment);
+verify.completions({ marker: "1", includes: { name: "multiM", text: "namespace multiM", documentation: comment } });
 
 for (const marker of ["2", "3", "4", "5"]) {
     verify.quickInfoAt(marker, "namespace multiM", comment);

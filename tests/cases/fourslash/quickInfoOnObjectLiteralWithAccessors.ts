@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////function /*1*/makePoint(x: number) { 
+////function /*1*/makePoint(x: number) {
 ////    return {
 ////        b: 10,
 ////        get x() { return x; },
@@ -13,12 +13,15 @@
 
 verify.quickInfos({
     1: "function makePoint(x: number): {\n    b: number;\n    x: number;\n}",
-    2: "var x: number"
+    2: "var x: number",
+    3: "(property) x: number",
+    4: "var point: {\n    b: number;\n    x: number;\n}",
 });
 
-goTo.marker('3');
-verify.completionListContains("x", "(property) x: number", undefined);
-verify.completionListContains("b", "(property) b: number", undefined);
-verify.quickInfoIs("(property) x: number");
-
-verify.quickInfoAt("4", "var point: {\n    b: number;\n    x: number;\n}");
+verify.completions({
+    marker: "3",
+    exact: [
+        { name: "b", text: "(property) b: number" },
+        { name: "x", text: "(property) x: number" },
+    ],
+});

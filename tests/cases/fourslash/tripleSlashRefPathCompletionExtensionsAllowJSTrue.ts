@@ -24,4 +24,4 @@
 // @Filename: f1.cs
 ////
 
-verify.completions({ marker: test.markerNames(), exact: ["f1.d.ts", "f1.js", "f1.jsx", "f1.ts", "f1.tsx"], isNewIdentifierLocation: true });
+verify.completions({ marker: test.markers(), exact: ["f1.d.ts", "f1.js", "f1.jsx", "f1.ts", "f1.tsx"], isNewIdentifierLocation: true });

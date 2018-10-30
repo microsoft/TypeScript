@@ -276,11 +276,15 @@ namespace ts.textChanges {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
+        public replaceNodeWithText(sourceFile: SourceFile, oldNode: Node, text: string): void {
+            this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
+        }
+
         public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions) {
             return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
         }
 
-        private nextCommaToken (sourceFile: SourceFile, node: Node): Node | undefined {
+        private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {
             const next = findNextToken(node, node.parent, sourceFile);
             return next && next.kind === SyntaxKind.CommaToken ? next : undefined;
         }
@@ -690,7 +694,7 @@ namespace ts.textChanges {
         }
 
         private finishDeleteDeclarations(): void {
-            const deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            const deletedNodesInLists = new NodeSet(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
@@ -1053,25 +1057,13 @@ namespace ts.textChanges {
             switch (node.kind) {
                 case SyntaxKind.Parameter: {
                     const oldFunction = node.parent;
-                    if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                    if (isArrowFunction(oldFunction) &&
+                        oldFunction.parameters.length === 1 &&
+                        !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)) {
                         // Lambdas with exactly one parameter are special because, after removal, there
                         // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
                         // case if the parameter is simply removed (e.g. in `x => 1`).
-                        const newFunction = updateArrowFunction(
-                            oldFunction,
-                            oldFunction.modifiers,
-                            oldFunction.typeParameters,
-                            /*parameters*/ undefined!, // TODO: GH#18217
-                            oldFunction.type,
-                            oldFunction.equalsGreaterThanToken,
-                            oldFunction.body);
-
-                        // Drop leading and trailing trivia of the new function because we're only going
-                        // to replace the span (vs the full span) of the old function - the old leading
-                        // and trailing trivia will remain.
-                        suppressLeadingAndTrailingTrivia(newFunction);
-
-                        changes.replaceNode(sourceFile, oldFunction, newFunction);
+                        changes.replaceNodeWithText(sourceFile, node, "()");
                     }
                     else {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);

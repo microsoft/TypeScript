@@ -310,9 +310,7 @@ namespace project {
             const program = ts.createProgram(getInputFiles(), compilerOptions, compilerHost);
             const errors = ts.getPreEmitDiagnostics(program);
 
-            const emitResult = program.emit();
-            ts.addRange(errors, emitResult.diagnostics);
-            const sourceMapData = emitResult.sourceMaps;
+            const { sourceMaps: sourceMapData, diagnostics: emitDiagnostics } = program.emit();
 
             // Clean up source map data that will be used in baselining
             if (sourceMapData) {
@@ -329,7 +327,7 @@ namespace project {
                 configFileSourceFiles,
                 moduleKind,
                 program,
-                errors,
+                errors: ts.concatenate(errors, emitDiagnostics),
                 sourceMapData
             };
         }

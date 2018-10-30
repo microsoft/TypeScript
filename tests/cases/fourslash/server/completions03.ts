@@ -14,7 +14,4 @@
 ////     /**/
 //// }
 
-goTo.marker("");
-verify.completionListContains("three");
-verify.not.completionListContains("one");
-verify.not.completionListContains("two");
+verify.completions({ marker: "", exact: "three" });

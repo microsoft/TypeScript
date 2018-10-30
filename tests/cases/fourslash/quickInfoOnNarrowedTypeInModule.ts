@@ -26,50 +26,26 @@
 ////    strOrNum = m./*9*/exportedStrOrNum;
 ////}
 
-goTo.marker('1');
-verify.quickInfoIs('var nonExportedStrOrNum: string | number');
-verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: string | number");
+verify.quickInfos({
+    1: "var nonExportedStrOrNum: string | number",
+    2: "var nonExportedStrOrNum: number",
+    3: "var nonExportedStrOrNum: string",
+    4: "var m.exportedStrOrNum: string | number",
+    5: "var m.exportedStrOrNum: number",
+    6: "var m.exportedStrOrNum: string",
+    7: "var m.exportedStrOrNum: string | number",
+    8: "var m.exportedStrOrNum: number",
+    9: "var m.exportedStrOrNum: string",
+});
 
-goTo.marker('2');
-verify.quickInfoIs('var nonExportedStrOrNum: number');
-verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: number");
-
-goTo.marker('3');
-verify.quickInfoIs('var nonExportedStrOrNum: string');
-verify.completionListContains("nonExportedStrOrNum", "var nonExportedStrOrNum: string");
-
-goTo.marker('4');
-verify.quickInfoIs('var m.exportedStrOrNum: string | number');
-verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: string | number");
-
-goTo.marker('5');
-verify.quickInfoIs('var m.exportedStrOrNum: number');
-verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: number");
-
-goTo.marker('6');
-verify.quickInfoIs('var m.exportedStrOrNum: string');
-verify.completionListContains("exportedStrOrNum", "var exportedStrOrNum: string");
-
-goTo.marker('7');
-verify.quickInfoIs('var m.exportedStrOrNum: string | number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string | number");
-
-goTo.marker('8');
-verify.quickInfoIs('var m.exportedStrOrNum: number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: number");
-
-goTo.marker('9');
-verify.quickInfoIs('var m.exportedStrOrNum: string');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string");
-
-goTo.marker('7');
-verify.quickInfoIs('var m.exportedStrOrNum: string | number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string | number");
-
-goTo.marker('8');
-verify.quickInfoIs('var m.exportedStrOrNum: number');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: number");
-
-goTo.marker('9');
-verify.quickInfoIs('var m.exportedStrOrNum: string');
-verify.completionListContains("exportedStrOrNum", "var m.exportedStrOrNum: string");
+verify.completions(
+    { marker: "1", includes: { name: "nonExportedStrOrNum", text: "var nonExportedStrOrNum: string | number" } },
+    { marker: "2", includes: { name: "nonExportedStrOrNum", text: "var nonExportedStrOrNum: number" }, isNewIdentifierLocation: true },
+    { marker: "3", includes: { name: "nonExportedStrOrNum", text: "var nonExportedStrOrNum: string" }, isNewIdentifierLocation: true },
+    { marker: "4", includes: { name: "exportedStrOrNum", text: "var exportedStrOrNum: string | number" } },
+    { marker: "5", includes: { name: "exportedStrOrNum", text: "var exportedStrOrNum: number" }, isNewIdentifierLocation: true },
+    { marker: "6", includes: { name: "exportedStrOrNum", text: "var exportedStrOrNum: string" }, isNewIdentifierLocation: true },
+    { marker: "7", includes: { name: "exportedStrOrNum", text: "var m.exportedStrOrNum: string | number" } },
+    { marker: "8", includes: { name: "exportedStrOrNum", text: "var m.exportedStrOrNum: number" } },
+    { marker: "9", includes: { name: "exportedStrOrNum", text: "var m.exportedStrOrNum: string" } },
+);

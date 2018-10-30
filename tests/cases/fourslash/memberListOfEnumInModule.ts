@@ -8,6 +8,4 @@
 ////    var f: Foo = Foo./**/;
 ////}
 
-goTo.marker();
-verify.completionListContains("bar");
-verify.completionListContains("baz");
+verify.completions({ marker: "", exact: ["bar", "baz"] });

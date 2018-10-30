@@ -4041,6 +4041,39 @@
         "category": "Error",
         "code": 7042
     },
+    "Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7043
+    },
+    "Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7044
+    },
+    "Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7045
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7046
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7047
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7048
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7049
+    },
+    "'{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7050
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

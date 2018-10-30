@@ -8,10 +8,6 @@ declare namespace ts.server {
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
-    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
-
     export interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }

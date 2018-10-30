@@ -129,6 +129,7 @@ namespace ts.server.protocol {
         GetEditsForFileRename = "getEditsForFileRename",
         /* @internal */
         GetEditsForFileRenameFull = "getEditsForFileRename-full",
+        ConfigurePlugin = "configurePlugin"
 
         // NOTE: If updating this, be sure to also update `allCommandNames` in `harness/unittests/session.ts`.
     }
@@ -1023,7 +1024,7 @@ namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReferencesResponseItem[];
+        refs: ReadonlyArray<ReferencesResponseItem>;
 
         /**
          * The name of the symbol.
@@ -1373,6 +1374,16 @@ namespace ts.server.protocol {
      * no body field is required.
      */
     export interface ConfigureResponse extends Response {
+    }
+
+    export interface ConfigurePluginRequestArguments {
+        pluginName: string;
+        configuration: any;
+    }
+
+    export interface ConfigurePluginRequest extends Request {
+        command: CommandTypes.ConfigurePlugin;
+        arguments: ConfigurePluginRequestArguments;
     }
 
     /**

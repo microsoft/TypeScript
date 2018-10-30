@@ -20,7 +20,6 @@ verify.completions({
     ],
     preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("", {
     name: "x",
     source: "/a",

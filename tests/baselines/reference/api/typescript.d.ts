@@ -27,6 +27,9 @@ declare namespace ts {
     interface MapLike<T> {
         [index: string]: T;
     }
+    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
+    }
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
@@ -1755,7 +1758,7 @@ declare namespace ts {
     }
     interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
         /**
          * Gets a value indicating whether the specified path exists and is a file.
          * @param path The path to test.
@@ -1925,7 +1928,7 @@ declare namespace ts {
         typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
-        getRootSymbols(symbol: Symbol): Symbol[];
+        getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
         getContextualType(node: Expression): Type | undefined;
         /**
          * returns unknownSignature in the case of an error.
@@ -3126,7 +3129,7 @@ declare namespace ts {
 /** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
+    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
@@ -4153,7 +4156,7 @@ declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
-    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -4457,9 +4460,6 @@ declare namespace ts.server {
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
     type EventInitializationFailed = "event::initializationFailed";
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
     interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
@@ -4696,16 +4696,16 @@ declare namespace ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
-        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
-        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
-        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined;
+        getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
+        getImplementationAtPosition(fileName: string, position: number): ReadonlyArray<ImplementationLocation> | undefined;
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
+        getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;

@@ -12,20 +12,7 @@
 
 /////* {| "name": "6" |}
 
-goTo.marker("1");
-verify.completionListIsEmpty();
-
-goTo.marker("2");
-verify.completionListIsEmpty();
-
-goTo.marker("3");
-verify.completionListIsEmpty();
-
-goTo.marker("4");
-verify.not.completionListIsEmpty();
-
-goTo.marker("5");
-verify.not.completionListIsEmpty();
-
-goTo.marker("6");
-verify.completionListIsEmpty();
+verify.completions(
+    { marker: ["1", "2", "3", "6"], exact: undefined },
+    { marker: ["4", "5"], exact: completion.globals },
+);

@@ -1496,7 +1496,7 @@ namespace ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
+        function getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined {
             synchronizeHostData();
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
@@ -1506,7 +1506,7 @@ namespace ts {
             return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
-        function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
+        function getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
@@ -1519,7 +1519,7 @@ namespace ts {
         }
 
         /// References and Occurrences
-        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
+        function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
             return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
                 fileName: entry.fileName,
                 textSpan: highlightSpan.textSpan,

@@ -3,8 +3,6 @@
 //// export interface Configfiles {
 ////   jspm: string;
 ////   'jspm:browser': string;
-////   'jspm:dev': string;
-////   'jspm:node': string;
 //// }
 
 //// let files: Configfiles;
@@ -13,5 +11,7 @@
 ////    '/*1*/': ''
 //// }
 
-verify.completionsAt("0", ["jspm", '"jspm:browser"', '"jspm:dev"', '"jspm:node"']);
-verify.completionsAt("1", ["jspm", "jspm:browser", "jspm:dev", "jspm:node"]);
+verify.completions(
+    { marker: "0", exact: ["jspm", '"jspm:browser"'] },
+    { marker: "1", exact: ["jspm", "jspm:browser"] },
+);

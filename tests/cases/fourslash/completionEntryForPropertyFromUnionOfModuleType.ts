@@ -11,5 +11,4 @@
 ////var q: typeof E | typeof F;
 ////var j = q./*1*/
 
-goTo.marker('1');
-verify.completionListContains('n', "(property) n: number");
+verify.completions({ marker: "1", exact: [{ name: "n", text: "(property) n: number" }] });

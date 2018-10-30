@@ -5,4 +5,8 @@
 
 const replacementSpan = test.ranges()[0];
 // No completion for " foo" because it starts with a space. See https://github.com/Microsoft/TypeScript/pull/20547
-verify.completionsAt("", [{ name: "foo ", insertText: '["foo "]', replacementSpan }], { includeInsertTextCompletions: true });
+verify.completions({
+    marker: "",
+    exact: [{ name: "foo ", insertText: '["foo "]', replacementSpan }],
+    preferences: { includeInsertTextCompletions: true },
+});

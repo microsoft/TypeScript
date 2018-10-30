@@ -2,7 +2,7 @@
 
 ////module TestModule {
 ////    var localVariable = "";
-////    export var exportedVaribale = 0;
+////    export var exportedVariable = 0;
 ////
 ////    function localFunction() { }
 ////    export function exportedFunction() { }
@@ -27,7 +27,7 @@
 ////// Add some new items to the module
 ////module TestModule {
 ////    var localVariable2 = "";
-////    export var exportedVaribale2 = 0;
+////    export var exportedVariable2 = 0;
 ////
 ////    function localFunction2() { }
 ////    export function exportedFunction2() { }
@@ -59,46 +59,53 @@
 ////    }
 ////}
 
-
-goTo.marker("valueReference");
-verify.completionListContains("localVariable");
-verify.completionListContains("exportedVaribale");
-
-verify.completionListContains("localFunction");
-verify.completionListContains("exportedFunction");
-
-verify.completionListContains("localClass");
-verify.completionListContains("exportedClass");
-
-verify.completionListContains("localModule");
-verify.completionListContains("exportedModule");
-
-verify.completionListContains("exportedVaribale2");
-verify.completionListContains("exportedFunction2");
-verify.completionListContains("exportedClass2");
-verify.completionListContains("exportedModule2");
-
-goTo.marker("typeReference");
-verify.completionListContains("localInterface");
-verify.completionListContains("exportedInterface");
-
-verify.completionListContains("localClass");
-verify.completionListContains("exportedClass");
-
-verify.not.completionListContains("localModule");
-verify.not.completionListContains("exportedModule");
-
-verify.completionListContains("exportedClass2");
-verify.not.completionListContains("exportedModule2");
-
-goTo.marker("insideMethod");
-verify.not.completionListContains("property");
-verify.not.completionListContains("testMethod");
-verify.not.completionListContains("staticMethod");
-
-verify.completionListContains("globalVar");
-verify.completionListContains("globalFunction");
-
-verify.completionListContains("param");
-verify.completionListContains("localVar");
-verify.completionListContains("localFunction");
+verify.completions(
+    {
+        marker: "valueReference",
+        includes: [
+            "localVariable",
+            "exportedVariable",
+            "localFunction",
+            "exportedFunction",
+            "localClass",
+            "exportedClass",
+            "localModule",
+            "exportedModule",
+            "exportedVariable2",
+            "exportedFunction2",
+            "exportedClass2",
+            "exportedModule2",
+        ],
+        isNewIdentifierLocation: true, // TODO: Should not be a new identifier location
+    },
+    {
+        marker: "typeReference",
+        includes: [
+            "localInterface",
+            "exportedInterface",
+            "localClass",
+            "exportedClass",
+            "exportedClass2",
+        ],
+        excludes: [
+            "localModule",
+            "exportedModule",
+            "exportedModule2",
+        ],
+    },
+    {
+        marker: "insideMethod",
+        includes: [
+            "globalVar",
+            "globalFunction",
+            "param",
+            "localVar",
+            "localFunction",
+        ],
+        excludes: [
+            "property",
+            "testMethod",
+            "staticMethod",
+        ],
+    },
+);

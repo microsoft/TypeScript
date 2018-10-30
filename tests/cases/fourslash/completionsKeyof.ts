@@ -7,11 +7,7 @@
 ////function g<T extends keyof B>(key: T) {}
 ////g("/*g*/");
 
-goTo.marker("f");
-verify.completionListCount(1);
-verify.completionListContains("a");
-
-goTo.marker("g");
-verify.completionListCount(2);
-verify.completionListContains("a");
-verify.completionListContains("b");
+verify.completions(
+    { marker: "f", exact: "a" },
+    { marker: "g", exact: ["a", "b"] },
+);

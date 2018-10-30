@@ -15,7 +15,7 @@
 
 goTo.marker("local");
 edit.insertLine("");
-verify.completionListContains("xmlEvent");
-
-goTo.marker("this");
-verify.completionListIsEmpty();
+verify.completions(
+    { includes: "xmlEvent" },
+    { marker: "this", exact: undefined },
+);

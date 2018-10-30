@@ -17,11 +17,4 @@
 ////    e./*2*/
 ////} );
 
-
-goTo.marker("1");
-verify.completionListContains('x1');
-verify.completionListContains('y1');
-
-goTo.marker("2");
-verify.completionListContains('x1');
-verify.completionListContains('y1');
+verify.completions({ marker: ["1", "2"], exact: ["x1", "y1"] });

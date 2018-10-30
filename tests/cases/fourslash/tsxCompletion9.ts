@@ -13,12 +13,9 @@
 //// var x4 = <div>/*10*/</div>;
 //// <div/>
 //// /*end*/
-//// 
+////
 
 for (var i = 1; i <= 10; i++) {
-	goTo.marker(i + '');
-	verify.completionListIsEmpty();
+	verify.completions({ marker: String(i), exact: undefined });
 }
-
-goTo.marker('end');
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "end", includes: "null" });

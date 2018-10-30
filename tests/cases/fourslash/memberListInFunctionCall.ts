@@ -10,6 +10,5 @@
 
 goTo.marker();
 edit.insert('.');
-
-verify.completionListContains('charAt');
+verify.completions({ includes: "charAt" });
 

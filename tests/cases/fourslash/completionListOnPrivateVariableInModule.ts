@@ -2,5 +2,4 @@
 
 //// module Foo {     var testing = "";     test/**/ }
 
-goTo.marker();
-verify.completionListContains('testing', 'var testing: string');
+verify.completions({ marker: "", includes: { name: "testing", text: "var testing: string" } });

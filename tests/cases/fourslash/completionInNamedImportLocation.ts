@@ -12,12 +12,7 @@
 ////import { x, /*2*/ } from "./file";
 
 goTo.file("a.ts");
-goTo.marker('1');
-verify.completionListContains("x", "var x: number");
-verify.completionListContains("y", "var y: number");
-verify.not.completionListContains("C");
-
-goTo.marker('2');
-verify.not.completionListContains("x", "var x: number");
-verify.completionListContains("y", "var y: number");
-verify.not.completionListContains("C");
+verify.completions(
+    { marker: "1", exact: [{ name: "x", text: "var x: number" }, { name: "y", text: "var y: number" }] },
+    { marker: "2", exact: [{ name: "y", text: "var y: number" }] },
+);

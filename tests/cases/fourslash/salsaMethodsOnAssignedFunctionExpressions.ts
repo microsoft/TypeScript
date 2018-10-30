@@ -13,5 +13,12 @@
 ////x/*1*/./*2*/m();
 
 verify.quickInfoAt("1", "var x: C");
-goTo.marker('2');
-verify.completionListContains('m', '(property) C.m: (a: string) => void', 'The prototype method.');
+verify.completions({
+    marker: "2",
+    includes: {
+        name: "m",
+        text: "(property) C.m: (a: string) => void",
+        documentation: "The prototype method.",
+        tags: [{ name: "param", text: "a Parameter definition." }],
+    },
+});

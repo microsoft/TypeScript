@@ -1,7 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 //// export class TestBase<T extends TestBase<T>>
-//// {   
+//// {
 ////     public publicMethod(p: any): void {}
 ////     private privateMethod(p: any): void {}
 ////     protected protectedMethod(p: any): void {}
@@ -11,8 +11,4 @@
 ////     }
 //// }
 
-goTo.marker();
-
-verify.completionListContains('publicMethod');
-verify.completionListContains('privateMethod');
-verify.completionListContains('protectedMethod');
+verify.completions({ marker: "", exact: ["publicMethod", "privateMethod", "protectedMethod", "test"] });

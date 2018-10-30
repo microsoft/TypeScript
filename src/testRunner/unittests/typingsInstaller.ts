@@ -310,7 +310,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
@@ -409,7 +409,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -451,7 +451,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {

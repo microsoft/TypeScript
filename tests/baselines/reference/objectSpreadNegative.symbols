@@ -132,7 +132,9 @@ let setterOnly = { ...{ set b (bad: number) { } } };
 >bad : Symbol(bad, Decl(objectSpreadNegative.ts, 45, 31))
 
 setterOnly.b = 12; // error, 'b' does not exist
+>setterOnly.b : Symbol(b, Decl(objectSpreadNegative.ts, 45, 23))
 >setterOnly : Symbol(setterOnly, Decl(objectSpreadNegative.ts, 45, 3))
+>b : Symbol(b, Decl(objectSpreadNegative.ts, 45, 23))
 
 // methods are skipped because they aren't enumerable
 class C { p = 1; m() { } }

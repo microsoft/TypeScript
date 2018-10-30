@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.FindAllReferences {
     export interface SymbolAndEntries {
-        definition: Definition | undefined;
-        references: Entry[];
+        readonly definition: Definition | undefined;
+        readonly references: ReadonlyArray<Entry>;
     }
 
     export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
@@ -60,7 +60,7 @@ namespace ts.FindAllReferences {
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): Entry[] | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): ReadonlyArray<Entry> | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -94,11 +94,19 @@ namespace ts.FindAllReferences {
 
     export type ToReferenceOrRenameEntry<T> = (entry: Entry, originalNode: Node) => T;
 
-    export function getReferenceEntriesForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): Entry[] | undefined {
+    export function getReferenceEntriesForNode(
+        position: number,
+        node: Node,
+        program: Program,
+        sourceFiles: ReadonlyArray<SourceFile>,
+        cancellationToken: CancellationToken,
+        options: Options = {},
+        sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName),
+    ): ReadonlyArray<Entry> | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options, sourceFilesSet));
     }
 
-    function flattenEntries(referenceSymbols: SymbolAndEntries[] | undefined): Entry[] | undefined {
+    function flattenEntries(referenceSymbols: SymbolAndEntries[] | undefined): ReadonlyArray<Entry> | undefined {
         return referenceSymbols && flatMap(referenceSymbols, r => r.references);
     }
 

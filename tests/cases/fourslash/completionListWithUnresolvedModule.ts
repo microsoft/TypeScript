@@ -5,6 +5,4 @@
 ////    var n: num/**/
 ////}
 
-goTo.marker();
-
-verify.completionListContains('number');
+verify.completions({ marker: "", includes: "number" });

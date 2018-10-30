@@ -9,12 +9,11 @@
 ////import * as s from "something";
 ////fo/*b*/
 
-goTo.marker("b");
-verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeCompletionsForModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "b",
+    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "const foo: 0", kind: "const", hasAction: true },
+    preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("b", {
     name: "foo",
     source: "/a",

@@ -8,5 +8,4 @@
 ////            export function baz() { }
 ////}
 
-goTo.marker();
-verify.completionListContains("baz", "function B.baz(): void");
+verify.completions({ marker: "", exact: { name: "baz", text: "function B.baz(): void" } });

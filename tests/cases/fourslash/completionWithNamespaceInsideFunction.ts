@@ -21,26 +21,27 @@
 ////}
 /////*33*/
 
-goTo.marker('1');
-verify.completionListContains("f", "function f(): void");
-verify.not.completionListContains("n", "namespace n");
-verify.not.completionListContains("I", "interface I");
-
-goTo.marker('2');
-verify.completionListContains("f", "function f(): void");
-verify.not.completionListContains("n", "namespace n");
-
-goTo.marker('3');
-verify.completionListContains("f", "function f(): void");
-
-goTo.marker('11');
-verify.completionListContains("f2", "function f2(): void");
-verify.completionListContains("n2", "namespace n2");
-verify.completionListContains("I2", "class I2");
-
-goTo.marker('22');
-verify.completionListContains("f2", "function f2(): void");
-verify.completionListContains("n2", "namespace n2");
-
-goTo.marker('33');
-verify.completionListContains("f2", "function f2(): void");
+verify.completions(
+    { marker: ["1", "2", "3"], includes: { name: "f", text: "function f(): void" }, excludes: ["n", "I"] },
+    {
+        marker: "11",
+        includes: [
+            { name: "f2", text: "function f2(): void" },
+            { name: "n2", text: "namespace n2" },
+            { name: "I2", text: "class I2" },
+        ],
+    },
+    {
+        marker: "22",
+        includes: [
+            { name: "f2", text: "function f2(): void" },
+            { name: "n2", text: "namespace n2" },
+        ],
+        excludes: "I2",
+    },
+    {
+        marker: "33",
+        includes: { name: "f2", text: "function f2(): void" },
+        excludes: ["n2", "I2"],
+    },
+);

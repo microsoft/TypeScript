@@ -27,6 +27,9 @@ declare namespace ts {
     interface MapLike<T> {
         [index: string]: T;
     }
+    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
+    }
     interface SortedArray<T> extends Array<T> {
         " __sortedArrayBrand": any;
     }
@@ -1755,7 +1758,7 @@ declare namespace ts {
     }
     interface ParseConfigHost {
         useCaseSensitiveFileNames: boolean;
-        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(rootDir: string, extensions: ReadonlyArray<string>, excludes: ReadonlyArray<string> | undefined, includes: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
         /**
          * Gets a value indicating whether the specified path exists and is a file.
          * @param path The path to test.
@@ -1925,7 +1928,7 @@ declare namespace ts {
         typePredicateToString(predicate: TypePredicate, enclosingDeclaration?: Node, flags?: TypeFormatFlags): string;
         getFullyQualifiedName(symbol: Symbol): string;
         getAugmentedPropertiesOfType(type: Type): Symbol[];
-        getRootSymbols(symbol: Symbol): Symbol[];
+        getRootSymbols(symbol: Symbol): ReadonlyArray<Symbol>;
         getContextualType(node: Expression): Type | undefined;
         /**
          * returns unknownSignature in the case of an error.
@@ -3126,7 +3129,7 @@ declare namespace ts {
 /** Non-internal stuff goes here */
 declare namespace ts {
     function isExternalModuleNameRelative(moduleName: string): boolean;
-    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[];
+    function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T>;
 }
 declare namespace ts {
     function getDefaultLibFileName(options: CompilerOptions): string;
@@ -4153,7 +4156,7 @@ declare namespace ts {
     function findConfigFile(searchPath: string, fileExists: (fileName: string) => boolean, configName?: string): string | undefined;
     function resolveTripleslashReference(moduleName: string, containingFile: string): string;
     function createCompilerHost(options: CompilerOptions, setParentNodes?: boolean): CompilerHost;
-    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[];
+    function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
     interface FormatDiagnosticsHost {
         getCurrentDirectory(): string;
         getCanonicalFileName(fileName: string): string;
@@ -4457,9 +4460,6 @@ declare namespace ts.server {
     type EventBeginInstallTypes = "event::beginInstallTypes";
     type EventEndInstallTypes = "event::endInstallTypes";
     type EventInitializationFailed = "event::initializationFailed";
-    interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
     interface TypingInstallerResponse {
         readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
@@ -4696,16 +4696,16 @@ declare namespace ts {
         getBreakpointStatementAtPosition(fileName: string, position: number): TextSpan | undefined;
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
         getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
-        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
+        getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
-        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
-        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined;
+        getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
+        getImplementationAtPosition(fileName: string, position: number): ReadonlyArray<ImplementationLocation> | undefined;
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
         /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
+        getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined;
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
         getNavigationTree(fileName: string): NavigationTree;
@@ -5685,7 +5685,8 @@ declare namespace ts.server.protocol {
         GetApplicableRefactors = "getApplicableRefactors",
         GetEditsForRefactor = "getEditsForRefactor",
         OrganizeImports = "organizeImports",
-        GetEditsForFileRename = "getEditsForFileRename"
+        GetEditsForFileRename = "getEditsForFileRename",
+        ConfigurePlugin = "configurePlugin"
     }
     /**
      * A TypeScript Server message
@@ -6405,7 +6406,7 @@ declare namespace ts.server.protocol {
         /**
          * The file locations referencing the symbol.
          */
-        refs: ReferencesResponseItem[];
+        refs: ReadonlyArray<ReferencesResponseItem>;
         /**
          * The name of the symbol.
          */
@@ -6633,6 +6634,14 @@ declare namespace ts.server.protocol {
      * no body field is required.
      */
     interface ConfigureResponse extends Response {
+    }
+    interface ConfigurePluginRequestArguments {
+        pluginName: string;
+        configuration: any;
+    }
+    interface ConfigurePluginRequest extends Request {
+        command: CommandTypes.ConfigurePlugin;
+        arguments: ConfigurePluginRequestArguments;
     }
     /**
      *  Information found in an "open" request.
@@ -8080,6 +8089,11 @@ declare namespace ts.server {
     interface PluginModule {
         create(createInfo: PluginCreateInfo): LanguageService;
         getExternalFiles?(proj: Project): string[];
+        onConfigurationChanged?(config: any): void;
+    }
+    interface PluginModuleWithName {
+        name: string;
+        module: PluginModule;
     }
     type PluginModuleFactory = (mod: {
         typescript: typeof ts;
@@ -8218,11 +8232,11 @@ declare namespace ts.server {
         filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
-        protected enableGlobalPlugins(options: CompilerOptions): void;
-        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[]): void;
+        protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
+        protected enablePlugin(pluginConfigEntry: PluginImport, searchPaths: string[], pluginConfigOverrides: Map<any> | undefined): void;
+        private enableProxy;
         /** Starts a new check for diagnostics. Call this if some file has updated that would cause diagnostics to be changed. */
         refreshDiagnostics(): void;
-        private enableProxy;
     }
     /**
      * If a file is opened and no tsconfig (or jsconfig) is found,
@@ -8263,7 +8277,6 @@ declare namespace ts.server {
         getConfigFilePath(): NormalizedPath;
         getProjectReferences(): ReadonlyArray<ProjectReference> | undefined;
         updateReferences(refs: ReadonlyArray<ProjectReference> | undefined): void;
-        enablePlugins(): void;
         /**
          * Get the errors that dont have any file name associated
          */
@@ -8523,6 +8536,7 @@ declare namespace ts.server {
         readonly globalPlugins: ReadonlyArray<string>;
         readonly pluginProbeLocations: ReadonlyArray<string>;
         readonly allowLocalPluginLoads: boolean;
+        private currentPluginConfigOverrides;
         readonly typesMapLocation: string | undefined;
         readonly syntaxOnly?: boolean;
         /** Tracks projects that we have already sent telemetry for. */
@@ -8698,6 +8712,7 @@ declare namespace ts.server {
         applySafeList(proj: protocol.ExternalProject): NormalizedPath[];
         openExternalProject(proj: protocol.ExternalProject): void;
         hasDeferredExtension(): boolean;
+        configurePlugin(args: protocol.ConfigurePluginRequestArguments): void;
     }
 }
 declare namespace ts.server {
@@ -8870,6 +8885,7 @@ declare namespace ts.server {
         private convertTextChangeToCodeEdit;
         private getBraceMatching;
         private getDiagnosticsForProject;
+        private configurePlugin;
         getCanonicalFileName(fileName: string): string;
         exit(): void;
         private notRequired;

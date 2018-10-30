@@ -11,6 +11,4 @@
 ////var t: thing;
 ////t.pos = { x: 4, y: 3 + t./**/ };
 
-goTo.marker();
-verify.not.completionListContains('x');
-verify.completionListContains('name');
+verify.completions({ marker: "", exact: ["name", "pos"] });

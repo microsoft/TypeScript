@@ -11,5 +11,5 @@
 verify.rangeAfterCodeFix(`namespace greeter {
     export class class2 {
     }
-}`);
+}`, /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);
 

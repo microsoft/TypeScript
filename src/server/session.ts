@@ -267,7 +267,7 @@ namespace ts.server {
         projects: Projects,
         action: (project: Project, value: T) => ReadonlyArray<U> | U | undefined,
     ): U[] {
-        const outputs = flatMap(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
+        const outputs = flatMapToMutable(isArray(projects) ? projects : projects.projects, project => action(project, defaultValue));
         if (!isArray(projects) && projects.symLinkedProjects) {
             projects.symLinkedProjects.forEach((projects, path) => {
                 const value = getValue(path as Path);
@@ -1230,7 +1230,7 @@ namespace ts.server {
                 const nameSpan = nameInfo && nameInfo.textSpan;
                 const symbolStartOffset = nameSpan ? scriptInfo.positionToLineOffset(nameSpan.start).offset : 0;
                 const symbolName = nameSpan ? scriptInfo.getSnapshot().getText(nameSpan.start, textSpanEnd(nameSpan)) : "";
-                const refs: protocol.ReferencesResponseItem[] = flatMap(references, referencedSymbol =>
+                const refs: ReadonlyArray<protocol.ReferencesResponseItem> = flatMap(references, referencedSymbol =>
                     referencedSymbol.references.map(({ fileName, textSpan, isWriteAccess, isDefinition }): protocol.ReferencesResponseItem => {
                         const scriptInfo = Debug.assertDefined(this.projectService.getScriptInfo(fileName));
                         const start = scriptInfo.positionToLineOffset(textSpan.start);
@@ -1983,6 +1983,10 @@ namespace ts.server {
             this.updateErrorCheck(next, checkList, delay, /*requireOpen*/ false);
         }
 
+        private configurePlugin(args: protocol.ConfigurePluginRequestArguments) {
+            this.projectService.configurePlugin(args);
+        }
+
         getCanonicalFileName(fileName: string) {
             const name = this.host.useCaseSensitiveFileNames ? fileName : fileName.toLowerCase();
             return normalizePath(name);
@@ -2304,6 +2308,10 @@ namespace ts.server {
             [CommandNames.GetEditsForFileRenameFull]: (request: protocol.GetEditsForFileRenameRequest) => {
                 return this.requiredResponse(this.getEditsForFileRename(request.arguments, /*simplifiedResult*/ false));
             },
+            [CommandNames.ConfigurePlugin]: (request: protocol.ConfigurePluginRequest) => {
+                this.configurePlugin(request.arguments);
+                return this.notRequired();
+            }
         });
 
         public addProtocolHandler(command: string, handler: (request: protocol.Request) => HandlerResponse) {

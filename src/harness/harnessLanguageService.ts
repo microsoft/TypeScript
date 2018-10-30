@@ -833,6 +833,36 @@ namespace Harness.LanguageService {
                         error: undefined
                     };
 
+                // Accepts configurations
+                case "configurable-diagnostic-adder":
+                    let customMessage = "default message";
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                customMessage = info.config.message;
+                                const proxy = makeDefaultProxy(info);
+                                proxy.getSemanticDiagnostics = filename => {
+                                    const prev = info.languageService.getSemanticDiagnostics(filename);
+                                    const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                    prev.push({
+                                        category: ts.DiagnosticCategory.Error,
+                                        file: sourceFile,
+                                        code: 9999,
+                                        length: 3,
+                                        messageText: customMessage,
+                                        start: 0
+                                    });
+                                    return prev;
+                                };
+                                return proxy;
+                            },
+                            onConfigurationChanged(config: any) {
+                                customMessage = config.message;
+                            }
+                        }),
+                        error: undefined
+                    };
+
                 default:
                     return {
                         module: undefined,

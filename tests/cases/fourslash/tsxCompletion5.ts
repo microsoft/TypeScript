@@ -9,7 +9,4 @@
 //// }
 //// var x = <div ONE/**//>;
 
-goTo.marker();
-verify.completionListContains("ONE");
-verify.completionListContains("TWO");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: ["ONE", "TWO"] });
