@@ -1146,7 +1146,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function printHelp(optionsList: CommandLineOption[], syntaxPrefix = "") {
+    export function printHelp(optionsList: ReadonlyArray<CommandLineOption>, syntaxPrefix = "") {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.

@@ -7,7 +7,7 @@ namespace ts {
         return pathIsRelative(moduleName) || isRootedDiskPath(moduleName);
     }
 
-    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): T[] {
+    export function sortAndDeduplicateDiagnostics<T extends Diagnostic>(diagnostics: ReadonlyArray<T>): SortedReadonlyArray<T> {
         return sortAndDeduplicate<T>(diagnostics, compareDiagnostics);
     }
 }
