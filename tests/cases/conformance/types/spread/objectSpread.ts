@@ -120,3 +120,24 @@ let a = 12;
 let shortCutted: { a: number, b: string } = { ...o, a }
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
+
+// generic spreads
+function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
+    let x01 = { ...t };
+    let x02 = { ...t, ...t };
+    let x03 = { ...t, ...u };
+    let x04 = { ...u, ...t };
+    let x05 = { a: 5, b: 'hi', ...t };
+    let x06 = { ...t, a: 5, b: 'hi' };
+    let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
+    let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
+    let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
+    let x11 = { ...v };
+    let x12 = { ...v, ...obj };
+    let x13 = { ...w };
+    let x14 = { ...w, ...obj };
+    let x15 = { ...t, ...v };
+    let x16 = { ...t, ...w };
+    let x17 = { ...t, ...w, ...obj };
+    let x18 = { ...t, ...v, ...w };
+}
