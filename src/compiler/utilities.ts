@@ -7333,9 +7333,7 @@ namespace ts {
     export function startsWithDirectory(fileName: string, directoryName: string, getCanonicalFileName: GetCanonicalFileName): boolean {
         const canonicalFileName = getCanonicalFileName(fileName);
         const canonicalDirectoryName = getCanonicalFileName(directoryName);
-        return canonicalFileName === canonicalDirectoryName ||
-            startsWith(canonicalFileName, canonicalDirectoryName + "/") ||
-            startsWith(canonicalFileName, canonicalDirectoryName + "\\");
+        return startsWith(canonicalFileName, canonicalDirectoryName + "/") || startsWith(canonicalFileName, canonicalDirectoryName + "\\");
     }
 
     export function isUrl(path: string) {

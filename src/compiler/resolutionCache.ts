@@ -224,7 +224,6 @@ namespace ts {
             const globalCache = resolutionHost.getGlobalCache ? resolutionHost.getGlobalCache() : undefined;
             if (globalCache !== undefined && !isExternalModuleNameRelative(moduleName) && !(primaryResult.resolvedModule && extensionIsTS(primaryResult.resolvedModule.extension))) {
                 // create different collection of failed lookup locations for second pass
-                // if it will fail and we've already found something during the first pass - we don't want to pollute its results
                 const { resolvedModule, failedLookupLocations } = loadModuleFromGlobalCache(moduleName, resolutionHost.projectName, compilerOptions, host, globalCache);
                 return { resolvedModule: resolvedModule || primaryResult.resolvedModule, failedLookupLocations: [...primaryResult.failedLookupLocations, ...failedLookupLocations] };
             }
@@ -386,7 +385,7 @@ namespace ts {
 
             const globalCache = resolutionHost.getGlobalCache ? resolutionHost.getGlobalCache() : undefined;
             // Using identity for getCanonicalFileName because assuming that if a path came from globalCache its case hasn't been changed.
-            if (globalCache !== undefined && startsWithDirectory(dirPath, globalCache, identity)) {
+            if (globalCache !== undefined && dirPath === globalCache) {
                 return true;
             }
 
