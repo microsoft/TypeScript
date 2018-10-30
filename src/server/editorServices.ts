@@ -962,6 +962,7 @@ namespace ts.server {
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
                     // If the the added or created file or directory is not supported file name, ignore the file

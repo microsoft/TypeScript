@@ -587,8 +587,8 @@ interface Array<T> {}`
             }
             this.invokeFileWatcher(fileOrDirectory.fullPath, FileWatcherEventKind.Created);
             if (isFsFolder(fileOrDirectory)) {
-                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, "");
-                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, "");
+                this.invokeDirectoryWatcher(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
+                this.invokeWatchedDirectoriesRecursiveCallback(fileOrDirectory.fullPath, fileOrDirectory.fullPath);
             }
             this.invokeDirectoryWatcher(folder.fullPath, fileOrDirectory.fullPath);
         }
