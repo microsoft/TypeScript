@@ -132,6 +132,11 @@ namespace ts {
         const commandLineOptions = commandLine.options;
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
+            if (commandLineOptions.showConfig) {
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(configParseResult.options);
             if (isWatchSet(configParseResult.options)) {
                 reportWatchModeWithoutSysSupport();
@@ -142,6 +147,11 @@ namespace ts {
             }
         }
         else {
+            if (commandLineOptions.showConfig) {
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
