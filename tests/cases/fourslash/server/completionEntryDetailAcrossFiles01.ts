@@ -14,7 +14,8 @@
 //// import a = require("./a");
 //// a.fo/*2*/
 
-goTo.marker('1');
-verify.completionEntryDetailIs("foo", "var foo: (p1: string) => void", "Modify the parameter");
-goTo.marker('2');
-verify.completionEntryDetailIs("foo", "(property) a.foo: (p1: string) => void", "Modify the parameter");
+const entry = (text: string): FourSlashInterface.ExpectedCompletionEntry => ({ name: "foo", text, documentation: "Modify the parameter", tags: [{ name: "param", text: "p1" }] });
+verify.completions(
+    { marker: "1", includes: entry("var foo: (p1: string) => void") },
+    { marker: "2", exact: entry("(property) a.foo: (p1: string) => void") },
+);

@@ -34,56 +34,18 @@
 ////a./*7*/;
 ////var tmp2: a./*7Type*/;
 
-function getVerify(isTypeLocation?: boolean) {
-    return {
-        verifyValue: isTypeLocation ? verify.not : verify,
-        verifyType: isTypeLocation ? verify : verify.not,
-        verifyValueOrType: verify
-    };
-}
-
-function verifyModuleM(marker: string) {
-    verifyModuleMWorker(marker, /*isTypeLocation*/ false);
-    verifyModuleMWorker(`${marker}Type`, /*isTypeLocation*/ true);
-}
-
-function verifyModuleMWorker(marker: string, isTypeLocation: boolean): void {
-    goTo.marker(marker);
-
-    const { verifyValue, verifyType, verifyValueOrType } = getVerify(isTypeLocation);
-    verifyType.completionListContains("I");
-    verifyValueOrType.completionListContains("C");
-    verifyValueOrType.completionListContains("E");
-    verifyValue.completionListContains("N");
-    verifyValue.completionListContains("V");
-    verifyValue.completionListContains("F");
-    verifyValueOrType.completionListContains("A");
-}
-
-// Module m
-goTo.marker("1");
-verify.completionListContains("A");
-verifyModuleM("1");
-
-// Class C
-goTo.marker("2");
-verify.completionListContains("property");
-
-// Enum E
-goTo.marker("3");
-verify.completionListContains("value");
-
-// Module N
-goTo.marker("4");
-verify.completionListContains("v");
-
-// var V
-goTo.marker("5");
-verify.completionListContains("toFixed");
-
-// function F
-goTo.marker("6");
-verify.completionListContains("call");
-
-// alias a
-verifyModuleM("7");
+verify.completions(
+    // Module m / alias a
+    { marker: ["1", "7"], exact: ["F", "C", "E", "N", "V", "A"] },
+    { marker: ["1Type", "7Type"], exact: ["I", "C", "E", "A"] },
+    // Class C
+    { marker: "2", exact: ["prototype", "property", ...completion.functionMembers] },
+    // Enum E
+    { marker: "3", exact: "value" },
+    // Module N
+    { marker: "4", exact: "v" },
+    // var V
+    { marker: "5", includes: "toFixed" },
+    // function F
+    { marker: "6", includes: "call" },
+);

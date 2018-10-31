@@ -18,18 +18,4 @@
 ////    }
 ////};
 
-goTo.marker("1");
-verify.completionListContains("x1");
-verify.completionListContains("x2");
-
-goTo.marker("2");
-verify.completionListContains("x1");
-verify.completionListContains("x2");
-
-goTo.marker("3");
-verify.completionListContains("x1");
-verify.completionListContains("x2");
-
-goTo.marker("4");
-verify.completionListContains("x1");
-verify.completionListContains("x2");
+verify.completions({ marker: test.markers(), exact: ["x1", "x2"] });

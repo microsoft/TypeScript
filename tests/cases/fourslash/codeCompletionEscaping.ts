@@ -4,6 +4,10 @@
 // @allowJs: true
 ////___foo; __foo;/**/
 
-goTo.marker();
-verify.completionListContains("__foo", undefined, undefined, "warning");
-verify.completionListContains("___foo", undefined, undefined, "warning");
+verify.completions({
+    marker: "",
+    includes: [
+        { name: "__foo", kind: "warning" },
+        { name: "___foo", kind: "warning" },
+    ],
+});

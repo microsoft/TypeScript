@@ -18,4 +18,8 @@
 // @Filename: package.json
 //// { "dependencies": { "@types/module-y": "latest" } }
 
-verify.completionsAt(["types_ref0", "import_as0", "import_equals0", "require0"], ["module-x", "module-y"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: ["types_ref0", "import_as0", "import_equals0", "require0"],
+    exact: ["module-x", "module-y"],
+    isNewIdentifierLocation: true,
+});

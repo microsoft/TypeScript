@@ -2,7 +2,7 @@
 
 //@Filename: file.tsx
 // @jsx: preserve
-// @noLib: true
+// @skipLibCheck: true
 
 //// declare module JSX {
 ////     interface Element { }
@@ -19,5 +19,4 @@
 //// var SFCComp = SFC1 || SFC2;
 //// <SFCComp /**/ />
 
-goTo.marker();
-verify.completionListContains("x", "(property) x: number | boolean");
+verify.completions({ marker: "", exact: undefined });

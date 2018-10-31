@@ -47,8 +47,8 @@ var ele11 = strNumTuple[1]; // number
 >1 : 1
 
 var ele12 = strNumTuple[2]; // string | number
->ele12 : string | number
->strNumTuple[2] : string | number
+>ele12 : undefined
+>strNumTuple[2] : undefined
 >strNumTuple : [string, number]
 >2 : 2
 
@@ -83,8 +83,8 @@ var strNumTuple1 = numTupleTuple[1];  //[string, number];
 >1 : 1
 
 var ele17 = numTupleTuple[2]; // number | [string, number]
->ele17 : number | [string, number]
->numTupleTuple[2] : number | [string, number]
+>ele17 : undefined
+>numTupleTuple[2] : undefined
 >numTupleTuple : [number, [string, number]]
 >2 : 2
 
@@ -101,8 +101,8 @@ var eleUnion11 = unionTuple1[1]; // string | number
 >1 : 1
 
 var eleUnion12 = unionTuple1[2]; // string | number
->eleUnion12 : string | number
->unionTuple1[2] : string | number
+>eleUnion12 : undefined
+>unionTuple1[2] : undefined
 >unionTuple1 : [number, string | number]
 >2 : 2
 
@@ -143,8 +143,8 @@ var eleUnion21 = unionTuple2[1]; // string | number
 >1 : 1
 
 var eleUnion22 = unionTuple2[2]; // string | number | boolean
->eleUnion22 : string | number | boolean
->unionTuple2[2] : string | number | boolean
+>eleUnion22 : undefined
+>unionTuple2[2] : undefined
 >unionTuple2 : [boolean, string | number]
 >2 : 2
 

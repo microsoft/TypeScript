@@ -18,14 +18,4 @@
 ////    }
 ////}
 
-goTo.marker("1");
-verify.completionListContains("p");
-verify.completionListCount(1);
-
-goTo.marker("2");
-verify.completionListContains("p");
-verify.completionListCount(1);
-
-goTo.marker("2");
-verify.completionListContains("p");
-verify.completionListCount(1);
+verify.completions({ marker: ["1", "2", "3"], exact: "p" });

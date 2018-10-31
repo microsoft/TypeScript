@@ -5,4 +5,4 @@
 ////declare const x: { m?(): void };
 ////x./**/
 
-verify.completionsAt("", ["m"]);
+verify.completions({ marker: "", exact: "m" });

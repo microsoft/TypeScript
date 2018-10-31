@@ -8,5 +8,4 @@
 ////}
 ////var x1: I1<Deri/**/>;
 
-goTo.marker();
-verify.completionListContains("Derived");
+verify.completions({ marker: "", includes: "Derived" });

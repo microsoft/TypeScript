@@ -3,5 +3,4 @@
 ////var x = { a: 0 };
 ////with(x./*1*/
 
-goTo.marker('1');
-verify.completionListContains("a");
+verify.completions({ marker: "1", exact: "a" });

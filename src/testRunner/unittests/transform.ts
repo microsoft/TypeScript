@@ -40,6 +40,16 @@ namespace ts {
             return (file: SourceFile) => file;
         }
 
+        function replaceIdentifiersNamedOldNameWithNewName2(context: TransformationContext) {
+            const visitor: Visitor = (node) => {
+                if (isIdentifier(node) && node.text === "oldName") {
+                    return createIdentifier("newName");
+                }
+                return visitEachChild(node, visitor, context);
+            };
+            return (node: SourceFile) => visitNode(node, visitor);
+        }
+
         function transformSourceFile(sourceText: string, transformers: TransformerFactory<SourceFile>[]) {
             const transformed = transform(createSourceFile("source.ts", sourceText, ScriptTarget.ES2015), transformers);
             const printer = createPrinter({ newLine: NewLineKind.CarriageReturnLineFeed }, {
@@ -77,6 +87,18 @@ namespace ts {
                 },
                 compilerOptions: {
                     newLine: NewLineKind.CarriageReturnLineFeed
+                }
+            }).outputText;
+        });
+
+        testBaseline("issue27854", () => {
+            return transpileModule(`oldName<{ a: string; }>\` ... \`;`, {
+                transformers: {
+                    before: [replaceIdentifiersNamedOldNameWithNewName2]
+                },
+                compilerOptions: {
+                    newLine: NewLineKind.CarriageReturnLineFeed,
+                    target: ScriptTarget.Latest
                 }
             }).outputText;
         });

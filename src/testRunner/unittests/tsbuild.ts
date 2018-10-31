@@ -276,6 +276,10 @@ export class cNew {}`);
 
             function verifyProjectWithResolveJsonModule(configFile: string, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
                 const fs = projFs.shadow();
+                verifyProjectWithResolveJsonModuleWithFs(fs, configFile, allExpectedOutputs, ...expectedDiagnosticMessages);
+            }
+
+            function verifyProjectWithResolveJsonModuleWithFs(fs: vfs.FileSystem, configFile: string, allExpectedOutputs: ReadonlyArray<string>, ...expectedDiagnosticMessages: DiagnosticMessage[]) {
                 const host = new fakes.SolutionBuilderHost(fs);
                 const builder = createSolutionBuilder(host, [configFile], { dry: false, force: false, verbose: false });
                 builder.buildAllProjects();
@@ -290,6 +294,21 @@ export class cNew {}`);
 
             it("with resolveJsonModule and include only", () => {
                 verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withInclude.json", Diagnostics.File_0_is_not_in_project_file_list_Projects_must_list_all_files_or_use_an_include_pattern);
+            });
+
+            it("with resolveJsonModule and include of *.json along with other include", () => {
+                verifyProjectWithResolveJsonModule("/src/tests/tsconfig_withIncludeOfJson.json");
+            });
+
+            it("with resolveJsonModule and include of *.json along with other include and file name matches ts file", () => {
+                const fs = projFs.shadow();
+                fs.rimrafSync("/src/tests/src/hello.json");
+                fs.writeFileSync("/src/tests/src/index.json", JSON.stringify({ hello: "world" }));
+                fs.writeFileSync("/src/tests/src/index.ts", `import hello from "./index.json"
+
+export default hello.hello`);
+                const allExpectedOutputs = ["/src/tests/dist/src/index.js", "/src/tests/dist/src/index.d.ts", "/src/tests/dist/src/index.json"];
+                verifyProjectWithResolveJsonModuleWithFs(fs, "/src/tests/tsconfig_withIncludeOfJson.json", allExpectedOutputs);
             });
 
             it("with resolveJsonModule and files containing json file", () => {
@@ -321,16 +340,6 @@ export class cNew {}`);
                     "/src/tests/index.ts"
                 ]);
 
-                function getLibs() {
-                    return [
-                        "/lib/lib.d.ts",
-                        "/lib/lib.es5.d.ts",
-                        "/lib/lib.dom.d.ts",
-                        "/lib/lib.webworker.importscripts.d.ts",
-                        "/lib/lib.scripthost.d.ts"
-                    ];
-                }
-
                 function getCoreOutputs() {
                     return [
                         "/src/core/index.d.ts",
@@ -347,8 +356,10 @@ export class cNew {}`);
                 assert.deepEqual(host.traces, [
                     "TSFILE: /src/core/anotherModule.js",
                     "TSFILE: /src/core/anotherModule.d.ts",
+                    "TSFILE: /src/core/anotherModule.d.ts.map",
                     "TSFILE: /src/core/index.js",
                     "TSFILE: /src/core/index.d.ts",
+                    "TSFILE: /src/core/index.d.ts.map",
                     "TSFILE: /src/logic/index.js",
                     "TSFILE: /src/logic/index.js.map",
                     "TSFILE: /src/logic/index.d.ts",
@@ -374,6 +385,74 @@ export class cNew {}`);
                 for (const output of allExpectedOutputs) {
                     assert(fs.existsSync(output), `Expect file ${output} to exist`);
                 }
+            });
+        });
+
+        describe("tsbuild - when project reference is referenced transitively", () => {
+            const projFs = loadProjectFromDisk("tests/projects/transitiveReferences");
+            const allExpectedOutputs = [
+                "/src/a.js", "/src/a.d.ts",
+                "/src/b.js", "/src/b.d.ts",
+                "/src/c.js"
+            ];
+            const expectedFileTraces = [
+                ...getLibs(),
+                "/src/a.ts",
+                ...getLibs(),
+                "/src/a.d.ts",
+                "/src/b.ts",
+                ...getLibs(),
+                "/src/a.d.ts",
+                "/src/b.d.ts",
+                "/src/refs/a.d.ts",
+                "/src/c.ts"
+            ];
+
+            function verifyBuild(modifyDiskLayout: (fs: vfs.FileSystem) => void, allExpectedOutputs: ReadonlyArray<string>, expectedDiagnostics: DiagnosticMessage[], expectedFileTraces: ReadonlyArray<string>) {
+                const fs = projFs.shadow();
+                const host = new fakes.SolutionBuilderHost(fs);
+                modifyDiskLayout(fs);
+                const builder = createSolutionBuilder(host, ["/src/tsconfig.c.json"], { listFiles: true });
+                builder.buildAllProjects();
+                host.assertDiagnosticMessages(...expectedDiagnostics);
+                for (const output of allExpectedOutputs) {
+                    assert(fs.existsSync(output), `Expect file ${output} to exist`);
+                }
+                assert.deepEqual(host.traces, expectedFileTraces);
+            }
+
+            function modifyFsBTsToNonRelativeImport(fs: vfs.FileSystem, moduleResolution: "node" | "classic") {
+                fs.writeFileSync("/src/b.ts", `import {A} from 'a';
+export const b = new A();`);
+                fs.writeFileSync("/src/tsconfig.b.json", JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        moduleResolution
+                    },
+                    files: ["b.ts"],
+                    references: [{ path: "tsconfig.a.json" }]
+                }));
+            }
+
+            it("verify that it builds correctly", () => {
+                verifyBuild(noop, allExpectedOutputs, emptyArray, expectedFileTraces);
+            });
+
+            it("verify that it builds correctly when the referenced project uses different module resolution", () => {
+                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "classic"), allExpectedOutputs, emptyArray, expectedFileTraces);
+            });
+
+            it("verify that it build reports error about module not found with node resolution with external module name", () => {
+                // Error in b build only a
+                const allExpectedOutputs = ["/src/a.js", "/src/a.d.ts"];
+                const expectedFileTraces = [
+                    ...getLibs(),
+                    "/src/a.ts",
+                ];
+                verifyBuild(fs => modifyFsBTsToNonRelativeImport(fs, "node"),
+                    allExpectedOutputs,
+                    [Diagnostics.Cannot_find_module_0],
+                    expectedFileTraces);
             });
         });
     }
@@ -583,5 +662,15 @@ export class cNew {}`);
         });
         fs.makeReadonly();
         return fs;
+    }
+
+    function getLibs() {
+        return [
+            "/lib/lib.d.ts",
+            "/lib/lib.es5.d.ts",
+            "/lib/lib.dom.d.ts",
+            "/lib/lib.webworker.importscripts.d.ts",
+            "/lib/lib.scripthost.d.ts"
+        ];
     }
 }

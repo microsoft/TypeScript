@@ -1,0 +1,17 @@
+=== tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts ===
+type Test<T extends string = T> = { value: T };
+>Test : Test<T>
+>value : T
+
+let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
+>zz : Test<string>
+>{ foo: "abc" } : { foo: string; }
+>foo : string
+>"abc" : "abc"
+
+let zzy: Test = { value: {} };  // should error
+>zzy : Test<string>
+>{ value: {} } : { value: {}; }
+>value : {}
+>{} : {}
+

@@ -9,6 +9,7 @@
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",
+    index: 2,
    newFileContent:
 `
 /** @param {Object<string, boolean>} sb

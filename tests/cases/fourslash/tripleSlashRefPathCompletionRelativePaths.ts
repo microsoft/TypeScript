@@ -32,15 +32,17 @@
 //// /// <reference path="d3/d4//*10*/
 //// /// <reference path="./d3/d4//*11*/
 
-// working dir completions
-verify.completionsAt(["0", "1", "4"], ["h.ts", "d3"], { isNewIdentifierLocation: true });
-verify.completionsAt("2", ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[0] })), { isNewIdentifierLocation: true });
-verify.completionsAt("3", ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[1] })), { isNewIdentifierLocation: true });
+verify.completions(
+    // working dir completions
+    { marker: ["0", "1", "4"], exact: ["h.ts", "d3"], isNewIdentifierLocation: true },
+    { marker: "2", exact: ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[0] })), isNewIdentifierLocation: true },
+    { marker: "3", exact: ["h.ts", "d3"].map(name => ({ name, replacementSpan: test.ranges()[1] })), isNewIdentifierLocation: true },
 
-// parent dir completions
-verify.completionsAt(["5", "6"], ["g.ts", "d2"], { isNewIdentifierLocation: true });
-verify.completionsAt("7", ["f.ts", "d1"], { isNewIdentifierLocation: true });
+    // parent dir completions
+    { marker: ["5", "6"], exact: ["g.ts", "d2"], isNewIdentifierLocation: true },
+    { marker: "7", exact: ["f.ts", "d1"], isNewIdentifierLocation: true },
 
-// child dir completions
-verify.completionsAt(["8", "9"], ["i.ts", "d4"], { isNewIdentifierLocation: true });
-verify.completionsAt(["10", "11"], ["j.ts"], { isNewIdentifierLocation: true });
+    // child dir completions
+    { marker: ["8", "9"], exact: ["i.ts", "d4"], isNewIdentifierLocation: true },
+    { marker: ["10", "11"], exact: "j.ts", isNewIdentifierLocation: true },
+);

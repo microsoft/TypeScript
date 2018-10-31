@@ -11,4 +11,4 @@
 
 ////var a2, a/*varName4*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });

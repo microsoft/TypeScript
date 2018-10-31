@@ -2,6 +2,8 @@
 class A {
     x() {
     }
+    y() {
+    }
 }
 
 class B extends A {
@@ -9,6 +11,8 @@ class B extends A {
     async simple() {
         // call with property access
         super.x();
+        // call additional property.
+        super.y();
 
         // call with element access
         super["x"]();
@@ -50,9 +54,12 @@ class B extends A {
     }
 }
 
+
 //// [asyncMethodWithSuper_es2017.js]
 class A {
     x() {
+    }
+    y() {
     }
 }
 class B extends A {
@@ -60,6 +67,8 @@ class B extends A {
     async simple() {
         // call with property access
         super.x();
+        // call additional property.
+        super.y();
         // call with element access
         super["x"]();
         // property access (read)

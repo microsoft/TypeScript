@@ -1,7 +1,7 @@
 namespace ts {
     // WARNING: The script `configureNightly.ts` uses a regexp to parse out these values.
     // If changing the text in this section, be sure to test `configureNightly` too.
-    export const versionMajorMinor = "3.1";
+    export const versionMajorMinor = "3.2";
     /** The version of the TypeScript compiler release */
     export const version = `${versionMajorMinor}.0-dev`;
 }
@@ -14,6 +14,10 @@ namespace ts {
      */
     export interface MapLike<T> {
         [index: string]: T;
+    }
+
+    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
+        " __sortedArrayBrand": any;
     }
 
     export interface SortedArray<T> extends Array<T> {
@@ -511,12 +515,27 @@ namespace ts {
      * @param array The array to map.
      * @param mapfn The callback used to map the result into one or more values.
      */
-    export function flatMap<T, U>(array: ReadonlyArray<T>, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[];
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined;
-    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] | undefined {
+    export function flatMap<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): ReadonlyArray<U> {
         let result: U[] | undefined;
         if (array) {
-            result = [];
+            for (let i = 0; i < array.length; i++) {
+                const v = mapfn(array[i], i);
+                if (v) {
+                    if (isArray(v)) {
+                        result = addRange(result, v);
+                    }
+                    else {
+                        result = append(result, v);
+                    }
+                }
+            }
+        }
+        return result || emptyArray;
+    }
+
+    export function flatMapToMutable<T, U>(array: ReadonlyArray<T> | undefined, mapfn: (x: T, i: number) => U | ReadonlyArray<U> | undefined): U[] {
+        const result: U[] = [];
+        if (array) {
             for (let i = 0; i < array.length; i++) {
                 const v = mapfn(array[i], i);
                 if (v) {
@@ -800,8 +819,8 @@ namespace ts {
     /**
      * Deduplicates an array that has already been sorted.
      */
-    function deduplicateSorted<T>(array: ReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): T[] {
-        if (array.length === 0) return [];
+    function deduplicateSorted<T>(array: SortedReadonlyArray<T>, comparer: EqualityComparer<T> | Comparer<T>): SortedReadonlyArray<T> {
+        if (array.length === 0) return emptyArray as any as SortedReadonlyArray<T>;
 
         let last = array[0];
         const deduplicated: T[] = [last];
@@ -823,7 +842,7 @@ namespace ts {
             deduplicated.push(last = next);
         }
 
-        return deduplicated;
+        return deduplicated as any as SortedReadonlyArray<T>;
     }
 
     export function insertSorted<T>(array: SortedArray<T>, insert: T, compare: Comparer<T>): void {
@@ -838,8 +857,10 @@ namespace ts {
         }
     }
 
-    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>) {
-        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer);
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<string>): SortedReadonlyArray<string>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T>;
+    export function sortAndDeduplicate<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>, equalityComparer?: EqualityComparer<T>): SortedReadonlyArray<T> {
+        return deduplicateSorted(sort(array, comparer), equalityComparer || comparer || compareStringsCaseSensitive as any as Comparer<T>);
     }
 
     export function arrayIsEqualTo<T>(array1: ReadonlyArray<T> | undefined, array2: ReadonlyArray<T> | undefined, equalityComparer: (a: T, b: T, index: number) => boolean = equateValues): boolean {
@@ -1020,8 +1041,8 @@ namespace ts {
     /**
      * Returns a new sorted array.
      */
-    export function sort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): T[] {
-        return array.slice().sort(comparer);
+    export function sort<T>(array: ReadonlyArray<T>, comparer?: Comparer<T>): SortedReadonlyArray<T> {
+        return (array.length === 0 ? array : array.slice().sort(comparer)) as SortedReadonlyArray<T>;
     }
 
     export function arrayIterator<T>(array: ReadonlyArray<T>): Iterator<T> {
@@ -1602,8 +1623,9 @@ namespace ts {
             return value;
         }
 
-        export function assertNever(member: never, message?: string, stackCrawlMark?: AnyFunction): never {
-            return fail(message || `Illegal value: ${member}`, stackCrawlMark || assertNever);
+        export function assertNever(member: never, message = "Illegal value:", stackCrawlMark?: AnyFunction): never {
+            const detail = "kind" in member && "pos" in member ? "SyntaxKind: " + showSyntaxKind(member as Node) : JSON.stringify(member);
+            return fail(`${message} ${detail}`, stackCrawlMark || assertNever);
         }
 
         export function getFunctionName(func: AnyFunction) {

@@ -23,6 +23,7 @@ x; y;`,
 export const x = 0;
 a;
 export const y = 1;
-b;`,
+b;
+`,
     },
 });

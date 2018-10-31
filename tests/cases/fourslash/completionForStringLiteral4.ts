@@ -17,7 +17,4 @@ goTo.marker('1');
 verify.quickInfoExists();
 verify.quickInfoIs('function f(p1: "literal", p2: "literal", p3: "other1" | "other2", p4: number | "literal", p5: true | 12): string', 'I am documentation');
 
-goTo.marker('2');
-verify.completionListContains("other1");
-verify.completionListContains("other2");
-verify.completionListCount(2);
+verify.completions({ marker: "2", exact: ["other1", "other2"] });

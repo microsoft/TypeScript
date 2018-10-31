@@ -7,6 +7,4 @@
 
 goTo.eof();
 edit.insert('t.');
-verify.completionListContains('x');
-verify.completionListContains('y');
-verify.not.completionListContains('z');
+verify.completions({ includes: ["x", "y"], excludes: "z" });

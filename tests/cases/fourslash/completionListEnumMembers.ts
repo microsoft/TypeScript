@@ -9,16 +9,7 @@
 ////var t :Foo./*typeReference*/ba;
 ////Foo.bar./*enumValueReference*/;
 
-goTo.marker('valueReference');
-verify.completionListContains("bar");
-verify.completionListContains("baz");
-verify.completionListCount(2);
-
-
-goTo.marker('typeReference');
-verify.completionListCount(2);
-
-goTo.marker('enumValueReference');
-verify.completionListContains("toString");
-verify.completionListContains("toFixed");
-verify.completionListCount(6);
+verify.completions(
+    { marker: ["valueReference", "typeReference"], exact: ["bar", "baz"] },
+    { marker: "enumValueReference", exact: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] },
+);

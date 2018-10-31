@@ -1,3 +1,6 @@
+// @lib: es2015
+// @traceResolution: true
+
 // JSDoc typedef tags are not bound TypeScript files.
 /** @typedef {function} T */
 declare const x: T;
@@ -50,3 +53,7 @@ const obj = { foo: (a, b) => a + b };
 /** @enum {string} */
 var E = {};
 E[""];
+
+// make sure import types in JSDoc are not resolved
+/** @type {import("should-not-be-resolved").Type} */
+var v = import(String());

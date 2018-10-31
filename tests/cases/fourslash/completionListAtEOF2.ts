@@ -8,4 +8,4 @@
 ////var p = <Shapes.
 
 goTo.eof();
-verify.completionListContains("Point");
+verify.completions({ exact: "Point" });

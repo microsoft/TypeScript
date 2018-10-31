@@ -15,8 +15,11 @@
 goTo.file('consumer.js');
 goTo.marker();
 edit.insert('.');
-verify.completionListContains("n", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("s", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("b", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
+verify.completions({
+    exact: [
+        ...["n", "s", "b"].map(name => ({ name, kind: "property" })),
+        ...["x", "require"].map(name => ({ name, kind: "warning" })),
+    ],
+});
 edit.insert('n.');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

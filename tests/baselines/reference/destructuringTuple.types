@@ -1,0 +1,22 @@
+=== tests/cases/compiler/destructuringTuple.ts ===
+declare var tuple: [boolean, number, ...string[]];
+>tuple : [boolean, number, ...string[]]
+
+const [a, b, c, ...rest] = tuple;
+>a : boolean
+>b : number
+>c : string
+>rest : string[]
+>tuple : [boolean, number, ...string[]]
+
+declare var receiver: typeof tuple;
+>receiver : [boolean, number, ...string[]]
+>tuple : [boolean, number, ...string[]]
+
+[...receiver] = tuple;
+>[...receiver] = tuple : [boolean, number, ...string[]]
+>[...receiver] : (string | number | boolean)[]
+>...receiver : string | number | boolean
+>receiver : [boolean, number, ...string[]]
+>tuple : [boolean, number, ...string[]]
+
