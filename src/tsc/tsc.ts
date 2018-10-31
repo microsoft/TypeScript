@@ -147,6 +147,11 @@ namespace ts {
             }
         }
         else {
+            if (commandLineOptions.showConfig) {
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(commandLine, combinePaths(sys.getCurrentDirectory(), "tsconfig.json"), sys), null, 4) + sys.newLine);
+                return sys.exit(ExitStatus.Success);
+            }
             updateReportDiagnostic(commandLineOptions);
             if (isWatchSet(commandLineOptions)) {
                 reportWatchModeWithoutSysSupport();
