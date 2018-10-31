@@ -2401,6 +2401,7 @@ namespace ts.server.protocol {
      */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+        event: DiagnosticEventKind;
     }
 
     export interface ConfigFileDiagnosticEventBody {
@@ -2519,6 +2520,9 @@ namespace ts.server.protocol {
          */
         maxFileSize: number;
     }
+
+    export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
+        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.

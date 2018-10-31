@@ -330,17 +330,44 @@ namespace ts.projectSystem {
         return new TestSession({ ...sessionOptions, ...opts });
     }
 
-    function createSessionWithEventTracking<T extends server.ProjectServiceEvent, U extends server.ProjectServiceEvent = T>(host: server.ServerHost, eventName: T["eventName"], eventName2?: U["eventName"]) {
-        const events: (T | U)[] = [];
+    function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
+        const events: T[] = [];
         const session = createSession(host, {
             eventHandler: e => {
-                if (e.eventName === eventName || (eventName2 && e.eventName === eventName2)) {
-                    events.push(e as T | U);
+                if (e.eventName === eventName || eventNames.some(eventName => e.eventName === eventName)) {
+                    events.push(e as T);
                 }
             }
         });
 
         return { session, events };
+    }
+
+    function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventName: T["event"], opts: Partial<server.SessionOptions> = {}, ...eventNames: T["event"][]) {
+        const session = createSession(host, { canUseEvents: true, ...opts });
+
+        return {
+            session,
+            getEvents,
+            clearEvents
+        };
+
+        function getEvents() {
+            const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
+            return filter(
+                map(
+                    host.getOutput(), s => convertToObject(
+                        parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                        []
+                    )
+                ),
+                e => e.event === eventName || eventNames.some(eventName => e.event === eventName)
+            ) as T[];
+        }
+
+        function clearEvents() {
+            session.clearMessages();
+        }
     }
 
     interface CreateProjectServiceParameters {
@@ -8062,15 +8089,7 @@ namespace ts.projectSystem {
             verifyProjectsUpdatedInBackgroundEvent(createSessionWithProjectChangedEventHandler);
 
             function createSessionWithProjectChangedEventHandler(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-                const projectChangedEvents: server.ProjectsUpdatedInBackgroundEvent[] = [];
-                const session = createSession(host, {
-                    eventHandler: e => {
-                        if (e.eventName === server.ProjectsUpdatedInBackgroundEvent) {
-                            projectChangedEvents.push(e);
-                        }
-                    }
-                });
-
+                const { session, events: projectChangedEvents } = createSessionWithEventTracking<server.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent);
                 return {
                     session,
                     verifyProjectsUpdatedInBackgroundEventHandler,
@@ -8110,7 +8129,7 @@ namespace ts.projectSystem {
 
 
             function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-                const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate });
+                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent, { noGetErrOnBackgroundUpdate });
 
                 return {
                     session,
@@ -8124,16 +8143,7 @@ namespace ts.projectSystem {
                             openFiles: e.data.openFiles
                         };
                     });
-                    const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
-                    const events: protocol.ProjectsUpdatedInBackgroundEvent[] = filter(
-                        map(
-                            host.getOutput(), s => convertToObject(
-                                parseJsonText("json.json", s.replace(outputEventRegex, "")),
-                                []
-                            )
-                        ),
-                        e => e.event === server.ProjectsUpdatedInBackgroundEvent
-                    );
+                    const events = getEvents();
                     assert.equal(events.length, expectedEvents.length, `Incorrect number of events Actual: ${map(events, e => e.body)} Expected: ${expectedEvents}`);
                     forEach(events, (actualEvent, i) => {
                         const expectedEvent = expectedEvents[i];
@@ -8141,7 +8151,7 @@ namespace ts.projectSystem {
                     });
 
                     // Verified the events, reset them
-                    session.clearMessages();
+                    clearEvents();
 
                     if (events.length) {
                         host.checkTimeoutQueueLength(noGetErrOnBackgroundUpdate ? 0 : 1); // Error checking queued only if not noGetErrOnBackgroundUpdate
@@ -9467,7 +9477,7 @@ export const x = 10;`
                 }
                 return originalReadFile.call(host, file);
             };
-            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent | server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
             const service = session.getProjectService();
             return { host, session, verifyEvent, verifyEventWithOpenTs, service, events };
 
