@@ -1,0 +1,69 @@
+tests/cases/conformance/jsdoc/b.js(5,7): error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+tests/cases/conformance/jsdoc/b.js(15,7): error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+
+
+==== tests/cases/conformance/jsdoc/a.js (0 errors) ====
+    /**
+     * @typedef {number}
+     */
+    export var numdef;
+    
+    /**
+     * @typedef {string} strdef
+     */
+    var this_is_not_the_name = true;
+    
+    
+    /**
+     * @param {numdef} p1
+     * @param {strdef} p2
+     */
+    function func1(p1, p2) {}
+    
+    /**
+     * @param {strdef} p1
+     * @param {numdef} p2
+     */
+    export function func2(p1, p2) {}
+    
+    
+==== tests/cases/conformance/jsdoc/b.js (2 errors) ====
+    import { func2, strdef } from './a';
+    import * as mod from './a';
+    
+    func2("123", 123);
+    func2(123, "123");  // should fail
+          ~~~
+!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+    
+    
+    /**
+     * @param {strdef} p1
+     * @param {mod.numdef} p2
+     */
+    function func3(p1, p2) {}
+    
+    func3("123", 123);
+    func3(123, {});  // should fail
+          ~~~
+!!! error TS2345: Argument of type '123' is not assignable to parameter of type 'string'.
+    
+    /**
+     * @typedef {{ a: string, b: number, c: strdef, d: mod.numdef }}
+     */
+    let objdef;
+    
+    export {
+      objdef
+    };
+    
+    
+==== tests/cases/conformance/jsdoc/c.js (0 errors) ====
+    import { objdef } from './b';
+    
+    /**
+     * @param {objdef} p1
+     */
+    function func4(p1) {}
+    func4({a: 'a', b: 0, c: 'c', d: 1});
+    

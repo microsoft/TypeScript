@@ -1,0 +1,113 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @typedef {number}
+ */
+export var numdef;
+>numdef : number
+
+/**
+ * @typedef {string} strdef
+ */
+var this_is_not_the_name = true;
+>this_is_not_the_name : boolean
+>true : true
+
+
+/**
+ * @param {numdef} p1
+ * @param {strdef} p2
+ */
+function func1(p1, p2) {}
+>func1 : (p1: number, p2: string) => void
+>p1 : number
+>p2 : string
+
+/**
+ * @param {strdef} p1
+ * @param {numdef} p2
+ */
+export function func2(p1, p2) {}
+>func2 : (p1: string, p2: number) => void
+>p1 : string
+>p2 : number
+
+
+=== tests/cases/conformance/jsdoc/b.js ===
+import { func2, strdef } from './a';
+>func2 : (p1: string, p2: number) => void
+>strdef : any
+
+import * as mod from './a';
+>mod : typeof mod
+
+func2("123", 123);
+>func2("123", 123) : void
+>func2 : (p1: string, p2: number) => void
+>"123" : "123"
+>123 : 123
+
+func2(123, "123");  // should fail
+>func2(123, "123") : void
+>func2 : (p1: string, p2: number) => void
+>123 : 123
+>"123" : "123"
+
+
+/**
+ * @param {strdef} p1
+ * @param {mod.numdef} p2
+ */
+function func3(p1, p2) {}
+>func3 : (p1: string, p2: number) => void
+>p1 : string
+>p2 : number
+
+func3("123", 123);
+>func3("123", 123) : void
+>func3 : (p1: string, p2: number) => void
+>"123" : "123"
+>123 : 123
+
+func3(123, {});  // should fail
+>func3(123, {}) : void
+>func3 : (p1: string, p2: number) => void
+>123 : 123
+>{} : {}
+
+/**
+ * @typedef {{ a: string, b: number, c: strdef, d: mod.numdef }}
+ */
+let objdef;
+>objdef : { a: string; b: number; c: string; d: number; }
+
+export {
+  objdef
+>objdef : { a: string; b: number; c: string; d: number; }
+
+};
+
+
+=== tests/cases/conformance/jsdoc/c.js ===
+import { objdef } from './b';
+>objdef : any
+
+/**
+ * @param {objdef} p1
+ */
+function func4(p1) {}
+>func4 : (p1: { a: string; b: number; c: string; d: number; }) => void
+>p1 : { a: string; b: number; c: string; d: number; }
+
+func4({a: 'a', b: 0, c: 'c', d: 1});
+>func4({a: 'a', b: 0, c: 'c', d: 1}) : void
+>func4 : (p1: { a: string; b: number; c: string; d: number; }) => void
+>{a: 'a', b: 0, c: 'c', d: 1} : { a: string; b: number; c: string; d: number; }
+>a : string
+>'a' : "a"
+>b : number
+>0 : 0
+>c : string
+>'c' : "c"
+>d : number
+>1 : 1
+

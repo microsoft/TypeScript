@@ -1,0 +1,94 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @typedef {number}
+ */
+export var numdef;
+>numdef : Symbol(numdef, Decl(a.js, 3, 10), Decl(a.js, 1, 3))
+
+/**
+ * @typedef {string} strdef
+ */
+var this_is_not_the_name = true;
+>this_is_not_the_name : Symbol(this_is_not_the_name, Decl(a.js, 8, 3))
+
+
+/**
+ * @param {numdef} p1
+ * @param {strdef} p2
+ */
+function func1(p1, p2) {}
+>func1 : Symbol(func1, Decl(a.js, 8, 32))
+>p1 : Symbol(p1, Decl(a.js, 15, 15))
+>p2 : Symbol(p2, Decl(a.js, 15, 18))
+
+/**
+ * @param {strdef} p1
+ * @param {numdef} p2
+ */
+export function func2(p1, p2) {}
+>func2 : Symbol(func2, Decl(a.js, 15, 25))
+>p1 : Symbol(p1, Decl(a.js, 21, 22))
+>p2 : Symbol(p2, Decl(a.js, 21, 25))
+
+
+=== tests/cases/conformance/jsdoc/b.js ===
+import { func2, strdef } from './a';
+>func2 : Symbol(func2, Decl(b.js, 0, 8))
+>strdef : Symbol(strdef, Decl(b.js, 0, 15))
+
+import * as mod from './a';
+>mod : Symbol(mod, Decl(b.js, 1, 6))
+
+func2("123", 123);
+>func2 : Symbol(func2, Decl(b.js, 0, 8))
+
+func2(123, "123");  // should fail
+>func2 : Symbol(func2, Decl(b.js, 0, 8))
+
+
+/**
+ * @param {strdef} p1
+ * @param {mod.numdef} p2
+ */
+function func3(p1, p2) {}
+>func3 : Symbol(func3, Decl(b.js, 4, 18))
+>p1 : Symbol(p1, Decl(b.js, 11, 15))
+>p2 : Symbol(p2, Decl(b.js, 11, 18))
+
+func3("123", 123);
+>func3 : Symbol(func3, Decl(b.js, 4, 18))
+
+func3(123, {});  // should fail
+>func3 : Symbol(func3, Decl(b.js, 4, 18))
+
+/**
+ * @typedef {{ a: string, b: number, c: strdef, d: mod.numdef }}
+ */
+let objdef;
+>objdef : Symbol(objdef, Decl(b.js, 19, 3), Decl(b.js, 17, 3))
+
+export {
+  objdef
+>objdef : Symbol(objdef, Decl(b.js, 21, 8), Decl(b.js, 17, 3))
+
+};
+
+
+=== tests/cases/conformance/jsdoc/c.js ===
+import { objdef } from './b';
+>objdef : Symbol(objdef, Decl(c.js, 0, 8))
+
+/**
+ * @param {objdef} p1
+ */
+function func4(p1) {}
+>func4 : Symbol(func4, Decl(c.js, 0, 29))
+>p1 : Symbol(p1, Decl(c.js, 5, 15))
+
+func4({a: 'a', b: 0, c: 'c', d: 1});
+>func4 : Symbol(func4, Decl(c.js, 0, 29))
+>a : Symbol(a, Decl(c.js, 6, 7))
+>b : Symbol(b, Decl(c.js, 6, 14))
+>c : Symbol(c, Decl(c.js, 6, 20))
+>d : Symbol(d, Decl(c.js, 6, 28))
+
