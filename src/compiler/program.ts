@@ -694,12 +694,14 @@ namespace ts {
                 if (!resolvedProjectReferences) {
                     resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
                 }
-                for (const parsedRef of resolvedProjectReferences) {
-                    if (parsedRef) {
-                        const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
-                        if (out) {
-                            const dtsOutfile = changeExtension(out, ".d.ts");
-                            processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                if (rootNames.length) {
+                    for (const parsedRef of resolvedProjectReferences) {
+                        if (parsedRef) {
+                            const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
+                            if (out) {
+                                const dtsOutfile = changeExtension(out, ".d.ts");
+                                processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                            }
                         }
                     }
                 }
@@ -708,7 +710,7 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
-            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
+            const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
 
             if (typeReferences.length) {
                 // This containingFilename needs to match with the one used in managed-side
@@ -724,7 +726,7 @@ namespace ts {
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
-            if (!skipDefaultLib) {
+            if (rootNames.length && !skipDefaultLib) {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 const defaultLibraryFileName = getDefaultLibraryFileName();

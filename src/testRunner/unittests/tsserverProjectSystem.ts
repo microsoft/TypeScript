@@ -10520,6 +10520,8 @@ declare class TestLib {
                 }).response;
                 assert.deepEqual(semanticDiagnostics, []);
             });
+            const containerProject = service.configuredProjects.get(containerConfig.path)!;
+            checkProjectActualFiles(containerProject, [containerConfig.path]);
         });
     });
 
