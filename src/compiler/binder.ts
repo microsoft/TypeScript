@@ -240,12 +240,15 @@ namespace ts {
 
         function setValueDeclaration(symbol: Symbol, node: Declaration): void {
             const { valueDeclaration } = symbol;
-            if (!valueDeclaration ||
-                (isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node)) ||
+            if (!valueDeclaration || checkAssignmentDeclaration(valueDeclaration, node) ||
                 (valueDeclaration.kind !== node.kind && isEffectiveModuleDeclaration(valueDeclaration))) {
                 // other kinds of value declarations take precedence over modules and assignment declarations
                 symbol.valueDeclaration = node;
             }
+        }
+
+        function checkAssignmentDeclaration(valueDeclaration: Declaration, node: Declaration): boolean {
+            return isAssignmentDeclaration(valueDeclaration) && !isAssignmentDeclaration(node);
         }
 
         // Should not be called on a declaration with a computed property name,
