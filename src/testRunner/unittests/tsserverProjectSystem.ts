@@ -10521,7 +10521,12 @@ declare class TestLib {
                 assert.deepEqual(semanticDiagnostics, []);
             });
             const containerProject = service.configuredProjects.get(containerConfig.path)!;
-            checkProjectActualFiles(containerProject, [containerConfig.path]);
+            checkProjectActualFiles(containerProject, [containerConfig.path, libFile.path]);
+            const optionsDiagnostics = session.executeCommandSeq<protocol.CompilerOptionsDiagnosticsRequest>({
+                command: protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
+                arguments: { projectFileName: containerProject.projectName }
+            }).response;
+            assert.deepEqual(optionsDiagnostics, []);
         });
     });
 
