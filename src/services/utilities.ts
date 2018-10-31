@@ -1847,4 +1847,70 @@ namespace ts {
         if (idx === -1) idx = change.indexOf('"' + name);
         return idx === -1 ? -1 : idx + 1;
     }
+
+    export function getContextualTypeFromParent(node: Expression, checker: TypeChecker): Type | undefined {
+        const { parent } = node;
+        switch (parent.kind) {
+            case SyntaxKind.NewExpression:
+                return checker.getContextualType(parent as NewExpression);
+            case SyntaxKind.BinaryExpression: {
+                const { left, operatorToken, right } = parent as BinaryExpression;
+                return isEqualityOperatorKind(operatorToken.kind)
+                    ? checker.getTypeAtLocation(node === right ? left : right)
+                    : checker.getContextualType(node);
+            }
+            case SyntaxKind.CaseClause:
+                return (parent as CaseClause).expression === node ? getSwitchedType(parent as CaseClause, checker) : undefined;
+            default:
+                return checker.getContextualType(node);
+        }
+    }
+
+    export function quote(text: string, preferences: UserPreferences): string {
+        if (/^\d+$/.test(text)) {
+            return text;
+        }
+        const quoted = JSON.stringify(text);
+        switch (preferences.quotePreference) {
+            case undefined:
+            case "double":
+                return quoted;
+            case "single":
+                return `'${stripQuotes(quoted).replace("'", "\\'").replace('\\"', '"')}'`;
+            default:
+                return Debug.assertNever(preferences.quotePreference);
+        }
+    }
+
+    export function isEqualityOperatorKind(kind: SyntaxKind): kind is EqualityOperator {
+        switch (kind) {
+            case SyntaxKind.EqualsEqualsEqualsToken:
+            case SyntaxKind.EqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsEqualsToken:
+            case SyntaxKind.ExclamationEqualsToken:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function isStringLiteralOrTemplate(node: Node): node is StringLiteralLike | TemplateExpression | TaggedTemplateExpression {
+        switch (node.kind) {
+            case SyntaxKind.StringLiteral:
+            case SyntaxKind.NoSubstitutionTemplateLiteral:
+            case SyntaxKind.TemplateExpression:
+            case SyntaxKind.TaggedTemplateExpression:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function hasIndexSignature(type: Type): boolean {
+        return !!type.getStringIndexType() || !!type.getNumberIndexType();
+    }
+
+    export function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type | undefined {
+        return checker.getTypeAtLocation(caseClause.parent.parent.expression);
+    }
 }
