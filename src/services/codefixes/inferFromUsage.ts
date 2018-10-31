@@ -682,9 +682,6 @@ namespace ts.codefix {
         }
 
         function unifyAnonymousTypes(anons: AnonymousType[], checker: TypeChecker) {
-            if (anons.length === 0) {
-                return checker.getNeverType();
-            }
             if (anons.length === 1) {
                 return anons[0];
             }
