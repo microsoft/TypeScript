@@ -4720,5 +4720,21 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Convert arrow function or function expression": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Convert to anonymous function": {
+        "category": "Message",
+        "code": 95070
+    },
+    "Convert to named function": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Convert to arrow function": {
+        "category": "Message",
+        "code": 95072
     }
 }
