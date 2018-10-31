@@ -34,8 +34,10 @@ namespace ts.tscWatch {
         return () => watch.getCurrentProgram().getProgram();
     }
 
-    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}) {
-        const watch = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host));
+    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host);
+        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
+        const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
     }
 
@@ -2466,6 +2468,46 @@ declare module "fs" {
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [file.path, libFile.path, `${currentDirectory}/node_modules/@types/qqq/index.d.ts`]);
             checkOutputErrorsIncremental(host, emptyArray);
+        });
+
+        describe("ignores files/folder changes in node_modules that start with '.'", () => {
+            const projectPath = "/user/username/projects/project";
+            const npmCacheFile: File = {
+                path: `${projectPath}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                content: JSON.stringify({ something: 10 })
+            };
+            const file1: File = {
+                path: `${projectPath}/test.ts`,
+                content: `import { x } from "somemodule";`
+            };
+            const file2: File = {
+                path: `${projectPath}/node_modules/somemodule/index.d.ts`,
+                content: `export const x = 10;`
+            };
+            const files = [libFile, file1, file2];
+            const expectedFiles = files.map(f => f.path);
+            it("when watching node_modules in inferred project for failed lookup", () => {
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfFilesAndCompilerOptions([file1.path], host, {}, /*maxNumberOfFilesToIterateForInvalidation*/ 1);
+                checkProgramActualFiles(watch(), expectedFiles);
+                host.checkTimeoutQueueLength(0);
+
+                host.ensureFileOrFolder(npmCacheFile);
+                host.checkTimeoutQueueLength(0);
+            });
+            it("when watching node_modules as part of wild card directories in config project", () => {
+                const config: File = {
+                    path: `${projectPath}/tsconfig.json`,
+                    content: "{}"
+                };
+                const host = createWatchedSystem(files.concat(config));
+                const watch = createWatchOfConfigFile(config.path, host);
+                checkProgramActualFiles(watch(), expectedFiles);
+                host.checkTimeoutQueueLength(0);
+
+                host.ensureFileOrFolder(npmCacheFile);
+                host.checkTimeoutQueueLength(0);
+            });
         });
     });
 

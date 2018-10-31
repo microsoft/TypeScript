@@ -71,6 +71,10 @@ namespace ts {
         nonRecursive?: boolean;
     }
 
+    export function isPathInNodeModulesStartingWithDot(path: Path) {
+        return stringContains(path, "/node_modules/.");
+    }
+
     export const maxNumberOfFilesToIterateForInvalidation = 256;
 
     type GetResolutionWithResolvedFileName<T extends ResolutionWithFailedLookupLocations = ResolutionWithFailedLookupLocations, R extends ResolutionWithResolvedFileName = ResolutionWithResolvedFileName> =
@@ -691,6 +695,9 @@ namespace ts {
                 isChangedFailedLookupLocation = location => isInDirectoryPath(fileOrDirectoryPath, resolutionHost.toPath(location));
             }
             else {
+                // If something to do with folder/file starting with "." in node_modules folder, skip it
+                if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return false;
+
                 // Some file or directory in the watching directory is created
                 // Return early if it does not have any of the watching extension or not the custom failed lookup path
                 const dirOfFileOrDirectory = getDirectoryPath(fileOrDirectoryPath);

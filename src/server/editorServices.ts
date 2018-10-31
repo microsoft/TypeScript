@@ -964,6 +964,7 @@ namespace ts.server {
                 fileOrDirectory => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
                     project.getCachedDirectoryStructureHost().addOrDeleteFileOrDirectory(fileOrDirectory, fileOrDirectoryPath);
+                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
                     const configFilename = project.getConfigFilePath();
 
                     // If the the added or created file or directory is not supported file name, ignore the file
@@ -2042,6 +2043,8 @@ namespace ts.server {
                 watchDir,
                 (fileOrDirectory) => {
                     const fileOrDirectoryPath = this.toPath(fileOrDirectory);
+                    if (isPathInNodeModulesStartingWithDot(fileOrDirectoryPath)) return;
+
                     // Has extension
                     Debug.assert(result.refCount > 0);
                     if (watchDir === fileOrDirectoryPath) {
