@@ -3286,6 +3286,8 @@ declare namespace ts {
     function getJSDocTags(node: Node): ReadonlyArray<JSDocTag>;
     /** Gets all JSDoc tags of a specified kind, or undefined if not present. */
     function getAllJSDocTagsOfKind(node: Node, kind: SyntaxKind): ReadonlyArray<JSDocTag>;
+    /** Gets the nameless JSDoc typedef tag for the node if present */
+    function getJSDocNamelessTypedefTag(node: Node): JSDocTypedefTag | undefined;
     /**
      * Gets the effective type parameters. If the node was parsed in a
      * JavaScript file, gets the type parameters from the `@template` tag from JSDoc.
@@ -3460,6 +3462,7 @@ declare namespace ts {
     function isJSDocTypeLiteral(node: Node): node is JSDocTypeLiteral;
     function isJSDocCallbackTag(node: Node): node is JSDocCallbackTag;
     function isJSDocSignature(node: Node): node is JSDocSignature;
+    function isNamelessJSDocTypeDef(node: Node): boolean;
 }
 declare namespace ts {
     /**

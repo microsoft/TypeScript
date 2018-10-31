@@ -4796,6 +4796,10 @@ namespace ts {
                 return addOptionality(declaredType, isOptional);
             }
 
+            if (isNamelessJSDocTypeDef(declaration)) {
+                return getDeclaredTypeOfTypeAlias(getSymbolOfNode(declaration));
+            }
+
             if ((noImplicitAny || isInJSFile(declaration)) &&
                 declaration.kind === SyntaxKind.VariableDeclaration && !isBindingPattern(declaration.name) &&
                 !(getCombinedModifierFlags(declaration) & ModifierFlags.Export) && !(declaration.flags & NodeFlags.Ambient)) {
@@ -5910,8 +5914,10 @@ namespace ts {
                     return errorType;
                 }
 
-                const declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
+                let declaration = <JSDocTypedefTag | JSDocCallbackTag | TypeAliasDeclaration>find(symbol.declarations, d =>
                     isJSDocTypeAlias(d) || d.kind === SyntaxKind.TypeAliasDeclaration);
+                if (!declaration) declaration = findMap(symbol.declarations, getJSDocNamelessTypedefTag);
+
                 const typeNode = isJSDocTypeAlias(declaration) ? declaration.typeExpression : declaration.type;
                 // If typeNode is missing, we will error in checkJSDocTypedefTag.
                 let type = typeNode ? getTypeFromTypeNode(typeNode) : errorType;

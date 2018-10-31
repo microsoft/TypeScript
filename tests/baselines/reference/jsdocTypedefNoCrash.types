@@ -4,6 +4,6 @@
  * }}
  */
 export const foo = 5;
->foo : 5
+>foo : {}
 >5 : 5
 
