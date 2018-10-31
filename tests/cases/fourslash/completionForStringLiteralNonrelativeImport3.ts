@@ -27,4 +27,8 @@
 // @Filename: node_modules/fake-module/repeated.jsx
 //// /*repeatedjsx*/
 
-verify.completionsAt(["import_as0", "import_equals0", "require0"], ["dts", "js", "jsx", "repeated", "ts", "tsx"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: ["import_as0", "import_equals0", "require0"],
+    exact: ["dts", "js", "jsx", "repeated", "ts", "tsx"],
+    isNewIdentifierLocation: true,
+});

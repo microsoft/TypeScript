@@ -23,17 +23,15 @@
 
 verify.signatureHelp({ marker: ["signatureA", "signatureB", "signatureC"], text: "x(a: number): void" });
 
-goTo.marker('completionA');
-verify.completionListContains("x", "(method) x(a: number): void");
-
-goTo.marker('completionB');
-verify.completionListContains("x", "(property) x: (a: number) => void");
-
-goTo.marker('completionC');
-verify.completionListContains("x", "(property) x: (a: number) => void");
+const method = "(method) x(a: number): void";
+const property = "(property) x: (a: number) => void";
+verify.completions(
+    { marker: "completionA", exact: { name: "x", text: method } },
+    { marker: ["completionB", "completionC"], exact: { name: "x", text: property } },
+);
 
 verify.quickInfos({
-    quickInfoA: "(method) x(a: number): void",
-    quickInfoB: "(property) x: (a: number) => void",
-    quickInfoC: "(property) x: (a: number) => void"
+    quickInfoA: method,
+    quickInfoB: property,
+    quickInfoC: property,
 });

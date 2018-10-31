@@ -235,7 +235,7 @@ namespace ts {
 
     // Modifiers
 
-    export function createModifier<T extends Modifier["kind"]>(kind: T) {
+    export function createModifier<T extends Modifier["kind"]>(kind: T): Token<T> {
         return createToken(kind);
     }
 
@@ -2168,6 +2168,57 @@ namespace ts {
         return node.expression !== expression
             ? updateNode(createExternalModuleReference(expression), node)
             : node;
+    }
+
+    // JSDoc
+
+    /* @internal */
+    export function createJSDocTypeExpression(type: TypeNode): JSDocTypeExpression {
+        const node = createSynthesizedNode(SyntaxKind.JSDocTypeExpression) as JSDocTypeExpression;
+        node.type = type;
+        return node;
+    }
+
+    /* @internal */
+    export function createJSDocTypeTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocTypeTag {
+        const tag = createJSDocTag<JSDocTypeTag>(SyntaxKind.JSDocTypeTag, "type");
+        tag.typeExpression = typeExpression;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocReturnTag(typeExpression?: JSDocTypeExpression, comment?: string): JSDocReturnTag {
+        const tag = createJSDocTag<JSDocReturnTag>(SyntaxKind.JSDocReturnTag, "returns");
+        tag.typeExpression = typeExpression;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocParamTag(name: EntityName, isBracketed: boolean, typeExpression?: JSDocTypeExpression, comment?: string): JSDocParameterTag {
+        const tag = createJSDocTag<JSDocParameterTag>(SyntaxKind.JSDocParameterTag, "param");
+        tag.typeExpression = typeExpression;
+        tag.name = name;
+        tag.isBracketed = isBracketed;
+        tag.comment = comment;
+        return tag;
+    }
+
+    /* @internal */
+    export function createJSDocComment(comment?: string | undefined, tags?: NodeArray<JSDocTag> | undefined) {
+        const node = createSynthesizedNode(SyntaxKind.JSDocComment) as JSDoc;
+        node.comment = comment;
+        node.tags = tags;
+        return node;
+    }
+
+    /* @internal */
+    function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
+        const node = createSynthesizedNode(kind) as T;
+        node.atToken = createToken(SyntaxKind.AtToken);
+        node.tagName = createIdentifier(tagName);
+        return node;
     }
 
     // JSX

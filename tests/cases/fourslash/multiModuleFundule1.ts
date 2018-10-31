@@ -13,21 +13,17 @@
 ////var /*4*/r2 = new C(/*3*/ // using void returning function as constructor
 ////var r3 = C./*5*/
 
-goTo.marker('1');
-verify.completionListContains('C');
+verify.completions({ marker: "1", includes: "C", isNewIdentifierLocation: true });
 edit.insert('C.x);');
 
 verify.quickInfoAt("2", "var r: void");
 
-goTo.marker('3');
-verify.completionListContains('C');
+verify.completions({ marker: "3", includes: "C", isNewIdentifierLocation: true });
 edit.insert('C.x);');
 
 verify.quickInfoAt("4", "var r2: any");
 
-goTo.marker('5');
-verify.completionListContains('x');
-verify.completionListContains('foo');
+verify.completions({ marker: "5", includes: ["x", "foo"] });
 edit.insert('x;');
 
 verify.noErrors();

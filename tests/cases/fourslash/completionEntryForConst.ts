@@ -3,5 +3,4 @@
 ////const c = "s";
 /////**/
 
-goTo.marker();
-verify.completionListContains("c", "const c: \"s\"", /*documentation*/ undefined, "const");
+verify.completions({ marker: "", includes: { name: "c", text: 'const c: "s"', kind: "const" } });

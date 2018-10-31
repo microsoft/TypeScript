@@ -4,7 +4,8 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/asyncGeneratorSetA
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts(2,19): error TS2524: 'await' expressions cannot be used in a parameter initializer.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitMissingValueIsError.ts(3,14): error TS1109: Expression expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(2,15): error TS1138: Parameter declaration expected.
-tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(2,20): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(2,15): error TS2693: 'await' only refers to a type, but is being used as a value here.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(2,20): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(2,22): error TS1136: Property assignment expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts(4,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionDeclarationNamedAwaitIsError.ts(3,18): error TS1003: Identifier expected.
@@ -19,7 +20,8 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpr
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/nestedFunctionExpressionNamedYieldIsError.ts(3,36): error TS1005: '=>' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInParameterInitializerIsError.ts(2,19): error TS2523: 'yield' expressions cannot be used in a parameter initializer.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(2,15): error TS1138: Parameter declaration expected.
-tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(2,20): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(2,15): error TS2693: 'yield' only refers to a type, but is being used as a value here.
+tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(2,20): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(2,22): error TS1136: Property assignment expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts(4,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingValueIsError.ts(3,16): error TS1109: Expression expected.
@@ -40,26 +42,30 @@ tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldStarMissingVa
         async * yield() {
         }
     };
-==== tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitParameterIsError.ts (5 errors) ====
     const o4 = {
         async * f(await) {
                   ~~~~~
 !!! error TS1138: Parameter declaration expected.
+                  ~~~~~
+!!! error TS2693: 'await' only refers to a type, but is being used as a value here.
                        ~
-!!! error TS1005: ':' expected.
+!!! error TS1005: ',' expected.
                          ~
 !!! error TS1136: Property assignment expected.
         }
     };
     ~
 !!! error TS1128: Declaration or statement expected.
-==== tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts (4 errors) ====
+==== tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts (5 errors) ====
     const o5 = {
         async * f(yield) {
                   ~~~~~
 !!! error TS1138: Parameter declaration expected.
+                  ~~~~~
+!!! error TS2693: 'yield' only refers to a type, but is being used as a value here.
                        ~
-!!! error TS1005: ':' expected.
+!!! error TS1005: ',' expected.
                          ~
 !!! error TS1136: Property assignment expected.
         }

@@ -41,20 +41,25 @@ namespace ts {
     export function getOutputPathsFor(sourceFile: SourceFile | Bundle, host: EmitHost, forceDtsPaths: boolean): EmitFileNames {
         const options = host.getCompilerOptions();
         if (sourceFile.kind === SyntaxKind.Bundle) {
-            const jsFilePath = options.outFile || options.out!;
-            const sourceMapFilePath = getSourceMapFilePath(jsFilePath, options);
-            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(jsFilePath) + Extension.Dts : undefined;
-            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            const outPath = options.outFile || options.out!;
+            const jsFilePath = options.emitDeclarationOnly ? undefined : outPath;
+            const sourceMapFilePath = jsFilePath && getSourceMapFilePath(jsFilePath, options);
+            const declarationFilePath = (forceDtsPaths || getEmitDeclarations(options)) ? removeFileExtension(outPath) + Extension.Dts : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             const bundleInfoPath = options.references && jsFilePath ? (removeFileExtension(jsFilePath) + infoExtension) : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath };
         }
         else {
-            const jsFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
-            const sourceMapFilePath = isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
+            const ownOutputFilePath = getOwnEmitOutputFilePath(sourceFile.fileName, host, getOutputExtension(sourceFile, options));
+            // If json file emits to the same location skip writing it, if emitDeclarationOnly skip writing it
+            const isJsonEmittedToSameLocation = isJsonSourceFile(sourceFile) &&
+                comparePaths(sourceFile.fileName, ownOutputFilePath, host.getCurrentDirectory(), !host.useCaseSensitiveFileNames()) === Comparison.EqualTo;
+            const jsFilePath = options.emitDeclarationOnly || isJsonEmittedToSameLocation ? undefined : ownOutputFilePath;
+            const sourceMapFilePath = !jsFilePath || isJsonSourceFile(sourceFile) ? undefined : getSourceMapFilePath(jsFilePath, options);
             // For legacy reasons (ie, we have baselines capturing the behavior), js files don't report a .d.ts output path - this would only matter if `declaration` and `allowJs` were both on, which is currently an error
-            const isJs = isSourceFileJavaScript(sourceFile);
+            const isJs = isSourceFileJS(sourceFile);
             const declarationFilePath = ((forceDtsPaths || getEmitDeclarations(options)) && !isJs) ? getDeclarationEmitOutputFilePath(sourceFile.fileName, host) : undefined;
-            const declarationMapPath = getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
+            const declarationMapPath = declarationFilePath && getAreDeclarationMapsEnabled(options) ? declarationFilePath + ".map" : undefined;
             return { jsFilePath, sourceMapFilePath, declarationFilePath, declarationMapPath, bundleInfoPath: undefined };
         }
     }
@@ -80,7 +85,7 @@ namespace ts {
         }
 
         if (options.jsx === JsxEmit.Preserve) {
-            if (isSourceFileJavaScript(sourceFile)) {
+            if (isSourceFileJS(sourceFile)) {
                 if (fileExtensionIs(sourceFile.fileName, Extension.Jsx)) {
                     return Extension.Jsx;
                 }
@@ -135,27 +140,33 @@ namespace ts {
 
             if (!emitSkipped && emittedFilesList) {
                 if (!emitOnlyDtsFiles) {
-                    emittedFilesList.push(jsFilePath);
-                }
-                if (sourceMapFilePath) {
-                    emittedFilesList.push(sourceMapFilePath);
+                    if (jsFilePath) {
+                        emittedFilesList.push(jsFilePath);
+                    }
+                    if (sourceMapFilePath) {
+                        emittedFilesList.push(sourceMapFilePath);
+                    }
+                    if (bundleInfoPath) {
+                        emittedFilesList.push(bundleInfoPath);
+                    }
                 }
                 if (declarationFilePath) {
                     emittedFilesList.push(declarationFilePath);
                 }
-                if (bundleInfoPath) {
-                    emittedFilesList.push(bundleInfoPath);
+                if (declarationMapPath) {
+                    emittedFilesList.push(declarationMapPath);
                 }
             }
         }
 
-        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
-            // Make sure not to write js file and source map file if any of them cannot be written
-            if (host.isEmitBlocked(jsFilePath) || compilerOptions.noEmit || compilerOptions.emitDeclarationOnly) {
-                emitSkipped = true;
+        function emitJsFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, jsFilePath: string | undefined, sourceMapFilePath: string | undefined, bundleInfoPath: string | undefined) {
+            if (emitOnlyDtsFiles || !jsFilePath) {
                 return;
             }
-            if (emitOnlyDtsFiles) {
+
+            // Make sure not to write js file and source map file if any of them cannot be written
+            if ((jsFilePath && host.isEmitBlocked(jsFilePath)) || compilerOptions.noEmit) {
+                emitSkipped = true;
                 return;
             }
             // Transform the source files
@@ -187,12 +198,12 @@ namespace ts {
         }
 
         function emitDeclarationFileOrBundle(sourceFileOrBundle: SourceFile | Bundle, declarationFilePath: string | undefined, declarationMapPath: string | undefined) {
-            if (!(declarationFilePath && !isInJavaScriptFile(sourceFileOrBundle))) {
+            if (!(declarationFilePath && !isInJSFile(sourceFileOrBundle))) {
                 return;
             }
             const sourceFiles = isSourceFile(sourceFileOrBundle) ? [sourceFileOrBundle] : sourceFileOrBundle.sourceFiles;
             // Setup and perform the transformation to retrieve declarations from the input files
-            const nonJsFiles = filter(sourceFiles, isSourceFileNotJavaScript);
+            const nonJsFiles = filter(sourceFiles, isSourceFileNotJS);
             const inputListOrBundle = (compilerOptions.outFile || compilerOptions.out) ? [createBundle(nonJsFiles, !isSourceFile(sourceFileOrBundle) ? sourceFileOrBundle.prepends : undefined)] : nonJsFiles;
             if (emitOnlyDtsFiles && !getEmitDeclarations(compilerOptions)) {
                 // Checker wont collect the linked aliases since thats only done when declaration is enabled.
@@ -851,7 +862,34 @@ namespace ts {
                     case SyntaxKind.EnumMember:
                         return emitEnumMember(<EnumMember>node);
 
-                    // JSDoc nodes (ignored)
+                    // JSDoc nodes (only used in codefixes currently)
+                    case SyntaxKind.JSDocParameterTag:
+                    case SyntaxKind.JSDocPropertyTag:
+                        return emitJSDocPropertyLikeTag(node as JSDocPropertyLikeTag);
+                    case SyntaxKind.JSDocReturnTag:
+                    case SyntaxKind.JSDocTypeTag:
+                    case SyntaxKind.JSDocThisTag:
+                    case SyntaxKind.JSDocEnumTag:
+                        return emitJSDocSimpleTypedTag(node as JSDocTypeTag);
+                    case SyntaxKind.JSDocAugmentsTag:
+                        return emitJSDocAugmentsTag(node as JSDocAugmentsTag);
+                    case SyntaxKind.JSDocTemplateTag:
+                        return emitJSDocTemplateTag(node as JSDocTemplateTag);
+                    case SyntaxKind.JSDocTypedefTag:
+                        return emitJSDocTypedefTag(node as JSDocTypedefTag);
+                    case SyntaxKind.JSDocCallbackTag:
+                        return emitJSDocCallbackTag(node as JSDocCallbackTag);
+                    case SyntaxKind.JSDocSignature:
+                        return emitJSDocSignature(node as JSDocSignature);
+                    case SyntaxKind.JSDocTypeLiteral:
+                        return emitJSDocTypeLiteral(node as JSDocTypeLiteral);
+                    case SyntaxKind.JSDocClassTag:
+                    case SyntaxKind.JSDocTag:
+                        return emitJSDocSimpleTag(node as JSDocTag);
+
+                    case SyntaxKind.JSDocComment:
+                        return emitJSDoc(node as JSDoc);
+
                     // Transformation nodes (ignored)
                 }
 
@@ -1015,7 +1053,7 @@ namespace ts {
                             writeLines(helper.text);
                         }
                         else {
-                            writeLines(helper.text(makeFileLevelOptmiisticUniqueName));
+                            writeLines(helper.text(makeFileLevelOptimisticUniqueName));
                         }
                         helpersEmitted = true;
                     }
@@ -1041,7 +1079,7 @@ namespace ts {
         // SyntaxKind.TemplateMiddle
         // SyntaxKind.TemplateTail
         function emitLiteral(node: LiteralLikeNode) {
-            const text = getLiteralTextOfNode(node);
+            const text = getLiteralTextOfNode(node, printerOptions.neverAsciiEscape);
             if ((printerOptions.sourceMap || printerOptions.inlineSourceMap)
                 && (node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind))) {
                 writeLiteral(text);
@@ -1532,7 +1570,7 @@ namespace ts {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
-                const text = getLiteralTextOfNode(<LiteralExpression>expression);
+                const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
                 return !expression.numericLiteralFlags
                     && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
             }
@@ -1780,7 +1818,9 @@ namespace ts {
 
         function emitExpressionStatement(node: ExpressionStatement) {
             emitExpression(node.expression);
-            if (!isJsonSourceFile(currentSourceFile)) {
+            // Emit semicolon in non json files
+            // or if json file that created synthesized expression(eg.define expression statement when --out and amd code generation)
+            if (!isJsonSourceFile(currentSourceFile) || nodeIsSynthesized(node.expression)) {
                 writeSemicolon();
             }
         }
@@ -2572,6 +2612,154 @@ namespace ts {
         }
 
         //
+        // JSDoc
+        //
+        function emitJSDoc(node: JSDoc) {
+            write("/**");
+            if (node.comment) {
+                const lines = node.comment.split(/\r\n?|\n/g);
+                for (const line of lines) {
+                    writeLine();
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
+                    write(line);
+                }
+            }
+            if (node.tags) {
+                if (node.tags.length === 1 && node.tags[0].kind === SyntaxKind.JSDocTypeTag && !node.comment) {
+                    writeSpace();
+                    emit(node.tags[0]);
+                }
+                else {
+                    emitList(node, node.tags, ListFormat.JSDocComment);
+                }
+            }
+            writeSpace();
+            write("*/");
+        }
+
+        function emitJSDocSimpleTypedTag(tag: JSDocTypeTag | JSDocThisTag | JSDocEnumTag | JSDocReturnTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocTypeExpression(tag.typeExpression);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocAugmentsTag(tag: JSDocAugmentsTag) {
+            emitJSDocTagName(tag.tagName);
+            writeSpace();
+            writePunctuation("{");
+            emit(tag.class);
+            writePunctuation("}");
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTemplateTag(tag: JSDocTemplateTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocTypeExpression(tag.constraint);
+            writeSpace();
+            emitList(tag, tag.typeParameters, ListFormat.CommaListElements);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTypedefTag(tag: JSDocTypedefTag) {
+            emitJSDocTagName(tag.tagName);
+            if (tag.typeExpression) {
+                if (tag.typeExpression.kind === SyntaxKind.JSDocTypeExpression) {
+                    emitJSDocTypeExpression(tag.typeExpression);
+                }
+                else {
+                    writeSpace();
+                    writePunctuation("{");
+                    write("Object");
+                    if (tag.typeExpression.isArrayType) {
+                        writePunctuation("[");
+                        writePunctuation("]");
+                    }
+                    writePunctuation("}");
+                }
+            }
+            if (tag.fullName) {
+                writeSpace();
+                emit(tag.fullName);
+            }
+            emitJSDocComment(tag.comment);
+            if (tag.typeExpression && tag.typeExpression.kind === SyntaxKind.JSDocTypeLiteral) {
+                emitJSDocTypeLiteral(tag.typeExpression);
+            }
+        }
+
+        function emitJSDocCallbackTag(tag: JSDocCallbackTag) {
+            emitJSDocTagName(tag.tagName);
+            if (tag.name) {
+                writeSpace();
+                emit(tag.name);
+            }
+            emitJSDocComment(tag.comment);
+            emitJSDocSignature(tag.typeExpression);
+        }
+
+        function emitJSDocSimpleTag(tag: JSDocTag) {
+            emitJSDocTagName(tag.tagName);
+            emitJSDocComment(tag.comment);
+        }
+
+        function emitJSDocTypeLiteral(lit: JSDocTypeLiteral) {
+            emitList(lit, createNodeArray(lit.jsDocPropertyTags), ListFormat.JSDocComment);
+        }
+
+        function emitJSDocSignature(sig: JSDocSignature) {
+            if (sig.typeParameters) {
+                emitList(sig, createNodeArray(sig.typeParameters), ListFormat.JSDocComment);
+            }
+            if (sig.parameters) {
+                emitList(sig, createNodeArray(sig.parameters), ListFormat.JSDocComment);
+            }
+            if (sig.type) {
+                writeLine();
+                writeSpace();
+                writePunctuation("*");
+                writeSpace();
+                emit(sig.type);
+            }
+        }
+
+        function emitJSDocPropertyLikeTag(param: JSDocPropertyLikeTag) {
+            emitJSDocTagName(param.tagName);
+            emitJSDocTypeExpression(param.typeExpression);
+            writeSpace();
+            if (param.isBracketed) {
+                writePunctuation("[");
+            }
+            emit(param.name);
+            if (param.isBracketed) {
+                writePunctuation("]");
+            }
+            emitJSDocComment(param.comment);
+        }
+
+        function emitJSDocTagName(tagName: Identifier) {
+            writePunctuation("@");
+            emit(tagName);
+        }
+
+        function emitJSDocComment(comment: string | undefined) {
+            if (comment) {
+                writeSpace();
+                write(comment);
+            }
+        }
+
+        function emitJSDocTypeExpression(typeExpression: JSDocTypeExpression | undefined) {
+            if (typeExpression) {
+                writeSpace();
+                writePunctuation("{");
+                emit(typeExpression.type);
+                writePunctuation("}");
+            }
+        }
+
+        //
         // Top-level nodes
         //
 
@@ -2816,7 +3004,8 @@ namespace ts {
             const parameter = singleOrUndefined(parameters);
             return parameter
                 && parameter.pos === parentNode.pos // may not have parsed tokens between parent and parameter
-                && !(isArrowFunction(parentNode) && parentNode.type) // arrow function may not have return type annotation
+                && isArrowFunction(parentNode)      // only arrow functions may have simple arrow head
+                && !parentNode.type                 // arrow function may not have return type annotation
                 && !some(parentNode.decorators)     // parent may not have decorators
                 && !some(parentNode.modifiers)      // parent may not have modifiers
                 && !some(parentNode.typeParameters) // parent may not have type parameters
@@ -2860,6 +3049,11 @@ namespace ts {
                 case ListFormat.BarDelimited:
                     writeSpace();
                     writePunctuation("|");
+                    break;
+                case ListFormat.AsteriskDelimited:
+                    writeSpace();
+                    writePunctuation("*");
+                    writeSpace();
                     break;
                 case ListFormat.AmpersandDelimited:
                     writeSpace();
@@ -2930,7 +3124,12 @@ namespace ts {
                     const child = children![start + i];
 
                     // Write the delimiter if this is not the first node.
-                    if (previousSibling) {
+                    if (format & ListFormat.AsteriskDelimited) {
+                        // always write JSDoc in the format "\n *"
+                        writeLine();
+                        writeDelimiter(format);
+                    }
+                    else if (previousSibling) {
                         // i.e
                         //      function commentedParameters(
                         //          /* Parameter a */
@@ -3303,20 +3502,20 @@ namespace ts {
             return getSourceTextOfNodeFromSourceFile(currentSourceFile, node, includeTrivia);
         }
 
-        function getLiteralTextOfNode(node: LiteralLikeNode): string {
+        function getLiteralTextOfNode(node: LiteralLikeNode, neverAsciiEscape: boolean | undefined): string {
             if (node.kind === SyntaxKind.StringLiteral && (<StringLiteral>node).textSourceNode) {
                 const textSourceNode = (<StringLiteral>node).textSourceNode!;
                 if (isIdentifier(textSourceNode)) {
-                    return getEmitFlags(node) & EmitFlags.NoAsciiEscaping ?
+                    return neverAsciiEscape || (getEmitFlags(node) & EmitFlags.NoAsciiEscaping) ?
                         `"${escapeString(getTextOfNode(textSourceNode))}"` :
                         `"${escapeNonAsciiString(getTextOfNode(textSourceNode))}"`;
                 }
                 else {
-                    return getLiteralTextOfNode(textSourceNode);
+                    return getLiteralTextOfNode(textSourceNode, neverAsciiEscape);
                 }
             }
 
-            return getLiteralText(node, currentSourceFile);
+            return getLiteralText(node, currentSourceFile, neverAsciiEscape);
         }
 
         /**
@@ -3585,7 +3784,7 @@ namespace ts {
             }
         }
 
-        function makeFileLevelOptmiisticUniqueName(name: string) {
+        function makeFileLevelOptimisticUniqueName(name: string) {
             return makeUniqueName(name, isFileLevelUniqueName, /*optimistic*/ true);
         }
 

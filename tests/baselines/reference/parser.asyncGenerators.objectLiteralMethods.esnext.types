@@ -33,7 +33,6 @@ const o4 = {
     async * f(await) {
 >f : () => any
 >await : any
-> : any
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts ===
@@ -44,7 +43,6 @@ const o5 = {
     async * f(yield) {
 >f : () => any
 >yield : any
-> : any
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts ===

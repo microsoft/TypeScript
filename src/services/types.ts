@@ -212,9 +212,9 @@ namespace ts {
          *
          * If this is implemented, `getResolvedModuleWithFailedLookupLocationsFromCache` should be too.
          */
-        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[]): ResolvedModule[];
+        resolveModuleNames?(moduleNames: string[], containingFile: string, reusedNames?: string[], redirectedReference?: ResolvedProjectReference): (ResolvedModule | undefined)[];
         getResolvedModuleWithFailedLookupLocationsFromCache?(modulename: string, containingFile: string): ResolvedModuleWithFailedLookupLocations | undefined;
-        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string): ResolvedTypeReferenceDirective[];
+        resolveTypeReferenceDirectives?(typeDirectiveNames: string[], containingFile: string, redirectedReference?: ResolvedProjectReference): (ResolvedTypeReferenceDirective | undefined)[];
         /* @internal */ hasInvalidatedResolution?: HasInvalidatedResolution;
         /* @internal */ hasChangedAutomaticTypeDirectiveNames?: boolean;
 
@@ -231,6 +231,8 @@ namespace ts {
 
         isKnownTypesPackageName?(name: string): boolean;
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
+        /* @internal */ inspectValue?(options: InspectValueOptions): Promise<ValueInfo>;
+        writeFile?(fileName: string, content: string): void;
     }
 
     /* @internal */
@@ -287,19 +289,19 @@ namespace ts {
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
 
-        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
+        getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
-        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
-        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined;
+        getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
+        getImplementationAtPosition(fileName: string, position: number): ReadonlyArray<ImplementationLocation> | undefined;
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
 
         /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
+        getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined;
 
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -331,9 +333,9 @@ namespace ts {
 
         getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
-        applyCodeActionCommand(action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
-        applyCodeActionCommand(action: CodeActionCommand[]): Promise<ApplyCodeActionCommandResult[]>;
-        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[]): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
+        applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
+        applyCodeActionCommand(action: CodeActionCommand | CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult | ApplyCodeActionCommandResult[]>;
         /** @deprecated `fileName` will be ignored */
         applyCodeActionCommand(fileName: string, action: CodeActionCommand): Promise<ApplyCodeActionCommandResult>;
         /** @deprecated `fileName` will be ignored */
@@ -526,12 +528,22 @@ namespace ts {
 
     // Publicly, this type is just `{}`. Internally it is a union of all the actions we use.
     // See `commands?: {}[]` in protocol.ts
-    export type CodeActionCommand = InstallPackageAction;
+    export type CodeActionCommand = InstallPackageAction | GenerateTypesAction;
 
     export interface InstallPackageAction {
-        /* @internal */ file: string;
-        /* @internal */ type: "install package";
-        /* @internal */ packageName: string;
+        /* @internal */ readonly type: "install package";
+        /* @internal */ readonly file: string;
+        /* @internal */ readonly packageName: string;
+    }
+
+    export interface GenerateTypesAction extends GenerateTypesOptions {
+        /* @internal */ readonly type: "generate types";
+    }
+
+    export interface GenerateTypesOptions {
+        readonly file: string; // File that was importing fileToGenerateTypesFor; used for formatting options.
+        readonly fileToGenerateTypesFor: string;
+        readonly outputFileName: string;
     }
 
     /**
@@ -607,6 +619,8 @@ namespace ts {
     }
 
     export interface RenameLocation extends DocumentSpan {
+        readonly prefixText?: string;
+        readonly suffixText?: string;
     }
 
     export interface ReferenceEntry extends DocumentSpan {
@@ -698,24 +712,51 @@ namespace ts {
     }
 
     export interface FormatCodeSettings extends EditorSettings {
-        insertSpaceAfterCommaDelimiter?: boolean;
-        insertSpaceAfterSemicolonInForStatements?: boolean;
-        insertSpaceBeforeAndAfterBinaryOperators?: boolean;
-        insertSpaceAfterConstructor?: boolean;
-        insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
-        insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
-        insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
-        insertSpaceAfterTypeAssertion?: boolean;
-        insertSpaceBeforeFunctionParenthesis?: boolean;
-        placeOpenBraceOnNewLineForFunctions?: boolean;
-        placeOpenBraceOnNewLineForControlBlocks?: boolean;
-        insertSpaceBeforeTypeAnnotation?: boolean;
-        indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
+        readonly insertSpaceAfterCommaDelimiter?: boolean;
+        readonly insertSpaceAfterSemicolonInForStatements?: boolean;
+        readonly insertSpaceBeforeAndAfterBinaryOperators?: boolean;
+        readonly insertSpaceAfterConstructor?: boolean;
+        readonly insertSpaceAfterKeywordsInControlFlowStatements?: boolean;
+        readonly insertSpaceAfterFunctionKeywordForAnonymousFunctions?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces?: boolean;
+        readonly insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces?: boolean;
+        readonly insertSpaceAfterTypeAssertion?: boolean;
+        readonly insertSpaceBeforeFunctionParenthesis?: boolean;
+        readonly placeOpenBraceOnNewLineForFunctions?: boolean;
+        readonly placeOpenBraceOnNewLineForControlBlocks?: boolean;
+        readonly insertSpaceBeforeTypeAnnotation?: boolean;
+        readonly indentMultiLineObjectLiteralBeginningOnBlankLine?: boolean;
     }
+
+    export function getDefaultFormatCodeSettings(newLineCharacter?: string): FormatCodeSettings {
+        return {
+            indentSize: 4,
+            tabSize: 4,
+            newLineCharacter: newLineCharacter || "\n",
+            convertTabsToSpaces: true,
+            indentStyle: IndentStyle.Smart,
+            insertSpaceAfterConstructor: false,
+            insertSpaceAfterCommaDelimiter: true,
+            insertSpaceAfterSemicolonInForStatements: true,
+            insertSpaceBeforeAndAfterBinaryOperators: true,
+            insertSpaceAfterKeywordsInControlFlowStatements: true,
+            insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
+            insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
+            insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
+            insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
+            insertSpaceBeforeFunctionParenthesis: false,
+            placeOpenBraceOnNewLineForFunctions: false,
+            placeOpenBraceOnNewLineForControlBlocks: false,
+        };
+    }
+
+    /* @internal */
+    export const testFormatSettings = getDefaultFormatCodeSettings("\n");
 
     export interface DefinitionInfo extends DocumentSpan {
         kind: ScriptElementKind;
@@ -782,14 +823,23 @@ namespace ts {
         tags?: JSDocTagInfo[];
     }
 
-    export interface RenameInfo {
-        canRename: boolean;
-        localizedErrorMessage?: string;
+    export type RenameInfo = RenameInfoSuccess | RenameInfoFailure;
+    export interface RenameInfoSuccess {
+        canRename: true;
+        /**
+         * File or directory to rename.
+         * If set, `getEditsForFileRename` should be called instead of `findRenameLocations`.
+         */
+        fileToRename?: string;
         displayName: string;
         fullDisplayName: string;
         kind: ScriptElementKind;
         kindModifiers: string;
         triggerSpan: TextSpan;
+    }
+    export interface RenameInfoFailure {
+        canRename: false;
+        localizedErrorMessage: string;
     }
 
     export interface SignatureHelpParameter {
@@ -1076,7 +1126,14 @@ namespace ts {
         ambientModifier = "declare",
         staticModifier = "static",
         abstractModifier = "abstract",
-        optionalModifier = "optional"
+        optionalModifier = "optional",
+
+        dtsModifier = ".d.ts",
+        tsModifier = ".ts",
+        tsxModifier = ".tsx",
+        jsModifier = ".js",
+        jsxModifier = ".jsx",
+        jsonModifier = ".json",
     }
 
     export const enum ClassificationTypeNames {

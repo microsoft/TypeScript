@@ -19,4 +19,8 @@
 ////    }
 ////}
 
-verify.completionsAt("", ["a", "b"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: "",
+    exact: ["a", "b"].map(name => ({ name, kind: "script", kindModifiers: ".ts" })),
+    isNewIdentifierLocation: true,
+});

@@ -30,6 +30,7 @@ const { p } = require("./a");
 const y = p + b;
 exports.y = y;
 const z = 0;
-exports.z = 0;`,
+exports.z = 0;
+`,
     },
 });

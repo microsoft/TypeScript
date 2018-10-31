@@ -835,7 +835,7 @@
         "category": "Error",
         "code": 1253
     },
-    "A 'const' initializer in an ambient context must be a string or numeric literal.": {
+    "A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.": {
         "category": "Error",
         "code": 1254
     },
@@ -2088,6 +2088,38 @@
         "category": "Error",
         "code": 2577
     },
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2580
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2581
+    },
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
+        "category": "Error",
+        "code": 2582
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2583
+    },
+    "Cannot find name '{0}'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.": {
+        "category": "Error",
+        "code": 2584
+    },
+    "'{0}' only refers to a type, but is being used as a value here. Do you need to change your target library? Try changing the `lib` compiler option to es2015 or later.": {
+        "category": "Error",
+        "code": 2585
+    },
+    "Enum type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2586
+    },
+    "JSDoc type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2587
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
@@ -2453,9 +2485,9 @@
         "category": "Error",
         "code": 2732
     },
-    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
+    "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
-        "code": 2733
+        "code": 2734
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -2912,7 +2944,7 @@
         "category": "Error",
         "code": 5070
     },
-    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs'.": {
+    "Option '--resolveJsonModule' can only be specified when module code generation is 'commonjs', 'amd', 'es2015' or 'esNext'.": {
         "category": "Error",
         "code": 5071
     },
@@ -2920,7 +2952,10 @@
         "category": "Error",
         "code": 5072
     },
-
+    "Build option '{0}' requires a value of type {1}.": {
+        "category": "Error",
+        "code": 5073
+    },
 
     "Generates a sourcemap for each corresponding '.d.ts' file.": {
         "category": "Message",
@@ -3294,7 +3329,7 @@
         "category": "Message",
         "code": 6104
     },
-    "Expected type of '{0}' field in 'package.json' to be 'string', got '{1}'.": {
+    "Expected type of '{0}' field in 'package.json' to be '{1}', got '{2}'.": {
         "category": "Message",
         "code": 6105
     },
@@ -3692,6 +3727,46 @@
         "category": "Error",
         "code": 6205
     },
+    "'package.json' has a 'typesVersions' field with version-specific path mappings.": {
+        "category": "Message",
+        "code": 6206
+    },
+    "'package.json' does not have a 'typesVersions' entry that matches version '{0}'.": {
+        "category": "Message",
+        "code": 6207
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that matches compiler version '{1}', looking for a pattern to match module name '{2}'.": {
+        "category": "Message",
+        "code": 6208
+    },
+    "'package.json' has a 'typesVersions' entry '{0}' that is not a valid semver range.": {
+        "category": "Message",
+        "code": 6209
+    },
+    "An argument for '{0}' was not provided.": {
+        "category": "Message",
+        "code": 6210
+    },
+    "An argument matching this binding pattern was not provided.": {
+        "category": "Message",
+        "code": 6211
+    },
+    "Did you mean to call this expression?": {
+        "category": "Message",
+        "code": 6212
+    },
+    "Did you mean to use 'new' with this expression?": {
+        "category": "Message",
+        "code": 6213
+    },
+    "Enable strict 'bind', 'call', and 'apply' methods on functions.": {
+        "category": "Message",
+        "code": 6214
+    },
+    "Using compiler options of project reference redirect '{0}'.": {
+        "category": "Message",
+        "code": 6215
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3814,10 +3889,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Skipping clean because not all projects could be located": {
-        "category": "Error",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -3826,6 +3897,10 @@
     "The expected type comes from this index signature.": {
         "category": "Message",
         "code": 6501
+    },
+    "The expected type comes from the return type of this signature.": {
+        "category": "Message",
+        "code": 6502
     },
 
     "Variable '{0}' implicitly has an '{1}' type.": {
@@ -3966,6 +4041,39 @@
         "category": "Error",
         "code": 7042
     },
+    "Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7043
+    },
+    "Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7044
+    },
+    "Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7045
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7046
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7047
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7048
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7049
+    },
+    "'{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7050
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4085,6 +4193,10 @@
     "The type of a function declaration must match the function's signature.": {
         "category": "Error",
         "code": 8030
+    },
+    "You cannot rename a module via a global import.": {
+        "category": "Error",
+        "code": 8031
     },
     "Only identifiers/qualified-names with optional type arguments are currently supported in a class 'extends' clause.": {
         "category": "Error",
@@ -4584,7 +4696,7 @@
         "category": "Message",
         "code": 95062
     },
-    
+
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4593,12 +4705,20 @@
         "category": "Message",
         "code": 95064
     },
-    "Convert to async function":{
+    "Convert to async function": {
         "category": "Message",
-         "code": 95065
+        "code": 95065
     },
     "Convert all to async functions": {
-     "category": "Message",
-         "code": 95066
+        "category": "Message",
+        "code": 95066
+    },
+    "Generate types for '{0}'": {
+        "category": "Message",
+        "code": 95067
+    },
+    "Generate types for all packages without types": {
+        "category": "Message",
+        "code": 95068
     }
 }

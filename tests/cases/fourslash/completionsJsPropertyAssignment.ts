@@ -7,4 +7,4 @@
 ////const x = { p: "x"  };
 ////x.p = "/**/";
 
-verify.completionsAt("", ["x", "y"]);
+verify.completions({ marker: "", exact: ["x", "y"] });

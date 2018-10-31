@@ -16,11 +16,4 @@
 ////    export class Test3 {}
 ////}
 
-
-goTo.marker("TypeReference");
-verify.completionListContains("C1");
-verify.completionListContains("C2");
-
-goTo.marker("ValueReference");
-verify.completionListContains("C1");
-verify.completionListContains("C2");
+verify.completions({ marker: test.markers(), exact: ["C1", "C2"] });

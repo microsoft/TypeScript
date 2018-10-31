@@ -13,7 +13,7 @@ for (var {x: a = "", y: b = true} of array) {
 >a : string
 >"" : ""
 >y : any
->b : number | true
+>b : number | boolean
 >true : true
 >array : { x: string; y: number; }[]
 

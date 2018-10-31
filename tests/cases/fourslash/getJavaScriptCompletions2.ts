@@ -6,5 +6,4 @@
 ////var v;
 ////v./**/
 
-goTo.marker();
-verify.completionListContains("valueOf", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "", includes: { name: "valueOf", kind: "method", kindModifiers: "declare" } });

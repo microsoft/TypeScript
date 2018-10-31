@@ -13,4 +13,8 @@
 ////    }
 ////}
 
-verify.completionsAt("", ["src", "foo/"], { isNewIdentifierLocation: true });
+verify.completions({
+    marker: "",
+    exact: ["src", "foo/"].map(name => ({ name, kind: "directory" })),
+    isNewIdentifierLocation: true,
+});

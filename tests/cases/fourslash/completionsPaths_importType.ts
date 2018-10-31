@@ -17,7 +17,19 @@
 /////** @type {import("/*3*/")} */
 
 verify.completions(
-    { marker: "1", exact: "package", isNewIdentifierLocation: true },
-    { marker: "2", exact: ["lib", "ns", "user", "node_modules"], isNewIdentifierLocation: true },
-    { marker: "3", exact: ["package"], isNewIdentifierLocation: true },
+    {
+        marker: ["1", "3"],
+        exact: { name: "package", kind: "directory" },
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: "2",
+        exact: [
+            { name: "lib", kind: "script", kindModifiers: ".d.ts" },
+            { name: "ns", kind: "script", kindModifiers: ".ts" },
+            { name: "user", kind: "script", kindModifiers: ".js" },
+            { name: "node_modules", kind: "directory" },
+        ],
+        isNewIdentifierLocation: true
+    },
 );

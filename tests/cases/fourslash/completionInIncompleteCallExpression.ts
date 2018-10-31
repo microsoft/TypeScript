@@ -3,7 +3,5 @@
 ////var array = [1, 2, 4]
 ////function a4(x, y, z) { }
 ////a4(...<crash>/**/
-    
 
-goTo.marker();
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "", exact: completion.globalsPlus(["a4", "array"]) });

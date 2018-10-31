@@ -3,6 +3,5 @@
 ////var foo = '';
 ////( // f/**/
 
-goTo.marker();
 // Completion list should not be available within comments
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });

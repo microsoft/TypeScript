@@ -54,56 +54,10 @@
 ////
 //// /** @param /*16*/ */
 
-goTo.marker('1');
-verify.completionListContains("constructor");
-verify.completionListContains("param");
-verify.completionListContains("type");
-verify.completionListContains("method");
-verify.completionListContains("template");
-
-goTo.marker('2');
-verify.completionListContains("constructor");
-verify.completionListContains("param");
-verify.completionListContains("type");
-
-goTo.marker('3');
-verify.completionListIsEmpty();
-
-goTo.marker('4');
-verify.completionListContains('number');
-
-goTo.marker('5');
-verify.completionListContains('number');
-
-goTo.marker('6');
-verify.completionListIsEmpty();
-
-goTo.marker('7');
-verify.completionListIsEmpty();
-
-goTo.marker('8');
-verify.completionListContains('number');
-
-goTo.marker('9');
-verify.completionListContains("@argument");
-
-goTo.marker('10');
-verify.completionListContains("@returns");
-
-goTo.marker('11');
-verify.completionListContains("@argument");
-
-goTo.marker('12');
-verify.completionListContains("@constructor");
-
-goTo.marker('13');
-verify.completionListContains("@param");
-
-goTo.marker('14');
-verify.completionListIsEmpty();
-
-goTo.marker('15');
-verify.completionListIsEmpty();
-
-goTo.marker('16');
-verify.completionListIsEmpty();
+verify.completions(
+    { marker: ["1", "2"], includes: ["constructor", "param", "type", "method", "template"] },
+    { marker: ["3", "15", "16"], exact: [] },
+    { marker: ["4", "5", "8"], includes: "number" },
+    { marker: ["6", "7", "14"], exact: undefined },
+    { marker: ["9", "10", "11", "12", "13"], includes: ["@argument", "@returns"] },
+);

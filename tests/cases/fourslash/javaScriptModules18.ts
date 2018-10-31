@@ -9,6 +9,4 @@
 // @Filename: other.js
 //// /**/;
 
-goTo.file('other.js');
-
-verify.not.completionListContains('x');
+verify.completions({ marker: "", excludes: "x" });

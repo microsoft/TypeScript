@@ -6,5 +6,15 @@
 ////unrelatedIdentifier;
 
 const [r0, r1] = test.ranges();
-verify.completionsAt("0", [{ name: "foo ", insertText: '["foo "]', replacementSpan: r0 }], { includeInsertTextCompletions: true });
-verify.completionsAt("1", [{ name: "foo ", insertText: '["foo "]', replacementSpan: r1 }], { includeInsertTextCompletions: true });
+verify.completions(
+    {
+        marker: "0",
+        exact: [{ name: "foo ", insertText: '["foo "]', replacementSpan: r0 }],
+        preferences: { includeInsertTextCompletions: true },
+    },
+    {
+        marker: "1",
+        exact: [{ name: "foo ", insertText: '["foo "]', replacementSpan: r1 }],
+        preferences: { includeInsertTextCompletions: true },
+    },
+);

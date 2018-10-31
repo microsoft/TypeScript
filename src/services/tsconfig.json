@@ -11,7 +11,7 @@
         "types.ts",
         "utilities.ts",
         "classifier.ts",
-        "pathCompletions.ts",
+        "stringCompletions.ts",
         "completions.ts",
         "documentHighlights.ts",
         "documentRegistry.ts",
@@ -69,6 +69,7 @@
         "codefixes/inferFromUsage.ts",
         "codefixes/fixInvalidImportSyntax.ts",
         "codefixes/fixStrictClassInitialization.ts",
+        "codefixes/generateTypes.ts",
         "codefixes/requireInTs.ts",
         "codefixes/useDefaultImport.ts",
         "codefixes/fixAddModuleReferTypeMissingTypeof.ts",
@@ -82,6 +83,6 @@
         "services.ts",
         "breakpoints.ts",
         "transform.ts",
-        "shims.ts"
+        "shims.ts",
     ]
 }

@@ -1,13 +1,16 @@
-tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,1): error TS1005: ':' expected.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(1,11): error TS2304: Cannot find name 'a'.
+tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,1): error TS1005: ',' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,7): error TS1005: ':' expected.
 tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts(2,8): error TS1005: '}' expected.
 
 
-==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts (3 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ObjectLiterals/parserErrorRecovery_ObjectLiteral2.ts (4 errors) ====
     var v = { a
+              ~
+!!! error TS2304: Cannot find name 'a'.
     return;
     ~~~~~~
-!!! error TS1005: ':' expected.
+!!! error TS1005: ',' expected.
           ~
 !!! error TS1005: ':' expected.
            

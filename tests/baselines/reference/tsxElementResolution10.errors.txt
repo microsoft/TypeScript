@@ -1,10 +1,8 @@
-tests/cases/conformance/jsx/file.tsx(13,1): error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
-  Property 'render' is missing in type '{ x: number; }'.
 tests/cases/conformance/jsx/file.tsx(13,2): error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; render: number; }' is not assignable to type 'string'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementClass {
@@ -18,9 +16,6 @@ tests/cases/conformance/jsx/file.tsx(19,2): error TS2322: Type '{ x: number; ren
     }
     var Obj1: Obj1type;
     <Obj1 x={10} />; // Error, no render member
-    ~~~~~~~~~~~~~~~
-!!! error TS2605: JSX element type '{ x: number; }' is not a constructor function for JSX elements.
-!!! error TS2605:   Property 'render' is missing in type '{ x: number; }'.
      ~~~~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type 'string'.
     

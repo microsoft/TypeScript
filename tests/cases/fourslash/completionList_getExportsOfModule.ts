@@ -11,6 +11,5 @@
 ////
 ////let y: /**/
 
-goTo.marker();
 // This is just a dummy test to cause `getCompletionsAtPosition` to be called.
-verify.not.completionListContains("x");
+verify.completions({ marker: "", excludes: "x" });

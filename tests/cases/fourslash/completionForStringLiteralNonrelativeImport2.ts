@@ -27,4 +27,4 @@
 // @Filename: ambient.ts
 //// declare module "fake-module/other"
 
-verify.completionsAt(["import_as0", "import_equals0", "require0"], ["other", "repeated"], { isNewIdentifierLocation: true })
+verify.completions({ marker: ["import_as0", "import_equals0", "require0"], exact: ["other", "repeated"], isNewIdentifierLocation: true });

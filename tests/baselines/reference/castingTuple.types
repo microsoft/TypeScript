@@ -25,11 +25,11 @@ class F extends A { f };
 
 enum E1 { one }
 >E1 : E1
->one : E1
+>one : E1.one
 
 enum E2 { one }
 >E2 : E2
->one : E2
+>one : E2.one
 
 // no error
 var numStrTuple: [number, string] = [5, "foo"];
@@ -83,14 +83,14 @@ var eleFromCDA1 = classCDATuple[2]; // A
 >2 : 2
 
 var eleFromCDA2 = classCDATuple[5]; // C | D | A
->eleFromCDA2 : A | C | D
->classCDATuple[5] : A | C | D
+>eleFromCDA2 : undefined
+>classCDATuple[5] : undefined
 >classCDATuple : [C, D, A]
 >5 : 5
 
 var t10: [E1, E2] = [E1.one, E2.one];
 >t10 : [E1, E2]
->[E1.one, E2.one] : [E1, E2]
+>[E1.one, E2.one] : [E1.one, E2.one]
 >E1.one : E1
 >E1 : typeof E1
 >one : E1

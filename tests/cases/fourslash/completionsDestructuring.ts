@@ -5,8 +5,4 @@
 ////const { /*b*/ } = points[0];
 ////for (const { /*c*/ } of points) {}
 
-goTo.eachMarker(() => {
-    verify.completionListContains("x");
-    verify.completionListContains("y");
-    verify.completionListCount(2);
-});
+verify.completions({ marker: test.markers(), exact: ["x", "y"] });

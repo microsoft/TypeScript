@@ -2,7 +2,7 @@
 
 // Function overloads should be highlighted together.
 
-////function [|{| "isWriteAccess": true, "isDefinition": true |}foo|](x: string);
+////function [|{| "isDefinition": true |}foo|](x: string);
 ////function [|{| "isWriteAccess": true, "isDefinition": true |}foo|](x: string, y: number) {
 ////    [|foo|]('', 43);
 ////}

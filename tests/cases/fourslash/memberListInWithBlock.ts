@@ -11,14 +11,8 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.completionListIsEmpty();
-
-goTo.marker('2');
-// Only keywords should show in completion, no members or types
-verify.not.completionListContains("foo");
-verify.not.completionListContains("f");
-verify.not.completionListContains("c");
-verify.not.completionListContains("d");
-verify.not.completionListContains("x");
-verify.not.completionListContains("Object");
+verify.completions(
+    { marker: "1", exact: undefined },
+    // Only keywords should show in completion, no members or types
+    { marker: "2", excludes: ["foo", "f", "c", "d", "x", "Object"] },
+);

@@ -21,13 +21,13 @@ namespace ts.JsTyping {
 
     export interface CachedTyping {
         typingLocation: string;
-        version: Semver;
+        version: Version;
     }
 
     /* @internal */
     export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
-        const availableVersion = Semver.parse(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
-        return !availableVersion.greaterThan(cachedTyping.version);
+        const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
+        return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
     /* @internal */
@@ -122,7 +122,7 @@ namespace ts.JsTyping {
         // Only infer typings for .js and .jsx files
         fileNames = mapDefined(fileNames, fileName => {
             const path = normalizePath(fileName);
-            if (hasJavaScriptFileExtension(path)) {
+            if (hasJSFileExtension(path)) {
                 return path;
             }
         });
@@ -218,7 +218,7 @@ namespace ts.JsTyping {
          */
         function getTypingNamesFromSourceFileNames(fileNames: string[]) {
             const fromFileNames = mapDefined(fileNames, j => {
-                if (!hasJavaScriptFileExtension(j)) return undefined;
+                if (!hasJSFileExtension(j)) return undefined;
 
                 const inferredTypingName = removeFileExtension(getBaseFileName(j.toLowerCase()));
                 const cleanedTypingName = removeMinAndVersionNumbers(inferredTypingName);

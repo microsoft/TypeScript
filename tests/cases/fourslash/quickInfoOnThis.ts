@@ -23,7 +23,7 @@
 ////}
 
 verify.quickInfos({
-    0: "this: this",
+    0: "this",
     1: "this: void",
     2: "this: this",
     3: "(parameter) this: Restricted",

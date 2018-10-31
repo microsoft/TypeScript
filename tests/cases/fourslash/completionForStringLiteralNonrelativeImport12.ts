@@ -16,7 +16,7 @@
 //// }
 
 verify.completions({
-    marker: test.markerNames(),
+    marker: test.markers(),
     exact: ["module", "dev-module", "peer-module", "optional-module"],
     isNewIdentifierLocation: true,
 });

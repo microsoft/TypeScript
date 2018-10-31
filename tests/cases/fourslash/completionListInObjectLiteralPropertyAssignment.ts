@@ -9,7 +9,4 @@
 ////    metadata: "/*1*/
 ////}
 
-goTo.marker('1');
-
-verify.not.completionListContains("metadata");
-verify.not.completionListContains("wat");
+verify.completions({ marker: "1", exact: [] });

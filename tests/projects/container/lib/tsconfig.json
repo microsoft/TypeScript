@@ -1,0 +1,11 @@
+{
+    "compilerOptions": {
+        "outFile": "../built/local/lib.js",
+        "composite": true,
+        "declarationMap": true
+    },
+    "references": [],
+    "files": [
+        "index.ts"
+    ]
+}

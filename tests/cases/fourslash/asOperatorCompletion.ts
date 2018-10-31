@@ -4,5 +4,5 @@
 //// var x;
 //// var y = x as /**/
 
-goTo.marker();
-verify.completionListContains('T');
+verify.completions({ marker: "", includes: "T" });
+

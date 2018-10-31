@@ -4,5 +4,4 @@
 ////module m3f { export interface I { foo(): void } }
 ////var x: m3f./**/
 
-goTo.marker();
-verify.not.completionListContains("foo");
+verify.completions({ marker: "", exact: "I" });

@@ -68,3 +68,11 @@ tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find name
      */
     const obj = { foo: (a, b) => a + b };
     
+    /** @enum {string} */
+    var E = {};
+    E[""];
+    
+    // make sure import types in JSDoc are not resolved
+    /** @type {import("should-not-be-resolved").Type} */
+    var v = import(String());
+    

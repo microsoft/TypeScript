@@ -7,8 +7,16 @@
 ////import * as a from 'a';
 /////**/
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "function foo(): void",
+        kind: "function",
+        kindModifiers: "export",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
 });

@@ -61,6 +61,19 @@ namespace ts {
             }
         }
 
+        function assertParseFileDiagnosticsExclusion(jsonText: string, configFileName: string, basePath: string, allFileList: string[], expectedExcludedDiagnosticCode: number) {
+            {
+                const parsed = getParsedCommandJson(jsonText, configFileName, basePath, allFileList);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.findIndex(e => e.code === expectedExcludedDiagnosticCode) === -1, `Expected error code ${expectedExcludedDiagnosticCode} to not be in ${JSON.stringify(parsed.errors)}`);
+            }
+            {
+                const parsed = getParsedCommandJsonNode(jsonText, configFileName, basePath, allFileList);
+                assert.isTrue(parsed.errors.length >= 0);
+                assert.isTrue(parsed.errors.findIndex(e => e.code === expectedExcludedDiagnosticCode) === -1, `Expected error code ${expectedExcludedDiagnosticCode} to not be in ${JSON.stringify(parsed.errors)}`);
+            }
+        }
+
         it("returns empty config for file with only whitespaces", () => {
             assertParseResult("", { config : {} });
             assertParseResult(" ", { config : {} });
@@ -128,7 +141,7 @@ namespace ts {
 
         it("returns object with error when json is invalid", () => {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", "invalid");
-            assert.deepEqual(parsed.config, { invalid: undefined });
+            assert.deepEqual(parsed.config, {});
             const expected = createCompilerDiagnostic(Diagnostics._0_expected, "{");
             const error = parsed.error!;
             assert.equal(error.messageText, expected.messageText);
@@ -274,6 +287,30 @@ namespace ts {
                 "files": []
             }`;
             assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        });
+
+        it("generates errors for empty files list when no references are provided", () => {
+            const content = `{
+                "files": [],
+                "references": []
+            }`;
+            assertParseFileDiagnostics(content,
+                "/apath/tsconfig.json",
+                "tests/cases/unittests",
+                ["/apath/a.ts"],
+                Diagnostics.The_files_list_in_config_file_0_is_empty.code);
+        });
+
+        it("does not generate errors for empty files list when one or more references are provided", () => {
+            const content = `{
+                "files": [],
+                "references": [{ "path": "/apath" }]
+            }`;
+            assertParseFileDiagnosticsExclusion(content,
                 "/apath/tsconfig.json",
                 "tests/cases/unittests",
                 ["/apath/a.ts"],

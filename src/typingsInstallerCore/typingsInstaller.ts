@@ -252,8 +252,11 @@ namespace ts.server.typingsInstaller {
                         }
                         const info = getProperty(npmLock.dependencies, key);
                         const version = info && info.version;
-                        const semver = Semver.parse(version!); // TODO: GH#18217
-                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: semver };
+                        if (!version) {
+                            continue;
+                        }
+
+                        const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: new Version(version) };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                     }
                 }
@@ -356,7 +359,7 @@ namespace ts.server.typingsInstaller {
 
                         // packageName is guaranteed to exist in typesRegistry by filterTypings
                         const distTags = this.typesRegistry.get(packageName)!;
-                        const newVersion = Semver.parse(distTags[`ts${versionMajorMinor}`] || distTags[this.latestDistTag]);
+                        const newVersion = new Version(distTags[`ts${versionMajorMinor}`] || distTags[this.latestDistTag]);
                         const newTyping: JsTyping.CachedTyping = { typingLocation: typingFile, version: newVersion };
                         this.packageNameToTypingLocation.set(packageName, newTyping);
                         installedTypingFiles.push(typingFile);

@@ -2,17 +2,14 @@ declare namespace ts.server {
     export type ActionSet = "action::set";
     export type ActionInvalidate = "action::invalidate";
     export type ActionPackageInstalled = "action::packageInstalled";
+    export type ActionValueInspected = "action::valueInspected";
     export type EventTypesRegistry = "event::typesRegistry";
     export type EventBeginInstallTypes = "event::beginInstallTypes";
     export type EventEndInstallTypes = "event::endInstallTypes";
     export type EventInitializationFailed = "event::initializationFailed";
 
-    export interface SortedReadonlyArray<T> extends ReadonlyArray<T> {
-        " __sortedArrayBrand": any;
-    }
-
     export interface TypingInstallerResponse {
-        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
+        readonly kind: ActionSet | ActionInvalidate | EventTypesRegistry | ActionPackageInstalled | ActionValueInspected | EventBeginInstallTypes | EventEndInstallTypes | EventInitializationFailed;
     }
 
     export interface TypingInstallerRequestWithProjectName {
@@ -20,7 +17,7 @@ declare namespace ts.server {
     }
 
     /* @internal */
-    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest | InstallPackageRequest;
+    export type TypingInstallerRequestUnion = DiscoverTypings | CloseProject | TypesRegistryRequest | InstallPackageRequest | InspectValueRequest;
 
     export interface DiscoverTypings extends TypingInstallerRequestWithProjectName {
         readonly fileNames: string[];
@@ -48,6 +45,12 @@ declare namespace ts.server {
     }
 
     /* @internal */
+    export interface InspectValueRequest {
+        readonly kind: "inspectValue";
+        readonly options: InspectValueOptions;
+    }
+
+    /* @internal */
     export interface TypesRegistryResponse extends TypingInstallerResponse {
         readonly kind: EventTypesRegistry;
         readonly typesRegistry: MapLike<MapLike<string>>;
@@ -57,6 +60,12 @@ declare namespace ts.server {
         readonly kind: ActionPackageInstalled;
         readonly success: boolean;
         readonly message: string;
+    }
+
+    /* @internal */
+    export interface InspectValueResponse {
+        readonly kind: ActionValueInspected;
+        readonly result: ValueInfo;
     }
 
     export interface InitializationFailedResponse extends TypingInstallerResponse {
@@ -106,5 +115,5 @@ declare namespace ts.server {
     }
 
     /* @internal */
-    export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InstallTypes | InitializationFailedResponse;
+    export type TypingInstallerResponseUnion = SetTypings | InvalidateCachedTypings | TypesRegistryResponse | PackageInstalledResponse | InspectValueResponse | InstallTypes | InitializationFailedResponse;
 }

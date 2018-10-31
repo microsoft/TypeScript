@@ -25,7 +25,7 @@ tests/cases/conformance/salsa/index.js(55,13): error TS2554: Expected 1 argument
         if (!(this instanceof C3)) return new C3();
     };
     
-    const c3_v1 = C3();
+    const c3_v1 = C3(); // error: @class tag requires 'new'
                   ~~~~
 !!! error TS2348: Value of type 'typeof C3' is not callable. Did you mean to include 'new'?
     const c3_v2 = new C3();
@@ -35,7 +35,7 @@ tests/cases/conformance/salsa/index.js(55,13): error TS2554: Expected 1 argument
         if (!(this instanceof C4)) return new C4();
     };
     
-    const c4_v1 = C4();
+    const c4_v1 = C4(); // error: @class tag requires 'new'
                   ~~~~
 !!! error TS2348: Value of type 'typeof C4' is not callable. Did you mean to include 'new'?
     const c4_v2 = new C4();
@@ -65,4 +65,5 @@ tests/cases/conformance/salsa/index.js(55,13): error TS2554: Expected 1 argument
     var c7_v1 = new C7();
                 ~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/conformance/salsa/index.js:53:13: An argument for 'num' was not provided.
     

@@ -2,7 +2,7 @@
 
 //@Filename: file.tsx
 // @jsx: preserve
-// @noLib: true
+// @skipLibCheck: true
 
 //// declare module JSX {
 ////     interface Element { }
@@ -30,33 +30,8 @@
 //// let opt = <MainButton goTo="goTo" /*5*/ />;
 //// let opt = <MainButton wrong /*6*/ />;
 
-goTo.marker("1");
-verify.completionListContains('children');
-verify.completionListContains('className');
-verify.completionListContains('onClick');
-verify.completionListContains('goTo');
-
-goTo.marker("2");
-verify.completionListContains('className');
-verify.completionListContains('onClick');
-verify.completionListContains('goTo');
-
-goTo.marker("3");
-verify.completionListContains('children');
-verify.completionListContains('className');
-verify.not.completionListContains('goTo');
-
-goTo.marker("4");
-verify.completionListContains('children');
-verify.completionListContains('className');
-
-goTo.marker("5");
-verify.completionListContains('children');
-verify.completionListContains('className');
-verify.not.completionListContains('onClick');
-
-goTo.marker("6");
-verify.completionListContains('children');
-verify.completionListContains('className');
-verify.completionListContains('onClick');
-verify.completionListContains('goTo');
+verify.completions(
+    { marker: ["1", "6"], exact: ["onClick", "children", "className", "goTo"] },
+    { marker: "2", exact: ["onClick", "className", "goTo"] },
+    { marker: ["3", "4", "5"], exact: ["children", "className"] },
+);

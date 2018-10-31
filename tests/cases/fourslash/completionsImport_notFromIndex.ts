@@ -16,8 +16,19 @@
 ////x/*2*/
 
 for (const [marker, sourceDisplay] of [["0", "./src"], ["1", "./a"], ["2", "../a"]]) {
-    goTo.marker(marker);
-    verify.completionListContains({ name: "x", source: "/src/a" }, "const x: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, { includeCompletionsForModuleExports: true, sourceDisplay });
+    verify.completions({
+        marker,
+        includes: {
+            name: "x",
+            source: "/src/a",
+            sourceDisplay,
+            text: "const x: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+        },
+        preferences: { includeCompletionsForModuleExports: true },
+    });
     verify.applyCodeActionFromCompletion(marker, {
         name: "x",
         source: "/src/a",

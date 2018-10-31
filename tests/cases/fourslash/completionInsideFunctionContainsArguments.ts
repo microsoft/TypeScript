@@ -10,13 +10,7 @@
 ////}
 ////let g = () => /*5*/
 
-goTo.marker('1');
-verify.completionListContains("arguments");
-goTo.marker('2');
-verify.not.completionListContains("arguments");
-goTo.marker('3');
-verify.completionListContains("arguments");
-goTo.marker('4');
-verify.completionListContains("arguments");
-goTo.marker('5');
-verify.not.completionListContains("arguments");
+verify.completions(
+    { marker: ["1", "3", "4"], includes: "arguments" },
+    { marker: ["2", "5"], excludes: "arguments" },
+);

@@ -21,5 +21,19 @@
 ////}
 
 const [r0, r1] = test.ranges();
-verify.completionsAt("0", ["a", "b", "dir"], { isNewIdentifierLocation: true });
-verify.completionsAt("1", ["x"], { isNewIdentifierLocation: true });
+verify.completions(
+    {
+        marker: "0",
+        exact: [
+            { name: "a", kind: "script", kindModifiers: ".ts" },
+            { name: "b", kind: "script", kindModifiers: ".ts" },
+            { name: "dir", kind: "directory" },
+        ],
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: "1",
+        exact: { name: "x", kind: "script", kindModifiers: ".ts" },
+        isNewIdentifierLocation: true,
+    },
+);

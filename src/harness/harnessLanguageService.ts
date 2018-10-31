@@ -268,7 +268,7 @@ namespace Harness.LanguageService {
         getHost(): LanguageServiceAdapterHost { return this.host; }
         getLanguageService(): ts.LanguageService { return ts.createLanguageService(this.host); }
         getClassifier(): ts.Classifier { return ts.createClassifier(); }
-        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJavaScriptFileExtension(fileName)); }
+        getPreProcessedFileInfo(fileName: string, fileContents: string): ts.PreProcessedFileInfo { return ts.preProcessFile(fileContents, /* readImportFiles */ true, ts.hasJSFileExtension(fileName)); }
     }
 
     /// Shim adapter
@@ -828,6 +828,36 @@ namespace Harness.LanguageService {
                                     return prev;
                                 };
                                 return proxy;
+                            }
+                        }),
+                        error: undefined
+                    };
+
+                // Accepts configurations
+                case "configurable-diagnostic-adder":
+                    let customMessage = "default message";
+                    return {
+                        module: () => ({
+                            create(info: ts.server.PluginCreateInfo) {
+                                customMessage = info.config.message;
+                                const proxy = makeDefaultProxy(info);
+                                proxy.getSemanticDiagnostics = filename => {
+                                    const prev = info.languageService.getSemanticDiagnostics(filename);
+                                    const sourceFile: ts.SourceFile = info.project.getSourceFile(ts.toPath(filename, /*basePath*/ undefined, ts.createGetCanonicalFileName(info.serverHost.useCaseSensitiveFileNames)))!;
+                                    prev.push({
+                                        category: ts.DiagnosticCategory.Error,
+                                        file: sourceFile,
+                                        code: 9999,
+                                        length: 3,
+                                        messageText: customMessage,
+                                        start: 0
+                                    });
+                                    return prev;
+                                };
+                                return proxy;
+                            },
+                            onConfigurationChanged(config: any) {
+                                customMessage = config.message;
                             }
                         }),
                         error: undefined

@@ -2,5 +2,4 @@
 
 ////Harness.newLine = ""\n/**/
 
-goTo.marker();
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "", exact: completion.globals });

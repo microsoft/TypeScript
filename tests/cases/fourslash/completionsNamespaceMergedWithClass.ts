@@ -12,10 +12,7 @@
 ////let x: D./*type*/;
 ////D./*value*/
 
-goTo.marker("type");
-verify.completionListContains("T");
-verify.not.completionListContains("m");
-
-goTo.marker("value");
-verify.not.completionListContains("T");
-verify.completionListContains("m");
+verify.completions(
+    { marker: "type", exact: "T" },
+    { marker: "value", exact: ["prototype", "m", ...completion.functionMembers] },
+);

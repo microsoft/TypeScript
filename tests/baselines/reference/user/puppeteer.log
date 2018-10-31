@@ -1,17 +1,16 @@
 Exit Code: 1
 Standard output:
-lib/Browser.js(71,43): error TS2345: Argument of type '() => Promise<CDPSession>' is not assignable to parameter of type '() => Promise<Puppeteer.CDPSession>'.
-  Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
-    Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
-      Types of property 'on' are incompatible.
-        Type '(event: string | symbol, listener: (...args: any[]) => void) => CDPSession' is not assignable to type '<T extends string | number | symbol>(event: T, listener: (arg: any) => void) => CDPSession'.
-          Types of parameters 'event' and 'event' are incompatible.
-            Type 'T' is not assignable to type 'string | symbol'.
-              Type 'string | number | symbol' is not assignable to type 'string | symbol'.
-                Type 'number' is not assignable to type 'string | symbol'.
-                  Type 'T' is not assignable to type 'symbol'.
-                    Type 'string | number | symbol' is not assignable to type 'symbol'.
-                      Type 'string' is not assignable to type 'symbol'.
+lib/Browser.js(71,49): error TS2322: Type 'Promise<CDPSession>' is not assignable to type 'Promise<Puppeteer.CDPSession>'.
+  Type 'CDPSession' is not assignable to type 'Puppeteer.CDPSession'.
+    Types of property 'on' are incompatible.
+      Type '(event: string | symbol, listener: (...args: any[]) => void) => CDPSession' is not assignable to type '<T extends string | number | symbol>(event: T, listener: (arg: any) => void) => CDPSession'.
+        Types of parameters 'event' and 'event' are incompatible.
+          Type 'T' is not assignable to type 'string | symbol'.
+            Type 'string | number | symbol' is not assignable to type 'string | symbol'.
+              Type 'number' is not assignable to type 'string | symbol'.
+                Type 'T' is not assignable to type 'symbol'.
+                  Type 'string | number | symbol' is not assignable to type 'symbol'.
+                    Type 'string' is not assignable to type 'symbol'.
 lib/Coverage.js(109,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/Coverage.js(196,15): error TS2503: Cannot find namespace 'Protocol'.
 lib/ElementHandle.js(24,15): error TS2503: Cannot find namespace 'Protocol'.
@@ -52,7 +51,6 @@ lib/Page.js(935,3): error TS2322: Type '{ width: number; height: number; }' is n
 lib/Page.js(936,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(937,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
 lib/Page.js(938,3): error TS2322: Type '{ width: number; height: number; }' is not assignable to type 'string'.
-lib/externs.d.ts(2,30): error TS2497: Module '"/puppeteer/puppeteer/lib/Browser"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(3,29): error TS2497: Module '"/puppeteer/puppeteer/lib/Target"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(5,32): error TS2497: Module '"/puppeteer/puppeteer/lib/TaskQueue"' resolves to a non-module entity and cannot be imported using this construct.
 lib/externs.d.ts(9,37): error TS2497: Module '"/puppeteer/puppeteer/lib/ElementHandle"' resolves to a non-module entity and cannot be imported using this construct.

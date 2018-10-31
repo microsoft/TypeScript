@@ -1,0 +1,54 @@
+=== tests/cases/conformance/types/contextualTypes/asyncFunctions/contextuallyTypeAsyncFunctionReturnType.ts ===
+interface Obj { key: "value"; }
+>Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+>key : Symbol(Obj.key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 15))
+
+async function fn1(): Promise<Obj> {
+>fn1 : Symbol(fn1, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 31))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+
+    return { key: "value" };
+>key : Symbol(key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 3, 12))
+}
+
+async function fn2(): Promise<Obj> {
+>fn2 : Symbol(fn2, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 4, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+
+    return new Promise(resolve => {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 7, 23))
+
+        resolve({ key: "value" });
+>resolve : Symbol(resolve, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 7, 23))
+>key : Symbol(key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 8, 17))
+
+    });
+}
+
+async function fn3(): Promise<Obj> {
+>fn3 : Symbol(fn3, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 10, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+
+    return await { key: "value" };
+>key : Symbol(key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 13, 18))
+}
+
+async function fn4(): Promise<Obj> {
+>fn4 : Symbol(fn4, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 14, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>Obj : Symbol(Obj, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 0, 0))
+
+    return await new Promise(resolve => {
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
+>resolve : Symbol(resolve, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 17, 29))
+
+        resolve({ key: "value" });
+>resolve : Symbol(resolve, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 17, 29))
+>key : Symbol(key, Decl(contextuallyTypeAsyncFunctionReturnType.ts, 18, 17))
+
+    });
+}

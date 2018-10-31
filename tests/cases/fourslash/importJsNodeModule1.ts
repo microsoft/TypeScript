@@ -11,8 +11,6 @@
 goTo.file('consumer.js');
 goTo.marker();
 edit.insert('.');
-verify.completionListContains("n", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("s", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("b", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
+verify.completions({ includes: ["n", "s", "b"].map(name => ({ name, kind: "property" })) });
 edit.insert('n.');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

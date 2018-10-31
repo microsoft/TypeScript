@@ -14,6 +14,7 @@ export {};
 export function gee() { eff(); }`,
         "/eff.ts":
 `import { gee } from "./a";
-export function eff() { gee(); }`,
+export function eff() { gee(); }
+`,
     },
 });

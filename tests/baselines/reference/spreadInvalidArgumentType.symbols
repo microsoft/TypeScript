@@ -82,19 +82,19 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >e : Symbol(e, Decl(spreadInvalidArgumentType.ts, 27, 7))
 >E : Symbol(E, Decl(spreadInvalidArgumentType.ts, 0, 0))
 
-    var o1 = { ...p1 };   // Error, generic type paramterre
+    var o1 = { ...p1 };  // OK, generic type paramterre
 >o1 : Symbol(o1, Decl(spreadInvalidArgumentType.ts, 29, 7))
 >p1 : Symbol(p1, Decl(spreadInvalidArgumentType.ts, 2, 36))
 
-    var o2 = { ...p2 };   // OK
+    var o2 = { ...p2 };  // OK
 >o2 : Symbol(o2, Decl(spreadInvalidArgumentType.ts, 30, 7))
 >p2 : Symbol(p2, Decl(spreadInvalidArgumentType.ts, 2, 42))
 
-    var o3 = { ...t };   // Error, generic type paramter
+    var o3 = { ...t };   // OK, generic type paramter
 >o3 : Symbol(o3, Decl(spreadInvalidArgumentType.ts, 31, 7))
 >t : Symbol(t, Decl(spreadInvalidArgumentType.ts, 3, 7))
 
-    var o4 = { ...i };   // Error, index access
+    var o4 = { ...i };   // OK, index access
 >o4 : Symbol(o4, Decl(spreadInvalidArgumentType.ts, 32, 7))
 >i : Symbol(i, Decl(spreadInvalidArgumentType.ts, 5, 7))
 
@@ -102,7 +102,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o5 : Symbol(o5, Decl(spreadInvalidArgumentType.ts, 33, 7))
 >k : Symbol(k, Decl(spreadInvalidArgumentType.ts, 6, 7))
 
-    var o6 = { ...mapped_generic }; // Error, generic mapped object type
+    var o6 = { ...mapped_generic }; // OK, generic mapped object type
 >o6 : Symbol(o6, Decl(spreadInvalidArgumentType.ts, 34, 7))
 >mapped_generic : Symbol(mapped_generic, Decl(spreadInvalidArgumentType.ts, 8, 7))
 
@@ -110,7 +110,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o7 : Symbol(o7, Decl(spreadInvalidArgumentType.ts, 35, 7))
 >mapped : Symbol(mapped, Decl(spreadInvalidArgumentType.ts, 9, 7))
 
-    var o8 = { ...union_generic };  // Error, union with generic type parameter
+    var o8 = { ...union_generic };  // OK, union with generic type parameter
 >o8 : Symbol(o8, Decl(spreadInvalidArgumentType.ts, 37, 7))
 >union_generic : Symbol(union_generic, Decl(spreadInvalidArgumentType.ts, 11, 7))
 
@@ -118,7 +118,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >o9 : Symbol(o9, Decl(spreadInvalidArgumentType.ts, 38, 7))
 >union_primitive : Symbol(union_primitive, Decl(spreadInvalidArgumentType.ts, 12, 7))
 
-    var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
+    var o10 = { ...intersection_generic };  // OK, intersection with generic type parameter
 >o10 : Symbol(o10, Decl(spreadInvalidArgumentType.ts, 40, 7))
 >intersection_generic : Symbol(intersection_generic, Decl(spreadInvalidArgumentType.ts, 14, 7))
 

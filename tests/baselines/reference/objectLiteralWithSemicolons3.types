@@ -5,13 +5,10 @@ var v = {
 
   a;
 >a : any
-> : any
 
   b;
 >b : any
-> : any
 
   c;
 >c : any
-> : any
 }

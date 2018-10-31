@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <LCX SchemaVersion="6.0" Name="f:\ddSetup\sources\typescript\localization\compiler2.resx" PsrId="306" FileType="1" SrcCul="en-US" TgtCul="zh-TW" xmlns="http://schemas.microsoft.com/locstudio/2006/6/lcx">
   <Props>
     <Str Name="CustomName1" Val="Custom 1" />
@@ -3766,7 +3766,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract constant]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮常數]]></Val>
+            <Val><![CDATA[擷取常數]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3775,7 +3775,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract function]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮函式]]></Val>
+            <Val><![CDATA[擷取函式]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3784,7 +3784,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1}]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至 {1} 中的 {0}]]></Val>
+            <Val><![CDATA[擷取至 {1} 中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3793,7 +3793,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in {1} scope]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至 {1} 範圍中的 {0}]]></Val>
+            <Val><![CDATA[擷取至 {1} 範圍中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -3802,7 +3802,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Extract to {0} in enclosing scope]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[解壓縮至封閉式範圍中的 {0}]]></Val>
+            <Val><![CDATA[擷取至封閉式範圍中的 {0}]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -5437,7 +5437,7 @@
         <Str Cat="Text">
           <Val><![CDATA[Move to a new file]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA[移至新行]]></Val>
+            <Val><![CDATA[移至新檔]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

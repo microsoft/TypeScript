@@ -3,8 +3,6 @@ var v = { a; b; c }
 >v : { a: any; b: any; c: any; }
 >{ a; b; c } : { a: any; b: any; c: any; }
 >a : any
-> : any
 >b : any
-> : any
 >c : any
 
