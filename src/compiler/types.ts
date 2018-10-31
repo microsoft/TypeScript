@@ -3174,6 +3174,7 @@ namespace ts {
 
         /* @internal */ isArrayLikeType(type: Type): boolean;
         /* @internal */ isEmptyObjectType(type: Type): boolean;
+        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
 
         /* @internal */ mapType(type: Type, mapper: (t: Type) => Type, noReductions?: boolean): Type;
         /* @internal */ mapType(type: Type, mapper: (t: Type) => Type | undefined, noReductions?: boolean): Type | undefined;
