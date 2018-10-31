@@ -1966,6 +1966,11 @@ namespace ts.server {
             return configProject && configProject.getCompilerOptions().configFile;
         }
 
+        /* @internal */
+        allScriptInfoFileNamesForDebug(): ReadonlyArray<string> {
+            return arrayFrom(this.filenameToScriptInfo.keys());
+        }
+
         /**
          * Returns the projects that contain script info through SymLink
          * Note that this does not return projects in info.containingProjects

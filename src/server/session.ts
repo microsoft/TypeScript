@@ -1908,8 +1908,18 @@ namespace ts.server {
             return textChanges.map(change => this.mapTextChangeToCodeEdit(change));
         }
 
-        private mapTextChangeToCodeEdit(change: FileTextChanges): protocol.FileCodeEdits {
-            return mapTextChangesToCodeEdits(change, this.projectService.getScriptInfoOrConfig(change.fileName));
+        private mapTextChangeToCodeEdit(textChanges: FileTextChanges): protocol.FileCodeEdits {
+            const scriptInfo = this.projectService.getScriptInfoOrConfig(textChanges.fileName);
+            if (!!textChanges.isNewFile === !!scriptInfo) {
+                if (!scriptInfo) { // and !isNewFile
+                    this.logger.msg(`Could not find file ${JSON.stringify(textChanges.fileName)} and 'isNewFile' not set.\n` +
+                        `All files are: ${JSON.stringify(this.projectService.allScriptInfoFileNamesForDebug())}`, Msg.Err);
+                }
+                Debug.fail("Expected isNewFile for (only) new files. " + JSON.stringify({ isNewFile: !!textChanges.isNewFile, hasScriptInfo: !!scriptInfo }));
+            }
+            return scriptInfo
+                ? { fileName: textChanges.fileName, textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, scriptInfo)) }
+                : convertNewFileTextChangeToCodeEdit(textChanges);
         }
 
         private convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfo): protocol.CodeEdit {
@@ -2429,13 +2439,6 @@ namespace ts.server {
 
     function toFileSpan(fileName: string, textSpan: TextSpan, scriptInfo: ScriptInfo): protocol.FileSpan {
         return { file: fileName, start: scriptInfo.positionToLineOffset(textSpan.start), end: scriptInfo.positionToLineOffset(textSpanEnd(textSpan)) };
-    }
-
-    function mapTextChangesToCodeEdits(textChanges: FileTextChanges, scriptInfo: ScriptInfoOrConfig | undefined): protocol.FileCodeEdits {
-        Debug.assert(!!textChanges.isNewFile === !scriptInfo, "Expected isNewFile for (only) new files", () => JSON.stringify({ isNewFile: !!textChanges.isNewFile, hasScriptInfo: !!scriptInfo }));
-        return scriptInfo
-            ? { fileName: textChanges.fileName, textChanges: textChanges.textChanges.map(textChange => convertTextChangeToCodeEdit(textChange, scriptInfo)) }
-            : convertNewFileTextChangeToCodeEdit(textChanges);
     }
 
     function convertTextChangeToCodeEdit(change: TextChange, scriptInfo: ScriptInfoOrConfig): protocol.CodeEdit {
