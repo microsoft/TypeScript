@@ -124,6 +124,25 @@ function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
     k = "hello"; // error
 }
 
+// Repro from #27470
+
+type UndefinedKeys<T extends Record<string, any>> = {
+  [K in keyof T]: undefined extends T[K] ? K : never
+};
+
+type MyType = {a: string, b: string | undefined}
+
+type Result1 = UndefinedKeys<MyType>;
+
+const a1: Result1['a'] = 'a';  // Error
+const b1: Result1['b'] = 'b';
+
+function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+    t[k] = 42;  // Error
+    t[k] = "hello";  // Error
+    t[k] = [10, 20];  // Error
+}
+
 
 //// [keyofAndIndexedAccessErrors.js]
 var Shape = /** @class */ (function () {
@@ -188,4 +207,11 @@ function f3(t, k, tk, u, j, uk, tj, uj) {
 function f4(k) {
     k = 42; // error
     k = "hello"; // error
+}
+var a1 = 'a'; // Error
+var b1 = 'b';
+function test1(t, k) {
+    t[k] = 42; // Error
+    t[k] = "hello"; // Error
+    t[k] = [10, 20]; // Error
 }

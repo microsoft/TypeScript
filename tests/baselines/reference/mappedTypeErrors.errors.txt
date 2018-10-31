@@ -41,9 +41,11 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: 
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(142,10): error TS2322: Type '{ x: number; y: boolean; }' is not assignable to type '{ [x: O]: unknown; }'.
   Object literal may only specify known properties, and 'x' does not exist in type '{ [x: O]: unknown; }'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(148,17): error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
+tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
 
 
-==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (26 errors) ====
+==== tests/cases/conformance/types/mapped/mappedTypeErrors.ts (28 errors) ====
     interface Shape {
         name: string;
         width: number;
@@ -262,4 +264,18 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(142,10): error TS2322: 
 !!! error TS2322:   Object literal may only specify known properties, and 'x' does not exist in type '{ [x: O]: unknown; }'.
 !!! related TS6500 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:136:5: The expected type comes from property 'pt' which is declared here on type 'Foo2<O, "x">'
     };
+    
+    // Repro from #28170
+    
+    function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+        let x = obj.foo;  // Error
+                    ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
+    }
+    
+    function test2<T, K extends keyof T>(obj: Record<K, number>) {
+        let x = obj.foo;  // Error
+                    ~~~
+!!! error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
+    }
     

@@ -11,7 +11,7 @@
         "types.ts",
         "utilities.ts",
         "classifier.ts",
-        "pathCompletions.ts",
+        "stringCompletions.ts",
         "completions.ts",
         "documentHighlights.ts",
         "documentRegistry.ts",

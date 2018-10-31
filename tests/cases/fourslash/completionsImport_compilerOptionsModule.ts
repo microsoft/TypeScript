@@ -27,6 +27,6 @@
 verify.completions({ marker: ["b", "c", "d"], excludes: "foo", preferences: { includeCompletionsForModuleExports: true } });
 verify.completions({
     marker: ["c2", "d2"],
-    includes: [{ name: "foo", source: "/node_modules/a/index", text: "const foo: 0", kind: "const", hasAction: true, sourceDisplay: "a" }],
+    includes: [{ name: "foo", source: "/node_modules/a/index", text: "const foo: 0", kind: "const", kindModifiers: "export,declare", hasAction: true, sourceDisplay: "a" }],
     preferences: { includeCompletionsForModuleExports: true },
 });

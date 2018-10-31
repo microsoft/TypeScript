@@ -20,7 +20,4 @@
 ////funcE({ /*E*/ });
 ////funcF({ /*F*/ });
 
-goTo.eachMarker(() => {
-    verify.completionListContains("hello");
-    verify.completionListContains("world");
-});
+verify.completions({ marker: test.markers(), exact: ["hello", "world"] });

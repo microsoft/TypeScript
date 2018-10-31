@@ -3,6 +3,4 @@
 ////let count: 'one' | 'two';
 ////count = `/**/`
 
-goTo.marker();
-verify.completionListContains('one');
-verify.completionListContains('two');
+verify.completions({ marker: "", exact: ["one", "two"] });

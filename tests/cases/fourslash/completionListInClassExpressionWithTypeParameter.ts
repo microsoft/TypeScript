@@ -8,10 +8,7 @@
 ////    prop: Ty/*1*/
 //// }
 
-goTo.marker("0");
-verify.not.completionListContains("TypeParam", "(type parameter) TypeParam in myClass<TypeParam>", /*documentation*/ undefined, "type parameter");
-goTo.marker("0Type");
-verify.completionListContains("TypeParam", "(type parameter) TypeParam in myClass<TypeParam>", /*documentation*/ undefined, "type parameter");
-
-goTo.marker("1");
-verify.completionListContains("TypeParam", "(type parameter) TypeParam in myClass<TypeParam>", /*documentation*/ undefined, "type parameter");
+verify.completions(
+    { marker: "0", excludes: "TypeParam" },
+    { marker: ["0Type", "1"], includes: { name: "TypeParam", text: "(type parameter) TypeParam in myClass<TypeParam>", kind: "type parameter" } },
+);

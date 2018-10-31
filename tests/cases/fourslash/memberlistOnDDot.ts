@@ -6,4 +6,4 @@
 goTo.marker();
 edit.insert('.');
 edit.insert('.');
-//verify.not.completionListContains('charAt');
+verify.completions({ exact: undefined });

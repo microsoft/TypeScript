@@ -8,7 +8,7 @@ function bar([x, z, ...w]) { }
 function foo([x, ...y] = [1, "string", true]) { }
 >foo : ([x, ...y]?: [number, string, boolean]) => void
 >x : number
->y : (string | boolean)[]
+>y : [string, boolean]
 >[1, "string", true] : [number, string, boolean]
 >1 : 1
 >"string" : "string"

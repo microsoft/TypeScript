@@ -147,12 +147,35 @@ namespace ts {
                 },
                 "/reference": {
                     files: { "/secondary/b.ts": moduleImporting("../primary/a") },
-                    references: ["../primary"]
+                    references: ["../primary"],
+                    config: {
+                        files: ["b.ts"]
+                    }
                 }
             };
             testProjectReferences(spec, "/reference/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
                 assertHasError("Reports an error about 'composite' not being set", errs, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true);
+            });
+        });
+
+        it("does not error when the referenced project doesn't have composite:true if its a container project", () => {
+            const spec: TestSpecification = {
+                "/primary": {
+                    files: { "/primary/a.ts": emptyModule },
+                    references: [],
+                    options: {
+                        composite: false
+                    }
+                },
+                "/reference": {
+                    files: { "/secondary/b.ts": moduleImporting("../primary/a") },
+                    references: ["../primary"],
+                }
+            };
+            testProjectReferences(spec, "/reference/tsconfig.json", program => {
+                const errs = program.getOptionsDiagnostics();
+                assertNoErrors("Reports an error about 'composite' not being set", errs);
             });
         });
 
@@ -184,7 +207,7 @@ namespace ts {
             };
             testProjectReferences(spec, "/primary/tsconfig.json", program => {
                 const errs = program.getOptionsDiagnostics();
-                assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_does_not_exist);
+                assertHasError("Reports an error about a missing file", errs, Diagnostics.File_0_not_found);
             });
         });
 

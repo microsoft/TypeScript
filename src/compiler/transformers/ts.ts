@@ -973,9 +973,11 @@ namespace ts {
             // Check if we have property assignment inside class declaration.
             // If there is a property assignment, we need to emit constructor whether users define it or not
             // If there is no property assignment, we can omit constructor if users do not define it
-            const hasInstancePropertyWithInitializer = forEach(node.members, isInstanceInitializedProperty);
-            const hasParameterPropertyAssignments = node.transformFlags & TransformFlags.ContainsParameterPropertyAssignments;
             const constructor = getFirstConstructorWithBody(node);
+            const hasInstancePropertyWithInitializer = forEach(node.members, isInstanceInitializedProperty);
+            const hasParameterPropertyAssignments = constructor &&
+                constructor.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax &&
+                forEach(constructor.parameters, isParameterWithPropertyAssignment);
 
             // If the class does not contain nodes that require a synthesized constructor,
             // accept the current constructor if it exists.

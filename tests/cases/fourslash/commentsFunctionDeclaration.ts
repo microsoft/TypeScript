@@ -24,8 +24,7 @@ verify.quickInfoAt("1", "function foo(): void", "This comment should appear for 
 
 verify.quickInfoAt("2", "function foo(): void", "This comment should appear for foo");
 
-goTo.marker('3');
-verify.completionListContains('foo', 'function foo(): void', 'This comment should appear for foo');
+verify.completions({ marker: "3", includes: { name: "foo", text: "function foo(): void", documentation: "This comment should appear for foo" }})
 
 verify.signatureHelp({ marker: "4", docComment: "This comment should appear for foo" });
 
@@ -33,14 +32,22 @@ verify.quickInfoAt("5", "function fooWithParameters(a: string, b: number): void"
 
 verify.quickInfoAt("6", "(local var) d: string");
 
-goTo.marker('7');
-verify.completionListContains('a', '(parameter) a: string', 'this is comment about a');
-verify.completionListContains('b', '(parameter) b: number', 'this is comment for b');
+verify.completions({
+    marker: "7",
+    includes: [
+        { name: "a", text: "(parameter) a: string", documentation: "this is comment about a" },
+        { name: "b", text: "(parameter) b: number", documentation: "this is comment for b" },
+    ],
+    isNewIdentifierLocation: true,
+});
 
 verify.quickInfoAt("8", "function fooWithParameters(a: string, b: number): void", "This is comment for function signature");
 
 goTo.marker('9');
-verify.completionListContains('fooWithParameters', 'function fooWithParameters(a: string, b: number): void', 'This is comment for function signature');
+verify.completions({
+    marker: "9",
+    includes: { name: "fooWithParameters", text: "function fooWithParameters(a: string, b: number): void", documentation: "This is comment for function signature" }
+})
 
 verify.signatureHelp(
     { marker: "10", docComment: "This is comment for function signature", parameterDocComment: "this is comment about a" },

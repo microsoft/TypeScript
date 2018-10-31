@@ -8,6 +8,4 @@
 ////var foo: I;
 ////var { property1/**/ } = foo;
 
-goTo.marker();
-verify.completionListContains("property1");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: ["property1", "property2"] });

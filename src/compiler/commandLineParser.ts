@@ -164,6 +164,13 @@ namespace ts {
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
+        {
+            name: "showConfig",
+            type: "boolean",
+            category: Diagnostics.Command_line_Options,
+            isCommandLineOnly: true,
+            description: Diagnostics.Print_the_final_configuration_instead_of_building
+        },
 
         // Basic
         {
@@ -1013,7 +1020,7 @@ namespace ts {
                                     i++;
                                     break;
                                 case "list":
-                                    const result = parseListTypeOption(<CommandLineOptionOfListType>opt, args[i], errors);
+                                    const result = parseListTypeOption(opt, args[i], errors);
                                     options[opt.name] = result || [];
                                     if (result) {
                                         i++;
@@ -1146,7 +1153,7 @@ namespace ts {
     }
 
     /* @internal */
-    export function printHelp(optionsList: CommandLineOption[], syntaxPrefix = "") {
+    export function printHelp(optionsList: ReadonlyArray<CommandLineOption>, syntaxPrefix = "") {
         const output: string[] = [];
 
         // We want to align our "syntax" and "examples" commands to a certain margin.
@@ -1293,6 +1300,9 @@ namespace ts {
 
         const result = parseJsonText(configFileName, configFileText);
         const cwd = host.getCurrentDirectory();
+        result.path = toPath(configFileName, cwd, createGetCanonicalFileName(host.useCaseSensitiveFileNames));
+        result.resolvedPath = result.path;
+        result.originalFileName = result.fileName;
         return parseJsonSourceFileConfigFileContent(result, host, getNormalizedAbsolutePath(getDirectoryPath(configFileName), cwd), optionsToExtend, getNormalizedAbsolutePath(configFileName, cwd));
     }
 
@@ -1529,7 +1539,12 @@ namespace ts {
             elements: NodeArray<Expression>,
             elementOption: CommandLineOption | undefined
         ): any[] | void {
-            return (returnValue ? elements.map : elements.forEach).call(elements, (element: Expression) => convertPropertyValueToJson(element, elementOption));
+            if (!returnValue) {
+                return elements.forEach(element => convertPropertyValueToJson(element, elementOption));
+            }
+
+            // Filter out invalid values
+            return filter(elements.map(element => convertPropertyValueToJson(element, elementOption)), v => v !== undefined);
         }
 
         function convertPropertyValueToJson(valueExpression: Expression, option: CommandLineOption | undefined): any {
@@ -1646,6 +1661,137 @@ namespace ts {
     }
 
     /**
+     * Generate an uncommented, complete tsconfig for use with "--showConfig"
+     * @param configParseResult options to be generated into tsconfig.json
+     * @param configFileName name of the parsed config file - output paths will be generated relative to this
+     * @param host provides current directory and case sensitivity services
+     */
+    /** @internal */
+    export function convertToTSConfig(configParseResult: ParsedCommandLine, configFileName: string, host: { getCurrentDirectory(): string, useCaseSensitiveFileNames: boolean }): object {
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames);
+        const files = map(
+            filter(
+                configParseResult.fileNames,
+                !configParseResult.configFileSpecs ? _ => false : matchesSpecs(
+                    configFileName,
+                    configParseResult.configFileSpecs.validatedIncludeSpecs,
+                    configParseResult.configFileSpecs.validatedExcludeSpecs
+                )
+            ),
+            f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), f, getCanonicalFileName)
+        );
+        const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
+        const config = {
+            compilerOptions: {
+                ...arrayFrom(optionMap.entries()).reduce((prev, cur) => ({ ...prev, [cur[0]]: cur[1] }), {}),
+                showConfig: undefined,
+                configFile: undefined,
+                configFilePath: undefined,
+                help: undefined,
+                init: undefined,
+                listFiles: undefined,
+                listEmittedFiles: undefined,
+                project: undefined,
+            },
+            references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
+            files: length(files) ? files : undefined,
+            ...(configParseResult.configFileSpecs ? {
+                include: filterSameAsDefaultInclude(configParseResult.configFileSpecs.validatedIncludeSpecs),
+                exclude: configParseResult.configFileSpecs.validatedExcludeSpecs
+            } : {}),
+            compilerOnSave: !!configParseResult.compileOnSave ? true : undefined
+        };
+        return config;
+    }
+
+    function filterSameAsDefaultInclude(specs: ReadonlyArray<string> | undefined) {
+        if (!length(specs)) return undefined;
+        if (length(specs) !== 1) return specs;
+        if (specs![0] === "**/*") return undefined;
+        return specs;
+    }
+
+    function matchesSpecs(path: string, includeSpecs: ReadonlyArray<string> | undefined, excludeSpecs: ReadonlyArray<string> | undefined): (path: string) => boolean {
+        if (!includeSpecs) return _ => false;
+        const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, sys.useCaseSensitiveFileNames, sys.getCurrentDirectory());
+        const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, sys.useCaseSensitiveFileNames);
+        const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, sys.useCaseSensitiveFileNames);
+        if (includeRe) {
+            if (excludeRe) {
+                return path => includeRe.test(path) && !excludeRe.test(path);
+            }
+            return path => includeRe.test(path);
+        }
+        if (excludeRe) {
+            return path => !excludeRe.test(path);
+        }
+        return _ => false;
+    }
+
+    function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
+        if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
+            // this is of a type CommandLineOptionOfPrimitiveType
+            return undefined;
+        }
+        else if (optionDefinition.type === "list") {
+            return getCustomTypeMapOfCommandLineOption(optionDefinition.element);
+        }
+        else {
+            return (<CommandLineOptionOfCustomType>optionDefinition).type;
+        }
+    }
+
+    function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
+        // There is a typeMap associated with this command-line option so use it to map value back to its name
+        return forEachEntry(customTypeMap, (mapValue, key) => {
+            if (mapValue === value) {
+                return key;
+            }
+        });
+    }
+
+    function serializeCompilerOptions(options: CompilerOptions, pathOptions?: { configFilePath: string, useCaseSensitiveFileNames: boolean }): Map<CompilerOptionsValue> {
+        const result = createMap<CompilerOptionsValue>();
+        const optionsNameMap = getOptionNameMap().optionNameMap;
+        const getCanonicalFileName = pathOptions && createGetCanonicalFileName(pathOptions.useCaseSensitiveFileNames);
+
+        for (const name in options) {
+            if (hasProperty(options, name)) {
+                // tsconfig only options cannot be specified via command line,
+                // so we can assume that only types that can appear here string | number | boolean
+                if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
+                    continue;
+                }
+                const value = <CompilerOptionsValue>options[name];
+                const optionDefinition = optionsNameMap.get(name.toLowerCase());
+                if (optionDefinition) {
+                    const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
+                    if (!customTypeMap) {
+                        // There is no map associated with this compiler option then use the value as-is
+                        // This is the case if the value is expect to be string, number, boolean or list of string
+                        if (pathOptions && optionDefinition.isFilePath) {
+                            result.set(name, getRelativePathFromFile(pathOptions.configFilePath, getNormalizedAbsolutePath(value as string, getDirectoryPath(pathOptions.configFilePath)), getCanonicalFileName!));
+                        }
+                        else {
+                            result.set(name, value);
+                        }
+                    }
+                    else {
+                        if (optionDefinition.type === "list") {
+                            result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
+                        }
+                        else {
+                            // There is a typeMap associated with this command-line option so use it to map value back to its name
+                            result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
+                        }
+                    }
+                }
+            }
+        }
+        return result;
+    }
+
+    /**
      * Generate tsconfig configuration when running command line "--init"
      * @param options commandlineOptions to be generated into tsconfig.json
      * @param fileNames array of filenames to be generated into tsconfig.json
@@ -1655,63 +1801,6 @@ namespace ts {
         const compilerOptions = extend(options, defaultInitCompilerOptions);
         const compilerOptionsMap = serializeCompilerOptions(compilerOptions);
         return writeConfigurations();
-
-        function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
-            if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
-                // this is of a type CommandLineOptionOfPrimitiveType
-                return undefined;
-            }
-            else if (optionDefinition.type === "list") {
-                return getCustomTypeMapOfCommandLineOption((<CommandLineOptionOfListType>optionDefinition).element);
-            }
-            else {
-                return (<CommandLineOptionOfCustomType>optionDefinition).type;
-            }
-        }
-
-        function getNameOfCompilerOptionValue(value: CompilerOptionsValue, customTypeMap: Map<string | number>): string | undefined {
-            // There is a typeMap associated with this command-line option so use it to map value back to its name
-            return forEachEntry(customTypeMap, (mapValue, key) => {
-                if (mapValue === value) {
-                    return key;
-                }
-            });
-        }
-
-        function serializeCompilerOptions(options: CompilerOptions): Map<CompilerOptionsValue> {
-            const result = createMap<CompilerOptionsValue>();
-            const optionsNameMap = getOptionNameMap().optionNameMap;
-
-            for (const name in options) {
-                if (hasProperty(options, name)) {
-                    // tsconfig only options cannot be specified via command line,
-                    // so we can assume that only types that can appear here string | number | boolean
-                    if (optionsNameMap.has(name) && optionsNameMap.get(name)!.category === Diagnostics.Command_line_Options) {
-                        continue;
-                    }
-                    const value = <CompilerOptionsValue>options[name];
-                    const optionDefinition = optionsNameMap.get(name.toLowerCase());
-                    if (optionDefinition) {
-                        const customTypeMap = getCustomTypeMapOfCommandLineOption(optionDefinition);
-                        if (!customTypeMap) {
-                            // There is no map associated with this compiler option then use the value as-is
-                            // This is the case if the value is expect to be string, number, boolean or list of string
-                            result.set(name, value);
-                        }
-                        else {
-                            if (optionDefinition.type === "list") {
-                                result.set(name, (value as ReadonlyArray<string | number>).map(element => getNameOfCompilerOptionValue(element, customTypeMap)!)); // TODO: GH#18217
-                            }
-                            else {
-                                // There is a typeMap associated with this command-line option so use it to map value back to its name
-                                result.set(name, getNameOfCompilerOptionValue(value, customTypeMap));
-                            }
-                        }
-                    }
-                }
-            }
-            return result;
-        }
 
         function getDefaultValueForOption(option: CommandLineOption) {
             switch (option.type) {
@@ -1726,7 +1815,7 @@ namespace ts {
                 case "object":
                     return {};
                 default:
-                    return (option as CommandLineOptionOfCustomType).type.keys().next().value;
+                    return option.type.keys().next().value;
             }
         }
 
@@ -1895,7 +1984,8 @@ namespace ts {
                     filesSpecs = <ReadonlyArray<string>>raw.files;
                     const hasReferences = hasProperty(raw, "references") && !isNullOrUndefined(raw.references);
                     const hasZeroOrNoReferences = !hasReferences || raw.references.length === 0;
-                    if (filesSpecs.length === 0 && hasZeroOrNoReferences) {
+                    const hasExtends = hasProperty(raw, "extends");
+                    if (filesSpecs.length === 0 && hasZeroOrNoReferences && !hasExtends) {
                         if (sourceFile) {
                             const fileName = configFileName || "tsconfig.json";
                             const diagnosticMessage = Diagnostics.The_files_list_in_config_file_0_is_empty;
@@ -1948,7 +2038,7 @@ namespace ts {
             }
 
             const result = matchFileNames(filesSpecs, includeSpecs, excludeSpecs, configFileName ? directoryOfCombinedPath(configFileName, basePath) : basePath, options, host, errors, extraFileExtensions, sourceFile);
-            if (result.fileNames.length === 0 && !hasProperty(raw, "files") && resolutionStack.length === 0 && !hasProperty(raw, "references")) {
+            if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles(raw), resolutionStack)) {
                 errors.push(getErrorForNoInputFiles(result.spec, configFileName));
             }
 
@@ -1983,18 +2073,37 @@ namespace ts {
         }
     }
 
-    /*@internal*/
-    export function isErrorNoInputFiles(error: Diagnostic) {
+    function isErrorNoInputFiles(error: Diagnostic) {
         return error.code === Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2.code;
     }
 
-    /*@internal*/
-    export function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
+    function getErrorForNoInputFiles({ includeSpecs, excludeSpecs }: ConfigFileSpecs, configFileName: string | undefined) {
         return createCompilerDiagnostic(
             Diagnostics.No_inputs_were_found_in_config_file_0_Specified_include_paths_were_1_and_exclude_paths_were_2,
             configFileName || "tsconfig.json",
             JSON.stringify(includeSpecs || []),
             JSON.stringify(excludeSpecs || []));
+    }
+
+    function shouldReportNoInputFiles(result: ExpandResult, canJsonReportNoInutFiles: boolean, resolutionStack?: Path[]) {
+        return result.fileNames.length === 0 && canJsonReportNoInutFiles && (!resolutionStack || resolutionStack.length === 0);
+    }
+
+     /*@internal*/
+    export function canJsonReportNoInutFiles(raw: any) {
+        return !hasProperty(raw, "files") && !hasProperty(raw, "references");
+    }
+
+     /*@internal*/
+    export function updateErrorForNoInputFiles(result: ExpandResult, configFileName: string, configFileSpecs: ConfigFileSpecs, configParseDiagnostics: Diagnostic[], canJsonReportNoInutFiles: boolean) {
+        const existingErrors = configParseDiagnostics.length;
+        if (shouldReportNoInputFiles(result, canJsonReportNoInutFiles)) {
+            configParseDiagnostics.push(getErrorForNoInputFiles(configFileSpecs, configFileName));
+        }
+        else {
+            filterMutate(configParseDiagnostics, error => !isErrorNoInputFiles(error));
+        }
+        return existingErrors !== configParseDiagnostics.length;
     }
 
     interface ParsedTsconfig {
@@ -2163,20 +2272,24 @@ namespace ts {
         errors: Push<Diagnostic>,
         createDiagnostic: (message: DiagnosticMessage, arg1?: string) => Diagnostic) {
         extendedConfig = normalizeSlashes(extendedConfig);
-        // If the path isn't a rooted or relative path, don't try to resolve it (we reserve the right to special case module-id like paths in the future)
-        if (!(isRootedDiskPath(extendedConfig) || startsWith(extendedConfig, "./") || startsWith(extendedConfig, "../"))) {
-            errors.push(createDiagnostic(Diagnostics.A_path_in_an_extends_option_must_be_relative_or_rooted_but_0_is_not, extendedConfig));
-            return undefined;
-        }
-        let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
-        if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
-            extendedConfigPath = `${extendedConfigPath}.json`;
-            if (!host.fileExists(extendedConfigPath)) {
-                errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
-                return undefined;
+        if (isRootedDiskPath(extendedConfig) || startsWith(extendedConfig, "./") || startsWith(extendedConfig, "../")) {
+            let extendedConfigPath = getNormalizedAbsolutePath(extendedConfig, basePath);
+            if (!host.fileExists(extendedConfigPath) && !endsWith(extendedConfigPath, Extension.Json)) {
+                extendedConfigPath = `${extendedConfigPath}.json`;
+                if (!host.fileExists(extendedConfigPath)) {
+                    errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+                    return undefined;
+                }
             }
+            return extendedConfigPath;
         }
-        return extendedConfigPath;
+        // If the path isn't a rooted or relative path, resolve like a module
+        const resolved = nodeModuleNameResolver(extendedConfig, combinePaths(basePath, "tsconfig.json"), { moduleResolution: ModuleResolutionKind.NodeJs }, host, /*cache*/ undefined, /*projectRefs*/ undefined, /*lookupConfig*/ true);
+        if (resolved.resolvedModule) {
+            return resolved.resolvedModule.resolvedFileName;
+        }
+        errors.push(createDiagnostic(Diagnostics.File_0_does_not_exist, extendedConfig));
+        return undefined;
     }
 
     function getExtendedConfig(
@@ -2313,7 +2426,7 @@ namespace ts {
     function normalizeOptionValue(option: CommandLineOption, basePath: string, value: any): CompilerOptionsValue {
         if (isNullOrUndefined(value)) return undefined;
         if (option.type === "list") {
-            const listOption = <CommandLineOptionOfListType>option;
+            const listOption = option;
             if (listOption.element.isFilePath || !isString(listOption.element.type)) {
                 return <CompilerOptionsValue>filter(map(value, v => normalizeOptionValue(listOption.element, basePath, v)), v => !!v);
             }
@@ -2484,11 +2597,16 @@ namespace ts {
         // via wildcard, and to handle extension priority.
         const wildcardFileMap = createMap<string>();
 
+        // Wildcard paths of json files (provided via the "includes" array in tsconfig.json) are stored in a
+        // file map with a possibly case insensitive key. We use this map to store paths matched
+        // via wildcard of *.json kind
+        const wildCardJsonFileMap = createMap<string>();
         const { filesSpecs, validatedIncludeSpecs, validatedExcludeSpecs, wildcardDirectories } = spec;
 
         // Rather than requery this for each file and filespec, we query the supported extensions
         // once and store it on the expansion context.
         const supportedExtensions = getSupportedExtensions(options, extraFileExtensions);
+        const supportedExtensionsWithJsonIfResolveJsonModule = getSuppoertedExtensionsWithJsonIfResolveJsonModule(options, supportedExtensions);
 
         // Literal files are always included verbatim. An "include" or "exclude" specification cannot
         // remove a literal file.
@@ -2499,8 +2617,25 @@ namespace ts {
             }
         }
 
+        let jsonOnlyIncludeRegexes: ReadonlyArray<RegExp> | undefined;
         if (validatedIncludeSpecs && validatedIncludeSpecs.length > 0) {
-            for (const file of host.readDirectory(basePath, supportedExtensions, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+            for (const file of host.readDirectory(basePath, supportedExtensionsWithJsonIfResolveJsonModule, validatedExcludeSpecs, validatedIncludeSpecs, /*depth*/ undefined)) {
+                if (fileExtensionIs(file, Extension.Json)) {
+                    // Valid only if *.json specified
+                    if (!jsonOnlyIncludeRegexes) {
+                        const includes = validatedIncludeSpecs.filter(s => endsWith(s, Extension.Json));
+                        const includeFilePatterns = map(getRegularExpressionsForWildcards(includes, basePath, "files"), pattern => `^${pattern}$`);
+                        jsonOnlyIncludeRegexes = includeFilePatterns ? includeFilePatterns.map(pattern => getRegexFromPattern(pattern, host.useCaseSensitiveFileNames)) : emptyArray;
+                    }
+                    const includeIndex = findIndex(jsonOnlyIncludeRegexes, re => re.test(file));
+                    if (includeIndex !== -1) {
+                        const key = keyMapper(file);
+                        if (!literalFileMap.has(key) && !wildCardJsonFileMap.has(key)) {
+                            wildCardJsonFileMap.set(key, file);
+                        }
+                    }
+                    continue;
+                }
                 // If we have already included a literal or wildcard path with a
                 // higher priority extension, we should skip this file.
                 //
@@ -2528,7 +2663,7 @@ namespace ts {
         const wildcardFiles = arrayFrom(wildcardFileMap.values());
 
         return {
-            fileNames: literalFiles.concat(wildcardFiles),
+            fileNames: literalFiles.concat(wildcardFiles, arrayFrom(wildCardJsonFileMap.values())),
             wildcardDirectories,
             spec
         };
@@ -2698,7 +2833,7 @@ namespace ts {
             case "boolean":
                 return typeof value === "boolean" ? value : "";
             case "list":
-                const elementType = (option as CommandLineOptionOfListType).element;
+                const elementType = option.element;
                 return isArray(value) ? value.map(v => getOptionValueWithEmptyStrings(v, elementType)) : "";
             default:
                 return forEachEntry(option.type, (optionEnumValue, optionStringValue) => {

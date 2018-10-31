@@ -329,29 +329,7 @@ namespace FourSlash {
                 });
             }
 
-            this.formatCodeSettings = {
-                baseIndentSize: 0,
-                indentSize: 4,
-                tabSize: 4,
-                newLineCharacter: "\n",
-                convertTabsToSpaces: true,
-                indentStyle: ts.IndentStyle.Smart,
-                insertSpaceAfterCommaDelimiter: true,
-                insertSpaceAfterSemicolonInForStatements: true,
-                insertSpaceBeforeAndAfterBinaryOperators: true,
-                insertSpaceAfterConstructor: false,
-                insertSpaceAfterKeywordsInControlFlowStatements: true,
-                insertSpaceAfterFunctionKeywordForAnonymousFunctions: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyParenthesis: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBrackets: false,
-                insertSpaceAfterOpeningAndBeforeClosingNonemptyBraces: true,
-                insertSpaceAfterOpeningAndBeforeClosingTemplateStringBraces: false,
-                insertSpaceAfterOpeningAndBeforeClosingJsxExpressionBraces: false,
-                insertSpaceAfterTypeAssertion: false,
-                placeOpenBraceOnNewLineForFunctions: false,
-                placeOpenBraceOnNewLineForControlBlocks: false,
-                insertSpaceBeforeTypeAnnotation: false
-            };
+            this.formatCodeSettings = ts.testFormatSettings;
 
             // Open the first file by default
             this.openFile(0);
@@ -513,7 +491,7 @@ namespace FourSlash {
             ];
         }
 
-        private getAllDiagnostics(): ts.Diagnostic[] {
+        private getAllDiagnostics(): ReadonlyArray<ts.Diagnostic> {
             return ts.flatMap(this.languageServiceAdapterHost.getFilenames(), fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)) {
                     return [];
@@ -554,7 +532,7 @@ namespace FourSlash {
                 predicate(start!, start! + length!, startMarker.position, endMarker === undefined ? undefined : endMarker.position)); // TODO: GH#18217
         }
 
-        private printErrorLog(expectErrors: boolean, errors: ts.Diagnostic[]) {
+        private printErrorLog(expectErrors: boolean, errors: ReadonlyArray<ts.Diagnostic>): void {
             if (expectErrors) {
                 Harness.IO.log("Expected error not found.  Error list is:");
             }
@@ -635,7 +613,7 @@ namespace FourSlash {
             this.verifyGoToX(arg0, endMarkerNames, () => this.getGoToDefinitionAndBoundSpan());
         }
 
-        private getGoToDefinition(): ts.DefinitionInfo[] {
+        private getGoToDefinition(): ReadonlyArray<ts.DefinitionInfo> {
             return this.languageService.getDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
         }
 
@@ -648,7 +626,7 @@ namespace FourSlash {
                 this.languageService.getTypeDefinitionAtPosition(this.activeFile.fileName, this.currentCaretPosition));
         }
 
-        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToX(arg0: any, endMarkerNames: ArrayOrSingle<string> | undefined, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
             if (endMarkerNames) {
                 this.verifyGoToXPlain(arg0, endMarkerNames, getDefs);
             }
@@ -668,7 +646,7 @@ namespace FourSlash {
             }
         }
 
-        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ts.DefinitionInfo[] | ts.DefinitionInfoAndBoundSpan | undefined) {
+        private verifyGoToXPlain(startMarkerNames: ArrayOrSingle<string>, endMarkerNames: ArrayOrSingle<string>, getDefs: () => ReadonlyArray<ts.DefinitionInfo> | ts.DefinitionInfoAndBoundSpan | undefined) {
             for (const start of toArray(startMarkerNames)) {
                 this.verifyGoToXSingle(start, endMarkerNames, getDefs);
             }
@@ -751,97 +729,6 @@ namespace FourSlash {
             });
         }
 
-        public verifyCompletionListCount(expectedCount: number, negative: boolean) {
-            if (expectedCount === 0 && negative) {
-                this.verifyCompletionListIsEmpty(/*negative*/ false);
-                return;
-            }
-
-            const members = this.getCompletionListAtCaret();
-
-            if (members) {
-                const match = members.entries.length === expectedCount;
-
-                if ((!match && !negative) || (match && negative)) {
-                    this.raiseError("Member list count was " + members.entries.length + ". Expected " + expectedCount);
-                }
-            }
-            else if (expectedCount) {
-                this.raiseError("Member list count was 0. Expected " + expectedCount);
-            }
-        }
-
-        public verifyCompletionListItemsCountIsGreaterThan(count: number, negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            const itemsCount = completions ? completions.entries.length : 0;
-
-            if (negative) {
-                if (itemsCount > count) {
-                    this.raiseError(`Expected completion list items count to not be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-            else {
-                if (itemsCount <= count) {
-                    this.raiseError(`Expected completion list items count to be greater than ${count}, but is actually ${itemsCount}`);
-                }
-            }
-        }
-
-        public verifyCompletionListStartsWithItemsInOrder(items: string[]): void {
-            if (items.length === 0) {
-                return;
-            }
-
-            const entries = this.getCompletionListAtCaret()!.entries;
-            assert.isTrue(items.length <= entries.length, `Amount of expected items in completion list [ ${items.length} ] is greater than actual number of items in list [ ${entries.length} ]`);
-            ts.zipWith(entries, items, (entry, item) => {
-                assert.equal(entry.name, item, `Unexpected item in completion list`);
-            });
-        }
-
-        public noItemsWithSameNameButDifferentKind(): void {
-            const completions = this.getCompletionListAtCaret()!;
-            const uniqueItems = ts.createMap<string>();
-            for (const item of completions.entries) {
-                const uniqueItem = uniqueItems.get(item.name);
-                if (!uniqueItem) {
-                    uniqueItems.set(item.name, item.kind);
-                }
-                else {
-                    assert.equal(item.kind, uniqueItem, `Items should have the same kind, got ${item.kind} and ${uniqueItem}`);
-                }
-            }
-        }
-
-        public verifyCompletionListIsEmpty(negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            if ((!completions || completions.entries.length === 0) && negative) {
-                this.raiseError("Completion list is empty at caret at position " + this.activeFile.fileName + " " + this.currentCaretPosition);
-            }
-            else if (completions && completions.entries.length !== 0 && !negative) {
-                this.raiseError(`Completion list is not empty at caret at position ${this.activeFile.fileName} ${this.currentCaretPosition}\n` +
-                    `Completion List contains: ${stringify(completions.entries.map(e => e.name))}`);
-            }
-        }
-
-        public verifyCompletionListAllowsNewIdentifier(negative: boolean) {
-            const completions = this.getCompletionListAtCaret();
-
-            if ((completions && !completions.isNewIdentifierLocation) && !negative) {
-                this.raiseError("Expected builder completion entry");
-            }
-            else if ((completions && completions.isNewIdentifierLocation) && negative) {
-                this.raiseError("Un-expected builder completion entry");
-            }
-        }
-
-        public verifyCompletionListIsGlobal(expected: boolean) {
-            const completions = this.getCompletionListAtCaret();
-            if (completions && completions.isGlobalCompletion !== expected) {
-                this.raiseError(`verifyCompletionListIsGlobal failed - expected result to be ${completions.isGlobalCompletion}`);
-            }
-        }
-
         public verifyCompletions(options: FourSlashInterface.VerifyCompletionsOptions) {
             if (options.marker === undefined) {
                 this.verifyCompletionsWorker(options);
@@ -865,13 +752,21 @@ namespace FourSlash {
                 this.raiseError(`Expected 'isNewIdentifierLocation' to be ${options.isNewIdentifierLocation || false}, got ${actualCompletions.isNewIdentifierLocation}`);
             }
 
-            const actualByName = ts.createMap<ts.CompletionEntry>();
+            if ("isGlobalCompletion" in options && actualCompletions.isGlobalCompletion !== options.isGlobalCompletion) {
+                this.raiseError(`Expected 'isGlobalCompletion to be ${options.isGlobalCompletion}, got ${actualCompletions.isGlobalCompletion}`);
+            }
+
+            const nameToEntries = ts.createMap<ts.CompletionEntry[]>();
             for (const entry of actualCompletions.entries) {
-                if (actualByName.has(entry.name)) {
-                    this.raiseError(`Duplicate (${actualCompletions.entries.filter(a => a.name === entry.name).length}) completions for ${entry.name}`);
+                const entries = nameToEntries.get(entry.name);
+                if (!entries) {
+                    nameToEntries.set(entry.name, [entry]);
                 }
                 else {
-                    actualByName.set(entry.name, entry);
+                    if (entries.some(e => e.source === entry.source)) {
+                        this.raiseError(`Duplicate completions for ${entry.name}`);
+                    }
+                    entries.push(entry);
                 }
             }
 
@@ -884,23 +779,16 @@ namespace FourSlash {
                 if (options.includes) {
                     for (const include of toArray(options.includes)) {
                         const name = typeof include === "string" ? include : include.name;
-                        const found = actualByName.get(name);
+                        const found = nameToEntries.get(name);
                         if (!found) throw this.raiseError(`No completion ${name} found`);
-                        this.verifyCompletionEntry(found, include);
+                        assert(found.length === 1); // Must use 'exact' for multiple completions with same name
+                        this.verifyCompletionEntry(ts.first(found), include);
                     }
                 }
                 if (options.excludes) {
                     for (const exclude of toArray(options.excludes)) {
-                        if (typeof exclude === "string") {
-                            if (actualByName.has(exclude)) {
-                                this.raiseError(`Did not expect to get a completion named ${exclude}`);
-                            }
-                        }
-                        else {
-                            const found = actualByName.get(exclude.name);
-                            if (found && found.source === exclude.source) {
-                                this.raiseError(`Did not expect to get a completion named ${exclude.name} with source ${exclude.source}`);
-                            }
+                        if (nameToEntries.has(exclude)) {
+                            this.raiseError(`Did not expect to get a completion named ${exclude}`);
                         }
                     }
                 }
@@ -908,8 +796,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionEntry(actual: ts.CompletionEntry, expected: FourSlashInterface.ExpectedCompletionEntry) {
-            const { insertText, replacementSpan, hasAction, isRecommended, kind, text, documentation, tags, source, sourceDisplay } = typeof expected === "string"
-                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, text: undefined, documentation: undefined, tags: undefined, source: undefined, sourceDisplay: undefined }
+            const { insertText, replacementSpan, hasAction, isRecommended, kind, kindModifiers, text, documentation, tags, source, sourceDisplay } = typeof expected === "string"
+                ? { insertText: undefined, replacementSpan: undefined, hasAction: undefined, isRecommended: undefined, kind: undefined, kindModifiers: undefined, text: undefined, documentation: undefined, tags: undefined, source: undefined, sourceDisplay: undefined }
                 : expected;
 
             if (actual.insertText !== insertText) {
@@ -923,7 +811,12 @@ namespace FourSlash {
                 this.raiseError(`Expected completion replacementSpan to be ${stringify(convertedReplacementSpan)}, got ${stringify(actual.replacementSpan)}`);
             }
 
-            if (kind !== undefined) assert.equal(actual.kind, kind);
+            if (kind !== undefined || kindModifiers !== undefined) {
+                assert.equal(actual.kind, kind);
+                if (actual.kindModifiers !== (kindModifiers || "")) {
+                    this.raiseError(`Bad kind modifiers for ${actual.name}: Expected ${kindModifiers || ""}, actual ${actual.kindModifiers}`);
+                }
+            }
 
             assert.equal(actual.hasAction, hasAction);
             assert.equal(actual.isRecommended, isRecommended);
@@ -945,9 +838,8 @@ namespace FourSlash {
         }
 
         private verifyCompletionsAreExactly(actual: ReadonlyArray<ts.CompletionEntry>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>) {
-            if (actual.length !== expected.length) {
-                this.raiseError(`Expected ${expected.length} completions, got ${actual.length} (${actual.map(a => a.name)}).`);
-            }
+            // First pass: test that names are right. Then we'll test details.
+            assert.deepEqual(actual.map(a => a.name), expected.map(e => typeof e === "string" ? e : e.name));
 
             ts.zipWith(actual, expected, (completion, expectedCompletion, index) => {
                 const name = typeof expectedCompletion === "string" ? expectedCompletion : expectedCompletion.name;
@@ -956,117 +848,6 @@ namespace FourSlash {
                 }
                 this.verifyCompletionEntry(completion, expectedCompletion);
             });
-        }
-
-        public verifyCompletionsAt(markerName: string | ReadonlyArray<string>, expected: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry>, options?: FourSlashInterface.CompletionsAtOptions) {
-            this.verifyCompletions({
-                marker: markerName,
-                exact: expected,
-                isNewIdentifierLocation: options && options.isNewIdentifierLocation,
-                preferences: options,
-                triggerCharacter: options && options.triggerCharacter,
-            });
-        }
-
-        public verifyCompletionListContains(entryId: ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: FourSlashInterface.VerifyCompletionListContainsOptions) {
-            const completions = this.getCompletionListAtCaret(options);
-            if (completions) {
-                this.assertItemInCompletionList(completions.entries, entryId, text, documentation, kind, spanIndex, hasAction, options);
-            }
-            else {
-                this.raiseError(`No completions at position '${this.currentCaretPosition}' when looking for '${JSON.stringify(entryId)}'.`);
-            }
-        }
-
-        /**
-         * Verify that the completion list does NOT contain the given symbol.
-         * The symbol is considered matched with the symbol in the list if and only if all given parameters must matched.
-         * When any parameter is omitted, the parameter is ignored during comparison and assumed that the parameter with
-         * that property of the symbol in the list.
-         * @param symbol the name of symbol
-         * @param expectedText the text associated with the symbol
-         * @param expectedDocumentation the documentation text associated with the symbol
-         * @param expectedKind the kind of symbol (see ScriptElementKind)
-         * @param spanIndex the index of the range that the completion item's replacement text span should match
-         */
-        public verifyCompletionListDoesNotContain(entryId: ts.Completions.CompletionEntryIdentifier, expectedText?: string, expectedDocumentation?: string, expectedKind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, options?: FourSlashInterface.CompletionsAtOptions) {
-            let replacementSpan: ts.TextSpan | undefined;
-            if (spanIndex !== undefined) {
-                replacementSpan = this.getTextSpanForRangeAtIndex(spanIndex);
-            }
-
-            const completions = this.getCompletionListAtCaret(options);
-            if (completions) {
-                let filterCompletions = completions.entries.filter(e => e.name === entryId.name && e.source === entryId.source);
-                filterCompletions = expectedKind ? filterCompletions.filter(e => e.kind === expectedKind || (typeof expectedKind === "object" && e.kind === expectedKind.kind)) : filterCompletions;
-                filterCompletions = filterCompletions.filter(entry => {
-                    const details = this.getCompletionEntryDetails(entry.name);
-                    const documentation = details && ts.displayPartsToString(details.documentation);
-                    const text = details && ts.displayPartsToString(details.displayParts);
-
-                    // If any of the expected values are undefined, assume that users don't
-                    // care about them.
-                    if (replacementSpan && !ts.textSpansEqual(replacementSpan, entry.replacementSpan)) {
-                        return false;
-                    }
-                    else if (expectedText && text !== expectedText) {
-                        return false;
-                    }
-                    else if (expectedDocumentation && documentation !== expectedDocumentation) {
-                        return false;
-                    }
-
-                    return true;
-                });
-                if (filterCompletions.length !== 0) {
-                    // After filtered using all present criterion, if there are still symbol left in the list
-                    // then these symbols must meet the criterion for Not supposed to be in the list. So we
-                    // raise an error
-                    let error = `Completion list did contain '${JSON.stringify(entryId)}\'.`;
-                    const details = this.getCompletionEntryDetails(filterCompletions[0].name)!;
-                    if (expectedText) {
-                        error += "Expected text: " + expectedText + " to equal: " + ts.displayPartsToString(details.displayParts) + ".";
-                    }
-                    if (expectedDocumentation) {
-                        error += "Expected documentation: " + expectedDocumentation + " to equal: " + ts.displayPartsToString(details.documentation) + ".";
-                    }
-                    if (expectedKind) {
-                        error += "Expected kind: " + expectedKind + " to equal: " + filterCompletions[0].kind + ".";
-                    }
-                    else {
-                        error += "kind: " + filterCompletions[0].kind + ".";
-                    }
-                    if (replacementSpan) {
-                        const spanText = filterCompletions[0].replacementSpan ? stringify(filterCompletions[0].replacementSpan) : undefined;
-                        error += "Expected replacement span: " + stringify(replacementSpan) + " to equal: " + spanText + ".";
-                    }
-                    this.raiseError(error);
-                }
-            }
-        }
-
-        public verifyCompletionEntryDetails(entryName: string, expectedText: string, expectedDocumentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
-            const details = this.getCompletionEntryDetails(entryName)!;
-
-            assert(details, "no completion entry available");
-
-            assert.equal(ts.displayPartsToString(details.displayParts), expectedText, this.assertionMessageAtLastKnownMarker("completion entry details text"));
-
-            if (expectedDocumentation !== undefined) {
-                assert.equal(ts.displayPartsToString(details.documentation), expectedDocumentation, this.assertionMessageAtLastKnownMarker("completion entry documentation"));
-            }
-
-            if (kind !== undefined) {
-                assert.equal(details.kind, kind, this.assertionMessageAtLastKnownMarker("completion entry kind"));
-            }
-
-            if (tags !== undefined) {
-                assert.equal(details.tags!.length, tags.length, this.messageAtLastKnownMarker("QuickInfo tags"));
-                ts.zipWith(tags, details.tags!, (expectedTag, actualTag) => {
-                    assert.equal(actualTag.name, expectedTag.name);
-                    assert.equal(actualTag.text, expectedTag.text, this.messageAtLastKnownMarker("QuickInfo tag " + actualTag.name));
-                });
-            }
         }
 
         /** Use `getProgram` instead of accessing this directly. */
@@ -1181,12 +962,7 @@ namespace FourSlash {
             }));
 
             for (const start of toArray<string | Range>(starts)) {
-                if (typeof start === "string") {
-                    this.goToMarker(start);
-                }
-                else {
-                    this.goToRangeStart(start);
-                }
+                this.goToMarkerOrRange(start);
                 const fullActual = ts.map<ts.ReferencedSymbol, ReferenceGroupJson>(this.findReferencesAtCaret(), ({ definition, references }, i) => {
                     const text = definition.displayParts.map(d => d.text).join("");
                     return {
@@ -1203,15 +979,7 @@ namespace FourSlash {
         }
 
         public verifyNoReferences(markerNameOrRange?: string | Range) {
-            if (markerNameOrRange) {
-                if (ts.isString(markerNameOrRange)) {
-                    this.goToMarker(markerNameOrRange);
-                }
-                else {
-                    this.goToRangeStart(markerNameOrRange);
-                }
-            }
-
+            if (markerNameOrRange) this.goToMarkerOrRange(markerNameOrRange);
             const refs = this.getReferencesAtCaret();
             if (refs && refs.length) {
                 this.raiseError(`Expected getReferences to fail, but saw references: ${stringify(refs)}`);
@@ -1328,8 +1096,10 @@ Actual: ${stringify(fullActual)}`);
             })));
         }
 
-        public verifyQuickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
-            this.goToMarker(markerName);
+        public verifyQuickInfoAt(markerName: string | Range, expectedText: string, expectedDocumentation?: string) {
+            if (typeof markerName === "string") this.goToMarker(markerName);
+            else this.goToRangeStart(markerName);
+
             this.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
@@ -1395,7 +1165,7 @@ Actual: ${stringify(fullActual)}`);
             }
         }
 
-        public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: ReadonlyArray<Range> | { findInStrings?: boolean, findInComments?: boolean, ranges: ReadonlyArray<Range> }) {
+        public verifyRenameLocations(startRanges: ArrayOrSingle<Range>, options: FourSlashInterface.RenameLocationsOptions) {
             const { findInStrings = false, findInComments = false, ranges = this.getRanges() } = ts.isArray(options) ? { findInStrings: false, findInComments: false, ranges: options } : options;
 
             for (const startRange of toArray(startRanges)) {
@@ -1412,7 +1182,10 @@ Actual: ${stringify(fullActual)}`);
 
                 const sort = (locations: ReadonlyArray<ts.RenameLocation> | undefined) =>
                     locations && ts.sort(locations, (r1, r2) => ts.compareStringsCaseSensitive(r1.fileName, r2.fileName) || r1.textSpan.start - r2.textSpan.start);
-                assert.deepEqual(sort(references), sort(ranges.map((r): ts.RenameLocation => ({ fileName: r.fileName, textSpan: ts.createTextSpanFromRange(r) }))));
+                assert.deepEqual(sort(references), sort(ranges.map((rangeOrOptions): ts.RenameLocation => {
+                    const { range, ...prefixSuffixText } = "range" in rangeOrOptions ? rangeOrOptions : { range: rangeOrOptions };
+                    return { fileName: range.fileName, textSpan: ts.createTextSpanFromRange(range), ...prefixSuffixText };
+                })));
             }
         }
 
@@ -1534,7 +1307,7 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameInfoSucceeded(displayName: string | undefined, fullDisplayName: string | undefined, kind: string | undefined, kindModifiers: string | undefined, fileToRename: string | undefined, expectedRange: Range | undefined): void {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (!renameInfo.canRename) {
-                this.raiseError("Rename did not succeed");
+                throw this.raiseError("Rename did not succeed");
             }
 
             this.validate("displayName", displayName, renameInfo.displayName);
@@ -1560,9 +1333,8 @@ Actual: ${stringify(fullActual)}`);
         public verifyRenameInfoFailed(message?: string) {
             const renameInfo = this.languageService.getRenameInfo(this.activeFile.fileName, this.currentCaretPosition);
             if (renameInfo.canRename) {
-                this.raiseError("Rename was expected to fail");
+                throw this.raiseError("Rename was expected to fail");
             }
-
             this.validate("error", message, renameInfo.localizedErrorMessage);
         }
 
@@ -2049,6 +1821,15 @@ Actual: ${stringify(fullActual)}`);
             this.goToPosition(len);
         }
 
+        private goToMarkerOrRange(markerOrRange: string | Range) {
+            if (typeof markerOrRange === "string") {
+                this.goToMarker(markerOrRange);
+            }
+            else {
+                this.goToRangeStart(markerOrRange);
+            }
+        }
+
         public goToRangeStart({ fileName, pos }: Range) {
             this.openFile(fileName);
             this.goToPosition(pos);
@@ -2113,7 +1894,7 @@ Actual: ${stringify(fullActual)}`);
 
         public verifyRangesInImplementationList(markerName: string) {
             this.goToMarker(markerName);
-            const implementations: ImplementationLocationInformation[] = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
+            const implementations: ReadonlyArray<ImplementationLocationInformation> = this.languageService.getImplementationAtPosition(this.activeFile.fileName, this.currentCaretPosition)!;
             if (!implementations || !implementations.length) {
                 this.raiseError("verifyRangesInImplementationList failed - expected to find at least one implementation location but got 0");
             }
@@ -2444,7 +2225,20 @@ Actual: ${stringify(fullActual)}`);
          */
         public getAndApplyCodeActions(errorCode?: number, index?: number) {
             const fileName = this.activeFile.fileName;
-            this.applyCodeActions(this.getCodeFixes(fileName, errorCode), index);
+            const fixes = this.getCodeFixes(fileName, errorCode);
+            if (index === undefined) {
+                if (!(fixes && fixes.length === 1)) {
+                    this.raiseError(`Should find exactly one codefix, but ${fixes ? fixes.length : "none"} found. ${fixes ? fixes.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
+                }
+                index = 0;
+            }
+            else {
+                if (!(fixes && fixes.length >= index + 1)) {
+                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${fixes ? fixes.length : "none"} found.`);
+                }
+            }
+
+            this.applyChanges(fixes[index].changes);
         }
 
         public applyCodeActionFromCompletion(markerName: string, options: FourSlashInterface.VerifyCompletionActionOptions) {
@@ -2455,12 +2249,12 @@ Actual: ${stringify(fullActual)}`);
             if (codeActions.length !== 1) {
                 this.raiseError(`Expected one code action, got ${codeActions.length}`);
             }
+            const codeAction = ts.first(codeActions);
 
-            if (codeActions[0].description !== options.description) {
+            if (codeAction.description !== options.description) {
                 this.raiseError(`Expected description to be:\n${options.description}\ngot:\n${codeActions[0].description}`);
             }
-
-            this.applyCodeActions(codeActions);
+            this.applyChanges(codeAction.changes);
 
             this.verifyNewContentAfterChange(options, ts.flatMap(codeActions, a => a.changes.map(c => c.fileName)));
         }
@@ -2503,26 +2297,6 @@ Actual: ${stringify(fullActual)}`);
             const { changes, commands } = this.languageService.getCombinedCodeFix({ type: "file", fileName: this.activeFile.fileName }, fixId, this.formatCodeSettings, ts.emptyOptions);
             assert.deepEqual<ReadonlyArray<{}> | undefined>(commands, expectedCommands);
             this.verifyNewContent({ newFileContent }, changes);
-        }
-
-        /**
-         * Applies fixes for the errors in fileName and compares the results to
-         * expectedContents after all fixes have been applied.
-         *
-         * Note: applying one codefix may generate another (eg: remove duplicate implements
-         * may generate an extends -> interface conversion fix).
-         * @param expectedContents The contents of the file after the fixes are applied.
-         * @param fileName The file to check. If not supplied, the current open file is used.
-         */
-        public verifyFileAfterCodeFix(expectedContents: string, fileName?: string) {
-            fileName = fileName ? fileName : this.activeFile.fileName;
-
-            this.applyCodeActions(this.getCodeFixes(fileName));
-
-            const actualContents: string = this.getFileContent(fileName);
-            if (this.removeWhitespace(actualContents) !== this.removeWhitespace(expectedContents)) {
-                this.raiseError(`Actual text doesn't match expected text. Actual:\n${actualContents}\n\nExpected:\n${expectedContents}`);
-            }
         }
 
         public verifyCodeFix(options: FourSlashInterface.VerifyCodeFixOptions) {
@@ -2613,7 +2387,7 @@ Actual: ${stringify(fullActual)}`);
          * Rerieves a codefix satisfying the parameters, or undefined if no such codefix is found.
          * @param fileName Path to file where error should be retrieved from.
          */
-        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions): ts.CodeFixAction[] {
+        private getCodeFixes(fileName: string, errorCode?: number, preferences: ts.UserPreferences = ts.emptyOptions): ReadonlyArray<ts.CodeFixAction> {
             const diagnosticsForCodeFix = this.getDiagnostics(fileName, /*includeSuggestions*/ true).map(diagnostic => ({
                 start: diagnostic.start,
                 length: diagnostic.length,
@@ -2627,22 +2401,6 @@ Actual: ${stringify(fullActual)}`);
 
                 return this.languageService.getCodeFixesAtPosition(fileName, diagnostic.start!, diagnostic.start! + diagnostic.length!, [diagnostic.code], this.formatCodeSettings, preferences);
             });
-        }
-
-        private applyCodeActions(actions: ReadonlyArray<ts.CodeAction>, index?: number): void {
-            if (index === undefined) {
-                if (!(actions && actions.length === 1)) {
-                    this.raiseError(`Should find exactly one codefix, but ${actions ? actions.length : "none"} found. ${actions ? actions.map(a => `${Harness.IO.newLine()} "${a.description}"`) : ""}`);
-                }
-                index = 0;
-            }
-            else {
-                if (!(actions && actions.length >= index + 1)) {
-                    this.raiseError(`Should find at least ${index + 1} codefix(es), but ${actions ? actions.length : "none"} found.`);
-                }
-            }
-
-            this.applyChanges(actions[index].changes);
         }
 
         private applyChanges(changes: ReadonlyArray<ts.FileTextChanges>): void {
@@ -3217,74 +2975,6 @@ Actual: ${stringify(fullActual)}`);
             return text.substring(startPos, endPos);
         }
 
-        private assertItemInCompletionList(
-            items: ts.CompletionEntry[],
-            entryId: ts.Completions.CompletionEntryIdentifier,
-            text: string | undefined,
-            documentation: string | undefined,
-            kind: string | undefined | { kind?: string, kindModifiers?: string },
-            spanIndex: number | undefined,
-            hasAction: boolean | undefined,
-            options: FourSlashInterface.VerifyCompletionListContainsOptions | undefined,
-        ) {
-            const eq = <T>(a: T, b: T, msg: string) => {
-                assert.deepEqual(a, b, this.assertionMessageAtLastKnownMarker(msg + " for " + stringify(entryId)));
-            };
-            const matchingItems = items.filter(item => item.name === entryId.name && item.source === entryId.source);
-            if (matchingItems.length === 0) {
-                const itemsString = items.map(item => stringify({ name: item.name, source: item.source, kind: item.kind })).join(",\n");
-                this.raiseError(`Expected "${stringify({ entryId, text, documentation, kind })}" to be in list [${itemsString}]`);
-            }
-            else if (matchingItems.length > 1) {
-                this.raiseError(`Found duplicate completion items for ${stringify(entryId)}`);
-            }
-            const item = matchingItems[0];
-
-            if (documentation !== undefined || text !== undefined || entryId.source !== undefined) {
-                const details = this.getCompletionEntryDetails(item.name, item.source)!;
-
-                if (documentation !== undefined) {
-                    eq(ts.displayPartsToString(details.documentation), documentation, "completion item documentation");
-                }
-                if (text !== undefined) {
-                    eq(ts.displayPartsToString(details.displayParts), text, "completion item detail text");
-                }
-
-                if (entryId.source === undefined) {
-                    eq(options && options.sourceDisplay, /*b*/ undefined, "source display");
-                }
-                else {
-                    eq(details.source, [ts.textPart(options!.sourceDisplay)], "source display");
-                }
-            }
-
-            if (kind !== undefined) {
-                if (typeof kind === "string") {
-                    eq(item.kind, kind, "completion item kind");
-                }
-                else {
-                    if (kind.kind) {
-                        eq(item.kind, kind.kind, "completion item kind");
-                    }
-                    if (kind.kindModifiers !== undefined) {
-                        eq(item.kindModifiers, kind.kindModifiers, "completion item kindModifiers");
-                    }
-                }
-            }
-
-
-
-            if (spanIndex !== undefined) {
-                const span = this.getTextSpanForRangeAtIndex(spanIndex);
-                assert.isTrue(ts.textSpansEqual(span, item.replacementSpan), this.assertionMessageAtLastKnownMarker(stringify(span) + " does not equal " + stringify(item.replacementSpan) + " replacement span for " + stringify(entryId)));
-            }
-
-            eq(item.hasAction, hasAction, "hasAction");
-            eq(item.isRecommended, options && options.isRecommended, "isRecommended");
-            eq(item.insertText, options && options.insertText, "insertText");
-            eq(item.replacementSpan, options && options.replacementSpan && ts.createTextSpanFromRange(options.replacementSpan), "replacementSpan");
-        }
-
         private findFile(indexOrName: string | number): FourSlashFile {
             if (typeof indexOrName === "number") {
                 const index = indexOrName;
@@ -3334,16 +3024,6 @@ Actual: ${stringify(fullActual)}`);
             return `line ${(pos.line + 1)}, col ${pos.character}`;
         }
 
-        private getTextSpanForRangeAtIndex(index: number): ts.TextSpan {
-            const ranges = this.getRanges();
-            if (ranges.length > index) {
-                return ts.createTextSpanFromRange(ranges[index]);
-            }
-            else {
-                throw this.raiseError("Supplied span index: " + index + " does not exist in range list of size: " + ranges.length);
-            }
-        }
-
         public getMarkerByName(markerName: string) {
             const markerPos = this.testData.markerPositions.get(markerName);
             if (markerPos === undefined) {
@@ -3389,8 +3069,8 @@ Actual: ${stringify(fullActual)}`);
         }
 
         public generateTypes(examples: ReadonlyArray<FourSlashInterface.GenerateTypesOptions>): void {
-            for (const { name = "example", value, output, outputBaseline } of examples) {
-                const actual = ts.generateTypesForModule(name, value, this.formatCodeSettings);
+            for (const { name = "example", value, global, output, outputBaseline } of examples) {
+                const actual = (global ? ts.generateTypesForGlobal : ts.generateTypesForModule)(name, value, this.formatCodeSettings);
                 if (outputBaseline) {
                     if (actual === undefined) throw ts.Debug.fail();
                     Harness.Baseline.runBaseline(ts.combinePaths("generateTypes", outputBaseline + ts.Extension.Dts), actual);
@@ -3399,6 +3079,10 @@ Actual: ${stringify(fullActual)}`);
                     assert.equal(actual, output, `generateTypes output for ${name} does not match`);
                 }
             }
+        }
+
+        public configurePlugin(pluginName: string, configuration: any): void {
+            (<ts.server.SessionClient>this.languageService).configurePlugin(pluginName, configuration);
         }
     }
 
@@ -3463,19 +3147,20 @@ Actual: ${stringify(fullActual)}`);
     function runCode(code: string, state: TestState): void {
         // Compile and execute the test
         const wrappedCode =
-            `(function(test, goTo, verify, edit, debug, format, cancellation, classification, verifyOperationIsCancelled) {
+            `(function(test, goTo, plugins, verify, edit, debug, format, cancellation, classification, completion, verifyOperationIsCancelled) {
 ${code}
 })`;
         try {
             const test = new FourSlashInterface.Test(state);
             const goTo = new FourSlashInterface.GoTo(state);
+            const plugins = new FourSlashInterface.Plugins(state);
             const verify = new FourSlashInterface.Verify(state);
             const edit = new FourSlashInterface.Edit(state);
             const debug = new FourSlashInterface.Debug(state);
             const format = new FourSlashInterface.Format(state);
             const cancellation = new FourSlashInterface.Cancellation(state);
             const f = eval(wrappedCode);
-            f(test, goTo, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, verifyOperationIsCancelled);
+            f(test, goTo, plugins, verify, edit, debug, format, cancellation, FourSlashInterface.Classification, FourSlashInterface.Completion, verifyOperationIsCancelled);
         }
         catch (err) {
             throw err;
@@ -3868,7 +3553,7 @@ ${code}
         }
 
         // put ranges in the correct order
-        localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : 1);
+        localRanges = localRanges.sort((a, b) => a.pos < b.pos ? -1 : a.pos === b.pos && a.end > b.end ? -1 : 1);
         localRanges.forEach((r) => { ranges.push(r); });
 
         return {
@@ -3975,6 +3660,15 @@ namespace FourSlashInterface {
         }
     }
 
+    export class Plugins {
+        constructor (private state: FourSlash.TestState) {
+        }
+
+        public configurePlugin(pluginName: string, configuration: any): void {
+            this.state.configurePlugin(pluginName, configuration);
+        }
+    }
+
     export class GoTo {
         constructor(private state: FourSlash.TestState) {
         }
@@ -4042,24 +3736,6 @@ namespace FourSlashInterface {
 
     export class VerifyNegatable {
         public not: VerifyNegatable;
-        public allowedClassElementKeywords = [
-            "public",
-            "private",
-            "protected",
-            "static",
-            "abstract",
-            "readonly",
-            "get",
-            "set",
-            "constructor",
-            "async"
-        ];
-        public allowedConstructorParameterKeywords = [
-            "public",
-            "private",
-            "protected",
-            "readonly",
-        ];
 
         constructor(protected state: FourSlash.TestState, private negative = false) {
             if (!negative) {
@@ -4067,56 +3743,8 @@ namespace FourSlashInterface {
             }
         }
 
-        public completionListCount(expectedCount: number) {
-            this.state.verifyCompletionListCount(expectedCount, this.negative);
-        }
-
-        // Verifies the completion list contains the specified symbol. The
-        // completion list is brought up if necessary
-        public completionListContains(entryId: string | ts.Completions.CompletionEntryIdentifier, text?: string, documentation?: string, kind?: string | { kind?: string, kindModifiers?: string }, spanIndex?: number, hasAction?: boolean, options?: VerifyCompletionListContainsOptions) {
-            if (typeof entryId === "string") {
-                entryId = { name: entryId, source: undefined };
-            }
-            if (this.negative) {
-                this.state.verifyCompletionListDoesNotContain(entryId, text, documentation, kind, spanIndex, options);
-            }
-            else {
-                this.state.verifyCompletionListContains(entryId, text, documentation, kind, spanIndex, hasAction, options);
-            }
-        }
-
-        // Verifies the completion list items count to be greater than the specified amount. The
-        // completion list is brought up if necessary
-        public completionListItemsCountIsGreaterThan(count: number) {
-            this.state.verifyCompletionListItemsCountIsGreaterThan(count, this.negative);
-        }
-
         public assertHasRanges(ranges: FourSlash.Range[]) {
             assert(ranges.length !== 0, "Array of ranges is expected to be non-empty");
-        }
-
-        public completionListIsEmpty() {
-            this.state.verifyCompletionListIsEmpty(this.negative);
-        }
-
-        public completionListContainsClassElementKeywords() {
-            for (const keyword of this.allowedClassElementKeywords) {
-                this.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
-            }
-        }
-
-        public completionListContainsConstructorParameterKeywords() {
-            for (const keyword of this.allowedConstructorParameterKeywords) {
-                this.completionListContains(keyword, keyword, /*documentation*/ undefined, "keyword");
-            }
-        }
-
-        public completionListIsGlobal(expected: boolean) {
-            this.state.verifyCompletionListIsGlobal(expected);
-        }
-
-        public completionListAllowsNewIdentifier() {
-            this.state.verifyCompletionListAllowsNewIdentifier(this.negative);
         }
 
         public noSignatureHelp(...markers: string[]): void {
@@ -4205,10 +3833,6 @@ namespace FourSlashInterface {
             super(state);
         }
 
-        public completionsAt(markerName: ArrayOrSingle<string>, completions: ReadonlyArray<ExpectedCompletionEntry>, options?: CompletionsAtOptions) {
-            this.state.verifyCompletionsAt(markerName, completions, options);
-        }
-
         public completions(...optionsArray: VerifyCompletionsOptions[]) {
             for (const options of optionsArray) {
                 this.state.verifyCompletions(options);
@@ -4219,7 +3843,7 @@ namespace FourSlashInterface {
             this.state.verifyQuickInfoString(expectedText, expectedDocumentation);
         }
 
-        public quickInfoAt(markerName: string, expectedText: string, expectedDocumentation?: string) {
+        public quickInfoAt(markerName: string | FourSlash.Range, expectedText: string, expectedDocumentation?: string) {
             this.state.verifyQuickInfoAt(markerName, expectedText, expectedDocumentation);
         }
 
@@ -4458,10 +4082,6 @@ namespace FourSlashInterface {
             this.state.verifyNoDocumentHighlights(startRange);
         }
 
-        public completionEntryDetailIs(entryName: string, text: string, documentation?: string, kind?: string, tags?: ts.JSDocTagInfo[]) {
-            this.state.verifyCompletionEntryDetails(entryName, text, documentation, kind, tags);
-        }
-
         /**
          * This method *requires* a contiguous, complete, and ordered stream of classifications for a file.
          */
@@ -4484,7 +4104,7 @@ namespace FourSlashInterface {
             this.state.verifyRenameInfoFailed(message);
         }
 
-        public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: FourSlash.Range[] | { findInStrings?: boolean, findInComments?: boolean, ranges: FourSlash.Range[] }) {
+        public renameLocations(startRanges: ArrayOrSingle<FourSlash.Range>, options: RenameLocationsOptions) {
             this.state.verifyRenameLocations(startRanges, options);
         }
 
@@ -4532,6 +4152,7 @@ namespace FourSlashInterface {
     export interface GenerateTypesOptions {
         readonly name?: string;
         readonly value: unknown;
+        readonly global?: boolean;
         // Exactly one of these should be set:
         readonly output?: string;
         readonly outputBaseline?: string;
@@ -4685,7 +4306,7 @@ namespace FourSlashInterface {
         }
 
         public setOption(name: keyof ts.FormatCodeSettings, value: number | string | boolean): void {
-            this.state.formatCodeSettings[name] = value;
+            this.state.formatCodeSettings = { ...this.state.formatCodeSettings, [name]: value };
         }
     }
 
@@ -4805,6 +4426,477 @@ namespace FourSlashInterface {
             return { classificationType, text, textSpan };
         }
     }
+    export namespace Completion {
+        const res: string[] = [];
+        for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
+            res.push(ts.Debug.assertDefined(ts.tokenToString(i)));
+        }
+        export const keywordsWithUndefined: ReadonlyArray<string> = res;
+        export const keywords: ReadonlyArray<string> = keywordsWithUndefined.filter(k => k !== "undefined");
+
+        export const typeKeywords: ReadonlyArray<string> =
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown"];
+
+        const globalTypeDecls = [
+            "Symbol",
+            "PropertyKey",
+            "PropertyDescriptor",
+            "PropertyDescriptorMap",
+            "Object",
+            "ObjectConstructor",
+            "Function",
+            "FunctionConstructor",
+            "CallableFunction",
+            "NewableFunction",
+            "IArguments",
+            "String",
+            "StringConstructor",
+            "Boolean",
+            "BooleanConstructor",
+            "Number",
+            "NumberConstructor",
+            "TemplateStringsArray",
+            "ImportMeta",
+            "Math",
+            "Date",
+            "DateConstructor",
+            "RegExpMatchArray",
+            "RegExpExecArray",
+            "RegExp",
+            "RegExpConstructor",
+            "Error",
+            "ErrorConstructor",
+            "EvalError",
+            "EvalErrorConstructor",
+            "RangeError",
+            "RangeErrorConstructor",
+            "ReferenceError",
+            "ReferenceErrorConstructor",
+            "SyntaxError",
+            "SyntaxErrorConstructor",
+            "TypeError",
+            "TypeErrorConstructor",
+            "URIError",
+            "URIErrorConstructor",
+            "JSON",
+            "ReadonlyArray",
+            "ConcatArray",
+            "Array",
+            "ArrayConstructor",
+            "TypedPropertyDescriptor",
+            "ClassDecorator",
+            "PropertyDecorator",
+            "MethodDecorator",
+            "ParameterDecorator",
+            "PromiseConstructorLike",
+            "PromiseLike",
+            "Promise",
+            "ArrayLike",
+            "Partial",
+            "Required",
+            "Readonly",
+            "Pick",
+            "Record",
+            "Exclude",
+            "Extract",
+            "NonNullable",
+            "Parameters",
+            "ConstructorParameters",
+            "ReturnType",
+            "InstanceType",
+            "ThisType",
+            "ArrayBuffer",
+            "ArrayBufferTypes",
+            "ArrayBufferLike",
+            "ArrayBufferConstructor",
+            "ArrayBufferView",
+            "DataView",
+            "DataViewConstructor",
+            "Int8Array",
+            "Int8ArrayConstructor",
+            "Uint8Array",
+            "Uint8ArrayConstructor",
+            "Uint8ClampedArray",
+            "Uint8ClampedArrayConstructor",
+            "Int16Array",
+            "Int16ArrayConstructor",
+            "Uint16Array",
+            "Uint16ArrayConstructor",
+            "Int32Array",
+            "Int32ArrayConstructor",
+            "Uint32Array",
+            "Uint32ArrayConstructor",
+            "Float32Array",
+            "Float32ArrayConstructor",
+            "Float64Array",
+            "Float64ArrayConstructor",
+            "Intl",
+        ];
+
+        export const globalTypes = globalTypesPlus([]);
+
+        export function globalTypesPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+            return [
+                ...globalTypeDecls,
+                ...plus,
+                ...typeKeywords,
+            ];
+        }
+
+        export const classElementKeywords: ReadonlyArray<string> =
+            ["private", "protected", "public", "static", "abstract", "async", "constructor", "get", "readonly", "set"];
+
+        export const constructorParameterKeywords: ReadonlyArray<ExpectedCompletionEntry> =
+            ["private", "protected", "public", "readonly"].map((name): ExpectedCompletionEntry => ({ name, kind: "keyword" }));
+
+        export const functionMembers: ReadonlyArray<ExpectedCompletionEntry> = [
+            "apply",
+            "call",
+            "bind",
+            "toString",
+            "length",
+            { name: "arguments", text: "(property) Function.arguments: any" },
+            "caller"
+        ];
+
+        export const stringMembers: ReadonlyArray<ExpectedCompletionEntry> = [
+            "toString",
+            "charAt",
+            "charCodeAt",
+            "concat",
+            "indexOf",
+            "lastIndexOf",
+            "localeCompare",
+            "match",
+            "replace",
+            "search",
+            "slice",
+            "split",
+            "substring",
+            "toLowerCase",
+            "toLocaleLowerCase",
+            "toUpperCase",
+            "toLocaleUpperCase",
+            "trim",
+            "length",
+            "substr",
+            "valueOf",
+        ];
+
+        export const functionMembersWithPrototype: ReadonlyArray<ExpectedCompletionEntry> = [
+            ...functionMembers.slice(0, 4),
+            "prototype",
+            ...functionMembers.slice(4),
+        ];
+
+        // TODO: Shouldn't propose type keywords in statement position
+        export const statementKeywordsWithTypes: ReadonlyArray<string> = [
+            "break",
+            "case",
+            "catch",
+            "class",
+            "const",
+            "continue",
+            "debugger",
+            "default",
+            "delete",
+            "do",
+            "else",
+            "enum",
+            "export",
+            "extends",
+            "false",
+            "finally",
+            "for",
+            "function",
+            "if",
+            "import",
+            "in",
+            "instanceof",
+            "new",
+            "null",
+            "return",
+            "super",
+            "switch",
+            "this",
+            "throw",
+            "true",
+            "try",
+            "typeof",
+            "var",
+            "void",
+            "while",
+            "with",
+            "implements",
+            "interface",
+            "let",
+            "package",
+            "private",
+            "protected",
+            "public",
+            "static",
+            "yield",
+            "abstract",
+            "as",
+            "any",
+            "async",
+            "await",
+            "boolean",
+            "constructor",
+            "declare",
+            "get",
+            "infer",
+            "is",
+            "keyof",
+            "module",
+            "namespace",
+            "never",
+            "readonly",
+            "require",
+            "number",
+            "object",
+            "set",
+            "string",
+            "symbol",
+            "type",
+            "unique",
+            "unknown",
+            "from",
+            "global",
+            "of",
+        ];
+
+        export const statementKeywords: ReadonlyArray<string> = statementKeywordsWithTypes.filter(k =>
+            k === "false" || k === "true" || k === "null" || k === "void" || !ts.contains(typeKeywords, k) && k !== "declare" && k !== "module");
+
+        export const globalsVars: ReadonlyArray<string> = [
+            "eval",
+            "parseInt",
+            "parseFloat",
+            "isNaN",
+            "isFinite",
+            "decodeURI",
+            "decodeURIComponent",
+            "encodeURI",
+            "encodeURIComponent",
+            "escape",
+            "unescape",
+            "NaN",
+            "Infinity",
+            "Object",
+            "Function",
+            "String",
+            "Boolean",
+            "Number",
+            "Math",
+            "Date",
+            "RegExp",
+            "Error",
+            "EvalError",
+            "RangeError",
+            "ReferenceError",
+            "SyntaxError",
+            "TypeError",
+            "URIError",
+            "JSON",
+            "Array",
+            "ArrayBuffer",
+            "DataView",
+            "Int8Array",
+            "Uint8Array",
+            "Uint8ClampedArray",
+            "Int16Array",
+            "Uint16Array",
+            "Int32Array",
+            "Uint32Array",
+            "Float32Array",
+            "Float64Array",
+            "Intl",
+        ];
+
+        // TODO: many of these are inappropriate to always provide
+        export const globalsInsideFunction = (plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> => [
+            "arguments",
+            ...plus,
+            ...globalsVars,
+            "undefined",
+            "break",
+            "case",
+            "catch",
+            "class",
+            "const",
+            "continue",
+            "debugger",
+            "default",
+            "delete",
+            "do",
+            "else",
+            "enum",
+            "export",
+            "extends",
+            "false",
+            "finally",
+            "for",
+            "function",
+            "if",
+            "import",
+            "in",
+            "instanceof",
+            "new",
+            "null",
+            "return",
+            "super",
+            "switch",
+            "this",
+            "throw",
+            "true",
+            "try",
+            "typeof",
+            "var",
+            "void",
+            "while",
+            "with",
+            "implements",
+            "interface",
+            "let",
+            "package",
+            "yield",
+            "async",
+        ];
+
+        // TODO: many of these are inappropriate to always provide
+        export const globalKeywords: ReadonlyArray<string> = [
+            "break",
+            "case",
+            "catch",
+            "class",
+            "const",
+            "continue",
+            "debugger",
+            "default",
+            "delete",
+            "do",
+            "else",
+            "enum",
+            "export",
+            "extends",
+            "false",
+            "finally",
+            "for",
+            "function",
+            "if",
+            "import",
+            "in",
+            "instanceof",
+            "new",
+            "null",
+            "return",
+            "super",
+            "switch",
+            "this",
+            "throw",
+            "true",
+            "try",
+            "typeof",
+            "var",
+            "void",
+            "while",
+            "with",
+            "implements",
+            "interface",
+            "let",
+            "package",
+            "private",
+            "protected",
+            "public",
+            "static",
+            "yield",
+            "abstract",
+            "as",
+            "any",
+            "async",
+            "await",
+            "boolean",
+            "constructor",
+            "declare",
+            "get",
+            "infer",
+            "is",
+            "keyof",
+            "module",
+            "namespace",
+            "never",
+            "readonly",
+            "require",
+            "number",
+            "object",
+            "set",
+            "string",
+            "symbol",
+            "type",
+            "unique",
+            "unknown",
+            "from",
+            "global",
+            "of",
+        ];
+
+        export const insideMethodKeywords: ReadonlyArray<string> = [
+            "break",
+            "case",
+            "catch",
+            "class",
+            "const",
+            "continue",
+            "debugger",
+            "default",
+            "delete",
+            "do",
+            "else",
+            "enum",
+            "export",
+            "extends",
+            "false",
+            "finally",
+            "for",
+            "function",
+            "if",
+            "import",
+            "in",
+            "instanceof",
+            "new",
+            "null",
+            "return",
+            "super",
+            "switch",
+            "this",
+            "throw",
+            "true",
+            "try",
+            "typeof",
+            "var",
+            "void",
+            "while",
+            "with",
+            "implements",
+            "interface",
+            "let",
+            "package",
+            "yield",
+            "async",
+        ];
+
+        export const globalKeywordsPlusUndefined: ReadonlyArray<string> = (() => {
+            const i = globalKeywords.indexOf("unique");
+            return [...globalKeywords.slice(0, i), "undefined", ...globalKeywords.slice(i)];
+        })();
+
+        export const globals: ReadonlyArray<string> = [...globalsVars, "undefined", ...globalKeywords];
+
+        export function globalsPlus(plus: ReadonlyArray<ExpectedCompletionEntry>): ReadonlyArray<ExpectedCompletionEntry> {
+            return [...globalsVars, ...plus, "undefined", ...globalKeywords];
+        }
+    }
 
     export interface ReferenceGroup {
         definition: ReferenceGroupDefinition;
@@ -4828,22 +4920,20 @@ namespace FourSlashInterface {
         readonly hasAction?: boolean, // If not specified, will assert that this is false.
         readonly isRecommended?: boolean; // If not specified, will assert that this is false.
         readonly kind?: string, // If not specified, won't assert about this
-        readonly text: string;
-        readonly documentation: string;
+        readonly kindModifiers?: string, // Must be paired with 'kind'
+        readonly text?: string;
+        readonly documentation?: string;
         readonly sourceDisplay?: string;
         readonly tags?: ReadonlyArray<ts.JSDocTagInfo>;
     };
-    export interface CompletionsAtOptions extends Partial<ts.UserPreferences> {
-        triggerCharacter?: ts.CompletionsTriggerCharacter;
-        isNewIdentifierLocation?: boolean;
-    }
 
     export interface VerifyCompletionsOptions {
         readonly marker?: ArrayOrSingle<string | FourSlash.Marker>;
-        readonly isNewIdentifierLocation?: boolean;
+        readonly isNewIdentifierLocation?: boolean; // Always tested
+        readonly isGlobalCompletion?: boolean; // Only tested if set
         readonly exact?: ArrayOrSingle<ExpectedCompletionEntry>;
         readonly includes?: ArrayOrSingle<ExpectedCompletionEntry>;
-        readonly excludes?: ArrayOrSingle<string | { readonly name: string, readonly source: string }>;
+        readonly excludes?: ArrayOrSingle<string>;
         readonly preferences?: ts.UserPreferences;
         readonly triggerCharacter?: ts.CompletionsTriggerCharacter;
     }
@@ -4959,4 +5049,11 @@ namespace FourSlashInterface {
         readonly newFileContents: { readonly [fileName: string]: string };
         readonly preferences?: ts.UserPreferences;
     }
+
+    export type RenameLocationsOptions = ReadonlyArray<RenameLocationOptions> | {
+        readonly findInStrings?: boolean;
+        readonly findInComments?: boolean;
+        readonly ranges: ReadonlyArray<RenameLocationOptions>;
+    };
+    export type RenameLocationOptions = FourSlash.Range | { readonly range: FourSlash.Range, readonly prefixText?: string, readonly suffixText?: string };
 }

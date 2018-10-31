@@ -24,7 +24,7 @@
 
 goTo.marker('body');
 edit.insert('.');
-verify.completionListContains('toFixed', undefined, undefined, 'method');
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 edit.backspace();
 
 verify.signatureHelp({
@@ -35,4 +35,4 @@ verify.signatureHelp({
 
 goTo.marker('method');
 edit.insert('.');
-verify.completionListContains('toFixed', undefined, undefined, 'method');
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

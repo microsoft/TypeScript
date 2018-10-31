@@ -5,5 +5,4 @@
 /////** @type {function (new: string, string): string} */
 ////var f = function () { return new/**/; }
 
-goTo.marker();
-verify.completionListContains('new');
+verify.completions({ marker: "", includes: "new" });

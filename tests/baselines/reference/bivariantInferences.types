@@ -1,0 +1,26 @@
+=== tests/cases/conformance/types/typeRelationships/typeInference/bivariantInferences.ts ===
+// Repro from #27337
+
+interface Array<T> {
+    equalsShallow<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>): boolean;
+>equalsShallow : <T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean
+>this : ReadonlyArray<T>
+>other : ReadonlyArray<T>
+}
+
+declare const a: (string | number)[] | null[] | undefined[] | {}[];
+>a : (string | number)[] | null[] | undefined[] | {}[]
+>null : null
+
+declare const b: (string | number)[] | null[] | undefined[] | {}[];
+>b : (string | number)[] | null[] | undefined[] | {}[]
+>null : null
+
+let x = a.equalsShallow(b);
+>x : boolean
+>a.equalsShallow(b) : boolean
+>a.equalsShallow : (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean)
+>a : (string | number)[] | null[] | undefined[] | {}[]
+>equalsShallow : (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean) | (<T>(this: ReadonlyArray<T>, other: ReadonlyArray<T>) => boolean)
+>b : (string | number)[] | null[] | undefined[] | {}[]
+

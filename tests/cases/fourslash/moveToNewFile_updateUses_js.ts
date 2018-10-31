@@ -19,7 +19,8 @@ verify.moveToNewFile({
 `,
 
         "/y.js":
-`exports.y = 0;`,
+`exports.y = 0;
+`,
 
         "/user.js":
 // TODO: GH#22330

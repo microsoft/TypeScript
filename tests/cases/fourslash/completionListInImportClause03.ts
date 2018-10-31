@@ -10,7 +10,4 @@
 ////}
 
 // Ensure we don't filter out the current item.
-goTo.marker();
-verify.completionListContains("abc");
-verify.completionListContains("def");
-verify.not.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: ["abc", "def"] });

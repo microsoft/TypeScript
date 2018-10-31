@@ -1,5 +1,5 @@
-tests/cases/compiler/es6ImportNamedImport_1.ts(1,10): error TS2305: Module '"tests/cases/compiler/es6ImportNamedImportNoExportMember_0"' has no exported member 'a1'.
-tests/cases/compiler/es6ImportNamedImport_1.ts(2,10): error TS2305: Module '"tests/cases/compiler/es6ImportNamedImportNoExportMember_0"' has no exported member 'x1'.
+tests/cases/compiler/es6ImportNamedImport_1.ts(1,10): error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'a1'.
+tests/cases/compiler/es6ImportNamedImport_1.ts(2,10): error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'x1'.
 
 
 ==== tests/cases/compiler/es6ImportNamedImportNoExportMember_0.ts (0 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/es6ImportNamedImport_1.ts(2,10): error TS2305: Module '"tes
 ==== tests/cases/compiler/es6ImportNamedImport_1.ts (2 errors) ====
     import { a1 } from "./es6ImportNamedImportNoExportMember_0";
              ~~
-!!! error TS2305: Module '"tests/cases/compiler/es6ImportNamedImportNoExportMember_0"' has no exported member 'a1'.
+!!! error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'a1'.
     import { x1 as x } from "./es6ImportNamedImportNoExportMember_0";
              ~~
-!!! error TS2305: Module '"tests/cases/compiler/es6ImportNamedImportNoExportMember_0"' has no exported member 'x1'.
+!!! error TS2305: Module '"./es6ImportNamedImportNoExportMember_0"' has no exported member 'x1'.

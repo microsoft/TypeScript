@@ -8,5 +8,4 @@
 //// import {a} from "./mod"
 //// a./**/
 
-goTo.marker();
-verify.completionListContains('toString');
+verify.completions({ marker: "", includes: "toString" });

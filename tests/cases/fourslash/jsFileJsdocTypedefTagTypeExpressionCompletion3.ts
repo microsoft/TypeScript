@@ -13,7 +13,7 @@
 ////     /**
 ////      * @param {string} foo A value.
 ////      * @returns {number} Another value
-////      * @mytag 
+////      * @mytag
 ////      */
 ////     method4(foo) { return 3; }
 //// }
@@ -30,98 +30,63 @@
 ////x1./*valueMemberOfFooInstance*/;
 ////Foo./*valueMemberOfFoo*/;
 
-function verifySymbolPresentWithKind(symbol: string, kind: string) {
-    return verify.completionListContains(symbol, /*text*/ undefined, /*documentation*/ undefined, kind);
-}
+const warnings = (names: ReadonlyArray<string>): ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> =>
+    names.map(name => ({ name, kind: "warning" }));
 
-function verifySymbolPresentWithWarning(symbol: string) {
-    return verifySymbolPresentWithKind(symbol, "warning");
-}
-
-for (const marker of ["type1", "type2"]) {
-    goTo.marker(marker);
-    verifySymbolPresentWithKind("Foo", "class");
-
-    verifySymbolPresentWithWarning("Namespace");
-    verifySymbolPresentWithWarning("SomeType");
-
-    verifySymbolPresentWithWarning("x");
-    verifySymbolPresentWithWarning("x1");
-    verifySymbolPresentWithWarning("method1");
-    verifySymbolPresentWithWarning("property1");
-    verifySymbolPresentWithWarning("method3");
-    verifySymbolPresentWithWarning("method4");
-    verifySymbolPresentWithWarning("foo");
-}
-
-goTo.marker("typeFooMember");
-verifySymbolPresentWithWarning("Foo");
-verifySymbolPresentWithKind("Namespace", "module");
-verifySymbolPresentWithWarning("SomeType");
-verifySymbolPresentWithWarning("x");
-verifySymbolPresentWithWarning("x1");
-verifySymbolPresentWithWarning("method1");
-verifySymbolPresentWithWarning("property1");
-verifySymbolPresentWithWarning("method3");
-verifySymbolPresentWithWarning("method4");
-verifySymbolPresentWithWarning("foo");
-
-goTo.marker("NamespaceMember");
-verifySymbolPresentWithWarning("Foo");
-verifySymbolPresentWithWarning("Namespace");
-verifySymbolPresentWithKind("SomeType", "type");
-verifySymbolPresentWithWarning("x");
-verifySymbolPresentWithWarning("x1");
-verifySymbolPresentWithWarning("method1");
-verifySymbolPresentWithWarning("property1");
-verifySymbolPresentWithWarning("method3");
-verifySymbolPresentWithWarning("method4");
-verifySymbolPresentWithWarning("foo");
-
-goTo.marker("globalValue");
-verifySymbolPresentWithKind("Foo", "class");
-verifySymbolPresentWithWarning("Namespace");
-verifySymbolPresentWithWarning("SomeType");
-verifySymbolPresentWithKind("x", "var");
-verifySymbolPresentWithKind("x1", "var");
-verifySymbolPresentWithWarning("method1");
-verifySymbolPresentWithWarning("property1");
-verifySymbolPresentWithWarning("method3");
-verifySymbolPresentWithWarning("method4");
-verifySymbolPresentWithWarning("foo");
-
-goTo.marker("valueMemberOfSomeType");
-verifySymbolPresentWithWarning("Foo");
-verifySymbolPresentWithWarning("Namespace");
-verifySymbolPresentWithWarning("SomeType");
-verifySymbolPresentWithWarning("x");
-verifySymbolPresentWithWarning("x1");
-verifySymbolPresentWithWarning("method1");
-verifySymbolPresentWithWarning("property1");
-verifySymbolPresentWithWarning("method3");
-verifySymbolPresentWithWarning("method4");
-verifySymbolPresentWithWarning("foo");
-
-goTo.marker("valueMemberOfFooInstance");
-verifySymbolPresentWithWarning("Foo");
-verifySymbolPresentWithWarning("Namespace");
-verifySymbolPresentWithWarning("SomeType");
-verifySymbolPresentWithWarning("x");
-verifySymbolPresentWithWarning("x1");
-verifySymbolPresentWithWarning("method1");
-verifySymbolPresentWithKind("property1", "property");
-verifySymbolPresentWithKind("method3", "method");
-verifySymbolPresentWithKind("method4", "method");
-verifySymbolPresentWithKind("foo", "warning");
-
-goTo.marker("valueMemberOfFoo");
-verifySymbolPresentWithWarning("Foo");
-verifySymbolPresentWithWarning("Namespace");
-verifySymbolPresentWithWarning("SomeType");
-verifySymbolPresentWithWarning("x");
-verifySymbolPresentWithWarning("x1");
-verifySymbolPresentWithKind("method1", "method");
-verifySymbolPresentWithWarning("property1");
-verifySymbolPresentWithWarning("method3");
-verifySymbolPresentWithWarning("method4");
-verifySymbolPresentWithWarning("foo");
+verify.completions(
+    {
+        marker: ["type1", "type2"],
+        includes: [
+            { name: "Foo", kind: "class" },
+            ...warnings(["Namespace", "SomeType", "x", "x1", "method1", "property1", "method3", "method4", "foo"]),
+        ],
+    },
+    {
+        marker: "typeFooMember",
+        exact: [
+            { name: "Namespace", kind: "module", kindModifiers: "export" },
+            ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "age", "SomeType", "x", "x1"]),
+        ],
+    },
+    {
+        marker: "NamespaceMember",
+        exact: [
+            { name: "SomeType", kind: "type" },
+            ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "age", "Namespace", "x", "x1"]),
+        ],
+    },
+    {
+        marker: "globalValue",
+        includes: [
+            { name: "Foo", kind: "class" },
+            { name: "x", kind: "var" },
+            { name: "x1", kind: "var" },
+            ...warnings(["Namespace", "SomeType", "method1", "property1", "method3", "method4", "foo"]),
+        ],
+    },
+    {
+        marker: "valueMemberOfSomeType",
+        exact: [
+            { name: "age", kind: "property" },
+            ...warnings(["Foo", "value", "property1", "method1", "method3", "method4", "foo", "Namespace", "SomeType", "x", "x1"]),
+        ],
+    },
+    {
+        marker: "valueMemberOfFooInstance",
+        exact: [
+            { name: "property1", kind: "property" },
+            { name: "method3", kind: "method" },
+            { name: "method4", kind: "method" },
+            ...warnings(["Foo", "value", "method1", "foo", "age", "Namespace", "SomeType", "x", "x1"]),
+        ],
+    },
+    {
+        marker: "valueMemberOfFoo",
+        exact: [
+            { name: "prototype", kind: "property" },
+            { name: "method1", kind: "method", kindModifiers: "static" },
+            ...completion.functionMembers,
+            ...warnings(["Foo", "value", "property1", "method3", "method4", "foo", "age", "Namespace", "SomeType", "x", "x1"]),
+        ],
+    },
+);

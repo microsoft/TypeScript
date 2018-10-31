@@ -7,9 +7,7 @@
 ////  * @param {T} a
 ////  * @return {T} */
 //// function foo(a) { }
-//// let x = /*1*/foo;
+//// let x = foo;
 //// foo(1)./**/
 
-goTo.marker('1');
-goTo.marker();
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

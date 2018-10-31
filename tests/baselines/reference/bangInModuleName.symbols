@@ -10,7 +10,7 @@ declare module "http" {
 }
 
 declare module 'intern/dojo/node!http' {
->'intern/dojo/node!http' : Symbol('intern/dojo/node!http', Decl(a.d.ts, 1, 1))
+>'intern/dojo/node!http' : Symbol("intern/dojo/node!http", Decl(a.d.ts, 1, 1))
 
     import http = require('http');
 >http : Symbol(http, Decl(a.d.ts, 3, 40))

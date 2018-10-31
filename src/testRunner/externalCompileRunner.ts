@@ -1,6 +1,6 @@
-const fs = require("fs");
-const path = require("path");
-const del = require("del");
+const fs: typeof import("fs") = require("fs");
+const path: typeof import("path") = require("path");
+const del: typeof import("del") = require("del");
 
 interface ExecResult {
     stdout: Buffer;
@@ -40,7 +40,7 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
         const timeout = 600_000; // 10 minutes
         describe(directoryName, function(this: Mocha.ISuiteCallbackContext) {
             this.timeout(timeout);
-            const cp = require("child_process");
+            const cp: typeof import("child_process") = require("child_process");
 
             it("should build successfully", () => {
                 let cwd = path.join(Harness.IO.getWorkspaceRoot(), cls.testDir, directoryName);
@@ -49,12 +49,9 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                 let types: string[] | undefined;
                 if (fs.existsSync(path.join(cwd, "test.json"))) {
                     const submoduleDir = path.join(cwd, directoryName);
-                    const reset = cp.spawnSync("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir, timeout, shell: true, stdio });
-                    if (reset.status !== 0) throw new Error(`git reset for ${directoryName} failed: ${reset.stderr.toString()}`);
-                    const clean = cp.spawnSync("git", ["clean", "-f"], { cwd: submoduleDir, timeout, shell: true, stdio });
-                    if (clean.status !== 0) throw new Error(`git clean for ${directoryName} failed: ${clean.stderr.toString()}`);
-                    const update = cp.spawnSync("git", ["submodule", "update", "--remote", "."], { cwd: submoduleDir, timeout, shell: true, stdio });
-                    if (update.status !== 0) throw new Error(`git submodule update for ${directoryName} failed: ${update.stderr.toString()}`);
+                    exec("git", ["reset", "HEAD", "--hard"], { cwd: submoduleDir });
+                    exec("git", ["clean", "-f"], { cwd: submoduleDir });
+                    exec("git", ["submodule", "update", "--init", "--remote", "."], { cwd: submoduleDir });
 
                     const config = JSON.parse(fs.readFileSync(path.join(cwd, "test.json"), { encoding: "utf8" })) as UserConfig;
                     ts.Debug.assert(!!config.types, "Bad format from test.json: Types field must be present.");
@@ -69,18 +66,23 @@ abstract class ExternalCompileRunnerBase extends RunnerBase {
                     if (fs.existsSync(path.join(cwd, "node_modules"))) {
                         del.sync(path.join(cwd, "node_modules"), { force: true });
                     }
-                    const install = cp.spawnSync(`npm`, ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
-                    if (install.status !== 0) throw new Error(`NPM Install for ${directoryName} failed: ${install.stderr.toString()}`);
+                    exec("npm", ["i", "--ignore-scripts"], { cwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                 }
                 const args = [path.join(Harness.IO.getWorkspaceRoot(), "built/local/tsc.js")];
                 if (types) {
                     args.push("--types", types.join(","));
                     // Also actually install those types (for, eg, the js projects which need node)
-                    const install = cp.spawnSync(`npm`, ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2, shell: true, stdio }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
-                    if (install.status !== 0) throw new Error(`NPM Install types for ${directoryName} failed: ${install.stderr.toString()}`);
+                    exec("npm", ["i", ...types.map(t => `@types/${t}`), "--no-save", "--ignore-scripts"], { cwd: originalCwd, timeout: timeout / 2 }); // NPM shouldn't take the entire timeout - if it takes a long time, it should be terminated and we should log the failure
                 }
                 args.push("--noEmit");
                 Harness.Baseline.runBaseline(`${cls.kind()}/${directoryName}.log`, cls.report(cp.spawnSync(`node`, args, { cwd, timeout, shell: true }), cwd));
+
+                function exec(command: string, args: string[], options: { cwd: string, timeout?: number }): void {
+                    const res = cp.spawnSync(command, args, { timeout, shell: true, stdio, ...options });
+                    if (res.status !== 0) {
+                        throw new Error(`${command} ${args.join(" ")} for ${directoryName} failed: ${res.stderr && res.stderr.toString()}`);
+                    }
+                }
             });
         });
     }

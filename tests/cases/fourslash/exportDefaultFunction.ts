@@ -5,8 +5,7 @@
 ////}
 //// /*2*/
 
-goTo.marker('1');
-verify.completionListContains("func", "function func(): void", /*documentation*/ undefined, "function");
-
-goTo.marker('2');
-verify.completionListContains("func", "function func(): void", /*documentation*/ undefined, "function");
+verify.completions({
+    marker: test.markers(),
+    includes: { name: "func", text: "function func(): void", kind: "function", kindModifiers: "export" },
+});

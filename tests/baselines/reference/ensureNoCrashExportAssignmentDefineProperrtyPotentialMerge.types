@@ -1,0 +1,79 @@
+=== tests/cases/compiler/index.js ===
+const _item = require("./namespacer");
+>_item : typeof B
+>require("./namespacer") : typeof B
+>require : any
+>"./namespacer" : "./namespacer"
+
+module.exports = 12;
+>module.exports = 12 : number
+>module.exports : number
+>module : typeof module
+>exports : number
+>12 : 12
+
+Object.defineProperty(module, "exports", { value: "oh no" });
+>Object.defineProperty(module, "exports", { value: "oh no" }) : any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object : ObjectConstructor
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>module : typeof module
+>"exports" : "exports"
+>{ value: "oh no" } : { value: string; }
+>value : string
+>"oh no" : "oh no"
+
+=== tests/cases/compiler/namespacey.js ===
+const A = {}
+>A : typeof A
+>{} : {}
+
+A.bar = class Q {}
+>A.bar = class Q {} : typeof Q
+>A.bar : typeof Q
+>A : typeof A
+>bar : typeof Q
+>class Q {} : typeof Q
+>Q : typeof Q
+
+module.exports = A;
+>module.exports = A : typeof A
+>module.exports : typeof A
+>module : { "tests/cases/compiler/namespacey": typeof A; }
+>exports : typeof A
+>A : typeof A
+
+=== tests/cases/compiler/namespacer.js ===
+const B = {}
+>B : typeof B
+>{} : {}
+
+B.NS = require("./namespacey");
+>B.NS = require("./namespacey") : typeof A
+>B.NS : string | typeof A
+>B : typeof B
+>NS : string | typeof A
+>require("./namespacey") : typeof A
+>require : any
+>"./namespacey" : "./namespacey"
+
+Object.defineProperty(B, "NS", { value: "why though", writable: true });
+>Object.defineProperty(B, "NS", { value: "why though", writable: true }) : any
+>Object.defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>Object : ObjectConstructor
+>defineProperty : (o: any, p: string | number | symbol, attributes: PropertyDescriptor & ThisType<any>) => any
+>B : typeof B
+>"NS" : "NS"
+>{ value: "why though", writable: true } : { value: string; writable: true; }
+>value : string
+>"why though" : "why though"
+>writable : true
+>true : true
+
+module.exports = B;
+>module.exports = B : typeof B
+>module.exports : typeof B
+>module : { "tests/cases/compiler/namespacer": typeof B; }
+>exports : typeof B
+>B : typeof B
+

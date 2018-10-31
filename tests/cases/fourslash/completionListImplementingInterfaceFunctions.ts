@@ -15,7 +15,4 @@
 ////    /*1*/
 ////}
 
-goTo.marker("0");
-verify.not.completionListContains("a");
-goTo.marker("1");
-verify.not.completionListContains("a");
+verify.completions({ marker: ["0", "1"], exact: "b" });

@@ -51,7 +51,7 @@ node_modules/async/autoInject.js(160,28): error TS2695: Left side of comma opera
 node_modules/async/autoInject.js(164,14): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/autoInject.js(168,6): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/cargo.js(62,12): error TS2304: Cannot find name 'AsyncFunction'.
-node_modules/async/cargo.js(67,14): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node`.
+node_modules/async/cargo.js(67,14): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 node_modules/async/cargo.js(67,20): error TS1005: '}' expected.
 node_modules/async/cargo.js(92,11): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/compose.js(8,37): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -582,9 +582,11 @@ node_modules/async/priorityQueue.js(9,14): error TS2695: Left side of comma oper
 node_modules/async/priorityQueue.js(18,15): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(23,21): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/priorityQueue.js(47,10): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/priorityQueue.js(86,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/priorityQueue.js(93,20): error TS1005: '}' expected.
 node_modules/async/queue.js(8,18): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/queue.js(9,11): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/queue.js(91,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/queue.js(97,20): error TS1005: '}' expected.
 node_modules/async/race.js(63,17): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/race.js(64,11): error TS2695: Left side of comma operator is unused and has no side effects.
@@ -618,6 +620,7 @@ node_modules/async/retryable.js(12,18): error TS2695: Left side of comma operato
 node_modules/async/retryable.js(13,13): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/retryable.js(18,70): error TS2695: Left side of comma operator is unused and has no side effects.
+node_modules/async/retryable.js(51,12): error TS2304: Cannot find name 'AsyncFunction'.
 node_modules/async/select.js(44,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectLimit.js(36,20): error TS2695: Left side of comma operator is unused and has no side effects.
 node_modules/async/selectSeries.js(34,20): error TS2695: Left side of comma operator is unused and has no side effects.

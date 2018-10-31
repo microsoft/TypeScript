@@ -12,10 +12,31 @@
 // @Filename: /use.ts
 ////fo/**/
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a/b/impl" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    exact: [
+        ...completion.globalsVars,
+        "undefined",
+        {
+            name: "foo",
+            source: "/a/b/impl",
+            sourceDisplay: "./a",
+            text: "function foo(): void",
+            kind: "function",
+            kindModifiers: "export",
+            hasAction: true,
+        },
+        {
+            name: "foo",
+            source: "/a/index",
+            sourceDisplay: "./a",
+            text: "(alias) function foo(): void\nexport foo",
+            kind: "alias",
+            hasAction: true,
+        },
+        ...completion.globalKeywords,
+    ],
+    preferences: { includeCompletionsForModuleExports: true },
 });
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

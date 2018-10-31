@@ -999,6 +999,10 @@
         "category": "Error",
         "code": 1349
     },
+    "Print the final configuration instead of building.": {
+        "category": "Message",
+        "code": 1350
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2080,15 +2084,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2582
     },
@@ -2107,6 +2111,10 @@
     "Enum type '{0}' circularly references itself.": {
         "category": "Error",
         "code": 2586
+    },
+    "JSDoc type '{0}' circularly references itself.": {
+        "category": "Error",
+        "code": 2587
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2472,10 +2480,6 @@
     "Cannot find module '{0}'. Consider using '--resolveJsonModule' to import module with '.json' extension": {
         "category": "Error",
         "code": 2732
-    },
-    "Index '{0}' is out-of-bounds in tuple of length {1}.": {
-        "category": "Error",
-        "code": 2733
     },
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
@@ -3755,6 +3759,10 @@
         "category": "Message",
         "code": 6214
     },
+    "Using compiler options of project reference redirect '{0}'.": {
+        "category": "Message",
+        "code": 6215
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -4029,6 +4037,39 @@
         "category": "Error",
         "code": 7042
     },
+    "Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7043
+    },
+    "Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7044
+    },
+    "Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7045
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7046
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7047
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7048
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7049
+    },
+    "'{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7050
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

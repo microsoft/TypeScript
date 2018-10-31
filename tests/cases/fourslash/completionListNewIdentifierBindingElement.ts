@@ -2,5 +2,4 @@
 
 ////var { x:html/*1*/
 
-goTo.marker("1");
-verify.completionListIsEmpty();
+verify.completions({ marker: "1", exact: undefined });

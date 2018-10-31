@@ -5,6 +5,10 @@
 ////x./*a*/;
 ////}
 
-goTo.marker("a");
-verify.completionListContains("a", /* text */ undefined, /* documentation */ undefined, { kindModifiers: "optional" });
-verify.completionListContains("method", /* text */ undefined, /* documentation */ undefined, { kindModifiers: "optional" });
+verify.completions({
+    marker: "a",
+    exact: [
+        { name: "a", kind: "property", kindModifiers: "optional" },
+        { name: "method", kind: "method", kindModifiers: "optional" },
+    ],
+});
