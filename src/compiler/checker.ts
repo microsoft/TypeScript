@@ -4639,7 +4639,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
+                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType) || isGenericObjectType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
@@ -9842,6 +9842,10 @@ namespace ts {
             return symbol ? getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol) : undefined;
         }
 
+        function isNonGenericObjectType(type: Type) {
+            return !!(type.flags & TypeFlags.Object) && !isGenericMappedType(type);
+        }
+
         /**
          * Since the source of spread types are object literals, which are not binary,
          * this function should be called in a left folding style, with left = previous result of getSpreadType
@@ -9868,6 +9872,23 @@ namespace ts {
             }
             if (right.flags & (TypeFlags.BooleanLike | TypeFlags.NumberLike | TypeFlags.StringLike | TypeFlags.EnumLike | TypeFlags.NonPrimitive | TypeFlags.Index)) {
                 return left;
+            }
+
+            if (isGenericObjectType(left) || isGenericObjectType(right)) {
+                if (isEmptyObjectType(left)) {
+                    return right;
+                }
+                // When the left type is an intersection, we may need to merge the last constituent of the
+                // intersection with the right type. For example when the left type is 'T & { a: string }'
+                // and the right type is '{ b: string }' we produce 'T & { a: string, b: string }'.
+                if (left.flags & TypeFlags.Intersection) {
+                    const types = (<IntersectionType>left).types;
+                    const lastLeft = types[types.length - 1];
+                    if (isNonGenericObjectType(lastLeft) && isNonGenericObjectType(right)) {
+                        return getIntersectionType(concatenate(types.slice(0, types.length - 1), [getSpreadType(lastLeft, right, symbol, typeFlags, objectFlags)]));
+                    }
+                }
+                return getIntersectionType([left, right]);
             }
 
             const members = createSymbolTable();
@@ -17700,9 +17721,8 @@ namespace ts {
         }
 
         function isValidSpreadType(type: Type): boolean {
-            return !!(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.NonPrimitive) ||
+            return !!(type.flags & (TypeFlags.AnyOrUnknown | TypeFlags.NonPrimitive | TypeFlags.Object | TypeFlags.InstantiableNonPrimitive) ||
                 getFalsyFlags(type) & TypeFlags.DefinitelyFalsy && isValidSpreadType(removeDefinitelyFalsyTypes(type)) ||
-                type.flags & TypeFlags.Object && !isGenericMappedType(type) ||
                 type.flags & TypeFlags.UnionOrIntersection && every((<UnionOrIntersectionType>type).types, isValidSpreadType));
         }
 
