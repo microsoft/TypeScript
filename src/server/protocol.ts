@@ -2521,6 +2521,7 @@ namespace ts.server.protocol {
         maxFileSize: number;
     }
 
+    /*@internal*/
     export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
         ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
