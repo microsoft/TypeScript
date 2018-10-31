@@ -8,7 +8,7 @@ class C3 {
 
 /*
 
-This behaves unexpectedly with teh following types:
+This behaves unexpectedly with the following types:
 
 Type 1 of any[]:
 
@@ -35,7 +35,7 @@ var C3 = (function () {
 }());
 /*
 
-This behaves unexpectedly with teh following types:
+This behaves unexpectedly with the following types:
 
 Type 1 of any[]:
 
