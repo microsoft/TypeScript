@@ -667,8 +667,8 @@ namespace ts.codefix {
             }
         }
 
-        function unifyFromContext(inferences: Type[], checker: TypeChecker, fallback = checker.getAnyType()): Type {
-            inferences.push(fallback);
+        function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
+            if (!inferences.length) return fallback;
             const hasNonVacuousType = inferences.some(i => !(i.flags & (TypeFlags.Any | TypeFlags.Void)));
             const hasNonVacuousNonAnonymousType = inferences.some(
                 i => !(i.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
