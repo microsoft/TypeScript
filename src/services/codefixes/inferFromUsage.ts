@@ -369,7 +369,6 @@ namespace ts.codefix {
         interface UsageContext {
             isNumber?: boolean;
             isString?: boolean;
-            isNumberOrString?: boolean;
             hasNonVacuousType?: boolean;
             hasNonVacuousNonAnonymousType?: boolean;
             hasNonEmptyObjectType?: boolean;
@@ -509,7 +508,8 @@ namespace ts.codefix {
                     break;
 
                 case SyntaxKind.PlusToken:
-                    usageContext.isNumberOrString = true;
+                    usageContext.isNumber = true;
+                    usageContext.isString = true;
                     break;
 
                 // case SyntaxKind.ExclamationToken:
@@ -580,7 +580,8 @@ namespace ts.codefix {
                         usageContext.isString = true;
                     }
                     else {
-                        usageContext.isNumberOrString = true;
+                        usageContext.isNumber = true;
+                        usageContext.isString = true;
                     }
                     break;
 
@@ -654,7 +655,8 @@ namespace ts.codefix {
 
         function inferTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
             if (node === parent.argumentExpression) {
-                usageContext.isNumberOrString = true;
+                usageContext.isNumber = true;
+                usageContext.isString = true;
                 return;
             }
             else {
@@ -727,17 +729,14 @@ namespace ts.codefix {
         }
 
         function inferFromPrimitive(usageContext: UsageContext, checker: TypeChecker) {
-            // TODO: Simplify this by removing isNumberOrString
-            if (usageContext.isNumberOrString && !usageContext.isNumber && !usageContext.isString) {
-                return [checker.getNumberType(), checker.getStringType()];
+            const primitives = [];
+            if (usageContext.isNumber) {
+                primitives.push(checker.getNumberType());
             }
-            else if (usageContext.isNumber) {
-                return [checker.getNumberType()];
+            if (usageContext.isString) {
+                primitives.push(checker.getStringType());
             }
-            else if (usageContext.isString) {
-                return [checker.getStringType()];
-            }
-            return [];
+            return primitives;
         }
 
         function inferFromContext(usageContext: UsageContext, checker: TypeChecker) {
