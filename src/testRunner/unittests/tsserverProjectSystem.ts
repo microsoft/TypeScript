@@ -343,7 +343,7 @@ namespace ts.projectSystem {
         return { session, events };
     }
 
-    function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventName: T["event"], opts: Partial<server.SessionOptions> = {}, ...eventNames: T["event"][]) {
+    function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
         const session = createSession(host, { canUseEvents: true, ...opts });
 
         return {
@@ -354,15 +354,13 @@ namespace ts.projectSystem {
 
         function getEvents() {
             const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
-            return filter(
-                map(
-                    host.getOutput(), s => convertToObject(
-                        parseJsonText("json.json", s.replace(outputEventRegex, "")),
-                        []
-                    )
-                ),
-                e => e.event === eventName || eventNames.some(eventName => e.event === eventName)
-            ) as T[];
+            return mapDefined(host.getOutput(), s => {
+                const e = convertToObject(
+                    parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                    []
+                );
+                return (isArray(eventNames) ? eventNames.some(eventName => e.event === eventName) : e.event === eventNames) ? e as T : undefined;
+            });
         }
 
         function clearEvents() {
@@ -9625,7 +9623,7 @@ export const x = 10;`
 
         describe("when using default event handler", () => {
             verifyProjectLoadingStartAndFinish(host => {
-                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, {}, server.ProjectLoadingFinishEvent);
+                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]);
                 return {
                     session,
                     getNumberOfEvents: () => getEvents().length,
