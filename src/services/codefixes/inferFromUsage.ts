@@ -710,7 +710,7 @@ namespace ts.codefix {
             const props = createMultiMap<Type>();
             for (const anon of anons) {
                 for (const p of checker.getPropertiesOfType(anon)) {
-                    props.add(p.name, (p as TransientSymbol).type!);
+                    props.add(p.name, checker.getTypeOfSymbolAtLocation(p, p.valueDeclaration));
                 }
                 calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
                 constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
