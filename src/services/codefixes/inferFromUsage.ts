@@ -371,8 +371,6 @@ namespace ts.codefix {
             isString?: boolean;
             hasNonVacuousType?: boolean;
             hasNonVacuousNonAnonymousType?: boolean;
-            hasNonEmptyObjectType?: boolean;
-            hasEmptyObjectType?: boolean;
 
             candidateTypes?: Type[];
             properties?: UnderscoreEscapedMap<UsageContext>;
@@ -687,10 +685,57 @@ namespace ts.codefix {
                     updateInferenceProperties(t, k, checker);
                 }
             }
-            const good = inferences.
-                map(i => k.hasEmptyObjectType && checker.getObjectFlags(i) & ObjectFlags.Anonymous ? makePartial(i as AnonymousType, checker) : i).
-                filter(i => !isVacuousInference(i, k, checker));
-            return checker.getWidenedType(checker.getUnionType(good, UnionReduction.Subtype));
+            const anons = inferences.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            const good = [];
+            if (!k.hasNonVacuousNonAnonymousType && anons.length) {
+                good.push(unifyAnonymousTypes(anons, checker));
+            }
+            good.push(...inferences.filter(i => !isVacuousInference(i, k, checker)));
+            return checker.getWidenedType(checker.getUnionType(good));
+        }
+
+        function unifyAnonymousTypes(anons: AnonymousType[], checker: TypeChecker) {
+            if (anons.length === 0) {
+                return checker.getNeverType();
+            }
+            if (anons.length === 1) {
+                return anons[0];
+            }
+            const calls = [];
+            const constructs = [];
+            const stringIndices = [];
+            const numberIndices = [];
+            let stringIndexReadonly = false;
+            let numberIndexReadonly = false;
+            const props = createMultiMap<Type>();
+            for (const anon of anons) {
+                for (const p of checker.getPropertiesOfType(anon)) {
+                    props.add(p.name, (p as TransientSymbol).type!);
+                }
+                calls.push(...checker.getSignaturesOfType(anon, SignatureKind.Call));
+                constructs.push(...checker.getSignaturesOfType(anon, SignatureKind.Construct));
+                if (anon.stringIndexInfo) {
+                    stringIndices.push(anon.stringIndexInfo.type);
+                    stringIndexReadonly = stringIndexReadonly || anon.stringIndexInfo.isReadonly;
+                }
+                if (anon.numberIndexInfo) {
+                    numberIndices.push(anon.numberIndexInfo.type);
+                    numberIndexReadonly = numberIndexReadonly || anon.numberIndexInfo.isReadonly;
+                }
+            }
+            const members = mapEntries(props, (name, types) => {
+                const isOptional = types.length < anons.length ? SymbolFlags.Optional : 0;
+                const s = checker.createSymbol(SymbolFlags.Property | isOptional, name as __String);
+                s.type = checker.getUnionType(types);
+                return [name, s];
+            });
+            return checker.createAnonymousType(
+                anons[0].symbol,
+                members as UnderscoreEscapedMap<TransientSymbol>,
+                calls,
+                constructs,
+                stringIndices.length ? checker.createIndexInfo(checker.getUnionType(stringIndices), stringIndexReadonly) : undefined,
+                numberIndices.length ? checker.createIndexInfo(checker.getUnionType(numberIndices), numberIndexReadonly) : undefined);
         }
 
         function updateInferenceProperties(type: Type, usageContext: UsageContext, checker: TypeChecker) {
@@ -698,34 +743,11 @@ namespace ts.codefix {
                 !(type.flags & (TypeFlags.Any | TypeFlags.Void));
             usageContext.hasNonVacuousNonAnonymousType = usageContext.hasNonVacuousNonAnonymousType ||
                 !(type.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(type) & ObjectFlags.Anonymous);
-            usageContext.hasNonEmptyObjectType = usageContext.hasNonEmptyObjectType ||
-                !!(type.flags & TypeFlags.Object) && !checker.isEmptyObjectType(type);
-            usageContext.hasEmptyObjectType = usageContext.hasEmptyObjectType ||
-                checker.isEmptyObjectType(type);
-        }
-
-        function makePartial(type: AnonymousType, checker: TypeChecker) {
-            const members = createSymbolTable();
-            if (type.properties) {
-                for (const p of type.properties) {
-                    const s = checker.createSymbol(SymbolFlags.Property | SymbolFlags.Optional, p.name as __String);
-                    s.type = (p as TransientSymbol).type;
-                    members.set(s.name as __String, s);
-                }
-            }
-            return checker.createAnonymousType(
-                type.symbol,
-                members,
-                (type.callSignatures as Signature[]) || emptyArray,
-                (type.constructSignatures as Signature[]) || emptyArray,
-                type.stringIndexInfo,
-                type.numberIndexInfo);
         }
 
         function isVacuousInference(type: Type, k: UsageContext, checker: TypeChecker) {
             return k.hasNonVacuousType && type.flags & (TypeFlags.Any | TypeFlags.Void) ||
-                k.hasNonEmptyObjectType && checker.isEmptyObjectType(type) ||
-                k.hasNonVacuousNonAnonymousType && checker.getObjectFlags(type) & ObjectFlags.Anonymous;
+                checker.getObjectFlags(type) & ObjectFlags.Anonymous;
         }
 
         function inferFromPrimitive(usageContext: UsageContext, checker: TypeChecker) {
