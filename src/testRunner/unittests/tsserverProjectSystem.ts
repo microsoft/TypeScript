@@ -10474,6 +10474,55 @@ declare class TestLib {
         });
     });
 
+    describe("tsserverProjectSystem with tsbuild projects", () => {
+        function getProjectFiles(project: string): [File, File] {
+            return [
+                TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json"),
+                TestFSWithWatch.getTsBuildProjectFile(project, "index.ts"),
+            ];
+        }
+        it("does not error on container only project", () => {
+            const project = "container";
+            const containerLib = getProjectFiles("container/lib");
+            const containerExec = getProjectFiles("container/exec");
+            const containerCompositeExec = getProjectFiles("container/compositeExec");
+            const containerConfig = TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
+            const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
+            const host = createServerHost(files);
+
+            // ts build should succeed
+            const solutionBuilder = tscWatch.createSolutionBuilder(host, [containerConfig.path], {});
+            solutionBuilder.buildAllProjects();
+            assert.equal(host.getOutput().length, 0);
+
+            // Open external project for the folder
+            const session = createSession(host);
+            const service = session.getProjectService();
+            service.openExternalProjects([{
+                projectFileName: TestFSWithWatch.getTsBuildProjectFilePath(project, project),
+                rootFiles: files.map(f => ({ fileName: f.path })),
+                options: {}
+            }]);
+            checkNumberOfProjects(service, { configuredProjects: 4 });
+            files.forEach(f => {
+                const args: protocol.FileRequestArgs = {
+                    file: f.path,
+                    projectFileName: endsWith(f.path, "tsconfig.json") ? f.path : undefined
+                };
+                const syntaxDiagnostics = session.executeCommandSeq<protocol.SyntacticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SyntacticDiagnosticsSync,
+                    arguments: args
+                }).response;
+                assert.deepEqual(syntaxDiagnostics, []);
+                const semanticDiagnostics = session.executeCommandSeq<protocol.SemanticDiagnosticsSyncRequest>({
+                    command: protocol.CommandTypes.SemanticDiagnosticsSync,
+                    arguments: args
+                }).response;
+                assert.deepEqual(semanticDiagnostics, []);
+            });
+        });
+    });
+
     describe("tsserverProjectSystem duplicate packages", () => {
         // Tests that 'moduleSpecifiers.ts' will import from the redirecting file, and not from the file it redirects to, if that can provide a global module specifier.
         it("works with import fixes", () => {

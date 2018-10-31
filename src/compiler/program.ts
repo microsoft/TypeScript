@@ -2806,7 +2806,11 @@ namespace ts {
                 }
                 const options = resolvedRef.commandLine.options;
                 if (!options.composite) {
-                    createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                    // ok to not have composite if the current program is container only
+                    const inputs = parent ? parent.commandLine.fileNames : rootNames;
+                    if (inputs.length) {
+                        createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                    }
                 }
                 if (ref.prepend) {
                     const out = options.outFile || options.out;

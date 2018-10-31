@@ -1,0 +1,8 @@
+{
+    "files": [],
+    "include": [],
+    "references": [
+        { "path": "./exec" },
+        { "path": "./compositeExec" }
+    ]
+}

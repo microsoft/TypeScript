@@ -988,4 +988,16 @@ interface Array<T> {}`
             return this.environmentVariables && this.environmentVariables.get(name) || "";
         }
     }
+
+    export const tsbuildProjectsLocation = "/user/username/projects";
+    export function getTsBuildProjectFilePath(project: string, file: string) {
+        return `${tsbuildProjectsLocation}/${project}/${file}`;
+    }
+
+    export function getTsBuildProjectFile(project: string, file: string): File {
+        return {
+            path: getTsBuildProjectFilePath(project, file),
+            content: Harness.IO.readFile(`${Harness.IO.getWorkspaceRoot()}/tests/projects/${project}/${file}`)!
+        };
+    }
 }
