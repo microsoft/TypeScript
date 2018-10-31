@@ -4663,7 +4663,7 @@ namespace ts {
                         : isIdentifier(name)
                             ? getLiteralType(unescapeLeadingUnderscores(name.escapedText))
                             : checkExpression(name);
-                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(parentType, exprType, name, /*useApparentObjectType*/ true), name, /*useApparentObjectType*/ true);
+                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(getApparentType(parentType), exprType, name), name);
                     type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
                 }
             }
@@ -7037,7 +7037,7 @@ namespace ts {
         function getConstraintOfIndexedAccess(type: IndexedAccessType) {
             const objectType = getConstraintOfType(type.objectType) || type.objectType;
             if (objectType !== type.objectType) {
-                const constraint = getIndexedAccessType(objectType, type.indexType, /*accessNode*/ undefined, /*useApparentObjectType*/ false, errorType);
+                const constraint = getIndexedAccessType(objectType, type.indexType, /*accessNode*/ undefined, errorType);
                 if (constraint && constraint !== errorType) {
                     return constraint;
                 }
@@ -7209,7 +7209,7 @@ namespace ts {
                 if (t.flags & TypeFlags.IndexedAccess) {
                     const baseObjectType = getBaseConstraint((<IndexedAccessType>t).objectType);
                     const baseIndexType = getBaseConstraint((<IndexedAccessType>t).indexType);
-                    const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType, /*accessNode*/ undefined, /*useApparentObjectType*/ false, errorType) : undefined;
+                    const baseIndexedAccess = baseObjectType && baseIndexType ? getIndexedAccessType(baseObjectType, baseIndexType, /*accessNode*/ undefined, errorType) : undefined;
                     return baseIndexedAccess && baseIndexedAccess !== errorType ? getBaseConstraint(baseIndexedAccess) : undefined;
                 }
                 if (t.flags & TypeFlags.Conditional) {
@@ -9499,7 +9499,7 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, useApparentObjectType?: boolean, missingType = accessNode ? errorType : unknownType): Type {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, missingType = accessNode ? errorType : unknownType): Type {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -9508,7 +9508,7 @@ namespace ts {
             // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
             // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
             // has always been resolved eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression) && isGenericObjectType(useApparentObjectType ? getApparentType(objectType) : objectType)) {
+            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression) && isGenericObjectType(objectType)) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -9523,11 +9523,12 @@ namespace ts {
             // In the following we resolve T[K] to the type of the property in T selected by K.
             // We treat boolean as different from other unions to improve errors;
             // skipping straight to getPropertyTypeForIndexType gives errors with 'boolean' instead of 'true'.
+            const apparentObjectType = getApparentType(objectType);
             if (indexType.flags & TypeFlags.Union && !(indexType.flags & TypeFlags.Boolean)) {
                 const propTypes: Type[] = [];
                 let wasMissingProp = false;
                 for (const t of (<UnionType>indexType).types) {
-                    const propType = getPropertyTypeForIndexType(objectType, t, accessNode, /*cacheSymbol*/ false, missingType);
+                    const propType = getPropertyTypeForIndexType(apparentObjectType, t, accessNode, /*cacheSymbol*/ false, missingType);
                     if (propType === missingType) {
                         if (!accessNode) {
                             // If there's no error node, we can immeditely stop, since error reporting is off
@@ -9545,7 +9546,7 @@ namespace ts {
                 }
                 return getUnionType(propTypes);
             }
-            return getPropertyTypeForIndexType(objectType, indexType, accessNode, /*cacheSymbol*/ true, missingType);
+            return getPropertyTypeForIndexType(apparentObjectType, indexType, accessNode, /*cacheSymbol*/ true, missingType);
         }
 
         function getTypeFromIndexedAccessTypeNode(node: IndexedAccessTypeNode) {
@@ -10860,8 +10861,8 @@ namespace ts {
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
-                const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, /*useApparentObjectType*/ false, errorType);
-                const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, /*useApparentObjectType*/ false, errorType);
+                const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
+                const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, errorType);
                 if (sourcePropType !== errorType && targetPropType !== errorType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined);
                     if (elaborated) {
@@ -23182,14 +23183,14 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
-        function checkIndexedAccessIndexType(type: Type, accessNode: Node, useApparentObjectType?: boolean) {
+        function checkIndexedAccessIndexType(type: Type, accessNode: Node) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
             }
             // Check if the index type is assignable to 'keyof T' for the object type.
             const objectType = (<IndexedAccessType>type).objectType;
             const indexType = (<IndexedAccessType>type).indexType;
-            if (isTypeAssignableTo(indexType, getIndexType(useApparentObjectType ? getApparentType(objectType) : objectType, /*stringsOnly*/ false))) {
+            if (isTypeAssignableTo(indexType, getIndexType(objectType, /*stringsOnly*/ false))) {
                 if (accessNode.kind === SyntaxKind.ElementAccessExpression && isAssignmentTarget(accessNode) &&
                     getObjectFlags(objectType) & ObjectFlags.Mapped && getMappedTypeModifiers(<MappedType>objectType) & MappedTypeModifiers.IncludeReadonly) {
                     error(accessNode, Diagnostics.Index_signature_in_type_0_only_permits_reading, typeToString(objectType));
