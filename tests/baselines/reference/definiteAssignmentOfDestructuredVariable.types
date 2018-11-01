@@ -18,20 +18,20 @@ class C<T extends Options> {
 >method : () => void
 
         let { a, b } = this.foo;
->a : T["a"]
->b : T["b"]
+>a : { [P in keyof T]: T[P]; }["a"]
+>b : { [P in keyof T]: T[P]; }["b"]
 >this.foo : { [P in keyof T]: T[P]; }
 >this : this
 >foo : { [P in keyof T]: T[P]; }
 
         !(a && b);
 >!(a && b) : false
->(a && b) : T["b"]
->a && b : T["b"]
->a : T["a"]
->b : T["b"]
+>(a && b) : { [P in keyof T]: T[P]; }["b"]
+>a && b : { [P in keyof T]: T[P]; }["b"]
+>a : { [P in keyof T]: T[P]; }["a"]
+>b : { [P in keyof T]: T[P]; }["b"]
 
         a;
->a : T["a"]
+>a : { [P in keyof T]: T[P]; }["a"]
     }
 }

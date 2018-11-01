@@ -7486,6 +7486,7 @@ declare namespace ts.server.protocol {
      */
     interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+        event: DiagnosticEventKind;
     }
     interface ConfigFileDiagnosticEventBody {
         /**

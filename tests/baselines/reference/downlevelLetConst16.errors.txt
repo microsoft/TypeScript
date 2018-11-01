@@ -1,9 +1,9 @@
 tests/cases/compiler/downlevelLetConst16.ts(151,15): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/compiler/downlevelLetConst16.ts(164,17): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/compiler/downlevelLetConst16.ts(195,14): error TS2461: Type 'undefined' is not an array type.
-tests/cases/compiler/downlevelLetConst16.ts(202,15): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+tests/cases/compiler/downlevelLetConst16.ts(202,15): error TS2339: Property 'a' does not exist on type 'undefined'.
 tests/cases/compiler/downlevelLetConst16.ts(216,16): error TS2461: Type 'undefined' is not an array type.
-tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2339: Property 'a' does not exist on type 'undefined'.
 
 
 ==== tests/cases/compiler/downlevelLetConst16.ts (6 errors) ====
@@ -216,7 +216,7 @@ tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2459: Type 'undefin
     function foo9() {
         for (let {a: x} of []) {
                   ~
-!!! error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+!!! error TS2339: Property 'a' does not exist on type 'undefined'.
             use(x);
         }
         use(x);
@@ -241,7 +241,7 @@ tests/cases/compiler/downlevelLetConst16.ts(223,17): error TS2459: Type 'undefin
     function foo12() {
         for (const {a: x} of []) {
                     ~
-!!! error TS2459: Type 'undefined' has no property 'a' and no string index signature.
+!!! error TS2339: Property 'a' does not exist on type 'undefined'.
             use(x);
         }
         use(x);

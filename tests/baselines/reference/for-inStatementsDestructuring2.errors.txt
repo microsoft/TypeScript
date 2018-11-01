@@ -1,6 +1,6 @@
 tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,10): error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,11): error TS2459: Type 'string' has no property 'a' and no string index signature.
-tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,14): error TS2459: Type 'string' has no property 'b' and no string index signature.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,11): error TS2339: Property 'a' does not exist on type 'String'.
+tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts(1,14): error TS2339: Property 'b' does not exist on type 'String'.
 
 
 ==== tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructuring2.ts (3 errors) ====
@@ -8,6 +8,6 @@ tests/cases/conformance/statements/for-inStatements/for-inStatementsDestructurin
              ~~~~~~
 !!! error TS2491: The left-hand side of a 'for...in' statement cannot be a destructuring pattern.
               ~
-!!! error TS2459: Type 'string' has no property 'a' and no string index signature.
+!!! error TS2339: Property 'a' does not exist on type 'String'.
                  ~
-!!! error TS2459: Type 'string' has no property 'b' and no string index signature.
+!!! error TS2339: Property 'b' does not exist on type 'String'.

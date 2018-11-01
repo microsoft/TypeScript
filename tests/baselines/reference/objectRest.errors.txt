@@ -1,9 +1,13 @@
+tests/cases/conformance/types/rest/objectRest.ts(7,12): error TS2339: Property '0' does not exist on type 'String'.
+tests/cases/conformance/types/rest/objectRest.ts(7,20): error TS2339: Property '1' does not exist on type 'String'.
+tests/cases/conformance/types/rest/objectRest.ts(43,8): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
+tests/cases/conformance/types/rest/objectRest.ts(43,35): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
 tests/cases/conformance/types/rest/objectRest.ts(43,57): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o' must be of type '{ a: number; b: string; }', but here has type 'Rest<{ a: number; b: string; }, string>'.
 tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2322: Type 'Rest<{ a: number; b: string; }, string>' is not assignable to type '{ a: number; b: string; }'.
   Property 'a' is missing in type 'Rest<{ a: number; b: string; }, string>'.
 
 
-==== tests/cases/conformance/types/rest/objectRest.ts (2 errors) ====
+==== tests/cases/conformance/types/rest/objectRest.ts (6 errors) ====
     var o = { a: 1, b: 'no' }
     var { ...clone } = o;
     var { a, ...justB } = o;
@@ -11,6 +15,10 @@ tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2322: Type 'Res
     var { ['b']: renamed, ...justA } = o;
     var { 'b': renamed, ...justA } = o;
     var { b: { '0': n, '1': oooo }, ...justA } = o;
+               ~~~
+!!! error TS2339: Property '0' does not exist on type 'String'.
+                       ~~~
+!!! error TS2339: Property '1' does not exist on type 'String'.
     
     let o2 = { c: 'terrible idea?', d: 'yes' };
     var { d: renamed, ...d } = o2;
@@ -47,6 +55,10 @@ tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2322: Type 'Res
     let computed = 'b';
     let computed2 = 'a';
     var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
+           ~~~~~~~~
+!!! error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
+                                      ~~~~~~~~~
+!!! error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
                                                             ~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'o' must be of type '{ a: number; b: string; }', but here has type 'Rest<{ a: number; b: string; }, string>'.
     ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
