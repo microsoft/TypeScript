@@ -4659,7 +4659,7 @@ namespace ts {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
                     const exprType = isComputedPropertyName(name)
-                        ? checkExpression(name.expression)
+                        ? checkComputedPropertyName(name)
                         : isIdentifier(name)
                             ? getLiteralType(unescapeLeadingUnderscores(name.escapedText))
                             : checkExpression(name);
