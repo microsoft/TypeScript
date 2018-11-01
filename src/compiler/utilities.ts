@@ -2921,7 +2921,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
         switch (kind) {
             case SyntaxKind.BarBarToken:
@@ -6834,7 +6833,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    /** @internal */
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
@@ -6898,7 +6896,6 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    /* @internal */
     export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
@@ -6909,7 +6906,6 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    /* @internal */
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
@@ -6938,7 +6934,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
@@ -6949,7 +6944,6 @@ namespace ts {
         return text;
     }
 
-    /* @internal */
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
@@ -6970,7 +6964,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
         return {
             file: undefined,
@@ -6983,7 +6976,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -7015,14 +7007,12 @@ namespace ts {
         return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
-    /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareDiagnosticsSkipRelatedInformation(d1, d2) ||
             compareRelatedInformation(d1, d2) ||
             Comparison.EqualTo;
     }
 
-    /* @internal */
     export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
@@ -7360,7 +7350,6 @@ namespace ts {
         return rootLength > 0 && rootLength === path.length;
     }
 
-    /* @internal */
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath
