@@ -43,6 +43,7 @@
         "textChanges.ts",
         "codeFixProvider.ts",
         "refactorProvider.ts",
+        "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
         "codefixes/convertFunctionToEs6Class.ts",

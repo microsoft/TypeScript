@@ -4724,5 +4724,13 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Add 'unknown' conversion for non-overlapping types": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Add 'unknown' to all conversions of non-overlapping types": {
+        "category": "Message",
+        "code": 95070
     }
 }
