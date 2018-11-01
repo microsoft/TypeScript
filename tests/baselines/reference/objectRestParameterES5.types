@@ -2,7 +2,7 @@
 function cloneAgain({ a, ...clone }: { a: number, b: string }): void {
 >cloneAgain : ({ a, ...clone }: { a: number; b: string; }) => void
 >a : number
->clone : { b: string; }
+>clone : Rest<{ a: number; b: string; }, "a">
 >a : number
 >b : string
 }
@@ -22,9 +22,9 @@ suddenly(({ x: a, ...rest }) => rest.y);
 >({ x: a, ...rest }) => rest.y : ({ x: a, ...rest }: { x: { z: any; ka: any; }; y: string; }) => string
 >x : any
 >a : { z: any; ka: any; }
->rest : { y: string; }
+>rest : Rest<{ x: { z: any; ka: any; }; y: string; }, "x">
 >rest.y : string
->rest : { y: string; }
+>rest : Rest<{ x: { z: any; ka: any; }; y: string; }, "x">
 >y : string
 
 suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
@@ -34,8 +34,8 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >x : any
 >z : any
 >12 : 12
->nested : { ka: any; }
->rest : { y: string; }
+>nested : Rest<{ z: any; ka: any; }, "z">
+>rest : Rest<{ x: { z: any; ka: any; }; y: string; }, "x">
 >{ x: { z: 1, ka: 1 }, y: 'noo' } : { x: { z: number; ka: number; }; y: string; }
 >x : { z: number; ka: number; }
 >{ z: 1, ka: 1 } : { z: number; ka: number; }
@@ -47,10 +47,10 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >'noo' : "noo"
 >rest.y + nested.ka : string
 >rest.y : string
->rest : { y: string; }
+>rest : Rest<{ x: { z: any; ka: any; }; y: string; }, "x">
 >y : string
 >nested.ka : any
->nested : { ka: any; }
+>nested : Rest<{ z: any; ka: any; }, "z">
 >ka : any
 
 class C {
@@ -59,7 +59,7 @@ class C {
     m({ a, ...clone }: { a: number, b: string}): void {
 >m : ({ a, ...clone }: { a: number; b: string; }) => void
 >a : number
->clone : { b: string; }
+>clone : Rest<{ a: number; b: string; }, "a">
 >a : number
 >b : string
 
@@ -68,7 +68,7 @@ class C {
     set p({ a, ...clone }: { a: number, b: string}) {
 >p : { a: number; b: string; }
 >a : number
->clone : { b: string; }
+>clone : Rest<{ a: number; b: string; }, "a">
 >a : number
 >b : string
 

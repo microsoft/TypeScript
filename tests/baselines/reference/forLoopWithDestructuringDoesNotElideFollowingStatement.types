@@ -10,7 +10,7 @@ let array = [{a: 0, b: 1}]
 
 for (let { a, ...rest } of array)
 >a : number
->rest : { b: number; }
+>rest : Rest<{ a: number; b: number; }, "a">
 >array : { a: number; b: number; }[]
 
     void a

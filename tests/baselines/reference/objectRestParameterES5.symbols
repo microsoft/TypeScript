@@ -21,9 +21,9 @@ suddenly(({ x: a, ...rest }) => rest.y);
 >x : Symbol(x, Decl(objectRestParameterES5.ts, 3, 34))
 >a : Symbol(a, Decl(objectRestParameterES5.ts, 4, 11))
 >rest : Symbol(rest, Decl(objectRestParameterES5.ts, 4, 17))
->rest.y : Symbol(y, Decl(objectRestParameterES5.ts, 3, 48))
+>rest.y : Symbol(y)
 >rest : Symbol(rest, Decl(objectRestParameterES5.ts, 4, 17))
->y : Symbol(y, Decl(objectRestParameterES5.ts, 3, 48))
+>y : Symbol(y)
 
 suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo' }) => rest.y + nested.ka);
 >suddenly : Symbol(suddenly, Decl(objectRestParameterES5.ts, 1, 1))
@@ -35,12 +35,12 @@ suddenly(({ x: { z = 12, ...nested }, ...rest } = { x: { z: 1, ka: 1 }, y: 'noo'
 >z : Symbol(z, Decl(objectRestParameterES5.ts, 5, 56))
 >ka : Symbol(ka, Decl(objectRestParameterES5.ts, 5, 62))
 >y : Symbol(y, Decl(objectRestParameterES5.ts, 5, 71))
->rest.y : Symbol(y, Decl(objectRestParameterES5.ts, 3, 48))
+>rest.y : Symbol(y)
 >rest : Symbol(rest, Decl(objectRestParameterES5.ts, 5, 37))
->y : Symbol(y, Decl(objectRestParameterES5.ts, 3, 48))
->nested.ka : Symbol(ka, Decl(objectRestParameterES5.ts, 3, 42))
+>y : Symbol(y)
+>nested.ka : Symbol(ka)
 >nested : Symbol(nested, Decl(objectRestParameterES5.ts, 5, 24))
->ka : Symbol(ka, Decl(objectRestParameterES5.ts, 3, 42))
+>ka : Symbol(ka)
 
 class C {
 >C : Symbol(C, Decl(objectRestParameterES5.ts, 5, 107))
