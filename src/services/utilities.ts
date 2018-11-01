@@ -936,7 +936,7 @@ namespace ts {
                 return undefined;
             }
             token = preceding;
-            
+
             if (token.kind === matchingTokenKind) {
                 if (remainingMatchingTokens === 0) {
                     return token;
