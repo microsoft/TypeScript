@@ -21,19 +21,22 @@ verify.completions(
     // no reserved words
     {
         marker: "break",
-        excludes: [{ name: "break", source: "/a" }],
+        includes: { name: "break", text: "break", kind: "keyword" },
+        excludes: { name: "break", source: "/a" },
         preferences,
     },
     // no strict mode reserved words
     {
         marker: "implements",
-        excludes: [{ name: "implements", source: "/a" }],
+        includes: { name: "implements", text: "implements", kind: "keyword" },
+        excludes: { name: "implements", source: "/a" },
         preferences,
     },
     // yes contextual keywords
     {
         marker: "unique",
         includes: { name: "unique", source: "/a", sourceDisplay: "./a", text: "(alias) const unique: 0\nexport unique", hasAction: true },
+        excludes: { name: "unique", source: undefined },
         preferences,
     },
 );
