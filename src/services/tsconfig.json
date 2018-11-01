@@ -44,6 +44,7 @@
         "codeFixProvider.ts",
         "refactorProvider.ts",
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
+        "codefixes/addMissingConstInForLoop.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
         "codefixes/addNameToNamelessParameter.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
