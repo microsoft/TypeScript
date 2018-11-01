@@ -1,5 +1,5 @@
 tests/cases/conformance/salsa/b.js(1,7): error TS2322: Type '{}' is not assignable to type 'typeof A'.
-  Property 'prototype' is missing in type '{}'.
+  Type '{}' is missing the following properties from type 'typeof A': prototype, d
 
 
 ==== tests/cases/conformance/salsa/a.d.ts (0 errors) ====
@@ -8,6 +8,6 @@ tests/cases/conformance/salsa/b.js(1,7): error TS2322: Type '{}' is not assignab
     const A = { };
           ~
 !!! error TS2322: Type '{}' is not assignable to type 'typeof A'.
-!!! error TS2322:   Property 'prototype' is missing in type '{}'.
+!!! error TS2322:   Type '{}' is missing the following properties from type 'typeof A': prototype, d
     A.d = { };
     

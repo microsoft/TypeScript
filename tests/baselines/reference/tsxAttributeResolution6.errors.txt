@@ -1,7 +1,7 @@
 tests/cases/conformance/jsx/file.tsx(10,8): error TS2322: Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(11,8): error TS2322: Type 'string' is not assignable to type 'boolean'.
 tests/cases/conformance/jsx/file.tsx(12,2): error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
-  Property 'n' is missing in type '{}'.
+  Property 'n' is missing in type {}' but present in type '{ n: boolean; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -25,7 +25,7 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2322: Type '{}' is not assig
     <test2 />;
      ~~~~~
 !!! error TS2322: Type '{}' is not assignable to type '{ n: boolean; }'.
-!!! error TS2322:   Property 'n' is missing in type '{}'.
+!!! error TS2322:   Property 'n' is missing in type {}' but present in type '{ n: boolean; }'.
     
     // OK
     <test1 n />;

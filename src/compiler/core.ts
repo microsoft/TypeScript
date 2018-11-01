@@ -1255,9 +1255,9 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
-    export function arrayFrom<T>(iterator: Iterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
         const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);

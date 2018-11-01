@@ -5,7 +5,7 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts(13,17): error TS232
         Types of property 'next' are incompatible.
           Type '() => { value: symbol; }' is not assignable to type '(value?: any) => IteratorResult<symbol>'.
             Type '{ value: symbol; }' is not assignable to type 'IteratorResult<symbol>'.
-              Property 'done' is missing in type '{ value: symbol; }'.
+              Property 'done' is missing in type { value: symbol; }' but present in type 'IteratorResult<symbol>'.
 
 
 ==== tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts (1 errors) ====
@@ -30,4 +30,4 @@ tests/cases/conformance/es6/spread/iteratorSpreadInArray9.ts(13,17): error TS232
 !!! error TS2322:         Types of property 'next' are incompatible.
 !!! error TS2322:           Type '() => { value: symbol; }' is not assignable to type '(value?: any) => IteratorResult<symbol>'.
 !!! error TS2322:             Type '{ value: symbol; }' is not assignable to type 'IteratorResult<symbol>'.
-!!! error TS2322:               Property 'done' is missing in type '{ value: symbol; }'.
+!!! error TS2322:               Property 'done' is missing in type { value: symbol; }' but present in type 'IteratorResult<symbol>'.

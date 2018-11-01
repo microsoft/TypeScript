@@ -1,16 +1,16 @@
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-    Property 'children' is missing in type '{ a: number; b: string; }'.
+    Property 'children' is missing in type { a: number; b: string; }' but present in type 'Prop'.
 tests/cases/conformance/jsx/file.tsx(24,6): error TS2322: Type '{ children: Element; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ children: Element; a: number; b: string; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
       Type 'Element' is not assignable to type 'Button'.
-        Property 'render' is missing in type 'Element'.
+        Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
 tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: typeof Button; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ children: typeof Button; a: number; b: string; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
       Type 'typeof Button' is not assignable to type 'Button'.
-        Property 'render' is missing in type 'typeof Button'.
+        Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
@@ -37,7 +37,7 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
              ~~~~
 !!! error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
 !!! error TS2322:   Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:     Property 'children' is missing in type '{ a: number; b: string; }'.
+!!! error TS2322:     Property 'children' is missing in type { a: number; b: string; }' but present in type 'Prop'.
     
     // Error: JSX.element is not the same as JSX.ElementClass
     let k1 =
@@ -47,7 +47,7 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
 !!! error TS2322:   Type '{ children: Element; a: number; b: string; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type 'Element' is not assignable to type 'Button'.
-!!! error TS2322:         Property 'render' is missing in type 'Element'.
+!!! error TS2322:         Type 'Element' is missing the following properties from type 'Button': render, setState, forceUpdate, state, and 2 more.
             <Button />
         </Comp>;
     let k2 =
@@ -57,6 +57,6 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
 !!! error TS2322:   Type '{ children: typeof Button; a: number; b: string; }' is not assignable to type 'Prop'.
 !!! error TS2322:     Types of property 'children' are incompatible.
 !!! error TS2322:       Type 'typeof Button' is not assignable to type 'Button'.
-!!! error TS2322:         Property 'render' is missing in type 'typeof Button'.
+!!! error TS2322:         Type 'typeof Button' is missing the following properties from type 'Button': render, setState, forceUpdate, props, and 3 more.
             {Button}
         </Comp>;

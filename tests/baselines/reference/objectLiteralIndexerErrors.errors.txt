@@ -1,5 +1,5 @@
 tests/cases/compiler/objectLiteralIndexerErrors.ts(13,54): error TS2322: Type 'A' is not assignable to type 'B'.
-  Property 'y' is missing in type 'A'.
+  Property 'y' is missing in type A' but present in type 'B'.
 tests/cases/compiler/objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A' is not assignable to type 'B'.
 
 
@@ -19,7 +19,7 @@ tests/cases/compiler/objectLiteralIndexerErrors.ts(14,14): error TS2322: Type 'A
     var o1: { [s: string]: A;[n: number]: B; } = { x: b, 0: a }; // both indexers are A
                                                          ~
 !!! error TS2322: Type 'A' is not assignable to type 'B'.
-!!! error TS2322:   Property 'y' is missing in type 'A'.
+!!! error TS2322:   Property 'y' is missing in type A' but present in type 'B'.
 !!! related TS6501 tests/cases/compiler/objectLiteralIndexerErrors.ts:13:26: The expected type comes from this index signature.
     o1 = { x: c, 0: a }; // string indexer is any, number indexer is A
                  ~

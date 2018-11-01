@@ -1,7 +1,7 @@
 tests/cases/compiler/typeofAmbientExternalModules_2.ts(7,1): error TS2322: Type 'typeof D' is not assignable to type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
-  Property 'C' is missing in type 'typeof D'.
+  Property 'C' is missing in type typeof D' but present in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
 tests/cases/compiler/typeofAmbientExternalModules_2.ts(9,1): error TS2322: Type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' is not assignable to type 'typeof D'.
-  Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
+  Property 'prototype' is missing in type typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' but present in type 'typeof D'.
 
 
 ==== tests/cases/compiler/typeofAmbientExternalModules_2.ts (2 errors) ====
@@ -14,12 +14,12 @@ tests/cases/compiler/typeofAmbientExternalModules_2.ts(9,1): error TS2322: Type 
     y1 = exp;
     ~~
 !!! error TS2322: Type 'typeof D' is not assignable to type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
-!!! error TS2322:   Property 'C' is missing in type 'typeof D'.
+!!! error TS2322:   Property 'C' is missing in type typeof D' but present in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
     var y2: typeof exp = exp;
     y2 = ext;
     ~~
 !!! error TS2322: Type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' is not assignable to type 'typeof D'.
-!!! error TS2322:   Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")'.
+!!! error TS2322:   Property 'prototype' is missing in type typeof import("tests/cases/compiler/typeofAmbientExternalModules_0")' but present in type 'typeof D'.
 ==== tests/cases/compiler/typeofAmbientExternalModules_0.ts (0 errors) ====
     export class C { foo: string; }
     

@@ -5,7 +5,7 @@ tests/cases/compiler/errorsWithInvokablesInUnions01.ts(14,12): error TS2322: Typ
 tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Type 'typeof ctor' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
   Type 'typeof ctor' is not assignable to type 'ConstructableA'.
     Type 'ctor' is not assignable to type '{ somePropA: any; }'.
-      Property 'somePropA' is missing in type 'ctor'.
+      Property 'somePropA' is missing in type ctor' but present in type '{ somePropA: any; }'.
 
 
 ==== tests/cases/compiler/errorsWithInvokablesInUnions01.ts (2 errors) ====
@@ -34,7 +34,7 @@ tests/cases/compiler/errorsWithInvokablesInUnions01.ts(16,12): error TS2322: Typ
 !!! error TS2322: Type 'typeof ctor' is not assignable to type 'ConstructableA | IDirectiveLinkFn<number> | IDirectivePrePost<number>'.
 !!! error TS2322:   Type 'typeof ctor' is not assignable to type 'ConstructableA'.
 !!! error TS2322:     Type 'ctor' is not assignable to type '{ somePropA: any; }'.
-!!! error TS2322:       Property 'somePropA' is missing in type 'ctor'.
+!!! error TS2322:       Property 'somePropA' is missing in type ctor' but present in type '{ somePropA: any; }'.
         someUnaccountedProp: any;
     }
     

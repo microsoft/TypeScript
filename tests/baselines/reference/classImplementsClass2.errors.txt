@@ -1,7 +1,7 @@
 tests/cases/compiler/classImplementsClass2.ts(2,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
-  Property 'foo' is missing in type 'C'.
+  Property 'foo' is missing in type C' but present in type 'A'.
 tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2322: Type 'C' is not assignable to type 'C2'.
-  Property 'foo' is missing in type 'C'.
+  Property 'foo' is missing in type C' but present in type 'C2'.
 
 
 ==== tests/cases/compiler/classImplementsClass2.ts (2 errors) ====
@@ -9,7 +9,7 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2322: Type 'C' is n
     class C implements A {} // error
           ~
 !!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
-!!! error TS2720:   Property 'foo' is missing in type 'C'.
+!!! error TS2720:   Property 'foo' is missing in type C' but present in type 'A'.
     
     class C2 extends A {
         foo() {
@@ -23,4 +23,4 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2322: Type 'C' is n
     c2 = c;
     ~~
 !!! error TS2322: Type 'C' is not assignable to type 'C2'.
-!!! error TS2322:   Property 'foo' is missing in type 'C'.
+!!! error TS2322:   Property 'foo' is missing in type C' but present in type 'C2'.

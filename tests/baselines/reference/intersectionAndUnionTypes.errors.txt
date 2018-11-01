@@ -1,35 +1,35 @@
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(19,1): error TS2322: Type 'A' is not assignable to type 'A & B'.
   Type 'A' is not assignable to type 'B'.
-    Property 'b' is missing in type 'A'.
+    Property 'b' is missing in type A' but present in type 'B'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(20,1): error TS2322: Type 'B' is not assignable to type 'A & B'.
   Type 'B' is not assignable to type 'A'.
-    Property 'a' is missing in type 'B'.
+    Property 'a' is missing in type B' but present in type 'A'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(23,1): error TS2322: Type 'A | B' is not assignable to type '(A & B) | (C & D)'.
   Type 'A' is not assignable to type '(A & B) | (C & D)'.
     Type 'A' is not assignable to type 'C & D'.
       Type 'A' is not assignable to type 'C'.
-        Property 'c' is missing in type 'A'.
+        Property 'c' is missing in type A' but present in type 'C'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(25,1): error TS2322: Type 'C | D' is not assignable to type '(A & B) | (C & D)'.
   Type 'C' is not assignable to type '(A & B) | (C & D)'.
     Type 'C' is not assignable to type 'C & D'.
       Type 'C' is not assignable to type 'D'.
-        Property 'd' is missing in type 'C'.
+        Property 'd' is missing in type C' but present in type 'D'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(26,1): error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A & B'.
   Type 'C & D' is not assignable to type 'A & B'.
     Type 'C & D' is not assignable to type 'A'.
-      Property 'a' is missing in type 'C & D'.
+      Property 'a' is missing in type C & D' but present in type 'A'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(27,1): error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A | B'.
   Type 'C & D' is not assignable to type 'A | B'.
     Type 'C & D' is not assignable to type 'B'.
-      Property 'b' is missing in type 'C & D'.
+      Property 'b' is missing in type C & D' but present in type 'B'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(28,1): error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C & D'.
   Type 'A & B' is not assignable to type 'C & D'.
     Type 'A & B' is not assignable to type 'C'.
-      Property 'c' is missing in type 'A & B'.
+      Property 'c' is missing in type A & B' but present in type 'C'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(29,1): error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C | D'.
   Type 'A & B' is not assignable to type 'C | D'.
     Type 'A & B' is not assignable to type 'D'.
-      Property 'd' is missing in type 'A & B'.
+      Property 'd' is missing in type A & B' but present in type 'D'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(31,1): error TS2322: Type 'A & B' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
   Type 'A & B' is not assignable to type 'B & D'.
     Type 'A & B' is not assignable to type 'D'.
@@ -44,15 +44,15 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(34,1): e
   Type 'C' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
     Type 'C' is not assignable to type 'B & D'.
       Type 'C' is not assignable to type 'B'.
-        Property 'b' is missing in type 'C'.
+        Property 'b' is missing in type C' but present in type 'B'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(35,1): error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'A & B'.
   Type 'A & C' is not assignable to type 'A & B'.
     Type 'A & C' is not assignable to type 'B'.
-      Property 'b' is missing in type 'A & C'.
+      Property 'b' is missing in type A & C' but present in type 'B'.
 tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'C & D'.
   Type 'A & C' is not assignable to type 'C & D'.
     Type 'A & C' is not assignable to type 'D'.
-      Property 'd' is missing in type 'A & C'.
+      Property 'd' is missing in type A & C' but present in type 'D'.
 
 
 ==== tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts (14 errors) ====
@@ -78,12 +78,12 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
     ~~~
 !!! error TS2322: Type 'A' is not assignable to type 'A & B'.
 !!! error TS2322:   Type 'A' is not assignable to type 'B'.
-!!! error TS2322:     Property 'b' is missing in type 'A'.
+!!! error TS2322:     Property 'b' is missing in type A' but present in type 'B'.
     anb = b;
     ~~~
 !!! error TS2322: Type 'B' is not assignable to type 'A & B'.
 !!! error TS2322:   Type 'B' is not assignable to type 'A'.
-!!! error TS2322:     Property 'a' is missing in type 'B'.
+!!! error TS2322:     Property 'a' is missing in type B' but present in type 'A'.
     
     x = anb;  // Ok
     x = aob;
@@ -92,7 +92,7 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
 !!! error TS2322:   Type 'A' is not assignable to type '(A & B) | (C & D)'.
 !!! error TS2322:     Type 'A' is not assignable to type 'C & D'.
 !!! error TS2322:       Type 'A' is not assignable to type 'C'.
-!!! error TS2322:         Property 'c' is missing in type 'A'.
+!!! error TS2322:         Property 'c' is missing in type A' but present in type 'C'.
     x = cnd;  // Ok
     x = cod;
     ~
@@ -100,31 +100,31 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
 !!! error TS2322:   Type 'C' is not assignable to type '(A & B) | (C & D)'.
 !!! error TS2322:     Type 'C' is not assignable to type 'C & D'.
 !!! error TS2322:       Type 'C' is not assignable to type 'D'.
-!!! error TS2322:         Property 'd' is missing in type 'C'.
+!!! error TS2322:         Property 'd' is missing in type C' but present in type 'D'.
     anb = x;
     ~~~
 !!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A & B'.
 !!! error TS2322:   Type 'C & D' is not assignable to type 'A & B'.
 !!! error TS2322:     Type 'C & D' is not assignable to type 'A'.
-!!! error TS2322:       Property 'a' is missing in type 'C & D'.
+!!! error TS2322:       Property 'a' is missing in type C & D' but present in type 'A'.
     aob = x;
     ~~~
 !!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'A | B'.
 !!! error TS2322:   Type 'C & D' is not assignable to type 'A | B'.
 !!! error TS2322:     Type 'C & D' is not assignable to type 'B'.
-!!! error TS2322:       Property 'b' is missing in type 'C & D'.
+!!! error TS2322:       Property 'b' is missing in type C & D' but present in type 'B'.
     cnd = x;
     ~~~
 !!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C & D'.
 !!! error TS2322:   Type 'A & B' is not assignable to type 'C & D'.
 !!! error TS2322:     Type 'A & B' is not assignable to type 'C'.
-!!! error TS2322:       Property 'c' is missing in type 'A & B'.
+!!! error TS2322:       Property 'c' is missing in type A & B' but present in type 'C'.
     cod = x;
     ~~~
 !!! error TS2322: Type '(A & B) | (C & D)' is not assignable to type 'C | D'.
 !!! error TS2322:   Type 'A & B' is not assignable to type 'C | D'.
 !!! error TS2322:     Type 'A & B' is not assignable to type 'D'.
-!!! error TS2322:       Property 'd' is missing in type 'A & B'.
+!!! error TS2322:       Property 'd' is missing in type A & B' but present in type 'D'.
     
     y = anb;
     ~
@@ -148,19 +148,19 @@ tests/cases/conformance/types/intersection/intersectionAndUnionTypes.ts(37,1): e
 !!! error TS2322:   Type 'C' is not assignable to type '(A & C) | (A & D) | (B & C) | (B & D)'.
 !!! error TS2322:     Type 'C' is not assignable to type 'B & D'.
 !!! error TS2322:       Type 'C' is not assignable to type 'B'.
-!!! error TS2322:         Property 'b' is missing in type 'C'.
+!!! error TS2322:         Property 'b' is missing in type C' but present in type 'B'.
     anb = y;
     ~~~
 !!! error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'A & B'.
 !!! error TS2322:   Type 'A & C' is not assignable to type 'A & B'.
 !!! error TS2322:     Type 'A & C' is not assignable to type 'B'.
-!!! error TS2322:       Property 'b' is missing in type 'A & C'.
+!!! error TS2322:       Property 'b' is missing in type A & C' but present in type 'B'.
     aob = y;  // Ok
     cnd = y;
     ~~~
 !!! error TS2322: Type '(A & C) | (A & D) | (B & C) | (B & D)' is not assignable to type 'C & D'.
 !!! error TS2322:   Type 'A & C' is not assignable to type 'C & D'.
 !!! error TS2322:     Type 'A & C' is not assignable to type 'D'.
-!!! error TS2322:       Property 'd' is missing in type 'A & C'.
+!!! error TS2322:       Property 'd' is missing in type A & C' but present in type 'D'.
     cod = y;  // Ok
     

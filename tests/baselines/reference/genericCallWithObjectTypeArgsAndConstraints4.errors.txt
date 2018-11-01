@@ -1,5 +1,4 @@
-tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
-  Property 'y' is missing in type 'C'.
+tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(19,17): error TS2737: Property 'y' is missing in type C' but present in type 'D'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectTypeArgsAndConstraints4.ts(30,24): error TS2345: Argument of type 'C' is not assignable to parameter of type 'T'.
 
 
@@ -24,8 +23,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObj
     var r = foo(c, d);
     var r2 = foo(d, c); // error because C does not extend D
                     ~
-!!! error TS2345: Argument of type 'C' is not assignable to parameter of type 'D'.
-!!! error TS2345:   Property 'y' is missing in type 'C'.
+!!! error TS2737: Property 'y' is missing in type C' but present in type 'D'.
     var r3 = foo(c, { x: '', foo: c });
     var r4 = foo(null, null);
     var r5 = foo({}, null);

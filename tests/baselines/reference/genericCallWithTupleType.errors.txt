@@ -10,7 +10,7 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,14): error TS2322: Type '{}' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(23,18): error TS2322: Type '{}' is not assignable to type 'number'.
 tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts(24,1): error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
-  Property '1' is missing in type '[{}]'.
+  Property '1' is missing in type [{}]' but present in type '[{}, {}]'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTupleType.ts (10 errors) ====
@@ -60,5 +60,5 @@ tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithTup
     i2.tuple1 = [{}];
     ~~~~~~~~~
 !!! error TS2322: Type '[{}]' is not assignable to type '[{}, {}]'.
-!!! error TS2322:   Property '1' is missing in type '[{}]'.
+!!! error TS2322:   Property '1' is missing in type [{}]' but present in type '[{}, {}]'.
     

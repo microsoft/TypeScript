@@ -8,7 +8,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
               Type 'IteratorResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo>'.
                 Type 'Bar | Baz' is not assignable to type 'Foo'.
                   Type 'Baz' is not assignable to type 'Foo'.
-                    Property 'x' is missing in type 'Baz'.
+                    Property 'x' is missing in type Baz' but present in type 'Foo'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts (1 errors) ====
@@ -27,7 +27,7 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck25.ts(4,5): error
 !!! error TS2322:               Type 'IteratorResult<Bar | Baz>' is not assignable to type 'IteratorResult<Foo>'.
 !!! error TS2322:                 Type 'Bar | Baz' is not assignable to type 'Foo'.
 !!! error TS2322:                   Type 'Baz' is not assignable to type 'Foo'.
-!!! error TS2322:                     Property 'x' is missing in type 'Baz'.
+!!! error TS2322:                     Property 'x' is missing in type Baz' but present in type 'Foo'.
         yield;
         yield new Bar;
         yield new Baz;

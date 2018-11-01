@@ -11315,6 +11315,7 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
+            let suppressNextError = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -11352,9 +11353,9 @@ namespace ts {
             }
             return result !== Ternary.False;
 
-            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
+            function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
+                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
@@ -11562,7 +11563,12 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
-                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                    if (suppressNextError) {
+                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
+                        suppressNextError = false;
+                        return result;
+                    }
+                    else if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
@@ -12209,7 +12215,20 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
+                        if (headMessage && headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code) {
+                            suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
+                        }
+                        if (props.length === 1) {
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_present_in_type_2, symbolToString(unmatchedProperty), typeToString(source), typeToString(target));
+                        }
+                        else if (props.length > 5) { // arbitrary cutoff for too-long list form
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        }
+                        else {
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                        }
                     }
                     return Ternary.False;
                 }
@@ -13591,17 +13610,20 @@ namespace ts {
             return getTypeFromInference(inference);
         }
 
-        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean) {
             const properties = target.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>target) : getPropertiesOfObjectType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (!sourceProp) {
-                        return targetProp;
+                        yield targetProp;
                     }
                 }
             }
-            return undefined;
+        }
+
+        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean): Symbol | undefined {
+            return getUnmatchedProperties(source, target, requireOptionalProperties).next().value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {

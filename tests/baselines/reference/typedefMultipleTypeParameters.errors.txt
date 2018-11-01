@@ -1,8 +1,6 @@
-tests/cases/conformance/jsdoc/a.js(12,23): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
-  Property 'b' is missing in type '{ a: number; }'.
+tests/cases/conformance/jsdoc/a.js(12,23): error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
 tests/cases/conformance/jsdoc/a.js(15,12): error TS2314: Generic type 'Everything' requires 5 type argument(s).
-tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
-  Property 'b' is missing in type '{ a: number; }'.
+tests/cases/conformance/jsdoc/test.ts(1,34): error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
 
 
 ==== tests/cases/conformance/jsdoc/a.js (2 errors) ====
@@ -19,8 +17,7 @@ tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }'
     
     /** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
                           ~~~~~~~~~~~~~~
-!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
-!!! error TS2344:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
     var wrong;
     
     /** @type {Everything<{ a: number  }>} */
@@ -31,6 +28,5 @@ tests/cases/conformance/jsdoc/test.ts(1,34): error TS2344: Type '{ a: number; }'
 ==== tests/cases/conformance/jsdoc/test.ts (1 errors) ====
     declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
                                      ~~~~~~~~~~~~~~
-!!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: number; b: string; }'.
-!!! error TS2344:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
     

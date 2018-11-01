@@ -1,5 +1,4 @@
-tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts(13,17): error TS2345: Argument of type 'B<T>' is not assignable to parameter of type 'A<{}>'.
-  Property 'a' is missing in type 'B<T>'.
+tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts(13,17): error TS2737: Property 'a' is missing in type B<T>' but present in type 'A<{}>'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeFromInstanceof01.ts (1 errors) ====
@@ -17,8 +16,7 @@ tests/cases/conformance/types/typeRelationships/instanceOf/narrowingGenericTypeF
         if (x instanceof B) {
             acceptA(x);
                     ~
-!!! error TS2345: Argument of type 'B<T>' is not assignable to parameter of type 'A<{}>'.
-!!! error TS2345:   Property 'a' is missing in type 'B<T>'.
+!!! error TS2737: Property 'a' is missing in type B<T>' but present in type 'A<{}>'.
         }
     
         if (x instanceof A) {
