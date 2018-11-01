@@ -3061,7 +3061,7 @@ namespace ts.projectSystem {
                 const configProject = configuredProjectAt(projectService, 0);
                 checkProjectActualFiles(configProject, lazyConfiguredProjectsFromExternalProject ?
                     emptyArray : // Since no files opened from this project, its not loaded
-                    [libFile.path, configFile.path]);
+                    [configFile.path]);
 
                 host.reloadFS([libFile, site]);
                 host.checkTimeoutQueueLengthAndRun(1);
@@ -10521,7 +10521,7 @@ declare class TestLib {
                 assert.deepEqual(semanticDiagnostics, []);
             });
             const containerProject = service.configuredProjects.get(containerConfig.path)!;
-            checkProjectActualFiles(containerProject, [containerConfig.path, libFile.path]);
+            checkProjectActualFiles(containerProject, [containerConfig.path]);
             const optionsDiagnostics = session.executeCommandSeq<protocol.CompilerOptionsDiagnosticsRequest>({
                 command: protocol.CommandTypes.CompilerOptionsDiagnosticsFull,
                 arguments: { projectFileName: containerProject.projectName }
