@@ -56,3 +56,5 @@
             duplicate9: () => string;
         }
     }
+Found 2 errors.
+

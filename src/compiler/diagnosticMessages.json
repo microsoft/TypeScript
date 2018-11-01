@@ -3771,6 +3771,14 @@
         "category": "Message",
         "code": 6215
     },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6216
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6217
+    },
 
     "Projects to reference": {
         "category": "Message",
