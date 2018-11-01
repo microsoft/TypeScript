@@ -1,0 +1,24 @@
+tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(2,5): error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type 'T'.
+tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(6,5): error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
+tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts(10,5): error TS2322: Type '{ a: string; }' is not assignable to type 'T'.
+
+
+==== tests/cases/compiler/errorElaborationDivesIntoApparentlyPresentPropsOnly.ts (3 errors) ====
+    function foo<T extends { a: string }>(x: T) {
+        x = { a: "abc", b: 20, c: 30 };
+        ~
+!!! error TS2322: Type '{ a: string; b: number; c: number; }' is not assignable to type 'T'.
+    }
+    
+    function bar<T extends { a: string }>(x: T) {
+        x = { a: 20 };
+        ~
+!!! error TS2322: Type '{ a: number; }' is not assignable to type 'T'.
+    }
+    
+    function baz<T extends { a: string }>(x: T) {
+        x = { a: "not ok" };
+        ~
+!!! error TS2322: Type '{ a: string; }' is not assignable to type 'T'.
+    }
+    

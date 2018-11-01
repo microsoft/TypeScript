@@ -10861,8 +10861,9 @@ namespace ts {
             let reportedError = false;
             for (let status = iterator.next(); !status.done; status = iterator.next()) {
                 const { errorNode: prop, innerExpression: next, nameType, errorMessage } = status.value;
-                const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
                 const targetPropType = getIndexedAccessType(target, nameType, /*accessNode*/ undefined, errorType);
+                if (targetPropType === errorType || targetPropType.flags & TypeFlags.IndexedAccess) continue; // Don't elaborate on indexes on generic variables
+                const sourcePropType = getIndexedAccessType(source, nameType, /*accessNode*/ undefined, errorType);
                 if (sourcePropType !== errorType && targetPropType !== errorType && !checkTypeRelatedTo(sourcePropType, targetPropType, relation, /*errorNode*/ undefined)) {
                     const elaborated = next && elaborateError(next, sourcePropType, targetPropType, relation, /*headMessage*/ undefined);
                     if (elaborated) {
