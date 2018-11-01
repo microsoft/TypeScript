@@ -1074,7 +1074,10 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([file1, configFile, libFile]);
             const watch = createWatchOfConfigFile(configFile.path, host);
 
-            checkProgramActualFiles(watch(), [libFile.path]);
+            checkProgramActualFiles(watch(), emptyArray);
+            checkOutputErrorsInitial(host, [
+                "error TS18003: No inputs were found in config file '/a/b/tsconfig.json'. Specified 'include' paths were '[\"app/*\",\"test/**/*\",\"something\"]' and 'exclude' paths were '[]'.\n"
+            ]);
         });
 
         it("non-existing directories listed in config file input array should be able to handle @types if input file list is empty", () => {
@@ -1100,7 +1103,10 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
             const watch = createWatchOfConfigFile(config.path, host);
 
-            checkProgramActualFiles(watch(), [t1.path, t2.path]);
+            checkProgramActualFiles(watch(), emptyArray);
+            checkOutputErrorsInitial(host, [
+                "tsconfig.json(1,24): error TS18002: The 'files' list in config file '/a/tsconfig.json' is empty.\n"
+            ]);
         });
 
         it("should support files without extensions", () => {
