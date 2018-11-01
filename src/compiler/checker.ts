@@ -517,6 +517,7 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
+        let deferredGlobalRestSymbol: Symbol;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -4596,26 +4597,18 @@ namespace ts {
             if (source.flags & TypeFlags.Never) {
                 return emptyObjectType;
             }
-
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
-
-            const members = createSymbolTable();
-            const names = createUnderscoreEscapedMap<true>();
-            for (const name of properties) {
-                names.set(getTextOfPropertyName(name), true);
+            const restTypeAlias = getGlobalRestSymbol();
+            if (!restTypeAlias) {
+                return errorType;
             }
-            for (const prop of getPropertiesOfType(source)) {
-                if (!names.has(prop.escapedName)
-                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
-                    && isSpreadableProperty(prop)) {
-                    members.set(prop.escapedName, getSpreadSymbol(prop));
-                }
+            const omitTypes = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+            if (omitTypes.flags & TypeFlags.Never) {
+                return source;
             }
-            const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
-            const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
-            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
+            return getTypeAliasInstantiation(restTypeAlias, [source, omitTypes]);
         }
 
         /** Return the inferred type for a binding element */
@@ -4639,7 +4632,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType) || isGenericObjectType(parentType)) {
+                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
@@ -6823,7 +6816,7 @@ namespace ts {
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include));
+                    addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
@@ -8674,6 +8667,10 @@ namespace ts {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
+        function getGlobalRestSymbol(): Symbol {
+            return deferredGlobalRestSymbol || (deferredGlobalRestSymbol = getGlobalSymbol("Rest" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
         /**
          * Instantiates a global type that is generic with some element type, and returns that instantiation.
          */
@@ -9256,14 +9253,18 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
-        function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
+        function getLiteralTypeFromPropertyName(name: PropertyName) {
+            return isComputedPropertyName(name) ? checkComputedPropertyName(name) :
+                isIdentifier(name) ? getLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
+                checkExpression(name);
+        }
+
+        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
-                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration);
-                    type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
-                        name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
-                        getLiteralType(symbolName(prop));
+                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
+                    type = name && getLiteralTypeFromPropertyName(name) || getLiteralType(symbolName(prop));
                 }
                 if (type && type.flags & include) {
                     return type;
@@ -9272,8 +9273,8 @@ namespace ts {
             return neverType;
         }
 
-        function getLiteralTypeFromPropertyNames(type: Type, include: TypeFlags) {
-            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromPropertyName(t, include)));
+        function getLiteralTypeFromProperties(type: Type, include: TypeFlags) {
+            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromProperty(t, include)));
         }
 
         function getNonEnumNumberIndexInfo(type: Type) {
@@ -9288,10 +9289,10 @@ namespace ts {
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
-                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
-                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
-                getLiteralTypeFromPropertyNames(type, TypeFlags.StringOrNumberLiteralOrUnique);
+                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
+                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
+                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
+                getLiteralTypeFromProperties(type, TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
         function getExtractStringType(type: Type) {
@@ -10976,7 +10977,7 @@ namespace ts {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
-                const type = getLiteralTypeFromPropertyName(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
+                const type = getLiteralTypeFromProperty(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
                 if (!type || (type.flags & TypeFlags.Never)) {
                     continue;
                 }
