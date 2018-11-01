@@ -576,7 +576,7 @@ namespace ts.server {
                     break;
                 case ProjectLoadingFinishEvent:
                     const { project: finishProject } = event.data;
-                    this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingStartEvent);
+                    this.event<protocol.ProjectLoadingFinishEventBody>({ projectName: finishProject.getProjectName() }, ProjectLoadingFinishEvent);
                     break;
                 case LargeFileReferencedEvent:
                     const { file, fileSize, maxFileSize } = event.data;

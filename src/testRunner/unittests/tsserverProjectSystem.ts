@@ -330,17 +330,42 @@ namespace ts.projectSystem {
         return new TestSession({ ...sessionOptions, ...opts });
     }
 
-    function createSessionWithEventTracking<T extends server.ProjectServiceEvent, U extends server.ProjectServiceEvent = T>(host: server.ServerHost, eventName: T["eventName"], eventName2?: U["eventName"]) {
-        const events: (T | U)[] = [];
+    function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
+        const events: T[] = [];
         const session = createSession(host, {
             eventHandler: e => {
-                if (e.eventName === eventName || (eventName2 && e.eventName === eventName2)) {
-                    events.push(e as T | U);
+                if (e.eventName === eventName || eventNames.some(eventName => e.eventName === eventName)) {
+                    events.push(e as T);
                 }
             }
         });
 
         return { session, events };
+    }
+
+    function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
+        const session = createSession(host, { canUseEvents: true, ...opts });
+
+        return {
+            session,
+            getEvents,
+            clearEvents
+        };
+
+        function getEvents() {
+            const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
+            return mapDefined(host.getOutput(), s => {
+                const e = convertToObject(
+                    parseJsonText("json.json", s.replace(outputEventRegex, "")),
+                    []
+                );
+                return (isArray(eventNames) ? eventNames.some(eventName => e.event === eventName) : e.event === eventNames) ? e as T : undefined;
+            });
+        }
+
+        function clearEvents() {
+            session.clearMessages();
+        }
     }
 
     interface CreateProjectServiceParameters {
@@ -8062,15 +8087,7 @@ namespace ts.projectSystem {
             verifyProjectsUpdatedInBackgroundEvent(createSessionWithProjectChangedEventHandler);
 
             function createSessionWithProjectChangedEventHandler(host: TestServerHost): ProjectsUpdatedInBackgroundEventVerifier {
-                const projectChangedEvents: server.ProjectsUpdatedInBackgroundEvent[] = [];
-                const session = createSession(host, {
-                    eventHandler: e => {
-                        if (e.eventName === server.ProjectsUpdatedInBackgroundEvent) {
-                            projectChangedEvents.push(e);
-                        }
-                    }
-                });
-
+                const { session, events: projectChangedEvents } = createSessionWithEventTracking<server.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent);
                 return {
                     session,
                     verifyProjectsUpdatedInBackgroundEventHandler,
@@ -8110,7 +8127,7 @@ namespace ts.projectSystem {
 
 
             function createSessionThatUsesEvents(host: TestServerHost, noGetErrOnBackgroundUpdate?: boolean): ProjectsUpdatedInBackgroundEventVerifier {
-                const session = createSession(host, { canUseEvents: true, noGetErrOnBackgroundUpdate });
+                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectsUpdatedInBackgroundEvent>(host, server.ProjectsUpdatedInBackgroundEvent, { noGetErrOnBackgroundUpdate });
 
                 return {
                     session,
@@ -8124,16 +8141,7 @@ namespace ts.projectSystem {
                             openFiles: e.data.openFiles
                         };
                     });
-                    const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
-                    const events: protocol.ProjectsUpdatedInBackgroundEvent[] = filter(
-                        map(
-                            host.getOutput(), s => convertToObject(
-                                parseJsonText("json.json", s.replace(outputEventRegex, "")),
-                                []
-                            )
-                        ),
-                        e => e.event === server.ProjectsUpdatedInBackgroundEvent
-                    );
+                    const events = getEvents();
                     assert.equal(events.length, expectedEvents.length, `Incorrect number of events Actual: ${map(events, e => e.body)} Expected: ${expectedEvents}`);
                     forEach(events, (actualEvent, i) => {
                         const expectedEvent = expectedEvents[i];
@@ -8141,7 +8149,7 @@ namespace ts.projectSystem {
                     });
 
                     // Verified the events, reset them
-                    session.clearMessages();
+                    clearEvents();
 
                     if (events.length) {
                         host.checkTimeoutQueueLength(noGetErrOnBackgroundUpdate ? 0 : 1); // Error checking queued only if not noGetErrOnBackgroundUpdate
@@ -9457,141 +9465,180 @@ export const x = 10;`
         const configBPath = `${projectRoot}/b/tsconfig.json`;
         const files = [libFile, aTs, configA];
 
-        function createSessionWithEventHandler(files: ReadonlyArray<File>) {
-            const host = createServerHost(files);
+        function verifyProjectLoadingStartAndFinish(createSession: (host: TestServerHost) => {
+            session: TestSession;
+            getNumberOfEvents: () => number;
+            clearEvents: () => void;
+            verifyProjectLoadEvents: (expected: [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]) => void;
+        }) {
+            function createSessionToVerifyEvent(files: ReadonlyArray<File>) {
+                const host = createServerHost(files);
+                const originalReadFile = host.readFile;
+                const { session, getNumberOfEvents, clearEvents, verifyProjectLoadEvents } = createSession(host);
+                host.readFile = file => {
+                    if (file === configA.path || file === configBPath) {
+                        assert.equal(getNumberOfEvents(), 1, "Event for loading is sent before reading config file");
+                    }
+                    return originalReadFile.call(host, file);
+                };
+                const service = session.getProjectService();
+                return { host, session, verifyEvent, verifyEventWithOpenTs, service, getNumberOfEvents };
 
-            const originalReadFile = host.readFile;
-            host.readFile = file => {
-                if (file === configA.path || file === configBPath) {
-                    assert.equal(events.length, 1, "Event for loading is sent before reading config file");
+                function verifyEvent(project: server.Project, reason: string) {
+                    verifyProjectLoadEvents([
+                        { eventName: server.ProjectLoadingStartEvent, data: { project, reason } },
+                        { eventName: server.ProjectLoadingFinishEvent, data: { project } }
+                    ]);
+                    clearEvents();
                 }
-                return originalReadFile.call(host, file);
-            };
-            const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
-            const service = session.getProjectService();
-            return { host, session, verifyEvent, verifyEventWithOpenTs, service, events };
 
-            function verifyEvent(project: server.Project, reason: string) {
-                assert.deepEqual(events, [
-                    { eventName: server.ProjectLoadingStartEvent, data: { project, reason } },
-                    { eventName: server.ProjectLoadingFinishEvent, data: { project } }
-                ]);
-                events.length = 0;
+                function verifyEventWithOpenTs(file: File, configPath: string, configuredProjects: number) {
+                    openFilesForSession([file], session);
+                    checkNumberOfProjects(service, { configuredProjects });
+                    const project = service.configuredProjects.get(configPath)!;
+                    assert.isDefined(project);
+                    verifyEvent(project, `Creating possible configured project for ${file.path} to open`);
+                }
             }
 
-            function verifyEventWithOpenTs(file: File, configPath: string, configuredProjects: number) {
-                openFilesForSession([file], session);
-                checkNumberOfProjects(service, { configuredProjects });
-                const project = service.configuredProjects.get(configPath)!;
-                assert.isDefined(project);
-                verifyEvent(project, `Creating possible configured project for ${file.path} to open`);
-            }
-        }
+            it("when project is created by open file", () => {
+                const bTs: File = {
+                    path: bTsPath,
+                    content: "export class B {}"
+                };
+                const configB: File = {
+                    path: configBPath,
+                    content: "{}"
+                };
+                const { verifyEventWithOpenTs } = createSessionToVerifyEvent(files.concat(bTs, configB));
+                verifyEventWithOpenTs(aTs, configA.path, 1);
+                verifyEventWithOpenTs(bTs, configB.path, 2);
+            });
 
-        it("when project is created by open file", () => {
-            const bTs: File = {
-                path: bTsPath,
-                content: "export class B {}"
-            };
-            const configB: File = {
-                path: configBPath,
-                content: "{}"
-            };
-            const { verifyEventWithOpenTs } = createSessionWithEventHandler(files.concat(bTs, configB));
-            verifyEventWithOpenTs(aTs, configA.path, 1);
-            verifyEventWithOpenTs(bTs, configB.path, 2);
-        });
+            it("when change is detected in the config file", () => {
+                const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionToVerifyEvent(files);
+                verifyEventWithOpenTs(aTs, configA.path, 1);
 
-        it("when change is detected in the config file", () => {
-            const { host, verifyEvent, verifyEventWithOpenTs, service } = createSessionWithEventHandler(files);
-            verifyEventWithOpenTs(aTs, configA.path, 1);
+                host.writeFile(configA.path, configA.content);
+                host.checkTimeoutQueueLengthAndRun(2);
+                const project = service.configuredProjects.get(configA.path)!;
+                verifyEvent(project, `Change in config file detected`);
+            });
 
-            host.writeFile(configA.path, configA.content);
-            host.checkTimeoutQueueLengthAndRun(2);
-            const project = service.configuredProjects.get(configA.path)!;
-            verifyEvent(project, `Change in config file detected`);
-        });
-
-        it("when opening original location project", () => {
-            const aDTs: File = {
-                path: `${projectRoot}/a/a.d.ts`,
-                content: `export declare class A {
+            it("when opening original location project", () => {
+                const aDTs: File = {
+                    path: `${projectRoot}/a/a.d.ts`,
+                    content: `export declare class A {
 }
 //# sourceMappingURL=a.d.ts.map
 `
-            };
-            const aDTsMap: File = {
-                path: `${projectRoot}/a/a.d.ts.map`,
-                content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
-            };
-            const bTs: File = {
-                path: bTsPath,
-                content: `import {A} from "../a/a"; new A();`
-            };
-            const configB: File = {
-                path: configBPath,
-                content: JSON.stringify({
-                    references: [{ path: "../a" }]
-                })
-            };
+                };
+                const aDTsMap: File = {
+                    path: `${projectRoot}/a/a.d.ts.map`,
+                    content: `{"version":3,"file":"a.d.ts","sourceRoot":"","sources":["./a.ts"],"names":[],"mappings":"AAAA,qBAAa,CAAC;CAAI"}`
+                };
+                const bTs: File = {
+                    path: bTsPath,
+                    content: `import {A} from "../a/a"; new A();`
+                };
+                const configB: File = {
+                    path: configBPath,
+                    content: JSON.stringify({
+                        references: [{ path: "../a" }]
+                    })
+                };
 
-            const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionWithEventHandler(files.concat(aDTs, aDTsMap, bTs, configB));
-            verifyEventWithOpenTs(bTs, configB.path, 1);
+                const { service, session, verifyEventWithOpenTs, verifyEvent } = createSessionToVerifyEvent(files.concat(aDTs, aDTsMap, bTs, configB));
+                verifyEventWithOpenTs(bTs, configB.path, 1);
 
-            session.executeCommandSeq<protocol.ReferencesRequest>({
-                command: protocol.CommandTypes.References,
-                arguments: {
-                    file: bTs.path,
-                    ...protocolLocationFromSubstring(bTs.content, "A()")
-                }
+                session.executeCommandSeq<protocol.ReferencesRequest>({
+                    command: protocol.CommandTypes.References,
+                    arguments: {
+                        file: bTs.path,
+                        ...protocolLocationFromSubstring(bTs.content, "A()")
+                    }
+                });
+
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const project = service.configuredProjects.get(configA.path)!;
+                assert.isDefined(project);
+                verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
             });
 
-            checkNumberOfProjects(service, { configuredProjects: 2 });
-            const project = service.configuredProjects.get(configA.path)!;
-            assert.isDefined(project);
-            verifyEvent(project, `Creating project for original file: ${aTs.path} for location: ${aDTs.path}`);
+            describe("with external projects and config files ", () => {
+                const projectFileName = `${projectRoot}/a/project.csproj`;
+
+                function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
+                    const { session, service, verifyEvent: verifyEventWorker, getNumberOfEvents } = createSessionToVerifyEvent(files);
+                    service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
+                    service.openExternalProject(<protocol.ExternalProject>{
+                        projectFileName,
+                        rootFiles: toExternalFiles([aTs.path, configA.path]),
+                        options: {}
+                    });
+                    checkNumberOfProjects(service, { configuredProjects: 1 });
+                    return { session, service, verifyEvent, getNumberOfEvents };
+
+                    function verifyEvent() {
+                        const projectA = service.configuredProjects.get(configA.path)!;
+                        assert.isDefined(projectA);
+                        verifyEventWorker(projectA, `Creating configured project in external project: ${projectFileName}`);
+                    }
+                }
+
+                it("when lazyConfiguredProjectsFromExternalProject is false", () => {
+                    const { verifyEvent } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ false);
+                    verifyEvent();
+                });
+
+                it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
+                    const { verifyEvent, getNumberOfEvents, session } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                    assert.equal(getNumberOfEvents(), 0);
+
+                    openFilesForSession([aTs], session);
+                    verifyEvent();
+                });
+
+                it("when lazyConfiguredProjectsFromExternalProject is disabled", () => {
+                    const { verifyEvent, getNumberOfEvents, service } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
+                    assert.equal(getNumberOfEvents(), 0);
+
+                    service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
+                    verifyEvent();
+                });
+            });
+        }
+
+        describe("when using event handler", () => {
+            verifyProjectLoadingStartAndFinish(host => {
+                const { session, events } = createSessionWithEventTracking<server.ProjectLoadingStartEvent | server.ProjectLoadingFinishEvent>(host, server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent);
+                return {
+                    session,
+                    getNumberOfEvents: () => events.length,
+                    clearEvents: () => events.length = 0,
+                    verifyProjectLoadEvents: expected => assert.deepEqual(events, expected)
+                };
+            });
         });
 
-        describe("with external projects and config files ", () => {
-            const projectFileName = `${projectRoot}/a/project.csproj`;
+        describe("when using default event handler", () => {
+            verifyProjectLoadingStartAndFinish(host => {
+                const { session, getEvents, clearEvents } = createSessionWithDefaultEventHandler<protocol.ProjectLoadingStartEvent | protocol.ProjectLoadingFinishEvent>(host, [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]);
+                return {
+                    session,
+                    getNumberOfEvents: () => getEvents().length,
+                    clearEvents,
+                    verifyProjectLoadEvents
+                };
 
-            function createSession(lazyConfiguredProjectsFromExternalProject: boolean) {
-                const { session, service, verifyEvent: verifyEventWorker, events } = createSessionWithEventHandler(files);
-                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject } });
-                service.openExternalProject(<protocol.ExternalProject>{
-                    projectFileName,
-                    rootFiles: toExternalFiles([aTs.path, configA.path]),
-                    options: {}
-                });
-                checkNumberOfProjects(service, { configuredProjects: 1 });
-                return { session, service, verifyEvent, events };
-
-                function verifyEvent() {
-                    const projectA = service.configuredProjects.get(configA.path)!;
-                    assert.isDefined(projectA);
-                    verifyEventWorker(projectA, `Creating configured project in external project: ${projectFileName}`);
+                function verifyProjectLoadEvents(expected: [server.ProjectLoadingStartEvent, server.ProjectLoadingFinishEvent]) {
+                    const actual = getEvents().map(e => ({ eventName: e.event, data: e.body }));
+                    const mappedExpected = expected.map(e => {
+                        const { project, ...rest } = e.data;
+                        return { eventName: e.eventName, data: { projectName: project.getProjectName(), ...rest } };
+                    });
+                    assert.deepEqual(actual, mappedExpected);
                 }
-            }
-
-            it("when lazyConfiguredProjectsFromExternalProject is false", () => {
-                const { verifyEvent } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ false);
-                verifyEvent();
-            });
-
-            it("when lazyConfiguredProjectsFromExternalProject is true and file is opened", () => {
-                const { verifyEvent, events, session } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
-                assert.equal(events.length, 0);
-
-                openFilesForSession([aTs], session);
-                verifyEvent();
-            });
-
-            it("when lazyConfiguredProjectsFromExternalProject is disabled", () => {
-                const { verifyEvent, events, service } = createSession(/*lazyConfiguredProjectsFromExternalProject*/ true);
-                assert.equal(events.length, 0);
-
-                service.setHostConfiguration({ preferences: { lazyConfiguredProjectsFromExternalProject: false } });
-                verifyEvent();
             });
         });
     });
