@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(9,13): error TS2737: Property 'raw' is missing in type undefined[]' but present in type 'TemplateStringsArray'.
+tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(9,13): error TS2737: Property 'raw' is missing in type 'undefined[]' but present in type 'TemplateStringsArray'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(10,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(11,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolution1_ES6.ts(12,13): error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
@@ -19,7 +19,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
     
     var a = foo([]);             // number
                 ~~
-!!! error TS2737: Property 'raw' is missing in type undefined[]' but present in type 'TemplateStringsArray'.
+!!! error TS2737: Property 'raw' is missing in type 'undefined[]' but present in type 'TemplateStringsArray'.
     var b = foo([], 1);          // string
                 ~~
 !!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.

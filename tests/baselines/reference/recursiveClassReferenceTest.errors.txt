@@ -1,7 +1,7 @@
 tests/cases/compiler/recursiveClassReferenceTest.ts(16,19): error TS2304: Cannot find name 'Element'.
 tests/cases/compiler/recursiveClassReferenceTest.ts(56,11): error TS2663: Cannot find name 'domNode'. Did you mean the instance member 'this.domNode'?
 tests/cases/compiler/recursiveClassReferenceTest.ts(88,36): error TS2663: Cannot find name 'mode'. Did you mean the instance member 'this.mode'?
-tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2737: Property 'getInitialState' is missing in type Window' but present in type 'IMode'.
+tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2737: Property 'getInitialState' is missing in type 'Window' but present in type 'IMode'.
 
 
 ==== tests/cases/compiler/recursiveClassReferenceTest.ts (4 errors) ====
@@ -107,7 +107,7 @@ tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2737: Proper
     		public getInitialState(): IState {
     			return new State(self);
     			                 ~~~~
-!!! error TS2737: Property 'getInitialState' is missing in type Window' but present in type 'IMode'.
+!!! error TS2737: Property 'getInitialState' is missing in type 'Window' but present in type 'IMode'.
     		}
     
     

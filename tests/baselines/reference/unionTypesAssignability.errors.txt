@@ -1,9 +1,9 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(18,1): error TS2322: Type 'E' is not assignable to type 'D'.
-  Property 'foo1' is missing in type E' but present in type 'D'.
+  Property 'foo1' is missing in type 'E' but present in type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(19,1): error TS2322: Type 'D | E' is not assignable to type 'D'.
   Type 'E' is not assignable to type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(20,1): error TS2322: Type 'D' is not assignable to type 'E'.
-  Property 'foo2' is missing in type D' but present in type 'E'.
+  Property 'foo2' is missing in type 'D' but present in type 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(22,1): error TS2322: Type 'D | E' is not assignable to type 'E'.
   Type 'D' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(24,1): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -13,9 +13,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(28,1): error TS2322: Type 'string | number' is not assignable to type 'string'.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(31,1): error TS2322: Type 'C' is not assignable to type 'D'.
-  Property 'foo1' is missing in type C' but present in type 'D'.
+  Property 'foo1' is missing in type 'C' but present in type 'D'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(32,1): error TS2322: Type 'C' is not assignable to type 'E'.
-  Property 'foo2' is missing in type C' but present in type 'E'.
+  Property 'foo2' is missing in type 'C' but present in type 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(33,1): error TS2322: Type 'C' is not assignable to type 'D | E'.
   Type 'C' is not assignable to type 'E'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts(35,1): error TS2322: Type 'D' is not assignable to type 'E'.
@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = e;
     ~
 !!! error TS2322: Type 'E' is not assignable to type 'D'.
-!!! error TS2322:   Property 'foo1' is missing in type E' but present in type 'D'.
+!!! error TS2322:   Property 'foo1' is missing in type 'E' but present in type 'D'.
     d = unionDE; // error e is not assignable to d
     ~
 !!! error TS2322: Type 'D | E' is not assignable to type 'D'.
@@ -59,7 +59,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     e = d;
     ~
 !!! error TS2322: Type 'D' is not assignable to type 'E'.
-!!! error TS2322:   Property 'foo2' is missing in type D' but present in type 'E'.
+!!! error TS2322:   Property 'foo2' is missing in type 'D' but present in type 'E'.
     e = e;
     e = unionDE; // error d is not assignable to e
     ~
@@ -86,11 +86,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = c;
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Property 'foo1' is missing in type C' but present in type 'D'.
+!!! error TS2322:   Property 'foo1' is missing in type 'C' but present in type 'D'.
     e = c;
     ~
 !!! error TS2322: Type 'C' is not assignable to type 'E'.
-!!! error TS2322:   Property 'foo2' is missing in type C' but present in type 'E'.
+!!! error TS2322:   Property 'foo2' is missing in type 'C' but present in type 'E'.
     unionDE = c; // error since C is not assinable to either D or E
     ~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'D | E'.

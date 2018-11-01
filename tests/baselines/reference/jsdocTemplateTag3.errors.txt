@@ -1,6 +1,6 @@
 tests/cases/conformance/jsdoc/a.js(14,29): error TS2339: Property 'a' does not exist on type 'U'.
 tests/cases/conformance/jsdoc/a.js(14,35): error TS2339: Property 'b' does not exist on type 'U'.
-tests/cases/conformance/jsdoc/a.js(21,3): error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
+tests/cases/conformance/jsdoc/a.js(21,3): error TS2737: Property 'b' is missing in type '{ a: number; }' but present in type '{ a: number; b: string; }'.
 tests/cases/conformance/jsdoc/a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
 tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
 
@@ -32,7 +32,7 @@ tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type
     f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
     f({ a: 12  }, undefined, undefined, 101, 'nope');
       ~~~~~~~~~~
-!!! error TS2737: Property 'b' is missing in type { a: number; }' but present in type '{ a: number; b: string; }'.
+!!! error TS2737: Property 'b' is missing in type '{ a: number; }' but present in type '{ a: number; b: string; }'.
     
     /**
      * @template {NoLongerAllowed}

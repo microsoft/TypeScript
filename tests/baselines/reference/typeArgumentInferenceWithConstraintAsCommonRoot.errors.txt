@@ -1,4 +1,4 @@
-tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): error TS2737: Property 'y' is missing in type Elephant' but present in type 'Giraffe'.
+tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): error TS2737: Property 'y' is missing in type 'Elephant' but present in type 'Giraffe'.
 
 
 ==== tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts (1 errors) ====
@@ -10,4 +10,4 @@ tests/cases/compiler/typeArgumentInferenceWithConstraintAsCommonRoot.ts(7,6): er
     var e: Elephant;
     f(g, e); // valid because both Giraffe and Elephant satisfy the constraint. T is Animal
          ~
-!!! error TS2737: Property 'y' is missing in type Elephant' but present in type 'Giraffe'.
+!!! error TS2737: Property 'y' is missing in type 'Elephant' but present in type 'Giraffe'.

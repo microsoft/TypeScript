@@ -3,15 +3,15 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(16,12): erro
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(17,12): error TS2460: Type '{ 0: string; 1: number; length: 2; }' has no property '2'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(18,5): error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
-  Property '2' is missing in type [string, number]' but present in type '[number, number, number]'.
+  Property '2' is missing in type '[string, number]' but present in type '[number, number, number]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(19,5): error TS2322: Type 'StrNum' is not assignable to type '[number, number, number]'.
-  Property '2' is missing in type StrNum' but present in type '[number, number, number]'.
+  Property '2' is missing in type 'StrNum' but present in type '[number, number, number]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(20,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, number, number]'.
   Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[number, number, number]': 2, pop, push, concat, and 16 more.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(21,5): error TS2322: Type '[string, number]' is not assignable to type '[string, number, number]'.
-  Property '2' is missing in type [string, number]' but present in type '[string, number, number]'.
+  Property '2' is missing in type '[string, number]' but present in type '[string, number, number]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(22,5): error TS2322: Type 'StrNum' is not assignable to type '[string, number, number]'.
-  Property '2' is missing in type StrNum' but present in type '[string, number, number]'.
+  Property '2' is missing in type 'StrNum' but present in type '[string, number, number]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(23,5): error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string, number, number]'.
   Type '{ 0: string; 1: number; length: 2; }' is missing the following properties from type '[string, number, number]': 2, pop, push, concat, and 16 more.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(24,5): error TS2322: Type '[string, number]' is not assignable to type '[number]'.
@@ -68,11 +68,11 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var j1: [number, number, number] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[number, number, number]'.
-!!! error TS2322:   Property '2' is missing in type [string, number]' but present in type '[number, number, number]'.
+!!! error TS2322:   Property '2' is missing in type '[string, number]' but present in type '[number, number, number]'.
     var j2: [number, number, number] = y;
         ~~
 !!! error TS2322: Type 'StrNum' is not assignable to type '[number, number, number]'.
-!!! error TS2322:   Property '2' is missing in type StrNum' but present in type '[number, number, number]'.
+!!! error TS2322:   Property '2' is missing in type 'StrNum' but present in type '[number, number, number]'.
     var j3: [number, number, number] = z;
         ~~
 !!! error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[number, number, number]'.
@@ -80,11 +80,11 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     var k1: [string, number, number] = x;
         ~~
 !!! error TS2322: Type '[string, number]' is not assignable to type '[string, number, number]'.
-!!! error TS2322:   Property '2' is missing in type [string, number]' but present in type '[string, number, number]'.
+!!! error TS2322:   Property '2' is missing in type '[string, number]' but present in type '[string, number, number]'.
     var k2: [string, number, number] = y;
         ~~
 !!! error TS2322: Type 'StrNum' is not assignable to type '[string, number, number]'.
-!!! error TS2322:   Property '2' is missing in type StrNum' but present in type '[string, number, number]'.
+!!! error TS2322:   Property '2' is missing in type 'StrNum' but present in type '[string, number, number]'.
     var k3: [string, number, number] = z;
         ~~
 !!! error TS2322: Type '{ 0: string; 1: number; length: 2; }' is not assignable to type '[string, number, number]'.

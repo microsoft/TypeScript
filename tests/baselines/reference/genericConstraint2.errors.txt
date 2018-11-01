@@ -1,6 +1,6 @@
 tests/cases/compiler/genericConstraint2.ts(11,7): error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
-  Property 'comparer' is missing in type ComparableString' but present in type 'Comparable<string>'.
-tests/cases/compiler/genericConstraint2.ts(21,17): error TS2737: Property 'comparer' is missing in type ComparableString' but present in type 'Comparable<ComparableString>'.
+  Property 'comparer' is missing in type 'ComparableString' but present in type 'Comparable<string>'.
+tests/cases/compiler/genericConstraint2.ts(21,17): error TS2737: Property 'comparer' is missing in type 'ComparableString' but present in type 'Comparable<ComparableString>'.
 
 
 ==== tests/cases/compiler/genericConstraint2.ts (2 errors) ====
@@ -17,7 +17,7 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2737: Property 'compa
     class ComparableString implements Comparable<string>{
           ~~~~~~~~~~~~~~~~
 !!! error TS2420: Class 'ComparableString' incorrectly implements interface 'Comparable<string>'.
-!!! error TS2420:   Property 'comparer' is missing in type ComparableString' but present in type 'Comparable<string>'.
+!!! error TS2420:   Property 'comparer' is missing in type 'ComparableString' but present in type 'Comparable<string>'.
         constructor(public currentValue: string) { }
     
         localeCompare(other) {
@@ -29,4 +29,4 @@ tests/cases/compiler/genericConstraint2.ts(21,17): error TS2737: Property 'compa
     var b = new ComparableString("b");
     var c = compare<ComparableString>(a, b);
                     ~~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'comparer' is missing in type ComparableString' but present in type 'Comparable<ComparableString>'.
+!!! error TS2737: Property 'comparer' is missing in type 'ComparableString' but present in type 'Comparable<ComparableString>'.

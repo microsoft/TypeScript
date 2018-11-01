@@ -1,10 +1,10 @@
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2737: Property 'x' is missing in type D' but present in type 'A'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2737: Property 'x' is missing in type 'D' but present in type 'A'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
   Types of parameters 'x' and 'x' are incompatible.
-    Property 'q' is missing in type B' but present in type 'D'.
+    Property 'q' is missing in type 'B' but present in type 'D'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 
 
@@ -26,7 +26,7 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
         ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                         ~
-!!! error TS2737: Property 'x' is missing in type D' but present in type 'A'.
+!!! error TS2737: Property 'x' is missing in type 'D' but present in type 'A'.
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.
         ~~~~~~~
@@ -38,7 +38,7 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
                               ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
 !!! error TS2345:   Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2345:     Property 'q' is missing in type B' but present in type 'D'.
+!!! error TS2345:     Property 'q' is missing in type 'B' but present in type 'D'.
         var y: G<typeof x>; // error that D does not satisfy constraint, y is of type G<D>, entire call to foo is an error
                  ~~~~~~~~
 !!! error TS2344: Type 'D' does not satisfy the constraint 'A'.

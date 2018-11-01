@@ -1,4 +1,4 @@
-tests/cases/compiler/constraints0.ts(14,11): error TS2737: Property 'a' is missing in type B' but present in type 'A'.
+tests/cases/compiler/constraints0.ts(14,11): error TS2737: Property 'a' is missing in type 'B' but present in type 'A'.
 
 
 ==== tests/cases/compiler/constraints0.ts (1 errors) ====
@@ -17,6 +17,6 @@ tests/cases/compiler/constraints0.ts(14,11): error TS2737: Property 'a' is missi
     var v1: C<A>; // should work
     var v2: C<B>; // should not work
               ~
-!!! error TS2737: Property 'a' is missing in type B' but present in type 'A'.
+!!! error TS2737: Property 'a' is missing in type 'B' but present in type 'A'.
     
     var y = v1.x.a; // 'a' should be of type 'number'

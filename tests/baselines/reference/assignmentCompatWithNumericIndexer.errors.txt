@@ -1,7 +1,7 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(14,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived; }'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
-      Property 'bar' is missing in type Base' but present in type 'Derived'.
+      Property 'bar' is missing in type 'Base' but present in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer.ts(18,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived2'.
@@ -41,7 +41,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2322:       Property 'bar' is missing in type Base' but present in type 'Derived'.
+!!! error TS2322:       Property 'bar' is missing in type 'Base' but present in type 'Derived'.
     
     var b2: { [x: number]: Derived2; }
     a = b2;

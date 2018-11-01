@@ -2501,7 +2501,7 @@
         "category": "Error",
         "code": 2736
     },
-    "Property '{0}' is missing in type {1}' but present in type '{2}'.": {
+    "Property '{0}' is missing in type '{1}' but present in type '{2}'.": {
         "category": "Error",
         "code": 2737
     },

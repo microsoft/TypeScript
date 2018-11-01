@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(16,17): error TS2501: A rest element cannot contain a binding pattern.
-tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error TS2737: Property 'x' is missing in type FooIterator' but present in type 'Bar'.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error TS2737: Property 'x' is missing in type 'FooIterator' but present in type 'Bar'.
 
 
 ==== tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts (2 errors) ====
@@ -23,4 +23,4 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error
 !!! error TS2501: A rest element cannot contain a binding pattern.
     fun(new FooIterator);
         ~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'x' is missing in type FooIterator' but present in type 'Bar'.
+!!! error TS2737: Property 'x' is missing in type 'FooIterator' but present in type 'Bar'.

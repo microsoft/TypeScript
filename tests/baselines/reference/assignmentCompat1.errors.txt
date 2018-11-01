@@ -1,7 +1,7 @@
 tests/cases/compiler/assignmentCompat1.ts(4,1): error TS2322: Type '{ [index: string]: any; }' is not assignable to type '{ one: number; }'.
-  Property 'one' is missing in type { [index: string]: any; }' but present in type '{ one: number; }'.
+  Property 'one' is missing in type '{ [index: string]: any; }' but present in type '{ one: number; }'.
 tests/cases/compiler/assignmentCompat1.ts(6,1): error TS2322: Type '{ [index: number]: any; }' is not assignable to type '{ one: number; }'.
-  Property 'one' is missing in type { [index: number]: any; }' but present in type '{ one: number; }'.
+  Property 'one' is missing in type '{ [index: number]: any; }' but present in type '{ one: number; }'.
 tests/cases/compiler/assignmentCompat1.ts(8,1): error TS2322: Type '"foo"' is not assignable to type '{ [index: string]: any; }'.
 tests/cases/compiler/assignmentCompat1.ts(10,1): error TS2322: Type 'false' is not assignable to type '{ [index: number]: any; }'.
 
@@ -13,12 +13,12 @@ tests/cases/compiler/assignmentCompat1.ts(10,1): error TS2322: Type 'false' is n
     x = y;  // Error
     ~
 !!! error TS2322: Type '{ [index: string]: any; }' is not assignable to type '{ one: number; }'.
-!!! error TS2322:   Property 'one' is missing in type { [index: string]: any; }' but present in type '{ one: number; }'.
+!!! error TS2322:   Property 'one' is missing in type '{ [index: string]: any; }' but present in type '{ one: number; }'.
     y = x;  // Ok because index signature type is any
     x = z;  // Error
     ~
 !!! error TS2322: Type '{ [index: number]: any; }' is not assignable to type '{ one: number; }'.
-!!! error TS2322:   Property 'one' is missing in type { [index: number]: any; }' but present in type '{ one: number; }'.
+!!! error TS2322:   Property 'one' is missing in type '{ [index: number]: any; }' but present in type '{ one: number; }'.
     z = x;  // Ok because index signature type is any
     y = "foo"; // Error
     ~

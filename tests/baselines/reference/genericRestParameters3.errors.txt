@@ -14,20 +14,20 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2322
   Types of parameters 'y' and 'args' are incompatible.
     Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
       Type '[string]' is not assignable to type '[number, boolean]'.
-        Property '1' is missing in type [string]' but present in type '[number, boolean]'.
+        Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(19,1): error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(29,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(30,21): error TS2345: Argument of type '100' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(31,21): error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
   Types of parameters 'cb' and 'args' are incompatible.
-    Property '0' is missing in type CoolArray<any>' but present in type '[(...args: any[]) => void]'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(38,32): error TS2737: Property 'hello' is missing in type [10, 20]' but present in type 'CoolArray<number>'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(43,1): error TS2737: Property 'hello' is missing in type []' but present in type 'CoolArray<never>'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(44,5): error TS2737: Property 'hello' is missing in type [number]' but present in type 'CoolArray<{}>'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(45,5): error TS2737: Property 'hello' is missing in type [number, number]' but present in type 'CoolArray<{}>'.
-tests/cases/conformance/types/rest/genericRestParameters3.ts(46,5): error TS2737: Property 'hello' is missing in type number[]' but present in type 'CoolArray<number>'.
+    Property '0' is missing in type 'CoolArray<any>' but present in type '[(...args: any[]) => void]'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(38,32): error TS2737: Property 'hello' is missing in type '[10, 20]' but present in type 'CoolArray<number>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(43,1): error TS2737: Property 'hello' is missing in type '[]' but present in type 'CoolArray<never>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(44,5): error TS2737: Property 'hello' is missing in type '[number]' but present in type 'CoolArray<{}>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(45,5): error TS2737: Property 'hello' is missing in type '[number, number]' but present in type 'CoolArray<{}>'.
+tests/cases/conformance/types/rest/genericRestParameters3.ts(46,5): error TS2737: Property 'hello' is missing in type 'number[]' but present in type 'CoolArray<number>'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
-  Property '1' is missing in type ["what"]' but present in type '[number, string]'.
+  Property '1' is missing in type '["what"]' but present in type '[number, string]'.
 
 
 ==== tests/cases/conformance/types/rest/genericRestParameters3.ts (15 errors) ====
@@ -70,7 +70,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
 !!! error TS2322:       Type '[string]' is not assignable to type '[number, boolean]'.
-!!! error TS2322:         Property '1' is missing in type [string]' but present in type '[number, boolean]'.
+!!! error TS2322:         Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
     f1 = f4;  // Error, misaligned complex rest types
     ~~
 !!! error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
@@ -94,7 +94,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
                         ~~~
 !!! error TS2345: Argument of type '<T extends any[]>(cb: (...args: T) => void) => void' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
 !!! error TS2345:   Types of parameters 'cb' and 'args' are incompatible.
-!!! error TS2345:     Property '0' is missing in type CoolArray<any>' but present in type '[(...args: any[]) => void]'.
+!!! error TS2345:     Property '0' is missing in type 'CoolArray<any>' but present in type '[(...args: any[]) => void]'.
     
     function bar<T extends any[]>(...args: T): T {
         return args;
@@ -103,23 +103,23 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
     let a = bar(10, 20);
     let b = bar<CoolArray<number>>(10, 20);  // Error
                                    ~~
-!!! error TS2737: Property 'hello' is missing in type [10, 20]' but present in type 'CoolArray<number>'.
+!!! error TS2737: Property 'hello' is missing in type '[10, 20]' but present in type 'CoolArray<number>'.
     
     declare function baz<T>(...args: CoolArray<T>): void;
     declare const ca: CoolArray<number>;
     
     baz();       // Error
     ~~~~~
-!!! error TS2737: Property 'hello' is missing in type []' but present in type 'CoolArray<never>'.
+!!! error TS2737: Property 'hello' is missing in type '[]' but present in type 'CoolArray<never>'.
     baz(1);      // Error
         ~
-!!! error TS2737: Property 'hello' is missing in type [number]' but present in type 'CoolArray<{}>'.
+!!! error TS2737: Property 'hello' is missing in type '[number]' but present in type 'CoolArray<{}>'.
     baz(1, 2);   // Error
         ~
-!!! error TS2737: Property 'hello' is missing in type [number, number]' but present in type 'CoolArray<{}>'.
+!!! error TS2737: Property 'hello' is missing in type '[number, number]' but present in type 'CoolArray<{}>'.
     baz(...ca);  // Error
         ~~~~~
-!!! error TS2737: Property 'hello' is missing in type number[]' but present in type 'CoolArray<number>'.
+!!! error TS2737: Property 'hello' is missing in type 'number[]' but present in type 'CoolArray<number>'.
     
     // Repro from #26491
     
@@ -129,5 +129,5 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
     hmm("what"); // no error?  A = [] | [number, string] ?
         ~~~~~~
 !!! error TS2345: Argument of type '["what"]' is not assignable to parameter of type '[] | [number, string]'.
-!!! error TS2345:   Property '1' is missing in type ["what"]' but present in type '[number, string]'.
+!!! error TS2345:   Property '1' is missing in type '["what"]' but present in type '[number, string]'.
     

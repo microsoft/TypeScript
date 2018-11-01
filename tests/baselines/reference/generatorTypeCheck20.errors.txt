@@ -1,5 +1,5 @@
 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts(5,13): error TS2322: Type 'Baz' is not assignable to type 'Foo'.
-  Property 'x' is missing in type Baz' but present in type 'Foo'.
+  Property 'x' is missing in type 'Baz' but present in type 'Foo'.
 
 
 ==== tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts (1 errors) ====
@@ -10,5 +10,5 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck20.ts(5,13): erro
         yield * [new Baz];
                 ~~~~~~~~~
 !!! error TS2322: Type 'Baz' is not assignable to type 'Foo'.
-!!! error TS2322:   Property 'x' is missing in type Baz' but present in type 'Foo'.
+!!! error TS2322:   Property 'x' is missing in type 'Baz' but present in type 'Foo'.
     }

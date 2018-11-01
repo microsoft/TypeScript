@@ -1,5 +1,5 @@
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts(19,64): error TS2322: Type 'B' is not assignable to type 'C'.
-  Property 'z' is missing in type B' but present in type 'C'.
+  Property 'z' is missing in type 'B' but present in type 'C'.
 
 
 ==== tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts (1 errors) ====
@@ -24,5 +24,5 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
     (new Chain(new A)).then(a => new B).then(b => new C).then(c => new B).then(b => new A);
                                                                    ~~~~~
 !!! error TS2322: Type 'B' is not assignable to type 'C'.
-!!! error TS2322:   Property 'z' is missing in type B' but present in type 'C'.
+!!! error TS2322:   Property 'z' is missing in type 'B' but present in type 'C'.
 !!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter.ts:3:27: The expected type comes from the return type of this signature.

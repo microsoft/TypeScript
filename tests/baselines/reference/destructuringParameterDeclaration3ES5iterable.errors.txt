@@ -2,7 +2,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5i
   Types of property 'length' are incompatible.
     Type '5' is not assignable to type '3'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5iterable.ts(29,12): error TS2322: Type 'number' is not assignable to type '[[any]]'.
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5iterable.ts(30,5): error TS2737: Property '2' is missing in type [number, number]' but present in type '[any, any, [[any]], ...any[]]'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5iterable.ts(30,5): error TS2737: Property '2' is missing in type '[number, number]' but present in type '[any, any, [[any]], ...any[]]'.
 
 
 ==== tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5iterable.ts (3 errors) ====
@@ -43,7 +43,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration3ES5i
 !!! error TS2322: Type 'number' is not assignable to type '[[any]]'.
     a10([1, 2]);                              // Parameter type is any[]
         ~~~~~~
-!!! error TS2737: Property '2' is missing in type [number, number]' but present in type '[any, any, [[any]], ...any[]]'.
+!!! error TS2737: Property '2' is missing in type '[number, number]' but present in type '[any, any, [[any]], ...any[]]'.
     a11([1, 2]);                              // Parameter type is number[]
     
     // Rest parameter with generic

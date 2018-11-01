@@ -1,9 +1,9 @@
 tests/cases/conformance/jsx/file.tsx(9,15): error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
   Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
-    Property 'b' is missing in type { a: number; }' but present in type '{ b: {}; a: number; }'.
+    Property 'b' is missing in type '{ a: number; }' but present in type '{ b: {}; a: number; }'.
 tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
   Type 'T & { ignore-prop: true; }' is not assignable to type '{ b: {}; a: {}; }'.
-    Property 'a' is missing in type { b: number; } & { ignore-prop: true; }' but present in type '{ b: {}; a: {}; }'.
+    Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but present in type '{ b: {}; a: {}; }'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (2 errors) ====
@@ -19,10 +19,10 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-pr
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
 !!! error TS2322:   Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
-!!! error TS2322:     Property 'b' is missing in type { a: number; }' but present in type '{ b: {}; a: number; }'.
+!!! error TS2322:     Property 'b' is missing in type '{ a: number; }' but present in type '{ b: {}; a: number; }'.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
 !!! error TS2322:   Type 'T & { ignore-prop: true; }' is not assignable to type '{ b: {}; a: {}; }'.
-!!! error TS2322:     Property 'a' is missing in type { b: number; } & { ignore-prop: true; }' but present in type '{ b: {}; a: {}; }'.
+!!! error TS2322:     Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }' but present in type '{ b: {}; a: {}; }'.
     }

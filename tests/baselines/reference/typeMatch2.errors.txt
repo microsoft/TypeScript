@@ -1,21 +1,21 @@
 tests/cases/compiler/typeMatch2.ts(3,2): error TS2322: Type '{}' is not assignable to type '{ x: number; y: number; }'.
   Type '{}' is missing the following properties from type '{ x: number; y: number; }': x, y
 tests/cases/compiler/typeMatch2.ts(4,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Property 'y' is missing in type { x: number; }' but present in type '{ x: number; y: number; }'.
+  Property 'y' is missing in type '{ x: number; }' but present in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(5,20): error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(6,17): error TS2322: Type '{ x: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(18,5): error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
   Type 'Animal' is not assignable to type 'Giraffe'.
-    Property 'g' is missing in type Animal' but present in type 'Giraffe'.
+    Property 'g' is missing in type 'Animal' but present in type 'Giraffe'.
 tests/cases/compiler/typeMatch2.ts(22,5): error TS2322: Type '{ f1: number; f2: Animal[]; }' is not assignable to type '{ f1: number; f2: Giraffe[]; }'.
   Types of property 'f2' are incompatible.
     Type 'Animal[]' is not assignable to type 'Giraffe[]'.
 tests/cases/compiler/typeMatch2.ts(34,26): error TS2322: Type '{ x: number; y: any; z: number; }' is not assignable to type '{ x: number; y: number; }'.
   Object literal may only specify known properties, and 'z' does not exist in type '{ x: number; y: number; }'.
 tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
-  Property 'y' is missing in type { x: number; }' but present in type '{ x: number; y: number; }'.
+  Property 'y' is missing in type '{ x: number; }' but present in type '{ x: number; y: number; }'.
 
 
 ==== tests/cases/compiler/typeMatch2.ts (8 errors) ====
@@ -28,7 +28,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is
         a = { x: 1 }; // error
         ~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Property 'y' is missing in type { x: number; }' but present in type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'y' is missing in type '{ x: number; }' but present in type '{ x: number; y: number; }'.
     	a = { x: 1, y: 2, z: 3 };
     	                  ~~~~
 !!! error TS2322: Type '{ x: number; y: number; z: number; }' is not assignable to type '{ x: number; y: number; }'.
@@ -52,7 +52,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is
         ~~
 !!! error TS2322: Type 'Animal[]' is not assignable to type 'Giraffe[]'.
 !!! error TS2322:   Type 'Animal' is not assignable to type 'Giraffe'.
-!!! error TS2322:     Property 'g' is missing in type Animal' but present in type 'Giraffe'.
+!!! error TS2322:     Property 'g' is missing in type 'Animal' but present in type 'Giraffe'.
         var xa = { f1: 5, f2: aa };
         var xb = { f1: 5, f2: gg };
         xa = xb; // Should be ok
@@ -79,7 +79,7 @@ tests/cases/compiler/typeMatch2.ts(35,5): error TS2322: Type '{ x: number; }' is
         a = { x: 1 }; // error
         ~
 !!! error TS2322: Type '{ x: number; }' is not assignable to type '{ x: number; y: number; }'.
-!!! error TS2322:   Property 'y' is missing in type { x: number; }' but present in type '{ x: number; y: number; }'.
+!!! error TS2322:   Property 'y' is missing in type '{ x: number; }' but present in type '{ x: number; y: number; }'.
         var mf = function m(n) { return false; };
         var zf = function z(n: number) { return true; };
         mf=zf;

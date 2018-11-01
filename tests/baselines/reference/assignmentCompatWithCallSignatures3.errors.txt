@@ -36,7 +36,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
       Type 'Base' is not assignable to type '{ foo: string; bar: string; }'.
-        Property 'bar' is missing in type Base' but present in type '{ foo: string; bar: string; }'.
+        Property 'bar' is missing in type 'Base' but present in type '{ foo: string; bar: string; }'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithCallSignatures3.ts(80,1): error TS2322: Type '(x: Base[], y: Derived2[]) => Derived[]' is not assignable to type '<T extends Base[]>(x: Base[], y: T) => Derived[]'.
   Types of parameters 'y' and 'y' are incompatible.
     Type 'T' is not assignable to type 'Derived2[]'.
@@ -184,7 +184,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
 !!! error TS2322:       Type 'Base' is not assignable to type '{ foo: string; bar: string; }'.
-!!! error TS2322:         Property 'bar' is missing in type Base' but present in type '{ foo: string; bar: string; }'.
+!!! error TS2322:         Property 'bar' is missing in type 'Base' but present in type '{ foo: string; bar: string; }'.
     var b12: <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
     a12 = b12; // ok
     b12 = a12; // ok

@@ -1,4 +1,4 @@
-tests/cases/compiler/differentTypesWithSameName.ts(16,15): error TS2737: Property 's' is missing in type variable' but present in type 'variable'.
+tests/cases/compiler/differentTypesWithSameName.ts(16,15): error TS2737: Property 's' is missing in type 'variable' but present in type 'variable'.
 
 
 ==== tests/cases/compiler/differentTypesWithSameName.ts (1 errors) ====
@@ -19,4 +19,4 @@ tests/cases/compiler/differentTypesWithSameName.ts(16,15): error TS2737: Propert
     var v: variable = new variable();
     m.doSomething(v);
                   ~
-!!! error TS2737: Property 's' is missing in type variable' but present in type 'variable'.
+!!! error TS2737: Property 's' is missing in type 'variable' but present in type 'variable'.

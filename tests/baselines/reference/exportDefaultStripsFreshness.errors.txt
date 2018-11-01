@@ -1,5 +1,5 @@
-tests/cases/compiler/index.ts(10,6): error TS2737: Property 'foo' is missing in type { foob: string; }' but present in type 'IFoo'.
-tests/cases/compiler/index.ts(12,6): error TS2737: Property 'foo' is missing in type { foob: string; }' but present in type 'IFoo'.
+tests/cases/compiler/index.ts(10,6): error TS2737: Property 'foo' is missing in type '{ foob: string; }' but present in type 'IFoo'.
+tests/cases/compiler/index.ts(12,6): error TS2737: Property 'foo' is missing in type '{ foob: string; }' but present in type 'IFoo'.
 
 
 ==== tests/cases/compiler/items.ts (0 errors) ====
@@ -22,9 +22,9 @@ tests/cases/compiler/index.ts(12,6): error TS2737: Property 'foo' is missing in 
     
     nFoo(q); // for comparison
          ~
-!!! error TS2737: Property 'foo' is missing in type { foob: string; }' but present in type 'IFoo'.
+!!! error TS2737: Property 'foo' is missing in type '{ foob: string; }' but present in type 'IFoo'.
     
     nFoo(B);
          ~
-!!! error TS2737: Property 'foo' is missing in type { foob: string; }' but present in type 'IFoo'.
+!!! error TS2737: Property 'foo' is missing in type '{ foob: string; }' but present in type 'IFoo'.
     

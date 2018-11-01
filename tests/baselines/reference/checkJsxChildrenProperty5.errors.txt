@@ -1,6 +1,6 @@
 tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-    Property 'children' is missing in type { a: number; b: string; }' but present in type 'Prop'.
+    Property 'children' is missing in type '{ a: number; b: string; }' but present in type 'Prop'.
 tests/cases/conformance/jsx/file.tsx(24,6): error TS2322: Type '{ children: Element; a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
   Type '{ children: Element; a: number; b: string; }' is not assignable to type 'Prop'.
     Types of property 'children' are incompatible.
@@ -37,7 +37,7 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
              ~~~~
 !!! error TS2322: Type '{ a: number; b: string; }' is not assignable to type 'IntrinsicAttributes & Prop'.
 !!! error TS2322:   Type '{ a: number; b: string; }' is not assignable to type 'Prop'.
-!!! error TS2322:     Property 'children' is missing in type { a: number; b: string; }' but present in type 'Prop'.
+!!! error TS2322:     Property 'children' is missing in type '{ a: number; b: string; }' but present in type 'Prop'.
     
     // Error: JSX.element is not the same as JSX.ElementClass
     let k1 =

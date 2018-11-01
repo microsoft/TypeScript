@@ -1,8 +1,8 @@
 tests/cases/compiler/fuzzy.ts(13,18): error TS2420: Class 'C' incorrectly implements interface 'I'.
-  Property 'alsoWorks' is missing in type C' but present in type 'I'.
+  Property 'alsoWorks' is missing in type 'C' but present in type 'I'.
 tests/cases/compiler/fuzzy.ts(21,34): error TS2322: Type 'this' is not assignable to type 'I'.
   Type 'C' is not assignable to type 'I'.
-tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missing in type { oneI: this; }' but present in type 'R'.
+tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missing in type '{ oneI: this; }' but present in type 'R'.
 
 
 ==== tests/cases/compiler/fuzzy.ts (3 errors) ====
@@ -21,7 +21,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missi
         export class C implements I {
                      ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
-!!! error TS2420:   Property 'alsoWorks' is missing in type C' but present in type 'I'.
+!!! error TS2420:   Property 'alsoWorks' is missing in type 'C' but present in type 'I'.
             constructor(public x:number) {
             }
             works():R {
@@ -39,7 +39,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missi
             worksToo():R {
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'anything' is missing in type { oneI: this; }' but present in type 'R'.
+!!! error TS2737: Property 'anything' is missing in type '{ oneI: this; }' but present in type 'R'.
             }
         }
     }

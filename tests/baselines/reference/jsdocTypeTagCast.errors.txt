@@ -1,8 +1,8 @@
 tests/cases/conformance/jsdoc/b.js(4,13): error TS2352: Conversion of type 'number' to type 'string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-tests/cases/conformance/jsdoc/b.js(45,16): error TS2737: Property 'p' is missing in type SomeOther' but present in type 'SomeBase'.
+tests/cases/conformance/jsdoc/b.js(45,16): error TS2737: Property 'p' is missing in type 'SomeOther' but present in type 'SomeBase'.
 tests/cases/conformance/jsdoc/b.js(49,19): error TS2735: Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
-tests/cases/conformance/jsdoc/b.js(51,17): error TS2737: Property 'q' is missing in type SomeDerived' but present in type 'SomeOther'.
-tests/cases/conformance/jsdoc/b.js(52,17): error TS2737: Property 'q' is missing in type SomeBase' but present in type 'SomeOther'.
+tests/cases/conformance/jsdoc/b.js(51,17): error TS2737: Property 'q' is missing in type 'SomeDerived' but present in type 'SomeOther'.
+tests/cases/conformance/jsdoc/b.js(52,17): error TS2737: Property 'q' is missing in type 'SomeBase' but present in type 'SomeOther'.
 tests/cases/conformance/jsdoc/b.js(58,1): error TS2322: Type 'SomeFakeClass' is not assignable to type 'SomeBase'.
   Types of property 'p' are incompatible.
     Type 'string | number' is not assignable to type 'number'.
@@ -66,7 +66,7 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     someBase = /** @type {SomeBase} */(someBase);
     someBase = /** @type {SomeBase} */(someOther); // Error
                    ~~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'p' is missing in type SomeOther' but present in type 'SomeBase'.
+!!! error TS2737: Property 'p' is missing in type 'SomeOther' but present in type 'SomeBase'.
     
     someDerived = /** @type {SomeDerived} */(someDerived);
     someDerived = /** @type {SomeDerived} */(someBase);
@@ -76,10 +76,10 @@ tests/cases/conformance/jsdoc/b.js(67,8): error TS2454: Variable 'numOrStr' is u
     
     someOther = /** @type {SomeOther} */(someDerived); // Error
                     ~~~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'q' is missing in type SomeDerived' but present in type 'SomeOther'.
+!!! error TS2737: Property 'q' is missing in type 'SomeDerived' but present in type 'SomeOther'.
     someOther = /** @type {SomeOther} */(someBase); // Error
                     ~~~~~~~~~~~~~~~~~
-!!! error TS2737: Property 'q' is missing in type SomeBase' but present in type 'SomeOther'.
+!!! error TS2737: Property 'q' is missing in type 'SomeBase' but present in type 'SomeOther'.
     someOther = /** @type {SomeOther} */(someOther);
     
     someFakeClass = someBase;

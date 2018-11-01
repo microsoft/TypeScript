@@ -1,4 +1,4 @@
-tests/cases/compiler/generics5.ts(10,14): error TS2737: Property 'b' is missing in type A' but present in type 'B'.
+tests/cases/compiler/generics5.ts(10,14): error TS2737: Property 'b' is missing in type 'A' but present in type 'B'.
 
 
 ==== tests/cases/compiler/generics5.ts (1 errors) ====
@@ -13,6 +13,6 @@ tests/cases/compiler/generics5.ts(10,14): error TS2737: Property 'b' is missing 
     
     var v3: G<A, A>;               // Error, A not valid argument for U
                  ~
-!!! error TS2737: Property 'b' is missing in type A' but present in type 'B'.
+!!! error TS2737: Property 'b' is missing in type 'A' but present in type 'B'.
     
     

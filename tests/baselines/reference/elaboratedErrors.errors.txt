@@ -1,10 +1,10 @@
 tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
   Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-  Property 'x' is missing in type Beta' but present in type 'Alpha'.
+  Property 'x' is missing in type 'Beta' but present in type 'Alpha'.
 tests/cases/compiler/elaboratedErrors.ts(21,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
 tests/cases/compiler/elaboratedErrors.ts(24,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
-  Property 'y' is missing in type Alpha' but present in type 'Beta'.
+  Property 'y' is missing in type 'Alpha' but present in type 'Beta'.
 tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
 
 
@@ -34,7 +34,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     x = y;
     ~
 !!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-!!! error TS2322:   Property 'x' is missing in type Beta' but present in type 'Alpha'.
+!!! error TS2322:   Property 'x' is missing in type 'Beta' but present in type 'Alpha'.
     x = y;
     ~
 !!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
@@ -43,7 +43,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     y = x;
     ~
 !!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
-!!! error TS2322:   Property 'y' is missing in type Alpha' but present in type 'Beta'.
+!!! error TS2322:   Property 'y' is missing in type 'Alpha' but present in type 'Beta'.
     y = x;
     ~
 !!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.

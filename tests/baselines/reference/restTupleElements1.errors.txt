@@ -3,9 +3,9 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(8,13): error TS1256: A
 tests/cases/conformance/types/tuple/restTupleElements1.ts(9,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,13): error TS2574: A rest element type must be an array type.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(10,16): error TS8020: JSDoc types can only be used inside documentation comments.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2737: Property '0' is missing in type number[]' but present in type '[number, ...number[]]'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2737: Property '0' is missing in type []' but present in type '[number, ...number[]]'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(29,18): error TS2737: Property '0' is missing in type number[]' but present in type '[number]'.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(23,31): error TS2737: Property '0' is missing in type 'number[]' but present in type '[number, ...number[]]'.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(24,31): error TS2737: Property '0' is missing in type '[]' but present in type '[number, ...number[]]'.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(29,18): error TS2737: Property '0' is missing in type 'number[]' but present in type '[number]'.
 tests/cases/conformance/types/tuple/restTupleElements1.ts(30,18): error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '1'.
@@ -19,7 +19,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(34,31): error TS2344: 
 tests/cases/conformance/types/tuple/restTupleElements1.ts(35,31): error TS2344: Type '[number, number, number, string]' does not satisfy the constraint '[number, ...number[]]'.
   Property '3' is incompatible with rest element type.
     Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2737: Property '0' is missing in type []' but present in type '[{}, ...{}[]]'.
+tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2737: Property '0' is missing in type '[]' but present in type '[{}, ...{}[]]'.
 
 
 ==== tests/cases/conformance/types/tuple/restTupleElements1.ts (14 errors) ====
@@ -57,17 +57,17 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2737: P
     
     assign<[number, ...number[]], number[]>();  // Error
                                   ~~~~~~~~
-!!! error TS2737: Property '0' is missing in type number[]' but present in type '[number, ...number[]]'.
+!!! error TS2737: Property '0' is missing in type 'number[]' but present in type '[number, ...number[]]'.
     assign<[number, ...number[]], []>();  // Error
                                   ~~
-!!! error TS2737: Property '0' is missing in type []' but present in type '[number, ...number[]]'.
+!!! error TS2737: Property '0' is missing in type '[]' but present in type '[number, ...number[]]'.
     assign<[number, ...number[]], [number]>();
     assign<[number, ...number[]], [number, number]>();
     assign<[number, ...number[]], [number, number, ...number[]]>();
     
     assign<[number], [...number[]]>();  // Error
                      ~~~~~~~~~~~~~
-!!! error TS2737: Property '0' is missing in type number[]' but present in type '[number]'.
+!!! error TS2737: Property '0' is missing in type 'number[]' but present in type '[number]'.
     assign<[number], [number, ...number[]]>();  // Error
                      ~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '[number, ...number[]]' does not satisfy the constraint '[number]'.
@@ -117,7 +117,7 @@ tests/cases/conformance/types/tuple/restTupleElements1.ts(59,4): error TS2737: P
     
     f0([]);  // Error
        ~~
-!!! error TS2737: Property '0' is missing in type []' but present in type '[{}, ...{}[]]'.
+!!! error TS2737: Property '0' is missing in type '[]' but present in type '[{}, ...{}[]]'.
     f0([1]);
     f0([1, 2, 3]);
     f0([1, "hello", true]);

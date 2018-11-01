@@ -5,7 +5,7 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(5
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(16,22): error TS2322: Type '{ id: number; }' is not assignable to type 'D'.
   Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(18,22): error TS2322: Type 'C' is not assignable to type 'D'.
-  Property 'name' is missing in type C' but present in type 'D'.
+  Property 'name' is missing in type 'C' but present in type 'D'.
 
 
 ==== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts (6 errors) ====
@@ -40,6 +40,6 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(1
     function fn11(): D { return new C(); }
                          ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Property 'name' is missing in type C' but present in type 'D'.
+!!! error TS2322:   Property 'name' is missing in type 'C' but present in type 'D'.
     
     

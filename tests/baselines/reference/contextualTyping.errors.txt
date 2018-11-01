@@ -1,6 +1,6 @@
 tests/cases/compiler/contextualTyping.ts(189,18): error TS2384: Overload signatures must all be ambient or non-ambient.
 tests/cases/compiler/contextualTyping.ts(223,5): error TS2322: Type '{}' is not assignable to type 'B'.
-  Property 'x' is missing in type {}' but present in type 'B'.
+  Property 'x' is missing in type '{}' but present in type 'B'.
 
 
 ==== tests/cases/compiler/contextualTyping.ts (2 errors) ====
@@ -231,5 +231,5 @@ tests/cases/compiler/contextualTyping.ts(223,5): error TS2322: Type '{}' is not 
     var x: B = { };
         ~
 !!! error TS2322: Type '{}' is not assignable to type 'B'.
-!!! error TS2322:   Property 'x' is missing in type {}' but present in type 'B'.
+!!! error TS2322:   Property 'x' is missing in type '{}' but present in type 'B'.
     
