@@ -8826,6 +8826,7 @@ declare namespace ts.server {
         private getProjectInfoWorker;
         private getRenameInfo;
         private getProjects;
+        private logErrorForScriptInfoNotFound;
         private getDefaultProject;
         private getRenameLocations;
         private mapRenameInfo;

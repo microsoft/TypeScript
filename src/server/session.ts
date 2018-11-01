@@ -1157,7 +1157,9 @@ namespace ts.server {
                     this.projectService.getScriptInfoEnsuringProjectsUptoDate(args.file) :
                     this.projectService.getScriptInfo(args.file);
                 if (!scriptInfo) {
-                    return ignoreNoProjectError ? emptyArray : Errors.ThrowNoProject();
+                    if (ignoreNoProjectError) return emptyArray;
+                    this.logErrorForScriptInfoNotFound(args.file);
+                    return Errors.ThrowNoProject();
                 }
                 projects = scriptInfo.containingProjects;
                 symLinkedProjects = this.projectService.getSymlinkedProjects(scriptInfo);
@@ -1165,9 +1167,15 @@ namespace ts.server {
             // filter handles case when 'projects' is undefined
             projects = filter(projects, p => p.languageServiceEnabled && !p.isOrphan());
             if (!ignoreNoProjectError && (!projects || !projects.length) && !symLinkedProjects) {
+                this.logErrorForScriptInfoNotFound(args.file);
                 return Errors.ThrowNoProject();
             }
             return symLinkedProjects ? { projects: projects!, symLinkedProjects } : projects!; // TODO: GH#18217
+        }
+
+        private logErrorForScriptInfoNotFound(fileName: string): void {
+            this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\n` +
+                `All files are: ${JSON.stringify(this.projectService.allScriptInfoFileNamesForDebug())}`, Msg.Err);
         }
 
         private getDefaultProject(args: protocol.FileRequestArgs) {
@@ -1912,8 +1920,7 @@ namespace ts.server {
             const scriptInfo = this.projectService.getScriptInfoOrConfig(textChanges.fileName);
             if (!!textChanges.isNewFile === !!scriptInfo) {
                 if (!scriptInfo) { // and !isNewFile
-                    this.logger.msg(`Could not find file ${JSON.stringify(textChanges.fileName)} and 'isNewFile' not set.\n` +
-                        `All files are: ${JSON.stringify(this.projectService.allScriptInfoFileNamesForDebug())}`, Msg.Err);
+                    this.logErrorForScriptInfoNotFound(textChanges.fileName);
                 }
                 Debug.fail("Expected isNewFile for (only) new files. " + JSON.stringify({ isNewFile: !!textChanges.isNewFile, hasScriptInfo: !!scriptInfo }));
             }
