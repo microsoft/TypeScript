@@ -2493,6 +2493,10 @@
         "category": "Error",
         "code": 2734
     },
+    "There is a 'this' type shadowed by this container.": {
+        "category": "Error",
+        "code": 2735
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
