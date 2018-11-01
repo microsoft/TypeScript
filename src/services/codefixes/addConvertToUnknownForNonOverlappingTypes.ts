@@ -17,26 +17,22 @@ namespace ts.codefix {
 
         const asExpression = findAncestor<AsExpression>(token, isAsExpression)!;
         if (!!asExpression) {
-            Debug.assert(!!asExpression, "Expected position to be owned by an as-expression.");
+            const nodeBeingConverted = asExpression.getChildAt(0);
+            const expressionBeingConverted = findAncestor<Expression>(nodeBeingConverted, isExpression)!;
+            Debug.assert(!!expressionBeingConverted, "Expected position to be owned by an expression.");
 
-            const nodeBeingCast = asExpression.getChildAt(0);
-            const expressionBeingCast = findAncestor<Expression>(nodeBeingCast, isExpression)!;
-            Debug.assert(!!expressionBeingCast, "Expected position to be owned by an expression.");
-
-            const replacement = createAsExpression(expressionBeingCast, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
-            changeTracker.replaceNode(sourceFile, expressionBeingCast, replacement);
+            const replacement = createAsExpression(expressionBeingConverted, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
+            changeTracker.replaceNode(sourceFile, expressionBeingConverted, replacement);
         }
 
         const typeAssertion = findAncestor<TypeAssertion>(token, isTypeAssertion)!;
         if (!!typeAssertion) {
-            Debug.assert(!!typeAssertion, "Expected position to be owned by a type assertion.");
+            const nodeBeingConverted = typeAssertion.getLastToken();
+            const expressionBeingConverted = findAncestor<Expression>(nodeBeingConverted, isExpression)!;
+            Debug.assert(!!expressionBeingConverted, "Expected position to be owned by an expression.");
 
-            const nodeBeingCast = typeAssertion.getLastToken();
-            const expressionBeingCast = findAncestor<Expression>(nodeBeingCast, isExpression)!;
-            Debug.assert(!!expressionBeingCast, "Expected position to be owned by an expression.");
-
-            const replacement = createTypeAssertion(createKeywordTypeNode(SyntaxKind.UnknownKeyword), expressionBeingCast);
-            changeTracker.replaceNode(sourceFile, expressionBeingCast, replacement);
+            const replacement = createTypeAssertion(createKeywordTypeNode(SyntaxKind.UnknownKeyword), expressionBeingConverted);
+            changeTracker.replaceNode(sourceFile, expressionBeingConverted, replacement);
         }
     }
 }
