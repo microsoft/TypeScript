@@ -1,0 +1,11 @@
+Exit Code: 1
+Standard output:
+node_modules/bignumber.js/bignumber.d.ts(1613,18): error TS2370: A rest parameter must be of an array type.
+node_modules/bignumber.js/bignumber.d.ts(1630,14): error TS2370: A rest parameter must be of an array type.
+node_modules/bignumber.js/bignumber.d.ts(1647,18): error TS2370: A rest parameter must be of an array type.
+node_modules/bignumber.js/bignumber.d.ts(1664,14): error TS2370: A rest parameter must be of an array type.
+node_modules/bignumber.js/bignumber.d.ts(1715,14): error TS2370: A rest parameter must be of an array type.
+
+
+
+Standard error:
