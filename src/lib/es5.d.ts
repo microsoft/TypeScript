@@ -1417,6 +1417,13 @@ type Pick<T, K extends keyof T> = {
 };
 
 /**
+ * From T, omit a set of properties whose keys are in the union K
+ */
+type Rest<T, K extends keyof T> = {
+    [P in Exclude<keyof T, K>]: T[P];
+};
+
+/**
  * Construct a type with a set of properties K of type T
  */
 type Record<K extends keyof any, T> = {
