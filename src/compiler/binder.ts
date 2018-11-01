@@ -2416,7 +2416,7 @@ namespace ts {
 
             // 'module.exports = expr' assignment
             const flags = exportAssignmentIsAlias(node)
-                ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
+                ? SymbolFlags.Alias | SymbolFlags.Assignment // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
             declareSymbol(file.symbol.exports!, file.symbol, node, flags, SymbolFlags.None);
         }
