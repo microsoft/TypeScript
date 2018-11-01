@@ -1142,7 +1142,7 @@ namespace ts.Completions {
                 const exportedSymbols = typeChecker.getExportsOfModule(symbol);
                 // If the exported symbols contains type,
                 // symbol can be referenced at locations where type is allowed
-                return exportedSymbols.some(symbolCanBeReferencedAtTypeLocation);
+                return exportedSymbols.some(ex => ex !== symbol && symbolCanBeReferencedAtTypeLocation(ex));
             }
             return false;
         }
