@@ -57,6 +57,7 @@ namespace ts.sourcemaps {
         fileExists(path: string): boolean;
         getCanonicalFileName(path: string): string;
         log(text: string): void;
+        useCaseSensitiveFileNames: boolean;
     }
 
     export function decode(host: SourceMapDecodeHost, mapPath: string, map: SourceMapData, program?: Program, fallbackCache = createSourceFileLikeCache(host)): SourceMapper {
@@ -79,7 +80,7 @@ namespace ts.sourcemaps {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot) !== 0) {
+            if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot, !host.useCaseSensitiveFileNames) !== 0) {
                 return loc;
             }
             return { fileName: toPath(map.file!, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
@@ -129,7 +130,7 @@ namespace ts.sourcemaps {
         }
 
         function compareProcessedPositionSourcePositions(a: ProcessedSourceMapPosition, b: ProcessedSourceMapPosition) {
-            return comparePaths(a.sourcePath, b.sourcePath, sourceRoot) ||
+            return comparePaths(a.sourcePath, b.sourcePath, sourceRoot, !host.useCaseSensitiveFileNames) ||
                 compareValues(a.sourcePosition, b.sourcePosition);
         }
 

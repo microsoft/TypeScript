@@ -1139,7 +1139,7 @@ namespace ts {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-        const sourceMapper = getSourceMapper(getCanonicalFileName, currentDirectory, log, host, () => program);
+        const sourceMapper = getSourceMapper(useCaseSensitiveFileNames, currentDirectory, log, host, () => program);
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);

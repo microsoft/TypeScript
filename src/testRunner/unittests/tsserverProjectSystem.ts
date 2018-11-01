@@ -10481,19 +10481,27 @@ declare class TestLib {
                 TestFSWithWatch.getTsBuildProjectFile(project, "index.ts"),
             ];
         }
-        it("does not error on container only project", () => {
-            const project = "container";
-            const containerLib = getProjectFiles("container/lib");
-            const containerExec = getProjectFiles("container/exec");
-            const containerCompositeExec = getProjectFiles("container/compositeExec");
-            const containerConfig = TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
-            const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
+
+        const project = "container";
+        const containerLib = getProjectFiles("container/lib");
+        const containerExec = getProjectFiles("container/exec");
+        const containerCompositeExec = getProjectFiles("container/compositeExec");
+        const containerConfig = TestFSWithWatch.getTsBuildProjectFile(project, "tsconfig.json");
+        const files = [libFile, ...containerLib, ...containerExec, ...containerCompositeExec, containerConfig];
+
+        function createHost() {
             const host = createServerHost(files);
 
             // ts build should succeed
             const solutionBuilder = tscWatch.createSolutionBuilder(host, [containerConfig.path], {});
             solutionBuilder.buildAllProjects();
             assert.equal(host.getOutput().length, 0);
+
+            return host;
+        }
+
+        it("does not error on container only project", () => {
+            const host = createHost();
 
             // Open external project for the folder
             const session = createSession(host);
@@ -10520,6 +10528,30 @@ declare class TestLib {
                 }).response;
                 assert.deepEqual(semanticDiagnostics, []);
             });
+        });
+
+        it("can successfully find references with --out options", () => {
+            const host = createHost();
+            const session = createSession(host);
+            openFilesForSession([containerCompositeExec[1]], session);
+            const service = session.getProjectService();
+            checkNumberOfProjects(service, { configuredProjects: 1 });
+            const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+            const response = session.executeCommandSeq<protocol.RenameRequest>({
+                command: protocol.CommandTypes.Rename,
+                arguments: {
+                    file: containerCompositeExec[1].path,
+                    ...locationOfMyConst
+               }
+            }).response as protocol.RenameResponseBody;
+
+
+            const myConstLen = "myConst".length;
+            const locationOfMyConstInLib = protocolLocationFromSubstring(containerLib[1].content, "myConst");
+            assert.deepEqual(response.locs, [
+                { file: containerCompositeExec[1].path, locs: [{ start: locationOfMyConst, end: { line: locationOfMyConst.line, offset: locationOfMyConst.offset + myConstLen } }] },
+                { file: containerLib[1].path, locs: [{ start: locationOfMyConstInLib, end: { line: locationOfMyConstInLib.line, offset: locationOfMyConstInLib.offset + myConstLen } }] }
+            ]);
         });
     });
 
