@@ -13,8 +13,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(17,1): error TS2322
 tests/cases/conformance/types/rest/genericRestParameters3.ts(18,1): error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
   Types of parameters 'y' and 'args' are incompatible.
     Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
-      Type '[string]' is not assignable to type '[number, boolean]'.
-        Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
+      Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(19,1): error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(29,1): error TS2554: Expected 1 arguments, but got 0.
 tests/cases/conformance/types/rest/genericRestParameters3.ts(30,21): error TS2345: Argument of type '100' is not assignable to parameter of type '(...args: CoolArray<any>) => void'.
@@ -69,8 +68,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
 !!! error TS2322: Type '(x: string, y: number, z: boolean) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.
 !!! error TS2322:   Types of parameters 'y' and 'args' are incompatible.
 !!! error TS2322:     Type '[string] | [number, boolean]' is not assignable to type '[number, boolean]'.
-!!! error TS2322:       Type '[string]' is not assignable to type '[number, boolean]'.
-!!! error TS2322:         Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
+!!! error TS2322:       Property '1' is missing in type '[string]' but present in type '[number, boolean]'.
     f1 = f4;  // Error, misaligned complex rest types
     ~~
 !!! error TS2322: Type '(...args: [string, string] | [string, number, boolean]) => void' is not assignable to type '(x: string, ...args: [string] | [number, boolean]) => void'.

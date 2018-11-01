@@ -21,8 +21,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(57,5): error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
     Types of parameters '__0' and '__0' are incompatible.
-      Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
-        Property 'c' is missing in type '{ x: any; y: any; z: any; }' but present in type '{ x: any; y: any; c: any; }'.
+      Property 'c' is missing in type '{ x: any; y: any; z: any; }' but present in type '{ x: any; y: any; c: any; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,18): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,26): error TS2300: Duplicate identifier 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(65,34): error TS2300: Duplicate identifier 'number'.
@@ -131,8 +130,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
 !!! error TS2416: Property 'd4' in type 'C4' is not assignable to the same property in base type 'F2'.
 !!! error TS2416:   Type '({ x, y, c }: { x: any; y: any; c: any; }) => void' is not assignable to type '({ x, y, z }?: { x: any; y: any; z: any; }) => any'.
 !!! error TS2416:     Types of parameters '__0' and '__0' are incompatible.
-!!! error TS2416:       Type '{ x: any; y: any; z: any; }' is not assignable to type '{ x: any; y: any; c: any; }'.
-!!! error TS2416:         Property 'c' is missing in type '{ x: any; y: any; z: any; }' but present in type '{ x: any; y: any; c: any; }'.
+!!! error TS2416:       Property 'c' is missing in type '{ x: any; y: any; z: any; }' but present in type '{ x: any; y: any; c: any; }'.
         e0([a, b, q]) { }
     }
     

@@ -11,14 +11,10 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(47,5): error TS2322: Type '
 tests/cases/conformance/types/mapped/mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(58,5): error TS2322: Type '{}' is not assignable to type 'T'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2322: Type '{ a: number; }' is not assignable to type 'Foo'.
-  Property 'b' is missing in type '{ a: number; }' but present in type 'Foo'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2322: Type '{ a: number; }' is not assignable to type 'Required<Foo>'.
-  Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
-tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Required<Foo>'.
-  Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
-tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Required<Foo>'.
-  Property 'd' is missing in type '{ a: number; b: number; c: number; }' but present in type 'Required<Foo>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2737: Property 'b' is missing in type '{ a: number; }' but present in type 'Foo'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2735: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2735: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2737: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but present in type 'Required<Foo>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
@@ -143,8 +139,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     
     x1 = { a: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type 'Foo'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but present in type 'Foo'.
+!!! error TS2737: Property 'b' is missing in type '{ a: number; }' but present in type 'Foo'.
     x1 = { a: 1, b: 1 };
     x1 = { a: 1, b: 1, c: 1 };
     x1 = { a: 1, b: 1, c: 1, d: 1 };
@@ -158,16 +153,13 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     
     x2 = { a: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
+!!! error TS2735: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
     x2 = { a: 1, b: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
+!!! error TS2735: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
     x2 = { a: 1, b: 1, c: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Property 'd' is missing in type '{ a: number; b: number; c: number; }' but present in type 'Required<Foo>'.
+!!! error TS2737: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but present in type 'Required<Foo>'.
     x2 = { a: 1, b: 1, c: 1, d: 1 };
     
     type Bar = {

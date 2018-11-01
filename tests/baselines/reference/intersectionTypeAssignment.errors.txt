@@ -1,13 +1,9 @@
-tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(8,1): error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; b: string; }'.
-  Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: string; }'.
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(8,1): error TS2737: Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: string; }'.
 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(9,1): error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
-  Type '{ a: string; }' is not assignable to type '{ b: string; }'.
-    Property 'b' is missing in type '{ a: string; }' but present in type '{ b: string; }'.
-tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(13,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; b: string; }'.
-  Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; b: string; }'.
+  Property 'b' is missing in type '{ a: string; }' but present in type '{ b: string; }'.
+tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(13,1): error TS2737: Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; b: string; }'.
 tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(14,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
-  Type '{ b: string; }' is not assignable to type '{ a: string; }'.
-    Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
+  Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
 
 
 ==== tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts (4 errors) ====
@@ -20,25 +16,21 @@ tests/cases/conformance/types/intersection/intersectionTypeAssignment.ts(14,1): 
     a = y;
     x = a;  // Error
     ~
-!!! error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; b: string; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: string; }'.
+!!! error TS2737: Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: string; }'.
     y = a;  // Error
     ~
 !!! error TS2322: Type '{ a: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
-!!! error TS2322:   Type '{ a: string; }' is not assignable to type '{ b: string; }'.
-!!! error TS2322:     Property 'b' is missing in type '{ a: string; }' but present in type '{ b: string; }'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: string; }' but present in type '{ b: string; }'.
     
     b = x;
     b = y;
     x = b;  // Error
     ~
-!!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; b: string; }'.
-!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; b: string; }'.
+!!! error TS2737: Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; b: string; }'.
     y = b;  // Error
     ~
 !!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: string; } & { b: string; }'.
-!!! error TS2322:   Type '{ b: string; }' is not assignable to type '{ a: string; }'.
-!!! error TS2322:     Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
+!!! error TS2322:   Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
     
     x = y;
     y = x;

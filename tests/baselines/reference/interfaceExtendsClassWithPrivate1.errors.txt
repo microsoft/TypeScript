@@ -1,9 +1,6 @@
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2322: Type 'C' is not assignable to type 'I'.
-  Property 'other' is missing in type 'C' but present in type 'I'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2322: Type 'I' is not assignable to type 'D'.
-  Property 'bar' is missing in type 'I' but present in type 'D'.
-tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2322: Type 'C' is not assignable to type 'D'.
-  Type 'C' is missing the following properties from type 'D': other, bar
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(21,1): error TS2737: Property 'other' is missing in type 'C' but present in type 'I'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(24,1): error TS2737: Property 'bar' is missing in type 'I' but present in type 'D'.
+tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2735: Type 'C' is missing the following properties from type 'D': other, bar
 
 
 ==== tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts (3 errors) ====
@@ -29,17 +26,14 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2322: T
     c = i;
     i = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'I'.
-!!! error TS2322:   Property 'other' is missing in type 'C' but present in type 'I'.
+!!! error TS2737: Property 'other' is missing in type 'C' but present in type 'I'.
     
     i = d;
     d = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'D'.
-!!! error TS2322:   Property 'bar' is missing in type 'I' but present in type 'D'.
+!!! error TS2737: Property 'bar' is missing in type 'I' but present in type 'D'.
     
     c = d;
     d = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Type 'C' is missing the following properties from type 'D': other, bar
+!!! error TS2735: Type 'C' is missing the following properties from type 'D': other, bar

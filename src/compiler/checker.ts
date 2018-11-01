@@ -428,6 +428,8 @@ namespace ts {
         const keyofConstraintType = keyofStringsOnly ? stringType : stringNumberSymbolType;
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes;
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
@@ -11574,7 +11576,7 @@ namespace ts {
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                    else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
                         const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
@@ -12216,8 +12218,8 @@ namespace ts {
                 if (unmatchedProperty) {
                     if (reportErrors) {
                         const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
-                        if (headMessage && headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
-                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code) {
+                        if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
                             suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
                         }
                         if (props.length === 1) {
@@ -17807,7 +17809,7 @@ namespace ts {
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
-            let spread: Type = emptyObjectType;
+            let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
             let explicitlySpecifyChildrenAttribute = false;
@@ -17890,10 +17892,10 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            if (typeToIntersect && spread !== emptyObjectType) {
+            if (typeToIntersect && spread !== emptyJsxObjectType) {
                 return getIntersectionType([typeToIntersect, spread]);
             }
-            return typeToIntersect || (spread === emptyObjectType ? createJsxAttributesType() : spread);
+            return typeToIntersect || (spread === emptyJsxObjectType ? createJsxAttributesType() : spread);
 
             /**
              * Create anonymous type from given attributes symbol table.

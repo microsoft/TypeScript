@@ -11,8 +11,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5):
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
-  Type 'B' is not assignable to type 'A'.
-    Property 'propA' is missing in type 'B' but present in type 'A'.
+  Property 'propA' is missing in type 'B' but present in type 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(41,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(45,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
@@ -133,8 +132,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     function hasNonMatchingParameterType1(x: A): x is B {
                                                       ~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
-!!! error TS2677:   Type 'B' is not assignable to type 'A'.
-!!! error TS2677:     Property 'propA' is missing in type 'B' but present in type 'A'.
+!!! error TS2677:   Property 'propA' is missing in type 'B' but present in type 'A'.
         return true;
     }
     

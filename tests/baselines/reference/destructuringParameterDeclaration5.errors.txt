@@ -1,5 +1,4 @@
-tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(47,6): error TS2322: Type 'Class' is not assignable to type 'D'.
-  Property 'foo' is missing in type 'Class' but present in type 'D'.
+tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(47,6): error TS2737: Property 'foo' is missing in type 'Class' but present in type 'D'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(48,4): error TS2737: Property 'y' is missing in type '{}' but present in type '{ y: D; }'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(49,6): error TS2322: Type 'number' is not assignable to type 'D'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(50,6): error TS2322: Type 'string' is not assignable to type 'D'.
@@ -54,8 +53,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts(
     // Error
     d3({ y: new Class() });
          ~
-!!! error TS2322: Type 'Class' is not assignable to type 'D'.
-!!! error TS2322:   Property 'foo' is missing in type 'Class' but present in type 'D'.
+!!! error TS2737: Property 'foo' is missing in type 'Class' but present in type 'D'.
 !!! related TS6500 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration5.ts:29:33: The expected type comes from property 'y' which is declared here on type '{ y: D; }'
     d3({});
        ~~

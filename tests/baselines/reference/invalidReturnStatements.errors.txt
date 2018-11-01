@@ -2,10 +2,8 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(2
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(3,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(4,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(5,17): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(16,22): error TS2322: Type '{ id: number; }' is not assignable to type 'D'.
-  Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
-tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(18,22): error TS2322: Type 'C' is not assignable to type 'D'.
-  Property 'name' is missing in type 'C' but present in type 'D'.
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(16,22): error TS2735: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
+tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(18,22): error TS2737: Property 'name' is missing in type 'C' but present in type 'D'.
 
 
 ==== tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts (6 errors) ====
@@ -34,12 +32,10 @@ tests/cases/conformance/statements/returnStatements/invalidReturnStatements.ts(1
     }
     function fn10(): D { return { id: 12 }; } 
                          ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ id: number; }' is not assignable to type 'D'.
-!!! error TS2322:   Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
+!!! error TS2735: Type '{ id: number; }' is missing the following properties from type 'D': name, dispose
     
     function fn11(): D { return new C(); }
                          ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'C' is not assignable to type 'D'.
-!!! error TS2322:   Property 'name' is missing in type 'C' but present in type 'D'.
+!!! error TS2737: Property 'name' is missing in type 'C' but present in type 'D'.
     
     

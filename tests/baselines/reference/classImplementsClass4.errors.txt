@@ -1,7 +1,6 @@
 tests/cases/compiler/classImplementsClass4.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Property 'x' is missing in type 'C' but present in type 'A'.
-tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2322: Type 'C' is not assignable to type 'C2'.
-  Property 'x' is missing in type 'C' but present in type 'C2'.
+tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2737: Property 'x' is missing in type 'C' but present in type 'C2'.
 
 
 ==== tests/cases/compiler/classImplementsClass4.ts (2 errors) ====
@@ -25,5 +24,4 @@ tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2322: Type 'C' is n
     c = c2;
     c2 = c;
     ~~
-!!! error TS2322: Type 'C' is not assignable to type 'C2'.
-!!! error TS2322:   Property 'x' is missing in type 'C' but present in type 'C2'.
+!!! error TS2737: Property 'x' is missing in type 'C' but present in type 'C2'.

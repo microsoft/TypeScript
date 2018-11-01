@@ -1,9 +1,7 @@
 tests/cases/conformance/jsx/file.tsx(25,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
-  Type '{}' is not assignable to type '{ reqd: any; }'.
-    Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
+  Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
 tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
-  Type '{}' is not assignable to type '{ reqd: any; }'.
-    Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
+  Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
 
 
 ==== tests/cases/conformance/jsx/react.d.ts (0 errors) ====
@@ -47,14 +45,12 @@ tests/cases/conformance/jsx/file.tsx(28,11): error TS2322: Type '{}' is not assi
     var t1 = <T />;
               ~
 !!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
-!!! error TS2322:   Type '{}' is not assignable to type '{ reqd: any; }'.
-!!! error TS2322:     Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
+!!! error TS2322:   Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
     
     // Should error
     var t2 = <TestMod.Test />;
               ~~~~~~~~~~~~
 !!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & { reqd: any; }'.
-!!! error TS2322:   Type '{}' is not assignable to type '{ reqd: any; }'.
-!!! error TS2322:     Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
+!!! error TS2322:   Property 'reqd' is missing in type '{}' but present in type '{ reqd: any; }'.
     
     
