@@ -4635,6 +4635,10 @@ namespace ts {
             if (isTypeAny(parentType)) {
                 return parentType;
             }
+            // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
+            if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
+                parentType = getNonNullableType(parentType);
+            }
 
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
@@ -4654,53 +4658,13 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    const isLate = isLateBindableName(name);
-                    const isWellKnown = isComputedPropertyName(name) && isWellKnownSymbolSyntactically(name.expression);
-                    if (!isLate && !isWellKnown && isComputedNonLiteralName(name)) {
-                        const exprType = checkExpression((name as ComputedPropertyName).expression);
-                        if (isTypeAssignableToKind(exprType, TypeFlags.ESSymbolLike)) {
-                            if (noImplicitAny) {
-                                error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(exprType), typeToString(parentType));
-                            }
-                            return anyType;
-                        }
-                        const indexerType = isTypeAssignableToKind(exprType, TypeFlags.NumberLike) && getIndexTypeOfType(parentType, IndexKind.Number) || getIndexTypeOfType(parentType, IndexKind.String);
-                        if (!indexerType && noImplicitAny && !compilerOptions.suppressImplicitAnyIndexErrors) {
-                            if (getIndexTypeOfType(parentType, IndexKind.Number)) {
-                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_index_expression_is_not_of_type_number);
-                            }
-                            else {
-                                error(declaration, Diagnostics.Element_implicitly_has_an_any_type_because_type_0_has_no_index_signature, typeToString(parentType));
-                            }
-                        }
-                        return indexerType || anyType;
-                    }
-
-                    // Use type of the specified property, or otherwise, for a numeric name, the type of the numeric index signature,
-                    // or otherwise the type of the string index signature.
-                    const nameType = isLate ? checkComputedPropertyName(name as ComputedPropertyName) as LiteralType | UniqueESSymbolType : undefined;
-                    const text = isLate ? getLateBoundNameFromType(nameType!) :
-                        isWellKnown ? getPropertyNameForKnownSymbolName(idText(((name as ComputedPropertyName).expression as PropertyAccessExpression).name)) :
-                        getTextOfPropertyName(name);
-
-                    // Relax null check on ambient destructuring parameters, since the parameters have no implementation and are just documentation
-                    if (strictNullChecks && declaration.flags & NodeFlags.Ambient && isParameterDeclaration(declaration)) {
-                        parentType = getNonNullableType(parentType);
-                    }
-                    if (isLate && nameType && !getPropertyOfType(parentType, text) && isTypeAssignableToKind(nameType, TypeFlags.ESSymbolLike)) {
-                        if (noImplicitAny) {
-                            error(declaration, Diagnostics.Type_0_cannot_be_used_to_index_type_1, typeToString(nameType), typeToString(parentType));
-                        }
-                        return anyType;
-                    }
-                    const declaredType = getConstraintForLocation(getTypeOfPropertyOfType(parentType, text), declaration.name);
-                    type = declaredType && getFlowTypeOfReference(declaration, declaredType) ||
-                        isNumericLiteralName(text) && getIndexTypeOfType(parentType, IndexKind.Number) ||
-                        getIndexTypeOfType(parentType, IndexKind.String);
-                    if (!type) {
-                        error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(parentType), declarationNameToString(name));
-                        return errorType;
-                    }
+                    const exprType = isComputedPropertyName(name)
+                        ? checkComputedPropertyName(name)
+                        : isIdentifier(name)
+                            ? getLiteralType(unescapeLeadingUnderscores(name.escapedText))
+                            : checkExpression(name);
+                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(getApparentType(parentType), exprType, name), name);
+                    type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
                 }
             }
             else {
@@ -9359,12 +9323,16 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | undefined, cacheSymbol: boolean, missingType: Type) {
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | undefined, cacheSymbol: boolean, missingType: Type) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
-            const propName = isTypeUsableAsLateBoundName(indexType) ? getLateBoundNameFromType(indexType) :
-                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
-                    getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
-                    undefined;
+            const propName = isTypeUsableAsLateBoundName(indexType)
+                ? getLateBoundNameFromType(indexType)
+                : accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false)
+                    ? getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name))
+                    : accessNode && isPropertyName(accessNode)
+                        // late bound names are handled in the first branch, so here we only need to handle normal names
+                        ? getPropertyNameForPropertyNameNode(accessNode)
+                        : undefined;
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
@@ -9385,7 +9353,7 @@ namespace ts {
                 }
                 if (everyType(objectType, isTupleType) && isNumericLiteralName(propName) && +propName >= 0) {
                     if (accessNode && everyType(objectType, t => !(<TupleTypeReference>t).target.hasRestElement)) {
-                        const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
+                        const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, unescapeLeadingUnderscores(propName), typeToString(objectType));
                     }
                     return mapType(objectType, t => getRestTypeOfTupleType(<TupleTypeReference>t) || undefinedType);
@@ -9400,7 +9368,7 @@ namespace ts {
                     undefined;
                 if (indexInfo) {
                     if (accessNode && !isTypeAssignableToKind(indexType, TypeFlags.String | TypeFlags.Number)) {
-                        const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
+                        const indexNode = getIndexNodeForAccessExpression(accessNode);
                         error(indexNode, Diagnostics.Type_0_cannot_be_used_as_an_index_type, typeToString(indexType));
                     }
                     else if (accessExpression && indexInfo.isReadonly && (isAssignmentTarget(accessExpression) || isDeleteTarget(accessExpression))) {
@@ -9441,7 +9409,7 @@ namespace ts {
                 return anyType;
             }
             if (accessNode) {
-                const indexNode = accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode.argumentExpression : accessNode.indexType;
+                const indexNode = getIndexNodeForAccessExpression(accessNode);
                 if (indexType.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral)) {
                     error(indexNode, Diagnostics.Property_0_does_not_exist_on_type_1, "" + (<LiteralType>indexType).value, typeToString(objectType));
                 }
@@ -9456,6 +9424,16 @@ namespace ts {
                 return indexType;
             }
             return missingType;
+        }
+
+        function getIndexNodeForAccessExpression(accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName) {
+            return accessNode.kind === SyntaxKind.ElementAccessExpression
+            ? accessNode.argumentExpression
+            : accessNode.kind === SyntaxKind.IndexedAccessType
+                ? accessNode.indexType
+                : accessNode.kind === SyntaxKind.ComputedPropertyName
+                    ? accessNode.expression
+                    : accessNode;
         }
 
         function isGenericObjectType(type: Type): boolean {
@@ -9521,7 +9499,7 @@ namespace ts {
             return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode, missingType = accessNode ? errorType : unknownType): Type {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, missingType = accessNode ? errorType : unknownType): Type {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -23207,7 +23185,7 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
-        function checkIndexedAccessIndexType(type: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode) {
+        function checkIndexedAccessIndexType(type: Type, accessNode: Node) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
             }
