@@ -26,6 +26,14 @@ namespace ts.server {
         private lineMap: number[] | undefined;
 
         /**
+         * When a large file is loaded, text will artificially be set to "".
+         * In order to be able to report correct telemetry, we store the actual
+         * file size in this case.  (In other cases where text === "", e.g.
+         * for mixed content or dynamic files, fileSize will be undefined.)
+         */
+        private fileSize: number | undefined;
+
+        /**
          * True if the text is for the file thats open in the editor
          */
         public isOpen: boolean;
@@ -56,10 +64,11 @@ namespace ts.server {
             this.switchToScriptVersionCache();
         }
 
-        public useText(newText?: string) {
+        public useText_TestOnly(newText?: string) {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
+            this.fileSize = undefined;
             this.version.text++;
         }
 
@@ -68,17 +77,24 @@ namespace ts.server {
             this.ownFileText = false;
             this.text = undefined;
             this.lineMap = undefined;
+            this.fileSize = undefined;
         }
 
         /**
          * Set the contents as newText
          * returns true if text changed
          */
-        public reload(newText: string) {
+        public reload(newText: string): boolean {
             Debug.assert(newText !== undefined);
 
             // Reload always has fresh content
             this.pendingReloadFromDisk = false;
+
+            // We only need both this.text and this.fileSize if this.text
+            // is artificially empty because it was too large.
+            // We assume that an empty string passed to reload is not
+            // for a file that was too large to store.
+            this.fileSize = undefined;
 
             // If text changed set the text
             // This also ensures that if we had switched to version cache,
@@ -86,11 +102,16 @@ namespace ts.server {
             // The change to version cache will happen when needed
             // Thus avoiding the computation if there are no changes
             if (this.text !== newText) {
-                this.useText(newText);
+                this.text = newText;
+                this.version.text++;
+                this.svc = undefined;
+                this.lineMap = undefined;
                 // We cant guarantee new text is own file text
                 this.ownFileText = false;
                 return true;
             }
+
+            return false;
         }
 
         /**
@@ -98,7 +119,9 @@ namespace ts.server {
          * returns true if text changed
          */
         public reloadWithFileText(tempFileName?: string) {
-            const reloaded = this.reload(this.getFileText(tempFileName));
+            const { text: newText, fileSize } = this.getFileTextAndSize(tempFileName);
+            const reloaded = this.reload(newText);
+            this.fileSize = fileSize; // NB: after reload since reload clears it
             this.ownFileText = !tempFileName || tempFileName === this.fileName;
             return reloaded;
         }
@@ -116,6 +139,23 @@ namespace ts.server {
 
         public delayReloadFromFileIntoText() {
             this.pendingReloadFromDisk = true;
+        }
+
+        /**
+         * For telemetry purposes, we would like to be able to report the size of the file.
+         * However, we do not want telemetry to require extra file I/O so we report a size
+         * that may be stale (e.g. may not reflect change made on disk since the last reload).
+         * NB: Will read from disk if the file contents have never been loaded because
+         * telemetry falsely indicating size 0 would be counter-productive.
+         */
+        public getTelemetryFileSize(): number {
+            return !!this.fileSize
+                ? this.fileSize
+                : !!this.text // Check text before svc because its length is cheaper
+                    ? this.text.length // Could be wrong if this.pendingReloadFromDisk
+                    : !!this.svc
+                        ? this.svc.getSnapshot().getLength() // Could be wrong if this.pendingReloadFromDisk
+                        : this.getSnapshot().getLength(); // Should be strictly correct
         }
 
         public getSnapshot(): IScriptSnapshot {
@@ -161,7 +201,7 @@ namespace ts.server {
             return this.svc!.positionToLineOffset(position);
         }
 
-        private getFileText(tempFileName?: string) {
+        private getFileTextAndSize(tempFileName?: string): { text: string, fileSize?: number } {
             let text: string;
             const fileName = tempFileName || this.fileName;
             const getText = () => text === undefined ? (text = this.host.readFile(fileName) || "") : text;
@@ -173,10 +213,10 @@ namespace ts.server {
                     const service = this.info.containingProjects[0].projectService;
                     service.logger.info(`Skipped loading contents of large file ${fileName} for info ${this.info.fileName}: fileSize: ${fileSize}`);
                     this.info.containingProjects[0].projectService.sendLargeFileReferencedEvent(fileName, fileSize);
-                    return "";
+                    return { text: "", fileSize };
                 }
             }
-            return getText();
+            return { text: getText() };
         }
 
         private switchToScriptVersionCache(): ScriptVersionCache {
