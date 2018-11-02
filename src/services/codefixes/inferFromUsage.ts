@@ -342,18 +342,24 @@ namespace ts.codefix {
     }
 
     function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
+                searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
+                break;
             case SyntaxKind.FunctionExpression:
+                const parent = containingFunction.parent;
+                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                    parent.name :
+                    containingFunction.name;
+                break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
-                const searchToken = isConstructor ?
-                    findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
-                    containingFunction.name;
-                if (searchToken) {
-                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
-                }
+                searchToken = containingFunction.name;
+                break;
+        }
+        if (searchToken) {
+            return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
         }
     }
 
