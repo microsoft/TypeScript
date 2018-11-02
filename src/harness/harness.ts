@@ -1325,6 +1325,9 @@ namespace Harness {
                 const [, content] = value;
                 outputLines += content;
             }
+            if (pretty) {
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
+            }
             return outputLines;
         }
 

@@ -200,17 +200,26 @@ namespace ts {
         }
 
         // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
+        const builder = createSolutionBuilder(buildOptions.watch ?
+            createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
+            createSolutionBuilderHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions)),
+            projects, buildOptions);
         if (buildOptions.clean) {
             return sys.exit(builder.cleanAllProjects());
         }
 
         if (buildOptions.watch) {
             builder.buildAllProjects();
-            return builder.startWatching();
+            return (builder as SolutionBuilderWithWatch).startWatching();
         }
 
         return sys.exit(builder.buildAllProjects());
+    }
+
+    function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+        return shouldBePretty(options) ?
+            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
+            undefined;
     }
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
@@ -225,7 +234,12 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const exitStatus = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
         reportStatistics(program);
         return sys.exit(exitStatus);
     }

@@ -9,3 +9,5 @@
     
     
 !!! error TS1005: '}' expected.
+Found 1 error.
+

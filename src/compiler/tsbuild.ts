@@ -29,6 +29,9 @@ namespace ts {
         preserveWatchOutput?: boolean;
         listEmittedFiles?: boolean;
         listFiles?: boolean;
+        pretty?: boolean;
+
+        traceResolution?: boolean;
     }
 
     enum BuildResultFlags {
@@ -316,7 +319,7 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export interface SolutionBuilderHost extends CompilerHost {
+    export interface SolutionBuilderHostBase extends CompilerHost {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
@@ -325,13 +328,18 @@ namespace ts {
         reportSolutionBuilderStatus: DiagnosticReporter;
     }
 
-    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
+    export interface SolutionBuilderHost extends SolutionBuilderHostBase {
+        reportErrorSummary?: ReportEmitErrorSummary;
+    }
+
+    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHostBase, WatchHost {
     }
 
     export interface SolutionBuilder {
         buildAllProjects(): ExitStatus;
         cleanAllProjects(): ExitStatus;
 
+        // TODO:: All the below ones should technically only be in watch mode. but thats for later time
         /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
         /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
         /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
@@ -340,7 +348,9 @@ namespace ts {
         /*@internal*/ buildInvalidatedProject(): void;
 
         /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
+    }
 
+    export interface SolutionBuilderWithWatch extends SolutionBuilder {
         /*@internal*/ startWatching(): void;
     }
 
@@ -355,8 +365,8 @@ namespace ts {
         };
     }
 
-    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
-        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
+    function createSolutionBuilderHostBase(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHostBase;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
@@ -365,8 +375,14 @@ namespace ts {
         return host;
     }
 
-    export function createSolutionBuilderWithWatchHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
-        const host = createSolutionBuilderHost(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
+    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
+        const host = createSolutionBuilderHostBase(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost;
+        host.reportErrorSummary = reportErrorSummary;
+        return host;
+    }
+
+    export function createSolutionBuilderWithWatchHost(system?: System, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+        const host = createSolutionBuilderHostBase(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
         const watchHost = createWatchHost(system, reportWatchStatus);
         host.onWatchStatusChange = watchHost.onWatchStatusChange;
         host.watchFile = watchHost.watchFile;
@@ -390,7 +406,9 @@ namespace ts {
      * TODO: use SolutionBuilderWithWatchHost => watchedSolution
      *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
+    export function createSolutionBuilder(host: SolutionBuilderWithWatchHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch;
+    export function createSolutionBuilder(host: SolutionBuilderHost | SolutionBuilderWithWatchHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -803,9 +821,7 @@ namespace ts {
                 globalDependencyGraph = undefined;
             }
             projectStatus.removeKey(resolved);
-            if (options.watch) {
-                diagnostics.removeKey(resolved);
-            }
+            diagnostics.removeKey(resolved);
 
             addProjToQueue(resolved, reloadLevel);
         }
@@ -874,7 +890,7 @@ namespace ts {
         }
 
         function reportErrorSummary() {
-            if (options.watch) {
+            if (options.watch || (host as SolutionBuilderHost).reportErrorSummary) {
                 // Report errors from the other projects
                 getGlobalDependencyGraph().buildQueue.forEach(project => {
                     if (!projectErrorsReported.hasKey(project)) {
@@ -882,8 +898,13 @@ namespace ts {
                     }
                 });
                 let totalErrors = 0;
-                diagnostics.forEach(singleProjectErrors => totalErrors += singleProjectErrors.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
-                reportWatchStatus(totalErrors === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, totalErrors);
+                diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+                if (options.watch) {
+                    reportWatchStatus(getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
+                }
+                else {
+                    (host as SolutionBuilderHost).reportErrorSummary!(totalErrors);
+                }
             }
         }
 
@@ -1066,9 +1087,7 @@ namespace ts {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
-            if (options.watch) {
-                diagnostics.removeKey(proj);
-            }
+            diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
             return resultFlags;
 
@@ -1207,10 +1226,8 @@ namespace ts {
 
         function reportAndStoreErrors(proj: ResolvedConfigFileName, errors: ReadonlyArray<Diagnostic>) {
             reportErrors(errors);
-            if (options.watch) {
-                projectErrorsReported.setValue(proj, true);
-                diagnostics.setValue(proj, errors);
-            }
+            projectErrorsReported.setValue(proj, true);
+            diagnostics.setValue(proj, errors);
         }
 
         function reportErrors(errors: ReadonlyArray<Diagnostic>) {

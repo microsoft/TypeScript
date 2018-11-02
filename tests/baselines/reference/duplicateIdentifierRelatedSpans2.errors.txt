@@ -45,3 +45,5 @@
     class H { }
     class I { }
     
+Found 2 errors.
+

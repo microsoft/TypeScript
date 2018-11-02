@@ -85,3 +85,5 @@
 !!! related TS6203 tests/cases/compiler/file1.ts:4:5: 'duplicate3' was also declared here.
     }
     
+Found 6 errors.
+
