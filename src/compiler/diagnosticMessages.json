@@ -2493,6 +2493,10 @@
         "category": "Error",
         "code": 2734
     },
+    "Did you mean for '{0}' to be constrained to type 'new (...args: any[]) => {1}'?": {
+        "category": "Error",
+        "code": 2735
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
