@@ -106,6 +106,21 @@ namespace ts {
 
     export type ReportEmitErrorSummary = (errorCount: number) => void;
 
+    export function getErrorCountForSummary(diagnostics: ReadonlyArray<Diagnostic>) {
+        return countWhere(diagnostics, diagnostic => diagnostic.category === DiagnosticCategory.Error);
+    }
+
+    export function getWatchErrorSummaryDiagnosticMessage(errorCount: number) {
+        return errorCount === 1 ?
+            Diagnostics.Found_1_error_Watching_for_file_changes :
+            Diagnostics.Found_0_errors_Watching_for_file_changes;
+    }
+
+    export function getErrorSummaryText(errorCount: number, newLine: string) {
+        const d = createCompilerDiagnostic(errorCount === 1 ? Diagnostics.Found_1_error : Diagnostics.Found_0_errors, errorCount);
+        return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
+    }
+
     /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
@@ -151,7 +166,7 @@ namespace ts {
         }
 
         if (reportSummary) {
-            reportSummary(diagnostics.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
+            reportSummary(getErrorCountForSummary(diagnostics));
         }
 
         if (emitSkipped && diagnostics.length > 0) {
@@ -227,16 +242,16 @@ namespace ts {
             const compilerOptions = builderProgram.getCompilerOptions();
             const newLine = getNewLineCharacter(compilerOptions, () => system.newLine);
 
-            const reportSummary = (errorCount: number) => {
-                if (errorCount === 1) {
-                    onWatchStatusChange!(createCompilerDiagnostic(Diagnostics.Found_1_error_Watching_for_file_changes, errorCount), newLine, compilerOptions);
-                }
-                else {
-                    onWatchStatusChange!(createCompilerDiagnostic(Diagnostics.Found_0_errors_Watching_for_file_changes, errorCount, errorCount), newLine, compilerOptions);
-                }
-            };
-
-            emitFilesAndReportErrors(builderProgram, reportDiagnostic, writeFileName, reportSummary);
+            emitFilesAndReportErrors(
+                builderProgram,
+                reportDiagnostic,
+                writeFileName,
+                errorCount => onWatchStatusChange!(
+                    createCompilerDiagnostic(getWatchErrorSummaryDiagnosticMessage(errorCount), errorCount),
+                    newLine,
+                    compilerOptions
+                )
+            );
         }
     }
 
