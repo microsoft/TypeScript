@@ -4600,15 +4600,24 @@ namespace ts {
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
-            const restTypeAlias = getGlobalRestSymbol();
-            if (!restTypeAlias) {
-                return errorType;
+            const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+            if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
+                const restTypeAlias = getGlobalRestSymbol();
+                return !restTypeAlias ? errorType :
+                    omitKeyType.flags & TypeFlags.Never ? source :
+                    getTypeAliasInstantiation(restTypeAlias, [source, omitKeyType]);
             }
-            const omitTypes = getUnionType(map(properties, getLiteralTypeFromPropertyName));
-            if (omitTypes.flags & TypeFlags.Never) {
-                return source;
+            const members = createSymbolTable();
+            for (const prop of getPropertiesOfType(source)) {
+                if (!isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), omitKeyType)
+                    && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
+                    && isSpreadableProperty(prop)) {
+                    members.set(prop.escapedName, getSpreadSymbol(prop));
+                }
             }
-            return getTypeAliasInstantiation(restTypeAlias, [source, omitTypes]);
+            const stringIndexInfo = getIndexInfoOfType(source, IndexKind.String);
+            const numberIndexInfo = getIndexInfoOfType(source, IndexKind.Number);
+            return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
         /** Return the inferred type for a binding element */
