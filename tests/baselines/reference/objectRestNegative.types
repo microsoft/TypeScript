@@ -8,7 +8,7 @@ let o = { a: 1, b: 'no' };
 >'no' : "no"
 
 var { ...mustBeLast, a } = o;
->mustBeLast : Rest<{ a: number; b: string; }, "a">
+>mustBeLast : { b: string; }
 >a : number
 >o : { a: number; b: string; }
 
@@ -30,24 +30,24 @@ let notAssignable: { a: string };
 
 function stillMustBeLast({ ...mustBeLast, a }: { a: number, b: string }): void {
 >stillMustBeLast : ({ ...mustBeLast, a }: { a: number; b: string; }) => void
->mustBeLast : Rest<{ a: number; b: string; }, "a">
+>mustBeLast : { b: string; }
 >a : number
 >a : number
 >b : string
 }
 function generic<T extends { x, y }>(t: T) {
->generic : <T extends { x: any; y: any; }>(t: T) => Rest<T, "x">
+>generic : <T extends { x: any; y: any; }>(t: T) => Pick<T, Exclude<keyof T, "x">>
 >x : any
 >y : any
 >t : T
 
     let { x, ...rest } = t;
 >x : any
->rest : Rest<T, "x">
+>rest : Pick<T, Exclude<keyof T, "x">>
 >t : T
 
     return rest;
->rest : Rest<T, "x">
+>rest : Pick<T, Exclude<keyof T, "x">>
 }
 
 let rest: { b: string }

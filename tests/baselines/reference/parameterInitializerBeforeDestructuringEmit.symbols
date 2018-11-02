@@ -18,9 +18,9 @@ function foobar({ bar = {}, ...opts }: Foo = {}) {
     "use strict";
     "Some other prologue";
     opts.baz(bar);
->opts.baz : Symbol(baz)
+>opts.baz : Symbol(Foo.baz, Decl(parameterInitializerBeforeDestructuringEmit.ts, 1, 14))
 >opts : Symbol(opts, Decl(parameterInitializerBeforeDestructuringEmit.ts, 5, 27))
->baz : Symbol(baz)
+>baz : Symbol(Foo.baz, Decl(parameterInitializerBeforeDestructuringEmit.ts, 1, 14))
 >bar : Symbol(bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 5, 17))
 }
 
@@ -35,9 +35,9 @@ class C {
         "use strict";
         "Some other prologue";
         opts.baz(bar);
->opts.baz : Symbol(baz)
+>opts.baz : Symbol(Foo.baz, Decl(parameterInitializerBeforeDestructuringEmit.ts, 1, 14))
 >opts : Symbol(opts, Decl(parameterInitializerBeforeDestructuringEmit.ts, 12, 27))
->baz : Symbol(baz)
+>baz : Symbol(Foo.baz, Decl(parameterInitializerBeforeDestructuringEmit.ts, 1, 14))
 >bar : Symbol(bar, Decl(parameterInitializerBeforeDestructuringEmit.ts, 12, 17))
     }
 }

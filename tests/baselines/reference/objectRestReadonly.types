@@ -32,12 +32,12 @@ const obj: Readonly<ObjType> = {
 
 const { foo, ...rest } = obj
 >foo : string
->rest : Rest<Readonly<ObjType>, "foo">
+>rest : { baz: string; quux: string; }
 >obj : Readonly<ObjType>
 
 delete rest.baz
 >delete rest.baz : boolean
 >rest.baz : string
->rest : Rest<Readonly<ObjType>, "foo">
+>rest : { baz: string; quux: string; }
 >baz : string
 

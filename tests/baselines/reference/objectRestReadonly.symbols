@@ -34,7 +34,7 @@ const { foo, ...rest } = obj
 >obj : Symbol(obj, Decl(objectRestReadonly.ts, 7, 5))
 
 delete rest.baz
->rest.baz : Symbol(baz)
+>rest.baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
 >rest : Symbol(rest, Decl(objectRestReadonly.ts, 13, 12))
->baz : Symbol(baz)
+>baz : Symbol(baz, Decl(objectRestReadonly.ts, 2, 13))
 

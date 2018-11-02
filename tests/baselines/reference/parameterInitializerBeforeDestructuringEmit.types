@@ -11,7 +11,7 @@ function foobar({ bar = {}, ...opts }: Foo = {}) {
 >foobar : ({ bar, ...opts }?: Foo) => void
 >bar : any
 >{} : {}
->opts : Rest<Foo, "bar">
+>opts : { baz?: any; }
 >{} : {}
 
     "use strict";
@@ -23,7 +23,7 @@ function foobar({ bar = {}, ...opts }: Foo = {}) {
     opts.baz(bar);
 >opts.baz(bar) : any
 >opts.baz : any
->opts : Rest<Foo, "bar">
+>opts : { baz?: any; }
 >baz : any
 >bar : any
 }
@@ -34,7 +34,7 @@ class C {
     constructor({ bar = {}, ...opts }: Foo = {}) {
 >bar : any
 >{} : {}
->opts : Rest<Foo, "bar">
+>opts : { baz?: any; }
 >{} : {}
 
         "use strict";
@@ -46,7 +46,7 @@ class C {
         opts.baz(bar);
 >opts.baz(bar) : any
 >opts.baz : any
->opts : Rest<Foo, "bar">
+>opts : { baz?: any; }
 >baz : any
 >bar : any
     }

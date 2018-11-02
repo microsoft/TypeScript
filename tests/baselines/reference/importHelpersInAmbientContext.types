@@ -33,7 +33,7 @@ interface Foo {
 }
 export var { a, ...x } : Foo;
 >a : number
->x : Rest<Foo, "a">
+>x : { b: string; }
 
 === tests/cases/compiler/b.ts ===
 export {};
@@ -72,7 +72,7 @@ declare namespace N {
 	}
 	export var { a, ...x } : Foo;
 >a : number
->x : Rest<Foo, "a">
+>x : { b: string; }
 }
 
 === tests/cases/compiler/tslib.d.ts ===

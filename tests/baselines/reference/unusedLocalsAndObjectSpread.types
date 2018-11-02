@@ -18,7 +18,7 @@ function one() {
     // 'a' is declared but never used
     const {a, ...bar} = foo;
 >a : number
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 >foo : { a: number; b: number; }
 
     console.log(bar);
@@ -26,7 +26,7 @@ function one() {
 >console.log : (a: any) => void
 >console : { log(a: any): void; }
 >log : (a: any) => void
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 }
 
 function two() {
@@ -44,7 +44,7 @@ function two() {
     const {a: _, ...bar} = foo;
 >a : any
 >_ : number
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 >foo : { a: number; b: number; }
 
     console.log(bar);
@@ -52,7 +52,7 @@ function two() {
 >console.log : (a: any) => void
 >console : { log(a: any): void; }
 >log : (a: any) => void
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 }
 
 function three() {
@@ -69,7 +69,7 @@ function three() {
     // 'a' is declared but never used
     const {a, ...bar} = foo; // bar should be unused
 >a : number
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 >foo : { a: number; b: number; }
 
     //console.log(bar);
@@ -90,7 +90,7 @@ function four() {
     const {a: _, ...bar} = foo; // bar should be unused
 >a : any
 >_ : number
->bar : Rest<{ a: number; b: number; }, "a">
+>bar : { b: number; }
 >foo : { a: number; b: number; }
 
     //console.log(bar);

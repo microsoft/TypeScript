@@ -19,6 +19,6 @@ var { destructuring } = a; // error
 >a : object
 
 var { ...rest } = a; // ok
->rest : object
+>rest : {}
 >a : object
 

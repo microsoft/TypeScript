@@ -13,32 +13,32 @@ var { ...clone } = o;
 
 var { a, ...justB } = o;
 >a : number
->justB : Rest<{ a: number; b: string; }, "a">
+>justB : { b: string; }
 >o : { a: number; b: string; }
 
 var { a, b: renamed, ...empty } = o;
 >a : number
 >b : any
 >renamed : string
->empty : Rest<{ a: number; b: string; }, "a" | "b">
+>empty : {}
 >o : { a: number; b: string; }
 
 var { ['b']: renamed, ...justA } = o;
 >'b' : "b"
 >renamed : string
->justA : Rest<{ a: number; b: string; }, "b">
+>justA : { a: number; }
 >o : { a: number; b: string; }
 
 var { 'b': renamed, ...justA } = o;
 >renamed : string
->justA : Rest<{ a: number; b: string; }, "b">
+>justA : { a: number; }
 >o : { a: number; b: string; }
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
 >b : any
 >n : any
 >oooo : any
->justA : Rest<{ a: number; b: string; }, "b">
+>justA : { a: number; }
 >o : { a: number; b: string; }
 
 let o2 = { c: 'terrible idea?', d: 'yes' };
@@ -52,7 +52,7 @@ let o2 = { c: 'terrible idea?', d: 'yes' };
 var { d: renamed, ...d } = o2;
 >d : any
 >renamed : string
->d : Rest<{ c: string; d: string; }, "d">
+>d : { c: string; }
 >o2 : { c: string; d: string; }
 
 let nestedrest: { x: number, n1: { y: number, n2: { z: number, n3: { n4: number } } }, rest: number, restrest: number };
@@ -75,7 +75,7 @@ var { x, n1: { y, n2: { z, n3: { ...nr } } }, ...restrest } = nestedrest;
 >z : number
 >n3 : any
 >nr : { n4: number; }
->restrest : Rest<{ x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }, "x" | "n1">
+>restrest : { rest: number; restrest: number; }
 >nestedrest : { x: number; n1: { y: number; n2: { z: number; n3: { n4: number; }; }; }; rest: number; restrest: number; }
 
 let complex: { x: { ka, ki }, y: number };
@@ -88,10 +88,10 @@ let complex: { x: { ka, ki }, y: number };
 var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >x : any
 >ka : any
->nested : Rest<{ ka: any; ki: any; }, "ka">
+>nested : { ki: any; }
 >y : any
 >other : number
->rest : Rest<{ x: { ka: any; ki: any; }; y: number; }, "x" | "y">
+>rest : {}
 >complex : { x: { ka: any; ki: any; }; y: number; }
 
 ({x: { ka, ...nested }, y: other, ...rest} = complex);
@@ -101,15 +101,15 @@ var { x: { ka, ...nested }, y: other, ...rest } = complex;
 >x : { ki: any; ka: any; }
 >{ ka, ...nested } : { ki: any; ka: any; }
 >ka : any
->nested : Rest<{ ka: any; ki: any; }, "ka">
+>nested : { ki: any; }
 >y : number
 >other : number
->rest : Rest<{ x: { ka: any; ki: any; }; y: number; }, "x" | "y">
+>rest : {}
 >complex : { x: { ka: any; ki: any; }; y: number; }
 
 var { x, ...fresh } = { x: 1, y: 2 };
 >x : number
->fresh : Rest<{ x: number; y: number; }, "x">
+>fresh : { y: number; }
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
 >1 : 1
@@ -121,7 +121,7 @@ var { x, ...fresh } = { x: 1, y: 2 };
 >{ x, ...fresh } = { x: 1, y: 2 } : { x: number; y: number; }
 >{ x, ...fresh } : { y: number; x: number; }
 >x : number
->fresh : Rest<{ x: number; y: number; }, "x">
+>fresh : { y: number; }
 >{ x: 1, y: 2 } : { x: number; y: number; }
 >x : number
 >1 : 1
@@ -175,7 +175,7 @@ var removable = new Removable();
 
 var { removed, ...removableRest } = removable;
 >removed : string
->removableRest : Rest<Removable, "removed">
+>removableRest : { remainder: string; }
 >removable : Removable
 
 var i: I = removable;
@@ -184,7 +184,7 @@ var i: I = removable;
 
 var { removed, ...removableRest2 } = i;
 >removed : string
->removableRest2 : Rest<I, "removed">
+>removableRest2 : { m(): void; remainder: string; }
 >i : I
 
 let computed = 'b';
@@ -221,10 +221,10 @@ var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmp
 >({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes : ({ aNumber, ...notEmptyObject }: { [x: string]: any; aNumber?: number; }) => any
 >aNumber : number
 >12 : 12
->notEmptyObject : Rest<{ [x: string]: any; aNumber?: number; }, "aNumber">
+>notEmptyObject : { [x: string]: any; }
 >aNumber + notEmptyObject.anythingGoes : any
 >aNumber : number
 >notEmptyObject.anythingGoes : any
->notEmptyObject : Rest<{ [x: string]: any; aNumber?: number; }, "aNumber">
+>notEmptyObject : { [x: string]: any; }
 >anythingGoes : any
 

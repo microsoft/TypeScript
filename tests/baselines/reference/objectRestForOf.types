@@ -6,13 +6,13 @@ let array: { x: number, y: string }[];
 
 for (let { x, ...restOf } of array) {
 >x : number
->restOf : Rest<{ x: number; y: string; }, "x">
+>restOf : { y: string; }
 >array : { x: number; y: string; }[]
 
     [x, restOf];
->[x, restOf] : (number | Rest<{ x: number; y: string; }, "x">)[]
+>[x, restOf] : (number | { y: string; })[]
 >x : number
->restOf : Rest<{ x: number; y: string; }, "x">
+>restOf : { y: string; }
 }
 let xx: number;
 >xx : number
