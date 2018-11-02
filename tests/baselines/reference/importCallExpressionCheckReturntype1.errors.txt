@@ -18,9 +18,11 @@ tests/cases/conformance/dynamicImport/1.ts(5,10): error TS2352: Conversion of ty
         ~~
 !!! error TS2322: Type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' is not assignable to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>'.
 !!! error TS2322:   Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but present in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
+!!! related TS2728 tests/cases/conformance/dynamicImport/anotherModule.ts:1:14: 'D' is declared here.
     let p2 = import("./defaultPath") as Promise<typeof anotherModule>;
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'Promise<typeof import("tests/cases/conformance/dynamicImport/defaultPath")>' to type 'Promise<typeof import("tests/cases/conformance/dynamicImport/anotherModule")>' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'D' is missing in type 'typeof import("tests/cases/conformance/dynamicImport/defaultPath")' but present in type 'typeof import("tests/cases/conformance/dynamicImport/anotherModule")'.
+!!! related TS2728 tests/cases/conformance/dynamicImport/anotherModule.ts:1:14: 'D' is declared here.
     let p3: Promise<any> = import("./defaultPath");
     

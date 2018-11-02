@@ -15,6 +15,7 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2737: Pr
     var result = foo(derived, d => d.toBase());
                                    ~~~~~~~~~~
 !!! error TS2737: Property 'toBase' is missing in type 'Base' but present in type 'Derived'.
+!!! related TS2728 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:5:5: 'toBase' is declared here.
 !!! related TS6502 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:10:37: The expected type comes from the return type of this signature.
     
     // bar should type check just like foo.

@@ -26,6 +26,7 @@ tests/cases/compiler/chainedAssignmentChecking.ts(21,6): error TS2735: Type 'Z' 
     c1 = c2 = c3; // Should be error
     ~~
 !!! error TS2737: Property 'a' is missing in type 'Z' but present in type 'X'.
+!!! related TS2728 tests/cases/compiler/chainedAssignmentChecking.ts:3:3: 'a' is declared here.
          ~~
 !!! error TS2735: Type 'Z' is missing the following properties from type 'Y': a, b
     

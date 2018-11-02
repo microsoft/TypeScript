@@ -24,6 +24,7 @@ tests/cases/conformance/jsx/file.tsx(12,2): error TS2737: Property 'n' is missin
     <test2 />;
      ~~~~~
 !!! error TS2737: Property 'n' is missing in type '{}' but present in type '{ n: boolean; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:12: 'n' is declared here.
     
     // OK
     <test1 n />;

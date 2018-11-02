@@ -27,7 +27,9 @@ tests/cases/compiler/genericTypeAssertions2.ts(13,21): error TS2737: Property 'f
     var r3: B<number> = <A<number>>new B(); // error
         ~~
 !!! error TS2737: Property 'bar' is missing in type 'A<number>' but present in type 'B<number>'.
+!!! related TS2728 tests/cases/compiler/genericTypeAssertions2.ts:3:5: 'bar' is declared here.
     var r4: A<number> = <A<number>>new A();
     var r5: A<number> = <A<number>>[]; // error
                         ~~~~~~~~~~~~~
 !!! error TS2737: Property 'foo' is missing in type 'undefined[]' but present in type 'A<number>'.
+!!! related TS2728 tests/cases/compiler/genericTypeAssertions2.ts:1:14: 'foo' is declared here.

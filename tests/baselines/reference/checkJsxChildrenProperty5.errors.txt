@@ -30,6 +30,7 @@ tests/cases/conformance/jsx/file.tsx(28,6): error TS2322: Type '{ children: type
     let k = <Comp a={10} b="hi" />;
              ~~~~
 !!! error TS2737: Property 'children' is missing in type '{ a: number; b: string; }' but present in type 'Prop'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:6:5: 'children' is declared here.
     
     // Error: JSX.element is not the same as JSX.ElementClass
     let k1 =

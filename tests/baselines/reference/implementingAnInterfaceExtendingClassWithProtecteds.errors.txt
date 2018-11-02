@@ -31,6 +31,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
           ~~~~
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'x' is missing in type 'Bar2' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:2:15: 'x' is declared here.
         y: number;
     }
     
@@ -54,6 +55,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
           ~~~~
 !!! error TS2420: Class 'Bar5' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar5' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithProtecteds.ts:6:5: 'y' is declared here.
     }
     
     class Bar6 extends Foo implements I { // error

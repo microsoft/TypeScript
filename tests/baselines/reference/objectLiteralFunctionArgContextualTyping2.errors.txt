@@ -23,6 +23,7 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts(13,17): error 
     f2({ value: '' })
        ~~~~~~~~~~~~~
 !!! error TS2737: Property 'doStuff' is missing in type '{ value: string; }' but present in type 'I2'.
+!!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping2.ts:3:5: 'doStuff' is declared here.
     f2({ value: '', what: 1 }) 
                     ~~~~~~~
 !!! error TS2345: Argument of type '{ value: string; what: number; }' is not assignable to parameter of type 'I2'.

@@ -11310,6 +11310,7 @@ namespace ts {
         ): boolean {
 
             let errorInfo: DiagnosticMessageChain | undefined;
+            let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
             let sourceStack: Type[];
             let targetStack: Type[];
@@ -11348,6 +11349,9 @@ namespace ts {
                 }
 
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                if (relatedInfo) {
+                    addRelatedInfo(diag, ...relatedInfo);
+                }
                 if (errorOutputContainer) {
                     errorOutputContainer.error = diag;
                 }
@@ -11358,6 +11362,16 @@ namespace ts {
             function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
                 errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+            }
+
+            function associateRelatedInfo(info: DiagnosticRelatedInformation) {
+                Debug.assert(!!errorInfo);
+                if (!relatedInfo) {
+                    relatedInfo = [info];
+                }
+                else {
+                    relatedInfo.push(info);
+                }
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
@@ -12223,7 +12237,11 @@ namespace ts {
                             suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
                         }
                         if (props.length === 1) {
-                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_present_in_type_2, symbolToString(unmatchedProperty), typeToString(source), typeToString(target));
+                            const propName = symbolToString(unmatchedProperty);
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_present_in_type_2, propName, typeToString(source), typeToString(target));
+                            if (unmatchedProperty.declarations[0]) {
+                                associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                            }
                         }
                         else if (props.length > 5) { // arbitrary cutoff for too-long list form
                             reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);

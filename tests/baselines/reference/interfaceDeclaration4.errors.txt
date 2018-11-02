@@ -45,6 +45,7 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
           ~~
 !!! error TS2420: Class 'C2' incorrectly implements interface 'I4'.
 !!! error TS2420:   Property 'item' is missing in type 'C2' but present in type 'I4'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
         public token: string;
     }
     
@@ -57,6 +58,7 @@ tests/cases/compiler/interfaceDeclaration4.ts(39,18): error TS1005: ';' expected
           ~~
 !!! error TS2420: Class 'C3' incorrectly implements interface 'I1'.
 !!! error TS2420:   Property 'item' is missing in type 'C3' but present in type 'I1'.
+!!! related TS2728 tests/cases/compiler/interfaceDeclaration4.ts:4:27: 'item' is declared here.
     
     // Negative case 
     interface Foo.I1 { }

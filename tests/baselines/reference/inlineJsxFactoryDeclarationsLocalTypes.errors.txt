@@ -79,6 +79,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
     elem = <h></h>; // Expect assignability error here
     ~~~~
 !!! error TS2737: Property '__predomBrand' is missing in type 'Element' but present in type 'Element'.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
     
     const DOMSFC = (props: {x: number, y: number, children?: dom.JSX.Element[]}) => <p>{props.x} + {props.y} = {props.x + props.y}{props.children}</p>;
     
@@ -102,6 +103,7 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
 !!! error TS2322:       Type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element'.
                                            ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property '__domBrand' is missing in type 'MyClass' but present in type 'ElementClass'.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
                                                                   ~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2605: JSX element type 'MyClass' is not a constructor function for JSX elements.
     
@@ -112,4 +114,5 @@ tests/cases/conformance/jsx/inline/index.tsx(24,23): error TS2322: Type '{ child
 !!! error TS2322:   Types of property 'children' are incompatible.
 !!! error TS2322:     Type 'import("tests/cases/conformance/jsx/inline/renderer2").predom.JSX.Element[]' is not assignable to type 'import("tests/cases/conformance/jsx/inline/renderer").dom.JSX.Element[]'.
 !!! error TS2322:       Property '__domBrand' is missing in type 'Element' but present in type 'Element'.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer.d.ts:7:13: '__domBrand' is declared here.
     

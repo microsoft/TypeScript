@@ -29,6 +29,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
               ~
 !!! error TS2420: Class 'B' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'foo' is missing in type 'B' but present in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:13:9: 'foo' is declared here.
             fooo: Derived; // error
         }
     
@@ -40,6 +41,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
               ~~
 !!! error TS2420: Class 'B2' incorrectly implements interface 'A2'.
 !!! error TS2420:   Property '1' is missing in type 'B2' but present in type 'A2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:21:9: '1' is declared here.
             2: Derived; // error
         }
     
@@ -51,6 +53,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
               ~~
 !!! error TS2420: Class 'B3' incorrectly implements interface 'A3'.
 !!! error TS2420:   Property ''1'' is missing in type 'B3' but present in type 'A3'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts:29:9: ''1'' is declared here.
             '1.0': Derived; // error
         }
     }

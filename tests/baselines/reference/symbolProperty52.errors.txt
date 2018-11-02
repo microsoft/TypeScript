@@ -13,6 +13,7 @@ tests/cases/conformance/es6/Symbols/symbolProperty52.ts(7,12): error TS2339: Pro
     obj = {};
     ~~~
 !!! error TS2737: Property '[Symbol.nonsense]' is missing in type '{}' but present in type '{ [Symbol.nonsense]: number; }'.
+!!! related TS2728 tests/cases/conformance/es6/Symbols/symbolProperty52.ts:2:5: '[Symbol.nonsense]' is declared here.
     
     obj[Symbol.nonsense];
                ~~~~~~~~

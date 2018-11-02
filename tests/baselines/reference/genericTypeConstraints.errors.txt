@@ -13,6 +13,7 @@ tests/cases/compiler/genericTypeConstraints.ts(9,31): error TS2737: Property 'fo
     class BarExtended extends Bar<FooExtended> {
                                   ~~~~~~~~~~~
 !!! error TS2737: Property 'fooMethod' is missing in type 'FooExtended' but present in type 'Foo'.
+!!! related TS2728 tests/cases/compiler/genericTypeConstraints.ts:2:5: 'fooMethod' is declared here.
         constructor() {
             super();
         }

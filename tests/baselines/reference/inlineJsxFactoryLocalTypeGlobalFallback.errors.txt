@@ -46,4 +46,5 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2737: Property '__pre
     elem = <h></h>; // Expect assignability error here
     ~~~~
 !!! error TS2737: Property '__predomBrand' is missing in type 'Element' but present in type 'Element'.
+!!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
     

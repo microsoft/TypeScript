@@ -11,4 +11,5 @@ tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPr
     foo(person);  // error
         ~~~~~~
 !!! error TS2737: Property 'a' is missing in type '{ name: string; id: number; }' but present in type '{ a: string; id: number; }'.
+!!! related TS2728 tests/cases/conformance/es6/shorthandPropertyAssignment/objectLiteralShorthandPropertiesFunctionArgument2.ts:6:19: 'a' is declared here.
     

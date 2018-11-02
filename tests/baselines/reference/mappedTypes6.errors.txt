@@ -140,6 +140,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x1 = { a: 1 };  // Error
     ~~
 !!! error TS2737: Property 'b' is missing in type '{ a: number; }' but present in type 'Foo'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:80:5: 'b' is declared here.
     x1 = { a: 1, b: 1 };
     x1 = { a: 1, b: 1, c: 1 };
     x1 = { a: 1, b: 1, c: 1, d: 1 };
@@ -160,6 +161,7 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x2 = { a: 1, b: 1, c: 1 };  // Error
     ~~
 !!! error TS2737: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but present in type 'Required<Foo>'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:82:5: 'd' is declared here.
     x2 = { a: 1, b: 1, c: 1, d: 1 };
     
     type Bar = {

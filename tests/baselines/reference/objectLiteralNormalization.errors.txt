@@ -47,6 +47,7 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     ~~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
 !!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but present in type '{ a: number; b: number; }'.
+!!! related TS2728 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19: 'b' is declared here.
     
     // Object literals containing spreads are not normalized
     declare let b1: { a: string, b: string } | { b: string, c: string };

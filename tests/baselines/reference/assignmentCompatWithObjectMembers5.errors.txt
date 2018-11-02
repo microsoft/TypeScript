@@ -18,6 +18,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     c = i; // error
     ~
 !!! error TS2737: Property 'foo' is missing in type 'I' but present in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:2:5: 'foo' is declared here.
     i = c; // error
     ~
 !!! error TS2737: Property 'fooo' is missing in type 'C' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:8:5: 'fooo' is declared here.

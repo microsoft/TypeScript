@@ -27,9 +27,11 @@ tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts(13,36): error T
     f2({ toString: (s) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'value' is missing in type '{ toString: (s: string) => string; }' but present in type 'I'.
+!!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
     f2({ toString: (s: string) => s }) // error, missing property value from ArgsString
        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'value' is missing in type '{ toString: (s: string) => string; }' but present in type 'I'.
+!!! related TS2728 tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts:2:5: 'value' is declared here.
     f2({ value: '', toString: (s) => s.uhhh }) // error
                                        ~~~~
 !!! error TS2339: Property 'uhhh' does not exist on type 'string'.

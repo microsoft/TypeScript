@@ -73,6 +73,7 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
         ~~~~~~~~~~~~
 !!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
 !!! error TS2322:   Property 'anotherP1' is missing in type '{ prop: string | number; anotherP: string; }' but present in type '{ prop: number; anotherP1: number; }'.
+!!! related TS2728 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:73: 'anotherP1' is declared here.
         prop: strOrNumber,
         anotherP: str
     };

@@ -8,4 +8,5 @@ tests/cases/compiler/functionOverloads41.ts(4,14): error TS2737: Property 'a' is
     var x = foo([{}]);
                  ~~
 !!! error TS2737: Property 'a' is missing in type '{}' but present in type '{ a: boolean; }'.
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:2:19: 'a' is declared here.
     

@@ -29,6 +29,7 @@ tests/cases/compiler/typeMatch1.ts(20,1): error TS2367: This condition will alwa
     x6=C;
        ~
 !!! error TS2737: Property 'x' is missing in type 'typeof C' but present in type 'C'.
+!!! related TS2728 tests/cases/compiler/typeMatch1.ts:12:19: 'x' is declared here.
 !!! related TS6213 tests/cases/compiler/typeMatch1.ts:19:4: Did you mean to use 'new' with this expression?
     C==D;
     ~~~~

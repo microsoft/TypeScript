@@ -6,3 +6,4 @@ tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts(2,5): error
     [...c] = ["", 0];
         ~
 !!! error TS2737: Property 'bogus' is missing in type '(string | number)[]' but present in type '{ bogus: number; }'.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/nonIterableRestElement3.ts:1:11: 'bogus' is declared here.

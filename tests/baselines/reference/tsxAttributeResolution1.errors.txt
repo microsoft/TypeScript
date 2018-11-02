@@ -57,6 +57,7 @@ tests/cases/conformance/jsx/file.tsx(30,8): error TS2322: Type 'number' is not a
     <test2 />; // Error, missing reqd
      ~~~~~
 !!! error TS2737: Property 'reqd' is missing in type '{}' but present in type '{ reqd: string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:5:12: 'reqd' is declared here.
     <test2 reqd={10} />; // Error, reqd is not string
            ~~~~
 !!! error TS2322: Type 'number' is not assignable to type 'string'.

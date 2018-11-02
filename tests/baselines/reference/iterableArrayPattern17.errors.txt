@@ -24,3 +24,4 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts(17,5): error
     fun(new FooIterator);
         ~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'x' is missing in type 'FooIterator' but present in type 'Bar'.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/iterableArrayPattern17.ts:1:13: 'x' is declared here.

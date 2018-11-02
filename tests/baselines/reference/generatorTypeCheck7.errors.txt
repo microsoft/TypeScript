@@ -8,3 +8,4 @@ tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts(4,17): error
     function* g1(): WeirdIter { }
                     ~~~~~~~~~
 !!! error TS2737: Property 'hello' is missing in type 'IterableIterator<number>' but present in type 'WeirdIter'.
+!!! related TS2728 tests/cases/conformance/es6/yieldExpressions/generatorTypeCheck7.ts:2:5: 'hello' is declared here.

@@ -17,6 +17,7 @@ tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts(2
         x: Bar,
            ~~~
 !!! error TS2737: Property 'x' is missing in type 'typeof Bar' but present in type 'Bar'.
+!!! related TS2728 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:2:5: 'x' is declared here.
 !!! related TS6213 tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts:10:8: Did you mean to use 'new' with this expression?
         y: Date
            ~~~~

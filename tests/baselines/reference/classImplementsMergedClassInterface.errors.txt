@@ -25,6 +25,7 @@ tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInte
           ~~
 !!! error TS2720: Class 'C3' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
 !!! error TS2720:   Property 'y' is missing in type 'C3' but present in type 'C1'.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:6:5: 'y' is declared here.
         x : number;
     }
     
@@ -32,6 +33,7 @@ tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInte
           ~~
 !!! error TS2720: Class 'C4' incorrectly implements class 'C1'. Did you mean to extend 'C1' and inherit its members as a subclass?
 !!! error TS2720:   Property 'x' is missing in type 'C4' but present in type 'C1'.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classImplementsMergedClassInterface.ts:2:5: 'x' is declared here.
         y : number;
     }
     

@@ -12,6 +12,7 @@ tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2737: Property 'x' 
           ~
 !!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
 !!! error TS2720:   Property 'x' is missing in type 'C' but present in type 'A'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass4.ts:2:13: 'x' is declared here.
         foo() {
             return 1;
         }
@@ -25,3 +26,4 @@ tests/cases/compiler/classImplementsClass4.ts(16,1): error TS2737: Property 'x' 
     c2 = c;
     ~~
 !!! error TS2737: Property 'x' is missing in type 'C' but present in type 'C2'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass4.ts:2:13: 'x' is declared here.

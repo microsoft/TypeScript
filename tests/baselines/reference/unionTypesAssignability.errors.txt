@@ -47,6 +47,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = e;
     ~
 !!! error TS2737: Property 'foo1' is missing in type 'E' but present in type 'D'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     d = unionDE; // error e is not assignable to d
     ~
 !!! error TS2322: Type 'D | E' is not assignable to type 'D'.
@@ -54,6 +55,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     e = d;
     ~
 !!! error TS2737: Property 'foo2' is missing in type 'D' but present in type 'E'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     e = e;
     e = unionDE; // error d is not assignable to e
     ~
@@ -80,9 +82,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTyp
     d = c;
     ~
 !!! error TS2737: Property 'foo1' is missing in type 'C' but present in type 'D'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:3:21: 'foo1' is declared here.
     e = c;
     ~
 !!! error TS2737: Property 'foo2' is missing in type 'C' but present in type 'E'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/unionTypesAssignability.ts:4:21: 'foo2' is declared here.
     unionDE = c; // error since C is not assinable to either D or E
     ~~~~~~~
 !!! error TS2322: Type 'C' is not assignable to type 'D | E'.

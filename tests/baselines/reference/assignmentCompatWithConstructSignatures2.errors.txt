@@ -50,15 +50,19 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     t = () => 1;
     ~
 !!! error TS2737: Property 'f' is missing in type '() => number' but present in type 'T'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
     t = function (x: number) { return ''; }
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: number) => string' but present in type 'T'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
     a = () => 1;
     ~
 !!! error TS2737: Property 'f' is missing in type '() => number' but present in type '{ f: new (x: number) => void; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
     a = function (x: number) { return ''; }
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: number) => string' but present in type '{ f: new (x: number) => void; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
     
     interface S2 {
         f(x: string): void;
@@ -81,9 +85,11 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     t = (x: string) => 1;
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: string) => number' but present in type 'T'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
     t = function (x: string) { return ''; }
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: string) => string' but present in type 'T'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:4:5: 'f' is declared here.
     a = s2;
     ~
 !!! error TS2322: Type 'S2' is not assignable to type '{ f: new (x: number) => void; }'.
@@ -99,7 +105,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     a = (x: string) => 1;
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: string) => number' but present in type '{ f: new (x: number) => void; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
     a = function (x: string) { return ''; }
     ~
 !!! error TS2737: Property 'f' is missing in type '(x: string) => string' but present in type '{ f: new (x: number) => void; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures2.ts:7:10: 'f' is declared here.
     

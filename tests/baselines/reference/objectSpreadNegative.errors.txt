@@ -47,10 +47,12 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS233
     spread = { s: "foo" };  // error, missing 'b'
     ~~~~~~
 !!! error TS2737: Property 'b' is missing in type '{ s: string; }' but present in type '{ s: string; b: boolean; }'.
+!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:21: 'b' is declared here.
     let b = { b: false };
     spread = b; // error, missing 's'
     ~~~~~~
 !!! error TS2737: Property 's' is missing in type '{ b: boolean; }' but present in type '{ s: string; b: boolean; }'.
+!!! related TS2728 tests/cases/conformance/types/spread/objectSpreadNegative.ts:22:36: 's' is declared here.
     
     // literal repeats are not allowed, but spread repeats are fine
     let duplicated = { b: 'bad', ...o, b: 'bad', ...o2, b: 'bad' }

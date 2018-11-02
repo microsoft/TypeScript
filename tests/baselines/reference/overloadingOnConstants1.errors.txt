@@ -29,12 +29,16 @@ tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2737: Property 'b
     var htmlElement2: Derived1 = d2.createElement("yo")
         ~~~~~~~~~~~~
 !!! error TS2737: Property 'bar' is missing in type 'Base' but present in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
         ~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'biz' is missing in type 'Derived1' but present in type 'Derived3'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:4:31: 'biz' is declared here.
     var htmlDivElement2: Derived1 = d2.createElement("div");
         ~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'bar' is missing in type 'Derived2' but present in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlSpanElement2: Derived1 = d2.createElement("span");
         ~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'bar' is missing in type 'Derived3' but present in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.

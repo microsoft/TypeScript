@@ -32,6 +32,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     x = y;
     ~
 !!! error TS2737: Property 'x' is missing in type 'Beta' but present in type 'Alpha'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:14:19: 'x' is declared here.
     x = y;
     ~
 !!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
@@ -40,6 +41,7 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     y = x;
     ~
 !!! error TS2737: Property 'y' is missing in type 'Alpha' but present in type 'Beta'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:15:18: 'y' is declared here.
     y = x;
     ~
 !!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.

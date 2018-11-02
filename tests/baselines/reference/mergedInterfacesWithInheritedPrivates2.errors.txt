@@ -41,6 +41,7 @@ tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheri
           ~
 !!! error TS2420: Class 'E' incorrectly implements interface 'A'.
 !!! error TS2420:   Property 'x' is missing in type 'E' but present in type 'A'.
+!!! related TS2728 tests/cases/conformance/interfaces/declarationMerging/mergedInterfacesWithInheritedPrivates2.ts:2:13: 'x' is declared here.
         w: number;
         y: string;
         z: string;

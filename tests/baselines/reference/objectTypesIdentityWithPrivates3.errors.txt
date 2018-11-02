@@ -29,3 +29,4 @@ tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectType
     <C4>c3; // Should fail (private x originates in the same declaration, but different types)
     ~~~~~~
 !!! error TS2737: Property 'y' is missing in type 'C3<T2>' but present in type 'C4'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/typeAndMemberIdentity/objectTypesIdentityWithPrivates3.ts:21:5: 'y' is declared here.

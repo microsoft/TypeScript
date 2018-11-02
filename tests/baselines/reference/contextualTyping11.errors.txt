@@ -5,3 +5,4 @@ tests/cases/compiler/contextualTyping11.ts(1,42): error TS2737: Property 'id' is
     class foo { public bar:{id:number;}[] = [<foo>({})]; }
                                              ~~~~~~~~~
 !!! error TS2737: Property 'id' is missing in type 'foo' but present in type '{ id: number; }'.
+!!! related TS2728 tests/cases/compiler/contextualTyping11.ts:1:25: 'id' is declared here.

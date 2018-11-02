@@ -55,6 +55,7 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someBase = <SomeBase>someOther; // Error
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'p' is missing in type 'SomeOther' but present in type 'SomeBase'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:15:13: 'p' is declared here.
     
     someDerived = <SomeDerived>someDerived;
     someDerived = <SomeDerived>someBase;
@@ -65,9 +66,11 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someOther = <SomeOther>someDerived; // Error
                 ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'q' is missing in type 'SomeDerived' but present in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
     someOther = <SomeOther>someBase; // Error
                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'q' is missing in type 'SomeBase' but present in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
     someOther = <SomeOther>someOther;
     
     // Type assertion cannot be a type-predicate type

@@ -108,6 +108,7 @@ tests/cases/compiler/recursiveClassReferenceTest.ts(95,21): error TS2737: Proper
     			return new State(self);
     			                 ~~~~
 !!! error TS2737: Property 'getInitialState' is missing in type 'Window' but present in type 'IMode'.
+!!! related TS2728 tests/cases/compiler/recursiveClassReferenceTest.ts:66:19: 'getInitialState' is declared here.
     		}
     
     

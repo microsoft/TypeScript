@@ -46,6 +46,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: string]: Derived; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'bar' is missing in type 'Base' but present in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithStringIndexer.ts:4:34: 'bar' is declared here.
     
     var b2: { [x: string]: Derived2; }
     a = b2; // ok

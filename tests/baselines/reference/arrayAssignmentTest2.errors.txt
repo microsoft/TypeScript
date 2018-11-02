@@ -64,14 +64,17 @@ tests/cases/compiler/arrayAssignmentTest2.ts(58,1): error TS2736: Type 'I1' is m
     ~~~~~~
 !!! error TS2322: Type 'C2[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'C2' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
     arr_c3 = arr_c1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type 'C1[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'C1' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
     arr_c3 = arr_i1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type 'I1[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'I1' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest2.ts:14:2: 'CM3M1' is declared here.
     
     arr_any = f1; // should be an error - is
     ~~~~~~~

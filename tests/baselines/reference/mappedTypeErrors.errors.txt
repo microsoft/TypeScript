@@ -156,6 +156,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
                                                 ~~~~~~~~
 !!! error TS2737: Property 'y' is missing in type '{ x: number; }' but present in type 'Readonly<{ x: number; y: number; }>'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37: 'y' is declared here.
         let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
                                                               ~~~~

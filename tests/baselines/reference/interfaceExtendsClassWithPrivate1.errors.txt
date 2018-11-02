@@ -27,11 +27,13 @@ tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts(27,1): error TS2735: T
     i = c; // error
     ~
 !!! error TS2737: Property 'other' is missing in type 'C' but present in type 'I'.
+!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:7:5: 'other' is declared here.
     
     i = d;
     d = i; // error
     ~
 !!! error TS2737: Property 'bar' is missing in type 'I' but present in type 'D'.
+!!! related TS2728 tests/cases/compiler/interfaceExtendsClassWithPrivate1.ts:13:5: 'bar' is declared here.
     
     c = d;
     d = c; // error

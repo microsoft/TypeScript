@@ -13,4 +13,5 @@ tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts(9,5): e
     var a: D = foo("hi", []);
         ~
 !!! error TS2737: Property 'x' is missing in type '(x: "hi", items: string[]) => typeof foo' but present in type 'D'.
+!!! related TS2728 tests/cases/compiler/crashInsourcePropertyIsRelatableToTargetProperty.ts:2:13: 'x' is declared here.
     

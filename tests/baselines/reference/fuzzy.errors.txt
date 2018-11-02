@@ -22,6 +22,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missi
                      ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'alsoWorks' is missing in type 'C' but present in type 'I'.
+!!! related TS2728 tests/cases/compiler/fuzzy.ts:4:9: 'alsoWorks' is declared here.
             constructor(public x:number) {
             }
             works():R {
@@ -40,6 +41,7 @@ tests/cases/compiler/fuzzy.ts(25,20): error TS2737: Property 'anything' is missi
                 return <R>({ oneI: this });
                        ~~~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'anything' is missing in type '{ oneI: this; }' but present in type 'R'.
+!!! related TS2728 tests/cases/compiler/fuzzy.ts:9:9: 'anything' is declared here.
             }
         }
     }

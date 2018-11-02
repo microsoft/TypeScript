@@ -15,6 +15,7 @@ tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts(19,1): err
     y = a; // expect error
     ~
 !!! error TS2737: Property 'foo' is missing in type '{}' but present in type '{ foo: string; }'.
+!!! related TS2728 tests/cases/conformance/types/nonPrimitive/nonPrimitiveAssignError.ts:2:10: 'foo' is declared here.
     a = x;
     a = y;
     

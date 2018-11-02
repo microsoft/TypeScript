@@ -24,12 +24,14 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
     x = [''];
     ~
 !!! error TS2737: Property 'call' is missing in type 'string[]' but present in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
     x = 4;
     ~
 !!! error TS2322: Type '4' is not assignable to type 'Callable'.
     x = {};
     ~
 !!! error TS2737: Property 'call' is missing in type '{}' but present in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
     
     // Should work
     function f() { };
@@ -50,6 +52,7 @@ tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-functio
     fn({});
        ~~
 !!! error TS2737: Property 'call' is missing in type '{}' but present in type 'Callable'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatability_checking-call-member-off-of-function-interface.ts:4:5: 'call' is declared here.
     
     
     // Should work

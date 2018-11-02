@@ -33,6 +33,7 @@ tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type 'string' is not 
     const c1 = <OneThing yy={10}/>;  // missing property;
                 ~~~~~~~~
 !!! error TS2737: Property 'yy1' is missing in type '{ yy: number; }' but present in type '{ yy: number; yy1: string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:3:43: 'yy1' is declared here.
     const c2 = <OneThing {...obj} yy1 />; // type incompatible;
                                   ~~~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.
@@ -57,6 +58,7 @@ tests/cases/conformance/jsx/file.tsx(35,29): error TS2322: Type 'string' is not 
     const d1 = <TestingOneThing extra-data />
                 ~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'yy' is missing in type '{ extra-data: true; }' but present in type '{ yy: string; direction?: number; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:22:38: 'yy' is declared here.
     const d2 = <TestingOneThing yy="hello" direction="left" />
                                            ~~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

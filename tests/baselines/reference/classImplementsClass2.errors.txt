@@ -9,6 +9,7 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2737: Property 'foo
           ~
 !!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
 !!! error TS2720:   Property 'foo' is missing in type 'C' but present in type 'A'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass2.ts:1:11: 'foo' is declared here.
     
     class C2 extends A {
         foo() {
@@ -22,3 +23,4 @@ tests/cases/compiler/classImplementsClass2.ts(13,1): error TS2737: Property 'foo
     c2 = c;
     ~~
 !!! error TS2737: Property 'foo' is missing in type 'C' but present in type 'C2'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass2.ts:5:5: 'foo' is declared here.

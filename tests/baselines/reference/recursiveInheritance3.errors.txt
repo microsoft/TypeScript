@@ -7,6 +7,7 @@ tests/cases/compiler/recursiveInheritance3.ts(1,7): error TS2420: Class 'C' inco
           ~
 !!! error TS2420: Class 'C' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'other' is missing in type 'C' but present in type 'I'.
+!!! related TS2728 tests/cases/compiler/recursiveInheritance3.ts:7:5: 'other' is declared here.
         public foo(x: any) { return x; }
         private x = 1;
     }

@@ -76,9 +76,11 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
     var anInterface: I = new D();
         ~~~~~~~~~~~
 !!! error TS2737: Property 'id' is missing in type 'D<{}>' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:2:5: 'id' is declared here.
     var aClass: C = new D();
         ~~~~~~
 !!! error TS2737: Property 'id' is missing in type 'D<{}>' but present in type 'C'.
+!!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:6:5: 'id' is declared here.
     var aGenericClass: D<string> = new C();
         ~~~~~~~~~~~~~
 !!! error TS2735: Type 'C' is missing the following properties from type 'D<string>': source, recurse, wrapped
@@ -113,6 +115,7 @@ tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAnd
 !!! error TS2322:   Types of property 'A' are incompatible.
 !!! error TS2322:     Type 'typeof N.A' is not assignable to type 'typeof M.A'.
 !!! error TS2322:       Property 'name' is missing in type 'A' but present in type 'A'.
+!!! related TS2728 tests/cases/conformance/statements/VariableStatements/everyTypeWithAnnotationAndInvalidInitializer.ts:20:9: 'name' is declared here.
     var aClassInModule: M.A = new N.A();
         ~~~~~~~~~~~~~~
 !!! error TS2322: Type 'N.A' is not assignable to type 'M.A'.

@@ -15,6 +15,7 @@ tests/cases/conformance/jsdoc/test.js(10,5): error TS8030: The type of a functio
     var g = function (prop) {
         ~
 !!! error TS2737: Property 'prop' is missing in type '(prop: any) => void' but present in type '{ prop: string; }'.
+!!! related TS2728 tests/cases/conformance/jsdoc/test.js:6:14: 'prop' is declared here.
     }
     
     /** @type {(a: number) => number} */

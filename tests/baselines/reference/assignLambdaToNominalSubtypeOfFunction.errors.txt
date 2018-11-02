@@ -12,7 +12,9 @@ tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts(8,4): error TS273
     fn((a, b) => true);
        ~~~~~~~~~~~~~~
 !!! error TS2737: Property 'x' is missing in type '(a: any, b: any) => boolean' but present in type 'IResultCallback'.
+!!! related TS2728 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts:2:5: 'x' is declared here.
     fn(function (a, b) { return true; })
        ~~~~~~~~
 !!! error TS2737: Property 'x' is missing in type '(a: any, b: any) => boolean' but present in type 'IResultCallback'.
+!!! related TS2728 tests/cases/compiler/assignLambdaToNominalSubtypeOfFunction.ts:2:5: 'x' is declared here.
     

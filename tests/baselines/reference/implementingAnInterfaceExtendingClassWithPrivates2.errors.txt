@@ -89,6 +89,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
               ~~~~
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'z' is missing in type 'Bar2' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts:30:9: 'z' is declared here.
             x: string;
             y: number;
         }
@@ -100,6 +101,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
               ~~~~
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'z' is missing in type 'Bar3' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts:30:9: 'z' is declared here.
             private x: string;
             y: number;
         }
@@ -123,6 +125,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
               ~~~
 !!! error TS2420: Class 'Bar' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
             z: number;
         }
     
@@ -142,6 +145,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
               ~~~~
 !!! error TS2420: Class 'Bar2' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar2' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
             x: string;
             z: number;
         }
@@ -153,6 +157,7 @@ tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInte
               ~~~~
 !!! error TS2420: Class 'Bar3' incorrectly implements interface 'I'.
 !!! error TS2420:   Property 'y' is missing in type 'Bar3' but present in type 'I'.
+!!! related TS2728 tests/cases/conformance/interfaces/interfacesExtendingClasses/implementingAnInterfaceExtendingClassWithPrivates2.ts:60:17: 'y' is declared here.
             private x: string;
             z: number;
         }

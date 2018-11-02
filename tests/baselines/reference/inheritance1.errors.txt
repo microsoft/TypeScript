@@ -32,6 +32,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
           ~~~~~~~~~
 !!! error TS2420: Class 'ImageBase' incorrectly implements interface 'SelectableControl'.
 !!! error TS2420:   Property 'select' is missing in type 'ImageBase' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
     }
     class Image1 extends Control {
     }
@@ -39,6 +40,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
           ~~~~~~~~~
 !!! error TS2420: Class 'Locations' incorrectly implements interface 'SelectableControl'.
 !!! error TS2420:   Property 'state' is missing in type 'Locations' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
         select() { }
     }
     class Locations1 {
@@ -54,6 +56,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
     b = c;
     ~
 !!! error TS2737: Property 'select' is missing in type 'Control' but present in type 'Button'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:9:5: 'select' is declared here.
     
     var t: TextBox;
     sc = t;
@@ -62,11 +65,13 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
     t = c;
     ~
 !!! error TS2737: Property 'select' is missing in type 'Control' but present in type 'TextBox'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:12:5: 'select' is declared here.
     
     var i: ImageBase;
     sc = i;
     ~~
 !!! error TS2737: Property 'select' is missing in type 'ImageBase' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
     c = i;
     i = sc;
     i = c;
@@ -75,6 +80,7 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
     sc = i1;
     ~~
 !!! error TS2737: Property 'select' is missing in type 'Image1' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:5:5: 'select' is declared here.
     c = i1;
     i1 = sc;
     i1 = c;
@@ -83,22 +89,28 @@ tests/cases/compiler/inheritance1.ts(61,1): error TS2737: Property 'select' is m
     sc = l;
     ~~
 !!! error TS2737: Property 'state' is missing in type 'Locations' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
     c = l;
     ~
 !!! error TS2737: Property 'state' is missing in type 'Locations' but present in type 'Control'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
     l = sc;
     l = c;
     ~
 !!! error TS2737: Property 'select' is missing in type 'Control' but present in type 'Locations'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:19:5: 'select' is declared here.
     
     var l1: Locations1;
     sc = l1;
     ~~
 !!! error TS2737: Property 'state' is missing in type 'Locations1' but present in type 'SelectableControl'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
     c = l1;
     ~
 !!! error TS2737: Property 'state' is missing in type 'Locations1' but present in type 'Control'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:2:13: 'state' is declared here.
     l1 = sc;
     l1 = c;
     ~~
 !!! error TS2737: Property 'select' is missing in type 'Control' but present in type 'Locations1'.
+!!! related TS2728 tests/cases/compiler/inheritance1.ts:22:5: 'select' is declared here.

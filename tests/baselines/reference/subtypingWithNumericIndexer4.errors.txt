@@ -41,6 +41,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2415:     Type 'string' is not assignable to type 'Base'.
                           ~~~~
 !!! error TS2737: Property 'bar' is missing in type 'Base' but present in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:4:34: 'bar' is declared here.
             [x: number]: string; // error
         }
     

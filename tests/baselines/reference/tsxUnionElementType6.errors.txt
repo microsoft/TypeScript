@@ -34,8 +34,10 @@ tests/cases/conformance/jsx/file.tsx(21,10): error TS2737: Property 'x' is missi
     let c = <SFC2AndEmptyComp />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'x' is missing in type '{}' but present in type '{ x: boolean; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
     let d = <SFC2AndEmptyComp data-prop />;
              ~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'x' is missing in type '{ data-prop: true; }' but present in type '{ x: boolean; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:23: 'x' is declared here.
     
     

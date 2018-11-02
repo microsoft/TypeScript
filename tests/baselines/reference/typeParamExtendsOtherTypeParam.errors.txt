@@ -27,6 +27,7 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Typ
     var x1: A<{ a: string;}, { b: string }>;
                              ~~~~~~~~~~~~~
 !!! error TS2737: Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
+!!! related TS2728 tests/cases/compiler/typeParamExtendsOtherTypeParam.ts:12:13: 'a' is declared here.
     var x2: A<{ a: string;}, { a: number }>;
                              ~~~~~~~~~~~~~
 !!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
@@ -35,6 +36,7 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Typ
     var x3: B<{ a: string;}, { b: string }>;
                              ~~~~~~~~~~~~~
 !!! error TS2737: Property 'a' is missing in type '{ b: string; }' but present in type '{ a: string; }'.
+!!! related TS2728 tests/cases/compiler/typeParamExtendsOtherTypeParam.ts:14:13: 'a' is declared here.
     var x4: B<{ a: string;}, { a: number }>;
                              ~~~~~~~~~~~~~
 !!! error TS2344: Type '{ a: number; }' does not satisfy the constraint '{ a: string; }'.
@@ -43,9 +45,11 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Typ
     var x5: A<{ a: string; b: number }, { a: string }>;
                                         ~~~~~~~~~~~~~
 !!! error TS2737: Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: number; }'.
+!!! related TS2728 tests/cases/compiler/typeParamExtendsOtherTypeParam.ts:16:24: 'b' is declared here.
     var x6: B<{ a: string; b: number }, { a: string }>;
                                         ~~~~~~~~~~~~~
 !!! error TS2737: Property 'b' is missing in type '{ a: string; }' but present in type '{ a: string; b: number; }'.
+!!! related TS2728 tests/cases/compiler/typeParamExtendsOtherTypeParam.ts:17:24: 'b' is declared here.
     
     interface I1 {
         a: string;
@@ -59,6 +63,7 @@ tests/cases/compiler/typeParamExtendsOtherTypeParam.ts(29,15): error TS2344: Typ
     var x7: A<I2, I1>;
                   ~~
 !!! error TS2737: Property 'b' is missing in type 'I1' but present in type 'I2'.
+!!! related TS2728 tests/cases/compiler/typeParamExtendsOtherTypeParam.ts:25:5: 'b' is declared here.
     var x8: B<I2, I1>;
                   ~~
 !!! error TS2344: Type 'I1' does not satisfy the constraint 'I2'.

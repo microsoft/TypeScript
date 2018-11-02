@@ -41,11 +41,13 @@ tests/cases/conformance/jsx/file.tsx(29,2): error TS2737: Property 'x' is missin
     	        ~~~~~
 !!! error TS2322: Type 'T' is not assignable to type 'Attribs1'.
 !!! error TS2322:   Property 'x' is missing in type '{ y: string; }' but present in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
     }
     
     
     <test1 {...{}} />; // Error, missing x
      ~~~~~
 !!! error TS2737: Property 'x' is missing in type '{}' but present in type 'Attribs1'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:9:2: 'x' is declared here.
     <test2 {...{}} />; // Error, missing toString
     

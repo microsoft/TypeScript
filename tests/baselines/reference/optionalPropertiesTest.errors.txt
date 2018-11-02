@@ -22,6 +22,7 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     foo = { name: "test" };            // Error, id missing
     ~~~
 !!! error TS2737: Property 'id' is missing in type '{ name: string; }' but present in type 'IFoo'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:5:5: 'id' is declared here.
     foo = {id: 1234, print:()=>{}}	   // Ok
     
     var s = foo.name || "default";
@@ -35,9 +36,11 @@ tests/cases/compiler/optionalPropertiesTest.ts(40,1): error TS2322: Type 'i2' is
     var test1: i1 = {};
         ~~~~~
 !!! error TS2737: Property 'M' is missing in type '{}' but present in type 'i1'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:20:16: 'M' is declared here.
     var test2: i3 = {};
         ~~~~~
 !!! error TS2737: Property 'M' is missing in type '{}' but present in type 'i3'.
+!!! related TS2728 tests/cases/compiler/optionalPropertiesTest.ts:22:16: 'M' is declared here.
     var test3: i2 = {};
     var test4: i4 = {};
     var test5: i1 = { M: function () { } };

@@ -16,3 +16,4 @@ tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts(5,5): error TS
     foo({ name: "hello" });            // Error, id required but missing
         ~~~~~~~~~~~~~~~~~
 !!! error TS2737: Property 'id' is missing in type '{ name: string; }' but present in type '{ id: number; name?: string; }'.
+!!! related TS2728 tests/cases/compiler/assignmentCompatFunctionsWithOptionalArgs.ts:1:19: 'id' is declared here.

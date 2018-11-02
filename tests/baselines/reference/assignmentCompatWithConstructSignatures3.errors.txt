@@ -182,6 +182,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322:   Types of parameters 'y' and 'y' are incompatible.
 !!! error TS2322:     Type 'T' is not assignable to type '{ foo: string; bar: string; }'.
 !!! error TS2322:       Property 'bar' is missing in type 'Base' but present in type '{ foo: string; bar: string; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithConstructSignatures3.ts:18:53: 'bar' is declared here.
     var b12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; 
     a12 = b12; // ok
     b12 = a12; // ok

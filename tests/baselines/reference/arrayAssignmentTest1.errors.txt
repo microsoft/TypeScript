@@ -77,6 +77,7 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     var i1_error: I1 = []; // should be an error - is
         ~~~~~~~~
 !!! error TS2737: Property 'IM1' is missing in type 'undefined[]' but present in type 'I1'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
     var c1_error: C1 = []; // should be an error - is
         ~~~~~~~~
 !!! error TS2735: Type 'undefined[]' is missing the following properties from type 'C1': IM1, C1M1
@@ -86,6 +87,7 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     var c3_error: C3 = []; // should be an error - is
         ~~~~~~~~
 !!! error TS2737: Property 'CM3M1' is missing in type 'undefined[]' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     
     
     arr_any = arr_i1; // should be ok - is
@@ -100,6 +102,7 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     ~~~~~~
 !!! error TS2322: Type 'C3[]' is not assignable to type 'I1[]'.
 !!! error TS2322:   Property 'IM1' is missing in type 'C3' but present in type 'I1'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:2:2: 'IM1' is declared here.
     
     arr_c1 = arr_c1; // should be ok - subtype relationship - is
     arr_c1 = arr_c2; // should be ok - subtype relationship - is
@@ -107,6 +110,7 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     ~~~~~~
 !!! error TS2322: Type 'I1[]' is not assignable to type 'C1[]'.
 !!! error TS2322:   Property 'C1M1' is missing in type 'I1' but present in type 'C1'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:7:2: 'C1M1' is declared here.
     arr_c1 = arr_c3; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type 'C3[]' is not assignable to type 'C1[]'.
@@ -117,6 +121,7 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     ~~~~~~
 !!! error TS2322: Type 'C1[]' is not assignable to type 'C2[]'.
 !!! error TS2322:   Property 'C2M1' is missing in type 'C1' but present in type 'C2'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:10:5: 'C2M1' is declared here.
     arr_c2 = arr_i1; // should be an error - subtype relationship - is
     ~~~~~~
 !!! error TS2322: Type 'I1[]' is not assignable to type 'C2[]'.
@@ -133,14 +138,17 @@ tests/cases/compiler/arrayAssignmentTest1.ts(85,1): error TS2736: Type 'I1' is m
     ~~~~~~
 !!! error TS2322: Type 'C2[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'C2' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     arr_c3 = arr_c1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type 'C1[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'C1' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     arr_c3 = arr_i1_2; // should be an error - is
     ~~~~~~
 !!! error TS2322: Type 'I1[]' is not assignable to type 'C3[]'.
 !!! error TS2322:   Property 'CM3M1' is missing in type 'I1' but present in type 'C3'.
+!!! related TS2728 tests/cases/compiler/arrayAssignmentTest1.ts:14:5: 'CM3M1' is declared here.
     
     arr_any = f1; // should be an error - is
     ~~~~~~~

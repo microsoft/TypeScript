@@ -113,34 +113,43 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         c = d; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'D' but present in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
         c = e; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'E' but present in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
         c = f; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'F' but present in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:53:9: 'opt' is declared here.
         c = a; // ok
     
         a = d; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'D' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
         a = e; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'E' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
         a = f; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'F' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:57:14: 'opt' is declared here.
         a = c; // ok
     
         b = d; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'D' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
         b = e; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'E' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
         b = f; // error
         ~
 !!! error TS2737: Property 'opt' is missing in type 'F' but present in type '{ opt: Base; }'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembersOptionality2.ts:58:15: 'opt' is declared here.
         b = a; // ok
         b = c; // ok
     }

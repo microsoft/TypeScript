@@ -28,6 +28,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'bar' is missing in type 'Base' but present in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:34: 'bar' is declared here.
     b = a; // ok
     
     class B2 extends A {
@@ -41,6 +42,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
 !!! error TS2322:   Index signatures are incompatible.
 !!! error TS2322:     Property 'baz' is missing in type 'Derived' but present in type 'Derived2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:5:38: 'baz' is declared here.
     
     module Generics {
         class A<T extends Derived> {

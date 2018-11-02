@@ -16,6 +16,7 @@ tests/cases/compiler/bluebirdStaticThis.ts(60,73): error TS2694: Namespace '"tes
                          ~~~~~~~
 !!! error TS2420: Class 'Promise<R>' incorrectly implements interface 'Thenable<R>'.
 !!! error TS2420:   Property 'then' is missing in type 'Promise<R>' but present in type 'Thenable<R>'.
+!!! related TS2728 tests/cases/compiler/bluebirdStaticThis.ts:113:3: 'then' is declared here.
     	constructor(callback: (resolve: (thenableOrResult: R | Promise.Thenable<R>) => void, reject: (error: any) => void) => void);
         static try<R>(dit: typeof Promise, fn: () => Promise.Thenable<R>, args?: any[], ctx?: any): Promise<R>;
         static try<R>(dit: typeof Promise, fn: () => R, args?: any[], ctx?: any): Promise<R>;

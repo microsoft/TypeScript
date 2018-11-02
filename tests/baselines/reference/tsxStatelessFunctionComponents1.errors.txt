@@ -57,6 +57,7 @@ tests/cases/conformance/jsx/file.tsx(45,11): error TS2559: Type '{ prop1: boolea
     let h = <MeetAndGreet extra-prop-name="World" />;
              ~~~~~~~~~~~~
 !!! error TS2737: Property '"prop-name"' is missing in type '{ extra-prop-name: string; }' but present in type '{ "prop-name": string; }'.
+!!! related TS2728 tests/cases/conformance/jsx/file.tsx:11:27: '"prop-name"' is declared here.
     
     // Error
     let i = <EmptyPropSFC prop1 />
