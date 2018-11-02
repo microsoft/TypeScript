@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////class Foo {
-////    constructor {
+////    constructor() {
 ////        await Promise.resolve();
 ////    }
 ////}

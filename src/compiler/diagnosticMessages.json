@@ -4800,11 +4800,11 @@
         "category": "Message",
         "code": 95073
     },
-    "Add const modifier to unresolved variable": {
+    "Add 'const' to unresolved variable": {
         "category": "Message",
         "code": 95074
     },
-    "Add const modifiers to all unresolved variables": {
+    "Add 'const' to all unresolved variables": {
         "category": "Message",
         "code": 95075
     }

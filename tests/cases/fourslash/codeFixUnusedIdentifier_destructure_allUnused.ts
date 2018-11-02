@@ -4,7 +4,7 @@
 // @noUnusedParameters: true
 
 ////export {};
-////const { x, y } = o;
+////const { x, y } = [{}];
 
 verify.codeFix({
     description: "Remove destructuring",

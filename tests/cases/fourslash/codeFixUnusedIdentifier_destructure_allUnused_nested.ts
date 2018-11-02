@@ -4,11 +4,11 @@
 // @noUnusedParameters: true
 
 ////export {};
-////const { x: { a, b } } = o;
+////const { x: { a, b } } = [{}];
 
 verify.codeFix({
     description: "Remove destructuring",
     newFileContent:
 `export {};
-const { } = o;`,
+const { } = [{}];`,
 });

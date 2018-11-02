@@ -3,10 +3,10 @@
 // @noUnusedLocals: true
 // @noUnusedParameters: true
 
-////for (const { x } of o) {}
+////for (const { x } of [{}]) {}
 
 verify.codeFix({
     description: "Remove destructuring",
     newFileContent:
-`for (const {} of o) {}`,
+`for (const {} of [{}]) {}`,
 });
