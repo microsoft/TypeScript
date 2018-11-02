@@ -517,7 +517,8 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
-        let deferredGlobalRestSymbol: Symbol;
+        let deferredGlobalExcludeSymbol: Symbol;
+        let deferredGlobalPickSymbol: Symbol;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
 
@@ -4602,10 +4603,16 @@ namespace ts {
             }
             const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
             if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
-                const restTypeAlias = getGlobalRestSymbol();
-                return !restTypeAlias ? errorType :
-                    omitKeyType.flags & TypeFlags.Never ? source :
-                    getTypeAliasInstantiation(restTypeAlias, [source, omitKeyType]);
+                if (omitKeyType.flags & TypeFlags.Never) {
+                    return source;
+                }
+                const pickTypeAlias = getGlobalPickSymbol();
+                const excludeTypeAlias = getGlobalExcludeSymbol();
+                if (!pickTypeAlias || !excludeTypeAlias) {
+                    return errorType;
+                }
+                const pickKeys = getTypeAliasInstantiation(excludeTypeAlias, [getIndexType(source), omitKeyType]);
+                return getTypeAliasInstantiation(pickTypeAlias, [source, pickKeys]);
             }
             const members = createSymbolTable();
             for (const prop of getPropertiesOfType(source)) {
@@ -8640,8 +8647,12 @@ namespace ts {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
-        function getGlobalRestSymbol(): Symbol {
-            return deferredGlobalRestSymbol || (deferredGlobalRestSymbol = getGlobalSymbol("Rest" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        function getGlobalExcludeSymbol(): Symbol {
+            return deferredGlobalExcludeSymbol || (deferredGlobalExcludeSymbol = getGlobalSymbol("Exclude" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
+        function getGlobalPickSymbol(): Symbol {
+            return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
         /**
@@ -9227,9 +9238,8 @@ namespace ts {
         }
 
         function getLiteralTypeFromPropertyName(name: PropertyName) {
-            return isComputedPropertyName(name) ? checkComputedPropertyName(name) :
-                isIdentifier(name) ? getLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
-                checkExpression(name);
+            return isIdentifier(name) ? getLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
+                getRegularTypeOfLiteralType(isComputedPropertyName(name) ? checkComputedPropertyName(name) : checkExpression(name));
         }
 
         function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {

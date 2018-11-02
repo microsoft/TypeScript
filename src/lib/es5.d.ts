@@ -1439,11 +1439,6 @@ type Extract<T, U> = T extends U ? T : never;
 type NonNullable<T> = T extends null | undefined ? never : T;
 
 /**
- * From T, pick all properties except those in the union K
- */
-type Rest<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
-
-/**
  * Obtain the parameters of a function type in a tuple
  */
 type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
