@@ -5683,11 +5683,11 @@ namespace ts {
                             if (ctorSig[0]) {
                                 const ctorReturn = getReturnTypeOfSignature(ctorSig[0]);
                                 elaborated = true;
-                                addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol!.declarations[0]!, Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
+                                addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
                             }
                         }
                         if (!elaborated) {
-                            addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol!.declarations[0]!, Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(unknownType)));
+                            addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(unknownType)));
                         }
                     }
                     return type.resolvedBaseConstructorType = errorType;
