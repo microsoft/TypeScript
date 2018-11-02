@@ -15891,7 +15891,12 @@ namespace ts {
                     return errorType;
                 }
                 if (isReadonlySymbol(localOrExportSymbol)) {
-                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(symbol));
+                    if (localOrExportSymbol.flags & SymbolFlags.Variable) {
+                        error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant, symbolToString(symbol));
+                    }
+                    else {
+                        error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(symbol));
+                    }
                     return errorType;
                 }
             }

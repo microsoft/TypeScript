@@ -2124,6 +2124,10 @@
         "category": "Error",
         "code": 2587
     },
+    "Cannot assign to '{0}' because it is a constant.": {
+        "category": "Error",
+        "code": 2588
+    },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
         "code": 2600
