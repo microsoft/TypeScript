@@ -5,7 +5,7 @@
 
 ////export class Example {
 ////    prop: any;
-////    constructor(private arg: any) {
+////    constructor(private readonly arg: any) {
 ////        this.prop = arg;
 ////    }
 ////}
