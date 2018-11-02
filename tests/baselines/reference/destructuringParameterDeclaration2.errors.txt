@@ -86,6 +86,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts(
     c1({});            // Error, implied type is {z:number}?
        ~~
 !!! error TS2737: Property 'z' is missing in type '{}' but present in type '{ z: number; }'.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration2.ts:27:21: 'z' is declared here.
     c1({ z: true });   // Error, implied type is {z:number}?
          ~
 !!! error TS2322: Type 'true' is not assignable to type 'number'.

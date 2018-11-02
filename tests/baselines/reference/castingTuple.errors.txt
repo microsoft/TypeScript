@@ -63,6 +63,7 @@ tests/cases/conformance/types/tuple/castingTuple.ts(33,1): error TS2304: Cannot 
              ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type '[C, D]' to type '[A, I]' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Property 'a' is missing in type 'C' but present in type 'A'.
+!!! related TS2728 tests/cases/conformance/types/tuple/castingTuple.ts:2:11: 'a' is declared here.
     var array1 = <number[]>numStrTuple;
         ~~~~~~
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'array1' must be of type '{}[]', but here has type 'number[]'.

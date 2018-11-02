@@ -102,6 +102,7 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
     let b = bar<CoolArray<number>>(10, 20);  // Error
                                    ~~
 !!! error TS2737: Property 'hello' is missing in type '[10, 20]' but present in type 'CoolArray<number>'.
+!!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:24:5: 'hello' is declared here.
     
     declare function baz<T>(...args: CoolArray<T>): void;
     declare const ca: CoolArray<number>;
@@ -109,15 +110,19 @@ tests/cases/conformance/types/rest/genericRestParameters3.ts(53,5): error TS2345
     baz();       // Error
     ~~~~~
 !!! error TS2737: Property 'hello' is missing in type '[]' but present in type 'CoolArray<never>'.
+!!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:24:5: 'hello' is declared here.
     baz(1);      // Error
         ~
 !!! error TS2737: Property 'hello' is missing in type '[number]' but present in type 'CoolArray<{}>'.
+!!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:24:5: 'hello' is declared here.
     baz(1, 2);   // Error
         ~
 !!! error TS2737: Property 'hello' is missing in type '[number, number]' but present in type 'CoolArray<{}>'.
+!!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:24:5: 'hello' is declared here.
     baz(...ca);  // Error
         ~~~~~
 !!! error TS2737: Property 'hello' is missing in type 'number[]' but present in type 'CoolArray<number>'.
+!!! related TS2728 tests/cases/conformance/types/rest/genericRestParameters3.ts:24:5: 'hello' is declared here.
     
     // Repro from #26491
     
