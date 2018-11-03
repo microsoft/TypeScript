@@ -19,9 +19,9 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2322: Type 
   Property 'c' is missing in type '{ a: number; b: number; }'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Required<Foo>'.
   Property 'd' is missing in type '{ a: number; b: number; c: number; }'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypes6.ts (19 errors) ====
@@ -179,15 +179,15 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x3.a = 1;
     x3.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x4: Readonly<Bar>;
     x4.a = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'a' because it is a read-only property.
     x4.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x5: Readwrite<Bar>;
     x5.a = 1;

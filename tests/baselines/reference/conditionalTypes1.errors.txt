@@ -31,9 +31,9 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(116,5): error TS2
     Type 'string' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(117,5): error TS2322: Type 'T[keyof T] extends Function ? keyof T : never' is not assignable to type 'T[keyof T] extends Function ? never : keyof T'.
   Type 'keyof T' is not assignable to type 'never'.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(134,10): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(134,10): error TS2540: Cannot assign to 'id' because it is a read-only property.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(135,5): error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
-tests/cases/conformance/types/conditional/conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+tests/cases/conformance/types/conditional/conditionalTypes1.ts(136,22): error TS2540: Cannot assign to 'id' because it is a read-only property.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(137,10): error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
 tests/cases/conformance/types/conditional/conditionalTypes1.ts(159,5): error TS2322: Type 'ZeroOf<T>' is not assignable to type 'T'.
   Type '0 | (T extends string ? "" : false)' is not assignable to type 'T'.
@@ -231,13 +231,13 @@ tests/cases/conformance/types/conditional/conditionalTypes1.ts(288,43): error TS
         let id: number = part.subparts[0].id;
         part.id = part.id;  // Error
              ~~
-!!! error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'id' because it is a read-only property.
         part.subparts[0] = part.subparts[0];  // Error
         ~~~~~~~~~~~~~~~~
 !!! error TS2542: Index signature in type 'DeepReadonlyArray<Part>' only permits reading.
         part.subparts[0].id = part.subparts[0].id;  // Error
                          ~~
-!!! error TS2540: Cannot assign to 'id' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'id' because it is a read-only property.
         part.updatePart("hello");  // Error
              ~~~~~~~~~~
 !!! error TS2339: Property 'updatePart' does not exist on type 'DeepReadonlyObject<Part>'.
