@@ -46,7 +46,7 @@ tests/cases/compiler/numberVsBigIntOperations.ts(25,34): error TS2365: Operator 
 tests/cases/compiler/numberVsBigIntOperations.ts(25,43): error TS2365: Operator '>>' cannot be applied to types '1n' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(38,1): error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
 tests/cases/compiler/numberVsBigIntOperations.ts(39,10): error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(40,8): error TS2735: Operator '+' cannot be applied to type 'bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(40,8): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(50,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
 tests/cases/compiler/numberVsBigIntOperations.ts(51,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
 tests/cases/compiler/numberVsBigIntOperations.ts(52,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
@@ -59,7 +59,7 @@ tests/cases/compiler/numberVsBigIntOperations.ts(57,11): error TS2365: Operator 
 tests/cases/compiler/numberVsBigIntOperations.ts(57,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(60,1): error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(61,1): error TS2365: Operator '<<' cannot be applied to types 'number | bigint' and 'number | bigint'.
-tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2735: Operator '+' cannot be applied to type 'number | bigint'.
+tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
 tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
 
@@ -202,7 +202,7 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
 !!! error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
     num = +bigInt; num = +num; num = +"3";
            ~~~~~~
-!!! error TS2735: Operator '+' cannot be applied to type 'bigint'.
+!!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
     
     // Comparisons can be mixed
     let result: boolean;
@@ -258,7 +258,7 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' de
     }
     +bigIntOrNumber; // should error, result in number
      ~~~~~~~~~~~~~~
-!!! error TS2735: Operator '+' cannot be applied to type 'number | bigint'.
+!!! error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
     ~bigIntOrNumber; // should infer number | bigint
     bigIntOrNumber++; // should infer number | bigint
     ++bigIntOrNumber; // should infer number | bigint
