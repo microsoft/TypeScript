@@ -1,4 +1,6 @@
-//// [bigintIndex.ts]
+//// [tests/cases/compiler/bigintIndex.ts] ////
+
+//// [a.ts]
 interface BigIntIndex<E> {
     [index: bigint]: E; // should error
 }
@@ -22,7 +24,14 @@ typedArray[String(bigNum)] = 0xAA;
 typedArray["1"] = 0xBB;
 typedArray[2] = 0xCC;
 
-//// [bigintIndex.js]
+// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
+//// [b.ts]
+// BigInt cannot be used as an object literal property
+const a = {1n: 123};
+const b = {[1n]: 456};
+const c = {[bigNum]: 789};
+
+//// [a.js]
 const arr = [1, 2, 3];
 let num = arr[1];
 num = arr["1"];
@@ -39,3 +48,12 @@ typedArray[bigNum] = 0xAA; // should error
 typedArray[String(bigNum)] = 0xAA;
 typedArray["1"] = 0xBB;
 typedArray[2] = 0xCC;
+// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
+//// [b.js]
+// BigInt cannot be used as an object literal property
+const a = {};
+1n;
+123;
+;
+const b = { [1n]: 456 };
+const c = { [bigNum]: 789 };

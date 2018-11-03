@@ -1,4 +1,4 @@
-=== tests/cases/compiler/bigintIndex.ts ===
+=== tests/cases/compiler/a.ts ===
 interface BigIntIndex<E> {
     [index: bigint]: E; // should error
 >index : bigint
@@ -95,4 +95,27 @@ typedArray[2] = 0xCC;
 >typedArray : Uint8Array
 >2 : 2
 >0xCC : 204
+
+// {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
+=== tests/cases/compiler/b.ts ===
+// BigInt cannot be used as an object literal property
+const a = {1n: 123};
+>a : {}
+>{ : {}
+>1n : 1n
+>123 : 123
+
+const b = {[1n]: 456};
+>b : {}
+>{[1n]: 456} : {}
+>[1n] : number
+>1n : 1n
+>456 : 456
+
+const c = {[bigNum]: 789};
+>c : {}
+>{[bigNum]: 789} : {}
+>[bigNum] : number
+>bigNum : bigint
+>789 : 789
 
