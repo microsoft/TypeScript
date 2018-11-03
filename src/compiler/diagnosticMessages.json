@@ -2493,7 +2493,7 @@
         "category": "Error",
         "code": 2734
     },
-    "There is a 'this' type shadowed by this container.": {
+    "An outer value of 'this' is shadowed by this container.": {
         "category": "Error",
         "code": 2735
     },

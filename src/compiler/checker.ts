@@ -16204,7 +16204,7 @@ namespace ts {
                 if (!isSourceFile(container)) {
                     const outsideThis = tryGetThisTypeAt(container);
                     if (outsideThis) {
-                        addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.There_is_a_this_type_shadowed_by_this_container));
+                        addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
                     }
                 }
             }
