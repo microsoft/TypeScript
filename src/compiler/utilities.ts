@@ -2490,6 +2490,7 @@ namespace ts {
     // export { x as <symbol> } from ...
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
+    // module.exports = <EntityNameExpression>
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -2498,7 +2499,7 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports;
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node);
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
@@ -2583,6 +2584,10 @@ namespace ts {
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);
+    }
+
+    export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+        return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
     export type TriviaKind = SyntaxKind.SingleLineCommentTrivia

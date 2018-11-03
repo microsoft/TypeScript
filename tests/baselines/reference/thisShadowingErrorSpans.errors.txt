@@ -9,7 +9,7 @@ tests/cases/compiler/thisShadowingErrorSpans.ts(5,13): error TS2683: 'this' impl
                 this.m();
                 ~~~~
 !!! error TS2683: 'this' implicitly has type 'any' because it does not have a type annotation.
-!!! related TS2735 tests/cases/compiler/thisShadowingErrorSpans.ts:4:18: An outer value of 'this' is shadowed by this container.
+!!! related TS2736 tests/cases/compiler/thisShadowingErrorSpans.ts:4:18: An outer value of 'this' is shadowed by this container.
             }
         }
     }

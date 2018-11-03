@@ -301,6 +301,7 @@ namespace ts {
             getESSymbolType: () => esSymbolType,
             getNeverType: () => neverType,
             isSymbolAccessible,
+            getObjectFlags,
             isArrayLikeType,
             isTypeInvalidDueToUnionDiscriminant,
             getAllPossiblePropertiesOfTypes,
@@ -5673,7 +5674,18 @@ namespace ts {
                     return type.resolvedBaseConstructorType = errorType;
                 }
                 if (!(baseConstructorType.flags & TypeFlags.Any) && baseConstructorType !== nullWideningType && !isConstructorType(baseConstructorType)) {
-                    error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
+                    const err = error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
+                    if (baseConstructorType.flags & TypeFlags.TypeParameter) {
+                        const constraint = getConstraintFromTypeParameter(baseConstructorType);
+                        let ctorReturn: Type = unknownType;
+                        if (constraint) {
+                            const ctorSig = getSignaturesOfType(constraint, SignatureKind.Construct);
+                            if (ctorSig[0]) {
+                                ctorReturn = getReturnTypeOfSignature(ctorSig[0]);
+                            }
+                        }
+                        addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
+                    }
                     return type.resolvedBaseConstructorType = errorType;
                 }
                 type.resolvedBaseConstructorType = baseConstructorType;

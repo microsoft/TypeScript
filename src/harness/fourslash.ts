@@ -5021,7 +5021,7 @@ namespace FourSlashInterface {
     export interface VerifyRefactorOptions {
         name: string;
         actionName: string;
-        refactors: ts.ApplicableRefactorInfo[];
+        refactors: ReadonlyArray<ts.ApplicableRefactorInfo>;
     }
 
     export interface VerifyCompletionActionOptions extends NewContentOptions {

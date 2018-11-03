@@ -2493,9 +2493,13 @@
         "category": "Error",
         "code": 2734
     },
-    "An outer value of 'this' is shadowed by this container.": {
+    "Did you mean for '{0}' to be constrained to type 'new (...args: any[]) => {1}'?": {
         "category": "Error",
         "code": 2735
+    },
+    "An outer value of 'this' is shadowed by this container.": {
+        "category": "Error",
+        "code": 2736
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3774,6 +3778,14 @@
     "Using compiler options of project reference redirect '{0}'.": {
         "category": "Message",
         "code": 6215
+    },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6216
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6217
     },
 
     "Projects to reference": {
