@@ -5677,18 +5677,14 @@ namespace ts {
                     const err = error(baseTypeNode.expression, Diagnostics.Type_0_is_not_a_constructor_function_type, typeToString(baseConstructorType));
                     if (baseConstructorType.flags & TypeFlags.TypeParameter) {
                         const constraint = getConstraintFromTypeParameter(baseConstructorType);
-                        let elaborated = false;
+                        let ctorReturn: Type = unknownType;
                         if (constraint) {
                             const ctorSig = getSignaturesOfType(constraint, SignatureKind.Construct);
                             if (ctorSig[0]) {
-                                const ctorReturn = getReturnTypeOfSignature(ctorSig[0]);
-                                elaborated = true;
-                                addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
+                                ctorReturn = getReturnTypeOfSignature(ctorSig[0]);
                             }
                         }
-                        if (!elaborated) {
-                            addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(unknownType)));
-                        }
+                        addRelatedInfo(err, createDiagnosticForNode(baseConstructorType.symbol.declarations[0], Diagnostics.Did_you_mean_for_0_to_be_constrained_to_type_new_args_Colon_any_1, symbolToString(baseConstructorType.symbol), typeToString(ctorReturn)));
                     }
                     return type.resolvedBaseConstructorType = errorType;
                 }
