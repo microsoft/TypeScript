@@ -69,7 +69,7 @@ namespace ts.formatting {
             const containerList = getListByPosition(position, precedingToken.parent);
             // use list position if the preceding token is before any list items
             if (containerList && !rangeContainsRange(containerList, precedingToken)) {
-                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize;
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize!; // TODO: GH#18217
             }
 
             return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
@@ -422,7 +422,7 @@ namespace ts.formatting {
                         return result;
                     }
                 }
-                return getActualIndentationForListStartLine(containingList, sourceFile, options) + (listIndentsChild ? options.indentSize : 0);
+                return getActualIndentationForListStartLine(containingList, sourceFile, options) + (listIndentsChild ? options.indentSize! : 0); // TODO: GH#18217
             }
             return Value.Unknown;
         }
