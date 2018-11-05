@@ -1011,6 +1011,10 @@
         "category": "Message",
         "code": 1350
     },
+    "Experimental support for BigInt is a feature that is subject to change in a future release. Set the 'experimentalBigInt' option to remove this warning.": {
+        "category": "Error",
+        "code": 1351
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1236,7 +1240,7 @@
         "category": "Error",
         "code": 2355
     },
-    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
+    "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2356
     },
@@ -1260,11 +1264,11 @@
         "category": "Error",
         "code": 2361
     },
-    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
     },
-    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2363
     },
@@ -2492,6 +2496,18 @@
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
+    },
+    "Did you mean for '{0}' to be constrained to type 'new (...args: any[]) => {1}'?": {
+        "category": "Error",
+        "code": 2735
+    },
+    "Operator '{0}' cannot be applied to type '{1}'.": {
+        "category": "Error",
+        "code": 2736
+    },
+    "BigInt literals are not available when targetting lower than ESNext.": {
+        "category": "Error",
+        "code": 2737
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3771,6 +3787,14 @@
         "category": "Message",
         "code": 6215
     },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6216
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6217
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3892,6 +3916,10 @@
     "Options '{0}' and '{1}' cannot be combined.": {
         "category": "Error",
         "code": 6370
+    },
+    "Enables experimental support for ESNext BigInt literals.": {
+        "category": "Message",
+        "code": 6371
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {

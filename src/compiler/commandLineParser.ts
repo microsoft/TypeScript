@@ -44,7 +44,8 @@ namespace ts {
         ["esnext.array", "lib.esnext.array.d.ts"],
         ["esnext.symbol", "lib.esnext.symbol.d.ts"],
         ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
-        ["esnext.intl", "lib.esnext.intl.d.ts"]
+        ["esnext.intl", "lib.esnext.intl.d.ts"],
+        ["esnext.bigint", "lib.esnext.bigint.d.ts"]
     ];
 
     /**
@@ -104,6 +105,13 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
+        {
+            name: "pretty",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
+        },
 
         {
             name: "traceResolution",
@@ -156,13 +164,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
-        },
-        {
-            name: "pretty",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
             name: "showConfig",
@@ -582,6 +583,12 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
+        },
+        {
+            name: "experimentalBigInt",
+            type: "boolean",
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_literals
         },
 
         // Advanced

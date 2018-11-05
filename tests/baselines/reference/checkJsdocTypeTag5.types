@@ -68,7 +68,7 @@ function monaLisa(sb) {
     return typeof sb === 'string' ? 1 : 2;
 >typeof sb === 'string' ? 1 : 2 : 1 | 2
 >typeof sb === 'string' : boolean
->typeof sb : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof sb : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >sb : any
 >'string' : "string"
 >1 : 1
