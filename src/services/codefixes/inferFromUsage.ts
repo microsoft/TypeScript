@@ -414,27 +414,33 @@ namespace ts.codefix {
                 inferTypeFromContext(reference, checker, usageContext);
             }
             const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
-                const types: Type[] = [];
+            const isJS = isInJSFile(declaration);
+            const callContexts = isJS ? [...usageContext.constructContexts || [], ...usageContext.callContexts || []] :
+                isConstructor ? usageContext.constructContexts :
+                usageContext.callContexts;
+            return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
+                const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
-                for (const callContext of callContexts) {
-                    if (callContext.argumentTypes.length <= parameterIndex) {
-                        isOptional = isInJSFile(declaration);
-                        types.push(checker.getUndefinedType());
-                    }
-                    else if (isRest) {
-                        for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
-                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
+                if (callContexts) {
+                    for (const callContext of callContexts) {
+                        if (callContext.argumentTypes.length <= parameterIndex) {
+                            isOptional = isJS;
+                            types.push(checker.getUndefinedType());
                         }
-                    }
-                    else {
-                        types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                        else if (isRest) {
+                            for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
+                                types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
+                            }
+                        }
+                        else {
+                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
+                        }
                     }
                 }
                 if (isIdentifier(parameter.name)) {
-                    types.push(...inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken));
+                    const inferred = inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken);
+                    types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
                 const type = unifyFromContext(types, checker);
                 return {
