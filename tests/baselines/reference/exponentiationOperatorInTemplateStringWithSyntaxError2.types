@@ -54,7 +54,7 @@ var s;
 `hello ${typeof t1 ** t2 ** t1}`;
 >`hello ${typeof t1 ** t2 ** t1}` : string
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -65,7 +65,7 @@ var s;
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -140,13 +140,13 @@ var s;
 `hello ${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1}`;
 >`hello ${typeof t1 ** t2 ** t1}${typeof t1 ** t2 ** t1}` : string
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
 >t1 : number
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -157,7 +157,7 @@ var s;
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -165,7 +165,7 @@ var s;
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -240,13 +240,13 @@ var s;
 `hello ${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1}`;
 >`hello ${typeof t1 ** t2 ** t1} hello world ${typeof t1 ** t2 ** t1}` : string
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
 >t1 : number
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -257,7 +257,7 @@ var s;
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number
@@ -265,7 +265,7 @@ var s;
 >1 + typeof t1 ** t2 ** t1 : number
 >1 : 1
 >typeof t1 ** t2 ** t1 : number
->typeof t1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof t1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >t1 : number
 >t2 ** t1 : number
 >t2 : number

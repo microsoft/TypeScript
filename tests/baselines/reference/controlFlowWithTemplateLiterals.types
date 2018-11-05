@@ -4,7 +4,7 @@ declare const envVar: string | undefined;
 
 if (typeof envVar === `string`) {
 >typeof envVar === `string` : boolean
->typeof envVar : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof envVar : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >envVar : string | undefined
 >`string` : "string"
 

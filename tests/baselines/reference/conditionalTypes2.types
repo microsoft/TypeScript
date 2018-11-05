@@ -69,7 +69,7 @@ function isFunction<T>(value: T): value is Extract<T, Function> {
 
     return typeof value === "function";
 >typeof value === "function" : boolean
->typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : T
 >"function" : "function"
 }

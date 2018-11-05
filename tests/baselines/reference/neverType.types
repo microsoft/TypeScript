@@ -160,7 +160,7 @@ function f1(x: string | number) {
 
     if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"boolean" : "boolean"
 
@@ -178,7 +178,7 @@ function f2(x: string | number) {
 
         if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"boolean" : "boolean"
 

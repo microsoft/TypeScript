@@ -65,6 +65,7 @@
         "unittests/matchFiles.ts",
         "unittests/moduleResolution.ts",
         "unittests/organizeImports.ts",
+        "unittests/parsePseudoBigInt.ts",
         "unittests/paths.ts",
         "unittests/printer.ts",
         "unittests/programMissingFiles.ts",
