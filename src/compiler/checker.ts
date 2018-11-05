@@ -4736,7 +4736,7 @@ namespace ts {
             // A variable declared in a for..in statement is of type string, or of type keyof T when the
             // right hand expression is of a type parameter type.
             if (isVariableDeclaration(declaration) && declaration.parent.parent.kind === SyntaxKind.ForInStatement) {
-                const indexType = getIndexType(checkNonNullExpression(declaration.parent.parent.expression));
+                const indexType = getIndexType(getNonNullableTypeIfNeeded(checkExpression(declaration.parent.parent.expression)));
                 return indexType.flags & (TypeFlags.TypeParameter | TypeFlags.Index) ? getExtractStringType(indexType) : stringType;
             }
 
@@ -15091,6 +15091,10 @@ namespace ts {
                     }
                     return declaredType;
                 }
+                // for (const _ in ref) acts as a nonnull on ref
+                if (isVariableDeclaration(node) && node.parent.parent.kind === SyntaxKind.ForInStatement && isMatchingReference(reference, node.parent.parent.expression)) {
+                    return getNonNullableTypeIfNeeded(getTypeFromFlowType(getTypeAtFlowNode(flow.antecedent)));
+                }
                 // Assignment doesn't affect reference
                 return undefined;
             }
@@ -18402,6 +18406,14 @@ namespace ts {
                 undefinedDiagnostic,
                 nullOrUndefinedDiagnostic
             );
+        }
+
+        function getNonNullableTypeIfNeeded(type: Type) {
+            const kind = (strictNullChecks ? getFalsyFlags(type) : type.flags) & TypeFlags.Nullable;
+            if (kind) {
+                return getNonNullableType(type);
+            }
+            return type;
         }
 
         function checkNonNullType(
@@ -25142,7 +25154,7 @@ namespace ts {
             // Grammar checking
             checkGrammarForInOrForOfStatement(node);
 
-            const rightType = checkNonNullExpression(node.expression);
+            const rightType = getNonNullableTypeIfNeeded(checkExpression(node.expression));
             // TypeScript 1.0 spec (April 2014): 5.4
             // In a 'for-in' statement of the form
             // for (let VarDecl in Expr) Statement
