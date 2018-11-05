@@ -21803,7 +21803,16 @@ namespace ts {
         }
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
-            const operandType = checkExpression(node.operand);
+            let operandType: Type;
+            const symbol = (<Identifier>node.operand).escapedText ? getResolvedSymbol(node.operand as Identifier) : undefined;
+            if (symbol && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
+                operandType = getTypeOfSymbol(symbol);
+                if (isLiteralType(operandType) && !(operandType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
+                    error(node.operand, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(operandType));
+                }
+            } 
+            operandType = checkExpression(node.operand);
+
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
@@ -22170,10 +22179,18 @@ namespace ts {
 
         function checkBinaryLikeExpression(left: Expression, operatorToken: Node, right: Expression, checkMode?: CheckMode, errorNode?: Node): Type {
             const operator = operatorToken.kind;
+            let leftType: Type;
+
+            const symbol = (<Identifier>left).escapedText ? getResolvedSymbol(left as Identifier) : undefined;
+            if (symbol && isCompoundAssignmentOperator(operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
+               leftType = getTypeOfSymbol(getResolvedSymbol(left as Identifier));
+               if (isLiteralType(leftType) && !(leftType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
+                   error(left, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(leftType));
+               }
+            }
             if (operator === SyntaxKind.EqualsToken && (left.kind === SyntaxKind.ObjectLiteralExpression || left.kind === SyntaxKind.ArrayLiteralExpression)) {
                 return checkDestructuringAssignment(left, checkExpression(right, checkMode), checkMode, right.kind === SyntaxKind.ThisKeyword);
             }
-            let leftType: Type;
             if (operator === SyntaxKind.AmpersandAmpersandToken || operator === SyntaxKind.BarBarToken) {
                 leftType = checkTruthinessExpression(left, checkMode);
             }

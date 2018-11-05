@@ -2529,6 +2529,10 @@
         "category": "Error",
         "code": 2742
     },
+    "The literal type '{0}' cannot be modified.": {
+        "category": "Error",
+        "code": 2743
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -3839,6 +3839,21 @@ namespace ts {
             || token === SyntaxKind.ExclamationToken;
     }
 
+    export function isCompoundAssignmentOperator(token: SyntaxKind): boolean {
+        return token === SyntaxKind.PlusEqualsToken 
+            || token === SyntaxKind.MinusEqualsToken
+            || token === SyntaxKind.AsteriskAsteriskEqualsToken
+            || token === SyntaxKind.AsteriskEqualsToken
+            || token === SyntaxKind.SlashEqualsToken
+            || token === SyntaxKind.PercentEqualsToken
+            || token === SyntaxKind.AmpersandEqualsToken
+            || token === SyntaxKind.BarEqualsToken
+            || token === SyntaxKind.CaretEqualsToken
+            || token === SyntaxKind.LessThanLessThanEqualsToken
+            || token === SyntaxKind.GreaterThanGreaterThanGreaterThanEqualsToken
+            || token === SyntaxKind.GreaterThanGreaterThanEqualsToken;
+    }
+
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }
