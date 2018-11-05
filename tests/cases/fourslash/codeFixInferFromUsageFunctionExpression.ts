@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////var f = function f([|x |]) {
+////var f = function ([|x |]) {
 ////    return x
 ////}
 ////f(1)

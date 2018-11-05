@@ -194,7 +194,8 @@ namespace ts.codefix {
             case SyntaxKind.Constructor:
                 return true;
             case SyntaxKind.FunctionExpression:
-                return !!declaration.name;
+                const parent = declaration.parent;
+                return isVariableDeclaration(parent) && isIdentifier(parent.name) || !!declaration.name;
         }
         return false;
     }
