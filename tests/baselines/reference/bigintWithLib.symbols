@@ -204,3 +204,16 @@ bigintVal = dataView.getBigUint64(2, true);
 >dataView : Symbol(dataView, Decl(bigintWithLib.ts, 36, 5))
 >getBigUint64 : Symbol(DataView.getBigUint64, Decl(lib.esnext.bigint.d.ts, --, --))
 
+// Test emitted declarations files
+const w = 12n; // should emit as const w = 12n
+>w : Symbol(w, Decl(bigintWithLib.ts, 49, 5))
+
+const x = -12n; // should emit as const x = -12n
+>x : Symbol(x, Decl(bigintWithLib.ts, 50, 5))
+
+const y: 12n = 12n; // should emit type 12n
+>y : Symbol(y, Decl(bigintWithLib.ts, 51, 5))
+
+let z = 12n; // should emit type bigint in declaration file
+>z : Symbol(z, Decl(bigintWithLib.ts, 52, 3))
+

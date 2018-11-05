@@ -1,5 +1,6 @@
 // @experimentalBigInt: true
 // @target: esnext
+// @declaration: true
 
 // Test BigInt functions
 let bigintVal: bigint = BigInt(123);
@@ -48,3 +49,9 @@ bigintVal = dataView.getBigInt64(1);
 bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
+
+// Test emitted declarations files
+const w = 12n; // should emit as const w = 12n
+const x = -12n; // should emit as const x = -12n
+const y: 12n = 12n; // should emit type 12n
+let z = 12n; // should emit type bigint in declaration file

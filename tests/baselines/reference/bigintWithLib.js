@@ -47,6 +47,12 @@ bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
 
+// Test emitted declarations files
+const w = 12n; // should emit as const w = 12n
+const x = -12n; // should emit as const x = -12n
+const y: 12n = 12n; // should emit type 12n
+let z = 12n; // should emit type bigint in declaration file
+
 //// [bigintWithLib.js]
 // Test BigInt functions
 let bigintVal = BigInt(123);
@@ -92,3 +98,22 @@ bigintVal = dataView.getBigInt64(1);
 bigintVal = dataView.getBigInt64(1, true);
 bigintVal = dataView.getBigUint64(2);
 bigintVal = dataView.getBigUint64(2, true);
+// Test emitted declarations files
+const w = 12n; // should emit as const w = 12n
+const x = -12n; // should emit as const x = -12n
+const y = 12n; // should emit type 12n
+let z = 12n; // should emit type bigint in declaration file
+
+
+//// [bigintWithLib.d.ts]
+declare let bigintVal: bigint;
+declare let stringVal: string;
+declare let bigIntArray: BigInt64Array;
+declare let len: number;
+declare let arrayBufferLike: ArrayBufferView;
+declare let bigUintArray: BigUint64Array;
+declare const dataView: DataView;
+declare const w = 12n;
+declare const x = -12n;
+declare const y: 12n;
+declare let z: bigint;
