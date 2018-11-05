@@ -200,11 +200,10 @@ namespace ts.codefix {
 
     function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
-            const modifiers: Modifier["kind"][] = [SyntaxKind.PrivateKeyword, SyntaxKind.ProtectedKeyword, SyntaxKind.PublicKeyword, SyntaxKind.ReadonlyKeyword];
-            const foundModifiers = modifiers.map(modifier => findModifier(p, modifier)).filter(modifier => modifier !== undefined);
-            if (foundModifiers.length > 0) {
-                foundModifiers.forEach(modifier => {
-                    changes.deleteModifier(sourceFile, modifier!);
+            if (p.modifiers && p.modifiers.length > 0
+                && (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
+                p.modifiers.forEach(modifier => {
+                    changes.deleteModifier(sourceFile, modifier);
                 });
             }
             else {
