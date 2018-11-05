@@ -1,0 +1,10 @@
+=== tests/cases/conformance/types/literal/stringLiteralTypes4.ts ===
+var s: 'foo' | 'bar' = 'bar';
+>s : "foo" | "bar"
+>'bar' : "bar"
+
+s += 'bar';
+>s += 'bar' : string
+>s : string
+>'bar' : "bar"
+

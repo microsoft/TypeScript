@@ -3840,7 +3840,7 @@ namespace ts {
     }
 
     export function isCompoundAssignmentOperator(token: SyntaxKind): boolean {
-        return token === SyntaxKind.PlusEqualsToken 
+        return token === SyntaxKind.PlusEqualsToken
             || token === SyntaxKind.MinusEqualsToken
             || token === SyntaxKind.AsteriskAsteriskEqualsToken
             || token === SyntaxKind.AsteriskEqualsToken

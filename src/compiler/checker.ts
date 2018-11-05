@@ -21810,7 +21810,7 @@ namespace ts {
                 if (isLiteralType(operandType) && !(operandType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
                     error(node.operand, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(operandType));
                 }
-            } 
+            }
             operandType = checkExpression(node.operand);
 
             if (operandType === silentNeverType) {

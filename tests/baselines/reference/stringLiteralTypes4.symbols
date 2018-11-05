@@ -1,0 +1,7 @@
+=== tests/cases/conformance/types/literal/stringLiteralTypes4.ts ===
+var s: 'foo' | 'bar' = 'bar';
+>s : Symbol(s, Decl(stringLiteralTypes4.ts, 0, 3))
+
+s += 'bar';
+>s : Symbol(s, Decl(stringLiteralTypes4.ts, 0, 3))
+

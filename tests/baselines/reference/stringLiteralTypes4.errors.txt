@@ -1,0 +1,8 @@
+tests/cases/conformance/types/literal/stringLiteralTypes4.ts(2,1): error TS2736: The literal type '"foo" | "bar"' cannot be modified.
+
+
+==== tests/cases/conformance/types/literal/stringLiteralTypes4.ts (1 errors) ====
+    var s: 'foo' | 'bar' = 'bar';
+    s += 'bar';
+    ~
+!!! error TS2736: The literal type '"foo" | "bar"' cannot be modified.

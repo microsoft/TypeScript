@@ -1,0 +1,202 @@
+=== tests/cases/conformance/types/literal/numericLiteralTypes4.ts ===
+var a: 10 = 10;
+>a : 10
+>10 : 10
+
+var b: 10 | 11 = 11;
+>b : 10 | 11
+>11 : 11
+
+var c: 10 | 11 | 12 = 10;
+>c : 10 | 11 | 12
+>10 : 10
+
+a ++;
+>a ++ : number
+>a : number
+
+a --;
+>a -- : number
+>a : number
+
+a += 1;
+>a += 1 : number
+>a : number
+>1 : 1
+
+a -= 1;
+>a -= 1 : number
+>a : number
+>1 : 1
+
+a *= 1;
+>a *= 1 : number
+>a : number
+>1 : 1
+
+a /= 1;
+>a /= 1 : number
+>a : number
+>1 : 1
+
+a %= 1;
+>a %= 1 : number
+>a : number
+>1 : 1
+
+a &= 1;
+>a &= 1 : number
+>a : number
+>1 : 1
+
+a |= 1;
+>a |= 1 : number
+>a : number
+>1 : 1
+
+a ^= 1;
+>a ^= 1 : number
+>a : number
+>1 : 1
+
+a >>= 1;
+>a >>= 1 : number
+>a : number
+>1 : 1
+
+a >>>= 1;
+>a >>>= 1 : number
+>a : number
+>1 : 1
+
+a <<= 1;
+>a <<= 1 : number
+>a : number
+>1 : 1
+
+b ++;
+>b ++ : number
+>b : number
+
+b --;
+>b -- : number
+>b : number
+
+b += 1;
+>b += 1 : number
+>b : number
+>1 : 1
+
+b -= 1;
+>b -= 1 : number
+>b : number
+>1 : 1
+
+b *= 1;
+>b *= 1 : number
+>b : number
+>1 : 1
+
+b /= 1;
+>b /= 1 : number
+>b : number
+>1 : 1
+
+b %= 1;
+>b %= 1 : number
+>b : number
+>1 : 1
+
+b &= 1;
+>b &= 1 : number
+>b : number
+>1 : 1
+
+b |= 1;
+>b |= 1 : number
+>b : number
+>1 : 1
+
+b ^= 1;
+>b ^= 1 : number
+>b : number
+>1 : 1
+
+b >>= 1;
+>b >>= 1 : number
+>b : number
+>1 : 1
+
+b >>>= 1;
+>b >>>= 1 : number
+>b : number
+>1 : 1
+
+b <<= 1;
+>b <<= 1 : number
+>b : number
+>1 : 1
+
+c ++;
+>c ++ : number
+>c : number
+
+c --;
+>c -- : number
+>c : number
+
+c += 1;
+>c += 1 : number
+>c : number
+>1 : 1
+
+c -= 1;
+>c -= 1 : number
+>c : number
+>1 : 1
+
+c *= 1;
+>c *= 1 : number
+>c : number
+>1 : 1
+
+c /= 1;
+>c /= 1 : number
+>c : number
+>1 : 1
+
+c %= 1;
+>c %= 1 : number
+>c : number
+>1 : 1
+
+c &= 1;
+>c &= 1 : number
+>c : number
+>1 : 1
+
+c |= 1;
+>c |= 1 : number
+>c : number
+>1 : 1
+
+c ^= 1;
+>c ^= 1 : number
+>c : number
+>1 : 1
+
+c >>= 1;
+>c >>= 1 : number
+>c : number
+>1 : 1
+
+c >>>= 1;
+>c >>>= 1 : number
+>c : number
+>1 : 1
+
+c <<= 1;
+>c <<= 1 : number
+>c : number
+>1 : 1
+
