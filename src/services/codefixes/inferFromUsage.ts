@@ -194,7 +194,8 @@ namespace ts.codefix {
             case SyntaxKind.Constructor:
                 return true;
             case SyntaxKind.FunctionExpression:
-                return !!declaration.name;
+                const parent = declaration.parent;
+                return isVariableDeclaration(parent) && isIdentifier(parent.name) || !!declaration.name;
         }
         return false;
     }
@@ -335,22 +336,31 @@ namespace ts.codefix {
     }
 
     function inferTypeForVariableFromUsage(token: Identifier, program: Program, cancellationToken: CancellationToken): Type {
-        return InferFromReference.inferTypeFromReferences(getReferences(token, program, cancellationToken), program.getTypeChecker(), cancellationToken);
+        const references = getReferences(token, program, cancellationToken);
+        const checker = program.getTypeChecker();
+        const types = InferFromReference.inferTypesFromReferences(references, checker, cancellationToken);
+        return InferFromReference.unifyFromContext(types, checker);
     }
 
     function inferTypeForParametersFromUsage(containingFunction: FunctionLikeDeclaration, sourceFile: SourceFile, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
+        let searchToken;
         switch (containingFunction.kind) {
             case SyntaxKind.Constructor:
+                searchToken = findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile);
+                break;
             case SyntaxKind.FunctionExpression:
+                const parent = containingFunction.parent;
+                searchToken = isVariableDeclaration(parent) && isIdentifier(parent.name) ?
+                    parent.name :
+                    containingFunction.name;
+                break;
             case SyntaxKind.FunctionDeclaration:
             case SyntaxKind.MethodDeclaration:
-                const isConstructor = containingFunction.kind === SyntaxKind.Constructor;
-                const searchToken = isConstructor ?
-                    findChildOfKind<Token<SyntaxKind.ConstructorKeyword>>(containingFunction, SyntaxKind.ConstructorKeyword, sourceFile) :
-                    containingFunction.name;
-                if (searchToken) {
-                    return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
-                }
+                searchToken = containingFunction.name;
+                break;
+        }
+        if (searchToken) {
+            return InferFromReference.inferTypeForParametersFromReferences(getReferences(searchToken, program, cancellationToken), containingFunction, program, cancellationToken);
         }
     }
 
@@ -380,13 +390,13 @@ namespace ts.codefix {
             stringIndexContext?: UsageContext;
         }
 
-        export function inferTypeFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type {
+        export function inferTypesFromReferences(references: ReadonlyArray<Identifier>, checker: TypeChecker, cancellationToken: CancellationToken): Type[] {
             const usageContext: UsageContext = {};
             for (const reference of references) {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            return unifyFromContext(inferFromContext(usageContext, checker), checker);
+            return inferFromContext(usageContext, checker);
         }
 
         export function inferTypeForParametersFromReferences(references: ReadonlyArray<Identifier>, declaration: FunctionLikeDeclaration, program: Program, cancellationToken: CancellationToken): ParameterInference[] | undefined {
@@ -394,7 +404,6 @@ namespace ts.codefix {
             if (references.length === 0) {
                 return undefined;
             }
-
             if (!declaration.parameters) {
                 return undefined;
             }
@@ -414,10 +423,8 @@ namespace ts.codefix {
                     if (callContext.argumentTypes.length <= parameterIndex) {
                         isOptional = isInJSFile(declaration);
                         types.push(checker.getUndefinedType());
-                        continue;
                     }
-
-                    if (isRest) {
+                    else if (isRest) {
                         for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
                             types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
@@ -426,10 +433,10 @@ namespace ts.codefix {
                         types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
                     }
                 }
-                let type = unifyFromContext(types, checker);
-                if (type.flags & TypeFlags.Any && isIdentifier(parameter.name)) {
-                    type = inferTypeForVariableFromUsage(parameter.name, program, cancellationToken);
+                if (isIdentifier(parameter.name)) {
+                    types.push(...inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken));
                 }
+                const type = unifyFromContext(types, checker);
                 return {
                     type: isRest ? checker.createArrayType(type) : type,
                     isOptional: isOptional && !isRest,
@@ -667,7 +674,7 @@ namespace ts.codefix {
             }
         }
 
-        function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
+        export function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
             const hasNonVacuousType = inferences.some(i => !(i.flags & (TypeFlags.Any | TypeFlags.Void)));
             const hasNonVacuousNonAnonymousType = inferences.some(
