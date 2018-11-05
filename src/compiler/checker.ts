@@ -26751,7 +26751,7 @@ namespace ts {
                         let reportError = !(symbol.flags & SymbolFlags.Transient);
                         if (!reportError) {
                             // symbol should not originate in augmentation
-                            reportError = isExternalModuleAugmentation(symbol.parent!.declarations[0]);
+                            reportError = !!symbol.parent && isExternalModuleAugmentation(symbol.parent.declarations[0]);
                         }
                     }
                     break;
