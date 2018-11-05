@@ -225,7 +225,35 @@ namespace ts {
      */
     function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path) {
         return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
-            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOf(state, filePath as Path)
+            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOfFileAndExportsOfFile(state, filePath as Path)
+        );
+    }
+
+    /**
+     * Removes semantic diagnostics of file and anything that exports this file
+     */
+    function removeSemanticDiagnosticsOfFileAndExportsOfFile(state: BuilderProgramState, filePath: Path): boolean {
+        if (removeSemanticDiagnosticsOf(state, filePath)) {
+            // If there are no more diagnostics from old cache, done
+            return true;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path)
+        )) {
+            return true;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        return !!forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path)
         );
     }
 

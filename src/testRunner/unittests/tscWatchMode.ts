@@ -1472,6 +1472,69 @@ foo().hello`
             checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, emptyArray);
         });
+
+        it("updates errors when file transitively exported file changes", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const config: File = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts"],
+                    compilerOptions: { baseUrl: "." }
+                })
+            };
+            const app: File = {
+                path: `${projectLocation}/app.ts`,
+                content: `import { Data } from "lib2/public";
+export class App {
+    public constructor() {
+        new Data().test();
+    }
+}`
+            };
+            const lib2Public: File = {
+                path: `${projectLocation}/lib2/public.ts`,
+                content: `export * from "./data";`
+            };
+            const lib2Data: File = {
+                path: `${projectLocation}/lib2/data.ts`,
+                content: `import { ITest } from "lib1/public";
+export class Data {
+    public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+            };
+            const lib1Public: File = {
+                path: `${projectLocation}/lib1/public.ts`,
+                content: `export * from "./tools/public";`
+            };
+            const lib1ToolsPublic: File = {
+                path: `${projectLocation}/lib1/tools/public.ts`,
+                content: `export * from "./tools.interface";`
+            };
+            const lib1ToolsInterface: File = {
+                path: `${projectLocation}/lib1/tools/tools.interface.ts`,
+                content: `export interface ITest {
+    title: string;
+}`
+            };
+            const filesWithoutConfig = [libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface];
+            const files = [config, ...filesWithoutConfig];
+            const host = createWatchedSystem(files, { currentDirectory: projectLocation });
+            const watch = createWatchOfConfigFile(config.path, host);
+            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+            checkOutputErrorsIncremental(host, [
+                "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+            ]);
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {
