@@ -22,8 +22,8 @@ namespace ts.codefix {
             const sourceFiles = program.getSourceFiles();
             const token = getTokenAtPosition(sourceFile, context.span.start);
 
-            if (isJSDocTemplateTag(token)) {
-                return [createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token)), Diagnostics.Remove_template_tag)];
+            if (token.kind === ts.SyntaxKind.AtToken && isJSDocTemplateTag(token.parent)) {
+                return [createDeleteFix(textChanges.ChangeTracker.with(context, t => t.delete(sourceFile, token.parent)), Diagnostics.Remove_template_tag)];
             }
             if (token.kind === SyntaxKind.LessThanToken) {
                 const changes = textChanges.ChangeTracker.with(context, t => deleteTypeParameters(t, sourceFile, token));
@@ -84,8 +84,8 @@ namespace ts.codefix {
                         if (importDecl) {
                             changes.delete(sourceFile, importDecl);
                         }
-                        else if (isJSDocTemplateTag(token)) {
-                            changes.delete(sourceFile, token);
+                        else if (token.kind === ts.SyntaxKind.AtToken && isJSDocTemplateTag(token.parent)) {
+                            changes.delete(sourceFile, token.parent);
                         }
                         else if (token.kind === SyntaxKind.LessThanToken) {
                             deleteTypeParameters(changes, sourceFile, token);
