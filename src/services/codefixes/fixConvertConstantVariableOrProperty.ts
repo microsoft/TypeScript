@@ -8,11 +8,12 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions(context) {
             const { sourceFile, span, program } = context;
+            if (program.isSourceFileFromExternalLibrary(sourceFile) || program.isSourceFileDefaultLibrary(sourceFile)) return undefined;
             const declaration = getDeclaration(sourceFile, span.start, program.getTypeChecker());
             if (!declaration) return undefined;
             const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, declaration));
             const type = declaration.kind === SyntaxKind.VariableDeclaration ? "const" : "readonly";
-            return [createCodeFixAction(fixId, changes, [Diagnostics.Remove_0_modifier, type], fixId, Diagnostics.Make_all_const_or_readonly_expressions_reassignable)];
+            return [createCodeFixAction(fixId, changes, [Diagnostics.Remove_0_modifier, type], fixId, Diagnostics.Make_variables_and_properties_mutable_where_necessary)];
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
@@ -23,9 +24,7 @@ namespace ts.codefix {
     function getDeclaration(sourceFile: SourceFile, pos: number, checker: TypeChecker): Declaration | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         const symbol = checker.getSymbolAtLocation(node);
-        if (symbol) {
-            return symbol.valueDeclaration;
-        }
+        return Debug.assertDefined(symbol).valueDeclaration;
     }
 
     function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, node: Declaration) {
@@ -35,17 +34,7 @@ namespace ts.codefix {
             changes.replaceNode(sourceFile, oldDeclarationList, declarationList);
         }
         else if (node.kind === SyntaxKind.PropertyDeclaration) {
-            const readonlyToken = findAnyChildOfKind(node, SyntaxKind.ReadonlyKeyword);
-            if (readonlyToken) {
-                changes.delete(sourceFile, readonlyToken);
-            }
+            changes.deleteModifier(sourceFile, Debug.assertDefined(findModifier(node, SyntaxKind.ReadonlyKeyword)));
         }
-    }
-
-    function findAnyChildOfKind(node: Node, kind: SyntaxKind): Node | undefined {
-        return node.forEachChild(child => {
-            if (child.kind === kind) return child;
-            else findAnyChildOfKind(child, kind);
-        });
     }
 }

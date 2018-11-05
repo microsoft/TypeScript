@@ -10,7 +10,7 @@ verify.codeFix({
     description: "Remove 'readonly' modifier",
     newFileContent:
 `class Test {
- prop = 5;
+    prop = 5;
 }
 let testInstance = new Test();
 testInstance.prop = 3;`,
