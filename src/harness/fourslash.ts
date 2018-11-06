@@ -317,8 +317,20 @@ namespace FourSlash {
                     }
                 });
                 if (!compilationOptions.noLib) {
-                    this.languageServiceAdapterHost.addScript(Harness.Compiler.defaultLibFileName,
-                        Harness.Compiler.getDefaultLibrarySourceFile()!.text, /*isRootFile*/ false);
+                    const libs = compilationOptions.lib || [Harness.Compiler.defaultLibFileName];
+                    const libFiles = libs.map(lib => {
+                        const sourceFile = Harness.Compiler.getDefaultLibrarySourceFile(lib)!;
+                        this.languageServiceAdapterHost.addScript(lib, sourceFile.text, /*isRootFile*/ false);
+                        return sourceFile;
+                    });
+                    for (const libFile of libFiles) {
+                        const resolvedResult = ts.preProcessFile(libFile.text);
+                        for (const libReference of resolvedResult.libReferenceDirectives) {
+                            const mapped = ts.libMap.get(libReference.fileName.toLowerCase())!;
+                            this.languageServiceAdapterHost.addScript(mapped,
+                                Harness.Compiler.getDefaultLibrarySourceFile(mapped)!.text, /*isRootFile*/ false);
+                        }
+                    }
                 }
             }
 
@@ -3660,7 +3672,7 @@ namespace FourSlashInterface {
     }
 
     export class Plugins {
-        constructor (private state: FourSlash.TestState) {
+        constructor(private state: FourSlash.TestState) {
         }
 
         public configurePlugin(pluginName: string, configuration: any): void {
