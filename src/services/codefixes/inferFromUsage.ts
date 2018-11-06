@@ -764,10 +764,10 @@ namespace ts.codefix {
             if (usageContext.isNumber) {
                 types.push(checker.getNumberType());
             }
-            else if (usageContext.isString) {
+            if (usageContext.isString) {
                 types.push(checker.getStringType());
             }
-            else if (usageContext.isNumberOrString) {
+            if (usageContext.isNumberOrString) {
                 types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
             }
 
