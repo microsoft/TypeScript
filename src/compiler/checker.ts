@@ -16296,11 +16296,17 @@ namespace ts {
             const type = tryGetThisTypeAt(node, container);
             if (!type && noImplicitThis) {
                 // With noImplicitThis, functions may not reference 'this' if it has type 'any'
-                error(
+                const diag = error(
                     node,
                     capturedByArrowFunction && container.kind === SyntaxKind.SourceFile ?
                         Diagnostics.The_containing_arrow_function_captures_the_global_value_of_this_which_implicitly_has_type_any :
                         Diagnostics.this_implicitly_has_type_any_because_it_does_not_have_a_type_annotation);
+                if (!isSourceFile(container)) {
+                    const outsideThis = tryGetThisTypeAt(container);
+                    if (outsideThis) {
+                        addRelatedInfo(diag, createDiagnosticForNode(container, Diagnostics.An_outer_value_of_this_is_shadowed_by_this_container));
+                    }
+                }
             }
             return type || anyType;
         }

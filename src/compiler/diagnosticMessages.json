@@ -2509,6 +2509,10 @@
         "category": "Error",
         "code": 2737
     },
+    "An outer value of 'this' is shadowed by this container.": {
+        "category": "Message",
+        "code": 2738
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",
