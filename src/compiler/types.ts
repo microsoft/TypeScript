@@ -3836,13 +3836,11 @@ namespace ts {
         Substitution            = 1 << 25,  // Type parameter substitution
         NonPrimitive            = 1 << 26,  // intrinsic object type
         /* @internal */
-        FreshLiteral            = 1 << 27,  // Fresh literal or unique type
+        ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsWideningType    = 1 << 28,  // Type is or contains undefined or null widening type
+        ContainsObjectLiteral   = 1 << 28,  // Type is or contains object literal type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 29,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 30,  // Type is or contains the anyFunctionType
+        ContainsAnyFunctionType = 1 << 29,  // Type is or contains the anyFunctionType
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -3980,6 +3978,7 @@ namespace ts {
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 15, // Fresh object literal
         ClassOrInterface = Class | Interface
     }
 
