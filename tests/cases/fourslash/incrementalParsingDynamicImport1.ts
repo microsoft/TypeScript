@@ -11,7 +11,7 @@
 //// })
 //// /*1*/
 
-verify.numberOfErrorsInCurrentFile(2);
+verify.numberOfErrorsInCurrentFile(1);
 goTo.marker("1");
 edit.insert("  ");
-verify.numberOfErrorsInCurrentFile(2);
+verify.numberOfErrorsInCurrentFile(1);
