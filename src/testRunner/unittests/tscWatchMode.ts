@@ -1298,7 +1298,7 @@ export default test;`;
             ]);
             changeParameterType("y", "string", [
                 getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf("5"), 1, Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, "5", "string"),
-                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type)
+                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type)
             ]);
 
             function changeParameterType(parameterName: string, toType: string, expectedErrors: ReadonlyArray<Diagnostic>) {
@@ -1471,6 +1471,69 @@ foo().hello`
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, emptyArray);
+        });
+
+        it("updates errors when file transitively exported file changes", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const config: File = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts"],
+                    compilerOptions: { baseUrl: "." }
+                })
+            };
+            const app: File = {
+                path: `${projectLocation}/app.ts`,
+                content: `import { Data } from "lib2/public";
+export class App {
+    public constructor() {
+        new Data().test();
+    }
+}`
+            };
+            const lib2Public: File = {
+                path: `${projectLocation}/lib2/public.ts`,
+                content: `export * from "./data";`
+            };
+            const lib2Data: File = {
+                path: `${projectLocation}/lib2/data.ts`,
+                content: `import { ITest } from "lib1/public";
+export class Data {
+    public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+            };
+            const lib1Public: File = {
+                path: `${projectLocation}/lib1/public.ts`,
+                content: `export * from "./tools/public";`
+            };
+            const lib1ToolsPublic: File = {
+                path: `${projectLocation}/lib1/tools/public.ts`,
+                content: `export * from "./tools.interface";`
+            };
+            const lib1ToolsInterface: File = {
+                path: `${projectLocation}/lib1/tools/tools.interface.ts`,
+                content: `export interface ITest {
+    title: string;
+}`
+            };
+            const filesWithoutConfig = [libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface];
+            const files = [config, ...filesWithoutConfig];
+            const host = createWatchedSystem(files, { currentDirectory: projectLocation });
+            const watch = createWatchOfConfigFile(config.path, host);
+            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+            checkOutputErrorsInitial(host, emptyArray);
+
+            host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+            checkOutputErrorsIncremental(host, [
+                "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+            ]);
         });
     });
 

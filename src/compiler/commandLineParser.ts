@@ -44,7 +44,8 @@ namespace ts {
         ["esnext.array", "lib.esnext.array.d.ts"],
         ["esnext.symbol", "lib.esnext.symbol.d.ts"],
         ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
-        ["esnext.intl", "lib.esnext.intl.d.ts"]
+        ["esnext.intl", "lib.esnext.intl.d.ts"],
+        ["esnext.bigint", "lib.esnext.bigint.d.ts"]
     ];
 
     /**
@@ -582,6 +583,12 @@ namespace ts {
             type: "boolean",
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
+        },
+        {
+            name: "experimentalBigInt",
+            type: "boolean",
+            category: Diagnostics.Experimental_Options,
+            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_literals
         },
 
         // Advanced

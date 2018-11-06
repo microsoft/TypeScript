@@ -10,7 +10,7 @@ x;
 
 if (typeof x === "object") {
 >typeof x === "object" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : symbol | Foo
 >"object" : "object"
 
