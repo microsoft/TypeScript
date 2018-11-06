@@ -3,6 +3,7 @@
     "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeNodeModulesAndRelativePathOutDirWithAllowJS",
     "baselineCheck": true,
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "a.ts"
     ],

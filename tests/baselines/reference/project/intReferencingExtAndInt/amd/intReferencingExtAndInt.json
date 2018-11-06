@@ -5,6 +5,7 @@
         "internal2.ts"
     ],
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "internal2.ts"
     ],

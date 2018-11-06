@@ -4,6 +4,7 @@
     "baselineCheck": true,
     "runTest": true,
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "main.ts"
     ],

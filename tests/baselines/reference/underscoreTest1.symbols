@@ -793,7 +793,7 @@ _.isNaN(NaN);
 >_.isNaN : Symbol(Underscore.Static.isNaN, Decl(underscoreTest1_underscore.ts, 613, 39))
 >_ : Symbol(_, Decl(underscoreTest1_underscore.ts, 645, 11))
 >isNaN : Symbol(Underscore.Static.isNaN, Decl(underscoreTest1_underscore.ts, 613, 39))
->NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
+>NaN : Symbol(NaN, Decl(lib.es3.d.ts, --, --))
 
 isNaN(undefined);
 >isNaN : Symbol(isNaN, Decl(lib.es5.d.ts, --, --))

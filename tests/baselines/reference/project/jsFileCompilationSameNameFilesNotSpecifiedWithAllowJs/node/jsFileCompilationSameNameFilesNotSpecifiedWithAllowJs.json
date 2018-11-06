@@ -5,6 +5,7 @@
     "declaration": true,
     "project": "SameNameFilesNotSpecifiedWithAllowJs",
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "SameNameFilesNotSpecifiedWithAllowJs/a.ts"
     ],

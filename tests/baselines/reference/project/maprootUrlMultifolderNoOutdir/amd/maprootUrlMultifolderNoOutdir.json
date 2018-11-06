@@ -9,6 +9,7 @@
     "baselineCheck": true,
     "mapRoot": "http://www.typescriptlang.org/",
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "ref/m1.ts",
         "../outputdir_multifolder_ref/m2.ts",

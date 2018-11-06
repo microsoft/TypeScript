@@ -5,6 +5,7 @@
         "test.ts"
     ],
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "test.ts"
     ],

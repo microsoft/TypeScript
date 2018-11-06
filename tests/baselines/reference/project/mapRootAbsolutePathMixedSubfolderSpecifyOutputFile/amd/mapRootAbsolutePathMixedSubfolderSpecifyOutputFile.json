@@ -11,6 +11,7 @@
     "mapRoot": "tests/cases/projects/outputdir_mixed_subfolder/mapFiles",
     "resolveMapRoot": true,
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "ref/m1.ts",
         "ref/m2.ts",

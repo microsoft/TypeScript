@@ -11,6 +11,7 @@
     "mapRoot": "http://www.typescriptlang.org/",
     "sourceRoot": "http://typescript.codeplex.com/",
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "m1.ts",
         "test.ts"

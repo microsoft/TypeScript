@@ -12,6 +12,7 @@
         "useModule.d.ts"
     ],
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "decl.d.ts",
         "useModule.ts"

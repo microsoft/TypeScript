@@ -9,6 +9,7 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
+        "lib.es3.d.ts",
         "lib.es5.d.ts",
         "ref/m1.ts",
         "../outputdir_module_multifolder_ref/m2.ts",
