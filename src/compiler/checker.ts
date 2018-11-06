@@ -17807,9 +17807,7 @@ namespace ts {
                 if (inDestructuringPattern) {
                     result.pattern = node;
                 }
-                if (!(result.flags & TypeFlags.Nullable)) {
-                    propagatedFlags |= (result.flags & TypeFlags.PropagatingFlags);
-                }
+                propagatedFlags |= (result.flags & TypeFlags.PropagatingFlags);
                 return result;
             }
         }
