@@ -4713,7 +4713,6 @@ namespace FourSlashInterface {
             functionEntry("encodeURIComponent"),
             functionEntry("escape"),
             functionEntry("unescape"),
-            constEntry("NaN"),
             constEntry("Infinity"),
             constEntry("Object"),
             constEntry("Function"),
@@ -4744,6 +4743,7 @@ namespace FourSlashInterface {
             constEntry("Float32Array"),
             constEntry("Float64Array"),
             moduleEntry("Intl"),
+            constEntry("NaN"),
         ];
 
         const globalKeywordsInsideFunction: ReadonlyArray<ExpectedCompletionEntryObject> = [
