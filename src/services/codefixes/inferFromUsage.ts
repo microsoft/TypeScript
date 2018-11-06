@@ -681,6 +681,7 @@ namespace ts.codefix {
             for (const i of inferences) {
                 for (const { high, low } of priorities) {
                     if (high(i)) {
+                        Debug.assert(!low(i));
                         toRemove.push(low);
                     }
                 }
