@@ -2254,6 +2254,7 @@ declare namespace ts {
         JsxAttributes = 4096,
         MarkerType = 8192,
         JSLiteral = 16384,
+        FreshLiteral = 32768,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
