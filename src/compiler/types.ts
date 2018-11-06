@@ -3838,13 +3838,11 @@ namespace ts {
         /* @internal */
         FreshLiteral            = 1 << 27,  // Fresh literal or unique type
         /* @internal */
-        UnionOfPrimitiveTypes   = 1 << 28,  // Type is union of primitive types
+        ContainsWideningType    = 1 << 28,  // Type is or contains undefined or null widening type
         /* @internal */
-        ContainsWideningType    = 1 << 29,  // Type is or contains undefined or null widening type
+        ContainsObjectLiteral   = 1 << 29,  // Type is or contains object literal type
         /* @internal */
-        ContainsObjectLiteral   = 1 << 30,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 31,  // Type is or contains the anyFunctionType
+        ContainsAnyFunctionType = 1 << 30,  // Type is or contains the anyFunctionType
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -4077,7 +4075,10 @@ namespace ts {
         couldContainTypeVariables: boolean;
     }
 
-    export interface UnionType extends UnionOrIntersectionType { }
+    export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        primitiveTypesOnly: boolean;
+    }
 
     export interface IntersectionType extends UnionOrIntersectionType {
         /* @internal */
