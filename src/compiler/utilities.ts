@@ -3854,6 +3854,12 @@ namespace ts {
             || token === SyntaxKind.GreaterThanGreaterThanEqualsToken;
     }
 
+    export function isUnaryAssignmentOperator(token: SyntaxKind): boolean {
+        return token === SyntaxKind.PlusPlusToken
+            || token === SyntaxKind.MinusMinusToken
+
+    }
+
     export function isAssignmentOperator(token: SyntaxKind): boolean {
         return token >= SyntaxKind.FirstAssignment && token <= SyntaxKind.LastAssignment;
     }

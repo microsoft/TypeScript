@@ -13268,6 +13268,11 @@ namespace ts {
                 isUnitType(type);
         }
 
+        function isStringOrNumericLiteralType(type: Type): boolean {
+            return type.flags & TypeFlags.Union ? every((<UnionType>type).types, t => !!(t.flags & TypeFlags.StringOrNumberLiteral && !(t.flags & (TypeFlags.EnumLike | TypeFlags.Intrinsic)))) :
+                !!(type.flags & TypeFlags.StringOrNumberLiteral) && !(type.flags & (TypeFlags.EnumLike | TypeFlags.Intrinsic))
+        }
+
         function getBaseTypeOfLiteralType(type: Type): Type {
             return type.flags & TypeFlags.EnumLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
                 type.flags & TypeFlags.StringLiteral ? stringType :
@@ -21803,17 +21808,7 @@ namespace ts {
         }
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
-            let operandType: Type;
-            const symbol = isEntityNameExpression(node.operand) ? isPropertyAccessEntityNameExpression(node.operand) ?
-                getSymbolAtLocation((<PropertyAccessExpression>node.operand).name) : getResolvedSymbol(node.operand as Identifier) : undefined;
-            if (symbol && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
-                operandType = getTypeOfSymbol(symbol);
-                if (isLiteralType(operandType) && !(operandType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
-                    error(node.operand, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(operandType));
-                }
-            }
-            operandType = checkExpression(node.operand);
-
+            const operandType = checkExpression(node.operand);
             if (operandType === silentNeverType) {
                 return silentNeverType;
             }
@@ -21836,6 +21831,21 @@ namespace ts {
             }
             // If it's not a bigint type, implicit coercion will result in a number
             return numberType;
+        }
+
+        function checkUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Type {
+            const symbol = isEntityNameExpression(node.operand) ? isPropertyAccessEntityNameExpression(node.operand) ?
+                getSymbolAtLocation((<PropertyAccessExpression>node.operand).name) : getResolvedSymbol(node.operand as Identifier) : undefined;
+            if (symbol && isUnaryAssignmentOperator(node.operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
+                const operandType = getTypeOfSymbol(symbol);
+                if (isStringOrNumericLiteralType(operandType)) {
+                    error(node.operand, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(operandType));
+                }
+            }
+            if (node.kind == SyntaxKind.PrefixUnaryExpression) {
+                return checkPrefixUnaryExpression(node)
+            }
+            return checkPostfixUnaryExpression(node)
         }
 
         // Return true if type might be of the given kind. A union or intersection type might be of a given
@@ -22186,7 +22196,7 @@ namespace ts {
                 getSymbolAtLocation((<PropertyAccessExpression>left).name) : getResolvedSymbol(left as Identifier) : undefined;
             if (symbol && isCompoundAssignmentOperator(operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
                leftType = getTypeOfSymbol(getResolvedSymbol(left as Identifier));
-               if (isLiteralType(leftType) && !(leftType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
+               if (isStringOrNumericLiteralType(leftType)) {
                    error(left, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(leftType));
                }
             }
@@ -22885,9 +22895,8 @@ namespace ts {
                 case SyntaxKind.AwaitExpression:
                     return checkAwaitExpression(<AwaitExpression>node);
                 case SyntaxKind.PrefixUnaryExpression:
-                    return checkPrefixUnaryExpression(<PrefixUnaryExpression>node);
                 case SyntaxKind.PostfixUnaryExpression:
-                    return checkPostfixUnaryExpression(<PostfixUnaryExpression>node);
+                    return checkUnaryExpression(<PrefixUnaryExpression | PostfixUnaryExpression>node);
                 case SyntaxKind.BinaryExpression:
                     return checkBinaryExpression(<BinaryExpression>node, checkMode);
                 case SyntaxKind.ConditionalExpression:
