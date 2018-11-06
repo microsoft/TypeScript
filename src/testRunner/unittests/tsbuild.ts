@@ -667,6 +667,7 @@ export const b = new A();`);
     function getLibs() {
         return [
             "/lib/lib.d.ts",
+            "/lib/lib.es3.d.ts",
             "/lib/lib.es5.d.ts",
             "/lib/lib.dom.d.ts",
             "/lib/lib.webworker.importscripts.d.ts",
