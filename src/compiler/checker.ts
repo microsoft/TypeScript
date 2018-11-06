@@ -21804,7 +21804,8 @@ namespace ts {
 
         function checkPostfixUnaryExpression(node: PostfixUnaryExpression): Type {
             let operandType: Type;
-            const symbol = (<Identifier>node.operand).escapedText ? getResolvedSymbol(node.operand as Identifier) : undefined;
+            const symbol = isEntityNameExpression(node.operand) ? isPropertyAccessEntityNameExpression(node.operand) ?
+                getSymbolAtLocation((<PropertyAccessExpression>node.operand).name) : getResolvedSymbol(node.operand as Identifier) : undefined;
             if (symbol && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
                 operandType = getTypeOfSymbol(symbol);
                 if (isLiteralType(operandType) && !(operandType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
@@ -22181,7 +22182,8 @@ namespace ts {
             const operator = operatorToken.kind;
             let leftType: Type;
 
-            const symbol = (<Identifier>left).escapedText ? getResolvedSymbol(left as Identifier) : undefined;
+            const symbol = isEntityNameExpression(left) ? isPropertyAccessEntityNameExpression(left) ?
+                getSymbolAtLocation((<PropertyAccessExpression>left).name) : getResolvedSymbol(left as Identifier) : undefined;
             if (symbol && isCompoundAssignmentOperator(operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
                leftType = getTypeOfSymbol(getResolvedSymbol(left as Identifier));
                if (isLiteralType(leftType) && !(leftType.flags & (TypeFlags.EnumLike | TypeFlags.BooleanLike | TypeFlags.Undefined))) {
