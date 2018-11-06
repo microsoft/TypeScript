@@ -10798,7 +10798,7 @@ declare class TestLib {
                 { name: "foo", kind: ScriptElementKind.memberFunctionElement, kindModifiers: "", sortText: "0" },
                 { name: "prop", kind: ScriptElementKind.memberVariableElement, kindModifiers: "", sortText: "0" }
             ];
-            
+
             it("can pass through metadata when the command returns array", () => {
                 const host = createHostWithPlugin([aTs, tsconfig]);
                 const session = createSession(host);
@@ -10832,7 +10832,7 @@ declare class TestLib {
                 verifyCommandWithMetadata<protocol.CompletionsRequest>(session, host, {
                     command: protocol.CommandTypes.Completions,
                     arguments: { file: aTs.path, line: 1, offset: aTs.content.indexOf("x") + 1 }
-                }, undefined);
+                }, /*expectedResponseBody*/ undefined);
             });
         });
     });
