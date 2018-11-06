@@ -413,29 +413,23 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const isJS = isInJSFile(declaration);
-            const callContexts = isJS ? [...usageContext.constructContexts || [], ...usageContext.callContexts || []] :
-                isConstructor ? usageContext.constructContexts :
-                usageContext.callContexts;
+            const callContexts = [...usageContext.constructContexts || [], ...usageContext.callContexts || []];
             return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
                 const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
-                if (callContexts) {
-                    for (const callContext of callContexts) {
-                        if (callContext.argumentTypes.length <= parameterIndex) {
-                            isOptional = isJS;
-                            types.push(checker.getUndefinedType());
+                for (const callContext of callContexts) {
+                    if (callContext.argumentTypes.length <= parameterIndex) {
+                        isOptional = isInJSFile(declaration);
+                        types.push(checker.getUndefinedType());
+                    }
+                    else if (isRest) {
+                        for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
+                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
                         }
-                        else if (isRest) {
-                            for (let i = parameterIndex; i < callContext.argumentTypes.length; i++) {
-                                types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
-                            }
-                        }
-                        else {
-                            types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
-                        }
+                    }
+                    else {
+                        types.push(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[parameterIndex]));
                     }
                 }
                 if (isIdentifier(parameter.name)) {
