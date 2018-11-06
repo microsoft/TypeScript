@@ -1,4 +1,4 @@
-tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(17,5): error TS2736: Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.
+tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(17,5): error TS2740: Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.
 
 
 ==== tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts (1 errors) ====
@@ -20,4 +20,4 @@ tests/cases/conformance/es6/destructuring/iterableArrayPattern19.ts(17,5): error
     function fun([[a], b]: Bar[][]) { }
     fun(new FooArrayIterator);
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2736: Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.
+!!! error TS2740: Type 'FooArrayIterator' is missing the following properties from type 'Bar[][]': length, pop, push, concat, and 24 more.

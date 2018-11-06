@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(16,5): error TS2735: Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
+tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(16,5): error TS2739: Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type '3'.
@@ -25,7 +25,7 @@ tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextua
     
     baz(array);                          // Error
         ~~~~~
-!!! error TS2735: Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
+!!! error TS2739: Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
     baz(["string", 1, true, ...array]);  // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.

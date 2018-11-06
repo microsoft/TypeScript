@@ -12,7 +12,7 @@ function isPet(pet: any): pet is Pet {
 
     return typeof pet.name === "string";
 >typeof pet.name === "string" : boolean
->typeof pet.name : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof pet.name : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >pet.name : any
 >pet : any
 >name : any

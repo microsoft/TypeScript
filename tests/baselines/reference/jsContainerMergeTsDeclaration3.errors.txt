@@ -1,4 +1,4 @@
-tests/cases/conformance/salsa/b.js(1,7): error TS2735: Type '{}' is missing the following properties from type 'typeof A': prototype, d
+tests/cases/conformance/salsa/b.js(1,7): error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
 
 
 ==== tests/cases/conformance/salsa/a.d.ts (0 errors) ====
@@ -6,6 +6,6 @@ tests/cases/conformance/salsa/b.js(1,7): error TS2735: Type '{}' is missing the 
 ==== tests/cases/conformance/salsa/b.js (1 errors) ====
     const A = { };
           ~
-!!! error TS2735: Type '{}' is missing the following properties from type 'typeof A': prototype, d
+!!! error TS2739: Type '{}' is missing the following properties from type 'typeof A': prototype, d
     A.d = { };
     

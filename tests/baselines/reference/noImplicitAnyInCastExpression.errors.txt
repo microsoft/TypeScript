@@ -1,4 +1,4 @@
-tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2735: Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b
+tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2739: Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b
 
 
 ==== tests/cases/compiler/noImplicitAnyInCastExpression.ts (1 errors) ====
@@ -18,4 +18,4 @@ tests/cases/compiler/noImplicitAnyInCastExpression.ts(15,2): error TS2735: Type 
     // Neither types is assignable to each other
     (<IFoo>{ c: null });
      ~~~~~~~~~~~~~~~~~
-!!! error TS2735: Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b
+!!! error TS2739: Type '{ c: null; }' is missing the following properties from type 'IFoo': a, b

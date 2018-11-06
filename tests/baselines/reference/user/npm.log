@@ -1546,8 +1546,6 @@ node_modules/npm/test/tap/scripts-whitespace-windows.js(38,47): error TS2339: Pr
 node_modules/npm/test/tap/search.all-package-search.js(3,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/search.all-package-search.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/search.all-package-search.js(8,21): error TS2307: Cannot find module 'tacks'.
-node_modules/npm/test/tap/search.all-package-search.js(151,19): error TS2532: Object is possibly 'undefined'.
-node_modules/npm/test/tap/search.all-package-search.js(152,26): error TS2532: Object is possibly 'undefined'.
 node_modules/npm/test/tap/search.esearch.js(4,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/search.esearch.js(9,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/search.esearch.js(33,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.

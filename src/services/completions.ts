@@ -165,8 +165,9 @@ namespace ts.Completions {
         });
     }
 
-    const completionNameForLiteral = JSON.stringify;
-    function createCompletionEntryForLiteral(literal: string | number): CompletionEntry {
+    const completionNameForLiteral = (literal: string | number | PseudoBigInt) =>
+        typeof literal === "object" ? pseudoBigIntToString(literal) + "n" : JSON.stringify(literal);
+    function createCompletionEntryForLiteral(literal: string | number | PseudoBigInt): CompletionEntry {
         return { name: completionNameForLiteral(literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: "0" };
     }
 
@@ -337,7 +338,7 @@ namespace ts.Completions {
         readonly isJsxInitializer: IsJsxInitializer;
     }
     function getSymbolCompletionFromEntryId(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier,
-    ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number } | { type: "none" } {
+    ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
         const compilerOptions = program.getCompilerOptions();
         const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
         if (!completionData) {
@@ -502,7 +503,7 @@ namespace ts.Completions {
         readonly isNewIdentifierLocation: boolean;
         readonly location: Node | undefined;
         readonly keywordFilters: KeywordCompletionFilters;
-        readonly literals: ReadonlyArray<string | number>;
+        readonly literals: ReadonlyArray<string | number | PseudoBigInt>;
         readonly symbolToOriginInfoMap: SymbolOriginInfoMap;
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;

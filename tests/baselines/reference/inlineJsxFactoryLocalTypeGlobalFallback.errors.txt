@@ -1,4 +1,4 @@
-tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2737: Property '__predomBrand' is missing in type 'Element' but present in type 'Element'.
+tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2741: Property '__predomBrand' is missing in type 'Element' but required in type 'Element'.
 
 
 ==== tests/cases/conformance/jsx/inline/renderer.d.ts (0 errors) ====
@@ -45,6 +45,6 @@ tests/cases/conformance/jsx/inline/index.tsx(5,1): error TS2737: Property '__pre
     let elem = prerendered;
     elem = <h></h>; // Expect assignability error here
     ~~~~
-!!! error TS2737: Property '__predomBrand' is missing in type 'Element' but present in type 'Element'.
+!!! error TS2741: Property '__predomBrand' is missing in type 'Element' but required in type 'Element'.
 !!! related TS2728 tests/cases/conformance/jsx/inline/renderer2.d.ts:7:13: '__predomBrand' is declared here.
     

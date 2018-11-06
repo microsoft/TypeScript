@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(6,31): error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(7,29): error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(10,9): error TS2540: Cannot assign to 'A' because it is a constant or a read-only property.
-tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(12,1): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(12,1): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(12,1): error TS2542: Index signature in type 'typeof ENUM1' only permits reading.
 tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOperatorWithEnumType.ts(12,7): error TS2304: Cannot find name 'A'.
 
@@ -26,7 +26,7 @@ tests/cases/conformance/expressions/unaryOperators/decrementOperator/decrementOp
     
     ENUM1[A]--;
     ~~~~~~~~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
     ~~~~~~~~
 !!! error TS2542: Index signature in type 'typeof ENUM1' only permits reading.
           ~
