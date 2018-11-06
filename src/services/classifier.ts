@@ -703,7 +703,7 @@ namespace ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation); // "@"
+                    pushClassification(tag.pos, 1, ClassificationType.punctuation); // "@"
                     pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;

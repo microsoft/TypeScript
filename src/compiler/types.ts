@@ -719,7 +719,6 @@ namespace ts {
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -2421,7 +2420,6 @@ namespace ts {
 
     export interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
-        atToken: AtToken;
         tagName: Identifier;
         comment?: string;
     }
