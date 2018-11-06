@@ -2,6 +2,7 @@ EmitSkipped: true
 Diagnostics:
  Cannot write file '/tests/cases/fourslash/b.js' because it would overwrite input file.
   Adding a tsconfig.json file will help organize projects that contain both TypeScript and JavaScript files. Learn more at https://aka.ms/tsconfig.
+  File 'lib.es3.d.ts' not found.
 
 EmitSkipped: false
 

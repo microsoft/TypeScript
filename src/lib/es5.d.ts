@@ -1,8 +1,8 @@
+/// <reference lib="es3" />
 /////////////////////////////
 /// ECMAScript APIs
 /////////////////////////////
 
-declare const NaN: number;
 declare const Infinity: number;
 
 /**

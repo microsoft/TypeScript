@@ -1,6 +1,7 @@
 {
     "libs": [
         // JavaScript only
+        "es3",
         "es5",
         "es2015",
         "es2016",
@@ -38,6 +39,7 @@
         "esnext.symbol",
         "esnext.intl",
         // Default libraries
+        "es3.full",
         "es5.full",
         "es2015.full",
         "es2016.full",
