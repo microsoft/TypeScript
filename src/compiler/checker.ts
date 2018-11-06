@@ -520,6 +520,8 @@ namespace ts {
         let deferredGlobalTemplateStringsArrayType: ObjectType;
         let deferredGlobalImportMetaType: ObjectType;
         let deferredGlobalExtractSymbol: Symbol;
+        let deferredGlobalExcludeSymbol: Symbol;
+        let deferredGlobalPickSymbol: Symbol;
         let deferredGlobalBigIntType: ObjectType;
 
         const allPotentiallyUnusedIdentifiers = createMap<PotentiallyUnusedIdentifier[]>(); // key is file name
@@ -4622,18 +4624,25 @@ namespace ts {
             if (source.flags & TypeFlags.Never) {
                 return emptyObjectType;
             }
-
             if (source.flags & TypeFlags.Union) {
                 return mapType(source, t => getRestType(t, properties, symbol));
             }
-
-            const members = createSymbolTable();
-            const names = createUnderscoreEscapedMap<true>();
-            for (const name of properties) {
-                names.set(getTextOfPropertyName(name), true);
+            const omitKeyType = getUnionType(map(properties, getLiteralTypeFromPropertyName));
+            if (isGenericObjectType(source) || isGenericIndexType(omitKeyType)) {
+                if (omitKeyType.flags & TypeFlags.Never) {
+                    return source;
+                }
+                const pickTypeAlias = getGlobalPickSymbol();
+                const excludeTypeAlias = getGlobalExcludeSymbol();
+                if (!pickTypeAlias || !excludeTypeAlias) {
+                    return errorType;
+                }
+                const pickKeys = getTypeAliasInstantiation(excludeTypeAlias, [getIndexType(source), omitKeyType]);
+                return getTypeAliasInstantiation(pickTypeAlias, [source, pickKeys]);
             }
+            const members = createSymbolTable();
             for (const prop of getPropertiesOfType(source)) {
-                if (!names.has(prop.escapedName)
+                if (!isTypeAssignableTo(getLiteralTypeFromProperty(prop, TypeFlags.StringOrNumberLiteralOrUnique), omitKeyType)
                     && !(getDeclarationModifierFlagsFromSymbol(prop) & (ModifierFlags.Private | ModifierFlags.Protected))
                     && isSpreadableProperty(prop)) {
                     members.set(prop.escapedName, getSpreadSymbol(prop));
@@ -4669,7 +4678,7 @@ namespace ts {
             let type: Type | undefined;
             if (pattern.kind === SyntaxKind.ObjectBindingPattern) {
                 if (declaration.dotDotDotToken) {
-                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType) || isGenericObjectType(parentType)) {
+                    if (parentType.flags & TypeFlags.Unknown || !isValidSpreadType(parentType)) {
                         error(declaration, Diagnostics.Rest_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
@@ -4684,12 +4693,8 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    const exprType = isComputedPropertyName(name)
-                        ? checkComputedPropertyName(name)
-                        : isIdentifier(name)
-                            ? getLiteralType(unescapeLeadingUnderscores(name.escapedText))
-                            : checkExpression(name);
-                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(getApparentType(parentType), exprType, name), name);
+                    const exprType = getLiteralTypeFromPropertyName(name);
+                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(parentType, exprType, name), name);
                     type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
                 }
             }
@@ -6825,7 +6830,7 @@ namespace ts {
             if (isMappedTypeWithKeyofConstraintDeclaration(type)) {
                 // We have a { [P in keyof T]: X }
                 for (const prop of getPropertiesOfType(modifiersType)) {
-                    addMemberForKeyType(getLiteralTypeFromPropertyName(prop, include));
+                    addMemberForKeyType(getLiteralTypeFromProperty(prop, include));
                 }
                 if (modifiersType.flags & TypeFlags.Any || getIndexInfoOfType(modifiersType, IndexKind.String)) {
                     addMemberForKeyType(stringType);
@@ -8677,6 +8682,14 @@ namespace ts {
             return deferredGlobalExtractSymbol || (deferredGlobalExtractSymbol = getGlobalSymbol("Extract" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
         }
 
+        function getGlobalExcludeSymbol(): Symbol {
+            return deferredGlobalExcludeSymbol || (deferredGlobalExcludeSymbol = getGlobalSymbol("Exclude" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
+        function getGlobalPickSymbol(): Symbol {
+            return deferredGlobalPickSymbol || (deferredGlobalPickSymbol = getGlobalSymbol("Pick" as __String, SymbolFlags.TypeAlias, Diagnostics.Cannot_find_global_type_0)!); // TODO: GH#18217
+        }
+
         function getGlobalBigIntType(reportErrors: boolean) {
             return deferredGlobalBigIntType || (deferredGlobalBigIntType = getGlobalType("BigInt" as __String, /*arity*/ 0, reportErrors)) || emptyObjectType;
         }
@@ -9268,6 +9281,11 @@ namespace ts {
                 type.resolvedIndexType || (type.resolvedIndexType = createIndexType(type, /*stringsOnly*/ false));
         }
 
+        function getLiteralTypeFromPropertyName(name: PropertyName) {
+            return isIdentifier(name) ? getLiteralType(unescapeLeadingUnderscores(name.escapedText)) :
+                getRegularTypeOfLiteralType(isComputedPropertyName(name) ? checkComputedPropertyName(name) : checkExpression(name));
+        }
+
         function getBigIntLiteralType(node: BigIntLiteral): LiteralType {
             return getLiteralType({
                 negative: false,
@@ -9275,14 +9293,12 @@ namespace ts {
             });
         }
 
-        function getLiteralTypeFromPropertyName(prop: Symbol, include: TypeFlags) {
+        function getLiteralTypeFromProperty(prop: Symbol, include: TypeFlags) {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
-                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration);
-                    type = name && isNumericLiteral(name) ? getLiteralType(+name.text) :
-                        name && name.kind === SyntaxKind.ComputedPropertyName && isNumericLiteral(name.expression) ? getLiteralType(+name.expression.text) :
-                        getLiteralType(symbolName(prop));
+                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
+                    type = name && getLiteralTypeFromPropertyName(name) || getLiteralType(symbolName(prop));
                 }
                 if (type && type.flags & include) {
                     return type;
@@ -9291,8 +9307,8 @@ namespace ts {
             return neverType;
         }
 
-        function getLiteralTypeFromPropertyNames(type: Type, include: TypeFlags) {
-            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromPropertyName(t, include)));
+        function getLiteralTypeFromProperties(type: Type, include: TypeFlags) {
+            return getUnionType(map(getPropertiesOfType(type), t => getLiteralTypeFromProperty(t, include)));
         }
 
         function getNonEnumNumberIndexInfo(type: Type) {
@@ -9307,10 +9323,10 @@ namespace ts {
                 getObjectFlags(type) & ObjectFlags.Mapped ? getConstraintTypeFromMappedType(<MappedType>type) :
                 type === wildcardType ? wildcardType :
                 type.flags & TypeFlags.Any ? keyofConstraintType :
-                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral) :
-                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.UniqueESSymbol)]) :
-                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromPropertyNames(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
-                getLiteralTypeFromPropertyNames(type, TypeFlags.StringOrNumberLiteralOrUnique);
+                stringsOnly ? getIndexInfoOfType(type, IndexKind.String) ? stringType : getLiteralTypeFromProperties(type, TypeFlags.StringLiteral) :
+                getIndexInfoOfType(type, IndexKind.String) ? getUnionType([stringType, numberType, getLiteralTypeFromProperties(type, TypeFlags.UniqueESSymbol)]) :
+                getNonEnumNumberIndexInfo(type) ? getUnionType([numberType, getLiteralTypeFromProperties(type, TypeFlags.StringLiteral | TypeFlags.UniqueESSymbol)]) :
+                getLiteralTypeFromProperties(type, TypeFlags.StringOrNumberLiteralOrUnique);
         }
 
         function getExtractStringType(type: Type) {
@@ -9563,7 +9579,7 @@ namespace ts {
             // object type. Note that for a generic T and a non-generic K, we eagerly resolve T[K] if it originates in
             // an expression. This is to preserve backwards compatibility. For example, an element access 'this["foo"]'
             // has always been resolved eagerly using the constraint type of 'this' at the given location.
-            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression) && isGenericObjectType(objectType)) {
+            if (isGenericIndexType(indexType) || !(accessNode && accessNode.kind !== SyntaxKind.IndexedAccessType) && isGenericObjectType(objectType)) {
                 if (objectType.flags & TypeFlags.AnyOrUnknown) {
                     return objectType;
                 }
@@ -11013,7 +11029,7 @@ namespace ts {
             if (!length(node.properties)) return;
             for (const prop of node.properties) {
                 if (isSpreadAssignment(prop)) continue;
-                const type = getLiteralTypeFromPropertyName(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
+                const type = getLiteralTypeFromProperty(getSymbolOfNode(prop), TypeFlags.StringOrNumberLiteralOrUnique);
                 if (!type || (type.flags & TypeFlags.Never)) {
                     continue;
                 }
