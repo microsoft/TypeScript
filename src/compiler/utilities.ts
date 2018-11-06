@@ -3856,7 +3856,7 @@ namespace ts {
 
     export function isUnaryAssignmentOperator(token: SyntaxKind): boolean {
         return token === SyntaxKind.PlusPlusToken
-            || token === SyntaxKind.MinusMinusToken
+            || token === SyntaxKind.MinusMinusToken;
 
     }
 

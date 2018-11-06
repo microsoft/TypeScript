@@ -74,6 +74,14 @@ a <<= 1;
 >a : number
 >1 : 1
 
+++a
+>++a : number
+>a : number
+
+--a
+>--a : number
+>a : number
+
 b ++;
 >b ++ : number
 >b : number
@@ -137,6 +145,14 @@ b <<= 1;
 >b : number
 >1 : 1
 
+++b
+>++b : number
+>b : number
+
+--b
+>--b : number
+>b : number
+
 c ++;
 >c ++ : number
 >c : number
@@ -199,4 +215,12 @@ c <<= 1;
 >c <<= 1 : number
 >c : number
 >1 : 1
+
+++c
+>++c : number
+>c : number
+
+--c
+>--c : number
+>c : number
 

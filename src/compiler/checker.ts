@@ -13270,7 +13270,7 @@ namespace ts {
 
         function isStringOrNumericLiteralType(type: Type): boolean {
             return type.flags & TypeFlags.Union ? every((<UnionType>type).types, t => !!(t.flags & TypeFlags.StringOrNumberLiteral && !(t.flags & (TypeFlags.EnumLike | TypeFlags.Intrinsic)))) :
-                !!(type.flags & TypeFlags.StringOrNumberLiteral) && !(type.flags & (TypeFlags.EnumLike | TypeFlags.Intrinsic))
+                !!(type.flags & TypeFlags.StringOrNumberLiteral) && !(type.flags & (TypeFlags.EnumLike | TypeFlags.Intrinsic));
         }
 
         function getBaseTypeOfLiteralType(type: Type): Type {
@@ -21835,17 +21835,17 @@ namespace ts {
 
         function checkUnaryExpression(node: PrefixUnaryExpression | PostfixUnaryExpression): Type {
             const symbol = isEntityNameExpression(node.operand) ? isPropertyAccessEntityNameExpression(node.operand) ?
-                getSymbolAtLocation((<PropertyAccessExpression>node.operand).name) : getResolvedSymbol(node.operand as Identifier) : undefined;
+                getSymbolAtLocation((<PropertyAccessExpression>node.operand).name) : getResolvedSymbol(node.operand) : undefined;
             if (symbol && isUnaryAssignmentOperator(node.operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
                 const operandType = getTypeOfSymbol(symbol);
                 if (isStringOrNumericLiteralType(operandType)) {
                     error(node.operand, Diagnostics.The_literal_type_0_cannot_be_modified, typeToString(operandType));
                 }
             }
-            if (node.kind == SyntaxKind.PrefixUnaryExpression) {
-                return checkPrefixUnaryExpression(node)
+            if (node.kind === SyntaxKind.PrefixUnaryExpression) {
+                return checkPrefixUnaryExpression(node);
             }
-            return checkPostfixUnaryExpression(node)
+            return checkPostfixUnaryExpression(node);
         }
 
         // Return true if type might be of the given kind. A union or intersection type might be of a given
@@ -22193,7 +22193,7 @@ namespace ts {
             let leftType: Type;
 
             const symbol = isEntityNameExpression(left) ? isPropertyAccessEntityNameExpression(left) ?
-                getSymbolAtLocation((<PropertyAccessExpression>left).name) : getResolvedSymbol(left as Identifier) : undefined;
+                getSymbolAtLocation((<PropertyAccessExpression>left).name) : getResolvedSymbol(left) : undefined;
             if (symbol && isCompoundAssignmentOperator(operator) && !(getDeclarationNodeFlagsFromSymbol(symbol) & NodeFlags.Const)) {
                leftType = getTypeOfSymbol(getResolvedSymbol(left as Identifier));
                if (isStringOrNumericLiteralType(leftType)) {

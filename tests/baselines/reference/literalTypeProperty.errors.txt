@@ -1,0 +1,58 @@
+tests/cases/conformance/types/literal/literalTypeProperty.ts(7,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(8,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(9,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(10,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(11,3): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(12,3): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(14,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(15,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(16,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(17,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(18,3): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/literalTypeProperty.ts(19,3): error TS2743: The literal type '10 | 11' cannot be modified.
+
+
+==== tests/cases/conformance/types/literal/literalTypeProperty.ts (12 errors) ====
+    declare class C {
+      foo: 10;
+      bar: 10 | 11
+    }
+    
+    var o = new C()
+    o.foo ++
+    ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    o.foo += 1
+    ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    o.foo -= 1
+    ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    o.foo --
+    ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    ++o.foo
+      ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    --o.foo
+      ~~~~~
+!!! error TS2743: The literal type '10' cannot be modified.
+    
+    o.bar ++
+    ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    o.bar += 1
+    ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    o.bar -= 1
+    ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    o.bar --
+    ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    ++o.bar
+      ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    --o.bar
+      ~~~~~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.

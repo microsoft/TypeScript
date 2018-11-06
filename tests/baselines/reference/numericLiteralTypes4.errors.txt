@@ -1,165 +1,192 @@
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(5,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(6,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(7,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(8,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(9,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(10,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(11,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(12,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(13,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(14,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(15,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(16,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(17,1): error TS2736: The literal type '10' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(19,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(20,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(21,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(22,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(23,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(24,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(25,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(26,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(27,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(28,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(29,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(30,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(31,1): error TS2736: The literal type '10 | 11' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(33,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(34,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(35,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(36,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(37,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(38,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(39,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(40,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(41,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(42,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(43,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(44,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes4.ts(45,1): error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(5,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(6,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(7,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(8,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(9,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(10,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(11,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(12,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(13,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(14,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(15,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(16,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(17,1): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(19,3): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(20,3): error TS2743: The literal type '10' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(22,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(23,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(24,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(25,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(26,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(27,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(28,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(29,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(30,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(31,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(32,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(33,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(34,1): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(36,3): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(37,3): error TS2743: The literal type '10 | 11' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(39,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(40,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(41,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(42,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(43,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(44,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(45,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(46,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(47,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(48,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(49,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(50,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(51,1): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(53,3): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes4.ts(54,3): error TS2743: The literal type '10 | 11 | 12' cannot be modified.
 
 
-==== tests/cases/conformance/types/literal/numericLiteralTypes4.ts (39 errors) ====
+==== tests/cases/conformance/types/literal/numericLiteralTypes4.ts (45 errors) ====
     var a: 10 = 10;
     var b: 10 | 11 = 11;
     var c: 10 | 11 | 12 = 10;
     
     a ++;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a --;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a += 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a -= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a *= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a /= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a %= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a &= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a |= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a ^= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a >>= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a >>>= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
     a <<= 1;
     ~
-!!! error TS2736: The literal type '10' cannot be modified.
+!!! error TS2743: The literal type '10' cannot be modified.
+    
+    ++a
+      ~
+!!! error TS2743: The literal type '10' cannot be modified.
+    --a
+      ~
+!!! error TS2743: The literal type '10' cannot be modified.
     
     b ++;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b --;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b += 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b -= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b *= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b /= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b %= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b &= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b |= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b ^= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b >>= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b >>>= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     b <<= 1;
     ~
-!!! error TS2736: The literal type '10 | 11' cannot be modified.
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    
+    ++b
+      ~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
+    --b
+      ~
+!!! error TS2743: The literal type '10 | 11' cannot be modified.
     
     c ++;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c --;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c += 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c -= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c *= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c /= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c %= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c &= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c |= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c ^= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c >>= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c >>>= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
     c <<= 1;
     ~
-!!! error TS2736: The literal type '10 | 11 | 12' cannot be modified.
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+    
+    ++c
+      ~
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.
+    --c
+      ~
+!!! error TS2743: The literal type '10 | 11 | 12' cannot be modified.

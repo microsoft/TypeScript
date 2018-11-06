@@ -1,5 +1,5 @@
-tests/cases/conformance/types/literal/numericLiteralTypes2.ts(48,5): error TS2736: The literal type '1' cannot be modified.
-tests/cases/conformance/types/literal/numericLiteralTypes2.ts(49,5): error TS2736: The literal type '0 | 1 | 2' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes2.ts(48,5): error TS2743: The literal type '1' cannot be modified.
+tests/cases/conformance/types/literal/numericLiteralTypes2.ts(49,5): error TS2743: The literal type '0 | 1 | 2' cannot be modified.
 
 
 ==== tests/cases/conformance/types/literal/numericLiteralTypes2.ts (2 errors) ====
@@ -52,10 +52,10 @@ tests/cases/conformance/types/literal/numericLiteralTypes2.ts(49,5): error TS273
     function f4(a: 1, b: 0 | 1 | 2) {
         a++;
         ~
-!!! error TS2736: The literal type '1' cannot be modified.
+!!! error TS2743: The literal type '1' cannot be modified.
         b++;
         ~
-!!! error TS2736: The literal type '0 | 1 | 2' cannot be modified.
+!!! error TS2743: The literal type '0 | 1 | 2' cannot be modified.
     }
     
     declare function g(x: 0): string;

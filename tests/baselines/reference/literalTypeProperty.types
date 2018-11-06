@@ -1,0 +1,92 @@
+=== tests/cases/conformance/types/literal/literalTypeProperty.ts ===
+declare class C {
+>C : C
+
+  foo: 10;
+>foo : 10
+
+  bar: 10 | 11
+>bar : 10 | 11
+}
+
+var o = new C()
+>o : C
+>new C() : C
+>C : typeof C
+
+o.foo ++
+>o.foo ++ : number
+>o.foo : number
+>o : C
+>foo : number
+
+o.foo += 1
+>o.foo += 1 : number
+>o.foo : number
+>o : C
+>foo : number
+>1 : 1
+
+o.foo -= 1
+>o.foo -= 1 : number
+>o.foo : number
+>o : C
+>foo : number
+>1 : 1
+
+o.foo --
+>o.foo -- : number
+>o.foo : number
+>o : C
+>foo : number
+
+++o.foo
+>++o.foo : number
+>o.foo : number
+>o : C
+>foo : number
+
+--o.foo
+>--o.foo : number
+>o.foo : number
+>o : C
+>foo : number
+
+o.bar ++
+>o.bar ++ : number
+>o.bar : number
+>o : C
+>bar : number
+
+o.bar += 1
+>o.bar += 1 : number
+>o.bar : number
+>o : C
+>bar : number
+>1 : 1
+
+o.bar -= 1
+>o.bar -= 1 : number
+>o.bar : number
+>o : C
+>bar : number
+>1 : 1
+
+o.bar --
+>o.bar -- : number
+>o.bar : number
+>o : C
+>bar : number
+
+++o.bar
+>++o.bar : number
+>o.bar : number
+>o : C
+>bar : number
+
+--o.bar
+>--o.bar : number
+>o.bar : number
+>o : C
+>bar : number
+

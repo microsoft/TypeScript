@@ -1,0 +1,75 @@
+=== tests/cases/conformance/types/literal/literalTypeProperty.ts ===
+declare class C {
+>C : Symbol(C, Decl(literalTypeProperty.ts, 0, 0))
+
+  foo: 10;
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+  bar: 10 | 11
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+}
+
+var o = new C()
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>C : Symbol(C, Decl(literalTypeProperty.ts, 0, 0))
+
+o.foo ++
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+o.foo += 1
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+o.foo -= 1
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+o.foo --
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+++o.foo
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+--o.foo
+>o.foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>foo : Symbol(C.foo, Decl(literalTypeProperty.ts, 0, 17))
+
+o.bar ++
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
+o.bar += 1
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
+o.bar -= 1
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
+o.bar --
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
+++o.bar
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
+--o.bar
+>o.bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+>o : Symbol(o, Decl(literalTypeProperty.ts, 5, 3))
+>bar : Symbol(C.bar, Decl(literalTypeProperty.ts, 1, 10))
+
