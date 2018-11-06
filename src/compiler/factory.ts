@@ -68,12 +68,15 @@ namespace ts {
     /* @internal */ export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote: boolean): StringLiteral; // tslint:disable-line unified-signatures
     /** If a node is passed, creates a string literal whose source text is read from a source node during emit. */
     export function createLiteral(value: string | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier): StringLiteral;
-    export function createLiteral(value: number): NumericLiteral;
+    export function createLiteral(value: number | PseudoBigInt): NumericLiteral;
     export function createLiteral(value: boolean): BooleanLiteral;
-    export function createLiteral(value: string | number | boolean): PrimaryExpression;
-    export function createLiteral(value: string | number | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
+    export function createLiteral(value: string | number | PseudoBigInt | boolean): PrimaryExpression;
+    export function createLiteral(value: string | number | PseudoBigInt | boolean | StringLiteral | NoSubstitutionTemplateLiteral | NumericLiteral | Identifier, isSingleQuote?: boolean): PrimaryExpression {
         if (typeof value === "number") {
             return createNumericLiteral(value + "");
+        }
+        if (typeof value === "object" && "base10Value" in value) { // PseudoBigInt
+            return createBigIntLiteral(pseudoBigIntToString(value) + "n");
         }
         if (typeof value === "boolean") {
             return value ? createTrue() : createFalse();
@@ -90,6 +93,12 @@ namespace ts {
         const node = <NumericLiteral>createSynthesizedNode(SyntaxKind.NumericLiteral);
         node.text = value;
         node.numericLiteralFlags = 0;
+        return node;
+    }
+
+    export function createBigIntLiteral(value: string): BigIntLiteral {
+        const node = <BigIntLiteral>createSynthesizedNode(SyntaxKind.BigIntLiteral);
+        node.text = value;
         return node;
     }
 
@@ -2216,7 +2225,6 @@ namespace ts {
     /* @internal */
     function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
         const node = createSynthesizedNode(kind) as T;
-        node.atToken = createToken(SyntaxKind.AtToken);
         node.tagName = createIdentifier(tagName);
         return node;
     }
@@ -3467,6 +3475,7 @@ namespace ts {
                 return cacheIdentifiers;
             case SyntaxKind.ThisKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
                 return false;
             case SyntaxKind.ArrayLiteralExpression:

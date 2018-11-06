@@ -905,7 +905,8 @@ namespace ts {
                 switch (node.kind) {
                     // Literals
                     case SyntaxKind.NumericLiteral:
-                        return emitNumericLiteral(<NumericLiteral>node);
+                    case SyntaxKind.BigIntLiteral:
+                        return emitNumericOrBigIntLiteral(<NumericLiteral | BigIntLiteral>node);
 
                     case SyntaxKind.StringLiteral:
                     case SyntaxKind.RegularExpressionLiteral:
@@ -1068,7 +1069,8 @@ namespace ts {
         //
 
         // SyntaxKind.NumericLiteral
-        function emitNumericLiteral(node: NumericLiteral) {
+        // SyntaxKind.BigIntLiteral
+        function emitNumericOrBigIntLiteral(node: NumericLiteral | BigIntLiteral) {
             emitLiteral(node);
         }
 
