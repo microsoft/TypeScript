@@ -688,7 +688,26 @@ namespace ts.server {
                 success,
             };
             if (success) {
-                res.body = info;
+                let metadata: any;
+                if (isArray(info)) {
+                    res.body = info;
+                    metadata = (info as WithMetadata<ReadonlyArray<any>>).metadata;
+                    delete (info as WithMetadata<ReadonlyArray<any>>).metadata;
+                }
+                else if (typeof info === "object") {
+                    if ((info as WithMetadata<{}>).metadata) {
+                        const { metadata: infoMetadata, ...body } = (info as WithMetadata<{}>);
+                        res.body = body;
+                        metadata = infoMetadata;
+                    }
+                    else {
+                        res.body = info;
+                    }
+                }
+                else {
+                    res.body = info;
+                }
+                if (metadata) res.metadata = metadata;
             }
             else {
                 Debug.assert(info === undefined);
@@ -1467,7 +1486,7 @@ namespace ts.server {
             });
         }
 
-        private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): ReadonlyArray<protocol.CompletionEntry> | protocol.CompletionInfo | CompletionInfo | undefined {
+        private getCompletions(args: protocol.CompletionsRequestArgs, kind: protocol.CommandTypes.CompletionInfo | protocol.CommandTypes.Completions | protocol.CommandTypes.CompletionsFull): WithMetadata<ReadonlyArray<protocol.CompletionEntry>> | protocol.CompletionInfo | CompletionInfo | undefined {
             const { file, project } = this.getFileAndProject(args);
             const scriptInfo = this.projectService.getScriptInfoForNormalizedPath(file)!;
             const position = this.getPosition(args, scriptInfo);
@@ -1492,7 +1511,10 @@ namespace ts.server {
                 }
             }).sort((a, b) => compareStringsCaseSensitiveUI(a.name, b.name));
 
-            if (kind === protocol.CommandTypes.Completions) return entries;
+            if (kind === protocol.CommandTypes.Completions) {
+                if (completions.metadata) (entries as WithMetadata<ReadonlyArray<protocol.CompletionEntry>>).metadata = completions.metadata;
+                return entries;
+            }
 
             const res: protocol.CompletionInfo = {
                 ...completions,

@@ -221,6 +221,11 @@ namespace ts.server.protocol {
          * Contains message body if success === true.
          */
         body?: any;
+
+        /**
+         * Contains extra information that plugin can include to be passed on
+         */
+        metadata?: any;
     }
 
     /**
