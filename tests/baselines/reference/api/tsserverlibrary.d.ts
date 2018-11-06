@@ -8904,7 +8904,7 @@ declare namespace ts.server {
         private getFullNavigateToItems;
         private getSupportedCodeFixes;
         private isLocation;
-        private extractPositionAndRange;
+        private extractPositionOrRange;
         private getApplicableRefactors;
         private getEditsForRefactor;
         private organizeImports;
