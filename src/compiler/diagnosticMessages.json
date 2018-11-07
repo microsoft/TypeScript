@@ -4756,5 +4756,17 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Inline local": {
+        "category": "Message",
+        "code": 95070
+    },
+    "Inline here": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Inline all": {
+        "category": "Message",
+        "code": 95072
     }
 }
