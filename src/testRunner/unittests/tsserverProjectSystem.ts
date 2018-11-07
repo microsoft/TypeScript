@@ -10523,6 +10523,42 @@ declare class TestLib {
             ]);
             verifySingleInferredProject(session);
         });
+
+        it("getEditsForFileRename when referencing project doesnt include file and its renamed", () => {
+            const aTs: File = { path: "/a/src/a.ts", content: "" };
+            const aTsconfig: File = {
+                path: "/a/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        declaration: true,
+                        declarationMap: true,
+                        outDir: "./build",
+                    }
+                }),
+            };
+            const bTs: File = { path: "/b/src/b.ts", content: "" };
+            const bTsconfig: File = {
+                path: "/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {
+                        composite: true,
+                        outDir: "./build",
+                    },
+                    include: ["./src"],
+                    references: [{ path: "../a" }],
+                }),
+            };
+
+            const host = createServerHost([aTs, aTsconfig, bTs, bTsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs, bTs], session);
+            const response = executeSessionRequest<protocol.GetEditsForFileRenameRequest, protocol.GetEditsForFileRenameResponse>(session, CommandNames.GetEditsForFileRename, {
+                oldFilePath: aTs.path,
+                newFilePath: "/a/src/a1.ts",
+            });
+            assert.deepEqual<ReadonlyArray<protocol.FileCodeEdits>>(response, []); // Should not change anything
+        });
     });
 
     describe("tsserverProjectSystem with tsbuild projects", () => {
