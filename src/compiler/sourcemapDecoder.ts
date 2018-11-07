@@ -150,14 +150,12 @@ namespace ts.sourcemaps {
         }
     }
 
-    /*@internal*/
     export interface MappingsDecoder extends Iterator<SourceMapSpan> {
         readonly decodingIndex: number;
         readonly error: string | undefined;
         readonly lastSpan: SourceMapSpan;
     }
 
-    /*@internal*/
     export function decodeMappings(map: SourceMapData): MappingsDecoder {
         const state: DecoderState = {
             encodedText: map.mappings,

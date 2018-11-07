@@ -334,7 +334,6 @@ namespace ts.formatting {
         return 0;
     }
 
-    /* @internal */
     export function formatNodeGivenIndentation(node: Node, sourceFileLike: SourceFileLike, languageVariant: LanguageVariant, initialIndentation: number, delta: number, formatContext: FormatContext): TextChange[] {
         const range = { pos: 0, end: sourceFileLike.text.length };
         return getFormattingScanner(sourceFileLike.text, languageVariant, range.pos, range.end, scanner => formatSpanWorker(

@@ -22,9 +22,9 @@ namespace ts {
         force?: boolean;
         verbose?: boolean;
 
-        /*@internal*/ clean?: boolean;
-        /*@internal*/ watch?: boolean;
-        /*@internal*/ help?: boolean;
+        clean?: boolean;
+        watch?: boolean;
+        help?: boolean;
 
         preserveWatchOutput?: boolean;
         listEmittedFiles?: boolean;
@@ -340,18 +340,18 @@ namespace ts {
         cleanAllProjects(): ExitStatus;
 
         // TODO:: All the below ones should technically only be in watch mode. but thats for later time
-        /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
-        /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
-        /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
+        resolveProjectName(name: string): ResolvedConfigFileName;
+        getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
+        getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
 
-        /*@internal*/ invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
-        /*@internal*/ buildInvalidatedProject(): void;
+        invalidateProject(configFileName: string, reloadLevel?: ConfigFileProgramReloadLevel): void;
+        buildInvalidatedProject(): void;
 
-        /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
+        resetBuildContext(opts?: BuildOptions): void;
     }
 
     export interface SolutionBuilderWithWatch extends SolutionBuilder {
-        /*@internal*/ startWatching(): void;
+        startWatching(): void;
     }
 
     /**

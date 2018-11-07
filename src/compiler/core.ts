@@ -2052,7 +2052,6 @@ namespace ts {
     }
 
     /** Represents a "prefix*suffix" pattern. */
-    /* @internal */
     export interface Pattern {
         prefix: string;
         suffix: string;
