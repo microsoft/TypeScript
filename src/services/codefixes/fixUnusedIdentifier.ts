@@ -84,8 +84,8 @@ namespace ts.codefix {
                         if (importDecl) {
                             changes.delete(sourceFile, importDecl);
                         }
-                        else if (token.kind === SyntaxKind.AtToken && isJSDocTemplateTag(token.parent)) {
-                            changes.delete(sourceFile, token.parent);
+                        else if (isJSDocTemplateTag(token)) {
+                            changes.delete(sourceFile, token);
                         }
                         else if (token.kind === SyntaxKind.LessThanToken) {
                             deleteTypeParameters(changes, sourceFile, token);

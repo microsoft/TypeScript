@@ -1481,7 +1481,7 @@ namespace ts {
         function shouldGetType(sourceFile: SourceFile, node: Node, position: number): boolean {
             switch (node.kind) {
                 case SyntaxKind.Identifier:
-                    return !isLabelName(node);
+                    return !isLabelName(node) && !isTagName(node);
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.QualifiedName:
                     // Don't return quickInfo if inside the comment in `a/**/.b`
@@ -2159,7 +2159,7 @@ namespace ts {
     function initializeNameTable(sourceFile: SourceFile): void {
         const nameTable = sourceFile.nameTable = createUnderscoreEscapedMap<number>();
         sourceFile.forEachChild(function walk(node) {
-            if (isIdentifier(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
+            if (isIdentifier(node) && !isTagName(node) && node.escapedText || isStringOrNumericLiteralLike(node) && literalIsName(node)) {
                 const text = getEscapedTextOfIdentifierOrLiteral(node);
                 nameTable.set(text, nameTable.get(text) === undefined ? node.pos : -1);
             }
