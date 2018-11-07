@@ -83,7 +83,7 @@ namespace ts.sourcemaps {
             if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot, !host.useCaseSensitiveFileNames) !== 0) {
                 return loc;
             }
-            return { fileName: toPath(map.file!, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
+            return { fileName: getNormalizedAbsolutePath(map.file!, sourceRoot), position: maps[targetIndex].emittedPosition }; // Closest pos
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
@@ -94,13 +94,13 @@ namespace ts.sourcemaps {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest pos
+            return { fileName: getNormalizedAbsolutePath(maps[targetIndex].sourcePath, sourceRoot), position: maps[targetIndex].sourcePosition }; // Closest pos
         }
 
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
             const path = toPath(fileName, location, host.getCanonicalFileName);
-            const file = program && program.getSourceFile(path);
+            const file = program && program.getSourceFileByPath(path);
             // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
             if (!file || file.resolvedPath !== path) {
                 // Otherwise check the cache (which may hit disk)
