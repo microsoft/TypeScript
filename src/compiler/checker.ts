@@ -82,6 +82,7 @@ namespace ts {
         const noImplicitAny = getStrictOptionValue(compilerOptions, "noImplicitAny");
         const noImplicitThis = getStrictOptionValue(compilerOptions, "noImplicitThis");
         const keyofStringsOnly = !!compilerOptions.keyofStringsOnly;
+        const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : ObjectFlags.FreshLiteral;
 
         const emitResolver = createResolver();
         const nodeBuilder = createNodeBuilder();
@@ -408,11 +409,13 @@ namespace ts {
         const regularFalseType = createIntrinsicType(TypeFlags.BooleanLiteral, "false") as FreshableIntrinsicType;
         const trueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true") as FreshableIntrinsicType;
         const regularTrueType = createIntrinsicType(TypeFlags.BooleanLiteral, "true") as FreshableIntrinsicType;
-        falseType.flags |= TypeFlags.FreshLiteral;
-        trueType.flags |= TypeFlags.FreshLiteral;
         trueType.regularType = regularTrueType;
+        trueType.freshType = trueType;
+        regularTrueType.regularType = regularTrueType;
         regularTrueType.freshType = trueType;
         falseType.regularType = regularFalseType;
+        falseType.freshType = falseType;
+        regularFalseType.regularType = regularFalseType;
         regularFalseType.freshType = falseType;
         const booleanType = createBooleanType([regularFalseType, regularTrueType]);
         // Also mark all combinations of fresh/regular booleans as "Boolean" so they print as `boolean` instead of `true | false`
@@ -8969,7 +8972,7 @@ namespace ts {
                     t.flags & TypeFlags.NumberLiteral && includes & TypeFlags.Number ||
                     t.flags & TypeFlags.BigIntLiteral && includes & TypeFlags.BigInt ||
                     t.flags & TypeFlags.UniqueESSymbol && includes & TypeFlags.ESSymbol ||
-                    t.flags & TypeFlags.Literal && t.flags & TypeFlags.FreshLiteral && containsType(types, (<LiteralType>t).regularType);
+                    isFreshLiteralType(t) && containsType(types, (<LiteralType>t).regularType);
                 if (remove) {
                     orderedRemoveItemAt(types, i);
                 }
@@ -9012,7 +9015,7 @@ namespace ts {
                             neverType;
                 }
             }
-            return getUnionTypeFromSortedList(typeSet, includes & TypeFlags.NotPrimitiveUnion ? 0 : TypeFlags.UnionOfPrimitiveTypes, aliasSymbol, aliasTypeArguments);
+            return getUnionTypeFromSortedList(typeSet, !(includes & TypeFlags.NotPrimitiveUnion), aliasSymbol, aliasTypeArguments);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate | undefined {
@@ -9052,7 +9055,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], unionOfUnitTypes: TypeFlags, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
+        function getUnionTypeFromSortedList(types: Type[], primitiveTypesOnly: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -9063,9 +9066,10 @@ namespace ts {
             let type = unionTypes.get(id);
             if (!type) {
                 const propagatedFlags = getPropagatingFlagsOfTypes(types, /*excludeKinds*/ TypeFlags.Nullable);
-                type = <UnionType>createType(TypeFlags.Union | propagatedFlags | unionOfUnitTypes);
+                type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
+                type.primitiveTypesOnly = primitiveTypesOnly;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
                 For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
@@ -9157,13 +9161,16 @@ namespace ts {
         // other unions and return true. Otherwise, do nothing and return false.
         function intersectUnionsOfPrimitiveTypes(types: Type[]) {
             let unionTypes: UnionType[] | undefined;
-            const index = findIndex(types, t => (t.flags & TypeFlags.UnionOfPrimitiveTypes) !== 0);
+            const index = findIndex(types, t => !!(t.flags & TypeFlags.Union) && (<UnionType>t).primitiveTypesOnly);
+            if (index < 0) {
+                return false;
+            }
             let i = index + 1;
             // Remove all but the first union of primitive types and collect them in
             // the unionTypes array.
             while (i < types.length) {
                 const t = types[i];
-                if (t.flags & TypeFlags.UnionOfPrimitiveTypes) {
+                if (t.flags & TypeFlags.Union && (<UnionType>t).primitiveTypesOnly) {
                     (unionTypes || (unionTypes = [<UnionType>types[index]])).push(<UnionType>t);
                     orderedRemoveItemAt(types, i);
                 }
@@ -9190,7 +9197,7 @@ namespace ts {
                 }
             }
             // Finally replace the first union with the result
-            types[index] = getUnionTypeFromSortedList(result, TypeFlags.UnionOfPrimitiveTypes);
+            types[index] = getUnionTypeFromSortedList(result, /*primitiveTypesOnly*/ true);
             return true;
         }
 
@@ -9232,7 +9239,7 @@ namespace ts {
                 return typeSet[0];
             }
             if (includes & TypeFlags.Union) {
-                if (includes & TypeFlags.UnionOfPrimitiveTypes && intersectUnionsOfPrimitiveTypes(typeSet)) {
+                if (intersectUnionsOfPrimitiveTypes(typeSet)) {
                     // When the intersection creates a reduced set (which might mean that *all* union types have
                     // disappeared), we restart the operation to get a new set of combined flags. Once we have
                     // reduced we'll never reduce again, so this occurs at most once.
@@ -9994,8 +10001,8 @@ namespace ts {
                 emptyArray,
                 getNonReadonlyIndexSignature(stringIndexInfo),
                 getNonReadonlyIndexSignature(numberIndexInfo));
-            spread.flags |= typeFlags | TypeFlags.ContainsObjectLiteral;
-            (spread as ObjectType).objectFlags |= objectFlags | (ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread);
+            spread.flags |= TypeFlags.ContainsObjectLiteral | typeFlags;
+            spread.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.ContainsSpread | objectFlags;
             return spread;
         }
 
@@ -10035,10 +10042,11 @@ namespace ts {
         }
 
         function getFreshTypeOfLiteralType(type: Type): Type {
-            if (type.flags & TypeFlags.Literal && !(type.flags & TypeFlags.FreshLiteral)) {
-                if (!(<LiteralType>type).freshType) { // NOTE: Safe because all freshable intrinsics always have fresh types already
-                    const freshType = createLiteralType(type.flags | TypeFlags.FreshLiteral, (<LiteralType>type).value, (<LiteralType>type).symbol);
+            if (type.flags & TypeFlags.Literal) {
+                if (!(<LiteralType>type).freshType) {
+                    const freshType = createLiteralType(type.flags, (<LiteralType>type).value, (<LiteralType>type).symbol);
                     freshType.regularType = <LiteralType>type;
+                    freshType.freshType = freshType;
                     (<LiteralType>type).freshType = freshType;
                 }
                 return (<LiteralType>type).freshType;
@@ -10047,9 +10055,13 @@ namespace ts {
         }
 
         function getRegularTypeOfLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.Literal && type.flags & TypeFlags.FreshLiteral ? (<LiteralType>type).regularType :
+            return type.flags & TypeFlags.Literal ? (<LiteralType>type).regularType :
                 type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getRegularTypeOfLiteralType)) :
                 type;
+        }
+
+        function isFreshLiteralType(type: Type) {
+            return !!(type.flags & TypeFlags.Literal) && (<LiteralType>type).freshType === type;
         }
 
         function getLiteralType(value: string | number | PseudoBigInt, enumId?: number, symbol?: Symbol) {
@@ -10065,6 +10077,7 @@ namespace ts {
                     typeof value === "string" ? TypeFlags.StringLiteral : TypeFlags.BigIntLiteral) |
                     (enumId ? TypeFlags.EnumLiteral : 0);
                 literalTypes.set(key, type = createLiteralType(flags, value, symbol));
+                type.regularType = type;
             }
             return type;
         }
@@ -11337,10 +11350,10 @@ namespace ts {
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
-            if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+            if (isFreshLiteralType(source)) {
                 source = (<FreshableType>source).regularType;
             }
-            if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+            if (isFreshLiteralType(target)) {
                 target = (<FreshableType>target).regularType;
             }
             if (source === target ||
@@ -11495,10 +11508,10 @@ namespace ts {
              * * Ternary.False if they are not related.
              */
             function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean): Ternary {
-                if (source.flags & TypeFlags.Literal && source.flags & TypeFlags.FreshLiteral) {
+                if (isFreshLiteralType(source)) {
                     source = (<FreshableType>source).regularType;
                 }
-                if (target.flags & TypeFlags.Literal && target.flags & TypeFlags.FreshLiteral) {
+                if (isFreshLiteralType(target)) {
                     target = (<FreshableType>target).regularType;
                 }
                 if (source.flags & TypeFlags.Substitution) {
@@ -11542,7 +11555,7 @@ namespace ts {
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
-                if (isObjectLiteralType(source) && source.flags & TypeFlags.FreshLiteral) {
+                if (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral) {
                     const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
                     if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
                         if (reportErrors) {
@@ -11810,12 +11823,14 @@ namespace ts {
             }
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
-            function findMatchingDiscriminantType(source: Type, target: UnionOrIntersectionType) {
-                const sourceProperties = getPropertiesOfObjectType(source);
-                if (sourceProperties) {
-                    const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
-                    if (sourcePropertiesFiltered) {
-                        return discriminateTypeByDiscriminableItems(target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
+            function findMatchingDiscriminantType(source: Type, target: Type) {
+                if (target.flags & TypeFlags.Union) {
+                    const sourceProperties = getPropertiesOfObjectType(source);
+                    if (sourceProperties) {
+                        const sourcePropertiesFiltered = findDiscriminantProperties(sourceProperties, target);
+                        if (sourcePropertiesFiltered) {
+                            return discriminateTypeByDiscriminableItems(<UnionType>target, map(sourcePropertiesFiltered, p => ([() => getTypeOfSymbol(p), p.escapedName] as [() => Type, __String])), isRelatedTo);
+                        }
                     }
                 }
                 return undefined;
@@ -13108,11 +13123,11 @@ namespace ts {
         }
 
         function getWidenedLiteralType(type: Type): Type {
-            return type.flags & TypeFlags.EnumLiteral && type.flags & TypeFlags.FreshLiteral ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
-                type.flags & TypeFlags.StringLiteral && type.flags & TypeFlags.FreshLiteral ? stringType :
-                type.flags & TypeFlags.NumberLiteral && type.flags & TypeFlags.FreshLiteral ? numberType :
-                type.flags & TypeFlags.BigIntLiteral && type.flags & TypeFlags.FreshLiteral ? bigintType :
-                type.flags & TypeFlags.BooleanLiteral && type.flags & TypeFlags.FreshLiteral ? booleanType :
+            return type.flags & TypeFlags.EnumLiteral && isFreshLiteralType(type) ? getBaseTypeOfEnumLiteralType(<LiteralType>type) :
+                type.flags & TypeFlags.StringLiteral && isFreshLiteralType(type) ? stringType :
+                type.flags & TypeFlags.NumberLiteral && isFreshLiteralType(type) ? numberType :
+                type.flags & TypeFlags.BigIntLiteral && isFreshLiteralType(type) ? bigintType :
+                type.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(type) ? booleanType :
                 type.flags & TypeFlags.Union ? getUnionType(sameMap((<UnionType>type).types, getWidenedLiteralType)) :
                 type;
         }
@@ -13271,7 +13286,7 @@ namespace ts {
          * Leave signatures alone since they are not subject to the check.
          */
         function getRegularTypeOfObjectLiteral(type: Type): Type {
-            if (!(isObjectLiteralType(type) && type.flags & TypeFlags.FreshLiteral)) {
+            if (!(isObjectLiteralType(type) && getObjectFlags(type) & ObjectFlags.FreshLiteral)) {
                 return type;
             }
             const regularType = (<FreshObjectLiteralType>type).regularType;
@@ -13287,7 +13302,7 @@ namespace ts {
                 resolved.constructSignatures,
                 resolved.stringIndexInfo,
                 resolved.numberIndexInfo);
-            regularNew.flags = resolved.flags & ~TypeFlags.FreshLiteral;
+            regularNew.flags = resolved.flags;
             regularNew.objectFlags |= ObjectFlags.ObjectLiteral | (getObjectFlags(resolved) & ObjectFlags.JSLiteral);
             (<FreshObjectLiteralType>type).regularType = regularNew;
             return regularNew;
@@ -14525,7 +14540,7 @@ namespace ts {
                     return assignedType;
                 }
                 let reducedType = filterType(declaredType, t => typeMaybeAssignableTo(assignedType, t));
-                if (assignedType.flags & TypeFlags.FreshLiteral && assignedType.flags & TypeFlags.BooleanLiteral) {
+                if (assignedType.flags & TypeFlags.BooleanLiteral && isFreshLiteralType(assignedType)) {
                     reducedType = mapType(reducedType, getFreshTypeOfLiteralType); // Ensure that if the assignment is a fresh type, that we narrow to fresh types
                 }
                 // Our crude heuristic produces an invalid result in some cases: see GH#26130.
@@ -14847,7 +14862,7 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
-                return filtered === types ? type : getUnionTypeFromSortedList(filtered, type.flags & TypeFlags.UnionOfPrimitiveTypes);
+                return filtered === types ? type : getUnionTypeFromSortedList(filtered, (<UnionType>type).primitiveTypesOnly);
             }
             return f(type) ? type : neverType;
         }
@@ -17634,7 +17649,7 @@ namespace ts {
             let propertiesTable: SymbolTable;
             let propertiesArray: Symbol[] = [];
             let spread: Type = emptyObjectType;
-            let propagatedFlags: TypeFlags = TypeFlags.FreshLiteral;
+            let propagatedFlags: TypeFlags = 0;
 
             const contextualType = getApparentTypeOfContextualType(node);
             const contextualTypeHasPattern = contextualType && contextualType.pattern &&
@@ -17719,7 +17734,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*objectFlags*/ 0);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
@@ -17731,7 +17746,7 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, /*objectFlags*/ 0);
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
                     offset = i + 1;
                     continue;
                 }
@@ -17781,7 +17796,7 @@ namespace ts {
 
             if (spread !== emptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, /*objectFlags*/ 0);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
                 }
                 return spread;
             }
@@ -17792,9 +17807,8 @@ namespace ts {
                 const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
                 const numberIndexInfo = hasComputedNumberProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.Number) : undefined;
                 const result = createAnonymousType(node.symbol, propertiesTable, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
-                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-                result.flags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag | (typeFlags & TypeFlags.PropagatingFlags);
-                result.objectFlags |= ObjectFlags.ObjectLiteral;
+                result.flags |= TypeFlags.ContainsObjectLiteral | typeFlags & TypeFlags.PropagatingFlags;
+                result.objectFlags |= ObjectFlags.ObjectLiteral | freshObjectLiteralFlag;
                 if (isJSObjectLiteral) {
                     result.objectFlags |= ObjectFlags.JSLiteral;
                 }
@@ -17804,9 +17818,7 @@ namespace ts {
                 if (inDestructuringPattern) {
                     result.pattern = node;
                 }
-                if (!(result.flags & TypeFlags.Nullable)) {
-                    propagatedFlags |= (result.flags & TypeFlags.PropagatingFlags);
-                }
+                propagatedFlags |= result.flags & TypeFlags.PropagatingFlags;
                 return result;
             }
         }
@@ -17897,14 +17909,15 @@ namespace ts {
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
             let explicitlySpecifyChildrenAttribute = false;
-            let propagatingFlags: TypeFlags = 0;
+            let typeFlags: TypeFlags = 0;
+            let objectFlags: ObjectFlags = ObjectFlags.JsxAttributes;
             const jsxChildrenPropertyName = getJsxElementChildrenPropertyName(getJsxNamespaceAt(openingLikeElement));
 
             for (const attributeDecl of attributes.properties) {
                 const member = attributeDecl.symbol;
                 if (isJsxAttribute(attributeDecl)) {
                     const exprType = checkJsxAttribute(attributeDecl, checkMode);
-                    propagatingFlags |= (exprType.flags & TypeFlags.PropagatingFlags);
+                    typeFlags |= exprType.flags & TypeFlags.PropagatingFlags;
 
                     const attributeSymbol = createSymbol(SymbolFlags.Property | SymbolFlags.Transient | member.flags, member.escapedName);
                     attributeSymbol.declarations = member.declarations;
@@ -17922,7 +17935,7 @@ namespace ts {
                 else {
                     Debug.assert(attributeDecl.kind === SyntaxKind.JsxSpreadAttribute);
                     if (attributesTable.size > 0) {
-                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, propagatingFlags, ObjectFlags.JsxAttributes);
+                        spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags);
                         attributesTable = createSymbolTable();
                     }
                     const exprType = checkExpressionCached(attributeDecl.expression, checkMode);
@@ -17930,7 +17943,7 @@ namespace ts {
                         hasSpreadAnyType = true;
                     }
                     if (isValidSpreadType(exprType)) {
-                        spread = getSpreadType(spread, exprType, attributes.symbol, propagatingFlags, ObjectFlags.JsxAttributes);
+                        spread = getSpreadType(spread, exprType, attributes.symbol, typeFlags, objectFlags);
                     }
                     else {
                         typeToIntersect = typeToIntersect ? getIntersectionType([typeToIntersect, exprType]) : exprType;
@@ -17940,7 +17953,7 @@ namespace ts {
 
             if (!hasSpreadAnyType) {
                 if (attributesTable.size > 0) {
-                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, propagatingFlags, ObjectFlags.JsxAttributes);
+                    spread = getSpreadType(spread, createJsxAttributesType(), attributes.symbol, typeFlags, objectFlags);
                 }
             }
 
@@ -17968,7 +17981,7 @@ namespace ts {
                     const childPropMap = createSymbolTable();
                     childPropMap.set(jsxChildrenPropertyName, childrenPropSymbol);
                     spread = getSpreadType(spread, createAnonymousType(attributes.symbol, childPropMap, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined),
-                        attributes.symbol, propagatingFlags, ObjectFlags.JsxAttributes);
+                        attributes.symbol, typeFlags, objectFlags);
 
                 }
             }
@@ -17987,10 +18000,10 @@ namespace ts {
              * @param attributesTable a symbol table of attributes property
              */
             function createJsxAttributesType() {
+                objectFlags |= freshObjectLiteralFlag;
                 const result = createAnonymousType(attributes.symbol, attributesTable, emptyArray, emptyArray, /*stringIndexInfo*/ undefined, /*numberIndexInfo*/ undefined);
-                const freshObjectLiteralFlag = compilerOptions.suppressExcessPropertyErrors ? 0 : TypeFlags.FreshLiteral;
-                result.flags |= (propagatingFlags |= TypeFlags.ContainsObjectLiteral | freshObjectLiteralFlag);
-                result.objectFlags |= ObjectFlags.ObjectLiteral | ObjectFlags.JsxAttributes;
+                result.flags |= TypeFlags.ContainsObjectLiteral | typeFlags;
+                result.objectFlags |= ObjectFlags.ObjectLiteral | objectFlags;
                 return result;
             }
         }
@@ -28781,8 +28794,7 @@ namespace ts {
 
         function isLiteralConstDeclaration(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): boolean {
             if (isDeclarationReadonly(node) || isVariableDeclaration(node) && isVarConst(node)) {
-                const type = getTypeOfSymbol(getSymbolOfNode(node));
-                return !!(type.flags & TypeFlags.Literal && type.flags & TypeFlags.FreshLiteral);
+                return isFreshLiteralType(getTypeOfSymbol(getSymbolOfNode(node)));
             }
             return false;
         }
