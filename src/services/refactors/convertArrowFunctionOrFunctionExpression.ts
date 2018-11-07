@@ -67,34 +67,40 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
 
         if (!info) return undefined;
         const { func } = info;
+        const edits: FileTextChanges[] = [];
 
         switch (actionName) {
             case toAnonymousFunctionActionName:
-                return getEditInfoForConvertToAnonymousFunction(context, func);
+                edits.push(...getEditInfoForConvertToAnonymousFunction(context, func));
+                break;
 
             case toNamedFunctionActionName:
-                return getEditInfoForConvertToNamedFunction(context, func);
+                const variableInfo = getVariableInfo(func);
+                if (!variableInfo) return undefined;
+
+                edits.push(...getEditInfoForConvertToNamedFunction(context, func, variableInfo));
+                break;
 
             case toArrowFunctionActionName:
-                return getEditInfoForConvertToArrowFunction(context, func);
+                if (!isFunctionExpression(func)) return undefined;
+                edits.push(...getEditInfoForConvertToArrowFunction(context, func));
+                break;
 
             default:
-                Debug.fail("invalid action");
-                break;
+                return Debug.fail("invalid action");
         }
 
-        return undefined;
+        return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
     function getFunctionInfo(file: SourceFile, startPosition: number): FunctionInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
-        let maybeFunc;
 
-        maybeFunc = getArrowFunctionFromVariableDeclaration(token.parent);
-        if (!!maybeFunc) return { selectedVariableDeclaration: true, func: maybeFunc };
+        const arrowFunc = getArrowFunctionFromVariableDeclaration(token.parent);
+        if (arrowFunc) return { selectedVariableDeclaration: true, func: arrowFunc };
 
-        maybeFunc = getContainingFunction(token);
-        if (!!maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
+        const maybeFunc = getContainingFunction(token);
+        if (maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
             return { selectedVariableDeclaration: false, func: maybeFunc };
         }
 
@@ -134,41 +140,34 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return { variableDeclaration, variableDeclarationList, statement, name: variableDeclaration.name };
     }
 
-    function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): RefactorEditInfo {
+    function getEditInfoForConvertToAnonymousFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): FileTextChanges[] {
         const { file } = context;
         const body = convertToBlock(func.body);
         const newNode = createFunctionExpression(func.modifiers, func.asteriskToken, /* name */ undefined, func.typeParameters, func.parameters, func.type, body);
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
-        return { renameFilename: undefined, renameLocation: undefined, edits };
+        return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
     }
 
-    function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): RefactorEditInfo | undefined {
+    function getEditInfoForConvertToNamedFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction, variableInfo: VariableInfo): FileTextChanges[] {
         const { file } = context;
         const body = convertToBlock(func.body);
-        const variableInfo = getVariableInfo(func);
-        if (!variableInfo) return undefined;
 
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
         suppressLeadingTrivia(statement);
         const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
-        let edits: FileTextChanges[];
 
         if (variableDeclarationList.declarations.length === 1) {
-            edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
+            return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, statement, newNode));
         }
         else {
-            edits = textChanges.ChangeTracker.with(context, t => {
+            return textChanges.ChangeTracker.with(context, t => {
                 t.delete(file, variableDeclaration);
                 t.insertNodeAfter(file, statement, newNode);
             });
         }
-        return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: FunctionExpression | ArrowFunction): RefactorEditInfo | undefined {
+    function getEditInfoForConvertToArrowFunction(context: RefactorContext, func: FunctionExpression): FileTextChanges[] {
         const { file } = context;
-        if (!isFunctionExpression(func)) return undefined;
-
         const statements = func.body.statements;
         const head = statements[0];
         let body: ConciseBody;
@@ -182,12 +181,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
             body = func.body;
         }
 
-        const newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, /* equalsGreaterThanToken */ undefined, body);
-        const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
-        return { renameFilename: undefined, renameLocation: undefined, edits };
+        const newNode = createArrowFunction(func.modifiers, func.typeParameters, func.parameters, func.type, createToken(SyntaxKind.EqualsGreaterThanToken), body);
+        return textChanges.ChangeTracker.with(context, t => t.replaceNode(file, func, newNode));
     }
 
-    function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement | ExpressionStatement {
-        return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression) || isExpressionStatement(head));
+    function canBeConvertedToExpression(body: Block, head: Statement): head is ReturnStatement {
+        return body.statements.length === 1 && ((isReturnStatement(head) && !!head.expression));
     }
 }

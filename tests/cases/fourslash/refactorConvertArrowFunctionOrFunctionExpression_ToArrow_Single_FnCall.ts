@@ -11,5 +11,7 @@ edit.applyRefactor({
     actionName: "Convert to arrow function",
     actionDescription: "Convert to arrow function",
     newContent: `function s(){}
-const foo = () => s();`,
+const foo = () => {
+    s();
+};`,
 });
