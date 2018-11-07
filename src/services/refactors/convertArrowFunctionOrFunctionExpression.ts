@@ -25,11 +25,11 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         readonly name: Identifier;
     }
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
         const info = getFunctionInfo(file, startPosition);
 
-        if (!info) return undefined;
+        if (!info) return emptyArray;
         const { selectedVariableDeclaration, func } = info;
         const possibleActions: RefactorActionInfo[] = [];
 
