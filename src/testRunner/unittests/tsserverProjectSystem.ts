@@ -3301,6 +3301,23 @@ namespace ts.projectSystem {
             });
         });
 
+        it("dynamic file with reference paths external project", () => {
+            const file: File = {
+                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
+/// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
+var x = 10;`
+            };
+            const host = createServerHost([libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path, file.content);
+
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+            const project = projectService.inferredProjects[0];
+            checkProjectRootFiles(project, [file.path]);
+            checkProjectActualFiles(project, [file.path, libFile.path]);
+        });
+
         it("files opened, closed affecting multiple projects", () => {
             const file: File = {
                 path: "/a/b/projects/config/file.ts",
@@ -3893,8 +3910,8 @@ namespace ts.projectSystem {
                     command: server.CommandNames.Open,
                     arguments: {
                         file: untitledFile,
-                        fileContent: "",
-                        scriptKindName: "JS",
+                        fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />`,
+                        scriptKindName: "TS",
                         projectRootPath: useProjectRoot ? folderPath : undefined
                     }
                 });
@@ -10772,16 +10789,16 @@ fn5();`
             const untitledFile = "untitled:^Untitled-1";
             executeSessionRequestNoResponse<protocol.OpenRequest>(session, protocol.CommandTypes.Open, {
                 file: untitledFile,
-                fileContent: "let foo = 1;\nfooo/**/",
+                fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
                 scriptKindName: "TS",
                 projectRootPath: "/proj",
             });
 
             const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
                 file: untitledFile,
-                startLine: 2,
+                startLine: 3,
                 startOffset: 1,
-                endLine: 2,
+                endLine: 3,
                 endOffset: 5,
                 errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
             });
@@ -10794,8 +10811,8 @@ fn5();`
                     changes: [{
                         fileName: untitledFile,
                         textChanges: [{
-                            start: { line: 2, offset: 1 },
-                            end: { line: 2, offset: 5 },
+                            start: { line: 3, offset: 1 },
+                            end: { line: 3, offset: 5 },
                             newText: "foo",
                         }],
                     }],
