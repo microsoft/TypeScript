@@ -10655,7 +10655,7 @@ declare class TestLib {
             const dependecyLocation = `${projectLocation}/dependency`;
             const mainLocation = `${projectLocation}/main`;
             const dependencyTs: File = {
-                path: `${dependecyLocation}/fns.ts`,
+                path: `${dependecyLocation}/FnS.ts`,
                 content: `export function fn1() { }
 export function fn2() { }
 export function fn3() { }

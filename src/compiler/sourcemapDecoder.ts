@@ -83,7 +83,7 @@ namespace ts.sourcemaps {
             if (!maps[targetIndex] || comparePaths(loc.fileName, maps[targetIndex].sourcePath, sourceRoot, !host.useCaseSensitiveFileNames) !== 0) {
                 return loc;
             }
-            return { fileName: toPath(map.file!, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].emittedPosition }; // Closest pos
+            return { fileName: getNormalizedAbsolutePath(map.file!, sourceRoot), position: maps[targetIndex].emittedPosition }; // Closest pos
         }
 
         function getOriginalPosition(loc: SourceMappableLocation): SourceMappableLocation {
@@ -94,7 +94,7 @@ namespace ts.sourcemaps {
                 // if no exact match, closest is 2's compliment of result
                 targetIndex = ~targetIndex;
             }
-            return { fileName: toPath(maps[targetIndex].sourcePath, sourceRoot, host.getCanonicalFileName), position: maps[targetIndex].sourcePosition }; // Closest pos
+            return { fileName: getNormalizedAbsolutePath(maps[targetIndex].sourcePath, sourceRoot), position: maps[targetIndex].sourcePosition }; // Closest pos
         }
 
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
