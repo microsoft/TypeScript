@@ -4,13 +4,13 @@ let stringOrNumber: string | number;
 
 if (typeof stringOrNumber === "number") {
 >typeof stringOrNumber === "number" : boolean
->typeof stringOrNumber : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >stringOrNumber : string | number
 >"number" : "number"
 
     if (typeof stringOrNumber !== "number") {
 >typeof stringOrNumber !== "number" : boolean
->typeof stringOrNumber : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >stringOrNumber : number
 >"number" : "number"
 
@@ -22,11 +22,11 @@ if (typeof stringOrNumber === "number") {
 if (typeof stringOrNumber === "number" && typeof stringOrNumber !== "number") {
 >typeof stringOrNumber === "number" && typeof stringOrNumber !== "number" : boolean
 >typeof stringOrNumber === "number" : boolean
->typeof stringOrNumber : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >stringOrNumber : string | number
 >"number" : "number"
 >typeof stringOrNumber !== "number" : boolean
->typeof stringOrNumber : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof stringOrNumber : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >stringOrNumber : number
 >"number" : "number"
 

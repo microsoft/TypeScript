@@ -1,7 +1,7 @@
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(21,24): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 
 
 ==== tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts (4 errors) ====
@@ -27,9 +27,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,27): error
             var f = function () {
                 return x * x;
                        ~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                            ~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
             };
         }
         x = "hello";
@@ -42,9 +42,9 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsDefeat.ts(32,27): error
         else {
             var f = () => x * x;
                           ~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                               ~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
         }
         x = "hello";
         f();

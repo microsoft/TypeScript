@@ -867,7 +867,7 @@ namespace ts.server {
         private doEnsureDefaultProjectForFile(fileName: NormalizedPath): Project {
             this.ensureProjectStructuresUptoDate();
             const scriptInfo = this.getScriptInfoForNormalizedPath(fileName);
-            return scriptInfo ? scriptInfo.getDefaultProject() : Errors.ThrowNoProject();
+            return scriptInfo ? scriptInfo.getDefaultProject() : (this.logErrorForScriptInfoNotFound(fileName), Errors.ThrowNoProject());
         }
 
         getScriptInfoEnsuringProjectsUptoDate(uncheckedFileName: string) {
@@ -1964,6 +1964,12 @@ namespace ts.server {
             if (info) return info;
             const configProject = this.configuredProjects.get(uncheckedFileName);
             return configProject && configProject.getCompilerOptions().configFile;
+        }
+
+        /* @internal */
+        logErrorForScriptInfoNotFound(fileName: string): void {
+            const names = arrayFrom(this.filenameToScriptInfo.entries()).map(([path, scriptInfo]) => ({ path, fileName: scriptInfo.fileName }));
+            this.logger.msg(`Could not find file ${JSON.stringify(fileName)}.\nAll files are: ${JSON.stringify(names)}`, Msg.Err);
         }
 
         /**

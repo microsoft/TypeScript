@@ -13,7 +13,7 @@
 
 verify.codeFix({
     description: "Infer type of \'x\' from usage",
-    index: 2,
+    index: 0,
     newFileContent:
 `class C {
     /**

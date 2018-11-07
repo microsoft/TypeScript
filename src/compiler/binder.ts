@@ -2418,7 +2418,7 @@ namespace ts {
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
-            declareSymbol(file.symbol.exports!, file.symbol, node, flags, SymbolFlags.None);
+            declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
@@ -3702,6 +3702,10 @@ namespace ts {
                 }
                 break;
 
+            case SyntaxKind.BigIntLiteral:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
                 if ((<ForOfStatement>node).awaitModifier) {
@@ -3718,6 +3722,7 @@ namespace ts {
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.ObjectKeyword:
             case SyntaxKind.StringKeyword:
@@ -3926,6 +3931,7 @@ namespace ts {
                 return TransformFlags.MethodOrAccessorExcludes;
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.ObjectKeyword:
