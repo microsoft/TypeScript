@@ -23,8 +23,12 @@ namespace ts {
         let sourcemappedFileCache: SourceFileLikeCache;
         return { tryGetOriginalLocation, tryGetGeneratedLocation, toLineColumnOffset, clearCache };
 
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        }
+
         function scanForSourcemapURL(fileName: string) {
-            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName));
             if (!mappedFile) {
                 return;
             }
@@ -88,7 +92,7 @@ namespace ts {
             }
             possibleMapLocations.push(fileName + ".map");
             for (const location of possibleMapLocations) {
-                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                const mapPath = ts.toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
                 if (host.fileExists(mapPath)) {
                     return convertDocumentToSourceMapper(file, host.readFile(mapPath)!, mapPath); // TODO: GH#18217
                 }
@@ -120,12 +124,16 @@ namespace ts {
         }
 
         function getFile(fileName: string): SourceFileLike | undefined {
-            return getProgram().getSourceFile(fileName) || sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            const path = toPath(fileName);
+            const file = getProgram().getSourceFileByPath(path);
+            if (file && file.resolvedPath === path) {
+                return file;
+            }
+            return sourcemappedFileCache.get(path);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const file = getProgram().getSourceFile(path) || sourcemappedFileCache.get(path)!; // TODO: GH#18217
+            const file = getFile(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
 

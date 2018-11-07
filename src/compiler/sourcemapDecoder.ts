@@ -100,7 +100,7 @@ namespace ts.sourcemaps {
         function getSourceFileLike(fileName: string, location: string): SourceFileLike | undefined {
             // Lookup file in program, if provided
             const path = toPath(fileName, location, host.getCanonicalFileName);
-            const file = program && program.getSourceFile(path);
+            const file = program && program.getSourceFileByPath(path);
             // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
             if (!file || file.resolvedPath !== path) {
                 // Otherwise check the cache (which may hit disk)
