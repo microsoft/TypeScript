@@ -238,6 +238,8 @@ namespace ts {
     /* @internal */
     export const emptyOptions = {};
 
+    export type WithMetadata<T> = T & { metadata?: unknown; };
+
     //
     // Public services of a language service instance associated
     // with a language service host instance
@@ -268,7 +270,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo | undefined;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
