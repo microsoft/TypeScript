@@ -4799,5 +4799,17 @@
     "Add names to all parameters without names": {
         "category": "Message",
         "code": 95073
+    },
+    "Inline local": {
+        "category": "Message",
+        "code": 95074
+    },
+    "Inline here": {
+        "category": "Message",
+        "code": 95075
+    },
+    "Inline all": {
+        "category": "Message",
+        "code": 95076
     }
 }
