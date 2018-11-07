@@ -4871,5 +4871,21 @@
     "Enable the 'experimentalDecorators' option in your configuration file": {
         "category": "Message",
         "code": 95074
+    },
+    "Inline local": {
+        "category": "Message",
+        "code": 95080
+    },
+    "Inline here": {
+        "category": "Message",
+        "code": 95081
+    },
+    "Inline all": {
+        "category": "Message",
+        "code": 95082
+    },
+    "Inline function": {
+        "category": "Message",
+        "code": 95083
     }
 }

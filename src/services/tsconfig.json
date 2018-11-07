@@ -81,6 +81,7 @@
         "refactors/convertExport.ts",
         "refactors/convertImport.ts",
         "refactors/extractSymbol.ts",
+        "refactors/inlineSymbol.ts",
         "refactors/generateGetAccessorAndSetAccessor.ts",
         "refactors/moveToNewFile.ts",
         "refactors/addOrRemoveBracesToArrowFunction.ts",
