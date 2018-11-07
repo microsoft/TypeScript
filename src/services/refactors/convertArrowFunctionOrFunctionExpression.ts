@@ -149,6 +149,7 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         if (!variableInfo) return undefined;
 
         const { variableDeclaration, variableDeclarationList, statement, name } = variableInfo;
+        suppressLeadingTrivia(statement);
         const newNode = createFunctionDeclaration(func.decorators, statement.modifiers, func.asteriskToken, name, func.typeParameters, func.parameters, func.type, body);
         let edits: FileTextChanges[];
 
