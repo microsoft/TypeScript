@@ -13,7 +13,7 @@
 
 verify.codeFix({
     description: "Infer parameter types from usage",
-    index: 2,
+    index: 0,
     newFileContent:
 `/**
  * @param {(arg0: any) => void} callback

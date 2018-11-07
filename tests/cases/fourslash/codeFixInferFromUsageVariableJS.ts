@@ -11,4 +11,4 @@
 ////    x++;
 ////}
 
-verify.rangeAfterCodeFix("/** @type {number } */\nvar x;", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 2);
+verify.rangeAfterCodeFix("/** @type {number } */\nvar x;", /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

@@ -16,11 +16,9 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(43,1): error TS2349
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(47,1): error TS2322: Type '12' is not assignable to type 'undefined'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(53,9): error TS2339: Property 'm' does not exist on type '{ p: number; }'.
 tests/cases/conformance/types/spread/objectSpreadNegative.ts(58,11): error TS2339: Property 'a' does not exist on type '{}'.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(62,14): error TS2698: Spread types may only be created from object types.
-tests/cases/conformance/types/spread/objectSpreadNegative.ts(65,14): error TS2698: Spread types may only be created from object types.
 
 
-==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (17 errors) ====
+==== tests/cases/conformance/types/spread/objectSpreadNegative.ts (15 errors) ====
     let o = { a: 1, b: 'no' }
     
     /// private propagates
@@ -112,24 +110,4 @@ tests/cases/conformance/types/spread/objectSpreadNegative.ts(65,14): error TS269
     spreadObj.a; // error 'a' is not in {}
               ~
 !!! error TS2339: Property 'a' does not exist on type '{}'.
-    
-    // generics
-    function f<T, U>(t: T, u: U) {
-        return { ...t, ...u, id: 'id' };
-                 ~~~~
-!!! error TS2698: Spread types may only be created from object types.
-    }
-    function override<U>(initial: U, override: U): U {
-        return { ...initial, ...override };
-                 ~~~~~~~~~~
-!!! error TS2698: Spread types may only be created from object types.
-    }
-    let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
-        f({ a: 1, b: 'yes' }, { c: 'no', d: false })
-    let overlap: { id: string, a: number, b: string } =
-        f({ a: 1 }, { a: 2, b: 'extra' })
-    let overlapConflict: { id:string, a: string } =
-        f({ a: 1 }, { a: 'mismatch' })
-    let overwriteId: { id: string, a: number, c: number, d: string } =
-        f({ a: 1, id: true }, { c: 1, d: 'no' })
     

@@ -221,6 +221,11 @@ namespace ts.server.protocol {
          * Contains message body if success === true.
          */
         body?: any;
+
+        /**
+         * Contains extra information that plugin can include to be passed on
+         */
+        metadata?: unknown;
     }
 
     /**
@@ -2401,6 +2406,7 @@ namespace ts.server.protocol {
      */
     export interface DiagnosticEvent extends Event {
         body?: DiagnosticEventBody;
+        event: DiagnosticEventKind;
     }
 
     export interface ConfigFileDiagnosticEventBody {
@@ -2519,6 +2525,10 @@ namespace ts.server.protocol {
          */
         maxFileSize: number;
     }
+
+    /*@internal*/
+    export type AnyEvent = RequestCompletedEvent | DiagnosticEvent | ConfigFileDiagnosticEvent | ProjectLanguageServiceStateEvent | TelemetryEvent |
+        ProjectsUpdatedInBackgroundEvent | ProjectLoadingStartEvent | ProjectLoadingFinishEvent | SurveyReadyEvent | LargeFileReferencedEvent;
 
     /**
      * Arguments for reload request.

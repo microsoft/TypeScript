@@ -31,6 +31,7 @@ namespace ts {
         | SyntaxKind.AbstractKeyword
         | SyntaxKind.AnyKeyword
         | SyntaxKind.AsKeyword
+        | SyntaxKind.BigIntKeyword
         | SyntaxKind.BooleanKeyword
         | SyntaxKind.BreakKeyword
         | SyntaxKind.CaseKeyword
@@ -128,6 +129,7 @@ namespace ts {
         ConflictMarkerTrivia,
         // Literals
         NumericLiteral,
+        BigIntLiteral,
         StringLiteral,
         JsxText,
         JsxTextAllWhiteSpaces,
@@ -271,6 +273,7 @@ namespace ts {
         UnknownKeyword,
         FromKeyword,
         GlobalKeyword,
+        BigIntKeyword,
         OfKeyword, // LastKeyword and LastToken and LastContextualKeyword
 
         // Parse tree nodes
@@ -716,7 +719,6 @@ namespace ts {
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -1109,6 +1111,7 @@ namespace ts {
         kind: SyntaxKind.AnyKeyword
             | SyntaxKind.UnknownKeyword
             | SyntaxKind.NumberKeyword
+            | SyntaxKind.BigIntKeyword
             | SyntaxKind.ObjectKeyword
             | SyntaxKind.BooleanKeyword
             | SyntaxKind.StringKeyword
@@ -1659,13 +1662,17 @@ namespace ts {
         OctalSpecifier = 1 << 8,    // e.g. `0o777`
         ContainsSeparator = 1 << 9, // e.g. `0b1100_0101`
         BinaryOrOctalSpecifier = BinarySpecifier | OctalSpecifier,
-        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinarySpecifier | OctalSpecifier | ContainsSeparator
+        NumericLiteralFlags = Scientific | Octal | HexSpecifier | BinaryOrOctalSpecifier | ContainsSeparator
     }
 
     export interface NumericLiteral extends LiteralExpression {
         kind: SyntaxKind.NumericLiteral;
         /* @internal */
         numericLiteralFlags: TokenFlags;
+    }
+
+    export interface BigIntLiteral extends LiteralExpression {
+        kind: SyntaxKind.BigIntLiteral;
     }
 
     export interface TemplateHead extends LiteralLikeNode {
@@ -2413,7 +2420,6 @@ namespace ts {
 
     export interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
-        atToken: AtToken;
         tagName: Identifier;
         comment?: string;
     }
@@ -3173,6 +3179,8 @@ namespace ts {
         /* @internal */ getTypeCount(): number;
 
         /* @internal */ isArrayLikeType(type: Type): boolean;
+        /* @internal */ getObjectFlags(type: Type): ObjectFlags;
+
         /**
          * True if `contextualType` should not be considered for completions because
          * e.g. it specifies `kind: "a"` and obj has `kind: "b"`.
@@ -3459,6 +3467,7 @@ namespace ts {
                                             // of a type, such as the global `Promise` type in lib.d.ts).
         VoidNullableOrNeverType,            // The TypeReferenceNode resolves to a Void-like, Nullable, or Never type.
         NumberLikeType,                     // The TypeReferenceNode resolves to a Number-like type.
+        BigIntLikeType,                     // The TypeReferenceNode resolves to a BigInt-like type.
         StringLikeType,                     // The TypeReferenceNode resolves to a String-like type.
         BooleanType,                        // The TypeReferenceNode resolves to a Boolean-like type.
         ArrayLikeType,                      // The TypeReferenceNode resolves to an Array-like type.
@@ -3803,29 +3812,27 @@ namespace ts {
         Number                  = 1 << 3,
         Boolean                 = 1 << 4,
         Enum                    = 1 << 5,
-        StringLiteral           = 1 << 6,
-        NumberLiteral           = 1 << 7,
-        BooleanLiteral          = 1 << 8,
-        EnumLiteral             = 1 << 9,   // Always combined with StringLiteral, NumberLiteral, or Union
-        ESSymbol                = 1 << 10,  // Type of symbol primitive introduced in ES6
-        UniqueESSymbol          = 1 << 11,  // unique symbol
-        Void                    = 1 << 12,
-        Undefined               = 1 << 13,
-        Null                    = 1 << 14,
-        Never                   = 1 << 15,  // Never type
-        TypeParameter           = 1 << 16,  // Type parameter
-        Object                  = 1 << 17,  // Object type
-        Union                   = 1 << 18,  // Union (T | U)
-        Intersection            = 1 << 19,  // Intersection (T & U)
-        Index                   = 1 << 20,  // keyof T
-        IndexedAccess           = 1 << 21,  // T[K]
-        Conditional             = 1 << 22,  // T extends U ? X : Y
-        Substitution            = 1 << 23,  // Type parameter substitution
-        NonPrimitive            = 1 << 24,  // intrinsic object type
-        /* @internal */
-        FreshLiteral            = 1 << 25,  // Fresh literal or unique type
-        /* @internal */
-        UnionOfPrimitiveTypes   = 1 << 26,  // Type is union of primitive types
+        BigInt                  = 1 << 6,
+        StringLiteral           = 1 << 7,
+        NumberLiteral           = 1 << 8,
+        BooleanLiteral          = 1 << 9,
+        EnumLiteral             = 1 << 10,  // Always combined with StringLiteral, NumberLiteral, or Union
+        BigIntLiteral           = 1 << 11,
+        ESSymbol                = 1 << 12,  // Type of symbol primitive introduced in ES6
+        UniqueESSymbol          = 1 << 13,  // unique symbol
+        Void                    = 1 << 14,
+        Undefined               = 1 << 15,
+        Null                    = 1 << 16,
+        Never                   = 1 << 17,  // Never type
+        TypeParameter           = 1 << 18,  // Type parameter
+        Object                  = 1 << 19,  // Object type
+        Union                   = 1 << 20,  // Union (T | U)
+        Intersection            = 1 << 21,  // Intersection (T & U)
+        Index                   = 1 << 22,  // keyof T
+        IndexedAccess           = 1 << 23,  // T[K]
+        Conditional             = 1 << 24,  // T extends U ? X : Y
+        Substitution            = 1 << 25,  // Type parameter substitution
+        NonPrimitive            = 1 << 26,  // intrinsic object type
         /* @internal */
         ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
@@ -3837,26 +3844,27 @@ namespace ts {
         AnyOrUnknown = Any | Unknown,
         /* @internal */
         Nullable = Undefined | Null,
-        Literal = StringLiteral | NumberLiteral | BooleanLiteral,
+        Literal = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral,
         Unit = Literal | UniqueESSymbol | Nullable,
         StringOrNumberLiteral = StringLiteral | NumberLiteral,
         /* @internal */
         StringOrNumberLiteralOrUnique = StringLiteral | NumberLiteral | UniqueESSymbol,
         /* @internal */
-        DefinitelyFalsy = StringLiteral | NumberLiteral | BooleanLiteral | Void | Undefined | Null,
-        PossiblyFalsy = DefinitelyFalsy | String | Number | Boolean,
+        DefinitelyFalsy = StringLiteral | NumberLiteral | BigIntLiteral | BooleanLiteral | Void | Undefined | Null,
+        PossiblyFalsy = DefinitelyFalsy | String | Number | BigInt | Boolean,
         /* @internal */
-        Intrinsic = Any | Unknown | String | Number | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
+        Intrinsic = Any | Unknown | String | Number | BigInt | Boolean | BooleanLiteral | ESSymbol | Void | Undefined | Null | Never | NonPrimitive,
         /* @internal */
-        Primitive = String | Number | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
+        Primitive = String | Number | BigInt | Boolean | Enum | EnumLiteral | ESSymbol | Void | Undefined | Null | Literal | UniqueESSymbol,
         StringLike = String | StringLiteral,
         NumberLike = Number | NumberLiteral | Enum,
+        BigIntLike = BigInt | BigIntLiteral,
         BooleanLike = Boolean | BooleanLiteral,
         EnumLike = Enum | EnumLiteral,
         ESSymbolLike = ESSymbol | UniqueESSymbol,
         VoidLike = Void | Undefined,
         /* @internal */
-        DisjointDomains = NonPrimitive | StringLike | NumberLike | BooleanLike | ESSymbolLike | VoidLike | Null,
+        DisjointDomains = NonPrimitive | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbolLike | VoidLike | Null,
         UnionOrIntersection = Union | Intersection,
         StructuredType = Object | Union | Intersection,
         TypeVariable = TypeParameter | IndexedAccess,
@@ -3867,7 +3875,7 @@ namespace ts {
 
         // 'Narrowable' types are types where narrowing actually narrows.
         // This *should* be every type other than null, undefined, void, and never
-        Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
+        Narrowable = Any | Unknown | StructuredOrInstantiable | StringLike | NumberLike | BigIntLike | BooleanLike | ESSymbol | UniqueESSymbol | NonPrimitive,
         NotUnionOrUnit = Any | Unknown | ESSymbol | Object | NonPrimitive,
         /* @internal */
         NotPrimitiveUnion = Any | Unknown | Enum | Void | Never | StructuredOrInstantiable,
@@ -3924,10 +3932,11 @@ namespace ts {
 
     // String literal types (TypeFlags.StringLiteral)
     // Numeric literal types (TypeFlags.NumberLiteral)
+    // BigInt literal types (TypeFlags.BigIntLiteral)
     export interface LiteralType extends Type {
-        value: string | number;     // Value of literal
-        freshType: LiteralType;     // Fresh version of type
-        regularType: LiteralType;   // Regular version of type
+        value: string | number | PseudoBigInt; // Value of literal
+        freshType: LiteralType;                // Fresh version of type
+        regularType: LiteralType;              // Regular version of type
     }
 
     // Unique symbol types (TypeFlags.UniqueESSymbol)
@@ -3941,6 +3950,10 @@ namespace ts {
 
     export interface NumberLiteralType extends LiteralType {
         value: number;
+    }
+
+    export interface BigIntLiteralType extends LiteralType {
+        value: PseudoBigInt;
     }
 
     // Enum types (TypeFlags.Enum)
@@ -3963,6 +3976,7 @@ namespace ts {
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 15, // Fresh object literal
         ClassOrInterface = Class | Interface
     }
 
@@ -4058,7 +4072,10 @@ namespace ts {
         couldContainTypeVariables: boolean;
     }
 
-    export interface UnionType extends UnionOrIntersectionType { }
+    export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        primitiveTypesOnly: boolean;
+    }
 
     export interface IntersectionType extends UnionOrIntersectionType {
         /* @internal */
@@ -4484,6 +4501,7 @@ namespace ts {
         downlevelIteration?: boolean;
         emitBOM?: boolean;
         emitDecoratorMetadata?: boolean;
+        experimentalBigInt?: boolean;
         experimentalDecorators?: boolean;
         forceConsistentCasingInFileNames?: boolean;
         /*@internal*/help?: boolean;
@@ -4556,6 +4574,7 @@ namespace ts {
         /*@internal*/ version?: boolean;
         /*@internal*/ watch?: boolean;
         esModuleInterop?: boolean;
+        /* @internal */ showConfig?: boolean;
 
         [option: string]: CompilerOptionsValue | TsConfigSourceFile | undefined;
     }
@@ -5757,5 +5776,11 @@ namespace ts {
         /** Determines whether we import `foo/index.ts` as "foo", "foo/index", or "foo/index.js" */
         readonly importModuleSpecifierEnding?: "minimal" | "index" | "js";
         readonly allowTextChangesInNewFiles?: boolean;
+    }
+
+    /** Represents a bigint literal value without requiring bigint support */
+    export interface PseudoBigInt {
+        negative: boolean;
+        base10Value: string;
     }
 }

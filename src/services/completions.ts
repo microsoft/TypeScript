@@ -165,8 +165,9 @@ namespace ts.Completions {
         });
     }
 
-    const completionNameForLiteral = JSON.stringify;
-    function createCompletionEntryForLiteral(literal: string | number): CompletionEntry {
+    const completionNameForLiteral = (literal: string | number | PseudoBigInt) =>
+        typeof literal === "object" ? pseudoBigIntToString(literal) + "n" : JSON.stringify(literal);
+    function createCompletionEntryForLiteral(literal: string | number | PseudoBigInt): CompletionEntry {
         return { name: completionNameForLiteral(literal), kind: ScriptElementKind.string, kindModifiers: ScriptElementKindModifier.none, sortText: "0" };
     }
 
@@ -337,7 +338,7 @@ namespace ts.Completions {
         readonly isJsxInitializer: IsJsxInitializer;
     }
     function getSymbolCompletionFromEntryId(program: Program, log: Log, sourceFile: SourceFile, position: number, entryId: CompletionEntryIdentifier,
-    ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number } | { type: "none" } {
+    ): SymbolCompletion | { type: "request", request: Request } | { type: "literal", literal: string | number | PseudoBigInt } | { type: "none" } {
         const compilerOptions = program.getCompilerOptions();
         const completionData = getCompletionData(program, log, sourceFile, isUncheckedFile(sourceFile, compilerOptions), position, { includeCompletionsForModuleExports: true, includeCompletionsWithInsertText: true }, entryId);
         if (!completionData) {
@@ -502,7 +503,7 @@ namespace ts.Completions {
         readonly isNewIdentifierLocation: boolean;
         readonly location: Node | undefined;
         readonly keywordFilters: KeywordCompletionFilters;
-        readonly literals: ReadonlyArray<string | number>;
+        readonly literals: ReadonlyArray<string | number | PseudoBigInt>;
         readonly symbolToOriginInfoMap: SymbolOriginInfoMap;
         readonly recommendedCompletion: Symbol | undefined;
         readonly previousToken: Node | undefined;
@@ -1128,23 +1129,13 @@ namespace ts.Completions {
             return false;
         }
 
-        function symbolCanBeReferencedAtTypeLocation(symbol: Symbol): boolean {
-            symbol = symbol.exportSymbol || symbol;
-
-            // This is an alias, follow what it aliases
-            symbol = skipAlias(symbol, typeChecker);
-
-            if (symbol.flags & SymbolFlags.Type) {
-                return true;
-            }
-
-            if (symbol.flags & SymbolFlags.Module) {
-                const exportedSymbols = typeChecker.getExportsOfModule(symbol);
-                // If the exported symbols contains type,
-                // symbol can be referenced at locations where type is allowed
-                return exportedSymbols.some(symbolCanBeReferencedAtTypeLocation);
-            }
-            return false;
+        /** True if symbol is a type or a module containing at least one type. */
+        function symbolCanBeReferencedAtTypeLocation(symbol: Symbol, seenModules = createMap<true>()): boolean {
+            const sym = skipAlias(symbol.exportSymbol || symbol, typeChecker);
+            return !!(sym.flags & SymbolFlags.Type) ||
+                !!(sym.flags & SymbolFlags.Module) &&
+                addToSeen(seenModules, getSymbolId(sym)) &&
+                typeChecker.getExportsOfModule(sym).some(e => symbolCanBeReferencedAtTypeLocation(e, seenModules));
         }
 
         function getSymbolsFromOtherSourceFileExports(symbols: Symbol[], tokenText: string, target: ScriptTarget): void {
@@ -1177,14 +1168,16 @@ namespace ts.Completions {
                     // The actual import fix might end up coming from a re-export -- we don't compute that until getting completion details.
                     // This is just to avoid adding duplicate completion entries.
                     //
-                    // If `symbol.parent !== ...`, this comes from an `export * from "foo"` re-export. Those don't create new symbols.
-                    // If `some(...)`, this comes from an `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                    // If `symbol.parent !== ...`, this is an `export * from "foo"` re-export. Those don't create new symbols.
                     if (typeChecker.getMergedSymbol(symbol.parent!) !== resolvedModuleSymbol
-                        || some(symbol.declarations, d => isExportSpecifier(d) && !d.propertyName && !!d.parent.parent.moduleSpecifier)) {
+                        || some(symbol.declarations, d =>
+                            // If `!!d.name.originalKeywordKind`, this is `export { _break as break };` -- skip this and prefer the keyword completion.
+                            // If `!!d.parent.parent.moduleSpecifier`, this is `export { foo } from "foo"` re-export, which creates a new symbol (thus isn't caught by the first check).
+                            isExportSpecifier(d) && (d.propertyName ? isIdentifierANonContextualKeyword(d.name) : !!d.parent.parent.moduleSpecifier))) {
                         continue;
                     }
 
-                    const isDefaultExport = symbol.name === InternalSymbolName.Default;
+                    const isDefaultExport = symbol.escapedName === InternalSymbolName.Default;
                     if (isDefaultExport) {
                         symbol = getLocalSymbolForExportDefault(symbol) || symbol;
                     }

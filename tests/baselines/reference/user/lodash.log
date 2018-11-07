@@ -26,9 +26,9 @@ node_modules/lodash/_arrayReduceRight.js(16,19): error TS2532: Object is possibl
 node_modules/lodash/_arrayReduceRight.js(19,41): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_arraySome.js(16,19): error TS2532: Object is possibly 'undefined'.
 node_modules/lodash/_asciiWords.js(8,20): error TS8024: JSDoc '@param' tag has name 'The', but there is no parameter with that name.
-node_modules/lodash/_baseClone.js(91,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-node_modules/lodash/_baseClone.js(92,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-node_modules/lodash/_baseClone.js(93,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/lodash/_baseClone.js(91,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/lodash/_baseClone.js(92,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/lodash/_baseClone.js(93,16): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/lodash/_baseClone.js(115,33): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
 node_modules/lodash/_baseClone.js(128,43): error TS2345: Argument of type 'number' is not assignable to parameter of type 'boolean | undefined'.
 node_modules/lodash/_baseClone.js(157,17): error TS2552: Cannot find name 'keysIn'. Did you mean 'keys'?

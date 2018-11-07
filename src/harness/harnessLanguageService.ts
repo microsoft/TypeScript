@@ -1,4 +1,18 @@
 namespace Harness.LanguageService {
+
+    export function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
+        // tslint:disable-next-line:no-null-keyword
+        const proxy = Object.create(/*prototype*/ null);
+        const langSvc: any = info.languageService;
+        for (const k of Object.keys(langSvc)) {
+            // tslint:disable-next-line only-arrow-functions
+            proxy[k] = function () {
+                return langSvc[k].apply(langSvc, arguments);
+            };
+        }
+        return proxy;
+    }
+
     export class ScriptInfo {
         public version = 1;
         public editRanges: { length: number; textChangeRange: ts.TextChangeRange; }[] = [];
@@ -868,19 +882,6 @@ namespace Harness.LanguageService {
                         module: undefined,
                         error: new Error("Could not resolve module")
                     };
-            }
-
-            function makeDefaultProxy(info: ts.server.PluginCreateInfo): ts.LanguageService {
-                // tslint:disable-next-line:no-null-keyword
-                const proxy = Object.create(/*prototype*/ null);
-                const langSvc: any = info.languageService;
-                for (const k of Object.keys(langSvc)) {
-                    // tslint:disable-next-line only-arrow-functions
-                    proxy[k] = function () {
-                        return langSvc[k].apply(langSvc, arguments);
-                    };
-                }
-                return proxy;
             }
         }
     }

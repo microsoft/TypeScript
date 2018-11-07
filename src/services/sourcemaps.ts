@@ -13,12 +13,13 @@ namespace ts {
     }
 
     export function getSourceMapper(
-        getCanonicalFileName: GetCanonicalFileName,
+        useCaseSensitiveFileNames: boolean,
         currentDirectory: string,
         log: (message: string) => void,
         host: LanguageServiceHost,
         getProgram: () => Program,
     ): SourceMapper {
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         let sourcemappedFileCache: SourceFileLikeCache;
         return { tryGetOriginalLocation, tryGetGeneratedLocation, toLineColumnOffset, clearCache };
 
@@ -56,6 +57,7 @@ namespace ts {
             return file.sourceMapper = sourcemaps.decode({
                 readFile: s => host.readFile!(s), // TODO: GH#18217
                 fileExists: s => host.fileExists!(s), // TODO: GH#18217
+                useCaseSensitiveFileNames,
                 getCanonicalFileName,
                 log,
             }, mapFileName, maps, getProgram(), sourcemappedFileCache);
@@ -105,7 +107,11 @@ namespace ts {
 
         function tryGetGeneratedLocation(info: sourcemaps.SourceMappableLocation): sourcemaps.SourceMappableLocation | undefined {
             const program = getProgram();
-            const declarationPath = getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            const options = program.getCompilerOptions();
+            const outPath = options.outFile || options.out;
+            const declarationPath = outPath ?
+                removeFileExtension(outPath) + Extension.Dts :
+                getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
             const declarationFile = getFile(declarationPath);
             if (!declarationFile) return undefined;

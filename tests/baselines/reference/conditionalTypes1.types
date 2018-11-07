@@ -413,13 +413,13 @@ function zeroOf<T extends number | string | boolean>(value: T) {
 >(typeof value === "number" ? 0 : typeof value === "string" ? "" : false) : false | "" | 0
 >typeof value === "number" ? 0 : typeof value === "string" ? "" : false : false | "" | 0
 >typeof value === "number" : boolean
->typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : T
 >"number" : "number"
 >0 : 0
 >typeof value === "string" ? "" : false : false | ""
 >typeof value === "string" : boolean
->typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : T
 >"string" : "string"
 >"" : ""
