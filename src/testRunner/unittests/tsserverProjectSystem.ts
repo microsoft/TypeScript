@@ -3301,7 +3301,7 @@ namespace ts.projectSystem {
             });
         });
 
-        it("dynamic file with reference paths external project", () => {
+        it("dynamic file with reference paths without external project", () => {
             const file: File = {
                 path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
                 content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
@@ -3899,18 +3899,30 @@ var x = 10;`
 
         describe("when opening new file that doesnt exist on disk yet", () => {
             function verifyNonExistentFile(useProjectRoot: boolean) {
-                const host = createServerHost([libFile]);
+                const folderPath = "/user/someuser/projects/someFolder";
+                const fileInRoot: File = {
+                    path: `/src/somefile.d.ts`,
+                    content: "class c { }"
+                };
+                const fileInProjectRoot: File = {
+                    path: `${folderPath}/src/somefile.d.ts`,
+                    content: "class c { }"
+                };
+                const host = createServerHost([libFile, fileInRoot, fileInProjectRoot]);
                 const { hasError, errorLogger } = createErrorLogger();
                 const session = createSession(host, { canUseEvents: true, logger: errorLogger, useInferredProjectPerProjectRoot: true });
 
-                const folderPath = "/user/someuser/projects/someFolder";
                 const projectService = session.getProjectService();
                 const untitledFile = "untitled:Untitled-1";
+                const refPathNotFound1 = "../../../../../../typings/@epic/Core.d.ts";
+                const refPathNotFound2 = "./src/somefile.d.ts";
+                const fileContent = `/// <reference path="${refPathNotFound1}" />
+/// <reference path="${refPathNotFound2}" />`;
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: server.CommandNames.Open,
                     arguments: {
                         file: untitledFile,
-                        fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />`,
+                        fileContent,
                         scriptKindName: "TS",
                         projectRootPath: useProjectRoot ? folderPath : undefined
                     }
@@ -3918,6 +3930,8 @@ var x = 10;`
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
                 const infoForUntitledAtProjectRoot = projectService.getScriptInfoForPath(`${folderPath.toLowerCase()}/${untitledFile.toLowerCase()}` as Path);
                 const infoForUnitiledAtRoot = projectService.getScriptInfoForPath(`/${untitledFile.toLowerCase()}` as Path);
+                const infoForSomefileAtProjectRoot = projectService.getScriptInfoForPath(`/${folderPath.toLowerCase()}/src/somefile.d.ts` as Path);
+                const infoForSomefileAtRoot = projectService.getScriptInfoForPath(`${fileInRoot.path.toLowerCase()}` as Path);
                 if (useProjectRoot) {
                     assert.isDefined(infoForUntitledAtProjectRoot);
                     assert.isUndefined(infoForUnitiledAtRoot);
@@ -3926,7 +3940,11 @@ var x = 10;`
                     assert.isDefined(infoForUnitiledAtRoot);
                     assert.isUndefined(infoForUntitledAtProjectRoot);
                 }
-                host.checkTimeoutQueueLength(2);
+                assert.isUndefined(infoForSomefileAtRoot);
+                assert.isUndefined(infoForSomefileAtProjectRoot);
+
+                // Since this is not js project so no typings are queued
+                host.checkTimeoutQueueLength(0);
 
                 const newTimeoutId = host.getNextTimeoutId();
                 const expectedSequenceId = session.getNextSeq();
@@ -3937,19 +3955,26 @@ var x = 10;`
                         files: [untitledFile]
                     }
                 });
-                host.checkTimeoutQueueLength(3);
+                host.checkTimeoutQueueLength(1);
 
                 // Run the last one = get error request
                 host.runQueuedTimeoutCallbacks(newTimeoutId);
 
                 assert.isFalse(hasError());
-                host.checkTimeoutQueueLength(2);
+                host.checkTimeoutQueueLength(0);
                 checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
                 assert.isFalse(hasError());
-                checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                const errorOffset = fileContent.indexOf(refPathNotFound1) + 1;
+                checkErrorMessage(session, "semanticDiag", {
+                    file: untitledFile,
+                    diagnostics: [
+                        createDiagnostic({ line: 1, offset: errorOffset }, { line: 1, offset: errorOffset + refPathNotFound1.length }, Diagnostics.File_0_not_found, [refPathNotFound1], "error"),
+                        createDiagnostic({ line: 2, offset: errorOffset }, { line: 2, offset: errorOffset + refPathNotFound2.length }, Diagnostics.File_0_not_found, [refPathNotFound2.substr(2)], "error")
+                    ]
+                });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks(1);

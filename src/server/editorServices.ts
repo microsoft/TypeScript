@@ -2109,7 +2109,20 @@ namespace ts.server {
         }
 
         private getOrCreateScriptInfoNotOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined, hostToQueryFileExistsOn: DirectoryStructureHost | undefined) {
-            return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            if (isRootedDiskPath(fileName) || isDynamicFileName(fileName)) {
+                return this.getOrCreateScriptInfoWorker(fileName, currentDirectory, /*openedByClient*/ false, /*fileContent*/ undefined, scriptKind, hasMixedContent, hostToQueryFileExistsOn);
+            }
+
+            // This is non rooted path with different current directory than project service current directory
+            // Only paths recognized are open relative file paths
+            const info = this.openFilesWithNonRootedDiskPath.get(this.toCanonicalFileName(fileName));
+            if (info) {
+                return info;
+            }
+
+            // This means triple slash references wont be resolved in dynamic and unsaved files
+            // which is intentional since we dont know what it means to be relative to non disk files
+            return undefined;
         }
 
         private getOrCreateScriptInfoOpenedByClientForNormalizedPath(fileName: NormalizedPath, currentDirectory: string, fileContent: string | undefined, scriptKind: ScriptKind | undefined, hasMixedContent: boolean | undefined) {
@@ -2126,7 +2139,7 @@ namespace ts.server {
             let info = this.getScriptInfoForPath(path);
             if (!info) {
                 const isDynamic = isDynamicFileName(fileName);
-                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info`);
+                Debug.assert(isRootedDiskPath(fileName) || isDynamic || openedByClient, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nScript info with non-dynamic relative file name can only be open script info or in context of host currentDirectory`);
                 Debug.assert(!isRootedDiskPath(fileName) || this.currentDirectory === currentDirectory || !this.openFilesWithNonRootedDiskPath.has(this.toCanonicalFileName(fileName)), "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nOpen script files with non rooted disk path opened with current directory context cannot have same canonical names`);
                 Debug.assert(!isDynamic || this.currentDirectory === currentDirectory, "", () => `${JSON.stringify({ fileName, currentDirectory, hostCurrentDirectory: this.currentDirectory, openKeys: arrayFrom(this.openFilesWithNonRootedDiskPath.keys()) })}\nDynamic files must always have current directory context since containing external project name will always match the script info name.`);
                 // If the file is not opened by client and the file doesnot exist on the disk, return
@@ -2139,7 +2152,7 @@ namespace ts.server {
                 if (!openedByClient) {
                     this.watchClosedScriptInfo(info);
                 }
-                else if (!isRootedDiskPath(fileName) && currentDirectory !== this.currentDirectory) {
+                else if (!isRootedDiskPath(fileName) && !isDynamic) {
                     // File that is opened by user but isn't rooted disk path
                     this.openFilesWithNonRootedDiskPath.set(this.toCanonicalFileName(fileName), info);
                 }
