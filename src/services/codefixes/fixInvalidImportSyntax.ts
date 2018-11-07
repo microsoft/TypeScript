@@ -77,12 +77,13 @@ namespace ts.codefix {
     }
 
     function getImportCodeFixesForExpression(context: CodeFixContext, expr: Node): CodeFixAction[] | undefined {
-        const type = context.program.getTypeChecker().getTypeAtLocation(expr);
-        if (!(type.symbol && (type.symbol as TransientSymbol).originatingImport)) {
+        const checker = context.program.getTypeChecker();
+        const type = checker.getTypeAtLocation(expr);
+        if (!(type.symbol && checker.getSymbolOriginatingImport(type.symbol))) {
             return [];
         }
         const fixes: CodeFixAction[] = [];
-        const relatedImport = (type.symbol as TransientSymbol).originatingImport!; // TODO: GH#18217
+        const relatedImport = checker.getSymbolOriginatingImport(type.symbol)!; // TODO: GH#18217
         if (!isImportCall(relatedImport)) {
             addRange(fixes, getCodeFixesForImportDeclaration(context, relatedImport));
         }

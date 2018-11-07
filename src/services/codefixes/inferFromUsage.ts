@@ -717,7 +717,7 @@ namespace ts.codefix {
             const members = mapEntries(props, (name, types) => {
                 const isOptional = types.length < anons.length ? SymbolFlags.Optional : 0;
                 const s = checker.createSymbol(SymbolFlags.Property | isOptional, name as __String);
-                s.type = checker.getUnionType(types);
+                checker.setSymbolType(s, checker.getUnionType(types));
                 return [name, s];
             });
             return checker.createAnonymousType(
@@ -761,7 +761,7 @@ namespace ts.codefix {
                 if (usageContext.properties) {
                     usageContext.properties.forEach((context, name) => {
                         const symbol = checker.createSymbol(SymbolFlags.Property, name);
-                        symbol.type = recur(context);
+                        checker.setSymbolType(symbol, recur(context));
                         members.set(name, symbol);
                     });
                 }
@@ -817,7 +817,7 @@ namespace ts.codefix {
             const parameters: Symbol[] = [];
             for (let i = 0; i < callContext.argumentTypes.length; i++) {
                 const symbol = checker.createSymbol(SymbolFlags.FunctionScopedVariable, escapeLeadingUnderscores(`arg${i}`));
-                symbol.type = checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i]));
+                checker.setSymbolType(symbol, checker.getWidenedType(checker.getBaseTypeOfLiteralType(callContext.argumentTypes[i])));
                 parameters.push(symbol);
             }
             const returnType = unifyFromContext(inferFromContext(callContext.returnType, checker), checker, checker.getVoidType());

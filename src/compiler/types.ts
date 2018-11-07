@@ -3229,6 +3229,8 @@ namespace ts {
         runWithCancellationToken<T>(token: CancellationToken, cb: (checker: TypeChecker) => T): T;
 
         /* @internal */ getLocalTypeParametersOfClassOrInterfaceOrTypeAlias(symbol: Symbol): ReadonlyArray<TypeParameter> | undefined;
+        /* @internal */ setSymbolType(symbol: Symbol, type: Type): Type;
+        /* @internal */ getSymbolOriginatingImport(symbol: Symbol): ImportDeclaration | ImportCall | undefined;
     }
 
     /* @internal */
@@ -3627,39 +3629,6 @@ namespace ts {
     }
 
     /* @internal */
-    export interface SymbolLinks {
-        immediateTarget?: Symbol;           // Immediate target of an alias. May be another alias. Do not access directly, use `checker.getImmediateAliasedSymbol` instead.
-        target?: Symbol;                    // Resolved (non-alias) target of an alias
-        type?: Type;                        // Type of value symbol
-        uniqueESSymbolType?: Type;          // UniqueESSymbol type for a symbol
-        declaredType?: Type;                // Type of class, interface, enum, type alias, or type parameter
-        resolvedJSDocType?: Type;           // Resolved type of a JSDoc type reference
-        typeParameters?: TypeParameter[];   // Type parameters of type alias (undefined if non-generic)
-        outerTypeParameters?: TypeParameter[];  // Outer type parameters of anonymous object type
-        inferredClassType?: Type;           // Type of an inferred ES5 class
-        instantiations?: Map<Type>;         // Instantiations of generic type alias (undefined if non-generic)
-        mapper?: TypeMapper;                // Type mapper for instantiation alias
-        referenced?: boolean;               // True if alias symbol has been referenced as a value
-        containingType?: UnionOrIntersectionType; // Containing union or intersection type for synthetic property
-        leftSpread?: Symbol;                // Left source for synthetic spread property
-        rightSpread?: Symbol;               // Right source for synthetic spread property
-        syntheticOrigin?: Symbol;           // For a property on a mapped or spread type, points back to the original property
-        isDiscriminantProperty?: boolean;   // True if discriminant synthetic property
-        resolvedExports?: SymbolTable;      // Resolved exports of module or combined early- and late-bound static members of a class.
-        resolvedMembers?: SymbolTable;      // Combined early- and late-bound members of a symbol
-        exportsChecked?: boolean;           // True if exports of external module have been checked
-        typeParametersChecked?: boolean;    // True if type parameters of merged class and interface declarations have been checked.
-        isDeclarationWithCollidingName?: boolean;   // True if symbol is block scoped redeclaration
-        bindingElement?: BindingElement;    // Binding element associated with property symbol
-        exportsSomeValue?: boolean;         // True if module exports some value (not just types)
-        enumKind?: EnumKind;                // Enum declaration classification
-        originatingImport?: ImportDeclaration | ImportCall; // Import declaration which produced the symbol, present if the symbol is marked as uncallable but had call signatures in `resolveESModuleSymbol`
-        lateSymbol?: Symbol;                // Late-bound symbol for a computed property
-        specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
-        variances?: Variance[];             // Alias symbol type argument variance cache
-    }
-
-    /* @internal */
     export const enum EnumKind {
         Numeric,                            // Numeric enum (each member has a TypeFlags.Enum type)
         Literal                             // Literal enum (each member has a TypeFlags.EnumLiteral type)
@@ -3685,7 +3654,7 @@ namespace ts {
     }
 
     /* @internal */
-    export interface TransientSymbol extends Symbol, SymbolLinks {
+    export interface TransientSymbol extends Symbol {
         checkFlags: CheckFlags;
     }
 
@@ -3778,31 +3747,6 @@ namespace ts {
         AssignmentsMarked                   = 0x00800000,  // Parameter assignments have been marked
         ClassWithConstructorReference       = 0x01000000,  // Class that contains a binding to its constructor inside of the class body.
         ConstructorReferenceInClass         = 0x02000000,  // Binding to a class constructor inside of the class's body.
-    }
-
-    /* @internal */
-    export interface NodeLinks {
-        flags: NodeCheckFlags;           // Set of flags specific to Node
-        resolvedType?: Type;              // Cached type of type node
-        resolvedEnumType?: Type;          // Cached constraint type from enum jsdoc tag
-        resolvedSignature?: Signature;    // Cached signature of signature node or call expression
-        resolvedSymbol?: Symbol;          // Cached name resolution result
-        resolvedIndexInfo?: IndexInfo;    // Cached indexing info resolution result
-        maybeTypePredicate?: boolean;     // Cached check whether call expression might reference a type predicate
-        enumMemberValue?: string | number;  // Constant value of enum member
-        isVisible?: boolean;              // Is this node visible
-        containsArgumentsReference?: boolean; // Whether a function-like declaration contains an 'arguments' reference
-        hasReportedStatementInAmbientContext?: boolean;  // Cache boolean if we report statements in ambient context
-        jsxFlags: JsxFlags;              // flags for knowing what kind of element/attributes we're dealing with
-        resolvedJsxElementAttributesType?: Type;  // resolved element attributes type of a JSX openinglike element
-        resolvedJsxElementAllAttributesType?: Type;  // resolved all element attributes type of a JSX openinglike element
-        hasSuperCall?: boolean;           // recorded result when we try to find super-call. We only try to find one if this flag is undefined, indicating that we haven't made an attempt.
-        superCall?: SuperCall;  // Cached first super-call found in the constructor. Used in checking whether super is called before this-accessing
-        switchTypes?: Type[];             // Cached array of switch case expression types
-        jsxNamespace?: Symbol | false;          // Resolved jsx namespace symbol for this node
-        contextFreeType?: Type;          // Cached context-free type used by the first pass of inference; used when a function's return is partially contextually sensitive
-        deferredNodes?: Map<Node>; // Set of nodes whose checking has been deferred
-        capturedBlockScopeBindings?: Symbol[]; // Block-scoped bindings captured beneath this part of an IterationStatement
     }
 
     export const enum TypeFlags {
