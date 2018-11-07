@@ -688,7 +688,7 @@ namespace ts.server {
                 success,
             };
             if (success) {
-                let metadata: any;
+                let metadata: unknown;
                 if (isArray(info)) {
                     res.body = info;
                     metadata = (info as WithMetadata<ReadonlyArray<any>>).metadata;

@@ -4689,7 +4689,7 @@ declare namespace ts {
         writeFile?(fileName: string, content: string): void;
     }
     type WithMetadata<T> = T & {
-        metadata?: any;
+        metadata?: unknown;
     };
     interface LanguageService {
         cleanupSemanticCache(): void;
@@ -5793,7 +5793,7 @@ declare namespace ts.server.protocol {
         /**
          * Contains extra information that plugin can include to be passed on
          */
-        metadata?: any;
+        metadata?: unknown;
     }
     /**
      * Arguments for FileRequest messages.

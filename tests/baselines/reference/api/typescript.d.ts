@@ -4689,7 +4689,7 @@ declare namespace ts {
         writeFile?(fileName: string, content: string): void;
     }
     type WithMetadata<T> = T & {
-        metadata?: any;
+        metadata?: unknown;
     };
     interface LanguageService {
         cleanupSemanticCache(): void;

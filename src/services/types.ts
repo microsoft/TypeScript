@@ -238,7 +238,7 @@ namespace ts {
     /* @internal */
     export const emptyOptions = {};
 
-    export type WithMetadata<T> = T & { metadata?: any; };
+    export type WithMetadata<T> = T & { metadata?: unknown; };
 
     //
     // Public services of a language service instance associated

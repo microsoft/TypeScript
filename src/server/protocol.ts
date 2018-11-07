@@ -225,7 +225,7 @@ namespace ts.server.protocol {
         /**
          * Contains extra information that plugin can include to be passed on
          */
-        metadata?: any;
+        metadata?: unknown;
     }
 
     /**
