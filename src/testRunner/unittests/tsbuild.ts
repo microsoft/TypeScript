@@ -467,84 +467,192 @@ export const b = new A();`);
     export namespace OutFile {
         const outFileFs = loadProjectFromDisk("tests/projects/outfile-concat");
 
-        describe("unittests:: tsbuild - baseline sectioned sourcemaps", () => {
-            let fs: vfs.FileSystem | undefined;
-            const actualReadFileMap = createMap<number>();
-            before(() => {
-                fs = outFileFs.shadow();
-                const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
-                host.clearDiagnostics();
-                const originalReadFile = host.readFile;
-                host.readFile = path => {
-                    // Dont record libs
-                    if (path.startsWith("/src/")) {
-                        actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
-                    }
-                    return originalReadFile.call(host, path);
-                };
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(/*none*/);
-            });
-            after(() => {
-                fs = undefined;
-            });
-            it(`Generates files matching the baseline`, () => {
-                const patch = fs!.diff();
-                // tslint:disable-next-line:no-null-keyword
-                Harness.Baseline.runBaseline("outfile-concat.js", patch ? vfs.formatPatch(patch) : null);
-            });
-            it("verify readFile calls", () => {
-                const expected = [
-                    // Configs
-                    "/src/third/tsconfig.json",
-                    "/src/second/tsconfig.json",
-                    "/src/first/tsconfig.json",
+        function verifyOutFileScenario(scenario: string, modifyFs: (fs: vfs.FileSystem) => void | ReadonlyArray<string>) {
+            describe(`unittests:: tsbuild - outFile:: ${scenario}`, () => {
+                let fs: vfs.FileSystem | undefined;
+                const actualReadFileMap = createMap<number>();
+                let additionalSourceFiles: ReadonlyArray<string> | void;
+                before(() => {
+                    fs = outFileFs.shadow();
+                    additionalSourceFiles = modifyFs(fs);
+                    const host = new fakes.SolutionBuilderHost(fs);
+                    const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
+                    host.clearDiagnostics();
+                    const originalReadFile = host.readFile;
+                    host.readFile = path => {
+                        // Dont record libs
+                        if (path.startsWith("/src/")) {
+                            actualReadFileMap.set(path, (actualReadFileMap.get(path) || 0) + 1);
+                        }
+                        return originalReadFile.call(host, path);
+                    };
+                    builder.buildAllProjects();
+                    host.assertDiagnosticMessages(/*none*/);
+                });
+                after(() => {
+                    fs = undefined;
+                });
+                it(`Generates files matching the baseline`, () => {
+                    const patch = fs!.diff();
+                    // tslint:disable-next-line:no-null-keyword
+                    Harness.Baseline.runBaseline(`outFile-${scenario.split(" ").join("-")}.js`, patch ? vfs.formatPatch(patch) : null);
+                });
+                it("verify readFile calls", () => {
+                    const expected = [
+                        // Configs
+                        "/src/third/tsconfig.json",
+                        "/src/second/tsconfig.json",
+                        "/src/first/tsconfig.json",
 
-                    // Source files
-                    "/src/third/third_part1.ts",
-                    "/src/second/second_part1.ts",
-                    "/src/second/second_part2.ts",
-                    "/src/first/first_PART1.ts",
-                    "/src/first/first_part2.ts",
-                    "/src/first/first_part3.ts",
+                        // Source files
+                        "/src/third/third_part1.ts",
+                        "/src/second/second_part1.ts",
+                        "/src/second/second_part2.ts",
+                        "/src/first/first_PART1.ts",
+                        "/src/first/first_part2.ts",
+                        "/src/first/first_part3.ts",
 
-                    // outputs
-                    "/src/first/bin/first-output.js",
-                    "/src/first/bin/first-output.js.map",
-                    "/src/first/bin/first-output.d.ts",
-                    "/src/first/bin/first-output.d.ts.map",
-                    "/src/2/second-output.js",
-                    "/src/2/second-output.js.map",
-                    "/src/2/second-output.d.ts",
-                    "/src/2/second-output.d.ts.map"
-                ];
+                        // Additional source Files
+                        ...(additionalSourceFiles || emptyArray),
 
-                assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
-                expected.forEach(expectedValue => {
-                    const actual = actualReadFileMap.get(expectedValue);
-                    assert.equal(actual, 1, `Mismatch in read file call number for: ${expectedValue}\nExpected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+
+                        // outputs
+                        "/src/first/bin/first-output.js",
+                        "/src/first/bin/first-output.js.map",
+                        "/src/first/bin/first-output.d.ts",
+                        "/src/first/bin/first-output.d.ts.map",
+                        "/src/2/second-output.js",
+                        "/src/2/second-output.js.map",
+                        "/src/2/second-output.d.ts",
+                        "/src/2/second-output.d.ts.map"
+                    ];
+
+                    assert.equal(actualReadFileMap.size, expected.length, `Expected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                    expected.forEach(expectedValue => {
+                        const actual = actualReadFileMap.get(expectedValue);
+                        assert.equal(actual, 1, `Mismatch in read file call number for: ${expectedValue}\nExpected: ${JSON.stringify(expected)} \nActual: ${JSON.stringify(arrayFrom(actualReadFileMap.entries()))}`);
+                    });
                 });
             });
+        }
+
+        verifyOutFileScenario("baseline sectioned sourcemaps", noop);
+
+        it("unittests:: tsbuild - outFile:: downstream prepend projects always get rebuilt", () => {
+            const fs = outFileFs.shadow();
+            const host = new fakes.SolutionBuilderHost(fs);
+            const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(/*none*/);
+            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
+            tick();
+            replaceText(fs, "src/first/first_PART1.ts", "Hello", "Hola");
+            tick();
+            builder.resetBuildContext();
+            builder.buildAllProjects();
+            host.assertDiagnosticMessages(/*none*/);
+            assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
         });
 
-        describe("unittests:: tsbuild - downstream prepend projects always get rebuilt", () => {
-            it("", () => {
-                const fs = outFileFs.shadow();
-                const host = new fakes.SolutionBuilderHost(fs);
-                const builder = createSolutionBuilder(host, ["/src/third"], { dry: false, force: false, verbose: false });
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(/*none*/);
-                assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "First build timestamp is correct");
-                tick();
-                replaceText(fs, "src/first/first_PART1.ts", "Hello", "Hola");
-                tick();
-                builder.resetBuildContext();
-                builder.buildAllProjects();
-                host.assertDiagnosticMessages(/*none*/);
-                assert.equal(fs.statSync("src/third/thirdjs/output/third-output.js").mtimeMs, time(), "Second build timestamp is correct");
-            });
+        function replaceFileContent(fs: vfs.FileSystem, path: string, searchValue: string, replaceValue: string) {
+            const content = fs.readFileSync(path, "utf8");
+            fs.writeFileSync(path, content.replace(searchValue, replaceValue));
+        }
+
+        function prependFileContent(fs: vfs.FileSystem, path: string, additionalContent: string) {
+            const content = fs.readFileSync(path, "utf8");
+            fs.writeFileSync(path, `${additionalContent}${content}`);
+        }
+
+        function appendFileContent(fs: vfs.FileSystem, path: string, additionalContent: string) {
+            const content = fs.readFileSync(path, "utf8");
+            fs.writeFileSync(path, `${content}${additionalContent}`);
+        }
+
+        // Strict
+        function enableStrict(fs: vfs.FileSystem, path: string) {
+            replaceFileContent(fs, path, `"strict": false`, `"strict": true`);
+        }
+        verifyOutFileScenario("strict in all projects", fs => {
+            enableStrict(fs, "src/first/tsconfig.json");
+            enableStrict(fs, "src/second/tsconfig.json");
+            enableStrict(fs, "src/third/tsconfig.json");
         });
+        verifyOutFileScenario("strict in one dependency", fs => {
+            enableStrict(fs, "src/second/tsconfig.json");
+        });
+
+        // Shebang
+        function addShebang(fs: vfs.FileSystem, project: string, file: string) {
+            prependFileContent(fs, `src/${project}/${file}.ts`, `#!someshebang ${project} ${file}
+`);
+        }
+        verifyOutFileScenario("shebang in all projects", fs => {
+            addShebang(fs, "first", "first_PART1");
+            addShebang(fs, "first", "first_part2");
+            addShebang(fs, "second", "second_part1");
+            addShebang(fs, "third", "third_part1");
+        });
+        verifyOutFileScenario("shebang in only one dependency project", fs => {
+            addShebang(fs, "second", "second_part1");
+        });
+
+        // emitHelpers
+        function addExtendsClause(fs: vfs.FileSystem, project: string, file: string) {
+            appendFileContent(fs, `src/${project}/${file}.ts`, `
+class ${project}1 { }
+class ${project}2 extends ${project}1 { }`);
+        }
+        verifyOutFileScenario("emitHelpers in all projects", fs => {
+            addExtendsClause(fs, "first", "first_part2");
+            addExtendsClause(fs, "second", "second_part1");
+            addExtendsClause(fs, "third", "third_part1");
+        });
+        verifyOutFileScenario("emitHelpers in only one dependency project", fs => {
+            addExtendsClause(fs, "second", "second_part1");
+        });
+        function addSpread(fs: vfs.FileSystem, project: string, file: string) {
+            const path = `src/${project}/${file}.ts`;
+            const content = fs.readFileSync(path, "utf8");
+            fs.writeFileSync(path, `${content}
+function ${project}${file}Spread(...b: number[]) { }
+${project}${file}Spread(...[10, 20, 30]);`);
+
+            replaceFileContent(fs, `src/${project}/tsconfig.json`, `"strict": false,`, `"strict": false,
+    "downlevelIteration": true,`);
+        }
+        verifyOutFileScenario("multiple emitHelpers in all projects", fs => {
+            addExtendsClause(fs, "first", "first_part2");
+            addSpread(fs, "first", "first_part3");
+            addExtendsClause(fs, "second", "second_part1");
+            addSpread(fs, "second", "second_part2");
+            addExtendsClause(fs, "third", "third_part1");
+            addSpread(fs, "third", "third_part1");
+        });
+        verifyOutFileScenario("multiple emitHelpers in different projects", fs => {
+            addSpread(fs, "first", "first_part3");
+            addExtendsClause(fs, "second", "second_part1");
+            addSpread(fs, "third", "third_part1");
+        });
+
+
+        // triple slash refs
+        function addTripleSlashRef(fs: vfs.FileSystem, project: string, file: string) {
+            const tripleSlashRef = `/src/${project}/tripleRef.d.ts`;
+            fs.writeFileSync(tripleSlashRef, `declare class ${project}${file} { }`);
+            prependFileContent(fs, `src/${project}/${file}.ts`, `///<reference path="./tripleRef.d.ts"/>
+const ${file}Const = new ${project}${file}();
+`);
+            return tripleSlashRef;
+        }
+        verifyOutFileScenario("triple slash refs in all projects", fs => [
+            addTripleSlashRef(fs, "first", "first_part2"),
+            addTripleSlashRef(fs, "second", "second_part1"),
+            addTripleSlashRef(fs, "third", "third_part1")
+        ]);
+        verifyOutFileScenario("triple slash refs in one project", fs => [
+            addTripleSlashRef(fs, "second", "second_part1")
+        ]);
     }
 
     export namespace EmptyFiles {
