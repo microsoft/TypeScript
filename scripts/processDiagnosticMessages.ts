@@ -27,7 +27,7 @@ function main(): void {
     console.log(`Reading diagnostics from ${inputFilePath}`);
     const inputStr = fs.readFileSync(inputFilePath, { encoding: "utf-8" });
 
-    const diagnosticMessagesJson: { [key: string]: DiagnosticDetails } = JSON.parse(inputStr);
+    const diagnosticMessagesJson = JSON.parse(inputStr) as { [key: string]: DiagnosticDetails };
 
     const diagnosticMessages: InputDiagnosticMessageTable = new Map();
     for (const key in diagnosticMessagesJson) {

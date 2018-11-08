@@ -28,7 +28,7 @@ function main(): void {
 
     // Acquire the version from the package.json file and modify it appropriately.
     const packageJsonFilePath = normalize(args[1]);
-    const packageJsonValue: PackageJson = JSON.parse(readFileSync(packageJsonFilePath).toString());
+    const packageJsonValue = JSON.parse(readFileSync(packageJsonFilePath).toString()) as PackageJson;
 
     const { majorMinor, patch } = parsePackageJsonVersion(packageJsonValue.version);
     const prereleasePatch = getPrereleasePatch(tag, patch);

@@ -1039,6 +1039,11 @@ interface URIErrorConstructor {
 
 declare const URIError: URIErrorConstructor;
 
+type JSONPrimitive = string | number | boolean | null;
+type JSONValue = JSONPrimitive | JSONObject | JSONArray;
+type JSONObject = { [member: string]: JSONValue };
+interface JSONArray extends Array<JSONValue> {}
+
 interface JSON {
     /**
       * Converts a JavaScript Object Notation (JSON) string into an object.
@@ -1046,7 +1051,7 @@ interface JSON {
       * @param reviver A function that transforms the results. This function is called for each member of the object.
       * If a member contains nested objects, the nested objects are transformed before the parent object is.
       */
-    parse(text: string, reviver?: (key: any, value: any) => any): any;
+    parse(text: string, reviver?: (key: any, value: any) => any): JSONValue;
     /**
       * Converts a JavaScript value to a JavaScript Object Notation (JSON) string.
       * @param value A JavaScript value, usually an object or array, to be converted.

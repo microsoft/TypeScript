@@ -136,7 +136,7 @@ function main(): void {
             writeFile(
                 path.join(outputPath, "enu", "diagnosticMessages.generated.json.lcg"),
                 getLCGFileXML(
-                    objectToList(JSON.parse(data.toString()))
+                    objectToList(JSON.parse(data.toString()) as Record<string, string>)
                         .sort((a, b) => a.key > b.key ? 1 : -1)  // lcg sorted by property keys
                         .reduce((s, { key, value }) => s + getItemXML(key, value), "")
                 ));
