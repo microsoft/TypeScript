@@ -27,4 +27,7 @@ verify.referenceGroups(bxRanges, [bxGroup, axGroup, ayGroup, byGroup]);
 verify.referenceGroups(ay, [ayGroup, byGroup]);
 verify.referenceGroups(byRanges, [byGroup, ayGroup]);
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.renameLocations(axRanges, [...axRanges, ...bxRanges]);
+verify.renameLocations(bxRanges, [{ range: bx0, prefixText: "x as " }, bx1]);
+verify.renameLocations(ay, [ay, ...byRanges]);
+verify.renameLocations(byRanges, [{ range: by0, prefixText: "y as " }, by1]);

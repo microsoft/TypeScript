@@ -43,13 +43,20 @@ verify.referenceGroups([bang0, bang1], [eBang]);
 verify.referenceGroups([boom0, boom1], [eBoom, d, a, b, eBar, c, eBaz, eBang]);
 
 test.rangesByText().forEach((ranges, text) => {
-    if (text === "default") {
-        for (const range of ranges) {
-            goTo.rangeStart(defaultC);
-            verify.renameInfoFailed();
-        }
-    }
-    else {
-        verify.rangesAreRenameLocations(ranges);
+    switch (text) {
+        case "default":
+            for (const range of ranges) {
+                goTo.rangeStart(defaultC);
+                verify.renameInfoFailed();
+            }
+            break;
+        case "bar":
+            const [r0, r1, ...tail] = ranges;
+            verify.renameLocations(r0, ranges);
+            verify.renameLocations(r1, [{ range: r1, prefixText: "bar as " }, ...tail]);
+            break;
+        default:
+            verify.rangesAreRenameLocations(ranges);
+            break;
     }
 });

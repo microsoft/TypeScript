@@ -14,11 +14,12 @@
 
 verify.noErrors();
 
-verify.rangesAreRenameLocations();
-
 const ranges = test.ranges();
 const [r0, r1, r2, r3] = ranges;
 const importRanges = [r2, r3];
+verify.renameLocations([r0, r1], ranges);
+verify.renameLocations(importRanges, [{ range: r2, prefixText: "C as " }, r3]);
+
 const classes = { definition: "class C", ranges: [r0] };
 const bs = { definition: "(alias) class C\nexport C", ranges: [r1] };
 const imports = { definition: "(alias) class C\nimport C", ranges: importRanges };

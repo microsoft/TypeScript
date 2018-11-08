@@ -33,5 +33,7 @@ verify.referenceGroups(cFromARanges, [cFromAGroup, aGroup]);
 
 verify.referenceGroups(d, [dGroup, cFromBGroup, bGroup]);
 
-verify.rangesAreRenameLocations([a, cFromA, cUse]);
-verify.rangesAreRenameLocations([b, cFromB, d]);
+verify.renameLocations(a, [a, cFromA, cUse]);
+verify.renameLocations([cFromA, cUse], [{ range: cFromA, prefixText: "x as " }, cUse]);
+verify.renameLocations([b, cFromB], [b, cFromB, d]);
+verify.renameLocations(d, [{ range: d, prefixText: "x as " }]);

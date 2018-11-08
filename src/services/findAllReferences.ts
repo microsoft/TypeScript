@@ -89,10 +89,10 @@ namespace ts.FindAllReferences {
         program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number, options: Options | undefined,
         convertEntry: ToReferenceOrRenameEntry<T>,
     ): T[] | undefined {
-        return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node));
+        return map(flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options)), entry => convertEntry(entry, node, program.getTypeChecker()));
     }
 
-    export type ToReferenceOrRenameEntry<T> = (entry: Entry, originalNode: Node) => T;
+    export type ToReferenceOrRenameEntry<T> = (entry: Entry, originalNode: Node, checker: TypeChecker) => T;
 
     export function getReferenceEntriesForNode(
         position: number,
@@ -157,8 +157,8 @@ namespace ts.FindAllReferences {
         return { displayParts, kind: symbolKind };
     }
 
-    export function toRenameLocation(entry: Entry, originalNode: Node): RenameLocation {
-        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode) };
+    export function toRenameLocation(entry: Entry, originalNode: Node, checker: TypeChecker): RenameLocation {
+        return { ...entryToDocumentSpan(entry), ...getPrefixAndSuffixText(entry, originalNode, checker) };
     }
 
     export function toReferenceEntry(entry: Entry): ReferenceEntry {
@@ -188,7 +188,7 @@ namespace ts.FindAllReferences {
         }
     }
 
-    function getPrefixAndSuffixText(entry: Entry, originalNode: Node): { readonly prefixText?: string, readonly suffixText?: string } {
+    function getPrefixAndSuffixText(entry: Entry, originalNode: Node, checker: TypeChecker): { readonly prefixText?: string, readonly suffixText?: string } {
         if (entry.kind !== EntryKind.Span && isIdentifier(originalNode)) {
             const { node, kind } = entry;
             const name = originalNode.text;
@@ -206,6 +206,13 @@ namespace ts.FindAllReferences {
                         ? { suffixText: ": " + name }
                         // For a binding element `const { x } = o;`, symbolAtLocation at `x` is the property symbol.
                         : { prefixText: name + ": " };
+                }
+            }
+            else if (isImportSpecifier(entry.node.parent) && !entry.node.parent.propertyName) {
+                // If the original symbol was using this alias, just rename the alias.
+                const originalSymbol = isExportSpecifier(originalNode.parent) ? checker.getExportSpecifierLocalTargetSymbol(originalNode.parent) : checker.getSymbolAtLocation(originalNode);
+                if (contains(originalSymbol!.declarations, entry.node.parent)) {
+                    return { prefixText: name + " as " };
                 }
             }
         }
@@ -1133,7 +1140,7 @@ namespace ts.FindAllReferences.Core {
         const { symbol } = importOrExport;
 
         if (importOrExport.kind === ImportExport.Import) {
-            if (!state.options.isForRename || importOrExport.isNamedImport) {
+            if (!state.options.isForRename) {
                 searchForImportedSymbol(symbol, state);
             }
         }

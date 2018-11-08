@@ -31,5 +31,6 @@ verify.referenceGroups(bRanges, [bGroup, aGroup, nGroup]);
 verify.singleReferenceGroup("var N.x: number", xRanges);
 
 verify.renameLocations(nRanges, nRanges.concat(aRanges, bRanges));
-verify.rangesAreRenameLocations(aRanges.concat(bRanges));
+verify.renameLocations(aRanges, [...aRanges, ...bRanges]);
+verify.renameLocations(bRanges, [{ range: b0, prefixText: "N as " }, b1]);
 verify.rangesAreRenameLocations(xRanges);
