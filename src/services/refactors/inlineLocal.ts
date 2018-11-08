@@ -46,7 +46,7 @@ namespace ts.refactor.inlineLocal {
         const parent = token.parent;
         const checker = program.getTypeChecker();
         if (isLocalVariable(parent)) {
-            return createInfo(checker, parent, undefined);
+            return createInfo(checker, parent);
         }
         else if (isVariableDeclarationList(parent) && parent.declarations.length === 1 && isVariableStatement(parent.parent)) {
             return undefined;
@@ -63,12 +63,36 @@ namespace ts.refactor.inlineLocal {
         else return undefined;
     }
 
-    function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token: Identifier | undefined): Info {
-        return {
+    function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token?: Identifier): Info | undefined {
+        const identifier = declaration.name;
+        type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
+        let hasErrors = false;
+        const usages = getReferencesInScope(ts.getEnclosingBlockScopeContainer(identifier), identifier, checker);
+        if (!declaration.initializer) hasErrors = true;
+        if (containsProhibitedModifiers(declaration.parent.parent.modifiers)) hasErrors = true;
+        
+        ts.forEach(usages, usage => {
+            // if is left of assignment
+            const assignment: AssignExpr = findAncestor(
+                usage, 
+                ancestor => isAssignmentExpression(ancestor)) as AssignExpr;
+            if (assignment) {
+                const references = getReferencesInScope(assignment.left, identifier, checker);
+                if (references.length > 0) hasErrors = true;
+            }
+
+        });
+        return !hasErrors ? {
             declaration: declaration,
-            usages: getReferencesInEnclosingScope(declaration.name, checker),
+            usages: usages,
             selectedUsage: token ? token : undefined
-        };
+        } : undefined;
+    }
+
+    function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
+        return !!modifiers && !!modifiers.find(mod => 
+            mod.kind === SyntaxKind.DefaultKeyword || 
+            mod.kind === SyntaxKind.ExportKeyword);
     }
 
     function isLocalVariable(parent: Node): parent is VariableDeclaration {
@@ -115,12 +139,11 @@ namespace ts.refactor.inlineLocal {
         });
     }
 
-    function getReferencesInEnclosingScope(node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
+    function getReferencesInScope(scope: Node, node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
         function getNodes(node: Node) {
             ts.forEachChild(node, n => { nodes.push(n); getNodes(n); })
         }
-        const scope = ts.getEnclosingBlockScopeContainer(node);
         getNodes(scope);
         const symbol = checker.getSymbolAtLocation(node);
         return nodes.filter(n => isIdentifier(n) && n.id !== node.id && checker.getSymbolAtLocation(n) === symbol) as Identifier[];
