@@ -2,7 +2,7 @@
 namespace ts.refactor.inlineLocal {
     const refactorName = "Inline local";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_local);
-    
+
     // const inlineLocalActionName = "Inline local";
     const inlineHereActionName = "Inline here";
     const inlineAllActionName = "Inline all";
@@ -13,7 +13,7 @@ namespace ts.refactor.inlineLocal {
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
-    interface Info{
+    interface Info {
         declaration: VariableDeclaration;
         usages: ReadonlyArray<Identifier>;
         selectedUsage: Identifier | undefined;
@@ -35,8 +35,8 @@ namespace ts.refactor.inlineLocal {
         if (selectedUsage) {
             refactorInfo.actions.push({
                 name: inlineHereActionName,
-                description: inlineHereActionDescription 
-            })
+                description: inlineHereActionDescription
+            });
         }
         return [refactorInfo];
     }
@@ -70,11 +70,11 @@ namespace ts.refactor.inlineLocal {
         const usages = getReferencesInScope(ts.getEnclosingBlockScopeContainer(identifier), identifier, checker);
         if (!declaration.initializer) hasErrors = true;
         if (containsProhibitedModifiers(declaration.parent.parent.modifiers)) hasErrors = true;
-        
+
         ts.forEach(usages, usage => {
             // if is left of assignment
             const assignment: AssignExpr = findAncestor(
-                usage, 
+                usage,
                 ancestor => isAssignmentExpression(ancestor)) as AssignExpr;
             if (assignment) {
                 const references = getReferencesInScope(assignment.left, identifier, checker);
@@ -83,15 +83,15 @@ namespace ts.refactor.inlineLocal {
 
         });
         return !hasErrors ? {
-            declaration: declaration,
-            usages: usages,
+            declaration,
+            usages,
             selectedUsage: token ? token : undefined
         } : undefined;
     }
 
     function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
-        return !!modifiers && !!modifiers.find(mod => 
-            mod.kind === SyntaxKind.DefaultKeyword || 
+        return !!modifiers && !!modifiers.find(mod =>
+            mod.kind === SyntaxKind.DefaultKeyword ||
             mod.kind === SyntaxKind.ExportKeyword);
     }
 
@@ -100,7 +100,7 @@ namespace ts.refactor.inlineLocal {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const { file, program, startPosition } = context; actionName;
+        const { file, program, startPosition } = context;
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
         const { declaration, usages, selectedUsage } = info;
@@ -112,7 +112,7 @@ namespace ts.refactor.inlineLocal {
             case inlineHereActionName:
             edits.push(...getInlineHereEdits(context, declaration, usages, selectedUsage!));
                 break;
-            default: 
+            default:
                 return undefined;
         }
 
@@ -142,10 +142,10 @@ namespace ts.refactor.inlineLocal {
     function getReferencesInScope(scope: Node, node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
         function getNodes(node: Node) {
-            ts.forEachChild(node, n => { nodes.push(n); getNodes(n); })
+            ts.forEachChild(node, n => { nodes.push(n); getNodes(n); });
         }
         getNodes(scope);
         const symbol = checker.getSymbolAtLocation(node);
         return nodes.filter(n => isIdentifier(n) && n.id !== node.id && checker.getSymbolAtLocation(n) === symbol) as Identifier[];
-    };
+    }
 }
