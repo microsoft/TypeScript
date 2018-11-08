@@ -47,7 +47,7 @@ namespace ts.refactor.inlineLocal {
         let isUsageSelected = false;
         let declaration: VariableDeclaration;
         const checker = program.getTypeChecker();
-        if (isVariableDeclaration(parent) && isVariableDeclarationInVariableStatement(parent)) {
+        if (isLocalVariable(parent)) {
             declaration = parent;
         }
         else if (isVariableDeclarationList(parent) && parent.declarations.length === 1 && isVariableStatement(parent.parent)) {
@@ -57,7 +57,7 @@ namespace ts.refactor.inlineLocal {
             const symbol = checker.getSymbolAtLocation(token);
             if (!symbol) return undefined;
             const decl = symbol.valueDeclaration;
-            if(isVariableDeclaration(decl) && isVariableDeclarationInVariableStatement(decl)) {
+            if (isLocalVariable(decl)) {
                 declaration = decl;
                 isUsageSelected = true;
             }
@@ -72,11 +72,15 @@ namespace ts.refactor.inlineLocal {
         }
     }
 
+    function isLocalVariable(parent: Node): parent is VariableDeclaration {
+        return isVariableDeclaration(parent) && isVariableDeclarationInVariableStatement(parent);
+    }
+
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, program, startPosition } = context; actionName;
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
-        const {declaration, usages, selectedUsage} = info;
+        const { declaration, usages, selectedUsage } = info;
         const edits: FileTextChanges[] = [];
         switch (actionName) {
             case inlineAllActionName:
@@ -108,19 +112,18 @@ namespace ts.refactor.inlineLocal {
         return textChanges.ChangeTracker.with(context, t => {
             const { initializer } = declaration;
             t.replaceNode(file, selectedUsage, createParen(initializer!));
-            if (usages.length === 1) { t.delete(file, declaration); }
+            if (usages.length === 1) t.delete(file, declaration);
         });
     }
 
     function getReferencesInEnclosingScope(node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
-        function getNodes(node: Node){
+        function getNodes(node: Node) {
             ts.forEachChild(node, n => { nodes.push(n); getNodes(n); })
         }
         const scope = ts.getEnclosingBlockScopeContainer(node);
         getNodes(scope);
         const symbol = checker.getSymbolAtLocation(node);
-        return nodes.filter(n => isIdentifier(n) && n.id !== node.id && checker.getSymbolAtLocation(n) === symbol) as Identifier[] /*TODO don't use as*/;
+        return nodes.filter(n => isIdentifier(n) && n.id !== node.id && checker.getSymbolAtLocation(n) === symbol) as Identifier[];
     };
-
 }
