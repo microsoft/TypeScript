@@ -8,7 +8,7 @@ namespace ts.refactor.inlineLocal {
     const inlineAllActionName = "Inline all";
 
     const inlineHereActionDescription = getLocaleSpecificMessage(Diagnostics.Inline_here);
-    // const inlineAllActionDescription = getLocaleSpecificMessage(Diagnostics.Inline_all);
+    const inlineAllActionDescription = getLocaleSpecificMessage(Diagnostics.Inline_all);
 
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -23,13 +23,13 @@ namespace ts.refactor.inlineLocal {
         const { file, program, startPosition } = context;
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
-        const {declaration, selectedUsage} = info;
+        const { selectedUsage } = info;
         const refactorInfo = {
             name: refactorName,
             description: refactorDescription,
             actions: [{
                 name: inlineAllActionName,
-                description: `${declaration.initializer}`
+                description: inlineAllActionDescription
             }]
         };
         if (selectedUsage) {
@@ -76,14 +76,14 @@ namespace ts.refactor.inlineLocal {
         const { file, program, startPosition } = context; actionName;
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
-        const {declaration, usages/* , selectedUsage */} = info;
+        const {declaration, usages, selectedUsage} = info;
         const edits: FileTextChanges[] = [];
         switch (actionName) {
             case inlineAllActionName:
                 edits.push(...getInlineAllEdits(context, declaration, usages));
                 break;
             case inlineHereActionName:
-                // getInlineHereEdits(declaration, usages, selectedUsage!);
+            edits.push(...getInlineHereEdits(context, declaration, usages, selectedUsage!));
                 break;
             default: 
                 return undefined;
@@ -103,9 +103,14 @@ namespace ts.refactor.inlineLocal {
         });
     }
 
-    // function getInlineHereEdits(declaration: VariableDeclaration, usages: ReadonlyArray<Identifier>, selectedUsage: Identifier): FileTextChanges[] {
-        
-    // }
+    function getInlineHereEdits(context: RefactorContext, declaration: VariableDeclaration, usages: ReadonlyArray<Identifier>, selectedUsage: Identifier): ReadonlyArray<FileTextChanges> {
+        const { file } = context;
+        return textChanges.ChangeTracker.with(context, t => {
+            const { initializer } = declaration;
+            t.replaceNode(file, selectedUsage, createParen(initializer!));
+            if (usages.length === 1) { t.delete(file, declaration); }
+        });
+    }
 
     function getReferencesInEnclosingScope(node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
