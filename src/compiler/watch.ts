@@ -117,6 +117,7 @@ namespace ts {
     }
 
     export function getErrorSummaryText(errorCount: number, newLine: string) {
+        if (errorCount === 0) return "";
         const d = createCompilerDiagnostic(errorCount === 1 ? Diagnostics.Found_1_error : Diagnostics.Found_0_errors, errorCount);
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }
