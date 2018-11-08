@@ -92,16 +92,15 @@ namespace ts.refactor.inlineLocal {
         return { edits };
     }
 
-    function getInlineAllEdits(context: RefactorContext, declaration: VariableDeclaration, usages: ReadonlyArray<Identifier>): FileTextChanges[] {
+    function getInlineAllEdits(context: RefactorContext, declaration: VariableDeclaration, usages: ReadonlyArray<Identifier>): ReadonlyArray<FileTextChanges> {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             ts.forEach(usages, oldNode => {
-                const expression = { ...declaration.initializer! };
-                const newNode = createParen(expression);
-                t.replaceNode(file, oldNode, newNode);
-            })
+                const { initializer } = declaration;
+                t.replaceNode(file, oldNode, createParen(initializer!));
+            });
             t.delete(file, declaration);
-        })
+        });
     }
 
     // function getInlineHereEdits(declaration: VariableDeclaration, usages: ReadonlyArray<Identifier>, selectedUsage: Identifier): FileTextChanges[] {
