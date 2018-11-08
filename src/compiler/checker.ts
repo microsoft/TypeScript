@@ -9097,8 +9097,11 @@ namespace ts {
             if (flags & TypeFlags.Intersection) {
                 return addTypesToIntersection(typeSet, includes, (<IntersectionType>type).types);
             }
-            if (getObjectFlags(type) & ObjectFlags.Anonymous && isEmptyObjectType(type)) {
-                includes |= TypeFlags.EmptyObject;
+            if (isEmptyAnonymousObjectType(type)) {
+                if (!(includes & TypeFlags.EmptyObject)) {
+                    includes |= TypeFlags.EmptyObject;
+                    typeSet.push(type);
+                }
             }
             else {
                 includes |= flags & ~TypeFlags.ConstructionFlags;
@@ -9229,8 +9232,8 @@ namespace ts {
                 includes & TypeFlags.ESSymbol && includes & TypeFlags.UniqueESSymbol) {
                 removeRedundantPrimitiveTypes(typeSet, includes);
             }
-            if (includes & TypeFlags.EmptyObject && !(includes & TypeFlags.Object)) {
-                typeSet.push(emptyObjectType);
+            if (includes & TypeFlags.EmptyObject && includes & TypeFlags.Object) {
+                orderedRemoveItemAt(typeSet, findIndex(typeSet, isEmptyAnonymousObjectType));
             }
             if (typeSet.length === 0) {
                 return unknownType;
@@ -11275,6 +11278,10 @@ namespace ts {
                 type.flags & TypeFlags.Union ? some((<UnionType>type).types, isEmptyObjectType) :
                 type.flags & TypeFlags.Intersection ? every((<UnionType>type).types, isEmptyObjectType) :
                 false;
+        }
+
+        function isEmptyAnonymousObjectType(type: Type) {
+            return !!(getObjectFlags(type) & ObjectFlags.Anonymous) && isEmptyObjectType(type);
         }
 
         function isEnumTypeRelatedTo(sourceSymbol: Symbol, targetSymbol: Symbol, errorReporter?: ErrorReporter) {
