@@ -5225,7 +5225,6 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
-        /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
