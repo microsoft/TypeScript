@@ -1042,7 +1042,7 @@ namespace ts.server {
 
             project.close();
             if (Debug.shouldAssert(AssertionLevel.Normal)) {
-                this.filenameToScriptInfo.forEach(info => Debug.assert(!info.isAttached(project)));
+                this.filenameToScriptInfo.forEach(info => Debug.assert(!info.isAttached(project), "Found script Info still attached to project", () => `${project.projectName}: ScriptInfos still attached: ${JSON.stringify(mapDefined(arrayFrom(this.filenameToScriptInfo.values()), info => info.isAttached(project) ? info : undefined))}`));
             }
             // Remove the project from pending project updates
             this.pendingProjectUpdates.delete(project.getProjectName());
