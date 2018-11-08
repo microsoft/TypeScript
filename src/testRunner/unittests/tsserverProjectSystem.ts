@@ -3301,6 +3301,23 @@ namespace ts.projectSystem {
             });
         });
 
+        it("dynamic file with reference paths without external project", () => {
+            const file: File = {
+                path: "^walkThroughSnippet:/Users/UserName/projects/someProject/out/someFile#1.js",
+                content: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />
+/// <reference path="../../../../../../typings/@epic/Shell.d.ts" />
+var x = 10;`
+            };
+            const host = createServerHost([libFile]);
+            const projectService = createProjectService(host);
+            projectService.openClientFile(file.path, file.content);
+
+            projectService.checkNumberOfProjects({ inferredProjects: 1 });
+            const project = projectService.inferredProjects[0];
+            checkProjectRootFiles(project, [file.path]);
+            checkProjectActualFiles(project, [file.path, libFile.path]);
+        });
+
         it("files opened, closed affecting multiple projects", () => {
             const file: File = {
                 path: "/a/b/projects/config/file.ts",
@@ -3882,25 +3899,39 @@ namespace ts.projectSystem {
 
         describe("when opening new file that doesnt exist on disk yet", () => {
             function verifyNonExistentFile(useProjectRoot: boolean) {
-                const host = createServerHost([libFile]);
+                const folderPath = "/user/someuser/projects/someFolder";
+                const fileInRoot: File = {
+                    path: `/src/somefile.d.ts`,
+                    content: "class c { }"
+                };
+                const fileInProjectRoot: File = {
+                    path: `${folderPath}/src/somefile.d.ts`,
+                    content: "class c { }"
+                };
+                const host = createServerHost([libFile, fileInRoot, fileInProjectRoot]);
                 const { hasError, errorLogger } = createErrorLogger();
                 const session = createSession(host, { canUseEvents: true, logger: errorLogger, useInferredProjectPerProjectRoot: true });
 
-                const folderPath = "/user/someuser/projects/someFolder";
                 const projectService = session.getProjectService();
                 const untitledFile = "untitled:Untitled-1";
+                const refPathNotFound1 = "../../../../../../typings/@epic/Core.d.ts";
+                const refPathNotFound2 = "./src/somefile.d.ts";
+                const fileContent = `/// <reference path="${refPathNotFound1}" />
+/// <reference path="${refPathNotFound2}" />`;
                 session.executeCommandSeq<protocol.OpenRequest>({
                     command: server.CommandNames.Open,
                     arguments: {
                         file: untitledFile,
-                        fileContent: "",
-                        scriptKindName: "JS",
+                        fileContent,
+                        scriptKindName: "TS",
                         projectRootPath: useProjectRoot ? folderPath : undefined
                     }
                 });
                 checkNumberOfProjects(projectService, { inferredProjects: 1 });
                 const infoForUntitledAtProjectRoot = projectService.getScriptInfoForPath(`${folderPath.toLowerCase()}/${untitledFile.toLowerCase()}` as Path);
                 const infoForUnitiledAtRoot = projectService.getScriptInfoForPath(`/${untitledFile.toLowerCase()}` as Path);
+                const infoForSomefileAtProjectRoot = projectService.getScriptInfoForPath(`/${folderPath.toLowerCase()}/src/somefile.d.ts` as Path);
+                const infoForSomefileAtRoot = projectService.getScriptInfoForPath(`${fileInRoot.path.toLowerCase()}` as Path);
                 if (useProjectRoot) {
                     assert.isDefined(infoForUntitledAtProjectRoot);
                     assert.isUndefined(infoForUnitiledAtRoot);
@@ -3909,7 +3940,11 @@ namespace ts.projectSystem {
                     assert.isDefined(infoForUnitiledAtRoot);
                     assert.isUndefined(infoForUntitledAtProjectRoot);
                 }
-                host.checkTimeoutQueueLength(2);
+                assert.isUndefined(infoForSomefileAtRoot);
+                assert.isUndefined(infoForSomefileAtProjectRoot);
+
+                // Since this is not js project so no typings are queued
+                host.checkTimeoutQueueLength(0);
 
                 const newTimeoutId = host.getNextTimeoutId();
                 const expectedSequenceId = session.getNextSeq();
@@ -3920,19 +3955,26 @@ namespace ts.projectSystem {
                         files: [untitledFile]
                     }
                 });
-                host.checkTimeoutQueueLength(3);
+                host.checkTimeoutQueueLength(1);
 
                 // Run the last one = get error request
                 host.runQueuedTimeoutCallbacks(newTimeoutId);
 
                 assert.isFalse(hasError());
-                host.checkTimeoutQueueLength(2);
+                host.checkTimeoutQueueLength(0);
                 checkErrorMessage(session, "syntaxDiag", { file: untitledFile, diagnostics: [] });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks();
                 assert.isFalse(hasError());
-                checkErrorMessage(session, "semanticDiag", { file: untitledFile, diagnostics: [] });
+                const errorOffset = fileContent.indexOf(refPathNotFound1) + 1;
+                checkErrorMessage(session, "semanticDiag", {
+                    file: untitledFile,
+                    diagnostics: [
+                        createDiagnostic({ line: 1, offset: errorOffset }, { line: 1, offset: errorOffset + refPathNotFound1.length }, Diagnostics.File_0_not_found, [refPathNotFound1], "error"),
+                        createDiagnostic({ line: 2, offset: errorOffset }, { line: 2, offset: errorOffset + refPathNotFound2.length }, Diagnostics.File_0_not_found, [refPathNotFound2.substr(2)], "error")
+                    ]
+                });
                 session.clearMessages();
 
                 host.runQueuedImmediateCallbacks(1);
@@ -10772,16 +10814,16 @@ fn5();`
             const untitledFile = "untitled:^Untitled-1";
             executeSessionRequestNoResponse<protocol.OpenRequest>(session, protocol.CommandTypes.Open, {
                 file: untitledFile,
-                fileContent: "let foo = 1;\nfooo/**/",
+                fileContent: `/// <reference path="../../../../../../typings/@epic/Core.d.ts" />\nlet foo = 1;\nfooo/**/`,
                 scriptKindName: "TS",
                 projectRootPath: "/proj",
             });
 
             const response = executeSessionRequest<protocol.CodeFixRequest, protocol.CodeFixResponse>(session, protocol.CommandTypes.GetCodeFixes, {
                 file: untitledFile,
-                startLine: 2,
+                startLine: 3,
                 startOffset: 1,
-                endLine: 2,
+                endLine: 3,
                 endOffset: 5,
                 errorCodes: [Diagnostics.Cannot_find_name_0_Did_you_mean_1.code],
             });
@@ -10794,8 +10836,8 @@ fn5();`
                     changes: [{
                         fileName: untitledFile,
                         textChanges: [{
-                            start: { line: 2, offset: 1 },
-                            end: { line: 2, offset: 5 },
+                            start: { line: 3, offset: 1 },
+                            end: { line: 3, offset: 5 },
                             newText: "foo",
                         }],
                     }],
