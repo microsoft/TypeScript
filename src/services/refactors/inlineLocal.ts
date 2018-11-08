@@ -44,11 +44,9 @@ namespace ts.refactor.inlineLocal {
     function getLocalInfo(file: SourceFile, program: Program, startPosition: number): Info | undefined {
         const token = getTokenAtPosition(file, startPosition);
         const parent = token.parent;
-        let isUsageSelected = false;
-        let declaration: VariableDeclaration;
         const checker = program.getTypeChecker();
         if (isLocalVariable(parent)) {
-            declaration = parent;
+            return createInfo(checker, parent, undefined);
         }
         else if (isVariableDeclarationList(parent) && parent.declarations.length === 1 && isVariableStatement(parent.parent)) {
             return undefined;
@@ -56,20 +54,21 @@ namespace ts.refactor.inlineLocal {
         else if (isIdentifier(token)) {
             const symbol = checker.getSymbolAtLocation(token);
             if (!symbol) return undefined;
-            const decl = symbol.valueDeclaration;
-            if (isLocalVariable(decl)) {
-                declaration = decl;
-                isUsageSelected = true;
+            const declaration = symbol.valueDeclaration;
+            if (isLocalVariable(declaration)) {
+                return createInfo(checker, declaration, token);
             }
             else return undefined;
         }
         else return undefined;
-        
+    }
+
+    function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token: Identifier | undefined): Info {
         return {
             declaration: declaration,
             usages: getReferencesInEnclosingScope(declaration.name, checker),
-            selectedUsage: isUsageSelected ? token as Identifier : undefined
-        }
+            selectedUsage: token ? token : undefined
+        };
     }
 
     function isLocalVariable(parent: Node): parent is VariableDeclaration {
