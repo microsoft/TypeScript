@@ -26,8 +26,8 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     }
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
-        const { file, startPosition } = context;
-        const info = getFunctionInfo(file, startPosition);
+        const { file, startPosition, program } = context;
+        const info = getFunctionInfo(file, startPosition, program);
 
         if (!info) return emptyArray;
         const { selectedVariableDeclaration, func } = info;
@@ -62,8 +62,8 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const { file, startPosition } = context;
-        const info = getFunctionInfo(file, startPosition);
+        const { file, startPosition, program } = context;
+        const info = getFunctionInfo(file, startPosition, program);
 
         if (!info) return undefined;
         const { func } = info;
@@ -93,14 +93,17 @@ namespace ts.refactor.convertArrowFunctionOrFunctionExpression {
         return { renameFilename: undefined, renameLocation: undefined, edits };
     }
 
-    function getFunctionInfo(file: SourceFile, startPosition: number): FunctionInfo | undefined {
+    function getFunctionInfo(file: SourceFile, startPosition: number, program: Program): FunctionInfo | undefined {
         const token = getTokenAtPosition(file, startPosition);
 
         const arrowFunc = getArrowFunctionFromVariableDeclaration(token.parent);
         if (arrowFunc) return { selectedVariableDeclaration: true, func: arrowFunc };
 
         const maybeFunc = getContainingFunction(token);
+        const typeChecker = program.getTypeChecker();
+
         if (maybeFunc && (isFunctionExpression(maybeFunc) || isArrowFunction(maybeFunc)) && !rangeContainsRange(maybeFunc.body, token)) {
+            if ((isFunctionExpression(maybeFunc) && maybeFunc.name && FindAllReferences.Core.isSymbolReferencedInFile(maybeFunc.name, typeChecker, file))) return undefined;
             return { selectedVariableDeclaration: false, func: maybeFunc };
         }
 
