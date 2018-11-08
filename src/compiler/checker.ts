@@ -13833,10 +13833,22 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target);
                         if (simplified !== target) {
-                            const key = source.id + "," + simplified.id;
-                            if (!visited || !visited.get(key)) {
-                                (visited || (visited = createMap<boolean>())).set(key, true);
-                                inferFromTypes(source, simplified);
+                            inferFromTypesOnce(source, simplified);
+                        }
+                        else if (target.flags & TypeFlags.IndexedAccess) {
+                            const indexType = getSimplifiedType((target as IndexedAccessType).indexType);
+                            // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
+                            // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
+                            if (indexType.flags & TypeFlags.Instantiable) {
+                                const objectType = getSimplifiedType((target as IndexedAccessType).objectType);
+                                // (T | U)[K] -> T[K] | U[K]
+                                if (objectType.flags & TypeFlags.Union) {
+                                    inferFromTypesOnce(source, mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+                                }
+                                // (T & U)[K] -> T[K] & U[K]
+                                else if (objectType.flags & TypeFlags.Intersection) {
+                                    inferFromTypesOnce(source, getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType)))));
+                                }
                             }
                         }
                     }
@@ -13957,6 +13969,14 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                    }
+                }
+
+                function inferFromTypesOnce(source: Type, target: Type) {
+                    const key = source.id + "," + target.id;
+                    if (!visited || !visited.get(key)) {
+                        (visited || (visited = createMap<boolean>())).set(key, true);
+                        inferFromTypes(source, target);
                     }
                 }
             }
