@@ -14,25 +14,10 @@ namespace ts.codefix {
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
         const token = getTokenAtPosition(sourceFile, pos);
-
-        const asExpression = findAncestor<AsExpression>(token, isAsExpression)!;
-        if (!!asExpression) {
-            const nodeBeingConverted = asExpression.getChildAt(0);
-            const expressionBeingConverted = findAncestor<Expression>(nodeBeingConverted, isExpression)!;
-            Debug.assert(!!expressionBeingConverted, "Expected position to be owned by an expression.");
-
-            const replacement = createAsExpression(expressionBeingConverted, createKeywordTypeNode(SyntaxKind.UnknownKeyword));
-            changeTracker.replaceNode(sourceFile, expressionBeingConverted, replacement);
-        }
-
-        const typeAssertion = findAncestor<TypeAssertion>(token, isTypeAssertion)!;
-        if (!!typeAssertion) {
-            const nodeBeingConverted = typeAssertion.getLastToken();
-            const expressionBeingConverted = findAncestor<Expression>(nodeBeingConverted, isExpression)!;
-            Debug.assert(!!expressionBeingConverted, "Expected position to be owned by an expression.");
-
-            const replacement = createTypeAssertion(createKeywordTypeNode(SyntaxKind.UnknownKeyword), expressionBeingConverted);
-            changeTracker.replaceNode(sourceFile, expressionBeingConverted, replacement);
-        }
+        const assertion = Debug.assertDefined(findAncestor(token, (n): n is AsExpression | TypeAssertion => isAsExpression(n) || isTypeAssertion(n)));
+        const replacement = isAsExpression(assertion)
+            ? createAsExpression(assertion.expression, createKeywordTypeNode(SyntaxKind.UnknownKeyword))
+            : createTypeAssertion(createKeywordTypeNode(SyntaxKind.UnknownKeyword), assertion.expression);
+        changeTracker.replaceNode(sourceFile, assertion.expression, replacement);
     }
 }

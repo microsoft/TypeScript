@@ -1,8 +1,8 @@
 /// <reference path='fourslash.ts' />
 
-////[|["words"] as string|]
+////["words"] as string
 
 verify.codeFix({
     description: "Add 'unknown' conversion for non-overlapping types",
-    newRangeContent: `["words"] as unknown as string`
+    newFileContent: `["words"] as unknown as string`
 });
