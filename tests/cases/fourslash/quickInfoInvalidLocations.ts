@@ -13,7 +13,7 @@
 ////
 ////    }
 ////
-////    pu/*invalid6*/blic method(value: string): string {
+////    pu{| "valid": true |}blic method(value: string): string {
 ////        retu/*invalid7*/rn null;
 ////    }
 ////
@@ -44,5 +44,11 @@
 ////    };
 ////}
 
-goTo.eachMarker(() => verify.not.quickInfoExists());
-
+goTo.eachMarker(m => {
+    if (m.data && m.data.valid) {
+        verify.quickInfoIs("(method) bar.method(value: string): string");
+    }
+    else {
+        verify.not.quickInfoExists();
+    }
+});

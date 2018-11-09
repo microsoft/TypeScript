@@ -28011,7 +28011,7 @@ namespace ts {
                 return undefined;
             }
 
-            if (isDeclarationNameOrImportPropertyName(node)) {
+            if (isModifier(node) || isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
                 return getSymbolOfNode(parent);
             }
