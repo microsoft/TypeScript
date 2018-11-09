@@ -1473,7 +1473,7 @@ foo().hello`
             checkOutputErrorsIncremental(host, emptyArray);
         });
 
-        it("updates errors when file transitively exported file changes", () => {
+        describe("updates errors when file transitively exported file changes", () => {
             const projectLocation = "/user/username/projects/myproject";
             const config: File = {
                 path: `${projectLocation}/tsconfig.json`,
@@ -1521,19 +1521,48 @@ export class Data {
     title: string;
 }`
             };
-            const filesWithoutConfig = [libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface];
-            const files = [config, ...filesWithoutConfig];
-            const host = createWatchedSystem(files, { currentDirectory: projectLocation });
-            const watch = createWatchOfConfigFile(config.path, host);
-            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-            checkOutputErrorsInitial(host, emptyArray);
 
-            host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
-            host.checkTimeoutQueueLengthAndRun(1);
-            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-            checkOutputErrorsIncremental(host, [
-                "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
-            ]);
+            function verifyTransitiveExports(filesWithoutConfig: ReadonlyArray<File>) {
+                const files = [config, ...filesWithoutConfig];
+                const host = createWatchedSystem(files, { currentDirectory: projectLocation });
+                const watch = createWatchOfConfigFile(config.path, host);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsInitial(host, emptyArray);
+
+                host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsIncremental(host, [
+                    "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+                ]);
+
+            }
+            it("when there are no circular import and exports", () => {
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
+
+            it("when there are circular import and exports", () => {
+                const lib2Data: File = {
+                    path: `${projectLocation}/lib2/data.ts`,
+                    content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
+export class Data {
+    public dat?: Data2; public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+                };
+                const lib2Data2: File = {
+                    path: `${projectLocation}/lib2/data2.ts`,
+                    content: `import { Data } from "./data";
+export class Data2 {
+    public dat?: Data;
+}`
+                };
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib2Data2, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
         });
     });
 
