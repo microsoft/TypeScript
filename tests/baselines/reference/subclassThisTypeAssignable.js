@@ -1,4 +1,6 @@
-//// [subclassThisTypeAssignable.ts]
+//// [tests/cases/compiler/subclassThisTypeAssignable.ts] ////
+
+//// [tile1.ts]
 interface Lifecycle<Attrs, State> {
 	oninit?(vnode: Vnode<Attrs, State>): number;
 	[_: number]: any;
@@ -23,8 +25,12 @@ class C implements ClassComponent<MyAttrs> {
 }
 
 const test8: ClassComponent<any> = new C();
+//// [file1.js]
+/** @type {ClassComponent<any>} */
+const test9 = new C();
 
-//// [subclassThisTypeAssignable.js]
+
+//// [tile1.js]
 var C = /** @class */ (function () {
     function C() {
     }
@@ -32,3 +38,6 @@ var C = /** @class */ (function () {
     return C;
 }());
 var test8 = new C();
+//// [file1.js]
+/** @type {ClassComponent<any>} */
+var test9 = new C();

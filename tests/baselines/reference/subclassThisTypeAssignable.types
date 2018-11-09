@@ -1,4 +1,4 @@
-=== tests/cases/compiler/subclassThisTypeAssignable.ts ===
+=== tests/cases/compiler/tile1.ts ===
 interface Lifecycle<Attrs, State> {
 	oninit?(vnode: Vnode<Attrs, State>): number;
 >oninit : (vnode: Vnode<Attrs, State>) => number
@@ -44,6 +44,13 @@ class C implements ClassComponent<MyAttrs> {
 
 const test8: ClassComponent<any> = new C();
 >test8 : ClassComponent<any>
+>new C() : C
+>C : typeof C
+
+=== tests/cases/compiler/file1.js ===
+/** @type {ClassComponent<any>} */
+const test9 = new C();
+>test9 : ClassComponent<any>
 >new C() : C
 >C : typeof C
 

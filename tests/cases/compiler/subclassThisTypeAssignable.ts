@@ -1,3 +1,7 @@
+// @allowJs: true
+// @checkJs: true
+// @outDir: ./out
+// @filename: tile1.ts
 interface Lifecycle<Attrs, State> {
 	oninit?(vnode: Vnode<Attrs, State>): number;
 	[_: number]: any;
@@ -22,3 +26,6 @@ class C implements ClassComponent<MyAttrs> {
 }
 
 const test8: ClassComponent<any> = new C();
+// @filename: file1.js
+/** @type {ClassComponent<any>} */
+const test9 = new C();
