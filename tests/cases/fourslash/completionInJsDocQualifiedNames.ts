@@ -11,5 +11,13 @@
 /////** @type {Foo./**/} */
 ////const x = 0;
 
-goTo.marker();
-verify.completionListContains("T", "type T = number", "tee", "type");
+verify.completions({
+    marker: "",
+    includes: {
+        name: "T",
+        text: "type T = number",
+        documentation: "tee",
+        kind: "type",
+        kindModifiers: "export,declare",
+    },
+});

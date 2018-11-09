@@ -1,5 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(13,11): error TS2322: Type '{}' is not assignable to type 'Prop'.
-  Property 'a' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(13,11): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+  Type '{}' is not assignable to type 'Prop'.
+    Property 'a' is missing in type '{}'.
 tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
@@ -18,8 +19,9 @@ tests/cases/conformance/jsx/file.tsx(19,18): error TS2322: Type 'string' is not 
     // Error
     let x1 = <MyComp />
               ~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'Prop'.
-!!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<MyComp<Prop>> & Prop & { children?: ReactNode; }'.
+!!! error TS2322:   Type '{}' is not assignable to type 'Prop'.
+!!! error TS2322:     Property 'a' is missing in type '{}'.
     
     // OK
     let x = <MyComp a={10} b="hi" />

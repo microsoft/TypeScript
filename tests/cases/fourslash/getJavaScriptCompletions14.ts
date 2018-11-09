@@ -9,5 +9,4 @@
 ////var x = 1;
 ////x./*1*/
 
-goTo.marker("1");
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "1", includes: { name: "toExponential", kind: "method" } });

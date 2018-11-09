@@ -6,7 +6,6 @@ namespace ts.server {
 
     /* @internal */
     export class TextStorage {
-        /*@internal*/
         version: ScriptInfoVersion;
 
         /**
@@ -438,7 +437,7 @@ namespace ts.server {
         setOptions(formatSettings: FormatCodeSettings, preferences: protocol.UserPreferences | undefined): void {
             if (formatSettings) {
                 if (!this.formatSettings) {
-                    this.formatSettings = getDefaultFormatCodeSettings(this.host);
+                    this.formatSettings = getDefaultFormatCodeSettings(this.host.newLine);
                     assign(this.formatSettings, formatSettings);
                 }
                 else {

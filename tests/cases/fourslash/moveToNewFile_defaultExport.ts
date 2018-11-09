@@ -16,7 +16,8 @@ verify.moveToNewFile({
 f();`,
 
         "/f.ts":
-`export default function f() { }`,
+`export default function f() { }
+`,
 
         "/user.ts":
 `import f from "./f";

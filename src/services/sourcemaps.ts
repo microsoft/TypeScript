@@ -10,17 +10,22 @@ namespace ts {
     }
 
     export function getSourceMapper(
-        getCanonicalFileName: GetCanonicalFileName,
+        useCaseSensitiveFileNames: boolean,
         currentDirectory: string,
         log: (message: string) => void,
         host: LanguageServiceHost,
         getProgram: () => Program,
     ): SourceMapper {
+        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
         let sourcemappedFileCache: SourceFileLikeCache;
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
+        function toPath(fileName: string) {
+            return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
+        }
+
         function scanForSourcemapURL(fileName: string) {
-            const mappedFile = sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            const mappedFile = sourcemappedFileCache.get(toPath(fileName));
             if (!mappedFile) {
                 return;
             }
@@ -38,7 +43,7 @@ namespace ts {
             return file.sourceMapper = createDocumentPositionMapper({
                 getSourceFileLike: s => {
                     // Lookup file in program, if provided
-                    const file = program && program.getSourceFile(s);
+                    const file = program && program.getSourceFileByPath(s);
                     // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
                     if (file === undefined || file.resolvedPath !== s) {
                         // Otherwise check the cache (which may hit disk)
@@ -76,7 +81,7 @@ namespace ts {
             }
             possibleMapLocations.push(fileName + ".map");
             for (const location of possibleMapLocations) {
-                const mapPath = toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
+                const mapPath = ts.toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
                 if (host.fileExists(mapPath)) {
                     return convertDocumentToSourceMapper(file, host.readFile(mapPath)!, mapPath); // TODO: GH#18217
                 }
@@ -95,7 +100,11 @@ namespace ts {
 
         function tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined {
             const program = getProgram();
-            const declarationPath = getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
+            const options = program.getCompilerOptions();
+            const outPath = options.outFile || options.out;
+            const declarationPath = outPath ?
+                removeFileExtension(outPath) + Extension.Dts :
+                getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
             const declarationFile = getFile(declarationPath);
             if (!declarationFile) return undefined;
@@ -104,12 +113,16 @@ namespace ts {
         }
 
         function getFile(fileName: string): SourceFileLike | undefined {
-            return getProgram().getSourceFile(fileName) || sourcemappedFileCache.get(toPath(fileName, currentDirectory, getCanonicalFileName));
+            const path = toPath(fileName);
+            const file = getProgram().getSourceFileByPath(path);
+            if (file && file.resolvedPath === path) {
+                return file;
+            }
+            return sourcemappedFileCache.get(path);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
-            const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-            const file = getProgram().getSourceFile(path) || sourcemappedFileCache.get(path)!; // TODO: GH#18217
+            const file = getFile(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
 

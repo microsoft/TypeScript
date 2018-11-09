@@ -16,7 +16,4 @@
 ////    }
 ////}
 
-goTo.marker();
-verify.completionListContains('foo');
-verify.completionListContains('bar');
-verify.completionListCount(2);
+verify.completions({ marker: "", exact: ["foo", "bar"] });

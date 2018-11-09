@@ -1,20 +1,20 @@
 tests/cases/compiler/client.ts(1,1): error TS1191: An import declaration cannot have modifiers.
 tests/cases/compiler/client.ts(2,12): error TS2323: Cannot redeclare exported variable 'x1'.
 tests/cases/compiler/client.ts(3,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(3,34): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(3,34): error TS2305: Module '"./server"' has no exported member 'a'.
 tests/cases/compiler/client.ts(4,12): error TS2323: Cannot redeclare exported variable 'x1'.
 tests/cases/compiler/client.ts(5,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(5,34): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(5,34): error TS2305: Module '"./server"' has no exported member 'a'.
 tests/cases/compiler/client.ts(6,12): error TS2323: Cannot redeclare exported variable 'x1'.
 tests/cases/compiler/client.ts(7,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(7,34): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
-tests/cases/compiler/client.ts(7,37): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+tests/cases/compiler/client.ts(7,34): error TS2305: Module '"./server"' has no exported member 'x'.
+tests/cases/compiler/client.ts(7,37): error TS2305: Module '"./server"' has no exported member 'a'.
 tests/cases/compiler/client.ts(8,12): error TS2323: Cannot redeclare exported variable 'x1'.
 tests/cases/compiler/client.ts(9,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(9,34): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
+tests/cases/compiler/client.ts(9,34): error TS2305: Module '"./server"' has no exported member 'x'.
 tests/cases/compiler/client.ts(10,12): error TS2323: Cannot redeclare exported variable 'x1'.
 tests/cases/compiler/client.ts(11,1): error TS1191: An import declaration cannot have modifiers.
-tests/cases/compiler/client.ts(11,34): error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'm'.
+tests/cases/compiler/client.ts(11,34): error TS2305: Module '"./server"' has no exported member 'm'.
 tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported variable 'x1'.
 
 
@@ -33,7 +33,7 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x1: number = defaultBinding2;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
@@ -41,7 +41,7 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x1: number = defaultBinding3;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
@@ -49,9 +49,9 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
+!!! error TS2305: Module '"./server"' has no exported member 'x'.
                                         ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'a'.
+!!! error TS2305: Module '"./server"' has no exported member 'a'.
     export var x1: number = defaultBinding4;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
@@ -59,7 +59,7 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'x'.
+!!! error TS2305: Module '"./server"' has no exported member 'x'.
     export var x1: number = defaultBinding5;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.
@@ -67,7 +67,7 @@ tests/cases/compiler/client.ts(12,12): error TS2323: Cannot redeclare exported v
     ~~~~~~
 !!! error TS1191: An import declaration cannot have modifiers.
                                      ~
-!!! error TS2305: Module '"tests/cases/compiler/server"' has no exported member 'm'.
+!!! error TS2305: Module '"./server"' has no exported member 'm'.
     export var x1: number = defaultBinding6;
                ~~
 !!! error TS2323: Cannot redeclare exported variable 'x1'.

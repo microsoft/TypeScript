@@ -8,7 +8,8 @@ verify.generateTypes(
     output:
 `export = example;
 declare class example {
-}`,
+}
+`,
 },
 
 {
@@ -28,11 +29,13 @@ declare class example {
 declare class example {
     constructor(x: any);
     x: any;
-}`,
+}
+`,
 },
 {
     value: { x: 0, export: 0 },
-    output: `export const x: number;`,
+    output: `export const x: number;
+`,
 },
 {
     value: (() => {
@@ -87,7 +90,8 @@ declare namespace example {
     namespace staticMethod {
         const staticMethodProperty: number;
     }
-}`,
+}
+`,
 },
 
 {
@@ -103,7 +107,8 @@ declare class example {
     static staticMethod(): void;
     x: any;
     method(): void;
-}`,
+}
+`,
 },
 
 );

@@ -79,14 +79,14 @@ namespace ts.formatting {
                 return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
             }
 
-            const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
-            const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
+            const startPositionOfLine = getStartPositionOfLine(previousLine, sourceFile);
+            const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPositionOfLine, position, sourceFile, options);
 
             if (column === 0) {
                 return column;
             }
 
-            const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
+            const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPositionOfLine + character);
             return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
         }
 

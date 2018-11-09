@@ -5,8 +5,7 @@
 
 ////module A./*moduleName2*/
 
-goTo.marker("moduleName1");
-verify.not.completionListIsEmpty();
-
-goTo.marker("moduleName2");
-verify.completionListIsEmpty();
+verify.completions(
+    { marker: "moduleName1", exact: completion.globals, isNewIdentifierLocation: true },
+    { marker: "moduleName2", exact: undefined },
+);

@@ -143,6 +143,16 @@ let f: Foo2<O, 'x'> = {
     pt: {x: 7, y: false},
 };
 
+// Repro from #28170
+
+function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+    let x = obj.foo;  // Error
+}
+
+function test2<T, K extends keyof T>(obj: Record<K, number>) {
+    let x = obj.foo;  // Error
+}
+
 
 //// [mappedTypeErrors.js]
 function f1(x) {
@@ -222,6 +232,13 @@ var f = {
     pf: { x: 7 },
     pt: { x: 7, y: false }
 };
+// Repro from #28170
+function test1(obj) {
+    var x = obj.foo; // Error
+}
+function test2(obj) {
+    var x = obj.foo; // Error
+}
 
 
 //// [mappedTypeErrors.d.ts]
@@ -300,3 +317,5 @@ declare type O = {
 };
 declare let o: O;
 declare let f: Foo2<O, 'x'>;
+declare function test1<T, K extends keyof T>(obj: Pick<T, K>): void;
+declare function test2<T, K extends keyof T>(obj: Record<K, number>): void;

@@ -591,10 +591,12 @@ namespace ts {
     export function createDocumentPositionMapper(host: DocumentPositionMapperHost, map: RawSourceMap, mapPath: string): DocumentPositionMapper {
         const mapDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
-        const generatedFilePath = toPath(map.file, mapDirectory, host.getCanonicalFileName);
-        const generatedFile = host.getSourceFileLike(generatedFilePath);
-        const sourceFilePaths = map.sources.map(source => toPath(source, sourceRoot, host.getCanonicalFileName));
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFilePaths.map((source, i) => [source, i] as [string, number]));
+        const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
+        const generatedCanonicalFilePath = host.getCanonicalFileName(generatedAbsoluteFilePath) as Path;
+        const generatedFile = host.getSourceFileLike(generatedCanonicalFilePath);
+        const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
+        const sourceFileCanonicalPaths = sourceFileAbsolutePaths.map(source => host.getCanonicalFileName(source) as Path);
+        const sourceToSourceIndexMap = createMapFromEntries(sourceFileCanonicalPaths.map((source, i) => [source, i] as [string, number]));
         let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
         let generatedMappings: ReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: ReadonlyArray<ReadonlyArray<SourceMappedPosition>> | undefined;
@@ -611,7 +613,7 @@ namespace ts {
             let source: string | undefined;
             let sourcePosition: number | undefined;
             if (isSourceMapping(mapping)) {
-                const sourceFilePath = sourceFilePaths[mapping.sourceIndex];
+                const sourceFilePath = sourceFileCanonicalPaths[mapping.sourceIndex];
                 const sourceFile = host.getSourceFileLike(sourceFilePath);
                 source = map.sources[mapping.sourceIndex];
                 sourcePosition = sourceFile !== undefined
@@ -670,7 +672,7 @@ namespace ts {
         }
 
         function getGeneratedPosition(loc: DocumentPosition): DocumentPosition {
-            const sourceIndex = sourceToSourceIndexMap.get(loc.fileName);
+            const sourceIndex = sourceToSourceIndexMap.get(host.getCanonicalFileName(loc.fileName));
             if (sourceIndex === undefined) return loc;
 
             const sourceMappings = getSourceMappings(sourceIndex);
@@ -678,7 +680,7 @@ namespace ts {
 
             let targetIndex = binarySearchKey(sourceMappings, loc.pos, getSourcePositionOfMapping, compareValues);
             if (targetIndex < 0) {
-                // if no exact match, closest is 2's compliment of result
+                // if no exact match, closest is 2's complement of result
                 targetIndex = ~targetIndex;
             }
 
@@ -687,7 +689,7 @@ namespace ts {
                 return loc;
             }
 
-            return { fileName: generatedFilePath, pos: mapping.generatedPosition }; // Closest pos
+            return { fileName: generatedAbsoluteFilePath, pos: mapping.generatedPosition }; // Closest pos
         }
 
         function getSourcePosition(loc: DocumentPosition): DocumentPosition {
@@ -696,7 +698,7 @@ namespace ts {
 
             let targetIndex = binarySearchKey(generatedMappings, loc.pos, getGeneratedPositionOfMapping, compareValues);
             if (targetIndex < 0) {
-                // if no exact match, closest is 2's compliment of result
+                // if no exact match, closest is 2's complement of result
                 targetIndex = ~targetIndex;
             }
 
@@ -705,7 +707,7 @@ namespace ts {
                 return loc;
             }
 
-            return { fileName: sourceFilePaths[mapping.sourceIndex], pos: mapping.sourcePosition }; // Closest pos
+            return { fileName: sourceFileAbsolutePaths[mapping.sourceIndex], pos: mapping.sourcePosition }; // Closest pos
         }
     }
 

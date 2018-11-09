@@ -14,6 +14,9 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 
 const obj = {};
 
+// OK
+<Poisoned {...{x: "ok", y: "2"}} />;
+
 // Error
 let p = <Poisoned {...obj} />;
 let y = <Poisoned />;
@@ -49,6 +52,8 @@ var Poisoned = /** @class */ (function (_super) {
     return Poisoned;
 }(React.Component));
 var obj = {};
+// OK
+<Poisoned {...{ x: "ok", y: "2" }}/>;
 // Error
 var p = <Poisoned {...obj}/>;
 var y = <Poisoned />;

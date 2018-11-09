@@ -9,6 +9,4 @@
 ////import p = M.N;
 ////p./**/
 
-goTo.marker();
-verify.completionListContains('foo');
-verify.not.completionListContains('bar');
+verify.completions({ marker: "", exact: "foo" });

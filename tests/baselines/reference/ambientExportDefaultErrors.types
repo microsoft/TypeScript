@@ -29,7 +29,7 @@ declare module "indirect" {
 >"indirect" : typeof import("indirect")
 
     export default typeof Foo.default;
->typeof Foo.default : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof Foo.default : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >Foo.default : number
 >Foo : typeof Foo
 >default : number
@@ -41,7 +41,7 @@ declare module "indirect2" {
 >"indirect2" : typeof import("indirect2")
 
     export = typeof Foo2;
->typeof Foo2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof Foo2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >Foo2 : number
 }
 

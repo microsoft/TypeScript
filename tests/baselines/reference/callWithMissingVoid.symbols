@@ -1,0 +1,231 @@
+=== tests/cases/conformance/expressions/functionCalls/callWithMissingVoid.ts ===
+// From #4260
+class X<T> {
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+>T : Symbol(T, Decl(callWithMissingVoid.ts, 1, 8))
+
+    f(t: T) {
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>t : Symbol(t, Decl(callWithMissingVoid.ts, 2, 6))
+>T : Symbol(T, Decl(callWithMissingVoid.ts, 1, 8))
+
+        return { a: t };
+>a : Symbol(a, Decl(callWithMissingVoid.ts, 3, 16))
+>t : Symbol(t, Decl(callWithMissingVoid.ts, 2, 6))
+    }
+}
+
+declare const x: X<void>;
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 7, 13))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+
+x.f() // no error because f expects void
+>x.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 7, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+declare const xUnion: X<void | number>;
+>xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+
+xUnion.f(42) // no error because f accepts number
+>xUnion.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+xUnion.f() // no error because f accepts void
+>xUnion.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>xUnion : Symbol(xUnion, Decl(callWithMissingVoid.ts, 10, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+declare const xAny: X<any>;
+>xAny : Symbol(xAny, Decl(callWithMissingVoid.ts, 14, 13))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+
+xAny.f() // error, any still expects an argument
+>xAny.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>xAny : Symbol(xAny, Decl(callWithMissingVoid.ts, 14, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+declare const xUnknown: X<unknown>;
+>xUnknown : Symbol(xUnknown, Decl(callWithMissingVoid.ts, 17, 13))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+
+xUnknown.f() // error, unknown still expects an argument
+>xUnknown.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>xUnknown : Symbol(xUnknown, Decl(callWithMissingVoid.ts, 17, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+declare const xNever: X<never>;
+>xNever : Symbol(xNever, Decl(callWithMissingVoid.ts, 20, 13))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 0, 0))
+
+xNever.f() // error, never still expects an argument
+>xNever.f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+>xNever : Symbol(xNever, Decl(callWithMissingVoid.ts, 20, 13))
+>f : Symbol(X.f, Decl(callWithMissingVoid.ts, 1, 12))
+
+
+// Promise has previously been updated to work without arguments, but to show this fixes the issue too.
+
+class MyPromise<X> {
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 26, 16))
+
+    constructor(executor: (resolve: (value: X) => void) => void) {
+>executor : Symbol(executor, Decl(callWithMissingVoid.ts, 27, 16))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 27, 27))
+>value : Symbol(value, Decl(callWithMissingVoid.ts, 27, 37))
+>X : Symbol(X, Decl(callWithMissingVoid.ts, 26, 16))
+
+    }
+}
+
+new MyPromise<void>(resolve => resolve()); // no error
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 32, 20))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 32, 20))
+
+new MyPromise<void | number>(resolve => resolve()); // no error
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 33, 29))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 33, 29))
+
+new MyPromise<any>(resolve => resolve()); // error, `any` arguments cannot be omitted
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 34, 19))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 34, 19))
+
+new MyPromise<unknown>(resolve => resolve()); // error, `unknown` arguments cannot be omitted
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 35, 23))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 35, 23))
+
+new MyPromise<never>(resolve => resolve()); // error, `never` arguments cannot be omitted
+>MyPromise : Symbol(MyPromise, Decl(callWithMissingVoid.ts, 21, 10))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 36, 21))
+>resolve : Symbol(resolve, Decl(callWithMissingVoid.ts, 36, 21))
+
+
+// Multiple parameters
+
+function a(x: number, y: string, z: void): void  {
+>a : Symbol(a, Decl(callWithMissingVoid.ts, 36, 43))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 41, 11))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 41, 21))
+>z : Symbol(z, Decl(callWithMissingVoid.ts, 41, 32))
+    
+}
+
+a(4, "hello"); // ok
+>a : Symbol(a, Decl(callWithMissingVoid.ts, 36, 43))
+
+a(4, "hello", void 0); // ok
+>a : Symbol(a, Decl(callWithMissingVoid.ts, 36, 43))
+
+a(4); // not ok
+>a : Symbol(a, Decl(callWithMissingVoid.ts, 36, 43))
+
+function b(x: number, y: string, z: void, what: number): void  {
+>b : Symbol(b, Decl(callWithMissingVoid.ts, 47, 5))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 49, 11))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 49, 21))
+>z : Symbol(z, Decl(callWithMissingVoid.ts, 49, 32))
+>what : Symbol(what, Decl(callWithMissingVoid.ts, 49, 41))
+    
+}
+
+b(4, "hello", void 0, 2); // ok
+>b : Symbol(b, Decl(callWithMissingVoid.ts, 47, 5))
+
+b(4, "hello"); // not ok
+>b : Symbol(b, Decl(callWithMissingVoid.ts, 47, 5))
+
+b(4, "hello", void 0); // not ok
+>b : Symbol(b, Decl(callWithMissingVoid.ts, 47, 5))
+
+b(4); // not ok
+>b : Symbol(b, Decl(callWithMissingVoid.ts, 47, 5))
+
+function c(x: number | void, y: void, z: void | string | number): void  {
+>c : Symbol(c, Decl(callWithMissingVoid.ts, 56, 5))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 58, 11))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 58, 28))
+>z : Symbol(z, Decl(callWithMissingVoid.ts, 58, 37))
+    
+}
+
+c(3, void 0, void 0); // ok
+>c : Symbol(c, Decl(callWithMissingVoid.ts, 56, 5))
+
+c(3, void 0); // ok
+>c : Symbol(c, Decl(callWithMissingVoid.ts, 56, 5))
+
+c(3); // ok
+>c : Symbol(c, Decl(callWithMissingVoid.ts, 56, 5))
+
+c(); // ok
+>c : Symbol(c, Decl(callWithMissingVoid.ts, 56, 5))
+
+
+// Spread Parameters
+
+declare function call<TS extends unknown[]>(
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>TS : Symbol(TS, Decl(callWithMissingVoid.ts, 70, 22))
+
+    handler: (...args: TS) => unknown,
+>handler : Symbol(handler, Decl(callWithMissingVoid.ts, 70, 44))
+>args : Symbol(args, Decl(callWithMissingVoid.ts, 71, 14))
+>TS : Symbol(TS, Decl(callWithMissingVoid.ts, 70, 22))
+
+    ...args: TS): void;
+>args : Symbol(args, Decl(callWithMissingVoid.ts, 71, 38))
+>TS : Symbol(TS, Decl(callWithMissingVoid.ts, 70, 22))
+
+call((x: number, y: number) => x + y) // error
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 74, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 74, 16))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 74, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 74, 16))
+
+call((x: number, y: number) => x + y, 4, 2) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 75, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 75, 16))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 75, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 75, 16))
+
+call((x: number, y: void) => x, 4, void 0) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 77, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 77, 16))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 77, 6))
+
+call((x: number, y: void) => x, 4) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 78, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 78, 16))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 78, 6))
+
+call((x: void, y: void) => 42) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 79, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 79, 14))
+
+call((x: number | void, y: number | void) => 42) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 80, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 80, 23))
+
+call((x: number | void, y: number | void) => 42, 4) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 81, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 81, 23))
+
+call((x: number | void, y: number | void) => 42, 4, 2) // ok
+>call : Symbol(call, Decl(callWithMissingVoid.ts, 65, 4))
+>x : Symbol(x, Decl(callWithMissingVoid.ts, 82, 6))
+>y : Symbol(y, Decl(callWithMissingVoid.ts, 82, 23))
+

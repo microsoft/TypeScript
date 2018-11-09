@@ -12,12 +12,11 @@
 ////<div a="1" b/*1*/ />
 ////<div a /*2*/ />
 
-const [replacementSpan] = test.ranges();
-goTo.marker("0");
-verify.completionListContains("foo", "const foo: 0", undefined, "const", undefined, undefined, {
-    includeInsertTextCompletions: true,
-    insertText: "{foo}",
-    replacementSpan,
-});
-
-verify.completionsAt(["1", "2"], ["b"]);
+verify.completions(
+    {
+        marker: "0",
+        includes: { name: "foo", text: "const foo: 0", kind: "const", insertText: "{foo}", replacementSpan: test.ranges()[0] },
+        preferences: { includeInsertTextCompletions: true },
+    },
+    { marker: ["1", "2"], exact: "b" },
+);
