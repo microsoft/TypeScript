@@ -10058,7 +10058,7 @@ declare class TestLib {
         const configContent = JSON.stringify({ compilerOptions });
         const aTsconfig: File = { path: "/a/tsconfig.json", content: configContent };
 
-        const aDtsMapContent: SourceMapSection = {
+        const aDtsMapContent: RawSourceMap = {
             version: 3,
             file: "a.d.ts",
             sourceRoot: "",
@@ -10082,7 +10082,7 @@ declare class TestLib {
         };
         const bTsconfig: File = { path: "/b/tsconfig.json", content: configContent };
 
-        const bDtsMapContent: SourceMapSection = {
+        const bDtsMapContent: RawSourceMap = {
             version: 3,
             file: "b.d.ts",
             sourceRoot: "",
