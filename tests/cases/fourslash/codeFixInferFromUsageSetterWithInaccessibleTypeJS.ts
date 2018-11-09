@@ -22,7 +22,7 @@
 
 goTo.file("/b.js");
 verify.codeFix({
-    index: 2,
+    index: 0,
     description: "Infer type of 'x' from usage",
     newFileContent:
 `export class C {

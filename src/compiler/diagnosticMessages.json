@@ -1007,6 +1007,14 @@
         "category": "Error",
         "code": 1349
     },
+    "Print the final configuration instead of building.": {
+        "category": "Message",
+        "code": 1350
+    },
+    "Experimental support for BigInt is a feature that is subject to change in a future release. Set the 'experimentalBigInt' option to remove this warning.": {
+        "category": "Error",
+        "code": 1351
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1232,7 +1240,7 @@
         "category": "Error",
         "code": 2355
     },
-    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
+    "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2356
     },
@@ -1256,11 +1264,11 @@
         "category": "Error",
         "code": 2361
     },
-    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
     },
-    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2363
     },
@@ -2088,15 +2096,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2582
     },
@@ -2488,6 +2496,22 @@
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
+    },
+    "Did you mean for '{0}' to be constrained to type 'new (...args: any[]) => {1}'?": {
+        "category": "Error",
+        "code": 2735
+    },
+    "Operator '{0}' cannot be applied to type '{1}'.": {
+        "category": "Error",
+        "code": 2736
+    },
+    "BigInt literals are not available when targetting lower than ESNext.": {
+        "category": "Error",
+        "code": 2737
+    },
+    "An outer value of 'this' is shadowed by this container.": {
+        "category": "Message",
+        "code": 2738
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3767,6 +3791,14 @@
         "category": "Message",
         "code": 6215
     },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6216
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6217
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3888,6 +3920,10 @@
     "Options '{0}' and '{1}' cannot be combined.": {
         "category": "Error",
         "code": 6370
+    },
+    "Enables experimental support for ESNext BigInt literals.": {
+        "category": "Message",
+        "code": 6371
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
@@ -4041,6 +4077,39 @@
         "category": "Error",
         "code": 7042
     },
+    "Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7043
+    },
+    "Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7044
+    },
+    "Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7045
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7046
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7047
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7048
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7049
+    },
+    "'{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7050
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4687,12 +4756,20 @@
         "category": "Message",
         "code": 95068
     },
-    "Add missing 'new' operator to call": {
+    "Add 'unknown' conversion for non-overlapping types": {
         "category": "Message",
         "code": 95069
     },
-    "Add missing 'new' operator to all calls": {
+    "Add 'unknown' to all conversions of non-overlapping types": {
         "category": "Message",
         "code": 95070
+    },
+    "Add missing 'new' operator to call": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
     }
 }

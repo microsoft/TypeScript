@@ -1139,7 +1139,7 @@ namespace ts {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-        const sourceMapper = getSourceMapper(getCanonicalFileName, currentDirectory, log, host, () => program);
+        const sourceMapper = getSourceMapper(useCaseSensitiveFileNames, currentDirectory, log, host, () => program);
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1496,7 +1496,7 @@ namespace ts {
         }
 
         /// Goto definition
-        function getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
+        function getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined {
             synchronizeHostData();
             return GoToDefinition.getDefinitionAtPosition(program, getValidSourceFile(fileName), position);
         }
@@ -1506,7 +1506,7 @@ namespace ts {
             return GoToDefinition.getDefinitionAndBoundSpan(program, getValidSourceFile(fileName), position);
         }
 
-        function getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined {
+        function getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined {
             synchronizeHostData();
             return GoToDefinition.getTypeDefinitionAtPosition(program.getTypeChecker(), getValidSourceFile(fileName), position);
         }
@@ -1519,7 +1519,7 @@ namespace ts {
         }
 
         /// References and Occurrences
-        function getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined {
+        function getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined {
             return flatMap(getDocumentHighlights(fileName, position, [fileName]), entry => entry.highlightSpans.map<ReferenceEntry>(highlightSpan => ({
                 fileName: entry.fileName,
                 textSpan: highlightSpan.textSpan,
@@ -1533,7 +1533,7 @@ namespace ts {
             const normalizedFileName = normalizePath(fileName);
             Debug.assert(filesToSearch.some(f => normalizePath(f) === normalizedFileName));
             synchronizeHostData();
-            const sourceFilesToSearch = map(filesToSearch, f => Debug.assertDefined(program.getSourceFile(f)));
+            const sourceFilesToSearch = filesToSearch.map(getValidSourceFile);
             const sourceFile = getValidSourceFile(fileName);
             return DocumentHighlights.getDocumentHighlights(program, cancellationToken, sourceFile, position, sourceFilesToSearch);
         }

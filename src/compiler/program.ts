@@ -198,7 +198,7 @@ namespace ts {
         };
     }
 
-    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): Diagnostic[] {
+    export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const diagnostics = [
             ...program.getConfigFileParsingDiagnostics(),
             ...program.getOptionsDiagnostics(cancellationToken),
@@ -694,12 +694,14 @@ namespace ts {
                 if (!resolvedProjectReferences) {
                     resolvedProjectReferences = projectReferences.map(parseProjectReferenceConfigFile);
                 }
-                for (const parsedRef of resolvedProjectReferences) {
-                    if (parsedRef) {
-                        const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
-                        if (out) {
-                            const dtsOutfile = changeExtension(out, ".d.ts");
-                            processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                if (rootNames.length) {
+                    for (const parsedRef of resolvedProjectReferences) {
+                        if (parsedRef) {
+                            const out = parsedRef.commandLine.options.outFile || parsedRef.commandLine.options.out;
+                            if (out) {
+                                const dtsOutfile = changeExtension(out, ".d.ts");
+                                processSourceFile(dtsOutfile, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false, /*packageId*/ undefined);
+                            }
                         }
                     }
                 }
@@ -708,7 +710,7 @@ namespace ts {
             forEach(rootNames, name => processRootFile(name, /*isDefaultLib*/ false, /*ignoreNoDefaultLib*/ false));
 
             // load type declarations specified via 'types' argument or implicitly from types/ and node_modules/@types folders
-            const typeReferences: string[] = getAutomaticTypeDirectiveNames(options, host);
+            const typeReferences: string[] = rootNames.length ? getAutomaticTypeDirectiveNames(options, host) : emptyArray;
 
             if (typeReferences.length) {
                 // This containingFilename needs to match with the one used in managed-side
@@ -724,7 +726,7 @@ namespace ts {
             //  - The '--noLib' flag is used.
             //  - A 'no-default-lib' reference comment is encountered in
             //      processing the root files.
-            if (!skipDefaultLib) {
+            if (rootNames.length && !skipDefaultLib) {
                 // If '--lib' is not specified, include default library file according to '--target'
                 // otherwise, using options specified in '--lib' instead of '--target' default library file
                 const defaultLibraryFileName = getDefaultLibraryFileName();
@@ -1817,7 +1819,7 @@ namespace ts {
             return sourceFile.isDeclarationFile ? [] : getDeclarationDiagnosticsWorker(sourceFile, cancellationToken);
         }
 
-        function getOptionsDiagnostics(): Diagnostic[] {
+        function getOptionsDiagnostics(): SortedReadonlyArray<Diagnostic> {
             return sortAndDeduplicateDiagnostics(concatenate(
                 fileProcessingDiagnostics.getGlobalDiagnostics(),
                 concatenate(
@@ -1838,8 +1840,8 @@ namespace ts {
             return diagnostics;
         }
 
-        function getGlobalDiagnostics(): Diagnostic[] {
-            return sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice());
+        function getGlobalDiagnostics(): SortedReadonlyArray<Diagnostic> {
+            return rootNames.length ? sortAndDeduplicateDiagnostics(getDiagnosticsProducingTypeChecker().getGlobalDiagnostics().slice()) : emptyArray as any as SortedReadonlyArray<Diagnostic>;
         }
 
         function getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic> {
@@ -2667,13 +2669,13 @@ namespace ts {
             const languageVersion = options.target || ScriptTarget.ES3;
             const outFile = options.outFile || options.out;
 
-            const firstNonAmbientExternalModuleSourceFile = forEach(files, f => isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
+            const firstNonAmbientExternalModuleSourceFile = find(files, f => isExternalModule(f) && !f.isDeclarationFile);
             if (options.isolatedModules) {
                 if (options.module === ModuleKind.None && languageVersion < ScriptTarget.ES2015) {
                     createDiagnosticForOptionName(Diagnostics.Option_isolatedModules_can_only_be_used_when_either_option_module_is_provided_or_option_target_is_ES2015_or_higher, "isolatedModules", "target");
                 }
 
-                const firstNonExternalModuleSourceFile = forEach(files, f => !isExternalModule(f) && !f.isDeclarationFile ? f : undefined);
+                const firstNonExternalModuleSourceFile = find(files, f => !isExternalModule(f) && !f.isDeclarationFile && f.scriptKind !== ScriptKind.JSON);
                 if (firstNonExternalModuleSourceFile) {
                     const span = getErrorSpanForNode(firstNonExternalModuleSourceFile, firstNonExternalModuleSourceFile);
                     programDiagnostics.add(createFileDiagnostic(firstNonExternalModuleSourceFile, span.start, span.length, Diagnostics.Cannot_compile_namespaces_when_the_isolatedModules_flag_is_provided));
@@ -2716,7 +2718,7 @@ namespace ts {
                 const dir = getCommonSourceDirectory();
 
                 // If we failed to find a good common directory, but outDir is specified and at least one of our files is on a windows drive/URL/other resource, add a failure
-                if (options.outDir && dir === "" && forEach(files, file => getRootLength(file.fileName) > 1)) {
+                if (options.outDir && dir === "" && files.some(file => getRootLength(file.fileName) > 1)) {
                     createDiagnosticForOptionName(Diagnostics.Cannot_find_the_common_subdirectory_path_for_the_input_files, "outDir");
                 }
             }
@@ -2806,7 +2808,11 @@ namespace ts {
                 }
                 const options = resolvedRef.commandLine.options;
                 if (!options.composite) {
-                    createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                    // ok to not have composite if the current program is container only
+                    const inputs = parent ? parent.commandLine.fileNames : rootNames;
+                    if (inputs.length) {
+                        createDiagnosticForReference(parentFile, index, Diagnostics.Referenced_project_0_must_have_setting_composite_Colon_true, ref.path);
+                    }
                 }
                 if (ref.prepend) {
                     const out = options.outFile || options.out;

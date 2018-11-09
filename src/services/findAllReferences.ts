@@ -1,8 +1,8 @@
 /* @internal */
 namespace ts.FindAllReferences {
     export interface SymbolAndEntries {
-        definition: Definition | undefined;
-        references: Entry[];
+        readonly definition: Definition | undefined;
+        readonly references: ReadonlyArray<Entry>;
     }
 
     export const enum DefinitionKind { Symbol, Label, Keyword, This, String }
@@ -60,7 +60,7 @@ namespace ts.FindAllReferences {
         return map(referenceEntries, entry => toImplementationLocation(entry, checker));
     }
 
-    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): Entry[] | undefined {
+    function getImplementationReferenceEntries(program: Program, cancellationToken: CancellationToken, sourceFiles: ReadonlyArray<SourceFile>, node: Node, position: number): ReadonlyArray<Entry> | undefined {
         if (node.kind === SyntaxKind.SourceFile) {
             return undefined;
         }
@@ -94,11 +94,19 @@ namespace ts.FindAllReferences {
 
     export type ToReferenceOrRenameEntry<T> = (entry: Entry, originalNode: Node) => T;
 
-    export function getReferenceEntriesForNode(position: number, node: Node, program: Program, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken, options: Options = {}, sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName)): Entry[] | undefined {
+    export function getReferenceEntriesForNode(
+        position: number,
+        node: Node,
+        program: Program,
+        sourceFiles: ReadonlyArray<SourceFile>,
+        cancellationToken: CancellationToken,
+        options: Options = {},
+        sourceFilesSet: ReadonlyMap<true> = arrayToSet(sourceFiles, f => f.fileName),
+    ): ReadonlyArray<Entry> | undefined {
         return flattenEntries(Core.getReferencedSymbolsForNode(position, node, program, sourceFiles, cancellationToken, options, sourceFilesSet));
     }
 
-    function flattenEntries(referenceSymbols: SymbolAndEntries[] | undefined): Entry[] | undefined {
+    function flattenEntries(referenceSymbols: SymbolAndEntries[] | undefined): ReadonlyArray<Entry> | undefined {
         return referenceSymbols && flatMap(referenceSymbols, r => r.references);
     }
 
@@ -360,6 +368,10 @@ namespace ts.FindAllReferences.Core {
             return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, cancellationToken) : undefined;
         }
 
+        if (symbol.escapedName === InternalSymbolName.ExportEquals) {
+            return getReferencedSymbolsForModule(program, symbol.parent!, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+        }
+
         let moduleReferences: SymbolAndEntries[] = emptyArray;
         const moduleSourceFile = isModuleSymbol(symbol);
         let referencedNode: Node | undefined = node;
@@ -416,6 +428,22 @@ namespace ts.FindAllReferences.Core {
                 default:
                     // This may be merged with something.
                     Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+            }
+        }
+
+        const exported = symbol.exports!.get(InternalSymbolName.ExportEquals);
+        if (exported) {
+            for (const decl of exported.declarations) {
+                const sourceFile = decl.getSourceFile();
+                if (sourceFilesSet.has(sourceFile.fileName)) {
+                    // At `module.exports = ...`, reference node is `module`
+                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left)
+                        ? decl.left.expression
+                        : isExportAssignment(decl)
+                        ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile))
+                        : getNameOfDeclaration(decl) || decl;
+                    references.push(nodeEntry(node));
+                }
             }
         }
 
@@ -831,7 +859,9 @@ namespace ts.FindAllReferences.Core {
     }
 
     export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
-        const symbol = checker.getSymbolAtLocation(definition);
+        const symbol = isParameterPropertyDeclaration(definition.parent)
+            ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
+            : checker.getSymbolAtLocation(definition);
         if (!symbol) return undefined;
         for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
             if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;

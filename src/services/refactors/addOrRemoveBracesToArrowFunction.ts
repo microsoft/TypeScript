@@ -15,10 +15,10 @@ namespace ts.refactor.addOrRemoveBracesToArrowFunction {
         addBraces: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
         const info = getConvertibleArrowFunctionAtPosition(file, startPosition);
-        if (!info) return undefined;
+        if (!info) return emptyArray;
 
         return [{
             name: refactorName,

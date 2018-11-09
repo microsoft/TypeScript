@@ -34,8 +34,10 @@ namespace ts.tscWatch {
         return () => watch.getCurrentProgram().getProgram();
     }
 
-    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}) {
-        const watch = createWatchProgram(createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host));
+    function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
+        const compilerHost = createWatchCompilerHostOfFilesAndCompilerOptions(rootFiles, options, host);
+        compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
+        const watch = createWatchProgram(compilerHost);
         return () => watch.getCurrentProgram().getProgram();
     }
 
@@ -1072,7 +1074,10 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([file1, configFile, libFile]);
             const watch = createWatchOfConfigFile(configFile.path, host);
 
-            checkProgramActualFiles(watch(), [libFile.path]);
+            checkProgramActualFiles(watch(), emptyArray);
+            checkOutputErrorsInitial(host, [
+                "error TS18003: No inputs were found in config file '/a/b/tsconfig.json'. Specified 'include' paths were '[\"app/*\",\"test/**/*\",\"something\"]' and 'exclude' paths were '[]'.\n"
+            ]);
         });
 
         it("non-existing directories listed in config file input array should be able to handle @types if input file list is empty", () => {
@@ -1098,7 +1103,10 @@ namespace ts.tscWatch {
             const host = createWatchedSystem([f, config, t1, t2], { currentDirectory: getDirectoryPath(f.path) });
             const watch = createWatchOfConfigFile(config.path, host);
 
-            checkProgramActualFiles(watch(), [t1.path, t2.path]);
+            checkProgramActualFiles(watch(), emptyArray);
+            checkOutputErrorsInitial(host, [
+                "tsconfig.json(1,24): error TS18002: The 'files' list in config file '/a/tsconfig.json' is empty.\n"
+            ]);
         });
 
         it("should support files without extensions", () => {
@@ -1290,7 +1298,7 @@ export default test;`;
             ]);
             changeParameterType("y", "string", [
                 getDiagnosticOfFileFromProgram(watch(), aFile.path, aFile.content.indexOf("5"), 1, Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1, "5", "string"),
-                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_or_an_enum_type)
+                getDiagnosticOfFileFromProgram(watch(), bFile.path, bFile.content.indexOf("y /"), 1, Diagnostics.The_left_hand_side_of_an_arithmetic_operation_must_be_of_type_any_number_bigint_or_an_enum_type)
             ]);
 
             function changeParameterType(parameterName: string, toType: string, expectedErrors: ReadonlyArray<Diagnostic>) {
@@ -1463,6 +1471,98 @@ foo().hello`
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
             checkOutputErrorsIncremental(host, emptyArray);
+        });
+
+        describe("updates errors when file transitively exported file changes", () => {
+            const projectLocation = "/user/username/projects/myproject";
+            const config: File = {
+                path: `${projectLocation}/tsconfig.json`,
+                content: JSON.stringify({
+                    files: ["app.ts"],
+                    compilerOptions: { baseUrl: "." }
+                })
+            };
+            const app: File = {
+                path: `${projectLocation}/app.ts`,
+                content: `import { Data } from "lib2/public";
+export class App {
+    public constructor() {
+        new Data().test();
+    }
+}`
+            };
+            const lib2Public: File = {
+                path: `${projectLocation}/lib2/public.ts`,
+                content: `export * from "./data";`
+            };
+            const lib2Data: File = {
+                path: `${projectLocation}/lib2/data.ts`,
+                content: `import { ITest } from "lib1/public";
+export class Data {
+    public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+            };
+            const lib1Public: File = {
+                path: `${projectLocation}/lib1/public.ts`,
+                content: `export * from "./tools/public";`
+            };
+            const lib1ToolsPublic: File = {
+                path: `${projectLocation}/lib1/tools/public.ts`,
+                content: `export * from "./tools.interface";`
+            };
+            const lib1ToolsInterface: File = {
+                path: `${projectLocation}/lib1/tools/tools.interface.ts`,
+                content: `export interface ITest {
+    title: string;
+}`
+            };
+
+            function verifyTransitiveExports(filesWithoutConfig: ReadonlyArray<File>) {
+                const files = [config, ...filesWithoutConfig];
+                const host = createWatchedSystem(files, { currentDirectory: projectLocation });
+                const watch = createWatchOfConfigFile(config.path, host);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsInitial(host, emptyArray);
+
+                host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsIncremental(host, [
+                    "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+                ]);
+
+            }
+            it("when there are no circular import and exports", () => {
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
+
+            it("when there are circular import and exports", () => {
+                const lib2Data: File = {
+                    path: `${projectLocation}/lib2/data.ts`,
+                    content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
+export class Data {
+    public dat?: Data2; public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+                };
+                const lib2Data2: File = {
+                    path: `${projectLocation}/lib2/data2.ts`,
+                    content: `import { Data } from "./data";
+export class Data2 {
+    public dat?: Data;
+}`
+                };
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib2Data2, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
         });
     });
 
@@ -2466,6 +2566,46 @@ declare module "fs" {
             host.runQueuedTimeoutCallbacks();
             checkProgramActualFiles(watch(), [file.path, libFile.path, `${currentDirectory}/node_modules/@types/qqq/index.d.ts`]);
             checkOutputErrorsIncremental(host, emptyArray);
+        });
+
+        describe("ignores files/folder changes in node_modules that start with '.'", () => {
+            const projectPath = "/user/username/projects/project";
+            const npmCacheFile: File = {
+                path: `${projectPath}/node_modules/.cache/babel-loader/89c02171edab901b9926470ba6d5677e.ts`,
+                content: JSON.stringify({ something: 10 })
+            };
+            const file1: File = {
+                path: `${projectPath}/test.ts`,
+                content: `import { x } from "somemodule";`
+            };
+            const file2: File = {
+                path: `${projectPath}/node_modules/somemodule/index.d.ts`,
+                content: `export const x = 10;`
+            };
+            const files = [libFile, file1, file2];
+            const expectedFiles = files.map(f => f.path);
+            it("when watching node_modules in inferred project for failed lookup", () => {
+                const host = createWatchedSystem(files);
+                const watch = createWatchOfFilesAndCompilerOptions([file1.path], host, {}, /*maxNumberOfFilesToIterateForInvalidation*/ 1);
+                checkProgramActualFiles(watch(), expectedFiles);
+                host.checkTimeoutQueueLength(0);
+
+                host.ensureFileOrFolder(npmCacheFile);
+                host.checkTimeoutQueueLength(0);
+            });
+            it("when watching node_modules as part of wild card directories in config project", () => {
+                const config: File = {
+                    path: `${projectPath}/tsconfig.json`,
+                    content: "{}"
+                };
+                const host = createWatchedSystem(files.concat(config));
+                const watch = createWatchOfConfigFile(config.path, host);
+                checkProgramActualFiles(watch(), expectedFiles);
+                host.checkTimeoutQueueLength(0);
+
+                host.ensureFileOrFolder(npmCacheFile);
+                host.checkTimeoutQueueLength(0);
+            });
         });
     });
 

@@ -219,73 +219,44 @@
 ////var shwvar = 1;
 /////*global*/
 
-function verifyNotContainFunctionMembers()
-{
-    verify.not.completionListContains('sfvar');
-    verify.not.completionListContains('sffn');
-}
-
-function verifyNotContainClassMembers()
-{
-    verify.not.completionListContains('scvar');
-    verify.not.completionListContains('scfn');
-    verify.not.completionListContains('scpfn');
-    verify.not.completionListContains('scpvar');
-    verify.not.completionListContains('scsvar');
-    verify.not.completionListContains('scsfn');
-}
-
-function verifyNotContainInterfaceMembers()
-{
-    verify.not.completionListContains('sivar');
-    verify.not.completionListContains('sifn');
-}
-
-function goToMarkAndGeneralVerify(marker: string)
-{
-    goTo.marker(marker);
-
-    verify.not.completionListContains('mod1var');
-    verify.not.completionListContains('mod1fn');
-    verify.not.completionListContains('mod1cls');
-    verify.not.completionListContains('mod1int');
-    verify.not.completionListContains('mod1mod');
-    verify.not.completionListContains('mod1evar');
-    verify.not.completionListContains('mod1efn');
-    verify.not.completionListContains('mod1ecls');
-    verify.not.completionListContains('mod1eint');
-    verify.not.completionListContains('mod1emod');
-    verify.not.completionListContains('mod1eexvar');
-}
-
-// from global scope
-goToMarkAndGeneralVerify('global');
-verify.completionListContains('mod1', 'namespace mod1');
-verify.completionListContains('mod2', 'namespace mod2');
-verify.completionListContains('mod3', 'namespace mod3');
-verify.completionListContains('shwvar', 'var shwvar: number');
-verify.completionListContains('shwfn', 'function shwfn(): void');
-verify.completionListContains('shwcls', 'class shwcls');
-verify.not.completionListContains('shwint', 'interface shwint');
-
-verifyNotContainFunctionMembers();
-verifyNotContainClassMembers();
-verifyNotContainInterfaceMembers();
-
-// from function scope
-goToMarkAndGeneralVerify('function');
-verify.completionListContains('sfvar', '(local var) sfvar: number');
-verify.completionListContains('sffn', '(local function) sffn(): void');
-
-verifyNotContainClassMembers();
-verifyNotContainInterfaceMembers();
-
-// from class scope
-goToMarkAndGeneralVerify('class');
-verifyNotContainFunctionMembers();
-verifyNotContainInterfaceMembers();
-
-// from interface scope
-goToMarkAndGeneralVerify('interface');
-verifyNotContainClassMembers();
-verifyNotContainFunctionMembers();
+const commonExcludes: ReadonlyArray<string> = [
+    "mod1var", "mod1fn", "mod1cls", "mod1int", "mod1mod", "mod1evar", "mod1efn", "mod1ecls", "mod1eint", "mod1emod", "mod1eexvar",
+    "scvar", "scfn", "scpfn", "scpvar", "scsvar", "scsfn",
+    "sivar", "sifn",
+];
+verify.completions(
+    // from global scope
+    {
+        marker: "global",
+        includes: [
+            { name: "mod1", text: "namespace mod1" },
+            { name: "mod2", text: "namespace mod2" },
+            { name: "mod3", text: "namespace mod3" },
+            { name: "shwvar", text: "var shwvar: number" },
+            { name: "shwfn", text: "function shwfn(): void" },
+            { name: "shwcls", text: "class shwcls" },
+        ],
+        excludes: [...commonExcludes, "shwint", "sfvar", "sffn"],
+    },
+    // from function scope
+    {
+        marker: "function",
+        includes: [
+            { name: "sfvar", text: "(local var) sfvar: number" },
+            { name: "sffn", text: "(local function) sffn(): void" },
+        ],
+        excludes: commonExcludes,
+    },
+    // from class scope
+    {
+        marker: "class",
+        exact: completion.classElementKeywords,
+        isNewIdentifierLocation: true,
+    },
+    // from interface scope
+    {
+        marker: "interface",
+        exact: ["readonly"],
+        isNewIdentifierLocation: true,
+    }
+);

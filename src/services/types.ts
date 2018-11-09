@@ -86,12 +86,12 @@ namespace ts {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
-        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
+        /* @internal */ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
+        /*@internal*/ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceMapSource {
@@ -238,6 +238,8 @@ namespace ts {
     /* @internal */
     export const emptyOptions = {};
 
+    export type WithMetadata<T> = T & { metadata?: unknown; };
+
     //
     // Public services of a language service instance associated
     // with a language service host instance
@@ -268,7 +270,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo | undefined;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -289,19 +291,19 @@ namespace ts {
         getSignatureHelpItems(fileName: string, position: number, options: SignatureHelpItemsOptions | undefined): SignatureHelpItems | undefined;
 
         getRenameInfo(fileName: string, position: number): RenameInfo;
-        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): RenameLocation[] | undefined;
+        findRenameLocations(fileName: string, position: number, findInStrings: boolean, findInComments: boolean): ReadonlyArray<RenameLocation> | undefined;
 
-        getDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
+        getDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
         getDefinitionAndBoundSpan(fileName: string, position: number): DefinitionInfoAndBoundSpan | undefined;
-        getTypeDefinitionAtPosition(fileName: string, position: number): DefinitionInfo[] | undefined;
-        getImplementationAtPosition(fileName: string, position: number): ImplementationLocation[] | undefined;
+        getTypeDefinitionAtPosition(fileName: string, position: number): ReadonlyArray<DefinitionInfo> | undefined;
+        getImplementationAtPosition(fileName: string, position: number): ReadonlyArray<ImplementationLocation> | undefined;
 
         getReferencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
         findReferences(fileName: string, position: number): ReferencedSymbol[] | undefined;
         getDocumentHighlights(fileName: string, position: number, filesToSearch: string[]): DocumentHighlights[] | undefined;
 
         /** @deprecated */
-        getOccurrencesAtPosition(fileName: string, position: number): ReferenceEntry[] | undefined;
+        getOccurrencesAtPosition(fileName: string, position: number): ReadonlyArray<ReferenceEntry> | undefined;
 
         getNavigateToItems(searchValue: string, maxResultCount?: number, fileName?: string, excludeDtsFiles?: boolean): NavigateToItem[];
         getNavigationBarItems(fileName: string): NavigationBarItem[];
@@ -978,6 +980,7 @@ namespace ts {
         Whitespace,
         Identifier,
         NumberLiteral,
+        BigIntLiteral,
         StringLiteral,
         RegExpLiteral,
     }
@@ -1126,7 +1129,14 @@ namespace ts {
         ambientModifier = "declare",
         staticModifier = "static",
         abstractModifier = "abstract",
-        optionalModifier = "optional"
+        optionalModifier = "optional",
+
+        dtsModifier = ".d.ts",
+        tsModifier = ".ts",
+        tsxModifier = ".tsx",
+        jsModifier = ".js",
+        jsxModifier = ".jsx",
+        jsonModifier = ".json",
     }
 
     export const enum ClassificationTypeNames {
@@ -1134,6 +1144,7 @@ namespace ts {
         identifier = "identifier",
         keyword = "keyword",
         numericLiteral = "number",
+        bigintLiteral = "bigint",
         operator = "operator",
         stringLiteral = "string",
         whiteSpace = "whitespace",
@@ -1182,5 +1193,6 @@ namespace ts {
         jsxAttribute = 22,
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

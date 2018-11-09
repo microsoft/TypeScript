@@ -201,12 +201,13 @@ namespace ts {
         }
 
         Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        const seenFileAndExportsOfFile = createMap<true>();
         // Go through exported modules from cache first
         // If exported modules has path, all files referencing file exported from are affected
         if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
             exportedModules &&
             exportedModules.has(affectedFile.path) &&
-            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path)
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
         )) {
             return;
         }
@@ -215,7 +216,7 @@ namespace ts {
         forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
             !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
             exportedModules.has(affectedFile.path) &&
-            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path)
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
         );
     }
 
@@ -223,9 +224,41 @@ namespace ts {
      * removes the semantic diagnostics of files referencing referencedPath and
      * returns true if there are no more semantic diagnostics from old state
      */
-    function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path) {
+    function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<true>) {
         return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
-            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOf(state, filePath as Path)
+            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOfFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile)
+        );
+    }
+
+    /**
+     * Removes semantic diagnostics of file and anything that exports this file
+     */
+    function removeSemanticDiagnosticsOfFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<true>): boolean {
+        if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
+            return false;
+        }
+
+        if (removeSemanticDiagnosticsOf(state, filePath)) {
+            // If there are no more diagnostics from old cache, done
+            return true;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        )) {
+            return true;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        return !!forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
         );
     }
 
@@ -417,7 +450,7 @@ namespace ts {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
                 if (!targetSourceFile) {
                     // Emit and report any errors we ran into.
-                    let sourceMaps: SourceMapData[] = [];
+                    let sourceMaps: SourceMapEmitResult[] = [];
                     let emitSkipped = false;
                     let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];

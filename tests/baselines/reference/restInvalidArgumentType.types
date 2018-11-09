@@ -67,7 +67,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >a : any
 
     var {...r1} = p1;   // Error, generic type paramterre
->r1 : any
+>r1 : T
 >p1 : T
 
     var {...r2} = p2;   // OK
@@ -75,11 +75,11 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >p2 : T[]
 
     var {...r3} = t;   // Error, generic type paramter
->r3 : any
+>r3 : T
 >t : T
 
     var {...r4} = i;   // Error, index access
->r4 : any
+>r4 : T["b"]
 >i : T["b"]
 
     var {...r5} = k;   // Error, index
@@ -87,7 +87,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >k : keyof T
 
     var {...r6} = mapped_generic; // Error, generic mapped object type
->r6 : any
+>r6 : { [P in keyof T]: T[P]; }
 >mapped_generic : { [P in keyof T]: T[P]; }
 
     var {...r7} = mapped;  // OK, non-generic mapped type
@@ -95,7 +95,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >mapped : { b: T["b"]; }
 
     var {...r8} = union_generic;  // Error, union with generic type parameter
->r8 : any
+>r8 : T | { a: number; }
 >union_generic : T | { a: number; }
 
     var {...r9} = union_primitive;  // Error, union with generic type parameter
@@ -103,7 +103,7 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 >union_primitive : number | { a: number; }
 
     var {...r10} = intersection_generic;  // Error, intersection with generic type parameter
->r10 : any
+>r10 : T & { a: number; }
 >intersection_generic : T & { a: number; }
 
     var {...r11} = intersection_primitive;  // Error, intersection with generic type parameter

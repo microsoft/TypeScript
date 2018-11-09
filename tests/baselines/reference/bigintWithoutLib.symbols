@@ -1,0 +1,154 @@
+=== tests/cases/compiler/bigintWithoutLib.ts ===
+// Every line should error because these builtins are not declared
+
+// Test BigInt functions
+let bigintVal: bigint = BigInt(123);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+
+bigintVal = BigInt("456");
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+
+new BigInt(123);
+bigintVal = BigInt.asIntN(8, 0xFFFFn);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+
+bigintVal = BigInt.asUintN(8, 0xFFFFn);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+
+bigintVal = bigintVal.valueOf(); // should error - bigintVal inferred as {}
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>bigintVal.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
+
+let stringVal: string = bigintVal.toString(); // should not error - bigintVal inferred as {}
+>stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+>bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+stringVal = bigintVal.toString(2); // should error - bigintVal inferred as {}
+>stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+>bigintVal.toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+stringVal = bigintVal.toLocaleString(); // should not error - bigintVal inferred as {}
+>stringVal : Symbol(stringVal, Decl(bigintWithoutLib.ts, 9, 3))
+>bigintVal.toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>toLocaleString : Symbol(Object.toLocaleString, Decl(lib.es5.d.ts, --, --))
+
+// Test BigInt64Array
+let bigIntArray: BigInt64Array = new BigInt64Array();
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray = new BigInt64Array(10);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray = new BigInt64Array([1n, 2n, 3n]);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray = new BigInt64Array([1, 2, 3]);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray = new BigInt64Array(new ArrayBuffer(80));
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+bigIntArray = new BigInt64Array(new ArrayBuffer(80), 8, 3);
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+let len: number = bigIntArray.length;
+>len : Symbol(len, Decl(bigintWithoutLib.ts, 21, 3))
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray.length = 10;
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+let arrayBufferLike: ArrayBufferView = bigIntArray;
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 23, 3))
+>ArrayBufferView : Symbol(ArrayBufferView, Decl(lib.es5.d.ts, --, --))
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+// Test BigUint64Array
+let bigUintArray: BigUint64Array = new BigUint64Array();
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+
+bigUintArray = new BigUint64Array(10);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+
+bigUintArray = new BigUint64Array([1n, 2n, 3n]);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+
+bigUintArray = new BigUint64Array([1, 2, 3]);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+
+bigUintArray = new BigUint64Array(new ArrayBuffer(80));
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+bigUintArray = new BigUint64Array(new ArrayBuffer(80), 8, 3);
+>bigUintArray : Symbol(bigUintArray, Decl(bigintWithoutLib.ts, 26, 3))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+len = bigIntArray.length;
+>len : Symbol(len, Decl(bigintWithoutLib.ts, 21, 3))
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+bigIntArray.length = 10;
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+arrayBufferLike = bigIntArray;
+>arrayBufferLike : Symbol(arrayBufferLike, Decl(bigintWithoutLib.ts, 23, 3))
+>bigIntArray : Symbol(bigIntArray, Decl(bigintWithoutLib.ts, 14, 3))
+
+// Test added DataView methods
+const dataView = new DataView(new ArrayBuffer(80));
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+>DataView : Symbol(DataView, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>ArrayBuffer : Symbol(ArrayBuffer, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+dataView.setBigInt64(1, -1n);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+dataView.setBigInt64(1, -1n, true);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+dataView.setBigInt64(1, -1);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+dataView.setBigUint64(2, 123n);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+dataView.setBigUint64(2, 123n, true);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+dataView.setBigUint64(2, 123);
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+bigintVal = dataView.getBigInt64(1);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+bigintVal = dataView.getBigInt64(1, true);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+bigintVal = dataView.getBigUint64(2);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+
+bigintVal = dataView.getBigUint64(2, true);
+>bigintVal : Symbol(bigintVal, Decl(bigintWithoutLib.ts, 3, 3))
+>dataView : Symbol(dataView, Decl(bigintWithoutLib.ts, 38, 5))
+

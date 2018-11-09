@@ -38,7 +38,7 @@
 ////
 
 verify.completions({
-    marker: test.markerNames(),
+    marker: test.markers(),
     exact: ["module1", "module2", "more", "module0"],
     isNewIdentifierLocation: true,
 });
