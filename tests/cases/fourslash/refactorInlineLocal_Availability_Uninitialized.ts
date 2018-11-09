@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// let /*z*a/*y*/;
+//// let /*z*/a/*y*/;
 //// const b = 2 * /*x*/a/*w*/;
 
 
