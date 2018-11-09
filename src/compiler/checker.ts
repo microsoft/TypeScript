@@ -25110,6 +25110,11 @@ namespace ts {
                         checkParameterInitializer(node);
                     }
                 }
+                if (symbol.declarations.length > 1) {
+                    if (some(symbol.declarations, d => d !== node && !areDeclarationFlagsIdentical(d, node))) {
+                        error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
+                    }
+                }
             }
             else {
                 // Node is a secondary declaration, check that type is identical to primary declaration and check that
@@ -25125,7 +25130,6 @@ namespace ts {
                     checkTypeAssignableToAndOptionallyElaborate(checkExpressionCached(node.initializer), declarationType, node, node.initializer, /*headMessage*/ undefined);
                 }
                 if (!areDeclarationFlagsIdentical(node, symbol.valueDeclaration)) {
-                    error(getNameOfDeclaration(symbol.valueDeclaration), Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                     error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                 }
             }
