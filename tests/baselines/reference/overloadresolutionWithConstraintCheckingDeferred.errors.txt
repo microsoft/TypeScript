@@ -1,5 +1,6 @@
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,5): error TS2322: Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(14,37): error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+  Property 'x' is missing in type 'D' but required in type 'A'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,5): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(16,38): error TS2344: Type 'D' does not satisfy the constraint 'A'.
 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(18,27): error TS2345: Argument of type '(x: D) => G<D>' is not assignable to parameter of type '(x: B) => any'.
@@ -26,7 +27,8 @@ tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts(19,14):
         ~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.
                                         ~
-!!! error TS2741: Property 'x' is missing in type 'D' but required in type 'A'.
+!!! error TS2345: Argument of type 'D' is not assignable to parameter of type 'A'.
+!!! error TS2345:   Property 'x' is missing in type 'D' but required in type 'A'.
 !!! related TS2728 tests/cases/compiler/overloadresolutionWithConstraintCheckingDeferred.ts:1:15: 'x' is declared here.
     
     var result2: number = foo(x => new G<typeof x>(x)); // x has type D, new G(x) fails, so first overload is picked.

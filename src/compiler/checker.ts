@@ -11656,12 +11656,9 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
-                    if (suppressNextError) {
-                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
-                        suppressNextError = false;
-                        return result;
-                    }
-                    else if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
+                    const maybeSuppress = suppressNextError;
+                    suppressNextError = false;
+                    if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
@@ -11676,6 +11673,10 @@ namespace ts {
                             // do not report top error
                             return result;
                         }
+                    }
+                    if (!headMessage && maybeSuppress) {
+                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
+                        return result;
                     }
                     reportRelationError(headMessage, source, target);
                 }
