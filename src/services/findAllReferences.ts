@@ -839,7 +839,9 @@ namespace ts.FindAllReferences.Core {
     }
 
     export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
-        const symbol = checker.getSymbolAtLocation(definition);
+        const symbol = isParameterPropertyDeclaration(definition.parent)
+            ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
+            : checker.getSymbolAtLocation(definition);
         if (!symbol) return undefined;
         for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
             if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;
