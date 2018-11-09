@@ -95,7 +95,7 @@ verify.indentationIs(8);
 goTo.marker('n2');
 verify.indentationIs(4);
 
-goTo.file(1);
+goTo.file("listSmart.ts");
 format.document();
 verify.currentFileContentIs(`Promise
     .resolve().then(
@@ -117,7 +117,7 @@ verify.indentationIs(12);
 goTo.marker("listSmart4");
 verify.indentationIs(8);
 
-goTo.file(2);
+goTo.file("listZeroIndent.ts");
 format.document();
 verify.currentFileContentIs(`Promise.resolve([
 ]).then(
@@ -132,7 +132,7 @@ verify.indentationIs(4);
 goTo.marker("listZeroIndent2");
 verify.indentationIs(8);
 
-goTo.file(3);
+goTo.file("listTypeParameter1.ts");
 format.document();
 verify.currentFileContentIs(`foo.then
     <
@@ -150,7 +150,7 @@ verify.indentationIs(8);
 goTo.marker("listTypeParameter2");
 verify.indentationIs(8);
 
-goTo.file(4);
+goTo.file("listComment.ts");
 format.document();
 verify.currentFileContentIs(`Promise
     .then(

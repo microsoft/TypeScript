@@ -34,7 +34,7 @@ namespace ts.formatting {
      * the first token in line so it should be indented
      */
     interface DynamicIndentation {
-        getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind, container: Node, suppressDelta?: boolean): number;
+        getIndentationForToken(tokenLine: number, tokenKind: SyntaxKind, container: Node, suppressDelta: boolean): number;
         getIndentationForComment(owningToken: SyntaxKind, tokenIndentation: number, container: Node): number;
         /**
          * Indentation for open and close tokens of the node if it is block or another node that needs special indentation
@@ -735,7 +735,6 @@ namespace ts.formatting {
 
                 let listDynamicIndentation = parentDynamicIndentation;
                 let startLine = parentStartLine;
-                let indentationOnListStartToken = parentDynamicIndentation.getIndentation();
 
                 if (listStartToken !== SyntaxKind.Unknown) {
                     // introduce a new indentation scope for lists (including list start and end tokens)
@@ -751,6 +750,7 @@ namespace ts.formatting {
 
                             consumeTokenAndAdvanceScanner(tokenInfo, parent, parentDynamicIndentation, parent);
 
+                            let indentationOnListStartToken: number;
                             if (indentationOnLastIndentedLine !== Constants.Unknown) {
                                 // scanner just processed list start token so consider last indentation as list indentation
                                 // function foo(): { // last indentation was 0, list item will be indented based on this value
@@ -835,7 +835,7 @@ namespace ts.formatting {
 
                 if (indentToken) {
                     const tokenIndentation = (isTokenInRange && !rangeContainsError(currentTokenInfo.token)) ?
-                        dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, isListEndToken) :
+                        dynamicIndentation.getIndentationForToken(tokenStart.line, currentTokenInfo.token.kind, container, !!isListEndToken) :
                         Constants.Unknown;
 
                     let indentNextTokenOrTrivia = true;
