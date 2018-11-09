@@ -27698,8 +27698,11 @@ namespace ts {
                     }
 
                     switch (location.kind) {
+                        case SyntaxKind.SourceFile:
+                            if (!isExternalOrCommonJsModule(<SourceFile>location)) break;
+                            // falls through
                         case SyntaxKind.ModuleDeclaration:
-                            copySymbols(getSymbolOfNode(location as ModuleDeclaration).exports!, meaning & SymbolFlags.ModuleMember);
+                            copySymbols(getSymbolOfNode(location as ModuleDeclaration | SourceFile).exports!, meaning & SymbolFlags.ModuleMember);
                             break;
                         case SyntaxKind.EnumDeclaration:
                             copySymbols(getSymbolOfNode(location as EnumDeclaration).exports!, meaning & SymbolFlags.EnumMember);
