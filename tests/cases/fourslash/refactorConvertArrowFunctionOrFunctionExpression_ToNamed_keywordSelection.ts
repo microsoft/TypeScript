@@ -1,13 +1,13 @@
 /// <reference path='fourslash.ts' />
 
-//// let foo = /*x*/(/*y*/): number => 42;
+//// /*x*/let/*y*/ foo = a => 1 + a;
 
 goTo.select("x", "y");
 edit.applyRefactor({
     refactorName: "Convert arrow function or function expression",
     actionName: "Convert to named function",
     actionDescription: "Convert to named function",
-    newContent: `function foo(): number {
-    return 42;
+    newContent: `function foo(a) {
+    return 1 + a;
 }`,
 });

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = /*x*/f/*y*/unction(): string {
-////    return "foobar";
+//// const concat = /*x*/f/*y*/unction(a: string, b: string): string {
+////    return a + b;
 //// };
 
 goTo.select("x", "y");
@@ -9,5 +9,5 @@ edit.applyRefactor({
     refactorName: "Convert arrow function or function expression",
     actionName: "Convert to arrow function",
     actionDescription: "Convert to arrow function",
-    newContent: `const foo = (): string => "foobar";`,
+    newContent: `const concat = (a: string, b: string): string => a + b;`,
 });
