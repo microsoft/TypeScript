@@ -63,6 +63,10 @@ namespace ts.refactor.inlineLocal {
         else return undefined;
     }
 
+    function isLocalVariable(parent: Node): parent is VariableDeclaration {
+        return isVariableDeclaration(parent) && isVariableDeclarationInVariableStatement(parent);
+    }
+
     function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token?: Identifier): Info | undefined {
         const identifier = declaration.name;
         type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
@@ -76,11 +80,7 @@ namespace ts.refactor.inlineLocal {
             const assignment: AssignExpr = findAncestor(
                 usage,
                 ancestor => isAssignmentExpression(ancestor)) as AssignExpr;
-            if (assignment) {
-                const references = getReferencesInScope(assignment.left, identifier, checker);
-                if (references.length > 0) hasErrors = true;
-            }
-
+            if (assignment && assignment.left === usage) hasErrors = true;
         });
         return !hasErrors ? {
             declaration,
@@ -90,13 +90,7 @@ namespace ts.refactor.inlineLocal {
     }
 
     function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
-        return !!modifiers && !!modifiers.find(mod =>
-            mod.kind === SyntaxKind.DefaultKeyword ||
-            mod.kind === SyntaxKind.ExportKeyword);
-    }
-
-    function isLocalVariable(parent: Node): parent is VariableDeclaration {
-        return isVariableDeclaration(parent) && isVariableDeclarationInVariableStatement(parent);
+        return !!modifiers && !!modifiers.find(mod => mod.kind === SyntaxKind.ExportKeyword);
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
