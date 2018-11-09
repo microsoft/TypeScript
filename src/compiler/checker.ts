@@ -390,7 +390,7 @@ namespace ts {
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
-        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
+        const unknownSymbol = createSymbol(SymbolFlags.Property, "<<unknown>>" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
@@ -877,7 +877,11 @@ namespace ts {
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
                 Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
-                    target = cloneSymbol(resolveSymbol(target));
+                    const resolvedTarget = resolveSymbol(target);
+                    if (resolvedTarget === unknownSymbol) {
+                        return unknownSymbol;
+                    }
+                    target = cloneSymbol(resolvedTarget);
                 }
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
