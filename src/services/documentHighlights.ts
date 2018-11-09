@@ -91,8 +91,8 @@ namespace ts.DocumentHighlights {
                 nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
         }
 
-        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
-            return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
+        function useParent<T extends Node>(node: Node | undefined, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+            return node && nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
         }
 
         function highlightSpans(nodes: ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
