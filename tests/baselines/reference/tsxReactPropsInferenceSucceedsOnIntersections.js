@@ -1,4 +1,4 @@
-//// [tsxReactPropsInferenceSuceedsOnIntersections.tsx]
+//// [tsxReactPropsInferenceSucceedsOnIntersections.tsx]
 /// <reference path="/.lib/react16.d.ts" />
 
 import React from "react";
@@ -16,7 +16,7 @@ interface CustomButtonProps extends ButtonProps {
 const CustomButton: React.SFC<CustomButtonProps> = props => <Button {...props} />;
 
 
-//// [tsxReactPropsInferenceSuceedsOnIntersections.js]
+//// [tsxReactPropsInferenceSucceedsOnIntersections.js]
 "use strict";
 /// <reference path="react16.d.ts" />
 var __assign = (this && this.__assign) || function () {
