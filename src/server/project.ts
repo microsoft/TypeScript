@@ -1228,11 +1228,10 @@ namespace ts.server {
 
         setCompilerOptions(options?: CompilerOptions) {
             // Avoid manipulating the given options directly
-            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilationSettings();
-            if (!newOptions) {
+            if (!options && !this.getCompilationSettings()) {
                 return;
             }
-
+            const newOptions = cloneCompilerOptions(options || this.getCompilationSettings());
             if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
                 newOptions.maxNodeModuleJsDepth = 2;
             }
