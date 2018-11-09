@@ -566,18 +566,18 @@ namespace ts {
             && value.sourcePosition !== undefined;
     }
 
-    function sameMappedPosition<T extends MappedPosition>(left: T, right: T) {
+    function sameMappedPosition(left: MappedPosition, right: MappedPosition) {
         return left.generatedPosition === right.generatedPosition
             && left.sourceIndex === right.sourceIndex
             && left.sourcePosition === right.sourcePosition;
     }
 
     function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedPosition) {
-        return left.sourcePosition - right.sourcePosition;
+        return compareValues(left.sourceIndex, right.sourceIndex);
     }
 
     function compareGeneratedPositions(left: MappedPosition, right: MappedPosition) {
-        return left.generatedPosition - right.generatedPosition;
+        return compareValues(left.generatedPosition, right.generatedPosition);
     }
 
     function getSourcePositionOfMapping(value: SourceMappedPosition) {
@@ -598,8 +598,8 @@ namespace ts {
         const sourceFileCanonicalPaths = sourceFileAbsolutePaths.map(source => host.getCanonicalFileName(source) as Path);
         const sourceToSourceIndexMap = createMapFromEntries(sourceFileCanonicalPaths.map((source, i) => [source, i] as [string, number]));
         let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
-        let generatedMappings: ReadonlyArray<MappedPosition> | undefined;
-        let sourceMappings: ReadonlyArray<ReadonlyArray<SourceMappedPosition>> | undefined;
+        let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
+        let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
 
         return {
             getSourcePosition,
@@ -648,25 +648,25 @@ namespace ts {
 
         function getSourceMappings(sourceIndex: number) {
             if (sourceMappings === undefined) {
-                const lists: SortedUniqueList<SourceMappedPosition>[] = [];
+                const lists: SourceMappedPosition[][] = [];
                 for (const mapping of getDecodedMappings()) {
                     if (!isSourceMappedPosition(mapping)) continue;
                     let list = lists[mapping.sourceIndex];
-                    if (!list) lists[mapping.sourceIndex] = list = new SortedUniqueList(compareSourcePositions, sameMappedPosition);
+                    if (!list) lists[mapping.sourceIndex] = list = [];
                     list.push(mapping);
                 }
-                sourceMappings = lists.map(list => list.toArray());
+                sourceMappings = lists.map(list => sortAndDeduplicate<SourceMappedPosition>(list, compareSourcePositions, sameMappedPosition));
             }
             return sourceMappings[sourceIndex];
         }
 
         function getGeneratedMappings() {
             if (generatedMappings === undefined) {
-                const list = new SortedUniqueList(compareGeneratedPositions, sameMappedPosition);
+                const list: MappedPosition[] = [];
                 for (const mapping of getDecodedMappings()) {
                     list.push(mapping);
                 }
-                generatedMappings = list.toArray();
+                generatedMappings = sortAndDeduplicate(list, compareGeneratedPositions, sameMappedPosition);
             }
             return generatedMappings;
         }

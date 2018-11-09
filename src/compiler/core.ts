@@ -1061,10 +1061,10 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): SortedReadonlyArray<T> {
         const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
-        return indices.map(i => array[i]);
+        return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -1156,7 +1156,7 @@ namespace ts {
      * @param offset An offset into `array` at which to start the search.
      */
     export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
-        return some(array) ? binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset) : -1;
+        return binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset);
     }
 
     /**
@@ -2166,75 +2166,5 @@ namespace ts {
 
     export function fill<T>(length: number, cb: (index: number) => T): T[] {
         return new Array(length).fill(0).map((_, i) => cb(i));
-    }
-
-    /**
-     * A list of sorted and unique values. Optimized for best performance when items are added
-     * in the sort order.
-     */
-    export class SortedUniqueList<T> implements Push<T> {
-        private relationalComparer: (a: T, b: T) => Comparison;
-        private equalityComparer: (a: T, b: T) => boolean;
-        private sortedAndUnique = true;
-        private copyOnWrite = false;
-        private unsafeArray: T[] = [];
-        private unsafeLast: T | undefined = undefined;
-
-        constructor(relationalComparer: Comparer<T>, equalityComparer: EqualityComparer<T>) {
-            this.relationalComparer = relationalComparer;
-            this.equalityComparer = equalityComparer;
-        }
-
-        get size() {
-            return this.unsafeArray.length;
-        }
-
-        get last() {
-            this.ensureSortedAndUnique();
-            return this.unsafeLast === undefined
-                ? this.unsafeLast = lastOrUndefined(this.unsafeArray)
-                : this.unsafeLast;
-        }
-
-        push(...values: T[]) {
-            for (const value of values) {
-                if (this.sortedAndUnique) {
-                    const last = this.last;
-                    if (last === undefined || this.relationalComparer(value, last) > 0) {
-                        this.unsafeAdd(value, /*sortedAndUnique*/ true);
-                        continue;
-                    }
-                    if (this.equalityComparer(value, last)) {
-                        continue;
-                    }
-                }
-                this.unsafeAdd(value, /*sortedAndUnique*/ false);
-            }
-        }
-
-        toArray(): ReadonlyArray<T> {
-            this.ensureSortedAndUnique();
-            this.copyOnWrite = true;
-            return this.unsafeArray;
-        }
-
-        private unsafeAdd(value: T, sortedAndUnique: boolean) {
-            if (this.copyOnWrite || this.unsafeArray === emptyArray) {
-                this.unsafeArray = this.unsafeArray.slice();
-                this.copyOnWrite = false;
-            }
-
-            this.unsafeArray.push(value);
-            this.unsafeLast = sortedAndUnique ? value : undefined;
-            this.sortedAndUnique = sortedAndUnique;
-        }
-
-        private ensureSortedAndUnique() {
-            if (!this.sortedAndUnique) {
-                this.unsafeArray = deduplicateSorted(stableSort(this.unsafeArray, this.relationalComparer) as any as SortedReadonlyArray<T>, this.equalityComparer) as any as T[];
-                this.unsafeLast = undefined;
-                this.sortedAndUnique = true;
-            }
-        }
     }
 }
