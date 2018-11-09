@@ -69,24 +69,25 @@ namespace ts.refactor.inlineLocal {
 
     function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token?: Identifier): Info | undefined {
         const identifier = declaration.name;
-        type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
         let hasErrors = false;
         const usages = getReferencesInScope(ts.getEnclosingBlockScopeContainer(identifier), identifier, checker);
         if (!declaration.initializer) hasErrors = true;
         if (containsProhibitedModifiers(declaration.parent.parent.modifiers)) hasErrors = true;
-
         ts.forEach(usages, usage => {
-            // if is left of assignment
-            const assignment: AssignExpr = findAncestor(
-                usage,
-                ancestor => isAssignmentExpression(ancestor)) as AssignExpr;
-            if (assignment && assignment.left === usage) hasErrors = true;
+            if (isAssigned(usage)) hasErrors = true;
         });
         return !hasErrors ? {
             declaration,
             usages,
             selectedUsage: token ? token : undefined
         } : undefined;
+    }
+
+    function isAssigned(usage: Identifier) {
+        type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
+        const assignment: AssignExpr = findAncestor(usage, ancestor => isAssignmentExpression(ancestor)) as AssignExpr;
+        if (assignment && assignment.left === usage) return true;
+        else return false;
     }
 
     function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
