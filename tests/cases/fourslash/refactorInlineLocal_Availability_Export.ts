@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// export const /*z*a/*y*/ = 42-3;
+//// export const /*z*/a/*y*/ = 42-3;
 //// const b = 2 * /*x*/a/*w*/;
 
 goTo.select("z", "y");
