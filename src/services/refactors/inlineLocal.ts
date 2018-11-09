@@ -3,7 +3,6 @@ namespace ts.refactor.inlineLocal {
     const refactorName = "Inline local";
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Inline_local);
 
-    // const inlineLocalActionName = "Inline local";
     const inlineHereActionName = "Inline here";
     const inlineAllActionName = "Inline all";
 
@@ -24,6 +23,7 @@ namespace ts.refactor.inlineLocal {
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
         const { selectedUsage } = info;
+        // inline all is always be available
         const refactorInfo = {
             name: refactorName,
             description: refactorDescription,
@@ -32,6 +32,7 @@ namespace ts.refactor.inlineLocal {
                 description: inlineAllActionDescription
             }]
         };
+        // inline here is only available if usage is selected
         if (selectedUsage) {
             refactorInfo.actions.push({
                 name: inlineHereActionName,
@@ -119,7 +120,8 @@ namespace ts.refactor.inlineLocal {
         return textChanges.ChangeTracker.with(context, t => {
             ts.forEach(usages, oldNode => {
                 const { initializer } = declaration;
-                t.replaceNode(file, oldNode, createParen(initializer!));
+                const expression = parenthesize(oldNode, initializer!);
+                t.replaceNode(file, oldNode, expression);
             });
             t.delete(file, declaration);
         });
@@ -129,9 +131,27 @@ namespace ts.refactor.inlineLocal {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             const { initializer } = declaration;
-            t.replaceNode(file, selectedUsage, createParen(initializer!));
+            makeIdUnique(initializer!);
+            const node = selectedUsage;
+            const expression = parenthesize(node, initializer!);
+            t.replaceNode(file, node, expression);
             if (usages.length === 1) t.delete(file, declaration);
         });
+    }
+
+    function makeIdUnique(node: Node) {
+        node.id = undefined;
+        getNodeId(node);
+    }
+
+    function parenthesize(node: Identifier, expression: Expression) {
+        const parent = node.parent;
+        if (isUnaryExpression(parent)) return createParen(expression);
+        if (isBinaryExpression(parent)) {
+            const isLeft = node === parent.left;
+            return parenthesizeBinaryOperand(parent.operatorToken.kind, expression, isLeft, parent.left);
+        }
+        return expression;
     }
 
     function getReferencesInScope(scope: Node, node: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
