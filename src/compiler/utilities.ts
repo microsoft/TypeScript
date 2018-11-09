@@ -6046,6 +6046,10 @@ namespace ts {
             || kind === SyntaxKind.TemplateTail;
     }
 
+    export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier {
+        return isImportSpecifier(node) || isExportSpecifier(node);
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }

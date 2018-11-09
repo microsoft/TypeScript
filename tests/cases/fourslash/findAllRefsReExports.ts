@@ -50,11 +50,12 @@ test.rangesByText().forEach((ranges, text) => {
                 verify.renameInfoFailed();
             }
             break;
-        case "bar":
+        case "bar": {
             const [r0, r1, ...tail] = ranges;
             verify.renameLocations(r0, ranges);
-            verify.renameLocations(r1, [{ range: r1, prefixText: "bar as " }, ...tail]);
+            verify.renameLocations([r1, ...tail], [{ range: r1, prefixText: "bar as " }, ...tail]);
             break;
+        }
         default:
             verify.rangesAreRenameLocations(ranges);
             break;

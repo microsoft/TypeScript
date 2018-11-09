@@ -242,17 +242,7 @@ namespace ts {
                 const parsed = getParseTreeNode(node, isFunctionLike);
                 return parsed ? isImplementationOfOverload(parsed) : undefined;
             },
-            getImmediateAliasedSymbol: symbol => {
-                Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
-                const links = getSymbolLinks(symbol);
-                if (!links.immediateTarget) {
-                    const node = getDeclarationOfAliasSymbol(symbol);
-                    if (!node) return Debug.fail();
-                    links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
-                }
-
-                return links.immediateTarget;
-            },
+            getImmediateAliasedSymbol,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
@@ -17641,6 +17631,18 @@ namespace ts {
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
+        function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
+            Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
+            const links = getSymbolLinks(symbol);
+            if (!links.immediateTarget) {
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
+                links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
+            }
+
+            return links.immediateTarget;
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
@@ -28010,7 +28012,10 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
-                return getSymbolOfNode(parent);
+                const parentSymbol = getSymbolOfNode(parent)!;
+                return isImportOrExportSpecifier(node.parent) && node.parent.propertyName === node
+                    ? getImmediateAliasedSymbol(parentSymbol)
+                    : parentSymbol;
             }
             else if (isLiteralComputedPropertyDeclarationName(node)) {
                 return getSymbolOfNode(parent.parent);

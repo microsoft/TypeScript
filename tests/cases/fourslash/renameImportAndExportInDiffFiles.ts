@@ -14,5 +14,6 @@ verify.referenceGroups(r0, [vars, imports]);
 verify.referenceGroups(r1, [imports, vars]);
 verify.referenceGroups(r2, [imports, vars]);
 
-verify.renameLocations(r0, [r0, r1, r2]);
-verify.renameLocations([r1, r2], [{ range: r1, prefixText: "a as " }, r2]);
+verify.renameLocations(r0, [r0, r1, { range: r2, suffixText: " as a" }]);
+verify.renameLocations(r1, [{ range: r1, prefixText: "a as " }, { range: r2, suffixText: " as a" }]);
+verify.renameLocations(r2, [{ range: r2, prefixText: "a as " }]);
