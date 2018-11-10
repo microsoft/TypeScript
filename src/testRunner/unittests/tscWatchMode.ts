@@ -1565,15 +1565,13 @@ export class Data2 {
             });
         });
 
-        describe("updates errors in lib file when non module file changes", () => {
+        describe("updates errors in lib file", () => {
             const currentDirectory = "/user/username/projects/myproject";
             const field = "fullscreen";
-            const aFile: File = {
-                path: `${currentDirectory}/a.ts`,
-                content: `interface Document {
+            const fieldWithoutReadonly = `interface Document {
 	${field}: boolean;
-}`
-            };
+}`;
+
             const libFileWithDocument: File = {
                 path: libFile.path,
                 content: `${libFile.content}
@@ -1586,40 +1584,63 @@ interface Document {
                 return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(field), field.length, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, field);
             }
 
-            const files = [aFile, libFileWithDocument];
+            function verifyLibFileErrorsWith(aFile: File) {
+                const files = [aFile, libFileWithDocument];
 
-            function verifyLibErrors(options: CompilerOptions) {
-                const host = createWatchedSystem(files, { currentDirectory });
-                const watch = createWatchOfFilesAndCompilerOptions([aFile.path], host, options);
-                checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
-                checkOutputErrorsInitial(host, getErrors());
+                function verifyLibErrors(options: CompilerOptions) {
+                    const host = createWatchedSystem(files, { currentDirectory });
+                    const watch = createWatchOfFilesAndCompilerOptions([aFile.path], host, options);
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsInitial(host, getErrors());
 
-                host.writeFile(aFile.path, "var x = 10;");
-                host.runQueuedTimeoutCallbacks();
-                checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
-                checkOutputErrorsIncremental(host, emptyArray);
+                    host.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;"));
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, emptyArray);
 
-                host.writeFile(aFile.path, aFile.content);
-                host.runQueuedTimeoutCallbacks();
-                checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
-                checkOutputErrorsIncremental(host, getErrors());
+                    host.writeFile(aFile.path, aFile.content);
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, getErrors());
 
-                function getErrors() {
-                    return [
-                        ...(options.skipLibCheck || options.skipDefaultLibCheck ? [] : [getDiagnostic(watch(), libFileWithDocument)]),
-                        getDiagnostic(watch(), aFile)
-                    ];
+                    function getErrors() {
+                        return [
+                            ...(options.skipLibCheck || options.skipDefaultLibCheck ? [] : [getDiagnostic(watch(), libFileWithDocument)]),
+                            getDiagnostic(watch(), aFile)
+                        ];
+                    }
                 }
+
+                it("with default options", () => {
+                    verifyLibErrors({});
+                });
+                it("with skipLibCheck", () => {
+                    verifyLibErrors({ skipLibCheck: true });
+                });
+                it("with skipDefaultLibCheck", () => {
+                    verifyLibErrors({ skipDefaultLibCheck: true });
+                });
             }
 
-            it("with default options", () => {
-                verifyLibErrors({});
+            describe("when non module file changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `${fieldWithoutReadonly}
+var y: number;`
+                };
+                verifyLibFileErrorsWith(aFile);
             });
-            it("with skipLibCheck", () => {
-                verifyLibErrors({ skipLibCheck: true });
-            });
-            it("with skipDefaultLibCheck", () => {
-                verifyLibErrors({ skipDefaultLibCheck: true });
+
+            describe("when module file with global definitions changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `export {}
+declare global {
+${fieldWithoutReadonly}
+var y: number;
+}`
+                };
+                verifyLibFileErrorsWith(aFile);
             });
         });
 
