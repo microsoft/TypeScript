@@ -3653,6 +3653,7 @@ namespace ts {
         lateSymbol?: Symbol;                // Late-bound symbol for a computed property
         specifierCache?: Map<string>;     // For symbols corresponding to external modules, a cache of incoming path -> module specifier name mappings
         extendedContainers?: Symbol[];      // Containers (other than the parent) which this symbol is aliased in
+        extendedContainersByFile?: Map<Symbol[]>;      // Containers (other than the parent) which this symbol is aliased in
         variances?: Variance[];             // Alias symbol type argument variance cache
     }
 

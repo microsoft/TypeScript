@@ -2598,8 +2598,13 @@ namespace ts {
         }
 
         function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
-            const results: Symbol[] = [];
             const containingFile = getSourceFileOfNode(enclosingDeclaration);
+            const id = "" + getNodeId(containingFile);
+            const links = getSymbolLinks(symbol);
+            if (links.extendedContainersByFile && links.extendedContainersByFile.has(id)) {
+                return links.extendedContainersByFile.get(id)!;
+            }
+            const results: Symbol[] = [];
             if (containingFile && containingFile.imports) {
                 // Try to make an import using an import already in the enclosing file, if possible
                 for (const importRef of containingFile.imports) {
@@ -2611,10 +2616,10 @@ namespace ts {
                     results.push(resolvedModule);
                 }
                 if (length(results)) {
+                    (links.extendedContainersByFile || (links.extendedContainersByFile = createMap())).set(id, results);
                     return results;
                 }
             }
-            const links = getSymbolLinks(symbol);
             if (links.extendedContainers) {
                 return links.extendedContainers;
             }
