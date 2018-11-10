@@ -14,3 +14,4 @@ let bigintNegativeLiteralType: -123n; // should not error when used as type
 const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should error
 >bigintNumber : Symbol(bigintNumber, Decl(warnExperimentalBigIntLiteral.ts, 4, 5))
 
+
