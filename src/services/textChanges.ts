@@ -1005,9 +1005,26 @@ namespace ts.textChanges {
         }
     }
 
-    function getInsertionPositionAtSourceFileTop({ text }: SourceFile): number {
-        const shebang = getShebang(text);
+    function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
+        let lastPrologue: PrologueDirective | undefined;
+        for (const node of sourceFile.statements) {
+            if (isPrologueDirective(node)) {
+                lastPrologue = node;
+            }
+            else {
+                break;
+            }
+        }
+
         let position = 0;
+        const text = sourceFile.text;
+        if (lastPrologue) {
+            position = lastPrologue.end;
+            advancePastLineBreak();
+            return position;
+        }
+
+        const shebang = getShebang(text);
         if (shebang !== undefined) {
             position = shebang.length;
             advancePastLineBreak();
