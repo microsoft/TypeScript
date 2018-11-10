@@ -659,10 +659,6 @@
         "category": "Error",
         "code": 1208
     },
-    "Ambient const enums are not allowed when the '--isolatedModules' flag is provided.": {
-        "category": "Error",
-        "code": 1209
-    },
     "Invalid use of '{0}'. Class definitions are automatically in strict mode.": {
         "category": "Error",
         "code": 1210
@@ -2512,6 +2508,10 @@
     "An outer value of 'this' is shadowed by this container.": {
         "category": "Message",
         "code": 2738
+    },
+    "Cannot access ambient const enums when the '--isolatedModules' flag is provided.": {
+        "category": "Error",
+        "code": 2739
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
