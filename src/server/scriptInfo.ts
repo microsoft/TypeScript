@@ -6,7 +6,6 @@ namespace ts.server {
 
     /* @internal */
     export class TextStorage {
-        /*@internal*/
         version: ScriptInfoVersion;
 
         /**

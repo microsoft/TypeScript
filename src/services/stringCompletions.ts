@@ -247,19 +247,9 @@ namespace ts.Completions.StringCompletions {
         const scriptPath = sourceFile.path;
         const scriptDirectory = getDirectoryPath(scriptPath);
 
-        const extensionOptions = getExtensionOptions(compilerOptions);
-        if (isPathRelativeToScript(literalValue) || isRootedDiskPath(literalValue)) {
-            if (compilerOptions.rootDirs) {
-                return getCompletionEntriesForDirectoryFragmentWithRootDirs(
-                    compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
-            }
-            else {
-                return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath);
-            }
-        }
-        else {
-            return getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
-        }
+        return isPathRelativeToScript(literalValue) || !compilerOptions.baseUrl && (isRootedDiskPath(literalValue) || isUrl(literalValue))
+            ? getCompletionEntriesForRelativeModules(literalValue, scriptDirectory, compilerOptions, host, scriptPath)
+            : getCompletionEntriesForNonRelativeModules(literalValue, scriptDirectory, compilerOptions, host, typeChecker);
     }
 
     interface ExtensionOptions {
@@ -269,6 +259,17 @@ namespace ts.Completions.StringCompletions {
     function getExtensionOptions(compilerOptions: CompilerOptions, includeExtensions = false): ExtensionOptions {
         return { extensions: getSupportedExtensionsForModuleResolution(compilerOptions), includeExtensions };
     }
+    function getCompletionEntriesForRelativeModules(literalValue: string, scriptDirectory: string, compilerOptions: CompilerOptions, host: LanguageServiceHost, scriptPath: Path) {
+        const extensionOptions = getExtensionOptions(compilerOptions);
+        if (compilerOptions.rootDirs) {
+            return getCompletionEntriesForDirectoryFragmentWithRootDirs(
+                compilerOptions.rootDirs, literalValue, scriptDirectory, extensionOptions, compilerOptions, host, scriptPath);
+        }
+        else {
+            return getCompletionEntriesForDirectoryFragment(literalValue, scriptDirectory, extensionOptions, host, scriptPath);
+        }
+    }
+
     function getSupportedExtensionsForModuleResolution(compilerOptions: CompilerOptions): ReadonlyArray<Extension> {
         const extensions = getSupportedExtensions(compilerOptions);
         return compilerOptions.resolveJsonModule && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs ?

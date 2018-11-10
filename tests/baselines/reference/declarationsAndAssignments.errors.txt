@@ -15,8 +15,8 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(67,9): e
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(68,9): error TS2461: Type '{ 0: number; 1: number; }' is not an array type.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,11): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(73,14): error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
-tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,11): error TS2339: Property 'a' does not exist on type 'undefined[]'.
+tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(74,14): error TS2339: Property 'b' does not exist on type 'undefined[]'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(106,17): error TS2322: Type '{ y: boolean; }' is not assignable to type '{ x: any; y?: boolean; }'.
   Property 'x' is missing in type '{ y: boolean; }'.
 tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,6): error TS2322: Type 'string' is not assignable to type 'number'.
@@ -133,9 +133,9 @@ tests/cases/conformance/es6/destructuring/declarationsAndAssignments.ts(138,9): 
 !!! error TS2525: Initializer provides no value for this binding element and the binding element has no default value.
         var { a, b } = [];  // Error
               ~
-!!! error TS2459: Type 'undefined[]' has no property 'a' and no string index signature.
+!!! error TS2339: Property 'a' does not exist on type 'undefined[]'.
                  ~
-!!! error TS2459: Type 'undefined[]' has no property 'b' and no string index signature.
+!!! error TS2339: Property 'b' does not exist on type 'undefined[]'.
     }
     
     function f11() {

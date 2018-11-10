@@ -757,6 +757,9 @@ import b = require("./moduleB");
                         ],
                         "somefolder/*": [
                             "someanotherfolder/*"
+                        ],
+                        "/rooted/*": [
+                            "generated/*"
                         ]
                     }
                 };
@@ -773,6 +776,7 @@ import b = require("./moduleB");
                     "/root/folder1/file2/index.d.ts",
                     // then first attempt on 'generated/*' was successful
                 ]);
+                check("/rooted/folder1/file2", file2, []);
                 check("folder2/file3", file3, [
                     // first try '*'
                     "/root/folder2/file3.ts",
@@ -900,6 +904,9 @@ import b = require("./moduleB");
                         ],
                         "somefolder/*": [
                             "someanotherfolder/*"
+                        ],
+                        "/rooted/*": [
+                            "generated/*"
                         ]
                     }
                 };
@@ -911,6 +918,7 @@ import b = require("./moduleB");
                     "/root/folder1/file2.d.ts",
                     // success when using 'generated/*'
                 ]);
+                check("/rooted/folder1/file2", file2, []);
                 check("folder1/file3", file3, [
                     // first try '*'
                     "/root/folder1/file3.ts",

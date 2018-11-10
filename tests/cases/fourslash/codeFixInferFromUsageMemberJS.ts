@@ -27,10 +27,10 @@ verify.codeFixAll({
     constructor() {
         /**
          * this is fine
-         * @type {undefined}
+         * @type {number[] | undefined}
          */
         this.p = undefined;
-        /** @type {undefined} */
+        /** @type {number[] | undefined} */
         this.q = undefined
     }
     method() {

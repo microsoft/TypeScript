@@ -382,7 +382,7 @@ namespace ts {
 
         function ensureNoInitializer(node: CanHaveLiteralInitializer) {
             if (shouldPrintWithInitializer(node)) {
-                return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
+                return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
             }
             return undefined;
         }

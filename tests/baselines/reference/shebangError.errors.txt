@@ -1,5 +1,5 @@
 tests/cases/compiler/shebangError.ts(2,1): error TS1127: Invalid character.
-tests/cases/compiler/shebangError.ts(2,2): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/shebangError.ts(2,2): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/shebangError.ts(2,12): error TS2304: Cannot find name 'env'.
 tests/cases/compiler/shebangError.ts(2,16): error TS1005: ';' expected.
 tests/cases/compiler/shebangError.ts(2,16): error TS2304: Cannot find name 'node'.
@@ -11,7 +11,7 @@ tests/cases/compiler/shebangError.ts(2,16): error TS2304: Cannot find name 'node
     
 !!! error TS1127: Invalid character.
      ~~~~~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
                ~~~
 !!! error TS2304: Cannot find name 'env'.
                    ~~~~

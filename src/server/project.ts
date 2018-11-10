@@ -204,7 +204,7 @@ namespace ts.server {
 
         /*@internal*/
         constructor(
-            /*@internal*/readonly projectName: string,
+            readonly projectName: string,
             readonly projectKind: ProjectKind,
             readonly projectService: ProjectService,
             private documentRegistry: DocumentRegistry,
@@ -995,6 +995,13 @@ namespace ts.server {
             return strBuilder;
         }
 
+        /*@internal*/
+        print(counter?: number) {
+            this.writeLog(`Project '${this.projectName}' (${ProjectKind[this.projectKind]}) ${counter === undefined ? "" : counter}`);
+            this.writeLog(this.filesToString(this.projectService.logger.hasLevel(LogLevel.verbose)));
+            this.writeLog("-----------------------------------------------");
+        }
+
         setCompilerOptions(compilerOptions: CompilerOptions) {
             if (compilerOptions) {
                 compilerOptions.allowNonTsExtensions = true;
@@ -1221,11 +1228,10 @@ namespace ts.server {
 
         setCompilerOptions(options?: CompilerOptions) {
             // Avoid manipulating the given options directly
-            const newOptions = options ? cloneCompilerOptions(options) : this.getCompilationSettings();
-            if (!newOptions) {
+            if (!options && !this.getCompilationSettings()) {
                 return;
             }
-
+            const newOptions = cloneCompilerOptions(options || this.getCompilationSettings());
             if (this._isJsInferredProject && typeof newOptions.maxNodeModuleJsDepth !== "number") {
                 newOptions.maxNodeModuleJsDepth = 2;
             }

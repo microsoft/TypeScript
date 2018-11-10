@@ -64,7 +64,6 @@ namespace ts {
             getText: () => str,
             write: writeText,
             rawWrite: writeText,
-            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
@@ -73,7 +72,9 @@ namespace ts {
             writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
-            writeSymbol: writeText,
+            writeSymbol: (s, _) => writeText(s),
+            writeTrailingSemicolon: writeText,
+            writeComment: writeText,
             getTextPos: () => str.length,
             getLine: () => 0,
             getColumn: () => 0,
@@ -527,7 +528,10 @@ namespace ts {
     export function getLiteralText(node: LiteralLikeNode, sourceFile: SourceFile, neverAsciiEscape: boolean | undefined) {
         // If we don't need to downlevel and we can reach the original source text using
         // the node's parent reference, then simply get the text as it was originally written.
-        if (!nodeIsSynthesized(node) && node.parent && !(isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator)) {
+        if (!nodeIsSynthesized(node) && node.parent && !(
+            (isNumericLiteral(node) && node.numericLiteralFlags & TokenFlags.ContainsSeparator) ||
+            isBigIntLiteral(node)
+        )) {
             return getSourceTextOfNodeFromSourceFile(sourceFile, node);
         }
 
@@ -554,6 +558,7 @@ namespace ts {
             case SyntaxKind.TemplateTail:
                 return "}" + escapeText(node.text, CharacterCodes.backtick) + "`";
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.RegularExpressionLiteral:
                 return node.text;
         }
@@ -976,6 +981,7 @@ namespace ts {
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.UnknownKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.SymbolKeyword:
@@ -1599,6 +1605,7 @@ namespace ts {
                 }
             // falls through
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ThisKeyword:
                 return isInExpressionContext(node);
@@ -2490,6 +2497,7 @@ namespace ts {
     // export { x as <symbol> } from ...
     // export = <EntityNameExpression>
     // export default <EntityNameExpression>
+    // module.exports = <EntityNameExpression>
     export function isAliasSymbolDeclaration(node: Node): boolean {
         return node.kind === SyntaxKind.ImportEqualsDeclaration ||
             node.kind === SyntaxKind.NamespaceExportDeclaration ||
@@ -2498,7 +2506,7 @@ namespace ts {
             node.kind === SyntaxKind.ImportSpecifier ||
             node.kind === SyntaxKind.ExportSpecifier ||
             node.kind === SyntaxKind.ExportAssignment && exportAssignmentIsAlias(<ExportAssignment>node) ||
-            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports;
+            isBinaryExpression(node) && getAssignmentDeclarationKind(node) === AssignmentDeclarationKind.ModuleExports && exportAssignmentIsAlias(node);
     }
 
     export function exportAssignmentIsAlias(node: ExportAssignment | BinaryExpression): boolean {
@@ -2583,6 +2591,10 @@ namespace ts {
     export function isStringANonContextualKeyword(name: string) {
         const token = stringToToken(name);
         return token !== undefined && isNonContextualKeyword(token);
+    }
+
+    export function isIdentifierANonContextualKeyword({ originalKeywordKind }: Identifier): boolean {
+        return !!originalKeywordKind && !isContextualKeyword(originalKeywordKind);
     }
 
     export type TriviaKind = SyntaxKind.SingleLineCommentTrivia
@@ -2900,6 +2912,7 @@ namespace ts {
             case SyntaxKind.TrueKeyword:
             case SyntaxKind.FalseKeyword:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.ArrayLiteralExpression:
             case SyntaxKind.ObjectLiteralExpression:
@@ -2921,7 +2934,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function getBinaryOperatorPrecedence(kind: SyntaxKind): number {
         switch (kind) {
             case SyntaxKind.BarBarToken:
@@ -3190,18 +3202,11 @@ namespace ts {
             }
         }
 
-        function writeTextOfNode(text: string, node: Node) {
-            const s = getTextOfNodeFromSourceText(text, node);
-            write(s);
-            updateLineCountAndPosFor(s);
-        }
-
         reset();
 
         return {
             write,
             rawWrite,
-            writeTextOfNode,
             writeLiteral,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -3224,7 +3229,79 @@ namespace ts {
             writePunctuation: write,
             writeSpace: write,
             writeStringLiteral: write,
-            writeSymbol: write
+            writeSymbol: (s, _) => write(s),
+            writeTrailingSemicolon: write,
+            writeComment: write
+        };
+    }
+
+    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
+        let pendingTrailingSemicolon = false;
+
+        function commitPendingTrailingSemicolon() {
+            if (pendingTrailingSemicolon) {
+                writer.writeTrailingSemicolon(";");
+                pendingTrailingSemicolon = false;
+            }
+        }
+
+        return {
+            ...writer,
+            writeTrailingSemicolon() {
+                pendingTrailingSemicolon = true;
+            },
+            writeLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeLiteral(s);
+            },
+            writeStringLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeStringLiteral(s);
+            },
+            writeSymbol(s, sym) {
+                commitPendingTrailingSemicolon();
+                writer.writeSymbol(s, sym);
+            },
+            writePunctuation(s) {
+                commitPendingTrailingSemicolon();
+                writer.writePunctuation(s);
+            },
+            writeKeyword(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeKeyword(s);
+            },
+            writeOperator(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeOperator(s);
+            },
+            writeParameter(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeParameter(s);
+            },
+            writeSpace(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeSpace(s);
+            },
+            writeProperty(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeProperty(s);
+            },
+            writeComment(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeComment(s);
+            },
+            writeLine() {
+                commitPendingTrailingSemicolon();
+                writer.writeLine();
+            },
+            increaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.increaseIndent();
+            },
+            decreaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.decreaseIndent();
+            }
         };
     }
 
@@ -3504,13 +3581,13 @@ namespace ts {
         writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
 
             let emitInterveningSeparator = false;
             for (const comment of comments) {
                 if (emitInterveningSeparator) {
-                    writer.write(" ");
+                    writer.writeSpace(" ");
                     emitInterveningSeparator = false;
                 }
 
@@ -3524,7 +3601,7 @@ namespace ts {
             }
 
             if (emitInterveningSeparator && trailingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
     }
@@ -3658,7 +3735,7 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(text.substring(commentPos, commentEnd));
+            writer.writeComment(text.substring(commentPos, commentEnd));
         }
     }
 
@@ -3667,14 +3744,14 @@ namespace ts {
         const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
         if (currentLineText) {
             // trimmed forward and ending spaces text
-            writer.write(currentLineText);
+            writer.writeComment(currentLineText);
             if (end !== commentEnd) {
                 writer.writeLine();
             }
         }
         else {
             // Empty string - make sure we write empty line
-            writer.writeLiteral(newLine);
+            writer.rawWrite(newLine);
         }
     }
 
@@ -5267,6 +5344,10 @@ namespace ts {
         return node.kind === SyntaxKind.NumericLiteral;
     }
 
+    export function isBigIntLiteral(node: Node): node is BigIntLiteral {
+        return node.kind === SyntaxKind.BigIntLiteral;
+    }
+
     export function isStringLiteral(node: Node): node is StringLiteral {
         return node.kind === SyntaxKind.StringLiteral;
     }
@@ -6210,6 +6291,7 @@ namespace ts {
             || kind === SyntaxKind.AnyKeyword
             || kind === SyntaxKind.UnknownKeyword
             || kind === SyntaxKind.NumberKeyword
+            || kind === SyntaxKind.BigIntKeyword
             || kind === SyntaxKind.ObjectKeyword
             || kind === SyntaxKind.BooleanKeyword
             || kind === SyntaxKind.StringKeyword
@@ -6392,6 +6474,7 @@ namespace ts {
             case SyntaxKind.Identifier:
             case SyntaxKind.RegularExpressionLiteral:
             case SyntaxKind.NumericLiteral:
+            case SyntaxKind.BigIntLiteral:
             case SyntaxKind.StringLiteral:
             case SyntaxKind.NoSubstitutionTemplateLiteral:
             case SyntaxKind.TemplateExpression:
@@ -6834,7 +6917,6 @@ namespace ts {
 
 /* @internal */
 namespace ts {
-    /** @internal */
     export function isNamedImportsOrExports(node: Node): node is NamedImportsOrExports {
         return node.kind === SyntaxKind.NamedImports || node.kind === SyntaxKind.NamedExports;
     }
@@ -6898,7 +6980,6 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    /* @internal */
     export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
         return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
     }
@@ -6909,7 +6990,6 @@ namespace ts {
         return localizedDiagnosticMessages && localizedDiagnosticMessages[message.key] || message.message;
     }
 
-    /* @internal */
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticWithLocation;
     export function createFileDiagnostic(file: SourceFile, start: number, length: number, message: DiagnosticMessage): DiagnosticWithLocation {
         Debug.assertGreaterThanOrEqual(start, 0);
@@ -6938,7 +7018,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function formatMessage(_dummy: any, message: DiagnosticMessage): string {
         let text = getLocaleSpecificMessage(message);
 
@@ -6949,7 +7028,6 @@ namespace ts {
         return text;
     }
 
-    /* @internal */
     export function createCompilerDiagnostic(message: DiagnosticMessage, ...args: (string | number | undefined)[]): Diagnostic;
     export function createCompilerDiagnostic(message: DiagnosticMessage): Diagnostic {
         let text = getLocaleSpecificMessage(message);
@@ -6970,7 +7048,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function createCompilerDiagnosticFromMessageChain(chain: DiagnosticMessageChain): Diagnostic {
         return {
             file: undefined,
@@ -6983,7 +7060,6 @@ namespace ts {
         };
     }
 
-    /* @internal */
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
@@ -7015,14 +7091,12 @@ namespace ts {
         return diagnostic.file ? diagnostic.file.path : undefined;
     }
 
-    /* @internal */
     export function compareDiagnostics(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareDiagnosticsSkipRelatedInformation(d1, d2) ||
             compareRelatedInformation(d1, d2) ||
             Comparison.EqualTo;
     }
 
-    /* @internal */
     export function compareDiagnosticsSkipRelatedInformation(d1: Diagnostic, d2: Diagnostic): Comparison {
         return compareStringsCaseSensitive(getDiagnosticFilePath(d1), getDiagnosticFilePath(d2)) ||
             compareValues(d1.start, d2.start) ||
@@ -7360,7 +7434,6 @@ namespace ts {
         return rootLength > 0 && rootLength === path.length;
     }
 
-    /* @internal */
     export function convertToRelativePath(absoluteOrRelativePath: string, basePath: string, getCanonicalFileName: (path: string) => string): string {
         return !isRootedDiskPath(absoluteOrRelativePath)
             ? absoluteOrRelativePath
@@ -8432,5 +8505,80 @@ namespace ts {
         else {
             return got;
         }
+    }
+
+    /**
+     * Converts a bigint literal string, e.g. `0x1234n`,
+     * to its decimal string representation, e.g. `4660`.
+     */
+    export function parsePseudoBigInt(stringValue: string): string {
+        let log2Base: number;
+        switch (stringValue.charCodeAt(1)) { // "x" in "0x123"
+            case CharacterCodes.b:
+            case CharacterCodes.B: // 0b or 0B
+                log2Base = 1;
+                break;
+            case CharacterCodes.o:
+            case CharacterCodes.O: // 0o or 0O
+                log2Base = 3;
+                break;
+            case CharacterCodes.x:
+            case CharacterCodes.X: // 0x or 0X
+                log2Base = 4;
+                break;
+            default: // already in decimal; omit trailing "n"
+                const nIndex = stringValue.length - 1;
+                // Skip leading 0s
+                let nonZeroStart = 0;
+                while (stringValue.charCodeAt(nonZeroStart) === CharacterCodes._0) {
+                    nonZeroStart++;
+                }
+                return stringValue.slice(nonZeroStart, nIndex) || "0";
+        }
+
+        // Omit leading "0b", "0o", or "0x", and trailing "n"
+        const startIndex = 2, endIndex = stringValue.length - 1;
+        const bitsNeeded = (endIndex - startIndex) * log2Base;
+        // Stores the value specified by the string as a LE array of 16-bit integers
+        // using Uint16 instead of Uint32 so combining steps can use bitwise operators
+        const segments = new Uint16Array((bitsNeeded >>> 4) + (bitsNeeded & 15 ? 1 : 0));
+        // Add the digits, one at a time
+        for (let i = endIndex - 1, bitOffset = 0; i >= startIndex; i--, bitOffset += log2Base) {
+            const segment = bitOffset >>> 4;
+            const digitChar = stringValue.charCodeAt(i);
+            // Find character range: 0-9 < A-F < a-f
+            const digit = digitChar <= CharacterCodes._9
+                ? digitChar - CharacterCodes._0
+                : 10 + digitChar -
+                    (digitChar <= CharacterCodes.F ? CharacterCodes.A : CharacterCodes.a);
+            const shiftedDigit = digit << (bitOffset & 15);
+            segments[segment] |= shiftedDigit;
+            const residual = shiftedDigit >>> 16;
+            if (residual) segments[segment + 1] |= residual; // overflows segment
+        }
+        // Repeatedly divide segments by 10 and add remainder to base10Value
+        let base10Value = "";
+        let firstNonzeroSegment = segments.length - 1;
+        let segmentsRemaining = true;
+        while (segmentsRemaining) {
+            let mod10 = 0;
+            segmentsRemaining = false;
+            for (let segment = firstNonzeroSegment; segment >= 0; segment--) {
+                const newSegment = mod10 << 16 | segments[segment];
+                const segmentValue = (newSegment / 10) | 0;
+                segments[segment] = segmentValue;
+                mod10 = newSegment - segmentValue * 10;
+                if (segmentValue && !segmentsRemaining) {
+                    firstNonzeroSegment = segment;
+                    segmentsRemaining = true;
+                }
+            }
+            base10Value = mod10 + base10Value;
+        }
+        return base10Value;
+    }
+
+    export function pseudoBigIntToString({negative, base10Value}: PseudoBigInt): string {
+        return (negative && base10Value !== "0" ? "-" : "") + base10Value;
     }
 }
