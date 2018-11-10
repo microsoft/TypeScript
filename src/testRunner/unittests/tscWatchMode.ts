@@ -1564,6 +1564,146 @@ export class Data2 {
                 verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib2Data2, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
             });
         });
+
+        describe("updates errors in lib file", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const field = "fullscreen";
+            const fieldWithoutReadonly = `interface Document {
+	${field}: boolean;
+}`;
+
+            const libFileWithDocument: File = {
+                path: libFile.path,
+                content: `${libFile.content}
+interface Document {
+    readonly ${field}: boolean;
+}`
+            };
+
+            function getDiagnostic(program: Program, file: File) {
+                return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(field), field.length, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, field);
+            }
+
+            function verifyLibFileErrorsWith(aFile: File) {
+                const files = [aFile, libFileWithDocument];
+
+                function verifyLibErrors(options: CompilerOptions) {
+                    const host = createWatchedSystem(files, { currentDirectory });
+                    const watch = createWatchOfFilesAndCompilerOptions([aFile.path], host, options);
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsInitial(host, getErrors());
+
+                    host.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;"));
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, emptyArray);
+
+                    host.writeFile(aFile.path, aFile.content);
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, getErrors());
+
+                    function getErrors() {
+                        return [
+                            ...(options.skipLibCheck || options.skipDefaultLibCheck ? [] : [getDiagnostic(watch(), libFileWithDocument)]),
+                            getDiagnostic(watch(), aFile)
+                        ];
+                    }
+                }
+
+                it("with default options", () => {
+                    verifyLibErrors({});
+                });
+                it("with skipLibCheck", () => {
+                    verifyLibErrors({ skipLibCheck: true });
+                });
+                it("with skipDefaultLibCheck", () => {
+                    verifyLibErrors({ skipDefaultLibCheck: true });
+                });
+            }
+
+            describe("when non module file changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `${fieldWithoutReadonly}
+var y: number;`
+                };
+                verifyLibFileErrorsWith(aFile);
+            });
+
+            describe("when module file with global definitions changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `export {}
+declare global {
+${fieldWithoutReadonly}
+var y: number;
+}`
+                };
+                verifyLibFileErrorsWith(aFile);
+            });
+        });
+
+        it("when skipLibCheck and skipDefaultLibCheck changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const field = "fullscreen";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `interface Document {
+	${field}: boolean;
+}`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.d.ts`,
+                content: `interface Document {
+	${field}: boolean;
+}`
+            };
+            const libFileWithDocument: File = {
+                path: libFile.path,
+                content: `${libFile.content}
+interface Document {
+    readonly ${field}: boolean;
+}`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: "{}"
+            };
+
+            const files = [aFile, bFile, configFile, libFileWithDocument];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgramFiles();
+            checkOutputErrorsInitial(host, [
+                getDiagnostic(libFileWithDocument),
+                getDiagnostic(aFile),
+                getDiagnostic(bFile)
+            ]);
+
+            verifyConfigChange({ skipLibCheck: true }, [aFile]);
+            verifyConfigChange({ skipDefaultLibCheck: true }, [aFile, bFile]);
+            verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
+            verifyConfigChange({ skipDefaultLibCheck: true }, [aFile, bFile]);
+            verifyConfigChange({ skipLibCheck: true }, [aFile]);
+            verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
+
+            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: ReadonlyArray<File>) {
+                host.writeFile(configFile.path, JSON.stringify({ compilerOptions }));
+                host.runQueuedTimeoutCallbacks();
+                verifyProgramFiles();
+                checkOutputErrorsIncremental(host, errorInFiles.map(getDiagnostic));
+            }
+
+            function getDiagnostic(file: File) {
+                return getDiagnosticOfFileFromProgram(watch(), file.path, file.content.indexOf(field), field.length, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, field);
+            }
+
+            function verifyProgramFiles() {
+                checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
+            }
+        });
     });
 
     describe("tsc-watch emit with outFile or out setting", () => {

@@ -39,6 +39,10 @@ namespace ts {
          */
         seenAffectedFiles: Map<true> | undefined;
         /**
+         * whether this program has cleaned semantic diagnostics cache for lib files
+         */
+        cleanedDiagnosticsOfLibFiles?: boolean;
+        /**
          * True if the semantic diagnostics were copied from the old state
          */
         semanticDiagnosticsFromOldState?: Map<true>;
@@ -64,9 +68,11 @@ namespace ts {
             state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         }
         state.changedFilesSet = createMap<true>();
+
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
+        const oldCompilerOptions = useOldState ? oldState!.program.getCompilerOptions() : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
-            !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldState!.program.getCompilerOptions());
+            !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
         if (useOldState) {
             // Verify the sanity of old state
             if (!oldState!.currentChangedFilePath) {
@@ -83,6 +89,8 @@ namespace ts {
         // Update changed files and copy semantic diagnostics if we can
         const referencedMap = state.referencedMap;
         const oldReferencedMap = useOldState ? oldState!.referencedMap : undefined;
+        const copyDeclarationFileDiagnostics = canCopySemanticDiagnostics && !compilerOptions.skipLibCheck === !oldCompilerOptions!.skipLibCheck;
+        const copyLibFileDiagnostics = copyDeclarationFileDiagnostics && !compilerOptions.skipDefaultLibCheck === !oldCompilerOptions!.skipDefaultLibCheck;
         state.fileInfos.forEach((info, sourceFilePath) => {
             let oldInfo: Readonly<BuilderState.FileInfo> | undefined;
             let newReferences: BuilderState.ReferencedSet | undefined;
@@ -101,6 +109,11 @@ namespace ts {
                 state.changedFilesSet.set(sourceFilePath, true);
             }
             else if (canCopySemanticDiagnostics) {
+                const sourceFile = state.program.getSourceFileByPath(sourceFilePath as Path)!;
+
+                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
+                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
+
                 // Unchanged file copy diagnostics
                 const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
@@ -193,6 +206,19 @@ namespace ts {
             return;
         }
 
+        // Clean lib file diagnostics if its all files excluding default files to emit
+        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles && !state.cleanedDiagnosticsOfLibFiles) {
+            state.cleanedDiagnosticsOfLibFiles = true;
+            const options = state.program.getCompilerOptions();
+            if (forEach(state.program.getSourceFiles(), f =>
+                state.program.isSourceFileDefaultLibrary(f) &&
+                !skipTypeChecking(f, options) &&
+                removeSemanticDiagnosticsOf(state, f.path)
+            )) {
+                return;
+            }
+        }
+
         // If there was change in signature for the changed file,
         // then delete the semantic diagnostics for files that are affected by using exports of this module
 
@@ -268,7 +294,7 @@ namespace ts {
      */
     function removeSemanticDiagnosticsOf(state: BuilderProgramState, path: Path) {
         if (!state.semanticDiagnosticsFromOldState) {
-            return false;
+            return true;
         }
         state.semanticDiagnosticsFromOldState.delete(path);
         state.semanticDiagnosticsPerFile!.delete(path);
