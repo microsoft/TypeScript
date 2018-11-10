@@ -30528,12 +30528,9 @@ namespace ts {
                 isPrefixUnaryExpression(node.parent) && isLiteralTypeNode(node.parent.parent);
             if (!literalType) {
                 if (languageVersion < ScriptTarget.ESNext) {
-                    if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targetting_lower_than_ESNext)) {
+                    if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targeting_lower_than_ESNext)) {
                         return true;
                     }
-                }
-                if (!compilerOptions.experimentalBigInt) {
-                    return grammarErrorOnNode(node, Diagnostics.Experimental_support_for_BigInt_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalBigInt_option_to_remove_this_warning);
                 }
             }
             return false;

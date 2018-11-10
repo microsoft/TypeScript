@@ -1011,10 +1011,6 @@
         "category": "Message",
         "code": 1350
     },
-    "Experimental support for BigInt is a feature that is subject to change in a future release. Set the 'experimentalBigInt' option to remove this warning.": {
-        "category": "Error",
-        "code": 1351
-    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2505,7 +2501,7 @@
         "category": "Error",
         "code": 2736
     },
-    "BigInt literals are not available when targetting lower than ESNext.": {
+    "BigInt literals are not available when targeting lower than ESNext.": {
         "category": "Error",
         "code": 2737
     },
@@ -3920,10 +3916,6 @@
     "Options '{0}' and '{1}' cannot be combined.": {
         "category": "Error",
         "code": 6370
-    },
-    "Enables experimental support for ESNext BigInt literals.": {
-        "category": "Message",
-        "code": 6371
     },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
