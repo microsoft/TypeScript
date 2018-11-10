@@ -2597,20 +2597,20 @@ namespace ts {
             return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
-        function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] | undefined {
+        function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
+            const results: Symbol[] = [];
             const containingFile = getSourceFileOfNode(enclosingDeclaration);
             if (containingFile && containingFile.imports) {
                 // Try to make an import using an import already in the enclosing file, if possible
-                let results: Symbol[] | undefined;
                 for (const importRef of containingFile.imports) {
                     if (nodeIsSynthesized(importRef)) continue; // Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
                     const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef);
                     if (!resolvedModule) continue;
                     const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
                     if (!ref) continue;
-                    results = append(results, resolvedModule);
+                    results.push(resolvedModule);
                 }
-                if (results) {
+                if (length(results)) {
                     return results;
                 }
             }
@@ -2618,7 +2618,6 @@ namespace ts {
             if (links.extendedContainers) {
                 return links.extendedContainers;
             }
-            let results: Symbol[] = [];
             // No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
             const otherFiles = host.getSourceFiles();
             for (const file of otherFiles) {
@@ -2626,7 +2625,7 @@ namespace ts {
                 const sym = getSymbolOfNode(file);
                 const ref = getAliasForSymbolInContainer(sym, symbol);
                 if (!ref) continue;
-                results = append(results, sym);
+                results.push(sym);
             }
             return links.extendedContainers = results;
         }
@@ -3985,15 +3984,21 @@ namespace ts {
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
                     let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
-
+                    let parentSpecifiers: (string | undefined)[] | undefined;
                     if (!accessibleSymbolChain ||
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
                         const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration);
                         if (length(parents)) {
-                            parents!.sort(sortByBestName);
-                            for (const parent of parents!) {
+                            parentSpecifiers = parents!.map(symbol =>
+                                some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)
+                                    ? getSpecifierForModuleSymbol(symbol, context)
+                                    : undefined);
+                            const indices = parents!.map((_, i) => i);
+                            indices.sort(sortByBestName);
+                            const sortedParents = indices.map(i => parents![i]);
+                            for (const parent of sortedParents) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
                                     accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
@@ -4017,24 +4022,24 @@ namespace ts {
                         }
                         return [symbol];
                     }
-                }
 
-                function sortByBestName(a: Symbol, b: Symbol) {
-                    if (some(a.declarations, hasNonGlobalAugmentationExternalModuleSymbol) && some(b.declarations, hasNonGlobalAugmentationExternalModuleSymbol)) {
-                        const specifierA = getSpecifierForModuleSymbol(a, context);
-                        const specifierB = getSpecifierForModuleSymbol(b, context);
-                        if (pathIsRelative(specifierA) === pathIsRelative(specifierB)) {
-                            // Both relative or both non-relative, sort by number of parts
-                            return moduleSpecifiers.countPathComponents(specifierA) - moduleSpecifiers.countPathComponents(specifierB);
+                    function sortByBestName(a: number, b: number) {
+                        const specifierA = parentSpecifiers![a];
+                        const specifierB = parentSpecifiers![b];
+                        if (specifierA && specifierB) {
+                            if (pathIsRelative(specifierA) === pathIsRelative(specifierB)) {
+                                // Both relative or both non-relative, sort by number of parts
+                                return moduleSpecifiers.countPathComponents(specifierA) - moduleSpecifiers.countPathComponents(specifierB);
+                            }
+                            if (pathIsRelative(specifierB)) {
+                                // A is non-relative, B is relative: prefer A
+                                return -1;
+                            }
+                            // A is relative, B is non-relative: prefer B
+                            return 1;
                         }
-                        if (pathIsRelative(specifierB)) {
-                            // A is non-relative, B is relative: prefer A
-                            return -1;
-                        }
-                        // A is relative, B is non-relative: prefer B
-                        return 1;
+                        return 0;
                     }
-                    return 0;
                 }
             }
 
