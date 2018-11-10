@@ -322,49 +322,24 @@ namespace ts.formatting {
             return false;
         }
 
-        function getListIfVisualStartEndIsInListRange(list: NodeArray<Node> | undefined, start: number, end: number, node: Node, sourceFile: SourceFile) {
-            return list && rangeContainsVisualStartEnd(list) ? list : undefined;
-
-            // Assumes a list is wrapped by list tokens
-            function rangeContainsVisualStartEnd(textRange: TextRange): boolean {
-                const children = node.getChildren();
-                for (let i = 1; i < children.length - 1; i++) {
-                    if (children[i].pos === textRange.pos && children[i].end === textRange.end) {
-                        return rangeContainsStartEnd({ pos: children[i - 1].end, end: children[i + 1].getStart(sourceFile) }, start, end);
-                    }
-                }
-                return rangeContainsStartEnd(textRange, start, end);
-            }
-        }
-
-        function getListIfStartEndIsInListRange(list: NodeArray<Node> | undefined, start: number, end: number) {
-            return list && rangeContainsStartEnd(list, start, end) ? list : undefined;
-        }
-
         export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
-            if (node.parent) {
-                return getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
-            }
-            return undefined;
+            return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }
 
         function getListByPosition(pos: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
-            if (!node) {
-                return;
-            }
-            return getListByRange(pos, pos, node, sourceFile);
+            return node && getListByRange(pos, pos, node, sourceFile);
         }
 
         function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
             switch (node.kind) {
                 case SyntaxKind.TypeReference:
-                    return getListIfVisualStartEndIsInListRange((<TypeReferenceNode>node).typeArguments, start, end, node, sourceFile);
+                    return getList((<TypeReferenceNode>node).typeArguments);
                 case SyntaxKind.ObjectLiteralExpression:
-                    return getListIfVisualStartEndIsInListRange((<ObjectLiteralExpression>node).properties, start, end, node, sourceFile);
+                    return getList((<ObjectLiteralExpression>node).properties);
                 case SyntaxKind.ArrayLiteralExpression:
-                    return getListIfVisualStartEndIsInListRange((<ArrayLiteralExpression>node).elements, start, end, node, sourceFile);
+                    return getList((<ArrayLiteralExpression>node).elements);
                 case SyntaxKind.TypeLiteral:
-                    return getListIfVisualStartEndIsInListRange((<TypeLiteralNode>node).members, start, end, node, sourceFile);
+                    return getList((<TypeLiteralNode>node).members);
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.FunctionExpression:
                 case SyntaxKind.ArrowFunction:
@@ -373,32 +348,40 @@ namespace ts.formatting {
                 case SyntaxKind.CallSignature:
                 case SyntaxKind.Constructor:
                 case SyntaxKind.ConstructorType:
-                case SyntaxKind.ConstructSignature: {
-                    return getListIfVisualStartEndIsInListRange((<SignatureDeclaration>node).typeParameters, start, end, node, sourceFile) ||
-                        getListIfVisualStartEndIsInListRange((<SignatureDeclaration>node).parameters, start, end, node, sourceFile);
-                }
+                case SyntaxKind.ConstructSignature:
+                    return getList((<SignatureDeclaration>node).typeParameters) || getList((<SignatureDeclaration>node).parameters);
                 case SyntaxKind.ClassDeclaration:
                 case SyntaxKind.ClassExpression:
                 case SyntaxKind.InterfaceDeclaration:
                 case SyntaxKind.TypeAliasDeclaration:
-                case SyntaxKind.JSDocTemplateTag: {
-                    const { typeParameters } = <ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node;
-                    return getListIfVisualStartEndIsInListRange(typeParameters, start, end, node, sourceFile);
-                }
+                case SyntaxKind.JSDocTemplateTag:
+                    return getList((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node).typeParameters);
                 case SyntaxKind.NewExpression:
-                case SyntaxKind.CallExpression: {
-                    return getListIfVisualStartEndIsInListRange((<CallExpression>node).typeArguments, start, end, node, sourceFile) ||
-                        getListIfVisualStartEndIsInListRange((<CallExpression>node).arguments, start, end, node, sourceFile);
-                }
+                case SyntaxKind.CallExpression:
+                    return getList((<CallExpression>node).typeArguments) || getList((<CallExpression>node).arguments);
                 case SyntaxKind.VariableDeclarationList:
-                    return getListIfStartEndIsInListRange((<VariableDeclarationList>node).declarations, start, end);
+                    return getList((<VariableDeclarationList>node).declarations);
                 case SyntaxKind.NamedImports:
                 case SyntaxKind.NamedExports:
-                    return getListIfVisualStartEndIsInListRange((<NamedImportsOrExports>node).elements, start, end, node, sourceFile);
+                    return getList((<NamedImportsOrExports>node).elements);
                 case SyntaxKind.ObjectBindingPattern:
                 case SyntaxKind.ArrayBindingPattern:
-                    return getListIfVisualStartEndIsInListRange((<ObjectBindingPattern | ArrayBindingPattern>node).elements, start, end, node, sourceFile);
+                    return getList((<ObjectBindingPattern | ArrayBindingPattern>node).elements);
             }
+
+            function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {
+                return list && rangeContainsStartEnd(getVisualListRange(node, list, sourceFile), start, end) ? list : undefined;
+            }
+        }
+
+        function getVisualListRange(node: Node, list: TextRange, sourceFile: SourceFile): TextRange {
+            const children = node.getChildren(sourceFile);
+            for (let i = 1; i < children.length - 1; i++) {
+                if (children[i].pos === list.pos && children[i].end === list.end) {
+                    return { pos: children[i - 1].end, end: children[i + 1].getStart(sourceFile) };
+                }
+            }
+            return list;
         }
 
         function getActualIndentationForListStartLine(list: NodeArray<Node>, sourceFile: SourceFile, options: EditorSettings): number {
