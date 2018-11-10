@@ -1,16 +1,16 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2358,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2377,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3154,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(3157,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(4850,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(4909,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(11128,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(11823,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(11903,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(16320,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(16451,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2388,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2407,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3267,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(3270,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(4963,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(5023,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(11214,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(11959,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(12039,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(16513,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(16644,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1406,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1442,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
