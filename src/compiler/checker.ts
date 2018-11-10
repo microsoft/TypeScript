@@ -25111,7 +25111,7 @@ namespace ts {
                     }
                 }
                 if (symbol.declarations.length > 1) {
-                    if (some(symbol.declarations, d => d !== node && !areDeclarationFlagsIdentical(d, node))) {
+                    if (some(symbol.declarations, d => d !== node && isVariableLike(d) && !areDeclarationFlagsIdentical(d, node))) {
                         error(node.name, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, declarationNameToString(node.name));
                     }
                 }
