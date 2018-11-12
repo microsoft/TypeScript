@@ -45,6 +45,7 @@
         "unittests/builder.ts",
         "unittests/cancellableLanguageServiceOperations.ts",
         "unittests/commandLineParsing.ts",
+        "unittests/comments.ts",
         "unittests/compileOnSave.ts",
         "unittests/compilerCore.ts",
         "unittests/configurationExtension.ts",
