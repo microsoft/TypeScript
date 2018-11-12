@@ -9533,6 +9533,17 @@ namespace ts {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type) : type;
         }
 
+        function distributeIndexOverObjectType(objectType: Type, indexType: Type) {
+            // (T | U)[K] -> T[K] | U[K]
+            if (objectType.flags & TypeFlags.Union) {
+                return mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+            }
+            // (T & U)[K] -> T[K] & U[K]
+            if (objectType.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+            }
+        }
+
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
@@ -9550,13 +9561,9 @@ namespace ts {
             }
             // Only do the inner distributions if the index can no longer be instantiated to cause index distribution again
             if (!(indexType.flags & TypeFlags.Instantiable)) {
-                // (T | U)[K] -> T[K] | U[K]
-                if (objectType.flags & TypeFlags.Union) {
-                    return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
-                }
-                // (T & U)[K] -> T[K] & U[K]
-                if (objectType.flags & TypeFlags.Intersection) {
-                    return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+                const simplified = distributeIndexOverObjectType(objectType, indexType);
+                if (simplified) {
+                    return type.simplified = simplified;
                 }
             }
             // So ultimately:
@@ -13888,10 +13895,17 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target);
                         if (simplified !== target) {
-                            const key = source.id + "," + simplified.id;
-                            if (!visited || !visited.get(key)) {
-                                (visited || (visited = createMap<boolean>())).set(key, true);
-                                inferFromTypes(source, simplified);
+                            inferFromTypesOnce(source, simplified);
+                        }
+                        else if (target.flags & TypeFlags.IndexedAccess) {
+                            const indexType = getSimplifiedType((target as IndexedAccessType).indexType);
+                            // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
+                            // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
+                            if (indexType.flags & TypeFlags.Instantiable) {
+                                const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType), indexType);
+                                if (simplified && simplified !== target) {
+                                    inferFromTypesOnce(source, simplified);
+                                }
                             }
                         }
                     }
@@ -14012,6 +14026,14 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                    }
+                }
+
+                function inferFromTypesOnce(source: Type, target: Type) {
+                    const key = source.id + "," + target.id;
+                    if (!visited || !visited.get(key)) {
+                        (visited || (visited = createMap<boolean>())).set(key, true);
+                        inferFromTypes(source, target);
                     }
                 }
             }
