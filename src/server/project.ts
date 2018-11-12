@@ -92,6 +92,7 @@ namespace ts.server {
         return value instanceof ScriptInfo;
     }
 
+    /* @internal */
     export function isConfiguredProject(p: Project): p is ConfiguredProject {
         return p.projectKind === ProjectKind.Configured;
     }
@@ -985,6 +986,7 @@ namespace ts.server {
             return this.projectService.getScriptInfo(uncheckedFileName);
         }
 
+        /* @internal */
         filesToString(writeProjectFileNames: boolean) {
             if (!this.program) {
                 return "\tFiles (0)\n";
@@ -1385,6 +1387,7 @@ namespace ts.server {
             this.canonicalConfigFilePath = asNormalizedPath(projectService.toCanonicalFileName(configFileName));
         }
 
+        /* @internal */
         filesToString(writeProjectFileNames: boolean) {
             if (this.isInitialLoadPending()) {
                 return "\tFiles (0) InitialLoadPending\n";
@@ -1438,6 +1441,7 @@ namespace ts.server {
             this.potentialProjectReferences = undefined;
         }
 
+        /*@internal*/
         setPotentialProjectRefence(path: Path) {
             // We know the composites if we have read the config file
             Debug.assert(this.isInitialLoadPending());

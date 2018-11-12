@@ -8254,7 +8254,6 @@ declare namespace ts.server {
         private isWatchedMissingFile;
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfo(uncheckedFileName: string): ScriptInfo | undefined;
-        filesToString(writeProjectFileNames: boolean): string;
         setCompilerOptions(compilerOptions: CompilerOptions): void;
         protected removeRoot(info: ScriptInfo): void;
         protected enableGlobalPlugins(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined): void;
@@ -8293,7 +8292,8 @@ declare namespace ts.server {
         private externalProjectRefCount;
         private projectErrors;
         private projectReferences;
-        protected isInitialLoadPending: () => boolean;
+        /** Portentual project references before the project is actually loaded (read config file) */
+        private potentialProjectReferences;
         /**
          * If the project has reload from disk pending, it reloads (and then updates graph as part of that) instead of just updating the graph
          * @returns: true if set of files in the project stays the same and false - otherwise.
@@ -8719,6 +8719,10 @@ declare namespace ts.server {
         openClientFile(fileName: string, fileContent?: string, scriptKind?: ScriptKind, projectRootPath?: string): OpenConfiguredProjectResult;
         private findExternalProjectContainingOpenScriptInfo;
         openClientFileWithNormalizedPath(fileName: NormalizedPath, fileContent?: string, scriptKind?: ScriptKind, hasMixedContent?: boolean, projectRootPath?: NormalizedPath): OpenConfiguredProjectResult;
+        /**
+         *  Traverse till project Root and create those configured projects
+         */
+        private createAncestorConfiguredProjects;
         private removeOrphanConfiguredProjects;
         private telemetryOnOpenFile;
         /**
