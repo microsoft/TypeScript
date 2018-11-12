@@ -2225,7 +2225,6 @@ namespace ts {
     /* @internal */
     function createJSDocTag<T extends JSDocTag>(kind: T["kind"], tagName: string): T {
         const node = createSynthesizedNode(kind) as T;
-        node.atToken = createToken(SyntaxKind.AtToken);
         node.tagName = createIdentifier(tagName);
         return node;
     }

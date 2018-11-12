@@ -26,6 +26,7 @@ namespace ts {
     }
     export interface ValueInfoObject extends ValueInfoBase {
         readonly kind: ValueKind.Object;
+        readonly hasNontrivialPrototype: boolean;
         readonly members: ReadonlyArray<ValueInfo>;
     }
 
@@ -63,7 +64,9 @@ namespace ts {
                     const builtin = getBuiltinType(name, value as object, recurser);
                     if (builtin !== undefined) return builtin;
                     const entries = getEntriesOfObject(value as object);
-                    return { kind: ValueKind.Object, name, members: flatMap(entries, ({ key, value }) => getValueInfo(key, value, recurser)) };
+                    const hasNontrivialPrototype = Object.getPrototypeOf(value) !== Object.prototype;
+                    const members = flatMap(entries, ({ key, value }) => getValueInfo(key, value, recurser));
+                    return { kind: ValueKind.Object, name, hasNontrivialPrototype, members };
                 }
                 return { kind: ValueKind.Const, name, typeName: isNullOrUndefined(value) ? "any" : typeof value };
             },

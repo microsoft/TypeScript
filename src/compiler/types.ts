@@ -719,7 +719,6 @@ namespace ts {
     export type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
     export type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     export type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    export type AtToken = Token<SyntaxKind.AtToken>;
     export type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     export type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     export type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -2421,7 +2420,6 @@ namespace ts {
 
     export interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
-        atToken: AtToken;
         tagName: Identifier;
         comment?: string;
     }
@@ -2965,16 +2963,10 @@ namespace ts {
         sourceIndex: number;
     }
 
-    export interface SourceMapData {
-        sourceMapFilePath: string;           // Where the sourcemap file is written
-        jsSourceMappingURL: string;          // source map URL written in the .js file
-        sourceMapFile: string;               // Source map's file field - .js file name
-        sourceMapSourceRoot: string;         // Source map's sourceRoot field - location where the sources will be present if not ""
-        sourceMapSources: string[];          // Source map's sources field - list of sources that can be indexed in this source map
-        sourceMapSourcesContent?: (string | null)[];  // Source map's sourcesContent field - list of the sources' text to be embedded in the source map
-        inputSourceFileNames: string[];      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMapSources list
-        sourceMapNames?: string[];           // Source map's names field - list of names that can be indexed in this source map
-        sourceMapMappings: string;           // Source map's mapping field - encoded source map spans
+    /* @internal */
+    export interface SourceMapEmitResult {
+        inputSourceFileNames: ReadonlyArray<string>;      // Input source file (which one can use on program to get the file), 1:1 mapping with the sourceMap.sources list
+        sourceMap: RawSourceMap;
     }
 
     /** Return code used by getEmitOutput function to indicate status of the function */
@@ -2996,7 +2988,7 @@ namespace ts {
         /** Contains declaration emit diagnostics */
         diagnostics: ReadonlyArray<Diagnostic>;
         emittedFiles?: string[]; // Array of files the compiler wrote to disk
-        /* @internal */ sourceMaps?: SourceMapData[];  // Array of sourceMapData if compiler emitted sourcemaps
+        /* @internal */ sourceMaps?: SourceMapEmitResult[];  // Array of sourceMapData if compiler emitted sourcemaps
         /* @internal */ exportedModulesFromDeclarationEmit?: ExportedModulesFromDeclarationEmit;
     }
 
@@ -3502,7 +3494,7 @@ namespace ts {
         createTypeOfDeclaration(declaration: AccessorDeclaration | VariableLikeDeclaration | PropertyAccessExpression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker, addUndefined?: boolean): TypeNode | undefined;
         createReturnTypeOfSignatureDeclaration(signatureDeclaration: SignatureDeclaration, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
         createTypeOfExpression(expr: Expression, enclosingDeclaration: Node, flags: NodeBuilderFlags, tracker: SymbolTracker): TypeNode | undefined;
-        createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration): Expression;
+        createLiteralConstValue(node: VariableDeclaration | PropertyDeclaration | PropertySignature | ParameterDeclaration, tracker: SymbolTracker): Expression;
         isSymbolAccessible(symbol: Symbol, enclosingDeclaration: Node | undefined, meaning: SymbolFlags | undefined, shouldComputeAliasToMarkVisible: boolean): SymbolAccessibilityResult;
         isEntityNameVisible(entityName: EntityNameOrEntityNameExpression, enclosingDeclaration: Node): SymbolVisibilityResult;
         // Returns the constant value this property access resolves to, or 'undefined' for a non-constant
@@ -3836,15 +3828,11 @@ namespace ts {
         Substitution            = 1 << 25,  // Type parameter substitution
         NonPrimitive            = 1 << 26,  // intrinsic object type
         /* @internal */
-        FreshLiteral            = 1 << 27,  // Fresh literal or unique type
+        ContainsWideningType    = 1 << 27,  // Type is or contains undefined or null widening type
         /* @internal */
-        UnionOfPrimitiveTypes   = 1 << 28,  // Type is union of primitive types
+        ContainsObjectLiteral   = 1 << 28,  // Type is or contains object literal type
         /* @internal */
-        ContainsWideningType    = 1 << 29,  // Type is or contains undefined or null widening type
-        /* @internal */
-        ContainsObjectLiteral   = 1 << 30,  // Type is or contains object literal type
-        /* @internal */
-        ContainsAnyFunctionType = 1 << 31,  // Type is or contains the anyFunctionType
+        ContainsAnyFunctionType = 1 << 29,  // Type is or contains the anyFunctionType
 
         /* @internal */
         AnyOrUnknown = Any | Unknown,
@@ -3982,6 +3970,7 @@ namespace ts {
         JsxAttributes    = 1 << 12, // Jsx attributes type
         MarkerType       = 1 << 13, // Marker type used for variance probing
         JSLiteral        = 1 << 14, // Object type declared in JS - disables errors on read/write of nonexisting members
+        FreshLiteral     = 1 << 15, // Fresh object literal
         ClassOrInterface = Class | Interface
     }
 
@@ -4077,7 +4066,10 @@ namespace ts {
         couldContainTypeVariables: boolean;
     }
 
-    export interface UnionType extends UnionOrIntersectionType { }
+    export interface UnionType extends UnionOrIntersectionType {
+        /* @internal */
+        primitiveTypesOnly: boolean;
+    }
 
     export interface IntersectionType extends UnionOrIntersectionType {
         /* @internal */
@@ -5219,6 +5211,7 @@ namespace ts {
         IdentifierName,      // Emitting an IdentifierName
         MappedTypeParameter, // Emitting a TypeParameterDeclaration inside of a MappedTypeNode
         Unspecified,         // Emitting an otherwise unspecified node
+        EmbeddedStatement,   // Emitting an embedded statement
     }
 
     /* @internal */
@@ -5227,7 +5220,6 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
 
-        /* @internal */
         isSourceFileFromExternalLibrary(file: SourceFile): boolean;
         getLibFileFromReference(ref: FileReference): SourceFile | undefined;
 
@@ -5389,8 +5381,8 @@ namespace ts {
         printBundle(bundle: Bundle): string;
         /*@internal*/ writeNode(hint: EmitHint, node: Node, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
         /*@internal*/ writeList<T extends Node>(format: ListFormat, list: NodeArray<T> | undefined, sourceFile: SourceFile | undefined, writer: EmitTextWriter): void;
-        /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter): void;
-        /*@internal*/ writeBundle(bundle: Bundle, writer: EmitTextWriter, info?: BundleInfo): void;
+        /*@internal*/ writeFile(sourceFile: SourceFile, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
+        /*@internal*/ writeBundle(bundle: Bundle, info: BundleInfo | undefined, writer: EmitTextWriter, sourceMapGenerator: SourceMapGenerator | undefined): void;
     }
 
     /**
@@ -5470,15 +5462,90 @@ namespace ts {
         /*@internal*/ target?: CompilerOptions["target"];
         /*@internal*/ sourceMap?: boolean;
         /*@internal*/ inlineSourceMap?: boolean;
+        /*@internal*/ inlineSources?: boolean;
         /*@internal*/ extendedDiagnostics?: boolean;
         /*@internal*/ onlyPrintJsDocStyle?: boolean;
         /*@internal*/ neverAsciiEscape?: boolean;
     }
 
     /* @internal */
+    export interface RawSourceMap {
+        version: 3;
+        file: string;
+        sourceRoot?: string | null;
+        sources: string[];
+        sourcesContent?: (string | null)[] | null;
+        mappings: string;
+        names?: string[] | null;
+    }
+
+    /**
+     * Generates a source map.
+     */
+    /* @internal */
+    export interface SourceMapGenerator {
+        getSources(): ReadonlyArray<string>;
+        /**
+         * Adds a source to the source map.
+         */
+        addSource(fileName: string): number;
+        /**
+         * Set the content for a source.
+         */
+        setSourceContent(sourceIndex: number, content: string | null): void;
+        /**
+         * Adds a name.
+         */
+        addName(name: string): number;
+        /**
+         * Adds a mapping without source information.
+         */
+        addMapping(generatedLine: number, generatedCharacter: number): void;
+        /**
+         * Adds a mapping with source information.
+         */
+        addMapping(generatedLine: number, generatedCharacter: number, sourceIndex: number, sourceLine: number, sourceCharacter: number, nameIndex?: number): void;
+        /**
+         * Appends a source map.
+         */
+        appendSourceMap(generatedLine: number, generatedCharacter: number, sourceMap: RawSourceMap, sourceMapPath: string): void;
+        /**
+         * Gets the source map as a `RawSourceMap` object.
+         */
+        toJSON(): RawSourceMap;
+        /**
+         * Gets the string representation of the source map.
+         */
+        toString(): string;
+    }
+
+    /* @internal */
+    export interface DocumentPositionMapperHost {
+        getSourceFileLike(path: Path): SourceFileLike | undefined;
+        getCanonicalFileName(path: string): string;
+        log?(text: string): void;
+    }
+
+    /**
+     * Maps positions between source and generated files.
+     */
+    /* @internal */
+    export interface DocumentPositionMapper {
+        getSourcePosition(input: DocumentPosition): DocumentPosition;
+        getGeneratedPosition(input: DocumentPosition): DocumentPosition;
+    }
+
+    /* @internal */
+    export interface DocumentPosition {
+        fileName: string;
+        pos: number;
+    }
+
+    /* @internal */
     export interface EmitTextWriter extends SymbolWriter {
         write(s: string): void;
-        writeTextOfNode(text: string, node: Node): void;
+        writeTrailingSemicolon(text: string): void;
+        writeComment(text: string): void;
         getText(): string;
         rawWrite(s: string): void;
         writeLiteral(s: string): void;

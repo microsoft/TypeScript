@@ -504,7 +504,6 @@ declare namespace ts {
     type AsteriskToken = Token<SyntaxKind.AsteriskToken>;
     type EqualsGreaterThanToken = Token<SyntaxKind.EqualsGreaterThanToken>;
     type EndOfFileToken = Token<SyntaxKind.EndOfFileToken> & JSDocContainer;
-    type AtToken = Token<SyntaxKind.AtToken>;
     type ReadonlyToken = Token<SyntaxKind.ReadonlyKeyword>;
     type AwaitKeywordToken = Token<SyntaxKind.AwaitKeyword>;
     type PlusToken = Token<SyntaxKind.PlusToken>;
@@ -1551,7 +1550,6 @@ declare namespace ts {
     }
     interface JSDocTag extends Node {
         parent: JSDoc | JSDocTypeLiteral;
-        atToken: AtToken;
         tagName: Identifier;
         comment?: string;
     }
@@ -1850,17 +1848,6 @@ declare namespace ts {
         nameIndex?: number;
         /** .ts file (index into sources array) associated with this span */
         sourceIndex: number;
-    }
-    interface SourceMapData {
-        sourceMapFilePath: string;
-        jsSourceMappingURL: string;
-        sourceMapFile: string;
-        sourceMapSourceRoot: string;
-        sourceMapSources: string[];
-        sourceMapSourcesContent?: (string | null)[];
-        inputSourceFileNames: string[];
-        sourceMapNames?: string[];
-        sourceMapMappings: string;
     }
     /** Return code used by getEmitOutput function to indicate status of the function */
     enum ExitStatus {
@@ -2254,6 +2241,7 @@ declare namespace ts {
         JsxAttributes = 4096,
         MarkerType = 8192,
         JSLiteral = 16384,
+        FreshLiteral = 32768,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
@@ -2765,7 +2753,8 @@ declare namespace ts {
         Expression = 1,
         IdentifierName = 2,
         MappedTypeParameter = 3,
-        Unspecified = 4
+        Unspecified = 4,
+        EmbeddedStatement = 5
     }
     interface TransformationContext {
         /** Gets the compiler options supplied to the transformer. */
@@ -4690,6 +4679,9 @@ declare namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         writeFile?(fileName: string, content: string): void;
     }
+    type WithMetadata<T> = T & {
+        metadata?: unknown;
+    };
     interface LanguageService {
         cleanupSemanticCache(): void;
         getSyntacticDiagnostics(fileName: string): DiagnosticWithLocation[];
@@ -4707,7 +4699,7 @@ declare namespace ts {
         getSemanticClassifications(fileName: string, span: TextSpan): ClassifiedSpan[];
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo | undefined;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
         getCompletionEntryDetails(fileName: string, position: number, name: string, formatOptions: FormatCodeOptions | FormatCodeSettings | undefined, source: string | undefined, preferences: UserPreferences | undefined): CompletionEntryDetails | undefined;
         getCompletionEntrySymbol(fileName: string, position: number, name: string, source: string | undefined): Symbol | undefined;
         getQuickInfoAtPosition(fileName: string, position: number): QuickInfo | undefined;

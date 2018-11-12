@@ -925,6 +925,9 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeComment(s: string): void {
+            this.writer.writeComment(s);
+        }
         writeKeyword(s: string): void {
             this.writer.writeKeyword(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
@@ -935,6 +938,10 @@ namespace ts.textChanges {
         }
         writePunctuation(s: string): void {
             this.writer.writePunctuation(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeTrailingSemicolon(s: string): void {
+            this.writer.writeTrailingSemicolon(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
         writeParameter(s: string): void {
@@ -956,9 +963,6 @@ namespace ts.textChanges {
         writeSymbol(s: string, sym: Symbol): void {
             this.writer.writeSymbol(s, sym);
             this.setLastNonTriviaPosition(s, /*force*/ false);
-        }
-        writeTextOfNode(text: string, node: Node): void {
-            this.writer.writeTextOfNode(text, node);
         }
         writeLine(): void {
             this.writer.writeLine();
@@ -1001,9 +1005,26 @@ namespace ts.textChanges {
         }
     }
 
-    function getInsertionPositionAtSourceFileTop({ text }: SourceFile): number {
-        const shebang = getShebang(text);
+    function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
+        let lastPrologue: PrologueDirective | undefined;
+        for (const node of sourceFile.statements) {
+            if (isPrologueDirective(node)) {
+                lastPrologue = node;
+            }
+            else {
+                break;
+            }
+        }
+
         let position = 0;
+        const text = sourceFile.text;
+        if (lastPrologue) {
+            position = lastPrologue.end;
+            advancePastLineBreak();
+            return position;
+        }
+
+        const shebang = getShebang(text);
         if (shebang !== undefined) {
             position = shebang.length;
             advancePastLineBreak();

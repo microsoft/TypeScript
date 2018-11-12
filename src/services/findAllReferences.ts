@@ -368,6 +368,10 @@ namespace ts.FindAllReferences.Core {
             return !options.implementations && isStringLiteral(node) ? getReferencesForStringLiteral(node, sourceFiles, cancellationToken) : undefined;
         }
 
+        if (symbol.escapedName === InternalSymbolName.ExportEquals) {
+            return getReferencedSymbolsForModule(program, symbol.parent!, /*excludeImportTypeOfExportEquals*/ false, sourceFiles, sourceFilesSet);
+        }
+
         let moduleReferences: SymbolAndEntries[] = emptyArray;
         const moduleSourceFile = isModuleSymbol(symbol);
         let referencedNode: Node | undefined = node;
@@ -424,6 +428,22 @@ namespace ts.FindAllReferences.Core {
                 default:
                     // This may be merged with something.
                     Debug.fail("Expected a module symbol to be declared by a SourceFile or ModuleDeclaration.");
+            }
+        }
+
+        const exported = symbol.exports!.get(InternalSymbolName.ExportEquals);
+        if (exported) {
+            for (const decl of exported.declarations) {
+                const sourceFile = decl.getSourceFile();
+                if (sourceFilesSet.has(sourceFile.fileName)) {
+                    // At `module.exports = ...`, reference node is `module`
+                    const node = isBinaryExpression(decl) && isPropertyAccessExpression(decl.left)
+                        ? decl.left.expression
+                        : isExportAssignment(decl)
+                        ? Debug.assertDefined(findChildOfKind(decl, SyntaxKind.ExportKeyword, sourceFile))
+                        : getNameOfDeclaration(decl) || decl;
+                    references.push(nodeEntry(node));
+                }
             }
         }
 
@@ -839,7 +859,9 @@ namespace ts.FindAllReferences.Core {
     }
 
     export function eachSymbolReferenceInFile<T>(definition: Identifier, checker: TypeChecker, sourceFile: SourceFile, cb: (token: Identifier) => T): T | undefined {
-        const symbol = checker.getSymbolAtLocation(definition);
+        const symbol = isParameterPropertyDeclaration(definition.parent)
+            ? first(checker.getSymbolsOfParameterPropertyDeclaration(definition.parent, definition.text))
+            : checker.getSymbolAtLocation(definition);
         if (!symbol) return undefined;
         for (const token of getPossibleSymbolReferenceNodes(sourceFile, symbol.name)) {
             if (!isIdentifier(token) || token === definition || token.escapedText !== definition.escapedText) continue;

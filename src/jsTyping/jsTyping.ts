@@ -24,13 +24,11 @@ namespace ts.JsTyping {
         version: Version;
     }
 
-    /* @internal */
     export function isTypingUpToDate(cachedTyping: CachedTyping, availableTypingVersions: MapLike<string>) {
         const availableVersion = new Version(getProperty(availableTypingVersions, `ts${versionMajorMinor}`) || getProperty(availableTypingVersions, "latest")!);
         return availableVersion.compareTo(cachedTyping.version) <= 0;
     }
 
-    /* @internal */
     export const nodeCoreModuleList: ReadonlyArray<string> = [
         "assert",
         "async_hooks",
@@ -70,7 +68,6 @@ namespace ts.JsTyping {
         "zlib"
     ];
 
-    /* @internal */
     export const nodeCoreModules = arrayToSet(nodeCoreModuleList);
 
     /**

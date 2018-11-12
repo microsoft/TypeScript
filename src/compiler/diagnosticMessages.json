@@ -2509,13 +2509,17 @@
         "category": "Error",
         "code": 2737
     },
+    "An outer value of 'this' is shadowed by this container.": {
+        "category": "Message",
+        "code": 2738
+    },
     "No overload expects {0} type arguments, but an overload does exist that expects {1} type arguments.": {
         "category": "Error",
-        "code": 2738
+        "code": 2739
     },
     "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
         "category": "Error",
-        "code": 2739
+        "code": 2740
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -4760,5 +4764,13 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Add 'unknown' conversion for non-overlapping types": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Add 'unknown' to all conversions of non-overlapping types": {
+        "category": "Message",
+        "code": 95070
     }
 }
