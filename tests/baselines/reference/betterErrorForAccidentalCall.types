@@ -1,4 +1,4 @@
-=== tests/cases/compiler/betterErrorForAccidentallyCallingTypeAssertionExpressions.ts ===
+=== tests/cases/compiler/betterErrorForAccidentalCall.ts ===
 declare function foo(): string;
 >foo : () => string
 
@@ -34,22 +34,23 @@ foo()
 >1 : 1
 >toString : any
 
-foo()   
->foo()       (1 as number).toString() : any
->foo()       (1 as number).toString : any
->foo()       (1 as number) : any
+foo()
+>foo()    (1 + 2).toString() : any
+>foo()    (1 + 2).toString : any
+>foo()    (1 + 2) : any
 >foo() : string
 >foo : () => string
 
-    (1 as number).toString();
->1 as number : number
+    (1 + 2).toString();
+>1 + 2 : number
 >1 : 1
+>2 : 2
 >toString : any
 
-foo()   
->foo()       (<number>1).toString() : any
->foo()       (<number>1).toString : any
->foo()       (<number>1) : any
+foo()
+>foo()    (<number>1).toString() : any
+>foo()    (<number>1).toString : any
+>foo()    (<number>1) : any
 >foo() : string
 >foo : () => string
 
