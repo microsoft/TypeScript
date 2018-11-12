@@ -9,7 +9,7 @@ namespace ts {
 ;`;
         const withTrailing = `;/* comment */
 // another one
-`
+`;
         it("skips shebang", () => {
             const result = getLeadingCommentRanges(withShebang, 0);
             assert.isDefined(result);
