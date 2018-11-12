@@ -7663,8 +7663,10 @@ namespace ts {
                 // Map an unsatisfied type parameter with a default type.
                 // If a type parameter does not have a default type, or if the default type
                 // is a forward reference, the empty object type is used.
+                const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                const circularityMapper = createTypeMapper(typeParameters!, map(typeParameters!, () => baseDefaultType));
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    result[i] = getConstraintFromTypeParameter(typeParameters![i]) || getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                    result[i] = instantiateType(getConstraintFromTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
                 }
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
                     const mapper = createTypeMapper(typeParameters!, result);
@@ -7672,7 +7674,7 @@ namespace ts {
                     if (isJavaScriptImplicitAny && defaultType && isTypeIdenticalTo(defaultType, emptyObjectType)) {
                         defaultType = anyType;
                     }
-                    result[i] = defaultType ? instantiateType(defaultType, mapper) : getDefaultTypeArgumentType(isJavaScriptImplicitAny);
+                    result[i] = defaultType ? instantiateType(defaultType, mapper) : baseDefaultType;
                 }
                 result.length = typeParameters!.length;
                 return result;
