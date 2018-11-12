@@ -408,7 +408,7 @@ namespace ts.projectSystem {
     }
 
     export function checkNumberOfConfiguredProjects(projectService: server.ProjectService, expected: number) {
-        assert.equal(projectService.configuredProjects.size, expected, `expected ${expected} configured project(s)`);
+        assert.equal(projectService.configuredProjects.size, expected, `expected ${expected} configured project(s): ${JSON.stringify(arrayFrom(projectService.configuredProjects.keys()))}`);
     }
 
     function checkNumberOfExternalProjects(projectService: server.ProjectService, expected: number) {
@@ -10135,7 +10135,8 @@ declare class TestLib {
 
             openFilesForSession([userTs], session);
             const service = session.getProjectService();
-            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 1 } : { inferredProjects: 1 });
+            // If config file then userConfig project and bConfig project since it is referenced
+            checkNumberOfProjects(service, addUserTsConfig ? { configuredProjects: 2 } : { inferredProjects: 1 });
             return session;
         }
 
@@ -10215,7 +10216,7 @@ declare class TestLib {
                 textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
             verifyUserTsConfigProject(session);
 
             // Navigate to the definition
@@ -10223,7 +10224,7 @@ declare class TestLib {
             openFilesForSession([aTs], session);
 
             // UserTs configured project should be alive
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 3 });
             verifyUserTsConfigProject(session);
             verifyATsConfigProject(session);
 
@@ -10398,7 +10399,7 @@ declare class TestLib {
             const session = createSession(createServerHost([aTs, aTsconfig, bTs, bTsconfig, aDts, aDtsMap]));
             checkDeclarationFiles(aTs, session, [aDtsMap, aDts]);
             openFilesForSession([bTs], session);
-            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
+            checkNumberOfProjects(session.getProjectService(), { configuredProjects: 2 }); // configured project of b is alive since a references b
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(bTs, "f()"));
 
@@ -10694,6 +10695,49 @@ declare class TestLib {
                 ]);
                 checkNumberOfProjects(service, { configuredProjects: 4 });
                 assert.isFalse(solutionProject.isInitialLoadPending());
+            });
+
+            it("ancestor and project ref management", () => {
+                const tempFile: File = {
+                    path: `/user/username/projects/temp/temp.ts`,
+                    content: "let x = 10"
+                };
+                const host = createHost(files.concat([tempFile]), [containerConfig.path]);
+                const session = createSession(host);
+                openFilesForSession([containerCompositeExec[1]], session);
+                const service = session.getProjectService();
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 2, inferredProjects: 1 });
+                assert.isTrue(solutionProject.isInitialLoadPending());
+
+                const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
+                session.executeCommandSeq<protocol.RenameRequest>({
+                    command: protocol.CommandTypes.Rename,
+                    arguments: {
+                        file: containerCompositeExec[1].path,
+                        ...locationOfMyConst
+                    }
+                });
+
+                // Ref projects are loaded
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
+
+                // Open temp file and verify all projects alive
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 4, inferredProjects: 1 });
+
+                // Close all files and open temp file, only inferred project should be alive
+                service.closeClientFile(containerCompositeExec[1].path);
+                service.closeClientFile(tempFile.path);
+                openFilesForSession([tempFile], session);
+                checkNumberOfProjects(service, { inferredProjects: 1 });
             });
         });
 

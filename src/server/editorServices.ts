@@ -2550,7 +2550,6 @@ namespace ts.server {
                     // Load the project
                     project.updateGraph();
                     // We want to also load the referenced projects
-                    // TODO:: Save them when project stays alive but at lower priority
                     project.forEachProjectReference(ref => {
                         if (ref) {
                             const configFileName = toNormalizedPath(ref.sourceFile.fileName);
@@ -2566,37 +2565,41 @@ namespace ts.server {
         private removeOrphanConfiguredProjects() {
             const toRemoveConfiguredProjects = cloneMap(this.configuredProjects);
 
+            const markOriginalProjectsAsUsed = (project: Project) => {
+                if (!project.isOrphan() && project.originalConfiguredProjects) {
+                    project.originalConfiguredProjects.forEach((_value, configuredProjectPath) => markConfiguredProjectAsUsed(this.configuredProjects.get(configuredProjectPath)));
+                }
+            };
+
             // Do not remove configured projects that are used as original projects of other
             this.inferredProjects.forEach(markOriginalProjectsAsUsed);
             this.externalProjects.forEach(markOriginalProjectsAsUsed);
             this.configuredProjects.forEach(project => {
                 // If project has open ref (there are more than zero references from external project/open file), keep it alive as well as any project it references
                 if (project.hasOpenRef()) {
-                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
-                    markOriginalProjectsAsUsed(project);
+                    markConfiguredProjectAsUsed(project);
                 }
-                else {
-                    project.forEachProjectReference(
-                        resolvedRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, resolvedRef && this.configuredProjects.get(resolvedRef.sourceFile.path)),
-                        projectRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, this.configuredProjects.get(this.toPath(projectRef.path))),
-                        potentialProjectRef => markProjectAsUsedIfReferencedConfigWithOpenRef(project, this.configuredProjects.get(potentialProjectRef))
-                    );
+                else if (toRemoveConfiguredProjects.has(project.canonicalConfigFilePath)) {
+                    project.forEachReferencedConfiguredProject(markProjectAsUsedIfReferencedConfigWithOpenRef);
                 }
             });
 
             // Remove all the non marked projects
             toRemoveConfiguredProjects.forEach(project => this.removeProject(project));
 
-            function markOriginalProjectsAsUsed(project: Project) {
-                if (!project.isOrphan() && project.originalConfiguredProjects) {
-                    project.originalConfiguredProjects.forEach((_value, configuredProjectPath) => toRemoveConfiguredProjects.delete(configuredProjectPath));
+            function markProjectAsUsedIfReferencedConfigWithOpenRef(refProject: ConfiguredProject | undefined, project: ConfiguredProject) {
+                if (refProject && refProject.hasOpenRef()) {
+                    markConfiguredProjectAsUsed(project);
+                    return true;
                 }
             }
 
-            function markProjectAsUsedIfReferencedConfigWithOpenRef(project: ConfiguredProject, refProject: ConfiguredProject | undefined) {
-                if (refProject && refProject.hasOpenRef()) {
-                    toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath);
-                    return true;
+            function markConfiguredProjectAsUsed(project: ConfiguredProject | undefined) {
+                if (project) {
+                    if (toRemoveConfiguredProjects.delete(project.canonicalConfigFilePath)) {
+                        markOriginalProjectsAsUsed(project);
+                        project.forEachReferencedConfiguredProject(markConfiguredProjectAsUsed);
+                    }
                 }
             }
         }

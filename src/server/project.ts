@@ -1465,6 +1465,15 @@ namespace ts.server {
         }
 
         /*@internal*/
+        forEachReferencedConfiguredProject<T>(cb: (refProject: ConfiguredProject | undefined, thisProject: ConfiguredProject) => T | undefined) {
+            return this.forEachProjectReference(
+                resolvedRef => cb(resolvedRef && this.projectService.configuredProjects.get(resolvedRef.sourceFile.path), this),
+                projectRef => cb(this.projectService.configuredProjects.get(this.toPath(projectRef.path)), this),
+                potentialProjectRef => cb(this.projectService.configuredProjects.get(potentialProjectRef), this)
+            );
+        }
+
+        /*@internal*/
         enablePluginsWithOptions(options: CompilerOptions, pluginConfigOverrides: Map<any> | undefined) {
             const host = this.projectService.host;
 
