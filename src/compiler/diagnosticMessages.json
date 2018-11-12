@@ -2513,9 +2513,21 @@
         "category": "Message",
         "code": 2738
     },
-    "The inferred type of '{0}' requires a reference to a module at '{1}' to name, which would likely break on type redistribution. A type annotation is necessary.": {
+    "Type '{0}' is missing the following properties from type '{1}': {2}": {
         "category": "Error",
         "code": 2739
+    },
+    "Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.": {
+        "category": "Error",
+        "code": 2740
+    },
+    "Property '{0}' is missing in type '{1}' but required in type '{2}'.": {
+        "category": "Error",
+        "code": 2741
+    },
+    "The inferred type of '{0}' requires a reference to a module at '{1}' to name, which would likely break on type redistribution. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2742
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {

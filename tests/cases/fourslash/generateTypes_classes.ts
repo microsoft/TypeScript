@@ -111,4 +111,39 @@ declare class example {
 `,
 },
 
+{
+    // No duplicate instance members
+    value: (() => {
+        class C {
+            constructor() {
+                (this as any).x = 0;
+                (this as any).x = 1;
+                (this as any).m = 0;
+            }
+            m() {}
+        }
+        return C;
+    })(),
+    output:
+`export = example;
+declare class example {
+    x: any;
+    m(): void;
+}
+`,
+},
+
+{
+    // nontrivial prototype marks something as an instance
+    value: (() => {
+        const obj = Object.create({});
+        obj.m = function() { this.x = 0; }
+        return { obj };
+    })(),
+    output:
+`export const obj: {
+    m: Function;
+};
+`,
+},
 );

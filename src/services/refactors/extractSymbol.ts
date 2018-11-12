@@ -677,7 +677,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
-                return `method '${scope.name.getText()}`;
+                return `method '${scope.name.getText()}'`;
             case SyntaxKind.GetAccessor:
                 return `'get ${scope.name.getText()}'`;
             case SyntaxKind.SetAccessor:

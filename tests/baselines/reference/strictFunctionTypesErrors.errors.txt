@@ -75,8 +75,7 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(83,1): error TS2322: Type 'Fun
 tests/cases/compiler/strictFunctionTypesErrors.ts(84,1): error TS2322: Type 'Func<string, Func<string, void>>' is not assignable to type 'Func<string, Func<Object, void>>'.
   Type 'Func<string, void>' is not assignable to type 'Func<Object, void>'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(111,1): error TS2322: Type 'Comparer2<Dog>' is not assignable to type 'Comparer2<Animal>'.
-  Type 'Animal' is not assignable to type 'Dog'.
-    Property 'dog' is missing in type 'Animal'.
+  Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
 tests/cases/compiler/strictFunctionTypesErrors.ts(126,1): error TS2322: Type 'Crate<Dog>' is not assignable to type 'Crate<Animal>'.
   Types of property 'onSetItem' are incompatible.
     Type '(item: Dog) => void' is not assignable to type '(item: Animal) => void'.
@@ -320,8 +319,8 @@ tests/cases/compiler/strictFunctionTypesErrors.ts(155,5): error TS2322: Type '(c
     animalComparer2 = dogComparer2;  // Error
     ~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'Comparer2<Dog>' is not assignable to type 'Comparer2<Animal>'.
-!!! error TS2322:   Type 'Animal' is not assignable to type 'Dog'.
-!!! error TS2322:     Property 'dog' is missing in type 'Animal'.
+!!! error TS2322:   Property 'dog' is missing in type 'Animal' but required in type 'Dog'.
+!!! related TS2728 tests/cases/compiler/strictFunctionTypesErrors.ts:91:32: 'dog' is declared here.
     dogComparer2 = animalComparer2;  // Ok
     
     // Crate<T> is invariant in --strictFunctionTypes mode
