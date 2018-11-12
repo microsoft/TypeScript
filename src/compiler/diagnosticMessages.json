@@ -3967,6 +3967,10 @@
         "category": "Error",
         "code": 7013
     },
+    "Function type, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7014
+    },
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015

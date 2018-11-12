@@ -13492,6 +13492,9 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
                     break;
+                case SyntaxKind.JSDocFunctionType:
+                    error(declaration, Diagnostics.Function_type_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
+                    return;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -24356,6 +24359,13 @@ namespace ts {
             }
         }
 
+        function checkJSDocFunctionType(node: JSDocFunctionType): void {
+            if (produceDiagnostics && !node.type && !isJSDocConstructSignature(node)) {
+                reportImplicitAny(node, anyType);
+            }
+            checkSignatureDeclaration(node);
+        }
+
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -27359,7 +27369,7 @@ namespace ts {
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
-                    checkSignatureDeclaration(node as JSDocFunctionType);
+                    checkJSDocFunctionType(node as JSDocFunctionType);
                     // falls through
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
