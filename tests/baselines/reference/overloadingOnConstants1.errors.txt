@@ -1,11 +1,7 @@
-tests/cases/compiler/overloadingOnConstants1.ts(22,5): error TS2322: Type 'Base' is not assignable to type 'Derived1'.
-  Property 'bar' is missing in type 'Base'.
-tests/cases/compiler/overloadingOnConstants1.ts(23,5): error TS2322: Type 'Derived1' is not assignable to type 'Derived3'.
-  Property 'biz' is missing in type 'Derived1'.
-tests/cases/compiler/overloadingOnConstants1.ts(24,5): error TS2322: Type 'Derived2' is not assignable to type 'Derived1'.
-  Property 'bar' is missing in type 'Derived2'.
-tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2322: Type 'Derived3' is not assignable to type 'Derived1'.
-  Property 'bar' is missing in type 'Derived3'.
+tests/cases/compiler/overloadingOnConstants1.ts(22,5): error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
+tests/cases/compiler/overloadingOnConstants1.ts(23,5): error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
+tests/cases/compiler/overloadingOnConstants1.ts(24,5): error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.
+tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2741: Property 'bar' is missing in type 'Derived3' but required in type 'Derived1'.
 
 
 ==== tests/cases/compiler/overloadingOnConstants1.ts (4 errors) ====
@@ -32,17 +28,17 @@ tests/cases/compiler/overloadingOnConstants1.ts(25,5): error TS2322: Type 'Deriv
     // these are errors
     var htmlElement2: Derived1 = d2.createElement("yo")
         ~~~~~~~~~~~~
-!!! error TS2322: Type 'Base' is not assignable to type 'Derived1'.
-!!! error TS2322:   Property 'bar' is missing in type 'Base'.
+!!! error TS2741: Property 'bar' is missing in type 'Base' but required in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlCanvasElement2: Derived3 = d2.createElement("canvas");
         ~~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Derived1' is not assignable to type 'Derived3'.
-!!! error TS2322:   Property 'biz' is missing in type 'Derived1'.
+!!! error TS2741: Property 'biz' is missing in type 'Derived1' but required in type 'Derived3'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:4:31: 'biz' is declared here.
     var htmlDivElement2: Derived1 = d2.createElement("div");
         ~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Derived2' is not assignable to type 'Derived1'.
-!!! error TS2322:   Property 'bar' is missing in type 'Derived2'.
+!!! error TS2741: Property 'bar' is missing in type 'Derived2' but required in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.
     var htmlSpanElement2: Derived1 = d2.createElement("span");
         ~~~~~~~~~~~~~~~~
-!!! error TS2322: Type 'Derived3' is not assignable to type 'Derived1'.
-!!! error TS2322:   Property 'bar' is missing in type 'Derived3'.
+!!! error TS2741: Property 'bar' is missing in type 'Derived3' but required in type 'Derived1'.
+!!! related TS2728 tests/cases/compiler/overloadingOnConstants1.ts:2:31: 'bar' is declared here.

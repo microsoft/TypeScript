@@ -2513,6 +2513,18 @@
         "category": "Message",
         "code": 2738
     },
+    "Type '{0}' is missing the following properties from type '{1}': {2}": {
+        "category": "Error",
+        "code": 2739
+    },
+    "Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.": {
+        "category": "Error",
+        "code": 2740
+    },
+    "Property '{0}' is missing in type '{1}' but required in type '{2}'.": {
+        "category": "Error",
+        "code": 2741
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -1,11 +1,9 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts(24,5): error TS2322: Type 'T' is not assignable to type 'S'.
   Types of property 'foo' are incompatible.
-    Type 'Derived2' is not assignable to type 'Derived'.
-      Property 'bar' is missing in type 'Derived2'.
+    Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts(25,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Types of property 'foo' are incompatible.
-    Type 'Derived' is not assignable to type 'Derived2'.
-      Property 'baz' is missing in type 'Derived'.
+    Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts(29,5): error TS2322: Type 'T2' is not assignable to type 'S2'.
   Types of property 'foo' are incompatible.
     Type 'Derived2' is not assignable to type 'Derived'.
@@ -41,8 +39,7 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     Type 'Derived2' is not assignable to type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts(70,5): error TS2322: Type 'S' is not assignable to type 'T'.
   Types of property 'foo' are incompatible.
-    Type 'Base' is not assignable to type 'Derived2'.
-      Property 'baz' is missing in type 'Base'.
+    Property 'baz' is missing in type 'Base' but required in type 'Derived2'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts(75,5): error TS2322: Type 'S2' is not assignable to type 'T2'.
   Types of property 'foo' are incompatible.
     Type 'Base' is not assignable to type 'Derived2'.
@@ -82,14 +79,14 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~
 !!! error TS2322: Type 'T' is not assignable to type 'S'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type 'Derived2' is not assignable to type 'Derived'.
-!!! error TS2322:       Property 'bar' is missing in type 'Derived2'.
+!!! error TS2322:     Property 'bar' is missing in type 'Derived2' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:5:34: 'bar' is declared here.
         t = s; // error
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type 'Derived' is not assignable to type 'Derived2'.
-!!! error TS2322:       Property 'baz' is missing in type 'Derived'.
+!!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:6:35: 'baz' is declared here.
         s = s2; // ok
         s = a2; // ok
     
@@ -182,8 +179,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
         ~
 !!! error TS2322: Type 'S' is not assignable to type 'T'.
 !!! error TS2322:   Types of property 'foo' are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived2'.
-!!! error TS2322:       Property 'baz' is missing in type 'Base'.
+!!! error TS2322:     Property 'baz' is missing in type 'Base' but required in type 'Derived2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers4.ts:51:35: 'baz' is declared here.
         s = s2; // ok
         s = a2; // ok
     

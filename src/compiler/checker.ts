@@ -434,6 +434,8 @@ namespace ts {
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes;
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
@@ -11407,6 +11409,7 @@ namespace ts {
         ): boolean {
 
             let errorInfo: DiagnosticMessageChain | undefined;
+            let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
             let sourceStack: Type[];
             let targetStack: Type[];
@@ -11414,6 +11417,7 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
+            let suppressNextError = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -11444,6 +11448,9 @@ namespace ts {
                 }
 
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                if (relatedInfo) {
+                    addRelatedInfo(diag, ...relatedInfo);
+                }
                 if (errorOutputContainer) {
                     errorOutputContainer.error = diag;
                 }
@@ -11451,9 +11458,19 @@ namespace ts {
             }
             return result !== Ternary.False;
 
-            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
+            function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
+                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+            }
+
+            function associateRelatedInfo(info: DiagnosticRelatedInformation) {
+                Debug.assert(!!errorInfo);
+                if (!relatedInfo) {
+                    relatedInfo = [info];
+                }
+                else {
+                    relatedInfo.push(info);
+                }
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
@@ -11661,13 +11678,15 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
+                    const maybeSuppress = suppressNextError;
+                    suppressNextError = false;
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                    else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
                         const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
@@ -11676,6 +11695,10 @@ namespace ts {
                             // do not report top error
                             return result;
                         }
+                    }
+                    if (!headMessage && maybeSuppress) {
+                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
+                        return result;
                     }
                     reportRelationError(headMessage, source, target);
                 }
@@ -12310,7 +12333,24 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
+                        if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
+                            suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
+                        }
+                        if (props.length === 1) {
+                            const propName = symbolToString(unmatchedProperty);
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, typeToString(source), typeToString(target));
+                            if (length(unmatchedProperty.declarations)) {
+                                associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                            }
+                        }
+                        else if (props.length > 5) { // arbitrary cutoff for too-long list form
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        }
+                        else {
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                        }
                     }
                     return Ternary.False;
                 }
@@ -13701,17 +13741,20 @@ namespace ts {
             return getTypeFromInference(inference);
         }
 
-        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean) {
             const properties = target.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>target) : getPropertiesOfObjectType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (!sourceProp) {
-                        return targetProp;
+                        yield targetProp;
                     }
                 }
             }
-            return undefined;
+        }
+
+        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean): Symbol | undefined {
+            return getUnmatchedProperties(source, target, requireOptionalProperties).next().value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -17914,7 +17957,7 @@ namespace ts {
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
-            let spread: Type = emptyObjectType;
+            let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
             let explicitlySpecifyChildrenAttribute = false;
@@ -17998,10 +18041,10 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            if (typeToIntersect && spread !== emptyObjectType) {
+            if (typeToIntersect && spread !== emptyJsxObjectType) {
                 return getIntersectionType([typeToIntersect, spread]);
             }
-            return typeToIntersect || (spread === emptyObjectType ? createJsxAttributesType() : spread);
+            return typeToIntersect || (spread === emptyJsxObjectType ? createJsxAttributesType() : spread);
 
             /**
              * Create anonymous type from given attributes symbol table.
