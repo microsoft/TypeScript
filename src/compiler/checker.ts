@@ -3199,7 +3199,8 @@ namespace ts {
                         getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
                     } : undefined },
                     encounteredError: false,
-                    visitedSymbols: undefined,
+                    visitedTypes: undefined,
+                    symbolDepth: undefined,
                     inferTypeParameters: undefined,
                     approximateLength: 0
                 };
@@ -3430,6 +3431,7 @@ namespace ts {
                 }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
+                    const typeId = "" + type.id;
                     const symbol = type.symbol;
                     let id: string;
                     if (symbol) {
@@ -3446,7 +3448,7 @@ namespace ts {
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
-                        else if (context.visitedSymbols && context.visitedSymbols.has(id)) {
+                        else if (context.visitedTypes && context.visitedTypes.has(typeId)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
@@ -3455,19 +3457,35 @@ namespace ts {
                             }
                             else {
                                 context.approximateLength += 3;
+                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                                }
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                             }
                         }
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.visitedSymbols) {
-                                context.visitedSymbols = createMap<true>();
+                            if (!context.visitedTypes) {
+                                context.visitedTypes = createMap<true>();
+                            }
+                            if (!context.symbolDepth) {
+                                context.symbolDepth = createMap<number>();
                             }
 
-                            context.visitedSymbols.set(id, true);
+                            const depth = context.symbolDepth.get(id) || 0;
+                            if (depth > 10) {
+                                context.approximateLength += 3;
+                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                                }
+                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                            }
+                            context.symbolDepth.set(id, depth + 1);
+                            context.visitedTypes.set(typeId, true);
                             const result = createTypeNodeFromObjectType(type);
-                            context.visitedSymbols.delete(id);
+                            context.visitedTypes.delete(typeId);
+                            context.symbolDepth.set(id, depth);
                             return result;
                         }
                     }
@@ -3484,7 +3502,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedSymbols && context.visitedSymbols.has(id))) && // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedTypes && context.visitedTypes.has(typeId))) && // it is type of the symbol uses itself recursively
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration!)); // TODO: GH#18217 // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
@@ -4308,7 +4326,8 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            visitedSymbols: Map<true> | undefined;
+            visitedTypes: Map<true> | undefined;
+            symbolDepth: Map<number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
