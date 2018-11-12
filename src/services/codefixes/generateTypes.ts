@@ -169,7 +169,7 @@ namespace ts {
                 isPropertyAccessExpression(node.left) && node.left.expression.kind === SyntaxKind.ThisKeyword) {
                 const name = node.left.name.text;
                 if (!isJsPrivate(name)) {
-                    members.set(name, createProperty(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*questionOrExclamationToken*/ undefined, anyType(), /*initializer*/ undefined));
+                    getOrUpdate(members, name, () => createProperty(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*questionOrExclamationToken*/ undefined, anyType(), /*initializer*/ undefined));
                 }
             }
         });
