@@ -1,4 +1,4 @@
-=== tests/cases/compiler/warnExperimentalBigIntLiteral.ts ===
+=== tests/cases/compiler/bigIntWithTargetES3.ts ===
 const normalNumber = 123; // should not error
 >normalNumber : 123
 >123 : 123
@@ -23,5 +23,4 @@ const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should err
 >0o444n * 0x7fn : bigint
 >0o444n : 292n
 >0x7fn : 127n
-
 

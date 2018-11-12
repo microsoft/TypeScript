@@ -1,4 +1,3 @@
-// @experimentalBigInt: true
 // @target: esnext
 // @declaration: true
 
