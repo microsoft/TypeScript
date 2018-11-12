@@ -46,7 +46,7 @@ test.rangesByText().forEach((ranges, text) => {
     switch (text) {
         case "default":
             for (const range of ranges) {
-                goTo.rangeStart(defaultC);
+                goTo.rangeStart(range);
                 verify.renameInfoFailed();
             }
             break;
