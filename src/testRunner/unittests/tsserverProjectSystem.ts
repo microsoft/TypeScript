@@ -10672,7 +10672,9 @@ declare class TestLib {
                 const session = createSession(host);
                 openFilesForSession([containerCompositeExec[1]], session);
                 const service = session.getProjectService();
-                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkNumberOfProjects(service, { configuredProjects: 2 }); // compositeExec and solution
+                const solutionProject = service.configuredProjects.get(containerConfig.path)!;
+                assert.isTrue(solutionProject.isInitialLoadPending());
                 const locationOfMyConst = protocolLocationFromSubstring(containerCompositeExec[1].content, "myConst");
                 const response = session.executeCommandSeq<protocol.RenameRequest>({
                     command: protocol.CommandTypes.Rename,
@@ -10682,13 +10684,16 @@ declare class TestLib {
                     }
                 }).response as protocol.RenameResponseBody;
 
-
                 const myConstLen = "myConst".length;
                 const locationOfMyConstInLib = protocolLocationFromSubstring(containerLib[1].content, "myConst");
+                const locationOfMyConstInExec = protocolLocationFromSubstring(containerExec[1].content, "myConst");
                 assert.deepEqual(response.locs, [
                     { file: containerCompositeExec[1].path, locs: [{ start: locationOfMyConst, end: { line: locationOfMyConst.line, offset: locationOfMyConst.offset + myConstLen } }] },
+                    { file: containerExec[1].path, locs: [{ start: locationOfMyConstInExec, end: { line: locationOfMyConstInExec.line, offset: locationOfMyConstInExec.offset + myConstLen } }] },
                     { file: containerLib[1].path, locs: [{ start: locationOfMyConstInLib, end: { line: locationOfMyConstInLib.line, offset: locationOfMyConstInLib.offset + myConstLen } }] }
                 ]);
+                checkNumberOfProjects(service, { configuredProjects: 4 });
+                assert.isFalse(solutionProject.isInitialLoadPending());
             });
         });
 
