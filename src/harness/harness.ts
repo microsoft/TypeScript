@@ -490,7 +490,7 @@ namespace Harness {
         getExecutingFilePath(): string;
         getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
@@ -1159,7 +1159,7 @@ namespace Harness {
                 }
                 // If not a primitive, the possible types are specified in what is effectively a map of options.
                 case "list":
-                    return ts.parseListTypeOption(<ts.CommandLineOptionOfListType>option, value, errors);
+                    return ts.parseListTypeOption(option, value, errors);
                 default:
                     return ts.parseCustomTypeOption(<ts.CommandLineOptionOfCustomType>option, value, errors);
             }
@@ -1324,6 +1324,9 @@ namespace Harness {
             for (let {done, value} = gen.next(); !done; { done, value } = gen.next()) {
                 const [, content] = value;
                 outputLines += content;
+            }
+            if (pretty) {
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
             }
             return outputLines;
         }
@@ -1643,6 +1646,7 @@ namespace Harness {
                 else {
                     sourceMapCode = "";
                     result.maps.forEach(sourceMap => {
+                        if (sourceMapCode) sourceMapCode += "\r\n";
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     });
                 }
@@ -1668,6 +1672,9 @@ namespace Harness {
 
             let jsCode = "";
             result.js.forEach(file => {
+                if (jsCode.length && jsCode.charCodeAt(jsCode.length - 1) !== ts.CharacterCodes.lineFeed) {
+                    jsCode += "\r\n";
+                }
                 jsCode += fileOutput(file, harnessSettings);
             });
 

@@ -15,6 +15,7 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments,
         var r = new m3d(); // error
                 ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:3:37: An argument for 'foo' was not provided.
     }
     
     module T2 {
@@ -23,6 +24,7 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments,
         var r = new m3d(); // error
                 ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:8:37: An argument for 'foo' was not provided.
     }
     
     module T3 {
@@ -56,8 +58,10 @@ tests/cases/compiler/cloduleTest2.ts(36,10): error TS2554: Expected 1 arguments,
     var r = new m3d(); // error
             ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:32:33: An argument for 'foo' was not provided.
     
     declare class m4d extends m3d { }
     var r2 = new m4d(); // error
              ~~~~~~~~~
 !!! error TS2554: Expected 1 arguments, but got 0.
+!!! related TS6210 tests/cases/compiler/cloduleTest2.ts:32:33: An argument for 'foo' was not provided.

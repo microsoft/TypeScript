@@ -1,8 +1,10 @@
-//// [errorForConflictingExportEqualsValue.ts]
+//// [a.ts]
 export var x;
-export = {};
+export = x;
+import("./a");
 
 
-//// [errorForConflictingExportEqualsValue.js]
+//// [a.js]
 "use strict";
-module.exports = {};
+Promise.resolve().then(function () { return require("./a"); });
+module.exports = exports.x;

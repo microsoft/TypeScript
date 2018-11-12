@@ -34,10 +34,10 @@ Multimap.prototype = {
 >key : K
 
         return this._map[key + ''];
->this._map[key + ''] : any
->this._map : any
->this : { get(key: K): V; }
->_map : any
+>this._map[key + ''] : V
+>this._map : { [x: string]: V; }
+>this : Multimap & { get(key: K): V; }
+>_map : { [x: string]: V; }
 >key + '' : string
 >key : K
 >'' : ""
@@ -81,10 +81,10 @@ Multimap2.prototype = {
 >key : K
 
         return this._map[key + ''];
->this._map[key + ''] : any
->this._map : any
->this : { get: (key: K) => V; }
->_map : any
+>this._map[key + ''] : V
+>this._map : { [x: string]: V; }
+>this : Multimap2 & { get: (key: K) => V; }
+>_map : { [x: string]: V; }
 >key + '' : string
 >key : K
 >'' : ""
@@ -136,10 +136,10 @@ Ns.Multimap3.prototype = {
 >key : K
 
         return this._map[key + ''];
->this._map[key + ''] : any
->this._map : any
->this : { get(key: K): V; }
->_map : any
+>this._map[key + ''] : V
+>this._map : { [x: string]: V; }
+>this : Multimap3 & { get(key: K): V; }
+>_map : { [x: string]: V; }
 >key + '' : string
 >key : K
 >'' : ""

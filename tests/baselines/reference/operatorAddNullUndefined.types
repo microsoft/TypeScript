@@ -1,7 +1,7 @@
 === tests/cases/compiler/operatorAddNullUndefined.ts ===
 enum E { x }
 >E : E
->x : E
+>x : E.x
 
 var x1 = null + null;
 >x1 : any

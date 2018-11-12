@@ -6,10 +6,10 @@ module m1 {
 >e : e
 
         m1, 
->m1 : e
+>m1 : e.m1
 
         m2 = m1
->m2 : e
+>m2 : e.m1
 >m1 : e
     }
 }

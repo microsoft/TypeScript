@@ -34,41 +34,19 @@
 ////const z = <div =/*13*/ />; // no globals in jsx attribute with syntax error
 ////const x = `/*14*/ ${/*15*/}`; // globals only in template expression
 ////var user = </*16*/User name=/*17*/{ /*18*/window.isLoggedIn ? window.name : '/*19*/'} />; // globals only in JSX expression (but not in JSX expression strings)
-goTo.marker("1");
-verify.completionListIsGlobal(false);
-goTo.marker("2");
-verify.completionListIsGlobal(false);
-goTo.marker("3");
-verify.completionListIsGlobal(false);
-goTo.marker("4");
-verify.completionListIsGlobal(false);
-goTo.marker("5");
-verify.completionListIsGlobal(true);
-goTo.marker("6");
-verify.completionListIsGlobal(false);
-goTo.marker("7");
-verify.completionListIsGlobal(true);
-goTo.marker("8");
-verify.completionListIsGlobal(false);
-goTo.marker("9");
-verify.completionListIsGlobal(false);
-goTo.marker("10");
-verify.completionListIsGlobal(false);
-goTo.marker("11");
-verify.completionListIsGlobal(true);
-goTo.marker("12");
-verify.completionListIsGlobal(false);
-goTo.marker("13");
-verify.completionListIsGlobal(false);
-goTo.marker("14");
-verify.completionListIsGlobal(false);
-goTo.marker("15");
-verify.completionListIsGlobal(true);
-goTo.marker("16");
-verify.completionListIsGlobal(false);
-goTo.marker("17");
-verify.completionListIsGlobal(false);
-goTo.marker("18");
-verify.completionListIsGlobal(true);
-goTo.marker("19");
-verify.completionListIsGlobal(false);
+
+const x = ["test", "A", "B", "C", "y", "z", "x", "user"];
+const globals: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [...x, ...completion.globals]
+verify.completions(
+    { marker: ["1", "3", "6", "8", "12", "14"], exact: undefined, isGlobalCompletion: false },
+    { marker: "2", exact: ["a.ts", "file.ts"], isGlobalCompletion: false, isNewIdentifierLocation: true },
+    { marker: ["4", "19"], exact: [], isGlobalCompletion: false },
+    { marker: ["5", "11", "18"], exact: globals, isGlobalCompletion: true },
+    { marker: "7", exact: completion.globalsInsideFunction(x), isGlobalCompletion: true },
+    { marker: "9", exact: ["x", "y"], isGlobalCompletion: false },
+    { marker: "10", exact: completion.classElementKeywords, isGlobalCompletion: false, isNewIdentifierLocation: true },
+    { marker: "13", exact: globals, isGlobalCompletion: false },
+    { marker: "15", exact: globals, isGlobalCompletion: true, isNewIdentifierLocation: true },
+    { marker: "16", exact: [...x, ...completion.globalsVars, "undefined"], isGlobalCompletion: false },
+    { marker: "17", exact: completion.globalKeywordsPlusUndefined, isGlobalCompletion: false },
+);

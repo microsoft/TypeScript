@@ -61,7 +61,7 @@ Change to the TypeScript directory:
 cd TypeScript
 ```
 
-Install Jake tools and dev dependencies:
+Install [Jake](http://jakejs.com/) tools and dev dependencies:
 
 ```bash
 npm install -g jake

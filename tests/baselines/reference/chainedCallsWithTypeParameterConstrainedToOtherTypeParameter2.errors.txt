@@ -1,7 +1,5 @@
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,43): error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
-  Type 'T' is not assignable to type 'S'.
-tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,29): error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
-  Type 'T' is not assignable to type 'S'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(7,49): error TS2322: Type 'T' is not assignable to type 'S'.
+tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(10,35): error TS2322: Type 'T' is not assignable to type 'S'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(32,9): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(36,9): error TS2322: Type '""' is not assignable to type 'number'.
 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts(37,9): error TS2322: Type '""' is not assignable to type 'number'.
@@ -15,15 +13,15 @@ tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParamete
             var s: S;
             // Ok to go down the chain, but error to climb up the chain
             (new Chain(t)).then(tt => s).then(ss => t);
-                                              ~~~~~~~
-!!! error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
-!!! error TS2345:   Type 'T' is not assignable to type 'S'.
+                                                    ~
+!!! error TS2322: Type 'T' is not assignable to type 'S'.
+!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // But error to try to climb up the chain
             (new Chain(s)).then(ss => t);
-                                ~~~~~~~
-!!! error TS2345: Argument of type '(ss: S) => T' is not assignable to parameter of type '(x: S) => S'.
-!!! error TS2345:   Type 'T' is not assignable to type 'S'.
+                                      ~
+!!! error TS2322: Type 'T' is not assignable to type 'S'.
+!!! related TS6502 tests/cases/compiler/chainedCallsWithTypeParameterConstrainedToOtherTypeParameter2.ts:3:27: The expected type comes from the return type of this signature.
     
             // Staying at T or S should be fine
             (new Chain(t)).then(tt => t).then(tt => t).then(tt => t);

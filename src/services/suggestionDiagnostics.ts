@@ -11,7 +11,7 @@ namespace ts {
             diags.push(createDiagnosticForNode(getErrorNodeFromCommonJsIndicator(sourceFile.commonJsModuleIndicator), Diagnostics.File_is_a_CommonJS_module_it_may_be_converted_to_an_ES6_module));
         }
 
-        const isJsFile = isSourceFileJavaScript(sourceFile);
+        const isJsFile = isSourceFileJS(sourceFile);
 
         check(sourceFile);
 
@@ -36,7 +36,7 @@ namespace ts {
             if (isJsFile) {
                 switch (node.kind) {
                     case SyntaxKind.FunctionExpression:
-                        const decl = getDeclarationOfJSInitializer(node);
+                        const decl = getDeclarationOfExpando(node);
                         if (decl) {
                             const symbol = decl.symbol;
                             if (symbol && (symbol.exports && symbol.exports.size || symbol.members && symbol.members.size)) {
@@ -82,12 +82,12 @@ namespace ts {
             switch (statement.kind) {
                 case SyntaxKind.VariableStatement:
                     return (statement as VariableStatement).declarationList.declarations.some(decl =>
-                        isRequireCall(propertyAccessLeftHandSide(decl.initializer!), /*checkArgumentIsStringLiteralLike*/ true)); // TODO: GH#18217
+                        !!decl.initializer && isRequireCall(propertyAccessLeftHandSide(decl.initializer), /*checkArgumentIsStringLiteralLike*/ true));
                 case SyntaxKind.ExpressionStatement: {
                     const { expression } = statement as ExpressionStatement;
                     if (!isBinaryExpression(expression)) return isRequireCall(expression, /*checkArgumentIsStringLiteralLike*/ true);
-                    const kind = getSpecialPropertyAssignmentKind(expression);
-                    return kind === SpecialPropertyAssignmentKind.ExportsProperty || kind === SpecialPropertyAssignmentKind.ModuleExports;
+                    const kind = getAssignmentDeclarationKind(expression);
+                    return kind === AssignmentDeclarationKind.ExportsProperty || kind === AssignmentDeclarationKind.ModuleExports;
                 }
                 default:
                     return false;
@@ -113,65 +113,70 @@ namespace ts {
         }
     }
 
-    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: DiagnosticWithLocation[]): void {
-
-        if (isAsyncFunction(node) || !node.body) {
-            return;
+    function addConvertToAsyncFunctionDiagnostics(node: FunctionLikeDeclaration, checker: TypeChecker, diags: Push<DiagnosticWithLocation>): void {
+        if (!isAsyncFunction(node) &&
+            node.body &&
+            isBlock(node.body) &&
+            hasReturnStatementWithPromiseHandler(node.body) &&
+            returnsPromise(node, checker)) {
+            diags.push(createDiagnosticForNode(
+                !node.name && isVariableDeclaration(node.parent) && isIdentifier(node.parent.name) ? node.parent.name : node,
+                Diagnostics.This_may_be_converted_to_an_async_function));
         }
+    }
 
+    function returnsPromise(node: FunctionLikeDeclaration, checker: TypeChecker): boolean {
         const functionType = checker.getTypeAtLocation(node);
-
         const callSignatures = checker.getSignaturesOfType(functionType, SignatureKind.Call);
         const returnType = callSignatures.length ? checker.getReturnTypeOfSignature(callSignatures[0]) : undefined;
-
-        if (!returnType || !checker.getPromisedTypeOfPromise(returnType)) {
-            return;
-        }
-
-        // collect all the return statements
-        // check that a property access expression exists in there and that it is a handler
-        const returnStatements = getReturnStatementsWithPromiseHandlers(node);
-        if (returnStatements.length > 0) {
-            diags.push(createDiagnosticForNode(isVariableDeclaration(node.parent) ? node.parent.name : node, Diagnostics.This_may_be_converted_to_an_async_function));
-        }
+        return !!returnType && !!checker.getPromisedTypeOfPromise(returnType);
     }
 
     function getErrorNodeFromCommonJsIndicator(commonJsModuleIndicator: Node): Node {
         return isBinaryExpression(commonJsModuleIndicator) ? commonJsModuleIndicator.left : commonJsModuleIndicator;
     }
 
-    /** @internal */
-    export function getReturnStatementsWithPromiseHandlers(node: Node): Node[] {
-        const returnStatements: Node[] = [];
-        if (isFunctionLike(node)) {
-            forEachChild(node, visit);
-        }
-        else {
-            visit(node);
-        }
-
-        function visit(child: Node) {
-            if (isFunctionLike(child)) {
-                return;
-            }
-
-            if (isReturnStatement(child)) {
-                forEachChild(child, addHandlers);
-            }
-
-            function addHandlers(returnChild: Node) {
-                if (isPromiseHandler(returnChild)) {
-                    returnStatements.push(child as ReturnStatement);
-                }
-            }
-
-            forEachChild(child, visit);
-        }
-        return returnStatements;
+    function hasReturnStatementWithPromiseHandler(body: Block): boolean {
+        return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    function isPromiseHandler(node: Node): boolean {
-        return (isCallExpression(node) && isPropertyAccessExpression(node.expression) &&
-            (node.expression.name.text === "then" || node.expression.name.text === "catch"));
+    export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
+        return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
+    }
+
+    // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
+    export function isFixablePromiseHandler(node: Node): boolean {
+        // ensure outermost call exists and is a promise handler
+        if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {
+            return false;
+        }
+
+        // ensure all chained calls are valid
+        let currentNode = node.expression;
+        while (isPromiseHandler(currentNode) || isPropertyAccessExpression(currentNode)) {
+            if (isCallExpression(currentNode) && !currentNode.arguments.every(isFixablePromiseArgument)) {
+                return false;
+            }
+            currentNode = currentNode.expression;
+        }
+        return true;
+    }
+
+    function isPromiseHandler(node: Node): node is CallExpression {
+        return isCallExpression(node) && (hasPropertyAccessExpressionWithName(node, "then") || hasPropertyAccessExpressionWithName(node, "catch"));
+    }
+
+    // should be kept up to date with getTransformationBody in convertToAsyncFunction.ts
+    function isFixablePromiseArgument(arg: Expression): boolean {
+        switch (arg.kind) {
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.Identifier: // identifier includes undefined
+            case SyntaxKind.FunctionDeclaration:
+            case SyntaxKind.FunctionExpression:
+            case SyntaxKind.ArrowFunction:
+                return true;
+            default:
+                return false;
+        }
     }
 }

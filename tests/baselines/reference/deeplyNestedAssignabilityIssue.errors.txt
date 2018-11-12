@@ -1,22 +1,22 @@
 [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m22[0m:[93m17[0m - [91merror[0m[90m TS2322: [0mType '{}' is not assignable to type 'A'.
   Property 'a' is missing in type '{}'.
 
-[30;47m22[0m                 thing: {}
-[30;47m  [0m [91m                ~~~~~[0m
+[7m22[0m                 thing: {}
+[7m  [0m [91m                ~~~~~[0m
 
   [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m9[0m:[93m17[0m
-    [30;47m9[0m                 thing: A;
-    [30;47m [0m [96m                ~~~~~[0m
+    [7m9[0m                 thing: A;
+    [7m [0m [96m                ~~~~~[0m
     The expected type comes from property 'thing' which is declared here on type '{ thing: A; }'
 [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m25[0m:[93m17[0m - [91merror[0m[90m TS2322: [0mType '{}' is not assignable to type 'A'.
   Property 'a' is missing in type '{}'.
 
-[30;47m25[0m                 another: {}
-[30;47m  [0m [91m                ~~~~~~~[0m
+[7m25[0m                 another: {}
+[7m  [0m [91m                ~~~~~~~[0m
 
   [96mtests/cases/compiler/deeplyNestedAssignabilityIssue.ts[0m:[93m12[0m:[93m17[0m
-    [30;47m12[0m                 another: A;
-    [30;47m  [0m [96m                ~~~~~~~[0m
+    [7m12[0m                 another: A;
+    [7m  [0m [96m                ~~~~~~~[0m
     The expected type comes from property 'another' which is declared here on type '{ another: A; }'
 
 
@@ -59,3 +59,5 @@
         }
     }
     
+Found 2 errors.
+

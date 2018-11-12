@@ -25,7 +25,7 @@ enum Enum {
 >Enum : Enum
 
     A
->A : Enum
+>A : Enum.A
 }
 
 const ObjLiteral = {

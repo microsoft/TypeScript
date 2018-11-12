@@ -270,7 +270,7 @@ export const Other = 1;
                     content: "function F() { }",
                 };
                 const languageService = makeLanguageService(testFile);
-                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatOptions, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testFile.path }, testFormatSettings, emptyOptions);
                 assert.isEmpty(changes);
             });
 
@@ -741,7 +741,7 @@ export * from "lib";
             function runBaseline(baselinePath: string, testFile: TestFSWithWatch.File, ...otherFiles: TestFSWithWatch.File[]) {
                 const { path: testPath, content: testContent } = testFile;
                 const languageService = makeLanguageService(testFile, ...otherFiles);
-                const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatOptions, emptyOptions);
+                const changes = languageService.organizeImports({ type: "file", fileName: testPath }, testFormatSettings, emptyOptions);
                 assert.equal(changes.length, 1);
                 assert.equal(changes[0].fileName, testPath);
 

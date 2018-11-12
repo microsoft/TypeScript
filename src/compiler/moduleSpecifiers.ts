@@ -30,7 +30,7 @@ namespace ts.moduleSpecifiers {
     function getPreferencesForUpdate(compilerOptions: CompilerOptions, oldImportSpecifier: string): Preferences {
         return {
             relativePreference: isExternalModuleNameRelative(oldImportSpecifier) ? RelativePreference.Relative : RelativePreference.NonRelative,
-            ending: hasJavaScriptOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
+            ending: hasJSOrJsonFileExtension(oldImportSpecifier) ? Ending.JsExtension
                 : getEmitModuleResolutionKind(compilerOptions) !== ModuleResolutionKind.NodeJs || endsWith(oldImportSpecifier, "index") ? Ending.Index : Ending.Minimal,
         };
     }
@@ -148,7 +148,7 @@ namespace ts.moduleSpecifiers {
     }
 
     function usesJsExtensionOnImports({ imports }: SourceFile): boolean {
-        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJavaScriptOrJsonFileExtension(text) : undefined) || false;
+        return firstDefined(imports, ({ text }) => pathIsRelative(text) ? hasJSOrJsonFileExtension(text) : undefined) || false;
     }
 
     function stringsEqual(a: string, b: string, getCanonicalFileName: GetCanonicalFileName): boolean {
@@ -235,7 +235,8 @@ namespace ts.moduleSpecifiers {
                     const suffix = pattern.substr(indexOfStar + 1);
                     if (relativeToBaseUrl.length >= prefix.length + suffix.length &&
                         startsWith(relativeToBaseUrl, prefix) &&
-                        endsWith(relativeToBaseUrl, suffix)) {
+                        endsWith(relativeToBaseUrl, suffix) ||
+                        !suffix && relativeToBaseUrl === removeTrailingDirectorySeparator(prefix)) {
                         const matchedStar = relativeToBaseUrl.substr(prefix.length, relativeToBaseUrl.length - suffix.length);
                         return key.replace("*", matchedStar);
                     }
@@ -259,9 +260,32 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
+        if (!host.fileExists || !host.readFile) {
+            return undefined;
+        }
         const parts: NodeModulePathParts = getNodeModulePathParts(moduleFileName)!;
         if (!parts) {
             return undefined;
+        }
+
+        const packageRootPath = moduleFileName.substring(0, parts.packageRootIndex);
+        const packageJsonPath = combinePaths(packageRootPath, "package.json");
+        const packageJsonContent = host.fileExists(packageJsonPath)
+            ? JSON.parse(host.readFile(packageJsonPath)!)
+            : undefined;
+        const versionPaths = packageJsonContent && packageJsonContent.typesVersions
+            ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
+            : undefined;
+        if (versionPaths) {
+            const subModuleName = moduleFileName.slice(parts.packageRootIndex + 1);
+            const fromPaths = tryGetModuleNameFromPaths(
+                removeFileExtension(subModuleName),
+                removeExtensionAndIndexPostFix(subModuleName, Ending.Minimal, options),
+                versionPaths.paths
+            );
+            if (fromPaths !== undefined) {
+                moduleFileName = combinePaths(moduleFileName.slice(0, parts.packageRootIndex), fromPaths);
+            }
         }
 
         // Simplify the full file path to something that can be resolved by Node.
@@ -274,23 +298,18 @@ namespace ts.moduleSpecifiers {
 
         // If the module was found in @types, get the actual Node package name
         const nodeModulesDirectoryName = moduleSpecifier.substring(parts.topLevelPackageNameIndex + 1);
-        const packageName = getPackageNameFromAtTypesDirectory(nodeModulesDirectoryName);
+        const packageName = getPackageNameFromTypesPackageName(nodeModulesDirectoryName);
         // For classic resolution, only allow importing from node_modules/@types, not other node_modules
         return getEmitModuleResolutionKind(options) !== ModuleResolutionKind.NodeJs && packageName === nodeModulesDirectoryName ? undefined : packageName;
 
         function getDirectoryOrExtensionlessFileName(path: string): string {
             // If the file is the main module, it can be imported by the package name
-            const packageRootPath = path.substring(0, parts.packageRootIndex);
-            const packageJsonPath = combinePaths(packageRootPath, "package.json");
-            if (host.fileExists!(packageJsonPath)) { // TODO: GH#18217
-                const packageJsonContent = JSON.parse(host.readFile!(packageJsonPath)!);
-                if (packageJsonContent) {
-                    const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
-                    if (mainFileRelative) {
-                        const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
-                        if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
-                            return packageRootPath;
-                        }
+            if (packageJsonContent) {
+                const mainFileRelative = packageJsonContent.typings || packageJsonContent.types || packageJsonContent.main;
+                if (mainFileRelative) {
+                    const mainExportFile = toPath(mainFileRelative, packageRootPath, getCanonicalFileName);
+                    if (removeFileExtension(mainExportFile) === removeFileExtension(getCanonicalFileName(path))) {
+                        return packageRootPath;
                     }
                 }
             }
@@ -309,11 +328,12 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {
+        if (!host.fileExists) return;
         // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
         const extensions = getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]);
         for (const e of extensions) {
             const fullPath = path + e;
-            if (host.fileExists!(fullPath)) { // TODO: GH#18217
+            if (host.fileExists(fullPath)) {
                 return fullPath;
             }
         }
@@ -399,13 +419,13 @@ namespace ts.moduleSpecifiers {
             case Ending.Index:
                 return noExtension;
             case Ending.JsExtension:
-                return noExtension + getJavaScriptExtensionForFile(fileName, options);
+                return noExtension + getJSExtensionForFile(fileName, options);
             default:
                 return Debug.assertNever(ending);
         }
     }
 
-    function getJavaScriptExtensionForFile(fileName: string, options: CompilerOptions): Extension {
+    function getJSExtensionForFile(fileName: string, options: CompilerOptions): Extension {
         const ext = extensionFromPath(fileName);
         switch (ext) {
             case Extension.Ts:

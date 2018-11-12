@@ -1,5 +1,6 @@
-tests/cases/conformance/jsx/file.tsx(9,15): error TS2322: Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
-  Property 'b' is missing in type '{ a: number; }'.
+tests/cases/conformance/jsx/file.tsx(9,15): error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
+  Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
+    Property 'b' is missing in type '{ a: number; }'.
 tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.
   Type 'T & { ignore-prop: true; }' is not assignable to type '{ b: {}; a: {}; }'.
     Property 'a' is missing in type '{ b: number; } & { ignore-prop: true; }'.
@@ -16,8 +17,9 @@ tests/cases/conformance/jsx/file.tsx(10,15): error TS2322: Type 'T & { ignore-pr
     function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
         let a0 = <OverloadComponent a={arg1.b}/>
                   ~~~~~~~~~~~~~~~~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2322: Type '{ a: number; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: number; }'.
+!!! error TS2322:   Type '{ a: number; }' is not assignable to type '{ b: {}; a: number; }'.
+!!! error TS2322:     Property 'b' is missing in type '{ a: number; }'.
         let a2 = <OverloadComponent {...arg1} ignore-prop />  // missing a
                   ~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type 'T & { ignore-prop: true; }' is not assignable to type 'IntrinsicAttributes & { b: {}; a: {}; }'.

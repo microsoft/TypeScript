@@ -34,6 +34,7 @@ tests/cases/conformance/types/union/unionTypeCallSignatures4.ts(25,1): error TS2
     f12345("a");  // error
     ~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
+!!! related TS6210 tests/cases/conformance/types/union/unionTypeCallSignatures4.ts:5:23: An argument for 'b' was not provided.
     f12345("a", "b");
     f12345("a", "b", "c");  // error
     ~~~~~~~~~~~~~~~~~~~~~

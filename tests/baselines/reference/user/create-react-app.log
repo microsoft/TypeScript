@@ -15,9 +15,9 @@ packages/babel-preset-react-app/index.js(123,17): error TS2307: Cannot find modu
 packages/babel-preset-react-app/index.js(130,17): error TS2307: Cannot find module '@babel/plugin-transform-regenerator'.
 packages/babel-preset-react-app/index.js(137,15): error TS2307: Cannot find module '@babel/plugin-syntax-dynamic-import'.
 packages/babel-preset-react-app/index.js(140,17): error TS2307: Cannot find module 'babel-plugin-transform-dynamic-import'.
-packages/confusing-browser-globals/test.js(14,1): error TS2304: Cannot find name 'it'.
+packages/confusing-browser-globals/test.js(14,1): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/confusing-browser-globals/test.js(15,3): error TS2304: Cannot find name 'expect'.
-packages/confusing-browser-globals/test.js(18,1): error TS2304: Cannot find name 'it'.
+packages/confusing-browser-globals/test.js(18,1): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/confusing-browser-globals/test.js(19,3): error TS2304: Cannot find name 'expect'.
 packages/create-react-app/createReactApp.js(37,37): error TS2307: Cannot find module 'validate-npm-package-name'.
 packages/create-react-app/createReactApp.js(47,24): error TS2307: Cannot find module 'tar-pack'.
@@ -35,18 +35,18 @@ packages/react-dev-utils/FileSizeReporter.js(16,24): error TS2307: Cannot find m
 packages/react-dev-utils/WebpackDevServerUtils.js(9,25): error TS2307: Cannot find module 'address'.
 packages/react-dev-utils/WebpackDevServerUtils.js(14,24): error TS2307: Cannot find module 'detect-port-alt'.
 packages/react-dev-utils/WebpackDevServerUtils.js(15,24): error TS2307: Cannot find module 'is-root'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(12,1): error TS2304: Cannot find name 'describe'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(13,3): error TS2304: Cannot find name 'it'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(12,1): error TS2582: Cannot find name 'describe'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(13,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(18,5): error TS2304: Cannot find name 'expect'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(19,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(22,3): error TS2304: Cannot find name 'it'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(22,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(26,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(29,3): error TS2304: Cannot find name 'it'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(29,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(36,5): error TS2304: Cannot find name 'expect'.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(37,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2304: Cannot find name 'it'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(40,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(46,5): error TS2304: Cannot find name 'expect'.
-packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2304: Cannot find name 'it'.
+packages/react-dev-utils/__tests__/ignoredFiles.test.js(49,3): error TS2582: Cannot find name 'it'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.
 packages/react-dev-utils/__tests__/ignoredFiles.test.js(53,5): error TS2304: Cannot find name 'expect'.
 packages/react-dev-utils/browsersHelper.js(9,30): error TS2307: Cannot find module 'browserslist'.
 packages/react-dev-utils/browsersHelper.js(13,23): error TS2307: Cannot find module 'pkg-up'.

@@ -3,7 +3,7 @@
 // @noLib: true
 
 // @Filename: /a.ts
-////var [|{| "isWriteAccess": true, "isDefinition": true |}x|];
+////var [|{| "isDefinition": true |}x|];
 ////export { [|{| "isWriteAccess": true, "isDefinition": true |}x|] };
 ////export { [|x|] as [|{| "isWriteAccess": true, "isDefinition": true |}y|] };
 

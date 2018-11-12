@@ -12,5 +12,5 @@
 
 const [t0, v0, t1, v1] = test.ranges();
 
-verify.singleReferenceGroup("type T = number\nconst T: 1", [t0, t1]);
-verify.singleReferenceGroup("type T = number\nconst T: 1", [v0, v1]);
+verify.singleReferenceGroup("type T = number", [t0, t1]);
+verify.singleReferenceGroup("const T: 1", [v0, v1]);

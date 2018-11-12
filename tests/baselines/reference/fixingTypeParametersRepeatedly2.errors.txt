@@ -1,6 +1,5 @@
-tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,27): error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-  Type 'Base' is not assignable to type 'Derived'.
-    Property 'toBase' is missing in type 'Base'.
+tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,32): error TS2322: Type 'Base' is not assignable to type 'Derived'.
+  Property 'toBase' is missing in type 'Base'.
 
 
 ==== tests/cases/compiler/fixingTypeParametersRepeatedly2.ts (1 errors) ====
@@ -15,10 +14,10 @@ tests/cases/compiler/fixingTypeParametersRepeatedly2.ts(11,27): error TS2345: Ar
     
     declare function foo<T>(x: T, func: (p: T) => T): T;
     var result = foo(derived, d => d.toBase());
-                              ~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(d: Derived) => Base' is not assignable to parameter of type '(p: Derived) => Derived'.
-!!! error TS2345:   Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2345:     Property 'toBase' is missing in type 'Base'.
+                                   ~~~~~~~~~~
+!!! error TS2322: Type 'Base' is not assignable to type 'Derived'.
+!!! error TS2322:   Property 'toBase' is missing in type 'Base'.
+!!! related TS6502 tests/cases/compiler/fixingTypeParametersRepeatedly2.ts:10:37: The expected type comes from the return type of this signature.
     
     // bar should type check just like foo.
     // The same error should be observed in both cases.

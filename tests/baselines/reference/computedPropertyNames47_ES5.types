@@ -1,11 +1,11 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames47_ES5.ts ===
 enum E1 { x }
 >E1 : E1
->x : E1
+>x : E1.x
 
 enum E2 { x }
 >E2 : E2
->x : E2
+>x : E2.x
 
 var o = {
 >o : { [E1.x || E2.x]: number; }

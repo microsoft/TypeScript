@@ -47,7 +47,7 @@ var x5 = 1;
 
 enum x5 { One } // error
 >x5 : x5
->One : x5
+>One : x5.One
 
 // var then module
 var x6 = 1;

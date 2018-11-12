@@ -270,17 +270,20 @@ namespace ts.NavigationBar {
                 break;
 
             case SyntaxKind.BinaryExpression: {
-                const special = getSpecialPropertyAssignmentKind(node as BinaryExpression);
+                const special = getAssignmentDeclarationKind(node as BinaryExpression);
                 switch (special) {
-                    case SpecialPropertyAssignmentKind.ExportsProperty:
-                    case SpecialPropertyAssignmentKind.ModuleExports:
-                    case SpecialPropertyAssignmentKind.PrototypeProperty:
-                    case SpecialPropertyAssignmentKind.Prototype:
+                    case AssignmentDeclarationKind.ExportsProperty:
+                    case AssignmentDeclarationKind.ModuleExports:
+                    case AssignmentDeclarationKind.PrototypeProperty:
+                    case AssignmentDeclarationKind.Prototype:
                         addNodeWithRecursiveChild(node, (node as BinaryExpression).right);
                         return;
-                    case SpecialPropertyAssignmentKind.ThisProperty:
-                    case SpecialPropertyAssignmentKind.Property:
-                    case SpecialPropertyAssignmentKind.None:
+                    case AssignmentDeclarationKind.ThisProperty:
+                    case AssignmentDeclarationKind.Property:
+                    case AssignmentDeclarationKind.None:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                         break;
                     default:
                         Debug.assertNever(special);
@@ -631,28 +634,50 @@ namespace ts.NavigationBar {
     }
 
     function getFunctionOrClassName(node: FunctionExpression | FunctionDeclaration | ArrowFunction | ClassLikeDeclaration): string {
+        const { parent } = node;
         if (node.name && getFullWidth(node.name) > 0) {
             return declarationNameToString(node.name);
         }
         // See if it is a var initializer. If so, use the var name.
-        else if (node.parent.kind === SyntaxKind.VariableDeclaration) {
-            return declarationNameToString((node.parent as VariableDeclaration).name);
+        else if (isVariableDeclaration(parent)) {
+            return declarationNameToString(parent.name);
         }
         // See if it is of the form "<expr> = function(){...}". If so, use the text from the left-hand side.
-        else if (node.parent.kind === SyntaxKind.BinaryExpression &&
-            (node.parent as BinaryExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-            return nodeText((node.parent as BinaryExpression).left).replace(whiteSpaceRegex, "");
+        else if (isBinaryExpression(parent) && parent.operatorToken.kind === SyntaxKind.EqualsToken) {
+            return nodeText(parent.left).replace(whiteSpaceRegex, "");
         }
         // See if it is a property assignment, and if so use the property name
-        else if (node.parent.kind === SyntaxKind.PropertyAssignment && (node.parent as PropertyAssignment).name) {
-            return nodeText((node.parent as PropertyAssignment).name);
+        else if (isPropertyAssignment(parent)) {
+            return nodeText(parent.name);
         }
         // Default exports are named "default"
         else if (getModifierFlags(node) & ModifierFlags.Default) {
             return "default";
         }
+        else if (isClassLike(node)) {
+            return "<class>";
+        }
+        else if (isCallExpression(parent)) {
+            const name = getCalledExpressionName(parent.expression);
+            if (name !== undefined) {
+                const args = mapDefined(parent.arguments, a => isStringLiteral(a) ? a.getText(curSourceFile) : undefined).join(", ");
+                return `${name}(${args}) callback`;
+            }
+        }
+        return "<function>";
+    }
+
+    function getCalledExpressionName(expr: Expression): string | undefined {
+        if (isIdentifier(expr)) {
+            return expr.text;
+        }
+        else if (isPropertyAccessExpression(expr)) {
+            const left = getCalledExpressionName(expr.expression);
+            const right = expr.name.text;
+            return left === undefined ? right : `${left}.${right}`;
+        }
         else {
-            return isClassLike(node) ? "<class>" : "<function>";
+            return undefined;
         }
     }
 

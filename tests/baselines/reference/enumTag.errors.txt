@@ -15,7 +15,7 @@ tests/cases/conformance/jsdoc/a.js(37,16): error TS2339: Property 'UNKNOWN' does
         /** @type {number} */
         OK_I_GUESS: 2
     }
-    /** @enum {number} */
+    /** @enum number */
     const Second = {
         MISTAKE: "end",
         ~~~~~~~~~~~~~~

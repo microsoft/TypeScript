@@ -7,18 +7,18 @@ namespace ts.refactor.extractSymbol {
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    export function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            return undefined;
+            return emptyArray;
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
-            return undefined;
+            return emptyArray;
         }
 
         const functionActions: RefactorActionInfo[] = [];
@@ -82,7 +82,7 @@ namespace ts.refactor.extractSymbol {
             });
         }
 
-        return infos.length ? infos : undefined;
+        return infos.length ? infos : emptyArray;
     }
 
     /* Exported for tests */
@@ -719,7 +719,7 @@ namespace ts.refactor.extractSymbol {
         // Make a unique name for the extracted function
         const file = scope.getSourceFile();
         const functionNameText = getUniqueName(isClassLike(scope) ? "newMethod" : "newFunction", file);
-        const isJS = isInJavaScriptFile(scope);
+        const isJS = isInJSFile(scope);
 
         const functionName = createIdentifier(functionNameText);
 
@@ -1006,7 +1006,7 @@ namespace ts.refactor.extractSymbol {
         // Make a unique name for the extracted variable
         const file = scope.getSourceFile();
         const localNameText = getUniqueName(isClassLike(scope) ? "newProperty" : "newLocal", file);
-        const isJS = isInJavaScriptFile(scope);
+        const isJS = isInJSFile(scope);
 
         const variableType = isJS || !checker.isContextSensitive(node)
             ? undefined
@@ -1424,7 +1424,7 @@ namespace ts.refactor.extractSymbol {
             if (expressionDiagnostic) {
                 constantErrors.push(expressionDiagnostic);
             }
-            if (isClassLike(scope) && isInJavaScriptFile(scope)) {
+            if (isClassLike(scope) && isInJSFile(scope)) {
                 constantErrors.push(createDiagnosticForNode(scope, Messages.cannotExtractToJSClass));
             }
             if (isArrowFunction(scope) && !isBlock(scope.body)) {

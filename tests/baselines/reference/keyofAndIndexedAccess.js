@@ -61,12 +61,11 @@ type Q21 = Shape[WIDTH_OR_HEIGHT];  // number
 
 type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
-type Q32 = [string, number][2];  // string | number
+type Q32 = [string, number][number];  // string | number
 type Q33 = [string, number][E.A];  // string
 type Q34 = [string, number][E.B];  // number
-type Q35 = [string, number][E.C];  // string | number
-type Q36 = [string, number]["0"];  // string
-type Q37 = [string, number]["1"];  // string
+type Q35 = [string, number]["0"];  // string
+type Q36 = [string, number]["1"];  // string
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 type Q41 = (Shape & Options)["visible"];  // true & "yes" | true & "no" | false & "yes" | false & "no"
@@ -300,23 +299,16 @@ type S2 = {
     b: string;
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 
 function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]) {
@@ -672,7 +664,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -886,23 +878,16 @@ var C1 = /** @class */ (function () {
     };
     return C1;
 }());
-function f90(x1, x2, x3, x4) {
+function f90(x1, x2, x3) {
     x1 = x2;
     x1 = x3;
-    x1 = x4;
     x2 = x1;
     x2 = x3;
-    x2 = x4;
     x3 = x1;
     x3 = x2;
-    x3 = x4;
-    x4 = x1;
-    x4 = x2;
-    x4 = x3;
     x1.length;
     x2.length;
     x3.length;
-    x4.length;
 }
 function f91(x, y, z) {
     var a;
@@ -1161,12 +1146,11 @@ declare type Q20 = Shape[NAME];
 declare type Q21 = Shape[WIDTH_OR_HEIGHT];
 declare type Q30 = [string, number][0];
 declare type Q31 = [string, number][1];
-declare type Q32 = [string, number][2];
+declare type Q32 = [string, number][number];
 declare type Q33 = [string, number][E.A];
 declare type Q34 = [string, number][E.B];
-declare type Q35 = [string, number][E.C];
-declare type Q36 = [string, number]["0"];
-declare type Q37 = [string, number]["1"];
+declare type Q35 = [string, number]["0"];
+declare type Q36 = [string, number]["1"];
 declare type Q40 = (Shape | Options)["visible"];
 declare type Q41 = (Shape & Options)["visible"];
 declare type Q50 = Dictionary<Shape>["howdy"];
@@ -1240,7 +1224,7 @@ declare type S2 = {
     a: string;
     b: string;
 };
-declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]): void;
+declare function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]): void;
 declare function f91<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare function f92<T, K extends keyof T>(x: T, y: T[keyof T], z: T[K]): void;
 declare class Base {

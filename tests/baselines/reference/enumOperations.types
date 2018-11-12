@@ -1,7 +1,7 @@
 === tests/cases/compiler/enumOperations.ts ===
 enum Enum { None = 0 }
 >Enum : Enum
->None : Enum
+>None : Enum.None
 >0 : 0
 
 var enumType: Enum = Enum.None;

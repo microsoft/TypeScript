@@ -41,7 +41,7 @@ function y4() { } // error
 
 enum y4 { One } // error
 >y4 : y4
->One : y4
+>One : y4.One
 
 // function then internal module
 function y5() { }

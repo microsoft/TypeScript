@@ -49,7 +49,7 @@ class C2<T> { foo: T; }
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 function f() { }
 >f : typeof f

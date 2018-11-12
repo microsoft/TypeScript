@@ -2,8 +2,8 @@
 namespace ts.refactor {
     const refactorName = "Move to a new file";
     registerRefactor(refactorName, {
-        getAvailableActions(context): ApplicableRefactorInfo[] | undefined {
-            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return undefined;
+        getAvailableActions(context): ReadonlyArray<ApplicableRefactorInfo> {
+            if (!context.preferences.allowTextChangesInNewFiles || getStatementsToMove(context) === undefined) return emptyArray;
             const description = getLocaleSpecificMessage(Diagnostics.Move_to_a_new_file);
             return [{ name: refactorName, description, actions: [{ name: refactorName, description }] }];
         },
@@ -158,7 +158,7 @@ namespace ts.refactor {
 
                     const shouldMove = (name: Identifier): boolean => {
                         const symbol = isBindingElement(name.parent)
-                            ? getPropertySymbolFromBindingElement(checker, name.parent as BindingElement & { name: Identifier })
+                            ? getPropertySymbolFromBindingElement(checker, name.parent as ObjectBindingElementWithoutPropertyName)
                             : skipAlias(checker.getSymbolAtLocation(name)!, checker); // TODO: GH#18217
                         return !!symbol && movedSymbols.has(symbol);
                     };
@@ -612,7 +612,7 @@ namespace ts.refactor {
         | ImportEqualsDeclaration;
     type TopLevelDeclarationStatement = NonVariableTopLevelDeclaration | VariableStatement;
     interface TopLevelVariableDeclaration extends VariableDeclaration { parent: VariableDeclarationList & { parent: VariableStatement; }; }
-    type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration;
+    type TopLevelDeclaration = NonVariableTopLevelDeclaration | TopLevelVariableDeclaration | BindingElement;
     function isTopLevelDeclaration(node: Node): node is TopLevelDeclaration {
         return isNonVariableTopLevelDeclaration(node) && isSourceFile(node.parent) || isVariableDeclaration(node) && isSourceFile(node.parent.parent.parent);
     }
@@ -653,23 +653,42 @@ namespace ts.refactor {
                 return cb(statement as FunctionDeclaration | ClassDeclaration | EnumDeclaration | ModuleDeclaration | TypeAliasDeclaration | InterfaceDeclaration | ImportEqualsDeclaration);
 
             case SyntaxKind.VariableStatement:
-                return forEach((statement as VariableStatement).declarationList.declarations as ReadonlyArray<TopLevelVariableDeclaration>, cb);
+                return firstDefined((statement as VariableStatement).declarationList.declarations, decl => forEachTopLevelDeclarationInBindingName(decl.name, cb));
 
             case SyntaxKind.ExpressionStatement: {
                 const { expression } = statement as ExpressionStatement;
-                return isBinaryExpression(expression) && getSpecialPropertyAssignmentKind(expression) === SpecialPropertyAssignmentKind.ExportsProperty
+                return isBinaryExpression(expression) && getAssignmentDeclarationKind(expression) === AssignmentDeclarationKind.ExportsProperty
                     ? cb(statement as TopLevelExpressionStatement)
                     : undefined;
             }
         }
     }
+    function forEachTopLevelDeclarationInBindingName<T>(name: BindingName, cb: (node: TopLevelDeclaration) => T): T | undefined {
+        switch (name.kind) {
+            case SyntaxKind.Identifier:
+                return cb(cast(name.parent, (x): x is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(x) || isBindingElement(x)));
+            case SyntaxKind.ArrayBindingPattern:
+            case SyntaxKind.ObjectBindingPattern:
+                return firstDefined(name.elements, em => isOmittedExpression(em) ? undefined : forEachTopLevelDeclarationInBindingName(em.name, cb));
+            default:
+                return Debug.assertNever(name);
+        }
+    }
 
     function nameOfTopLevelDeclaration(d: TopLevelDeclaration): Identifier | undefined {
-        return d.kind === SyntaxKind.ExpressionStatement ? d.expression.left.name : tryCast(d.name, isIdentifier);
+        return isExpressionStatement(d) ? d.expression.left.name : tryCast(d.name, isIdentifier);
     }
 
     function getTopLevelDeclarationStatement(d: TopLevelDeclaration): TopLevelDeclarationStatement {
-        return isVariableDeclaration(d) ? d.parent.parent : d;
+        switch (d.kind) {
+            case SyntaxKind.VariableDeclaration:
+                return d.parent.parent;
+            case SyntaxKind.BindingElement:
+                return getTopLevelDeclarationStatement(
+                    cast(d.parent.parent, (p): p is TopLevelVariableDeclaration | BindingElement => isVariableDeclaration(p) || isBindingElement(p)));
+            default:
+                return d;
+        }
     }
 
     function addExportToChanges(sourceFile: SourceFile, decl: TopLevelDeclarationStatement, changes: textChanges.ChangeTracker, useEs6Exports: boolean): void {

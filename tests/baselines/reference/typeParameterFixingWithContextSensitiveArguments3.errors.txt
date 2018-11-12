@@ -1,6 +1,5 @@
-tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts(7,29): error TS2345: Argument of type '(t2: A) => A' is not assignable to parameter of type '(t2: A) => B'.
-  Type 'A' is not assignable to type 'B'.
-    Property 'b' is missing in type 'A'.
+tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts(7,35): error TS2322: Type 'A' is not assignable to type 'B'.
+  Property 'b' is missing in type 'A'.
 
 
 ==== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts (1 errors) ====
@@ -11,7 +10,7 @@ tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts(7,29):
     var a: A, b: B;
     
     var d = f(a, b, u2 => u2.b, t2 => t2);
-                                ~~~~~~~~
-!!! error TS2345: Argument of type '(t2: A) => A' is not assignable to parameter of type '(t2: A) => B'.
-!!! error TS2345:   Type 'A' is not assignable to type 'B'.
-!!! error TS2345:     Property 'b' is missing in type 'A'.
+                                      ~~
+!!! error TS2322: Type 'A' is not assignable to type 'B'.
+!!! error TS2322:   Property 'b' is missing in type 'A'.
+!!! related TS6502 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments3.ts:1:56: The expected type comes from the return type of this signature.

@@ -1,15 +1,10 @@
-error TS2321: Excessive stack depth comparing types 'Extract<T[Exclude<keyof T, string | number | symbol>], Record<"val", string>>["val"]' and 'Extract<T[Exclude<keyof T, Exclude<keyof T, string | number | symbol>>], Record<"val", string>>["val"]'.
 tests/cases/compiler/infiniteConstraints.ts(4,37): error TS2536: Type '"val"' cannot be used to index type 'B[Exclude<keyof B, K>]'.
-tests/cases/compiler/infiniteConstraints.ts(27,37): error TS2322: Type 'Record<"val", "test">' is not assignable to type 'never'.
-tests/cases/compiler/infiniteConstraints.ts(27,58): error TS2322: Type 'Record<"val", "test2">' is not assignable to type 'never'.
-tests/cases/compiler/infiniteConstraints.ts(29,45): error TS2322: Type 'Record<"val", "test">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(31,43): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(31,63): error TS2322: Type 'Record<"val", "dup">' is not assignable to type 'never'.
 tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' cannot be used to index type 'T[keyof T]'.
 
 
-!!! error TS2321: Excessive stack depth comparing types 'Extract<T[Exclude<keyof T, string | number | symbol>], Record<"val", string>>["val"]' and 'Extract<T[Exclude<keyof T, Exclude<keyof T, string | number | symbol>>], Record<"val", string>>["val"]'.
-==== tests/cases/compiler/infiniteConstraints.ts (7 errors) ====
+==== tests/cases/compiler/infiniteConstraints.ts (4 errors) ====
     // Both of the following types trigger the recursion limiter in getImmediateBaseConstraint
     
     type T1<B extends { [K in keyof B]: Extract<B[Exclude<keyof B, K>], { val: string }>["val"] }> = B;
@@ -39,17 +34,8 @@ tests/cases/compiler/infiniteConstraints.ts(36,71): error TS2536: Type '"foo"' c
     >(vals: T): void;
     
     const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
-                                        ~~~~
-!!! error TS2322: Type 'Record<"val", "test">' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:27:37: The expected type comes from property 'main' which is declared here on type '{ main: never; alternate: never; }'
-                                                             ~~~~~~~~~
-!!! error TS2322: Type 'Record<"val", "test2">' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:27:58: The expected type comes from property 'alternate' which is declared here on type '{ main: never; alternate: never; }'
     
     const shouldBeNoError = ensureNoDuplicates({main: value("test")});
-                                                ~~~~
-!!! error TS2322: Type 'Record<"val", "test">' is not assignable to type 'never'.
-!!! related TS6500 tests/cases/compiler/infiniteConstraints.ts:29:45: The expected type comes from property 'main' which is declared here on type '{ main: never; }'
     
     const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
                                               ~~~~

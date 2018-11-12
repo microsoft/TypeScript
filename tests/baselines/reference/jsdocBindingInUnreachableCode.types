@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/bug27341.js ===
+if (false) {
+>false : false
+
+    /**
+     * @param {string} s
+     */
+    const x = function (s) {
+>x : (s: string) => void
+>function (s) {    } : (s: string) => void
+>s : string
+
+    };
+}
+

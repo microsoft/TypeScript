@@ -22,9 +22,9 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(58,5): error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
-  Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
-    Type 'string | number' is not assignable to type 'number'.
-      Type 'string' is not assignable to type 'number'.
+  Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+    Type 'string | number' is not assignable to type 'string'.
+      Type 'number' is not assignable to type 'string'.
 
 
 ==== tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts (6 errors) ====
@@ -116,8 +116,8 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
         commonMethodDifferentReturnType: (a, b) => strOrNumber,
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2322: Type '(a: string, b: number) => string | number' is not assignable to type '((a: string, b: number) => string) | ((a: string, b: number) => number)'.
-!!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => number'.
-!!! error TS2322:     Type 'string | number' is not assignable to type 'number'.
-!!! error TS2322:       Type 'string' is not assignable to type 'number'.
+!!! error TS2322:   Type '(a: string, b: number) => string | number' is not assignable to type '(a: string, b: number) => string'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'string'.
+!!! error TS2322:       Type 'number' is not assignable to type 'string'.
 !!! related TS6500 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:35:5: The expected type comes from property 'commonMethodDifferentReturnType' which is declared here on type 'I11 | I21'
     };

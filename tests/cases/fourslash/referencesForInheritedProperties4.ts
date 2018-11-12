@@ -2,7 +2,7 @@
 
 //// class class1 extends class1 {
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() { }
-////    [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;
+////    [|{| "isDefinition": true |}propName|]: string;
 //// }
 ////
 //// var c: class1;

@@ -15,6 +15,7 @@ import { x } from './x';
 x;`,
 
         "/x.ts":
-`export const x = 0;`,
+`export const x = 0;
+`,
     },
 });

@@ -973,9 +973,11 @@ namespace ts {
             // Check if we have property assignment inside class declaration.
             // If there is a property assignment, we need to emit constructor whether users define it or not
             // If there is no property assignment, we can omit constructor if users do not define it
-            const hasInstancePropertyWithInitializer = forEach(node.members, isInstanceInitializedProperty);
-            const hasParameterPropertyAssignments = node.transformFlags & TransformFlags.ContainsParameterPropertyAssignments;
             const constructor = getFirstConstructorWithBody(node);
+            const hasInstancePropertyWithInitializer = forEach(node.members, isInstanceInitializedProperty);
+            const hasParameterPropertyAssignments = constructor &&
+                constructor.transformFlags & TransformFlags.ContainsTypeScriptClassSyntax &&
+                forEach(constructor.parameters, isParameterWithPropertyAssignment);
 
             // If the class does not contain nodes that require a synthesized constructor,
             // accept the current constructor if it exists.
@@ -1899,6 +1901,9 @@ namespace ts {
                         case SyntaxKind.NumericLiteral:
                             return createIdentifier("Number");
 
+                        case SyntaxKind.BigIntLiteral:
+                            return getGlobalBigIntNameWithFallback();
+
                         case SyntaxKind.TrueKeyword:
                         case SyntaxKind.FalseKeyword:
                             return createIdentifier("Boolean");
@@ -1909,6 +1914,9 @@ namespace ts {
 
                 case SyntaxKind.NumberKeyword:
                     return createIdentifier("Number");
+
+                case SyntaxKind.BigIntKeyword:
+                    return getGlobalBigIntNameWithFallback();
 
                 case SyntaxKind.SymbolKeyword:
                     return languageVersion < ScriptTarget.ES2015
@@ -2003,6 +2011,9 @@ namespace ts {
 
                 case TypeReferenceSerializationKind.VoidNullableOrNeverType:
                     return createVoidZero();
+
+                case TypeReferenceSerializationKind.BigIntLikeType:
+                    return getGlobalBigIntNameWithFallback();
 
                 case TypeReferenceSerializationKind.BooleanType:
                     return createIdentifier("Boolean");
@@ -2111,6 +2122,20 @@ namespace ts {
                 createIdentifier("Symbol"),
                 createIdentifier("Object")
             );
+        }
+
+        /**
+         * Gets an expression that points to the global "BigInt" constructor at runtime if it is
+         * available.
+         */
+        function getGlobalBigIntNameWithFallback(): SerializedTypeNode {
+            return languageVersion < ScriptTarget.ESNext
+                ? createConditional(
+                    createTypeCheck(createIdentifier("BigInt"), "function"),
+                    createIdentifier("BigInt"),
+                    createIdentifier("Object")
+                )
+                : createIdentifier("BigInt");
         }
 
         /**

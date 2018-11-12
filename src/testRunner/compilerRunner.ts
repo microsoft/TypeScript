@@ -208,7 +208,7 @@ class CompilerTest {
     public verifyModuleResolution() {
         if (this.options.traceResolution) {
             Harness.Baseline.runBaseline(this.justName.replace(/\.tsx?$/, ".trace.json"),
-                utils.removeTestPathPrefixes(JSON.stringify(this.result.traces, undefined, 4)));
+                JSON.stringify(this.result.traces.map(utils.sanitizeTraceResolutionLogEntry), undefined, 4));
         }
     }
 
