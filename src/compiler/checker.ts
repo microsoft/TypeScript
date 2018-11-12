@@ -2601,10 +2601,10 @@ namespace ts {
             const containingFile = getSourceFileOfNode(enclosingDeclaration);
             const id = "" + getNodeId(containingFile);
             const links = getSymbolLinks(symbol);
-            if (links.extendedContainersByFile && links.extendedContainersByFile.has(id)) {
-                return links.extendedContainersByFile.get(id)!;
+            let results: Symbol[] | undefined;
+            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(id))) {
+                return results;
             }
-            const results: Symbol[] = [];
             if (containingFile && containingFile.imports) {
                 // Try to make an import using an import already in the enclosing file, if possible
                 for (const importRef of containingFile.imports) {
@@ -2613,11 +2613,11 @@ namespace ts {
                     if (!resolvedModule) continue;
                     const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
                     if (!ref) continue;
-                    results.push(resolvedModule);
+                    results = append(results, resolvedModule);
                 }
                 if (length(results)) {
-                    (links.extendedContainersByFile || (links.extendedContainersByFile = createMap())).set(id, results);
-                    return results;
+                    (links.extendedContainersByFile || (links.extendedContainersByFile = createMap())).set(id, results!);
+                    return results!;
                 }
             }
             if (links.extendedContainers) {
@@ -2630,9 +2630,9 @@ namespace ts {
                 const sym = getSymbolOfNode(file);
                 const ref = getAliasForSymbolInContainer(sym, symbol);
                 if (!ref) continue;
-                results.push(sym);
+                results = append(results, sym);
             }
-            return links.extendedContainers = results;
+            return links.extendedContainers = results || emptyArray;
         }
 
         /**
@@ -3989,7 +3989,7 @@ namespace ts {
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
                     let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
-                    let parentSpecifiers: (string | undefined)[] | undefined;
+                    let parentSpecifiers: (string | undefined)[];
                     if (!accessibleSymbolChain ||
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
@@ -4029,14 +4029,15 @@ namespace ts {
                     }
 
                     function sortByBestName(a: number, b: number) {
-                        const specifierA = parentSpecifiers![a];
-                        const specifierB = parentSpecifiers![b];
+                        const specifierA = parentSpecifiers[a];
+                        const specifierB = parentSpecifiers[b];
                         if (specifierA && specifierB) {
-                            if (pathIsRelative(specifierA) === pathIsRelative(specifierB)) {
+                            const isBRelative = pathIsRelative(specifierB);
+                            if (pathIsRelative(specifierA) === isBRelative) {
                                 // Both relative or both non-relative, sort by number of parts
                                 return moduleSpecifiers.countPathComponents(specifierA) - moduleSpecifiers.countPathComponents(specifierB);
                             }
-                            if (pathIsRelative(specifierB)) {
+                            if (isBRelative) {
                                 // A is non-relative, B is relative: prefer A
                                 return -1;
                             }
