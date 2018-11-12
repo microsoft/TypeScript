@@ -2812,7 +2812,7 @@ namespace ts {
     }
 
     /**
-     * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
+     * Produces a cleaned version of compiler options with personally identifying info (aka, paths) removed.
      * Also converts enum values back to strings.
      */
     /* @internal */
