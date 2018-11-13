@@ -17,20 +17,20 @@ function f1 (bar = foo) { // unexpected compiler error; works at runtime
 }
 
 function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
->f2 : (bar?: (baz?: number) => number) => number
->bar : (baz?: number) => number
->(baz = foo) => baz : (baz?: number) => number
->baz : number
->foo : number
->baz : number
+>f2 : (bar?: (baz?: string) => string) => string
+>bar : (baz?: string) => string
+>(baz = foo) => baz : (baz?: string) => string
+>baz : string
+>foo : string
+>baz : string
 
     var foo: number = 2;
 >foo : number
 >2 : 2
 
     return bar(); // returns 1
->bar() : number
->bar : (baz?: number) => number
+>bar() : string
+>bar : (baz?: string) => string
 }
 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
@@ -97,4 +97,23 @@ function f8(foo1: string, bar = foo1) { }
 >foo1 : string
 >bar : string
 >foo1 : string
+
+let bazzzz = 2;
+>bazzzz : number
+>2 : 2
+
+function f9(bar = () => bazzzz) {
+>f9 : (bar?: () => number) => number
+>bar : () => number
+>() => bazzzz : () => number
+>bazzzz : number
+
+    var bazzzz = 1;
+>bazzzz : number
+>1 : 1
+
+    return bar();
+>bar() : number
+>bar : () => number
+}
 

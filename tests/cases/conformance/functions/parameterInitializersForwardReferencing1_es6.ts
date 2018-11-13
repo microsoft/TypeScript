@@ -37,3 +37,9 @@ class Foo {
 }
 
 function f8(foo1: string, bar = foo1) { }
+
+let bazzzz = 2;
+function f9(bar = () => bazzzz) {
+    var bazzzz = 1;
+    return bar();
+}

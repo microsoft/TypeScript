@@ -1,6 +1,6 @@
-tests/cases/compiler/functionLikeInParameterInitializer.ts(2,34): error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
-tests/cases/compiler/functionLikeInParameterInitializer.ts(6,44): error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
-tests/cases/compiler/functionLikeInParameterInitializer.ts(11,50): error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
+tests/cases/compiler/functionLikeInParameterInitializer.ts(2,34): error TS2304: Cannot find name 'foo'.
+tests/cases/compiler/functionLikeInParameterInitializer.ts(6,44): error TS2304: Cannot find name 'foo'.
+tests/cases/compiler/functionLikeInParameterInitializer.ts(11,50): error TS2304: Cannot find name 'foo'.
 tests/cases/compiler/functionLikeInParameterInitializer.ts(16,41): error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
 
 
@@ -8,20 +8,20 @@ tests/cases/compiler/functionLikeInParameterInitializer.ts(16,41): error TS2373:
     // error
     export function bar(func = () => foo) {
                                      ~~~
-!!! error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
+!!! error TS2304: Cannot find name 'foo'.
         let foo = "in";
     }
     // error
     export function baz1(func = { f() { return foo } }) {
                                                ~~~
-!!! error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
+!!! error TS2304: Cannot find name 'foo'.
         let foo = "in";
     }
     
     // error
     export function baz2(func = function () { return foo }) {
                                                      ~~~
-!!! error TS2373: Initializer of parameter 'func' cannot reference identifier 'foo' declared after it.
+!!! error TS2304: Cannot find name 'foo'.
         let foo = "in";
     }
     

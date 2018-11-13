@@ -98,3 +98,22 @@ function f8(foo1: string, bar = foo1) { }
 >bar : string
 >foo1 : string
 
+let bazzzz = 2;
+>bazzzz : number
+>2 : 2
+
+function f9(bar = () => bazzzz) {
+>f9 : (bar?: () => number) => number
+>bar : () => number
+>() => bazzzz : () => number
+>bazzzz : number
+
+    var bazzzz = 1;
+>bazzzz : number
+>1 : 1
+
+    return bar();
+>bar() : number
+>bar : () => number
+}
+
