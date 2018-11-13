@@ -43,7 +43,6 @@ namespace ts {
         return false;
     }
 
-    /** @internal */
     export const screenStartingMessageCodes: number[] = [
         Diagnostics.Starting_compilation_in_watch_mode.code,
         Diagnostics.File_change_detected_Starting_incremental_compilation.code,
@@ -117,6 +116,7 @@ namespace ts {
     }
 
     export function getErrorSummaryText(errorCount: number, newLine: string) {
+        if (errorCount === 0) return "";
         const d = createCompilerDiagnostic(errorCount === 1 ? Diagnostics.Found_1_error : Diagnostics.Found_0_errors, errorCount);
         return `${newLine}${flattenDiagnosticMessageText(d.messageText, newLine)}${newLine}${newLine}`;
     }

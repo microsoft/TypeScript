@@ -1,4 +1,4 @@
-// @target: esnext
+// @target: es3
 
 const normalNumber = 123; // should not error
 let bigintType: bigint; // should not error

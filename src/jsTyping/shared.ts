@@ -34,7 +34,6 @@ namespace ts.server {
             : undefined;
     }
 
-    /*@internal*/
     export function nowString() {
         // E.g. "12:34:56.789"
         const d = new Date();

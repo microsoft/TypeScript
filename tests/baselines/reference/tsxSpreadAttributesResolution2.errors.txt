@@ -1,8 +1,5 @@
-tests/cases/conformance/jsx/file.tsx(20,10): error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-  Property 'x' is missing in type '{}'.
-tests/cases/conformance/jsx/file.tsx(21,10): error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
-  Type '{}' is not assignable to type 'PoisonedProp'.
-    Property 'x' is missing in type '{}'.
+tests/cases/conformance/jsx/file.tsx(20,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
+tests/cases/conformance/jsx/file.tsx(21,10): error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
 tests/cases/conformance/jsx/file.tsx(22,19): error TS2322: Type 'true' is not assignable to type 'string'.
 tests/cases/conformance/jsx/file.tsx(22,21): error TS2322: Type 'true' is not assignable to type '"2"'.
 tests/cases/conformance/jsx/file.tsx(23,10): error TS2322: Type '{ x: number; y: "2"; }' is not assignable to type 'PoisonedProp'.
@@ -34,13 +31,10 @@ tests/cases/conformance/jsx/file.tsx(24,11): error TS2322: Type '{ X: string; x:
     // Error
     let p = <Poisoned {...obj} />;
              ~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'PoisonedProp'.
-!!! error TS2322:   Property 'x' is missing in type '{}'.
+!!! error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
     let y = <Poisoned />;
              ~~~~~~~~
-!!! error TS2322: Type '{}' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & PoisonedProp & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{}' is not assignable to type 'PoisonedProp'.
-!!! error TS2322:     Property 'x' is missing in type '{}'.
+!!! error TS2739: Type '{}' is missing the following properties from type 'PoisonedProp': x, y
     let z = <Poisoned x y/>;
                       ~
 !!! error TS2322: Type 'true' is not assignable to type 'string'.

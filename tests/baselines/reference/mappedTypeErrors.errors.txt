@@ -22,7 +22,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(60,9): error TS2403: Su
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(61,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ readonly [P in keyof T]?: T[P] | undefined; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(66,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type '{ [P in keyof T]: T[P]; }', but here has type '{ [P in keyof T]: T[P][]; }'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(75,45): error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
-  Property 'y' is missing in type '{ x: number; }'.
+  Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(77,59): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
   Object literal may only specify known properties, and 'z' does not exist in type 'Readonly<{ x: number; y: number; }>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(83,58): error TS2345: Argument of type '{ x: number; y: number; z: number; }' is not assignable to parameter of type 'Partial<{ x: number; y: number; }>'.
@@ -157,7 +157,8 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         let x1 = objAndReadonly({ x: 0, y: 0 }, { x: 1 });  // Error
                                                 ~~~~~~~~
 !!! error TS2345: Argument of type '{ x: number; }' is not assignable to parameter of type 'Readonly<{ x: number; y: number; }>'.
-!!! error TS2345:   Property 'y' is missing in type '{ x: number; }'.
+!!! error TS2345:   Property 'y' is missing in type '{ x: number; }' but required in type 'Readonly<{ x: number; y: number; }>'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypeErrors.ts:75:37: 'y' is declared here.
         let x2 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1 });
         let x3 = objAndReadonly({ x: 0, y: 0 }, { x: 1, y: 1, z: 1 });  // Error
                                                               ~~~~

@@ -730,11 +730,25 @@ namespace ts {
     function tryLoadModuleUsingOptionalResolutionSettings(extensions: Extensions, moduleName: string, containingDirectory: string, loader: ResolutionKindSpecificLoader,
         state: ModuleResolutionState): Resolved | undefined {
 
+        const resolved = tryLoadModuleUsingPathsIfEligible(extensions, moduleName, loader, state);
+        if (resolved) return resolved.value;
+
         if (!isExternalModuleNameRelative(moduleName)) {
             return tryLoadModuleUsingBaseUrl(extensions, moduleName, loader, state);
         }
         else {
             return tryLoadModuleUsingRootDirs(extensions, moduleName, containingDirectory, loader, state);
+        }
+    }
+
+    function tryLoadModuleUsingPathsIfEligible(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState) {
+        const { baseUrl, paths } = state.compilerOptions;
+        if (baseUrl && paths && !pathIsRelative(moduleName)) {
+            if (state.traceEnabled) {
+                trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
+                trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
+            }
+            return tryLoadModuleUsingPaths(extensions, moduleName, baseUrl, paths, loader, /*onlyRecordFailures*/ false, state);
         }
     }
 
@@ -816,21 +830,12 @@ namespace ts {
     }
 
     function tryLoadModuleUsingBaseUrl(extensions: Extensions, moduleName: string, loader: ResolutionKindSpecificLoader, state: ModuleResolutionState): Resolved | undefined {
-        const { baseUrl, paths } = state.compilerOptions;
+        const { baseUrl } = state.compilerOptions;
         if (!baseUrl) {
             return undefined;
         }
         if (state.traceEnabled) {
             trace(state.host, Diagnostics.baseUrl_option_is_set_to_0_using_this_value_to_resolve_non_relative_module_name_1, baseUrl, moduleName);
-        }
-        if (paths) {
-            if (state.traceEnabled) {
-                trace(state.host, Diagnostics.paths_option_is_specified_looking_for_a_pattern_to_match_module_name_0, moduleName);
-            }
-            const resolved = tryLoadModuleUsingPaths(extensions, moduleName, baseUrl, paths, loader, /*onlyRecordFailures*/ false, state);
-            if (resolved) {
-                return resolved.value;
-            }
         }
         const candidate = normalizePath(combinePaths(baseUrl, moduleName));
         if (state.traceEnabled) {

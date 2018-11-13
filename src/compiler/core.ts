@@ -1061,10 +1061,10 @@ namespace ts {
     /**
      * Stable sort of an array. Elements equal to each other maintain their relative position in the array.
      */
-    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>) {
+    export function stableSort<T>(array: ReadonlyArray<T>, comparer: Comparer<T>): SortedReadonlyArray<T> {
         const indices = array.map((_, i) => i);
         stableSortIndices(array, indices, comparer);
-        return indices.map(i => array[i]);
+        return indices.map(i => array[i]) as SortedArray<T> as SortedReadonlyArray<T>;
     }
 
     export function rangeEquals<T>(array1: ReadonlyArray<T>, array2: ReadonlyArray<T>, pos: number, end: number) {
@@ -1156,13 +1156,26 @@ namespace ts {
      * @param offset An offset into `array` at which to start the search.
      */
     export function binarySearch<T, U>(array: ReadonlyArray<T>, value: T, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
-        if (!array || array.length === 0) {
+        return binarySearchKey(array, keySelector(value), keySelector, keyComparer, offset);
+    }
+
+    /**
+     * Performs a binary search, finding the index at which an object with `key` occurs in `array`.
+     * If no such index is found, returns the 2's-complement of first index at which
+     * `array[index]` exceeds `key`.
+     * @param array A sorted array whose first element must be no larger than number
+     * @param key The key to be searched for in the array.
+     * @param keySelector A callback used to select the search key from each element of `array`.
+     * @param keyComparer A callback used to compare two keys in a sorted array.
+     * @param offset An offset into `array` at which to start the search.
+     */
+    export function binarySearchKey<T, U>(array: ReadonlyArray<T>, key: U, keySelector: (v: T) => U, keyComparer: Comparer<U>, offset?: number): number {
+        if (!some(array)) {
             return -1;
         }
 
         let low = offset || 0;
         let high = array.length - 1;
-        const key = keySelector(value);
         while (low <= high) {
             const middle = low + ((high - low) >> 1);
             const midKey = keySelector(array[middle]);
@@ -1255,9 +1268,9 @@ namespace ts {
     }
 
     /** Shims `Array.from`. */
-    export function arrayFrom<T, U>(iterator: Iterator<T>, map: (t: T) => U): U[];
-    export function arrayFrom<T>(iterator: Iterator<T>): T[];
-    export function arrayFrom(iterator: Iterator<any>, map?: (t: any) => any): any[] {
+    export function arrayFrom<T, U>(iterator: Iterator<T> | IterableIterator<T>, map: (t: T) => U): U[];
+    export function arrayFrom<T>(iterator: Iterator<T> | IterableIterator<T>): T[];
+    export function arrayFrom(iterator: Iterator<any> | IterableIterator<any>, map?: (t: any) => any): any[] {
         const result: any[] = [];
         for (let { value, done } = iterator.next(); !done; { value, done } = iterator.next()) {
             result.push(map ? map(value) : value);
@@ -2052,7 +2065,6 @@ namespace ts {
     }
 
     /** Represents a "prefix*suffix" pattern. */
-    /* @internal */
     export interface Pattern {
         prefix: string;
         suffix: string;
