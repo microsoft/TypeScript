@@ -156,7 +156,7 @@ namespace ts {
 
         function reportLikelyUnsafeImportRequiredError(specifier: string) {
             if (errorNameNode) {
-                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_requires_a_reference_to_a_module_at_1_to_name_which_would_likely_break_on_type_redistribution_A_type_annotation_is_necessary,
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     specifier));
             }
