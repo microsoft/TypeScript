@@ -13,9 +13,9 @@ namespace ts.refactor.inlineLocal {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     interface Info {
-        declaration: VariableDeclaration;
-        usages: ReadonlyArray<Identifier>;
-        selectedUsage: Identifier | undefined;
+        readonly declaration: VariableDeclaration;
+        readonly usages: ReadonlyArray<Identifier>;
+        readonly selectedUsage: Identifier | undefined;
     }
 
     function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
@@ -51,10 +51,8 @@ namespace ts.refactor.inlineLocal {
             const symbol = checker.getSymbolAtLocation(token);
             if (!symbol) return undefined;
             const declaration = symbol.valueDeclaration;
-            if (isLocalVariable(declaration)) {
-                return createInfo(checker, declaration, token);
-            }
-            return undefined;
+            if (!isLocalVariable(declaration)) return undefined;
+            return createInfo(checker, declaration, token);
         }
         return undefined;
     }
@@ -103,10 +101,10 @@ namespace ts.refactor.inlineLocal {
         const edits: FileTextChanges[] = [];
         switch (actionName) {
             case inlineAllActionName:
-                edits.push(...getInlineAllEdits(context, declaration, usages));
+                return { edits: getInlineAllEdits(context, declaration, usages) };
                 break;
             case inlineHereActionName:
-                edits.push(...getInlineHereEdits(context, declaration, usages, selectedUsage!));
+                return { edits: getInlineHereEdits(context, declaration, usages, selectedUsage!) };
                 break;
             default:
                 return Debug.fail("invalid action");
@@ -117,7 +115,7 @@ namespace ts.refactor.inlineLocal {
     function getInlineAllEdits(
         context: RefactorContext,
         declaration: VariableDeclaration,
-        usages: ReadonlyArray<Identifier>): ReadonlyArray<FileTextChanges> {
+        usages: ReadonlyArray<Identifier>): FileTextChanges[] {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             ts.forEach(usages, oldNode => {
@@ -133,7 +131,7 @@ namespace ts.refactor.inlineLocal {
     function getInlineHereEdits(context: RefactorContext,
         declaration: VariableDeclaration,
         usages: ReadonlyArray<Identifier>,
-        selectedUsage: Identifier): ReadonlyArray<FileTextChanges> {
+        selectedUsage: Identifier): FileTextChanges[] {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             const { initializer } = declaration;
@@ -164,7 +162,10 @@ namespace ts.refactor.inlineLocal {
     function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
         function getNodes(node: Node) {
-            ts.forEachChild(node, n => { nodes.push(n); getNodes(n); });
+            ts.forEachChild(node, n => {
+                nodes.push(n);
+                getNodes(n);
+            });
         }
         getNodes(scope);
         const symbol = checker.getSymbolAtLocation(target);
