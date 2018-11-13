@@ -1542,8 +1542,8 @@ namespace ts.Completions {
                     case SyntaxKind.JsxSpreadAttribute:
                         if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
                             if (contextToken.kind === SyntaxKind.GreaterThanToken) {
-                                const preceedingToken = findPrecedingToken(contextToken.pos, sourceFile, /*startNode*/ undefined);
-                                if (!(parent as JsxOpeningLikeElement).typeArguments || (preceedingToken && preceedingToken.kind === SyntaxKind.SlashToken)) break;
+                                const precedingToken = findPrecedingToken(contextToken.pos, sourceFile, /*startNode*/ undefined);
+                                if (!(parent as JsxOpeningLikeElement).typeArguments || (precedingToken && precedingToken.kind === SyntaxKind.SlashToken)) break;
                             }
                             return <JsxOpeningLikeElement>parent;
                         }
