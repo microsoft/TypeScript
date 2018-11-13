@@ -18,7 +18,7 @@ function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at 
 >f2 : Symbol(f2, Decl(parameterInitializersForwardReferencing1.ts, 5, 1))
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 7, 13))
 >baz : Symbol(baz, Decl(parameterInitializersForwardReferencing1.ts, 7, 20))
->foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 0, 3))
+>foo : Symbol(foo, Decl(parameterInitializersForwardReferencing1.ts, 8, 7))
 >baz : Symbol(baz, Decl(parameterInitializersForwardReferencing1.ts, 7, 20))
 
     var foo: number = 2;
@@ -96,7 +96,7 @@ let bazzzz = 2;
 function f9(bar = () => bazzzz) {
 >f9 : Symbol(f9, Decl(parameterInitializersForwardReferencing1.ts, 38, 15))
 >bar : Symbol(bar, Decl(parameterInitializersForwardReferencing1.ts, 39, 12))
->bazzzz : Symbol(bazzzz, Decl(parameterInitializersForwardReferencing1.ts, 38, 3))
+>bazzzz : Symbol(bazzzz, Decl(parameterInitializersForwardReferencing1.ts, 40, 7))
 
     var bazzzz = 1;
 >bazzzz : Symbol(bazzzz, Decl(parameterInitializersForwardReferencing1.ts, 40, 7))
