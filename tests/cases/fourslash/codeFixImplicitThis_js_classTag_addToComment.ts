@@ -15,8 +15,9 @@ verify.codeFix({
     index: 0,
     newFileContent:
 `/**
+ * Doc
  * @class
- * Doc */
+ */
 function f() {
     this.x = 1;
 }`,

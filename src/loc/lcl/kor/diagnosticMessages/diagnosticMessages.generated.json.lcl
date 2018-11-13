@@ -61,7 +61,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'break' statement can only be used within an enclosing iteration or switch statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['break' 문은 이 문을 둘러싼 반복 문 또는 switch 문 내에서만 사용할 수 있습니다.]]></Val>
+            <Val><![CDATA['break' 문은 이 문을 둘러싼 반복문 또는 switch 문 내에서만 사용할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -247,7 +247,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'continue' statement can only be used within an enclosing iteration statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['continue' 문은 이 문을 둘러싼 반복 문 내에서만 사용할 수 있습니다.]]></Val>
+            <Val><![CDATA['continue' 문은 이 문을 둘러싼 반복문 내에서만 사용할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />
@@ -256,7 +256,7 @@
         <Str Cat="Text">
           <Val><![CDATA[A 'continue' statement can only jump to a label of an enclosing iteration statement.]]></Val>
           <Tgt Cat="Text" Stat="Loc" Orig="New">
-            <Val><![CDATA['continue' 문은 이 문을 둘러싼 반복 문의 레이블로만 이동할 수 있습니다.]]></Val>
+            <Val><![CDATA['continue' 문은 이 문을 둘러싼 반복문의 레이블로만 이동할 수 있습니다.]]></Val>
           </Tgt>
         </Str>
         <Disp Icon="Str" />

@@ -17,7 +17,7 @@ void Symbol.toPrimitive;
 >toPrimitive : symbol
 
 typeof Symbol.toStringTag;
->typeof Symbol.toStringTag : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof Symbol.toStringTag : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

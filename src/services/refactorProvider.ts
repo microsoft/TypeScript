@@ -5,7 +5,7 @@ namespace ts {
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
         /** Compute (quickly) which actions are available here */
-        getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
+        getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo>;
     }
 
     export interface RefactorContext extends textChanges.TextChangesContext {

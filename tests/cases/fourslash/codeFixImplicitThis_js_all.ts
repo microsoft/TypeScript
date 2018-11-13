@@ -23,11 +23,15 @@ verify.codeFixAll({
     fixId: "fixImplicitThis",
     fixAllDescription: "Fix all implicit-'this' errors",
     newFileContent:
-`/** @class */
+`/**
+ * @class
+ */
 function f() {
     this.x = 1;
 }
-/** @this {any} */
+/**
+ * @this {any}
+ */
 function g() {
     this;
 }

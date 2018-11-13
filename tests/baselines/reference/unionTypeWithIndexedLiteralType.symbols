@@ -1,0 +1,20 @@
+=== tests/cases/compiler/unionTypeWithIndexedLiteralType.ts ===
+interface I { x: number; }
+>I : Symbol(I, Decl(unionTypeWithIndexedLiteralType.ts, 0, 0))
+>x : Symbol(I.x, Decl(unionTypeWithIndexedLiteralType.ts, 0, 13))
+
+interface Idx { [index: string]: U; }
+>Idx : Symbol(Idx, Decl(unionTypeWithIndexedLiteralType.ts, 0, 26))
+>index : Symbol(index, Decl(unionTypeWithIndexedLiteralType.ts, 1, 17))
+>U : Symbol(U, Decl(unionTypeWithIndexedLiteralType.ts, 1, 37))
+
+type U = Idx | I | "lit";
+>U : Symbol(U, Decl(unionTypeWithIndexedLiteralType.ts, 1, 37))
+>Idx : Symbol(Idx, Decl(unionTypeWithIndexedLiteralType.ts, 0, 26))
+>I : Symbol(I, Decl(unionTypeWithIndexedLiteralType.ts, 0, 0))
+
+const u: U = { x: "lit" };
+>u : Symbol(u, Decl(unionTypeWithIndexedLiteralType.ts, 3, 5))
+>U : Symbol(U, Decl(unionTypeWithIndexedLiteralType.ts, 1, 37))
+>x : Symbol(x, Decl(unionTypeWithIndexedLiteralType.ts, 3, 14))
+

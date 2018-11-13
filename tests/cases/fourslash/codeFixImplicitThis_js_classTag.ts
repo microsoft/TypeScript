@@ -13,7 +13,9 @@ verify.codeFix({
     description: "Add '@class' tag",
     index: 0,
     newFileContent:
-`/** @class */
+`/**
+ * @class
+ */
 function f() {
     this.x = 1;
 }`,

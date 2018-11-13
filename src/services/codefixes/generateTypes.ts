@@ -1,14 +1,22 @@
-/* @internal */
 namespace ts {
     export function generateTypesForModule(name: string, moduleValue: unknown, formatSettings: FormatCodeSettings): string {
-        return valueInfoToDeclarationFileText(inspectValue(name, moduleValue), formatSettings);
+        return generateTypesForModuleOrGlobal(name, moduleValue, formatSettings, OutputKind.ExportEquals);
     }
 
-    export function valueInfoToDeclarationFileText(valueInfo: ValueInfo, formatSettings: FormatCodeSettings): string {
-        return textChanges.getNewFileText(toStatements(valueInfo, OutputKind.ExportEquals), ScriptKind.TS, "\n", formatting.getFormatContext(formatSettings));
+    export function generateTypesForGlobal(name: string, globalValue: unknown, formatSettings: FormatCodeSettings): string {
+        return generateTypesForModuleOrGlobal(name, globalValue, formatSettings, OutputKind.Global);
     }
 
-    const enum OutputKind { ExportEquals, NamedExport, NamespaceMember }
+    function generateTypesForModuleOrGlobal(name: string, globalValue: unknown, formatSettings: FormatCodeSettings, outputKind: OutputKind.ExportEquals | OutputKind.Global): string {
+        return valueInfoToDeclarationFileText(inspectValue(name, globalValue), formatSettings, outputKind);
+    }
+
+    /* @internal */
+    export function valueInfoToDeclarationFileText(valueInfo: ValueInfo, formatSettings: FormatCodeSettings, outputKind: OutputKind.ExportEquals | OutputKind.Global = OutputKind.ExportEquals): string {
+        return textChanges.getNewFileText(toStatements(valueInfo, outputKind), ScriptKind.TS, formatSettings.newLineCharacter || "\n", formatting.getFormatContext(formatSettings));
+    }
+
+    const enum OutputKind { ExportEquals, NamedExport, NamespaceMember, Global }
     function toNamespaceMemberStatements(info: ValueInfo): ReadonlyArray<Statement> {
         return toStatements(info, OutputKind.NamespaceMember);
     }
@@ -18,7 +26,7 @@ namespace ts {
         if (!isValidIdentifier(name) || isDefault && kind !== OutputKind.NamedExport) return emptyArray;
 
         const modifiers = isDefault && info.kind === ValueKind.FunctionOrClass ? [createModifier(SyntaxKind.ExportKeyword), createModifier(SyntaxKind.DefaultKeyword)]
-            : kind === OutputKind.ExportEquals ? [createModifier(SyntaxKind.DeclareKeyword)]
+            : kind === OutputKind.Global || kind === OutputKind.ExportEquals ? [createModifier(SyntaxKind.DeclareKeyword)]
             : kind === OutputKind.NamedExport ? [createModifier(SyntaxKind.ExportKeyword)]
             : undefined;
         const exportEquals = () => kind === OutputKind.ExportEquals ? [exportEqualsOrDefault(info.name, /*isExportEquals*/ true)] : emptyArray;
@@ -28,13 +36,15 @@ namespace ts {
             case ValueKind.FunctionOrClass:
                 return [...exportEquals(), ...functionOrClassToStatements(modifiers, name, info)];
             case ValueKind.Object:
-                const { members } = info;
-                if (kind === OutputKind.ExportEquals) {
-                    return flatMap(members, v => toStatements(v, OutputKind.NamedExport));
-                }
-                if (members.some(m => m.kind === ValueKind.FunctionOrClass)) {
-                    // If some member is a function, use a namespace so it gets a FunctionDeclaration or ClassDeclaration.
-                    return [...exportDefault(), createNamespace(modifiers, name, flatMap(members, toNamespaceMemberStatements))];
+                const { members, hasNontrivialPrototype } = info;
+                if (!hasNontrivialPrototype) {
+                    if (kind === OutputKind.ExportEquals) {
+                        return flatMap(members, v => toStatements(v, OutputKind.NamedExport));
+                    }
+                    if (members.some(m => m.kind === ValueKind.FunctionOrClass)) {
+                        // If some member is a function, use a namespace so it gets a FunctionDeclaration or ClassDeclaration.
+                        return [...exportDefault(), createNamespace(modifiers, name, flatMap(members, toNamespaceMemberStatements))];
+                    }
                 }
                 // falls through
             case ValueKind.Const:
@@ -54,10 +64,20 @@ namespace ts {
     function functionOrClassToStatements(modifiers: Modifiers, name: string, { source, prototypeMembers, namespaceMembers }: ValueInfoFunctionOrClass): ReadonlyArray<Statement> {
         const fnAst = parseClassOrFunctionBody(source);
         const { parameters, returnType } = fnAst === undefined ? { parameters: emptyArray, returnType: anyType() } : getParametersAndReturnType(fnAst);
-        const instanceProperties = typeof fnAst === "object" ? getConstructorFunctionInstanceProperties(fnAst) : emptyArray;
+        const protoOrInstanceMembers = createMap<MethodDeclaration | PropertyDeclaration>();
+        if (typeof fnAst === "object") getConstructorFunctionInstanceProperties(fnAst, protoOrInstanceMembers);
+        for (const p of prototypeMembers) {
+            // ignore non-functions on the prototype
+            if (p.kind === ValueKind.FunctionOrClass) {
+                const m = tryGetMethod(p);
+                if (m) {
+                    protoOrInstanceMembers.set(p.name, m);
+                }
+            }
+        }
 
         const classStaticMembers: ClassElement[] | undefined =
-            instanceProperties.length !== 0 || prototypeMembers.length !== 0 || fnAst === undefined || typeof fnAst !== "number" && fnAst.kind === SyntaxKind.Constructor ? [] : undefined;
+            protoOrInstanceMembers.size !== 0 || fnAst === undefined || typeof fnAst !== "number" && fnAst.kind === SyntaxKind.Constructor ? [] : undefined;
 
         const namespaceStatements = flatMap(namespaceMembers, info => {
             if (!isValidIdentifier(info.name)) return undefined;
@@ -83,6 +103,9 @@ namespace ts {
                                 return undefined;
                             }
                         }
+                        break;
+                    default:
+                        Debug.assertNever(info);
                 }
             }
             return toStatements(info, OutputKind.NamespaceMember);
@@ -98,9 +121,7 @@ namespace ts {
                 [
                     ...classStaticMembers,
                     ...(parameters.length ? [createConstructor(/*decorators*/ undefined, /*modifiers*/ undefined, parameters, /*body*/ undefined)] : emptyArray),
-                    ...instanceProperties,
-                    // ignore non-functions on the prototype
-                    ...mapDefined(prototypeMembers, info => info.kind === ValueKind.FunctionOrClass ? tryGetMethod(info) : undefined),
+                    ...arrayFrom(protoOrInstanceMembers.values()),
                 ])
             : createFunctionDeclaration(/*decorators*/ undefined, modifiers, /*asteriskToken*/ undefined, name, /*typeParameters*/ undefined, parameters, returnType, /*body*/ undefined);
         return [decl, ...(namespaceStatements.length === 0 ? emptyArray : [createNamespace(modifiers && modifiers.map(m => getSynthesizedDeepClone(m)), name, namespaceStatements)])];
@@ -132,23 +153,26 @@ namespace ts {
             case ValueKind.FunctionOrClass:
                 return createTypeReferenceNode("Function", /*typeArguments*/ undefined); // Normally we create a FunctionDeclaration, but this can happen for a function in an array.
             case ValueKind.Object:
-                return createTypeLiteralNode(info.members.map(m => createPropertySignature(/*modifiers*/ undefined, m.name, /*questionToken*/ undefined, toType(m), /*initializer*/ undefined)));
+                return createTypeLiteralNode(info.members.map(m => createPropertySignature(/*modifiers*/ undefined, toPropertyName(m.name), /*questionToken*/ undefined, toType(m), /*initializer*/ undefined)));
             default:
                 return Debug.assertNever(info);
         }
     }
+    function toPropertyName(name: string): Identifier | StringLiteral {
+        return isIdentifierText(name, ScriptTarget.ESNext) ? createIdentifier(name) : createStringLiteral(name);
+    }
 
     // Parses assignments to "this.x" in the constructor into class property declarations
-    function getConstructorFunctionInstanceProperties(fnAst: FunctionOrConstructorNode): ReadonlyArray<PropertyDeclaration> {
-        const members: PropertyDeclaration[] = [];
+    function getConstructorFunctionInstanceProperties(fnAst: FunctionOrConstructorNode, members: Map<MethodDeclaration | PropertyDeclaration>): void {
         forEachOwnNodeOfFunction(fnAst, node => {
             if (isAssignmentExpression(node, /*excludeCompoundAssignment*/ true) &&
                 isPropertyAccessExpression(node.left) && node.left.expression.kind === SyntaxKind.ThisKeyword) {
                 const name = node.left.name.text;
-                if (!isJsPrivate(name)) members.push(createProperty(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*questionOrExclamationToken*/ undefined, anyType(), /*initializer*/ undefined));
+                if (!isJsPrivate(name)) {
+                    getOrUpdate(members, name, () => createProperty(/*decorators*/ undefined, /*modifiers*/ undefined, name, /*questionOrExclamationToken*/ undefined, anyType(), /*initializer*/ undefined));
+                }
             }
         });
-        return members;
     }
 
     interface ParametersAndReturnType { readonly parameters: ReadonlyArray<ParameterDeclaration>; readonly returnType: TypeNode; }

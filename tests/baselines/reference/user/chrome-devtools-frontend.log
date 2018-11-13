@@ -1,16 +1,16 @@
 Exit Code: 1
 Standard output:
-../../../../built/local/lib.dom.d.ts(2354,11): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(2373,13): error TS2300: Duplicate identifier 'CSSRule'.
-../../../../built/local/lib.dom.d.ts(3150,11): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(3153,13): error TS2300: Duplicate identifier 'Comment'.
-../../../../built/local/lib.dom.d.ts(4846,11): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(4905,13): error TS2300: Duplicate identifier 'Event'.
-../../../../built/local/lib.dom.d.ts(11124,11): error TS2300: Duplicate identifier 'Position'.
-../../../../built/local/lib.dom.d.ts(11819,11): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(11899,13): error TS2300: Duplicate identifier 'Request'.
-../../../../built/local/lib.dom.d.ts(16316,11): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.dom.d.ts(16447,13): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(2388,11): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(2407,13): error TS2300: Duplicate identifier 'CSSRule'.
+../../../../built/local/lib.dom.d.ts(3267,11): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(3270,13): error TS2300: Duplicate identifier 'Comment'.
+../../../../built/local/lib.dom.d.ts(4963,11): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(5023,13): error TS2300: Duplicate identifier 'Event'.
+../../../../built/local/lib.dom.d.ts(11214,11): error TS2300: Duplicate identifier 'Position'.
+../../../../built/local/lib.dom.d.ts(11959,11): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(12039,13): error TS2300: Duplicate identifier 'Request'.
+../../../../built/local/lib.dom.d.ts(16513,11): error TS2300: Duplicate identifier 'Window'.
+../../../../built/local/lib.dom.d.ts(16644,13): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.es5.d.ts(1406,11): error TS2300: Duplicate identifier 'ArrayLike'.
 ../../../../built/local/lib.es5.d.ts(1442,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
@@ -149,6 +149,7 @@ node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(274,42): error TS2554: Expected 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(298,19): error TS2339: Property 'breadcrumb' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(302,23): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
+node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(314,15): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(323,23): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(330,27): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/accessibility/AXBreadcrumbsPane.js(391,50): error TS2345: Argument of type '0' is not assignable to parameter of type 'string'.
@@ -365,12 +366,9 @@ node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(4
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(450,37): error TS2339: Property 'AnimationUI' does not exist on type '{ new (effect?: AnimationEffect, timeline?: AnimationTimeline): Animation; prototype: Animation; }'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(457,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(484,36): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(566,10): error TS2322: Type '{ transform: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ transform: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(566,42): error TS2322: Type '{ transform: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ transform: string; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(571,18): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(587,44): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(588,9): error TS2367: This condition will always return 'false' since the types 'AnimationPlayState' and '"pending"' have no overlap.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(589,20): error TS2339: Property 'window' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(605,38): error TS2339: Property 'x' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/animation/AnimationTimeline.js(612,41): error TS2339: Property 'x' does not exist on type 'Event'.
@@ -2832,10 +2830,14 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,11): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60267,32): error TS2304: Cannot find name 'define'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60268,1): error TS2304: Cannot find name 'define'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60346,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60397,1): error TS2323: Cannot redeclare exported variable 'parse'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60430,8): error TS2339: Property 'errors' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60436,1): error TS2323: Cannot redeclare exported variable 'Syntax'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60446,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60601,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60602,1): error TS2323: Cannot redeclare exported variable 'Syntax'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60688,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60728,13): error TS2339: Property 'match' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60732,6): error TS2339: Property 'scanner' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(60732,25): error TS2339: Property 'startMarker' does not exist on type 'JSXParser'.
@@ -2998,6 +3000,11 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61200,9): error TS2339: Property 'config' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61201,6): error TS2339: Property 'tokens' does not exist on type 'JSXParser'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61209,62): error TS2339: Property 'match' does not exist on type 'JSXParser'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61221,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61281,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61386,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(61407,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62087,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(62832,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'id' must be of type 'string', but here has type 'any'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63482,12): error TS2339: Property 'message' does not exist on type '{ simple: boolean; paramSet: {}; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(63483,39): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; paramSet: {}; }'.
@@ -3009,12 +3016,19 @@ node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighth
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64518,9): error TS2551: Property 'paramSet' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'. Did you mean 'params'?
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64534,18): error TS2339: Property 'stricted' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(64536,17): error TS2339: Property 'message' does not exist on type '{ simple: boolean; params: undefined[]; firstRestricted: any; }'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65232,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65248,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65283,7): error TS2339: Property 'index' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65284,7): error TS2339: Property 'lineNumber' does not exist on type 'Error'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65285,7): error TS2339: Property 'description' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65310,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65379,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65468,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65533,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entry' must be of type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }', but here has type '{ multiLine: boolean; slice: any[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(65576,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'comment' must be of type '{ multiLine: boolean; slice: any[]; range: number[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]', but here has type '{ multiLine: boolean; slice: number[]; range: any[]; loc: { start: { line: number; column: number; }; end: {}; }; }[]'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66529,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66549,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(66811,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67117,1): error TS2322: Type 'string[]' is not assignable to type 'RegExpExecArray'.
   Property 'index' is missing in type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/audits2_worker/lighthouse/lighthouse-background.js(67300,14): error TS2339: Property 'Channels' does not exist on type '{}'.
@@ -3352,7 +3366,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2856,10): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,32): error TS2339: Property 'left' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(2858,49): error TS2339: Property 'right' does not exist on type 'never'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(3034,25): error TS2339: Property 'xRel' does not exist on type 'Pos'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(4840,5): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,35): error TS2339: Property 'line' does not exist on type 'LineWidget'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5675,61): error TS2339: Property 'line' does not exist on type 'LineWidget'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(5693,57): error TS2339: Property 'line' does not exist on type 'LineWidget'.
@@ -3414,7 +3428,7 @@ node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7777,11): error
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,32): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7827,41): error TS2339: Property 'textRendering' does not exist on type 'CSSStyleDeclaration'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7828,15): error TS2339: Property 'lineDiv' does not exist on type 'Display'.
-node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7895,25): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(7895,25): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8658,17): error TS2339: Property 'outside' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8659,54): error TS2339: Property 'hitSide' does not exist on type 'Pos'.
 node_modules/chrome-devtools-frontend/front_end/cm/codemirror.js(8680,19): error TS2339: Property 'div' does not exist on type 'ContentEditableInput'.
@@ -3600,10 +3614,6 @@ node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(217,25)
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(241,27): error TS2339: Property 'focus' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(251,13): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(251,39): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(253,24): error TS2322: Type '{ opacity: number; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ opacity: number; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(253,38): error TS2322: Type '{ opacity: number; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ opacity: number; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(254,13): error TS2339: Property 'title' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(259,36): error TS2694: Namespace 'ColorPicker.Spectrum' has no exported member 'Palette'.
 node_modules/chrome-devtools-frontend/front_end/color_picker/Spectrum.js(272,22): error TS2339: Property '__mutable' does not exist on type 'Element'.
@@ -4374,8 +4384,8 @@ node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(74,
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(81,16): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(116,28): error TS2322: Type '{ cookies: Cookie[]; }' is not assignable to type '{ folderName: string; cookies: Cookie[]; }'.
   Property 'folderName' is missing in type '{ cookies: Cookie[]; }'.
-node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(320,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(320,52): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(320,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(320,52): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(346,21): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(347,19): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/cookie_table/CookiesTable.js(348,22): error TS2555: Expected at least 2 arguments, but got 1.
@@ -4399,6 +4409,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManag
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(247,24): error TS2694: Namespace 'Coverage' has no exported member 'RawLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(248,24): error TS2694: Namespace 'Coverage' has no exported member 'RawLocation'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(255,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(258,34): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(277,18): error TS2339: Property 'uninstallGutter' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(293,16): error TS2339: Property 'uninstallGutter' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageDecorationManager.js(294,16): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
@@ -4452,6 +4463,7 @@ node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(57,54):
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(141,5): error TS2322: Type 'Timer' is not assignable to type 'number'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(187,55): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(187,85): error TS2339: Property 'bytesToString' does not exist on type 'NumberConstructor'.
+node_modules/chrome-devtools-frontend/front_end/coverage/CoverageView.js(231,59): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(12,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(20,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/coverage_test_runner/CoverageTestRunner.js(28,27): error TS2339: Property 'runtime' does not exist on type 'Window'.
@@ -4929,11 +4941,11 @@ node_modules/chrome-devtools-frontend/front_end/diff/Diff.js(43,25): error TS269
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,116): error TS2322: Type 'string[]' is not assignable to type '{ chars1: string; chars2: string; lineArray: string[]; }'.
   Property 'chars1' is missing in type 'string[]'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,240): error TS2322: Type '0' is not assignable to type '{ chars1: string; chars2: string; lineArray: string[]; }'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,321): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,321): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,352): error TS2365: Operator '<=' cannot be applied to types 'number' and '{ chars1: string; chars2: string; lineArray: string[]; }'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,375): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,375): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,379): error TS2365: Operator '+' cannot be applied to types '{ chars1: string; chars2: string; lineArray: string[]; }' and 'number'.
-node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,388): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,388): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(6,476): error TS2322: Type '0' is not assignable to type '{ chars1: string; chars2: string; lineArray: string[]; }'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(13,201): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/diff/diff_match_patch.js(15,142): error TS2403: Subsequent variable declarations must have the same type.  Variable 'd' must be of type 'any', but here has type 'any[]'.
@@ -5480,11 +5492,11 @@ node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(1
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(164,22): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(179,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(183,9): error TS2322: Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(183,17): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(183,17): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(186,21): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(195,18): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(199,9): error TS2322: Type 'number' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(199,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(199,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(202,21): error TS2339: Property 'toFixedIfFloating' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(235,7): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/MetricsSidebarPane.js(235,35): error TS2555: Expected at least 2 arguments, but got 1.
@@ -5519,12 +5531,6 @@ node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(153
 node_modules/chrome-devtools-frontend/front_end/elements/PropertiesWidget.js(162,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(29,25): error TS2339: Property 'property' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(43,42): error TS2339: Property 'scrollIntoViewIfNeeded' does not exist on type 'Element'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(46,11): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(47,11): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylePropertyHighlighter.js(47,69): error TS2322: Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string | string[] | Keyframe'.
-  Type '{ offset: number; backgroundColor: string; }' is not assignable to type 'string'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(35,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(50,51): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(69,32): error TS2339: Property '_instance' does not exist on type 'typeof StylesSidebarPane'.
@@ -5566,7 +5572,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(68
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(704,36): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(716,22): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(716,38): error TS2555: Expected at least 2 arguments, but got 1.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(724,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(724,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(758,18): error TS2339: Property 'tabIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(762,18): error TS2339: Property '_section' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(763,39): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -5625,7 +5631,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(12
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1296,13): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1325,43): error TS2345: Argument of type 'TemplateStringsArray' is not assignable to parameter of type 'string | string[]'.
   Type 'TemplateStringsArray' is not assignable to type 'string[]'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1346,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1346,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1346,33): error TS2339: Property '_updateFilter' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1349,77): error TS2339: Property 'deepTextContent' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1363,30): error TS2339: Property 'selectors' does not exist on type 'CSSRule'.
@@ -5674,7 +5680,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(19
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1984,25): error TS2339: Property 'key' does not exist on type 'CSSRule'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(1987,17): error TS2339: Property 'setKeyText' does not exist on type 'CSSRule'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2018,64): error TS2339: Property 'key' does not exist on type 'CSSRule'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2109,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2109,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2109,46): error TS2339: Property '_updateFilter' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2148,30): error TS2694: Namespace 'SDK.CSSModel' has no exported member 'ContrastInfo'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2266,49): error TS2339: Property 'section' does not exist on type 'TreeOutline'.
@@ -5723,7 +5729,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(26
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2699,49): error TS2694: Namespace 'Elements.StylePropertyTreeElement' has no exported member 'Context'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2715,49): error TS2694: Namespace 'Elements.StylePropertyTreeElement' has no exported member 'Context'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2750,49): error TS2694: Namespace 'Elements.StylePropertyTreeElement' has no exported member 'Context'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2765,40): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2765,40): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2769,7): error TS2322: Type 'StylePropertyTreeElement' is not assignable to type 'this'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2780,32): error TS2339: Property 'isWhitespace' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2785,32): error TS2339: Property 'focus' does not exist on type 'Element'.
@@ -5733,7 +5739,7 @@ node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(28
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2838,73): error TS2339: Property 'nameElement' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2838,99): error TS2339: Property 'valueElement' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2839,25): error TS2339: Property 'startEditing' does not exist on type 'TreeElement'.
-node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2849,61): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2849,61): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2857,9): error TS2322: Type 'StylePropertyTreeElement' is not assignable to type 'this'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2906,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
 node_modules/chrome-devtools-frontend/front_end/elements/StylesSidebarPane.js(2910,7): error TS2322: Type 'Promise<void>' is not assignable to type 'Promise<undefined>'.
@@ -6251,6 +6257,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(44,24): error TS2339: Property 'token' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(46,20): error TS2345: Argument of type 'void' is not assignable to parameter of type 'string'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(46,69): error TS2339: Property 'length' does not exist on type 'void'.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(58,26): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(96,3): error TS2554: Expected 2-3 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(103,45): error TS2322: Type 'number' is not assignable to type 'boolean'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/FormatterWorker.js(138,3): error TS2554: Expected 2-3 arguments, but got 1.
@@ -6363,7 +6370,7 @@ node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(527,43): error TS2339: Property 'startNode' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(528,8): error TS2339: Property 'nextToken' does not exist on type 'Parser'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(529,15): error TS2339: Property 'parseTopLevel' does not exist on type 'Parser'.
-node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1674,55): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(1674,55): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,7): error TS2339: Property 'pos' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,22): error TS2339: Property 'loc' does not exist on type 'SyntaxError'.
 node_modules/chrome-devtools-frontend/front_end/formatter_worker/acorn/acorn.js(2451,37): error TS2339: Property 'raisedAt' does not exist on type 'SyntaxError'.
@@ -6442,6 +6449,8 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(918,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
   Property 'pop' is missing in type 'Uint32Array'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(920,34): error TS2345: Argument of type 'Uint32Array' is not assignable to parameter of type 'number[]'.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1020,16): error TS2587: JSDoc type 'JSHeapSnapshotEdge' circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1028,16): error TS2587: JSDoc type 'JSHeapSnapshotRetainerEdge' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1045,5): error TS2322: Type 'void' is not assignable to type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1083,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(1086,14): error TS2339: Property 'key' does not exist on type '(arg0: HeapSnapshotNode) => boolean'.
@@ -6529,7 +6538,7 @@ node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapsho
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2510,16): error TS2339: Property 'isArray' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2524,18): error TS2339: Property 'rawName' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,16): error TS2365: Operator '<' cannot be applied to types 'string' and 'number'.
-node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2527,30): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,17): error TS2339: Property 'isUserRoot' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2541,38): error TS2339: Property 'isDocumentDOMTreesRoot' does not exist on type 'HeapSnapshotNode'.
 node_modules/chrome-devtools-frontend/front_end/heap_snapshot_worker/HeapSnapshot.js(2629,14): error TS2403: Subsequent variable declarations must have the same type.  Variable 'iter' must be of type 'HeapSnapshotEdgeIterator', but here has type 'any'.
@@ -6776,6 +6785,7 @@ node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(199,80): error TS2339: Property '_layer' does not exist on type 'TreeElement'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(222,11): error TS2339: Property 'createTextChild' does not exist on type 'DocumentFragment'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerTreeOutline.js(223,25): error TS2339: Property 'createChild' does not exist on type 'DocumentFragment'.
+node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(110,15): error TS2587: JSDoc type 'Layer' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(125,84): error TS2339: Property 'scrollRectIndex' does not exist on type 'Selection'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(135,19): error TS2694: Namespace 'SDK' has no exported member 'SnapshotWithRect'.
 node_modules/chrome-devtools-frontend/front_end/layer_viewer/LayerViewHost.js(149,34): error TS2339: Property '_snapshot' does not exist on type 'Selection'.
@@ -7744,10 +7754,10 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSectio
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(923,51): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(924,51): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(980,18): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1153,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1153,23): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1182,26): error TS2339: Property '_readOnly' does not exist on type 'ObjectPropertyTreeElement'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1211,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1211,44): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1211,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1211,44): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1241,23): error TS2339: Property 'parentObject' does not exist on type 'RemoteObjectProperty'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1243,26): error TS2339: Property '_readOnly' does not exist on type 'ObjectPropertyTreeElement'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/ObjectPropertiesSection.js(1319,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
@@ -7771,7 +7781,7 @@ node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFor
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(127,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(136,26): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(137,26): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
-node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(149,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(149,19): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(161,23): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(167,23): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/object_ui/RemoteObjectPreviewFormatter.js(171,23): error TS2339: Property 'createTextChild' does not exist on type 'Element'.
@@ -7796,7 +7806,7 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(67,47):
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(131,41): error TS2339: Property 'offsetWidth' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(133,46): error TS2339: Property 'offsetHeight' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(182,27): error TS2339: Property 'shiftKey' does not exist on type 'Event'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(182,38): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(182,38): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(183,46): error TS2339: Property 'wheelDeltaY' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(183,72): error TS2339: Property 'wheelDeltaX' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/ChartViewport.js(184,55): error TS2339: Property 'wheelDeltaX' does not exist on type 'Event'.
@@ -7870,14 +7880,12 @@ node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(694,31): e
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(701,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'entryIndex' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(796,43): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(903,60): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(915,27): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(919,45): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(907,17): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(931,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(940,33): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'Group'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1027,38): error TS2339: Property 'lowerBound' does not exist on type 'any[]'.
+node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1167,15): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1169,70): error TS2339: Property 'peekLast' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1176,27): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
-node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1182,43): error TS2339: Property 'peekLast' does not exist on type '{ nestingLevel: number; visible: boolean; }[]'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1273,25): error TS2339: Property 'style' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1286,19): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/perf_ui/FlameChart.js(1390,34): error TS2694: Namespace 'PerfUI.FlameChart' has no exported member 'GroupStyle'.
@@ -8008,7 +8016,7 @@ node_modules/chrome-devtools-frontend/front_end/performance_test_runner/Timeline
 node_modules/chrome-devtools-frontend/front_end/performance_test_runner/TimelineTestRunner.js(355,13): error TS2339: Property 'timeline' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(67,40): error TS2339: Property 'valuesArray' does not exist on type 'Set<PersistenceBinding>'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(155,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
-node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(315,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(315,20): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(329,40): error TS2339: Property 'valuesArray' does not exist on type 'Set<PersistenceBinding>'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(355,41): error TS2339: Property 'reverse' does not exist on type 'string'.
 node_modules/chrome-devtools-frontend/front_end/persistence/Automapping.js(363,44): error TS2339: Property 'reverse' does not exist on type 'string'.
@@ -8142,8 +8150,8 @@ node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(275,8): er
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(320,8): error TS2339: Property 'naturalOrderComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(335,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(336,19): error TS2345: Argument of type 'string' is not assignable to parameter of type 'number'.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(342,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(342,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(342,18): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(342,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(364,8): error TS2339: Property 'caseInsensetiveComparator' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(378,8): error TS2339: Property 'constrain' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/platform/utilities.js(391,8): error TS2339: Property 'gcd' does not exist on type 'NumberConstructor'.
@@ -8827,6 +8835,7 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.j
     Type 'HeapSnapshotProviderProxy' is not assignable to type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
       Property '_worker' does not exist on type '{ dispose(): void; nodePosition(snapshotObjectId: number): Promise<number>; isEmpty(): Promise<boolean>; serializeItemsRange(startPosition: number, endPosition: number): Promise<...>; sortAndRewind(comparator: ComparatorConfig): Promise<...>; }'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,15): error TS2577: Return type annotation circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(804,16): error TS2587: JSDoc type 'HeapSnapshotRetainingObjectNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(871,36): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(874,34): error TS2339: Property 'withThousandsSeparator' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotGridNodes.js(892,3): error TS2416: Property 'createProvider' in type 'HeapSnapshotInstanceNode' is not assignable to the same property in base type 'HeapSnapshotGenericObjectNode'.
@@ -8995,7 +9004,6 @@ node_modules/chrome-devtools-frontend/front_end/profiler/HeapSnapshotView.js(198
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(48,37): error TS2339: Property 'deoptReason' does not exist on type 'ProfileNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(97,15): error TS2339: Property 'self' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property 'self' does not exist on type 'ProfileDataGridTree'.
-node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(118,27): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((key: any) => any) | ((key: string) => ProfileDataGridNode)' has no compatible call signatures.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(131,19): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
   Property '_populated' does not exist on type 'ProfileDataGridNode'.
 node_modules/chrome-devtools-frontend/front_end/profiler/ProfileDataGrid.js(133,15): error TS2339: Property '_populated' does not exist on type 'ProfileDataGridNode | ProfileDataGridTree'.
@@ -9133,7 +9141,6 @@ node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxControll
 node_modules/chrome-devtools-frontend/front_end/profiler/TargetsComboBoxController.js(97,25): error TS2339: Property 'selectedIndex' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(63,17): error TS2339: Property 'populate' does not exist on type 'TopDownProfileDataGridTree | TopDownProfileDataGridNode'.
   Property 'populate' does not exist on type 'TopDownProfileDataGridTree'.
-node_modules/chrome-devtools-frontend/front_end/profiler/TopDownProfileDataGrid.js(73,17): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type '((key: any) => any) | ((key: string) => ProfileDataGridNode)' has no compatible call signatures.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(168,40): error TS2345: Argument of type 'S' is not assignable to parameter of type 'S'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(170,24): error TS2345: Argument of type 'S' is not assignable to parameter of type 'T'.
 node_modules/chrome-devtools-frontend/front_end/protocol/InspectorBackend.js(194,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -9751,7 +9758,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/CookieModel.js(114,38): erro
 node_modules/chrome-devtools-frontend/front_end/sdk/CookieModel.js(129,38): error TS2339: Property 'networkAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CookieParser.js(246,25): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
 node_modules/chrome-devtools-frontend/front_end/sdk/CookieParser.js(250,33): error TS2694: Namespace 'Protocol' has no exported member 'Network'.
-node_modules/chrome-devtools-frontend/front_end/sdk/CookieParser.js(325,53): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/sdk/CookieParser.js(325,53): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMDebuggerModel.js(11,26): error TS2339: Property 'domdebuggerAgent' does not exist on type 'Target'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMDebuggerModel.js(232,22): error TS2694: Namespace 'Common' has no exported member 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DOMDebuggerModel.js(275,24): error TS2694: Namespace 'Protocol' has no exported member 'DOMDebugger'.
@@ -9887,6 +9894,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(250,43): er
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(281,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(304,43): error TS2694: Namespace 'SDK.DebuggerModel' has no exported member 'SetBreakpointResult'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(319,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
+node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(332,32): error TS2587: JSDoc type 'BreakLocation' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(346,24): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(347,34): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/sdk/DebuggerModel.js(355,24): error TS2694: Namespace 'Protocol' has no exported member 'Debugger'.
@@ -9973,6 +9981,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(23,15): err
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(28,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(33,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(38,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(45,12): error TS2502: 'child' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(48,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(53,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/sdk/LayerTreeBase.js(58,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
@@ -10610,6 +10619,7 @@ node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,43): err
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(576,55): error TS2339: Property 'ordinal' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(647,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,15): error TS2577: Return type annotation circularly references itself.
+node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(649,16): error TS2587: JSDoc type 'ObjectSnapshot' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(859,34): error TS2694: Namespace 'SDK.TracingManager' has no exported member 'EventPayload'.
 node_modules/chrome-devtools-frontend/front_end/sdk/TracingModel.js(870,5): error TS2322: Type 'NamedObject[]' is not assignable to type 'Thread[]'.
   Type 'NamedObject' is not assignable to type 'Thread'.
@@ -10871,6 +10881,7 @@ node_modules/chrome-devtools-frontend/front_end/source_frame/JSONView.js(170,23)
 node_modules/chrome-devtools-frontend/front_end/source_frame/PreviewFactory.js(14,33): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/ResourceSourceFrame.js(51,35): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(15,22): error TS2339: Property 'installGutter' does not exist on type 'CodeMirrorTextEditor'.
+node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(18,24): error TS2587: JSDoc type 'TextEditorPositionHandle' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(89,28): error TS2339: Property 'toggleLineClass' does not exist on type 'CodeMirrorTextEditor'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(110,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
 node_modules/chrome-devtools-frontend/front_end/source_frame/SourceCodeDiff.js(177,25): error TS2694: Namespace 'Diff.Diff' has no exported member 'DiffArray'.
@@ -11586,23 +11597,31 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,482): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,502): error TS2554: Expected 1 arguments, but got 2.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1,564): error TS2339: Property 'code' does not exist on type 'Error'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(166,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(293,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(337,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(392,1): error TS2323: Cannot redeclare exported variable 'EventEmitter'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(398,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1330,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1370,101): error TS2339: Property 'TIME_BEFORE_LINKIFY' does not exist on type 'typeof Linkifier'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1550,11): error TS2339: Property 'TIME_BEFORE_LINKIFY' does not exist on type 'typeof Linkifier'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(1557,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2037,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2281,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2359,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2378,16): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2397,20): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2398,27): error TS2339: Property 'clipboardData' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2450,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2476,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2503,41): error TS2339: Property '_document' does not exist on type 'CharMeasure'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2509,18): error TS2339: Property '_parentElement' does not exist on type 'CharMeasure'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2524,18): error TS2339: Property 'emit' does not exist on type 'CharMeasure'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2587,35): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2589,43): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2535,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2612,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2615,22): error TS2403: Subsequent variable declarations must have the same type.  Variable 'i' must be of type 'any', but here has type 'number'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2618,52): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2619,74): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2620,37): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2651,44): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
-node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2664,50): error TS2339: Property 'maxLength' does not exist on type 'CircularList'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2674,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2690,63): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2694,68): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2697,70): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
@@ -11610,6 +11629,9 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2704,51): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2713,22): error TS2339: Property 'OBJECT_ID_ATTRIBUTE' does not exist on type 'typeof DomElementObjectPool'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2714,22): error TS2339: Property '_objectCount' does not exist on type 'typeof DomElementObjectPool'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2721,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2732,1): error TS2323: Cannot redeclare exported variable '__esModule'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2766,1): error TS2323: Cannot redeclare exported variable '__esModule'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(2925,9): error TS2322: Type 'number' is not assignable to type 'number[]'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3087,14): error TS2339: Property 'browser' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(3151,54): error TS2339: Property 'theme' does not exist on type 'Terminal'.
@@ -11670,6 +11692,7 @@ node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4164,20): error TS2300: Duplicate identifier 'handler'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4171,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
 node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4174,10): error TS2339: Property 'emit' does not exist on type 'Terminal'.
+node_modules/chrome-devtools-frontend/front_end/terminal/xterm.js/build/xterm.js(4307,1): error TS2323: Cannot redeclare exported variable 'EventEmitter'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(13,6): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(24,8): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(42,21): error TS2339: Property 'testRunner' does not exist on type 'Window'.
@@ -11707,7 +11730,7 @@ node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(503,30
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,59): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(641,92): error TS2339: Property 'testRunner' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(642,3): error TS2322: Type '1' is not assignable to type 'boolean'.
-node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(683,28): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(683,28): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(717,24): error TS2694: Namespace 'TestRunner' has no exported member 'CustomFormatters'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(748,24): error TS2694: Namespace 'TestRunner' has no exported member 'CustomFormatters'.
 node_modules/chrome-devtools-frontend/front_end/test_runner/TestRunner.js(777,22): error TS2339: Property 'attributes' does not exist on type 'Node'.
@@ -11793,6 +11816,7 @@ node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1551,68): error TS2365: Operator '+' cannot be applied to types 'undefined' and 'number'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1563,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1569,15): error TS2355: A function whose declared type is neither 'void' nor 'any' must return a value.
+node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1571,9): error TS2502: 'positionHandle' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1614,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1615,48): error TS2339: Property 'line' does not exist on type 'void'.
 node_modules/chrome-devtools-frontend/front_end/text_editor/CodeMirrorTextEditor.js(1621,9): error TS1345: An expression of type 'void' cannot be tested for truthiness
@@ -12613,6 +12637,8 @@ node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1780,33): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1811,25): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModel.js(1819,32): error TS2694: Namespace 'Protocol' has no exported member 'Runtime'.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineModelFilter.js(43,22): error TS1110: Type expected.
+node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(72,15): error TS2587: JSDoc type 'TopDownNode' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(74,26): error TS2502: 'parent' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/timeline_model/TimelineProfileTree.js(168,31): error TS2345: Argument of type 'string | symbol' is not assignable to parameter of type 'string'.
   Type 'symbol' is not assignable to type 'string'.
@@ -12674,6 +12700,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/Context.js(73,30): error TS23
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(77,33): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(86,45): error TS1110: Type expected.
 node_modules/chrome-devtools-frontend/front_end/ui/Context.js(101,16): error TS2339: Property 'runtime' does not exist on type 'Window'.
+node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(36,15): error TS2587: JSDoc type 'ContextMenu' circularly references itself.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(42,15): error TS2502: 'contextMenu' is referenced directly or indirectly in its own type annotation.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(81,41): error TS2694: Namespace 'InspectorFrontendHostAPI' has no exported member 'ContextMenuDescriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/ContextMenu.js(87,18): error TS2339: Property '_customElement' does not exist on type 'ContextMenuItem'.
@@ -12862,7 +12889,6 @@ node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(97,36): e
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(108,36): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Descriptor'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(135,42): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(144,42): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
-node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(197,9): error TS1127: Invalid character.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(216,21): error TS2551: Property 'Key' does not exist on type 'typeof KeyboardShortcut'. Did you mean 'Keys'?
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(218,50): error TS2694: Namespace 'UI.KeyboardShortcut' has no exported member 'Key'.
 node_modules/chrome-devtools-frontend/front_end/ui/KeyboardShortcut.js(289,21): error TS2300: Duplicate identifier 'Descriptor'.
@@ -12908,7 +12934,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(276,35): error 
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(279,46): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(291,15): error TS2339: Property 'consume' does not exist on type 'Event'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(347,27): error TS2339: Property 'createChild' does not exist on type 'HTMLSelectElement'.
-node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(376,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(376,7): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(378,24): error TS2339: Property 'disabled' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(395,18): error TS2339: Property 'scrollIntoViewIfNeeded' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/ui/ListWidget.js(402,28): error TS2339: Property 'disabled' does not exist on type 'Element'.

@@ -5,7 +5,7 @@ function f1(x: any) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 >"function" : "function"
 
@@ -20,7 +20,7 @@ function f2(x: unknown) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : unknown
 >"function" : "function"
 
@@ -35,7 +35,7 @@ function f3(x: {}) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : {}
 >"function" : "function"
 
@@ -50,7 +50,7 @@ function f4<T>(x: T) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : T
 >"function" : "function"
 
@@ -66,7 +66,7 @@ function f5(x: { s: string }) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : { s: string; }
 >"function" : "function"
 
@@ -81,7 +81,7 @@ function f6(x: () => string) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : () => string
 >"function" : "function"
 
@@ -96,7 +96,7 @@ function f10(x: string | (() => string)) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | (() => string)
 >"function" : "function"
 
@@ -116,7 +116,7 @@ function f11(x: { s: string } | (() => string)) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : { s: string; } | (() => string)
 >"function" : "function"
 
@@ -137,7 +137,7 @@ function f12(x: { s: string } | { n: number }) {
 
     if (typeof x === "function") {
 >typeof x === "function" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : { s: string; } | { n: number; }
 >"function" : "function"
 
@@ -169,7 +169,7 @@ function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
 
         if (typeof item == 'function')
 >typeof item == 'function' : boolean
->typeof item : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof item : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >item : T[K]
 >'function' : "function"
 

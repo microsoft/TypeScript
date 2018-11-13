@@ -32,14 +32,6 @@ import { m } from "mquery";
 j + k + l + m;
 
 
-//// [lquery.js]
-"use strict";
-exports.__esModule = true;
-exports.l = 2;
-//// [index.js]
-"use strict";
-exports.__esModule = true;
-exports.m = 3;
 //// [a.js]
 "use strict";
 exports.__esModule = true;

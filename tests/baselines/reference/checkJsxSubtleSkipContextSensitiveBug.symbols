@@ -1,0 +1,64 @@
+=== tests/cases/conformance/jsx/checkJsxSubtleSkipContextSensitiveBug.tsx ===
+/// <reference path="react16.d.ts" />
+import * as React from "react";
+>React : Symbol(React, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 6))
+
+interface ErrorResult { error: true }
+>ErrorResult : Symbol(ErrorResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 31))
+>error : Symbol(ErrorResult.error, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 3, 23))
+
+interface AsyncLoaderProps<TResult> {
+>AsyncLoaderProps : Symbol(AsyncLoaderProps, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 3, 37))
+>TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 27))
+
+    readonly prop1: () => Promise<TResult>;
+>prop1 : Symbol(AsyncLoaderProps.prop1, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 37))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 27))
+
+    readonly prop2: (result: Exclude<TResult, ErrorResult>) => any;
+>prop2 : Symbol(AsyncLoaderProps.prop2, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 6, 43))
+>result : Symbol(result, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 8, 21))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 5, 27))
+>ErrorResult : Symbol(ErrorResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 31))
+}
+
+class AsyncLoader<TResult> extends React.Component<AsyncLoaderProps<TResult>> {
+>AsyncLoader : Symbol(AsyncLoader, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 9, 1))
+>TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 11, 18))
+>React.Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>React : Symbol(React, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 6))
+>Component : Symbol(React.Component, Decl(react16.d.ts, 345, 54), Decl(react16.d.ts, 349, 94))
+>AsyncLoaderProps : Symbol(AsyncLoaderProps, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 3, 37))
+>TResult : Symbol(TResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 11, 18))
+
+    render() { return null; }
+>render : Symbol(AsyncLoader.render, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 11, 79))
+}
+
+async function load(): Promise<{ success: true } | ErrorResult> {
+>load : Symbol(load, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 13, 1))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>success : Symbol(success, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 15, 32))
+>ErrorResult : Symbol(ErrorResult, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 1, 31))
+
+    return { success: true };
+>success : Symbol(success, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 16, 12))
+}
+
+const loader = <AsyncLoader
+>loader : Symbol(loader, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 19, 5))
+>AsyncLoader : Symbol(AsyncLoader, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 9, 1))
+
+    prop1={load}
+>prop1 : Symbol(prop1, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 19, 27))
+>load : Symbol(load, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 13, 1))
+
+    prop2={result => result}
+>prop2 : Symbol(prop2, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 20, 16))
+>result : Symbol(result, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 21, 11))
+>result : Symbol(result, Decl(checkJsxSubtleSkipContextSensitiveBug.tsx, 21, 11))
+
+/>;
+

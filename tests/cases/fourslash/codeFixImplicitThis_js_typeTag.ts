@@ -13,7 +13,9 @@ verify.codeFix({
     description: "Add '@this' tag",
     index: 0,
     newFileContent:
-`/** @this {any} */
+`/**
+ * @this {any}
+ */
 function f() {
     this;
 }`,

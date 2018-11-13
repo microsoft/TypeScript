@@ -9,7 +9,10 @@
 ////var f = new C1();
 ////f./**/
 
-goTo.marker();
-verify.completionListCount(2);
-verify.completionListContains('pubMeth', '(method) C1.pubMeth(): void');
-verify.completionListContains('pubProp', '(property) C1.pubProp: number');
+verify.completions({
+    marker: "",
+    exact: [
+        { name: "pubMeth", text: "(method) C1.pubMeth(): void" },
+        { name: "pubProp", text: "(property) C1.pubProp: number" },
+    ],
+});

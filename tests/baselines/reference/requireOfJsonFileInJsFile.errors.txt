@@ -1,9 +1,7 @@
 /user.js(2,7): error TS2339: Property 'b' does not exist on type '{ "a": number; }'.
-/user.js(5,7): error TS2322: Type '{ "a": number; }' is not assignable to type '{ b: number; }'.
-  Property 'b' is missing in type '{ "a": number; }'.
+/user.js(5,7): error TS2741: Property 'b' is missing in type '{ "a": number; }' but required in type '{ b: number; }'.
 /user.js(9,7): error TS2339: Property 'b' does not exist on type '{ "a": number; }'.
-/user.js(12,7): error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
-  Property 'b' is missing in type '{ a: number; }'.
+/user.js(12,7): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
 
 
 ==== /user.js (4 errors) ====
@@ -15,8 +13,8 @@
     /** @type {{ b: number }} */
     const json1 = require("./json.json"); // No error (bad)
           ~~~~~
-!!! error TS2322: Type '{ "a": number; }' is not assignable to type '{ b: number; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ "a": number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ "a": number; }' but required in type '{ b: number; }'.
+!!! related TS2728 /user.js:4:14: 'b' is declared here.
     json1.b; // No error (OK since that's the type annotation)
     
     const js0 = require("./js.js");
@@ -27,8 +25,8 @@
     /** @type {{ b: number }} */
     const js1 = require("./js.js"); // Error (good)
           ~~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type '{ b: number; }'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type '{ b: number; }'.
+!!! related TS2728 /user.js:11:14: 'b' is declared here.
     js1.b;
 ==== /json.json (0 errors) ====
     { "a": 0 }

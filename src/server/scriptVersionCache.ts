@@ -382,7 +382,6 @@ namespace ts.server {
         }
     }
 
-    /* @internal */
     export class LineIndex {
         root: LineNode;
         // set this to true to check each edit for accuracy

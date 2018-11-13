@@ -232,3 +232,81 @@ function foo6(x: Item) {
 >length : number
     }
 }
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+>Types : Types
+>Str : Types.Str
+>1 : 1
+>Num : Types.Num
+>2 : 2
+
+type Instance = StrType | NumType;
+>Instance : Instance
+
+interface StrType {
+    type: Types.Str;
+>type : Types.Str
+>Types : any
+
+    value: string;
+>value : string
+
+    length: number;
+>length : number
+}
+
+interface NumType {
+    type: Types.Num;
+>type : Types.Num
+>Types : any
+
+    value: number;
+>value : number
+}
+
+function func2(inst: Instance) {
+>func2 : (inst: Instance) => void
+>inst : Instance
+
+    while (true) {
+>true : true
+
+        switch (inst.type) {
+>inst.type : Types
+>inst : Instance
+>type : Types
+
+            case Types.Str: {
+>Types.Str : Types.Str
+>Types : typeof Types
+>Str : Types.Str
+
+                inst.value.length;
+>inst.value.length : number
+>inst.value : string
+>inst : StrType
+>value : string
+>length : number
+
+                break;
+            }
+            case Types.Num: {
+>Types.Num : Types.Num
+>Types : typeof Types
+>Num : Types.Num
+
+                inst.value.toExponential;
+>inst.value.toExponential : (fractionDigits?: number | undefined) => string
+>inst.value : number
+>inst : NumType
+>value : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+                break;
+            }
+        }
+    }
+}
+

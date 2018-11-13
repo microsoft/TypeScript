@@ -260,6 +260,9 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetModuleNameAsNodeModule(moduleFileName: string, { getCanonicalFileName, sourceDirectory }: Info, host: ModuleSpecifierResolutionHost, options: CompilerOptions): string | undefined {
+        if (!host.fileExists || !host.readFile) {
+            return undefined;
+        }
         const parts: NodeModulePathParts = getNodeModulePathParts(moduleFileName)!;
         if (!parts) {
             return undefined;
@@ -267,8 +270,8 @@ namespace ts.moduleSpecifiers {
 
         const packageRootPath = moduleFileName.substring(0, parts.packageRootIndex);
         const packageJsonPath = combinePaths(packageRootPath, "package.json");
-        const packageJsonContent = host.fileExists!(packageJsonPath)
-            ? JSON.parse(host.readFile!(packageJsonPath)!)
+        const packageJsonContent = host.fileExists(packageJsonPath)
+            ? JSON.parse(host.readFile(packageJsonPath)!)
             : undefined;
         const versionPaths = packageJsonContent && packageJsonContent.typesVersions
             ? getPackageJsonTypesVersionsPaths(packageJsonContent.typesVersions)
@@ -325,11 +328,12 @@ namespace ts.moduleSpecifiers {
     }
 
     function tryGetAnyFileFromPath(host: ModuleSpecifierResolutionHost, path: string) {
+        if (!host.fileExists) return;
         // We check all js, `node` and `json` extensions in addition to TS, since node module resolution would also choose those over the directory
         const extensions = getSupportedExtensions({ allowJs: true }, [{ extension: "node", isMixedContent: false }, { extension: "json", isMixedContent: false, scriptKind: ScriptKind.JSON }]);
         for (const e of extensions) {
             const fullPath = path + e;
-            if (host.fileExists!(fullPath)) { // TODO: GH#18217
+            if (host.fileExists(fullPath)) {
                 return fullPath;
             }
         }
