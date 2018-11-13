@@ -15,9 +15,9 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2741: Proper
 tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
 tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
 tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypes6.ts (19 errors) ====
@@ -173,15 +173,15 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x3.a = 1;
     x3.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x4: Readonly<Bar>;
     x4.a = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'a' because it is a read-only property.
     x4.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x5: Readwrite<Bar>;
     x5.a = 1;
