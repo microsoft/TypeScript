@@ -56,7 +56,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 c.foo();
 >c.foo() : void
@@ -72,8 +71,6 @@ c.foo(1);
 >1 : 1
 
 interface I {
->I : I
-
     (x?: number);
 >x : number
 
@@ -85,7 +82,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 i();
 >i() : any

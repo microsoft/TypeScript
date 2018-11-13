@@ -1,25 +1,16 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         div: any;
 >div : any
 	}
     interface ElementAttributesProperty { prop: any }
->ElementAttributesProperty : ElementAttributesProperty
 >prop : any
 }
 
 === tests/cases/conformance/jsx/file.tsx ===
 interface IProps {
->IProps : IProps
-
   primaryText: string,
 >primaryText : string
 
@@ -30,7 +21,6 @@ interface IProps {
 function VerticalNavMenuItem(prop: IProps) {
 >VerticalNavMenuItem : (prop: IProps) => JSX.Element
 >prop : IProps
->IProps : IProps
 
   return <div>props.primaryText</div>
 ><div>props.primaryText</div> : JSX.Element

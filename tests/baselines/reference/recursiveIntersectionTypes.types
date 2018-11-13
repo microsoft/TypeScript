@@ -1,31 +1,20 @@
 === tests/cases/conformance/types/intersection/recursiveIntersectionTypes.ts ===
 type LinkedList<T> = T & { next: LinkedList<T> };
 >LinkedList : LinkedList<T>
->T : T
->T : T
 >next : LinkedList<T>
->LinkedList : LinkedList<T>
->T : T
 
 interface Entity {
->Entity : Entity
-
     name: string;
 >name : string
 }
 
 interface Product extends Entity {
->Product : Product
->Entity : Entity
-
     price: number;
 >price : number
 }
 
 var entityList: LinkedList<Entity>;
 >entityList : LinkedList<Entity>
->LinkedList : LinkedList<T>
->Entity : Entity
 
 var s = entityList.name;
 >s : string
@@ -65,8 +54,6 @@ var s = entityList.next.next.next.name;
 
 var productList: LinkedList<Product>;
 >productList : LinkedList<Product>
->LinkedList : LinkedList<T>
->Product : Product
 
 entityList = productList;
 >entityList = productList : LinkedList<Product>

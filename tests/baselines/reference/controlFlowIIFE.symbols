@@ -16,9 +16,9 @@ function f1() {
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 5, 11))
 
             return x.length;
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 3, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         }();
     }
@@ -38,9 +38,9 @@ function f2() {
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 14, 11))
 
             return x.length;
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 12, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         })();
     }
@@ -62,9 +62,9 @@ function f3() {
         let n = (z => x.length + y + z)(y = 1);
 >n : Symbol(n, Decl(controlFlowIIFE.ts, 24, 11))
 >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(controlFlowIIFE.ts, 21, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
 >z : Symbol(z, Decl(controlFlowIIFE.ts, 24, 17))
 >y : Symbol(y, Decl(controlFlowIIFE.ts, 22, 7))
@@ -99,12 +99,60 @@ if (!test) {
 >test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
 
     throw new Error('Test is not defined');
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 (() => {
     test.slice(1); // No error
->test.slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>test.slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 >test : Symbol(test, Decl(controlFlowIIFE.ts, 39, 3))
->slice : Symbol(String.slice, Decl(lib.d.ts, --, --))
+>slice : Symbol(String.slice, Decl(lib.es5.d.ts, --, --))
 
 })();
+
+// Repro from #23565
+
+function f4() {
+>f4 : Symbol(f4, Decl(controlFlowIIFE.ts, 45, 5))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    (function() {
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+
+    })();
+    v;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 50, 7))
+}
+
+function f5() {
+>f5 : Symbol(f5, Decl(controlFlowIIFE.ts, 55, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    (function*() {
+        yield 1;
+        v = 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 58, 7))
+}
+
+function f6() {
+>f6 : Symbol(f6, Decl(controlFlowIIFE.ts, 64, 1))
+
+    let v: number;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    (async function() {
+        v = await 1;
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+
+    })();
+    v; // still undefined
+>v : Symbol(v, Decl(controlFlowIIFE.ts, 67, 7))
+}

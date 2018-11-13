@@ -1,11 +1,9 @@
 === tests/cases/compiler/unknownTypeArgOnCall.ts ===
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
   public clone<U>() {
 >clone : <U>() => any
->U : U
 
    return null;
 >null : null
@@ -22,5 +20,4 @@ var r = f.clone<Uhhhh>()
 >f.clone : <U>() => any
 >f : Foo<number>
 >clone : <U>() => any
->Uhhhh : No type information available!
 

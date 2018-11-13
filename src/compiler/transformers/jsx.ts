@@ -1,14 +1,10 @@
-/// <reference path="../factory.ts" />
-/// <reference path="../visitor.ts" />
-/// <reference path="./esnext.ts" />
-
 /*@internal*/
 namespace ts {
     export function transformJsx(context: TransformationContext) {
         const compilerOptions = context.getCompilerOptions();
         let currentSourceFile: SourceFile;
 
-        return transformSourceFile;
+        return chainBundle(transformSourceFile);
 
         /**
          * Transform JSX-specific syntax in a SourceFile.
@@ -54,26 +50,25 @@ namespace ts {
             }
         }
 
-        function transformJsxChildToExpression(node: JsxChild): Expression {
+        function transformJsxChildToExpression(node: JsxChild): Expression | undefined {
             switch (node.kind) {
                 case SyntaxKind.JsxText:
-                    return visitJsxText(<JsxText>node);
+                    return visitJsxText(node);
 
                 case SyntaxKind.JsxExpression:
-                    return visitJsxExpression(<JsxExpression>node);
+                    return visitJsxExpression(node);
 
                 case SyntaxKind.JsxElement:
-                    return visitJsxElement(<JsxElement>node, /*isChild*/ true);
+                    return visitJsxElement(node, /*isChild*/ true);
 
                 case SyntaxKind.JsxSelfClosingElement:
-                    return visitJsxSelfClosingElement(<JsxSelfClosingElement>node, /*isChild*/ true);
+                    return visitJsxSelfClosingElement(node, /*isChild*/ true);
 
                 case SyntaxKind.JsxFragment:
-                    return visitJsxFragment(<JsxFragment>node, /*isChild*/ true);
+                    return visitJsxFragment(node, /*isChild*/ true);
 
                 default:
-                    Debug.failBadSyntaxKind(node);
-                    return undefined;
+                    return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -89,9 +84,9 @@ namespace ts {
             return visitJsxOpeningFragment(node.openingFragment, node.children, isChild, /*location*/ node);
         }
 
-        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
+        function visitJsxOpeningLikeElement(node: JsxOpeningLikeElement, children: ReadonlyArray<JsxChild> | undefined, isChild: boolean, location: TextRange) {
             const tagName = getTagName(node);
-            let objectProperties: Expression;
+            let objectProperties: Expression | undefined;
             const attrs = node.attributes.properties;
             if (attrs.length === 0) {
                 // When there are no attributes, React wants "null"
@@ -122,8 +117,8 @@ namespace ts {
             }
 
             const element = createExpressionForJsxElement(
-                context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 tagName,
                 objectProperties,
                 mapDefined(children, transformJsxChildToExpression),
@@ -140,8 +135,8 @@ namespace ts {
 
         function visitJsxOpeningFragment(node: JsxOpeningFragment, children: ReadonlyArray<JsxChild>, isChild: boolean, location: TextRange) {
             const element = createExpressionForJsxFragment(
-                context.getEmitResolver().getJsxFactoryEntity(),
-                compilerOptions.reactNamespace,
+                context.getEmitResolver().getJsxFactoryEntity(currentSourceFile),
+                compilerOptions.reactNamespace!, // TODO: GH#18217
                 mapDefined(children, transformJsxChildToExpression),
                 node,
                 location
@@ -164,25 +159,25 @@ namespace ts {
             return createPropertyAssignment(name, expression);
         }
 
-        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression) {
+        function transformJsxAttributeInitializer(node: StringLiteral | JsxExpression | undefined): Expression {
             if (node === undefined) {
                 return createTrue();
             }
             else if (node.kind === SyntaxKind.StringLiteral) {
                 // Always recreate the literal to escape any escape sequences or newlines which may be in the original jsx string and which
                 // Need to be escaped to be handled correctly in a normal string
-                const literal = createLiteral(tryDecodeEntities((<StringLiteral>node).text) || (<StringLiteral>node).text);
-                literal.singleQuote = (node as StringLiteral).singleQuote !== undefined ? (node as StringLiteral).singleQuote : !isStringDoubleQuoted(node as StringLiteral, currentSourceFile);
+                const literal = createLiteral(tryDecodeEntities(node.text) || node.text);
+                literal.singleQuote = node.singleQuote !== undefined ? node.singleQuote : !isStringDoubleQuoted(node, currentSourceFile);
                 return setTextRange(literal, node);
             }
             else if (node.kind === SyntaxKind.JsxExpression) {
                 if (node.expression === undefined) {
                     return createTrue();
                 }
-                return visitJsxExpression(<JsxExpression>node);
+                return visitJsxExpression(node);
             }
             else {
-                Debug.failBadSyntaxKind(node);
+                return Debug.failBadSyntaxKind(node);
             }
         }
 
@@ -279,10 +274,10 @@ namespace ts {
 
         function getTagName(node: JsxElement | JsxOpeningLikeElement): Expression {
             if (node.kind === SyntaxKind.JsxElement) {
-                return getTagName((<JsxElement>node).openingElement);
+                return getTagName(node.openingElement);
             }
             else {
-                const name = (<JsxOpeningLikeElement>node).tagName;
+                const name = node.tagName;
                 if (isIdentifier(name) && isIntrinsicJsxName(name.escapedText)) {
                     return createLiteral(idText(name));
                 }

@@ -7,9 +7,9 @@ function f(x: number, y: number, z: number) {
 >z : Symbol(z, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 1, 32))
 
     return Array.from(arguments);
->Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
->from : Symbol(ArrayConstructor.from, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
 >arguments : Symbol(arguments)
 }
 
@@ -19,7 +19,7 @@ f(1, 2, 3);  // no error
 // Using ES6 collection
 var m = new Map<string, number>();
 >m : Symbol(m, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 8, 3))
->Map : Symbol(Map, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 m.clear();
 >m.clear : Symbol(Map.clear, Decl(lib.es2015.collection.d.ts, --, --))
@@ -44,7 +44,7 @@ Baz.name;
 // Using ES6 math
 Math.sign(1);
 >Math.sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >sign : Symbol(Math.sign, Decl(lib.es2015.core.d.ts, --, --))
 
 // Using ES6 object
@@ -55,8 +55,9 @@ var o = {
 >a : Symbol(a, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 21, 9))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 22, 9))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >value : Symbol(value, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 23, 25))
 
@@ -64,11 +65,11 @@ var o = {
     }
 };
 o.hasOwnProperty(Symbol.hasInstance);
->o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>o.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >o : Symbol(o, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 21, 3))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // Using Es6 proxy
@@ -83,13 +84,13 @@ var p = new Proxy(t, {});
 // Using ES6 reflect
 Reflect.isExtensible({});
 >Reflect.isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
->Reflect : Symbol(Reflect, Decl(lib.es2015.reflect.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Reflect : Symbol(Reflect, Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.reflect.d.ts, --, --))
 >isExtensible : Symbol(Reflect.isExtensible, Decl(lib.es2015.reflect.d.ts, --, --))
 
 // Using Es6 regexp
 var reg = new RegExp("/s");
 >reg : Symbol(reg, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 37, 3))
->RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 reg.flags;
 >reg.flags : Symbol(RegExp.flags, Decl(lib.es2015.core.d.ts, --, --))
@@ -108,15 +109,16 @@ str.includes("hello", 0);
 // Using ES6 symbol
 var s = Symbol();
 >s : Symbol(s, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 45, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 // Using ES6 wellknown-symbol
 const o1 = {
 >o1 : Symbol(o1, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 48, 5))
 
     [Symbol.hasInstance](value: any) {
+>[Symbol.hasInstance] : Symbol([Symbol.hasInstance], Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 48, 12))
 >Symbol.hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >hasInstance : Symbol(SymbolConstructor.hasInstance, Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >value : Symbol(value, Decl(modularizeLibrary_TargetES6UsingES6Lib.ts, 49, 25))
 

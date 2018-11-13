@@ -53,9 +53,7 @@ declare function fn9(...q: {}[]);
 
 declare function fn10<T>(...q: T[]);
 >fn10 : <T>(...q: T[]) => any
->T : T
 >q : T[]
->T : T
 
 // Ambient class
 declare class cls {
@@ -64,7 +62,6 @@ declare class cls {
     constructor();
     method(): cls;
 >method : () => cls
->cls : cls
 
     static static(p): number;
 >static : (p: any) => number
@@ -163,6 +160,8 @@ var q = M1.fn();
 // Ambient external module in the global module
 // Ambient external module with a string literal name that is a top level external module name
 declare module 'external1' {
+>'external1' : typeof import("external1")
+
     var q;
 >q : any
 }

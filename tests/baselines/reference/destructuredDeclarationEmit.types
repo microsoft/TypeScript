@@ -29,10 +29,10 @@ const arr: [0, 1, 2, ['a', 'b', 'c', [{def: 'def'}, {sec: 'sec'}]]] = [0, 1, 2, 
 >'c' : "c"
 >[{def: 'def'}, {sec: 'sec'}] : [{ def: "def"; }, { sec: "sec"; }]
 >{def: 'def'} : { def: "def"; }
->def : string
+>def : "def"
 >'def' : "def"
 >{sec: 'sec'} : { sec: "sec"; }
->sec : string
+>sec : "sec"
 >'sec' : "sec"
 
 export { foo, arr };

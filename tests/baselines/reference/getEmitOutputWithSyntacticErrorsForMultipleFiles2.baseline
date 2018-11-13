@@ -1,4 +1,5 @@
 EmitSkipped: false
+
 FileName : out.js
 // File to emit, does not contain syntactic errors, but --out is passed
 // expected to not generate outputs because of the syntactic errors in the other file.

@@ -1,6 +1,5 @@
 /// <reference path='fourslash.ts'/>
 
-////Harness.newLine = "\r"\n/**/
+////Harness.newLine = ""\n/**/
 
-goTo.marker();
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "", exact: completion.globals });

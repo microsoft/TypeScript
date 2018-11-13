@@ -16,14 +16,9 @@ class D extends C {
 
 declare function testError<T extends C>(a: (t: T, t1: T) => void): T
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
->T : T
->C : C
 >a : (t: T, t1: T) => void
 >t : T
->T : T
 >t1 : T
->T : T
->T : T
 
 // more args
 testError((t1: D, t2, t3) => {})
@@ -31,7 +26,6 @@ testError((t1: D, t2, t3) => {})
 >testError : <T extends C>(a: (t: T, t1: T) => void) => T
 >(t1: D, t2, t3) => {} : (t1: D, t2: any, t3: any) => void
 >t1 : D
->D : D
 >t2 : any
 >t3 : any
 
@@ -41,7 +35,6 @@ testError((t1, t2: D, t3) => {})
 >(t1, t2: D, t3) => {} : (t1: any, t2: D, t3: any) => void
 >t1 : any
 >t2 : D
->D : D
 >t3 : any
 
 testError((t1, t2, t3: D) => {})
@@ -51,5 +44,4 @@ testError((t1, t2, t3: D) => {})
 >t1 : any
 >t2 : any
 >t3 : D
->D : D
 

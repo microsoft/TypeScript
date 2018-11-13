@@ -1,0 +1,15 @@
+=== tests/cases/compiler/decoratorMetadataGenericTypeVariableInScope.ts ===
+// Unused, but could collide with the named type argument below.
+class TypeVariable {}
+>TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableInScope.ts, 0, 0))
+
+export class C<TypeVariable> {
+>C : Symbol(C, Decl(decoratorMetadataGenericTypeVariableInScope.ts, 1, 21))
+>TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableInScope.ts, 3, 15))
+
+  @Decorate
+  member: TypeVariable;
+>member : Symbol(C.member, Decl(decoratorMetadataGenericTypeVariableInScope.ts, 3, 30))
+>TypeVariable : Symbol(TypeVariable, Decl(decoratorMetadataGenericTypeVariableInScope.ts, 3, 15))
+}
+

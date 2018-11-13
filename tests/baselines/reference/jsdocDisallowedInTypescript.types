@@ -2,7 +2,6 @@
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
 >ara : number[]
->Array : T[]
 >[1,2,3] : number[]
 >1 : 1
 >2 : 2
@@ -12,7 +11,6 @@ function f(x: ?number, y: Array.<number>) {
 >f : (x: number | null, y: number[]) => number
 >x : number | null
 >y : number[]
->Array : T[]
 
     return x ? x + y[1] : y[0];
 >x ? x + y[1] : y[0] : number
@@ -64,13 +62,6 @@ var g: function(number, number): number = (n,m) => n + m;
 >n : number
 >m : number
 
-var variadic: ...boolean = [true, false, true];
->variadic : boolean | undefined
->[true, false, true] : boolean[]
->true : true
->false : false
->true : true
-
 var most: !string = 'definite';
 >most : string
 >'definite' : "definite"
@@ -85,18 +76,11 @@ var postfixopt: number? = undefined;
 
 var nns: Array<?number>;
 >nns : (number | null)[]
->Array : T[]
 
 var dns: Array<!number>;
 >dns : number[]
->Array : T[]
 
 var anys: Array<*>;
 >anys : any[]
->Array : T[]
-
-var vars: Array<...number>;
->vars : (number | undefined)[]
->Array : T[]
 
 

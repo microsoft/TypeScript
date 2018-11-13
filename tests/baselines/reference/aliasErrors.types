@@ -28,31 +28,31 @@ import beez = foo.bar;
 
 import m = no;
 >m : any
->no : No type information available!
+>no : any
 
 import m2 = no.mod;
 >m2 : any
->no : No type information available!
->mod : No type information available!
+>no : any
+>mod : any
 
 import n = 5;
 >n : any
-> : No type information available!
+> : any
 >5 : 5
 
 import o = "s";
 >o : any
-> : No type information available!
+> : any
 >"s" : "s"
 
 import q = null;
 >q : any
-> : No type information available!
+> : any
 >null : null
 
 import r = undefined;
 >r : any
->undefined : No type information available!
+>undefined : any
 
 
 var p = new provide.Provide();
@@ -75,17 +75,14 @@ function use() {
   var p1: provide.Provide; 
 >p1 : provide.Provide
 >provide : any
->Provide : provide.Provide
 
   var p2: foo.Provide;
 >p2 : provide.Provide
 >foo : any
->Provide : provide.Provide
 
   var p3:booz.bar;
 >p3 : any
 >booz : any
->bar : No type information available!
 
   var p22 = new provide.Provide();
 >p22 : provide.Provide

@@ -7,7 +7,6 @@ module M {
 
    export class C2<T> { }
 >C2 : C2<T>
->T : T
 }
 module N {
 >N : typeof N
@@ -20,11 +19,9 @@ module N {
 
    export class D2<T> extends M.C2<T> { }
 >D2 : D2<T>
->T : T
 >M.C2 : M.C2<T>
 >M : typeof M
 >C2 : typeof M.C2
->T : T
 }
 
 var c = new M.C2<number>(); // no error

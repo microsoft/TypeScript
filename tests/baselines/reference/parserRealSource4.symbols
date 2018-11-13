@@ -42,7 +42,7 @@ module TypeScript {
             // initialize the 'constructor' field
             this["constructor"] = undefined;
 >this : Symbol(BlockIntrinsics, Decl(parserRealSource4.ts, 5, 19))
->"constructor" : Symbol(Object.constructor, Decl(lib.d.ts, --, --))
+>"constructor" : Symbol(Object.constructor, Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
         }
     }
@@ -127,9 +127,9 @@ module TypeScript {
 
                     result[result.length] = k;
 >result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
->result.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>result.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(parserRealSource4.ts, 38, 15))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >k : Symbol(k, Decl(parserRealSource4.ts, 39, 20))
                 }
             }
@@ -373,13 +373,13 @@ module TypeScript {
 >getAllKeys : Symbol(DualStringHashTable.getAllKeys, Decl(parserRealSource4.ts, 120, 78))
 
             return this.primaryTable.getAllKeys().concat(this.secondaryTable.getAllKeys());
->this.primaryTable.getAllKeys().concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>this.primaryTable.getAllKeys().concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.primaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
 >this.primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
 >this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
 >primaryTable : Symbol(DualStringHashTable.primaryTable, Decl(parserRealSource4.ts, 119, 21))
 >getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
->concat : Symbol(Array.concat, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >this.secondaryTable.getAllKeys : Symbol(IHashTable.getAllKeys, Decl(parserRealSource4.ts, 22, 33))
 >this.secondaryTable : Symbol(DualStringHashTable.secondaryTable, Decl(parserRealSource4.ts, 119, 53))
 >this : Symbol(DualStringHashTable, Decl(parserRealSource4.ts, 110, 5))
@@ -932,9 +932,9 @@ module TypeScript {
             for (var i = 0; i < searchArray.length; i++) {
 >i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
 >i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
->searchArray.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>searchArray.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >searchArray : Symbol(searchArray, Decl(parserRealSource4.ts, 265, 15))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource4.ts, 270, 20))
 
                 if (searchArray[i] == key) {
@@ -985,22 +985,22 @@ module TypeScript {
 >this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
 >this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
 >keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
->this.keys.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.keys.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
 >this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
 >keys : Symbol(SimpleHashTable.keys, Decl(parserRealSource4.ts, 260, 34))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(parserRealSource4.ts, 281, 19))
 
             this.values[this.values.length] = data;
 >this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
 >this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
 >values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
->this.values.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
 >this : Symbol(SimpleHashTable, Decl(parserRealSource4.ts, 257, 5))
 >values : Symbol(SimpleHashTable.values, Decl(parserRealSource4.ts, 261, 26))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >data : Symbol(data, Decl(parserRealSource4.ts, 281, 23))
 
             return true;

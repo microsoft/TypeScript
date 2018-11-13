@@ -142,7 +142,10 @@ class C8 {
 >a : Symbol(C8.a, Decl(strictPropertyInitialization.ts, 69, 10))
 
     "b": number;
+>"b" : Symbol(C8["b"], Decl(strictPropertyInitialization.ts, 70, 14))
+
     0: number;
+>0 : Symbol(C8[0], Decl(strictPropertyInitialization.ts, 71, 16))
 }
 
 // No strict initialization checks for abstract members

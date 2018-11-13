@@ -1,14 +1,12 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module "react" {
-No type information for this code.
-No type information for this code.}
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/jsx/file1.tsx ===
-declare module JSX {
->JSX : any
+>"react" : typeof import("react")
 
+}
+
+=== tests/cases/conformance/jsx/file1.tsx ===
+declare module JSX {
     interface Element { }
->Element : Element
 }
 export class MyClass { }
 >MyClass : MyClass
@@ -22,6 +20,6 @@ import {MyClass} from './file1';
 >MyClass : typeof MyClass
 
 <MyClass />;
-><MyClass /> : any
+><MyClass /> : error
 >MyClass : typeof MyClass
 

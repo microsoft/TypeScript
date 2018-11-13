@@ -3,5 +3,6 @@ class C {
 >C : Symbol(C, Decl(parserComputedPropertyName24.ts, 0, 0))
 
     set [e](v) { }
+>[e] : Symbol(C[e], Decl(parserComputedPropertyName24.ts, 0, 9))
 >v : Symbol(v, Decl(parserComputedPropertyName24.ts, 1, 12))
 }

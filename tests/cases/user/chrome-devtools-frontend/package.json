@@ -9,6 +9,6 @@
   "author": "",
   "license": "Apache-2.0",
   "dependencies": {
-    "chrome-devtools-frontend": "latest"
+    "chrome-devtools-frontend": "1.0.530099"
   }
 }

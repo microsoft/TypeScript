@@ -26,9 +26,9 @@ var nodes: TreeNodeMiddleman[];
 >TreeNodeMiddleman : Symbol(TreeNodeMiddleman, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 3, 1))
 
 nodes.map(n => n.name);
->nodes.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>nodes.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >nodes : Symbol(nodes, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 10, 3))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 11, 10))
 >n.name : Symbol(name, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 5, 26))
 >n : Symbol(n, Decl(typeArgumentInferenceWithRecursivelyReferencedTypeAliasToTypeLiteral02.ts, 11, 10))

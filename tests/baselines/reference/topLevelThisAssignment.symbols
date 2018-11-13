@@ -1,0 +1,10 @@
+=== tests/cases/conformance/salsa/a.js ===
+this.a = 10;
+No type information for this code.this.a;
+No type information for this code.a;
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/salsa/b.js ===
+this.a;
+No type information for this code.a;
+No type information for this code.
+No type information for this code.

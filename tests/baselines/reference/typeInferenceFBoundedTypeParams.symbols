@@ -43,9 +43,9 @@ function append<a, b extends a>(values: a[], value: b): a[] {
 >a : Symbol(a, Decl(typeInferenceFBoundedTypeParams.ts, 9, 16))
 
     values.push(value);
->values.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>values.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(typeInferenceFBoundedTypeParams.ts, 9, 32))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(typeInferenceFBoundedTypeParams.ts, 9, 44))
 
     return values;

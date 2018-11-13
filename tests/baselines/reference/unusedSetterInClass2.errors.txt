@@ -1,0 +1,14 @@
+tests/cases/compiler/unusedSetterInClass2.ts(3,17): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+
+
+==== tests/cases/compiler/unusedSetterInClass2.ts (1 errors) ====
+    // Unlike everything else, a setter without a getter is used by a write access.
+    class Employee {
+        private set p(_: number) {}
+                    ~
+!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
+    
+        m() {
+            this.p = 0;
+        }
+    }

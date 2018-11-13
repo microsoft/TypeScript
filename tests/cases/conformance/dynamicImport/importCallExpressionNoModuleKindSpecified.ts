@@ -1,4 +1,5 @@
-﻿// @filename: 0.ts
+﻿// @lib: es5
+// @filename: 0.ts
 export class B {
     print() { return "I am B"}
 }

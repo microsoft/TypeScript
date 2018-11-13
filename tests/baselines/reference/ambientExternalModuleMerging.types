@@ -17,12 +17,16 @@ var y = M.y;
 
 === tests/cases/conformance/ambient/ambientExternalModuleMerging_declare.ts ===
 declare module "M" {
+>"M" : typeof import("M")
+
     export var x: string;
 >x : string
 }
 
 // Merge
 declare module "M" {
+>"M" : typeof import("M")
+
     export var y: string;
 >y : string
 }

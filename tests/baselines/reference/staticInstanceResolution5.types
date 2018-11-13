@@ -7,18 +7,15 @@ var x = (w1: WinJS) => { };
 >x : (w1: any) => void
 >(w1: WinJS) => { } : (w1: any) => void
 >w1 : any
->WinJS : No type information available!
 
 var y = function (w2: WinJS) { }
 >y : (w2: any) => void
 >function (w2: WinJS) { } : (w2: any) => void
 >w2 : any
->WinJS : No type information available!
 
 function z(w3: WinJS) { }
 >z : (w3: any) => void
 >w3 : any
->WinJS : No type information available!
 
 === tests/cases/compiler/staticInstanceResolution5_0.ts ===
 export class Promise {
@@ -27,7 +24,6 @@ export class Promise {
     static timeout(delay: number): Promise {
 >timeout : (delay: number) => Promise
 >delay : number
->Promise : Promise
 
         return null;
 >null : null

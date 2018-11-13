@@ -10,56 +10,53 @@ sourceFile:ES5For-of13.ts
 -------------------------------------------------------------------
 >>>for (var _i = 0, _a = ['a', 'b', 'c']; _i < _a.length; _i++) {
 1 >
-2 >^^^
-3 >   ^
-4 >    ^
-5 >     ^^^^^^^^^^
-6 >               ^^
-7 >                 ^^^^^^
-8 >                       ^^^
-9 >                          ^^
-10>                            ^^^
-11>                               ^^
-12>                                 ^^^
-13>                                    ^
-14>                                     ^^
-15>                                       ^^^^^^^^^^^^^^
-16>                                                     ^^
-17>                                                       ^^^^
+2 >^^^^^
+3 >     ^^^^^^^^^^
+4 >               ^^
+5 >                 ^^^^^^
+6 >                       ^^^
+7 >                          ^^
+8 >                            ^^^
+9 >                               ^^
+10>                                 ^^^
+11>                                    ^
+12>                                     ^^
+13>                                       ^^^^^^^^^^^^^^
+14>                                                     ^^
+15>                                                       ^^^^
+16>                                                           ^^
 1 >
-2 >for
-3 >    
-4 >    (let v of 
-5 >     ['a', 'b', 'c']
-6 >               
-7 >                 [
-8 >                       'a'
-9 >                          , 
-10>                            'b'
-11>                               , 
-12>                                 'c'
-13>                                    ]
-14>                                     
-15>                                       ['a', 'b', 'c']
-16>                                                     
-17>                                                       ['a', 'b', 'c']
+2 >for (let v of 
+3 >     ['a', 'b', 'c']
+4 >               
+5 >                 [
+6 >                       'a'
+7 >                          , 
+8 >                            'b'
+9 >                               , 
+10>                                 'c'
+11>                                    ]
+12>                                     
+13>                                       ['a', 'b', 'c']
+14>                                                     
+15>                                                       ['a', 'b', 'c']
+16>                                                           ) 
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
-2 >Emitted(1, 4) Source(1, 4) + SourceIndex(0)
-3 >Emitted(1, 5) Source(1, 5) + SourceIndex(0)
-4 >Emitted(1, 6) Source(1, 15) + SourceIndex(0)
-5 >Emitted(1, 16) Source(1, 30) + SourceIndex(0)
-6 >Emitted(1, 18) Source(1, 15) + SourceIndex(0)
-7 >Emitted(1, 24) Source(1, 16) + SourceIndex(0)
-8 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
-9 >Emitted(1, 29) Source(1, 21) + SourceIndex(0)
-10>Emitted(1, 32) Source(1, 24) + SourceIndex(0)
-11>Emitted(1, 34) Source(1, 26) + SourceIndex(0)
-12>Emitted(1, 37) Source(1, 29) + SourceIndex(0)
-13>Emitted(1, 38) Source(1, 30) + SourceIndex(0)
-14>Emitted(1, 40) Source(1, 15) + SourceIndex(0)
-15>Emitted(1, 54) Source(1, 30) + SourceIndex(0)
-16>Emitted(1, 56) Source(1, 15) + SourceIndex(0)
-17>Emitted(1, 60) Source(1, 30) + SourceIndex(0)
+2 >Emitted(1, 6) Source(1, 15) + SourceIndex(0)
+3 >Emitted(1, 16) Source(1, 30) + SourceIndex(0)
+4 >Emitted(1, 18) Source(1, 15) + SourceIndex(0)
+5 >Emitted(1, 24) Source(1, 16) + SourceIndex(0)
+6 >Emitted(1, 27) Source(1, 19) + SourceIndex(0)
+7 >Emitted(1, 29) Source(1, 21) + SourceIndex(0)
+8 >Emitted(1, 32) Source(1, 24) + SourceIndex(0)
+9 >Emitted(1, 34) Source(1, 26) + SourceIndex(0)
+10>Emitted(1, 37) Source(1, 29) + SourceIndex(0)
+11>Emitted(1, 38) Source(1, 30) + SourceIndex(0)
+12>Emitted(1, 40) Source(1, 15) + SourceIndex(0)
+13>Emitted(1, 54) Source(1, 30) + SourceIndex(0)
+14>Emitted(1, 56) Source(1, 15) + SourceIndex(0)
+15>Emitted(1, 60) Source(1, 30) + SourceIndex(0)
+16>Emitted(1, 62) Source(1, 32) + SourceIndex(0)
 ---
 >>>    var v = _a[_i];
 1 >^^^^

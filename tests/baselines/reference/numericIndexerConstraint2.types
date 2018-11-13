@@ -6,7 +6,6 @@ class Foo { foo() { } }
 var x: { [index: string]: Foo; };
 >x : { [index: string]: Foo; }
 >index : string
->Foo : Foo
 
 var a: { one: number; };
 >a : { one: number; }

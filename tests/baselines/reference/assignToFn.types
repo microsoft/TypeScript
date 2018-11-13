@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     interface I {
->I : I
-
 	f(n:number):boolean;
 >f : (n: number) => boolean
 >n : number
@@ -12,10 +10,9 @@ module M {
 
     var x:I={ f:function(n) { return true; } };
 >x : I
->I : I
->{ f:function(n) { return true; } } : { f: (n: number) => boolean; }
->f : (n: number) => boolean
->function(n) { return true; } : (n: number) => boolean
+>{ f:function(n) { return true; } } : { f: (n: number) => true; }
+>f : (n: number) => true
+>function(n) { return true; } : (n: number) => true
 >n : number
 >true : true
 

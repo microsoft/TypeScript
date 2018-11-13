@@ -3,43 +3,28 @@
 // no errors expected
 
 interface A { foo: number }
->A : A
 >foo : number
 
 interface B extends A { bar: string; }
->B : B
->A : A
 >bar : string
 
 interface C extends B { baz: boolean; }
->C : C
->B : B
 >baz : boolean
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 var c: C;
 >c : C
->C : C
 
 function foo<T, U, V>(x: T, y: U, z: V): V { return z; }
 >foo : <T, U, V>(x: T, y: U, z: V) => V
->T : T
->U : U
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
->V : V
 >z : V
 
 //function foo<T, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }
@@ -62,12 +47,12 @@ foo({ x: 1 }, { x: 1, y: '' }, { x: 2, y: '', z: true });
 >1 : 1
 >y : string
 >'' : ""
->{ x: 2, y: '', z: true } : { x: number; y: string; z: boolean; }
+>{ x: 2, y: '', z: true } : { x: number; y: string; z: true; }
 >x : number
 >2 : 2
 >y : string
 >'' : ""
->z : boolean
+>z : true
 >true : true
 
 foo(a, b, c);
@@ -82,12 +67,12 @@ foo(a, b, { foo: 1, bar: '', hm: true });
 >foo : <T, U, V>(x: T, y: U, z: V) => V
 >a : A
 >b : B
->{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: boolean; }
+>{ foo: 1, bar: '', hm: true } : { foo: number; bar: string; hm: true; }
 >foo : number
 >1 : 1
 >bar : string
 >'' : ""
->hm : boolean
+>hm : true
 >true : true
 
 foo((x: number, y) => { }, (x) => { }, () => { });
@@ -102,17 +87,9 @@ foo((x: number, y) => { }, (x) => { }, () => { });
 
 function foo2<T extends A, U, V>(x: T, y: U, z: V): V { return z; }
 >foo2 : <T extends A, U, V>(x: T, y: U, z: V) => V
->T : T
->A : A
->U : U
->V : V
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
->V : V
 >z : V
 
 //function foo2<T extends A, U extends T, V extends U>(x: T, y: U, z: V): V { return z; }

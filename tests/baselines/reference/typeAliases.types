@@ -9,7 +9,6 @@ var x1: number;
 
 var x1: T1;
 >x1 : number
->T1 : number
 
 type T2 = string;
 >T2 : string
@@ -19,7 +18,6 @@ var x2: string;
 
 var x2: T2;
 >x2 : string
->T2 : string
 
 type T3 = boolean;
 >T3 : boolean
@@ -29,7 +27,6 @@ var x3: boolean;
 
 var x3: T3;
 >x3 : boolean
->T3 : boolean
 
 type T4 = void;
 >T4 : void
@@ -39,7 +36,6 @@ var x4: void;
 
 var x4: T4;
 >x4 : void
->T4 : void
 
 type T5 = any;
 >T5 : any
@@ -49,23 +45,18 @@ var x5: any;
 
 var x5: T5;
 >x5 : any
->T5 : any
 
 interface I6 { x : string }
->I6 : I6
 >x : string
 
 type T6 = I6;
 >T6 : I6
->I6 : I6
 
 var x6: I6;
 >x6 : I6
->I6 : I6
 
 var x6: T6;
 >x6 : I6
->T6 : I6
 
 class C7 { x: boolean }
 >C7 : C7
@@ -73,15 +64,12 @@ class C7 { x: boolean }
 
 type T7 = C7;
 >T7 : C7
->C7 : C7
 
 var x7: C7;
 >x7 : C7
->C7 : C7
 
 var x7: T7;
 >x7 : C7
->T7 : C7
 
 type T8 = string | boolean;
 >T8 : string | boolean
@@ -91,7 +79,6 @@ var x8: string | boolean;
 
 var x8: T8;
 >x8 : string | boolean
->T8 : string | boolean
 
 type T9 = () => string;
 >T9 : T9
@@ -101,7 +88,6 @@ var x9: () => string;
 
 var x9: T9;
 >x9 : () => string
->T9 : T9
 
 type T10 = { x: number };
 >T10 : T10
@@ -113,7 +99,6 @@ var x10: { x: number };
 
 var x10: T10;
 >x10 : { x: number; }
->T10 : T10
 
 type T11 = { new(): boolean };
 >T11 : T11
@@ -123,34 +108,23 @@ var x11: { new(): boolean };
 
 var x11: T11;
 >x11 : new () => boolean
->T11 : T11
 
 interface I13 { x: string };
->I13 : I13
 >x : string
 
 type T13 = I13;
 >T13 : I13
->I13 : I13
 
 var x13_1: I13;
 >x13_1 : I13
->I13 : I13
 
 var x13_2: T13
 >x13_2 : I13
->T13 : I13
 
 declare function foo13<T1 extends I13, T2 extends T13>(t1: T1, t2: T13): void;
 >foo13 : <T1 extends I13, T2 extends I13>(t1: T1, t2: I13) => void
->T1 : T1
->I13 : I13
->T2 : T2
->T13 : I13
 >t1 : T1
->T1 : T1
 >t2 : I13
->T13 : I13
 
 foo13(x13_1, x13_2);
 >foo13(x13_1, x13_2) : void
@@ -169,12 +143,10 @@ type T14 = string;
 
 var x14: T14;
 >x14 : string
->T14 : string
 
 declare function foo14_1(x: T14): void;
 >foo14_1 : (x: string) => void
 >x : string
->T14 : string
 
 declare function foo14_2(x: "click"): void;
 >foo14_2 : { (x: "click"): void; (x: string): void; }
@@ -183,14 +155,13 @@ declare function foo14_2(x: "click"): void;
 declare function foo14_2(x: T14): void;
 >foo14_2 : { (x: "click"): void; (x: string): void; }
 >x : string
->T14 : string
 
 type Meters = number
 >Meters : number
 
 enum E { x = 10 }
 >E : E
->x : E
+>x : E.x
 >10 : 10
 
 declare function f15(a: string): boolean;
@@ -200,7 +171,6 @@ declare function f15(a: string): boolean;
 declare function f15(a: Meters): string;
 >f15 : { (a: string): boolean; (a: number): string; }
 >a : number
->Meters : number
 
 f15(E.x).toLowerCase();
 >f15(E.x).toLowerCase() : string
@@ -218,7 +188,6 @@ type StringAndBoolean = [string, boolean]
 declare function f16(s: StringAndBoolean): string;
 >f16 : (s: [string, boolean]) => string
 >s : [string, boolean]
->StringAndBoolean : [string, boolean]
 
 var x: [string, boolean];
 >x : [string, boolean]
@@ -230,8 +199,7 @@ f16(x);
 
 var y: StringAndBoolean = ["1", false];
 >y : [string, boolean]
->StringAndBoolean : [string, boolean]
->["1", false] : [string, boolean]
+>["1", false] : [string, false]
 >"1" : "1"
 >false : false
 

@@ -48,11 +48,11 @@
  }
  var x_v = o.name().length
 >x_v : Symbol(x_v, Decl(knockout.ts, 14, 4))
->o.name().length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>o.name().length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >o.name : Symbol(name, Decl(knockout.ts, 10, 10))
 >o : Symbol(o, Decl(knockout.ts, 10, 4))
 >name : Symbol(name, Decl(knockout.ts, 10, 10))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
  var age_v = o.age();
 >age_v : Symbol(age_v, Decl(knockout.ts, 15, 4))

@@ -1,10 +1,10 @@
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,1): error TS2304: Cannot find name 'declare'.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(1,21): error TS1005: ';' expected.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,1): error TS2304: Cannot find name 'declare'.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS1005: ';' expected.
-tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,9): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,24): error TS1005: ';' expected.
 
 
@@ -15,7 +15,7 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,24): error
             ~~~~~~
 !!! error TS1005: ';' expected.
             ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                         ~
 !!! error TS1005: ';' expected.
     }
@@ -26,7 +26,7 @@ tests/cases/conformance/es6/templates/templateStringInModuleName.ts(4,24): error
             ~~~~~~
 !!! error TS1005: ';' expected.
             ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                            ~
 !!! error TS1005: ';' expected.
     }

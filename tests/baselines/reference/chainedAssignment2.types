@@ -10,11 +10,9 @@ var c: boolean;
 
 var d: Date;
 >d : Date
->Date : Date
 
 var e: RegExp;
 >e : RegExp
->RegExp : RegExp
 
 a = b = c = d = e = null;
 >a = b = c = d = e = null : null

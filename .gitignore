@@ -1,4 +1,5 @@
 node_modules/
+.node_modules/
 built/*
 tests/cases/rwc/*
 tests/cases/test262/*
@@ -22,6 +23,8 @@ tests/services/browser/typescriptServices.js
 src/harness/*.js
 src/compiler/diagnosticInformationMap.generated.ts
 src/compiler/diagnosticMessages.generated.json
+src/parser/diagnosticInformationMap.generated.ts
+src/parser/diagnosticMessages.generated.json
 rwc-report.html
 *.swp
 build.json
@@ -39,9 +42,11 @@ scripts/word2md.js
 scripts/buildProtocol.js
 scripts/ior.js
 scripts/authors.js
-scripts/configureNightly.js
+scripts/configurePrerelease.js
+scripts/open-user-pr.js
 scripts/processDiagnosticMessages.d.ts
 scripts/processDiagnosticMessages.js
+scripts/produceLKG.js
 scripts/importDefinitelyTypedTests/importDefinitelyTypedTests.js
 scripts/generateLocalizedDiagnosticMessages.js
 scripts/*.js.map
@@ -58,6 +63,7 @@ internal/
 !tests/baselines/reference/project/nodeModules*/**/*
 .idea
 yarn.lock
+yarn-error.log
 .parallelperf.*
 tests/cases/user/*/package-lock.json
 tests/cases/user/*/node_modules/
@@ -68,3 +74,6 @@ tests/cases/user/*/**/*.d.ts
 !tests/cases/user/bignumber.js/
 !tests/cases/user/discord.js/
 tests/baselines/reference/dt
+.failed-tests
+TEST-results.xml
+package-lock.json

@@ -6,11 +6,4 @@
 ////cl/*invalidContext*/ass InvalidSignatureHelpLocation { }
 ////InvalidSignatureHelpLocation(/*validContext*/);
 
-goTo.marker('insideComment');
-verify.not.signatureHelpPresent();
-
-goTo.marker('invalidContext');
-verify.not.signatureHelpPresent();
-
-goTo.marker('validContext');
-verify.not.signatureHelpPresent();
+verify.noSignatureHelp("insideComment", "invalidContext", "validContext");

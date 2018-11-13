@@ -14,8 +14,20 @@ interface I<_T, U> { };
 >_T : Symbol(_T, Decl(unusedTypeParametersWithUnderscore.ts, 4, 12))
 >U : Symbol(U, Decl(unusedTypeParametersWithUnderscore.ts, 4, 15))
 
-class C<_T, U> { };
+class C<_T, U> {
 >C : Symbol(C, Decl(unusedTypeParametersWithUnderscore.ts, 4, 23))
 >_T : Symbol(_T, Decl(unusedTypeParametersWithUnderscore.ts, 6, 8))
 >U : Symbol(U, Decl(unusedTypeParametersWithUnderscore.ts, 6, 11))
+
+    public m<_V, W>() { }
+>m : Symbol(C.m, Decl(unusedTypeParametersWithUnderscore.ts, 6, 16))
+>_V : Symbol(_V, Decl(unusedTypeParametersWithUnderscore.ts, 7, 13))
+>W : Symbol(W, Decl(unusedTypeParametersWithUnderscore.ts, 7, 16))
+
+};
+
+let l = <_T, U>() => { };
+>l : Symbol(l, Decl(unusedTypeParametersWithUnderscore.ts, 10, 3))
+>_T : Symbol(_T, Decl(unusedTypeParametersWithUnderscore.ts, 10, 9))
+>U : Symbol(U, Decl(unusedTypeParametersWithUnderscore.ts, 10, 12))
 

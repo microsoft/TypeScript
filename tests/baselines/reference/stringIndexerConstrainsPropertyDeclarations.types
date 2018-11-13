@@ -2,9 +2,6 @@
 // String indexer types constrain the types of named properties in their containing type
 
 interface MyString extends String {
->MyString : MyString
->String : String
-
     foo: number;
 >foo : number
 }
@@ -27,14 +24,25 @@ class C {
 >c : () => {}
 
     "d": string; // ok
+>"d" : string
+
     "e": number; // error
+>"e" : number
+
     1.0: string; // ok
+>1.0 : string
+
     2.0: number; // error
+>2.0 : number
+
     "3.0": string; // ok
+>"3.0" : string
+
     "4.0": number; // error
+>"4.0" : number
+
     f: MyString; // error
 >f : MyString
->MyString : MyString
 
     get X() { // ok
 >X : string
@@ -71,8 +79,6 @@ class C {
 }
 
 interface I {
->I : I
-
     [x: string]: string;
 >x : string
 
@@ -86,9 +92,17 @@ interface I {
 >c : () => {}
 
     "d": string; // ok
+>"d" : string
+
     "e": number; // error
+>"e" : number
+
     1.0: string; // ok
+>1.0 : string
+
     2.0: number; // error
+>2.0 : number
+
     (): string; // ok
     (x): number // ok
 >x : any
@@ -97,10 +111,13 @@ interface I {
 >foo : () => string
 
     "3.0": string; // ok
+>"3.0" : string
+
     "4.0": number; // error
+>"4.0" : number
+
     f: MyString; // error
 >f : MyString
->MyString : MyString
 }
 
 var a: {
@@ -119,9 +136,17 @@ var a: {
 >c : () => {}
 
     "d": string; // ok
+>"d" : string
+
     "e": number; // error
+>"e" : number
+
     1.0: string; // ok
+>1.0 : string
+
     2.0: number; // error
+>2.0 : number
+
     (): string; // ok
     (x): number // ok
 >x : any
@@ -130,10 +155,13 @@ var a: {
 >foo : () => string
 
     "3.0": string; // ok
+>"3.0" : string
+
     "4.0": number; // error
+>"4.0" : number
+
     f: MyString; // error
 >f : MyString
->MyString : MyString
 }
 
 // error
@@ -155,27 +183,32 @@ var b: { [x: string]: string; } = {
 >() => { } : () => void
 
     "d": '', 
+>"d" : string
 >'' : ""
 
     "e": 1, 
+>"e" : number
 >1 : 1
 
     1.0: '',
+>1.0 : string
 >'' : ""
 
     2.0: 1, 
+>2.0 : number
 >1 : 1
 
     "3.0": '', 
+>"3.0" : string
 >'' : ""
 
     "4.0": 1, 
+>"4.0" : number
 >1 : 1
 
     f: <MyString>null, 
 >f : MyString
 ><MyString>null : MyString
->MyString : MyString
 >null : null
 
     get X() { 

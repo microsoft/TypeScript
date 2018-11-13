@@ -33,7 +33,6 @@ const o4 = {
     async * f(await) {
 >f : () => any
 >await : any
-> : any
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldParameterIsError.ts ===
@@ -44,7 +43,6 @@ const o5 = {
     async * f(yield) {
 >f : () => any
 >yield : any
-> : any
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitInParameterInitializerIsError.ts ===
@@ -228,8 +226,6 @@ const o18 = {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 const o19 = {
 >o19 : { f(): AsyncIterableIterator<any>; }
 >{    async * f() {        let x: await;    }} : { f(): AsyncIterableIterator<any>; }
@@ -239,13 +235,10 @@ const o19 = {
 
         let x: await;
 >x : await
->await : await
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldAsTypeIsOk.ts ===
 interface yield {}
->yield : yield
-
 const o20 = {
 >o20 : { f(): AsyncIterableIterator<any>; }
 >{    async * f() {        let x: yield;    }} : { f(): AsyncIterableIterator<any>; }
@@ -255,7 +248,6 @@ const o20 = {
 
         let x: yield;
 >x : yield
->yield : yield
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
@@ -269,6 +261,7 @@ const o21 = {
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
     }

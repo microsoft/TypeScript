@@ -17,9 +17,9 @@ if (value.foo !== null) {
 >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
 
     value.foo.toExponential()
->value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>value.foo.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(controlFlowStringIndex.ts, 4, 13))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
     value.other // should still be number | null
 >value.other : Symbol(other, Decl(controlFlowStringIndex.ts, 0, 10))

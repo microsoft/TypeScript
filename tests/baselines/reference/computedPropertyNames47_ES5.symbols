@@ -11,6 +11,7 @@ var o = {
 >o : Symbol(o, Decl(computedPropertyNames47_ES5.ts, 2, 3))
 
     [E1.x || E2.x]: 0
+>[E1.x || E2.x] : Symbol([E1.x || E2.x], Decl(computedPropertyNames47_ES5.ts, 2, 9))
 >E1.x : Symbol(E1.x, Decl(computedPropertyNames47_ES5.ts, 0, 9))
 >E1 : Symbol(E1, Decl(computedPropertyNames47_ES5.ts, 0, 0))
 >x : Symbol(E1.x, Decl(computedPropertyNames47_ES5.ts, 0, 9))

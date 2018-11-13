@@ -1,2 +1,2 @@
 //// [es5-souremap-amd.js.map]
-{"version":3,"file":"es5-souremap-amd.js","sourceRoot":"","sources":["es5-souremap-amd.ts"],"names":[],"mappings":"AAAA;IAEI;IAGA,CAAC;IAEM,aAAC,GAAR;QAEI,MAAM,CAAC,EAAE,CAAC;IACd,CAAC;IACL,QAAC;AAAD,CAAC,AAXD,IAWC"}
+{"version":3,"file":"es5-souremap-amd.js","sourceRoot":"","sources":["es5-souremap-amd.ts"],"names":[],"mappings":"AAAA;IAEI;IAGA,CAAC;IAEM,aAAC,GAAR;QAEI,OAAO,EAAE,CAAC;IACd,CAAC;IACL,QAAC;AAAD,CAAC,AAXD,IAWC"}

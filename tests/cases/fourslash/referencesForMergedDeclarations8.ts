@@ -10,4 +10,4 @@
 ////// module
 ////import a3 = Foo.[|Bar|].Baz;
 
-verify.singleReferenceGroup("namespace Foo.Bar\nfunction Foo.Bar(): void");
+verify.singleReferenceGroup("namespace Foo.Bar");

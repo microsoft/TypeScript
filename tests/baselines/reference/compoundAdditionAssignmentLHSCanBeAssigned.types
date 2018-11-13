@@ -142,7 +142,6 @@ x3 += undefined;
 
 var x4: E;
 >x4 : E
->E : E
 
 x4 += a;
 >x4 += a : any

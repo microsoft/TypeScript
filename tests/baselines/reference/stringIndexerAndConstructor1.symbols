@@ -6,4 +6,5 @@ interface I {
 >s : Symbol(s, Decl(stringIndexerAndConstructor1.ts, 1, 5))
 
     "": string;
+>"" : Symbol(I[""], Decl(stringIndexerAndConstructor1.ts, 1, 24))
 }

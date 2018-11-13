@@ -36,17 +36,11 @@ export class FooItem {
 
 export type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 export function WithTags<T extends Constructor<FooItem>>(Base: T) {
 >WithTags : <T extends Constructor<FooItem>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T
->T : T
->Constructor : Constructor<T>
->FooItem : FooItem
 >Base : T
->T : T
 
     return class extends Base {
 >class extends Base {        static getTags(): void { }        tags(): void { }    } : { new (...args: any[]): (Anonymous class); prototype: WithTags<any>.(Anonymous class); getTags(): void; } & T

@@ -13,7 +13,6 @@ const i = 0;
 function F() {
     for (let j = 0; j < 10; j++) {
         const newLocal = i + 1;
-
         const x = /*RENAME*/newLocal;
     }
 }
@@ -22,7 +21,6 @@ function F() {
 
 const i = 0;
 const newLocal = i + 1;
-
 function F() {
     for (let j = 0; j < 10; j++) {
         const x = /*RENAME*/newLocal;

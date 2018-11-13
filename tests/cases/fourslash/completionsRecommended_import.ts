@@ -3,25 +3,43 @@
 // @noLib: true
 
 // @Filename: /a.ts
-////export class C {}
-////export function f(c: C) {}
+////export class Cls {}
+////export function f(c: Cls) {}
 
 // @Filename: /b.ts
 ////import { f } from "./a";
-// Here we will recommend a new import of 'C'
-////f(new /*b*/);
+// Here we will recommend a new import of 'Cls'
+////f(new C/*b0*/);
+////f(new /*b1*/);
 
 // @Filename: /c.ts
-////import * as a from "./a";
-// Here we will recommend 'a' because it contains 'C'.
-////a.f(new /*c*/);
+////import * as alpha from "./a";
+// Here we will recommend 'alpha' because it contains 'Cls'.
+////alpha.f(new al/*c0*/);
+////alpha.f(new /*c1*/);
 
-goTo.marker("b");
-verify.completionListContains({ name: "C", source: "/a" }, "class C", "", "class", undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    isRecommended: true,
+const preferences: FourSlashInterface.UserPreferences = { includeCompletionsForModuleExports: true };
+const classEntry = (isConstructor: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
+    name: "Cls",
+    source: "/a",
     sourceDisplay: "./a",
+    kind: "class",
+    kindModifiers: "export",
+    text: isConstructor ? "constructor Cls(): Cls" : "class Cls",
+    hasAction: true,
+    isRecommended: true,
 });
-
-goTo.marker("c");
-verify.completionListContains("a", "import a", "", "alias", undefined, undefined, { isRecommended: true });
+verify.completions(
+    { marker: "b0", includes: classEntry(true), preferences },
+    { marker: "b1", includes: classEntry(false), preferences },
+    {
+        marker: ["c0", "c1"],
+        includes: {
+            name: "alpha",
+            text: "import alpha",
+            kind: "alias",
+            isRecommended: true,
+        },
+        preferences,
+    },
+);

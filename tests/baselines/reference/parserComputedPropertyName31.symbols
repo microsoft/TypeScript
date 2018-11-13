@@ -4,5 +4,8 @@ class C {
 
     // yes ASI
     [e]: number
+>[e] : Symbol(C[e], Decl(parserComputedPropertyName31.ts, 0, 9))
+
     [e2]: number
+>[e2] : Symbol(C[e2], Decl(parserComputedPropertyName31.ts, 2, 15))
 }

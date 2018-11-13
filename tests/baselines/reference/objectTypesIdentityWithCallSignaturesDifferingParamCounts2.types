@@ -2,20 +2,13 @@
 // object types are identical structurally
 
 interface I {
->I : I
-
     (x: string): string;
 >x : string
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: T): T;
 >x : T
->T : T
->T : T
 }
 
 var a: { (x: string, y: string): string }
@@ -26,12 +19,10 @@ var a: { (x: string, y: string): string }
 function foo2(x: I);
 >foo2 : { (x: I): any; (x: I): any; }
 >x : I
->I : I
 
 function foo2(x: I); // error
 >foo2 : { (x: I): any; (x: I): any; }
 >x : I
->I : I
 
 function foo2(x: any) { }
 >foo2 : { (x: I): any; (x: I): any; }
@@ -54,12 +45,10 @@ function foo3(x: any) { }
 function foo4(x: I2<string>);
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2<T>
 
 function foo4(x: I2<string>); // error
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2<T>
 
 function foo4(x: any) { }
 >foo4 : { (x: I2<string>): any; (x: I2<string>): any; }
@@ -68,12 +57,10 @@ function foo4(x: any) { }
 function foo5(x: I2<string>);
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
 >x : I2<string>
->I2 : I2<T>
 
 function foo5(x: I2<number>); // ok
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
 >x : I2<number>
->I2 : I2<T>
 
 function foo5(x: any) { }
 >foo5 : { (x: I2<string>): any; (x: I2<number>): any; }
@@ -82,7 +69,6 @@ function foo5(x: any) { }
 function foo13(x: I);
 >foo13 : { (x: I): any; (x: (x: string, y: string) => string): any; }
 >x : I
->I : I
 
 function foo13(x: typeof a); // ok
 >foo13 : { (x: I): any; (x: (x: string, y: string) => string): any; }
@@ -96,12 +82,10 @@ function foo13(x: any) { }
 function foo14(x: I);
 >foo14 : { (x: I): any; (x: I2<string>): any; }
 >x : I
->I : I
 
 function foo14(x: I2<string>); // error
 >foo14 : { (x: I): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2<T>
 
 function foo14(x: any) { }
 >foo14 : { (x: I): any; (x: I2<string>): any; }
@@ -115,7 +99,6 @@ function foo14b(x: typeof a);
 function foo14b(x: I2<string>); // ok
 >foo14b : { (x: (x: string, y: string) => string): any; (x: I2<string>): any; }
 >x : I2<string>
->I2 : I2<T>
 
 function foo14b(x: any) { }
 >foo14b : { (x: (x: string, y: string) => string): any; (x: I2<string>): any; }
@@ -124,12 +107,10 @@ function foo14b(x: any) { }
 function foo15(x: I);
 >foo15 : { (x: I): any; (x: I2<number>): any; }
 >x : I
->I : I
 
 function foo15(x: I2<number>); // ok
 >foo15 : { (x: I): any; (x: I2<number>): any; }
 >x : I2<number>
->I2 : I2<T>
 
 function foo15(x: any) { }
 >foo15 : { (x: I): any; (x: I2<number>): any; }

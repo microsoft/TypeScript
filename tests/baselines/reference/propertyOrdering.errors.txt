@@ -18,6 +18,7 @@ tests/cases/compiler/propertyOrdering.ts(20,14): error TS2339: Property '_store'
           public bar() { return this.store; } // should be an error
                                      ~~~~~
 !!! error TS2551: Property 'store' does not exist on type 'Foo'. Did you mean '_store'?
+!!! related TS2728 tests/cases/compiler/propertyOrdering.ts:6:14: '_store' is declared here.
     
     }
     

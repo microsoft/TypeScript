@@ -22,6 +22,8 @@ export function foo() { };
 
 === tests/cases/compiler/externalModuleRefernceResolutionOrderInImportDeclaration_file2.ts ===
 declare module "externalModuleRefernceResolutionOrderInImportDeclaration_file1" {
+>"externalModuleRefernceResolutionOrderInImportDeclaration_file1" : typeof import("externalModuleRefernceResolutionOrderInImportDeclaration_file1")
+
     export function bar();
 >bar : () => any
 }

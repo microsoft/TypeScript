@@ -3,6 +3,7 @@ class C {
 >C : C
 
     [Symbol.toStringTag]: string = "";
+>[Symbol.toStringTag] : string
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

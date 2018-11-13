@@ -3,19 +3,14 @@ declare module ambiModule {
 >ambiModule : typeof ambiModule
 
    export interface i1 { };
->i1 : i1
-
    export interface i2 { }
->i2 : i2
 }
 
 var n1: ambiModule.i1;
 >n1 : ambiModule.i1
 >ambiModule : any
->i1 : ambiModule.i1
 
 var n2: ambiModule.i2;
 >n2 : ambiModule.i2
 >ambiModule : any
->i2 : ambiModule.i2
 

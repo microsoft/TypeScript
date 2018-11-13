@@ -8,5 +8,5 @@ export default class {
 
 
 //// [declarationEmitDefaultExport2.d.ts]
-export default class  {
+export default class {
 }

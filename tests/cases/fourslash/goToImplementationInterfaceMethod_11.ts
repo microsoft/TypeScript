@@ -6,7 +6,7 @@
 ////    hel/*reference*/lo(): void;
 //// }
 ////
-//// var x = <Foo> { [|hello: () => {}|] };
-//// var y = <Foo> (((({ [|hello: () => {}|] }))));
+//// var x = <Foo> { [|hello|]: () => {} };
+//// var y = <Foo> (((({ [|hello|]: () => {} }))));
 
 verify.allRangesAppearInImplementationList("reference");

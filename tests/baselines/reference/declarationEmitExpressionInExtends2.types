@@ -1,23 +1,17 @@
 === tests/cases/compiler/declarationEmitExpressionInExtends2.ts ===
 class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
     x: T;
 >x : T
->T : T
 
     y: U;
 >y : U
->U : U
 }
 
 function getClass<T>(c: T) {
 >getClass : <T>(c: T) => typeof C
->T : T
 >c : T
->T : T
 
     return C;
 >C : typeof C

@@ -40,8 +40,6 @@ declare class m3f { foo(): void }
 >foo : () => void
 
 module m3f { export interface I { foo(): void } }
->m3f : typeof m3f
->I : I
 >foo : () => void
 
 declare class m3g { foo(): void }

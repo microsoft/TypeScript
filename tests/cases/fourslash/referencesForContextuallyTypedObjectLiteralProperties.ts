@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////interface IFoo { [|{| "isWriteAccess": true, "isDefinition": true |}xy|]: number; }
+////interface IFoo { [|{| "isDefinition": true |}xy|]: number; }
 ////
 ////// Assignment
 ////var a1: IFoo = { [|{| "isWriteAccess": true, "isDefinition": true |}xy|]: 0 };
@@ -25,12 +25,4 @@
 ////// Untped -- should not be included
 ////var u = { xy: 0 };
 
-const ranges = test.ranges();
-verify.referenceGroups(ranges[0], [{ definition: "(property) IFoo.xy: number", ranges }]);
-for (const range of ranges.slice(1)) {
-    const type = range.marker.data.type || "number";
-    verify.referenceGroups(range, [
-        { definition: "(property) IFoo.xy: number", ranges: ranges.filter(r => r !== range) },
-        { definition: `(property) xy: ${type}`, ranges: [range] }
-    ]);
-}
+verify.singleReferenceGroup("(property) IFoo.xy: number");

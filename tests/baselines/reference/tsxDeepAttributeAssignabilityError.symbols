@@ -1,0 +1,50 @@
+=== tests/cases/compiler/my-component.tsx ===
+import * as React from 'react'
+>React : Symbol(React, Decl(my-component.tsx, 0, 6))
+
+interface MyProps {
+>MyProps : Symbol(MyProps, Decl(my-component.tsx, 0, 30))
+
+    x: string;
+>x : Symbol(MyProps.x, Decl(my-component.tsx, 2, 19))
+
+    y: MyInnerProps;
+>y : Symbol(MyProps.y, Decl(my-component.tsx, 3, 14))
+>MyInnerProps : Symbol(MyInnerProps, Decl(my-component.tsx, 5, 1))
+}
+
+interface MyInnerProps {
+>MyInnerProps : Symbol(MyInnerProps, Decl(my-component.tsx, 5, 1))
+
+    value: string;
+>value : Symbol(MyInnerProps.value, Decl(my-component.tsx, 7, 24))
+}
+
+export function MyComponent(_props: MyProps) {
+>MyComponent : Symbol(MyComponent, Decl(my-component.tsx, 9, 1))
+>_props : Symbol(_props, Decl(my-component.tsx, 11, 28))
+>MyProps : Symbol(MyProps, Decl(my-component.tsx, 0, 30))
+
+    return <span>my component</span>;
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+>span : Symbol(JSX.IntrinsicElements.span, Decl(react.d.ts, 2461, 51))
+}
+
+=== tests/cases/compiler/file1.tsx ===
+import * as React from 'react'
+>React : Symbol(React, Decl(file1.tsx, 0, 6))
+
+import { MyComponent } from './my-component'
+>MyComponent : Symbol(MyComponent, Decl(file1.tsx, 1, 8))
+
+export const result = <MyComponent x="yes" y={{
+>result : Symbol(result, Decl(file1.tsx, 3, 12))
+>MyComponent : Symbol(MyComponent, Decl(file1.tsx, 1, 8))
+>x : Symbol(x, Decl(file1.tsx, 3, 34))
+>y : Symbol(y, Decl(file1.tsx, 3, 42))
+
+    value: 42
+>value : Symbol(value, Decl(file1.tsx, 3, 47))
+
+}} />;
+

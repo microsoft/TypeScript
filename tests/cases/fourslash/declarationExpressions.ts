@@ -1,30 +1,21 @@
 /// <reference path="fourslash.ts"/>
 
-////class A {}
-////const B = class C {
+// @noLib: true
+
+////[|{| "name": "A", "kind": "class" |}class A {}|]
+////const [|{| "name": "B", "kind": "const" |}B = [|{| "name": "Cz", "kind": "class" |}class Cz {
 ////    public x;
-////};
-////function D() {}
-////const E = function F() {}
+////}|]|];
+////[|{| "name": "D", "kind": "function" |}function D() {}|]
+////const [|{| "name": "E", "kind": "const" |}E = [|{| "name": "F", "kind": "function" |}function F() {}|]|]
 ////console.log(function() {}, class {}); // Expression with no name should have no effect.
-////console.log(function inner() {});
-////String(function fun() { class cls { public prop; } }));
+////console.log([|{| "name": "inner", "kind": "function" |}function inner() {}|]);
+////String([|{| "name": "nn", "kind": "function" |}function nn() {
+////	[|{| "name": "cls", "kind": "class", "containerName": "nn", "containerKind": "function" |}class cls {
+////		[|{| "name": "prop", "kind": "property", "kindModifiers": "public", "containerName": "cls", "containerKind": "class" |}public prop;|]
+////	}|]
+////}|]));
 
-function navExact(name: string, kind: string) {
-	verify.navigationItemsListContains(name, kind, name, "exact");
+for (const range of test.ranges()) {
+	verify.navigateTo({ pattern: range.marker.data.name, expected: [{ ...range.marker.data, range }] });
 }
-
-navExact("A", "class");
-navExact("B", "const");
-navExact("C", "class");
-navExact("x", "property");
-
-navExact("D", "function");
-navExact("E", "const");
-navExact("F", "function")
-
-navExact("inner", "function");
-
-navExact("fun", "function");
-navExact("cls", "class");
-navExact("prop", "property");

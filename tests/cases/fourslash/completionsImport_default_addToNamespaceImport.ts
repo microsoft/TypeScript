@@ -7,16 +7,23 @@
 ////import * as a from "./a";
 ////f/**/;
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "function foo(): void",
+        kind: "function",
+        kindModifiers: "export",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
 });
-
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Add 'foo' to existing import declaration from "./a"`,
+    description: `Add default import 'foo' to existing import declaration from "./a"`,
     newFileContent: `import foo, * as a from "./a";
 f;`,
 });

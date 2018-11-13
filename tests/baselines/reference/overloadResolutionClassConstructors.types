@@ -58,7 +58,6 @@ new fn1({}); // Error
 // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 class fn2<T> {
 >fn2 : fn2<T>
->T : T
 
     constructor(s: string, n: number);
 >s : string
@@ -67,7 +66,6 @@ class fn2<T> {
     constructor(n: number, t: T);
 >n : number
 >t : T
->T : T
 
     constructor() { }
 }
@@ -76,7 +74,6 @@ var d = new fn2<Date>(0, undefined);
 >d : fn2<Date>
 >new fn2<Date>(0, undefined) : fn2<Date>
 >fn2 : typeof fn2
->Date : Date
 >0 : 0
 >undefined : undefined
 
@@ -92,7 +89,6 @@ var s = new fn2(0, '');
 new fn2<Date>('', 0); // OK
 >new fn2<Date>('', 0) : fn2<Date>
 >fn2 : typeof fn2
->Date : Date
 >'' : ""
 >0 : 0
 
@@ -106,28 +102,19 @@ new fn2('', 0); // OK
 // Generic overloads with differing arity called without type arguments
 class fn3<T, U, V> {
 >fn3 : fn3<T, U, V>
->T : T
->U : U
->V : V
 
     constructor(n: T);
 >n : T
->T : T
 
     constructor(s: string, t: T, u: U);
 >s : string
 >t : T
->T : T
 >u : U
->U : U
 
     constructor(v: V, u: U, t: T);
 >v : V
->V : V
 >u : U
->U : U
 >t : T
->T : T
 
     constructor() { }
 }
@@ -179,14 +166,10 @@ new fn3<number, number, number, number>(); // Error
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 class fn4<T extends string, U extends number> {
 >fn4 : fn4<T, U>
->T : T
->U : U
 
     constructor(n: T, m: U);
 >n : T
->T : T
 >m : U
->U : U
 
     constructor() { }
 }
@@ -243,7 +226,6 @@ new fn4('', null);
 new fn4<boolean, Date>(null, null); // Error
 >new fn4<boolean, Date>(null, null) : any
 >fn4 : typeof fn4
->Date : Date
 >null : null
 >null : null
 

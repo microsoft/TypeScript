@@ -17,11 +17,11 @@ var C = /** @class */ (function () {
     C.prototype.bar = function () {
         var _this = this;
         (function () {
+            var _a;
             var obj = (_a = {},
                 _a[_this.bar()] = function () { } // needs capture
             ,
                 _a);
-            var _a;
         });
         return 0;
     };

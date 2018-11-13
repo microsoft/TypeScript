@@ -178,10 +178,11 @@ namespace ts {
     /// If we consider every slash token to be a regex, we could be missing cases like "1/2/3", where
     /// we have a series of divide operator. this list allows us to be more accurate by ruling out
     /// locations where a regexp cannot exist.
-    const noRegexTable: true[] = ts.arrayToNumericMap<SyntaxKind, true>([
+    const noRegexTable: true[] = arrayToNumericMap<SyntaxKind, true>([
         SyntaxKind.Identifier,
         SyntaxKind.StringLiteral,
         SyntaxKind.NumericLiteral,
+        SyntaxKind.BigIntLiteral,
         SyntaxKind.RegularExpressionLiteral,
         SyntaxKind.ThisKeyword,
         SyntaxKind.PlusPlusToken,
@@ -224,7 +225,7 @@ namespace ts {
                         case SyntaxKind.NoSubstitutionTemplateLiteral:
                             return EndOfLineState.InTemplateHeadOrNoSubstitutionTemplate;
                         default:
-                            throw Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
+                            return Debug.fail("Only 'NoSubstitutionTemplateLiteral's and 'TemplateTail's can be unterminated; got SyntaxKind #" + token);
                     }
                 }
                 return lastOnTemplateStack === SyntaxKind.TemplateHead ? EndOfLineState.InTemplateSubstitutionPosition : undefined;
@@ -286,6 +287,7 @@ namespace ts {
             case ClassificationType.comment: return TokenClass.Comment;
             case ClassificationType.keyword: return TokenClass.Keyword;
             case ClassificationType.numericLiteral: return TokenClass.NumberLiteral;
+            case ClassificationType.bigintLiteral: return TokenClass.BigIntLiteral;
             case ClassificationType.operator: return TokenClass.Operator;
             case ClassificationType.stringLiteral: return TokenClass.StringLiteral;
             case ClassificationType.whiteSpace: return TokenClass.Whitespace;
@@ -300,6 +302,8 @@ namespace ts {
             case ClassificationType.text:
             case ClassificationType.parameterName:
                 return TokenClass.Identifier;
+            default:
+                return undefined!; // TODO: GH#18217 Debug.assertNever(type);
         }
     }
 
@@ -343,7 +347,7 @@ namespace ts {
             case EndOfLineState.None:
                 return { prefix: "" };
             default:
-                throw Debug.assertNever(lexState);
+                return Debug.assertNever(lexState);
         }
     }
 
@@ -420,6 +424,8 @@ namespace ts {
         switch (token) {
             case SyntaxKind.NumericLiteral:
                 return ClassificationType.numericLiteral;
+            case SyntaxKind.BigIntLiteral:
+                return ClassificationType.bigintLiteral;
             case SyntaxKind.StringLiteral:
                 return ClassificationType.stringLiteral;
             case SyntaxKind.RegularExpressionLiteral:
@@ -540,6 +546,7 @@ namespace ts {
             case ClassificationType.identifier: return ClassificationTypeNames.identifier;
             case ClassificationType.keyword: return ClassificationTypeNames.keyword;
             case ClassificationType.numericLiteral: return ClassificationTypeNames.numericLiteral;
+            case ClassificationType.bigintLiteral: return ClassificationTypeNames.bigintLiteral;
             case ClassificationType.operator: return ClassificationTypeNames.operator;
             case ClassificationType.stringLiteral: return ClassificationTypeNames.stringLiteral;
             case ClassificationType.whiteSpace: return ClassificationTypeNames.whiteSpace;
@@ -559,6 +566,7 @@ namespace ts {
             case ClassificationType.jsxAttribute: return ClassificationTypeNames.jsxAttribute;
             case ClassificationType.jsxText: return ClassificationTypeNames.jsxText;
             case ClassificationType.jsxAttributeStringLiteralValue: return ClassificationTypeNames.jsxAttributeStringLiteralValue;
+            default: return undefined!; // TODO: GH#18217 throw Debug.assertNever(type);
         }
     }
 
@@ -619,37 +627,46 @@ namespace ts {
                     return start;
                 }
 
-                // Don't bother with newlines/whitespace.
-                if (kind === SyntaxKind.NewLineTrivia || kind === SyntaxKind.WhitespaceTrivia) {
-                    continue;
-                }
-
-                // Only bother with the trivia if it at least intersects the span of interest.
-                if (isComment(kind)) {
-                    classifyComment(token, kind, start, width);
-
-                    // Classifying a comment might cause us to reuse the trivia scanner
-                    // (because of jsdoc comments).  So after we classify the comment make
-                    // sure we set the scanner position back to where it needs to be.
-                    triviaScanner.setTextPos(end);
-                    continue;
-                }
-
-                if (kind === SyntaxKind.ConflictMarkerTrivia) {
-                    const text = sourceFile.text;
-                    const ch = text.charCodeAt(start);
-
-                    // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
-                    // in the classification stream.
-                    if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
-                        pushClassification(start, width, ClassificationType.comment);
+                switch (kind) {
+                    case SyntaxKind.NewLineTrivia:
+                    case SyntaxKind.WhitespaceTrivia:
+                        // Don't bother with newlines/whitespace.
                         continue;
-                    }
 
-                    // for the ||||||| and ======== markers, add a comment for the first line,
-                    // and then lex all subsequent lines up until the end of the conflict marker.
-                    Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
-                    classifyDisabledMergeCode(text, start, end);
+                    case SyntaxKind.SingleLineCommentTrivia:
+                    case SyntaxKind.MultiLineCommentTrivia:
+                        // Only bother with the trivia if it at least intersects the span of interest.
+                        classifyComment(token, kind, start, width);
+
+                        // Classifying a comment might cause us to reuse the trivia scanner
+                        // (because of jsdoc comments).  So after we classify the comment make
+                        // sure we set the scanner position back to where it needs to be.
+                        triviaScanner.setTextPos(end);
+                        continue;
+
+                    case SyntaxKind.ConflictMarkerTrivia:
+                        const text = sourceFile.text;
+                        const ch = text.charCodeAt(start);
+
+                        // for the <<<<<<< and >>>>>>> markers, we just add them in as comments
+                        // in the classification stream.
+                        if (ch === CharacterCodes.lessThan || ch === CharacterCodes.greaterThan) {
+                            pushClassification(start, width, ClassificationType.comment);
+                            continue;
+                        }
+
+                        // for the ||||||| and ======== markers, add a comment for the first line,
+                        // and then lex all subsequent lines up until the end of the conflict marker.
+                        Debug.assert(ch === CharacterCodes.bar || ch === CharacterCodes.equals);
+                        classifyDisabledMergeCode(text, start, end);
+                        break;
+
+                    case SyntaxKind.ShebangTrivia:
+                        // TODO: Maybe we should classify these.
+                        break;
+
+                    default:
+                        Debug.assertNever(kind);
                 }
             }
         }
@@ -686,7 +703,7 @@ namespace ts {
                         pushCommentRange(pos, tag.pos - pos);
                     }
 
-                    pushClassification(tag.atToken.pos, tag.atToken.end - tag.atToken.pos, ClassificationType.punctuation); // "@"
+                    pushClassification(tag.pos, 1, ClassificationType.punctuation); // "@"
                     pushClassification(tag.tagName.pos, tag.tagName.end - tag.tagName.pos, ClassificationType.docCommentTagName); // e.g. "param"
 
                     pos = tag.tagName.end;
@@ -697,16 +714,17 @@ namespace ts {
                             break;
                         case SyntaxKind.JSDocTemplateTag:
                             processJSDocTemplateTag(<JSDocTemplateTag>tag);
+                            pos = tag.end;
                             break;
                         case SyntaxKind.JSDocTypeTag:
                             processElement((<JSDocTypeTag>tag).typeExpression);
+                            pos = tag.end;
                             break;
                         case SyntaxKind.JSDocReturnTag:
                             processElement((<JSDocReturnTag>tag).typeExpression);
+                            pos = tag.end;
                             break;
                     }
-
-                    pos = tag.end;
                 }
             }
 
@@ -803,7 +821,7 @@ namespace ts {
             return true;
         }
 
-        function tryClassifyJsxElementName(token: Node): ClassificationType {
+        function tryClassifyJsxElementName(token: Node): ClassificationType | undefined {
             switch (token.parent && token.parent.kind) {
                 case SyntaxKind.JsxOpeningElement:
                     if ((<JsxOpeningElement>token.parent).tagName === token) {
@@ -832,12 +850,12 @@ namespace ts {
         // for accurate classification, the actual token should be passed in.  however, for
         // cases like 'disabled merge code' classification, we just get the token kind and
         // classify based on that instead.
-        function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType {
+        function classifyTokenType(tokenKind: SyntaxKind, token?: Node): ClassificationType | undefined {
             if (isKeyword(tokenKind)) {
                 return ClassificationType.keyword;
             }
 
-            // Special case < and >  If they appear in a generic context they are punctuation,
+            // Special case `<` and `>`: If they appear in a generic context they are punctuation,
             // not operators.
             if (tokenKind === SyntaxKind.LessThanToken || tokenKind === SyntaxKind.GreaterThanToken) {
                 // If the node owning the token has a type argument list or type parameter list, then
@@ -849,20 +867,21 @@ namespace ts {
 
             if (isPunctuation(tokenKind)) {
                 if (token) {
+                    const parent = token.parent;
                     if (tokenKind === SyntaxKind.EqualsToken) {
                         // the '=' in a variable declaration is special cased here.
-                        if (token.parent.kind === SyntaxKind.VariableDeclaration ||
-                            token.parent.kind === SyntaxKind.PropertyDeclaration ||
-                            token.parent.kind === SyntaxKind.Parameter ||
-                            token.parent.kind === SyntaxKind.JsxAttribute) {
+                        if (parent.kind === SyntaxKind.VariableDeclaration ||
+                            parent.kind === SyntaxKind.PropertyDeclaration ||
+                            parent.kind === SyntaxKind.Parameter ||
+                            parent.kind === SyntaxKind.JsxAttribute) {
                             return ClassificationType.operator;
                         }
                     }
 
-                    if (token.parent.kind === SyntaxKind.BinaryExpression ||
-                        token.parent.kind === SyntaxKind.PrefixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.PostfixUnaryExpression ||
-                        token.parent.kind === SyntaxKind.ConditionalExpression) {
+                    if (parent.kind === SyntaxKind.BinaryExpression ||
+                        parent.kind === SyntaxKind.PrefixUnaryExpression ||
+                        parent.kind === SyntaxKind.PostfixUnaryExpression ||
+                        parent.kind === SyntaxKind.ConditionalExpression) {
                         return ClassificationType.operator;
                     }
                 }
@@ -872,8 +891,12 @@ namespace ts {
             else if (tokenKind === SyntaxKind.NumericLiteral) {
                 return ClassificationType.numericLiteral;
             }
+            else if (tokenKind === SyntaxKind.BigIntLiteral) {
+                return ClassificationType.bigintLiteral;
+            }
             else if (tokenKind === SyntaxKind.StringLiteral) {
-                return token.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
+                // TODO: GH#18217
+                return token!.parent.kind === SyntaxKind.JsxAttribute ? ClassificationType.jsxAttributeStringLiteralValue : ClassificationType.stringLiteral;
             }
             else if (tokenKind === SyntaxKind.RegularExpressionLiteral) {
                 // TODO: we should get another classification type for these literals.
@@ -925,7 +948,7 @@ namespace ts {
             }
         }
 
-        function processElement(element: Node) {
+        function processElement(element: Node | undefined) {
             if (!element) {
                 return;
             }

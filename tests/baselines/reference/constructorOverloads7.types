@@ -13,14 +13,12 @@ declare class Point
 >y : number
 
      add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => Point
+>add : (dx: number, dy: number) => any
 >dx : number
 >dy : number
->Point : Point
 
      origin: Point;
->origin : Point
->Point : Point
+>origin : any
 
 }
 

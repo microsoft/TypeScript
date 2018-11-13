@@ -1,7 +1,5 @@
 === tests/cases/compiler/objectLiteralFunctionArgContextualTyping.ts ===
 interface I {
->I : I
-
     value: string;
 >value : string
 
@@ -13,7 +11,6 @@ interface I {
 function f2(args: I) { }
 >f2 : (args: I) => void
 >args : I
->I : I
 
 f2({ hello: 1 }) // error 
 >f2({ hello: 1 }) : void

@@ -1,14 +1,10 @@
 === tests/cases/compiler/genericSpecializations2.ts ===
 class IFoo<T> {
 >IFoo : IFoo<T>
->T : T
 
     foo<T>(x: T): T { // no error on implementors because IFoo's T is different from foo's T
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         return null;
 >null : null
@@ -17,36 +13,28 @@ class IFoo<T> {
 
 class IntFooBad implements IFoo<number> {
 >IntFooBad : IntFooBad
->IFoo : IFoo<T>
 
     foo<string>(x: string): string { return null; }
 >foo : <string>(x: string) => string
->string : string
 >x : string
 >null : null
 }
 
 class StringFoo2 implements IFoo<string> {
 >StringFoo2 : StringFoo2
->IFoo : IFoo<T>
 
     foo<string>(x: string): string { return null; }
 >foo : <string>(x: string) => string
->string : string
 >x : string
 >null : null
 }
 
 class StringFoo3 implements IFoo<string> {
 >StringFoo3 : StringFoo3
->IFoo : IFoo<T>
 
     foo<T>(x: T): T { return null; }
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 }
 

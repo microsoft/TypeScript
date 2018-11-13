@@ -36,6 +36,8 @@ interface Derived extends Base {
     }
     // error
     1: {
+>1 : Symbol(Derived[1], Decl(interfaceWithStringIndexerHidingBaseTypeIndexer2.ts, 14, 5))
+
         a: number;
 >a : Symbol(a, Decl(interfaceWithStringIndexerHidingBaseTypeIndexer2.ts, 16, 8))
     }

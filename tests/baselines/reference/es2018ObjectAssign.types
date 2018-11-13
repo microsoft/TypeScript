@@ -1,0 +1,21 @@
+=== tests/cases/compiler/es2018ObjectAssign.ts ===
+const test = Object.assign({}, { test: true });
+>test : { test: boolean; }
+>Object.assign({}, { test: true }) : { test: boolean; }
+>Object.assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>Object : ObjectConstructor
+>assign : { <T, U>(target: T, source: U): T & U; <T, U, V>(target: T, source1: U, source2: V): T & U & V; <T, U, V, W>(target: T, source1: U, source2: V, source3: W): T & U & V & W; (target: object, ...sources: any[]): any; }
+>{} : {}
+>{ test: true } : { test: true; }
+>test : true
+>true : true
+
+declare const p: Promise<number>;
+>p : Promise<number>
+
+p.finally();
+>p.finally() : Promise<number>
+>p.finally : (onfinally?: () => void) => Promise<number>
+>p : Promise<number>
+>finally : (onfinally?: () => void) => Promise<number>
+

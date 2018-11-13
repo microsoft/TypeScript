@@ -2,13 +2,11 @@
 // A built-in element (OK)
 var a1 = <div id="foo" />;
 >a1 : Symbol(a1, Decl(tsxTypeErrors.tsx, 1, 3))
->div : Symbol(unknown)
 >id : Symbol(id, Decl(tsxTypeErrors.tsx, 1, 13))
 
 // A built-in element with a mistyped property (error)
 var a2 = <img srce="foo.jpg" />
 >a2 : Symbol(a2, Decl(tsxTypeErrors.tsx, 4, 3))
->img : Symbol(unknown)
 >srce : Symbol(srce, Decl(tsxTypeErrors.tsx, 4, 13))
 
 // A built-in element with a badly-typed attribute value (error)
@@ -18,14 +16,12 @@ var thing = { oops: 100 };
 
 var a3 = <div id={thing} />
 >a3 : Symbol(a3, Decl(tsxTypeErrors.tsx, 8, 3))
->div : Symbol(unknown)
 >id : Symbol(id, Decl(tsxTypeErrors.tsx, 8, 13))
 >thing : Symbol(thing, Decl(tsxTypeErrors.tsx, 7, 3))
 
 // Mistyped html name (error)
 var e1 = <imag src="bar.jpg" />
 >e1 : Symbol(e1, Decl(tsxTypeErrors.tsx, 11, 3))
->imag : Symbol(unknown)
 >src : Symbol(src, Decl(tsxTypeErrors.tsx, 11, 14))
 
 // A custom type

@@ -77,12 +77,12 @@ module Errors {
             a12: (x: Array<Base>, y: Array<Derived2>) => Array<Derived>;
 >a12 : Symbol(A.a12, Decl(callSignatureAssignabilityInInheritance3.ts, 16, 79))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance3.ts, 17, 18))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance3.ts, 3, 15))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance3.ts, 17, 33))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(callSignatureAssignabilityInInheritance3.ts, 5, 47))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived : Symbol(Derived, Decl(callSignatureAssignabilityInInheritance3.ts, 4, 31))
 
             a14: {
@@ -274,13 +274,13 @@ module Errors {
             a12: <T extends Array<Derived2>>(x: Array<Base>, y: Array<Base>) => T; // valid, no inferences for T, defaults to Array<Derived2>
 >a12 : Symbol(I4E.a12, Decl(callSignatureAssignabilityInInheritance3.ts, 71, 33))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance3.ts, 72, 18))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Derived2 : Symbol(Derived2, Decl(callSignatureAssignabilityInInheritance3.ts, 5, 47))
 >x : Symbol(x, Decl(callSignatureAssignabilityInInheritance3.ts, 72, 45))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance3.ts, 3, 15))
 >y : Symbol(y, Decl(callSignatureAssignabilityInInheritance3.ts, 72, 60))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Base : Symbol(Base, Decl(callSignatureAssignabilityInInheritance3.ts, 3, 15))
 >T : Symbol(T, Decl(callSignatureAssignabilityInInheritance3.ts, 72, 18))
         }

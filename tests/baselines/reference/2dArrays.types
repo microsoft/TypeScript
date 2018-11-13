@@ -15,11 +15,9 @@ class Board {
 
     ships: Ship[];
 >ships : Ship[]
->Ship : Ship
 
     cells: Cell[];
 >cells : Cell[]
->Cell : Cell
 
     private allShipsSunk() {
 >allShipsSunk : () => boolean

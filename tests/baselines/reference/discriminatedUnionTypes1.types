@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/union/discriminatedUnionTypes1.ts ===
 interface Square {
->Square : Square
-
     kind: "square";
 >kind : "square"
 
@@ -10,8 +8,6 @@ interface Square {
 }
 
 interface Rectangle {
->Rectangle : Rectangle
-
     kind: "rectangle";
 >kind : "rectangle"
 
@@ -23,8 +19,6 @@ interface Rectangle {
 }
 
 interface Circle {
->Circle : Circle
-
     kind: "circle";
 >kind : "circle"
 
@@ -34,14 +28,10 @@ interface Circle {
 
 type Shape = Square | Rectangle | Circle;
 >Shape : Shape
->Square : Square
->Rectangle : Rectangle
->Circle : Circle
 
 function area1(s: Shape) {
 >area1 : (s: Shape) => number
 >s : Shape
->Shape : Shape
 
     if (s.kind === "square") {
 >s.kind === "square" : boolean
@@ -104,7 +94,6 @@ function area1(s: Shape) {
 function area2(s: Shape) {
 >area2 : (s: Shape) => number
 >s : Shape
->Shape : Shape
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
@@ -162,7 +151,6 @@ function assertNever(x: never): never {
 function area3(s: Shape) {
 >area3 : (s: Shape) => number
 >s : Shape
->Shape : Shape
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
@@ -213,7 +201,6 @@ function area3(s: Shape) {
 function area4(s: Shape) {
 >area4 : (s: Shape) => number
 >s : Shape
->Shape : Shape
 
     switch (s.kind) {
 >s.kind : "square" | "rectangle" | "circle"
@@ -277,7 +264,6 @@ type Message =
 function f1(m: Message) {
 >f1 : (m: Message) => void
 >m : Message
->Message : Message
 
     if (m.kind === "A") {
 >m.kind === "A" : boolean
@@ -308,7 +294,6 @@ function f1(m: Message) {
 function f2(m: Message) {
 >f2 : (m: Message) => void
 >m : Message
->Message : Message
 
     if (m.kind === "A") {
 >m.kind === "A" : boolean
@@ -326,7 +311,6 @@ function f2(m: Message) {
 function f3(m: Message) {
 >f3 : (m: Message) => void
 >m : Message
->Message : Message
 
     if (m.kind === "X") {
 >m.kind === "X" : boolean
@@ -343,7 +327,6 @@ function f3(m: Message) {
 function f4(m: Message, x: "A" | "D") {
 >f4 : (m: Message, x: "A" | "D") => void
 >m : Message
->Message : Message
 >x : "A" | "D"
 
     if (m.kind == x) {
@@ -361,7 +344,6 @@ function f4(m: Message, x: "A" | "D") {
 function f5(m: Message) {
 >f5 : (m: Message) => void
 >m : Message
->Message : Message
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
@@ -391,7 +373,6 @@ function f5(m: Message) {
 function f6(m: Message) {
 >f6 : (m: Message) => void
 >m : Message
->Message : Message
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
@@ -420,7 +401,6 @@ function f6(m: Message) {
 function f7(m: Message) {
 >f7 : (m: Message) => void
 >m : Message
->Message : Message
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"
@@ -442,7 +422,6 @@ function f7(m: Message) {
 function f8(m: Message) {
 >f8 : (m: Message) => void
 >m : Message
->Message : Message
 
     switch (m.kind) {
 >m.kind : "A" | "B" | "C" | "D"

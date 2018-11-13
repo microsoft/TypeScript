@@ -66,3 +66,22 @@ var m;
     var y3 = new m2.public2();
     m.l3 = new m2.public2();
 })(m || (m = {}));
+
+
+//// [declFileTypeAnnotationVisibilityErrorVariableDeclaration.d.ts]
+declare module m {
+    class private1 {
+    }
+    class public1 {
+    }
+    var k: private1;
+    var l: private1;
+    var k2: public1;
+    var l2: public1;
+    module m2 {
+        class public2 {
+        }
+    }
+    var k3: m2.public2;
+    var l3: m2.public2;
+}

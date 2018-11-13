@@ -46,7 +46,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
         [x: string]: number;
         // S is union type and each constituent type of S is a subtype of T
         foo: string | number; // error string is not subtype of number
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'number'.
         foo2: e | number; // ok e and number both subtype of number
     }
@@ -54,10 +54,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I3 {
         [x: string]: string;
         foo: string | number; // error numer is not subtype of string
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'string'.
         foo2: e | number; // error e and number both not subtype of string
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'string'.
     }
     
@@ -65,10 +65,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I4 {
         [x: string]: boolean;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'boolean'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'boolean'.
     }
     
@@ -76,10 +76,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I5 {
         [x: string]: Date;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'Date'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'Date'.
     }
     
@@ -87,10 +87,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I6 {
         [x: string]: RegExp;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'RegExp'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'RegExp'.
     }
     
@@ -98,10 +98,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I7 {
         [x: string]: { bar: number };
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type '{ bar: number; }'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type '{ bar: number; }'.
     }
     
@@ -109,10 +109,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I8 {
         [x: string]: number[];
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'number[]'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'number[]'.
     }
     
@@ -120,10 +120,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I9 {
         [x: string]: I8;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'I8'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'I8'.
     }
     
@@ -131,10 +131,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I10 {
         [x: string]: A;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'A'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'A'.
     }
     
@@ -142,10 +142,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I11 {
         [x: string]: A2<number>;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'A2<number>'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'A2<number>'.
     }
     
@@ -153,10 +153,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I12 {
         [x: string]: (x) => number;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type '(x: any) => number'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type '(x: any) => number'.
     }
     
@@ -164,10 +164,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I13 {
         [x: string]: <T>(x: T) => T;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type '<T>(x: T) => T'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type '<T>(x: T) => T'.
     }
     
@@ -176,7 +176,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I14 {
         [x: string]: E2;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'E2'.
         foo2: e | number;
     }
@@ -189,10 +189,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I15 {
         [x: string]: typeof f;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'typeof f'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'typeof f'.
     }
     
@@ -204,10 +204,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I16 {
         [x: string]: typeof c;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'typeof c'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'typeof c'.
     }
     
@@ -215,10 +215,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/unionSubty
     interface I17<T> {
         [x: string]: T;
         foo: string | number;
-        ~~~~~~~~~~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'foo' of type 'string | number' is not assignable to string index type 'T'.
         foo2: e | number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property 'foo2' of type 'number' is not assignable to string index type 'T'.
     }
     

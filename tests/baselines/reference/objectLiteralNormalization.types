@@ -60,10 +60,10 @@ a1 = { b: "y" };  // Error
 >"y" : "y"
 
 a1 = { c: true };  // Error
->a1 = { c: true } : { c: boolean; }
+>a1 = { c: true } : { c: true; }
 >a1 : { a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }
->{ c: true } : { c: boolean; }
->c : boolean
+>{ c: true } : { c: true; }
+>c : true
 >true : true
 
 let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
@@ -265,10 +265,7 @@ d1.pos.b;
 
 declare function f<T>(...items: T[]): T;
 >f : <T>(...items: T[]) => T
->T : T
 >items : T[]
->T : T
->T : T
 
 declare let data: { a: 1, b: "abc", c: true };
 >data : { a: 1; b: "abc"; c: true; }

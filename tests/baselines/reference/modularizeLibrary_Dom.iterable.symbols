@@ -6,7 +6,7 @@ for (const element of document.getElementsByTagName("a")) {
 >getElementsByTagName : Symbol(Document.getElementsByTagName, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
 
     element.href;
->element.href : Symbol(HTMLAnchorElement.href, Decl(lib.dom.d.ts, --, --))
+>element.href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
 >element : Symbol(element, Decl(modularizeLibrary_Dom.iterable.ts, 0, 10))
->href : Symbol(HTMLAnchorElement.href, Decl(lib.dom.d.ts, --, --))
+>href : Symbol(HTMLHyperlinkElementUtils.href, Decl(lib.dom.d.ts, --, --))
 }

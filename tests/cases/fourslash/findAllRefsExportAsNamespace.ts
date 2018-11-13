@@ -18,7 +18,7 @@ const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
 
 const globals = { definition: "function f(): void", ranges: [r0, r2] };
-const imports = { definition: "import f", ranges: [r1] };
+const imports = { definition: "(alias) function f(): void\nimport f", ranges: [r1] };
 
 verify.referenceGroups([r0, r2], [globals, imports]);
 verify.referenceGroups(r1, [imports, globals]);

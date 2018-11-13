@@ -25,7 +25,6 @@ var a5: void;
 
 var a6: E;
 >a6 : E
->E : E
 
 var a7: {};
 >a7 : {}

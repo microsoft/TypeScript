@@ -1,39 +1,24 @@
 === tests/cases/compiler/genericTypeWithMultipleBases3.ts ===
 interface IA<T> {
->IA : IA<T>
->T : T
 
 foo(x: T): T;
 >foo : (x: T) => T
 >x : T
->T : T
->T : T
 
 }
 
 interface IB<T> {
->IB : IB<T>
->T : T
 
 bar(x: T): T;
 >bar : (x: T) => T
 >x : T
->T : T
->T : T
 
 }
 
 interface IC<T> extends IA<T>, IB<T> { }
->IC : IC<T>
->T : T
->IA : IA<T>
->T : T
->IB : IB<T>
->T : T
 
 var c: IC<number>;
 >c : IC<number>
->IC : IC<T>
 
 var x = c.foo;
 >x : (x: number) => number

@@ -79,8 +79,8 @@ enum E3 {
 
     X = 'foo'.length, Y = 4 + 3, Z = +'foo'
 >X : Symbol(E3.X, Decl(enumBasics.ts, 31, 9))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >Y : Symbol(E3.Y, Decl(enumBasics.ts, 32, 21))
 >Z : Symbol(E3.Z, Decl(enumBasics.ts, 32, 32))
 }
@@ -93,8 +93,8 @@ enum E4 {
 >X : Symbol(E4.X, Decl(enumBasics.ts, 36, 9))
 >Y : Symbol(E4.Y, Decl(enumBasics.ts, 37, 10))
 >Z : Symbol(E4.Z, Decl(enumBasics.ts, 37, 13))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Enum with > 2 constant members with no initializer for first member, non zero initializer for second element

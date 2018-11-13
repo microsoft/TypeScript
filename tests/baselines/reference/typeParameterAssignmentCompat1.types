@@ -1,31 +1,18 @@
 === tests/cases/compiler/typeParameterAssignmentCompat1.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     frobble(value: T): T;
 >frobble : (value: T) => T
 >value : T
->T : T
->T : T
 }
 
 function f<T, U>(): Foo<U> {
 >f : <T, U>() => Foo<U>
->T : T
->U : U
->Foo : Foo<T>
->U : U
 
     var x: Foo<T>;
 >x : Foo<T>
->Foo : Foo<T>
->T : T
 
     var y: Foo<U>;
 >y : Foo<U>
->Foo : Foo<T>
->U : U
 
     x = y; // should be an error
 >x = y : Foo<U>
@@ -38,23 +25,15 @@ function f<T, U>(): Foo<U> {
 
 class C<T> {
 >C : C<T>
->T : T
 
     f<U>(): Foo<U> {
 >f : <U>() => Foo<U>
->U : U
->Foo : Foo<T>
->U : U
 
         var x: Foo<T>;
 >x : Foo<T>
->Foo : Foo<T>
->T : T
 
         var y: Foo<U>;
 >y : Foo<U>
->Foo : Foo<T>
->U : U
 
         x = y; // should be an error
 >x = y : Foo<U>

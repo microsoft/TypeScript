@@ -16,8 +16,6 @@ enum E {
 }
 
 interface Item {
->Item : Item
-
     a: string;
 >a : string
 
@@ -30,11 +28,9 @@ interface Item {
 
 declare const item: Item;
 >item : Item
->Item : Item
 
 declare const e: E;
 >e : E
->E : E
 
 const snb: string | number | boolean = item[e];
 >snb : string | number | boolean

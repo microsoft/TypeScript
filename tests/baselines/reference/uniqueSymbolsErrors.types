@@ -29,15 +29,12 @@ declare function invalidThisType(this: unique symbol): void;
 declare function invalidTypePredicate(n: any): n is unique symbol;
 >invalidTypePredicate : (n: any) => n is symbol
 >n : any
->n : any
 
 declare function invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
 declare function invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->T : T
 
 // classes
 class InvalidClass {
@@ -70,15 +67,12 @@ class InvalidClass {
     invalidTypePredicate(n: any): n is unique symbol { return; }
 >invalidTypePredicate : (n: any) => n is symbol
 >n : any
->n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidTypeParameterDefault : <T = symbol>() => void
->T : T
 
     get invalidGetter(): unique symbol { return; }
 >invalidGetter : symbol
@@ -108,15 +102,12 @@ class InvalidClass {
     static invalidStaticTypePredicate(n: any): n is unique symbol { return; }
 >invalidStaticTypePredicate : (n: any) => n is symbol
 >n : any
->n : any
 
     static invalidStaticTypeParameterConstraint<T extends unique symbol>(): void { return; }
 >invalidStaticTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     static invalidStaticTypeParameterDefault<T = unique symbol>(): void { return; }
 >invalidStaticTypeParameterDefault : <T = symbol>() => void
->T : T
 
     static get invalidStaticGetter(): unique symbol { return; }
 >invalidStaticGetter : symbol
@@ -128,8 +119,6 @@ class InvalidClass {
 
 // interfaces
 interface InvalidInterface {
->InvalidInterface : InvalidInterface
-
     invalidPropertyType: unique symbol;
 >invalidPropertyType : symbol
 
@@ -151,15 +140,12 @@ interface InvalidInterface {
     invalidTypePredicate(n: any): n is unique symbol
 >invalidTypePredicate : (n: any) => n is symbol
 >n : any
->n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->T : T
 }
 
 // type literals
@@ -187,15 +173,12 @@ type InvalidTypeLiteral = {
     invalidTypePredicate(n: any): n is unique symbol
 >invalidTypePredicate : (n: any) => n is symbol
 >n : any
->n : any
 
     invalidTypeParameterConstraint<T extends unique symbol>(): void;
 >invalidTypeParameterConstraint : <T extends symbol>() => void
->T : T
 
     invalidTypeParameterDefault<T = unique symbol>(): void;
 >invalidTypeParameterDefault : <T = symbol>() => void
->T : T
 
 };
 
@@ -205,16 +188,13 @@ type InvalidAlias = unique symbol;
 
 type InvalidAliasTypeParameterConstraint<T extends unique symbol> = never;
 >InvalidAliasTypeParameterConstraint : never
->T : T
 
 type InvalidAliasTypeParameterDefault<T extends unique symbol> = never;
 >InvalidAliasTypeParameterDefault : never
->T : T
 
 // type references
 declare const invalidTypeArgument: Promise<unique symbol>;
 >invalidTypeArgument : Promise<symbol>
->Promise : Promise<T>
 
 declare const invalidArrayType: (unique symbol)[];
 >invalidArrayType : symbol[]
@@ -225,7 +205,6 @@ declare const invalidTupleType: [unique symbol];
 // mapped types
 declare const invalidMappedType: { [P in string]: unique symbol };
 >invalidMappedType : { [x: string]: symbol; }
->P : P
 
 // unions/intersection
 declare const invalidUnion: unique symbol | unique symbol;
@@ -234,5 +213,10 @@ declare const invalidUnion: unique symbol | unique symbol;
 declare const invalidIntersection: unique symbol | unique symbol;
 >invalidIntersection : symbol
 
-
+// initializer assignability
+// https://github.com/Microsoft/TypeScript/issues/21584
+const shouldNotBeAssignable: string = Symbol();
+>shouldNotBeAssignable : string
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
 

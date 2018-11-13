@@ -21,8 +21,10 @@
     <button id='runTestBtn' onclick='runTests()' type="button" class="btn">Run Tests</button>
   </div>
   <div id="mocha"></div>
+  <script src="../node_modules/source-map-support/browser-source-map-support.js"></script>
+  <script>sourceMapSupport.install();</script>
   <script src="../node_modules/mocha/mocha.js"></script>
-  <script>mocha.setup('bdd')</script>
+  <script>mocha.setup({ ui: 'bdd', timeout: 0 })</script>
   <script src="../built/local/bundle.js"></script>
 
   <script>

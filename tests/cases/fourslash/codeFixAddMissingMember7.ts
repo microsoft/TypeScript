@@ -11,10 +11,10 @@
 verify.codeFix({
     description: "Initialize static property 'foo'",
     index: 2,
-    // TODO: GH#18445
     newFileContent: `class C {
     static p = ()=>{ this.foo === 10 };
-}\r
-C.foo = undefined;\r
+}
+
+C.foo = undefined;
 `
 });

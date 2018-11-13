@@ -29,7 +29,7 @@ interface Combinators {
 >f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 32))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 37))
 >T : Symbol(T, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 7, 12))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 var c2: Collection<number>;
@@ -44,9 +44,9 @@ var _: Combinators;
 var f = (x: number) => { return x.toFixed() };
 >f : Symbol(f, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 3))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 9))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 14, 9))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 var r5 = _.forEach<number>(c2, f); 
 >r5 : Symbol(r5, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 15, 3))
@@ -63,7 +63,7 @@ var r6 = _.forEach<number>(c2, (x) => { return x.toFixed() });
 >forEach : Symbol(Combinators.forEach, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 6, 23))
 >c2 : Symbol(c2, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 10, 3))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 16, 32))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(contextualTypingOfGenericFunctionTypedArguments1.ts, 16, 32))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 

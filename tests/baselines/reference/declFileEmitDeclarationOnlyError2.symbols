@@ -1,0 +1,4 @@
+=== tests/cases/compiler/hello.ts ===
+var hello = "yo!";
+>hello : Symbol(hello, Decl(hello.ts, 0, 3))
+

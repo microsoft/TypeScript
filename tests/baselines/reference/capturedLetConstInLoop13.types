@@ -29,6 +29,7 @@ class Main {
 >{                [name + ".a"]: () => { this.foo(name); },            } : { [x: string]: () => void; }
 
                 [name + ".a"]: () => { this.foo(name); },
+>[name + ".a"] : () => void
 >name + ".a" : string
 >name : string
 >".a" : ".a"

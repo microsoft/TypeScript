@@ -3,15 +3,19 @@ enum Foo {
 >Foo : Foo
 
     "__a" = 1,
+>"__a" : Foo.__a
 >1 : 1
 
     "(Anonymous function)" = 2,
+>"(Anonymous function)" : Foo.(Anonymous function)
 >2 : 2
 
     "(Anonymous class)" = 4,
+>"(Anonymous class)" : Foo.(Anonymous class)
 >4 : 4
 
     "__call" = 10
+>"__call" : Foo.__call
 >10 : 10
 }
 namespace Foo {

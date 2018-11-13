@@ -5,6 +5,7 @@
 
 // @moduleResolution: node
 // @module: commonJs
+// @noLib: true
 
 // @Filename: /foo/index.ts
 ////export { foo } from "./lib/foo";
@@ -15,17 +16,20 @@
 // @Filename: /user.ts
 ////fo/**/
 
-goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: "./foo" };
-verify.completionListContains({ name: "foo", source: "/foo/lib/foo" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, options);
-verify.not.completionListContains({ name: "foo", source: "/foo/index" }, undefined, undefined, undefined, undefined, undefined, options);
-
+verify.completions({
+    marker: "",
+    exact: [
+        "undefined",
+        { name: "foo", source: "/foo/lib/foo", sourceDisplay: "./foo", text: "const foo: 0", kind: "const", kindModifiers: "export", hasAction: true },
+        ...completion.statementKeywordsWithTypes,
+    ],
+    preferences: { includeCompletionsForModuleExports: true },
+});
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/foo/lib/foo",
     description: `Import 'foo' from module "./foo"`,
-    // TODO: GH#18445
-    newFileContent: `import { foo } from "./foo";\r
-\r
+    newFileContent: `import { foo } from "./foo";
+
 fo`,
 });

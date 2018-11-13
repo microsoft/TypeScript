@@ -38,11 +38,9 @@ class E {
 
 class F<T> {
 >F : F<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     constructor() {
         return { x: 1 }; // error
@@ -54,18 +52,15 @@ class F<T> {
 
 class G<T> {
 >G : G<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     constructor() {
         return { x: <T>null };
 >{ x: <T>null } : { x: T; }
 >x : T
 ><T>null : T
->T : T
 >null : null
     }
 }

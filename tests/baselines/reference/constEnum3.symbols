@@ -1,0 +1,38 @@
+=== tests/cases/conformance/constEnums/constEnum3.ts ===
+const enum TestType { foo, bar }
+>TestType : Symbol(TestType, Decl(constEnum3.ts, 0, 0))
+>foo : Symbol(TestType.foo, Decl(constEnum3.ts, 0, 21))
+>bar : Symbol(TestType.bar, Decl(constEnum3.ts, 0, 26))
+
+type TestTypeStr = keyof typeof TestType;
+>TestTypeStr : Symbol(TestTypeStr, Decl(constEnum3.ts, 0, 32))
+>TestType : Symbol(TestType, Decl(constEnum3.ts, 0, 0))
+
+function f1(f: TestType) { }
+>f1 : Symbol(f1, Decl(constEnum3.ts, 1, 41))
+>f : Symbol(f, Decl(constEnum3.ts, 3, 12))
+>TestType : Symbol(TestType, Decl(constEnum3.ts, 0, 0))
+
+function f2(f: TestTypeStr) { }
+>f2 : Symbol(f2, Decl(constEnum3.ts, 3, 28))
+>f : Symbol(f, Decl(constEnum3.ts, 4, 12))
+>TestTypeStr : Symbol(TestTypeStr, Decl(constEnum3.ts, 0, 32))
+
+f1(TestType.foo)
+>f1 : Symbol(f1, Decl(constEnum3.ts, 1, 41))
+>TestType.foo : Symbol(TestType.foo, Decl(constEnum3.ts, 0, 21))
+>TestType : Symbol(TestType, Decl(constEnum3.ts, 0, 0))
+>foo : Symbol(TestType.foo, Decl(constEnum3.ts, 0, 21))
+
+f1(TestType.bar)
+>f1 : Symbol(f1, Decl(constEnum3.ts, 1, 41))
+>TestType.bar : Symbol(TestType.bar, Decl(constEnum3.ts, 0, 26))
+>TestType : Symbol(TestType, Decl(constEnum3.ts, 0, 0))
+>bar : Symbol(TestType.bar, Decl(constEnum3.ts, 0, 26))
+
+f2('foo')
+>f2 : Symbol(f2, Decl(constEnum3.ts, 3, 28))
+
+f2('bar')
+>f2 : Symbol(f2, Decl(constEnum3.ts, 3, 28))
+

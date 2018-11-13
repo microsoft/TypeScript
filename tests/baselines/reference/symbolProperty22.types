@@ -1,35 +1,24 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty22.ts ===
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     [Symbol.unscopables](x: T): U;
+>[Symbol.unscopables] : (x: T) => U
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
 >x : T
->T : T
->U : U
 }
 
 declare function foo<T, U>(p1: T, p2: I<T, U>): U;
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
->T : T
->U : U
 >p1 : T
->T : T
 >p2 : I<T, U>
->I : I<T, U>
->T : T
->U : U
->U : U
 
 foo("", { [Symbol.unscopables]: s => s.length });
 >foo("", { [Symbol.unscopables]: s => s.length }) : number
 >foo : <T, U>(p1: T, p2: I<T, U>) => U
 >"" : ""
 >{ [Symbol.unscopables]: s => s.length } : { [Symbol.unscopables]: (s: string) => number; }
+>[Symbol.unscopables] : (s: string) => number
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol

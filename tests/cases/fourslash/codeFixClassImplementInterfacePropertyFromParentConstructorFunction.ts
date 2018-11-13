@@ -6,7 +6,7 @@
 ////
 //// class B implements A {[| |]}
 
-verify.not.codeFixAvailable();
+verify.codeFixAvailable([]);
 
 // TODO: (arozga) Get this working.
 /*

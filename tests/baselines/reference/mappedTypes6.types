@@ -1,0 +1,482 @@
+=== tests/cases/conformance/types/mapped/mappedTypes6.ts ===
+type T00<T> = { [P in keyof T]: T[P] };
+>T00 : T00<T>
+
+type T01<T> = { [P in keyof T]?: T[P] };
+>T01 : T01<T>
+
+type T02<T> = { [P in keyof T]+?: T[P] };
+>T02 : T02<T>
+
+type T03<T> = { [P in keyof T]-?: T[P] };
+>T03 : T03<T>
+
+type T04<T> = { readonly [P in keyof T]: T[P] };
+>T04 : T04<T>
+
+type T05<T> = { readonly [P in keyof T]?: T[P] };
+>T05 : T05<T>
+
+type T06<T> = { readonly [P in keyof T]+?: T[P] };
+>T06 : T06<T>
+
+type T07<T> = { readonly [P in keyof T]-?: T[P] };
+>T07 : T07<T>
+
+type T08<T> = { +readonly [P in keyof T]: T[P] };
+>T08 : T08<T>
+
+type T09<T> = { +readonly [P in keyof T]?: T[P] };
+>T09 : T09<T>
+
+type T10<T> = { +readonly [P in keyof T]+?: T[P] };
+>T10 : T10<T>
+
+type T11<T> = { +readonly [P in keyof T]-?: T[P] };
+>T11 : T11<T>
+
+type T12<T> = { -readonly [P in keyof T]: T[P] };
+>T12 : T12<T>
+
+type T13<T> = { -readonly [P in keyof T]?: T[P] };
+>T13 : T13<T>
+
+type T14<T> = { -readonly [P in keyof T]+?: T[P] };
+>T14 : T14<T>
+
+type T15<T> = { -readonly [P in keyof T]-?: T[P] };
+>T15 : T15<T>
+
+function f1<T>(x: Required<T>, y: T, z: Partial<T>) {
+>f1 : <T>(x: Required<T>, y: T, z: Partial<T>) => void
+>x : Required<T>
+>y : T
+>z : Partial<T>
+
+    x = x;
+>x = x : Required<T>
+>x : Required<T>
+>x : Required<T>
+
+    x = y;  // Error
+>x = y : T
+>x : Required<T>
+>y : T
+
+    x = z;  // Error
+>x = z : Partial<T>
+>x : Required<T>
+>z : Partial<T>
+
+    y = x;
+>y = x : Required<T>
+>y : T
+>x : Required<T>
+
+    y = y;
+>y = y : T
+>y : T
+>y : T
+
+    y = z;  // Error
+>y = z : Partial<T>
+>y : T
+>z : Partial<T>
+
+    z = x;
+>z = x : Required<T>
+>z : Partial<T>
+>x : Required<T>
+
+    z = y;
+>z = y : T
+>z : Partial<T>
+>y : T
+
+    z = z;
+>z = z : Partial<T>
+>z : Partial<T>
+>z : Partial<T>
+}
+
+type Denullified<T> = { [P in keyof T]-?: NonNullable<T[P]> };
+>Denullified : Denullified<T>
+
+function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+>f2 : <T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
+>w : Denullified<T>
+>x : Required<T>
+>y : T
+>z : Partial<T>
+
+    w = w;
+>w = w : Denullified<T>
+>w : Denullified<T>
+>w : Denullified<T>
+
+    w = x;  // Error
+>w = x : Required<T>
+>w : Denullified<T>
+>x : Required<T>
+
+    w = y;  // Error
+>w = y : T
+>w : Denullified<T>
+>y : T
+
+    w = z;  // Error
+>w = z : Partial<T>
+>w : Denullified<T>
+>z : Partial<T>
+
+    x = w;
+>x = w : Denullified<T>
+>x : Required<T>
+>w : Denullified<T>
+
+    x = x;
+>x = x : Required<T>
+>x : Required<T>
+>x : Required<T>
+
+    x = y;  // Error
+>x = y : T
+>x : Required<T>
+>y : T
+
+    x = z;  // Error
+>x = z : Partial<T>
+>x : Required<T>
+>z : Partial<T>
+
+    y = w;
+>y = w : Denullified<T>
+>y : T
+>w : Denullified<T>
+
+    y = x;
+>y = x : Required<T>
+>y : T
+>x : Required<T>
+
+    y = y;
+>y = y : T
+>y : T
+>y : T
+
+    y = z;  // Error
+>y = z : Partial<T>
+>y : T
+>z : Partial<T>
+
+    z = w;
+>z = w : Denullified<T>
+>z : Partial<T>
+>w : Denullified<T>
+
+    z = x;
+>z = x : Required<T>
+>z : Partial<T>
+>x : Required<T>
+
+    z = y;
+>z = y : T
+>z : Partial<T>
+>y : T
+
+    z = z;
+>z = z : Partial<T>
+>z : Partial<T>
+>z : Partial<T>
+}
+
+
+function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
+>f3 : <T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) => void
+>w : Denullified<T>
+>x : Required<T>
+>y : T
+>z : Partial<T>
+
+    w = {};  // Error
+>w = {} : {}
+>w : Denullified<T>
+>{} : {}
+
+    x = {};  // Error
+>x = {} : {}
+>x : Required<T>
+>{} : {}
+
+    y = {};  // Error
+>y = {} : {}
+>y : T
+>{} : {}
+
+    z = {};
+>z = {} : {}
+>z : Partial<T>
+>{} : {}
+}
+
+type Readwrite<T> = {
+>Readwrite : Readwrite<T>
+
+    -readonly [P in keyof T]: T[P];
+}
+
+function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
+>f10 : <T>(x: Readonly<T>, y: T, z: Readwrite<T>) => void
+>x : Readonly<T>
+>y : T
+>z : Readwrite<T>
+
+    x = x;
+>x = x : Readonly<T>
+>x : Readonly<T>
+>x : Readonly<T>
+
+    x = y;
+>x = y : T
+>x : Readonly<T>
+>y : T
+
+    x = z;
+>x = z : Readwrite<T>
+>x : Readonly<T>
+>z : Readwrite<T>
+
+    y = x;
+>y = x : Readonly<T>
+>y : T
+>x : Readonly<T>
+
+    y = y;
+>y = y : T
+>y : T
+>y : T
+
+    y = z;
+>y = z : Readwrite<T>
+>y : T
+>z : Readwrite<T>
+
+    z = x;
+>z = x : Readonly<T>
+>z : Readwrite<T>
+>x : Readonly<T>
+
+    z = y;
+>z = y : T
+>z : Readwrite<T>
+>y : T
+
+    z = z;
+>z = z : Readwrite<T>
+>z : Readwrite<T>
+>z : Readwrite<T>
+}
+
+type Foo = {
+>Foo : Foo
+
+    a: number;
+>a : number
+
+    b: number | undefined;
+>b : number | undefined
+
+    c?: number;
+>c : number | undefined
+
+    d?: number | undefined;
+>d : number | undefined
+}
+
+declare let x1: Foo;
+>x1 : Foo
+
+x1.a;  // number
+>x1.a : number
+>x1 : Foo
+>a : number
+
+x1.b;  // number | undefined
+>x1.b : number | undefined
+>x1 : Foo
+>b : number | undefined
+
+x1.c;  // number | undefined
+>x1.c : number | undefined
+>x1 : Foo
+>c : number | undefined
+
+x1.d;  // number | undefined
+>x1.d : number | undefined
+>x1 : Foo
+>d : number | undefined
+
+x1 = { a: 1 };  // Error
+>x1 = { a: 1 } : { a: number; }
+>x1 : Foo
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+x1 = { a: 1, b: 1 };
+>x1 = { a: 1, b: 1 } : { a: number; b: number; }
+>x1 : Foo
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+x1 = { a: 1, b: 1, c: 1 };
+>x1 = { a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>x1 : Foo
+>{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+>c : number
+>1 : 1
+
+x1 = { a: 1, b: 1, c: 1, d: 1 };
+>x1 = { a: 1, b: 1, c: 1, d: 1 } : { a: number; b: number; c: number; d: number; }
+>x1 : Foo
+>{ a: 1, b: 1, c: 1, d: 1 } : { a: number; b: number; c: number; d: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+>c : number
+>1 : 1
+>d : number
+>1 : 1
+
+declare let x2: Required<Foo>;
+>x2 : Required<Foo>
+
+x1.a;  // number
+>x1.a : number
+>x1 : Foo
+>a : number
+
+x1.b;  // number | undefined
+>x1.b : number | undefined
+>x1 : Foo
+>b : number | undefined
+
+x1.c;  // number
+>x1.c : number | undefined
+>x1 : Foo
+>c : number | undefined
+
+x1.d;  // number
+>x1.d : number | undefined
+>x1 : Foo
+>d : number | undefined
+
+x2 = { a: 1 };  // Error
+>x2 = { a: 1 } : { a: number; }
+>x2 : Required<Foo>
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+
+x2 = { a: 1, b: 1 };  // Error
+>x2 = { a: 1, b: 1 } : { a: number; b: number; }
+>x2 : Required<Foo>
+>{ a: 1, b: 1 } : { a: number; b: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+
+x2 = { a: 1, b: 1, c: 1 };  // Error
+>x2 = { a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>x2 : Required<Foo>
+>{ a: 1, b: 1, c: 1 } : { a: number; b: number; c: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+>c : number
+>1 : 1
+
+x2 = { a: 1, b: 1, c: 1, d: 1 };
+>x2 = { a: 1, b: 1, c: 1, d: 1 } : { a: number; b: number; c: number; d: number; }
+>x2 : Required<Foo>
+>{ a: 1, b: 1, c: 1, d: 1 } : { a: number; b: number; c: number; d: number; }
+>a : number
+>1 : 1
+>b : number
+>1 : 1
+>c : number
+>1 : 1
+>d : number
+>1 : 1
+
+type Bar = {
+>Bar : Bar
+
+    a: number;
+>a : number
+
+    readonly b: number;
+>b : number
+}
+
+declare let x3: Bar;
+>x3 : Bar
+
+x3.a = 1;
+>x3.a = 1 : 1
+>x3.a : number
+>x3 : Bar
+>a : number
+>1 : 1
+
+x3.b = 1;  // Error
+>x3.b = 1 : 1
+>x3.b : any
+>x3 : Bar
+>b : any
+>1 : 1
+
+declare let x4: Readonly<Bar>;
+>x4 : Readonly<Bar>
+
+x4.a = 1;  // Error
+>x4.a = 1 : 1
+>x4.a : any
+>x4 : Readonly<Bar>
+>a : any
+>1 : 1
+
+x4.b = 1;  // Error
+>x4.b = 1 : 1
+>x4.b : any
+>x4 : Readonly<Bar>
+>b : any
+>1 : 1
+
+declare let x5: Readwrite<Bar>;
+>x5 : Readwrite<Bar>
+
+x5.a = 1;
+>x5.a = 1 : 1
+>x5.a : number
+>x5 : Readwrite<Bar>
+>a : number
+>1 : 1
+
+x5.b = 1;
+>x5.b = 1 : 1
+>x5.b : number
+>x5 : Readwrite<Bar>
+>b : number
+>1 : 1
+

@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 
@@ -14,19 +12,14 @@ interface Prop {
 
 declare class MyComp<P = Prop> extends React.Component<P, {}> {
 >MyComp : MyComp<P>
->P : P
->Prop : Prop
 >React.Component : React.Component<P, {}>
 >React : typeof React
 >Component : typeof React.Component
->P : P
 
     internalProp: P;
 >internalProp : P
->P : P
 }
 
-// Error
 let x = <MyComp />
 >x : JSX.Element
 ><MyComp /> : JSX.Element

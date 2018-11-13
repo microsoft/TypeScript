@@ -1,4 +1,5 @@
-//@target: es6
+// @target: es6
+// @lib: es2015
 
 declare var console: any;
 const arr: {y(): number}[] = [];

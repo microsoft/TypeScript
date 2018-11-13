@@ -1,4 +1,4 @@
-tests/cases/compiler/extendAndImplementTheSameBaseType2.ts(7,7): error TS2420: Class 'D' incorrectly implements interface 'C<number>'.
+tests/cases/compiler/extendAndImplementTheSameBaseType2.ts(7,7): error TS2720: Class 'D' incorrectly implements class 'C<number>'. Did you mean to extend 'C<number>' and inherit its members as a subclass?
   Types of property 'bar' are incompatible.
     Type '() => string' is not assignable to type '() => number'.
       Type 'string' is not assignable to type 'number'.
@@ -15,10 +15,10 @@ tests/cases/compiler/extendAndImplementTheSameBaseType2.ts(16,5): error TS2322: 
     }
     class D extends C<string> implements C<number> {
           ~
-!!! error TS2420: Class 'D' incorrectly implements interface 'C<number>'.
-!!! error TS2420:   Types of property 'bar' are incompatible.
-!!! error TS2420:     Type '() => string' is not assignable to type '() => number'.
-!!! error TS2420:       Type 'string' is not assignable to type 'number'.
+!!! error TS2720: Class 'D' incorrectly implements class 'C<number>'. Did you mean to extend 'C<number>' and inherit its members as a subclass?
+!!! error TS2720:   Types of property 'bar' are incompatible.
+!!! error TS2720:     Type '() => string' is not assignable to type '() => number'.
+!!! error TS2720:       Type 'string' is not assignable to type 'number'.
         baz() { }
     }
     

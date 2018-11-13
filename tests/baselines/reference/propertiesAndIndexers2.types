@@ -1,7 +1,5 @@
 === tests/cases/compiler/propertiesAndIndexers2.ts ===
 interface A {
->A : A
-
     [n: number]: string;
 >n : number
 
@@ -11,21 +9,25 @@ interface A {
 
 // All of these should fail.
 interface B extends A {
->B : B
->A : A
-
     c: string;
 >c : string
 
     3: string;
+>3 : string
+
     Infinity: string;
 >Infinity : string
 
     "-Infinity": string;
+>"-Infinity" : string
+
     NaN: string;
 >NaN : string
 
     "-NaN": string;
+>"-NaN" : string
+
     6(): string;
+>6 : () => string
 }
 

@@ -30,9 +30,9 @@ module TypeScript {
                 for (var i = 0, len = typeLinks.length; i < len; i++) {
 >i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
 >len : Symbol(len, Decl(parserRealSource9.ts, 12, 31))
->typeLinks.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>typeLinks.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >typeLinks : Symbol(typeLinks, Decl(parserRealSource9.ts, 8, 36))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
 >len : Symbol(len, Decl(parserRealSource9.ts, 12, 31))
 >i : Symbol(i, Decl(parserRealSource9.ts, 12, 24))
@@ -478,6 +478,7 @@ module TypeScript {
 >bindSymbol : Symbol(Binder.bindSymbol, Decl(parserRealSource9.ts, 142, 9))
 >scope : Symbol(scope, Decl(parserRealSource9.ts, 144, 26))
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
             if (!symbol.bound) {
 >symbol : Symbol(symbol, Decl(parserRealSource9.ts, 144, 45))

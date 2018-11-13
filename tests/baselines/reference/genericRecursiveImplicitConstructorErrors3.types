@@ -4,19 +4,12 @@ module TypeScript {
 
     export class MemberName <A,B,C>{
 >MemberName : MemberName<A, B, C>
->A : A
->B : B
->C : C
 
         static create<A,B,C>(arg1: any, arg2?: any, arg3?: any): MemberName {
 >create : <A, B, C>(arg1: any, arg2?: any, arg3?: any) => any
->A : A
->B : B
->C : C
 >arg1 : any
 >arg2 : any
 >arg3 : any
->MemberName : MemberName<A, B, C>
         }
     }
 }
@@ -26,34 +19,22 @@ module TypeScript {
 
     export class PullSymbol <A,B,C>{
 >PullSymbol : PullSymbol<A, B, C>
->A : A
->B : B
->C : C
 
         public type: PullTypeSymbol = null;
 >type : any
->PullTypeSymbol : PullTypeSymbol<A, B, C>
 >null : null
     }
     export class PullTypeSymbol <A,B,C>extends PullSymbol {
 >PullTypeSymbol : PullTypeSymbol<A, B, C>
->A : A
->B : B
->C : C
 >PullSymbol : typeof PullSymbol
 
         private _elementType: PullTypeSymbol = null;
 >_elementType : any
->PullTypeSymbol : PullTypeSymbol<A, B, C>
 >null : null
 
         public toString<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean) {
 >toString : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean) => any
->A : A
->B : B
->C : C
 >scopeSymbol : any
->PullSymbol : PullSymbol<A, B, C>
 >useConstraintInName : boolean
 
             var s = this.getScopedNameEx(scopeSymbol, useConstraintInName).toString();
@@ -73,11 +54,7 @@ module TypeScript {
         }
         public getScopedNameEx<A,B,C>(scopeSymbol?: PullSymbol, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) {
 >getScopedNameEx : <A, B, C>(scopeSymbol?: any, useConstraintInName?: boolean, getPrettyTypeName?: boolean, getTypeParamMarkerInfo?: boolean) => any
->A : A
->B : B
->C : C
 >scopeSymbol : any
->PullSymbol : PullSymbol<A, B, C>
 >useConstraintInName : boolean
 >getPrettyTypeName : boolean
 >getTypeParamMarkerInfo : boolean

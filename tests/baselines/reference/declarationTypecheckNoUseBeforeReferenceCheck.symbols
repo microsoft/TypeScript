@@ -1,0 +1,14 @@
+=== tests/cases/compiler/index.d.ts ===
+export class C extends Object {
+>C : Symbol(C, Decl(index.d.ts, 0, 0))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    static readonly p: unique symbol;
+>p : Symbol(C.p, Decl(index.d.ts, 0, 31))
+
+    [C.p](): void;
+>[C.p] : Symbol(C[C.p], Decl(index.d.ts, 1, 37))
+>C.p : Symbol(C.p, Decl(index.d.ts, 0, 31))
+>C : Symbol(C, Decl(index.d.ts, 0, 0))
+>p : Symbol(C.p, Decl(index.d.ts, 0, 31))
+}

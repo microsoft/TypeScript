@@ -6,6 +6,7 @@ class C {
 }
 
 //// [parserComputedPropertyName29.js]
+var _a;
 class C {
     constructor() {
         // yes ASI
@@ -13,4 +14,3 @@ class C {
     }
 }
 _a = e;
-var _a;

@@ -9,19 +9,15 @@ module m1 {
         export function f1(c1: C1) {
 >f1 : (c1: C1) => void
 >c1 : C1
->C1 : C1
         }
         export function f2(c2: C2) {
 >f2 : (c2: C2) => void
 >c2 : C2
->C2 : C2
         }
 
         export class C2 implements m3.i3 {
 >C2 : C2
->m3.i3 : any
 >m3 : typeof m3
->i3 : m3.i3
 
             public get p1(arg) {
 >p1 : C1
@@ -35,7 +31,6 @@ module m1 {
             public set p1(arg1: C1) {
 >p1 : C1
 >arg1 : C1
->C1 : C1
             }
 
             public f55() {
@@ -51,7 +46,6 @@ module m1 {
 >f2 : (arg1: { x?: C1; y: number; }) => void
 >arg1 : { x?: C1; y: number; }
 >x : C1
->C1 : C1
 >y : number
     }
 
@@ -60,7 +54,6 @@ module m1 {
 
         (a: number) : C1;
 >a : number
->C1 : C1
 
     } {
         return null;
@@ -72,8 +65,8 @@ module m1 {
 >arg1 : {}
     {
     [number]: C1; // Used to be indexer, now it is a computed property
+>[number] : C1
 >number : any
->C1 : C1
 
     }) {
     }
@@ -85,8 +78,6 @@ module m1 {
 
         new (arg1: C1) : C1
 >arg1 : C1
->C1 : C1
->C1 : C1
 
     }) {
     }
@@ -96,12 +87,9 @@ module m1 {
         function f2(f1: C1) {
 >f2 : (f1: C1) => void
 >f1 : C1
->C1 : C1
         }
 
         export interface i3 {
->i3 : i3
-
             f55(): string;
 >f55 : () => string
         }
@@ -112,15 +100,12 @@ module m1 {
     }
 
     interface i {
->i : i
-
         x: number;
 >x : number
     }
 
     export class C5 implements i {
 >C5 : C5
->i : i
 
         public x: number;
 >x : number
@@ -128,7 +113,6 @@ module m1 {
 
     export var v2: C1[];
 >v2 : C1[]
->C1 : C1
 }
 
 class C2 {
@@ -143,12 +127,8 @@ module m2 {
 
         export class c_pr  implements mglo5.i5, mglo5.i6 {
 >c_pr : c_pr
->mglo5.i5 : any
 >mglo5 : any
->i5 : mglo5.i5
->mglo5.i6 : any
 >mglo5 : any
->i6 : No type information available!
 
             f1() {
 >f1 : () => string
@@ -185,18 +165,12 @@ module m2 {
 }
 
 module mglo5 {
->mglo5 : any
-
     export interface i5 {
->i5 : i5
-
         f1(): string;
 >f1 : () => string
     }
 
     interface i6 {
->i6 : i6
-
         f6(): number;
 >f6 : () => number
     }

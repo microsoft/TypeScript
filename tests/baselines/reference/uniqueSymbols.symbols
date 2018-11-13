@@ -2,15 +2,15 @@
 // declarations with call initializer
 const constCall = Symbol();
 >constCall : Symbol(constCall, Decl(uniqueSymbols.ts, 1, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
 let letCall = Symbol();
 >letCall : Symbol(letCall, Decl(uniqueSymbols.ts, 2, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
 var varCall = Symbol();
 >varCall : Symbol(varCall, Decl(uniqueSymbols.ts, 3, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
 // ambient declaration with type
 declare const constType: unique symbol;
@@ -19,7 +19,7 @@ declare const constType: unique symbol;
 // declaration with type and call initializer
 const constTypeAndCall: unique symbol = Symbol();
 >constTypeAndCall : Symbol(constTypeAndCall, Decl(uniqueSymbols.ts, 9, 5))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
 // declaration from initializer
 const constInitToConstCall = constCall;
@@ -152,26 +152,26 @@ class C {
 
     static readonly readonlyStaticCall = Symbol();
 >readonlyStaticCall : Symbol(C.readonlyStaticCall, Decl(uniqueSymbols.ts, 56, 9))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
     static readonly readonlyStaticType: unique symbol;
 >readonlyStaticType : Symbol(C.readonlyStaticType, Decl(uniqueSymbols.ts, 57, 50))
 
     static readonly readonlyStaticTypeAndCall: unique symbol = Symbol();
 >readonlyStaticTypeAndCall : Symbol(C.readonlyStaticTypeAndCall, Decl(uniqueSymbols.ts, 58, 54))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
     static readwriteStaticCall = Symbol();
 >readwriteStaticCall : Symbol(C.readwriteStaticCall, Decl(uniqueSymbols.ts, 59, 72))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
     readonly readonlyCall = Symbol();
 >readonlyCall : Symbol(C.readonlyCall, Decl(uniqueSymbols.ts, 60, 42))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 
     readwriteCall = Symbol();
 >readwriteCall : Symbol(C.readwriteCall, Decl(uniqueSymbols.ts, 62, 37))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.esnext.symbol.d.ts, --, --))
 }
 declare const c: C;
 >c : Symbol(c, Decl(uniqueSymbols.ts, 65, 13))
@@ -388,7 +388,7 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 const promiseForConstCall = Promise.resolve(constCall);
 >promiseForConstCall : Symbol(promiseForConstCall, Decl(uniqueSymbols.ts, 111, 5))
 >Promise.resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >resolve : Symbol(PromiseConstructor.resolve, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 >constCall : Symbol(constCall, Decl(uniqueSymbols.ts, 1, 5))
 
@@ -406,7 +406,9 @@ declare namespace N { const s: unique symbol; }
 
 declare const o: { [s]: "a", [N.s]: "b" };
 >o : Symbol(o, Decl(uniqueSymbols.ts, 117, 13))
+>[s] : Symbol([s], Decl(uniqueSymbols.ts, 117, 18))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
+>[N.s] : Symbol([N.s], Decl(uniqueSymbols.ts, 117, 28))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -663,13 +665,13 @@ N["s"] || "";
 // conditionals
 Math.random() * 2 ? s : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
 Math.random() * 2 ? N.s : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
@@ -677,7 +679,7 @@ Math.random() * 2 ? N.s : "a";
 
 Math.random() * 2 ? N["s"] : "a";
 >Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >"s" : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -685,9 +687,11 @@ Math.random() * 2 ? N["s"] : "a";
 // computed property names
 ({
     [s]: "a",
+>[s] : Symbol([s], Decl(uniqueSymbols.ts, 198, 2))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     [N.s]: "b",
+>[N.s] : Symbol([N.s], Decl(uniqueSymbols.ts, 199, 13))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -698,17 +702,21 @@ class C1 {
 >C1 : Symbol(C1, Decl(uniqueSymbols.ts, 201, 3))
 
     static [s]: "a";
+>[s] : Symbol(C1[s], Decl(uniqueSymbols.ts, 203, 10))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     static [N.s]: "b";
+>[N.s] : Symbol(C1[N.s], Decl(uniqueSymbols.ts, 204, 20))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 
     [s]: "a";
+>[s] : Symbol(C1[s], Decl(uniqueSymbols.ts, 205, 22))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     [N.s]: "b";
+>[N.s] : Symbol(C1[N.s], Decl(uniqueSymbols.ts, 207, 13))
 >N.s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
 >N : Symbol(N, Decl(uniqueSymbols.ts, 115, 31))
 >s : Symbol(N.s, Decl(uniqueSymbols.ts, 116, 27))
@@ -725,7 +733,7 @@ interface Context {
 
     method2(): Promise<typeof s>;
 >method2 : Symbol(Context.method2, Decl(uniqueSymbols.ts, 214, 24))
->Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2018.promise.d.ts, --, --))
 >s : Symbol(s, Decl(uniqueSymbols.ts, 115, 13))
 
     method3(): AsyncIterableIterator<typeof s>;

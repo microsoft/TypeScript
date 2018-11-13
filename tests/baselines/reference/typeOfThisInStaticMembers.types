@@ -52,7 +52,6 @@ var r4 = new t(1);
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     static test: number;
 >test : number

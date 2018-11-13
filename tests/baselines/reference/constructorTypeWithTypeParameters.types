@@ -3,7 +3,6 @@ declare var X: {
 >X : new <T>() => number
 
     new <T>(): number;
->T : T
 }
 declare var Y: {
 >Y : new () => number
@@ -12,5 +11,4 @@ declare var Y: {
 }
 var anotherVar: new <T>() => number;
 >anotherVar : new <T>() => number
->T : T
 

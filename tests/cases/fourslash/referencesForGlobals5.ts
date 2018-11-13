@@ -12,4 +12,4 @@
 // @Filename: referencesForGlobals_2.ts
 ////var m = [|globalAlias|];
 
-verify.singleReferenceGroup("import globalAlias = globalModule");
+verify.singleReferenceGroup("(alias) namespace globalAlias\nimport globalAlias = globalModule");

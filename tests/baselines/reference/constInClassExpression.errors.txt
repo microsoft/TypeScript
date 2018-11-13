@@ -1,0 +1,10 @@
+tests/cases/compiler/constInClassExpression.ts(2,11): error TS1248: A class member cannot have the 'const' keyword.
+
+
+==== tests/cases/compiler/constInClassExpression.ts (1 errors) ====
+    let C = class {
+        const a = 4;
+              ~
+!!! error TS1248: A class member cannot have the 'const' keyword.
+    };
+    

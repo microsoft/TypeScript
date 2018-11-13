@@ -6,26 +6,18 @@ module M {
 >C : C
 
     interface C { }
->C : C
-
     interface D { }
->D : D
-
     class D { }
 >D : D
 }
 
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
     a: string;
 >a : string
 }
 
 class Foo<T>{
 >Foo : Foo<T>
->T : T
 
     b: number;
 >b : number
@@ -33,16 +25,12 @@ class Foo<T>{
 
 class Bar<T>{
 >Bar : Bar<T>
->T : T
 
     b: number;
 >b : number
 }
 
 interface Bar<T> {
->Bar : Bar<T>
->T : T
-
     a: string;
 >a : string
 }

@@ -1,7 +1,6 @@
 === tests/cases/compiler/declarationQuotedMembers.ts ===
 export declare const mapped: { [K in 'a-b-c']: number }
 >mapped : { "a-b-c": number; }
->K : K
 
 export const example = mapped;
 >example : { "a-b-c": number; }

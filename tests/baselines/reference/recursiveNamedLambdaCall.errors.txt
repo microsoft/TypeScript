@@ -1,12 +1,11 @@
 tests/cases/compiler/recursiveNamedLambdaCall.ts(3,8): error TS2304: Cannot find name 'top'.
 tests/cases/compiler/recursiveNamedLambdaCall.ts(3,15): error TS2304: Cannot find name 'top'.
-tests/cases/compiler/recursiveNamedLambdaCall.ts(7,6): error TS7027: Unreachable code detected.
 tests/cases/compiler/recursiveNamedLambdaCall.ts(8,7): error TS2304: Cannot find name 'top'.
 tests/cases/compiler/recursiveNamedLambdaCall.ts(10,14): error TS2304: Cannot find name 'setTimeout'.
 tests/cases/compiler/recursiveNamedLambdaCall.ts(14,6): error TS2304: Cannot find name 'detach'.
 
 
-==== tests/cases/compiler/recursiveNamedLambdaCall.ts (6 errors) ====
+==== tests/cases/compiler/recursiveNamedLambdaCall.ts (5 errors) ====
     var promise = function( obj ) {
     	
     		if ( top && top.doScroll ) {
@@ -18,8 +17,6 @@ tests/cases/compiler/recursiveNamedLambdaCall.ts(14,6): error TS2304: Cannot fin
     				if ( false ) {
     
     					try {
-    					~~~
-!!! error TS7027: Unreachable code detected.
     						top.doScroll("left");
     						~~~
 !!! error TS2304: Cannot find name 'top'.

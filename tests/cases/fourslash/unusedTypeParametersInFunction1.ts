@@ -1,9 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 //// [|function f1<T>() {}|]
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'",
+    description: "Remove type parameters",
     newRangeContent: "function f1() {}",
 });

@@ -1,0 +1,15 @@
+tests/cases/compiler/classImplementsClass7.ts(5,7): error TS2720: Class 'B' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+  Property 'x' is missing in type 'B' but required in type 'A'.
+
+
+==== tests/cases/compiler/classImplementsClass7.ts (1 errors) ====
+    class A {
+        private x: number;
+    }
+    
+    class B implements A {}
+          ~
+!!! error TS2720: Class 'B' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720:   Property 'x' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 tests/cases/compiler/classImplementsClass7.ts:2:13: 'x' is declared here.
+    

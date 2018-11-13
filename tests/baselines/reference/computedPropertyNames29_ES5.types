@@ -13,6 +13,7 @@ class C {
 >{                [this.bar()]() { } // needs capture            } : { [x: number]: () => void; }
 
                 [this.bar()]() { } // needs capture
+>[this.bar()] : () => void
 >this.bar() : number
 >this.bar : () => number
 >this : this

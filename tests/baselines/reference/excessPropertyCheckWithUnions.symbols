@@ -167,3 +167,57 @@ t0 = t2
 >t0 : Symbol(t0, Decl(excessPropertyCheckWithUnions.ts, 52, 11))
 >t2 : Symbol(t2, Decl(excessPropertyCheckWithUnions.ts, 54, 3))
 
+// Nested excess property checks work with discriminated unions
+type AN = { a: string } | { c: string }
+>AN : Symbol(AN, Decl(excessPropertyCheckWithUnions.ts, 55, 7))
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 58, 11))
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 58, 27))
+
+type BN = { b: string }
+>BN : Symbol(BN, Decl(excessPropertyCheckWithUnions.ts, 58, 39))
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 59, 11))
+
+type AB = { kind: "A", n: AN } | { kind: "B", n: BN }
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 60, 11))
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 60, 22))
+>AN : Symbol(AN, Decl(excessPropertyCheckWithUnions.ts, 55, 7))
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 60, 34))
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 60, 45))
+>BN : Symbol(BN, Decl(excessPropertyCheckWithUnions.ts, 58, 39))
+
+const abab: AB = {
+>abab : Symbol(abab, Decl(excessPropertyCheckWithUnions.ts, 61, 5))
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+
+    kind: "A",
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 61, 18))
+
+    n: {
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 62, 14))
+
+        a: "a",
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 63, 8))
+
+        b: "b", // excess -- kind: "A"
+>b : Symbol(b, Decl(excessPropertyCheckWithUnions.ts, 64, 15))
+    }
+}
+const abac: AB = {
+>abac : Symbol(abac, Decl(excessPropertyCheckWithUnions.ts, 68, 5))
+>AB : Symbol(AB, Decl(excessPropertyCheckWithUnions.ts, 59, 23))
+
+    kind: "A",
+>kind : Symbol(kind, Decl(excessPropertyCheckWithUnions.ts, 68, 18))
+
+    n: {
+>n : Symbol(n, Decl(excessPropertyCheckWithUnions.ts, 69, 14))
+
+        a: "a",
+>a : Symbol(a, Decl(excessPropertyCheckWithUnions.ts, 70, 8))
+
+        c: "c", // ok -- kind: "A", an: { a: string } | { c: string }
+>c : Symbol(c, Decl(excessPropertyCheckWithUnions.ts, 71, 15))
+    }
+}
+

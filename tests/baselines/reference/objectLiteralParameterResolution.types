@@ -1,27 +1,18 @@
 === tests/cases/compiler/objectLiteralParameterResolution.ts ===
 interface Foo{
->Foo : Foo
-
     extend<T>(target: T, ...objs: any[]): T;
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->T : T
 >target : T
->T : T
 >objs : any[]
->T : T
 
     extend<T>(deep: boolean, target: T, ...objs: any[]): T;
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->T : T
 >deep : boolean
 >target : T
->T : T
 >objs : any[]
->T : T
 }
 declare var $: Foo;
 >$ : Foo
->Foo : Foo
 
 var s = $.extend({
 >s : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
@@ -29,7 +20,7 @@ var s = $.extend({
 >$.extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
 >$ : Foo
 >extend : { <T>(target: T, ...objs: any[]): T; <T>(deep: boolean, target: T, ...objs: any[]): T; }
->{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: boolean; timeout: number; }
+>{    type: "GET" ,    data: "data" ,    success: wrapSuccessCallback(requestContext, callback) ,    error: wrapErrorCallback(requestContext, errorCallback) ,    dataType: "json" ,    converters: { "text json": "" },    traditional: true ,    timeout: 12,    } : { type: string; data: string; success: any; error: any; dataType: string; converters: { "text json": string; }; traditional: true; timeout: number; }
 
     type: "GET" ,
 >type : string
@@ -60,10 +51,11 @@ var s = $.extend({
     converters: { "text json": "" },
 >converters : { "text json": string; }
 >{ "text json": "" } : { "text json": string; }
+>"text json" : string
 >"" : ""
 
     traditional: true ,
->traditional : boolean
+>traditional : true
 >true : true
 
     timeout: 12,

@@ -1,5 +1,7 @@
 === tests/cases/conformance/jsx/modules.d.ts ===
 declare module 'mod' {
+>'mod' : typeof import("mod")
+
   var y: any;
 >y : any
 
@@ -17,7 +19,7 @@ declare var Foo, React;
 
 // Should see mod_1['default'] in emit here
 <Foo handler={Main}></Foo>;
-><Foo handler={Main}></Foo> : any
+><Foo handler={Main}></Foo> : error
 >Foo : any
 >handler : any
 >Main : any
@@ -25,7 +27,7 @@ declare var Foo, React;
 
 // Should see mod_1['default'] in emit here
 <Foo {...Main}></Foo>;
-><Foo {...Main}></Foo> : any
+><Foo {...Main}></Foo> : error
 >Foo : any
 >Main : any
 >Foo : any

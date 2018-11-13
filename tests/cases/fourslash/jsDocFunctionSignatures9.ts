@@ -19,5 +19,5 @@ verify.verifyQuickInfoDisplayParts('function',
                                     {"text": " ", "kind": "space"},
                                     {"text": "void", "kind": "keyword"}
                                    ],
-                                   [{"text": "first line of the comment\n\nthird line ", "kind": "text"}],
-                                   []);
+                                   [{"text": "first line of the comment\n\nthird line", "kind": "text"}],
+                                   undefined);

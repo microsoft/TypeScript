@@ -1,10 +1,6 @@
 === tests/cases/conformance/jsx/tsxCorrectlyParseLessThanComparison1.tsx ===
 declare module JSX {
->JSX : any
-
     interface Element {
->Element : Element
-
         div: string;
 >div : string
     }
@@ -14,17 +10,13 @@ declare namespace React {
 
     class Component<P, S> {
 >Component : Component<P, S>
->P : P
->S : S
 
         constructor(props?: P, context?: any);
 >props : P
->P : P
 >context : any
 
         props: P;
 >props : P
->P : P
     }
 }
 
@@ -38,7 +30,6 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
     public render(): JSX.Element {
 >render : () => JSX.Element
 >JSX : any
->Element : JSX.Element
 
         if (this.props.id < 1) {
 >this.props.id < 1 : boolean
@@ -50,8 +41,8 @@ export class ShortDetails extends React.Component<{ id: number }, {}> {
 >1 : 1
 
             return (<div></div>);
->(<div></div>) : any
-><div></div> : any
+>(<div></div>) : error
+><div></div> : error
 >div : any
 >div : any
         }

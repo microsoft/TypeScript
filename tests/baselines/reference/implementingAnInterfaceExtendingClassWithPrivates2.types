@@ -7,9 +7,6 @@ class Foo {
 }
 
 interface I extends Foo {
->I : I
->Foo : Foo
-
     y: number;
 >y : number
 }
@@ -17,7 +14,6 @@ interface I extends Foo {
 class Bar extends Foo implements I { // ok
 >Bar : Bar
 >Foo : Foo
->I : I
 
     y: number;
 >y : number
@@ -26,7 +22,6 @@ class Bar extends Foo implements I { // ok
 class Bar2 extends Foo implements I { // error
 >Bar2 : Bar2
 >Foo : Foo
->I : I
 
     x: string;
 >x : string
@@ -38,7 +33,6 @@ class Bar2 extends Foo implements I { // error
 class Bar3 extends Foo implements I { // error
 >Bar3 : Bar3
 >Foo : Foo
->I : I
 
     private x: string;
 >x : string
@@ -67,9 +61,6 @@ module M {
     }
 
     interface I extends Baz {
->I : I
->Baz : Baz
-
         y: number;
 >y : number
     }
@@ -77,7 +68,6 @@ module M {
     class Bar extends Foo implements I { // ok
 >Bar : Bar
 >Foo : Foo
->I : I
 
         y: number;
 >y : number
@@ -89,7 +79,6 @@ module M {
     class Bar2 extends Foo implements I { // error
 >Bar2 : Bar2
 >Foo : Foo
->I : I
 
         x: string;
 >x : string
@@ -101,7 +90,6 @@ module M {
     class Bar3 extends Foo implements I { // error
 >Bar3 : Bar3
 >Foo : Foo
->I : I
 
         private x: string;
 >x : string
@@ -131,9 +119,6 @@ module M2 {
     }
 
     interface I extends Baz {
->I : I
->Baz : Baz
-
         z: number;
 >z : number
     }
@@ -141,7 +126,6 @@ module M2 {
     class Bar extends Foo implements I { // error
 >Bar : Bar
 >Foo : Foo
->I : I
 
         z: number;
 >z : number
@@ -149,7 +133,6 @@ module M2 {
 
     var b: Bar;
 >b : Bar
->Bar : Bar
 
     var r1 = b.z;
 >r1 : number
@@ -172,7 +155,6 @@ module M2 {
     class Bar2 extends Foo implements I { // error
 >Bar2 : Bar2
 >Foo : Foo
->I : I
 
         x: string;
 >x : string
@@ -184,7 +166,6 @@ module M2 {
     class Bar3 extends Foo implements I { // error
 >Bar3 : Bar3
 >Foo : Foo
->I : I
 
         private x: string;
 >x : string

@@ -28,10 +28,10 @@ declare module M {
 >M : Symbol(M, Decl(extension.ts, 6, 1), Decl(extension.ts, 12, 1))
 
     export extension class C {
->C : Symbol(M.C, Decl(extension.ts, 15, 20))
+>C : Symbol(C, Decl(extension.ts, 15, 20))
 
         public pe:string;
->pe : Symbol(M.C.pe, Decl(extension.ts, 15, 30))
+>pe : Symbol(C.pe, Decl(extension.ts, 15, 30))
     }
 }
 

@@ -8,9 +8,11 @@ export default R = {
 >{    "__esmodule": true,    "__proto__": {}} : { "__esmodule": boolean; "__proto__": {}; }
 
     "__esmodule": true,
+>"__esmodule" : boolean
 >true : true
 
     "__proto__": {}
+>"__proto__" : {}
 >{} : {}
 }
 

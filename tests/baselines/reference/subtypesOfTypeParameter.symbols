@@ -138,13 +138,13 @@ function f2<T, U>(x: T, y: U) {
 
     var r4 = true ? new Date() : x;
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
 
     var r4 = true ? x : new Date();
 >r4 : Symbol(r4, Decl(subtypesOfTypeParameter.ts, 46, 7), Decl(subtypesOfTypeParameter.ts, 47, 7))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     var r5 = true ? /1/ : x;
 >r5 : Symbol(r5, Decl(subtypesOfTypeParameter.ts, 49, 7), Decl(subtypesOfTypeParameter.ts, 50, 7))
@@ -322,13 +322,13 @@ function f2<T, U>(x: T, y: U) {
 
     var r19 = true ? new Object() : x; // BCT is Object
 >r19 : Symbol(r19, Decl(subtypesOfTypeParameter.ts, 99, 7), Decl(subtypesOfTypeParameter.ts, 100, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
 
     var r19 = true ? x : new Object(); // BCT is Object
 >r19 : Symbol(r19, Decl(subtypesOfTypeParameter.ts, 99, 7), Decl(subtypesOfTypeParameter.ts, 100, 7))
 >x : Symbol(x, Decl(subtypesOfTypeParameter.ts, 29, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     var r20 = true ? {} : x; // ok
 >r20 : Symbol(r20, Decl(subtypesOfTypeParameter.ts, 102, 7), Decl(subtypesOfTypeParameter.ts, 103, 7))

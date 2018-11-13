@@ -8,6 +8,8 @@ import { Observable } from "./observable"
 >prototype : Symbol(Observable.prototype)
 
 declare module "./observable" {
+>"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+
     interface I {x0}
 >I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
 >x0 : Symbol(I.x0, Decl(map1.ts, 5, 17))
@@ -23,6 +25,8 @@ import { Observable } from "./observable"
 >prototype : Symbol(Observable.prototype)
 
 declare module "./observable" {
+>"./observable" : Symbol("tests/cases/compiler/observable", Decl(observable.ts, 0, 0), Decl(map1.ts, 2, 48), Decl(map2.ts, 2, 48))
+
     interface I {x1}
 >I : Symbol(I, Decl(map1.ts, 4, 31), Decl(map2.ts, 4, 31))
 >x1 : Symbol(I.x1, Decl(map2.ts, 5, 17))

@@ -2,5 +2,6 @@
 var v = { public get [e]() { } };
 >v : { [x: number]: void; }
 >{ public get [e]() { } } : { [x: number]: void; }
+>[e] : void
 >e : any
 

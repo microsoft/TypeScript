@@ -1,4 +1,5 @@
 EmitSkipped: false
+
 FileName : declSingle.js
 var x = "hello";
 var x1 = 1000;

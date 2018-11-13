@@ -4,8 +4,6 @@ module Moclodule {
 >Moclodule : typeof Moclodule
 
     export interface Someinterface {
->Someinterface : Someinterface
-
         foo(): void;
 >foo : () => void
     }

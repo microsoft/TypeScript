@@ -1,7 +1,7 @@
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(1,18): error TS7010: 'foo', which lacks return-type annotation, implicitly has an 'any' return type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(1,22): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(2,13): error TS7005: Variable 'bar' implicitly has an 'any' type.
-tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(4,5): error TS7008: Member 'publicMember' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(4,12): error TS7008: Member 'publicMember' implicitly has an 'any' type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(7,12): error TS7010: 'publicFunction', which lacks return-type annotation, implicitly has an 'any' return type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(7,27): error TS7006: Parameter 'x' implicitly has an 'any' type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(13,24): error TS7006: Parameter 'publicConsParam' implicitly has an 'any' type.
@@ -18,7 +18,7 @@ tests/cases/compiler/implicitAnyInAmbientDeclaration2.d.ts(13,24): error TS7006:
 !!! error TS7005: Variable 'bar' implicitly has an 'any' type.
     declare class C {
         public publicMember;  // this should be an error
-        ~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~~
 !!! error TS7008: Member 'publicMember' implicitly has an 'any' type.
         private privateMember;  // this should not be an error
     

@@ -1,6 +1,6 @@
 === tests/cases/conformance/es6/templates/templateStringInIndexExpression.ts ===
 `abc${0}abc`[`0`];
->`abc${0}abc`[`0`] : any
+>`abc${0}abc`[`0`] : error
 >`abc${0}abc` : string
 >0 : 0
 >`0` : "0"

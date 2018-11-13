@@ -1,18 +1,11 @@
 === tests/cases/conformance/types/typeAliases/genericTypeAliases.ts ===
 type Tree<T> = T | { left: Tree<T>, right: Tree<T> };
 >Tree : Tree<T>
->T : T
->T : T
 >left : Tree<T>
->Tree : Tree<T>
->T : T
 >right : Tree<T>
->Tree : Tree<T>
->T : T
 
 var tree: Tree<number> = {
 >tree : Tree<number>
->Tree : Tree<T>
 >{    left: {        left: 0,        right: {            left: 1,            right: 2        },    },    right: 3} : { left: { left: number; right: { left: number; right: number; }; }; right: number; }
 
     left: {
@@ -45,13 +38,9 @@ var tree: Tree<number> = {
 
 type Lazy<T> = T | (() => T);
 >Lazy : Lazy<T>
->T : T
->T : T
->T : T
 
 var ls: Lazy<string>;
 >ls : Lazy<string>
->Lazy : Lazy<T>
 
 ls = "eager";
 >ls = "eager" : "eager"
@@ -66,28 +55,18 @@ ls = () => "lazy";
 
 type Foo<T> = T | { x: Foo<T> };
 >Foo : Foo<T>
->T : T
->T : T
 >x : Foo<T>
->Foo : Foo<T>
->T : T
 
 type Bar<U> = U | { x: Bar<U> };
 >Bar : Bar<U>
->U : U
->U : U
 >x : Bar<U>
->Bar : Bar<U>
->U : U
 
 // Deeply instantiated generics
 var x: Foo<string>;
 >x : Foo<string>
->Foo : Foo<T>
 
 var y: Bar<string>;
 >y : Bar<string>
->Bar : Bar<U>
 
 x = y;
 >x = y : Bar<string>
@@ -122,7 +101,6 @@ x = { x: { x: "world" } };
 
 var z: Foo<number>;
 >z : Foo<number>
->Foo : Foo<T>
 
 z = 42;
 >z = 42 : 42
@@ -147,11 +125,9 @@ z = { x: { x: 42 } };
 
 type Strange<T> = string;  // Type parameter not used
 >Strange : string
->T : T
 
 var s: Strange<number>;
 >s : string
->Strange : string
 
 s = "hello";
 >s = "hello" : "hello"
@@ -159,39 +135,23 @@ s = "hello";
 >"hello" : "hello"
 
 interface AB<A, B> {
->AB : AB<A, B>
->A : A
->B : B
-
     a: A;
 >a : A
->A : A
 
     b: B;
 >b : B
->B : B
 }
 
 type Pair<T> = AB<T, T>;
 >Pair : AB<T, T>
->T : T
->AB : AB<A, B>
->T : T
->T : T
 
 interface TaggedPair<T> extends Pair<T> {
->TaggedPair : TaggedPair<T>
->T : T
->Pair : AB<T, T>
->T : T
-
     tag: string;
 >tag : string
 }
 
 var p: TaggedPair<number>;
 >p : TaggedPair<number>
->TaggedPair : TaggedPair<T>
 
 p.a = 1;
 >p.a = 1 : 1
@@ -216,20 +176,13 @@ p.tag = "test";
 
 function f<A>() {
 >f : <A>() => A[] | { x: A[] | any; }
->A : A
 
     type Foo<T> = T | { x: Foo<T> };
 >Foo : T | { x: T | any; }
->T : T
->T : T
 >x : T | { x: T | any; }
->Foo : T | { x: T | any; }
->T : T
 
     var x: Foo<A[]>;
 >x : A[] | { x: A[] | any; }
->Foo : T | { x: T | any; }
->A : A
 
     return x;
 >x : A[] | { x: A[] | any; }
@@ -237,20 +190,13 @@ function f<A>() {
 
 function g<B>() {
 >g : <B>() => B[] | { x: B[] | any; }
->B : B
 
     type Bar<U> = U | { x: Bar<U> };
 >Bar : U | { x: U | any; }
->U : U
->U : U
 >x : U | { x: U | any; }
->Bar : U | { x: U | any; }
->U : U
 
     var x: Bar<B[]>;
 >x : B[] | { x: B[] | any; }
->Bar : U | { x: U | any; }
->B : B
 
     return x;
 >x : B[] | { x: B[] | any; }

@@ -1,32 +1,18 @@
 === tests/cases/compiler/genericClassPropertyInheritanceSpecialization.ts ===
 interface KnockoutObservableBase<T> {
->KnockoutObservableBase : KnockoutObservableBase<T>
->T : T
-
     peek(): T;
 >peek : () => T
->T : T
 
     (): T;
->T : T
-
     (value: T): void;
 >value : T
->T : T
 }
 
 interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
->KnockoutObservable : KnockoutObservable<T>
->T : T
->KnockoutObservableBase : KnockoutObservableBase<T>
->T : T
-
     equalityComparer(a: T, b: T): boolean;
 >equalityComparer : (a: T, b: T) => boolean
 >a : T
->T : T
 >b : T
->T : T
 
     valueHasMutated(): void;
 >valueHasMutated : () => void
@@ -36,104 +22,73 @@ interface KnockoutObservable<T> extends KnockoutObservableBase<T> {
 }
 
 interface KnockoutObservableArray<T> extends KnockoutObservable<T[]> {
->KnockoutObservableArray : KnockoutObservableArray<T>
->T : T
->KnockoutObservable : KnockoutObservable<T>
->T : T
-
     indexOf(searchElement: T, fromIndex?: number): number;
 >indexOf : (searchElement: T, fromIndex?: number) => number
 >searchElement : T
->T : T
 >fromIndex : number
 
     slice(start: number, end?: number): T[];
 >slice : (start: number, end?: number) => T[]
 >start : number
 >end : number
->T : T
 
     splice(start: number, deleteCount?: number, ...items: T[]): T[];
 >splice : (start: number, deleteCount?: number, ...items: T[]) => T[]
 >start : number
 >deleteCount : number
 >items : T[]
->T : T
->T : T
 
     pop(): T;
 >pop : () => T
->T : T
 
     push(...items: T[]): void;
 >push : (...items: T[]) => void
 >items : T[]
->T : T
 
     shift(): T;
 >shift : () => T
->T : T
 
     unshift(...items: T[]): number;
 >unshift : (...items: T[]) => number
 >items : T[]
->T : T
 
     reverse(): T[];
 >reverse : () => T[]
->T : T
 
     sort(compareFunction?: (a: T, b: T) => number): void;
 >sort : (compareFunction?: (a: T, b: T) => number) => void
 >compareFunction : (a: T, b: T) => number
 >a : T
->T : T
 >b : T
->T : T
 
     replace(oldItem: T, newItem: T): void;
 >replace : (oldItem: T, newItem: T) => void
 >oldItem : T
->T : T
 >newItem : T
->T : T
 
     remove(item: T): T[];
 >remove : (item: T) => T[]
 >item : T
->T : T
->T : T
 
     removeAll(items?: T[]): T[];
 >removeAll : (items?: T[]) => T[]
 >items : T[]
->T : T
->T : T
 
     destroy(item: T): void;
 >destroy : (item: T) => void
 >item : T
->T : T
 
     destroyAll(items?: T[]): void;
 >destroyAll : (items?: T[]) => void
 >items : T[]
->T : T
 }
 
 interface KnockoutObservableArrayStatic {
->KnockoutObservableArrayStatic : KnockoutObservableArrayStatic
-
     fn: KnockoutObservableArray<any>;
 >fn : KnockoutObservableArray<any>
->KnockoutObservableArray : KnockoutObservableArray<T>
 
     <T>(value?: T[]): KnockoutObservableArray<T>;
->T : T
 >value : T[]
->T : T
->KnockoutObservableArray : KnockoutObservableArray<T>
->T : T
 }
 
 declare module ko {
@@ -141,7 +96,6 @@ declare module ko {
 
     export var observableArray: KnockoutObservableArrayStatic;
 >observableArray : KnockoutObservableArrayStatic
->KnockoutObservableArrayStatic : KnockoutObservableArrayStatic
 }
 
 module Portal.Controls.Validators {
@@ -151,23 +105,18 @@ module Portal.Controls.Validators {
 
     export class Validator<TValue> {
 >Validator : Validator<TValue>
->TValue : TValue
 
         private _subscription;
 >_subscription : any
 
         public message: KnockoutObservable<string>;
 >message : KnockoutObservable<string>
->KnockoutObservable : KnockoutObservable<T>
 
         public validationState: KnockoutObservable<number>;
 >validationState : KnockoutObservable<number>
->KnockoutObservable : KnockoutObservable<T>
 
         public validate: KnockoutObservable<TValue>;
 >validate : KnockoutObservable<TValue>
->KnockoutObservable : KnockoutObservable<T>
->TValue : TValue
 
         constructor(message?: string) { }
 >message : string
@@ -178,7 +127,6 @@ module Portal.Controls.Validators {
         public _validate(value: TValue): number {return 0 }
 >_validate : (value: TValue) => number
 >value : TValue
->TValue : TValue
 >0 : 0
     }
 }
@@ -191,7 +139,6 @@ module PortalFx.ViewModels.Controls.Validators {
 
     export class Validator<TValue> extends Portal.Controls.Validators.Validator<TValue> {
 >Validator : Validator<TValue>
->TValue : TValue
 >Portal.Controls.Validators.Validator : Portal.Controls.Validators.Validator<TValue>
 >Portal.Controls.Validators : typeof Portal.Controls.Validators
 >Portal.Controls : typeof Portal.Controls
@@ -199,7 +146,6 @@ module PortalFx.ViewModels.Controls.Validators {
 >Controls : typeof Portal.Controls
 >Validators : typeof Portal.Controls.Validators
 >Validator : typeof Portal.Controls.Validators.Validator
->TValue : TValue
 
         constructor(message?: string) {
 >message : string
@@ -214,36 +160,25 @@ module PortalFx.ViewModels.Controls.Validators {
 }
 
 interface Contract<TValue> {
->Contract : Contract<TValue>
->TValue : TValue
 
     validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>;
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray<T>
 >PortalFx : any
 >ViewModels : any
 >Controls : any
 >Validators : any
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
 }
 
 
 class ViewModel<TValue> implements Contract<TValue> {
 >ViewModel : ViewModel<TValue>
->TValue : TValue
->Contract : Contract<TValue>
->TValue : TValue
 
     public validators: KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>> = ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>();
 >validators : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
->KnockoutObservableArray : KnockoutObservableArray<T>
 >PortalFx : any
 >ViewModels : any
 >Controls : any
 >Validators : any
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
 >ko.observableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>() : KnockoutObservableArray<PortalFx.ViewModels.Controls.Validators.Validator<TValue>>
 >ko.observableArray : KnockoutObservableArrayStatic
 >ko : typeof ko
@@ -252,8 +187,6 @@ class ViewModel<TValue> implements Contract<TValue> {
 >ViewModels : any
 >Controls : any
 >Validators : any
->Validator : PortalFx.ViewModels.Controls.Validators.Validator<TValue>
->TValue : TValue
 }
 
 

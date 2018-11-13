@@ -386,6 +386,7 @@ Math.random() * 2 ? N["s"] : "a";
 });
 class C1 {
 }
+N.s, N.s;
 const o4 = {
     method1() {
         return s; // return type should not widen due to contextual type
@@ -482,7 +483,7 @@ declare const constInitToLReadonlyTypeWithTypeQuery: typeof l.readonlyType;
 declare const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNestedType;
 declare const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"];
 declare const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"];
-declare const promiseForConstCall: Promise<symbol>;
+declare const promiseForConstCall: Promise<typeof constCall>;
 declare const arrayOfConstCall: symbol[];
 declare const s: unique symbol;
 declare namespace N {

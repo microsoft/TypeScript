@@ -1,20 +1,19 @@
 /// <reference path="fourslash.ts" />
 
-////export { {| "itemName": "a", "kind": "alias", "parentName": "" |}a }  from "a";
-////
-////export { {| "itemName": "B", "kind": "alias", "parentName": "" |}b as B }  from "a";
-////
-////export { {| "itemName": "c", "kind": "alias", "parentName": "" |}c,
-////            {| "itemName": "D", "kind": "alias", "parentName": "" |}d as D }  from "a";
-////
-////{| "itemName": "f", "kind": "alias", "parentName": "" |}export import f = require("a");
+// @noLib: true
 
-test.markers().forEach(marker => {
-    verify.navigationItemsListContains(
-        marker.data.itemName,
-        marker.data.kind,
-        marker.data.itemName,
-        "exact",
-        marker.fileName,
-        marker.data.parentName);
-});
+////export { [|{| "name": "a", "kind": "alias" |}a|] }  from "a";
+////
+////export { [|{| "name": "B", "kind": "alias" |}b as B|] }  from "a";
+////
+////export { [|{| "name": "c", "kind": "alias" |}c|],
+////            [|{| "name": "D", "kind": "alias" |}d as D|] }  from "a";
+////
+////[|{| "name": "f", "kind": "alias", "kindModifiers": "export" |}export import f = require("a");|]
+
+for (const range of test.ranges()) {
+    verify.navigateTo({
+        pattern: range.marker.data.name,
+        expected: [{ ...range.marker.data, range }],
+    });
+}

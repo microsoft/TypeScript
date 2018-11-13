@@ -28,7 +28,7 @@ function walk(ctx: Lint.WalkContext<void>): void {
     }
 
     function check(node: ts.UnaryExpression): void {
-        if (!isAllowedLocation(node.parent!)) {
+        if (!isAllowedLocation(node.parent)) {
             ctx.addFailureAtNode(node, Rule.POSTFIX_FAILURE_STRING);
         }
     }
@@ -47,7 +47,7 @@ function isAllowedLocation(node: ts.Node): boolean {
         // Can be in a comma operator in a for statement (`for (let a = 0, b = 10; a < b; a++, b--)`)
         case ts.SyntaxKind.BinaryExpression:
             return (node as ts.BinaryExpression).operatorToken.kind === ts.SyntaxKind.CommaToken &&
-                node.parent!.kind === ts.SyntaxKind.ForStatement;
+                node.parent.kind === ts.SyntaxKind.ForStatement;
 
         default:
             return false;

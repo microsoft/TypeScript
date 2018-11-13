@@ -1,0 +1,18 @@
+=== tests/cases/conformance/salsa/a.js ===
+var /*1*/x = function foo() {
+>x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))
+>foo : Symbol(foo, Decl(a.js, 0, 12))
+}
+x.a = function bar() {
+>x.a : Symbol(x.a, Decl(a.js, 1, 1))
+>x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))
+>a : Symbol(x.a, Decl(a.js, 1, 1))
+>bar : Symbol(bar, Decl(a.js, 2, 5))
+}
+=== tests/cases/conformance/salsa/b.ts ===
+var x = function () {
+>x : Symbol(x, Decl(a.js, 0, 3), Decl(a.js, 1, 1), Decl(b.ts, 0, 3))
+
+    return 1;
+}();
+

@@ -1,19 +1,12 @@
 === tests/cases/conformance/es6/destructuring/destructuringParameterProperties3.ts ===
 class C1<T, U, V> {
 >C1 : C1<T, U, V>
->T : T
->U : U
->V : V
 
     constructor(private k: T, private [a, b, c]: [T,U,V]) {
 >k : T
->T : T
 >a : T
 >b : U
 >c : V
->T : T
->U : U
->V : V
 
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
 >(b === undefined && c === undefined) || (this.b === undefined && this.c === undefined) : boolean
@@ -82,7 +75,7 @@ var x = new C1(undefined, [0, true, ""]);
 >new C1(undefined, [0, true, ""]) : C1<number, boolean, string>
 >C1 : typeof C1
 >undefined : undefined
->[0, true, ""] : [number, boolean, string]
+>[0, true, ""] : [number, true, string]
 >0 : 0
 >true : true
 >"" : ""
@@ -110,7 +103,7 @@ var y = new C1(10, [0, true, true]);
 >new C1(10, [0, true, true]) : C1<number, boolean, boolean>
 >C1 : typeof C1
 >10 : 10
->[0, true, true] : [number, boolean, boolean]
+>[0, true, true] : [number, true, true]
 >0 : 0
 >true : true
 >true : true

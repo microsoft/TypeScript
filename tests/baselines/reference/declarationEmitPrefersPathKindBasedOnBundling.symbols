@@ -1,0 +1,29 @@
+=== tests/cases/compiler/src/lib/operators/scalar.ts ===
+export interface Scalar {
+>Scalar : Symbol(Scalar, Decl(scalar.ts, 0, 0))
+
+	(): string;
+	value: number;
+>value : Symbol(Scalar.value, Decl(scalar.ts, 1, 12))
+}
+
+export function scalar(value: string): Scalar {
+>scalar : Symbol(scalar, Decl(scalar.ts, 3, 1))
+>value : Symbol(value, Decl(scalar.ts, 5, 23))
+>Scalar : Symbol(Scalar, Decl(scalar.ts, 0, 0))
+
+	return null as any;
+}
+=== tests/cases/compiler/src/settings/spacing.ts ===
+import { scalar } from '../lib/operators/scalar';
+>scalar : Symbol(scalar, Decl(spacing.ts, 0, 8))
+
+export default {
+	get xs() {
+>xs : Symbol(xs, Decl(spacing.ts, 2, 16))
+
+		return scalar("14px");
+>scalar : Symbol(scalar, Decl(spacing.ts, 0, 8))
+	}
+};
+

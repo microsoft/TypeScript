@@ -3,15 +3,11 @@ module EmptyTypes {
 >EmptyTypes : typeof EmptyTypes
 
     interface iface { }
->iface : iface
-
     class base implements iface { }
 >base : base
->iface : iface
 
     class base2 implements iface { }
 >base2 : base2
->iface : iface
 
     class derived extends base { }
 >derived : derived
@@ -235,7 +231,6 @@ module EmptyTypes {
 >t1 : { x: number; y: base; }[]
 >x : number
 >y : base
->base : base
 >[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: derived; }[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
@@ -254,16 +249,15 @@ module EmptyTypes {
 >t2 : { x: boolean; y: base; }[]
 >x : boolean
 >y : base
->base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: derived; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
->x : boolean
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
->x : boolean
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
 >false : false
 >y : base
 >new base() : base
@@ -273,7 +267,6 @@ module EmptyTypes {
 >t3 : { x: string; y: base; }[]
 >x : string
 >y : base
->base : base
 >[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : { x: string; y: derived; }[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
@@ -352,7 +345,6 @@ module EmptyTypes {
 
             var ifaceObj: iface = null;
 >ifaceObj : iface
->iface : iface
 >null : null
 
             var baseObj = new base();
@@ -400,18 +392,15 @@ module NonEmptyTypes {
 >NonEmptyTypes : typeof NonEmptyTypes
 
     interface iface { x: string; }
->iface : iface
 >x : string
 
     class base implements iface { x: string; y: string; }
 >base : base
->iface : iface
 >x : string
 >y : string
 
     class base2 implements iface { x: string; z: string; }
 >base2 : base2
->iface : iface
 >x : string
 >z : string
 
@@ -638,7 +627,6 @@ module NonEmptyTypes {
 >t1 : { x: number; y: base; }[]
 >x : number
 >y : base
->base : base
 >[{ x: 7, y: new derived() }, { x: 5, y: new base() }] : { x: number; y: base; }[]
 >{ x: 7, y: new derived() } : { x: number; y: derived; }
 >x : number
@@ -657,16 +645,15 @@ module NonEmptyTypes {
 >t2 : { x: boolean; y: base; }[]
 >x : boolean
 >y : base
->base : base
->[{ x: true, y: new derived() }, { x: false, y: new base() }] : { x: boolean; y: base; }[]
->{ x: true, y: new derived() } : { x: boolean; y: derived; }
->x : boolean
+>[{ x: true, y: new derived() }, { x: false, y: new base() }] : ({ x: true; y: derived; } | { x: false; y: base; })[]
+>{ x: true, y: new derived() } : { x: true; y: derived; }
+>x : true
 >true : true
 >y : derived
 >new derived() : derived
 >derived : typeof derived
->{ x: false, y: new base() } : { x: boolean; y: base; }
->x : boolean
+>{ x: false, y: new base() } : { x: false; y: base; }
+>x : false
 >false : false
 >y : base
 >new base() : base
@@ -676,7 +663,6 @@ module NonEmptyTypes {
 >t3 : { x: string; y: base; }[]
 >x : string
 >y : base
->base : base
 >[{ x: undefined, y: new base() }, { x: '', y: new derived() }] : ({ x: undefined; y: base; } | { x: string; y: derived; })[]
 >{ x: undefined, y: new base() } : { x: undefined; y: base; }
 >x : undefined
@@ -755,7 +741,6 @@ module NonEmptyTypes {
 
             var ifaceObj: iface = null;
 >ifaceObj : iface
->iface : iface
 >null : null
 
             var baseObj = new base();

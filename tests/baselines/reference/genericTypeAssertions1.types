@@ -1,10 +1,8 @@
 === tests/cases/compiler/genericTypeAssertions1.ts ===
 class A<T> { foo(x: T) { }}
 >A : A<T>
->T : T
 >foo : (x: T) => void
 >x : T
->T : T
 
 var foo = new A<number>();
 >foo : A<number>
@@ -13,17 +11,12 @@ var foo = new A<number>();
 
 var r: A<string> = <A<number>>new A(); // error
 >r : A<string>
->A : A<T>
 ><A<number>>new A() : A<number>
->A : A<T>
 >new A() : A<number>
 >A : typeof A
 
 var r2: A<number> = <A<A<number>>>foo; // error
 >r2 : A<number>
->A : A<T>
 ><A<A<number>>>foo : A<A<number>>
->A : A<T>
->A : A<T>
 >foo : A<number>
 

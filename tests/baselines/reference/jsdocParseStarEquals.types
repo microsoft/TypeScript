@@ -1,0 +1,15 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {...*=} args
+    @return {*=} */
+function f(...args) {
+>f : (...args: any[]) => any
+>args : any[]
+
+    return null
+>null : null
+}
+
+/** @type *= */
+var x;
+>x : any
+

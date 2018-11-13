@@ -19,7 +19,6 @@ var d: void;
 
 var e: E;
 >e : E
->E : E
 
 var f: { a: string };
 >f : { a: string; }
@@ -30,12 +29,8 @@ var g: any[];
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     var r1 = t < u;
 >r1 : boolean

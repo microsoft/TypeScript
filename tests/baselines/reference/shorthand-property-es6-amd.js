@@ -14,3 +14,4 @@ define(["require", "exports", "./foo"], function (require, exports, foo_1) {
 
 
 //// [test.d.ts]
+export {};

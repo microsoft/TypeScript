@@ -9,5 +9,4 @@ module A {
 
 var a: A; // no error
 >a : any
->A : No type information available!
 

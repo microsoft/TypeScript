@@ -1,14 +1,10 @@
 === tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts ===
 // Generic call with no parameters
 interface NoParams {
->NoParams : NoParams
-
     new <T>();
->T : T
 }
 var noParams: NoParams;
 >noParams : NoParams
->NoParams : NoParams
 
 new noParams();
 >new noParams() : any
@@ -24,14 +20,10 @@ new noParams<{}>();
 
 // Generic call with parameters but none use type parameter type
 interface noGenericParams {
->noGenericParams : noGenericParams
-
     new <T>(n: string);
->T : T
 >n : string
 }
 var noGenericParams: noGenericParams;
->noGenericParams : noGenericParams
 >noGenericParams : noGenericParams
 
 new noGenericParams('');
@@ -51,17 +43,11 @@ new noGenericParams<{}>('');
 
 // Generic call with multiple type parameters and only one used in parameter type annotation
 interface someGenerics1 {
->someGenerics1 : someGenerics1
-
     new <T, U>(n: T, m: number);
->T : T
->U : U
 >n : T
->T : T
 >m : number
 }
 var someGenerics1: someGenerics1;
->someGenerics1 : someGenerics1
 >someGenerics1 : someGenerics1
 
 new someGenerics1(3, 4);
@@ -84,16 +70,11 @@ new someGenerics1<number, {}>(3, 4);
 
 // Generic call with argument of function type whose parameter is of type parameter type
 interface someGenerics2a {
->someGenerics2a : someGenerics2a
-
     new <T>(n: (x: T) => void);
->T : T
 >n : (x: T) => void
 >x : T
->T : T
 }
 var someGenerics2a: someGenerics2a;
->someGenerics2a : someGenerics2a
 >someGenerics2a : someGenerics2a
 
 new someGenerics2a((n: string) => n);
@@ -122,19 +103,12 @@ new someGenerics2a<string>((n) => n.substr(0));
 >0 : 0
 
 interface someGenerics2b {
->someGenerics2b : someGenerics2b
-
     new <T, U>(n: (x: T, y: U) => void);
->T : T
->U : U
 >n : (x: T, y: U) => void
 >x : T
->T : T
 >y : U
->U : U
 }
 var someGenerics2b: someGenerics2b;
->someGenerics2b : someGenerics2b
 >someGenerics2b : someGenerics2b
 
 new someGenerics2b((n: string, x: number) => n);
@@ -169,15 +143,10 @@ new someGenerics2b<string, number>((n, t) => n.substr(t * t));
 
 // Generic call with argument of function type whose parameter is not of type parameter type but body/return type uses type parameter
 interface someGenerics3 {
->someGenerics3 : someGenerics3
-
     new <T>(producer: () => T);
->T : T
 >producer : () => T
->T : T
 }
 var someGenerics3: someGenerics3;
->someGenerics3 : someGenerics3
 >someGenerics3 : someGenerics3
 
 new someGenerics3(() => '');
@@ -189,7 +158,6 @@ new someGenerics3(() => '');
 new someGenerics3<Window>(() => undefined);
 >new someGenerics3<Window>(() => undefined) : any
 >someGenerics3 : someGenerics3
->Window : No type information available!
 >() => undefined : () => any
 >undefined : undefined
 
@@ -201,19 +169,12 @@ new someGenerics3<number>(() => 3);
 
 // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
 interface someGenerics4 {
->someGenerics4 : someGenerics4
-
     new <T, U>(n: T, f: (x: U) => void);
->T : T
->U : U
 >n : T
->T : T
 >f : (x: U) => void
 >x : U
->U : U
 }
 var someGenerics4: someGenerics4;
->someGenerics4 : someGenerics4
 >someGenerics4 : someGenerics4
 
 new someGenerics4(4, () => null);
@@ -246,19 +207,12 @@ new someGenerics4<string, number>(null, null);
 
 // 2 parameter generic call with argument 2 of type parameter type and argument 1 of function type whose parameter is of type parameter type
 interface someGenerics5 {
->someGenerics5 : someGenerics5
-
     new <U, T>(n: T, f: (x: U) => void);
->U : U
->T : T
 >n : T
->T : T
 >f : (x: U) => void
 >x : U
->U : U
 }
 var someGenerics5: someGenerics5;
->someGenerics5 : someGenerics5
 >someGenerics5 : someGenerics5
 
 new someGenerics5(4, () => null);
@@ -291,25 +245,15 @@ new someGenerics5<string, number>(null, null);
 
 // Generic call with multiple arguments of function types that each have parameters of the same generic type
 interface someGenerics6 {
->someGenerics6 : someGenerics6
-
     new <A>(a: (a: A) => A, b: (b: A) => A, c: (c: A) => A);
->A : A
 >a : (a: A) => A
 >a : A
->A : A
->A : A
 >b : (b: A) => A
 >b : A
->A : A
->A : A
 >c : (c: A) => A
 >c : A
->A : A
->A : A
 }
 var someGenerics6: someGenerics6;
->someGenerics6 : someGenerics6
 >someGenerics6 : someGenerics6
 
 new someGenerics6(n => n, n => n, n => n);
@@ -366,27 +310,15 @@ new someGenerics6<number>((n: number) => n, (n: number) => n, (n: number) => n);
 
 // Generic call with multiple arguments of function types that each have parameters of different generic type
 interface someGenerics7 {
->someGenerics7 : someGenerics7
-
     new <A, B, C>(a: (a: A) => A, b: (b: B) => B, c: (c: C) => C);
->A : A
->B : B
->C : C
 >a : (a: A) => A
 >a : A
->A : A
->A : A
 >b : (b: B) => B
 >b : B
->B : B
->B : B
 >c : (c: C) => C
 >c : C
->C : C
->C : C
 }
 var someGenerics7: someGenerics7;
->someGenerics7 : someGenerics7
 >someGenerics7 : someGenerics7
 
 new someGenerics7(n => n, n => n, n => n);
@@ -430,16 +362,10 @@ new someGenerics7<number, string, number>((n: number) => n, (n: string) => n, (n
 
 // Generic call with argument of generic function type
 interface someGenerics8 {
->someGenerics8 : someGenerics8
-
     new <T>(n: T): T;
->T : T
 >n : T
->T : T
->T : T
 }
 var someGenerics8: someGenerics8;
->someGenerics8 : someGenerics8
 >someGenerics8 : someGenerics8
 
 var x = new someGenerics8(someGenerics7);
@@ -457,20 +383,12 @@ new x<string, string, string>(null, null, null);
 
 // Generic call with multiple parameters of generic type passed arguments with no best common type
 interface someGenerics9 {
->someGenerics9 : someGenerics9
-
     new <T>(a: T, b: T, c: T): T;
->T : T
 >a : T
->T : T
 >b : T
->T : T
 >c : T
->T : T
->T : T
 }
 var someGenerics9: someGenerics9;
->someGenerics9 : someGenerics9
 >someGenerics9 : someGenerics9
 
 var a9a = new someGenerics9('', 0, []);
@@ -505,8 +423,6 @@ var a9b: { a?: number; b?: string; };
 
 // Generic call with multiple parameters of generic type passed arguments with multiple best common types
 interface A91 {
->A91 : A91
-
     x: number;
 >x : number
 
@@ -514,25 +430,22 @@ interface A91 {
 >y : string
 }
 interface A92 {
->A92 : A92
-
     x: number;
 >x : number
 
     z?: Window;
->z : any
->Window : No type information available!
+>z : Window
 }
 var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
->new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' }) : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 >someGenerics9 : someGenerics9
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -540,19 +453,18 @@ var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >'' : ""
 
 var a9e: {};
->a9e : { x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }
+>a9e : { x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }
 
 var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
 >a9f : any
 >new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }) : any
 >someGenerics9 : someGenerics9
->A92 : A92
 >undefined : undefined
->{ x: 6, z: window } : { x: number; z: any; }
+>{ x: 6, z: window } : { x: number; z: Window; }
 >x : number
 >6 : 6
->z : any
->window : any
+>z : Window
+>window : Window
 >{ x: 6, y: '' } : { x: number; y: string; }
 >x : number
 >6 : 6
@@ -561,7 +473,6 @@ var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' }
 
 var a9f: A92;
 >a9f : any
->A92 : A92
 
 // Generic call with multiple parameters of generic type passed arguments with a single best common type
 var a9d = new someGenerics9({ x: 3 }, { x: 6 }, { x: 6 });

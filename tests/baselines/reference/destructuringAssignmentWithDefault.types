@@ -13,5 +13,6 @@ let x = 0;
 >{x = 1} = a : { x?: number | undefined; }
 >{x = 1} : { x?: number; }
 >x : number
+>1 : 1
 >a : { x?: number | undefined; }
 

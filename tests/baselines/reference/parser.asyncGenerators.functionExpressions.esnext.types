@@ -172,28 +172,22 @@ const f18 = async function * () {
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 const f19 = async function * () {
 >f19 : () => AsyncIterableIterator<any>
 >async function * () {    let x: await;} : () => AsyncIterableIterator<any>
 
     let x: await;
 >x : await
->await : await
 
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldAsTypeIsOk.ts ===
 interface yield {}
->yield : yield
-
 const f20 = async function * () {
 >f20 : () => AsyncIterableIterator<any>
 >async function * () {    let x: yield;} : () => AsyncIterableIterator<any>
 
     let x: yield;
 >x : yield
->yield : yield
 
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
@@ -204,6 +198,7 @@ const f21 = async function *() {
     const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
 

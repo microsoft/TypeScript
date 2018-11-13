@@ -14,6 +14,7 @@ function foo(y = class {static c = x}, x = 1) {
 function foo2(y = class {[x] = x}, x = 1) {
 >foo2 : Symbol(foo2, Decl(capturedParametersInInitializers2.ts, 2, 1))
 >y : Symbol(y, Decl(capturedParametersInInitializers2.ts, 3, 14))
+>[x] : Symbol((Anonymous class)[x], Decl(capturedParametersInInitializers2.ts, 3, 25))
 >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))
 >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))
 >x : Symbol(x, Decl(capturedParametersInInitializers2.ts, 3, 34))

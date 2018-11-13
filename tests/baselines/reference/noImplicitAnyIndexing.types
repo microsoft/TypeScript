@@ -3,7 +3,7 @@ enum MyEmusEnum {
 >MyEmusEnum : MyEmusEnum
 
     emu
->emu : MyEmusEnum
+>emu : MyEmusEnum.emu
 }
 
 // Should be okay; should be a string.
@@ -76,29 +76,28 @@ var z2 = (<any>emptyObj)[hi];
 >hi : any
 
 interface MyMap<T> {
->MyMap : MyMap<T>
->T : T
-
     [key: string]: T;
 >key : string
->T : T
 }
 
 var m: MyMap<number> = {
 >m : MyMap<number>
->MyMap : MyMap<T>
 >{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
 
     "0": 0,
+>"0" : number
 >0 : 0
 
     "1": 1,
+>"1" : number
 >1 : 1
 
     "2": 2,
+>"2" : number
 >2 : 2
 
     "Okay that's enough for today.": NaN
+>"Okay that's enough for today." : number
 >NaN : number
 
 };

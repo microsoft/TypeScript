@@ -13,5 +13,5 @@
 verify.codeFix({
     description: "Change 'extends' to 'implements'",
     // TODO: GH#18794
-    newRangeContent: "class A implements I1 , I2 { }",
+    newRangeContent: "class A implements I1, I2 { }",
 });

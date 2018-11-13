@@ -16,11 +16,11 @@ declare class Point
 >add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 5, 17))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 5, 28))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 
       static origin: Point;
 >origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 
 }
 
@@ -28,7 +28,7 @@ declare class Point
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
 function Point(x, y) {
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 >x : Symbol(x, Decl(targetTypeTest1.ts, 13, 15))
 >y : Symbol(y, Decl(targetTypeTest1.ts, 13, 17))
 
@@ -57,25 +57,23 @@ var x = EF1(1,2);
 
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
->Point.origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
->origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 5, 48))
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
+>Point.origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 22, 17))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
+>origin : Symbol(Point.origin, Decl(targetTypeTest1.ts, 22, 17))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 
 // Point.prototype declared as type Point
 // this inferred as Point because of obj.prop assignment
 // dx, dy, and return type inferred using target typing
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
->Point.prototype : Symbol(Point.prototype)
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
->prototype : Symbol(Point.prototype)
->add : Symbol(Point.add, Decl(targetTypeTest1.ts, 4, 23))
+>Point.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 30, 31))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 30, 34))
 
     return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 30, 31))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 30, 34))
 
@@ -88,9 +86,9 @@ var f : number = 5;
 // this in function add inferred to be type of object literal (i.e. Point)
 // dx, dy, and return type of add inferred using target typing
 Point.prototype = {
->Point.prototype : Symbol(Point.prototype)
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
->prototype : Symbol(Point.prototype)
+>Point.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     x: 0,
 >x : Symbol(x, Decl(targetTypeTest1.ts, 39, 19))
@@ -104,7 +102,7 @@ Point.prototype = {
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 42, 21))
 
         return new Point(this.x + dx, this.y + dy);
->Point : Symbol(Point, Decl(targetTypeTest1.ts, 0, 0))
+>Point : Symbol(Point, Decl(targetTypeTest1.ts, 8, 1), Decl(targetTypeTest1.ts, 22, 17))
 >dx : Symbol(dx, Decl(targetTypeTest1.ts, 42, 18))
 >dy : Symbol(dy, Decl(targetTypeTest1.ts, 42, 21))
     }
@@ -153,9 +151,9 @@ function C(a,b) {
 }
 
 C.prototype = 
->C.prototype : Symbol(C.prototype)
->C : Symbol(C, Decl(targetTypeTest1.ts, 50, 1))
->prototype : Symbol(C.prototype)
+>C.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>C : Symbol(C, Decl(targetTypeTest1.ts, 57, 1))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
 	{	a:0,
 >a : Symbol(a, Decl(targetTypeTest1.ts, 65, 2))

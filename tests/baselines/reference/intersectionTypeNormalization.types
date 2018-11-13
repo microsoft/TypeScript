@@ -1,190 +1,90 @@
 === tests/cases/compiler/intersectionTypeNormalization.ts ===
 interface A { a: string }
->A : A
 >a : string
 
 interface B { b: string }
->B : B
 >b : string
 
 interface C { c: string }
->C : C
 >c : string
 
 interface D { d: string }
->D : D
 >d : string
 
 // Identical ways of writing the same type
 type X1 = (A | B) & (C | D);
 >X1 : X1
->A : A
->B : B
->C : C
->D : D
 
 type X2 = A & (C | D) | B & (C | D)
 >X2 : X1
->A : A
->C : C
->D : D
->B : B
->C : C
->D : D
 
 type X3 = A & C | A & D | B & C | B & D;
 >X3 : X1
->A : A
->C : C
->A : A
->D : D
->B : B
->C : C
->B : B
->D : D
 
 var x: X1;
 >x : X1
->X1 : X1
 
 var x: X2;
 >x : X1
->X2 : X1
 
 var x: X3;
 >x : X1
->X3 : X1
 
 interface X { x: string }
->X : X
 >x : string
 
 interface Y { y: string }
->Y : Y
 >y : string
 
 // Identical ways of writing the same type
 type Y1 = (A | X & Y) & (C | D);
 >Y1 : Y1
->A : A
->X : X
->Y : Y
->C : C
->D : D
 
 type Y2 = A & (C | D) | X & Y & (C | D)
 >Y2 : Y1
->A : A
->C : C
->D : D
->X : X
->Y : Y
->C : C
->D : D
 
 type Y3 = A & C | A & D | X & Y & C | X & Y & D;
 >Y3 : Y1
->A : A
->C : C
->A : A
->D : D
->X : X
->Y : Y
->C : C
->X : X
->Y : Y
->D : D
 
 var y: Y1;
 >y : Y1
->Y1 : Y1
 
 var y: Y2;
 >y : Y1
->Y2 : Y1
 
 var y: Y3;
 >y : Y1
->Y3 : Y1
 
 interface M { m: string }
->M : M
 >m : string
 
 interface N { n: string }
->N : N
 >n : string
 
 // Identical ways of writing the same type
 type Z1 = (A | X & (M | N)) & (C | D);
 >Z1 : Z1
->A : A
->X : X
->M : M
->N : N
->C : C
->D : D
 
 type Z2 = A & (C | D) | X & (M | N) & (C | D)
 >Z2 : Z1
->A : A
->C : C
->D : D
->X : X
->M : M
->N : N
->C : C
->D : D
 
 type Z3 = A & C | A & D | X & (M | N) & C | X & (M | N) & D;
 >Z3 : Z1
->A : A
->C : C
->A : A
->D : D
->X : X
->M : M
->N : N
->C : C
->X : X
->M : M
->N : N
->D : D
 
 type Z4 = A & C | A & D | X & M & C | X & N & C | X & M & D | X & N & D;
 >Z4 : Z1
->A : A
->C : C
->A : A
->D : D
->X : X
->M : M
->C : C
->X : X
->N : N
->C : C
->X : X
->M : M
->D : D
->X : X
->N : N
->D : D
 
 var z: Z1;
 >z : Z1
->Z1 : Z1
 
 var z: Z2;
 >z : Z1
->Z2 : Z1
 
 var z: Z3;
 >z : Z1
->Z3 : Z1
 
 var z: Z4;
 >z : Z1
->Z4 : Z1
 
 // Repro from #9919
 
@@ -206,24 +106,19 @@ type BoxedValue = { kind: 'int',    num: number }
 
 type IntersectionFail = BoxedValue & ToString
 >IntersectionFail : IntersectionFail
->BoxedValue : BoxedValue
->ToString : ToString
 
 type IntersectionInline = { kind: 'int',    num: number } & ToString
 >IntersectionInline : IntersectionInline
 >kind : "int"
 >num : number
->ToString : ToString
 
                         | { kind: 'string', str: string } & ToString
 >kind : "string"
 >str : string
->ToString : ToString
 
 function getValueAsString(value: IntersectionFail): string {
 >getValueAsString : (value: IntersectionFail) => string
 >value : IntersectionFail
->IntersectionFail : IntersectionFail
 
     if (value.kind === 'int') {
 >value.kind === 'int' : boolean
@@ -248,8 +143,6 @@ function getValueAsString(value: IntersectionFail): string {
 // Repro from #12535
 
 namespace enums {
->enums : typeof enums
-
     export const enum A {
 >A : A
 
@@ -306,9 +199,6 @@ namespace enums {
     }
     export type Genre = A | B | C;
 >Genre : Genre
->A : A
->B : B
->C : C
 }
 
 type Foo = {
@@ -317,7 +207,6 @@ type Foo = {
     genreId: enums.Genre;
 >genreId : enums.Genre
 >enums : any
->Genre : enums.Genre
 
 };
 
@@ -327,14 +216,11 @@ type Bar = {
     genreId: enums.Genre;
 >genreId : enums.Genre
 >enums : any
->Genre : enums.Genre
 
 };
 
 type FooBar = Foo & Bar;
 >FooBar : FooBar
->Foo : Foo
->Bar : Bar
 
 function foo(so: any) {
 >foo : (so: any) => enums.Genre
@@ -344,7 +230,6 @@ function foo(so: any) {
 >val : FooBar
 >so as FooBar : FooBar
 >so : any
->FooBar : FooBar
 
     const isGenre = val.genreId;
 >isGenre : enums.Genre

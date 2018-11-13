@@ -1,0 +1,14 @@
+=== tests/cases/conformance/salsa/bug24492.js ===
+module.exports.D = class { }
+>module.exports.D = class { } : typeof D
+>module.exports.D : typeof D
+>module.exports : typeof import("tests/cases/conformance/salsa/bug24492")
+>module : { "tests/cases/conformance/salsa/bug24492": typeof import("tests/cases/conformance/salsa/bug24492"); }
+>exports : typeof import("tests/cases/conformance/salsa/bug24492")
+>D : typeof D
+>class { } : typeof D
+
+new D()
+>new D() : any
+>D : any
+

@@ -4,23 +4,9 @@ var x;
 >x : any
 
 interface Array {}
->Array : Array
-
 interface String {}
->String : String
-
 interface Number {}
->Number : Number
-
 interface Object {}
->Object : Object
-
 interface Date {}
->Date : Date
-
 interface Function {}
->Function : Function
-
 interface RegExp {}
->RegExp : RegExp
-

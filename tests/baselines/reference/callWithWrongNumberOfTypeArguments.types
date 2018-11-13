@@ -1,8 +1,6 @@
 === tests/cases/compiler/callWithWrongNumberOfTypeArguments.ts ===
 function f<T, U>() { }
 >f : <T, U>() => void
->T : T
->U : U
 
 f<number>();
 >f<number>() : any

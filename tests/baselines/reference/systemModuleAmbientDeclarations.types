@@ -10,7 +10,7 @@ declare class C {}
 
 declare enum E {X = 1};
 >E : E
->X : E
+>X : E.X
 >1 : 1
 
 export var promise = Promise;
@@ -44,7 +44,7 @@ export declare var v: number;
 === tests/cases/compiler/file5.ts ===
 export declare enum E {X = 1}
 >E : E
->X : E
+>X : E.X
 >1 : 1
 
 === tests/cases/compiler/file6.ts ===

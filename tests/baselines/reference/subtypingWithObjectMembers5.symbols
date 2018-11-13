@@ -40,6 +40,7 @@ module NotOptional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 17, 5))
 
         1: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers5.ts, 19, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
     }
 
@@ -48,6 +49,7 @@ module NotOptional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 17, 5))
 
         2: Derived; // error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers5.ts, 23, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 
@@ -55,6 +57,7 @@ module NotOptional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 25, 5))
 
         '1': Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers5.ts, 27, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
     }
 
@@ -63,6 +66,7 @@ module NotOptional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 25, 5))
 
         '1.0': Derived; // error
+>'1.0' : Symbol(B3['1.0'], Decl(subtypingWithObjectMembers5.ts, 31, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 }
@@ -92,6 +96,7 @@ module Optional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 44, 5))
 
         1?: Base;
+>1 : Symbol(A2[1], Decl(subtypingWithObjectMembers5.ts, 46, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
     }
 
@@ -100,6 +105,7 @@ module Optional {
 >A2 : Symbol(A2, Decl(subtypingWithObjectMembers5.ts, 44, 5))
 
         2: Derived; // weak type error
+>2 : Symbol(B2[2], Decl(subtypingWithObjectMembers5.ts, 50, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 
@@ -107,6 +113,7 @@ module Optional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 52, 5))
 
         '1'?: Base;
+>'1' : Symbol(A3['1'], Decl(subtypingWithObjectMembers5.ts, 54, 18))
 >Base : Symbol(Base, Decl(subtypingWithObjectMembers5.ts, 0, 0))
     }
 
@@ -115,6 +122,7 @@ module Optional {
 >A3 : Symbol(A3, Decl(subtypingWithObjectMembers5.ts, 52, 5))
 
         '1.0': Derived; // weak type error
+>'1.0' : Symbol(B3['1.0'], Decl(subtypingWithObjectMembers5.ts, 58, 28))
 >Derived : Symbol(Derived, Decl(subtypingWithObjectMembers5.ts, 2, 1))
     }
 }

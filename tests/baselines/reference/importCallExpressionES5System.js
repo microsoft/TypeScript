@@ -43,11 +43,11 @@ System.register([], function (exports_1, context_1) {
 //// [1.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
+    var p1, p2, C, D;
     var __moduleName = context_1 && context_1.id;
     function foo() {
         var p2 = context_1.import("./0");
     }
-    var p1, p2, C, D;
     return {
         setters: [],
         execute: function () {

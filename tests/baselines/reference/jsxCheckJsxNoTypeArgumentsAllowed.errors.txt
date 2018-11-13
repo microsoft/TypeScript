@@ -1,0 +1,22 @@
+tests/cases/conformance/jsx/file.jsx(4,17): error TS8011: 'type arguments' can only be used in a .ts file.
+
+
+==== tests/cases/conformance/jsx/component.d.ts (0 errors) ====
+    import * as React from "react";
+    export declare class MyComp<P> extends React.Component<P, {}> {
+        internalProp: P;
+    }
+    
+    export interface Prop {
+        a: number,
+        b: string
+    }
+    
+==== tests/cases/conformance/jsx/file.jsx (1 errors) ====
+    import { MyComp, Prop } from "./component";
+    import * as React from "react";
+    
+    let x = <MyComp<Prop> a={10} b="hi" />; // error, no type arguments in js
+                    ~~~~
+!!! error TS8011: 'type arguments' can only be used in a .ts file.
+    

@@ -28,7 +28,7 @@ function foo<T, U>(t: T, u: U) {
 
     var e: Object;
 >e : Symbol(e, Decl(additionOperatorWithTypeParameter.ts, 8, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     var g: E;
 >g : Symbol(g, Decl(additionOperatorWithTypeParameter.ts, 9, 7))

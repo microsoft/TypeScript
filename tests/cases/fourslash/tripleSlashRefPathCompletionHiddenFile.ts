@@ -9,12 +9,11 @@
 
 // @Filename: test.ts
 //// /// <reference path="/*0*/
-//// /// <reference path="./*1*/
+//// /// <reference path="[|./*1*/|]
 //// /// <reference path=".//*2*/
 //// /// <reference path=".\/*3*/
 
-for(let m of ["0", "1", "2", "3"]) {
-    goTo.marker(m);
-    verify.completionListContains("f.ts");
-    verify.not.completionListItemsCountIsGreaterThan(1);
-}
+verify.completions(
+    { marker: ["0", "2", "3"], exact: "f.ts", isNewIdentifierLocation: true },
+    { marker: "1", exact: { name: "f.ts", replacementSpan: test.ranges()[0] }, isNewIdentifierLocation: true },
+);

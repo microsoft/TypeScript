@@ -4,18 +4,9 @@ declare namespace JSX { interface Element { } }
 >Element : Symbol(Element, Decl(file1.tsx, 0, 23))
 
 <div></div>
->div : Symbol(unknown)
->div : Symbol(unknown)
-
 <div></div>
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 === tests/cases/conformance/jsx/file2.tsx ===
 var x = <div></div><div></div>
 >x : Symbol(x, Decl(file2.tsx, 0, 3))
->div : Symbol(unknown)
->div : Symbol(unknown)
->div : Symbol(unknown)
->div : Symbol(unknown)
 

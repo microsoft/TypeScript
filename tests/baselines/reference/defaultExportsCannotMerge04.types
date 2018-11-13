@@ -11,9 +11,7 @@ namespace Foo {
 }
 
 interface Foo {
->Foo : Foo
 }
 
 export interface Foo {
->Foo : Foo
 }

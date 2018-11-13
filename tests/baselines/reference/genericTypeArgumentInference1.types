@@ -1,45 +1,26 @@
 === tests/cases/compiler/genericTypeArgumentInference1.ts ===
 module Underscore {
->Underscore : any
-
     export interface Iterator<T, U> {
->Iterator : Iterator<T, U>
->T : T
->U : U
-
         (value: T, index: any, list: any): U;
 >value : T
->T : T
 >index : any
 >list : any
->U : U
     }
     export interface Static {
->Static : Static
-
         all<T>(list: T[], iterator?: Iterator<T, boolean>, context?: any): T;
 >all : <T>(list: T[], iterator?: Iterator<T, boolean>, context?: any) => T
->T : T
 >list : T[]
->T : T
 >iterator : Iterator<T, boolean>
->Iterator : Iterator<T, U>
->T : T
 >context : any
->T : T
 
         identity<T>(value: T): T;
 >identity : <T>(value: T) => T
->T : T
 >value : T
->T : T
->T : T
     }
 }
 declare var _: Underscore.Static;
 >_ : Underscore.Static
 >Underscore : any
->Static : Underscore.Static
 
 var r = _.all([true, 1, null, 'yes'], _.identity);
 >r : any
@@ -62,7 +43,7 @@ var r2 = _.all([true], _.identity);
 >_.all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
 >_ : Underscore.Static
 >all : <T>(list: T[], iterator?: Underscore.Iterator<T, boolean>, context?: any) => T
->[true] : boolean[]
+>[true] : true[]
 >true : true
 >_.identity : <T>(value: T) => T
 >_ : Underscore.Static

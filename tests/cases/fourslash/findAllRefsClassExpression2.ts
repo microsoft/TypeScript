@@ -10,7 +10,7 @@
 ////[|A|];
 
 const [r0, r1, r2] = test.ranges();
-const defs = { definition: "(property) A: typeof (Anonymous class)", ranges: [r0] };
-const imports = { definition: "import A", ranges: [r1, r2] };
+const defs = { definition: "class A\n(property) A: typeof A", ranges: [r0] };
+const imports = { definition: "(alias) class A\n(alias) (property) A: typeof A\nimport A", ranges: [r1, r2] };
 verify.referenceGroups([r0], [defs, imports]);
 verify.referenceGroups([r1, r2], [imports, defs]);

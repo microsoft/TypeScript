@@ -11,12 +11,12 @@ interface Foo {
 class A<P extends Partial<Foo>> {
 >A : Symbol(A, Decl(typeVariableTypeGuards.ts, 4, 1))
 >P : Symbol(P, Decl(typeVariableTypeGuards.ts, 6, 8))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(typeVariableTypeGuards.ts, 0, 0))
 
     constructor(public props: Readonly<P>) {}
 >props : Symbol(A.props, Decl(typeVariableTypeGuards.ts, 7, 16))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >P : Symbol(P, Decl(typeVariableTypeGuards.ts, 6, 8))
 
     doSomething() {
@@ -193,10 +193,10 @@ function f4<T extends string[] | undefined>(obj: T | undefined, x: number) {
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 70, 44))
 
         obj[x].length;
->obj[x].length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>obj[x].length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >obj : Symbol(obj, Decl(typeVariableTypeGuards.ts, 70, 44))
 >x : Symbol(x, Decl(typeVariableTypeGuards.ts, 70, 63))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
     }
 }
 

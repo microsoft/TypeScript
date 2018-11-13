@@ -2,6 +2,7 @@
 
 // @noImplicitAny: true
 ////function f(a: number, [|...rest |]){
+////    a;
 ////    rest.push(22);
 ////}
 

@@ -1,9 +1,7 @@
 === tests/cases/compiler/cloduleAndTypeParameters.ts ===
 class Foo<T extends Foo.Bar> {
 >Foo : Foo<T>
->T : T
 >Foo : any
->Bar : Foo.Bar
 
   constructor() {
   }
@@ -13,8 +11,6 @@ module Foo {
 >Foo : typeof Foo
 
   export interface Bar {
->Bar : Bar
-
     bar(): void;
 >bar : () => void
   }

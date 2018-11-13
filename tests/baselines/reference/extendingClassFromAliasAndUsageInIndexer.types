@@ -9,8 +9,6 @@ import moduleB = require("./extendingClassFromAliasAndUsageInIndexer_moduleB");
 >moduleB : typeof moduleB
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
 >Backbone.Model : typeof Backbone.Model
@@ -19,19 +17,19 @@ interface IHasVisualizationModel {
 }
 var moduleATyped: IHasVisualizationModel = moduleA;
 >moduleATyped : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >moduleA : typeof moduleA
 
 var moduleMap: { [key: string]: IHasVisualizationModel } = {
 >moduleMap : { [key: string]: IHasVisualizationModel; }
 >key : string
->IHasVisualizationModel : IHasVisualizationModel
 >{    "moduleA": moduleA,    "moduleB": moduleB} : { "moduleA": typeof moduleA; "moduleB": typeof moduleB; }
 
     "moduleA": moduleA,
+>"moduleA" : typeof moduleA
 >moduleA : typeof moduleA
 
     "moduleB": moduleB
+>"moduleB" : typeof moduleB
 >moduleB : typeof moduleB
 
 };

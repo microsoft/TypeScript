@@ -12,7 +12,6 @@ export function backup() { return "backup"; }
 async function compute(promise: Promise<any>) {
 >compute : (promise: Promise<any>) => Promise<any>
 >promise : Promise<any>
->Promise : Promise<T>
 
     let j = await promise;
 >j : any
@@ -24,10 +23,10 @@ async function compute(promise: Promise<any>) {
 >j : any
 
         j = await import("./1");
->j = await import("./1") : typeof "tests/cases/conformance/dynamicImport/1"
+>j = await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
 >j : any
->await import("./1") : typeof "tests/cases/conformance/dynamicImport/1"
->import("./1") : Promise<typeof "tests/cases/conformance/dynamicImport/1">
+>await import("./1") : typeof import("tests/cases/conformance/dynamicImport/1")
+>import("./1") : Promise<typeof import("tests/cases/conformance/dynamicImport/1")>
 >"./1" : "./1"
 
         return j.backup();
@@ -46,6 +45,6 @@ async function compute(promise: Promise<any>) {
 compute(import("./0"));
 >compute(import("./0")) : Promise<any>
 >compute : (promise: Promise<any>) => Promise<any>
->import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >"./0" : "./0"
 

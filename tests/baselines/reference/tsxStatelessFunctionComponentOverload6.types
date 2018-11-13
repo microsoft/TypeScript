@@ -3,8 +3,6 @@ import React = require('react')
 >React : typeof React
 
 export interface ClickableProps {
->ClickableProps : ClickableProps
-
     children?: string;
 >children : string
 
@@ -13,28 +11,19 @@ export interface ClickableProps {
 }
 
 export interface ButtonProps extends ClickableProps {
->ButtonProps : ButtonProps
->ClickableProps : ClickableProps
-
     onClick: React.MouseEventHandler<any>;
 >onClick : React.EventHandler<React.MouseEvent<any>>
 >React : any
->MouseEventHandler : React.EventHandler<React.MouseEvent<T>>
 }
 
 export interface LinkProps extends ClickableProps {
->LinkProps : LinkProps
->ClickableProps : ClickableProps
-
     to: string;
 >to : string
 }
 
 export interface HyphenProps extends ClickableProps {
->HyphenProps : HyphenProps
->ClickableProps : ClickableProps
-
     "data-format": string;
+>"data-format" : string
 }
 
 let obj = {
@@ -64,38 +53,27 @@ let obj2 = {
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >buttonProps : ButtonProps
->ButtonProps : ButtonProps
 >JSX : any
->Element : JSX.Element
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >linkProps : LinkProps
->LinkProps : LinkProps
 >JSX : any
->Element : JSX.Element
 
 export function MainButton(hyphenProps: HyphenProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >hyphenProps : HyphenProps
->HyphenProps : HyphenProps
 >JSX : any
->Element : JSX.Element
 
 export function MainButton(props: ButtonProps | LinkProps | HyphenProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; (hyphenProps: HyphenProps): JSX.Element; }
 >props : ButtonProps | LinkProps | HyphenProps
->ButtonProps : ButtonProps
->LinkProps : LinkProps
->HyphenProps : HyphenProps
 >JSX : any
->Element : JSX.Element
 
     const linkProps = props as LinkProps;
 >linkProps : LinkProps
 >props as LinkProps : LinkProps
 >props : ButtonProps | LinkProps | HyphenProps
->LinkProps : LinkProps
 
     if(linkProps.to) {
 >linkProps.to : string

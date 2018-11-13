@@ -8,9 +8,9 @@ declare function use(x: string);
 
 use(x.toExponential());
 >use : Symbol(use, Decl(file1.ts, 0, 34))
->x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file1.ts, 0, 8))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 === c:/root/src/file2.d.ts ===
 export let x: number;

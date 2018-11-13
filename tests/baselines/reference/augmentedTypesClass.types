@@ -15,5 +15,5 @@ class c4 { public foo() { } }
 
 enum c4 { One } // error
 >c4 : c4
->One : c4
+>One : c4.One
 

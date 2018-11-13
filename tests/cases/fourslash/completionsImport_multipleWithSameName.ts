@@ -1,5 +1,8 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+// @noLib: true
+
 // @Filename: /global.d.ts
 // A local variable would prevent import completions (see `completionsImport_shadowedByLocal.ts`), but a global doesn't.
 ////declare var foo: number;
@@ -14,17 +17,38 @@
 ////fo/**/
 
 goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: undefined };
-verify.completionListContains("foo", "var foo: number", "", "var", undefined, undefined, options);
-verify.completionListContains({ name: "foo", source: "/a" }, "const foo: 0", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, { ...options, sourceDisplay: "./a" });
-verify.completionListContains({ name: "foo", source: "/b" }, "const foo: 1", "", "const", /*spanIndex*/ undefined, /*hasAction*/ true, { ...options, sourceDisplay: "./b" });
-
+verify.completions({
+    marker: "",
+    exact: [
+        { name: "foo", text: "var foo: number", kind: "var", kindModifiers: "declare" },
+        "undefined",
+        {
+            name: "foo",
+            source: "/a",
+            sourceDisplay: "./a",
+            text: "const foo: 0",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+        },
+        {
+            name: "foo",
+            source: "/b",
+            sourceDisplay: "./b",
+            text: "const foo: 1",
+            kind: "const",
+            kindModifiers: "export",
+            hasAction: true,
+        },
+        ...completion.statementKeywordsWithTypes,
+    ],
+    preferences: { includeCompletionsForModuleExports: true },
+});
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/b",
     description: `Import 'foo' from module "./b"`,
-    // TODO: GH#18445
-    newFileContent: `import { foo } from "./b";\r
-\r
+    newFileContent: `import { foo } from "./b";
+
 fo`,
 });

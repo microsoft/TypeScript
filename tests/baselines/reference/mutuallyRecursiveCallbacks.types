@@ -2,31 +2,18 @@
 // Repro from #18277
 
 interface Foo<T> { (bar: Bar<T>): void };
->Foo : Foo<T>
->T : T
 >bar : Bar<T>
->Bar : Bar<T>
->T : T
 
 type Bar<T> = (foo: Foo<T>) => Foo<T>;
 >Bar : Bar<T>
->T : T
 >foo : Foo<T>
->Foo : Foo<T>
->T : T
->Foo : Foo<T>
->T : T
 
 declare function foo<T>(bar: Bar<T>): void;
 >foo : <T>(bar: Bar<T>) => void
->T : T
 >bar : Bar<T>
->Bar : Bar<T>
->T : T
 
 declare var bar: Bar<{}>;
 >bar : Bar<{}>
->Bar : Bar<T>
 
 bar = foo;
 >bar = foo : <T>(bar: Bar<T>) => void

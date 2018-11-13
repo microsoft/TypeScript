@@ -34,7 +34,6 @@ class X {
 >attr : { (name: string): string; (name: string, value: string): X; }
 >name : string
 >value : string
->X : X
 
    public attr(first:any, second?:any):any {
 >attr : { (name: string): string; (name: string, value: string): X; }

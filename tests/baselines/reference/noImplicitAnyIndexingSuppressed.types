@@ -3,7 +3,7 @@ enum MyEmusEnum {
 >MyEmusEnum : MyEmusEnum
 
     emu
->emu : MyEmusEnum
+>emu : MyEmusEnum.emu
 }
 
 // Should be okay; should be a string.
@@ -24,8 +24,8 @@ var strRepresentation2 = MyEmusEnum[MyEmusEnum.emu]
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var strRepresentation3 = MyEmusEnum["monehh"];
->strRepresentation3 : any
->MyEmusEnum["monehh"] : any
+>strRepresentation3 : error
+>MyEmusEnum["monehh"] : error
 >MyEmusEnum : typeof MyEmusEnum
 >"monehh" : "monehh"
 
@@ -39,15 +39,15 @@ var strRepresentation4 = MyEmusEnum["emu"];
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var x = {}["hi"];
->x : any
->{}["hi"] : any
+>x : error
+>{}["hi"] : error
 >{} : {}
 >"hi" : "hi"
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var y = {}[10];
->y : any
->{}[10] : any
+>y : error
+>{}[10] : error
 >{} : {}
 >10 : 10
 
@@ -61,8 +61,8 @@ var emptyObj = {};
 
 // Should be okay, as we suppress implicit 'any' property access checks
 var z1 = emptyObj[hi];
->z1 : any
->emptyObj[hi] : any
+>z1 : error
+>emptyObj[hi] : error
 >emptyObj : {}
 >hi : any
 
@@ -75,29 +75,28 @@ var z2 = (<any>emptyObj)[hi];
 >hi : any
 
 interface MyMap<T> {
->MyMap : MyMap<T>
->T : T
-
     [key: string]: T;
 >key : string
->T : T
 }
 
 var m: MyMap<number> = {
 >m : MyMap<number>
->MyMap : MyMap<T>
 >{    "0": 0,    "1": 1,    "2": 2,    "Okay that's enough for today.": NaN} : { "0": number; "1": number; "2": number; "Okay that's enough for today.": number; }
 
     "0": 0,
+>"0" : number
 >0 : 0
 
     "1": 1,
+>"1" : number
 >1 : 1
 
     "2": 2,
+>"2" : number
 >2 : 2
 
     "Okay that's enough for today.": NaN
+>"Okay that's enough for today." : number
 >NaN : number
 
 };

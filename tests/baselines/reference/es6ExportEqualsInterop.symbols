@@ -304,6 +304,8 @@ export * from "class-module";
 
 === tests/cases/compiler/modules.d.ts ===
 declare module "interface" {
+>"interface" : Symbol("interface", Decl(modules.d.ts, 0, 0))
+
     interface Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 0, 28))
 
@@ -318,6 +320,8 @@ declare module "interface" {
 }
 
 declare module "variable" {
+>"variable" : Symbol("variable", Decl(modules.d.ts, 6, 1))
+
     var Foo: {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 9, 7))
 
@@ -332,6 +336,8 @@ declare module "variable" {
 }
 
 declare module "interface-variable" {
+>"interface-variable" : Symbol("interface-variable", Decl(modules.d.ts, 14, 1))
+
     interface Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 16, 37), Decl(modules.d.ts, 21, 7))
 
@@ -355,6 +361,8 @@ declare module "interface-variable" {
 }
 
 declare module "module" {
+>"module" : Symbol("module", Decl(modules.d.ts, 26, 1))
+
     module Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 28, 25))
 
@@ -369,6 +377,8 @@ declare module "module" {
 }
 
 declare module "interface-module" {
+>"interface-module" : Symbol("interface-module", Decl(modules.d.ts, 34, 1))
+
     interface Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 36, 35), Decl(modules.d.ts, 40, 5))
 
@@ -392,6 +402,8 @@ declare module "interface-module" {
 }
 
 declare module "variable-module" {
+>"variable-module" : Symbol("variable-module", Decl(modules.d.ts, 46, 1))
+
     module Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 48, 34), Decl(modules.d.ts, 55, 7))
 
@@ -419,6 +431,8 @@ declare module "variable-module" {
 }
 
 declare module "function" {
+>"function" : Symbol("function", Decl(modules.d.ts, 60, 1))
+
     function foo();
 >foo : Symbol(foo, Decl(modules.d.ts, 62, 27))
 
@@ -427,6 +441,8 @@ declare module "function" {
 }
 
 declare module "function-module" {
+>"function-module" : Symbol("function-module", Decl(modules.d.ts, 65, 1))
+
     function foo();
 >foo : Symbol(foo, Decl(modules.d.ts, 67, 34), Decl(modules.d.ts, 68, 19))
 
@@ -444,6 +460,8 @@ declare module "function-module" {
 }
 
 declare module "class" {
+>"class" : Symbol("class", Decl(modules.d.ts, 74, 1))
+
     class Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 76, 24))
 
@@ -458,6 +476,8 @@ declare module "class" {
 }
 
 declare module "class-module" {
+>"class-module" : Symbol("class-module", Decl(modules.d.ts, 82, 1))
+
     class Foo {
 >Foo : Symbol(Foo, Decl(modules.d.ts, 84, 31), Decl(modules.d.ts, 88, 5))
 

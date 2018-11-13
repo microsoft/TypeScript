@@ -1,0 +1,155 @@
+=== tests/cases/conformance/types/union/unionTypeWithIndexSignature.ts ===
+type Two = { foo: { bar: true }, baz: true } | { [s: string]: string };
+>Two : Two
+>foo : { bar: true; }
+>bar : true
+>true : true
+>baz : true
+>true : true
+>s : string
+
+declare var u: Two
+>u : Two
+
+u.foo = 'bye'
+>u.foo = 'bye' : "bye"
+>u.foo : string | { bar: true; }
+>u : Two
+>foo : string | { bar: true; }
+>'bye' : "bye"
+
+u.baz = 'hi'
+>u.baz = 'hi' : "hi"
+>u.baz : string | true
+>u : Two
+>baz : string | true
+>'hi' : "hi"
+
+type Three = { foo: number } | { [s: string]: string } | { [s: string]: boolean };
+>Three : Three
+>foo : number
+>s : string
+>s : string
+
+declare var v: Three
+>v : Three
+
+v.foo = false
+>v.foo = false : false
+>v.foo : string | number | boolean
+>v : Three
+>foo : string | number | boolean
+>false : false
+
+type Missing = { foo: number, bar: true } | { [s: string]: string } | { foo: boolean }
+>Missing : Missing
+>foo : number
+>bar : true
+>true : true
+>s : string
+>foo : boolean
+
+declare var m: Missing
+>m : Missing
+
+m.foo = 'hi'
+>m.foo = 'hi' : "hi"
+>m.foo : string | number | boolean
+>m : Missing
+>foo : string | number | boolean
+>'hi' : "hi"
+
+m.bar
+>m.bar : any
+>m : Missing
+>bar : any
+
+type RO = { foo: number } | { readonly [s: string]: string }
+>RO : RO
+>foo : number
+>s : string
+
+declare var ro: RO
+>ro : RO
+
+ro.foo = 'not allowed'
+>ro.foo = 'not allowed' : "not allowed"
+>ro.foo : any
+>ro : RO
+>foo : any
+>'not allowed' : "not allowed"
+
+type Num = { '0': string } | { [n: number]: number }
+>Num : Num
+>'0' : string
+>n : number
+
+declare var num: Num
+>num : Num
+
+num[0] = 1
+>num[0] = 1 : 1
+>num[0] : string | number
+>num : Num
+>0 : 0
+>1 : 1
+
+num['0'] = 'ok'
+>num['0'] = 'ok' : "ok"
+>num['0'] : string | number
+>num : Num
+>'0' : "0"
+>'ok' : "ok"
+
+const sym = Symbol()
+>sym : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+type Both = { s: number, '0': number, [sym]: boolean } | { [n: number]: number, [s: string]: string | number }
+>Both : Both
+>s : number
+>'0' : number
+>[sym] : boolean
+>sym : unique symbol
+>n : number
+>s : string
+
+declare var both: Both
+>both : Both
+
+both['s'] = 'ok'
+>both['s'] = 'ok' : "ok"
+>both['s'] : string | number
+>both : Both
+>'s' : "s"
+>'ok' : "ok"
+
+both[0] = 1
+>both[0] = 1 : 1
+>both[0] : number
+>both : Both
+>0 : 0
+>1 : 1
+
+both[1] = 0 // not ok
+>both[1] = 0 : 0
+>both[1] : any
+>both : Both
+>1 : 1
+>0 : 0
+
+both[0] = 'not ok'
+>both[0] = 'not ok' : "not ok"
+>both[0] : number
+>both : Both
+>0 : 0
+>'not ok' : "not ok"
+
+both[sym] = 'not ok'
+>both[sym] = 'not ok' : "not ok"
+>both[sym] : any
+>both : Both
+>sym : unique symbol
+>'not ok' : "not ok"
+

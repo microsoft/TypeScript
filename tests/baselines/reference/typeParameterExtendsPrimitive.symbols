@@ -12,6 +12,7 @@ function f<T extends number>() {
 >v : Symbol(v, Decl(typeParameterExtendsPrimitive.ts, 3, 7))
 
         [t]: 0
+>[t] : Symbol([t], Decl(typeParameterExtendsPrimitive.ts, 3, 13))
 >t : Symbol(t, Decl(typeParameterExtendsPrimitive.ts, 2, 7))
     }
     return t + t;
@@ -56,7 +57,7 @@ function g<T extends I>(i: IdMap<T>) {
 function h<T extends Record<K, number>, K extends string>(array: T[], prop: K): number {
 >h : Symbol(h, Decl(typeParameterExtendsPrimitive.ts, 15, 1))
 >T : Symbol(T, Decl(typeParameterExtendsPrimitive.ts, 18, 11))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(typeParameterExtendsPrimitive.ts, 18, 39))
 >K : Symbol(K, Decl(typeParameterExtendsPrimitive.ts, 18, 39))
 >array : Symbol(array, Decl(typeParameterExtendsPrimitive.ts, 18, 58))

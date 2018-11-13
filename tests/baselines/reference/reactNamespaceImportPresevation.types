@@ -1,5 +1,7 @@
 === tests/cases/compiler/modules.d.ts ===
 declare module "my-React-Lib" {
+>"my-React-Lib" : typeof import("my-React-Lib")
+
     var a: any;
 >a : any
 
@@ -15,7 +17,7 @@ declare var foo: any;
 >foo : any
 
 <foo data/>;
-><foo data/> : any
+><foo data/> : error
 >foo : any
 >data : true
 

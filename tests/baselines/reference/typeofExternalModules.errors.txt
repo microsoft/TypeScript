@@ -1,7 +1,5 @@
-tests/cases/compiler/typeofExternalModules_core.ts(5,1): error TS2322: Type 'typeof D' is not assignable to type 'typeof "tests/cases/compiler/typeofExternalModules_external"'.
-  Property 'C' is missing in type 'typeof D'.
-tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2322: Type 'typeof "tests/cases/compiler/typeofExternalModules_external"' is not assignable to type 'typeof D'.
-  Property 'prototype' is missing in type 'typeof "tests/cases/compiler/typeofExternalModules_external"'.
+tests/cases/compiler/typeofExternalModules_core.ts(5,1): error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
+tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof D'.
 
 
 ==== tests/cases/compiler/typeofExternalModules_core.ts (2 errors) ====
@@ -11,13 +9,12 @@ tests/cases/compiler/typeofExternalModules_core.ts(7,1): error TS2322: Type 'typ
     var y1: typeof ext = ext;
     y1 = exp;
     ~~
-!!! error TS2322: Type 'typeof D' is not assignable to type 'typeof "tests/cases/compiler/typeofExternalModules_external"'.
-!!! error TS2322:   Property 'C' is missing in type 'typeof D'.
+!!! error TS2741: Property 'C' is missing in type 'typeof D' but required in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")'.
+!!! related TS2728 /.src/tests/cases/compiler/typeofExternalModules_external.ts:1:14: 'C' is declared here.
     var y2: typeof exp = exp;
     y2 = ext;
     ~~
-!!! error TS2322: Type 'typeof "tests/cases/compiler/typeofExternalModules_external"' is not assignable to type 'typeof D'.
-!!! error TS2322:   Property 'prototype' is missing in type 'typeof "tests/cases/compiler/typeofExternalModules_external"'.
+!!! error TS2741: Property 'prototype' is missing in type 'typeof import("tests/cases/compiler/typeofExternalModules_external")' but required in type 'typeof D'.
 ==== tests/cases/compiler/typeofExternalModules_external.ts (0 errors) ====
     export class C { }
     

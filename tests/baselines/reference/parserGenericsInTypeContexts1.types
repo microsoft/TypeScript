@@ -2,52 +2,35 @@
 class C extends A<T> implements B<T> {
 >C : C
 >A : any
->T : No type information available!
->B : No type information available!
->T : No type information available!
 }
 
 var v1: C<T>;
 >v1 : any
->C : C
->T : No type information available!
 
 var v2: D<T> = null;
 >v2 : any
->D : No type information available!
->T : No type information available!
 >null : null
 
 var v3: E.F<T>;
 >v3 : any
 >E : any
->F : No type information available!
->T : No type information available!
 
 var v3: G.H.I<T>;
 >v3 : any
 >G : any
 >H : any
->I : No type information available!
->T : No type information available!
 
 var v6: K<T>[];
 >v6 : any[]
->K : No type information available!
->T : No type information available!
 
 
 function f1(a: E<T>) {
 >f1 : (a: any) => void
 >a : any
->E : No type information available!
->T : No type information available!
 }
 
 function f2(): F<T> {
 >f2 : () => any
->F : No type information available!
->T : No type information available!
 }
 
 

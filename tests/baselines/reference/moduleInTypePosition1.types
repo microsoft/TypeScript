@@ -7,7 +7,6 @@ var x = (w1: WinJS) => { };
 >x : (w1: any) => void
 >(w1: WinJS) => { } : (w1: any) => void
 >w1 : any
->WinJS : No type information available!
 
 === tests/cases/compiler/moduleInTypePosition1_0.ts ===
 export class Promise {

@@ -50,7 +50,7 @@ tests/cases/compiler/typeName1.ts(23,5): error TS2322: Type 'typeof C' is not as
     var x8:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; }=3;
         ~~
 !!! error TS2322: Type '3' is not assignable to type '{ (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }'.
-             ~~~~
+             ~
 !!! error TS2411: Property 'z' of type 'I' is not assignable to string index type '{ x: any; y: any; }'.
     var x9:I=3;
         ~~
@@ -64,7 +64,7 @@ tests/cases/compiler/typeName1.ts(23,5): error TS2322: Type 'typeof C' is not as
     var x12:{z:I;x:boolean;y:(s:string)=>boolean;w:{ z:I;[s:string]:{ x; y; };[n:number]:{x; y;};():boolean; };}[][]=3;
         ~~~
 !!! error TS2322: Type '3' is not assignable to type '{ z: I; x: boolean; y: (s: string) => boolean; w: { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }; }[][]'.
-                                                     ~~~~
+                                                     ~
 !!! error TS2411: Property 'z' of type 'I' is not assignable to string index type '{ x: any; y: any; }'.
     var x13:{ new(): number; new(n:number):number; x: string; w: {y: number;}; (): {}; } = 3;
         ~~~

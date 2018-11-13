@@ -1,9 +1,6 @@
 === tests/cases/compiler/declarationEmitIndexTypeNotFound.ts ===
 export interface Test {
->Test : Test
-
     [index: TypeNotFound]: any;
 >index : any
->TypeNotFound : No type information available!
 }
 

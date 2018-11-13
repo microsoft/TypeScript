@@ -3,8 +3,6 @@ module Bugs {
 >Bugs : typeof Bugs
 
                 export interface IToken {
->IToken : IToken
-
                                 startIndex:number;
 >startIndex : number
 
@@ -16,16 +14,11 @@ module Bugs {
                 }
                 
                 export interface IState {
->IState : IState
                 }
 
                 export interface IStateToken extends IToken {
->IStateToken : IStateToken
->IToken : IToken
-
                                 state: IState;
 >state : IState
->IState : IState
 
                                 length: number;
 >length : number
@@ -36,7 +29,6 @@ module Bugs {
 
                                 var tokens:IToken[]= [];
 >tokens : IToken[]
->IToken : IToken
 >[] : undefined[]
 
                                 tokens.push({ startIndex: 1, type: '', bracket: 3 });
@@ -58,7 +50,6 @@ module Bugs {
 >tokens : IToken[]
 >push : (...items: IToken[]) => number
 ><IToken>({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : IToken
->IToken : IToken
 >({ startIndex: 1, type: '', bracket: 3, state: null, length: 10 }) : { startIndex: number; type: string; bracket: number; state: null; length: number; }
 >{ startIndex: 1, type: '', bracket: 3, state: null, length: 10 } : { startIndex: number; type: string; bracket: number; state: null; length: number; }
 >startIndex : number

@@ -6,7 +6,7 @@ type StringContains<S extends string, L extends string> = (
     { [key: string]: 'false' }
   )[L]
 
-type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
 
@@ -43,7 +43,7 @@ declare type StringContains<S extends string, L extends string> = ({
 } & {
     [key: string]: 'false';
 })[L];
-declare type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>;
+declare type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
 declare type First<T> = ObjectHasKey<T, '0'>;
 declare type T1 = ObjectHasKey<{
     a: string;
@@ -54,9 +54,7 @@ declare type T2 = ObjectHasKey<{
 declare function f1<A extends string, B extends string>(a: A, b: B): {
     [P in A | B]: any;
 };
-declare function f2<A extends string>(a: A): {
-    [P in A | "x"]: any;
-};
+declare function f2<A extends string>(a: A): { [P in A | "x"]: any; };
 declare function f3(x: 'a' | 'b'): {
     a: any;
     b: any;

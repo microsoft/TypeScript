@@ -1,16 +1,10 @@
 === tests/cases/compiler/genericConstructInvocationWithNoTypeArg.ts ===
 interface Foo<T> {
->Foo : Foo<T>
->T : T
-
    new (x: number): Foo<T>;
 >x : number
->Foo : Foo<T>
->T : T
 }
 var f2: Foo<number> = new Foo(3);
 >f2 : Foo<number>
->Foo : Foo<T>
 >new Foo(3) : any
 >Foo : any
 >3 : 3

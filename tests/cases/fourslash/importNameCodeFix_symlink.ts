@@ -11,12 +11,15 @@
 ////import { foo } from "link";
 
 // @Filename: /b.ts
-////[|foo/**/;|]
+////[|foo;|]
 
 // Uses "link" instead of "real" because `a` did.
 goTo.file("/b.ts");
 verify.importFixAtPosition([
 `import { foo } from "link";
+
+foo;`,
+`import { foo } from "real";
 
 foo;`,
 ]);

@@ -1,70 +1,55 @@
 /* @internal */
 namespace ts.codefix {
-    registerCodeFix({
-        errorCodes: getApplicableDiagnosticCodes(),
-        getCodeActions: getDisableJsDiagnosticsCodeActions
+    const fixName = "disableJsDiagnostics";
+    const fixId = "disableJsDiagnostics";
+    const errorCodes = mapDefined(Object.keys(Diagnostics) as ReadonlyArray<keyof typeof Diagnostics>, key => {
+        const diag = Diagnostics[key];
+        return diag.category === DiagnosticCategory.Error ? diag.code : undefined;
     });
 
-    function getApplicableDiagnosticCodes(): number[] {
-        const allDiagnostcs = <MapLike<DiagnosticMessage>>Diagnostics;
-        return Object.keys(allDiagnostcs)
-            .filter(d => allDiagnostcs[d] && allDiagnostcs[d].category === DiagnosticCategory.Error)
-            .map(d => allDiagnostcs[d].code);
-    }
+    registerCodeFix({
+        errorCodes,
+        getCodeActions(context) {
+            const { sourceFile, program, span, host, formatContext } = context;
 
-    function getIgnoreCommentLocationForLocation(sourceFile: SourceFile, position: number, newLineCharacter: string) {
-        const { line } = getLineAndCharacterOfPosition(sourceFile, position);
-        const lineStartPosition = getStartPositionOfLine(line, sourceFile);
-        const startPosition = getFirstNonSpaceCharacterPosition(sourceFile.text, lineStartPosition);
-
-        // First try to see if we can put the '// @ts-ignore' on the previous line.
-        // We need to make sure that we are not in the middle of a string literal or a comment.
-        // We also want to check if the previous line holds a comment for a node on the next line
-        // if so, we do not want to separate the node from its comment if we can.
-        if (!isInComment(sourceFile, startPosition) && !isInString(sourceFile, startPosition) && !isInTemplateString(sourceFile, startPosition)) {
-            const token = getTouchingToken(sourceFile, startPosition, /*includeJsDocComment*/ false);
-            const tokenLeadingCommnets = getLeadingCommentRangesOfNode(token, sourceFile);
-            if (!tokenLeadingCommnets || !tokenLeadingCommnets.length || tokenLeadingCommnets[0].pos >= startPosition) {
-                return {
-                    span: { start: startPosition, length: 0 },
-                    newText: `// @ts-ignore${newLineCharacter}`
-                };
+            if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+                return undefined;
             }
-        }
 
-        // If all fails, add an extra new line immediately before the error span.
-        return {
-            span: { start: position, length: 0 },
-            newText: `${position === startPosition ? "" : newLineCharacter}// @ts-ignore${newLineCharacter}`
-        };
-    }
+            const fixes: CodeFixAction[] = [
+                // fixId unnecessary because adding `// @ts-nocheck` even once will ignore every error in the file.
+                createCodeFixActionNoFixId(
+                    fixName,
+                    [createFileTextChanges(sourceFile.fileName, [
+                        createTextChange(sourceFile.checkJsDirective
+                            ? createTextSpanFromBounds(sourceFile.checkJsDirective.pos, sourceFile.checkJsDirective.end)
+                            : createTextSpan(0, 0), `// @ts-nocheck${getNewLineOrDefaultFromHost(host, formatContext.options)}`),
+                    ])],
+                    Diagnostics.Disable_checking_for_this_file),
+            ];
 
-    function getDisableJsDiagnosticsCodeActions(context: CodeFixContext): CodeAction[] | undefined {
-        const { sourceFile, program, newLineCharacter, span } = context;
+            if (textChanges.isValidLocationToAddComment(sourceFile, span.start)) {
+                fixes.unshift(createCodeFixAction(fixName, textChanges.ChangeTracker.with(context, t => makeChange(t, sourceFile, span.start)), Diagnostics.Ignore_this_error_message, fixId, Diagnostics.Add_ts_ignore_to_all_error_messages));
+            }
 
-        if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
-            return undefined;
-        }
-
-        return [{
-            description: getLocaleSpecificMessage(Diagnostics.Ignore_this_error_message),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [getIgnoreCommentLocationForLocation(sourceFile, span.start, newLineCharacter)]
-            }]
+            return fixes;
         },
-        {
-            description: getLocaleSpecificMessage(Diagnostics.Disable_checking_for_this_file),
-            changes: [{
-                fileName: sourceFile.fileName,
-                textChanges: [{
-                    span: {
-                        start: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.pos : 0,
-                        length: sourceFile.checkJsDirective ? sourceFile.checkJsDirective.end - sourceFile.checkJsDirective.pos : 0
-                    },
-                    newText: `// @ts-nocheck${newLineCharacter}`
-                }]
-            }]
-        }];
+        fixIds: [fixId],
+        getAllCodeActions: context => {
+            const seenLines = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
+                    makeChange(changes, diag.file, diag.start, seenLines);
+                }
+            });
+        },
+    });
+
+    function makeChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, position: number, seenLines?: Map<true>) {
+        const { line: lineNumber } = getLineAndCharacterOfPosition(sourceFile, position);
+        // Only need to add `// @ts-ignore` for a line once.
+        if (!seenLines || addToSeen(seenLines, lineNumber)) {
+            changes.insertCommentBeforeLine(sourceFile, lineNumber, position, " @ts-ignore");
+        }
     }
 }

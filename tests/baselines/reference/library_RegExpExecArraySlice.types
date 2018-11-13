@@ -2,7 +2,6 @@
 // RegExpExecArray.slice can have zero, one, or two arguments
 var regExpExecArrayValue: RegExpExecArray;
 >regExpExecArrayValue : RegExpExecArray
->RegExpExecArray : RegExpExecArray
 
 regExpExecArrayValue.slice();
 >regExpExecArrayValue.slice() : string[]

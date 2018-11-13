@@ -1,31 +1,22 @@
 === tests/cases/compiler/contextualTypeArrayReturnType.ts ===
 interface IBookStyle {
->IBookStyle : IBookStyle
-
     initialLeftPageTransforms?: (width: number) => NamedTransform[];
 >initialLeftPageTransforms : (width: number) => NamedTransform[]
 >width : number
->NamedTransform : NamedTransform
 }
 
 interface NamedTransform {
->NamedTransform : NamedTransform
-
     [name: string]: Transform3D;
 >name : string
->Transform3D : Transform3D
 }
 
 interface Transform3D {
->Transform3D : Transform3D
-
     cachedCss: string;
 >cachedCss : string
 }
 
 var style: IBookStyle = {
 >style : IBookStyle
->IBookStyle : IBookStyle
 >{    initialLeftPageTransforms: (width: number) => {        return [            {'ry': null }        ];    }} : { initialLeftPageTransforms: (width: number) => { 'ry': any; }[]; }
 
     initialLeftPageTransforms: (width: number) => {
@@ -38,6 +29,7 @@ var style: IBookStyle = {
 
             {'ry': null }
 >{'ry': null } : { 'ry': null; }
+>'ry' : null
 >null : null
 
         ];

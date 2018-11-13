@@ -36,7 +36,6 @@ async function test5(isError: boolean = true): Promise<any> { //should not be er
 >test5 : (isError?: boolean) => Promise<any>
 >isError : boolean
 >true : true
->Promise : Promise<T>
 
     if (isError === true) {
 >isError === true : boolean
@@ -54,7 +53,6 @@ async function test6(isError: boolean = true): Promise<number> {
 >test6 : (isError?: boolean) => Promise<number>
 >isError : boolean
 >true : true
->Promise : Promise<T>
 
     if (isError === true) {
 >isError === true : boolean

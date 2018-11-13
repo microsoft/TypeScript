@@ -23,15 +23,11 @@
 
 type FileMatchOrMatch = FileMatch | Match;
 >FileMatchOrMatch : FileMatchOrMatch
->FileMatch : FileMatch
->Match : Match
 
 
 let elementA: FileMatchOrMatch, elementB: FileMatchOrMatch;
 >elementA : FileMatchOrMatch
->FileMatchOrMatch : FileMatchOrMatch
 >elementB : FileMatchOrMatch
->FileMatchOrMatch : FileMatchOrMatch
 
 if (elementA instanceof FileMatch && elementB instanceof FileMatch) {
 >elementA instanceof FileMatch && elementB instanceof FileMatch : boolean

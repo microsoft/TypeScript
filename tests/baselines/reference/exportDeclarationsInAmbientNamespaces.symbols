@@ -5,7 +5,7 @@ declare namespace Q {
     function _try(method: Function, ...args: any[]): any;
 >_try : Symbol(_try, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 21))
 >method : Symbol(method, Decl(exportDeclarationsInAmbientNamespaces.ts, 1, 18))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >args : Symbol(args, Decl(exportDeclarationsInAmbientNamespaces.ts, 1, 35))
 
     export { _try as try };

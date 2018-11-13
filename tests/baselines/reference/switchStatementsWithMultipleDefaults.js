@@ -35,7 +35,7 @@ var x = 10;
 switch (x) {
     case 1:
     case 2:
-    default:// No issues.
+    default: // No issues.
         break;
     default: // Error; second 'default' clause.
     default: // Error; third 'default' clause.
@@ -43,12 +43,12 @@ switch (x) {
         x *= x;
 }
 switch (x) {
-    default:// No issues.
+    default: // No issues.
         break;
     case 100:
         switch (x * x) {
             default: // No issues.
-            default:// Error; second 'default' clause.
+            default: // Error; second 'default' clause.
                 break;
             case 10000:
                 x /= x;

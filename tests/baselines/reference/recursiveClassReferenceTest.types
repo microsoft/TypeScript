@@ -5,12 +5,8 @@
 
 
 declare module Sample.Thing {
->Sample : typeof Sample
->Thing : typeof Thing
 
 	export interface IWidget {
->IWidget : IWidget
-
 		getDomNode(): any;
 >getDomNode : () => any
 
@@ -23,21 +19,17 @@ declare module Sample.Thing {
 >widget : IWidget
 >Sample : any
 >Thing : any
->IWidget : IWidget
 	}
 
 	export interface ICodeThing {
->ICodeThing : ICodeThing
   
   		getDomNode(): Element;
 >getDomNode : () => any
->Element : No type information available!
 		
 		addWidget(widgetId:string, widget:IWidget);
 >addWidget : (widgetId: string, widget: IWidget) => any
 >widgetId : string
 >widget : IWidget
->IWidget : IWidget
 
 		
 		focus(); 
@@ -47,12 +39,9 @@ declare module Sample.Thing {
 	}
 
 	export interface IAction {
->IAction : IAction
-
 		run(Thing:ICodeThing):boolean;
 >run : (Thing: ICodeThing) => boolean
 >Thing : ICodeThing
->ICodeThing : ICodeThing
 
 		getId():string;
 >getId : () => string
@@ -67,11 +56,9 @@ module Sample.Actions.Thing.Find {
 
 	export class StartFindAction implements Sample.Thing.IAction {
 >StartFindAction : StartFindAction
->Sample.Thing.IAction : any
 >Sample.Thing : typeof Sample.Thing
 >Sample : typeof Sample
 >Thing : typeof Sample.Thing
->IAction : Sample.Thing.IAction
 		
 		public getId() { return "yo"; }
 >getId : () => string
@@ -82,7 +69,6 @@ module Sample.Actions.Thing.Find {
 >Thing : Sample.Thing.ICodeThing
 >Sample : any
 >Thing : any
->ICodeThing : Sample.Thing.ICodeThing
 
 			return true;
 >true : true
@@ -97,11 +83,9 @@ module Sample.Thing.Widgets {
 
 	export class FindWidget implements Sample.Thing.IWidget {
 >FindWidget : FindWidget
->Sample.Thing.IWidget : any
 >Sample.Thing : typeof Thing
 >Sample : typeof Sample
 >Thing : typeof Thing
->IWidget : IWidget
 
 		public gar(runner:(widget:Sample.Thing.IWidget)=>any) { if (true) {return runner(this);}}
 >gar : (runner: (widget: IWidget) => any) => any
@@ -109,7 +93,6 @@ module Sample.Thing.Widgets {
 >widget : IWidget
 >Sample : any
 >Thing : any
->IWidget : IWidget
 >true : true
 >runner(this) : any
 >runner : (widget: IWidget) => any
@@ -123,7 +106,6 @@ module Sample.Thing.Widgets {
 >codeThing : ICodeThing
 >Sample : any
 >Thing : any
->ICodeThing : ICodeThing
 
 		    // scenario 1
 		    codeThing.addWidget("addWidget", this);
@@ -151,30 +133,21 @@ module Sample.Thing.Widgets {
 }
 
 interface IMode { getInitialState(): IState;} 
->IMode : IMode
 >getInitialState : () => IState
->IState : IState
 
 class AbstractMode implements IMode { public getInitialState(): IState { return null;} }
 >AbstractMode : AbstractMode
->IMode : IMode
 >getInitialState : () => IState
->IState : IState
 >null : null
 
 interface IState {}
->IState : IState
 
 interface Window {
->Window : Window
-
     opener: Window;
 >opener : Window
->Window : Window
 }
 declare var self: Window;
 >self : Window
->Window : Window
 
 module Sample.Thing.Languages.PlainText {
 >Sample : typeof Sample
@@ -184,15 +157,12 @@ module Sample.Thing.Languages.PlainText {
 	
 	export class State implements IState {		
 >State : State
->IState : IState
 
         constructor(private mode: IMode) { }
 >mode : IMode
->IMode : IMode
 
 		public clone():IState {
 >clone : () => IState
->IState : IState
 
 			return this;
 >this : this
@@ -201,7 +171,6 @@ module Sample.Thing.Languages.PlainText {
 		public equals(other:IState):boolean {
 >equals : (other: IState) => boolean
 >other : IState
->IState : IState
 
 			return this === other;
 >this === other : boolean
@@ -211,7 +180,6 @@ module Sample.Thing.Languages.PlainText {
 		
 		public getMode(): IMode { return mode; }
 >getMode : () => IMode
->IMode : IMode
 >mode : any
 	}
 	
@@ -222,7 +190,6 @@ module Sample.Thing.Languages.PlainText {
 		// scenario 2
 		public getInitialState(): IState {
 >getInitialState : () => IState
->IState : IState
 
 			return new State(self);
 >new State(self) : any

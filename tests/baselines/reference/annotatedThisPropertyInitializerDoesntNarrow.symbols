@@ -1,0 +1,28 @@
+=== tests/cases/conformance/salsa/Compilation.js ===
+// from webpack/lib/Compilation.js and filed at #26427
+/** @param {{ [s: string]: number }} map */
+function mappy(map) {}
+>mappy : Symbol(mappy, Decl(Compilation.js, 0, 0))
+>map : Symbol(map, Decl(Compilation.js, 2, 15))
+
+export class C {
+>C : Symbol(C, Decl(Compilation.js, 2, 22))
+
+    constructor() {
+        /** @type {{ [assetName: string]: number}} */
+        this.assets = {};
+>this.assets : Symbol(C.assets, Decl(Compilation.js, 5, 19))
+>this : Symbol(C, Decl(Compilation.js, 2, 22))
+>assets : Symbol(C.assets, Decl(Compilation.js, 5, 19))
+    }
+    m() {
+>m : Symbol(C.m, Decl(Compilation.js, 8, 5))
+
+        mappy(this.assets)
+>mappy : Symbol(mappy, Decl(Compilation.js, 0, 0))
+>this.assets : Symbol(C.assets, Decl(Compilation.js, 5, 19))
+>this : Symbol(C, Decl(Compilation.js, 2, 22))
+>assets : Symbol(C.assets, Decl(Compilation.js, 5, 19))
+    }
+}
+

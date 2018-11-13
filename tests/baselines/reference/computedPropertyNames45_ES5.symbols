@@ -12,6 +12,7 @@ class C {
 >C : Symbol(C, Decl(computedPropertyNames45_ES5.ts, 1, 19))
 
     get ["get1"]() { return new Foo }
+>["get1"] : Symbol(C["get1"], Decl(computedPropertyNames45_ES5.ts, 3, 9))
 >"get1" : Symbol(C["get1"], Decl(computedPropertyNames45_ES5.ts, 3, 9))
 >Foo : Symbol(Foo, Decl(computedPropertyNames45_ES5.ts, 0, 0))
 }
@@ -26,6 +27,7 @@ class D extends C {
 >Foo2 : Symbol(Foo2, Decl(computedPropertyNames45_ES5.ts, 0, 15))
 
     set ["set1"](p: Foo) { }
+>["set1"] : Symbol(D["set1"], Decl(computedPropertyNames45_ES5.ts, 9, 22))
 >"set1" : Symbol(D["set1"], Decl(computedPropertyNames45_ES5.ts, 9, 22))
 >p : Symbol(p, Decl(computedPropertyNames45_ES5.ts, 10, 17))
 >Foo : Symbol(Foo, Decl(computedPropertyNames45_ES5.ts, 0, 0))

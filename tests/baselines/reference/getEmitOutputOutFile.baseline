@@ -1,4 +1,5 @@
 EmitSkipped: false
+
 FileName : outFile.js
 var x = 5;
 var Bar = /** @class */ (function () {
@@ -12,6 +13,7 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+
 FileName : outFile.d.ts
 declare var x: number;
 declare class Bar {

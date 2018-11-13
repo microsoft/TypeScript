@@ -9,12 +9,10 @@ import m2 = require('mod2');
 var x: m1.Foo;
 >x : m1.Foo
 >m1 : any
->Foo : m1.Foo
 
 var x: m2.Foo; // Should be error (mod1.Foo !== mod2.Foo)
 >x : m1.Foo
 >m2 : any
->Foo : m2.Foo
 
 class Foo1 {
 >Foo1 : Foo1
@@ -30,14 +28,14 @@ class Foo2 {
 }
 var y: Foo1;
 >y : Foo1
->Foo1 : Foo1
 
 var y: Foo2;
 >y : Foo1
->Foo2 : Foo2
 
 === tests/cases/compiler/propertyIdentityWithPrivacyMismatch_0.ts ===
 declare module 'mod1' {
+>'mod1' : typeof import("mod1")
+
     class Foo {
 >Foo : Foo
 
@@ -46,6 +44,8 @@ declare module 'mod1' {
     }
 }
 declare module 'mod2' {
+>'mod2' : typeof import("mod2")
+
     class Foo {
 >Foo : Foo
 

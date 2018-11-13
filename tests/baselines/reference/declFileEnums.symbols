@@ -34,9 +34,9 @@ enum e3 {
 
     b = Math.PI,
 >b : Symbol(e3.b, Decl(declFileEnums.ts, 13, 11))
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 
     c = a + 3
 >c : Symbol(e3.c, Decl(declFileEnums.ts, 14, 16))
@@ -66,9 +66,16 @@ enum e5 {
 >e5 : Symbol(e5, Decl(declFileEnums.ts, 24, 1))
 
     "Friday",
+>"Friday" : Symbol(e5["Friday"], Decl(declFileEnums.ts, 26, 9))
+
     "Saturday",
+>"Saturday" : Symbol(e5["Saturday"], Decl(declFileEnums.ts, 27, 13))
+
     "Sunday",
+>"Sunday" : Symbol(e5["Sunday"], Decl(declFileEnums.ts, 28, 15))
+
     "Weekend days"
+>"Weekend days" : Symbol(e5["Weekend days"], Decl(declFileEnums.ts, 29, 13))
 }
 
 

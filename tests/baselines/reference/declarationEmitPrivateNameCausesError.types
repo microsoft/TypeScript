@@ -1,0 +1,23 @@
+=== tests/cases/compiler/file.ts ===
+const IGNORE_EXTRA_VARIABLES = Symbol(); //Notice how this is unexported
+>IGNORE_EXTRA_VARIABLES : unique symbol
+>Symbol() : unique symbol
+>Symbol : SymbolConstructor
+
+//This is exported
+export function ignoreExtraVariables<CtorT extends {new(...args:any[]):{}}> (ctor : CtorT) {
+>ignoreExtraVariables : <CtorT extends new (...args: any[]) => {}>(ctor: CtorT) => { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
+>args : any[]
+>ctor : CtorT
+
+    return class extends ctor {
+>class extends ctor {        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used    } : { new (...args: any[]): (Anonymous class); prototype: ignoreExtraVariables<any>.(Anonymous class); } & CtorT
+>ctor : {}
+
+        [IGNORE_EXTRA_VARIABLES] = true; //An unexported constant is used
+>[IGNORE_EXTRA_VARIABLES] : boolean
+>IGNORE_EXTRA_VARIABLES : unique symbol
+>true : true
+
+    };
+}

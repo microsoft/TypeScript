@@ -6,15 +6,9 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(17,1): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(18,2): error TS2539: Cannot assign to 'M' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(25,5): error TS2539: Cannot assign to 'M3' because it is not a variable.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,1): error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(31,11): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(32,13): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(33,13): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(37,1): error TS2539: Cannot assign to 'fn' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(38,2): error TS2539: Cannot assign to 'fn' because it is not a variable.
 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts(43,5): error TS2322: Type '""' is not assignable to type 'number'.
@@ -78,20 +72,17 @@ tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesize
     (M2.M3) = { x: 3 }; // OK
     
     M2.M3 = { x: '' }; // Error
-    ~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+              ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2).M3 = { x: '' }; // Error
-    ~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+                ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     (M2.M3) = { x: '' }; // Error
-    ~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type 'typeof M3'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+                ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/expressions/valuesAndReferences/assignmentToParenthesizedIdentifiers.ts:22:20: The expected type comes from property 'x' which is declared here on type 'typeof M3'
     
     
     function fn() { }

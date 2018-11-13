@@ -35,7 +35,7 @@ foo(function(x) { x });
 >["hello"] : string[]
 >"hello" : "hello"
 >every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
->function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
+>function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => true
 >v : string
 >i : number
 >a : string[]
@@ -47,7 +47,7 @@ foo(function(x) { x });
 >[1] : number[]
 >1 : 1
 >every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
->function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
+>function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => true
 >v : number
 >i : number
 >a : number[]
@@ -59,7 +59,7 @@ foo(function(x) { x });
 >[1] : number[]
 >1 : 1
 >every : (callbackfn: (value: number, index: number, array: number[]) => boolean, thisArg?: any) => boolean
->function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => boolean
+>function(v,i,a) {return true;} : (v: number, i: number, a: number[]) => true
 >v : number
 >i : number
 >a : number[]
@@ -71,7 +71,7 @@ foo(function(x) { x });
 >["s"] : string[]
 >"s" : "s"
 >every : (callbackfn: (value: string, index: number, array: string[]) => boolean, thisArg?: any) => boolean
->function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => boolean
+>function(v,i,a) {return true;} : (v: string, i: number, a: string[]) => true
 >v : string
 >i : number
 >a : string[]

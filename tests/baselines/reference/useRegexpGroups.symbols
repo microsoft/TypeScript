@@ -1,0 +1,51 @@
+=== tests/cases/conformance/es2018/useRegexpGroups.ts ===
+let re = /(?<year>\d{4})-(?<month>\d{2})-(?<day>\d{2})/u;
+>re : Symbol(re, Decl(useRegexpGroups.ts, 0, 3))
+
+let result = re.exec("2015-01-02");
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+>re.exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+>re : Symbol(re, Decl(useRegexpGroups.ts, 0, 3))
+>exec : Symbol(RegExp.exec, Decl(lib.es5.d.ts, --, --))
+
+let date = result[0];
+>date : Symbol(date, Decl(useRegexpGroups.ts, 3, 3))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+
+let year1 = result.groups.year;
+>year1 : Symbol(year1, Decl(useRegexpGroups.ts, 5, 3))
+>result.groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+>groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+
+let year2 = result[1];
+>year2 : Symbol(year2, Decl(useRegexpGroups.ts, 6, 3))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+
+let month1 = result.groups.month;
+>month1 : Symbol(month1, Decl(useRegexpGroups.ts, 8, 3))
+>result.groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+>groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+
+let month2 = result[2];
+>month2 : Symbol(month2, Decl(useRegexpGroups.ts, 9, 3))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+
+let day1 = result.groups.day;
+>day1 : Symbol(day1, Decl(useRegexpGroups.ts, 11, 3))
+>result.groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+>groups : Symbol(RegExpExecArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+
+let day2 = result[3];
+>day2 : Symbol(day2, Decl(useRegexpGroups.ts, 12, 3))
+>result : Symbol(result, Decl(useRegexpGroups.ts, 1, 3))
+
+let foo = "foo".match(/(?<bar>foo)/)!.groups.foo;
+>foo : Symbol(foo, Decl(useRegexpGroups.ts, 14, 3))
+>"foo".match(/(?<bar>foo)/)!.groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+>"foo".match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>match : Symbol(String.match, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>groups : Symbol(RegExpMatchArray.groups, Decl(lib.es2018.regexp.d.ts, --, --))
+

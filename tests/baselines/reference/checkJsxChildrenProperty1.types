@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 
@@ -14,13 +12,11 @@ interface Prop {
     children: string | JSX.Element
 >children : string | JSX.Element
 >JSX : any
->Element : JSX.Element
 }
 
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
 >p : Prop
->Prop : Prop
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element

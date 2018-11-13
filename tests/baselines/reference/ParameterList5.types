@@ -1,6 +1,5 @@
 === tests/cases/compiler/ParameterList5.ts ===
 function A(): (public B) => C {
->A : () => (public B: any) => any
+>A : () => (B: any) => any
 >B : any
->C : No type information available!
 }

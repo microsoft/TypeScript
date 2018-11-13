@@ -16,7 +16,6 @@ class C {
     M() {
         for (let j = 0; j < 10; j++) {
             const newLocal = i + 1;
-
             x = /*RENAME*/newLocal;
         }
     }
@@ -26,7 +25,6 @@ class C {
 
 const i = 0;
 const newLocal = i + 1;
-
 class C {
     M() {
         for (let j = 0; j < 10; j++) {

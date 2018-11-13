@@ -1,0 +1,43 @@
+=== tests/cases/compiler/baseClassImprovedMismatchErrors.ts ===
+class Base {
+>Base : Base
+
+    n: Base | string;
+>n : string | Base
+
+    fn() {
+>fn : () => number
+
+        return 10;
+>10 : 10
+    }
+}
+class Derived extends Base {
+>Derived : Derived
+>Base : Base
+
+    n: Derived | string;
+>n : string | Derived
+
+    fn() {
+>fn : () => string | number
+
+        return 10 as number | string;
+>10 as number | string : string | number
+>10 : 10
+    }
+}
+class DerivedInterface implements Base {
+>DerivedInterface : DerivedInterface
+
+    n: DerivedInterface | string;
+>n : string | DerivedInterface
+
+    fn() {
+>fn : () => string | number
+
+        return 10 as number | string;
+>10 as number | string : string | number
+>10 : 10
+    }
+}

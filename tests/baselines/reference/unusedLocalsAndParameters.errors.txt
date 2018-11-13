@@ -2,16 +2,13 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(4,12): error TS6133: 'a' is de
 tests/cases/compiler/unusedLocalsAndParameters.ts(9,22): error TS6133: 'a' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(15,5): error TS6133: 'farrow' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(15,15): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParameters.ts(18,7): error TS6133: 'C' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(18,7): error TS6196: 'C' is declared but never used.
 tests/cases/compiler/unusedLocalsAndParameters.ts(20,12): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParameters.ts(23,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/unusedLocalsAndParameters.ts(23,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(27,5): error TS6133: 'E' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(29,12): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParameters.ts(32,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/unusedLocalsAndParameters.ts(32,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(38,12): error TS6133: 'a' is declared but its value is never read.
-tests/cases/compiler/unusedLocalsAndParameters.ts(41,9): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
 tests/cases/compiler/unusedLocalsAndParameters.ts(41,11): error TS6133: 'v' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(48,10): error TS6133: 'i' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(52,10): error TS6133: 'i' is declared but its value is never read.
@@ -22,9 +19,13 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(71,11): error TS6133: 'c' is d
 tests/cases/compiler/unusedLocalsAndParameters.ts(74,11): error TS6133: 'c' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(79,11): error TS6133: 'N' is declared but its value is never read.
 tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is declared but its value is never read.
+tests/cases/compiler/unusedLocalsAndParameters.ts(83,13): error TS2304: Cannot find name 'y'.
+tests/cases/compiler/unusedLocalsAndParameters.ts(83,14): error TS1005: ',' expected.
+tests/cases/compiler/unusedLocalsAndParameters.ts(84,6): error TS1005: ',' expected.
+tests/cases/compiler/unusedLocalsAndParameters.ts(85,1): error TS1109: Expression expected.
 
 
-==== tests/cases/compiler/unusedLocalsAndParameters.ts (24 errors) ====
+==== tests/cases/compiler/unusedLocalsAndParameters.ts (25 errors) ====
     export { };
     
     // function declaration paramter
@@ -52,7 +53,7 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is de
     
     class C {
           ~
-!!! error TS6133: 'C' is declared but its value is never read.
+!!! error TS6196: 'C' is declared but never used.
         // Method declaration paramter
         method(a) {
                ~
@@ -60,8 +61,6 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is de
         }
         // Accessor declaration paramter
         set x(v: number) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
@@ -77,8 +76,6 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is de
         }
         // Accessor declaration paramter
         set x(v: number) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
@@ -92,8 +89,6 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is de
         },
         // Accessor declaration paramter
         set x(v: number) {
-            ~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
               ~
 !!! error TS6133: 'v' is declared but its value is never read.
         }
@@ -155,4 +150,15 @@ tests/cases/compiler/unusedLocalsAndParameters.ts(80,9): error TS6133: 'x' is de
 !!! error TS6133: 'x' is declared but its value is never read.
     }
     
-        
+    for (let x: y) {
+                ~
+!!! error TS2304: Cannot find name 'y'.
+                 ~
+!!! error TS1005: ',' expected.
+        z(x);
+         ~
+!!! error TS1005: ',' expected.
+    }
+    ~
+!!! error TS1109: Expression expected.
+    

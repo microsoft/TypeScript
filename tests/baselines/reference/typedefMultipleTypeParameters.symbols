@@ -1,0 +1,29 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @template {{ a: number, b: string }} T,U A Comment
+ * @template {{ c: boolean }} V uh ... are comments even supported??
+ * @template W
+ * @template X That last one had no comment
+ * @typedef {{ t: T, u: U, v: V, w: W, x: X }} Everything
+ */
+
+/** @type {Everything<{ a: number, b: 'hi', c: never }, undefined, { c: true, d: 1 }, number, string>} */
+var tuvwx;
+>tuvwx : Symbol(tuvwx, Decl(a.js, 9, 3))
+
+/** @type {Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>} */
+var wrong;
+>wrong : Symbol(wrong, Decl(a.js, 12, 3))
+
+/** @type {Everything<{ a: number  }>} */
+var insufficient;
+>insufficient : Symbol(insufficient, Decl(a.js, 15, 3))
+
+=== tests/cases/conformance/jsdoc/test.ts ===
+declare var actually: Everything<{ a: number  }, undefined, { c: 1, d: 1 }, number, string>;
+>actually : Symbol(actually, Decl(test.ts, 0, 11))
+>Everything : Symbol(Everything, Decl(a.js, 5, 3))
+>a : Symbol(a, Decl(test.ts, 0, 34))
+>c : Symbol(c, Decl(test.ts, 0, 61))
+>d : Symbol(d, Decl(test.ts, 0, 67))
+

@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/thisType/thisTypeInFunctions2.ts ===
 interface IndexedWithThis {
->IndexedWithThis : IndexedWithThis
-
     // this is a workaround for React
     init?: (this: this) => void;
 >init : (this: this) => void
@@ -18,8 +16,6 @@ interface IndexedWithThis {
 >args : any[]
 }
 interface IndexedWithoutThis {
->IndexedWithoutThis : IndexedWithoutThis
-
     // this is what React would like to write (and what they write today)
     init?: () => void;
 >init : () => void
@@ -31,8 +27,6 @@ interface IndexedWithoutThis {
 >propName : string
 }
 interface SimpleInterface {
->SimpleInterface : SimpleInterface
-
     foo(n: string);
 >foo : (n: string) => any
 >n : string
@@ -43,17 +37,14 @@ interface SimpleInterface {
 declare function extend1(args: IndexedWithThis): void;
 >extend1 : (args: IndexedWithThis) => void
 >args : IndexedWithThis
->IndexedWithThis : IndexedWithThis
 
 declare function extend2(args: IndexedWithoutThis): void;
 >extend2 : (args: IndexedWithoutThis) => void
 >args : IndexedWithoutThis
->IndexedWithoutThis : IndexedWithoutThis
 
 declare function simple(arg: SimpleInterface): void;
 >simple : (arg: SimpleInterface) => void
 >arg : SimpleInterface
->SimpleInterface : SimpleInterface
 
 extend1({
 >extend1({    init() {        this // this: IndexedWithThis because of contextual typing.        // this.mine        this.willDestroy    },    mine: 12,    foo() {        this.url; // this: any because 'foo' matches the string indexer        this.willDestroy;    }}) : void
@@ -92,14 +83,14 @@ extend1({
     }
 });
 extend2({
->extend2({    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }}) : void
+>extend2({    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }}) : void
 >extend2 : (args: IndexedWithoutThis) => void
->{    init() {        this // this: containing object literal type        this.mine    },    mine: 13,    foo() {        this // this: containing object literal type        this.mine    }} : { init(): void; mine: number; foo(): void; }
+>{    init() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    },    mine: 13,    foo() {        this // this: IndexedWithoutThis because of contextual typing        this.mine    }} : { init(): void; mine: number; foo(): void; }
 
     init() {
 >init : () => void
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
 
         this.mine
@@ -115,7 +106,7 @@ extend2({
     foo() {
 >foo : () => void
 
-        this // this: containing object literal type
+        this // this: IndexedWithoutThis because of contextual typing
 >this : IndexedWithoutThis
 
         this.mine

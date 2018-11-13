@@ -2,6 +2,8 @@
     "extends": "tslint:latest",
     "rulesDirectory": "built/local/tslint/rules",
     "rules": {
+        "no-unnecessary-type-assertion": true,
+
         "array-type": [true, "array"],
         "ban-types": {
             "options": [
@@ -31,6 +33,7 @@
             "check-else"
         ],
         "no-bom": true,
+        "no-double-space": true,
         "no-in-operator": true,
         "no-increment-decrement": true,
         "no-inferrable-types": true,
@@ -39,6 +42,7 @@
         "no-switch-case-fall-through": true,
         "no-trailing-whitespace": [true, "ignore-template-strings"],
         "no-type-assertion-whitespace": true,
+        "no-unnecessary-qualifier": true,
         "no-var-keyword": true,
         "object-literal-shorthand": true,
         "object-literal-surrounding-space": true,
@@ -100,7 +104,6 @@
         "no-object-literal-type-assertion": false,
         "no-shadowed-variable": false,
         "no-submodule-imports": false,
-        "no-unnecessary-initializer": false,
         "no-var-requires": false,
         "ordered-imports": false,
         "prefer-conditional-expression": false,

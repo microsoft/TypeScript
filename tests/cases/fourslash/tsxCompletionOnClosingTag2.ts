@@ -11,10 +11,4 @@
 ////    <h1> Hello world </ /*2*/>
 ////    </ /*1*/>
 
-goTo.marker("1");
-verify.completionListCount(1);
-verify.completionListContains('div');
-
-goTo.marker("2");
-verify.completionListCount(1);
-verify.completionListContains('h1')
+verify.completions({ marker: "1", exact: ["div"] }, { marker: "2", exact: ["h1"] });

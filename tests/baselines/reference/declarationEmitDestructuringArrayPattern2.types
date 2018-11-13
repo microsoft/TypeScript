@@ -23,7 +23,7 @@ var [a11, b11, c11] = [];
 >a11 : any
 >b11 : any
 >c11 : any
->[] : [any, any, any]
+>[] : [undefined?, undefined?, undefined?]
 
 var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello", { x12: 5, y12: true }]];
 >a2 : number
@@ -38,14 +38,14 @@ var [a2, [b2, { x12, y12: c2 }]=["abc", { x12: 10, y12: false }]] = [1, ["hello"
 >10 : 10
 >y12 : boolean
 >false : false
->[1, ["hello", { x12: 5, y12: true }]] : [number, [string, { x12: number; y12: boolean; }]]
+>[1, ["hello", { x12: 5, y12: true }]] : [number, [string, { x12: number; y12: true; }]]
 >1 : 1
->["hello", { x12: 5, y12: true }] : [string, { x12: number; y12: boolean; }]
+>["hello", { x12: 5, y12: true }] : [string, { x12: number; y12: true; }]
 >"hello" : "hello"
->{ x12: 5, y12: true } : { x12: number; y12: boolean; }
+>{ x12: 5, y12: true } : { x12: number; y12: true; }
 >x12 : number
 >5 : 5
->y12 : boolean
+>y12 : true
 >true : true
 
 var [x13, y13] = [1, "hello"];

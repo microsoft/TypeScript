@@ -32,18 +32,16 @@ function Goo(s:string); // error - no implementation
 declare function Gar(s:String); // expect no error
 >Gar : Symbol(Gar, Decl(callOverloads2.ts, 13, 23))
 >s : Symbol(s, Decl(callOverloads2.ts, 15, 21))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var f1 = new Foo("hey");
 >f1 : Symbol(f1, Decl(callOverloads2.ts, 17, 3))
->Foo : Symbol(Foo, Decl(callOverloads2.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1))
 
 
 f1.bar1();
->f1.bar1 : Symbol(Foo.bar1, Decl(callOverloads2.ts, 0, 11))
 >f1 : Symbol(f1, Decl(callOverloads2.ts, 17, 3))
->bar1 : Symbol(Foo.bar1, Decl(callOverloads2.ts, 0, 11))
 
 Foo();
->Foo : Symbol(Foo, Decl(callOverloads2.ts, 0, 0))
+>Foo : Symbol(Foo, Decl(callOverloads2.ts, 6, 1))
 

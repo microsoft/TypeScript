@@ -2,22 +2,18 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// var ===;
+////var [|===|][|;|]
 
-verify.getSyntacticDiagnostics(`[
+verify.getSyntacticDiagnostics([
   {
-    "message": "Variable declaration expected.",
-    "start": 4,
-    "length": 3,
-    "category": "error",
-    "code": 1134
+    message: "Variable declaration expected.",
+    range: test.ranges()[0],
+    code: 1134
   },
   {
-    "message": "Expression expected.",
-    "start": 7,
-    "length": 1,
-    "category": "error",
-    "code": 1109
-  }
-]`);
-verify.getSemanticDiagnostics(`[]`);
+    message: "Expression expected.",
+    range: test.ranges()[1],
+    code: 1109
+  },
+]);
+verify.getSemanticDiagnostics([]);

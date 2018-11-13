@@ -11,7 +11,6 @@ export function f() {
 
     var x: X;
 >x : X
->X : X
 
     return x;
 >x : X

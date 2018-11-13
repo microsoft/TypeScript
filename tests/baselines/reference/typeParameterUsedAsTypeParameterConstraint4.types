@@ -4,27 +4,16 @@
 
 class C<T, U extends T, V extends U> {
 >C : C<T, U, V>
->T : T
->U : U
->T : T
->V : V
->U : U
 
     z: W; // error
 >z : any
->W : No type information available!
 
     foo<W extends V>(x: W): T {
 >foo : <W extends V>(x: W) => T
->W : W
->V : V
 >x : W
->W : W
->T : T
 
         var r: T;
 >r : T
->T : T
 
         return x;
 >x : W
@@ -32,64 +21,32 @@ class C<T, U extends T, V extends U> {
 }
 
 interface I<T, U extends T, V extends U> {
->I : I<T, U, V>
->T : T
->U : U
->T : T
->V : V
->U : U
-
     x: T;
 >x : T
->T : T
 
     y: U;
 >y : U
->U : U
 
     z: W; // error
 >z : any
->W : No type information available!
 
     foo<W extends V>(x: W): T;
 >foo : <W extends V>(x: W) => T
->W : W
->V : V
 >x : W
->W : W
->T : T
 }
 
 function foo<T, U extends T>(x: T, y: U): V { // error
 >foo : <T, U extends T>(x: T, y: U) => any
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
->V : No type information available!
 
     function bar<V extends T, W extends U>(): X { // error
 >bar : <V extends T, W extends U>() => any
->V : V
->T : T
->W : W
->U : U
->X : No type information available!
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->W : W
->Y : Y
->V : V
 >a : X
->X : X
 >b : Y
->Y : Y
->T : T
 
             x = y;
 >x = y : U
@@ -104,34 +61,16 @@ function foo<T, U extends T>(x: T, y: U): V { // error
 
 function foo2<U extends T, T>(x: T, y: U): W { // error
 >foo2 : <U extends T, T>(x: T, y: U) => any
->U : U
->T : T
->T : T
 >x : T
->T : T
 >y : U
->U : U
->W : No type information available!
 
     function bar<V extends T, W extends U>(): Y { // error
 >bar : <V extends T, W extends U>() => any
->V : V
->T : T
->W : W
->U : U
->Y : No type information available!
 
         function baz<X extends W, Y extends V>(a: X, b: Y): T {
 >baz : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->W : W
->Y : Y
->V : V
 >a : X
->X : X
 >b : Y
->Y : Y
->T : T
 
             x = y;
 >x = y : U
@@ -147,37 +86,19 @@ function foo2<U extends T, T>(x: T, y: U): W { // error
 var f3 = <T, U extends T>(x: T, y: U) => {
 >f3 : <T, U extends T>(x: T, y: U) => void
 ><T, U extends T>(x: T, y: U) => {    function bar<V extends T, W extends U>(r: X, s: Y) { // error        var g = <X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        }    }} : <T, U extends T>(x: T, y: U) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
 
     function bar<V extends T, W extends U>(r: X, s: Y) { // error
 >bar : <V extends T, W extends U>(r: any, s: any) => void
->V : V
->T : T
->W : W
->U : U
 >r : any
->X : No type information available!
 >s : any
->Y : No type information available!
 
         var g = <X extends W, Y extends V>(a: X, b: Y): T => {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 ><X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->W : W
->Y : Y
->V : V
 >a : X
->X : X
 >b : Y
->Y : Y
->T : T
 
             x = y;
 >x = y : U
@@ -193,33 +114,17 @@ var f3 = <T, U extends T>(x: T, y: U) => {
 var f4 = <U extends T, T>(x: V, y: X) => { // error
 >f4 : <U extends T, T>(x: any, y: any) => void
 ><U extends T, T>(x: V, y: X) => { // error    function bar<V extends T, W extends U>() {        var g = <X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        }    }} : <U extends T, T>(x: any, y: any) => void
->U : U
->T : T
->T : T
 >x : any
->V : No type information available!
 >y : any
->X : No type information available!
 
     function bar<V extends T, W extends U>() {
 >bar : <V extends T, W extends U>() => void
->V : V
->T : T
->W : W
->U : U
 
         var g = <X extends W, Y extends V>(a: X, b: Y): T => {
 >g : <X extends W, Y extends V>(a: X, b: Y) => T
 ><X extends W, Y extends V>(a: X, b: Y): T => {            x = y;            return y;        } : <X extends W, Y extends V>(a: X, b: Y) => T
->X : X
->W : W
->Y : Y
->V : V
 >a : X
->X : X
 >b : Y
->Y : Y
->T : T
 
             x = y;
 >x = y : any

@@ -4,7 +4,6 @@ class Module {
 
     public members: Class[];
 >members : Class[]
->Class : Class
 }
 
 class Namespace {
@@ -12,8 +11,6 @@ class Namespace {
 
     public members: (Class | Property)[];
 >members : (Class | Property)[]
->Class : Class
->Property : Property
 }
 
 class Class {
@@ -21,7 +18,6 @@ class Class {
 
     public parent: Namespace;
 >parent : Namespace
->Namespace : Namespace
 }
 
 class Property {
@@ -29,14 +25,10 @@ class Property {
 
     public parent: Module | Class;
 >parent : Module | Class
->Module : Module
->Class : Class
 }
 
 var t: Class | Property;
 >t : Class | Property
->Class : Class
->Property : Property
 
 t.parent;
 >t.parent : Module | Class | Namespace

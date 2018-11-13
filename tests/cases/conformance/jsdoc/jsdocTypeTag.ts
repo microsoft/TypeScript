@@ -63,6 +63,12 @@ var obj;
 /** @type {Function} */
 var Func;
 
+/** @type {(s: string) => number} */
+var f;
+
+/** @type {new (s: string) => { s: string }} */
+var ctor;
+
 // @filename: b.ts
 var S: string;
 var s: string;
@@ -84,3 +90,5 @@ var nullable: number | null;
 var Obj: any;
 var obj: any;
 var Func: Function;
+var f: (s: string) => number;
+var ctor: new (s: string) => { s: string };

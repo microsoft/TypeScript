@@ -61,15 +61,15 @@ module Foo.Bar {
         for (var i = 0; i < restGreetings.length; i++) {
 >i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
 >i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
->restGreetings.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>restGreetings.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >restGreetings : Symbol(restGreetings, Decl(sourceMapSample.ts, 20, 35))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
 
             greeters.push(new Greeter(restGreetings[i]));
->greeters.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>greeters.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >greeters : Symbol(greeters, Decl(sourceMapSample.ts, 21, 11))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >Greeter : Symbol(Greeter, Decl(sourceMapSample.ts, 1, 17))
 >restGreetings : Symbol(restGreetings, Decl(sourceMapSample.ts, 20, 35))
 >i : Symbol(i, Decl(sourceMapSample.ts, 23, 16))
@@ -86,9 +86,9 @@ module Foo.Bar {
     for (var j = 0; j < b.length; j++) {
 >j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
 >j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
->b.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(sourceMapSample.ts, 30, 7))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >j : Symbol(j, Decl(sourceMapSample.ts, 31, 12))
 
         b[j].greet();

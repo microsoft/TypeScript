@@ -13,7 +13,3 @@ class Y {
 }
 
 interface Z extends X, Y { }
->Z : Z
->X : X
->Y : Y
-

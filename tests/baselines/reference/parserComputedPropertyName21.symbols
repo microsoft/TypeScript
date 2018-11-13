@@ -3,4 +3,5 @@ interface I {
 >I : Symbol(I, Decl(parserComputedPropertyName21.ts, 0, 0))
 
     [e]: number 
+>[e] : Symbol(I[e], Decl(parserComputedPropertyName21.ts, 0, 13))
 }

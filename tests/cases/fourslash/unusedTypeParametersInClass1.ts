@@ -1,10 +1,10 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 ////[|class greeter<T> |] {
 ////}
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'",
+    description: "Remove type parameters",
     newRangeContent: "class greeter ",
 });

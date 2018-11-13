@@ -13,7 +13,7 @@ for (aBoolean in {}) { }
 
 var aRegExp: RegExp;
 >aRegExp : Symbol(aRegExp, Decl(for-inStatementsInvalid.ts, 6, 3))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 for (aRegExp in {}) { }
 >aRegExp : Symbol(aRegExp, Decl(for-inStatementsInvalid.ts, 6, 3))

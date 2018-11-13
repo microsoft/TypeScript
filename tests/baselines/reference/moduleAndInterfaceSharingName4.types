@@ -6,17 +6,11 @@ declare module D3 {
 >x : Color.Color
 >D3 : any
 >Color : any
->Color : Color.Color
 
     module Color {
->Color : any
-
         export interface Color {
->Color : Color
-
             darker: Color;
 >darker : Color
->Color : Color
         }
     }
 }

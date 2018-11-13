@@ -16,7 +16,6 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     constructor(x: string);
 >x : string
@@ -33,11 +32,9 @@ var f: {
 
     new(x: string): C;
 >x : string
->C : C
 
     new(x: number): C;
 >x : number
->C : C
 
 } = C;
 >C : typeof C
@@ -46,14 +43,10 @@ var f2: {
 >f2 : { new <T>(x: string): C; new <T>(x: number): C; }
 
     new<T>(x: string): C;
->T : T
 >x : string
->C : C
 
     new<T>(x: number): C;
->T : T
 >x : number
->C : C
 
 } = C;
 >C : typeof C
@@ -62,16 +55,10 @@ var f3: {
 >f3 : { new <T>(x: string): D<T>; new <T>(x: number): D<T>; }
 
     new<T>(x: string): D<T>;
->T : T
 >x : string
->D : D<T>
->T : T
 
     new<T>(x: number): D<T>;
->T : T
 >x : number
->D : D<T>
->T : T
 
 } = D;
 >D : typeof D

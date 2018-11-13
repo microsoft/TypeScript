@@ -15,18 +15,18 @@ function foo(y, x) {
         _a.c = x,
         _a); }
     if (x === void 0) { x = 1; }
-    y.c;
     var _a;
+    y.c;
 }
 function foo2(y, x) {
-    if (y === void 0) { y = (_a = /** @class */ (function () {
+    if (y === void 0) { y = (_b = /** @class */ (function () {
             function class_2() {
-                this[_b] = x;
+                this[_a] = x;
             }
             return class_2;
         }()),
-        _b = x,
-        _a); }
+        _a = x,
+        _b); }
     if (x === void 0) { x = 1; }
-    var _b, _a;
+    var _a, _b;
 }

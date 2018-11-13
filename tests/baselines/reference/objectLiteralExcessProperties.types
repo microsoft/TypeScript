@@ -1,36 +1,28 @@
 === tests/cases/compiler/objectLiteralExcessProperties.ts ===
 interface Book {
->Book : Book
-
     foreword: string;
 >foreword : string
 }
 
 interface Cover {
->Cover : Cover
-
     color?: string;
 >color : string
 }
 
 var b1: Book = { forword: "oops" };
 >b1 : Book
->Book : Book
 >{ forword: "oops" } : { forword: string; }
 >forword : string
 >"oops" : "oops"
 
 var b2: Book | string = { foreward: "nope" };
 >b2 : string | Book
->Book : Book
 >{ foreward: "nope" } : { foreward: string; }
 >foreward : string
 >"nope" : "nope"
 
 var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 >b3 : Book | Book[]
->Book : Book
->Book : Book
 >[{ foreword: "hello" }, { forwards: "back" }] : ({ foreword: string; } | { forwards: string; })[]
 >{ foreword: "hello" } : { foreword: string; }
 >foreword : string
@@ -41,8 +33,6 @@ var b3: Book | (Book[]) = [{ foreword: "hello" }, { forwards: "back" }];
 
 var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 >b4 : Book & Cover
->Book : Book
->Cover : Cover
 >{ foreword: "hi", colour: "blue" } : { foreword: string; colour: string; }
 >foreword : string
 >"hi" : "hi"
@@ -51,8 +41,6 @@ var b4: Book & Cover = { foreword: "hi", colour: "blue" };
 
 var b5: Book & Cover = { foreward: "hi", color: "blue" };
 >b5 : Book & Cover
->Book : Book
->Cover : Cover
 >{ foreward: "hi", color: "blue" } : { foreward: string; color: string; }
 >foreward : string
 >"hi" : "hi"
@@ -61,8 +49,6 @@ var b5: Book & Cover = { foreward: "hi", color: "blue" };
 
 var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 >b6 : Book & Cover
->Book : Book
->Cover : Cover
 >{ foreword: "hi", color: "blue", price: 10.99 } : { foreword: string; color: string; price: number; }
 >foreword : string
 >"hi" : "hi"
@@ -73,7 +59,6 @@ var b6: Book & Cover = { foreword: "hi", color: "blue", price: 10.99 };
 
 var b7: Book & number = { foreword: "hi", price: 10.99 };
 >b7 : Book & number
->Book : Book
 >{ foreword: "hi", price: 10.99 } : { foreword: string; price: number; }
 >foreword : string
 >"hi" : "hi"
@@ -82,39 +67,33 @@ var b7: Book & number = { foreword: "hi", price: 10.99 };
 
 var b8: Cover | Cover[] = { couleur : "non" };
 >b8 : Cover | Cover[]
->Cover : Cover
->Cover : Cover
 >{ couleur : "non" } : { couleur: string; }
 >couleur : string
 >"non" : "non"
 
 var b9: Book | Book[] = { forewarned: "still no" };
 >b9 : Book | Book[]
->Book : Book
->Book : Book
 >{ forewarned: "still no" } : { forewarned: string; }
 >forewarned : string
 >"still no" : "still no"
 
 interface Indexed {
->Indexed : Indexed
-
     [n: number]: Cover;
 >n : number
->Cover : Cover
 }
 
 var b10: Indexed = { 0: { }, '1': { } }; // ok
 >b10 : Indexed
->Indexed : Indexed
 >{ 0: { }, '1': { } } : { 0: {}; '1': {}; }
+>0 : {}
 >{ } : {}
+>'1' : {}
 >{ } : {}
 
 var b11: Indexed = { 0: { colour: "blue" } }; // nested object literal still errors
 >b11 : Indexed
->Indexed : Indexed
 >{ 0: { colour: "blue" } } : { 0: { colour: string; }; }
+>0 : { colour: string; }
 >{ colour: "blue" } : { colour: string; }
 >colour : string
 >"blue" : "blue"

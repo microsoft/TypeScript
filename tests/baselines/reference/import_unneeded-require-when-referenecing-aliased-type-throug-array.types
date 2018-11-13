@@ -5,7 +5,6 @@ import ITest = require('ITest');
 
 var testData: ITest[];
 >testData : ITest[]
->ITest : ITest
 
 var p = testData[0].name;
 >p : string
@@ -17,9 +16,9 @@ var p = testData[0].name;
  
 === tests/cases/compiler/b.ts ===
 declare module "ITest" {
-    interface Name {
->Name : Name
+>"ITest" : typeof import("ITest")
 
+    interface Name {
         name: string;
 >name : string
     }

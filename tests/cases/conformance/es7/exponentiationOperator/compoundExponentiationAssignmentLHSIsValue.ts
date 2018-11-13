@@ -1,3 +1,4 @@
+// @allowUnreachableCode: false
 // expected error for all the LHS of compound assignments (arithmetic and addition)
 var value: any;
 

@@ -24,7 +24,6 @@ tests/cases/conformance/fixSignatureCaching.ts(474,38): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(481,22): error TS2339: Property 'findMatch' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(481,37): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(489,18): error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(490,39): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
 tests/cases/conformance/fixSignatureCaching.ts(492,37): error TS2339: Property 'FALLBACK_MOBILE' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(495,51): error TS2339: Property 'FALLBACK_PHONE' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(498,52): error TS2339: Property 'FALLBACK_TABLET' does not exist on type '{}'.
@@ -37,10 +36,6 @@ tests/cases/conformance/fixSignatureCaching.ts(637,36): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(638,18): error TS2339: Property 'findMatch' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(638,33): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(641,10): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(642,16): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(642,38): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(643,13): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(644,13): error TS2304: Cannot find name 'window'.
 tests/cases/conformance/fixSignatureCaching.ts(707,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(737,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(786,18): error TS2339: Property 'prepareDetectionCache' does not exist on type '{}'.
@@ -53,26 +48,18 @@ tests/cases/conformance/fixSignatureCaching.ts(872,25): error TS2339: Property '
 tests/cases/conformance/fixSignatureCaching.ts(893,25): error TS2339: Property 'getVersionStr' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(915,36): error TS2339: Property 'findMatches' does not exist on type '{}'.
 tests/cases/conformance/fixSignatureCaching.ts(915,53): error TS2339: Property 'mobileDetectRules' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(944,33): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
 tests/cases/conformance/fixSignatureCaching.ts(955,42): error TS2339: Property 'mobileGrade' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(962,16): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(962,42): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(963,22): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
 tests/cases/conformance/fixSignatureCaching.ts(964,57): error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
-tests/cases/conformance/fixSignatureCaching.ts(967,22): error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
-tests/cases/conformance/fixSignatureCaching.ts(971,18): error TS2339: Property '_impl' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
-tests/cases/conformance/fixSignatureCaching.ts(973,18): error TS2339: Property 'version' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
-tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/fixSignatureCaching.ts(978,42): error TS2304: Cannot find name 'module'.
-tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2304: Cannot find name 'module'.
+tests/cases/conformance/fixSignatureCaching.ts(978,16): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/fixSignatureCaching.ts(978,42): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/conformance/fixSignatureCaching.ts(979,37): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/conformance/fixSignatureCaching.ts(980,23): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(980,48): error TS2304: Cannot find name 'define'.
 tests/cases/conformance/fixSignatureCaching.ts(981,16): error TS2304: Cannot find name 'define'.
-tests/cases/conformance/fixSignatureCaching.ts(982,23): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/fixSignatureCaching.ts(983,44): error TS2339: Property 'MobileDetect' does not exist on type 'Window'.
 
 
-==== tests/cases/conformance/fixSignatureCaching.ts (72 errors) ====
+==== tests/cases/conformance/fixSignatureCaching.ts (59 errors) ====
     // Repro from #10697
     
     (function (define, undefined) {
@@ -615,8 +602,6 @@ tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot fin
                      ~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'isMobileFallback' does not exist on type '{}'.
                 phoneSized = MobileDetect.isPhoneSized(maxPhoneWidth);
-                                          ~~~~~~~~~~~~
-!!! error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
                 if (phoneSized === undefined) {
                     cache.mobile = impl.FALLBACK_MOBILE;
                                         ~~~~~~~~~~~~~~~
@@ -793,16 +778,8 @@ tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot fin
              ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
             return window.screen.width < window.screen.height ?
-                   ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
-                                         ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                 window.screen.width :
-                ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                 window.screen.height;
-                ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
         };
     
         /**
@@ -1127,8 +1104,6 @@ tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot fin
              */
             isPhoneSized: function (maxPhoneWidth) {
                 return MobileDetect.isPhoneSized(maxPhoneWidth || this.maxPhoneWidth);
-                                    ~~~~~~~~~~~~
-!!! error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
             },
     
             /**
@@ -1149,43 +1124,31 @@ tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot fin
     
         // environment-dependent
         if (typeof window !== 'undefined' && window.screen) {
-                   ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
-                                             ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
             MobileDetect.isPhoneSized = function (maxPhoneWidth) {
-                         ~~~~~~~~~~~~
-!!! error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
                 return maxPhoneWidth < 0 ? undefined : impl.getDeviceSmallerSide() <= maxPhoneWidth;
                                                             ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2339: Property 'getDeviceSmallerSide' does not exist on type '{}'.
             };
         } else {
             MobileDetect.isPhoneSized = function () {};
-                         ~~~~~~~~~~~~
-!!! error TS2339: Property 'isPhoneSized' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
         }
     
         // should not be replaced by a completely new object - just overwrite existing methods
         MobileDetect._impl = impl;
-                     ~~~~~
-!!! error TS2339: Property '_impl' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
     
         MobileDetect.version = '1.3.3 2016-07-31';
-                     ~~~~~~~
-!!! error TS2339: Property 'version' does not exist on type '(userAgent: any, maxPhoneWidth: any) => void'.
     
         return MobileDetect;
     }); // end of call of define()
     })((function (undefined) {
         if (typeof module !== 'undefined' && module.exports) {
                    ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                                              ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
             return function (factory) { module.exports = factory(); };
                                         ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
         } else if (typeof define === 'function' && define.amd) {
                           ~~~~~~
 !!! error TS2304: Cannot find name 'define'.
@@ -1195,13 +1158,12 @@ tests/cases/conformance/fixSignatureCaching.ts(983,37): error TS2304: Cannot fin
                    ~~~~~~
 !!! error TS2304: Cannot find name 'define'.
         } else if (typeof window !== 'undefined') {
-                          ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
             return function (factory) { window.MobileDetect = factory(); };
-                                        ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
+                                               ~~~~~~~~~~~~
+!!! error TS2339: Property 'MobileDetect' does not exist on type 'Window'.
         } else {
             // please file a bug if you get this error!
             throw new Error('unknown environment');
         }
     })());
+    

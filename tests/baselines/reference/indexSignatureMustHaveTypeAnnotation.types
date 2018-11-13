@@ -1,9 +1,8 @@
 === tests/cases/compiler/indexSignatureMustHaveTypeAnnotation.ts ===
 interface I {
->I : I
-
     // Used to be indexer, now it is a computed property
     [x]: string;
+>[x] : string
 >x : any
 
     [x: string];
@@ -15,6 +14,7 @@ class C {
 
     // Used to be indexer, now it is a computed property
     [x]: string
+>[x] : string
 >x : any
     
 }

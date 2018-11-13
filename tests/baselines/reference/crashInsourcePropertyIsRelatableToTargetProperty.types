@@ -27,7 +27,6 @@ function foo(x: string, items: string[]): typeof foo {
 }
 var a: D = foo("hi", []);
 >a : D
->D : D
 >foo("hi", []) : (x: "hi", items: string[]) => typeof foo
 >foo : (x: "hi", items: string[]) => typeof foo
 >"hi" : "hi"

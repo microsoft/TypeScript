@@ -164,7 +164,7 @@ var i1Ori2: I1<number> | I2<number> = { // Like i1 and i2 both
 
 var arrayI1OrI2: Array<I1<number> | I2<number>> = [i1, i2, { // Like i1
 >arrayI1OrI2 : Symbol(arrayI1OrI2, Decl(contextualTypeWithUnionTypeMembers.ts, 51, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >I1 : Symbol(I1, Decl(contextualTypeWithUnionTypeMembers.ts, 0, 0))
 >I2 : Symbol(I2, Decl(contextualTypeWithUnionTypeMembers.ts, 9, 1))
 >i1 : Symbol(i1, Decl(contextualTypeWithUnionTypeMembers.ts, 21, 3))
@@ -301,9 +301,9 @@ var i11Ori21: I11 | I21 = {
 
         var z = a.charAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 91, 11))
->a.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 38))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 90, 40))
 
         return z;  
@@ -327,9 +327,9 @@ var i11Ori21: I11 | I21 = {
 
         var z = a.charCodeAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 99, 11))
->a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 38))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 98, 40))
 
         return z;
@@ -342,7 +342,7 @@ var i11Ori21: I11 | I21 = {
 };
 var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, { 
 >arrayOrI11OrI21 : Symbol(arrayOrI11OrI21, Decl(contextualTypeWithUnionTypeMembers.ts, 104, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >I11 : Symbol(I11, Decl(contextualTypeWithUnionTypeMembers.ts, 74, 7))
 >I21 : Symbol(I21, Decl(contextualTypeWithUnionTypeMembers.ts, 79, 1))
 >i11 : Symbol(i11, Decl(contextualTypeWithUnionTypeMembers.ts, 84, 3))
@@ -358,9 +358,9 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 
             var z = a.charAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 107, 15))
->a.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>a.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 42))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 106, 44))
 
             return z;
@@ -379,9 +379,9 @@ var arrayOrI11OrI21: Array<I11 | I21> = [i11, i21, i11 || i21, {
 
             var z = a.charCodeAt(b);
 >z : Symbol(z, Decl(contextualTypeWithUnionTypeMembers.ts, 114, 15))
->a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>a.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 42))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypeWithUnionTypeMembers.ts, 113, 44))
 
             return z;

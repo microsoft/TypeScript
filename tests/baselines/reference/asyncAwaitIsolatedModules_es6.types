@@ -4,22 +4,18 @@ import { MyPromise } from "missing";
 
 declare var p: Promise<number>;
 >p : Promise<number>
->Promise : Promise<T>
 
 declare var mp: MyPromise<number>;
 >mp : any
->MyPromise : any
 
 async function f0() { }
 >f0 : () => Promise<void>
 
 async function f1(): Promise<void> { }
 >f1 : () => Promise<void>
->Promise : Promise<T>
 
 async function f3(): MyPromise<void> { }
 >f3 : () => any
->MyPromise : any
 
 let f4 = async function() { }
 >f4 : () => Promise<void>
@@ -28,12 +24,10 @@ let f4 = async function() { }
 let f5 = async function(): Promise<void> { }
 >f5 : () => Promise<void>
 >async function(): Promise<void> { } : () => Promise<void>
->Promise : Promise<T>
 
 let f6 = async function(): MyPromise<void> { }
 >f6 : () => any
 >async function(): MyPromise<void> { } : () => any
->MyPromise : any
 
 let f7 = async () => { };
 >f7 : () => Promise<void>
@@ -42,12 +36,10 @@ let f7 = async () => { };
 let f8 = async (): Promise<void> => { };
 >f8 : () => Promise<void>
 >async (): Promise<void> => { } : () => Promise<void>
->Promise : Promise<T>
 
 let f9 = async (): MyPromise<void> => { }; 
 >f9 : () => any
 >async (): MyPromise<void> => { } : () => any
->MyPromise : any
 
 let f10 = async () => p;
 >f10 : () => Promise<number>
@@ -62,13 +54,11 @@ let f11 = async () => mp;
 let f12 = async (): Promise<number> => mp;
 >f12 : () => Promise<number>
 >async (): Promise<number> => mp : () => Promise<number>
->Promise : Promise<T>
 >mp : any
 
 let f13 = async (): MyPromise<number> => p;
 >f13 : () => any
 >async (): MyPromise<number> => p : () => any
->MyPromise : any
 >p : Promise<number>
 
 let o = {
@@ -80,11 +70,9 @@ let o = {
 
 	async m2(): Promise<void> { },
 >m2 : () => Promise<void>
->Promise : Promise<T>
 
 	async m3(): MyPromise<void> { }
 >m3 : () => any
->MyPromise : any
 
 };
 
@@ -96,22 +84,18 @@ class C {
 
 	async m2(): Promise<void> { }
 >m2 : () => Promise<void>
->Promise : Promise<T>
 
 	async m3(): MyPromise<void> { }
 >m3 : () => any
->MyPromise : any
 
 	static async m4() { }
 >m4 : () => Promise<void>
 
 	static async m5(): Promise<void> { }
 >m5 : () => Promise<void>
->Promise : Promise<T>
 
 	static async m6(): MyPromise<void> { }
 >m6 : () => any
->MyPromise : any
 }
 
 module M {

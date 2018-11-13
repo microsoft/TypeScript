@@ -3,13 +3,13 @@ declare function isString1(a: number, b: Object): b is string;
 >isString1 : Symbol(isString1, Decl(typeGuardOfFormFunctionEquality.ts, 0, 0))
 >a : Symbol(a, Decl(typeGuardOfFormFunctionEquality.ts, 0, 27))
 >b : Symbol(b, Decl(typeGuardOfFormFunctionEquality.ts, 0, 37))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(typeGuardOfFormFunctionEquality.ts, 0, 37))
 
 declare function isString2(a: Object): a is string;
 >isString2 : Symbol(isString2, Decl(typeGuardOfFormFunctionEquality.ts, 0, 62))
 >a : Symbol(a, Decl(typeGuardOfFormFunctionEquality.ts, 2, 27))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(typeGuardOfFormFunctionEquality.ts, 2, 27))
 
 switch (isString1(0, "")) {
@@ -31,7 +31,7 @@ function isString3(a: number, b: number, c: Object): c is string {
 >a : Symbol(a, Decl(typeGuardOfFormFunctionEquality.ts, 11, 19))
 >b : Symbol(b, Decl(typeGuardOfFormFunctionEquality.ts, 11, 29))
 >c : Symbol(c, Decl(typeGuardOfFormFunctionEquality.ts, 11, 40))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >c : Symbol(c, Decl(typeGuardOfFormFunctionEquality.ts, 11, 40))
 
     return isString1(0, c);

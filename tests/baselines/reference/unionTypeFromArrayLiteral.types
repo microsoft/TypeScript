@@ -37,7 +37,11 @@ var arr5Tuple: {
 >arr5Tuple : { 0: string; 5: number; }
 
     0: string;
+>0 : string
+
     5: number;
+>5 : number
+
 } = ["hello", true, false, " hello", true, 10, "any"]; // Tuple
 >["hello", true, false, " hello", true, 10, "any"] : [string, boolean, boolean, string, boolean, number, string]
 >"hello" : "hello"
@@ -68,13 +72,9 @@ class F extends C { foo4() { } }
 
 var c: C, d: D, e: E, f: F;
 >c : C
->C : C
 >d : D
->D : D
 >e : E
->E : E
 >f : F
->F : F
 
 var arr6 = [c, d];  // (C | D)[]
 >arr6 : (C | D)[]

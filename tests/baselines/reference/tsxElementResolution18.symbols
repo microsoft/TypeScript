@@ -8,6 +8,5 @@ declare module JSX {
 
 // Error under implicit any
 <div n='x' />;
->div : Symbol(unknown)
 >n : Symbol(n, Decl(file1.tsx, 5, 4))
 

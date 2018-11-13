@@ -13,21 +13,20 @@ enum Strs {
 }
 type TestStrs = { [key in Strs]: string }
 >TestStrs : TestStrs
->key : key
->Strs : Strs
 
 const x: TestStrs = {
 >x : TestStrs
->TestStrs : TestStrs
 >{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { [Strs.A]: string; [Strs.B]: string; }
 
     [Strs.A]: 'xo',
+>[Strs.A] : string
 >Strs.A : Strs.A
 >Strs : typeof Strs
 >A : Strs.A
 >'xo' : "xo"
 
     [Strs.B]: 'xe'
+>[Strs.B] : string
 >Strs.B : Strs.B
 >Strs : typeof Strs
 >B : Strs.B
@@ -38,12 +37,14 @@ const ux = {
 >{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { [Strs.A]: string; [Strs.B]: string; }
 
     [Strs.A]: 'xo',
+>[Strs.A] : string
 >Strs.A : Strs.A
 >Strs : typeof Strs
 >A : Strs.A
 >'xo' : "xo"
 
     [Strs.B]: 'xe'
+>[Strs.B] : string
 >Strs.B : Strs.B
 >Strs : typeof Strs
 >B : Strs.B
@@ -51,14 +52,15 @@ const ux = {
 }
 const y: TestStrs = {
 >y : TestStrs
->TestStrs : TestStrs
 >{    ['a']: 'yo',    ['b']: 'ye'} : { ['a']: string; ['b']: string; }
 
     ['a']: 'yo',
+>['a'] : string
 >'a' : "a"
 >'yo' : "yo"
 
     ['b']: 'ye'
+>['b'] : string
 >'b' : "b"
 >'ye' : "ye"
 }
@@ -72,14 +74,15 @@ const b = 'b';
 
 const z: TestStrs = {
 >z : TestStrs
->TestStrs : TestStrs
 >{    [a]: 'zo',    [b]: 'ze'} : { [a]: string; [b]: string; }
 
     [a]: 'zo',
+>[a] : string
 >a : "a"
 >'zo' : "zo"
 
     [b]: 'ze'
+>[b] : string
 >b : "b"
 >'ze' : "ze"
 }
@@ -88,10 +91,12 @@ const uz = {
 >{    [a]: 'zo',    [b]: 'ze'} : { [a]: string; [b]: string; }
 
     [a]: 'zo',
+>[a] : string
 >a : "a"
 >'zo' : "zo"
 
     [b]: 'ze'
+>[b] : string
 >b : "b"
 >'ze' : "ze"
 }
@@ -107,19 +112,22 @@ enum Nums {
 }
 type TestNums = { 0: number, 1: number }
 >TestNums : TestNums
+>0 : number
+>1 : number
 
 const n: TestNums = {
 >n : TestNums
->TestNums : TestNums
 >{    [Nums.A]: 1,    [Nums.B]: 2} : { [Nums.A]: number; [Nums.B]: number; }
 
     [Nums.A]: 1,
+>[Nums.A] : number
 >Nums.A : Nums.A
 >Nums : typeof Nums
 >A : Nums.A
 >1 : 1
 
     [Nums.B]: 2
+>[Nums.B] : number
 >Nums.B : Nums.B
 >Nums : typeof Nums
 >B : Nums.B
@@ -130,12 +138,14 @@ const un = {
 >{    [Nums.A]: 3,    [Nums.B]: 4} : { [Nums.A]: number; [Nums.B]: number; }
 
     [Nums.A]: 3,
+>[Nums.A] : number
 >Nums.A : Nums.A
 >Nums : typeof Nums
 >A : Nums.A
 >3 : 3
 
     [Nums.B]: 4
+>[Nums.B] : number
 >Nums.B : Nums.B
 >Nums : typeof Nums
 >B : Nums.B
@@ -151,14 +161,15 @@ const bn = 1;
 
 const m: TestNums = {
 >m : TestNums
->TestNums : TestNums
 >{    [an]: 5,    [bn]: 6} : { [an]: number; [bn]: number; }
 
     [an]: 5,
+>[an] : number
 >an : 0
 >5 : 5
 
     [bn]: 6
+>[bn] : number
 >bn : 1
 >6 : 6
 }
@@ -167,10 +178,12 @@ const um = {
 >{    [an]: 7,    [bn]: 8} : { [an]: number; [bn]: number; }
 
     [an]: 7,
+>[an] : number
 >an : 0
 >7 : 7
 
     [bn]: 8
+>[bn] : number
 >bn : 1
 >8 : 8
 }

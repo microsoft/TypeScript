@@ -59,22 +59,19 @@ sourceFile:properties.ts
 ---
 >>>            return 42;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^
-5 >                     ^
+2 >            ^^^^^^^
+3 >                   ^^
+4 >                     ^
 1->public get Count(): number
   >    {
   >        
-2 >            return
-3 >                   
-4 >                   42
-5 >                     ;
+2 >            return 
+3 >                   42
+4 >                     ;
 1->Emitted(6, 13) Source(5, 9) + SourceIndex(0)
-2 >Emitted(6, 19) Source(5, 15) + SourceIndex(0)
-3 >Emitted(6, 20) Source(5, 16) + SourceIndex(0)
-4 >Emitted(6, 22) Source(5, 18) + SourceIndex(0)
-5 >Emitted(6, 23) Source(5, 19) + SourceIndex(0)
+2 >Emitted(6, 20) Source(5, 16) + SourceIndex(0)
+3 >Emitted(6, 22) Source(5, 18) + SourceIndex(0)
+4 >Emitted(6, 23) Source(5, 19) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^

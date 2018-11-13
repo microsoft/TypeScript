@@ -4,7 +4,6 @@ class Base {
 
     [x: string]: Object;
 >x : string
->Object : Object
 }
 
 // ok, use assignment compatibility
@@ -21,7 +20,6 @@ class Base2 {
 
     [x: number]: Object;
 >x : number
->Object : Object
 }
 
 // ok, use assignment compatibility

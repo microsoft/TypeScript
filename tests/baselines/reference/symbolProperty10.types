@@ -3,6 +3,7 @@ class C {
 >C : C
 
     [Symbol.iterator]: { x; y };
+>[Symbol.iterator] : { x: any; y: any; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -10,9 +11,8 @@ class C {
 >y : any
 }
 interface I {
->I : I
-
     [Symbol.iterator]?: { x };
+>[Symbol.iterator] : { x: any; }
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -21,7 +21,6 @@ interface I {
 
 var i: I;
 >i : I
->I : I
 
 i = new C;
 >i = new C : C
@@ -31,6 +30,5 @@ i = new C;
 
 var c: C = i;
 >c : C
->C : C
 >i : I
 

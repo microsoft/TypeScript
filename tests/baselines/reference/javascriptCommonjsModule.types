@@ -8,8 +8,8 @@ class Bar extends Foo {}
 
 module.exports = Bar;
 >module.exports = Bar : typeof Bar
->module.exports : any
->module : any
->exports : any
+>module.exports : typeof Bar
+>module : { "tests/cases/compiler/index": typeof Bar; }
+>exports : typeof Bar
 >Bar : typeof Bar
 

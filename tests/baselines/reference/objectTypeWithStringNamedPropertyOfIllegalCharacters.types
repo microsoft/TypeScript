@@ -3,15 +3,23 @@ class C {
 >C : C
 
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
+
     "a\a": number;
+>"a\a" : number
+
     static "a ": number
+>"a " : number
 }
 
 var c: C;
 >c : C
->C : C
 
 var r = c["   "];
 >r : number
@@ -20,8 +28,8 @@ var r = c["   "];
 >"   " : "   "
 
 var r2 = c["    "];
->r2 : any
->c["    "] : any
+>r2 : error
+>c["    "] : error
 >c : C
 >"    " : "    "
 
@@ -39,16 +47,18 @@ var r4 = c["~!@#$%^&*()_+{}|:'<>?\/.,`"];
 >"~!@#$%^&*()_+{}|:'<>?\/.,`" : "~!@#$%^&*()_+{}|:'<>?/.,`"
 
 interface I {
->I : I
-
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 }
 
 var i: I;
 >i : I
->I : I
 
 var r = i["   "];
 >r : number
@@ -57,8 +67,8 @@ var r = i["   "];
 >"   " : "   "
 
 var r2 = i["    "];
->r2 : any
->i["    "] : any
+>r2 : error
+>i["    "] : error
 >i : I
 >"    " : "    "
 
@@ -80,8 +90,13 @@ var a: {
 >a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 
     "   ": number;
+>"   " : number
+
     "a   b": string;
+>"a   b" : string
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 }
 
 var r = a["   "];
@@ -91,8 +106,8 @@ var r = a["   "];
 >"   " : "   "
 
 var r2 = a["    "];
->r2 : any
->a["    "] : any
+>r2 : error
+>a["    "] : error
 >a : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 >"    " : "    "
 
@@ -114,12 +129,15 @@ var b = {
 >{    "   ": 1,    "a   b": "",    "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,} : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 
     "   ": 1,
+>"   " : number
 >1 : 1
 
     "a   b": "",
+>"a   b" : string
 >"" : ""
 
     "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : number
 >1 : 1
 }
 
@@ -130,8 +148,8 @@ var r = b["   "];
 >"   " : "   "
 
 var r2 = b["    "];
->r2 : any
->b["    "] : any
+>r2 : error
+>b["    "] : error
 >b : { "   ": number; "a   b": string; "~!@#$%^&*()_+{}|:'<>?\/.,`": number; }
 >"    " : "    "
 

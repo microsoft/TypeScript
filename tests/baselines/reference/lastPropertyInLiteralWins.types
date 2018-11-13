@@ -1,7 +1,5 @@
 === tests/cases/compiler/lastPropertyInLiteralWins.ts ===
 interface Thing {
->Thing : Thing
-
     thunk: (str: string) => void;
 >thunk : (str: string) => void
 >str : string
@@ -9,7 +7,6 @@ interface Thing {
 function test(thing: Thing) {
 >test : (thing: Thing) => void
 >thing : Thing
->Thing : Thing
 
     thing.thunk("str");
 >thing.thunk("str") : void

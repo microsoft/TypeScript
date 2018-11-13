@@ -27,7 +27,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,45): error TS
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,58): error TS2304: Cannot find name 'AST'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(79,71): error TS2304: Cannot find name 'IAstWalker'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(81,13): error TS2304: Cannot find name 'hasFlag'.
-tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(92,56): error TS2304: Cannot find name 'Symbol'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(93,23): error TS2304: Cannot find name 'ScopedMembers'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(94,30): error TS2304: Cannot find name 'ScopedMembers'.
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(95,24): error TS2304: Cannot find name 'ScopedMembers'.
@@ -61,7 +60,7 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(212,81): error T
 tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(215,20): error TS2339: Property 'getAstWalkerFactory' does not exist on type 'typeof TypeScript'.
 
 
-==== tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts (61 errors) ====
+==== tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts (60 errors) ====
     // Copyright (c) Microsoft. All rights reserved. Licensed under the Apache License, Version 2.0. 
     // See LICENSE.txt in the project root for complete license information.
     
@@ -212,8 +211,6 @@ tests/cases/conformance/parser/ecmascript5/parserRealSource6.ts(215,20): error T
         }
     
         export function pushTypeCollectionScope(container: Symbol,
-                                                           ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
             valueMembers: ScopedMembers,
                           ~~~~~~~~~~~~~
 !!! error TS2304: Cannot find name 'ScopedMembers'.

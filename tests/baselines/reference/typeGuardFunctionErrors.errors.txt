@@ -8,12 +8,10 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(21,33)
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(25,33): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(29,10): error TS2391: Function implementation is missing or not immediately following the declaration.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS1131: Property or signature expected.
-tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(30,5): error TS7027: Unreachable code detected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(31,1): error TS1128: Declaration or statement expected.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(33,38): error TS1225: Cannot find parameter 'x'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(37,51): error TS2677: A type predicate's type must be assignable to its parameter's type.
-  Type 'B' is not assignable to type 'A'.
-    Property 'propA' is missing in type 'B'.
+  Property 'propA' is missing in type 'B' but required in type 'A'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(41,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
   Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(45,56): error TS2677: A type predicate's type must be assignable to its parameter's type.
@@ -23,8 +21,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(64,7):
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(69,7): error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(74,46): error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
-    Type 'C' is not assignable to type 'B'.
-      Property 'propB' is missing in type 'C'.
+    Property 'propB' is missing in type 'C' but required in type 'B'.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(78,1): error TS2322: Type '(p1: any, p2: any) => boolean' is not assignable to type '(p1: any, p2: any) => p1 is A'.
   Signature '(p1: any, p2: any): boolean' must be a type predicate.
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(84,1): error TS2322: Type '(p1: any, p2: any) => p2 is A' is not assignable to type '(p1: any, p2: any) => p1 is A'.
@@ -71,7 +68,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,45
 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54): error TS2344: Type 'number' does not satisfy the constraint 'Foo'.
 
 
-==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (57 errors) ====
+==== tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts (56 errors) ====
     class A {
           ~
 !!! error TS2300: Duplicate identifier 'A'.
@@ -122,8 +119,6 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         return true;
         ~~~~~~
 !!! error TS1131: Property or signature expected.
-        ~~~~~~
-!!! error TS7027: Unreachable code detected.
     }
     ~
 !!! error TS1128: Declaration or statement expected.
@@ -137,8 +132,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
     function hasNonMatchingParameterType1(x: A): x is B {
                                                       ~
 !!! error TS2677: A type predicate's type must be assignable to its parameter's type.
-!!! error TS2677:   Type 'B' is not assignable to type 'A'.
-!!! error TS2677:     Property 'propA' is missing in type 'B'.
+!!! error TS2677:   Property 'propA' is missing in type 'B' but required in type 'A'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
         return true;
     }
     
@@ -169,6 +164,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Parameter index and argument index for the type guard target is not matching.
@@ -176,6 +172,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB; // Error
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // No type guard in if statement
@@ -183,6 +180,7 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
         a.propB;
           ~~~~~
 !!! error TS2551: Property 'propB' does not exist on type 'A'. Did you mean 'propA'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:2:5: 'propA' is declared here.
     }
     
     // Type predicate type is not assignable
@@ -191,8 +189,8 @@ tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts(166,54
                                                  ~~~
 !!! error TS2345: Argument of type '(p1: any) => p1 is C' is not assignable to parameter of type '(p1: any) => p1 is B'.
 !!! error TS2345:   Type predicate 'p1 is C' is not assignable to 'p1 is B'.
-!!! error TS2345:     Type 'C' is not assignable to type 'B'.
-!!! error TS2345:       Property 'propB' is missing in type 'C'.
+!!! error TS2345:     Property 'propB' is missing in type 'C' but required in type 'B'.
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardFunctionErrors.ts:6:5: 'propB' is declared here.
     
     // Boolean not assignable to type guard
     var assign1: (p1, p2) => p1 is A;

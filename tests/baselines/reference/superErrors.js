@@ -53,9 +53,12 @@ class RegisteredUser extends User {
 
 //// [superErrors.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -63,7 +66,6 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 function foo() {
-    var _this = this;
     // super in a non class context
     var x = _super.;
     var y = function () { return _super.; };
@@ -93,10 +95,7 @@ var RegisteredUser = /** @class */ (function (_super) {
             var x = function () { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () {
-            var _this = this;
-            return function () { return _super.; };
-        })();
+        (function () { return function () { return _super.; }; })();
         return _this;
     }
     RegisteredUser.prototype.sayHello = function () {
@@ -108,13 +107,9 @@ var RegisteredUser = /** @class */ (function (_super) {
             var x = function () { return _super.sayHello.call(_this); };
         }
         // super call in a lambda in a function expression in a constructor 
-        (function () {
-            var _this = this;
-            return function () { return _super.; };
-        })();
+        (function () { return function () { return _super.; }; })();
     };
     RegisteredUser.staticFunction = function () {
-        var _this = this;
         // super in static functions
         var s = _super.;
         var x = function () { return _super.; };

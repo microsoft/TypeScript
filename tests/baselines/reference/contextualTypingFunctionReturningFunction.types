@@ -1,7 +1,5 @@
 === tests/cases/compiler/contextualTypingFunctionReturningFunction.ts ===
 interface I {
->I : I
-
 	a(s: string): void;
 >a : (s: string) => void
 >s : string
@@ -14,7 +12,6 @@ interface I {
 declare function f(i: I): void;
 >f : (i: I) => void
 >i : I
->I : I
 
 f({
 >f({	a: s => {},	b: () => n => {},}) : void

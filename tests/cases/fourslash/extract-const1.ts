@@ -9,6 +9,5 @@ edit.applyRefactor({
     actionDescription: "Extract to constant in enclosing scope",
     newContent:
 `const newLocal = 0;
-
 const x = /*RENAME*/newLocal;`
 });

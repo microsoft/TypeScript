@@ -1,5 +1,3 @@
-/// <reference path="project.ts"/>
-
 namespace ts.server {
     export interface InstallPackageOptionsWithProject extends InstallPackageOptions {
         projectName: string;
@@ -10,32 +8,35 @@ namespace ts.server {
     export interface ITypingsInstaller {
         isKnownTypesPackageName(name: string): boolean;
         installPackage(options: InstallPackageOptionsWithProject): Promise<ApplyCodeActionCommandResult>;
-        enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>): void;
+        /* @internal */
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo>;
+        enqueueInstallTypingsRequest(p: Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string> | undefined): void;
         attach(projectService: ProjectService): void;
         onProjectClosed(p: Project): void;
-        readonly globalTypingsCacheLocation: string;
+        readonly globalTypingsCacheLocation: string | undefined;
     }
 
     export const nullTypingsInstaller: ITypingsInstaller = {
         isKnownTypesPackageName: returnFalse,
         // Should never be called because we never provide a types registry.
         installPackage: notImplemented,
+        inspectValue: notImplemented,
         enqueueInstallTypingsRequest: noop,
         attach: noop,
         onProjectClosed: noop,
-        globalTypingsCacheLocation: undefined
+        globalTypingsCacheLocation: undefined! // TODO: GH#18217
     };
 
-    class TypingsCacheEntry {
+    interface TypingsCacheEntry {
         readonly typeAcquisition: TypeAcquisition;
         readonly compilerOptions: CompilerOptions;
         readonly typings: SortedReadonlyArray<string>;
-        readonly unresolvedImports: SortedReadonlyArray<string>;
+        readonly unresolvedImports: SortedReadonlyArray<string> | undefined;
         /* mainly useful for debugging */
         poisoned: boolean;
     }
 
-    function setIsEqualTo(arr1: string[], arr2: string[]): boolean {
+    function setIsEqualTo(arr1: string[] | undefined, arr2: string[] | undefined): boolean {
         if (arr1 === arr2) {
             return true;
         }
@@ -45,13 +46,13 @@ namespace ts.server {
         const set: Map<boolean> = createMap<boolean>();
         let unique = 0;
 
-        for (const v of arr1) {
+        for (const v of arr1!) {
             if (set.get(v) !== true) {
                 set.set(v, true);
                 unique++;
             }
         }
-        for (const v of arr2) {
+        for (const v of arr2!) {
             const isSet = set.get(v);
             if (isSet === undefined) {
                 return false;
@@ -75,13 +76,14 @@ namespace ts.server {
         return opt1.allowJs !== opt2.allowJs;
     }
 
-    function unresolvedImportsChanged(imports1: SortedReadonlyArray<string>, imports2: SortedReadonlyArray<string>): boolean {
+    function unresolvedImportsChanged(imports1: SortedReadonlyArray<string> | undefined, imports2: SortedReadonlyArray<string> | undefined): boolean {
         if (imports1 === imports2) {
             return false;
         }
         return !arrayIsEqualTo(imports1, imports2);
     }
 
+    /*@internal*/
     export class TypingsCache {
         private readonly perProjectCache: Map<TypingsCacheEntry> = createMap<TypingsCacheEntry>();
 
@@ -96,15 +98,18 @@ namespace ts.server {
             return this.installer.installPackage(options);
         }
 
-        getTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string>, forceRefresh: boolean): SortedReadonlyArray<string> {
+        inspectValue(options: InspectValueOptions): Promise<ValueInfo> {
+            return this.installer.inspectValue(options);
+        }
+
+        enqueueInstallTypingsForProject(project: Project, unresolvedImports: SortedReadonlyArray<string> | undefined, forceRefresh: boolean) {
             const typeAcquisition = project.getTypeAcquisition();
 
             if (!typeAcquisition || !typeAcquisition.enable) {
-                return <any>emptyArray;
+                return;
             }
 
             const entry = this.perProjectCache.get(project.getProjectName());
-            const result: SortedReadonlyArray<string> = entry ? entry.typings : <any>emptyArray;
             if (forceRefresh ||
                 !entry ||
                 typeAcquisitionChanged(typeAcquisition, entry.typeAcquisition) ||
@@ -115,28 +120,25 @@ namespace ts.server {
                 this.perProjectCache.set(project.getProjectName(), {
                     compilerOptions: project.getCompilationSettings(),
                     typeAcquisition,
-                    typings: result,
+                    typings: entry ? entry.typings : emptyArray,
                     unresolvedImports,
                     poisoned: true
                 });
                 // something has been changed, issue a request to update typings
                 this.installer.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
             }
-            return result;
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
+            const typings = sort(newTypings);
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typeAcquisition,
-                typings: toSortedArray(newTypings),
+                typings,
                 unresolvedImports,
                 poisoned: false
             });
-        }
-
-        deleteTypingsForProject(projectName: string) {
-            this.perProjectCache.delete(projectName);
+            return !typeAcquisition || !typeAcquisition.enable ? emptyArray : typings;
         }
 
         onProjectClosed(project: Project) {

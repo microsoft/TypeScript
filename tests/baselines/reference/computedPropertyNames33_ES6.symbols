@@ -14,6 +14,7 @@ class C<T> {
 >obj : Symbol(obj, Decl(computedPropertyNames33_ES6.ts, 3, 11))
 
             [foo<T>()]() { }
+>[foo<T>()] : Symbol([foo<T>()], Decl(computedPropertyNames33_ES6.ts, 3, 19))
 >foo : Symbol(foo, Decl(computedPropertyNames33_ES6.ts, 0, 0))
 >T : Symbol(T, Decl(computedPropertyNames33_ES6.ts, 1, 8))
 

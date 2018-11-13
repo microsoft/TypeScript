@@ -1,4 +1,4 @@
-tests/cases/compiler/implicitAnyInAmbientDeclaration.ts(3,9): error TS7008: Member 'publicMember' implicitly has an 'any' type.
+tests/cases/compiler/implicitAnyInAmbientDeclaration.ts(3,16): error TS7008: Member 'publicMember' implicitly has an 'any' type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration.ts(6,16): error TS7010: 'publicFunction', which lacks return-type annotation, implicitly has an 'any' return type.
 tests/cases/compiler/implicitAnyInAmbientDeclaration.ts(6,31): error TS7006: Parameter 'x' implicitly has an 'any' type.
 
@@ -7,7 +7,7 @@ tests/cases/compiler/implicitAnyInAmbientDeclaration.ts(6,31): error TS7006: Par
     module Test {
         declare class C {
             public publicMember;  // this should be an error
-            ~~~~~~~~~~~~~~~~~~~~
+                   ~~~~~~~~~~~~
 !!! error TS7008: Member 'publicMember' implicitly has an 'any' type.
             private privateMember;  // this should not be an error
     

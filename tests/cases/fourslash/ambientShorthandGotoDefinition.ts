@@ -10,22 +10,22 @@
 ////import [|/*importBang*/bang|] = require("jquery");
 ////[|foo/*useFoo*/|]([|bar/*useBar*/|], [|baz/*useBaz*/|], [|bang/*useBang*/|]);
 
-verify.quickInfoAt("useFoo", "import foo");
+verify.quickInfoAt("useFoo", "(alias) module \"jquery\"\nimport foo");
 verify.goToDefinition({
     useFoo: "module",
     importFoo: "module"
 });
 
-verify.quickInfoAt("useBar", "import bar");
+verify.quickInfoAt("useBar", "(alias) module \"jquery\"\nimport bar");
 verify.goToDefinition("useBar", "module");
 
-verify.quickInfoAt("useBaz", "import baz");
+verify.quickInfoAt("useBaz", "(alias) module \"jquery\"\nimport baz");
 verify.goToDefinition({
     useBaz: "importBaz",
     importBaz: "module"
 });
 
-verify.quickInfoAt("useBang", "import bang = require(\"jquery\")");
+verify.quickInfoAt("useBang", "(alias) module \"jquery\"\nimport bang = require(\"jquery\")");
 verify.goToDefinition({
     useBang: "module",
     importBang: "module"

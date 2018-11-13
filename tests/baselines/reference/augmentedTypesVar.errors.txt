@@ -5,8 +5,8 @@ tests/cases/compiler/augmentedTypesVar.ts(13,5): error TS2300: Duplicate identif
 tests/cases/compiler/augmentedTypesVar.ts(14,7): error TS2300: Duplicate identifier 'x4'.
 tests/cases/compiler/augmentedTypesVar.ts(16,5): error TS2300: Duplicate identifier 'x4a'.
 tests/cases/compiler/augmentedTypesVar.ts(17,7): error TS2300: Duplicate identifier 'x4a'.
-tests/cases/compiler/augmentedTypesVar.ts(20,5): error TS2300: Duplicate identifier 'x5'.
-tests/cases/compiler/augmentedTypesVar.ts(21,6): error TS2300: Duplicate identifier 'x5'.
+tests/cases/compiler/augmentedTypesVar.ts(20,5): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesVar.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/augmentedTypesVar.ts(27,5): error TS2300: Duplicate identifier 'x6a'.
 tests/cases/compiler/augmentedTypesVar.ts(28,8): error TS2300: Duplicate identifier 'x6a'.
 tests/cases/compiler/augmentedTypesVar.ts(30,5): error TS2300: Duplicate identifier 'x6b'.
@@ -49,10 +49,10 @@ tests/cases/compiler/augmentedTypesVar.ts(31,8): error TS2300: Duplicate identif
     // var then enum
     var x5 = 1;
         ~~
-!!! error TS2300: Duplicate identifier 'x5'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     enum x5 { One } // error
          ~~
-!!! error TS2300: Duplicate identifier 'x5'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     
     // var then module
     var x6 = 1;

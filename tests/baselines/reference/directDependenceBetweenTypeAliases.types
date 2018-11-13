@@ -4,57 +4,42 @@
 // A type alias directly depends on the type it aliases.
 type T0 = T0
 >T0 : any
->T0 : any
 
 type T0_1 = T0_2
 >T0_1 : any
->T0_2 : any
 
 type T0_2 = T0_3
 >T0_2 : any
->T0_3 : any
 
 type T0_3 = T0_1
 >T0_3 : any
->T0_1 : any
 
 // A type reference directly depends on the referenced type and each of the type arguments, if any.
 interface I<T> {}
->I : I<T>
->T : T
-
 type T1 = I<T1>
->T1 : any
->I : I<T>
 >T1 : any
 
 // A union type directly depends on each of the constituent types.
 type T2 = T2 | string
 >T2 : any
->T2 : any
 
 class C<T> {}
 >C : C<T>
->T : T
 
 type T2_1 = T2_1[] | number
->T2_1 : any
 >T2_1 : any
 
 // An array type directly depends on its element type.
 type T3 = T3[]
 >T3 : any
->T3 : any
 
 // A tuple type directly depends on each of its element types.
 type T4 = [number, T4]
->T4 : any
 >T4 : any
 
 // A type query directly depends on the type of the referenced entity.
 var x: T5[] = []
 >x : any
->T5 : any
 >[] : undefined[]
 
 type T5 = typeof x
@@ -63,11 +48,9 @@ type T5 = typeof x
 
 class C1<T> {}
 >C1 : C1<T>
->T : T
 
 type T6 = T7 | number
 >T6 : any
->T7 : any
 
 type T7 = typeof yy
 >T7 : any
@@ -75,32 +58,24 @@ type T7 = typeof yy
 
 var yy: [string, T8[]];
 >yy : any
->T8 : any
 
 type T8 = C<T6>
 >T8 : any
->C : C<T>
->T6 : any
 
 // legal cases
 type T9 = () => T9
->T9 : T9
 >T9 : T9
 
 type T10 = { x: T10 } | { new(v: T10): string }
 >T10 : T10
 >x : T10
->T10 : T10
 >v : T10
->T10 : T10
 
 type T11 = T12[]
 >T11 : [{ x: [any, string][]; }, string][]
->T12 : [{ x: [any, string][]; }, string]
 
 type T12 = [T13, string]
 >T12 : [{ x: [any, string][]; }, string]
->T13 : { x: [any, string][]; }
 
 type T13 = typeof zz
 >T13 : { x: [any, string][]; }
@@ -109,6 +84,5 @@ type T13 = typeof zz
 var zz: { x: T11 }
 >zz : { x: [any, string][]; }
 >x : [{ x: [any, string][]; }, string][]
->T11 : [{ x: [any, string][]; }, string][]
 
 

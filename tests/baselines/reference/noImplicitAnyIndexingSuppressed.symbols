@@ -70,10 +70,17 @@ var m: MyMap<number> = {
 >MyMap : Symbol(MyMap, Decl(noImplicitAnyIndexingSuppressed.ts, 29, 29))
 
     "0": 0,
+>"0" : Symbol("0", Decl(noImplicitAnyIndexingSuppressed.ts, 35, 24))
+
     "1": 1,
+>"1" : Symbol("1", Decl(noImplicitAnyIndexingSuppressed.ts, 36, 11))
+
     "2": 2,
+>"2" : Symbol("2", Decl(noImplicitAnyIndexingSuppressed.ts, 37, 11))
+
     "Okay that's enough for today.": NaN
->NaN : Symbol(NaN, Decl(lib.d.ts, --, --))
+>"Okay that's enough for today." : Symbol("Okay that's enough for today.", Decl(noImplicitAnyIndexingSuppressed.ts, 38, 11))
+>NaN : Symbol(NaN, Decl(lib.es5.d.ts, --, --))
 
 };
 

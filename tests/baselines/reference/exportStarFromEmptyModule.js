@@ -68,3 +68,4 @@ export declare class A {
     static q: any;
 }
 //// [exportStarFromEmptyModule_module4.d.ts]
+export {};

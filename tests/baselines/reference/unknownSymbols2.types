@@ -4,7 +4,6 @@ module M {
 
     var x: asdf;
 >x : any
->asdf : No type information available!
 
     var y = x + asdf;
 >y : any
@@ -15,7 +14,6 @@ module M {
     var z = <asdf>x; // should be an error
 >z : any
 ><asdf>x : any
->asdf : No type information available!
 >x : any
 
     if (asdf) {
@@ -66,5 +64,5 @@ module M {
 
     import d = asdf;
 >d : any
->asdf : No type information available!
+>asdf : any
 }

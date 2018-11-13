@@ -140,14 +140,17 @@ export const o1_s2 = o1[s2];
 export const o2: T0 = o1;
 
 // recursive declarations
-declare const rI: RI;
-interface RI {
-    x: "a";
+// (type parameter indirection courtesy of #20400)
+declare const rI: RI<"a">;
+rI.x
+interface RI<T extends "a" | "b"> {
+    x: T;
     [rI.x]: "b";
 }
 
-declare const rC: RC;
-declare class RC {
-    x: "a";
+declare const rC: RC<"a">;
+rC.x
+declare class RC<T extends "a" | "b"> {
+    x: T;
     [rC.x]: "b";
 }

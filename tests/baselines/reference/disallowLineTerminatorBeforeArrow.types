@@ -150,7 +150,7 @@ function foo(func: () => boolean) { }
 foo(()
 >foo(()    => true) : void
 >foo : (func: () => boolean) => void
->()    => true : () => boolean
+>()    => true : () => true
 
     => true);
 >true : true
@@ -158,7 +158,7 @@ foo(()
 foo(()
 >foo(()    => { return false; }) : void
 >foo : (func: () => boolean) => void
->()    => { return false; } : () => boolean
+>()    => { return false; } : () => false
 
     => { return false; });
 >false : false

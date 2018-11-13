@@ -10,15 +10,15 @@ const enum numbers {
 }
 
 interface indexAccess {
->indexAccess : indexAccess
-
     0: string;
+>0 : string
+
     1: number;
+>1 : number
 }
 
 let test: indexAccess;
 >test : indexAccess
->indexAccess : indexAccess
 
 let s = test[0];
 >s : string

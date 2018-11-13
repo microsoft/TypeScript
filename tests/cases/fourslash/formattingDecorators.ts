@@ -41,6 +41,8 @@
 /////*29*/    property1;
 ////
 /////*30*/        @    decorator33    @            decorator34 @decorator35            property2;
+/////*31*/function test(@decorator36@decorator37 param) {};
+/////*32*/function test2(@decorator38()@decorator39()param) {};
 ////}
 
 format.document();
@@ -104,3 +106,7 @@ goTo.marker("29");
 verify.currentLineContentIs("    property1;");
 goTo.marker("30");
 verify.currentLineContentIs("    @decorator33 @decorator34 @decorator35 property2;");
+goTo.marker("31");
+verify.currentLineContentIs("function test(@decorator36 @decorator37 param) { };");
+goTo.marker("32");
+verify.currentLineContentIs("function test2(@decorator38() @decorator39() param) { };");

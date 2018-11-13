@@ -5,6 +5,7 @@ enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
 >A : ENUM1.A
 >B : ENUM1.B
+>"" : ENUM1.
 
 // expression
 var ResultIsNumber1 = --ENUM1["A"];

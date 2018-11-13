@@ -1,45 +1,29 @@
 === tests/cases/compiler/decls.d.ts ===
 declare function f0<T>(x?: T): T;
 >f0 : <T>(x?: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 declare function f1<T, U = number>(x?: T): [T, U];
 >f1 : <T, U = number>(x?: T) => [T, U]
->T : T
->U : U
 >x : T
->T : T
->T : T
->U : U
 
 declare class C0<T> {
 >C0 : C0<T>
->T : T
 
     y: T;
 >y : T
->T : T
 
     constructor(x?: T);
 >x : T
->T : T
 }
 declare class C1<T, U = number> {
 >C1 : C1<T, U>
->T : T
->U : U
 
     y: [T, U];
 >y : [T, U]
->T : T
->U : U
 
     constructor(x?: T);
 >x : T
->T : T
 }
 === tests/cases/compiler/main.js ===
 const f0_v0 = f0();

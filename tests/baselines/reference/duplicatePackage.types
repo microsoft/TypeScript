@@ -1,22 +1,22 @@
 === /src/a.ts ===
 import { a } from "a";
->a : (x: X) => void
+>a : (x: import("/node_modules/a/node_modules/x/index").default) => void
 
 import { b } from "b";
->b : X
+>b : import("/node_modules/a/node_modules/x/index").default
 
 import { c } from "c";
->c : X
+>c : import("/node_modules/c/node_modules/x/index").default
 
 a(b); // Works
 >a(b) : void
->a : (x: X) => void
->b : X
+>a : (x: import("/node_modules/a/node_modules/x/index").default) => void
+>b : import("/node_modules/a/node_modules/x/index").default
 
 a(c); // Error, these are from different versions of the library.
 >a(c) : void
->a : (x: X) => void
->c : X
+>a : (x: import("/node_modules/a/node_modules/x/index").default) => void
+>c : import("/node_modules/c/node_modules/x/index").default
 
 === /node_modules/a/index.d.ts ===
 import X from "x";
@@ -25,7 +25,6 @@ import X from "x";
 export function a(x: X): void;
 >a : (x: X) => void
 >x : X
->X : X
 
 === /node_modules/a/node_modules/x/index.d.ts ===
 export default class X {
@@ -41,7 +40,6 @@ import X from "x";
 
 export const b: X;
 >b : X
->X : X
 
 === /node_modules/b/node_modules/x/index.d.ts ===
 content not parsed
@@ -55,7 +53,6 @@ import X from "x";
 
 export const c: X;
 >c : X
->X : X
 
 === /node_modules/c/node_modules/x/index.d.ts ===
 export default class X {

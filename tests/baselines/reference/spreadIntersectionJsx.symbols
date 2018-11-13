@@ -17,6 +17,5 @@ let intersected: A & C;
 
 let element = <div { ...intersected } />;
 >element : Symbol(element, Decl(spreadIntersectionJsx.tsx, 4, 3))
->div : Symbol(unknown)
 >intersected : Symbol(intersected, Decl(spreadIntersectionJsx.tsx, 3, 3))
 

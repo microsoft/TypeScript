@@ -1,0 +1,32 @@
+=== /node_modules/foo/index.d.ts ===
+export = foo;
+>foo : any
+
+declare namespace foo {
+    export type T = number;
+>T : number
+}
+
+=== /a.ts ===
+import * as foo from "foo";
+>foo : typeof foo
+
+declare module "foo" {
+>"foo" : typeof foo
+
+    export function f(): T; // OK
+>f : () => number
+}
+
+=== /b.ts ===
+import * as foo from "foo";
+>foo : typeof foo
+
+declare module "foo" {
+>"foo" : typeof foo
+
+    export function g(): foo.T; // OK
+>g : () => number
+>foo : any
+}
+

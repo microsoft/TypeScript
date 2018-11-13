@@ -1,0 +1,18 @@
+=== tests/cases/conformance/salsa/a.js ===
+var obj = {};
+>obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
+
+obj.method = function (hunch) {
+>obj.method : Symbol(obj.method, Decl(a.js, 0, 13))
+>obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
+>method : Symbol(obj.method, Decl(a.js, 0, 13))
+>hunch : Symbol(hunch, Decl(a.js, 1, 23))
+
+    return true;
+}
+var b = obj.method();
+>b : Symbol(b, Decl(a.js, 4, 3))
+>obj.method : Symbol(obj.method, Decl(a.js, 0, 13))
+>obj : Symbol(obj, Decl(a.js, 0, 3), Decl(a.js, 0, 13))
+>method : Symbol(obj.method, Decl(a.js, 0, 13))
+

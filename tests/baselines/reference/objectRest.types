@@ -36,8 +36,8 @@ var { 'b': renamed, ...justA } = o;
 
 var { b: { '0': n, '1': oooo }, ...justA } = o;
 >b : any
->n : string
->oooo : string
+>n : any
+>oooo : any
 >justA : { a: number; }
 >o : { a: number; b: string; }
 
@@ -159,8 +159,6 @@ class Removable {
 >remainder : string
 }
 interface I {
->I : I
-
     m(): void;
 >m : () => void
 
@@ -177,12 +175,11 @@ var removable = new Removable();
 
 var { removed, ...removableRest } = removable;
 >removed : string
->removableRest : { both: number; remainder: string; }
+>removableRest : { remainder: string; }
 >removable : Removable
 
 var i: I = removable;
 >i : I
->I : I
 >removable : Removable
 
 var { removed, ...removableRest2 } = i;
@@ -210,8 +207,10 @@ var { [computed]: stillNotGreat, [computed2]: soSo,  ...o } = o;
 >({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o) : { a: number; b: string; }
 >{ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o : { a: number; b: string; }
 >{ [computed]: stillNotGreat, [computed2]: soSo, ...o } : { a: number; b: string; }
+>[computed] : any
 >computed : string
 >stillNotGreat : any
+>[computed2] : any
 >computed2 : string
 >soSo : any
 >o : { a: number; b: string; }

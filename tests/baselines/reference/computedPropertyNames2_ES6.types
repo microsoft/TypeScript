@@ -11,22 +11,28 @@ class C {
 >C : C
 
     [methodName]() { }
+>[methodName] : () => void
 >methodName : string
 
     static [methodName]() { }
+>[methodName] : () => void
 >methodName : string
 
     get [accessorName]() { }
+>[accessorName] : void
 >accessorName : string
 
     set [accessorName](v) { }
+>[accessorName] : any
 >accessorName : string
 >v : any
 
     static get [accessorName]() { }
+>[accessorName] : void
 >accessorName : string
 
     static set [accessorName](v) { }
+>[accessorName] : any
 >accessorName : string
 >v : any
 }

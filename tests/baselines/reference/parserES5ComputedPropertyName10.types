@@ -3,6 +3,7 @@ class C {
 >C : C
 
    [e] = 1
+>[e] : number
 >e : any
 >1 : 1
 }

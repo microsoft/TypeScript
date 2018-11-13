@@ -13,10 +13,11 @@
 ////    }
 ////}
 
-
-goTo.marker('indirectSuperCall');
-verify.signatureHelpCountIs(2);
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs('B2(n: number): B2');
-verify.currentParameterHelpArgumentNameIs("n");
-verify.currentParameterSpanIs("n: number");
+verify.signatureHelp({
+    marker: "indirectSuperCall",
+    overloadsCount: 2,
+    text: "B2(n: number): B2",
+    parameterCount: 1,
+    parameterName: "n",
+    parameterSpan: "n: number",
+});

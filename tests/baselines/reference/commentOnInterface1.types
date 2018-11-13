@@ -1,21 +1,19 @@
 === tests/cases/compiler/b.ts ===
 ///<reference path='a.ts'/>
-interface I3 {
->I3 : I3
-}
-=== tests/cases/compiler/a.ts ===
+No type information for this code.interface I3 {
+No type information for this code.}
+No type information for this code.=== tests/cases/compiler/a.ts ===
 /*!=================
-    Keep this pinned
-   =================
-*/
-
-/*! Don't keep this pinned comment */
-interface I {
->I : I
-}
-
-// Don't keep this comment.
-interface I2 {
->I2 : I2
-}
-
+No type information for this code.    Keep this pinned
+No type information for this code.   =================
+No type information for this code.*/
+No type information for this code.
+No type information for this code./*! Don't keep this pinned comment */
+No type information for this code.interface I {
+No type information for this code.}
+No type information for this code.
+No type information for this code.// Don't keep this comment.
+No type information for this code.interface I2 {
+No type information for this code.}
+No type information for this code.
+No type information for this code.

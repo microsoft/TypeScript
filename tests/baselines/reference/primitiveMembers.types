@@ -30,7 +30,6 @@ var n = 0;
 
 var N: Number;
 >N : Number
->Number : Number
 
 n = N;  // should not work, as 'number' has a different brand
 >n = N : Number
@@ -44,12 +43,10 @@ N = n; // should work
 
 var o: Object = {}
 >o : Object
->Object : Object
 >{} : {}
 
 var f: Function = (x: string) => x.length;
 >f : Function
->Function : Function
 >(x: string) => x.length : (x: string) => number
 >x : string
 >x.length : number
@@ -58,22 +55,18 @@ var f: Function = (x: string) => x.length;
 
 var r2: RegExp = /./g;
 >r2 : RegExp
->RegExp : RegExp
 >/./g : RegExp
 
 var n2: Number = 34;
 >n2 : Number
->Number : Number
 >34 : 34
 
 var s: String = "yo";
 >s : String
->String : String
 >"yo" : "yo"
 
 var b: Boolean = true;
 >b : Boolean
->Boolean : Boolean
 >true : true
 
 var n3 = 5 || {};

@@ -1,11 +1,9 @@
 === tests/cases/compiler/implicitAnyGenerics.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 var c = new C();
@@ -25,17 +23,14 @@ var c3 = new C<number>();
 
 var c4: C<any> = new C();
 >c4 : C<any>
->C : C<T>
 >new C() : C<any>
 >C : typeof C
 
 class D<T> {
 >D : D<T>
->T : T
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 var d = new D(null);
@@ -65,15 +60,12 @@ var d4 = new D(<any>1);
 
 var d5: D<any> = new D(null);
 >d5 : D<any>
->D : D<T>
 >new D(null) : D<any>
 >D : typeof D
 >null : null
 
 function foo<T>(): T { return null; };
 >foo : <T>() => T
->T : T
->T : T
 >null : null
 
 foo() 

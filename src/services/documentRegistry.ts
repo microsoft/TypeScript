@@ -87,7 +87,16 @@ namespace ts {
 
         releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void;
 
+        /*@internal*/
+        getLanguageServiceRefCounts(path: Path): [string, number | undefined][];
+
         reportStats(): string;
+    }
+
+    /*@internal*/
+    export interface ExternalDocumentCache {
+        setDocument(key: DocumentRegistryBucketKey, path: Path, sourceFile: SourceFile): void;
+        getDocument(key: DocumentRegistryBucketKey, path: Path): SourceFile | undefined;
     }
 
     export type DocumentRegistryBucketKey = string & { __bucketKey: any };
@@ -99,36 +108,27 @@ namespace ts {
         // language services are referencing the file, then the file can be removed from the
         // registry.
         languageServiceRefCount: number;
-        owners: string[];
     }
 
-    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory = ""): DocumentRegistry {
+    export function createDocumentRegistry(useCaseSensitiveFileNames?: boolean, currentDirectory?: string): DocumentRegistry {
+        return createDocumentRegistryInternal(useCaseSensitiveFileNames, currentDirectory);
+    }
+
+    /*@internal*/
+    export function createDocumentRegistryInternal(useCaseSensitiveFileNames?: boolean, currentDirectory = "", externalCache?: ExternalDocumentCache): DocumentRegistry {
         // Maps from compiler setting target (ES3, ES5, etc.) to all the cached documents we have
         // for those settings.
         const buckets = createMap<Map<DocumentRegistryEntry>>();
         const getCanonicalFileName = createGetCanonicalFileName(!!useCaseSensitiveFileNames);
 
-        function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
-            return <DocumentRegistryBucketKey>`_${settings.target}|${settings.module}|${settings.noResolve}|${settings.jsx}|${settings.allowJs}|${settings.baseUrl}|${JSON.stringify(settings.typeRoots)}|${JSON.stringify(settings.rootDirs)}|${JSON.stringify(settings.paths)}`;
-        }
-
-        function getBucketForCompilationSettings(key: DocumentRegistryBucketKey, createIfMissing: boolean): Map<DocumentRegistryEntry> {
-            let bucket = buckets.get(key);
-            if (!bucket && createIfMissing) {
-                buckets.set(key, bucket = createMap<DocumentRegistryEntry>());
-            }
-            return bucket;
-        }
-
         function reportStats() {
             const bucketInfoArray = arrayFrom(buckets.keys()).filter(name => name && name.charAt(0) === "_").map(name => {
-                const entries = buckets.get(name);
-                const sourceFiles: { name: string; refCount: number; references: string[]; }[] = [];
+                const entries = buckets.get(name)!;
+                const sourceFiles: { name: string; refCount: number; }[] = [];
                 entries.forEach((entry, name) => {
                     sourceFiles.push({
                         name,
-                        refCount: entry.languageServiceRefCount,
-                        references: entry.owners.slice(0)
+                        refCount: entry.languageServiceRefCount
                     });
                 });
                 sourceFiles.sort((x, y) => y.refCount - x.refCount);
@@ -170,16 +170,30 @@ namespace ts {
             acquiring: boolean,
             scriptKind?: ScriptKind): SourceFile {
 
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ true);
+            const bucket = getOrUpdate<Map<DocumentRegistryEntry>>(buckets, key, createMap);
             let entry = bucket.get(path);
+            const scriptTarget = scriptKind === ScriptKind.JSON ? ScriptTarget.JSON : compilationSettings.target || ScriptTarget.ES5;
+            if (!entry && externalCache) {
+                const sourceFile = externalCache.getDocument(key, path);
+                if (sourceFile) {
+                    Debug.assert(acquiring);
+                    entry = {
+                        sourceFile,
+                        languageServiceRefCount: 0
+                    };
+                    bucket.set(path, entry);
+                }
+            }
+
             if (!entry) {
                 // Have never seen this file with these settings.  Create a new source file for it.
-                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, compilationSettings.target, version, /*setNodeParents*/ false, scriptKind);
-
+                const sourceFile = createLanguageServiceSourceFile(fileName, scriptSnapshot, scriptTarget, version, /*setNodeParents*/ false, scriptKind);
+                if (externalCache) {
+                    externalCache.setDocument(key, path, sourceFile);
+                }
                 entry = {
                     sourceFile,
                     languageServiceRefCount: 1,
-                    owners: []
                 };
                 bucket.set(path, entry);
             }
@@ -189,7 +203,10 @@ namespace ts {
                 // return it as is.
                 if (entry.sourceFile.version !== version) {
                     entry.sourceFile = updateLanguageServiceSourceFile(entry.sourceFile, scriptSnapshot, version,
-                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot));
+                        scriptSnapshot.getChangeRange(entry.sourceFile.scriptSnapshot!)); // TODO: GH#18217
+                    if (externalCache) {
+                        externalCache.setDocument(key, path, entry.sourceFile);
+                    }
                 }
 
                 // If we're acquiring, then this is the first time this LS is asking for this document.
@@ -201,6 +218,7 @@ namespace ts {
                     entry.languageServiceRefCount++;
                 }
             }
+            Debug.assert(entry.languageServiceRefCount !== 0);
 
             return entry.sourceFile;
         }
@@ -212,16 +230,21 @@ namespace ts {
         }
 
         function releaseDocumentWithKey(path: Path, key: DocumentRegistryBucketKey): void {
-            const bucket = getBucketForCompilationSettings(key, /*createIfMissing*/ false);
-            Debug.assert(bucket !== undefined);
-
-            const entry = bucket.get(path);
+            const bucket = Debug.assertDefined(buckets.get(key));
+            const entry = bucket.get(path)!;
             entry.languageServiceRefCount--;
 
             Debug.assert(entry.languageServiceRefCount >= 0);
             if (entry.languageServiceRefCount === 0) {
                 bucket.delete(path);
             }
+        }
+
+        function getLanguageServiceRefCounts(path: Path) {
+            return arrayFrom(buckets.entries(), ([key, bucket]): [string, number | undefined] => {
+                const entry = bucket.get(path);
+                return [key, entry && entry.languageServiceRefCount];
+            });
         }
 
         return {
@@ -231,8 +254,13 @@ namespace ts {
             updateDocumentWithKey,
             releaseDocument,
             releaseDocumentWithKey,
+            getLanguageServiceRefCounts,
             reportStats,
             getKeyForCompilationSettings
         };
+    }
+
+    function getKeyForCompilationSettings(settings: CompilerOptions): DocumentRegistryBucketKey {
+        return sourceFileAffectingCompilerOptions.map(option => getCompilerOptionValue(settings, option)).join("|") as DocumentRegistryBucketKey;
     }
 }

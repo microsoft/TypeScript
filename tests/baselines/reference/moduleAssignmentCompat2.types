@@ -17,11 +17,9 @@ module B {
 
 var a: A;
 >a : any
->A : No type information available!
 
 var b: B;
 >b : any
->B : No type information available!
 
 a = b;
 >a = b : any

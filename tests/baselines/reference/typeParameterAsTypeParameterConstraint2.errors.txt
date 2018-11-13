@@ -1,12 +1,8 @@
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(6,8): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(7,8): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(13,17): error TS2345: Argument of type 'NumberVariant' is not assignable to parameter of type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(16,9): error TS2345: Argument of type '{ length: string; }' is not assignable to parameter of type '{ length: number; }'.
-  Types of property 'length' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(17,9): error TS2345: Argument of type '{ length: {}; }' is not assignable to parameter of type '{ length: number; }'.
-  Types of property 'length' are incompatible.
-    Type '{}' is not assignable to type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(16,11): error TS2322: Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(17,11): error TS2322: Type '{}' is not assignable to type 'number'.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts(18,10): error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ length: any[]; }'.
   Types of property 'length' are incompatible.
     Type 'number' is not assignable to type 'any[]'.
@@ -35,15 +31,13 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTy
     
     function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
     foo2(1, { length: '' });
-            ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ length: string; }' is not assignable to parameter of type '{ length: number; }'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type 'string' is not assignable to type 'number'.
+              ~~~~~~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
     foo2(1, { length: {} });
-            ~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '{ length: {}; }' is not assignable to parameter of type '{ length: number; }'.
-!!! error TS2345:   Types of property 'length' are incompatible.
-!!! error TS2345:     Type '{}' is not assignable to type 'number'.
+              ~~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/types/typeParameters/typeArgumentLists/typeParameterAsTypeParameterConstraint2.ts:15:30: The expected type comes from property 'length' which is declared here on type '{ length: number; }'
     foo2([], ['']);
              ~~~~
 !!! error TS2345: Argument of type 'string[]' is not assignable to parameter of type '{ length: any[]; }'.

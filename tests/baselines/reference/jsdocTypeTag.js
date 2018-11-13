@@ -61,6 +61,12 @@ var obj;
 /** @type {Function} */
 var Func;
 
+/** @type {(s: string) => number} */
+var f;
+
+/** @type {new (s: string) => { s: string }} */
+var ctor;
+
 //// [b.ts]
 var S: string;
 var s: string;
@@ -82,6 +88,8 @@ var nullable: number | null;
 var Obj: any;
 var obj: any;
 var Func: Function;
+var f: (s: string) => number;
+var ctor: new (s: string) => { s: string };
 
 
 //// [a.js]
@@ -125,6 +133,10 @@ var Obj;
 var obj;
 /** @type {Function} */
 var Func;
+/** @type {(s: string) => number} */
+var f;
+/** @type {new (s: string) => { s: string }} */
+var ctor;
 //// [b.js]
 var S;
 var s;
@@ -146,3 +158,5 @@ var nullable;
 var Obj;
 var obj;
 var Func;
+var f;
+var ctor;

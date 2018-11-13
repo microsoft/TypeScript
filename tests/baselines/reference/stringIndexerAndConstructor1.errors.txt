@@ -5,6 +5,6 @@ tests/cases/compiler/stringIndexerAndConstructor1.ts(3,5): error TS2411: Propert
     interface I {
         [s: string]: number;
         "": string;
-        ~~~~~~~~~~~
+        ~~
 !!! error TS2411: Property '""' of type 'string' is not assignable to string index type 'number'.
     }

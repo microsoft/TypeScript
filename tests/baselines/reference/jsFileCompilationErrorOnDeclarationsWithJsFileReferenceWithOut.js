@@ -29,6 +29,7 @@ function foo() {
 
 
 //// [out.d.ts]
+/// <reference path="tests/cases/compiler/c.js" />
 declare class c {
 }
 declare function foo(): void;

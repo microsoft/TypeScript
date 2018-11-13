@@ -3,15 +3,17 @@
 ////class sampleCls { constructor(str: string, num: number) { } }
 ////var x = new sampleCls(/*1*/"", /*2*/5);
 
-goTo.marker('1');
-verify.signatureHelpCountIs(1);
-
-verify.currentSignatureParameterCountIs(2);
-verify.currentSignatureHelpIs('sampleCls(str: string, num: number): sampleCls');
-
-verify.currentParameterHelpArgumentNameIs('str');
-verify.currentParameterSpanIs("str: string");
-
-goTo.marker('2');
-verify.currentParameterHelpArgumentNameIs('num');
-verify.currentParameterSpanIs("num: number");
+verify.signatureHelp(
+    {
+        marker: "1",
+        text: "sampleCls(str: string, num: number): sampleCls",
+        parameterCount: 2,
+        parameterName: "str",
+        parameterSpan: "str: string",
+    },
+    {
+        marker: "2",
+        parameterName: "num",
+        parameterSpan: "num: number",
+    },
+)

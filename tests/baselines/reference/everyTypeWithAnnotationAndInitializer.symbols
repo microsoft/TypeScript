@@ -51,9 +51,9 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(everyTypeWithAnnotationAndInitializer.ts, 19, 5))
 >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 21, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(everyTypeWithAnnotationAndInitializer.ts, 21, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 var aNumber: number = 9.9;
@@ -64,13 +64,13 @@ var aString: string = 'this is a string';
 
 var aDate: Date = new Date(12);
 >aDate : Symbol(aDate, Decl(everyTypeWithAnnotationAndInitializer.ts, 26, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 var anObject: Object = new Object();
 >anObject : Symbol(anObject, Decl(everyTypeWithAnnotationAndInitializer.ts, 27, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var anAny: any = null;
 >anAny : Symbol(anAny, Decl(everyTypeWithAnnotationAndInitializer.ts, 29, 3))

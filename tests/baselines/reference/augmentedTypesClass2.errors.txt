@@ -1,5 +1,5 @@
-tests/cases/compiler/augmentedTypesClass2.ts(16,7): error TS2300: Duplicate identifier 'c33'.
-tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate identifier 'c33'.
+tests/cases/compiler/augmentedTypesClass2.ts(16,7): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 
 
 ==== tests/cases/compiler/augmentedTypesClass2.ts (2 errors) ====
@@ -20,14 +20,14 @@ tests/cases/compiler/augmentedTypesClass2.ts(21,6): error TS2300: Duplicate iden
     // class then enum 
     class c33 {
           ~~~
-!!! error TS2300: Duplicate identifier 'c33'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         foo() {
             return 1;
         }
     }
     enum c33 { One };
          ~~~
-!!! error TS2300: Duplicate identifier 'c33'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
     
     // class then import
     class c44 {

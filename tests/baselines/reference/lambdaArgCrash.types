@@ -48,7 +48,6 @@ class ItemSetEvent extends Event {
 >add : (listener: (items: any) => void) => void
 >listener : (items: any) => void
 >items : any
->ItemSet : No type information available!
 
 	 	super.add(listener);
 >super.add(listener) : void

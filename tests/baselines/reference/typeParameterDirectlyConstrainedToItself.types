@@ -3,60 +3,31 @@
 
 class C<T extends T> { } 
 >C : C<T>
->T : T
->T : T
 
 class C2<T, U extends U> { } 
 >C2 : C2<T, U>
->T : T
->U : U
->U : U
 
 interface I<T extends T> { }
->I : I<T>
->T : T
->T : T
-
 interface I2<T, U extends U> { }
->I2 : I2<T, U>
->T : T
->U : U
->U : U
 
 function f<T extends T>() { }
->f : <T extends T>() => void
->T : T
->T : T
+>f : <T>() => void
 
 function f2<T, U extends U>() { }
->f2 : <T, U extends U>() => void
->T : T
->U : U
->U : U
+>f2 : <T, U>() => void
 
 var a: {
->a : { <T extends T>(): void; <T, U extends U>(): void; }
+>a : { <T>(): void; <T, U>(): void; }
 
     <T extends T>(): void;
->T : T
->T : T
-
     <T, U extends U>(): void;
->T : T
->U : U
->U : U
 }
 
 var b = <T extends T>() => { }
->b : <T extends T>() => void
-><T extends T>() => { } : <T extends T>() => void
->T : T
->T : T
+>b : <T>() => void
+><T extends T>() => { } : <T>() => void
 
 var b2 = <T, U extends U>() => { }
->b2 : <T, U extends U>() => void
-><T, U extends U>() => { } : <T, U extends U>() => void
->T : T
->U : U
->U : U
+>b2 : <T, U>() => void
+><T, U extends U>() => { } : <T, U>() => void
 

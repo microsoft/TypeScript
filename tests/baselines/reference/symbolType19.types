@@ -4,14 +4,13 @@ enum E { }
 
 var x: symbol | E;
 >x : symbol | E
->E : E
 
 x;
 >x : symbol | E
 
 if (typeof x === "number") {
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : symbol | E
 >"number" : "number"
 

@@ -1,11 +1,9 @@
 === tests/cases/compiler/incrementOnTypeParameter.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     a: T;
 >a : T
->T : T
 
     foo() {
 >foo : () => void
@@ -18,7 +16,6 @@ class C<T> {
 
         for (var i: T, j = 0; j < 10; i++) { 
 >i : T
->T : T
 >j : number
 >0 : 0
 >j < 10 : boolean

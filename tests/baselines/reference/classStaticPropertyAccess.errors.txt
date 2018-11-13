@@ -1,0 +1,28 @@
+tests/cases/compiler/classStaticPropertyAccess.ts(9,1): error TS2576: Property 'y' is a static member of type 'A'
+tests/cases/compiler/classStaticPropertyAccess.ts(10,3): error TS2576: Property 'y' is a static member of type 'A'
+tests/cases/compiler/classStaticPropertyAccess.ts(11,3): error TS2341: Property '_b' is private and only accessible within class 'A'.
+tests/cases/compiler/classStaticPropertyAccess.ts(12,3): error TS2339: Property 'a' does not exist on type 'typeof A'.
+
+
+==== tests/cases/compiler/classStaticPropertyAccess.ts (4 errors) ====
+    class A {
+        public static x: number = 1;
+        public static y: number = 1;
+        private static _b: number = 2;
+    }
+    
+    const a = new A();
+    
+    a['y'] // Error
+    ~~~~~~
+!!! error TS2576: Property 'y' is a static member of type 'A'
+    a.y    // Error
+      ~
+!!! error TS2576: Property 'y' is a static member of type 'A'
+    A._b   // Error
+      ~~
+!!! error TS2341: Property '_b' is private and only accessible within class 'A'.
+    A.a
+      ~
+!!! error TS2339: Property 'a' does not exist on type 'typeof A'.
+    

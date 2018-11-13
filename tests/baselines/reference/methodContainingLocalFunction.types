@@ -2,7 +2,6 @@
 // The first case here (BugExhibition<T>) caused a crash. Try with different permutations of features.
 class BugExhibition<T> {
 >BugExhibition : BugExhibition<T>
->T : T
 
     public exhibitBug() {
 >exhibitBug : () => void
@@ -22,7 +21,6 @@ class BugExhibition<T> {
 
 class BugExhibition2<T> {
 >BugExhibition2 : BugExhibition2<T>
->T : T
 
     private static get exhibitBug() {
 >exhibitBug : any
@@ -45,16 +43,13 @@ class BugExhibition2<T> {
 
 class BugExhibition3<T> {
 >BugExhibition3 : BugExhibition3<T>
->T : T
 
     public exhibitBug() {
 >exhibitBug : () => void
 
         function localGenericFunction<U>(u?: U) { }
 >localGenericFunction : <U>(u?: U) => void
->U : U
 >u : U
->U : U
 
         var x: { (): void; };
 >x : () => void
@@ -75,9 +70,7 @@ class C {
         var funcExpr = <U>(u?: U) => { };
 >funcExpr : <U>(u?: U) => void
 ><U>(u?: U) => { } : <U>(u?: U) => void
->U : U
 >u : U
->U : U
 
         var x: { (): void; };
 >x : () => void

@@ -14,7 +14,7 @@ import * as  while from "foo"
 >"foo" : "foo"
 
 var typeof = 10;
->typeof : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 > : any
 >10 : 10
 

@@ -1,0 +1,90 @@
+=== tests/cases/conformance/types/import/importTypeAmbient.ts ===
+declare module "foo" {
+>"foo" : typeof import("foo")
+
+    interface Point {
+        x: number;
+>x : number
+
+        y: number;
+>y : number
+    }
+    export = Point;
+>Point : Point
+}
+const x: import("foo") = { x: 0, y: 0 };
+>x : Point
+>{ x: 0, y: 0 } : { x: number; y: number; }
+>x : number
+>0 : 0
+>y : number
+>0 : 0
+
+declare module "foo2" {
+>"foo2" : typeof import("foo2")
+
+    namespace Bar {
+        interface I {
+            a: string;
+>a : string
+
+            b: number;
+>b : number
+        }
+    }
+
+    namespace Baz {
+        interface J {
+            a: number;
+>a : number
+
+            b: string;
+>b : string
+        }
+    }
+
+    class Bar {
+>Bar : Bar
+
+        item: Bar.I;
+>item : Bar.I
+>Bar : any
+
+        constructor(input: Baz.J);
+>input : Baz.J
+>Baz : any
+    }
+}
+
+let y: import("foo2").Bar.I = { a: "", b: 0 };
+>y : import("foo2").Bar.I
+>Bar : any
+>{ a: "", b: 0 } : { a: string; b: number; }
+>a : string
+>"" : ""
+>b : number
+>0 : 0
+
+class Bar2 {
+>Bar2 : Bar2
+
+    item: {a: string, b: number, c: object};
+>item : { a: string; b: number; c: object; }
+>a : string
+>b : number
+>c : object
+
+    constructor(input?: any) {}
+>input : any
+}
+
+let shim: typeof import("foo2") = {
+>shim : typeof import("foo2")
+>{    Bar: Bar2} : { Bar: typeof Bar2; }
+
+    Bar: Bar2
+>Bar : typeof Bar2
+>Bar2 : typeof Bar2
+
+};
+

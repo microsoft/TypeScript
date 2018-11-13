@@ -1,0 +1,65 @@
+=== tests/cases/conformance/salsa/module.js ===
+var Outer = {}
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+
+Outer.Inner = function() {}
+>Outer.Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+>Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(module.js, 1, 27))
+>Outer.Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+>Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>prototype : Symbol(Outer.Inner.prototype, Decl(module.js, 1, 27))
+
+    m() { },
+>m : Symbol(m, Decl(module.js, 2, 25))
+
+    i: 1
+>i : Symbol(i, Decl(module.js, 3, 12))
+}
+// incremental assignments still work
+Outer.Inner.prototype.j = 2
+>Outer.Inner.prototype : Symbol(Outer.Inner.j, Decl(module.js, 5, 1))
+>Outer.Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+>Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>prototype : Symbol(Outer.Inner.prototype, Decl(module.js, 1, 27))
+>j : Symbol(Outer.Inner.j, Decl(module.js, 5, 1))
+
+/** @type {string} */
+Outer.Inner.prototype.k;
+>Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(module.js, 1, 27))
+>Outer.Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+>Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>prototype : Symbol(Outer.Inner.prototype, Decl(module.js, 1, 27))
+
+var inner = new Outer.Inner()
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>Outer.Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+>Outer : Symbol(Outer, Decl(module.js, 0, 3), Decl(module.js, 0, 14), Decl(module.js, 1, 27))
+>Inner : Symbol(Outer.Inner, Decl(module.js, 0, 14), Decl(module.js, 2, 6))
+
+inner.m()
+>inner.m : Symbol(m, Decl(module.js, 2, 25))
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>m : Symbol(m, Decl(module.js, 2, 25))
+
+inner.i
+>inner.i : Symbol(i, Decl(module.js, 3, 12))
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>i : Symbol(i, Decl(module.js, 3, 12))
+
+inner.j
+>inner.j : Symbol(Outer.Inner.j, Decl(module.js, 5, 1))
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>j : Symbol(Outer.Inner.j, Decl(module.js, 5, 1))
+
+inner.k
+>inner.k : Symbol(Outer.Inner.k, Decl(module.js, 7, 27))
+>inner : Symbol(inner, Decl(module.js, 10, 3))
+>k : Symbol(Outer.Inner.k, Decl(module.js, 7, 27))
+

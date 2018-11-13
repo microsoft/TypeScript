@@ -13,12 +13,12 @@ tests/cases/compiler/implicitAnyDeclareTypePropertyWithoutType.ts(10,22): error 
     
     // this should be an error
     var x: { y; z; }             // error at "y,z"
-             ~~
+             ~
 !!! error TS7008: Member 'y' implicitly has an 'any' type.
-                ~~
+                ~
 !!! error TS7008: Member 'z' implicitly has an 'any' type.
     var x1: { y1: C; z1; };      // error at "z1" 
-                     ~~~
+                     ~~
 !!! error TS7008: Member 'z1' implicitly has an 'any' type.
     var x11: { new (); };        // error at "new"
                ~~~~~~~

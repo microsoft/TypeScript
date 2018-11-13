@@ -12,10 +12,10 @@ class I2 { }
 >I2 : Symbol(I2, Decl(interfaceDeclaration2.ts, 1, 13), Decl(interfaceDeclaration2.ts, 3, 16))
 
 interface I3 { }
->I3 : Symbol(I3, Decl(interfaceDeclaration2.ts, 4, 12), Decl(interfaceDeclaration2.ts, 6, 16))
+>I3 : Symbol(I3, Decl(interfaceDeclaration2.ts, 6, 16), Decl(interfaceDeclaration2.ts, 4, 12))
 
 function I3() { }
->I3 : Symbol(I3, Decl(interfaceDeclaration2.ts, 4, 12), Decl(interfaceDeclaration2.ts, 6, 16))
+>I3 : Symbol(I3, Decl(interfaceDeclaration2.ts, 6, 16), Decl(interfaceDeclaration2.ts, 4, 12))
 
 interface I4 { }
 >I4 : Symbol(I4, Decl(interfaceDeclaration2.ts, 7, 17), Decl(interfaceDeclaration2.ts, 10, 3))

@@ -1,14 +1,12 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedStaticFunctionUsingClassPrivateStatics.ts ===
 class clodule<T> {
 >clodule : clodule<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 
     private static sfn(id: string) { return 42; }
 >sfn : (id: string) => number
@@ -22,11 +20,8 @@ module clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): number {
 >fn : <T>(x: T, y: T) => number
->T : T
 >x : T
->T : T
 >y : T
->T : T
 
         return clodule.sfn('a');
 >clodule.sfn('a') : number

@@ -1,30 +1,32 @@
 /// <reference path='fourslash.ts' />
 
 /////**
-////    * Returns the substring at the specified location within a String object. 
-////    * @param start The zero-based index integer indicating the beginning of the substring.
-////    * @param end Zero-based index integer indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.
-////    * If end is omitted, the characters from start through the end of the original string are returned.
-////    */
-////function foo(start: number, end?: number) {
-////    return "";
-////}
+//// * @param start The start
+//// * @param end The end
+//// * More text
+//// */
+////declare function foo(start: number, end?: number);
 ////
 ////fo/*1*/
-goTo.marker('1');
-verify.not.signatureHelpPresent();
+
+const tags: ReadonlyArray<FourSlashInterface.JSDocTagInfo> = [
+    { name: "param", text: "start The start" },
+    { name: "param", text: "end The end\nMore text" },
+];
+verify.noSignatureHelp("1");
 edit.insert("o");
-verify.not.signatureHelpPresent();
+verify.noSignatureHelp();
 edit.insert("(");
-verify.currentParameterHelpArgumentDocCommentIs("The zero-based index integer indicating the beginning of the substring.");
+verify.signatureHelp({ parameterDocComment: "The start", tags });
 edit.insert("10,");
-verify.currentParameterHelpArgumentDocCommentIs("Zero-based index integer indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.");
+const help2: FourSlashInterface.VerifySignatureHelpOptions = { parameterDocComment: "The end\nMore text", tags };
+verify.signatureHelp(help2);
 edit.insert("  ");
-verify.currentParameterHelpArgumentDocCommentIs("Zero-based index integer indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.");
+verify.signatureHelp(help2);
 edit.insert(",  ");
 edit.backspace(3);
-verify.currentParameterHelpArgumentDocCommentIs("Zero-based index integer indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.");
+verify.signatureHelp(help2);
 edit.insert("12");
-verify.currentParameterHelpArgumentDocCommentIs("Zero-based index integer indicating the end of the substring. The substring includes the characters up to, but not including, the character indicated by end.\nIf end is omitted, the characters from start through the end of the original string are returned.");
+verify.signatureHelp(help2);
 edit.insert(")");
-verify.not.signatureHelpPresent();
+verify.noSignatureHelp();

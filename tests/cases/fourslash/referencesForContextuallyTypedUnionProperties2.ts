@@ -6,7 +6,7 @@
 ////}
 ////
 ////interface B {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}b|]: number;
+////    [|{| "isDefinition": true |}b|]: number;
 ////    common: number;
 ////}
 ////
@@ -34,12 +34,4 @@
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-const ranges = test.ranges();
-verify.referenceGroups(ranges[0], [{ definition: "(property) B.b: number", ranges }]);
-for (const reference of ranges.slice(1)) {
-    const type = reference.marker.data.type;
-    verify.referenceGroups(reference, [
-        { definition: "(property) B.b: number", ranges: ranges.filter(r => r !== reference) },
-        { definition: `(property) b: ${type}`, ranges: [reference] }
-    ]);
-}
+verify.singleReferenceGroup("(property) B.b: number");

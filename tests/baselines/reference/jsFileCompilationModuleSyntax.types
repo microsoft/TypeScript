@@ -1,4 +1,3 @@
 === tests/cases/compiler/a.js ===
 module M { }
->M : any
-
+No type information for this code.

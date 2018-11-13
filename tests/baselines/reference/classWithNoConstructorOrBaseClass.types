@@ -17,16 +17,12 @@ var r = C;
 
 class D<T,U> {
 >D : D<T, U>
->T : T
->U : U
 
     x: T;
 >x : T
->T : T
 
     y: U;
 >y : U
->U : U
 }
 
 var d = new D();

@@ -1,16 +1,10 @@
 === tests/cases/conformance/classes/classDeclarations/classExtendingClassLikeType.ts ===
 interface Base<T, U> {
->Base : Base<T, U>
->T : T
->U : U
-
     x: T;
 >x : T
->T : T
 
     y: U;
 >y : U
->U : U
 }
 
 // Error, no Base constructor function
@@ -20,46 +14,24 @@ class D0 extends Base<string, string> {
 }
 
 interface BaseConstructor {
->BaseConstructor : BaseConstructor
-
     new (x: string, y: string): Base<string, string>;
 >x : string
 >y : string
->Base : Base<T, U>
 
     new <T>(x: T): Base<T, T>;
->T : T
 >x : T
->T : T
->Base : Base<T, U>
->T : T
->T : T
 
     new <T>(x: T, y: T): Base<T, T>;
->T : T
 >x : T
->T : T
 >y : T
->T : T
->Base : Base<T, U>
->T : T
->T : T
 
     new <T, U>(x: T, y: U): Base<T, U>;
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->Base : Base<T, U>
->T : T
->U : U
 }
 
 declare function getBase(): BaseConstructor;
 >getBase : () => BaseConstructor
->BaseConstructor : BaseConstructor
 
 class D1 extends getBase() {
 >D1 : D1
@@ -158,20 +130,15 @@ class D4 extends getBase() <string, string, string> {
 }
 
 interface BadBaseConstructor {
->BadBaseConstructor : BadBaseConstructor
-
     new (x: string): Base<string, string>;
 >x : string
->Base : Base<T, U>
 
     new (x: number): Base<number, number>;
 >x : number
->Base : Base<T, U>
 }
 
 declare function getBadBase(): BadBaseConstructor;
 >getBadBase : () => BadBaseConstructor
->BadBaseConstructor : BadBaseConstructor
 
 // Error, constructor return types differ
 class D5 extends getBadBase() {

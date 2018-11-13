@@ -1,0 +1,40 @@
+=== tests/cases/compiler/deepElaborationsIntoArrowExpressions.ts ===
+const a: {
+>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 0, 5))
+
+    y(): "a"
+>y : Symbol(y, Decl(deepElaborationsIntoArrowExpressions.ts, 0, 10))
+
+} = {
+    y: () => "b"
+>y : Symbol(y, Decl(deepElaborationsIntoArrowExpressions.ts, 2, 5))
+
+};
+
+interface Foo {
+>Foo : Symbol(Foo, Decl(deepElaborationsIntoArrowExpressions.ts, 4, 2))
+
+    a: number;
+>a : Symbol(Foo.a, Decl(deepElaborationsIntoArrowExpressions.ts, 6, 15))
+}
+
+function foo1(): () => Foo {
+>foo1 : Symbol(foo1, Decl(deepElaborationsIntoArrowExpressions.ts, 8, 1))
+>Foo : Symbol(Foo, Decl(deepElaborationsIntoArrowExpressions.ts, 4, 2))
+
+    return () => ({a: ''});
+>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 11, 19))
+}
+
+function foo3(): Foo[] {
+>foo3 : Symbol(foo3, Decl(deepElaborationsIntoArrowExpressions.ts, 12, 1))
+>Foo : Symbol(Foo, Decl(deepElaborationsIntoArrowExpressions.ts, 4, 2))
+
+    return [{a: ''}];
+>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 15, 13))
+}
+var y: Foo[] = [{a: ''}]
+>y : Symbol(y, Decl(deepElaborationsIntoArrowExpressions.ts, 17, 3))
+>Foo : Symbol(Foo, Decl(deepElaborationsIntoArrowExpressions.ts, 4, 2))
+>a : Symbol(a, Decl(deepElaborationsIntoArrowExpressions.ts, 17, 17))
+

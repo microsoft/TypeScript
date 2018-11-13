@@ -23,7 +23,6 @@ let magnitude = m.getLength(v);
 let p: m.Point = v.translate(5, 5);
 >p : m.Point
 >m : any
->Point : m.Point
 >v.translate(5, 5) : m.Vector
 >v.translate : (dx: number, dy: number) => m.Vector
 >v : m.Vector
@@ -47,11 +46,9 @@ var t = p.x;
 
 === tests/cases/conformance/externalModules/node_modules/math2d/index.d.ts ===
 export as namespace Math2d;
->Math2d : typeof "tests/cases/conformance/externalModules/node_modules/math2d/index"
+>Math2d : typeof import("tests/cases/conformance/externalModules/node_modules/math2d/index")
 
 export interface Point {
->Point : Point
-
 	x: number;
 >x : number
 
@@ -61,7 +58,6 @@ export interface Point {
 
 export class Vector implements Point {
 >Vector : Vector
->Point : Point
 
 	x: number;
 >x : number
@@ -77,13 +73,11 @@ export class Vector implements Point {
 >translate : (dx: number, dy: number) => Vector
 >dx : number
 >dy : number
->Vector : Vector
 }
 
 export function getLength(p: Vector): number;
 >getLength : (p: Vector) => number
 >p : Vector
->Vector : Vector
 
 === tests/cases/conformance/externalModules/math2d-augment.d.ts ===
 import * as Math2d from 'math2d';
@@ -91,14 +85,13 @@ import * as Math2d from 'math2d';
 
 // Augment the module
 declare module 'math2d' {
+>'math2d' : typeof Math2d
+
 	// Add a method to the class
 	interface Vector {
->Vector : Vector
-
 		reverse(): Math2d.Point;
 >reverse : () => Point
 >Math2d : any
->Point : Point
 	}
 }
 

@@ -3,8 +3,6 @@ declare var lib: () => void;
 >lib : () => void
 
 declare namespace lib {}
->lib : () => void
-
 export = lib;
 >lib : () => void
 
@@ -13,6 +11,8 @@ import * as lib from "lib";
 >lib : () => void
 
 declare module "lib" {
+>"lib" : typeof import("lib")
+
     export function fn(): void;
 >fn : () => void
 }

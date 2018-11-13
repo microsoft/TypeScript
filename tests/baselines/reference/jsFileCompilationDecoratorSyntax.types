@@ -1,5 +1,5 @@
 === tests/cases/compiler/a.js ===
 @internal class C { }
->internal : any
+>internal : error
 >C : C
 

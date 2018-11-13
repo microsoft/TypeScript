@@ -40,19 +40,16 @@ var d: ({ (x: string): string } | { (x: number): number })[];
 
 var d: Array<((x: string) => string) | ((x: number) => number)>;
 >d : (((x: string) => string) | ((x: number) => number))[]
->Array : T[]
 >x : string
 >x : number
 
 var d: Array<{ (x: string): string } | { (x: number): number }>;
 >d : (((x: string) => string) | ((x: number) => number))[]
->Array : T[]
 >x : string
 >x : number
 
 var d: (Array<{ (x: string): string } | { (x: number): number }>);
 >d : (((x: string) => string) | ((x: number) => number))[]
->Array : T[]
 >x : string
 >x : number
 

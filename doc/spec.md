@@ -286,7 +286,7 @@ function f(s) {
 }
 ```
 
-In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emiting JavaScript.
+In the JavaScript output, all type annotations have been erased. In general, TypeScript erases all type information before emitting JavaScript.
 
 ## <a name="1.1"/>1.1 Ambient Declarations
 
@@ -1706,7 +1706,7 @@ When union, intersection, function, or constructor types are used as array eleme
 
 ```TypeScript
 (string | number)[]  
-(() => string))[]
+(() => string)[]
 ```
 
 Alternatively, array types can be written using the 'Array&lt;T>' notation. For example, the types above are equivalent to

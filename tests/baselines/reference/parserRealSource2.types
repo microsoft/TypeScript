@@ -984,26 +984,18 @@ module TypeScript {
     export function ToDeclFlags(fncFlags: FncFlags) : DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
 >fncFlags : FncFlags
->FncFlags : FncFlags
->DeclFlags : DeclFlags
 
     export function ToDeclFlags(varFlags: VarFlags) : DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
 >varFlags : VarFlags
->VarFlags : VarFlags
->DeclFlags : DeclFlags
 
     export function ToDeclFlags(symFlags: SymbolFlags): DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
 >symFlags : SymbolFlags
->SymbolFlags : SymbolFlags
->DeclFlags : DeclFlags
 
     export function ToDeclFlags(moduleFlags: ModuleFlags): DeclFlags;
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
 >moduleFlags : ModuleFlags
->ModuleFlags : ModuleFlags
->DeclFlags : DeclFlags
 
     export function ToDeclFlags(fncOrVarOrSymbolOrModuleFlags: any) {
 >ToDeclFlags : { (fncFlags: FncFlags): DeclFlags; (varFlags: VarFlags): DeclFlags; (symFlags: SymbolFlags): DeclFlags; (moduleFlags: ModuleFlags): DeclFlags; }
@@ -1011,7 +1003,6 @@ module TypeScript {
 
         return <DeclFlags>fncOrVarOrSymbolOrModuleFlags;
 ><DeclFlags>fncOrVarOrSymbolOrModuleFlags : DeclFlags
->DeclFlags : DeclFlags
 >fncOrVarOrSymbolOrModuleFlags : any
     }
 
@@ -1149,14 +1140,12 @@ module TypeScript {
     //  - getters and setters
     export var codeGenTarget: CodeGenTarget = CodeGenTarget.ES3;
 >codeGenTarget : CodeGenTarget
->CodeGenTarget : CodeGenTarget
 >CodeGenTarget.ES3 : CodeGenTarget.ES3
 >CodeGenTarget : typeof CodeGenTarget
 >ES3 : CodeGenTarget.ES3
 
     export var moduleGenTarget: ModuleGenTarget = ModuleGenTarget.Synchronous;
 >moduleGenTarget : ModuleGenTarget
->ModuleGenTarget : ModuleGenTarget
 >ModuleGenTarget.Synchronous : ModuleGenTarget
 >ModuleGenTarget : typeof ModuleGenTarget
 >Synchronous : ModuleGenTarget

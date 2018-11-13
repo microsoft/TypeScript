@@ -1,5 +1,8 @@
 {
 	"compilerOptions": {
+		"lib": ["es6"],
+		"sourceMap": false,
+		"declaration": false,
 		"noImplicitAny": true,
 		"noImplicitReturns": true,
 		"noImplicitThis": true,
@@ -7,6 +10,10 @@
 		"noUnusedParameters": true,
 		"strictNullChecks": true,
 		"module": "commonjs",
-		"outDir": "../../built/local/tslint"
+		"outDir": "../../built/local/tslint",
+		"baseUrl": "../..",
+		"paths": {
+			"typescript": ["lib/typescript.d.ts"]
+		}
 	}
 }

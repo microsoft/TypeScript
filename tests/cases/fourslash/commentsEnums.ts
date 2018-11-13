@@ -14,19 +14,23 @@ verify.quickInfos({
     1: ["enum Colors", "Enum of colors"],
     2: ["(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'"],
     3: ["(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'"],
-    4: "var x: Colors"
+    4: "var x: Colors",
+    5: ["enum Colors", "Enum of colors"],
+    6: ["(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'"],
+    7: ["(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'"],
 });
 
-goTo.marker('5');
-verify.completionListContains("Colors", "enum Colors", "Enum of colors");
-verify.quickInfoIs("enum Colors", "Enum of colors");
-
-goTo.marker('6');
-verify.completionListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-verify.completionListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
-verify.quickInfoIs("(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-
-goTo.marker('7');
-verify.completionListContains("Cornflower", "(enum member) Colors.Cornflower = 0", "Fancy name for 'blue'");
-verify.completionListContains("FancyPink", "(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
-verify.quickInfoIs("(enum member) Colors.FancyPink = 1", "Fancy name for 'pink'");
+verify.completions(
+    {
+        marker: "5",
+        includes: { name: "Colors", text: "enum Colors", documentation: "Enum of colors" },
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: ["6", "7"],
+        exact: [
+            { name: "Cornflower", text: "(enum member) Colors.Cornflower = 0", documentation: "Fancy name for 'blue'" },
+            { name: "FancyPink", text: "(enum member) Colors.FancyPink = 1", documentation: "Fancy name for 'pink'" },
+        ]
+    },
+);

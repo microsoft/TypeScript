@@ -4,24 +4,13 @@
 
 class C<T> extends T { }
 >C : C<T>
->T : T
 >T : any
 
 class C2<T, U> extends U { }
 >C2 : C2<T, U>
->T : T
->U : U
 >U : any
 
 interface I<T> extends T { }
->I : I<T>
->T : T
->T : T
-
 interface I2<T, U> extends U { }
->I2 : I2<T, U>
->T : T
->U : U
->U : U
 
 

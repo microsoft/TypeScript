@@ -12,29 +12,23 @@ class T { foo: string; }
 
 var s: S;
 >s : S
->S : S
 
 var t: T;
 >t : T
->T : T
 
 interface S2 { foo: string; bar?: string }
->S2 : S2
 >foo : string
 >bar : string
 
 interface T2 { foo: string; baz?: string }
->T2 : T2
 >foo : string
 >baz : string
 
 var s2: S2;
 >s2 : S2
->S2 : S2
 
 var t2: T2;
 >t2 : T2
->T2 : T2
 
 var a: { foo: string; bar?: string }
 >a : { foo: string; bar?: string; }

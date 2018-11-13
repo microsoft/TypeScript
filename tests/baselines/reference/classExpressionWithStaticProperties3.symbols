@@ -12,9 +12,9 @@ for (let i = 0; i < 3; i++) {
 >i : Symbol(i, Decl(classExpressionWithStaticProperties3.ts, 2, 8))
 
     arr.push(class C {
->arr.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticProperties3.ts, 1, 5))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(classExpressionWithStaticProperties3.ts, 3, 13))
 
         static x = i;
@@ -30,9 +30,9 @@ for (let i = 0; i < 3; i++) {
     });
 }
 arr.forEach(C => console.log(C.y()));
->arr.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>arr.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(classExpressionWithStaticProperties3.ts, 1, 5))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(classExpressionWithStaticProperties3.ts, 8, 12))
 >console : Symbol(console, Decl(classExpressionWithStaticProperties3.ts, 0, 11))
 >C.y : Symbol(y, Decl(classExpressionWithStaticProperties3.ts, 1, 12))

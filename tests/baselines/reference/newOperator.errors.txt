@@ -3,16 +3,15 @@ tests/cases/compiler/newOperator.ts(10,10): error TS2351: Cannot use 'new' with 
 tests/cases/compiler/newOperator.ts(11,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
 tests/cases/compiler/newOperator.ts(12,5): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/newOperator.ts(18,14): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/newOperator.ts(18,20): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(18,21): error TS1011: An element access expression should take an argument.
 tests/cases/compiler/newOperator.ts(21,1): error TS2693: 'string' only refers to a type, but is being used as a value here.
-tests/cases/compiler/newOperator.ts(22,1): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(22,2): error TS1011: An element access expression should take an argument.
 tests/cases/compiler/newOperator.ts(28,13): error TS2304: Cannot find name 'q'.
 tests/cases/compiler/newOperator.ts(31,10): error TS2351: Cannot use 'new' with an expression whose type lacks a call or construct signature.
-tests/cases/compiler/newOperator.ts(44,16): error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
-tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+tests/cases/compiler/newOperator.ts(45,24): error TS1011: An element access expression should take an argument.
 
 
-==== tests/cases/compiler/newOperator.ts (12 errors) ====
+==== tests/cases/compiler/newOperator.ts (11 errors) ====
     interface ifc { }
     // Attempting to 'new' an interface yields poor error
     var i = new ifc();
@@ -41,18 +40,17 @@ tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be us
     var t3 = new string[]( );
                  ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
-                       ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                        
+!!! error TS1011: An element access expression should take an argument.
     var t4 =
     new
     string
     ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
     [
-    ~
+     
+!!! error TS1011: An element access expression should take an argument.
         ]
-    ~~~~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
         (
             );
     
@@ -78,11 +76,9 @@ tests/cases/compiler/newOperator.ts(45,23): error TS1150: 'new T[]' cannot be us
     
     class S {
         public get xs(): M.T[] {
-                   ~~
-!!! error TS1056: Accessors are only available when targeting ECMAScript 5 and higher.
             return new M.T[];
-                          ~~
-!!! error TS1150: 'new T[]' cannot be used to create an array. Use 'new Array<T>()' instead.
+                           
+!!! error TS1011: An element access expression should take an argument.
         }
     }
     

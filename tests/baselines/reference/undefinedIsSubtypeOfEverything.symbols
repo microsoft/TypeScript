@@ -40,7 +40,7 @@ class D1A extends Base {
 
     foo: String;
 >foo : Symbol(D1A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 18, 24))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 
@@ -58,7 +58,7 @@ class D2A extends Base {
 
     foo: Number;
 >foo : Symbol(D2A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 27, 24))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 
@@ -76,7 +76,7 @@ class D3A extends Base {
 
     foo: Boolean;
 >foo : Symbol(D3A.foo, Decl(undefinedIsSubtypeOfEverything.ts, 36, 24))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 
@@ -86,7 +86,7 @@ class D4 extends Base {
 
     foo: RegExp;
 >foo : Symbol(D4.foo, Decl(undefinedIsSubtypeOfEverything.ts, 41, 23))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 class D5 extends Base {
@@ -95,7 +95,7 @@ class D5 extends Base {
 
     foo: Date;
 >foo : Symbol(D5.foo, Decl(undefinedIsSubtypeOfEverything.ts, 45, 23))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 
@@ -235,7 +235,7 @@ class D16 extends Base {
 
     foo: Object;
 >foo : Symbol(D16.foo, Decl(undefinedIsSubtypeOfEverything.ts, 112, 24))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 

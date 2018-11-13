@@ -1,7 +1,5 @@
 === tests/cases/compiler/overloadOnConstInObjectLiteralImplementingAnInterface.ts ===
 interface I {
->I : I
-
     x1(a: number, callback: (x: 'hi') => number);
 >x1 : (a: number, callback: (x: "hi") => number) => any
 >a : number
@@ -11,7 +9,6 @@ interface I {
 
 var i2: I = { x1: (a: number, cb: (x: 'hi') => number) => { } }; // error
 >i2 : I
->I : I
 >{ x1: (a: number, cb: (x: 'hi') => number) => { } } : { x1: (a: number, cb: (x: "hi") => number) => void; }
 >x1 : (a: number, cb: (x: "hi") => number) => void
 >(a: number, cb: (x: 'hi') => number) => { } : (a: number, cb: (x: "hi") => number) => void

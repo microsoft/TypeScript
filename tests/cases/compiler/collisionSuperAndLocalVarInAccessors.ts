@@ -1,3 +1,4 @@
+// @target: es5
 var _super = 10; // No Error
 class Foo {
     get prop1(): number {

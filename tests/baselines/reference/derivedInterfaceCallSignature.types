@@ -1,7 +1,5 @@
 === tests/cases/compiler/derivedInterfaceCallSignature.ts ===
 interface D3SvgPath {
->D3SvgPath : D3SvgPath
-
     (data: any, index?: number): string;
 >data : any
 >index : number
@@ -29,22 +27,17 @@ interface D3SvgPath {
 }
 
 interface D3SvgArea extends D3SvgPath {
->D3SvgArea : D3SvgArea
->D3SvgPath : D3SvgPath
-
     x(x: (data: any, index?: number) => number): D3SvgArea;
 >x : (x: (data: any, index?: number) => number) => D3SvgArea
 >x : (data: any, index?: number) => number
 >data : any
 >index : number
->D3SvgArea : D3SvgArea
 
     y(y: (data: any, index?: number) => number): D3SvgArea;
 >y : (y: (data: any, index?: number) => number) => D3SvgArea
 >y : (data: any, index?: number) => number
 >data : any
 >index : number
->D3SvgArea : D3SvgArea
 
     y0(): (data: any, index?: number) => number;
 >y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
@@ -54,14 +47,12 @@ interface D3SvgArea extends D3SvgPath {
     y0(y: number): D3SvgArea;
 >y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
 >y : number
->D3SvgArea : D3SvgArea
 
     y0(y: (data: any, index?: number) => number): D3SvgArea;
 >y0 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
 >y : (data: any, index?: number) => number
 >data : any
 >index : number
->D3SvgArea : D3SvgArea
 
     y1(): (data: any, index?: number) => number;
 >y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
@@ -71,36 +62,30 @@ interface D3SvgArea extends D3SvgPath {
     y1(y: number): D3SvgArea;
 >y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
 >y : number
->D3SvgArea : D3SvgArea
 
     y1(y: (data: any, index?: number) => number): D3SvgArea;
 >y1 : { (): (data: any, index?: number) => number; (y: number): D3SvgArea; (y: (data: any, index?: number) => number): D3SvgArea; }
 >y : (data: any, index?: number) => number
 >data : any
 >index : number
->D3SvgArea : D3SvgArea
 
     interpolate(interpolator: string): D3SvgArea;
 >interpolate : (interpolator: string) => D3SvgArea
 >interpolator : string
->D3SvgArea : D3SvgArea
 
     tension(tension: number): D3SvgArea;
 >tension : (tension: number) => D3SvgArea
 >tension : number
->D3SvgArea : D3SvgArea
 
     defined(defined: (data: any, index?: number) => boolean): D3SvgArea;
 >defined : (defined: (data: any, index?: number) => boolean) => D3SvgArea
 >defined : (data: any, index?: number) => boolean
 >data : any
 >index : number
->D3SvgArea : D3SvgArea
 }
 
 var area: D3SvgArea;
 >area : D3SvgArea
->D3SvgArea : D3SvgArea
 
 area.interpolate('two')('one');
 >area.interpolate('two')('one') : string

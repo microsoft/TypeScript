@@ -1,9 +1,9 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
+>'react' : typeof import("react")
+
 	class Component<T, U> { }
 >Component : Component<T, U>
->T : T
->U : U
 }
 
 === tests/cases/conformance/jsx/app.tsx ===
@@ -24,7 +24,7 @@ export class App extends React.Component<any, any> {
 >render : () => any
 
         return <Button />;
-><Button /> : any
+><Button /> : error
 >Button : typeof Button
     }
 
@@ -44,7 +44,7 @@ export class Button extends React.Component<any, any> {
 >render : () => any
 
         return <button>Some button</button>;
-><button>Some button</button> : any
+><button>Some button</button> : error
 >button : any
 >button : any
     }

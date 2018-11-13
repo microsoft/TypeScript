@@ -24,9 +24,9 @@ const pRanges = [P0, P1];
 const qRanges = [Q0, Q1];
 
 const ns = { definition: "namespace N", ranges: nRanges };
-const os = { definition: "import O", ranges: oRanges };
-const ps = { definition: "import P", ranges: pRanges };
-const qs = { definition: "import Q", ranges: qRanges };
+const os = { definition: "(alias) namespace O\nimport O", ranges: oRanges };
+const ps = { definition: "(alias) namespace P\nexport P", ranges: pRanges };
+const qs = { definition: "(alias) namespace Q\nimport Q", ranges: qRanges };
 
 verify.referenceGroups(nRanges, [ns, os, ps, qs]);
 verify.referenceGroups(oRanges, [os, ps, qs]);

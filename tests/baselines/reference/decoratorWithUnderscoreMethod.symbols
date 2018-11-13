@@ -6,13 +6,13 @@ declare var console : { log(arg: string): void };
 
 function dec(): Function {
 >dec : Symbol(dec, Decl(decoratorWithUnderscoreMethod.ts, 0, 49))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     return function (target: any, propKey: string, descr: PropertyDescriptor): void {
 >target : Symbol(target, Decl(decoratorWithUnderscoreMethod.ts, 2, 21))
 >propKey : Symbol(propKey, Decl(decoratorWithUnderscoreMethod.ts, 2, 33))
 >descr : Symbol(descr, Decl(decoratorWithUnderscoreMethod.ts, 2, 50))
->PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.d.ts, --, --))
+>PropertyDescriptor : Symbol(PropertyDescriptor, Decl(lib.es5.d.ts, --, --))
 
         console.log(target[propKey]);
 >console.log : Symbol(log, Decl(decoratorWithUnderscoreMethod.ts, 0, 23))

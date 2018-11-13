@@ -5,3 +5,12 @@ function* g() {
     yield;
 >yield : any
 }
+
+function* h() {
+>h : () => IterableIterator<any>
+
+    yield undefined;
+>yield undefined : any
+>undefined : undefined
+}
+

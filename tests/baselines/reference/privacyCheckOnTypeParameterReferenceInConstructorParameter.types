@@ -1,13 +1,10 @@
 === tests/cases/compiler/privacyCheckOnTypeParameterReferenceInConstructorParameter.ts ===
 export class A<T1>{
 >A : A<T1>
->T1 : T1
 
     constructor(callback: (self: A<T1>) => void) {
 >callback : (self: A<T1>) => void
 >self : A<T1>
->A : A<T1>
->T1 : T1
 
         var child = new B(this);
 >child : B<this>
@@ -19,10 +16,8 @@ export class A<T1>{
 
 export class B<T2> {
 >B : B<T2>
->T2 : T2
 
     constructor(parent: T2) { }
 >parent : T2
->T2 : T2
 }
 

@@ -14,8 +14,9 @@ import { Observable } from "./observable"
 >function() { } : () => void
 
 declare module "./observable" {
+>"./observable" : typeof import("tests/cases/compiler/observable")
+
     interface I {x0}
->I : I
 >x0 : any
 }
 
@@ -35,8 +36,9 @@ import { Observable } from "./observable"
 >function() { } : () => void
 
 declare module "./observable" {
+>"./observable" : typeof import("tests/cases/compiler/observable")
+
     interface I {x1}
->I : I
 >x1 : any
 }
 
@@ -44,15 +46,11 @@ declare module "./observable" {
 === tests/cases/compiler/observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
->T : T
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
 >pred : (e: T) => boolean
 >e : T
->T : T
->Observable : Observable<T>
->T : T
 }
 
 === tests/cases/compiler/main.ts ===
@@ -64,5 +62,4 @@ import "./map2";
 
 let x: Observable<number>;
 >x : Observable<number>
->Observable : Observable<T>
 

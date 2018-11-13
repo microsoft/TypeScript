@@ -4,7 +4,6 @@ let obj: number[];
 
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 function a() {
 >a : () => void

@@ -17,7 +17,6 @@ class c {
 
 var x: c;
 >x : c
->c : c
 
 var y = c;
 >y : typeof c
@@ -29,7 +28,6 @@ var z: typeof c;
 
 class genericC<T>
 >genericC : genericC<T>
->T : T
 {
 }
 var genericX = genericC;

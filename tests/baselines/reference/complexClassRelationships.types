@@ -6,7 +6,6 @@ class Derived extends Base {
 
     public static createEmpty(): Derived {
 >createEmpty : () => Derived
->Derived : Derived
 
         var item = new Derived();
 >item : Derived
@@ -19,17 +18,13 @@ class Derived extends Base {
 }
 class BaseCollection<T extends Base> {
 >BaseCollection : BaseCollection<T>
->T : T
->Base : Base
 
     constructor(f: () => T) {
 >f : () => T
->T : T
 
         (item: Thing) => { return [item.Components]; };
 >(item: Thing) => { return [item.Components]; } : (item: Thing) => ComponentCollection<any>[]
 >item : Thing
->Thing : Thing
 >[item.Components] : ComponentCollection<any>[]
 >item.Components : ComponentCollection<any>
 >item : Thing
@@ -41,8 +36,6 @@ class Base {
 
     ownerCollection: BaseCollection<Base>;
 >ownerCollection : BaseCollection<Base>
->BaseCollection : BaseCollection<T>
->Base : Base
 }
 
 class Thing {
@@ -50,18 +43,15 @@ class Thing {
 
     public get Components(): ComponentCollection<any> { return null }
 >Components : ComponentCollection<any>
->ComponentCollection : ComponentCollection<T>
 >null : null
 }
 
 class ComponentCollection<T> {
 >ComponentCollection : ComponentCollection<T>
->T : T
 
     private static sortComponents(p: Foo) {
 >sortComponents : (p: Foo) => GenericType<string>
 >p : Foo
->Foo : Foo
 
         return p.prop1;
 >p.prop1 : GenericType<string>
@@ -91,13 +81,10 @@ class Foo {
     }
     public get prop2(): BaseCollection<Derived> {
 >prop2 : BaseCollection<Derived>
->BaseCollection : BaseCollection<T>
->Derived : Derived
 
         return new BaseCollection<Derived>(Derived.createEmpty);
 >new BaseCollection<Derived>(Derived.createEmpty) : BaseCollection<Derived>
 >BaseCollection : typeof BaseCollection
->Derived : Derived
 >Derived.createEmpty : () => Derived
 >Derived : typeof Derived
 >createEmpty : () => Derived
@@ -106,11 +93,9 @@ class Foo {
 
 class GenericType<T> {
 >GenericType : GenericType<T>
->T : T
 
     constructor(parent: FooBase) { }
 >parent : FooBase
->FooBase : FooBase
 }
 
 class FooBase {

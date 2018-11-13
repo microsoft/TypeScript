@@ -2,8 +2,6 @@
 // Each pair of signatures in these types has a signature that should cause an error. 
 // Overloads, generic or not, that differ only by return type are an error.
 interface I {
->I : I
-
     (x): number;
 >x : any
 
@@ -11,41 +9,26 @@ interface I {
 >x : any
 
     <T>(x: T): number;
->T : T
 >x : T
->T : T
 
     <T>(x: T): string; // error
->T : T
 >x : T
->T : T
 }
 
 interface I2 {
->I2 : I2
-
     <T>(x: T): number;
->T : T
 >x : T
->T : T
 
     <T>(x: T): string; // error
->T : T
 >x : T
->T : T
 }
 
 interface I3<T> {
->I3 : I3<T>
->T : T
-
     (x: T): number;
 >x : T
->T : T
 
     (x: T): string; // error
 >x : T
->T : T
 }
 
 var a: {
@@ -54,7 +37,6 @@ var a: {
     (x, y): Object;
 >x : any
 >y : any
->Object : Object
 
     (x, y): any; // error
 >x : any
@@ -65,12 +47,8 @@ var a2: {
 >a2 : { <T>(x: T): number; <T>(x: T): string; }
 
     <T>(x: T): number;
->T : T
 >x : T
->T : T
 
     <T>(x: T): string; // error
->T : T
 >x : T
->T : T
 }

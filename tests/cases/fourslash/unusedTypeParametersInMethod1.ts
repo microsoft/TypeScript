@@ -1,11 +1,11 @@
 /// <reference path='fourslash.ts' />
 
-// @noUnusedLocals: true
+// @noUnusedParameters: true
 //// class C1 {
 ////    [|f1<T extends number>()|] {}
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'",
+    description: "Remove type parameters",
     newRangeContent: "f1()",
 });

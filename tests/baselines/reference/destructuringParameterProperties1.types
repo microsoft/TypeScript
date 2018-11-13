@@ -19,7 +19,6 @@ class C2 {
 >x : string
 >y : number
 >z : boolean
->TupleType1 : [string, number, boolean]
     }
 }
 
@@ -36,7 +35,6 @@ class C3 {
 >x : number
 >y : string
 >z : boolean
->ObjType1 : ObjType1
     }
 }
 
@@ -104,12 +102,12 @@ var c3 = new C3({x: 0, y: "", z: false});
 >c3 : C3
 >new C3({x: 0, y: "", z: false}) : C3
 >C3 : typeof C3
->{x: 0, y: "", z: false} : { x: number; y: string; z: boolean; }
+>{x: 0, y: "", z: false} : { x: number; y: string; z: false; }
 >x : number
 >0 : 0
 >y : string
 >"" : ""
->z : boolean
+>z : false
 >false : false
 
 c3 = new C3({x: 0, "y": "y", z: true});
@@ -117,11 +115,12 @@ c3 = new C3({x: 0, "y": "y", z: true});
 >c3 : C3
 >new C3({x: 0, "y": "y", z: true}) : C3
 >C3 : typeof C3
->{x: 0, "y": "y", z: true} : { x: number; "y": string; z: boolean; }
+>{x: 0, "y": "y", z: true} : { x: number; "y": string; z: true; }
 >x : number
 >0 : 0
+>"y" : string
 >"y" : "y"
->z : boolean
+>z : true
 >true : true
 
 var [c3_x, c3_y, c3_z] = [c3.x, c3.y, c3.z];

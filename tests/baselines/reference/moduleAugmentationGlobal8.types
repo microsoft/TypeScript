@@ -1,13 +1,9 @@
 === tests/cases/compiler/moduleAugmentationGlobal8.ts ===
 namespace A {
->A : any
-
     declare global {
 >global : typeof global
 
         interface Array<T> { x }
->Array : Array<T>
->T : T
 >x : any
     }
 }

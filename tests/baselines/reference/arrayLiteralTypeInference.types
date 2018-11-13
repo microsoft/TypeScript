@@ -24,7 +24,6 @@ class ActionB extends Action {
 
 var x1: Action[] = [
 >x1 : Action[]
->Action : Action
 >[    { id: 2, trueness: false },    { id: 3, name: "three" }] : ({ id: number; trueness: boolean; } | { id: number; name: string; })[]
 
     { id: 2, trueness: false },
@@ -45,7 +44,6 @@ var x1: Action[] = [
 
 var x2: Action[] = [
 >x2 : Action[]
->Action : Action
 >[    new ActionA(),    new ActionB()] : (ActionA | ActionB)[]
 
     new ActionA(),
@@ -60,7 +58,6 @@ var x2: Action[] = [
 
 var x3: Action[] = [
 >x3 : Action[]
->Action : Action
 >[    new Action(),    new ActionA(),    new ActionB()] : Action[]
 
     new Action(),

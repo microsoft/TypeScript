@@ -183,8 +183,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 14>                                                                                                                                                                                                  , 
 15>                                                                                                                                                                                                    secondarySkillA = "noSkill"
 16>                                                                                                                                                                                                              
-17>                                                                                                                                                                                                                secondarySkillA = "noSkill"
-18>                                                                                                                                                                                                                                                                ] = ["noSkill", "noSkill"]] = multiRobotA;
+17>                                                                                                                                                                                                                secondarySkillA = "noSkill"] = ["noSkill", "noSkill"]
+18>                                                                                                                                                                                                                                                                ] = multiRobotA;
 1->Emitted(5, 1) Source(10, 6) + SourceIndex(0)
 2 >Emitted(5, 5) Source(10, 6) + SourceIndex(0)
 3 >Emitted(5, 24) Source(10, 23) + SourceIndex(0)
@@ -201,7 +201,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 14>Emitted(5, 197) Source(10, 53) + SourceIndex(0)
 15>Emitted(5, 207) Source(10, 80) + SourceIndex(0)
 16>Emitted(5, 209) Source(10, 53) + SourceIndex(0)
-17>Emitted(5, 257) Source(10, 80) + SourceIndex(0)
+17>Emitted(5, 257) Source(10, 106) + SourceIndex(0)
 18>Emitted(5, 258) Source(10, 122) + SourceIndex(0)
 ---
 >>>var _h = ["roomba", ["vaccum", "mopping"]][0], nameMC = _h === void 0 ? "noName" : _h;
@@ -267,8 +267,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 16>                                                                                                                                                                                                                         , 
 17>                                                                                                                                                                                                                           secondarySkillC = "noSkill"
 18>                                                                                                                                                                                                                                     
-19>                                                                                                                                                                                                                                       secondarySkillC = "noSkill"
-20>                                                                                                                                                                                                                                                                                       ] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]];
+19>                                                                                                                                                                                                                                       secondarySkillC = "noSkill"] = ["noSkill", "noSkill"]] = ["roomba", ["vaccum", "mopping"]]
+20>                                                                                                                                                                                                                                                                                       ;
 1->Emitted(7, 1) Source(13, 5) + SourceIndex(0)
 2 >Emitted(7, 5) Source(13, 5) + SourceIndex(0)
 3 >Emitted(7, 43) Source(13, 144) + SourceIndex(0)
@@ -287,43 +287,31 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 16>Emitted(7, 220) Source(13, 54) + SourceIndex(0)
 17>Emitted(7, 230) Source(13, 81) + SourceIndex(0)
 18>Emitted(7, 232) Source(13, 54) + SourceIndex(0)
-19>Emitted(7, 280) Source(13, 81) + SourceIndex(0)
+19>Emitted(7, 280) Source(13, 144) + SourceIndex(0)
 20>Emitted(7, 281) Source(13, 145) + SourceIndex(0)
 ---
 >>>if (nameMB == nameMA) {
 1 >
-2 >^^
-3 >  ^
-4 >   ^
-5 >    ^^^^^^
-6 >          ^^^^
-7 >              ^^^^^^
-8 >                    ^
-9 >                     ^
-10>                      ^
-11>                       ^^^^^^^^^^^^^^^^^->
+2 >^^^^
+3 >    ^^^^^^
+4 >          ^^^^
+5 >              ^^^^^^
+6 >                    ^^
+7 >                      ^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >if
-3 >   
-4 >   (
-5 >    nameMB
-6 >           == 
-7 >              nameMA
-8 >                    )
-9 >                      
-10>                      {
+2 >if (
+3 >    nameMB
+4 >           == 
+5 >              nameMA
+6 >                    ) 
 1 >Emitted(8, 1) Source(15, 1) + SourceIndex(0)
-2 >Emitted(8, 3) Source(15, 3) + SourceIndex(0)
-3 >Emitted(8, 4) Source(15, 4) + SourceIndex(0)
-4 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
-5 >Emitted(8, 11) Source(15, 11) + SourceIndex(0)
-6 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
-7 >Emitted(8, 21) Source(15, 21) + SourceIndex(0)
-8 >Emitted(8, 22) Source(15, 22) + SourceIndex(0)
-9 >Emitted(8, 23) Source(15, 23) + SourceIndex(0)
-10>Emitted(8, 24) Source(15, 24) + SourceIndex(0)
+2 >Emitted(8, 5) Source(15, 5) + SourceIndex(0)
+3 >Emitted(8, 11) Source(15, 11) + SourceIndex(0)
+4 >Emitted(8, 15) Source(15, 15) + SourceIndex(0)
+5 >Emitted(8, 21) Source(15, 21) + SourceIndex(0)
+6 >Emitted(8, 23) Source(15, 23) + SourceIndex(0)
 ---
 >>>    console.log(skillA[0] + skillA[1]);
 1->^^^^
@@ -342,7 +330,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 14>                                    ^
 15>                                     ^
 16>                                      ^
-1->
+1->{
   >    
 2 >    console
 3 >           .
@@ -377,13 +365,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementArrayBindingPatternD
 16>Emitted(9, 40) Source(16, 40) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(10, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(10, 2) Source(17, 2) + SourceIndex(0)
+  >}
+1 >Emitted(10, 2) Source(17, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues2.js.map

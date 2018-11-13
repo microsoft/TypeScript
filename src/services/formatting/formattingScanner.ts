@@ -1,6 +1,3 @@
-/// <reference path="formatting.ts"/>
-/// <reference path="..\..\compiler\scanner.ts"/>
-
 /* @internal */
 namespace ts.formatting {
     const standardScanner = createScanner(ScriptTarget.Latest, /*skipTrivia*/ false, LanguageVariant.Standard);
@@ -10,7 +7,7 @@ namespace ts.formatting {
         advance(): void;
         isOnToken(): boolean;
         readTokenInfo(n: Node): TokenInfo;
-        getCurrentLeadingTrivia(): TextRangeWithKind[];
+        getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
     }
@@ -31,8 +28,8 @@ namespace ts.formatting {
         scanner.setTextPos(startPos);
 
         let wasNewLine = true;
-        let leadingTrivia: TextRangeWithKind[] | undefined;
-        let trailingTrivia: TextRangeWithKind[] | undefined;
+        let leadingTrivia: TextRangeWithTriviaKind[] | undefined;
+        let trailingTrivia: TextRangeWithTriviaKind[] | undefined;
 
         let savedPos: number;
         let lastScanAction: ScanAction | undefined;
@@ -57,7 +54,7 @@ namespace ts.formatting {
             const isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
-                wasNewLine = trailingTrivia && lastOrUndefined(trailingTrivia)!.kind === SyntaxKind.NewLineTrivia;
+                wasNewLine = !!trailingTrivia && last(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
             }
             else {
                 scanner.scan();
@@ -77,7 +74,7 @@ namespace ts.formatting {
 
                 // consume leading trivia
                 scanner.scan();
-                const item = {
+                const item: TextRangeWithTriviaKind = {
                     pos,
                     end: scanner.getStartPos(),
                     kind: t
@@ -188,7 +185,7 @@ namespace ts.formatting {
                 if (!isTrivia(currentToken)) {
                     break;
                 }
-                const trivia = {
+                const trivia: TextRangeWithTriviaKind = {
                     pos: scanner.getStartPos(),
                     end: scanner.getTextPos(),
                     kind: currentToken

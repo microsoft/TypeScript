@@ -28,22 +28,17 @@ tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS1212: Identifier 
 tests/cases/compiler/strictModeReservedWord.ts(19,21): error TS2503: Cannot find namespace 'private'.
 tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(20,22): error TS2503: Cannot find namespace 'private'.
-tests/cases/compiler/strictModeReservedWord.ts(20,30): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(21,22): error TS2503: Cannot find namespace 'private'.
-tests/cases/compiler/strictModeReservedWord.ts(21,30): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(21,38): error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(22,9): error TS2300: Duplicate identifier 'b'.
 tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(22,12): error TS2503: Cannot find namespace 'interface'.
-tests/cases/compiler/strictModeReservedWord.ts(22,22): error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-tests/cases/compiler/strictModeReservedWord.ts(22,30): error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(23,5): error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
 tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS1212: Identifier expected. 'static' is a reserved word in strict mode.
 tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invoke an expression whose type lacks a call signature. Type 'String' has no compatible call signatures.
 
 
-==== tests/cases/compiler/strictModeReservedWord.ts (43 errors) ====
+==== tests/cases/compiler/strictModeReservedWord.ts (38 errors) ====
     let let = 10;
         ~~~
 !!! error TS2480: 'let' is not allowed to be used as a name in 'let' or 'const' declarations.
@@ -124,17 +119,11 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
                          ~~~~~~~
 !!! error TS2503: Cannot find namespace 'private'.
-                                 ~~~~~~~
-!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
         function foo2(x: private.package.protected) { }
                          ~~~~~~~
 !!! error TS1212: Identifier expected. 'private' is a reserved word in strict mode.
                          ~~~~~~~
 !!! error TS2503: Cannot find namespace 'private'.
-                                 ~~~~~~~
-!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-                                         ~~~~~~~~~
-!!! error TS1212: Identifier expected. 'protected' is a reserved word in strict mode.
         let b: interface.package.implements.B;
             ~
 !!! error TS2300: Duplicate identifier 'b'.
@@ -142,13 +131,10 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
 !!! error TS1212: Identifier expected. 'interface' is a reserved word in strict mode.
                ~~~~~~~~~
 !!! error TS2503: Cannot find namespace 'interface'.
-                         ~~~~~~~
-!!! error TS1212: Identifier expected. 'package' is a reserved word in strict mode.
-                                 ~~~~~~~~~~
-!!! error TS1212: Identifier expected. 'implements' is a reserved word in strict mode.
         ublic();
         ~~~~~
 !!! error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
+!!! related TS2728 tests/cases/compiler/strictModeReservedWord.ts:5:9: 'public' is declared here.
         static();
         ~~~~~~
 !!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.

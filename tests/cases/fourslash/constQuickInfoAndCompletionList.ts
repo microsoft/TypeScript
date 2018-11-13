@@ -9,27 +9,22 @@
 ////    var z = /*6*/a;
 ////    /*7*/
 ////}
-verify.quickInfoAt("1", "const a: 10");
 
-goTo.marker('2');
-verify.completionListContains("a", "const a: 10");
-verify.quickInfoIs("const a: 10");
+const a = "const a: 10";
+const b = "const b: 20";
+const completeA: FourSlashInterface.ExpectedCompletionEntry = { name: "a", text: a };
+const completeB: FourSlashInterface.ExpectedCompletionEntry = { name: "b", text: b };
+verify.completions(
+    { marker: "2", includes: completeA, excludes: "b", isNewIdentifierLocation: true },
+    { marker: "3", includes: completeA, excludes: "b" },
+    { marker: ["5", "6"], includes: [completeA, completeB], isNewIdentifierLocation: true },
+    { marker: "7", includes: [completeA, completeB] },
+);
 
-goTo.marker('3');
-verify.completionListContains("a", "const a: 10");
-
-verify.quickInfoAt("4", "const b: 20");
-
-goTo.marker('5');
-verify.completionListContains("a", "const a: 10");
-verify.completionListContains("b", "const b: 20");
-verify.quickInfoIs("const b: 20");
-
-goTo.marker('6');
-verify.completionListContains("a", "const a: 10");
-verify.completionListContains("b", "const b: 20");
-verify.quickInfoIs("const a: 10");
-
-goTo.marker('7');
-verify.completionListContains("a", "const a: 10");
-verify.completionListContains("b", "const b: 20");
+verify.quickInfos({
+    1: a,
+    2: a,
+    4: b,
+    5: b,
+    6: a,
+});

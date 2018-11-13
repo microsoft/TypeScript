@@ -9,665 +9,552 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerWithDetailCallback : typeof AstWalkerWithDetailCallback
 
     export interface AstWalkerDetailCallback {
->AstWalkerDetailCallback : AstWalkerDetailCallback
-
         EmptyCallback? (pre, ast: AST): boolean;
 >EmptyCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         EmptyExprCallback? (pre, ast: AST): boolean;
 >EmptyExprCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TrueCallback? (pre, ast: AST): boolean;
 >TrueCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         FalseCallback? (pre, ast: AST): boolean;
 >FalseCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ThisCallback? (pre, ast: AST): boolean;
 >ThisCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         SuperCallback? (pre, ast: AST): boolean;
 >SuperCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         QStringCallback? (pre, ast: AST): boolean;
 >QStringCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         RegexCallback? (pre, ast: AST): boolean;
 >RegexCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NullCallback? (pre, ast: AST): boolean;
 >NullCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ArrayLitCallback? (pre, ast: AST): boolean;
 >ArrayLitCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ObjectLitCallback? (pre, ast: AST): boolean;
 >ObjectLitCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         VoidCallback? (pre, ast: AST): boolean;
 >VoidCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         CommaCallback? (pre, ast: AST): boolean;
 >CommaCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         PosCallback? (pre, ast: AST): boolean;
 >PosCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NegCallback? (pre, ast: AST): boolean;
 >NegCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DeleteCallback? (pre, ast: AST): boolean;
 >DeleteCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AwaitCallback? (pre, ast: AST): boolean;
 >AwaitCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         InCallback? (pre, ast: AST): boolean;
 >InCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DotCallback? (pre, ast: AST): boolean;
 >DotCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         FromCallback? (pre, ast: AST): boolean;
 >FromCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         IsCallback? (pre, ast: AST): boolean;
 >IsCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         InstOfCallback? (pre, ast: AST): boolean;
 >InstOfCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TypeofCallback? (pre, ast: AST): boolean;
 >TypeofCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NumberLitCallback? (pre, ast: AST): boolean;
 >NumberLitCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NameCallback? (pre, identifierAst: Identifier): boolean;
 >NameCallback : (pre: any, identifierAst: any) => boolean
 >pre : any
 >identifierAst : any
->Identifier : No type information available!
 
         TypeRefCallback? (pre, ast: AST): boolean;
 >TypeRefCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         IndexCallback? (pre, ast: AST): boolean;
 >IndexCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         CallCallback? (pre, ast: AST): boolean;
 >CallCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NewCallback? (pre, ast: AST): boolean;
 >NewCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgCallback? (pre, ast: AST): boolean;
 >AsgCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgAddCallback? (pre, ast: AST): boolean;
 >AsgAddCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgSubCallback? (pre, ast: AST): boolean;
 >AsgSubCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgDivCallback? (pre, ast: AST): boolean;
 >AsgDivCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgMulCallback? (pre, ast: AST): boolean;
 >AsgMulCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgModCallback? (pre, ast: AST): boolean;
 >AsgModCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgAndCallback? (pre, ast: AST): boolean;
 >AsgAndCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgXorCallback? (pre, ast: AST): boolean;
 >AsgXorCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgOrCallback? (pre, ast: AST): boolean;
 >AsgOrCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgLshCallback? (pre, ast: AST): boolean;
 >AsgLshCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgRshCallback? (pre, ast: AST): boolean;
 >AsgRshCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AsgRs2Callback? (pre, ast: AST): boolean;
 >AsgRs2Callback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         QMarkCallback? (pre, ast: AST): boolean;
 >QMarkCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LogOrCallback? (pre, ast: AST): boolean;
 >LogOrCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LogAndCallback? (pre, ast: AST): boolean;
 >LogAndCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         OrCallback? (pre, ast: AST): boolean;
 >OrCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         XorCallback? (pre, ast: AST): boolean;
 >XorCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AndCallback? (pre, ast: AST): boolean;
 >AndCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         EqCallback? (pre, ast: AST): boolean;
 >EqCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NeCallback? (pre, ast: AST): boolean;
 >NeCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         EqvCallback? (pre, ast: AST): boolean;
 >EqvCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NEqvCallback? (pre, ast: AST): boolean;
 >NEqvCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LtCallback? (pre, ast: AST): boolean;
 >LtCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LeCallback? (pre, ast: AST): boolean;
 >LeCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         GtCallback? (pre, ast: AST): boolean;
 >GtCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         GeCallback? (pre, ast: AST): boolean;
 >GeCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         AddCallback? (pre, ast: AST): boolean;
 >AddCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         SubCallback? (pre, ast: AST): boolean;
 >SubCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         MulCallback? (pre, ast: AST): boolean;
 >MulCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DivCallback? (pre, ast: AST): boolean;
 >DivCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ModCallback? (pre, ast: AST): boolean;
 >ModCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LshCallback? (pre, ast: AST): boolean;
 >LshCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         RshCallback? (pre, ast: AST): boolean;
 >RshCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         Rs2Callback? (pre, ast: AST): boolean;
 >Rs2Callback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         NotCallback? (pre, ast: AST): boolean;
 >NotCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LogNotCallback? (pre, ast: AST): boolean;
 >LogNotCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         IncPreCallback? (pre, ast: AST): boolean;
 >IncPreCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DecPreCallback? (pre, ast: AST): boolean;
 >DecPreCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         IncPostCallback? (pre, ast: AST): boolean;
 >IncPostCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DecPostCallback? (pre, ast: AST): boolean;
 >DecPostCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TypeAssertionCallback? (pre, ast: AST): boolean;
 >TypeAssertionCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         FuncDeclCallback? (pre, funcDecl: FuncDecl): boolean;
 >FuncDeclCallback : (pre: any, funcDecl: any) => boolean
 >pre : any
 >funcDecl : any
->FuncDecl : No type information available!
 
         MemberCallback? (pre, ast: AST): boolean;
 >MemberCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         VarDeclCallback? (pre, varDecl: VarDecl): boolean;
 >VarDeclCallback : (pre: any, varDecl: any) => boolean
 >pre : any
 >varDecl : any
->VarDecl : No type information available!
 
         ArgDeclCallback? (pre, ast: AST): boolean;
 >ArgDeclCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ReturnCallback? (pre, ast: AST): boolean;
 >ReturnCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         BreakCallback? (pre, ast: AST): boolean;
 >BreakCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ContinueCallback? (pre, ast: AST): boolean;
 >ContinueCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ThrowCallback? (pre, ast: AST): boolean;
 >ThrowCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ForCallback? (pre, ast: AST): boolean;
 >ForCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ForInCallback? (pre, ast: AST): boolean;
 >ForInCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         IfCallback? (pre, ast: AST): boolean;
 >IfCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         WhileCallback? (pre, ast: AST): boolean;
 >WhileCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DoWhileCallback? (pre, ast: AST): boolean;
 >DoWhileCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         BlockCallback? (pre, block: Block): boolean;
 >BlockCallback : (pre: any, block: any) => boolean
 >pre : any
 >block : any
->Block : No type information available!
 
         CaseCallback? (pre, ast: AST): boolean;
 >CaseCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         SwitchCallback? (pre, ast: AST): boolean;
 >SwitchCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TryCallback? (pre, ast: AST): boolean;
 >TryCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TryCatchCallback? (pre, ast: AST): boolean;
 >TryCatchCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         TryFinallyCallback? (pre, ast: AST): boolean;
 >TryFinallyCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         FinallyCallback? (pre, ast: AST): boolean;
 >FinallyCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         CatchCallback? (pre, ast: AST): boolean;
 >CatchCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ListCallback? (pre, astList: ASTList): boolean;
 >ListCallback : (pre: any, astList: any) => boolean
 >pre : any
 >astList : any
->ASTList : No type information available!
 
         ScriptCallback? (pre, script: Script): boolean;
 >ScriptCallback : (pre: any, script: any) => boolean
 >pre : any
 >script : any
->Script : No type information available!
 
         ClassDeclarationCallback? (pre, ast: AST): boolean;
 >ClassDeclarationCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         InterfaceDeclarationCallback? (pre, interfaceDecl: InterfaceDeclaration): boolean;
 >InterfaceDeclarationCallback : (pre: any, interfaceDecl: any) => boolean
 >pre : any
 >interfaceDecl : any
->InterfaceDeclaration : No type information available!
 
         ModuleDeclarationCallback? (pre, moduleDecl: ModuleDeclaration): boolean;
 >ModuleDeclarationCallback : (pre: any, moduleDecl: any) => boolean
 >pre : any
 >moduleDecl : any
->ModuleDeclaration : No type information available!
 
         ImportDeclarationCallback? (pre, ast: AST): boolean;
 >ImportDeclarationCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         WithCallback? (pre, ast: AST): boolean;
 >WithCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         LabelCallback? (pre, labelAST: AST): boolean;
 >LabelCallback : (pre: any, labelAST: any) => boolean
 >pre : any
 >labelAST : any
->AST : No type information available!
 
         LabeledStatementCallback? (pre, ast: AST): boolean;
 >LabeledStatementCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         EBStartCallback? (pre, ast: AST): boolean;
 >EBStartCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         GotoEBCallback? (pre, ast: AST): boolean;
 >GotoEBCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         EndCodeCallback? (pre, ast: AST): boolean;
 >EndCodeCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         ErrorCallback? (pre, ast: AST): boolean;
 >ErrorCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         CommentCallback? (pre, ast: AST): boolean;
 >CommentCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DebuggerCallback? (pre, ast: AST): boolean;
 >DebuggerCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
 
         DefaultCallback? (pre, ast: AST): boolean;
 >DefaultCallback : (pre: any, ast: any) => boolean
 >pre : any
 >ast : any
->AST : No type information available!
     }
 
     export function walk(script: Script, callback: AstWalkerDetailCallback): void {
 >walk : (script: any, callback: AstWalkerDetailCallback) => void
 >script : any
->Script : No type information available!
 >callback : AstWalkerDetailCallback
->AstWalkerDetailCallback : AstWalkerDetailCallback
 
         var pre = (cur: AST, parent: AST) => {
 >pre : (cur: any, parent: any) => any
 >(cur: AST, parent: AST) => {            walker.options.goChildren = AstWalkerCallback(true, cur, callback);            return cur;        } : (cur: any, parent: any) => any
 >cur : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 
             walker.options.goChildren = AstWalkerCallback(true, cur, callback);
 >walker.options.goChildren = AstWalkerCallback(true, cur, callback) : boolean
@@ -690,9 +577,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >post : (cur: any, parent: any) => any
 >(cur: AST, parent: AST) => {            AstWalkerCallback(false, cur, callback);            return cur;        } : (cur: any, parent: any) => any
 >cur : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 
             AstWalkerCallback(false, cur, callback);
 >AstWalkerCallback(false, cur, callback) : boolean
@@ -730,9 +615,7 @@ module TypeScript.AstWalkerWithDetailCallback {
 >AstWalkerCallback : (pre: boolean, ast: any, callback: AstWalkerDetailCallback) => boolean
 >pre : boolean
 >ast : any
->AST : No type information available!
 >callback : AstWalkerDetailCallback
->AstWalkerDetailCallback : AstWalkerDetailCallback
 
         // See if the Callback needs to be handled using specific one or default one
         var nodeType = ast.nodeType;

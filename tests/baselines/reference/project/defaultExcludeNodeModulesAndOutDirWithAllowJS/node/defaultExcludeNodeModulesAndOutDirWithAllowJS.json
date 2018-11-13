@@ -3,7 +3,7 @@
     "projectRoot": "tests/cases/projects/projectOption/DefaultExcludeNodeModulesAndOutDirWithAllowJS",
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "a.ts"
     ],
     "emittedFiles": [

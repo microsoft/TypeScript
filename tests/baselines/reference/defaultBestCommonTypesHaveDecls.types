@@ -9,7 +9,6 @@ obj1.length;
 
 var obj2: Object;
 >obj2 : Object
->Object : Object
 
 obj2.length;
 >obj2.length : any
@@ -18,12 +17,8 @@ obj2.length;
 
 function concat<T>(x: T, y: T): T { return null; }
 >concat : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 >null : null
 
 var result = concat(1, ""); // error
@@ -41,12 +36,8 @@ var elementCount = result.length;
 
 function concat2<T, U>(x: T, y: U) { return null; }
 >concat2 : <T, U>(x: T, y: U) => any
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 >null : null
 
 var result2 = concat2(1, ""); // result2 will be number|string

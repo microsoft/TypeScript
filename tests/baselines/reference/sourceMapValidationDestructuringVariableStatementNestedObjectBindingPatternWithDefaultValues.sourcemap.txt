@@ -196,8 +196,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 11>                                                                                                                                                            secondary: secondaryA = "noSkill"
 12>                                                                                                                                                                             
 13>                                                                                                                                                                               secondary: secondaryA = "noSkill"
+  >                                                                                                                                                                                   } = { primary: "noSkill", secondary: "noSkill" }
 14>                                                                                                                                                                                                                          
-  >                                                                                                                                                                                                                              } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                                                                                                                                                          } = robotA;
 1->Emitted(3, 1) Source(15, 5) + SourceIndex(0)
 2 >Emitted(3, 5) Source(15, 5) + SourceIndex(0)
@@ -211,7 +211,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 10>Emitted(3, 157) Source(17, 9) + SourceIndex(0)
 11>Emitted(3, 174) Source(17, 42) + SourceIndex(0)
 12>Emitted(3, 176) Source(17, 9) + SourceIndex(0)
-13>Emitted(3, 219) Source(17, 42) + SourceIndex(0)
+13>Emitted(3, 219) Source(18, 53) + SourceIndex(0)
 14>Emitted(3, 220) Source(19, 12) + SourceIndex(0)
 ---
 >>>var _e = robotB.name, nameB = _e === void 0 ? "noNameSpecified" : _e, _f = robotB.skills, _g = _f === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _f, _h = _g.primary, primaryB = _h === void 0 ? "noSkill" : _h, _j = _g.secondary, secondaryB = _j === void 0 ? "noSkill" : _j;
@@ -261,8 +261,8 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 15>                                                                                                                                                                                                                              secondary: secondaryB = "noSkill"
 16>                                                                                                                                                                                                                                               
 17>                                                                                                                                                                                                                                                 secondary: secondaryB = "noSkill"
+  >                                                                                                                                                                                                                                                     } = { primary: "noSkill", secondary: "noSkill" }
 18>                                                                                                                                                                                                                                                                                            
-  >                                                                                                                                                                                                                                                                                                } = { primary: "noSkill", secondary: "noSkill" }
   >                                                                                                                                                                                                                                                                                            } = robotB;
 1->Emitted(4, 1) Source(21, 5) + SourceIndex(0)
 2 >Emitted(4, 5) Source(21, 5) + SourceIndex(0)
@@ -280,7 +280,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 14>Emitted(4, 223) Source(24, 9) + SourceIndex(0)
 15>Emitted(4, 240) Source(24, 42) + SourceIndex(0)
 16>Emitted(4, 242) Source(24, 9) + SourceIndex(0)
-17>Emitted(4, 285) Source(24, 42) + SourceIndex(0)
+17>Emitted(4, 285) Source(25, 53) + SourceIndex(0)
 18>Emitted(4, 286) Source(26, 12) + SourceIndex(0)
 ---
 >>>var _k = { name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }, _l = _k.name, nameC = _l === void 0 ? "noNameSpecified" : _l, _m = _k.skills, _o = _m === void 0 ? { primary: "noSkill", secondary: "noSkill" } : _m, _p = _o.primary, primaryB = _p === void 0 ? "noSkill" : _p, _q = _o.secondary, secondaryB = _q === void 0 ? "noSkill" : _q;
@@ -338,9 +338,9 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 17>                                                                                                                                                                                                                                                                                                           secondary: secondaryB = "noSkill"
 18>                                                                                                                                                                                                                                                                                                                            
 19>                                                                                                                                                                                                                                                                                                                              secondary: secondaryB = "noSkill"
-20>                                                                                                                                                                                                                                                                                                                                                                         
-  >                                                                                                                                                                                                                                                                                                                                                                             } = { primary: "noSkill", secondary: "noSkill" }
-  >                                                                                                                                                                                                                                                                                                                                                                         } = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } };
+  >                                                                                                                                                                                                                                                                                                                                  } = { primary: "noSkill", secondary: "noSkill" }
+  >                                                                                                                                                                                                                                                                                                                              } = <Robot>{ name: "Edger", skills: { primary: "edging", secondary: "branch trimming" } }
+20>                                                                                                                                                                                                                                                                                                                                                                         ;
 1->Emitted(5, 1) Source(27, 5) + SourceIndex(0)
 2 >Emitted(5, 5) Source(27, 5) + SourceIndex(0)
 3 >Emitted(5, 88) Source(33, 90) + SourceIndex(0)
@@ -359,43 +359,31 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 16>Emitted(5, 300) Source(31, 9) + SourceIndex(0)
 17>Emitted(5, 317) Source(31, 42) + SourceIndex(0)
 18>Emitted(5, 319) Source(31, 9) + SourceIndex(0)
-19>Emitted(5, 362) Source(31, 42) + SourceIndex(0)
+19>Emitted(5, 362) Source(33, 90) + SourceIndex(0)
 20>Emitted(5, 363) Source(33, 91) + SourceIndex(0)
 ---
 >>>if (nameB == nameB) {
 1 >
-2 >^^
-3 >  ^
-4 >   ^
-5 >    ^^^^^
-6 >         ^^^^
-7 >             ^^^^^
-8 >                  ^
-9 >                   ^
-10>                    ^
-11>                     ^^^->
+2 >^^^^
+3 >    ^^^^^
+4 >         ^^^^
+5 >             ^^^^^
+6 >                  ^^
+7 >                    ^^^^->
 1 >
   >
   >
-2 >if
-3 >   
-4 >   (
-5 >    nameB
-6 >          == 
-7 >             nameB
-8 >                  )
-9 >                    
-10>                    {
+2 >if (
+3 >    nameB
+4 >          == 
+5 >             nameB
+6 >                  ) 
 1 >Emitted(6, 1) Source(35, 1) + SourceIndex(0)
-2 >Emitted(6, 3) Source(35, 3) + SourceIndex(0)
-3 >Emitted(6, 4) Source(35, 4) + SourceIndex(0)
-4 >Emitted(6, 5) Source(35, 5) + SourceIndex(0)
-5 >Emitted(6, 10) Source(35, 10) + SourceIndex(0)
-6 >Emitted(6, 14) Source(35, 14) + SourceIndex(0)
-7 >Emitted(6, 19) Source(35, 19) + SourceIndex(0)
-8 >Emitted(6, 20) Source(35, 20) + SourceIndex(0)
-9 >Emitted(6, 21) Source(35, 21) + SourceIndex(0)
-10>Emitted(6, 22) Source(35, 22) + SourceIndex(0)
+2 >Emitted(6, 5) Source(35, 5) + SourceIndex(0)
+3 >Emitted(6, 10) Source(35, 10) + SourceIndex(0)
+4 >Emitted(6, 14) Source(35, 14) + SourceIndex(0)
+5 >Emitted(6, 19) Source(35, 19) + SourceIndex(0)
+6 >Emitted(6, 21) Source(35, 21) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -406,7 +394,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->
+1->{
   >    
 2 >    console
 3 >           .
@@ -425,30 +413,18 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 8 >Emitted(7, 24) Source(36, 24) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(8, 1) Source(37, 1) + SourceIndex(0)
-2 >Emitted(8, 2) Source(37, 2) + SourceIndex(0)
+  >}
+1 >Emitted(8, 2) Source(37, 2) + SourceIndex(0)
 ---
 >>>else {
+1->^^^^^
+2 >     ^^^^^^^^^^^^^^^^^^^->
 1->
-2 >^^^^
-3 >    ^
-4 >     ^
-5 >      ^^^^^^^^^^^^^^^^^^->
-1->
-  >
-2 >else
-3 >     
-4 >     {
-1->Emitted(9, 1) Source(38, 1) + SourceIndex(0)
-2 >Emitted(9, 5) Source(38, 5) + SourceIndex(0)
-3 >Emitted(9, 6) Source(38, 6) + SourceIndex(0)
-4 >Emitted(9, 7) Source(38, 7) + SourceIndex(0)
+  >else 
+1->Emitted(9, 6) Source(38, 6) + SourceIndex(0)
 ---
 >>>    console.log(nameC);
 1->^^^^
@@ -459,7 +435,7 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 6 >                ^^^^^
 7 >                     ^
 8 >                      ^
-1->
+1->{
   >    
 2 >    console
 3 >           .
@@ -478,13 +454,10 @@ sourceFile:sourceMapValidationDestructuringVariableStatementNestedObjectBindingP
 8 >Emitted(10, 24) Source(39, 24) + SourceIndex(0)
 ---
 >>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
-2 >^
-3 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
-1 >
-  >
-2 >}
-1 >Emitted(11, 1) Source(40, 1) + SourceIndex(0)
-2 >Emitted(11, 2) Source(40, 2) + SourceIndex(0)
+  >}
+1 >Emitted(11, 2) Source(40, 2) + SourceIndex(0)
 ---
 >>>//# sourceMappingURL=sourceMapValidationDestructuringVariableStatementNestedObjectBindingPatternWithDefaultValues.js.map

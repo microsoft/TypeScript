@@ -2,71 +2,71 @@
 // same as promisePermutations but without the same overloads in IPromise<T>
 
 interface Promise<T> {
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 3, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 3, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 3, 47))
 >error : Symbol(error, Decl(promisePermutations3.ts, 3, 57))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 3, 83))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 3, 96))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 3, 9))
 
     then<U>(success?: (value: T) => Promise<U>, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 4, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 4, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 4, 47))
 >error : Symbol(error, Decl(promisePermutations3.ts, 4, 57))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 4, 74))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 4, 87))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 4, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => Promise<U>, progress?: (progress: any) => void): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 5, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 5, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 5, 38))
 >error : Symbol(error, Decl(promisePermutations3.ts, 5, 48))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 5, 74))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 5, 87))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 5, 9))
 
     then<U>(success?: (value: T) => U, error?: (error: any) => U, progress?: (progress: any) => void): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 6, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 6, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >error : Symbol(error, Decl(promisePermutations3.ts, 6, 38))
 >error : Symbol(error, Decl(promisePermutations3.ts, 6, 48))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 6, 65))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 6, 78))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >U : Symbol(U, Decl(promisePermutations3.ts, 6, 9))
 
     done<U>(success?: (value: T) => any, error?: (error: any) => any, progress?: (progress: any) => void): void;
@@ -74,7 +74,7 @@ interface Promise<T> {
 >U : Symbol(U, Decl(promisePermutations3.ts, 7, 9))
 >success : Symbol(success, Decl(promisePermutations3.ts, 7, 12))
 >value : Symbol(value, Decl(promisePermutations3.ts, 7, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 18))
 >error : Symbol(error, Decl(promisePermutations3.ts, 7, 40))
 >error : Symbol(error, Decl(promisePermutations3.ts, 7, 50))
 >progress : Symbol(progress, Decl(promisePermutations3.ts, 7, 69))
@@ -118,7 +118,7 @@ declare function testFunction(): IPromise<number>;
 
 declare function testFunctionP(): Promise<number>;
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction2(): IPromise<{ x: number }>;
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
@@ -127,7 +127,7 @@ declare function testFunction2(): IPromise<{ x: number }>;
 
 declare function testFunction2P(): Promise<{ x: number }>;
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >x : Symbol(x, Decl(promisePermutations3.ts, 18, 44))
 
 declare function testFunction3(x: number): IPromise<number>;
@@ -138,7 +138,7 @@ declare function testFunction3(x: number): IPromise<number>;
 declare function testFunction3P(x: number): Promise<number>;
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >x : Symbol(x, Decl(promisePermutations3.ts, 20, 32))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction4(x: number, y?: string): IPromise<string>;
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
@@ -150,7 +150,7 @@ declare function testFunction4P(x: number, y?: string): Promise<string>;
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >x : Symbol(x, Decl(promisePermutations3.ts, 22, 32))
 >y : Symbol(y, Decl(promisePermutations3.ts, 22, 42))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction5(x: number, cb: (a: string) => string): IPromise<string>;
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
@@ -164,7 +164,7 @@ declare function testFunction5P(x: number, cb: (a: string) => string): Promise<s
 >x : Symbol(x, Decl(promisePermutations3.ts, 24, 32))
 >cb : Symbol(cb, Decl(promisePermutations3.ts, 24, 42))
 >a : Symbol(a, Decl(promisePermutations3.ts, 24, 48))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction6(x: number, cb: <T>(a: T) => T): IPromise<string>;
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
@@ -184,7 +184,7 @@ declare function testFunction6P(x: number, cb: <T>(a: T) => T): Promise<string>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 26, 51))
 >T : Symbol(T, Decl(promisePermutations3.ts, 26, 48))
 >T : Symbol(T, Decl(promisePermutations3.ts, 26, 48))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction7(cb: <T>(a: T) => T): IPromise<string>;
 >testFunction7 : Symbol(testFunction7, Decl(promisePermutations3.ts, 26, 80))
@@ -202,7 +202,7 @@ declare function testFunction7P(cb: <T>(a: T) => T): Promise<string>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 28, 40))
 >T : Symbol(T, Decl(promisePermutations3.ts, 28, 37))
 >T : Symbol(T, Decl(promisePermutations3.ts, 28, 37))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction8<T>(x: T, cb: (a: T) => T): IPromise<T>;
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
@@ -225,7 +225,7 @@ declare function testFunction8P<T>(x: T, cb: (a: T) => T): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 30, 46))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 30, 32))
 
 declare function testFunction9<T>(x: T, cb: <U>(a: U) => U): IPromise<T>;
@@ -251,7 +251,7 @@ declare function testFunction9P<T>(x: T, cb: <U>(a: U) => U): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 32, 49))
 >U : Symbol(U, Decl(promisePermutations3.ts, 32, 46))
 >U : Symbol(U, Decl(promisePermutations3.ts, 32, 46))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 32, 32))
 
 declare function testFunction10<T>(cb: <U>(a: U) => U): IPromise<T>;
@@ -273,7 +273,7 @@ declare function testFunction10P<T>(cb: <U>(a: U) => U): Promise<T>;
 >a : Symbol(a, Decl(promisePermutations3.ts, 34, 44))
 >U : Symbol(U, Decl(promisePermutations3.ts, 34, 41))
 >U : Symbol(U, Decl(promisePermutations3.ts, 34, 41))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 34, 33))
 
 declare function testFunction11(x: number): IPromise<number>;
@@ -289,12 +289,12 @@ declare function testFunction11(x: string): IPromise<string>;
 declare function testFunction11P(x: number): Promise<number>;
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >x : Symbol(x, Decl(promisePermutations3.ts, 38, 33))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction11P(x: string): Promise<string>;
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >x : Symbol(x, Decl(promisePermutations3.ts, 39, 33))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 declare function testFunction12<T>(x: T): IPromise<T>;
 >testFunction12 : Symbol(testFunction12, Decl(promisePermutations3.ts, 39, 61), Decl(promisePermutations3.ts, 41, 54))
@@ -329,7 +329,7 @@ declare function testFunction12P<T>(x: T, y: T): Promise<T>;
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
 >y : Symbol(y, Decl(promisePermutations3.ts, 44, 41))
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >T : Symbol(T, Decl(promisePermutations3.ts, 44, 33))
 
 var r1: IPromise<number>;
@@ -370,45 +370,45 @@ var r1c = r1.then(testFunctionP, testFunctionP, testFunctionP);
 
 var s1: Promise<number>;
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s1a = s1.then(testFunction, testFunction, testFunction);
 >s1a : Symbol(s1a, Decl(promisePermutations3.ts, 51, 3))
->s1.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 
 var s1b = s1.then(testFunctionP, testFunctionP, testFunctionP);
 >s1b : Symbol(s1b, Decl(promisePermutations3.ts, 52, 3))
->s1.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 
 var s1c = s1.then(testFunctionP, testFunction, testFunction);
 >s1c : Symbol(s1c, Decl(promisePermutations3.ts, 53, 3))
->s1.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 
 var s1d = s1.then(testFunctionP, testFunction, testFunction).then(testFunction, testFunction, testFunction);
 >s1d : Symbol(s1d, Decl(promisePermutations3.ts, 54, 3))
->s1.then(testFunctionP, testFunction, testFunction).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s1.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s1.then(testFunctionP, testFunction, testFunction).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s1.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s1 : Symbol(s1, Decl(promisePermutations3.ts, 50, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
@@ -443,46 +443,46 @@ var r2b = r2.then(testFunction2, testFunction2, testFunction2).then(testFunction
 
 var s2: Promise<{ x: number; }>;
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 >x : Symbol(x, Decl(promisePermutations3.ts, 59, 17))
 
 var s2a = s2.then(testFunction2, testFunction2, testFunction2);
 >s2a : Symbol(s2a, Decl(promisePermutations3.ts, 60, 3))
->s2.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s2.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 
 var s2b = s2.then(testFunction2P, testFunction2P, testFunction2P);
 >s2b : Symbol(s2b, Decl(promisePermutations3.ts, 61, 3))
->s2.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s2.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
 
 var s2c = s2.then(testFunction2P, testFunction2, testFunction2);
 >s2c : Symbol(s2c, Decl(promisePermutations3.ts, 62, 3))
->s2.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s2.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 
 var s2d = s2.then(testFunction2P, testFunction2, testFunction2).then(testFunction2, testFunction2, testFunction2);
 >s2d : Symbol(s2d, Decl(promisePermutations3.ts, 63, 3))
->s2.then(testFunction2P, testFunction2, testFunction2).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s2.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s2.then(testFunction2P, testFunction2, testFunction2).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s2.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s2 : Symbol(s2, Decl(promisePermutations3.ts, 59, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction2P : Symbol(testFunction2P, Decl(promisePermutations3.ts, 17, 58))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
 >testFunction2 : Symbol(testFunction2, Decl(promisePermutations3.ts, 16, 50))
@@ -516,45 +516,45 @@ var r3b = r3.then(testFunction3, testFunction3, testFunction3).then(testFunction
 
 var s3: Promise<number>;
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s3a = s3.then(testFunction3, testFunction3, testFunction3);
 >s3a : Symbol(s3a, Decl(promisePermutations3.ts, 69, 3))
->s3.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s3.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 
 var s3b = s3.then(testFunction3P, testFunction3P, testFunction3P);
 >s3b : Symbol(s3b, Decl(promisePermutations3.ts, 70, 3))
->s3.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s3.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 
 var s3c = s3.then(testFunction3P, testFunction3, testFunction3);
 >s3c : Symbol(s3c, Decl(promisePermutations3.ts, 71, 3))
->s3.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s3.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 
 var s3d = s3.then(testFunction3P, testFunction3, testFunction3).then(testFunction3, testFunction3, testFunction3);
 >s3d : Symbol(s3d, Decl(promisePermutations3.ts, 72, 3))
->s3.then(testFunction3P, testFunction3, testFunction3).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s3.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s3.then(testFunction3P, testFunction3, testFunction3).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s3.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s3 : Symbol(s3, Decl(promisePermutations3.ts, 68, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction3P : Symbol(testFunction3P, Decl(promisePermutations3.ts, 19, 60))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
 >testFunction3 : Symbol(testFunction3, Decl(promisePermutations3.ts, 18, 58))
@@ -571,7 +571,7 @@ var sIPromise: (x: any) => IPromise<string>;
 var sPromise: (x: any) => Promise<string>;
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >x : Symbol(x, Decl(promisePermutations3.ts, 76, 15))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var r4a = r4.then(testFunction4, testFunction4, testFunction4); // error
 >r4a : Symbol(r4a, Decl(promisePermutations3.ts, 77, 3))
@@ -598,45 +598,45 @@ var r4b = r4.then(sIPromise, testFunction4, testFunction4).then(sIPromise, testF
 
 var s4: Promise<string>;
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s4a = s4.then(testFunction4, testFunction4, testFunction4); // error
 >s4a : Symbol(s4a, Decl(promisePermutations3.ts, 80, 3))
->s4.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s4.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
 
 var s4b = s4.then(testFunction4P, testFunction4P, testFunction4P); // error 
 >s4b : Symbol(s4b, Decl(promisePermutations3.ts, 81, 3))
->s4.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s4.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 
 var s4c = s4.then(testFunction4P, testFunction4, testFunction4); // error
 >s4c : Symbol(s4c, Decl(promisePermutations3.ts, 82, 3))
->s4.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s4.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
 
 var s4d = s4.then(sIPromise, testFunction4P, testFunction4).then(sIPromise, testFunction4P, testFunction4);
 >s4d : Symbol(s4d, Decl(promisePermutations3.ts, 83, 3))
->s4.then(sIPromise, testFunction4P, testFunction4).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s4.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s4.then(sIPromise, testFunction4P, testFunction4).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s4.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s4 : Symbol(s4, Decl(promisePermutations3.ts, 79, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >testFunction4P : Symbol(testFunction4P, Decl(promisePermutations3.ts, 21, 72))
 >testFunction4 : Symbol(testFunction4, Decl(promisePermutations3.ts, 20, 60))
@@ -670,45 +670,45 @@ var r5b = r5.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s5: Promise<string>;
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s5a = s5.then(testFunction5, testFunction5, testFunction5); // error
 >s5a : Symbol(s5a, Decl(promisePermutations3.ts, 89, 3))
->s5.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
 
 var s5b = s5.then(testFunction5P, testFunction5P, testFunction5P); // error
 >s5b : Symbol(s5b, Decl(promisePermutations3.ts, 90, 3))
->s5.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction5P : Symbol(testFunction5P, Decl(promisePermutations3.ts, 23, 87))
 >testFunction5P : Symbol(testFunction5P, Decl(promisePermutations3.ts, 23, 87))
 >testFunction5P : Symbol(testFunction5P, Decl(promisePermutations3.ts, 23, 87))
 
 var s5c = s5.then(testFunction5P, testFunction5, testFunction5); // error
 >s5c : Symbol(s5c, Decl(promisePermutations3.ts, 91, 3))
->s5.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction5P : Symbol(testFunction5P, Decl(promisePermutations3.ts, 23, 87))
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
 >testFunction5 : Symbol(testFunction5, Decl(promisePermutations3.ts, 22, 72))
 
 var s5d = s5.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >s5d : Symbol(s5d, Decl(promisePermutations3.ts, 92, 3))
->s5.then(sPromise, sPromise, sPromise).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s5.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s5.then(sPromise, sPromise, sPromise).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s5.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s5 : Symbol(s5, Decl(promisePermutations3.ts, 88, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
@@ -742,45 +742,45 @@ var r6b = r6.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s6: Promise<string>;
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s6a = s6.then(testFunction6, testFunction6, testFunction6); // error
 >s6a : Symbol(s6a, Decl(promisePermutations3.ts, 98, 3))
->s6.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
 
 var s6b = s6.then(testFunction6P, testFunction6P, testFunction6P); // error
 >s6b : Symbol(s6b, Decl(promisePermutations3.ts, 99, 3))
->s6.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction6P : Symbol(testFunction6P, Decl(promisePermutations3.ts, 25, 80))
 >testFunction6P : Symbol(testFunction6P, Decl(promisePermutations3.ts, 25, 80))
 >testFunction6P : Symbol(testFunction6P, Decl(promisePermutations3.ts, 25, 80))
 
 var s6c = s6.then(testFunction6P, testFunction6, testFunction6); // error
 >s6c : Symbol(s6c, Decl(promisePermutations3.ts, 100, 3))
->s6.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction6P : Symbol(testFunction6P, Decl(promisePermutations3.ts, 25, 80))
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
 >testFunction6 : Symbol(testFunction6, Decl(promisePermutations3.ts, 24, 87))
 
 var s6d = s6.then(sPromise, sPromise, sPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >s6d : Symbol(s6d, Decl(promisePermutations3.ts, 101, 3))
->s6.then(sPromise, sPromise, sPromise).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s6.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s6.then(sPromise, sPromise, sPromise).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s6.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s6 : Symbol(s6, Decl(promisePermutations3.ts, 97, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
@@ -814,7 +814,7 @@ var r7b = r7.then(sIPromise, sIPromise, sIPromise).then(sIPromise, sIPromise, sI
 
 var s7: Promise<string>;
 >s7 : Symbol(s7, Decl(promisePermutations3.ts, 106, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s7a = r7.then(testFunction7, testFunction7, testFunction7); // error
 >s7a : Symbol(s7a, Decl(promisePermutations3.ts, 107, 3))
@@ -869,7 +869,7 @@ var nIPromise: (x: any) => IPromise<number>;
 var nPromise: (x: any) => Promise<number>;
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 >x : Symbol(x, Decl(promisePermutations3.ts, 114, 15))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var r8a = r8.then(testFunction8, testFunction8, testFunction8); // error
 >r8a : Symbol(r8a, Decl(promisePermutations3.ts, 115, 3))
@@ -896,45 +896,45 @@ var r8b = r8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nI
 
 var s8: Promise<number>;
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s8a = s8.then(testFunction8, testFunction8, testFunction8); // error
 >s8a : Symbol(s8a, Decl(promisePermutations3.ts, 118, 3))
->s8.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s8.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
 
 var s8b = s8.then(testFunction8P, testFunction8P, testFunction8P); // error
 >s8b : Symbol(s8b, Decl(promisePermutations3.ts, 119, 3))
->s8.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s8.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction8P : Symbol(testFunction8P, Decl(promisePermutations3.ts, 29, 70))
 >testFunction8P : Symbol(testFunction8P, Decl(promisePermutations3.ts, 29, 70))
 >testFunction8P : Symbol(testFunction8P, Decl(promisePermutations3.ts, 29, 70))
 
 var s8c = s8.then(testFunction8P, testFunction8, testFunction8); // error
 >s8c : Symbol(s8c, Decl(promisePermutations3.ts, 120, 3))
->s8.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s8.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction8P : Symbol(testFunction8P, Decl(promisePermutations3.ts, 29, 70))
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
 >testFunction8 : Symbol(testFunction8, Decl(promisePermutations3.ts, 28, 69))
 
 var s8d = s8.then(nIPromise, nIPromise, nIPromise).then(nIPromise, nIPromise, nIPromise); // ok
 >s8d : Symbol(s8d, Decl(promisePermutations3.ts, 121, 3))
->s8.then(nIPromise, nIPromise, nIPromise).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s8.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s8.then(nIPromise, nIPromise, nIPromise).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s8.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s8 : Symbol(s8, Decl(promisePermutations3.ts, 117, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
@@ -995,72 +995,72 @@ var r9e = r9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise,
 
 var s9: Promise<number>;
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s9a = s9.then(testFunction9, testFunction9, testFunction9); // error
 >s9a : Symbol(s9a, Decl(promisePermutations3.ts, 130, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction9 : Symbol(testFunction9, Decl(promisePermutations3.ts, 30, 70))
 >testFunction9 : Symbol(testFunction9, Decl(promisePermutations3.ts, 30, 70))
 >testFunction9 : Symbol(testFunction9, Decl(promisePermutations3.ts, 30, 70))
 
 var s9b = s9.then(testFunction9P, testFunction9P, testFunction9P); // error
 >s9b : Symbol(s9b, Decl(promisePermutations3.ts, 131, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction9P : Symbol(testFunction9P, Decl(promisePermutations3.ts, 31, 73))
 >testFunction9P : Symbol(testFunction9P, Decl(promisePermutations3.ts, 31, 73))
 >testFunction9P : Symbol(testFunction9P, Decl(promisePermutations3.ts, 31, 73))
 
 var s9c = s9.then(testFunction9P, testFunction9, testFunction9); // error
 >s9c : Symbol(s9c, Decl(promisePermutations3.ts, 132, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction9P : Symbol(testFunction9P, Decl(promisePermutations3.ts, 31, 73))
 >testFunction9 : Symbol(testFunction9, Decl(promisePermutations3.ts, 30, 70))
 >testFunction9 : Symbol(testFunction9, Decl(promisePermutations3.ts, 30, 70))
 
 var s9d = s9.then(sPromise, sPromise, sPromise); // ok
 >s9d : Symbol(s9d, Decl(promisePermutations3.ts, 133, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 
 var s9e = s9.then(nPromise, nPromise, nPromise); // ok
 >s9e : Symbol(s9e, Decl(promisePermutations3.ts, 134, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 
 var s9f = s9.then(testFunction, sIPromise, nIPromise); // error
 >s9f : Symbol(s9f, Decl(promisePermutations3.ts, 135, 3))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 
 var s9g = s9.then(testFunction, nIPromise, sIPromise).then(sIPromise, sIPromise, sIPromise); // ok
 >s9g : Symbol(s9g, Decl(promisePermutations3.ts, 136, 3))
->s9.then(testFunction, nIPromise, sIPromise).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s9.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then(testFunction, nIPromise, sIPromise).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s9.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s9 : Symbol(s9, Decl(promisePermutations3.ts, 129, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction : Symbol(testFunction, Decl(promisePermutations3.ts, 13, 1))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
@@ -1129,68 +1129,68 @@ var s10 = testFunction10P(x => x);
 
 var s10a = s10.then(testFunction10, testFunction10, testFunction10); // ok
 >s10a : Symbol(s10a, Decl(promisePermutations3.ts, 145, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction10 : Symbol(testFunction10, Decl(promisePermutations3.ts, 32, 73))
 >testFunction10 : Symbol(testFunction10, Decl(promisePermutations3.ts, 32, 73))
 >testFunction10 : Symbol(testFunction10, Decl(promisePermutations3.ts, 32, 73))
 
 var s10b = s10.then(testFunction10P, testFunction10P, testFunction10P); // ok
 >s10b : Symbol(s10b, Decl(promisePermutations3.ts, 146, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction10P : Symbol(testFunction10P, Decl(promisePermutations3.ts, 33, 68))
 >testFunction10P : Symbol(testFunction10P, Decl(promisePermutations3.ts, 33, 68))
 >testFunction10P : Symbol(testFunction10P, Decl(promisePermutations3.ts, 33, 68))
 
 var s10c = s10.then(testFunction10P, testFunction10, testFunction10); // ok
 >s10c : Symbol(s10c, Decl(promisePermutations3.ts, 147, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction10P : Symbol(testFunction10P, Decl(promisePermutations3.ts, 33, 68))
 >testFunction10 : Symbol(testFunction10, Decl(promisePermutations3.ts, 32, 73))
 >testFunction10 : Symbol(testFunction10, Decl(promisePermutations3.ts, 32, 73))
 
 var s10d = s10.then(sPromise, sPromise, sPromise); // ok
 >s10d : Symbol(s10d, Decl(promisePermutations3.ts, 148, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 
 var s10e = s10.then(nIPromise, nPromise, nIPromise); // ok
 >s10e : Symbol(s10e, Decl(promisePermutations3.ts, 149, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >nPromise : Symbol(nPromise, Decl(promisePermutations3.ts, 114, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 
 var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
 >s10f : Symbol(s10f, Decl(promisePermutations3.ts, 150, 3))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 
 var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
 >s10g : Symbol(s10g, Decl(promisePermutations3.ts, 151, 3))
->s10.then(testFunctionP, nIPromise, sIPromise).then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
->s10.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then(testFunctionP, nIPromise, sIPromise).then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s10.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s10 : Symbol(s10, Decl(promisePermutations3.ts, 144, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunctionP : Symbol(testFunctionP, Decl(promisePermutations3.ts, 15, 50))
 >nIPromise : Symbol(nIPromise, Decl(promisePermutations3.ts, 113, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >sPromise : Symbol(sPromise, Decl(promisePermutations3.ts, 76, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
 >sIPromise : Symbol(sIPromise, Decl(promisePermutations3.ts, 75, 3))
@@ -1210,31 +1210,31 @@ var r11a = r11.then(testFunction11, testFunction11, testFunction11); // ok
 
 var s11: Promise<number>;
 >s11 : Symbol(s11, Decl(promisePermutations3.ts, 155, 3))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 0, 0))
 
 var s11a = s11.then(testFunction11, testFunction11, testFunction11); // ok
 >s11a : Symbol(s11a, Decl(promisePermutations3.ts, 156, 3))
->s11.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s11.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s11 : Symbol(s11, Decl(promisePermutations3.ts, 155, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction11 : Symbol(testFunction11, Decl(promisePermutations3.ts, 34, 68), Decl(promisePermutations3.ts, 36, 61))
 >testFunction11 : Symbol(testFunction11, Decl(promisePermutations3.ts, 34, 68), Decl(promisePermutations3.ts, 36, 61))
 >testFunction11 : Symbol(testFunction11, Decl(promisePermutations3.ts, 34, 68), Decl(promisePermutations3.ts, 36, 61))
 
 var s11b = s11.then(testFunction11P, testFunction11P, testFunction11P); // error
 >s11b : Symbol(s11b, Decl(promisePermutations3.ts, 157, 3))
->s11.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s11.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s11 : Symbol(s11, Decl(promisePermutations3.ts, 155, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 
 var s11c = s11.then(testFunction11P, testFunction11, testFunction11); // error
 >s11c : Symbol(s11c, Decl(promisePermutations3.ts, 158, 3))
->s11.then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>s11.then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >s11 : Symbol(s11, Decl(promisePermutations3.ts, 155, 3))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promisePermutations3.ts, 2, 22), Decl(promisePermutations3.ts, 3, 132), Decl(promisePermutations3.ts, 4, 123), Decl(promisePermutations3.ts, 5, 123))
 >testFunction11P : Symbol(testFunction11P, Decl(promisePermutations3.ts, 37, 61), Decl(promisePermutations3.ts, 38, 61))
 >testFunction11 : Symbol(testFunction11, Decl(promisePermutations3.ts, 34, 68), Decl(promisePermutations3.ts, 36, 61))
 >testFunction11 : Symbol(testFunction11, Decl(promisePermutations3.ts, 34, 68), Decl(promisePermutations3.ts, 36, 61))

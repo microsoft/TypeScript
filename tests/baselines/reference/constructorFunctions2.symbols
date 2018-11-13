@@ -23,11 +23,28 @@ const B = function() { this.id = 1; }
 >B : Symbol(B, Decl(index.js, 3, 5))
 >id : Symbol(B.id, Decl(index.js, 3, 22))
 
-const b = new B().id;
->b : Symbol(b, Decl(index.js, 4, 5))
->new B().id : Symbol(B.id, Decl(index.js, 3, 22))
+B.prototype.m = function() { this.x = 2; }
+>B.prototype : Symbol(B.m, Decl(index.js, 3, 37))
 >B : Symbol(B, Decl(index.js, 3, 5))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
+>m : Symbol(B.m, Decl(index.js, 3, 37))
+>this.x : Symbol(B.x, Decl(index.js, 4, 28))
+>this : Symbol(B, Decl(index.js, 3, 9))
+>x : Symbol(B.x, Decl(index.js, 4, 28))
+
+const b = new B();
+>b : Symbol(b, Decl(index.js, 5, 5))
+>B : Symbol(B, Decl(index.js, 3, 5))
+
+b.id;
+>b.id : Symbol(B.id, Decl(index.js, 3, 22))
+>b : Symbol(b, Decl(index.js, 5, 5))
 >id : Symbol(B.id, Decl(index.js, 3, 22))
+
+b.x;
+>b.x : Symbol(B.x, Decl(index.js, 4, 28))
+>b : Symbol(b, Decl(index.js, 5, 5))
+>x : Symbol(B.x, Decl(index.js, 4, 28))
 
 === tests/cases/conformance/salsa/other.js ===
 function A() { this.id = 1; }
@@ -35,6 +52,7 @@ function A() { this.id = 1; }
 >id : Symbol(A.id, Decl(other.js, 0, 14))
 
 module.exports = A;
+>module.exports : Symbol("tests/cases/conformance/salsa/other", Decl(other.js, 0, 0))
 >module : Symbol(export=, Decl(other.js, 0, 29))
 >exports : Symbol(export=, Decl(other.js, 0, 29))
 >A : Symbol(A, Decl(other.js, 0, 0))

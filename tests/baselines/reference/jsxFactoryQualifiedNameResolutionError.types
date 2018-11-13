@@ -1,10 +1,6 @@
 === tests/cases/compiler/test.tsx ===
 declare module JSX {
->JSX : any
-
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         [s: string]: any;
 >s : string
     }

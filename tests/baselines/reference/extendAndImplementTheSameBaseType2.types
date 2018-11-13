@@ -1,14 +1,12 @@
 === tests/cases/compiler/extendAndImplementTheSameBaseType2.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo: number
 >foo : number
 
     bar(): T {
 >bar : () => T
->T : T
 
         return null;
 >null : null
@@ -17,7 +15,6 @@ class C<T> {
 class D extends C<string> implements C<number> {
 >D : D
 >C : C<string>
->C : C<T>
 
     baz() { }
 >baz : () => void
@@ -25,7 +22,6 @@ class D extends C<string> implements C<number> {
 
 var d: D = new D();
 >d : D
->D : D
 >new D() : D
 >D : typeof D
 

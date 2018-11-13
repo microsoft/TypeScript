@@ -1,8 +1,11 @@
 /// <reference path="fourslash.ts" />
 
-////enum E {}
-////declare const e: E;
-////e === /**/
+////enum Enu {}
+////declare const e: Enu;
+////e === /*a*/;
+////e === E/*b*/
 
-goTo.marker();
-verify.completionListContains("E", "enum E", "", "enum", undefined, undefined, { isRecommended: true });
+verify.completions({
+    marker: ["a", "b"],
+    includes: { name: "Enu", text: "enum Enu", kind: "enum", isRecommended: true },
+});

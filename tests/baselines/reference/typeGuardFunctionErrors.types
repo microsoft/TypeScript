@@ -24,8 +24,6 @@ class C extends A {
 function hasANonBooleanReturnStatement(x): x is A {
 >hasANonBooleanReturnStatement : (x: any) => x is A
 >x : any
->x : any
->A : A
 
     return '';
 >'' : ""
@@ -34,8 +32,6 @@ function hasANonBooleanReturnStatement(x): x is A {
 function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 >hasTypeGuardTypeInsideTypeGuardType : (x: any) => x is any
 >x : any
->x : any
->x : No type information available!
 >is : any
 >A : typeof A
 
@@ -45,7 +41,6 @@ function hasTypeGuardTypeInsideTypeGuardType(x): x is x is A {
 
 function hasMissingIsKeyword(): x {
 >hasMissingIsKeyword : () => any
->x : No type information available!
 
     return true;
 >true : true
@@ -53,8 +48,6 @@ function hasMissingIsKeyword(): x {
 
 function hasMissingParameter(): x is A {
 >hasMissingParameter : () => x is A
->x : any
->A : A
 
     return true;
 >true : true
@@ -62,7 +55,6 @@ function hasMissingParameter(): x is A {
 
 function hasMissingTypeInTypeGuardType(x): x is {
 >hasMissingTypeInTypeGuardType : (x: any) => x is {}
->x : any
 >x : any
 
     return true;
@@ -72,8 +64,6 @@ function hasMissingTypeInTypeGuardType(x): x is {
 function hasNonMatchingParameter(y): x is A {
 >hasNonMatchingParameter : (y: any) => x is A
 >y : any
->x : any
->A : A
 
     return true;
 >true : true
@@ -82,9 +72,6 @@ function hasNonMatchingParameter(y): x is A {
 function hasNonMatchingParameterType1(x: A): x is B {
 >hasNonMatchingParameterType1 : (x: A) => x is B
 >x : A
->A : A
->x : any
->B : B
 
     return true;
 >true : true
@@ -93,7 +80,6 @@ function hasNonMatchingParameterType1(x: A): x is B {
 function hasNonMatchingParameterType2(x: string): x is number {
 >hasNonMatchingParameterType2 : (x: string) => x is number
 >x : string
->x : any
 
     return true;
 >true : true
@@ -101,10 +87,7 @@ function hasNonMatchingParameterType2(x: string): x is number {
 
 function hasNonMathcingGenericType<T>(a: string): a is T[] {
 >hasNonMathcingGenericType : <T>(a: string) => a is T[]
->T : T
 >a : string
->a : any
->T : T
 
     return true;
 >true : true
@@ -112,30 +95,22 @@ function hasNonMathcingGenericType<T>(a: string): a is T[] {
 
 let a: A;
 >a : A
->A : A
 
 let b: B;
 >b : B
->B : B
 
 declare function isB(p1): p1 is B;
 >isB : (p1: any) => p1 is B
 >p1 : any
->p1 : any
->B : B
 
 declare function isC(p1): p1 is C;
 >isC : (p1: any) => p1 is C
 >p1 : any
->p1 : any
->C : C
 
 declare function funA(p1: any, p2: any): p1 is B;
 >funA : (p1: any, p2: any) => p1 is B
 >p1 : any
 >p2 : any
->p1 : any
->B : B
 
 declare function hasNoTypeGuard(x);
 >hasNoTypeGuard : (x: any) => any
@@ -183,8 +158,6 @@ declare function acceptingDifferentSignatureTypeGuardFunction(p1: (p1) => p1 is 
 >acceptingDifferentSignatureTypeGuardFunction : (p1: (p1: any) => p1 is B) => any
 >p1 : (p1: any) => p1 is B
 >p1 : any
->p1 : any
->B : B
 
 acceptingDifferentSignatureTypeGuardFunction(isC);
 >acceptingDifferentSignatureTypeGuardFunction(isC) : any
@@ -196,8 +169,6 @@ var assign1: (p1, p2) => p1 is A;
 >assign1 : (p1: any, p2: any) => p1 is A
 >p1 : any
 >p2 : any
->p1 : any
->A : A
 
 assign1 = function(p1, p2): boolean {
 >assign1 = function(p1, p2): boolean {    return true;} : (p1: any, p2: any) => boolean
@@ -216,8 +187,6 @@ var assign2: (p1, p2) => p1 is A;
 >assign2 : (p1: any, p2: any) => p1 is A
 >p1 : any
 >p2 : any
->p1 : any
->A : A
 
 assign2 = function(p1, p2): p2 is A {
 >assign2 = function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
@@ -225,8 +194,6 @@ assign2 = function(p1, p2): p2 is A {
 >function(p1, p2): p2 is A {    return true;} : (p1: any, p2: any) => p2 is A
 >p1 : any
 >p2 : any
->p2 : any
->A : A
 
     return true;
 >true : true
@@ -238,8 +205,6 @@ var assign3: (p1, p2) => p1 is A;
 >assign3 : (p1: any, p2: any) => p1 is A
 >p1 : any
 >p2 : any
->p1 : any
->A : A
 
 assign3 = function(p1, p2, p3): p1 is A {
 >assign3 = function(p1, p2, p3): p1 is A {    return true;} : (p1: any, p2: any, p3: any) => p1 is A
@@ -248,8 +213,6 @@ assign3 = function(p1, p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : any
->A : A
 
     return true;
 >true : true
@@ -259,21 +222,17 @@ assign3 = function(p1, p2, p3): p1 is A {
 // Type predicates in non-return type positions
 var b1: b is A;
 >b1 : any
->b : No type information available!
 >is : any
 >A : any
 
 function b2(a: b is A) {};
 >b2 : (a: any, is: any, A: any) => void
 >a : any
->b : No type information available!
 >is : any
 >A : any
 
 function b3(): A | b is A {
 >b3 : () => any
->A : A
->b : No type information available!
 >is : any
 >A : typeof A
 
@@ -288,9 +247,6 @@ class D {
 
     constructor(p1: A): p1 is C {
 >p1 : A
->A : A
->p1 : any
->C : C
 
         return true;
 >true : true
@@ -298,9 +254,6 @@ class D {
     get m1(p1: A): p1 is C {
 >m1 : boolean
 >p1 : A
->A : A
->p1 : any
->C : C
 
         return true;
 >true : true
@@ -308,9 +261,6 @@ class D {
     set m2(p1: A): p1 is C {
 >m2 : A
 >p1 : A
->A : A
->p1 : any
->C : C
 
         return true;
 >true : true
@@ -318,21 +268,13 @@ class D {
 }
 
 interface I1 {
->I1 : I1
-
     new (p1: A): p1 is C;
 >p1 : A
->A : A
->p1 : any
->C : C
 }
 
 interface I2 {
->I2 : I2
-
     [index: number]: p1 is C;
 >index : number
->p1 : No type information available!
 >is : any
 >C : typeof C
 }
@@ -341,8 +283,6 @@ interface I2 {
 function b4(...a): a is A {
 >b4 : (...a: any[]) => a is A
 >a : any[]
->a : any
->A : A
 
     return true;
 >true : true
@@ -356,8 +296,6 @@ function b5({a, b, p1}, p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
->A : A
 
     return true;
 >true : true
@@ -370,8 +308,6 @@ function b6([a, b, p1], p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
->A : A
 
     return true;
 >true : true
@@ -385,8 +321,6 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 >p1 : any
 >p2 : any
 >p3 : any
->p1 : No type information available!
->A : A
 
     return true;
 >true : true
@@ -395,7 +329,6 @@ function b7({a, b, c: {p1}}, p2, p3): p1 is A {
 // Should not crash the compiler
 var x: A;
 >x : A
->A : A
 
 if (hasMissingParameter()) {
 >hasMissingParameter() : boolean
@@ -414,71 +347,45 @@ type Keys = 'a'|'b'|'c'
 
 type KeySet<T extends Keys> = { [k in T]: true }
 >KeySet : KeySet<T>
->T : T
->Keys : Keys
->k : k
->T : T
 >true : true
 
 // expected an error, since Keys doesn't have a 'd'
 declare function hasKey<T extends Keys>(x: KeySet<T>): x is KeySet<T|'d'>;
 >hasKey : <T extends Keys>(x: KeySet<T>) => x is KeySet<T | "d">
->T : T
->Keys : Keys
 >x : KeySet<T>
->KeySet : KeySet<T>
->T : T
->x : any
->KeySet : KeySet<T>
->T : T
 
 type Foo = { 'a': string; }
 >Foo : Foo
+>'a' : string
 
 type Bar = { 'a': number; }
 >Bar : Bar
+>'a' : number
 
 interface NeedsFoo<T extends Foo> {
->NeedsFoo : NeedsFoo<T>
->T : T
->Foo : Foo
-
     foo: T;
 >foo : T
->T : T
 
     isFoo(): this is NeedsFoo<Bar>; // should error
 >isFoo : () => this is NeedsFoo<Bar>
->NeedsFoo : NeedsFoo<T>
->Bar : Bar
 
 };
 
 declare var anError: NeedsFoo<Bar>; // error, as expected
 >anError : NeedsFoo<Bar>
->NeedsFoo : NeedsFoo<T>
->Bar : Bar
 
 declare var alsoAnError: NeedsFoo<number>; // also error, as expected
 >alsoAnError : NeedsFoo<number>
->NeedsFoo : NeedsFoo<T>
 
 declare function newError1(x: any): x is NeedsFoo<Bar>; // should error
 >newError1 : (x: any) => x is NeedsFoo<Bar>
 >x : any
->x : any
->NeedsFoo : NeedsFoo<T>
->Bar : Bar
 
 declare function newError2(x: any): x is NeedsFoo<number>; // should error
 >newError2 : (x: any) => x is NeedsFoo<number>
 >x : any
->x : any
->NeedsFoo : NeedsFoo<T>
 
 declare function newError3(x: number): x is NeedsFoo<number>; // should error
 >newError3 : (x: number) => x is NeedsFoo<number>
 >x : number
->x : any
->NeedsFoo : NeedsFoo<T>
 

@@ -1,24 +1,17 @@
 === tests/cases/compiler/dottedSymbolResolution1.ts ===
 interface JQuery {
->JQuery : JQuery
-
     find(selector: string): JQuery;
 >find : (selector: string) => JQuery
 >selector : string
->JQuery : JQuery
 }
 
 interface JQueryStatic {
->JQueryStatic : JQueryStatic
     
     (selector: string): JQuery;
 >selector : string
->JQuery : JQuery
 
     (object: JQuery): JQuery;
 >object : JQuery
->JQuery : JQuery
->JQuery : JQuery
 }
 
 class Base { foo() { } }
@@ -35,11 +28,9 @@ function each(collection: string, callback: (indexInArray: any, valueOfElement: 
 function each(collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any;
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
 >collection : JQuery
->JQuery : JQuery
 >callback : (indexInArray: number, valueOfElement: Base) => any
 >indexInArray : number
 >valueOfElement : Base
->Base : Base
 
 function each(collection: any, callback: (indexInArray: any, valueOfElement: any) => any): any {
 >each : { (collection: string, callback: (indexInArray: any, valueOfElement: any) => any): any; (collection: JQuery, callback: (indexInArray: number, valueOfElement: Base) => any): any; }
@@ -57,9 +48,7 @@ function _setBarAndText(): void {
 
     var x: JQuery, $: JQueryStatic
 >x : JQuery
->JQuery : JQuery
 >$ : JQueryStatic
->JQueryStatic : JQueryStatic
 
     each(x.find(" "), function () {
 >each(x.find(" "), function () {        var $this: JQuery = $(''),            thisBar = $this.find(".fx-usagebars-calloutbar-this"); // bug lead to 'could not find dotted symbol' here    } ) : any
@@ -73,7 +62,6 @@ function _setBarAndText(): void {
 
         var $this: JQuery = $(''),
 >$this : JQuery
->JQuery : JQuery
 >$('') : JQuery
 >$ : JQueryStatic
 >'' : ""

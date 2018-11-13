@@ -61,8 +61,6 @@ module M {
 
 
 	interface I {
->I : I
-
 		someMethod():number;
 >someMethod : () => number
 	}
@@ -74,7 +72,6 @@ module M {
 
 	 export class C implements I {
 >C : C
->I : I
 
 		public someMethodThatCallsAnOuterMethod() {return OuterInnerAlias.someExportedOuterInnerFunc();}
 >someMethodThatCallsAnOuterMethod : () => string
@@ -145,10 +142,8 @@ module M {
 var cprime : M.I = <M.I>null;
 >cprime : any
 >M : any
->I : No type information available!
 ><M.I>null : any
 >M : any
->I : No type information available!
 >null : null
 
 var c = new M.C();

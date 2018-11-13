@@ -103,7 +103,7 @@ var y = new C1(10, [0, "", true]);
 >new C1(10, [0, "", true]) : C1
 >C1 : typeof C1
 >10 : 10
->[0, "", true] : [number, string, boolean]
+>[0, "", true] : [number, string, true]
 >0 : 0
 >"" : ""
 >true : true

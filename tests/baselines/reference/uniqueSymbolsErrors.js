@@ -83,8 +83,9 @@ declare const invalidMappedType: { [P in string]: unique symbol };
 declare const invalidUnion: unique symbol | unique symbol;
 declare const invalidIntersection: unique symbol | unique symbol;
 
-
-
+// initializer assignability
+// https://github.com/Microsoft/TypeScript/issues/21584
+const shouldNotBeAssignable: string = Symbol();
 
 //// [uniqueSymbolsErrors.js]
 // classes
@@ -109,3 +110,6 @@ class InvalidClass {
     static get invalidStaticGetter() { return; }
     static set invalidStaticSetter(arg) { return; }
 }
+// initializer assignability
+// https://github.com/Microsoft/TypeScript/issues/21584
+const shouldNotBeAssignable = Symbol();

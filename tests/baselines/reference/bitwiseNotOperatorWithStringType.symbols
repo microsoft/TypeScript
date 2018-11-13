@@ -88,9 +88,9 @@ var ResultIsNumber11 = ~(STRING + STRING);
 
 var ResultIsNumber12 = ~STRING.charAt(0);
 >ResultIsNumber12 : Symbol(ResultIsNumber12, Decl(bitwiseNotOperatorWithStringType.ts, 32, 3))
->STRING.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(bitwiseNotOperatorWithStringType.ts, 1, 3))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 // multiple ~ operators
 var ResultIsNumber13 = ~~STRING;

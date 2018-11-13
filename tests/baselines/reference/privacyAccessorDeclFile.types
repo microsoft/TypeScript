@@ -12,28 +12,24 @@ export class publicClassWithWithPrivateGetAccessorTypes {
 
     static get myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     get myPublicMethod(): privateClass { // Error
 >myPublicMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
@@ -73,28 +69,24 @@ export class publicClassWithWithPublicGetAccessorTypes {
 
     static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -134,28 +126,24 @@ class privateClassWithWithPrivateGetAccessorTypes {
 
     static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
     }
     private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
         return null;
 >null : null
@@ -195,28 +183,24 @@ class privateClassWithWithPublicGetAccessorTypes {
 
     static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
     }
     private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
         return null;
 >null : null
@@ -257,22 +241,18 @@ export class publicClassWithWithPrivateSetAccessorTypes {
     static set myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     set myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
 }
 
@@ -282,22 +262,18 @@ export class publicClassWithWithPublicSetAccessorTypes {
     static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
 }
 
@@ -307,22 +283,18 @@ class privateClassWithWithPrivateSetAccessorTypes {
     static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     set myPublicMethod(param: privateClass) { 
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
     private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
     }
 }
 
@@ -332,22 +304,18 @@ class privateClassWithWithPublicSetAccessorTypes {
     static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
     private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
     }
 }
 
@@ -357,7 +325,6 @@ export class publicClassWithPrivateModuleGetAccessorTypes {
     static get myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -365,7 +332,6 @@ export class publicClassWithPrivateModuleGetAccessorTypes {
     get myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -397,13 +363,11 @@ export class publicClassWithPrivateModuleSetAccessorTypes {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     set myPublicMethod(param: privateModule.publicClass) { // Error
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
 }
 
@@ -413,7 +377,6 @@ class privateClassWithPrivateModuleGetAccessorTypes {
     static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -421,7 +384,6 @@ class privateClassWithPrivateModuleGetAccessorTypes {
     get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
         return null;
 >null : null
@@ -453,13 +415,11 @@ class privateClassWithPrivateModuleSetAccessorTypes {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
     set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
     }
 }
 
@@ -478,28 +438,24 @@ export module publicModule {
 
         static get myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass { // Error
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -539,28 +495,24 @@ export module publicModule {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -600,28 +552,24 @@ export module publicModule {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -661,28 +609,24 @@ export module publicModule {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -723,22 +667,18 @@ export module publicModule {
         static set myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -748,22 +688,18 @@ export module publicModule {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -773,22 +709,18 @@ export module publicModule {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -798,22 +730,18 @@ export module publicModule {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -823,7 +751,6 @@ export module publicModule {
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -831,7 +758,6 @@ export module publicModule {
         get myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -863,13 +789,11 @@ export module publicModule {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
     }
 
@@ -879,7 +803,6 @@ export module publicModule {
         static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -887,7 +810,6 @@ export module publicModule {
         get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -919,13 +841,11 @@ export module publicModule {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
     }
 }
@@ -945,28 +865,24 @@ module privateModule {
 
         static get myPublicStaticMethod(): privateClass { 
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass { 
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -1006,28 +922,24 @@ module privateModule {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1067,28 +979,24 @@ module privateModule {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -1128,28 +1036,24 @@ module privateModule {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1190,22 +1094,18 @@ module privateModule {
         static set myPublicStaticMethod(param: privateClass) { 
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) { 
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -1215,22 +1115,18 @@ module privateModule {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -1240,22 +1136,18 @@ module privateModule {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -1265,22 +1157,18 @@ module privateModule {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -1290,7 +1178,6 @@ module privateModule {
         static get myPublicStaticMethod(): privateModule.publicClass { 
 >myPublicStaticMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1298,7 +1185,6 @@ module privateModule {
         get myPublicMethod(): privateModule.publicClass { 
 >myPublicMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1330,13 +1216,11 @@ module privateModule {
 >myPublicStaticMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) { 
 >myPublicMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
         }
     }
 
@@ -1346,7 +1230,6 @@ module privateModule {
         static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1354,7 +1237,6 @@ module privateModule {
         get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
             return null;
 >null : null
@@ -1386,13 +1268,11 @@ module privateModule {
 >myPublicStaticMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
         }
     }
 }
@@ -1407,28 +1287,24 @@ class publicClassInGlobalWithPublicGetAccessorTypes {
 
     static get myPublicStaticMethod(): publicClassInGlobal {
 >myPublicStaticMethod : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     private static get myPrivateStaticMethod(): publicClassInGlobal {
 >myPrivateStaticMethod : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     get myPublicMethod(): publicClassInGlobal {
 >myPublicMethod : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
     }
     private get myPrivateMethod(): publicClassInGlobal {
 >myPrivateMethod : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
 
         return null;
 >null : null
@@ -1469,22 +1345,18 @@ class publicClassInGlobalWithWithPublicSetAccessorTypes {
     static set myPublicStaticMethod(param: publicClassInGlobal) {
 >myPublicStaticMethod : publicClassInGlobal
 >param : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
     }
     private static set myPrivateStaticMethod(param: publicClassInGlobal) {
 >myPrivateStaticMethod : publicClassInGlobal
 >param : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
     }
     set myPublicMethod(param: publicClassInGlobal) {
 >myPublicMethod : publicClassInGlobal
 >param : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
     }
     private set myPrivateMethod(param: publicClassInGlobal) {
 >myPrivateMethod : publicClassInGlobal
 >param : publicClassInGlobal
->publicClassInGlobal : publicClassInGlobal
     }
 }
 
@@ -1514,28 +1386,24 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
@@ -1575,28 +1443,24 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1636,28 +1500,24 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
             }
             private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
                 return null;
 >null : null
@@ -1697,28 +1557,24 @@ module publicModuleInGlobal {
 
             static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
             }
             private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1759,22 +1615,18 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             set myPublicMethod(param: privateClass) {
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
         }
 
@@ -1784,22 +1636,18 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
         }
 
@@ -1809,22 +1657,18 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             set myPublicMethod(param: privateClass) {
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
             private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
             }
         }
 
@@ -1834,22 +1678,18 @@ module publicModuleInGlobal {
             static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
             private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
             }
         }
 
@@ -1859,7 +1699,6 @@ module publicModuleInGlobal {
             static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1867,7 +1706,6 @@ module publicModuleInGlobal {
             get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1899,13 +1737,11 @@ module publicModuleInGlobal {
 >myPublicStaticMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
             }
             set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
             }
         }
 
@@ -1915,7 +1751,6 @@ module publicModuleInGlobal {
             static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1923,7 +1758,6 @@ module publicModuleInGlobal {
             get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : publicClass
 >privateModule : any
->publicClass : publicClass
 
                 return null;
 >null : null
@@ -1955,13 +1789,11 @@ module publicModuleInGlobal {
 >myPublicStaticMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
             }
             set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
 >privateModule : any
->publicClass : publicClass
             }
         }
     }
@@ -1971,28 +1803,24 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): privateClass { // Error
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass { // Error
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -2032,28 +1860,24 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2093,28 +1917,24 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): privateClass {
 >myPublicStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): privateClass {
 >myPrivateStaticMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): privateClass {
 >myPublicMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): privateClass {
 >myPrivateMethod : privateClass
->privateClass : privateClass
 
             return null;
 >null : null
@@ -2154,28 +1974,24 @@ module publicModuleInGlobal {
 
         static get myPublicStaticMethod(): publicClass {
 >myPublicStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private static get myPrivateStaticMethod(): publicClass {
 >myPrivateStaticMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         get myPublicMethod(): publicClass {
 >myPublicMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
         }
         private get myPrivateMethod(): publicClass {
 >myPrivateMethod : publicClass
->publicClass : publicClass
 
             return null;
 >null : null
@@ -2216,22 +2032,18 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: privateClass) { // Error
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) { // Error
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -2241,22 +2053,18 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -2266,22 +2074,18 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: privateClass) {
 >myPublicStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private static set myPrivateStaticMethod(param: privateClass) {
 >myPrivateStaticMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         set myPublicMethod(param: privateClass) {
 >myPublicMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
         private set myPrivateMethod(param: privateClass) {
 >myPrivateMethod : privateClass
 >param : privateClass
->privateClass : privateClass
         }
     }
 
@@ -2291,22 +2095,18 @@ module publicModuleInGlobal {
         static set myPublicStaticMethod(param: publicClass) {
 >myPublicStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private static set myPrivateStaticMethod(param: publicClass) {
 >myPrivateStaticMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         set myPublicMethod(param: publicClass) {
 >myPublicMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
         private set myPrivateMethod(param: publicClass) {
 >myPrivateMethod : publicClass
 >param : publicClass
->publicClass : publicClass
         }
     }
 
@@ -2316,7 +2116,6 @@ module publicModuleInGlobal {
         static get myPublicStaticMethod(): privateModule.publicClass { // Error
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2324,7 +2123,6 @@ module publicModuleInGlobal {
         get myPublicMethod(): privateModule.publicClass { // Error
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2356,13 +2154,11 @@ module publicModuleInGlobal {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) { // Error
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
     }
 
@@ -2372,7 +2168,6 @@ module publicModuleInGlobal {
         static get myPublicStaticMethod(): privateModule.publicClass {
 >myPublicStaticMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2380,7 +2175,6 @@ module publicModuleInGlobal {
         get myPublicMethod(): privateModule.publicClass {
 >myPublicMethod : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
 
             return null;
 >null : null
@@ -2412,13 +2206,11 @@ module publicModuleInGlobal {
 >myPublicStaticMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
         set myPublicMethod(param: privateModule.publicClass) {
 >myPublicMethod : privateModule.publicClass
 >param : privateModule.publicClass
 >privateModule : any
->publicClass : privateModule.publicClass
         }
     }
 }

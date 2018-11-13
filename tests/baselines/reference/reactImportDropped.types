@@ -11,14 +11,10 @@ declare namespace React {
     function createClass(spec: any): ClassicComponentClass;
 >createClass : (spec: any) => ClassicComponentClass
 >spec : any
->ClassicComponentClass : ClassicComponentClass
 
     interface ClassicComponentClass {
->ClassicComponentClass : ClassicComponentClass
-
         new (props?: any): ClassicComponentClass;
 >props : any
->ClassicComponentClass : ClassicComponentClass
     }
 }
 
@@ -26,20 +22,17 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface ElementAttributesProperty { }
->ElementAttributesProperty : ElementAttributesProperty
     }
 }
 
 
 === tests/cases/compiler/src/components/TabBar.js ===
 export default React.createClass({
->React.createClass({  render() {    return (      null    );  }}) : React.ClassicComponentClass
->React.createClass : (spec: any) => React.ClassicComponentClass
+>React.createClass({  render() {    return (      null    );  }}) : import("tests/cases/compiler/react").ClassicComponentClass
+>React.createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
 >React : typeof React
->createClass : (spec: any) => React.ClassicComponentClass
+>createClass : (spec: any) => import("tests/cases/compiler/react").ClassicComponentClass
 >{  render() {    return (      null    );  }} : { render(): any; }
 
   render() {
@@ -57,17 +50,17 @@ export default React.createClass({
 
 === tests/cases/compiler/src/modules/navigation/NavigationView.js ===
 import TabBar from '../../components/TabBar';
->TabBar : React.ClassicComponentClass
+>TabBar : import("tests/cases/compiler/react").ClassicComponentClass
 
 import {layout} from '../../utils/theme'; // <- DO NOT DROP this import
 >layout : any
 
 const x = <TabBar height={layout.footerHeight} />;
->x : any
-><TabBar height={layout.footerHeight} /> : any
->TabBar : React.ClassicComponentClass
->height : any
->layout.footerHeight : any
+>x : error
+><TabBar height={layout.footerHeight} /> : error
+>TabBar : import("tests/cases/compiler/react").ClassicComponentClass
+>height : error
+>layout.footerHeight : error
 >layout : any
 >footerHeight : any
 

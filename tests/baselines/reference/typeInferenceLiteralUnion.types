@@ -5,14 +5,11 @@
  */
 export type Primitive = number | string | boolean | Date;
 >Primitive : Primitive
->Date : Date
 
 /**
  * Administrivia: anything with a valueOf(): number method is comparable, so we allow it in numeric operations
  */
 interface Numeric {
->Numeric : Numeric
-
     valueOf(): number;
 >valueOf : () => number
 }
@@ -49,16 +46,7 @@ class NumCoercible {
  */
 export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Primitive, T | Primitive] | [undefined, undefined] {
 >extent : <T extends Numeric>(array: (string | number | boolean | Date | T)[]) => [string | number | boolean | Date | T, string | number | boolean | Date | T] | [undefined, undefined]
->T : T
->Numeric : Numeric
 >array : (string | number | boolean | Date | T)[]
->Array : T[]
->T : T
->Primitive : Primitive
->T : T
->Primitive : Primitive
->T : T
->Primitive : Primitive
 
     return [undefined, undefined];
 >[undefined, undefined] : [undefined, undefined]
@@ -69,17 +57,13 @@ export function extent<T extends Numeric>(array: Array<T | Primitive>): [T | Pri
 
 let extentMixed: [Primitive | NumCoercible, Primitive | NumCoercible] | [undefined, undefined];
 >extentMixed : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
->Primitive : Primitive
->NumCoercible : NumCoercible
->Primitive : Primitive
->NumCoercible : NumCoercible
 
 extentMixed = extent([new NumCoercible(10), 13, '12', true]);
 >extentMixed = extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extentMixed : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extent([new NumCoercible(10), 13, '12', true]) : [undefined, undefined] | [string | number | boolean | Date | NumCoercible, string | number | boolean | Date | NumCoercible]
 >extent : <T extends Numeric>(array: (string | number | boolean | Date | T)[]) => [string | number | boolean | Date | T, string | number | boolean | Date | T] | [undefined, undefined]
->[new NumCoercible(10), 13, '12', true] : (string | number | boolean | NumCoercible)[]
+>[new NumCoercible(10), 13, '12', true] : (string | number | true | NumCoercible)[]
 >new NumCoercible(10) : NumCoercible
 >NumCoercible : typeof NumCoercible
 >10 : 10

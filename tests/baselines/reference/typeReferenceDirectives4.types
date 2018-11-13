@@ -4,7 +4,6 @@
 
 let x: $;
 >x : $
->$ : $
 
 let y = () => x
 >y : () => $
@@ -15,7 +14,6 @@ let y = () => x
 // $ comes from d.ts file - no need to add type reference directive
 
 interface $ { x }
->$ : $
 >x : any
 
 === /types/lib/index.d.ts ===

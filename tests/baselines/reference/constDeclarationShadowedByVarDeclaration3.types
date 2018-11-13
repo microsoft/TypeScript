@@ -5,7 +5,6 @@ class Rule {
 
     public regex: RegExp = new RegExp('');
 >regex : RegExp
->RegExp : RegExp
 >new RegExp('') : RegExp
 >RegExp : RegExpConstructor
 >'' : ""

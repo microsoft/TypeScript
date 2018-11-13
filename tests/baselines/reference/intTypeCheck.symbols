@@ -84,6 +84,8 @@ interface i4 {
 
     // Used to be indexer, now it is a computed property
     [p];
+>[p] : Symbol(i4[p], Decl(intTypeCheck.ts, 32, 14))
+
     //Index Signatures
     [p1: string];
 >p1 : Symbol(p1, Decl(intTypeCheck.ts, 36, 5))
@@ -166,6 +168,8 @@ interface i11 {
     
     // Used to be indexer, now it is a computed property
     [p];
+>[p] : Symbol(i11[p], Decl(intTypeCheck.ts, 67, 35))
+
     //Index Signatures
     [p1: string];
 >p1 : Symbol(p1, Decl(intTypeCheck.ts, 72, 5))
@@ -241,7 +245,7 @@ var obj1: i1 = {
 var obj2: i1 = new Object();
 >obj2 : Symbol(obj2, Decl(intTypeCheck.ts, 98, 3))
 >i1 : Symbol(i1, Decl(intTypeCheck.ts, 0, 0))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj3: i1 = new obj0;
 >obj3 : Symbol(obj3, Decl(intTypeCheck.ts, 99, 3))
@@ -291,7 +295,7 @@ var obj12: i2 = {};
 var obj13: i2 = new Object();
 >obj13 : Symbol(obj13, Decl(intTypeCheck.ts, 112, 3))
 >i2 : Symbol(i2, Decl(intTypeCheck.ts, 10, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj14: i2 = new obj11;
 >obj14 : Symbol(obj14, Decl(intTypeCheck.ts, 113, 3))
@@ -341,7 +345,7 @@ var obj23: i3 = {};
 var obj24: i3 = new Object();
 >obj24 : Symbol(obj24, Decl(intTypeCheck.ts, 126, 3))
 >i3 : Symbol(i3, Decl(intTypeCheck.ts, 21, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj25: i3 = new obj22;
 >obj25 : Symbol(obj25, Decl(intTypeCheck.ts, 127, 3))
@@ -391,7 +395,7 @@ var obj34: i4 = {};
 var obj35: i4 = new Object();
 >obj35 : Symbol(obj35, Decl(intTypeCheck.ts, 140, 3))
 >i4 : Symbol(i4, Decl(intTypeCheck.ts, 31, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj36: i4 = new obj33;
 >obj36 : Symbol(obj36, Decl(intTypeCheck.ts, 141, 3))
@@ -441,7 +445,7 @@ var obj45: i5 = {};
 var obj46: i5 = new Object();
 >obj46 : Symbol(obj46, Decl(intTypeCheck.ts, 154, 3))
 >i5 : Symbol(i5, Decl(intTypeCheck.ts, 38, 1))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj47: i5 = new obj44;
 >obj47 : Symbol(obj47, Decl(intTypeCheck.ts, 155, 3))
@@ -491,7 +495,7 @@ var obj56: i6 = {};
 var obj57: i6 = new Object();
 >obj57 : Symbol(obj57, Decl(intTypeCheck.ts, 168, 3))
 >i6 : Symbol(i6, Decl(intTypeCheck.ts, 39, 27))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj58: i6 = new obj55;
 >obj58 : Symbol(obj58, Decl(intTypeCheck.ts, 169, 3))
@@ -541,7 +545,7 @@ var obj67: i7 = {};
 var obj68: i7 = new Object();
 >obj68 : Symbol(obj68, Decl(intTypeCheck.ts, 182, 3))
 >i7 : Symbol(i7, Decl(intTypeCheck.ts, 40, 27))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj69: i7 = new obj66;
 >obj69 : Symbol(obj69, Decl(intTypeCheck.ts, 183, 3))
@@ -592,7 +596,7 @@ var obj78: i8 = {};
 var obj79: i8 = new Object();
 >obj79 : Symbol(obj79, Decl(intTypeCheck.ts, 196, 3))
 >i8 : Symbol(i8, Decl(intTypeCheck.ts, 41, 27))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var obj80: i8 = new obj77;
 >obj80 : Symbol(obj80, Decl(intTypeCheck.ts, 197, 3))

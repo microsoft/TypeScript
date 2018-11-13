@@ -3,6 +3,7 @@
 
 interface Y { 'i am a very certain type': Y }
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
+>'i am a very certain type' : Symbol(Y['i am a very certain type'], Decl(unionAndIntersectionInference1.ts, 2, 13))
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
 
 var y: Y = <Y>undefined;
@@ -48,9 +49,9 @@ function destructure<a, r>(
 
 var value = Math.random() > 0.5 ? 'hey!' : <Y>undefined;
 >value : Symbol(value, Decl(unionAndIntersectionInference1.ts, 12, 3))
->Math.random : Symbol(Math.random, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->random : Symbol(Math.random, Decl(lib.d.ts, --, --))
+>Math.random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>random : Symbol(Math.random, Decl(lib.es5.d.ts, --, --))
 >Y : Symbol(Y, Decl(unionAndIntersectionInference1.ts, 0, 0))
 >undefined : Symbol(undefined)
 
@@ -146,10 +147,10 @@ let foo: Maybe<string>;
 >Maybe : Symbol(Maybe, Decl(unionAndIntersectionInference1.ts, 40, 1))
 
 get(foo).toUpperCase(); // Ok
->get(foo).toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>get(foo).toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >get : Symbol(get, Decl(unionAndIntersectionInference1.ts, 44, 25))
 >foo : Symbol(foo, Decl(unionAndIntersectionInference1.ts, 50, 3))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
 // Repro from #5456
 

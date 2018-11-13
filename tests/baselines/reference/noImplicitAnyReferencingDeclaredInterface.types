@@ -1,12 +1,9 @@
 === tests/cases/compiler/noImplicitAnyReferencingDeclaredInterface.ts ===
 interface Entry {
->Entry : Entry
-
     // Should return error for implicit any.
     new ();
 }
 
 declare var x: Entry;
 >x : Entry
->Entry : Entry
 

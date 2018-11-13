@@ -3,4 +3,5 @@ class C {
 >C : Symbol(C, Decl(parserComputedPropertyName9.ts, 0, 0))
 
    [e]: Type
+>[e] : Symbol(C[e], Decl(parserComputedPropertyName9.ts, 0, 9))
 }

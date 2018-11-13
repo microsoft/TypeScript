@@ -25,5 +25,5 @@ let k = <button {...buttonProps}>
 
 === tests/cases/conformance/jsx/declaration.d.ts ===
 declare module "classnames";
-No type information for this code.
-No type information for this code.
+>"classnames" : Symbol("classnames", Decl(declaration.d.ts, 0, 0))
+

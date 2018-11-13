@@ -19,19 +19,19 @@ let y = x.map(x => x + 1);
 
 let z1 = Observable.someValue.toFixed();
 >z1 : Symbol(z1, Decl(main.ts, 6, 3))
->Observable.someValue.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>Observable.someValue.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >Observable.someValue : Symbol(Observable.someValue, Decl(observable.d.ts, 5, 18))
 >Observable : Symbol(Observable, Decl(main.ts, 1, 8))
 >someValue : Symbol(Observable.someValue, Decl(observable.d.ts, 5, 18))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 let z2 = Observable.someAnotherValue.toLowerCase();
 >z2 : Symbol(z2, Decl(main.ts, 7, 3))
->Observable.someAnotherValue.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>Observable.someAnotherValue.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >Observable.someAnotherValue : Symbol(Observable.someAnotherValue, Decl(map.ts, 9, 11))
 >Observable : Symbol(Observable, Decl(main.ts, 1, 8))
 >someAnotherValue : Symbol(Observable.someAnotherValue, Decl(map.ts, 9, 11))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 === tests/cases/compiler/map.ts ===
 import { Observable } from "observable"
@@ -43,6 +43,8 @@ import { Observable } from "observable"
 >prototype : Symbol(Observable.prototype)
 
 declare module "observable" {
+>"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0), Decl(map.ts, 2, 48))
+
     interface Observable<T> {
 >Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
 >T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))
@@ -67,6 +69,8 @@ declare module "observable" {
 
 === tests/cases/compiler/observable.d.ts ===
 declare module "observable" {
+>"observable" : Symbol("observable", Decl(observable.d.ts, 0, 0), Decl(map.ts, 2, 48))
+
     class Observable<T> {
 >Observable : Symbol(Observable, Decl(observable.d.ts, 0, 29), Decl(observable.d.ts, 3, 5), Decl(map.ts, 4, 29), Decl(map.ts, 7, 5))
 >T : Symbol(T, Decl(observable.d.ts, 1, 21), Decl(map.ts, 5, 25))

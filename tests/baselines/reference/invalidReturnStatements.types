@@ -11,18 +11,15 @@ function fn3(): boolean { }
 
 function fn4(): Date {  }
 >fn4 : () => Date
->Date : Date
 
 function fn7(): any {  } // should be valid: any includes void
 >fn7 : () => any
 
 interface I { id: number }
->I : I
 >id : number
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -39,14 +36,12 @@ class D extends C {
 }
 function fn10(): D { return { id: 12 }; } 
 >fn10 : () => D
->D : D
 >{ id: 12 } : { id: number; }
 >id : number
 >12 : 12
 
 function fn11(): D { return new C(); }
 >fn11 : () => D
->D : D
 >new C() : C
 >C : typeof C
 

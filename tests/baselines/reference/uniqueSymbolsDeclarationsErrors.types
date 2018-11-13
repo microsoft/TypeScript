@@ -3,7 +3,6 @@ declare const s: unique symbol;
 >s : unique symbol
 
 interface I { readonly readonlyType: unique symbol; }
->I : I
 >readonlyType : unique symbol
 
 // not allowed when emitting declarations
@@ -25,8 +24,6 @@ export const obj = {
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: unique symbol) => unique symbol
 >p : unique symbol
->I : I
->I : I
 
         return p;
 >p : unique symbol
@@ -49,8 +46,6 @@ export const classExpression = class {
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: unique symbol) => unique symbol
 >p : unique symbol
->I : I
->I : I
 
         return p;
 >p : unique symbol
@@ -69,16 +64,14 @@ export function funcInferredReturnType(obj: { method(p: typeof s): void }) {
 }
 
 export interface InterfaceWithPrivateNamedProperties {
->InterfaceWithPrivateNamedProperties : InterfaceWithPrivateNamedProperties
-
     [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
 export interface InterfaceWithPrivateNamedMethods {
->InterfaceWithPrivateNamedMethods : InterfaceWithPrivateNamedMethods
-
     [s](): any;
+>[s] : () => any
 >s : unique symbol
 }
 
@@ -86,6 +79,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 >TypeLiteralWithPrivateNamedProperties : TypeLiteralWithPrivateNamedProperties
 
     [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
@@ -93,6 +87,7 @@ export type TypeLiteralWithPrivateNamedMethods = {
 >TypeLiteralWithPrivateNamedMethods : TypeLiteralWithPrivateNamedMethods
 
     [s](): any;
+>[s] : () => any
 >s : unique symbol
 }
 
@@ -100,9 +95,11 @@ export class ClassWithPrivateNamedProperties {
 >ClassWithPrivateNamedProperties : ClassWithPrivateNamedProperties
 
     [s]: any;
+>[s] : any
 >s : unique symbol
 
     static [s]: any;
+>[s] : any
 >s : unique symbol
 }
 
@@ -110,9 +107,11 @@ export class ClassWithPrivateNamedMethods {
 >ClassWithPrivateNamedMethods : ClassWithPrivateNamedMethods
 
     [s]() {}
+>[s] : () => void
 >s : unique symbol
 
     static [s]() {}
+>[s] : () => void
 >s : unique symbol
 }
 
@@ -120,18 +119,22 @@ export class ClassWithPrivateNamedAccessors {
 >ClassWithPrivateNamedAccessors : ClassWithPrivateNamedAccessors
 
     get [s](): any { return undefined; }
+>[s] : any
 >s : unique symbol
 >undefined : undefined
 
     set [s](v: any) { }
+>[s] : any
 >s : unique symbol
 >v : any
 
     static get [s](): any { return undefined; }
+>[s] : any
 >s : unique symbol
 >undefined : undefined
 
     static set [s](v: any) { }
+>[s] : any
 >s : unique symbol
 >v : any
 }

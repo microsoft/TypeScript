@@ -4,9 +4,11 @@
 
 class S { 1: string; }
 >S : Symbol(S, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 0, 0))
+>1 : Symbol(S[1], Decl(assignmentCompatWithObjectMembersNumericNames.ts, 3, 9))
 
 class T { 1.: string; }
 >T : Symbol(T, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 3, 22))
+>1. : Symbol(T[1.], Decl(assignmentCompatWithObjectMembersNumericNames.ts, 4, 9))
 
 var s: S;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 5, 3))
@@ -18,10 +20,12 @@ var t: T;
 
 interface S2 { 1: string; bar?: string }
 >S2 : Symbol(S2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 6, 9))
+>1 : Symbol(S2[1], Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 14))
 >bar : Symbol(S2.bar, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 25))
 
 interface T2 { 1.0: string; baz?: string }
 >T2 : Symbol(T2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 8, 40))
+>1.0 : Symbol(T2[1.0], Decl(assignmentCompatWithObjectMembersNumericNames.ts, 9, 14))
 >baz : Symbol(T2.baz, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 9, 27))
 
 var s2: S2;
@@ -34,17 +38,21 @@ var t2: T2;
 
 var a: { 1.: string; bar?: string }
 >a : Symbol(a, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 13, 3))
+>1. : Symbol(1., Decl(assignmentCompatWithObjectMembersNumericNames.ts, 13, 8))
 >bar : Symbol(bar, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 13, 20))
 
 var b: { 1.0: string; baz?: string }
 >b : Symbol(b, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 14, 3))
+>1.0 : Symbol(1.0, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 14, 8))
 >baz : Symbol(baz, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 14, 21))
 
 var a2 = { 1.0: '' };
 >a2 : Symbol(a2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 16, 3))
+>1.0 : Symbol(1.0, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 16, 10))
 
 var b2 = { 1: '' };
 >b2 : Symbol(b2, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 17, 3))
+>1 : Symbol(1, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 17, 10))
 
 s = t;
 >s : Symbol(s, Decl(assignmentCompatWithObjectMembersNumericNames.ts, 5, 3))

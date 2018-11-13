@@ -13,14 +13,12 @@ declare class Point
 >y : number
 
       public add(dx: number, dy: number): Point;
->add : (dx: number, dy: number) => Point
+>add : (dx: number, dy: number) => any
 >dx : number
 >dy : number
->Point : Point
 
       static origin: Point;
->origin : Point
->Point : Point
+>origin : any
 
 }
 
@@ -28,7 +26,7 @@ declare class Point
 // Because Point is a constructor function, this is inferred
 // to be Point and return type is inferred to be void
 function Point(x, y) {
->Point : (x: any, y: any) => void
+>Point : typeof Point
 >x : any
 >y : any
 
@@ -69,11 +67,11 @@ var x = EF1(1,2);
 
 // Point.origin declared as type Point
 Point.origin = new Point(0, 0);
->Point.origin = new Point(0, 0) : Point
->Point.origin : Point
+>Point.origin = new Point(0, 0) : any
+>Point.origin : any
 >Point : typeof Point
->origin : Point
->new Point(0, 0) : Point
+>origin : any
+>new Point(0, 0) : any
 >Point : typeof Point
 >0 : 0
 >0 : 0
@@ -82,29 +80,29 @@ Point.origin = new Point(0, 0);
 // this inferred as Point because of obj.prop assignment
 // dx, dy, and return type inferred using target typing
 Point.prototype.add = function(dx, dy) {
->Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
->Point.prototype.add : (dx: number, dy: number) => Point
->Point.prototype : Point
+>Point.prototype.add = function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
+>Point.prototype.add : any
+>Point.prototype : any
 >Point : typeof Point
->prototype : Point
->add : (dx: number, dy: number) => Point
->function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: number, dy: number) => Point
->dx : number
->dy : number
+>prototype : any
+>add : any
+>function(dx, dy) {    return new Point(this.x + dx, this.y + dy);} : (dx: any, dy: any) => any
+>dx : any
+>dy : any
 
     return new Point(this.x + dx, this.y + dy);
->new Point(this.x + dx, this.y + dy) : Point
+>new Point(this.x + dx, this.y + dy) : any
 >Point : typeof Point
 >this.x + dx : any
 >this.x : any
 >this : any
 >x : any
->dx : number
+>dx : any
 >this.y + dy : any
 >this.y : any
 >this : any
 >y : any
->dy : number
+>dy : any
 
 };
 
@@ -116,11 +114,11 @@ var f : number = 5;
 // this in function add inferred to be type of object literal (i.e. Point)
 // dx, dy, and return type of add inferred using target typing
 Point.prototype = {
->Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
->Point.prototype : Point
+>Point.prototype = {    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
+>Point.prototype : any
 >Point : typeof Point
->prototype : Point
->{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: number, dy: number) => Point; }
+>prototype : any
+>{    x: 0,    y: 0,    add: function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    }} : { x: number; y: number; add: (dx: any, dy: any) => any; }
 
     x: 0,
 >x : number
@@ -131,24 +129,24 @@ Point.prototype = {
 >0 : 0
 
     add: function(dx, dy) {
->add : (dx: number, dy: number) => Point
->function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: number, dy: number) => Point
->dx : number
->dy : number
+>add : (dx: any, dy: any) => any
+>function(dx, dy) {        return new Point(this.x + dx, this.y + dy);    } : (dx: any, dy: any) => any
+>dx : any
+>dy : any
 
         return new Point(this.x + dx, this.y + dy);
->new Point(this.x + dx, this.y + dy) : Point
+>new Point(this.x + dx, this.y + dy) : any
 >Point : typeof Point
 >this.x + dx : any
 >this.x : any
 >this : any
 >x : any
->dx : number
+>dx : any
 >this.y + dy : any
 >this.y : any
 >this : any
 >y : any
->dy : number
+>dy : any
     }
 };
 
@@ -205,13 +203,13 @@ function C(a,b) {
 }
 
 C.prototype = 
->C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
->C.prototype : C
->C : typeof C
->prototype : C
+>C.prototype = 	{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
+>C.prototype : any
+>C : (a: any, b: any) => void
+>prototype : any
 
 	{	a:0,
->{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: number, d: number) => any; }
+>{	a:0,		b:0, 		C1M1: function(c,d) {     				return (this.a + c) + (this.b + d);			}	} : { a: number; b: number; C1M1: (c: any, d: any) => any; }
 >a : number
 >0 : 0
 
@@ -220,10 +218,10 @@ C.prototype =
 >0 : 0
 
 		C1M1: function(c,d) {     
->C1M1 : (c: number, d: number) => any
->function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: number, d: number) => any
->c : number
->d : number
+>C1M1 : (c: any, d: any) => any
+>function(c,d) {     				return (this.a + c) + (this.b + d);			} : (c: any, d: any) => any
+>c : any
+>d : any
 
 				return (this.a + c) + (this.b + d);
 >(this.a + c) + (this.b + d) : any
@@ -232,13 +230,13 @@ C.prototype =
 >this.a : any
 >this : any
 >a : any
->c : number
+>c : any
 >(this.b + d) : any
 >this.b + d : any
 >this.b : any
 >this : any
 >b : any
->d : number
+>d : any
 			}
 	};
 

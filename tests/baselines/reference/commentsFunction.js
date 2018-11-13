@@ -61,8 +61,8 @@ function foo() {
 foo();
 /** This is comment for function signature*/
 function fooWithParameters(/** this is comment about a*/ a, 
-    /** this is comment for b*/
-    b) {
+/** this is comment for b*/
+b) {
     var d = a;
 } // trailing comment of function
 fooWithParameters("a", 10);
@@ -73,12 +73,12 @@ var fooFunc = function FooFunctionValue(/** fooFunctionValue param */ b) {
     return b;
 };
 /// lamdaFoo var comment
-var lambdaFoo = function (/**param a*/ a, /**param b*/ b) { return a + b; };
-var lambddaNoVarComment = function (/**param a*/ a, /**param b*/ b) { return a * b; };
+var lambdaFoo = /** this is lambda comment*/ function (/**param a*/ a, /**param b*/ b) { return a + b; };
+var lambddaNoVarComment = /** this is lambda multiplication*/ function (/**param a*/ a, /**param b*/ b) { return a * b; };
 lambdaFoo(10, 20);
 lambddaNoVarComment(10, 20);
 function blah(a /* multiline trailing comment
-    multiline */) {
+multiline */) {
 }
 function blah2(a /* single line multiple trailing comments */ /* second */) {
 }
@@ -104,8 +104,8 @@ function foo2() {
 declare function foo(): void;
 /** This is comment for function signature*/
 declare function fooWithParameters(/** this is comment about a*/ a: string, 
-    /** this is comment for b*/
-    b: number): void;
+/** this is comment for b*/
+b: number): void;
 /** fooFunc
  * comment
  */
@@ -115,6 +115,6 @@ declare var lambddaNoVarComment: (a: number, b: number) => number;
 declare function blah(a: string): void;
 declare function blah2(a: string): void;
 declare function blah3(a: string): void;
-declare function blah4(a: string, b: string): void;
+declare function blah4(/*1*/ a: string, /*3*/ b: string): void;
 declare function foo1(): void;
 declare function foo2(): void;

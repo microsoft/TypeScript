@@ -31,13 +31,13 @@ function foo(func: () => boolean) { }
 foo(() => true);
 >foo(() => true) : void
 >foo : (func: () => boolean) => void
->() => true : () => boolean
+>() => true : () => true
 >true : true
 
 foo(() => { return false; });
 >foo(() => { return false; }) : void
 >foo : (func: () => boolean) => void
->() => { return false; } : () => boolean
+>() => { return false; } : () => false
 >false : false
 
 // Binding patterns in arrow functions
@@ -58,14 +58,14 @@ var p3 = ([, a]) => { };
 >a : any
 
 var p4 = ([, ...a]) => { };
->p4 : ([, ...a]: Iterable<any>) => void
->([, ...a]) => { } : ([, ...a]: Iterable<any>) => void
+>p4 : ([, ...a]: [any?, ...any[]]) => void
+>([, ...a]) => { } : ([, ...a]: [any?, ...any[]]) => void
 > : undefined
 >a : any[]
 
 var p5 = ([a = 1]) => { };
->p5 : ([a]: [number]) => void
->([a = 1]) => { } : ([a]: [number]) => void
+>p5 : ([a]: [number?]) => void
+>([a = 1]) => { } : ([a]: [number?]) => void
 >a : number
 >1 : 1
 

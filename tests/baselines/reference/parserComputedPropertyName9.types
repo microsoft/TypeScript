@@ -3,6 +3,6 @@ class C {
 >C : C
 
    [e]: Type
+>[e] : any
 >e : any
->Type : No type information available!
 }

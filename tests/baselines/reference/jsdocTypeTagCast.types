@@ -80,7 +80,7 @@ class SomeOther {
 }
 
 function SomeFakeClass() {
->SomeFakeClass : () => void
+>SomeFakeClass : typeof SomeFakeClass
 
     /** @type {string|number} */
     this.p = "bar";
@@ -108,9 +108,9 @@ var someOther = new SomeOther();
 >SomeOther : typeof SomeOther
 
 var someFakeClass = new SomeFakeClass();
->someFakeClass : { p: string | number | undefined; }
->new SomeFakeClass() : { p: string | number | undefined; }
->SomeFakeClass : () => void
+>someFakeClass : SomeFakeClass
+>new SomeFakeClass() : SomeFakeClass
+>SomeFakeClass : typeof SomeFakeClass
 
 someBase = /** @type {SomeBase} */(someDerived);
 >someBase = /** @type {SomeBase} */(someDerived) : SomeBase
@@ -168,24 +168,24 @@ someOther = /** @type {SomeOther} */(someOther);
 
 someFakeClass = someBase;
 >someFakeClass = someBase : SomeBase
->someFakeClass : { p: string | number | undefined; }
+>someFakeClass : SomeFakeClass
 >someBase : SomeBase
 
 someFakeClass = someDerived;
 >someFakeClass = someDerived : SomeDerived
->someFakeClass : { p: string | number | undefined; }
+>someFakeClass : SomeFakeClass
 >someDerived : SomeDerived
 
 someBase = someFakeClass; // Error
->someBase = someFakeClass : { p: string | number | undefined; }
+>someBase = someFakeClass : SomeFakeClass
 >someBase : SomeBase
->someFakeClass : { p: string | number | undefined; }
+>someFakeClass : SomeFakeClass
 
 someBase = /** @type {SomeBase} */(someFakeClass);
 >someBase = /** @type {SomeBase} */(someFakeClass) : SomeBase
 >someBase : SomeBase
 >(someFakeClass) : SomeBase
->someFakeClass : { p: string | number | undefined; }
+>someFakeClass : SomeFakeClass
 
 // Type assertion cannot be a type-predicate type
 /** @type {number | string} */
@@ -197,7 +197,7 @@ var str;
 >str : string
 
 if(/** @type {numOrStr is string} */(numOrStr === undefined)) { // Error
->(numOrStr === undefined) : string | number
+>(numOrStr === undefined) : boolean
 >numOrStr === undefined : boolean
 >numOrStr : string | number
 >undefined : undefined

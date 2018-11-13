@@ -208,8 +208,6 @@ class C18 {
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/awaitAsTypeIsOk.ts ===
 interface await {}
->await : await
-
 class C19 {
 >C19 : C19
 
@@ -218,13 +216,10 @@ class C19 {
 
         let x: await;
 >x : await
->await : await
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldAsTypeIsStrictError.ts ===
 interface yield {}
->yield : yield
-
 class C20 {
 >C20 : C20
 
@@ -233,7 +228,6 @@ class C20 {
 
         let x: yield;
 >x : yield
->yield : yield
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInClassComputedPropertyIsError.ts ===
@@ -241,6 +235,7 @@ class C21 {
 >C21 : C21
 
     async * [yield]() {
+>[yield] : () => AsyncIterableIterator<any>
 >yield : any
     }
 }
@@ -254,6 +249,7 @@ class C22 {
         const x = { [yield]: 1 };
 >x : { [x: number]: number; }
 >{ [yield]: 1 } : { [x: number]: number; }
+>[yield] : number
 >yield : any
 >1 : 1
     }
@@ -286,4 +282,5 @@ class C25 {
 
     async * x = 1;
 >x : () => any
+>1 : any
 }

@@ -3,11 +3,11 @@
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 enum F { B }
 >F : F
->B : F
+>B : F.B
 
 var e = E.A;
 >e : E
@@ -65,17 +65,13 @@ module Others {
     }
     var ac: C;
 >ac : C
->C : C
 
     interface I {
->I : I
-
         foo: string;
 >foo : string
     }
     var ai: I;
 >ai : I
->I : I
 
     var b: number = e; // ok
 >b : number
@@ -91,7 +87,6 @@ module Others {
 
     var ee: Date = e;
 >ee : Date
->Date : Date
 >e : E
 
     var f: any = e; // ok
@@ -104,7 +99,6 @@ module Others {
 
     var h: Object = e;
 >h : Object
->Object : Object
 >e : E
 
     var i: {} = e;
@@ -117,7 +111,6 @@ module Others {
 
     var k: Function = e;
 >k : Function
->Function : Function
 >e : E
 
     var l: (x: number) => string = e;
@@ -146,39 +139,22 @@ module Others {
 
     var o: <T>(x: T) => T = e;
 >o : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >e : E
 
     var p: Number = e;
 >p : Number
->Number : Number
 >e : E
 
     var q: String = e;
 >q : String
->String : String
 >e : E
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
 >foo : <T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) => void
->T : T
->U : U
->T : T
->V : V
->Date : Date
->A : A
->Number : Number
->B : B
->E : E
 >x : T
->T : T
 >y : U
->U : U
 >z : V
->V : V
 
         x = e;
 >x = e : E
@@ -197,12 +173,10 @@ module Others {
 
         var a: A = e;
 >a : A
->A : A
 >e : E
 
         var b: B = e;
 >b : B
->B : B
 >e : E
     }
 }

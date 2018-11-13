@@ -17,22 +17,10 @@
 ////var a = new A();
 ////a./*3*/
 
-goTo.marker('1');
-verify.completionListContains('foo');
-verify.completionListContains('bar');
-verify.completionListContains('baz');
-edit.insert('foo;');
-
-goTo.marker('2');
-verify.completionListContains('foo');
-verify.completionListContains('bar');
-verify.not.completionListContains('baz');
-edit.insert('foo;');
-
-goTo.marker('3');
-verify.completionListContains('foo');
-verify.not.completionListContains('bar');
-verify.not.completionListContains('baz');
-edit.insert('foo;');
+goTo.eachMarker((_, i) => {
+    const all = ["foo", "bar", "baz"];
+    verify.completions({ includes: all.slice(0, 3 - i), excludes: all.slice(3 - i) });
+    edit.insert("foo;");
+});
 
 verify.noErrors();

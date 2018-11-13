@@ -4,17 +4,17 @@
 class A {
 >A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
 
-    prop: { a: string; };
+    prop!: { a: string; };
 >prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
->a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 11))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
 }
 
 class B {
 >B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
 
-    prop: { b: string; }
+    prop!: { b: string; }
 >prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
->b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
 }
 
 function isA(x: any): x is A {
@@ -51,22 +51,22 @@ function f1(x: A | B) {
 >A : Symbol(A, Decl(narrowingOfDottedNames.ts, 0, 0))
 
             x.prop.a;
->x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 11))
+>x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
 >x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
 >prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
->a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 11))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
         }
         else if (x instanceof B) {
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
 >B : Symbol(B, Decl(narrowingOfDottedNames.ts, 4, 1))
 
             x.prop.b;
->x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
+>x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
 >x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 18, 12))
 >prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
->b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
         }
     }
 }
@@ -83,23 +83,49 @@ function f2(x: A | B) {
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
 
             x.prop.a;
->x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 11))
+>x.prop.a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
 >x.prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
 >prop : Symbol(A.prop, Decl(narrowingOfDottedNames.ts, 2, 9))
->a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 11))
+>a : Symbol(a, Decl(narrowingOfDottedNames.ts, 3, 12))
         }
         else if (isB(x)) {
 >isB : Symbol(isB, Decl(narrowingOfDottedNames.ts, 12, 1))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
 
             x.prop.b;
->x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
+>x.prop.b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
 >x.prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
 >x : Symbol(x, Decl(narrowingOfDottedNames.ts, 29, 12))
 >prop : Symbol(B.prop, Decl(narrowingOfDottedNames.ts, 6, 9))
->b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 11))
+>b : Symbol(b, Decl(narrowingOfDottedNames.ts, 7, 12))
         }
+    }
+}
+
+// Repro from #28100
+
+class Foo1
+>Foo1 : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
+{
+    x: number;  // Error
+>x : Symbol(Foo1.x, Decl(narrowingOfDottedNames.ts, 43, 1))
+
+    constructor() {
+        if (this instanceof Boolean) {
+>this : Symbol(Foo1, Decl(narrowingOfDottedNames.ts, 38, 1))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
+
+class Foo2
+>Foo2 : Symbol(Foo2, Decl(narrowingOfDottedNames.ts, 49, 1))
+{
+    x: number;  // Error
+>x : Symbol(Foo2.x, Decl(narrowingOfDottedNames.ts, 52, 1))
+
+    constructor() {
     }
 }
 

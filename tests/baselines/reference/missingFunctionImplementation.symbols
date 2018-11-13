@@ -97,7 +97,7 @@ namespace C8 {
 >C8 : Symbol(C8, Decl(missingFunctionImplementation.ts, 42, 1), Decl(missingFunctionImplementation.ts, 48, 1))
 
   export function m(a?, b?): void { }
->m : Symbol(C8.m, Decl(missingFunctionImplementation.ts, 49, 14))
+>m : Symbol(m, Decl(missingFunctionImplementation.ts, 49, 14))
 >a : Symbol(a, Decl(missingFunctionImplementation.ts, 50, 20))
 >b : Symbol(b, Decl(missingFunctionImplementation.ts, 50, 23))
 }
@@ -114,7 +114,7 @@ namespace C9 {
 >C9 : Symbol(C9, Decl(missingFunctionImplementation.ts, 51, 1), Decl(missingFunctionImplementation.ts, 56, 1))
 
   export function m(a): void;
->m : Symbol(C9.m, Decl(missingFunctionImplementation.ts, 57, 14))
+>m : Symbol(m, Decl(missingFunctionImplementation.ts, 57, 14))
 >a : Symbol(a, Decl(missingFunctionImplementation.ts, 58, 20))
 }
 

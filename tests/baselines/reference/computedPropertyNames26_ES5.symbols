@@ -13,6 +13,12 @@ class C extends Base {
 >Base : Symbol(Base, Decl(computedPropertyNames26_ES5.ts, 0, 0))
 
     [
+>[        { [super.bar()]: 1 }[0]    ] : Symbol(C[
         { [super.bar()]: 1 }[0]
+    ], Decl(computedPropertyNames26_ES5.ts, 5, 22))
+
+        { [super.bar()]: 1 }[0]
+>[super.bar()] : Symbol([super.bar()], Decl(computedPropertyNames26_ES5.ts, 7, 9))
+
     ]() { }
 }

@@ -3,44 +3,43 @@ module M {
 >M : typeof M
 
     interface I { }
->I : I
-
     export class C {
 >C : C
 
         [Symbol.iterator]: I;
+>[Symbol.iterator] : I
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->I : I
 
         [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : (x: I) => void
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >x : I
->I : I
 
         [Symbol.isConcatSpreadable](): I {
+>[Symbol.isConcatSpreadable] : () => I
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
->I : I
 
             return undefined
 >undefined : undefined
         }
         get [Symbol.toPrimitive]() { return undefined; }
+>[Symbol.toPrimitive] : any
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >undefined : undefined
 
         set [Symbol.toPrimitive](x: I) { }
+>[Symbol.toPrimitive] : I
 >Symbol.toPrimitive : symbol
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >x : I
->I : I
     }
 }

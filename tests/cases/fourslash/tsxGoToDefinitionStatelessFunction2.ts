@@ -27,14 +27,14 @@
 //// let opt = <[|Main/*secondTarget*/Button|] children="chidlren" />;
 //// let opt = <[|Main/*thirdTarget*/Button|] onClick={()=>{}} />;
 //// let opt = <[|Main/*fourthTarget*/Button|] onClick={()=>{}} ignore-prop />;
-//// let opt = <[|Main/*fivethTarget*/Button|] goTo="goTo" />;
+//// let opt = <[|Main/*fifthTarget*/Button|] goTo="goTo" />;
 //// let opt = <[|Main/*sixthTarget*/Button|] wrong />;
 
 verify.goToDefinition({
-    firstTarget: "thirdSource",
-    secondTarget: "thirdSource",
+    firstTarget: "firstSource",
+    secondTarget: "firstSource",
     thirdTarget: "firstSource",
     fourthTarget: "firstSource",
-    fivethTarget: "secondSource",
-    sixthTarget: "thirdSource"
+    fifthTarget: "secondSource",
+    sixthTarget: "firstSource"
 });
