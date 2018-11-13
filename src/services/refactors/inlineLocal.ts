@@ -150,7 +150,7 @@ namespace ts.refactor.inlineLocal {
 
     function parenthesizeIfNecessary(target: Node, expression: Expression): Expression {
         const parent = target.parent;
-        if (isUnaryExpression(parent)) return createParen(expression);
+        if (isUnaryExpression(parent) && !isCallExpression(parent)) return createParen(expression);
         if (isBinaryExpression(parent)) {
             return parenthesizeBinaryOperand(
                 parent.operatorToken.kind,
