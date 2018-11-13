@@ -26,6 +26,7 @@ declare function f5<A, B>(): void;
 f5<number>();
 f5<number, number, number>();
 
+
 //// [functionTypeArgumentArityErrors.js]
 f1();
 f1();

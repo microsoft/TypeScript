@@ -1,7 +1,7 @@
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(27,9): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(60,9): error TS2738: No overload expects 1 type arguments, but an overload does exist that expects 3 type arguments.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(61,9): error TS2738: No overload expects 2 type arguments, but an overload does exist that expects 3 type arguments.
-tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,9): error TS2738: No overload expects 4 type arguments, but an overload does exist that expects 3 type arguments.
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(60,9): error TS2739: No overload expects 1 type argument(s), but an overload does exist that expects 3 type argument(s).
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(61,9): error TS2739: No overload expects 2 type argument(s), but an overload does exist that expects 3 type argument(s).
+tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(65,9): error TS2739: No overload expects 4 type argument(s), but an overload does exist that expects 3 type argument(s).
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(73,25): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(74,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstructors.ts(75,9): error TS2344: Type 'number' does not satisfy the constraint 'string'.
@@ -78,16 +78,16 @@ tests/cases/conformance/expressions/functionCalls/overloadResolutionClassConstru
     // Generic overloads with differing arity called with type arguments matching each overload type parameter count
     new fn3<number>(4); // Error
             ~~~~~~
-!!! error TS2738: No overload expects 1 type arguments, but an overload does exist that expects 3 type arguments.
+!!! error TS2739: No overload expects 1 type argument(s), but an overload does exist that expects 3 type argument(s).
     new fn3<string, string>('', '', '');  // Error
             ~~~~~~~~~~~~~~
-!!! error TS2738: No overload expects 2 type arguments, but an overload does exist that expects 3 type arguments.
+!!! error TS2739: No overload expects 2 type argument(s), but an overload does exist that expects 3 type argument(s).
     new fn3<number, string, string>('', '', 3);
     
     // Generic overloads with differing arity called with type argument count that doesn't match any overload
     new fn3<number, number, number, number>(); // Error
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2738: No overload expects 4 type arguments, but an overload does exist that expects 3 type arguments.
+!!! error TS2739: No overload expects 4 type argument(s), but an overload does exist that expects 3 type argument(s).
     
     // Generic overloads with constraints called with type arguments that satisfy the constraints
     class fn4<T extends string, U extends number> {

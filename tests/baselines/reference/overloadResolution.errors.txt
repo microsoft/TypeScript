@@ -1,6 +1,6 @@
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(27,5): error TS2345: Argument of type '{}' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(41,11): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
-tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(63,5): error TS2738: No overload expects 4 type arguments, but an overload does exist that expects 3 type arguments.
+tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(63,5): error TS2739: No overload expects 4 type argument(s), but an overload does exist that expects 3 type argument(s).
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(70,21): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(71,21): error TS2345: Argument of type '""' is not assignable to parameter of type 'number'.
 tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(81,5): error TS2344: Type 'boolean' does not satisfy the constraint 'number'.
@@ -79,7 +79,7 @@ tests/cases/conformance/expressions/functionCalls/overloadResolution.ts(91,22): 
     // Generic overloads with differing arity called with type argument count that doesn't match any overload
     fn3<number, number, number, number>(); // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2738: No overload expects 4 type arguments, but an overload does exist that expects 3 type arguments.
+!!! error TS2739: No overload expects 4 type argument(s), but an overload does exist that expects 3 type argument(s).
     
     // Generic overloads with constraints called with type arguments that satisfy the constraints
     function fn4<T extends string, U extends number>(n: T, m: U);
