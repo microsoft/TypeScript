@@ -1908,4 +1908,6 @@ namespace ts {
     export function getSwitchedType(caseClause: CaseClause, checker: TypeChecker): Type | undefined {
         return checker.getTypeAtLocation(caseClause.parent.parent.expression);
     }
+
+    export const ANONYMOUS = "anonymous function";
 }

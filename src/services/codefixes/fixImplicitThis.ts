@@ -30,7 +30,7 @@ namespace ts.codefix {
             const { name } = fn;
             const body = Debug.assertDefined(fn.body); // Should be defined because the function contained a 'this' expression
             if (isFunctionExpression(fn)) {
-                if (fn.name && FindAllReferences.Core.isSymbolReferencedInFile(fn.name, checker, sourceFile, body)) {
+                if (name && FindAllReferences.Core.isSymbolReferencedInFile(name, checker, sourceFile, body)) {
                     // Function expression references itself. To fix we would have to extract it to a const.
                     return undefined;
                 }
@@ -41,7 +41,7 @@ namespace ts.codefix {
                     changes.delete(sourceFile, name);
                 }
                 changes.insertText(sourceFile, body.pos, " =>");
-                return [Diagnostics.Convert_function_expression_0_to_arrow_function, name ? name.text : "<anonymous>"];
+                return [Diagnostics.Convert_function_expression_0_to_arrow_function, name ? name.text : ANONYMOUS];
             }
             else {
                 // `function f() {}` => `const f = () => {}`
@@ -52,14 +52,14 @@ namespace ts.codefix {
                 return [Diagnostics.Convert_function_declaration_0_to_arrow_function, name!.text];
             }
         }
-        else { // No outer 'this', must add an annotation
+        else { // No outer 'this', must add a jsdoc tag / parameter
             if (isSourceFileJS(sourceFile)) {
                 const addClassTag = isPropertyAccessExpression(token.parent) && isAssignmentExpression(token.parent.parent);
                 addJSDocTags(changes, sourceFile, fn, [addClassTag ? createJSDocClassTag() : createJSDocThisTag(createKeywordTypeNode(SyntaxKind.AnyKeyword))]);
                 return addClassTag ? Diagnostics.Add_class_tag : Diagnostics.Add_this_tag;
             }
             else {
-                changes.insertNodeAt(sourceFile, fn.parameters.pos, makeParameter("this", createKeywordTypeNode(SyntaxKind.AnyKeyword)));
+                changes.insertFirstParameter(sourceFile, fn.parameters, makeParameter("this", createKeywordTypeNode(SyntaxKind.AnyKeyword)));
                 return Diagnostics.Add_this_parameter;
             }
         }

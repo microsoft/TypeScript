@@ -11,7 +11,7 @@
 ////}
 
 verify.codeFix({
-    description: "Convert function expression '<anonymous>' to arrow function",
+    description: "Convert function expression 'anonymous function' to arrow function",
     index: 0,
     newFileContent:
 `class C {

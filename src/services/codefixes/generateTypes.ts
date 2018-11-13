@@ -191,6 +191,7 @@ namespace ts {
         ];
         return { parameters, returnType: hasReturn ? anyType() : createKeywordTypeNode(SyntaxKind.VoidKeyword) };
     }
+    /* @internal */
     export function makeParameter(name: string, type: TypeNode): ParameterDeclaration {
         return createParameter(/*decorators*/ undefined, /*modifiers*/ undefined, /*dotDotDotToken*/ undefined, name, /*questionToken*/ undefined, type);
     }

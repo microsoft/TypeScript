@@ -310,8 +310,18 @@ namespace ts.textChanges {
             });
         }
 
+        public insertFirstParameter(sourceFile: SourceFile, parameters: NodeArray<ParameterDeclaration>, newParam: ParameterDeclaration): void {
+            const p0 = firstOrUndefined(parameters);
+            if (p0) {
+                this.insertNodeBefore(sourceFile, p0, newParam);
+            }
+            else {
+                this.insertNodeAt(sourceFile, parameters.pos, newParam);
+            }
+        }
+
         public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false) {
-            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}, Position.Start), newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
+            this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}, Position.Start), newNode, this.getOptionsForInsertNodeBefore(before, newNode, blankLineBetween));
         }
 
         public insertModifierBefore(sourceFile: SourceFile, modifier: SyntaxKind, before: Node): void {
@@ -390,7 +400,7 @@ namespace ts.textChanges {
             this.insertNodesAt(sourceFile, start, typeParameters, { prefix: "<", suffix: ">" });
         }
 
-        private getOptionsForInsertNodeBefore(before: Node, doubleNewlines: boolean): InsertNodeOptions {
+        private getOptionsForInsertNodeBefore(before: Node, inserted: Node, doubleNewlines: boolean): InsertNodeOptions {
             if (isStatement(before) || isClassElement(before)) {
                 return { suffix: doubleNewlines ? this.newLineCharacter + this.newLineCharacter : this.newLineCharacter };
             }
@@ -398,7 +408,7 @@ namespace ts.textChanges {
                 return { suffix: ", " };
             }
             else if (isParameter(before)) {
-                return {};
+                return isParameter(inserted) ? { suffix: ", " } : {};
             }
             else if (isStringLiteral(before) && isImportDeclaration(before.parent) || isNamedImports(before)) {
                 return { suffix: ", " };
@@ -807,7 +817,7 @@ namespace ts.textChanges {
         }
 
         /** Note: this may mutate `nodeIn`. */
-        export function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
+        function getFormattedTextOfNode(nodeIn: Node, sourceFile: SourceFile, pos: number, { indentation, prefix, delta }: InsertNodeOptions, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
             // Emitter doesn't handle JSDoc, so generate that here.
             if (isJSDocTag(nodeIn)) {
                 switch (nodeIn.kind) {
