@@ -3458,11 +3458,7 @@ namespace ts {
                                 return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
-                                context.approximateLength += 3;
-                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
-                                }
-                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                                return createElidedInformationPlaceholder(context);
                             }
                         }
                         else {
@@ -3477,11 +3473,7 @@ namespace ts {
 
                             const depth = context.symbolDepth.get(id) || 0;
                             if (depth > 10) {
-                                context.approximateLength += 3;
-                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
-                                }
-                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                                return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
                             context.visitedTypes.set(typeId, true);
@@ -3674,10 +3666,15 @@ namespace ts {
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
                     if (resolvedType.stringIndexInfo) {
-                        const indexInfo = resolvedType.objectFlags & ObjectFlags.ReverseMapped ?
-                            createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
-                            resolvedType.stringIndexInfo;
-                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(indexInfo, IndexKind.String, context));
+                        let indexSignature: IndexSignatureDeclaration;
+                        if (resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration), IndexKind.String, context);
+                            indexSignature.type = createElidedInformationPlaceholder(context);
+                        }
+                        else {
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, context);
+                        }
+                        typeElements.push(indexSignature);
                     }
                     if (resolvedType.numberIndexInfo) {
                         typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, context));
@@ -3711,8 +3708,17 @@ namespace ts {
                 }
             }
 
+            function createElidedInformationPlaceholder(context: NodeBuilderContext) {
+                context.approximateLength += 3;
+                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                }
+                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            }
+
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
-                const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
+                const propertyType = propertyIsReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
@@ -3741,8 +3747,14 @@ namespace ts {
                 }
                 else {
                     const savedFlags = context.flags;
-                    context.flags |= !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) ? NodeBuilderFlags.InReverseMappedType : 0;
-                    const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    context.flags |= propertyIsReverseMapped ? NodeBuilderFlags.InReverseMappedType : 0;
+                    let propertyTypeNode: TypeNode;
+                    if (propertyIsReverseMapped && !!(savedFlags & NodeBuilderFlags.InReverseMappedType)) {
+                        propertyTypeNode = createElidedInformationPlaceholder(context);
+                    }
+                    else {
+                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    }
                     context.flags = savedFlags;
 
                     const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
