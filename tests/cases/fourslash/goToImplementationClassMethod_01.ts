@@ -7,7 +7,7 @@
 //// }
 ////
 //// class Bar extends AbstractBar{
-////     [|hello() {}|]
+////     [|hello|]() {}
 //// }
 ////
 //// function whatever(x: AbstractBar) {

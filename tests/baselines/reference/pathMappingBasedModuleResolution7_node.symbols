@@ -11,15 +11,15 @@ declare function use(x: string);
 
 use(x.toFixed());
 >use : Symbol(use, Decl(file1.ts, 1, 26))
->x.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>x.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(file1.ts, 0, 8))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 use(y.toFixed());
 >use : Symbol(use, Decl(file1.ts, 1, 26))
->y.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>y.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(file1.ts, 1, 8))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 === c:/root/generated/src/project/file2.ts ===
 import {a} from "module1";

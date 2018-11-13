@@ -4,7 +4,8 @@ tests/cases/compiler/nativeToBoxedTypes.ts(7,1): error TS2322: Type 'String' is 
   'string' is a primitive, but 'String' is a wrapper object. Prefer using 'string' when possible.
 tests/cases/compiler/nativeToBoxedTypes.ts(11,1): error TS2322: Type 'Boolean' is not assignable to type 'boolean'.
   'boolean' is a primitive, but 'Boolean' is a wrapper object. Prefer using 'boolean' when possible.
-tests/cases/compiler/nativeToBoxedTypes.ts(14,10): error TS2304: Cannot find name 'Symbol'.
+tests/cases/compiler/nativeToBoxedTypes.ts(15,1): error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
+  'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.
 
 
 ==== tests/cases/compiler/nativeToBoxedTypes.ts (4 errors) ====
@@ -31,6 +32,7 @@ tests/cases/compiler/nativeToBoxedTypes.ts(14,10): error TS2304: Cannot find nam
     
     var sym: symbol; 
     var Sym: Symbol;
-             ~~~~~~
-!!! error TS2304: Cannot find name 'Symbol'.
     sym = Sym;
+    ~~~
+!!! error TS2322: Type 'Symbol' is not assignable to type 'symbol'.
+!!! error TS2322:   'symbol' is a primitive, but 'Symbol' is a wrapper object. Prefer using 'symbol' when possible.

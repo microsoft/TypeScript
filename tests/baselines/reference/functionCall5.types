@@ -7,7 +7,6 @@ module m1 { export class c1 { public a; }}
 function foo():m1.c1{return new m1.c1();}; 
 >foo : () => m1.c1
 >m1 : any
->c1 : m1.c1
 >new m1.c1() : m1.c1
 >m1.c1 : typeof m1.c1
 >m1 : typeof m1

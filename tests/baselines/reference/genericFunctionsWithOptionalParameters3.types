@@ -1,55 +1,30 @@
 === tests/cases/compiler/genericFunctionsWithOptionalParameters3.ts ===
 class Collection<T> {
 >Collection : Collection<T>
->T : T
 
     public add(x: T) { }
 >add : (x: T) => void
 >x : T
->T : T
 }
 interface Utils {
->Utils : Utils
-
     fold<T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S): T;
 >fold : <T, S>(c?: Collection<T>, folder?: (s: S, t: T) => T, init?: S) => T
->T : T
->S : S
 >c : Collection<T>
->Collection : Collection<T>
->T : T
 >folder : (s: S, t: T) => T
 >s : S
->S : S
 >t : T
->T : T
->T : T
 >init : S
->S : S
->T : T
 
     mapReduce<T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V): Collection<V>;
 >mapReduce : <T, U, V>(c: Collection<T>, mapper: (x: T) => U, reducer: (y: U) => V) => Collection<V>
->T : T
->U : U
->V : V
 >c : Collection<T>
->Collection : Collection<T>
->T : T
 >mapper : (x: T) => U
 >x : T
->T : T
->U : U
 >reducer : (y: U) => V
 >y : U
->U : U
->V : V
->Collection : Collection<T>
->V : V
 }
 var utils: Utils;
 >utils : Utils
->Utils : Utils
 
 var c = new Collection<string>();
 >c : Collection<string>

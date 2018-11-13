@@ -8,19 +8,15 @@ export var x: SubModule.m.m3.c;
 >SubModule : any
 >m : any
 >m3 : any
->c : SubModule.m.m3.c
 
 
 === tests/cases/compiler/declFileAmbientExternalModuleWithSingleExportedModule_0.ts ===
 declare module "SubModule" {
+>"SubModule" : typeof import("SubModule")
+
     export module m {
->m : any
-
         export module m3 {
->m3 : any
-
             interface c {
->c : c
             }
         }
     }

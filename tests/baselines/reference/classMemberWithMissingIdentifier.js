@@ -6,7 +6,8 @@ class C {
 //// [classMemberWithMissingIdentifier.js]
 var C = /** @class */ (function () {
     function C() {
-        this. = {};
     }
     return C;
 }());
+{ }
+;

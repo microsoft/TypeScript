@@ -5,8 +5,7 @@
 ////
 ////var x2 = (b: number) => {/*2*/ };
 
-goTo.marker("1");
-verify.not.completionListContains("a");
-
-goTo.marker("2");
-verify.completionListContains("b");
+verify.completions(
+    { marker: "1", excludes: "a" },
+    { marker: "2", includes: "b" },
+);

@@ -1,19 +1,19 @@
 === tests/cases/compiler/optionalFunctionArgAssignability.ts ===
 interface Promise<T> {
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 18))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 18))
 
     then<U>(onFulfill?: (value: T) => U, onReject?: (reason: any) => U): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 22))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 22))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 1, 9))
 >onFulfill : Symbol(onFulfill, Decl(optionalFunctionArgAssignability.ts, 1, 12))
 >value : Symbol(value, Decl(optionalFunctionArgAssignability.ts, 1, 25))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 18))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 18))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 1, 9))
 >onReject : Symbol(onReject, Decl(optionalFunctionArgAssignability.ts, 1, 40))
 >reason : Symbol(reason, Decl(optionalFunctionArgAssignability.ts, 1, 53))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 1, 9))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 1, 9))
 }
  
@@ -27,7 +27,7 @@ var a = function then<U>(onFulfill?: (value: string) => U, onReject?: (reason: a
 >onReject : Symbol(onReject, Decl(optionalFunctionArgAssignability.ts, 4, 58))
 >reason : Symbol(reason, Decl(optionalFunctionArgAssignability.ts, 4, 71))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 4, 22))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 4, 22))
 
 var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: any) => U): Promise<U> { return null };
@@ -40,7 +40,7 @@ var b = function then<U>(onFulFill?: (value: number) => U, onReject?: (reason: a
 >onReject : Symbol(onReject, Decl(optionalFunctionArgAssignability.ts, 5, 58))
 >reason : Symbol(reason, Decl(optionalFunctionArgAssignability.ts, 5, 71))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 5, 22))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(optionalFunctionArgAssignability.ts, 0, 0))
 >U : Symbol(U, Decl(optionalFunctionArgAssignability.ts, 5, 22))
 
 a = b; // error because number is not assignable to string

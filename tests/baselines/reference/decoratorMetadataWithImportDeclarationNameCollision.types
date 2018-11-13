@@ -26,10 +26,8 @@ class MyClass {
 
     db: db;
 >db : db
->db : db
 
     constructor(db: db) {
->db : db
 >db : db
 
         this.db = db;

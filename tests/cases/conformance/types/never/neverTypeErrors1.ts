@@ -6,6 +6,7 @@ function f1() {
     x = undefined;
     x = null;
     x = {};
+    x();
 }
 
 function f2(): never {
@@ -18,3 +19,6 @@ function f3(): never {
 
 function f4(): never {
 }
+
+for (const n of f4()) {}
+for (const n in f4()) {}

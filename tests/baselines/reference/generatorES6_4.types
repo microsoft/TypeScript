@@ -1,10 +1,10 @@
 === tests/cases/compiler/generatorES6_4.ts ===
 var v = { 
->v : { foo(): IterableIterator<0>; }
->{    *foo() {       yield 0   }} : { foo(): IterableIterator<0>; }
+>v : { foo(): IterableIterator<number>; }
+>{    *foo() {       yield 0   }} : { foo(): IterableIterator<number>; }
 
    *foo() {
->foo : () => IterableIterator<0>
+>foo : () => IterableIterator<number>
 
        yield 0
 >yield 0 : any

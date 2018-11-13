@@ -8,13 +8,15 @@ let x = Test; // emit test_1.default
 >Test : typeof Test
 
 <anything attr={Test} />; // ?
-><anything attr={Test} /> : any
+><anything attr={Test} /> : error
 >anything : any
 >attr : typeof Test
 >Test : typeof Test
 
 === tests/cases/compiler/component.d.ts ===
 declare module "Test" {
+>"Test" : typeof import("Test")
+
 	export default class Text { }
 >Text : Text
 }

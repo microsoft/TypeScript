@@ -1,11 +1,9 @@
 === tests/cases/conformance/expressions/propertyAccess/propertyAccessStringIndexSignature.ts ===
 interface Flags { [name: string]: boolean };
->Flags : Flags
 >name : string
 
 let flags: Flags;
 >flags : Flags
->Flags : Flags
 
 flags.b;
 >flags.b : boolean
@@ -28,11 +26,8 @@ flags['this is fine'];
 >'this is fine' : "this is fine"
 
 interface Empty { }
->Empty : Empty
-
 let empty: Empty;
 >empty : Empty
->Empty : Empty
 
 empty.nope;
 >empty.nope : any

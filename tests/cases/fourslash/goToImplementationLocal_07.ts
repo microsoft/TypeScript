@@ -2,7 +2,7 @@
 
 // Should be able to go to ambient function declarations
 
-//// [|declare function someFunction(): () => void;|]
+//// declare function [|someFunction|](): () => void;
 //// someFun/*reference*/ction();
 
 verify.allRangesAppearInImplementationList("reference");

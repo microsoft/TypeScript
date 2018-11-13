@@ -1,10 +1,10 @@
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(5,9): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(8,10): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(11,10): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(18,10): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(24,10): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(31,10): error TS2558: Expected 0 type arguments, but got 1.
-tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(37,10): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(5,11): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(8,13): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(11,13): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(18,22): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(24,14): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(31,23): error TS2558: Expected 0 type arguments, but got 1.
+tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(37,15): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(40,10): error TS2347: Untyped function calls may not accept type arguments.
 tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFunctionWithTypeArguments.ts(43,10): error TS2347: Untyped function calls may not accept type arguments.
 
@@ -15,17 +15,17 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFun
     
     function f(x: number) { return null; }
     var r = f<string>(1);
-            ~~~~~~~~~~~~
+              ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     var f2 = (x: number) => { return null; }
     var r2 = f2<string>(1);
-             ~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     var f3: { (x: number): any; }
     var r3 = f3<string>(1);
-             ~~~~~~~~~~~~~
+                ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     class C {
@@ -34,7 +34,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFun
         }
     }
     var r4 = (new C()).f<string>(1);
-             ~~~~~~~~~~~~~~~~~~~~~~
+                         ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     interface I {
@@ -42,7 +42,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFun
     }
     var i: I;
     var r5 = i.f<string>(1);
-             ~~~~~~~~~~~~~~
+                 ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     class C2 {
@@ -51,7 +51,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFun
         }
     }
     var r6 = (new C2()).f<string>(1);
-             ~~~~~~~~~~~~~~~~~~~~~~~
+                          ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     interface I2 {
@@ -59,7 +59,7 @@ tests/cases/conformance/types/typeParameters/typeArgumentLists/callNonGenericFun
     }
     var i2: I2;
     var r7 = i2.f<string>(1);
-             ~~~~~~~~~~~~~~~
+                  ~~~~~~
 !!! error TS2558: Expected 0 type arguments, but got 1.
     
     var a;

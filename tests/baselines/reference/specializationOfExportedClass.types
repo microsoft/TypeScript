@@ -4,7 +4,6 @@ module M {
 
 export class C<T> { }
 >C : C<T>
->T : T
 
 }
  

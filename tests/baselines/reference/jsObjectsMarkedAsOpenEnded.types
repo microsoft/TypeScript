@@ -1,117 +1,117 @@
 === tests/cases/conformance/salsa/a.js ===
 var variable = {};
->variable : { [x: string]: any; }
->{} : { [x: string]: any; }
+>variable : typeof variable
+>{} : {}
 
 variable.a = 0;
 >variable.a = 0 : 0
->variable.a : any
->variable : { [x: string]: any; }
->a : any
+>variable.a : number
+>variable : typeof variable
+>a : number
 >0 : 0
 
 class C {
 >C : C
 
     initializedMember = {};
->initializedMember : { [x: string]: any; }
->{} : { [x: string]: any; }
+>initializedMember : {}
+>{} : {}
 
     constructor() {
         this.member = {};
->this.member = {} : { [x: string]: any; }
->this.member : { [x: string]: any; }
+>this.member = {} : {}
+>this.member : {}
 >this : this
->member : { [x: string]: any; }
->{} : { [x: string]: any; }
+>member : {}
+>{} : {}
 
         this.member.a = 0;
 >this.member.a = 0 : 0
 >this.member.a : any
->this.member : { [x: string]: any; }
+>this.member : {}
 >this : this
->member : { [x: string]: any; }
+>member : {}
 >a : any
 >0 : 0
     }
 }
 
 var obj = {
->obj : { [x: string]: any; property: { [x: string]: any; }; }
->{    property: {}} : { [x: string]: any; property: { [x: string]: any; }; }
+>obj : { property: {}; }
+>{    property: {}} : { property: {}; }
 
     property: {}
->property : { [x: string]: any; }
->{} : { [x: string]: any; }
+>property : {}
+>{} : {}
 
 };
 
 obj.property.a = 0;
 >obj.property.a = 0 : 0
 >obj.property.a : any
->obj.property : { [x: string]: any; }
->obj : { [x: string]: any; property: { [x: string]: any; }; }
->property : { [x: string]: any; }
+>obj.property : {}
+>obj : { property: {}; }
+>property : {}
 >a : any
 >0 : 0
 
 var arr = [{}];
->arr : { [x: string]: any; }[]
->[{}] : { [x: string]: any; }[]
->{} : { [x: string]: any; }
+>arr : {}[]
+>[{}] : {}[]
+>{} : {}
 
 function getObj() {
->getObj : () => { [x: string]: any; }
+>getObj : () => {}
 
     return {};
->{} : { [x: string]: any; }
+>{} : {}
 }
 
 
 === tests/cases/conformance/salsa/b.ts ===
 variable.a = 1;
 >variable.a = 1 : 1
->variable.a : any
->variable : { [x: string]: any; }
->a : any
+>variable.a : number
+>variable : typeof variable
+>a : number
 >1 : 1
 
 (new C()).member.a = 1;
 >(new C()).member.a = 1 : 1
 >(new C()).member.a : any
->(new C()).member : { [x: string]: any; }
+>(new C()).member : {}
 >(new C()) : C
 >new C() : C
 >C : typeof C
->member : { [x: string]: any; }
+>member : {}
 >a : any
 >1 : 1
 
 (new C()).initializedMember.a = 1;
 >(new C()).initializedMember.a = 1 : 1
 >(new C()).initializedMember.a : any
->(new C()).initializedMember : { [x: string]: any; }
+>(new C()).initializedMember : {}
 >(new C()) : C
 >new C() : C
 >C : typeof C
->initializedMember : { [x: string]: any; }
+>initializedMember : {}
 >a : any
 >1 : 1
 
 obj.property.a = 1;
 >obj.property.a = 1 : 1
 >obj.property.a : any
->obj.property : { [x: string]: any; }
->obj : { [x: string]: any; property: { [x: string]: any; }; }
->property : { [x: string]: any; }
+>obj.property : {}
+>obj : { property: {}; }
+>property : {}
 >a : any
 >1 : 1
 
 arr[0].a = 1;
 >arr[0].a = 1 : 1
 >arr[0].a : any
->arr[0] : { [x: string]: any; }
->arr : { [x: string]: any; }[]
+>arr[0] : {}
+>arr : {}[]
 >0 : 0
 >a : any
 >1 : 1
@@ -119,8 +119,8 @@ arr[0].a = 1;
 getObj().a = 1;
 >getObj().a = 1 : 1
 >getObj().a : any
->getObj() : { [x: string]: any; }
->getObj : () => { [x: string]: any; }
+>getObj() : {}
+>getObj : () => {}
 >a : any
 >1 : 1
 

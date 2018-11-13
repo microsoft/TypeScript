@@ -4,16 +4,20 @@ let x = {
 >{    1:1,    [2]:1,    "3":1,    ["4"]:1} : { 1: number; [2]: number; "3": number; ["4"]: number; }
 
     1:1,
+>1 : number
 >1 : 1
 
     [2]:1,
+>[2] : number
 >2 : 2
 >1 : 1
 
     "3":1,
+>"3" : number
 >1 : 1
 
     ["4"]:1
+>["4"] : number
 >"4" : "4"
 >1 : 1
 }
@@ -50,20 +54,23 @@ x[4].toExponential();
 >toExponential : (fractionDigits?: number) => string
 
 interface A {
->A : A
-
     1:number;
+>1 : number
+
     [2]:number;
+>[2] : number
 >2 : 2
 
     "3":number;
+>"3" : number
+
     ["4"]:number;
+>["4"] : number
 >"4" : "4"
 }
 
 let y:A;
 >y : A
->A : A
 
 y[1].toExponential();
 >y[1].toExponential() : string
@@ -101,17 +108,22 @@ class C {
 >C : C
 
     1:number;
+>1 : number
+
     [2]:number;
+>[2] : number
 >2 : 2
 
     "3":number;
+>"3" : number
+
     ["4"]:number;
+>["4"] : number
 >"4" : "4"
 }
 
 let z:C;
 >z : C
->C : C
 
 z[1].toExponential();
 >z[1].toExponential() : string
@@ -149,23 +161,29 @@ enum X {
 >X : X
 
     1 = 1,
+>1 : X.1
 >1 : 1
 
     [2] = 2,
+>[2] : X.2
 >2 : 2
 >2 : 2
 
     "3" = 3,
+>"3" : X.3
 >3 : 3
 
     ["4"] = 4,
+>["4"] : X.4
 >"4" : "4"
 >4 : 4
 
     "foo" = 5,
+>"foo" : X.foo
 >5 : 5
 
     ["bar"] = 6
+>["bar"] : X.bar
 >"bar" : "bar"
 >6 : 6
 }

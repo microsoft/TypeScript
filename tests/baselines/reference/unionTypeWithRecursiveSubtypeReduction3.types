@@ -3,7 +3,6 @@ var a27: { prop: number } | { prop: T27 };
 >a27 : { prop: number; } | { prop: { prop: number; } | any; }
 >prop : number
 >prop : { prop: number; } | { prop: { prop: number; } | any; }
->T27 : { prop: number; } | { prop: { prop: number; } | any; }
 
 type T27 = typeof a27;
 >T27 : { prop: number; } | { prop: { prop: number; } | any; }
@@ -11,7 +10,6 @@ type T27 = typeof a27;
 
 var b: T27;
 >b : { prop: number; } | { prop: { prop: number; } | any; }
->T27 : { prop: number; } | { prop: { prop: number; } | any; }
 
 var s: string = b;
 >s : string

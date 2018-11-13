@@ -1,0 +1,279 @@
+=== tests/cases/conformance/types/mapped/mappedTypes5.ts ===
+function f<T>(p: Partial<T>, r: Readonly<T>, pr: Partial<Readonly<T>>, rp: Readonly<Partial<T>>) {
+>f : Symbol(f, Decl(mappedTypes5.ts, 0, 0))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>p : Symbol(p, Decl(mappedTypes5.ts, 0, 14))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>r : Symbol(r, Decl(mappedTypes5.ts, 0, 28))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>pr : Symbol(pr, Decl(mappedTypes5.ts, 0, 44))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>rp : Symbol(rp, Decl(mappedTypes5.ts, 0, 70))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+
+    let a1: Partial<T> = p;
+>a1 : Symbol(a1, Decl(mappedTypes5.ts, 1, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>p : Symbol(p, Decl(mappedTypes5.ts, 0, 14))
+
+    let a2: Partial<T> = r;
+>a2 : Symbol(a2, Decl(mappedTypes5.ts, 2, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>r : Symbol(r, Decl(mappedTypes5.ts, 0, 28))
+
+    let a3: Partial<T> = pr;
+>a3 : Symbol(a3, Decl(mappedTypes5.ts, 3, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>pr : Symbol(pr, Decl(mappedTypes5.ts, 0, 44))
+
+    let a4: Partial<T> = rp;
+>a4 : Symbol(a4, Decl(mappedTypes5.ts, 4, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>rp : Symbol(rp, Decl(mappedTypes5.ts, 0, 70))
+
+    let b1: Readonly<T> = p;  // Error
+>b1 : Symbol(b1, Decl(mappedTypes5.ts, 5, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>p : Symbol(p, Decl(mappedTypes5.ts, 0, 14))
+
+    let b2: Readonly<T> = r;
+>b2 : Symbol(b2, Decl(mappedTypes5.ts, 6, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>r : Symbol(r, Decl(mappedTypes5.ts, 0, 28))
+
+    let b3: Readonly<T> = pr;  // Error
+>b3 : Symbol(b3, Decl(mappedTypes5.ts, 7, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>pr : Symbol(pr, Decl(mappedTypes5.ts, 0, 44))
+
+    let b4: Readonly<T> = rp;  // Error
+>b4 : Symbol(b4, Decl(mappedTypes5.ts, 8, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>rp : Symbol(rp, Decl(mappedTypes5.ts, 0, 70))
+
+    let c1: Partial<Readonly<T>> = p;
+>c1 : Symbol(c1, Decl(mappedTypes5.ts, 9, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>p : Symbol(p, Decl(mappedTypes5.ts, 0, 14))
+
+    let c2: Partial<Readonly<T>> = r;
+>c2 : Symbol(c2, Decl(mappedTypes5.ts, 10, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>r : Symbol(r, Decl(mappedTypes5.ts, 0, 28))
+
+    let c3: Partial<Readonly<T>> = pr;
+>c3 : Symbol(c3, Decl(mappedTypes5.ts, 11, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>pr : Symbol(pr, Decl(mappedTypes5.ts, 0, 44))
+
+    let c4: Partial<Readonly<T>> = rp;
+>c4 : Symbol(c4, Decl(mappedTypes5.ts, 12, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>rp : Symbol(rp, Decl(mappedTypes5.ts, 0, 70))
+
+    let d1: Readonly<Partial<T>> = p;
+>d1 : Symbol(d1, Decl(mappedTypes5.ts, 13, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>p : Symbol(p, Decl(mappedTypes5.ts, 0, 14))
+
+    let d2: Readonly<Partial<T>> = r;
+>d2 : Symbol(d2, Decl(mappedTypes5.ts, 14, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>r : Symbol(r, Decl(mappedTypes5.ts, 0, 28))
+
+    let d3: Readonly<Partial<T>> = pr;
+>d3 : Symbol(d3, Decl(mappedTypes5.ts, 15, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>pr : Symbol(pr, Decl(mappedTypes5.ts, 0, 44))
+
+    let d4: Readonly<Partial<T>> = rp;
+>d4 : Symbol(d4, Decl(mappedTypes5.ts, 16, 7))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 0, 11))
+>rp : Symbol(rp, Decl(mappedTypes5.ts, 0, 70))
+}
+
+// Repro from #17682
+
+type State = {
+>State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
+
+    [key: string]: string | boolean | number | null;
+>key : Symbol(key, Decl(mappedTypes5.ts, 22, 5))
+
+};
+
+type Args1<T extends State> = {
+>Args1 : Symbol(Args1, Decl(mappedTypes5.ts, 23, 2))
+>T : Symbol(T, Decl(mappedTypes5.ts, 25, 11))
+>State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
+
+    readonly previous: Readonly<Partial<T>>;
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 25, 31))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 25, 11))
+
+    readonly current: Readonly<Partial<T>>;
+>current : Symbol(current, Decl(mappedTypes5.ts, 26, 44))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 25, 11))
+
+};
+
+type Args2<T extends State> = {
+>Args2 : Symbol(Args2, Decl(mappedTypes5.ts, 28, 2))
+>T : Symbol(T, Decl(mappedTypes5.ts, 30, 11))
+>State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
+
+    readonly previous: Partial<Readonly<T>>;
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 30, 31))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 30, 11))
+
+    readonly current: Partial<Readonly<T>>;
+>current : Symbol(current, Decl(mappedTypes5.ts, 31, 44))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 30, 11))
+
+};
+
+function doit<T extends State>() {
+>doit : Symbol(doit, Decl(mappedTypes5.ts, 33, 2))
+>T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+>State : Symbol(State, Decl(mappedTypes5.ts, 17, 1))
+
+    let previous: Partial<T> = Object.create(null);
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 36, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    let current: Partial<T> = Object.create(null);
+>current : Symbol(current, Decl(mappedTypes5.ts, 37, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    let args1: Args1<T> = { previous, current };
+>args1 : Symbol(args1, Decl(mappedTypes5.ts, 38, 7))
+>Args1 : Symbol(Args1, Decl(mappedTypes5.ts, 23, 2))
+>T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 38, 27))
+>current : Symbol(current, Decl(mappedTypes5.ts, 38, 37))
+
+    let args2: Args2<T> = { previous, current };
+>args2 : Symbol(args2, Decl(mappedTypes5.ts, 39, 7))
+>Args2 : Symbol(Args2, Decl(mappedTypes5.ts, 28, 2))
+>T : Symbol(T, Decl(mappedTypes5.ts, 35, 14))
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 39, 27))
+>current : Symbol(current, Decl(mappedTypes5.ts, 39, 37))
+}
+
+type State2 = { foo: number, bar: string };
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+>foo : Symbol(foo, Decl(mappedTypes5.ts, 42, 15))
+>bar : Symbol(bar, Decl(mappedTypes5.ts, 42, 28))
+
+type Args3 = {
+>Args3 : Symbol(Args3, Decl(mappedTypes5.ts, 42, 43))
+
+    readonly previous: Readonly<Partial<State2>>;
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 44, 14))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+
+    readonly current: Readonly<Partial<State2>>;
+>current : Symbol(current, Decl(mappedTypes5.ts, 45, 49))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+
+};
+
+type Args4 = {
+>Args4 : Symbol(Args4, Decl(mappedTypes5.ts, 47, 2))
+
+    readonly previous: Partial<Readonly<State2>>;
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 49, 14))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+
+    readonly current: Partial<Readonly<State2>>;
+>current : Symbol(current, Decl(mappedTypes5.ts, 50, 49))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+
+};
+
+function doit2() {
+>doit2 : Symbol(doit2, Decl(mappedTypes5.ts, 52, 2))
+
+    let previous: Partial<State2> = Object.create(null);
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 55, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    let current: Partial<State2> = Object.create(null);
+>current : Symbol(current, Decl(mappedTypes5.ts, 56, 7))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
+>State2 : Symbol(State2, Decl(mappedTypes5.ts, 40, 1))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+
+    let args1: Args3 = { previous, current };
+>args1 : Symbol(args1, Decl(mappedTypes5.ts, 57, 7))
+>Args3 : Symbol(Args3, Decl(mappedTypes5.ts, 42, 43))
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 57, 24))
+>current : Symbol(current, Decl(mappedTypes5.ts, 57, 34))
+
+    let args2: Args4 = { previous, current };
+>args2 : Symbol(args2, Decl(mappedTypes5.ts, 58, 7))
+>Args4 : Symbol(Args4, Decl(mappedTypes5.ts, 47, 2))
+>previous : Symbol(previous, Decl(mappedTypes5.ts, 58, 24))
+>current : Symbol(current, Decl(mappedTypes5.ts, 58, 34))
+}
+

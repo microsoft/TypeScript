@@ -5,5 +5,4 @@
 ////    var n: num/*1*/
 ////}
 
-goTo.marker('1');
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "1", exact: completion.globalTypes });

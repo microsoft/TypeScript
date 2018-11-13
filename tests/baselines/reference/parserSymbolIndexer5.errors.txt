@@ -15,6 +15,7 @@ tests/cases/conformance/parser/ecmascript6/Symbols/parserSymbolIndexer5.ts(3,1):
 !!! error TS1005: ']' expected.
             ~~~~~~
 !!! error TS2552: Cannot find name 'symbol'. Did you mean 'Symbol'?
+!!! related TS2728 /.ts/lib.es2015.symbol.d.ts:48:13: 'Symbol' is declared here.
                   ~
 !!! error TS1005: ',' expected.
                    ~

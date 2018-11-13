@@ -42,14 +42,12 @@ var p1 = import(ValidSomeCondition() ? "./0" : "externalModule");
 
 var p1: Promise<any> = import(getSpecifier());
 >p1 : Promise<any>
->Promise : Promise<T>
 >import(getSpecifier()) : Promise<any>
 >getSpecifier() : string
 >getSpecifier : () => string
 
 var p11: Promise<typeof defaultModule> = import(getSpecifier());
 >p11 : Promise<typeof defaultModule>
->Promise : Promise<T>
 >defaultModule : typeof defaultModule
 >import(getSpecifier()) : Promise<any>
 >getSpecifier() : string
@@ -64,7 +62,6 @@ const p2 = import(whatToLoad ? getSpecifier() : "defaulPath") as Promise<typeof 
 >getSpecifier() : string
 >getSpecifier : () => string
 >"defaulPath" : "defaulPath"
->Promise : Promise<T>
 >defaultModule : typeof defaultModule
 
 p1.then(zero => {
@@ -88,7 +85,6 @@ let j: string;
 
 var p3: Promise<typeof defaultModule> = import(j=getSpecifier());
 >p3 : Promise<typeof defaultModule>
->Promise : Promise<T>
 >defaultModule : typeof defaultModule
 >import(j=getSpecifier()) : Promise<any>
 >j=getSpecifier() : string

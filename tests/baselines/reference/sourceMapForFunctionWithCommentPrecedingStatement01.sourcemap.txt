@@ -10,14 +10,20 @@ sourceFile:sourceMapForFunctionWithCommentPrecedingStatement01.ts
 -------------------------------------------------------------------
 >>>function P() {
 1 >
-2 >^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^
+4 >          ^^^^^^^->
 1 >
+2 >function 
+3 >         P
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
 ---
 >>>    // Test this
 1->^^^^
 2 >    ^^^^^^^^^^^^
-1->function P() {
+1->() {
   >    
 2 >    // Test this
 1->Emitted(2, 5) Source(2, 5) + SourceIndex(0)

@@ -2,12 +2,12 @@
 
 ////interface A {
 ////    a: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: string;
+////    [|{| "isDefinition": true |}common|]: string;
 ////}
 ////
 ////interface B {
 ////    b: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: number;
+////    [|{| "isDefinition": true |}common|]: number;
 ////}
 ////
 ////// Assignment
@@ -34,16 +34,17 @@
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-const all = test.ranges();
-const [aCommon, bCommon, ...unionRefs] = all;
-verify.referenceGroups(aCommon, [{ definition: "(property) A.common: string", ranges: [aCommon, ...unionRefs] }]);
-verify.referenceGroups(bCommon, [{ definition: "(property) B.common: number", ranges: [bCommon, ...unionRefs] }]);
-
-unionRefs.forEach((unionRef, idx) => {
-    const type = unionRef.marker.data.type;
-    verify.referenceGroups(unionRef, [
-        { definition: "(property) A.common: string", ranges: all.filter(x => x !== bCommon && x !== unionRef) },
-        { definition: "(property) B.common: number", ranges: [bCommon] },
-        { definition: `(property) common: ${type}`, ranges: [unionRef] }
-    ]);
-});
+const [aCommon, bCommon, ...unionRefs] = test.ranges();
+verify.referenceGroups(aCommon, [
+    { definition: "(property) A.common: string", ranges: [aCommon] },
+    { definition: "(property) common: string | number", ranges: unionRefs },
+]);
+verify.referenceGroups(bCommon, [
+    { definition: "(property) B.common: number", ranges: [bCommon] },
+    { definition: "(property) common: string | number", ranges: unionRefs },
+]);
+verify.referenceGroups(unionRefs, [
+    { definition: "(property) A.common: string", ranges: [aCommon] },
+    { definition: "(property) B.common: number", ranges: [bCommon] },
+    { definition: `(property) common: string | number`, ranges: unionRefs },
+]);

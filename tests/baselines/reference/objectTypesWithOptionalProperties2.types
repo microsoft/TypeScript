@@ -10,8 +10,6 @@ var a: {
 }
 
 interface I {
->I : I
-
     x()?: number; // error
 >x : () => any
 >number : any
@@ -26,9 +24,6 @@ class C {
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     x()?: T; // error
 >x : () => any
 >T : any
@@ -36,7 +31,6 @@ interface I2<T> {
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     x()?: T; // error
 >x : () => any
@@ -50,6 +44,7 @@ var b = {
 
     x()?: 1 // error
 >x : () => any
+>1 : any
 }
 > : any
 

@@ -6,5 +6,5 @@ var foo: { [index: any]; }; // expect an error here
 var foo2: { [index: RegExp]; }; // expect an error here
 >foo2 : Symbol(foo2, Decl(parserIndexSignature8.ts, 1, 3))
 >index : Symbol(index, Decl(parserIndexSignature8.ts, 1, 13))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

@@ -1,0 +1,21 @@
+=== tests/cases/compiler/use.ts ===
+import Chunk = require('./mod1')
+>Chunk : typeof Chunk
+
+declare var c: Chunk;
+>c : Chunk
+
+c.chunk;
+>c.chunk : number
+>c : Chunk
+>chunk : number
+
+=== tests/cases/compiler/mod1.ts ===
+export = class {
+>class {    chunk = 1} : typeof (Anonymous class)
+
+    chunk = 1
+>chunk : number
+>1 : 1
+}
+

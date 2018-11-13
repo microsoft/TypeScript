@@ -49,10 +49,8 @@ verify.docCommentTemplateAt("c", /*newTextOffset*/ 8,
  * @param x
  */`);
 
-verify.docCommentTemplateAt("d", /*newTextOffset*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("d", /*newTextOffset*/ 3,
+"/** */");
 
 verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
 `/**
@@ -60,10 +58,8 @@ verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,
  * @param param0
  */`);
 
-verify.docCommentTemplateAt("f", /*newTextOffset*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("f", /*newTextOffset*/ 3,
+"/** */");
 
 verify.docCommentTemplateAt("g", /*newTextOffset*/ 8,
 `/**

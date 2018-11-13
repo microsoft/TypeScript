@@ -1,0 +1,27 @@
+=== tests/cases/compiler/Class1.ts ===
+export class Class1 {
+>Class1 : Class1
+}
+=== tests/cases/compiler/Class2.ts ===
+import { Class1 } from './Class1';
+>Class1 : typeof Class1
+
+function decorate(target: any, propertyKey: string) {
+>decorate : (target: any, propertyKey: string) => void
+>target : any
+>propertyKey : string
+}
+
+export class Class2 {
+>Class2 : Class2
+
+    @decorate
+>decorate : (target: any, propertyKey: string) => void
+
+    get prop(): Class1 | undefined {
+>prop : Class1
+
+        return undefined;
+>undefined : undefined
+    }
+}

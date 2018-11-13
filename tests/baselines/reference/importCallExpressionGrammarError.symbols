@@ -17,9 +17,6 @@ var p1 = import(...a);
 const p2 = import();
 >p2 : Symbol(p2, Decl(importCallExpressionGrammarError.ts, 7, 5))
 
-const p3 = import(,);
->p3 : Symbol(p3, Decl(importCallExpressionGrammarError.ts, 8, 5))
-
 const p4 = import("pathToModule", "secondModule");
->p4 : Symbol(p4, Decl(importCallExpressionGrammarError.ts, 9, 5))
+>p4 : Symbol(p4, Decl(importCallExpressionGrammarError.ts, 8, 5))
 

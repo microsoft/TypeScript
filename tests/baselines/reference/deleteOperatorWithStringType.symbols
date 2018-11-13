@@ -88,9 +88,9 @@ var ResultIsBoolean11 = delete (STRING + STRING);
 
 var ResultIsBoolean12 = delete STRING.charAt(0);
 >ResultIsBoolean12 : Symbol(ResultIsBoolean12, Decl(deleteOperatorWithStringType.ts, 32, 3))
->STRING.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(deleteOperatorWithStringType.ts, 1, 3))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 // multiple delete  operator
 var ResultIsBoolean13 = delete delete STRING;

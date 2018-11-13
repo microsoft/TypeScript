@@ -1,5 +1,5 @@
-tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfFunctionType' has type '(() => string) | (() => number)' at tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts 8:4, but here has type '() => string | number'.
-tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts(15,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfConstructorType' has type '(new () => string) | (new () => number)' at tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts 12:4, but here has type 'new () => string | number'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts(11,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfFunctionType' must be of type '(() => string) | (() => number)', but here has type '() => string | number'.
+tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts(15,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfConstructorType' must be of type '(new () => string) | (new () => number)', but here has type 'new () => string | number'.
 
 
 ==== tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts (2 errors) ====
@@ -15,10 +15,10 @@ tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts(
     var unionOfFunctionType: { (): string } | { (): number };
     var unionOfFunctionType: () => string | number;
         ~~~~~~~~~~~~~~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfFunctionType' has type '(() => string) | (() => number)' at tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts 8:4, but here has type '() => string | number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfFunctionType' must be of type '(() => string) | (() => number)', but here has type '() => string | number'.
     
     var unionOfConstructorType: (new () => string) | (new () => number);
     var unionOfConstructorType: { new (): string } | { new (): number };
     var unionOfConstructorType: new () => string | number;
         ~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfConstructorType' has type '(new () => string) | (new () => number)' at tests/cases/conformance/types/specifyingTypes/typeLiterals/unionTypeLiterals.ts 12:4, but here has type 'new () => string | number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'unionOfConstructorType' must be of type '(new () => string) | (new () => number)', but here has type 'new () => string | number'.

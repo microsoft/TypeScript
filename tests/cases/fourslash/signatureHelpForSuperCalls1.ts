@@ -17,9 +17,7 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.signatureHelpPresent();
-verify.currentSignatureHelpIs('B(): B');
-
-goTo.marker('2');
-verify.currentSignatureHelpIs('B2(x: number): B2');
+verify.signatureHelp(
+    { marker: "1", text: "B(): B" },
+    { marker: "2", text: "B2(x: number): B2" },
+);

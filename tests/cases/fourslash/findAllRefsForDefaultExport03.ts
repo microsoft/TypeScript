@@ -14,7 +14,4 @@
 ////    var local = 100;
 ////}
 
-const ranges = test.ranges();
-const [r0, r1, r2, r3, r4] = ranges;
-verify.referenceGroups([r0, r3], [{ definition: "function f(): number\nnamespace f", ranges }]);
-verify.referenceGroups([r1, r2, r4], [{ definition: "namespace f\nfunction f(): number", ranges }]);
+verify.singleReferenceGroup("namespace f\nfunction f(): number");

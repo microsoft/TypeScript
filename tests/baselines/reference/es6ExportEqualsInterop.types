@@ -320,9 +320,9 @@ export * from "class-module";
 
 === tests/cases/compiler/modules.d.ts ===
 declare module "interface" {
-    interface Foo {
->Foo : Foo
+>"interface" : typeof import("interface")
 
+    interface Foo {
         x: number;
 >x : number
 
@@ -334,6 +334,8 @@ declare module "interface" {
 }
 
 declare module "variable" {
+>"variable" : typeof import("variable")
+
     var Foo: {
 >Foo : { a: number; b: number; }
 
@@ -348,9 +350,9 @@ declare module "variable" {
 }
 
 declare module "interface-variable" {
-    interface Foo {
->Foo : Foo
+>"interface-variable" : typeof import("interface-variable")
 
+    interface Foo {
         x: number;
 >x : number
 
@@ -371,6 +373,8 @@ declare module "interface-variable" {
 }
 
 declare module "module" {
+>"module" : typeof import("module")
+
     module Foo {
 >Foo : typeof Foo
 
@@ -385,9 +389,9 @@ declare module "module" {
 }
 
 declare module "interface-module" {
-    interface Foo {
->Foo : Foo
+>"interface-module" : typeof import("interface-module")
 
+    interface Foo {
         x: number;
 >x : number
 
@@ -408,12 +412,10 @@ declare module "interface-module" {
 }
 
 declare module "variable-module" {
+>"variable-module" : typeof import("variable-module")
+
     module Foo {
->Foo : { a: number; b: number; }
-
         interface Bar {
->Bar : Bar
-
             x: number;
 >x : number
 
@@ -435,6 +437,8 @@ declare module "variable-module" {
 }
 
 declare module "function" {
+>"function" : typeof import("function")
+
     function foo();
 >foo : () => any
 
@@ -443,6 +447,8 @@ declare module "function" {
 }
 
 declare module "function-module" {
+>"function-module" : typeof import("function-module")
+
     function foo();
 >foo : typeof foo
 
@@ -460,6 +466,8 @@ declare module "function-module" {
 }
 
 declare module "class" {
+>"class" : typeof import("class")
+
     class Foo {
 >Foo : Foo
 
@@ -474,6 +482,8 @@ declare module "class" {
 }
 
 declare module "class-module" {
+>"class-module" : typeof import("class-module")
+
     class Foo {
 >Foo : Foo
 

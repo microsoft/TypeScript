@@ -16,7 +16,7 @@ t = [];               // Error
 t = [1];              // Error
 t = [1, "hello"];     // Ok
 t = ["hello", 1];     // Error
-t = [1, "hello", 2];  // Ok
+t = [1, "hello", 2];  // Error
 
 var tf: [string, (x: string) => number] = ["hello", x => x.length];
 
@@ -70,7 +70,7 @@ t = []; // Error
 t = [1]; // Error
 t = [1, "hello"]; // Ok
 t = ["hello", 1]; // Error
-t = [1, "hello", 2]; // Ok
+t = [1, "hello", 2]; // Error
 var tf = ["hello", function (x) { return x.length; }];
 var ff1 = ff("hello", ["foo", function (x) { return x.length; }]);
 var ff1;

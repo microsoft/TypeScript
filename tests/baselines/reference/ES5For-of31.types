@@ -5,11 +5,11 @@ var a: string, b: number;
 
 for ({ a: b = 1, b: a = ""} of []) {
 >{ a: b = 1, b: a = ""} : { a?: number; b?: string; }
->a : undefined
+>a : number
 >b = 1 : 1
 >b : number
 >1 : 1
->b : undefined
+>b : string
 >a = "" : ""
 >a : string
 >"" : ""

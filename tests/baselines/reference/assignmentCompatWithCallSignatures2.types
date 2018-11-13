@@ -2,15 +2,12 @@
 // void returning call signatures can be assigned a non-void returning call signature that otherwise matches
 
 interface T {
->T : T
-
     f(x: number): void;
 >f : (x: number) => void
 >x : number
 }
 var t: T;
 >t : T
->T : T
 
 var a: { f(x: number): void };
 >a : { f(x: number): void; }
@@ -28,15 +25,12 @@ a = t;
 >t : T
 
 interface S {
->S : S
-
     f(x: number): string;
 >f : (x: number) => string
 >x : number
 }
 var s: S;
 >s : S
->S : S
 
 var a2: { f(x: number): string };
 >a2 : { f(x: number): string; }
@@ -77,9 +71,7 @@ t = { f: <T>(x:T) => 1 };
 >{ f: <T>(x:T) => 1 } : { f: <T>(x: T) => number; }
 >f : <T>(x: T) => number
 ><T>(x:T) => 1 : <T>(x: T) => number
->T : T
 >x : T
->T : T
 >1 : 1
 
 t = { f: function f() { return 1 } };
@@ -113,9 +105,7 @@ a = { f: <T>(x: T) => 1 };
 >{ f: <T>(x: T) => 1 } : { f: <T>(x: T) => number; }
 >f : <T>(x: T) => number
 ><T>(x: T) => 1 : <T>(x: T) => number
->T : T
 >x : T
->T : T
 >1 : 1
 
 a = { f: function (x: number) { return ''; } }
@@ -155,15 +145,12 @@ a = function (x: number) { return ''; }
 >'' : ""
 
 interface S2 {
->S2 : S2
-
     f(x: string): void;
 >f : (x: string) => void
 >x : string
 }
 var s2: S2;
 >s2 : S2
->S2 : S2
 
 var a3: { f(x: string): void };
 >a3 : { f(x: string): void; }

@@ -5,7 +5,7 @@
 /////*4*/        i -= 2
 /////*5*/        }/*1*/while (1 !== 1)
 goTo.marker("1");
-edit.insert("\r\n");
+edit.insert("\n");
 verify.currentLineContentIs("while (1 !== 1)");
 goTo.marker("2");
 verify.currentLineContentIs("do {");

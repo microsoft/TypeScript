@@ -1,25 +1,24 @@
 /// <reference path="fourslash.ts"/>
 
 /////// Module
-////{| "itemName": "MyShapes", "kind": "module", "parentName": "", "matchKind": "substring" |}module MyShapes {
+////[|{| "name": "MyShapes", "kind": "module" |}module MyShapes {
 ////
 ////    // Class
-////    {| "itemName": "MyPoint", "kind": "class", "parentName": "MyShapes", "matchKind": "substring" |}export class MyPoint {
+////    [|{| "name": "MyPoint", "kind": "class", "kindModifiers": "export", "containerName": "MyShapes", "containerKind": "module" |}export class MyPoint {
 ////        // Instance member
-////        {| "itemName": "MyoriginPointAttheHorizon", "kind": "property", "parentName": "MyPoint", "matchKind": "substring"|}private MyoriginPointAttheHorizon = 0.0;
+////        [|{| "name": "MyoriginAttheHorizon", "kind": "property", "kindModifiers": "private", "containerName": "MyPoint", "containerKind": "class" |}private MyoriginAttheHorizon = 0.0;|]
 ////
 ////        // Getter
-////        {| "itemName": "MydistanceFromOrigin", "kind": "getter", "parentName": "MyPoint", "matchKind": "substring" |}get MydistanceFromOrigin(): number { return 0; }
-////
-////    }
-////}
+////        [|{| "name": "MydistanceFromOrigin", "kind": "getter", "containerName": "MyPoint", "containerKind": "class" |}get MydistanceFromOrigin(): number { return 0; }|]
+////    }|]
+////}|]
 ////
 ////// Local variables
-////{| "itemName": "MymyPointThatIJustInitiated", "kind": "var", "parentName": "", "matchKind": "substring"|}var MymyPointThatIJustInitiated = new Shapes.Point();
+////var [|{| "name": "MyXyz", "kind": "var" |}MyXyz = new Shapes.Point()|];
 
-test.markers().forEach((marker) => {
-    if (marker.data) {
-        var name = marker.data.itemName;
-        verify.navigationItemsListContains(name, marker.data.kind, name.substr(2), marker.data.matchKind, marker.fileName, marker.data.parentName);
-    }
-});
+for (const range of test.ranges()) {
+    verify.navigateTo({
+        pattern: range.marker.data.name.slice(2),
+        expected: [{ ...range.marker.data, range, matchKind: "substring" }],
+    })
+}

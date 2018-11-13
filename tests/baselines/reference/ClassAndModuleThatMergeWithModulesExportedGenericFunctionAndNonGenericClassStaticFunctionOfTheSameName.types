@@ -1,14 +1,12 @@
 === tests/cases/conformance/internalModules/DeclarationMerging/ClassAndModuleThatMergeWithModulesExportedGenericFunctionAndNonGenericClassStaticFunctionOfTheSameName.ts ===
 class clodule<T> {
 >clodule : clodule<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 
     static fn(id: string) { }
 >fn : (id: string) => void
@@ -21,12 +19,8 @@ module clodule {
     // error: duplicate identifier expected
     export function fn<T>(x: T, y: T): T {
 >fn : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
         return x;
 >x : T

@@ -35,12 +35,12 @@ $.each(lines, function(dit) {
 >dit : Symbol(dit, Decl(instantiateContextuallyTypedGenericThis.ts, 8, 23))
 
     return dit.charAt(0) + this.charAt(1);
->dit.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>dit.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >dit : Symbol(dit, Decl(instantiateContextuallyTypedGenericThis.ts, 8, 23))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
->this.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>this.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >this : Symbol(this, Decl(instantiateContextuallyTypedGenericThis.ts, 2, 36))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 });
 

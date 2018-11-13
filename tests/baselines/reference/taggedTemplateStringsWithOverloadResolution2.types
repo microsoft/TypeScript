@@ -2,7 +2,6 @@
 function foo1(strs: TemplateStringsArray, x: number): string;
 >foo1 : { (strs: TemplateStringsArray, x: number): string; (strs: string[], x: number): number; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 
 function foo1(strs: string[], x: number): number;
@@ -40,7 +39,6 @@ function foo2(strs: string[], x: number): number;
 function foo2(strs: TemplateStringsArray, x: number): string;
 >foo2 : { (strs: string[], x: number): number; (strs: TemplateStringsArray, x: number): string; }
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >x : number
 
 function foo2(...stuff: any[]): any {

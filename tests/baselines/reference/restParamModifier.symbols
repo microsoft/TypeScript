@@ -4,5 +4,5 @@ class C {
 
     constructor(...public rest: string[]) {}
 >public : Symbol(public, Decl(restParamModifier.ts, 1, 16))
->string : Symbol(string, Decl(restParamModifier.ts, 1, 31))
+>rest : Symbol(rest, Decl(restParamModifier.ts, 1, 25))
 }

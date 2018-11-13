@@ -2,7 +2,7 @@
 // Fixes #15094
 export import Component = CompletelyMissing;
 >Component : any
->CompletelyMissing : No type information available!
+>CompletelyMissing : any
 
 === tests/cases/compiler/first.d.ts ===
 import * as Second from './second';

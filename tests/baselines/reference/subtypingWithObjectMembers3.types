@@ -1,15 +1,10 @@
 === tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers3.ts ===
 interface Base {
->Base : Base
-
     foo: string;
 >foo : string
 }
 
 interface Derived extends Base {
->Derived : Derived
->Base : Base
-
     bar: string;
 >bar : string
 }
@@ -17,143 +12,101 @@ interface Derived extends Base {
 // N and M have the same name, same accessibility, same optionality, and N is a subtype of M
 // foo properties are valid, bar properties cause errors in the derived class declarations
 module NotOptional {
->NotOptional : any
-
     interface A {
->A : A
-
         foo: Base;
 >foo : Base
->Base : Base
 
         bar: Derived;
 >bar : Derived
->Derived : Derived
     }
 
     interface B extends A {
->B : B
->A : A
-
         foo: Derived; // ok
 >foo : Derived
->Derived : Derived
 
         bar: Base; // error
 >bar : Base
->Base : Base
     }
 
     interface A2 {
->A2 : A2
-
         1: Base;
->Base : Base
+>1 : Base
 
         2.0: Derived;
->Derived : Derived
+>2.0 : Derived
     }
 
     interface B2 extends A2 {
->B2 : B2
->A2 : A2
-
         1: Derived; // ok
->Derived : Derived
+>1 : Derived
 
         2: Base; // error
->Base : Base
+>2 : Base
     }
 
     interface A3 {
->A3 : A3
-
         '1': Base;
->Base : Base
+>'1' : Base
 
         '2.0': Derived;
->Derived : Derived
+>'2.0' : Derived
     }
 
     interface B3 extends A3 {
->B3 : B3
->A3 : A3
-
         '1': Derived; // ok
->Derived : Derived
+>'1' : Derived
 
         '2.0': Base; // error
->Base : Base
+>'2.0' : Base
     }
 }
 
 module Optional {
->Optional : any
-
     interface A {
->A : A
-
         foo?: Base;
 >foo : Base
->Base : Base
 
         bar?: Derived;
 >bar : Derived
->Derived : Derived
     }
 
     interface B extends A {
->B : B
->A : A
-
         foo?: Derived; // ok
 >foo : Derived
->Derived : Derived
 
         bar?: Base; // error
 >bar : Base
->Base : Base
     }
 
     interface A2 {
->A2 : A2
-
         1?: Base;
->Base : Base
+>1 : Base
 
         2.0?: Derived;
->Derived : Derived
+>2.0 : Derived
     }
 
     interface B2 extends A2 {
->B2 : B2
->A2 : A2
-
         1?: Derived; // ok
->Derived : Derived
+>1 : Derived
 
         2?: Base; // error
->Base : Base
+>2 : Base
     }
 
     interface A3 {
->A3 : A3
-
         '1'?: Base;
->Base : Base
+>'1' : Base
 
         '2.0'?: Derived;
->Derived : Derived
+>'2.0' : Derived
     }
 
     interface B3 extends A3 {
->B3 : B3
->A3 : A3
-
         '1'?: Derived; // ok
->Derived : Derived
+>'1' : Derived
 
         '2.0'?: Base; // error
->Base : Base
+>'2.0' : Base
     }
 }

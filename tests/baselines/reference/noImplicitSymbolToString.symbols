@@ -1,0 +1,32 @@
+=== tests/cases/compiler/noImplicitSymbolToString.ts ===
+// Fix #19666
+
+let symbol!: symbol;
+>symbol : Symbol(symbol, Decl(noImplicitSymbolToString.ts, 2, 3))
+
+let str = "hello ";
+>str : Symbol(str, Decl(noImplicitSymbolToString.ts, 3, 3))
+
+const templateStr = `hello ${symbol}`;
+>templateStr : Symbol(templateStr, Decl(noImplicitSymbolToString.ts, 5, 5))
+>symbol : Symbol(symbol, Decl(noImplicitSymbolToString.ts, 2, 3))
+
+const appendStr = "hello " + symbol;
+>appendStr : Symbol(appendStr, Decl(noImplicitSymbolToString.ts, 6, 5))
+>symbol : Symbol(symbol, Decl(noImplicitSymbolToString.ts, 2, 3))
+
+str += symbol;
+>str : Symbol(str, Decl(noImplicitSymbolToString.ts, 3, 3))
+>symbol : Symbol(symbol, Decl(noImplicitSymbolToString.ts, 2, 3))
+
+let symbolUnionNumber!: symbol | number;
+>symbolUnionNumber : Symbol(symbolUnionNumber, Decl(noImplicitSymbolToString.ts, 9, 3))
+
+let symbolUnionString!: symbol | string;
+>symbolUnionString : Symbol(symbolUnionString, Decl(noImplicitSymbolToString.ts, 10, 3))
+
+const templateStrUnion = `union with number ${symbolUnionNumber} and union with string ${symbolUnionString}`;
+>templateStrUnion : Symbol(templateStrUnion, Decl(noImplicitSymbolToString.ts, 12, 5))
+>symbolUnionNumber : Symbol(symbolUnionNumber, Decl(noImplicitSymbolToString.ts, 9, 3))
+>symbolUnionString : Symbol(symbolUnionString, Decl(noImplicitSymbolToString.ts, 10, 3))
+

@@ -1,13 +1,10 @@
 === tests/cases/compiler/implementPublicPropertyAsPrivate.ts ===
 interface I {
->I : I
-
     x: number;
 >x : number
 }
 class C implements I {
 >C : C
->I : I
 
     private x = 0; // should raise error at class decl
 >x : number

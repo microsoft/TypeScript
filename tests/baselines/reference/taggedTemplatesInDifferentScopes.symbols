@@ -2,7 +2,7 @@
 export function tag(parts: TemplateStringsArray, ...values: any[]) {
 >tag : Symbol(tag, Decl(taggedTemplatesInDifferentScopes.ts, 0, 0))
 >parts : Symbol(parts, Decl(taggedTemplatesInDifferentScopes.ts, 0, 20))
->TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.d.ts, --, --))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(taggedTemplatesInDifferentScopes.ts, 0, 48))
 
     return parts[0];

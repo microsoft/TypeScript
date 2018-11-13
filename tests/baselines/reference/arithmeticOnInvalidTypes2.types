@@ -3,11 +3,8 @@ var obj = function f<T>(a: T, b: T) {
 >obj : <T>(a: T, b: T) => T
 >function f<T>(a: T, b: T) {    var z1 = a + b;    var z2 = a - b;    var z3 = a * b;    var z4 = a / b;    return a;} : <T>(a: T, b: T) => T
 >f : <T>(a: T, b: T) => T
->T : T
 >a : T
->T : T
 >b : T
->T : T
 
     var z1 = a + b;
 >z1 : any

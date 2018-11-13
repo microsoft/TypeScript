@@ -1,26 +1,16 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface ElementAttributesProperty { }
->ElementAttributesProperty : ElementAttributesProperty
-
 	interface IntrinsicElements { }
->IntrinsicElements : IntrinsicElements
 }
 
 interface Obj1type {
->Obj1type : Obj1type
-
 	new(n: string): any;
 >n : string
 }
 var Obj1: Obj1type;
 >Obj1 : Obj1type
->Obj1type : Obj1type
 
 <Obj1 x={10} />; // OK
 ><Obj1 x={10} /> : JSX.Element
@@ -29,15 +19,12 @@ var Obj1: Obj1type;
 >10 : 10
 
 interface Obj2type {
->Obj2type : Obj2type
-
 	new(n: string): { q?: number };
 >n : string
 >q : number
 }
 var Obj2: Obj2type;
 >Obj2 : Obj2type
->Obj2type : Obj2type
 
 <Obj2 x={10} />; // Error
 ><Obj2 x={10} /> : JSX.Element
@@ -46,15 +33,12 @@ var Obj2: Obj2type;
 >10 : 10
 
 interface Obj3type {
->Obj3type : Obj3type
-
 	new(n: string): { x: number; };
 >n : string
 >x : number
 }
 var Obj3: Obj3type;
 >Obj3 : Obj3type
->Obj3type : Obj3type
 
 <Obj3 x={10} />; // OK
 ><Obj3 x={10} /> : JSX.Element

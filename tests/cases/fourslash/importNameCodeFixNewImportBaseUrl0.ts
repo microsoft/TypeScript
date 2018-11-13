@@ -15,5 +15,5 @@
 verify.importFixAtPosition([
 `import { f1 } from "b";
 
-f1();`
+f1();`,
 ]);

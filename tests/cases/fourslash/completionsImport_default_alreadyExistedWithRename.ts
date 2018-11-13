@@ -7,15 +7,24 @@
 ////import f_o_o from "./a";
 ////f/**/;
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-
+verify.completions({
+    marker: "",
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "function foo(): void",
+        kind: "function",
+        kindModifiers: "export",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
+});
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from "./a".`,
-    // TODO: GH#18445
+    description: `Import default 'foo' from module "./a"`,
     newFileContent: `import f_o_o from "./a";
-import foo from "./a";\r
+import foo from "./a";
 f;`,
 });

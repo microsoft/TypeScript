@@ -1,7 +1,0 @@
-tests/cases/conformance/parser/ecmascript5/TupleTypes/TupleType3.ts(1,8): error TS1122: A tuple type element list cannot be empty.
-
-
-==== tests/cases/conformance/parser/ecmascript5/TupleTypes/TupleType3.ts (1 errors) ====
-    var v: []
-           ~~
-!!! error TS1122: A tuple type element list cannot be empty.

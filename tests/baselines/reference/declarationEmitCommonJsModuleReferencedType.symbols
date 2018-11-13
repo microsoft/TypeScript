@@ -1,0 +1,55 @@
+=== tests/cases/compiler/r/node_modules/foo/node_modules/nested/index.d.ts ===
+export interface NestedProps {}
+>NestedProps : Symbol(NestedProps, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/r/node_modules/foo/other/index.d.ts ===
+export interface OtherIndexProps {}
+>OtherIndexProps : Symbol(OtherIndexProps, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/r/node_modules/foo/other.d.ts ===
+export interface OtherProps {}
+>OtherProps : Symbol(OtherProps, Decl(other.d.ts, 0, 0))
+
+=== tests/cases/compiler/r/node_modules/foo/index.d.ts ===
+import { OtherProps } from "./other";
+>OtherProps : Symbol(OtherProps, Decl(index.d.ts, 0, 8))
+
+import { OtherIndexProps } from "./other/index";
+>OtherIndexProps : Symbol(OtherIndexProps, Decl(index.d.ts, 1, 8))
+
+import { NestedProps } from "nested";
+>NestedProps : Symbol(NestedProps, Decl(index.d.ts, 2, 8))
+
+export interface SomeProps {}
+>SomeProps : Symbol(SomeProps, Decl(index.d.ts, 2, 37))
+
+export function foo(): [SomeProps, OtherProps, OtherIndexProps, NestedProps];
+>foo : Symbol(foo, Decl(index.d.ts, 3, 29))
+>SomeProps : Symbol(SomeProps, Decl(index.d.ts, 2, 37))
+>OtherProps : Symbol(OtherProps, Decl(index.d.ts, 0, 8))
+>OtherIndexProps : Symbol(OtherIndexProps, Decl(index.d.ts, 1, 8))
+>NestedProps : Symbol(NestedProps, Decl(index.d.ts, 2, 8))
+
+=== tests/cases/compiler/node_modules/root/index.d.ts ===
+export interface RootProps {}
+>RootProps : Symbol(RootProps, Decl(index.d.ts, 0, 0))
+
+export function bar(): RootProps;
+>bar : Symbol(bar, Decl(index.d.ts, 0, 29))
+>RootProps : Symbol(RootProps, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/r/entry.ts ===
+import { foo } from "foo";
+>foo : Symbol(foo, Decl(entry.ts, 0, 8))
+
+import { bar } from "root";
+>bar : Symbol(bar, Decl(entry.ts, 1, 8))
+
+export const x = foo();
+>x : Symbol(x, Decl(entry.ts, 2, 12))
+>foo : Symbol(foo, Decl(entry.ts, 0, 8))
+
+export const y = bar();
+>y : Symbol(y, Decl(entry.ts, 3, 12))
+>bar : Symbol(bar, Decl(entry.ts, 1, 8))
+

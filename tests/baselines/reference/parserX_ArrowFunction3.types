@@ -1,8 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/ErrorRecovery/ArrowFunctions/parserX_ArrowFunction3.ts ===
 var v = (a): => {
->v : (a: any) => any
->(a): => {   } : (a: any) => any
+>v : any
+>(a) : any
 >a : any
-> : No type information available!
    
 };

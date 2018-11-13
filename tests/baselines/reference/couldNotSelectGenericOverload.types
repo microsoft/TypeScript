@@ -1,10 +1,7 @@
 === tests/cases/compiler/couldNotSelectGenericOverload.ts ===
 function makeArray<T>(items: T[]): T[] { return items; }
 >makeArray : <T>(items: T[]) => T[]
->T : T
 >items : T[]
->T : T
->T : T
 >items : T[]
 
 var b = [1, ""];

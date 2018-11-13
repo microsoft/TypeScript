@@ -6,9 +6,12 @@ import * as http from 'intern/dojo/node!http';
 
 === tests/cases/compiler/a.d.ts ===
 declare module "http" {
+>"http" : typeof import("http")
 }
 
 declare module 'intern/dojo/node!http' {
+>'intern/dojo/node!http' : typeof import("intern/dojo/node!http")
+
     import http = require('http');
 >http : typeof http
 

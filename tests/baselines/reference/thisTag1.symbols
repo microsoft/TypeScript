@@ -1,0 +1,32 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @this {{ n: number }} Mount Holyoke Preparatory School
+ * @param {string} s
+ * @return {number}
+ */
+function f(s) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>s : Symbol(s, Decl(a.js, 4, 11))
+
+    return this.n + s.length
+>this.n : Symbol(n, Decl(a.js, 0, 12))
+>this : Symbol(__type, Decl(a.js, 0, 11))
+>n : Symbol(n, Decl(a.js, 0, 12))
+>s.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>s : Symbol(s, Decl(a.js, 4, 11))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+}
+
+const o = {
+>o : Symbol(o, Decl(a.js, 8, 5))
+
+    f,
+>f : Symbol(f, Decl(a.js, 8, 11))
+
+    n: 1
+>n : Symbol(n, Decl(a.js, 9, 6))
+}
+o.f('hi')
+>o.f : Symbol(f, Decl(a.js, 8, 11))
+>o : Symbol(o, Decl(a.js, 8, 5))
+>f : Symbol(f, Decl(a.js, 8, 11))
+

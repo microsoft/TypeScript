@@ -1,30 +1,14 @@
 === tests/cases/conformance/decorators/a.ts ===
 interface Object { }
->Object : Object
-
-interface Array<T> { }
->Array : T[]
->T : T
-
-interface String { }
->String : String
-
-interface Boolean { }
->Boolean : Boolean
-
-interface Number { }
->Number : Number
-
-interface Function { }
->Function : Function
-
-interface RegExp { }
->RegExp : RegExp
-
-interface IArguments { }
->IArguments : IArguments
-
-=== tests/cases/conformance/decorators/b.ts ===
+No type information for this code.interface Array<T> { }
+No type information for this code.interface String { }
+No type information for this code.interface Boolean { }
+No type information for this code.interface Number { }
+No type information for this code.interface Function { }
+No type information for this code.interface RegExp { }
+No type information for this code.interface IArguments { }
+No type information for this code.
+No type information for this code.=== tests/cases/conformance/decorators/b.ts ===
 declare function dec(t, k, d);
 >dec : (t: any, k: any, d: any) => any
 >t : any

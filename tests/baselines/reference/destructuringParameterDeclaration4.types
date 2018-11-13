@@ -7,22 +7,15 @@
 
 type arrayString = Array<String>
 >arrayString : String[]
->Array : T[]
->String : String
 
 type someArray = Array<String> | number[];
 >someArray : someArray
->Array : T[]
->String : String
 
 type stringOrNumArray = Array<String|Number>;
 >stringOrNumArray : (String | Number)[]
->Array : T[]
->String : String
->Number : Number
 
 function a0(...x: [number, number, string]) { }  // Error, rest parameter must be array type
->a0 : (...x: [number, number, string]) => void
+>a0 : (x_0: number, x_1: number, x_2: string) => void
 >x : [number, number, string]
 
 function a1(...x: (number|string)[]) { }
@@ -32,7 +25,6 @@ function a1(...x: (number|string)[]) { }
 function a2(...a: someArray) { }  // Error, rest parameter must be array type
 >a2 : (...a: someArray) => void
 >a : someArray
->someArray : someArray
 
 function a3(...b?) { }            // Error, can't be optional
 >a3 : (...b?: any[]) => void
@@ -117,10 +109,7 @@ class C {
 // Rest parameter with generic
 function foo1<T extends Number>(...a: T[]) { }
 >foo1 : <T extends Number>(...a: T[]) => void
->T : T
->Number : Number
 >a : T[]
->T : T
 
 foo1(1, 2, "string", E1.a, E.b);  // Error
 >foo1(1, 2, "string", E1.a, E.b) : void

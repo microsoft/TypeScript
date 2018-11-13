@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/classDeclaration/superCallFromClassThatHasNoBaseTypeButWithSameSymbolInterface.ts ===
 interface Foo extends Array<number> {}
->Foo : Foo
->Array : T[]
 
 class Foo {
 >Foo : Foo

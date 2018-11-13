@@ -6,11 +6,8 @@ export = Bar;
 >Bar : Bar
 
 interface Bar {
->Bar : Bar
-
     foo: Foo<number>;
 >foo : Foo<number>
->Foo : Foo<A>
 }
 === tests/cases/compiler/privacyCheckExternalModuleExportAssignmentOfGenericClass_0.ts ===
 export = Foo;
@@ -18,10 +15,8 @@ export = Foo;
 
 class Foo<A> {
 >Foo : Foo<A>
->A : A
 
     constructor(public a: A) { }
 >a : A
->A : A
 }
 

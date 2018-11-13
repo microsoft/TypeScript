@@ -5,7 +5,6 @@ class C1 {
 public func(param: C2): any { }
 >func : (param: C2) => any
 >param : C2
->C2 : C2
 }
 class C2 extends C1 { }
 >C2 : C2

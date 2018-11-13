@@ -14,7 +14,6 @@ class F {
 
     [s: string]: B
 >s : string
->B : B
 }
 class G extends F {
 >G : G
@@ -22,7 +21,6 @@ class G extends F {
 
     [n: number]: A
 >n : number
->A : A
 }
 
 // Other way
@@ -31,7 +29,6 @@ class H {
 
     [n: number]: A
 >n : number
->A : A
 }
 class I extends H {
 >I : I
@@ -39,7 +36,6 @@ class I extends H {
 
     [s: string]: B
 >s : string
->B : B
 }
 
 // With hidden indexer
@@ -56,9 +52,69 @@ class K extends J {
 
     [n: number]: A;
 >n : number
->A : A
 
     [s: string]: B;
 >s : string
->B : B
+}
+
+
+type AliasedNumber = number;
+>AliasedNumber : number
+
+interface L {
+    [n: AliasedNumber]: A;
+>n : number
+}
+
+type AliasedString = string;
+>AliasedString : string
+
+interface M {
+    [s: AliasedString]: A;
+>s : string
+}
+
+type AliasedBoolean = boolean;
+>AliasedBoolean : boolean
+
+interface N {
+    [b: AliasedBoolean]: A;
+>b : boolean
+}
+
+type IndexableUnion = "foo" | "bar";
+>IndexableUnion : IndexableUnion
+
+interface O {
+    [u: IndexableUnion]: A;
+>u : IndexableUnion
+}
+
+type NonIndexableUnion = boolean | {};
+>NonIndexableUnion : NonIndexableUnion
+
+interface P {
+    [u: NonIndexableUnion]: A;
+>u : NonIndexableUnion
+}
+
+type NonIndexableUnion2 = string | number;
+>NonIndexableUnion2 : NonIndexableUnion2
+
+interface Q {
+    [u: NonIndexableUnion2]: A;
+>u : NonIndexableUnion2
+}
+
+type NonIndexableUnion3 = "foo" | 42;
+>NonIndexableUnion3 : NonIndexableUnion3
+
+interface R {
+    [u: NonIndexableUnion3]: A;
+>u : NonIndexableUnion3
+}
+
+interface S {
+    [u: "foo" | "bar"]: A;
+>u : IndexableUnion
 }

@@ -24,3 +24,4 @@ _10_lib_1.Foo();
 //// [10_lib.d.ts]
 export declare function Foo(): void;
 //// [main.d.ts]
+export {};

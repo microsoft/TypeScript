@@ -2,7 +2,7 @@
 
 // @Filename: a.ts
 ////interface A {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}foo|]: string;
+////    [|{| "isDefinition": true |}foo|]: string;
 ////}
 
 // @Filename: b.ts
@@ -15,6 +15,6 @@
 verify.singleReferenceGroup("(property) A.foo: string");
 
 goTo.marker("");
-edit.insert("\r\n");
+edit.insert("\n");
 
 verify.singleReferenceGroup("(property) A.foo: string");

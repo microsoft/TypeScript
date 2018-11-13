@@ -1,13 +1,13 @@
-tests/cases/compiler/constEnumErrors.ts(1,12): error TS2300: Duplicate identifier 'E'.
-tests/cases/compiler/constEnumErrors.ts(5,8): error TS2300: Duplicate identifier 'E'.
+tests/cases/compiler/constEnumErrors.ts(1,12): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
+tests/cases/compiler/constEnumErrors.ts(5,8): error TS2567: Enum declarations can only merge with namespace or other enum declarations.
 tests/cases/compiler/constEnumErrors.ts(12,9): error TS2651: A member initializer in a enum declaration cannot reference members declared after it, including members defined in other enums.
 tests/cases/compiler/constEnumErrors.ts(14,9): error TS2474: In 'const' enum declarations member initializer must be constant expression.
 tests/cases/compiler/constEnumErrors.ts(15,10): error TS2474: In 'const' enum declarations member initializer must be constant expression.
 tests/cases/compiler/constEnumErrors.ts(22,13): error TS2476: A const enum member can only be accessed using a string literal.
 tests/cases/compiler/constEnumErrors.ts(24,13): error TS2476: A const enum member can only be accessed using a string literal.
-tests/cases/compiler/constEnumErrors.ts(26,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
-tests/cases/compiler/constEnumErrors.ts(27,10): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
-tests/cases/compiler/constEnumErrors.ts(32,5): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+tests/cases/compiler/constEnumErrors.ts(26,9): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/compiler/constEnumErrors.ts(27,10): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
+tests/cases/compiler/constEnumErrors.ts(32,5): error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
 tests/cases/compiler/constEnumErrors.ts(40,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(41,9): error TS2477: 'const' enum member initializer was evaluated to a non-finite value.
 tests/cases/compiler/constEnumErrors.ts(42,9): error TS2478: 'const' enum member initializer was evaluated to disallowed value 'NaN'.
@@ -16,13 +16,13 @@ tests/cases/compiler/constEnumErrors.ts(42,9): error TS2478: 'const' enum member
 ==== tests/cases/compiler/constEnumErrors.ts (13 errors) ====
     const enum E {
                ~
-!!! error TS2300: Duplicate identifier 'E'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         A
     }
     
     module E {
            ~
-!!! error TS2300: Duplicate identifier 'E'.
+!!! error TS2567: Enum declarations can only merge with namespace or other enum declarations.
         var x = 1;
     }
     
@@ -55,17 +55,17 @@ tests/cases/compiler/constEnumErrors.ts(42,9): error TS2478: 'const' enum member
     
     var x = E2;
             ~~
-!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
     var y = [E2];
              ~~
-!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
     
     function foo(t: any): void {
     }
     
     foo(E2);
         ~~
-!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment.
+!!! error TS2475: 'const' enums can only be used in property or index access expressions or the right hand side of an import declaration or export assignment or type query.
     
     const enum NaNOrInfinity {
         A = 9007199254740992,

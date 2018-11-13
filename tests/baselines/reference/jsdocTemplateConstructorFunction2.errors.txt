@@ -1,0 +1,39 @@
+tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(21,1): error TS2322: Type 'false' is not assignable to type 'number'.
+tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js(26,15): error TS2304: Cannot find name 'T'.
+
+
+==== tests/cases/conformance/jsdoc/templateTagWithNestedTypeLiteral.js (2 errors) ====
+    /**
+     * @param {T} t
+     * @template T
+     */
+    function Zet(t) {
+        /** @type {T} */
+        this.u
+        this.t = t
+    }
+    /**
+     * @param {T} v
+     * @param {object} o
+     * @param {T} o.nested
+     */
+    Zet.prototype.add = function(v, o) {
+        this.u = v || o.nested
+        return this.u
+    }
+    var z = new Zet(1)
+    z.t = 2
+    z.u = false
+    ~~~
+!!! error TS2322: Type 'false' is not assignable to type 'number'.
+    
+    // lookup in typedef should not crash the compiler, even when the type is unknown
+    /**
+     * @typedef {Object} A
+     * @property {T} value
+                  ~
+!!! error TS2304: Cannot find name 'T'.
+     */
+    /** @type {A} */
+    const options = { value: null };
+    

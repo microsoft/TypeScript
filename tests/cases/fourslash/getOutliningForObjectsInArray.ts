@@ -53,4 +53,4 @@
 ////     ]|]
 //// ]|];
 
-verify.outliningSpansInCurrentFile(test.ranges());
+verify.outliningSpansInCurrentFile(test.ranges(), "code");

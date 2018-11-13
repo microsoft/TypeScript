@@ -3,11 +3,10 @@
 function isNumber(x: any): x is number {
 >isNumber : (x: any) => x is number
 >x : any
->x : any
 
   return typeof x === "number";
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 >"number" : "number"
 }
@@ -34,7 +33,6 @@ const readonlyArrayOfStringsNumbersAndBooleans = arrayOfStringsNumbersAndBoolean
 >readonlyArrayOfStringsNumbersAndBooleans : ReadonlyArray<string | number | boolean>
 >arrayOfStringsNumbersAndBooleans as ReadonlyArray<string | number | boolean> : ReadonlyArray<string | number | boolean>
 >arrayOfStringsNumbersAndBooleans : (string | number | boolean)[]
->ReadonlyArray : ReadonlyArray<T>
 
 const readonlyFoundNumber: number | undefined = readonlyArrayOfStringsNumbersAndBooleans.find(isNumber);
 >readonlyFoundNumber : number

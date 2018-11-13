@@ -1,11 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-//// interface I<T> {
+////interface I<T> {
 ////    x: { y: T, z: T[] };
-//// }
-//// 
-//// class C implements I<number> {[| |]}
+////}
+////class C implements I<number> {[| |]}
 
-verify.rangeAfterCodeFix(`
+verify.codeFix({
+    description: "Implement interface 'I<number>'",
+    newFileContent:
+`interface I<T> {
+    x: { y: T, z: T[] };
+}
+class C implements I<number> {
     x: { y: number; z: number[]; };
-`);
+}`,
+});

@@ -1,17 +1,17 @@
 tests/cases/conformance/types/witness/witness.ts(4,21): error TS2372: Parameter 'pInit' cannot be referenced in its initializer.
 tests/cases/conformance/types/witness/witness.ts(28,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 27:4, but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(29,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
 tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(30,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/types/witness/witness.ts(32,12): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/types/witness/witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' has type 'any' at tests/cases/conformance/types/witness/witness.ts 31:4, but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 35:4, but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' has type 'any' at tests/cases/conformance/types/witness/witness.ts 37:4, but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 41:4, but here has type 'number'.
-tests/cases/conformance/types/witness/witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 55:4, but here has type 'string'.
-tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 106:4, but here has type '{ m: any; }'.
+tests/cases/conformance/types/witness/witness.ts(33,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(37,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(39,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(43,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
+tests/cases/conformance/types/witness/witness.ts(57,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
+tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
 
 
 ==== tests/cases/conformance/types/witness/witness.ts (14 errors) ====
@@ -49,7 +49,7 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     var co1: number;
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 27:4, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co1' must be of type 'any', but here has type 'number'.
     var co2 = (3, 4, co2);
                ~
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
@@ -65,23 +65,23 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
 !!! error TS2695: Left side of comma operator is unused and has no side effects.
     var co3: number;
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' has type 'any' at tests/cases/conformance/types/witness/witness.ts 31:4, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'co3' must be of type 'any', but here has type 'number'.
     
     // Assignment
     var as1 = (as1 = 2);
     var as1: number;
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 35:4, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as1' must be of type 'any', but here has type 'number'.
     var as2 = (as2 = as2 = 2);
     var as2: number;
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' has type 'any' at tests/cases/conformance/types/witness/witness.ts 37:4, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'as2' must be of type 'any', but here has type 'number'.
     
     // Conditional
     var cnd1 = cnd1 ? 0 : 1;
     var cnd1: number;
         ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 41:4, but here has type 'number'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'cnd1' must be of type 'any', but here has type 'number'.
     var cnd2 = cnd1 ? cnd1 ? '' : "" : '';
     var cnd2: string;
     
@@ -97,7 +97,7 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     var and1 = and1 && '';
     var and1: string;
         ~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 55:4, but here has type 'string'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'and1' must be of type 'any', but here has type 'string'.
     var and2 = '' && and2;
     var and2: any;
     var and3 = and3 && and3;
@@ -152,7 +152,7 @@ tests/cases/conformance/types/witness/witness.ts(110,5): error TS2403: Subsequen
     };
     var propAcc1: { m: any; }
         ~~~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' has type 'any' at tests/cases/conformance/types/witness/witness.ts 106:4, but here has type '{ m: any; }'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'propAcc1' must be of type 'any', but here has type '{ m: any; }'.
     
     // Property access of module member
     module M2 {

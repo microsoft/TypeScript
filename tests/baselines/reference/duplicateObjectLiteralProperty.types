@@ -28,6 +28,7 @@ var x = {
 >1 : 1
 
         "c": 56, // Duplicate
+>"c" : number
 >56 : 56
     }
 };

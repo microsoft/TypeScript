@@ -21,6 +21,4 @@ exports.thing = umd_1.makeThing();
 
 
 //// [index.d.ts]
-export declare const thing: {
-    a: number;
-};
+export declare const thing: import("umd").Thing;

@@ -8,37 +8,23 @@
 type FuncType = (x: <T>(p: T) => T) => typeof x;
 >FuncType : FuncType
 >x : <T>(p: T) => T
->T : T
 >p : T
->T : T
->T : T
 >x : <T>(p: T) => T
 
 function fun<T>(f: FuncType, x: T): T;
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >f : FuncType
->FuncType : FuncType
 >x : T
->T : T
->T : T
 
 function fun<T>(f: FuncType, g: FuncType, x: T): T;
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >f : FuncType
->FuncType : FuncType
 >g : FuncType
->FuncType : FuncType
 >x : T
->T : T
->T : T
 
 function fun<T>(...rest: any[]): T {
 >fun : { <T>(f: FuncType, x: T): T; <T>(f: FuncType, g: FuncType, x: T): T; }
->T : T
 >rest : any[]
->T : T
 
     return undefined;
 >undefined : undefined
@@ -299,7 +285,6 @@ var l = fun(((Math.random() < 0.5 ? ((x => { x<number>(undefined); return x; }))
 
 var lambda1: FuncType = x => { x<number>(undefined); return x; };
 >lambda1 : FuncType
->FuncType : FuncType
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
 >x<number>(undefined) : number
@@ -309,7 +294,6 @@ var lambda1: FuncType = x => { x<number>(undefined); return x; };
 
 var lambda2: FuncType = (x => { x<number>(undefined); return x; });
 >lambda2 : FuncType
->FuncType : FuncType
 >(x => { x<number>(undefined); return x; }) : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x => { x<number>(undefined); return x; } : (x: <T>(p: T) => T) => <T>(p: T) => T
 >x : <T>(p: T) => T
@@ -327,7 +311,6 @@ type ObjType = { x: (p: number) => string; y: (p: string) => number };
 
 var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 >obj1 : ObjType
->ObjType : ObjType
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any
 >x => (x, undefined) : (x: number) => any
@@ -346,7 +329,6 @@ var obj1: ObjType = { x: x => (x, undefined), y: y => (y, undefined) };
 
 var obj2: ObjType = ({ x: x => (x, undefined), y: y => (y, undefined) });
 >obj2 : ObjType
->ObjType : ObjType
 >({ x: x => (x, undefined), y: y => (y, undefined) }) : { x: (x: number) => any; y: (y: string) => any; }
 >{ x: x => (x, undefined), y: y => (y, undefined) } : { x: (x: number) => any; y: (y: string) => any; }
 >x : (x: number) => any

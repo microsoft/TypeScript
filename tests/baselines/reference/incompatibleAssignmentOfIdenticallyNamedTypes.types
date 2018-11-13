@@ -1,18 +1,13 @@
 === tests/cases/compiler/incompatibleAssignmentOfIdenticallyNamedTypes.ts ===
 interface T { }
->T : T
-
 declare const a: T;
 >a : T
->T : T
 
 class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     fn() {
 >fn : () => void

@@ -46,6 +46,7 @@ var s = $.extend({
 
     converters: { "text json": "" },
 >converters : Symbol(converters, Decl(objectLiteralParameterResolution.ts, 10, 22))
+>"text json" : Symbol("text json", Decl(objectLiteralParameterResolution.ts, 11, 17))
 
     traditional: true ,
 >traditional : Symbol(traditional, Decl(objectLiteralParameterResolution.ts, 11, 36))

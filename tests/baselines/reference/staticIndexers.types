@@ -17,9 +17,7 @@ class D {
 
 class E<T> {
 >E : E<T>
->T : T
 
     static [x: string]: T;
 >x : string
->T : No type information available!
 }

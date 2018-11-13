@@ -1,7 +1,5 @@
 === tests/cases/compiler/arrayconcat.ts ===
 interface IOptions {
->IOptions : IOptions
-
     name?: string;
 >name : string
 
@@ -30,7 +28,6 @@ class parser {
 
 	public options: IOptions[];
 >options : IOptions[]
->IOptions : IOptions
 
 	public m() {
 >m : () => void

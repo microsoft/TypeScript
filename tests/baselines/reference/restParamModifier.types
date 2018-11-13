@@ -3,8 +3,6 @@ class C {
 >C : C
 
     constructor(...public rest: string[]) {}
->public : any
->rest : any
->string : any[]
->[] : undefined[]
+>public : any[]
+>rest : string[]
 }

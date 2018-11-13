@@ -1,0 +1,66 @@
+=== tests/cases/compiler/jsxInferenceProducesLiteralAsExpected.tsx ===
+import React = require("react");
+>React : Symbol(React, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 0))
+
+type FunctionPropertyNames<T> = { [K in keyof T]: T[K] extends Function ? K : never }[keyof T];
+>FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 32))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
+>Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>K : Symbol(K, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 35))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 27))
+
+class TestObject {
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
+
+    a: string = '';
+>a : Symbol(TestObject.a, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 2, 18))
+
+    b: number = 1;
+>b : Symbol(TestObject.b, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 3, 19))
+
+    c: () => void = () => { };
+>c : Symbol(TestObject.c, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 4, 18))
+}
+interface TestProps<T> {
+>TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 6, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+
+    model: T;
+>model : Symbol(TestProps.model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 24))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+
+    foo: FunctionPropertyNames<T>;
+>foo : Symbol(TestProps.foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 8, 13))
+>FunctionPropertyNames : Symbol(FunctionPropertyNames, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 0, 32))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 7, 20))
+}
+function Test<T>(props: TestProps<T>) { return <></>; }
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 14))
+>props : Symbol(props, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 17))
+>TestProps : Symbol(TestProps, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 6, 1))
+>T : Symbol(T, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 11, 14))
+
+const model = new TestObject();
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
+
+const el1 = <Test model={model} foo="c" />;
+>el1 : Symbol(el1, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 5))
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 17))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
+>foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 14, 31))
+
+const el2 = <Test<TestObject> model={model} foo="c" />;
+>el2 : Symbol(el2, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 5))
+>Test : Symbol(Test, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 10, 1))
+>TestObject : Symbol(TestObject, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 1, 95))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 29))
+>model : Symbol(model, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 12, 5))
+>foo : Symbol(foo, Decl(jsxInferenceProducesLiteralAsExpected.tsx, 15, 43))
+

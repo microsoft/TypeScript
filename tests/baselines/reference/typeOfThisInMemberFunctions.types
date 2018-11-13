@@ -21,11 +21,9 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     foo() {
 >foo : () => void
@@ -46,12 +44,9 @@ class D<T> {
 
 class E<T extends Date> {
 >E : E<T>
->T : T
->Date : Date
 
     x: T;
 >x : T
->T : T
 
     foo() {
 >foo : () => void

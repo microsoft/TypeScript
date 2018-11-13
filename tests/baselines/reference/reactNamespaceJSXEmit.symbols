@@ -8,27 +8,31 @@ declare var foo: any;
 declare var Bar: any;
 >Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
 
+declare var _Bar: any;
+>_Bar : Symbol(_Bar, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+
 declare var x: any;
->x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 
 <foo data/>;
->foo : Symbol(unknown)
->data : Symbol(data, Decl(reactNamespaceJSXEmit.tsx, 5, 4))
+>data : Symbol(data, Decl(reactNamespaceJSXEmit.tsx, 6, 4))
 
 <Bar x={x} />;
 >Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
->x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 6, 4))
->x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 7, 4))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 
 <x-component />;
->x-component : Symbol(unknown)
-
 <Bar {...x} />;
 >Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
->x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 
 <Bar { ...x } y={2} />;
 >Bar : Symbol(Bar, Decl(reactNamespaceJSXEmit.tsx, 2, 11))
->x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
->y : Symbol(y, Decl(reactNamespaceJSXEmit.tsx, 9, 13))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
+>y : Symbol(y, Decl(reactNamespaceJSXEmit.tsx, 10, 13))
+
+<_Bar { ...x } />;
+>_Bar : Symbol(_Bar, Decl(reactNamespaceJSXEmit.tsx, 3, 11))
+>x : Symbol(x, Decl(reactNamespaceJSXEmit.tsx, 4, 11))
 

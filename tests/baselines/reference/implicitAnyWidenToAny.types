@@ -47,7 +47,6 @@ var temp: number = 5;
 
 var c: AnimalObj = { x: null }; 
 >c : AnimalObj
->AnimalObj : AnimalObj
 >{ x: null } : { x: null; }
 >x : null
 >null : null

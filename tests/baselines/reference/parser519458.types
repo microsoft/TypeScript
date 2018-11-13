@@ -1,7 +1,7 @@
 === tests/cases/conformance/parser/ecmascript5/RegressionTests/parser519458.ts ===
 import rect = module("rect"); var bar = new rect.Rect();
 >rect : any
->module : No type information available!
+>module : any
 >("rect") : "rect"
 >"rect" : "rect"
 >bar : any

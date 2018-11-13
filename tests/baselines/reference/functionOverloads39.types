@@ -21,6 +21,6 @@ var x = foo([{a:true}]);
 >foo : { (bar: { a: number; }[]): string; (bar: { a: boolean; }[]): number; }
 >[{a:true}] : { a: true; }[]
 >{a:true} : { a: true; }
->a : boolean
+>a : true
 >true : true
 

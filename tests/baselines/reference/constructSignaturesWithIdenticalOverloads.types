@@ -25,21 +25,17 @@ var r1 = new C(1, '');
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     constructor(x: T, y: string);
 >x : T
->T : T
 >y : string
 
     constructor(x: T, y: string); // error
 >x : T
->T : T
 >y : string
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 var r2 = new C2(1, '');
@@ -50,22 +46,17 @@ var r2 = new C2(1, '');
 >'' : ""
 
 interface I {
->I : I
-
     new (x: number, y: string): C;
 >x : number
 >y : string
->C : C
 
     new (x: number, y: string): C; // error
 >x : number
 >y : string
->C : C
 }
 
 var i: I;
 >i : I
->I : I
 
 var r3 = new i(1, '');
 >r3 : C
@@ -75,43 +66,25 @@ var r3 = new i(1, '');
 >'' : ""
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     new (x: T, y: string): C2<T>;
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 
     new (x: T, y: string): C2<T>; // error
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 
     new <T>(x: T, y: string): C2<T>;
->T : T
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 
     new <T>(x: T, y: string): C2<T>; // error
->T : T
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 }
 
 var i2: I2<number>;
 >i2 : I2<number>
->I2 : I2<T>
 
 var r4 = new i2(1, '');
 >r4 : C2<number>
@@ -126,12 +99,10 @@ var a: {
     new (x: number, y: string): C;
 >x : number
 >y : string
->C : C
 
     new (x: number, y: string): C; // error
 >x : number
 >y : string
->C : C
 }
 
 var r5 = new a(1, '');
@@ -145,20 +116,12 @@ var b: {
 >b : { new <T>(x: T, y: string): C2<T>; new <T>(x: T, y: string): C2<T>; }
 
     new <T>(x: T, y: string): C2<T>;
->T : T
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 
     new <T>(x: T, y: string): C2<T>; // error
->T : T
 >x : T
->T : T
 >y : string
->C2 : C2<T>
->T : T
 }
 
 var r6 = new b(1, '');

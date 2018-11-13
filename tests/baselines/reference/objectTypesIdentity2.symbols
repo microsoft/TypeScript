@@ -29,13 +29,13 @@ interface I {
 
     foo: Date;
 >foo : Symbol(I.foo, Decl(objectTypesIdentity2.ts, 14, 13))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 var a: { foo: RegExp; }
 >a : Symbol(a, Decl(objectTypesIdentity2.ts, 18, 3))
 >foo : Symbol(foo, Decl(objectTypesIdentity2.ts, 18, 8))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 enum E { A }
 >E : Symbol(E, Decl(objectTypesIdentity2.ts, 18, 23))

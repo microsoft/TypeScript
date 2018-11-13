@@ -4,7 +4,7 @@
 class A {
 >A : A
 
-    prop: { a: string; };
+    prop!: { a: string; };
 >prop : { a: string; }
 >a : string
 }
@@ -12,7 +12,7 @@ class A {
 class B {
 >B : B
 
-    prop: { b: string; }
+    prop!: { b: string; }
 >prop : { b: string; }
 >b : string
 }
@@ -20,8 +20,6 @@ class B {
 function isA(x: any): x is A {
 >isA : (x: any) => x is A
 >x : any
->x : any
->A : A
 
     return x instanceof A;
 >x instanceof A : boolean
@@ -32,8 +30,6 @@ function isA(x: any): x is A {
 function isB(x: any): x is B {
 >isB : (x: any) => x is B
 >x : any
->x : any
->B : B
 
     return x instanceof B;
 >x instanceof B : boolean
@@ -44,8 +40,6 @@ function isB(x: any): x is B {
 function f1(x: A | B) {
 >f1 : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     while (true) {
 >true : true
@@ -80,8 +74,6 @@ function f1(x: A | B) {
 function f2(x: A | B) {
 >f2 : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     while (true) {
 >true : true
@@ -110,6 +102,33 @@ function f2(x: A | B) {
 >prop : { b: string; }
 >b : string
         }
+    }
+}
+
+// Repro from #28100
+
+class Foo1
+>Foo1 : Foo1
+{
+    x: number;  // Error
+>x : number
+
+    constructor() {
+        if (this instanceof Boolean) {
+>this instanceof Boolean : boolean
+>this : this
+>Boolean : BooleanConstructor
+        }
+    }
+}
+
+class Foo2
+>Foo2 : Foo2
+{
+    x: number;  // Error
+>x : number
+
+    constructor() {
     }
 }
 

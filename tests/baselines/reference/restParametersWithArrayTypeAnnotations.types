@@ -26,8 +26,6 @@ class C {
 }
 
 interface I {
->I : I
-
     (...x: number[]);
 >x : number[]
 
@@ -75,22 +73,18 @@ var b = {
 function foo2(...x: Array<string>) { }
 >foo2 : (...x: string[]) => void
 >x : string[]
->Array : T[]
 
 var f3 = function foo(...x: Array<string>) { }
 >f3 : (...x: string[]) => void
 >function foo(...x: Array<string>) { } : (...x: string[]) => void
 >foo : (...x: string[]) => void
 >x : string[]
->Array : T[]
 
 var f4 = (...x: Array<string>, ...y: Array<string>) => { }
 >f4 : (...x: string[], ...y: string[]) => void
 >(...x: Array<string>, ...y: Array<string>) => { } : (...x: string[], ...y: string[]) => void
 >x : string[]
->Array : T[]
 >y : string[]
->Array : T[]
 
 class C2 {
 >C2 : C2
@@ -98,22 +92,16 @@ class C2 {
     foo(...x: Array<string>) { }
 >foo : (...x: string[]) => void
 >x : string[]
->Array : T[]
 }
 
 interface I2 {
->I2 : I2
-
     (...x: Array<string>);
 >x : string[]
->Array : T[]
 
     foo(...x: Array<string>, ...y: Array<string>);
 >foo : (...x: string[], ...y: string[]) => any
 >x : string[]
->Array : T[]
 >y : string[]
->Array : T[]
 }
 
 var a2: {
@@ -121,12 +109,10 @@ var a2: {
 
     (...x: Array<string>);
 >x : string[]
->Array : T[]
 
     foo(...x: Array<string>);
 >foo : (...x: string[]) => any
 >x : string[]
->Array : T[]
 }
 
 var b2 = {
@@ -136,20 +122,16 @@ var b2 = {
     foo(...x: Array<string>) { },
 >foo : (...x: string[]) => void
 >x : string[]
->Array : T[]
 
     a: function foo(...x: Array<string>, ...y: Array<string>) { },
 >a : (...x: string[], ...y: string[]) => void
 >function foo(...x: Array<string>, ...y: Array<string>) { } : (...x: string[], ...y: string[]) => void
 >foo : (...x: string[], ...y: string[]) => void
 >x : string[]
->Array : T[]
 >y : string[]
->Array : T[]
 
     b: (...x: Array<string>) => { }
 >b : (...x: string[]) => void
 >(...x: Array<string>) => { } : (...x: string[]) => void
 >x : string[]
->Array : T[]
 }

@@ -16,7 +16,7 @@ class MyClass<T extends MyInterface> {
   doIt(data : Partial<T>) {}
 >doIt : Symbol(MyClass.doIt, Decl(mappedTypePartialConstraints.ts, 6, 38))
 >data : Symbol(data, Decl(mappedTypePartialConstraints.ts, 7, 7))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypePartialConstraints.ts, 6, 14))
 }
 

@@ -6,7 +6,7 @@ interface Foo {
 }
 
 class A<P extends Partial<Foo>> {
-    props: Readonly<P>
+    constructor(public props: Readonly<P>) {}
     doSomething() {
         this.props.foo && this.props.foo()
     }
@@ -19,7 +19,7 @@ interface Banana {
 }
 
 class Monkey<T extends Banana | undefined> {
-    a: T;
+    constructor(public a: T) {}
     render() {
         if (this.a) {
             this.a.color;
@@ -86,9 +86,12 @@ function f5<T, K extends keyof T>(obj: T | undefined, key: K) {
 "use strict";
 // Repro from #14091
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -96,7 +99,8 @@ var __extends = (this && this.__extends) || (function () {
     };
 })();
 var A = /** @class */ (function () {
-    function A() {
+    function A(props) {
+        this.props = props;
     }
     A.prototype.doSomething = function () {
         this.props.foo && this.props.foo();
@@ -104,7 +108,8 @@ var A = /** @class */ (function () {
     return A;
 }());
 var Monkey = /** @class */ (function () {
-    function Monkey() {
+    function Monkey(a) {
+        this.a = a;
     }
     Monkey.prototype.render = function () {
         if (this.a) {

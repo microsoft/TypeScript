@@ -5,13 +5,10 @@ type T1 = { x: string }
 
 // An interface can be named in an extends or implements clause, but a type alias for an object type literal cannot.
 interface I1 extends T1 { y: string }
->I1 : I1
->T1 : T1
 >y : string
 
 class C1 implements T1 {
 >C1 : C1
->T1 : T1
 
     x: string;
 >x : string
@@ -29,7 +26,5 @@ type T2 = { y: number }
 // An interface can have type parameters, but a type alias for an object type literal cannot.
 type T3<T> = { x: T }
 >T3 : T3<T>
->T : T
 >x : T
->T : T
 

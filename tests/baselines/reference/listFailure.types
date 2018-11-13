@@ -7,21 +7,15 @@ module Editor {
 
     	lines: List<Line> = ListMakeHead<Line>();
 >lines : List<Line>
->List : List<T>
->Line : Line
 >ListMakeHead<Line>() : List<Line>
 >ListMakeHead : <U>() => List<U>
->Line : Line
         
         addLine(lineText: string): List<Line> {
 >addLine : (lineText: string) => List<Line>
 >lineText : string
->List : List<T>
->Line : Line
             
             var line: Line = new Line();
 >line : Line
->Line : Line
 >new Line() : Line
 >Line : typeof Line
 
@@ -42,12 +36,7 @@ module Editor {
     
     export function ListRemoveEntry<U>(entry: List<U>): List<U> { 
 >ListRemoveEntry : <U>(entry: List<U>) => List<U>
->U : U
 >entry : List<U>
->List : List<T>
->U : U
->List : List<T>
->U : U
 
     	return entry;
 >entry : List<U>
@@ -55,9 +44,6 @@ module Editor {
 
     export function ListMakeHead<U>(): List<U> {
 >ListMakeHead : <U>() => List<U>
->U : U
->List : List<T>
->U : U
 
 		return null;
 >null : null
@@ -65,11 +51,7 @@ module Editor {
 
     export function ListMakeEntry<U>(data: U): List<U> {
 >ListMakeEntry : <U>(data: U) => List<U>
->U : U
 >data : U
->U : U
->List : List<T>
->U : U
 
 		return null;
 >null : null
@@ -77,19 +59,13 @@ module Editor {
 
     class List<T> { 
 >List : List<T>
->T : T
 
         public next: List<T>; 
 >next : List<T>
->List : List<T>
->T : T
 
         add(data: T): List<T> {
 >add : (data: T) => List<T>
 >data : T
->T : T
->List : List<T>
->T : T
 
             this.next = ListMakeEntry(data);
 >this.next = ListMakeEntry(data) : List<T>
@@ -109,10 +85,6 @@ module Editor {
         popEntry(head: List<T>): List<T> {
 >popEntry : (head: List<T>) => List<T>
 >head : List<T>
->List : List<T>
->T : T
->List : List<T>
->T : T
 
             return (ListRemoveEntry(this.next));
 >(ListRemoveEntry(this.next)) : List<T>

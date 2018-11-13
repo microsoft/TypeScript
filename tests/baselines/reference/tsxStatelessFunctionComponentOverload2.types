@@ -5,7 +5,6 @@ import React = require('react')
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >JSX : any
->Element : JSX.Element
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
@@ -13,7 +12,6 @@ declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >yy : number
 >yy1 : string
 >JSX : any
->Element : JSX.Element
 
 let obj = {
 >obj : { yy: number; yy1: string; }
@@ -46,6 +44,7 @@ let obj2 = {
 >500 : 500
 
     "ignore-prop": "hello"
+>"ignore-prop" : string
 >"hello" : "hello"
 }
 
@@ -119,6 +118,7 @@ const c9 = <OneThing {...{ "ignore-prop":200 }} />;
 ><OneThing {...{ "ignore-prop":200 }} /> : JSX.Element
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >{ "ignore-prop":200 } : { "ignore-prop": number; }
+>"ignore-prop" : number
 >200 : 200
 
 const c10 = <OneThing {...obj2} yy1="boo" />;

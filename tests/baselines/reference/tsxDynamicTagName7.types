@@ -1,9 +1,9 @@
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
+>'react' : typeof import("react")
+
 	class Component<T, U> { }
 >Component : Component<T, U>
->T : T
->U : U
 }
 
 === tests/cases/conformance/jsx/app.tsx ===

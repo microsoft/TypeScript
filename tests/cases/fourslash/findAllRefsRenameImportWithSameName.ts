@@ -12,9 +12,10 @@ const [r0, r1, r2, r3] = test.ranges();
 const aRanges = [r0, r1];
 const bRanges = [r2, r3];
 const aGroup = { definition: "const x: 0", ranges: aRanges };
-const bGroup =  { definition: "import x", ranges: bRanges };
+const bGroup =  { definition: "(alias) const x: 0\nimport x", ranges: bRanges };
 verify.referenceGroups(aRanges, [aGroup, bGroup]);
 verify.referenceGroups(bRanges, [bGroup]);
 
-verify.rangesAreRenameLocations(aRanges);
-verify.rangesAreRenameLocations(aRanges);
+verify.renameLocations(r0, [r0, r1, r2, r3]);
+verify.renameLocations(r1, [r0, r1, r2, r3]);
+verify.rangesAreRenameLocations([r2, r3]);

@@ -1,0 +1,22 @@
+=== tests/cases/compiler/consumer.ts ===
+import provider = require('./provider');
+>provider : Symbol(provider, Decl(consumer.ts, 0, 0))
+
+export const value = provider.Enum.Value1;
+>value : Symbol(value, Decl(consumer.ts, 2, 12))
+>provider.Enum.Value1 : Symbol(provider.Enum.Value1, Decl(provider.ts, 0, 18))
+>provider.Enum : Symbol(provider.Enum, Decl(provider.ts, 0, 0))
+>provider : Symbol(provider, Decl(consumer.ts, 0, 0))
+>Enum : Symbol(provider.Enum, Decl(provider.ts, 0, 0))
+>Value1 : Symbol(provider.Enum.Value1, Decl(provider.ts, 0, 18))
+
+=== tests/cases/compiler/provider.ts ===
+export enum Enum {
+>Enum : Symbol(Enum, Decl(provider.ts, 0, 0))
+
+    Value1,
+>Value1 : Symbol(Enum.Value1, Decl(provider.ts, 0, 18))
+
+    Value2,
+>Value2 : Symbol(Enum.Value2, Decl(provider.ts, 1, 11))
+}

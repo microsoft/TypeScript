@@ -9,7 +9,7 @@ export var x = new Namespace.Foo();
 >Namespace : typeof Namespace
 >Foo : typeof Namespace.Foo
 
-=== tests/cases/compiler/b.ts ===
+=== tests/cases/compiler/b.d.ts ===
 export class Foo {
 >Foo : Foo
 

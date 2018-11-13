@@ -2,35 +2,28 @@
 declare function ClassDecorator1(target: Function): void;
 >ClassDecorator1 : (target: Function) => void
 >target : Function
->Function : Function
 
 declare function ClassDecorator2(x: number): (target: Function) => void;
 >ClassDecorator2 : (x: number) => (target: Function) => void
 >x : number
 >target : Function
->Function : Function
 
 declare function PropertyDecorator1(target: Object, key: string | symbol, descriptor?: PropertyDescriptor): void;
 >PropertyDecorator1 : (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >target : Object
->Object : Object
 >key : string | symbol
 >descriptor : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
 
 declare function PropertyDecorator2(x: number): (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void;
 >PropertyDecorator2 : (x: number) => (target: Object, key: string | symbol, descriptor?: PropertyDescriptor) => void
 >x : number
 >target : Object
->Object : Object
 >key : string | symbol
 >descriptor : PropertyDescriptor
->PropertyDescriptor : PropertyDescriptor
 
 declare function ParameterDecorator1(target: Object, key: string | symbol, paramIndex: number): void;
 >ParameterDecorator1 : (target: Object, key: string | symbol, paramIndex: number) => void
 >target : Object
->Object : Object
 >key : string | symbol
 >paramIndex : number
 
@@ -38,7 +31,6 @@ declare function ParameterDecorator2(x: number): (target: Object, key: string | 
 >ParameterDecorator2 : (x: number) => (target: Object, key: string | symbol, paramIndex: number) => void
 >x : number
 >target : Object
->Object : Object
 >key : string | symbol
 >paramIndex : number
 

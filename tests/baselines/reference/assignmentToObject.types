@@ -11,6 +11,5 @@ var b: {} = a;  // ok
 
 var c: Object = a;  // should be error
 >c : Object
->Object : Object
 >a : { toString: number; }
 

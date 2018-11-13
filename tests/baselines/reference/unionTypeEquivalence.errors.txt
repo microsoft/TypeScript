@@ -1,4 +1,4 @@
-tests/cases/conformance/types/union/unionTypeEquivalence.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'C' at tests/cases/conformance/types/union/unionTypeEquivalence.ts 3:4, but here has type 'C | D'.
+tests/cases/conformance/types/union/unionTypeEquivalence.ts(5,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'C', but here has type 'C | D'.
 
 
 ==== tests/cases/conformance/types/union/unionTypeEquivalence.ts (1 errors) ====
@@ -8,7 +8,7 @@ tests/cases/conformance/types/union/unionTypeEquivalence.ts(5,5): error TS2403: 
     var x: C;
     var x : C | D;
         ~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' has type 'C' at tests/cases/conformance/types/union/unionTypeEquivalence.ts 3:4, but here has type 'C | D'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'x' must be of type 'C', but here has type 'C | D'.
     
     // A | B is equivalent to B | A.
     var y: string | number;

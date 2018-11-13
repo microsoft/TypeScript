@@ -1,8 +1,8 @@
 tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,11): error TS2304: Cannot find name 'async'.
 tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,18): error TS2304: Cannot find name 'await'.
 tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,24): error TS1005: ',' expected.
-tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,26): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' has type 'PromiseConstructor' at lib.es2015.promise.d.ts 222:12, but here has type 'void'.
-tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,33): error TS1005: '=' expected.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,26): error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'.
+tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,33): error TS1005: ',' expected.
 tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(1,40): error TS1109: Expression expected.
 
 
@@ -15,9 +15,9 @@ tests/cases/conformance/async/es6/asyncArrowFunction/asyncArrowFunction5_es6.ts(
                            ~
 !!! error TS1005: ',' expected.
                              ~~~~~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' has type 'PromiseConstructor' at lib.es2015.promise.d.ts 222:12, but here has type 'void'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'Promise' must be of type 'PromiseConstructor', but here has type 'any'.
                                     ~
-!!! error TS1005: '=' expected.
+!!! error TS1005: ',' expected.
                                            ~~
 !!! error TS1109: Expression expected.
     }

@@ -1,0 +1,111 @@
+=== tests/cases/conformance/types/never/neverInference.ts ===
+declare function f1<T>(x: T[]): T;
+>f1 : Symbol(f1, Decl(neverInference.ts, 0, 0))
+>T : Symbol(T, Decl(neverInference.ts, 0, 20))
+>x : Symbol(x, Decl(neverInference.ts, 0, 23))
+>T : Symbol(T, Decl(neverInference.ts, 0, 20))
+>T : Symbol(T, Decl(neverInference.ts, 0, 20))
+
+let neverArray: never[] = [];
+>neverArray : Symbol(neverArray, Decl(neverInference.ts, 2, 3))
+
+let a1 = f1([]);  // never
+>a1 : Symbol(a1, Decl(neverInference.ts, 4, 3))
+>f1 : Symbol(f1, Decl(neverInference.ts, 0, 0))
+
+let a2 = f1(neverArray);  // never
+>a2 : Symbol(a2, Decl(neverInference.ts, 5, 3))
+>f1 : Symbol(f1, Decl(neverInference.ts, 0, 0))
+>neverArray : Symbol(neverArray, Decl(neverInference.ts, 2, 3))
+
+// Repro from #19576
+
+type Comparator<T> = (x: T, y: T) => number;
+>Comparator : Symbol(Comparator, Decl(neverInference.ts, 5, 24))
+>T : Symbol(T, Decl(neverInference.ts, 9, 16))
+>x : Symbol(x, Decl(neverInference.ts, 9, 22))
+>T : Symbol(T, Decl(neverInference.ts, 9, 16))
+>y : Symbol(y, Decl(neverInference.ts, 9, 27))
+>T : Symbol(T, Decl(neverInference.ts, 9, 16))
+
+interface LinkedList<T> {
+>LinkedList : Symbol(LinkedList, Decl(neverInference.ts, 9, 44))
+>T : Symbol(T, Decl(neverInference.ts, 11, 21))
+
+    comparator: Comparator<T>,
+>comparator : Symbol(LinkedList.comparator, Decl(neverInference.ts, 11, 25))
+>Comparator : Symbol(Comparator, Decl(neverInference.ts, 5, 24))
+>T : Symbol(T, Decl(neverInference.ts, 11, 21))
+
+    nodes: Node<T>
+>nodes : Symbol(LinkedList.nodes, Decl(neverInference.ts, 12, 30))
+>Node : Symbol(Node, Decl(neverInference.ts, 14, 1))
+>T : Symbol(T, Decl(neverInference.ts, 11, 21))
+}
+
+type Node<T> = { value: T, next: Node<T> } | null
+>Node : Symbol(Node, Decl(neverInference.ts, 14, 1))
+>T : Symbol(T, Decl(neverInference.ts, 16, 10))
+>value : Symbol(value, Decl(neverInference.ts, 16, 16))
+>T : Symbol(T, Decl(neverInference.ts, 16, 10))
+>next : Symbol(next, Decl(neverInference.ts, 16, 26))
+>Node : Symbol(Node, Decl(neverInference.ts, 14, 1))
+>T : Symbol(T, Decl(neverInference.ts, 16, 10))
+
+declare function compareNumbers(x: number, y: number): number;
+>compareNumbers : Symbol(compareNumbers, Decl(neverInference.ts, 16, 49))
+>x : Symbol(x, Decl(neverInference.ts, 18, 32))
+>y : Symbol(y, Decl(neverInference.ts, 18, 42))
+
+declare function mkList<T>(items: T[], comparator: Comparator<T>): LinkedList<T>;
+>mkList : Symbol(mkList, Decl(neverInference.ts, 18, 62))
+>T : Symbol(T, Decl(neverInference.ts, 19, 24))
+>items : Symbol(items, Decl(neverInference.ts, 19, 27))
+>T : Symbol(T, Decl(neverInference.ts, 19, 24))
+>comparator : Symbol(comparator, Decl(neverInference.ts, 19, 38))
+>Comparator : Symbol(Comparator, Decl(neverInference.ts, 5, 24))
+>T : Symbol(T, Decl(neverInference.ts, 19, 24))
+>LinkedList : Symbol(LinkedList, Decl(neverInference.ts, 9, 44))
+>T : Symbol(T, Decl(neverInference.ts, 19, 24))
+
+const list: LinkedList<number> = mkList([], compareNumbers);
+>list : Symbol(list, Decl(neverInference.ts, 21, 5))
+>LinkedList : Symbol(LinkedList, Decl(neverInference.ts, 9, 44))
+>mkList : Symbol(mkList, Decl(neverInference.ts, 18, 62))
+>compareNumbers : Symbol(compareNumbers, Decl(neverInference.ts, 16, 49))
+
+// Repro from #19858
+
+declare function f2<a>(as1: a[], as2: a[], cmp: (a1: a, a2: a) => number): void;
+>f2 : Symbol(f2, Decl(neverInference.ts, 21, 60))
+>a : Symbol(a, Decl(neverInference.ts, 25, 20))
+>as1 : Symbol(as1, Decl(neverInference.ts, 25, 23))
+>a : Symbol(a, Decl(neverInference.ts, 25, 20))
+>as2 : Symbol(as2, Decl(neverInference.ts, 25, 32))
+>a : Symbol(a, Decl(neverInference.ts, 25, 20))
+>cmp : Symbol(cmp, Decl(neverInference.ts, 25, 42))
+>a1 : Symbol(a1, Decl(neverInference.ts, 25, 49))
+>a : Symbol(a, Decl(neverInference.ts, 25, 20))
+>a2 : Symbol(a2, Decl(neverInference.ts, 25, 55))
+>a : Symbol(a, Decl(neverInference.ts, 25, 20))
+
+f2(Array.from([0]), [], (a1, a2) => a1 - a2);
+>f2 : Symbol(f2, Decl(neverInference.ts, 21, 60))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>a1 : Symbol(a1, Decl(neverInference.ts, 26, 25))
+>a2 : Symbol(a2, Decl(neverInference.ts, 26, 28))
+>a1 : Symbol(a1, Decl(neverInference.ts, 26, 25))
+>a2 : Symbol(a2, Decl(neverInference.ts, 26, 28))
+
+f2(Array.from([]), [0], (a1, a2) => a1 - a2);
+>f2 : Symbol(f2, Decl(neverInference.ts, 21, 60))
+>Array.from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+>from : Symbol(ArrayConstructor.from, Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+>a1 : Symbol(a1, Decl(neverInference.ts, 27, 25))
+>a2 : Symbol(a2, Decl(neverInference.ts, 27, 28))
+>a1 : Symbol(a1, Decl(neverInference.ts, 27, 25))
+>a2 : Symbol(a2, Decl(neverInference.ts, 27, 28))
+

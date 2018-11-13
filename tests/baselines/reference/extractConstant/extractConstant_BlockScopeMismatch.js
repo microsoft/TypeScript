@@ -11,7 +11,6 @@ for (let i = 0; i < 10; i++) {
 for (let i = 0; i < 10; i++) {
     for (let j = 0; j < 10; j++) {
         const newLocal = i + 1;
-
         const x = /*RENAME*/newLocal;
     }
 }

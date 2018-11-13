@@ -10,7 +10,6 @@ declare class MyComp<P = Prop> extends React.Component<P, {}> {
     internalProp: P;
 }
 
-// Error
 let x = <MyComp />
 let x1 = <MyComp a="hi"/>
 
@@ -18,6 +17,5 @@ let x1 = <MyComp a="hi"/>
 "use strict";
 exports.__esModule = true;
 var React = require("react");
-// Error
 var x = <MyComp />;
 var x1 = <MyComp a="hi"/>;

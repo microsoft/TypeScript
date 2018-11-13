@@ -1,3 +1,10 @@
+//// [tests/cases/compiler/APISample_jsdoc.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_jsdoc.ts]
 /*
  * Note: This test is a public API sample. The original sources can be found
@@ -21,7 +28,7 @@ function parseCommentsIntoDefinition(this: any,
     }
 
     // the comments for a symbol
-    let comments = symbol.getDocumentationComment();
+    let comments = symbol.getDocumentationComment(undefined);
 
     if (comments.length) {
         definition.description = comments.map(comment => comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n")).join("");
@@ -131,7 +138,7 @@ function parseCommentsIntoDefinition(symbol, definition, otherAnnotations) {
         return;
     }
     // the comments for a symbol
-    var comments = symbol.getDocumentationComment();
+    var comments = symbol.getDocumentationComment(undefined);
     if (comments.length) {
         definition.description = comments.map(function (comment) { return comment.kind === "lineBreak" ? comment.text : comment.text.trim().replace(/\r\n/g, "\n"); }).join("");
     }

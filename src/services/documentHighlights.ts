@@ -1,20 +1,16 @@
 /* @internal */
 namespace ts.DocumentHighlights {
-    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] | undefined {
-        const node = getTouchingWord(sourceFile, position, /*includeJsDocComment*/ true);
-        // Note that getTouchingWord indicates failure by returning the sourceFile node.
-        if (node === sourceFile) return undefined;
+    export function getDocumentHighlights(program: Program, cancellationToken: CancellationToken, sourceFile: SourceFile, position: number, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+        const node = getTouchingPropertyName(sourceFile, position);
 
-        Debug.assert(node.parent !== undefined);
-
-        if (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent)) {
+        if (node.parent && (isJsxOpeningElement(node.parent) && node.parent.tagName === node || isJsxClosingElement(node.parent))) {
             // For a JSX element, just highlight the matching tag, not all references.
             const { openingElement, closingElement } = node.parent.parent;
             const highlightSpans = [openingElement, closingElement].map(({ tagName }) => getHighlightSpanForNode(tagName, sourceFile));
             return [{ fileName: sourceFile.fileName, highlightSpans }];
         }
 
-        return getSemanticDocumentHighlights(node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
+        return getSemanticDocumentHighlights(position, node, program, cancellationToken, sourceFilesToSearch) || getSyntacticDocumentHighlights(node, sourceFile);
     }
 
     function getHighlightSpanForNode(node: Node, sourceFile: SourceFile): HighlightSpan {
@@ -25,123 +21,81 @@ namespace ts.DocumentHighlights {
         };
     }
 
-    function getSemanticDocumentHighlights(node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: SourceFile[]): DocumentHighlights[] {
-        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(node, program, sourceFilesToSearch, cancellationToken);
-        return referenceEntries && convertReferencedSymbols(referenceEntries);
-    }
-
-    function convertReferencedSymbols(referenceEntries: FindAllReferences.Entry[]): DocumentHighlights[] {
-        const fileNameToDocumentHighlights = createMap<HighlightSpan[]>();
-        for (const entry of referenceEntries) {
-            const { fileName, span } = FindAllReferences.toHighlightSpan(entry);
-            let highlightSpans = fileNameToDocumentHighlights.get(fileName);
-            if (!highlightSpans) {
-                fileNameToDocumentHighlights.set(fileName, highlightSpans = []);
+    function getSemanticDocumentHighlights(position: number, node: Node, program: Program, cancellationToken: CancellationToken, sourceFilesToSearch: ReadonlyArray<SourceFile>): DocumentHighlights[] | undefined {
+        const sourceFilesSet = arrayToSet(sourceFilesToSearch, f => f.fileName);
+        const referenceEntries = FindAllReferences.getReferenceEntriesForNode(position, node, program, sourceFilesToSearch, cancellationToken, /*options*/ undefined, sourceFilesSet);
+        if (!referenceEntries) return undefined;
+        const map = arrayToMultiMap(referenceEntries.map(FindAllReferences.toHighlightSpan), e => e.fileName, e => e.span);
+        return arrayFrom(map.entries(), ([fileName, highlightSpans]) => {
+            if (!sourceFilesSet.has(fileName)) {
+                Debug.assert(program.redirectTargetsMap.has(fileName));
+                const redirectTarget = program.getSourceFile(fileName);
+                const redirect = find(sourceFilesToSearch, f => !!f.redirectInfo && f.redirectInfo.redirectTarget === redirectTarget)!;
+                fileName = redirect.fileName;
+                Debug.assert(sourceFilesSet.has(fileName));
             }
-            highlightSpans.push(span);
-        }
-
-        return arrayFrom(fileNameToDocumentHighlights.entries(), ([fileName, highlightSpans ]) => ({ fileName, highlightSpans }));
+            return { fileName, highlightSpans };
+        });
     }
 
-    function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] {
+    function getSyntacticDocumentHighlights(node: Node, sourceFile: SourceFile): DocumentHighlights[] | undefined {
         const highlightSpans = getHighlightSpans(node, sourceFile);
-        if (!highlightSpans || highlightSpans.length === 0) {
-            return undefined;
-        }
-
-        return [{ fileName: sourceFile.fileName, highlightSpans }];
+        return highlightSpans && [{ fileName: sourceFile.fileName, highlightSpans }];
     }
 
-    // returns true if 'node' is defined and has a matching 'kind'.
-    function hasKind(node: Node, kind: SyntaxKind) {
-        return node !== undefined && node.kind === kind;
-    }
-
-    // Null-propagating 'parent' function.
-    function parent(node: Node): Node {
-        return node && node.parent;
-    }
-
-    function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] {
-        if (!node) {
-            return undefined;
-        }
-
+    function getHighlightSpans(node: Node, sourceFile: SourceFile): HighlightSpan[] | undefined {
         switch (node.kind) {
             case SyntaxKind.IfKeyword:
             case SyntaxKind.ElseKeyword:
-                if (hasKind(node.parent, SyntaxKind.IfStatement)) {
-                    return getIfElseOccurrences(<IfStatement>node.parent, sourceFile);
-                }
-                break;
+                return isIfStatement(node.parent) ? getIfElseOccurrences(node.parent, sourceFile) : undefined;
             case SyntaxKind.ReturnKeyword:
-                if (hasKind(node.parent, SyntaxKind.ReturnStatement)) {
-                    return highlightSpans(getReturnOccurrences(<ReturnStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isReturnStatement, getReturnOccurrences);
             case SyntaxKind.ThrowKeyword:
-                if (hasKind(node.parent, SyntaxKind.ThrowStatement)) {
-                    return highlightSpans(getThrowOccurrences(<ThrowStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isThrowStatement, getThrowOccurrences);
             case SyntaxKind.TryKeyword:
             case SyntaxKind.CatchKeyword:
             case SyntaxKind.FinallyKeyword:
-                const tryStatement = node.kind === SyntaxKind.CatchKeyword ? parent(parent(node)) : parent(node);
-                if (hasKind(tryStatement, SyntaxKind.TryStatement)) {
-                    return highlightSpans(getTryCatchFinallyOccurrences(<TryStatement>tryStatement, sourceFile));
-                }
-                break;
+                const tryStatement = node.kind === SyntaxKind.CatchKeyword ? node.parent.parent : node.parent;
+                return useParent(tryStatement, isTryStatement, getTryCatchFinallyOccurrences);
             case SyntaxKind.SwitchKeyword:
-                if (hasKind(node.parent, SyntaxKind.SwitchStatement)) {
-                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
             case SyntaxKind.CaseKeyword:
             case SyntaxKind.DefaultKeyword:
-                if (hasKind(parent(parent(parent(node))), SyntaxKind.SwitchStatement)) {
-                    return highlightSpans(getSwitchCaseDefaultOccurrences(<SwitchStatement>node.parent.parent.parent));
-                }
-                break;
+                return useParent(node.parent.parent.parent, isSwitchStatement, getSwitchCaseDefaultOccurrences);
             case SyntaxKind.BreakKeyword:
             case SyntaxKind.ContinueKeyword:
-                if (hasKind(node.parent, SyntaxKind.BreakStatement) || hasKind(node.parent, SyntaxKind.ContinueStatement)) {
-                    return highlightSpans(getBreakOrContinueStatementOccurrences(<BreakOrContinueStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, isBreakOrContinueStatement, getBreakOrContinueStatementOccurrences);
             case SyntaxKind.ForKeyword:
-                if (hasKind(node.parent, SyntaxKind.ForStatement) ||
-                    hasKind(node.parent, SyntaxKind.ForInStatement) ||
-                    hasKind(node.parent, SyntaxKind.ForOfStatement)) {
-                    return highlightSpans(getLoopBreakContinueOccurrences(<IterationStatement>node.parent));
-                }
-                break;
             case SyntaxKind.WhileKeyword:
             case SyntaxKind.DoKeyword:
-                if (hasKind(node.parent, SyntaxKind.WhileStatement) || hasKind(node.parent, SyntaxKind.DoStatement)) {
-                    return highlightSpans(getLoopBreakContinueOccurrences(<IterationStatement>node.parent));
-                }
-                break;
+                return useParent(node.parent, (n): n is IterationStatement => isIterationStatement(n, /*lookInLabeledStatements*/ true), getLoopBreakContinueOccurrences);
             case SyntaxKind.ConstructorKeyword:
-                if (hasKind(node.parent, SyntaxKind.Constructor)) {
-                    return highlightSpans(getConstructorOccurrences(<ConstructorDeclaration>node.parent));
-                }
-                break;
+                return getFromAllDeclarations(isConstructorDeclaration, [SyntaxKind.ConstructorKeyword]);
             case SyntaxKind.GetKeyword:
             case SyntaxKind.SetKeyword:
-                if (hasKind(node.parent, SyntaxKind.GetAccessor) || hasKind(node.parent, SyntaxKind.SetAccessor)) {
-                    return highlightSpans(getGetAndSetOccurrences(<AccessorDeclaration>node.parent));
-                }
-                break;
+                return getFromAllDeclarations(isAccessor, [SyntaxKind.GetKeyword, SyntaxKind.SetKeyword]);
+            case SyntaxKind.AwaitKeyword:
+                return useParent(node.parent, isAwaitExpression, getAsyncAndAwaitOccurrences);
+            case SyntaxKind.AsyncKeyword:
+                return highlightSpans(getAsyncAndAwaitOccurrences(node));
+            case SyntaxKind.YieldKeyword:
+                return highlightSpans(getYieldOccurrences(node));
             default:
-                if (isModifierKind(node.kind) && node.parent &&
-                    (isDeclaration(node.parent) || node.parent.kind === SyntaxKind.VariableStatement)) {
-                    return highlightSpans(getModifierOccurrences(node.kind, node.parent));
-                }
+                return isModifierKind(node.kind) && (isDeclaration(node.parent) || isVariableStatement(node.parent))
+                    ? highlightSpans(getModifierOccurrences(node.kind, node.parent))
+                    : undefined;
         }
 
-        function highlightSpans(nodes: Node[]): HighlightSpan[] {
+        function getFromAllDeclarations<T extends Node>(nodeTest: (node: Node) => node is T, keywords: ReadonlyArray<SyntaxKind>): HighlightSpan[] | undefined {
+            return useParent(node.parent, nodeTest, decl => mapDefined(decl.symbol.declarations, d =>
+                nodeTest(d) ? find(d.getChildren(sourceFile), c => contains(keywords, c.kind)) : undefined));
+        }
+
+        function useParent<T extends Node>(node: Node, nodeTest: (node: Node) => node is T, getNodes: (node: T, sourceFile: SourceFile) => ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
+            return nodeTest(node) ? highlightSpans(getNodes(node, sourceFile)) : undefined;
+        }
+
+        function highlightSpans(nodes: ReadonlyArray<Node> | undefined): HighlightSpan[] | undefined {
             return nodes && nodes.map(node => getHighlightSpanForNode(node, sourceFile));
         }
     }
@@ -150,36 +104,18 @@ namespace ts.DocumentHighlights {
      * Aggregates all throw-statements within this node *without* crossing
      * into function boundaries and try-blocks with catch-clauses.
      */
-    function aggregateOwnedThrowStatements(node: Node): ThrowStatement[] {
-        const statementAccumulator: ThrowStatement[] = [];
-        aggregate(node);
-        return statementAccumulator;
-
-        function aggregate(node: Node): void {
-            if (node.kind === SyntaxKind.ThrowStatement) {
-                statementAccumulator.push(<ThrowStatement>node);
-            }
-            else if (node.kind === SyntaxKind.TryStatement) {
-                const tryStatement = <TryStatement>node;
-
-                if (tryStatement.catchClause) {
-                    aggregate(tryStatement.catchClause);
-                }
-                else {
-                    // Exceptions thrown within a try block lacking a catch clause
-                    // are "owned" in the current context.
-                    aggregate(tryStatement.tryBlock);
-                }
-
-                if (tryStatement.finallyBlock) {
-                    aggregate(tryStatement.finallyBlock);
-                }
-            }
-            // Do not cross function boundaries.
-            else if (!isFunctionLike(node)) {
-                forEachChild(node, aggregate);
-            }
+    function aggregateOwnedThrowStatements(node: Node): ReadonlyArray<ThrowStatement> | undefined {
+        if (isThrowStatement(node)) {
+            return [node];
         }
+        else if (isTryStatement(node)) {
+            // Exceptions thrown within a try block lacking a catch clause are "owned" in the current context.
+            return concatenate(
+                node.catchClause ? aggregateOwnedThrowStatements(node.catchClause) : node.tryBlock && aggregateOwnedThrowStatements(node.tryBlock),
+                node.finallyBlock && aggregateOwnedThrowStatements(node.finallyBlock));
+        }
+        // Do not cross function boundaries.
+        return isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateOwnedThrowStatements);
     }
 
     /**
@@ -187,7 +123,7 @@ namespace ts.DocumentHighlights {
      * nearest ancestor that is a try-block (whose try statement has a catch clause),
      * function-block, or source file.
      */
-    function getThrowStatementOwner(throwStatement: ThrowStatement): Node {
+    function getThrowStatementOwner(throwStatement: ThrowStatement): Node | undefined {
         let child: Node = throwStatement;
 
         while (child.parent) {
@@ -199,12 +135,8 @@ namespace ts.DocumentHighlights {
 
             // A throw-statement is only owned by a try-statement if the try-statement has
             // a catch clause, and if the throw-statement occurs within the try block.
-            if (parent.kind === SyntaxKind.TryStatement) {
-                const tryStatement = <TryStatement>parent;
-
-                if (tryStatement.tryBlock === child && tryStatement.catchClause) {
-                    return child;
-                }
+            if (isTryStatement(parent) && parent.tryBlock === child && parent.catchClause) {
+                return child;
             }
 
             child = parent;
@@ -213,75 +145,55 @@ namespace ts.DocumentHighlights {
         return undefined;
     }
 
-    function aggregateAllBreakAndContinueStatements(node: Node): BreakOrContinueStatement[] {
-        const statementAccumulator: BreakOrContinueStatement[] = [];
-        aggregate(node);
-        return statementAccumulator;
+    function aggregateAllBreakAndContinueStatements(node: Node): ReadonlyArray<BreakOrContinueStatement> | undefined {
+        return isBreakOrContinueStatement(node) ? [node] : isFunctionLike(node) ? undefined : flatMapChildren(node, aggregateAllBreakAndContinueStatements);
+    }
 
-        function aggregate(node: Node): void {
-            if (node.kind === SyntaxKind.BreakStatement || node.kind === SyntaxKind.ContinueStatement) {
-                statementAccumulator.push(<BreakOrContinueStatement>node);
+    function flatMapChildren<T>(node: Node, cb: (child: Node) => ReadonlyArray<T> | T | undefined): ReadonlyArray<T> {
+        const result: T[] = [];
+        node.forEachChild(child => {
+            const value = cb(child);
+            if (value !== undefined) {
+                result.push(...toArray(value));
             }
-            // Do not cross function boundaries.
-            else if (!isFunctionLike(node)) {
-                forEachChild(node, aggregate);
-            }
-        }
+        });
+        return result;
     }
 
     function ownsBreakOrContinueStatement(owner: Node, statement: BreakOrContinueStatement): boolean {
         const actualOwner = getBreakOrContinueOwner(statement);
-
-        return actualOwner && actualOwner === owner;
+        return !!actualOwner && actualOwner === owner;
     }
 
-    function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node {
-        for (let node = statement.parent; node; node = node.parent) {
+    function getBreakOrContinueOwner(statement: BreakOrContinueStatement): Node | undefined {
+        return findAncestor(statement, node => {
             switch (node.kind) {
                 case SyntaxKind.SwitchStatement:
                     if (statement.kind === SyntaxKind.ContinueStatement) {
-                        continue;
+                        return false;
                     }
-                    // falls through
+                // falls through
                 case SyntaxKind.ForStatement:
                 case SyntaxKind.ForInStatement:
                 case SyntaxKind.ForOfStatement:
                 case SyntaxKind.WhileStatement:
                 case SyntaxKind.DoStatement:
-                    if (!statement.label || isLabeledBy(node, statement.label.text)) {
-                        return node;
-                    }
-                    break;
+                    return !statement.label || isLabeledBy(node, statement.label.escapedText);
                 default:
                     // Don't cross function boundaries.
-                    if (isFunctionLike(node)) {
-                        return undefined;
-                    }
-                    break;
-            }
-        }
-
-        return undefined;
-    }
-
-    function getModifierOccurrences(modifier: SyntaxKind, declaration: Node): Node[] {
-        // Make sure we only highlight the keyword when it makes sense to do so.
-        if (!isLegalModifier(modifier, declaration)) {
-            return undefined;
-        }
-
-        const modifierFlag = modifierToFlag(modifier);
-        return mapDefined(getNodesToSearchForModifier(declaration, modifierFlag), node => {
-            if (getModifierFlags(node) & modifierFlag) {
-                const mod = find(node.modifiers, m => m.kind === modifier);
-                Debug.assert(!!mod);
-                return mod;
+                    // TODO: GH#20090
+                    return isFunctionLike(node) && "quit";
             }
         });
     }
 
-    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> {
-        const container = declaration.parent;
+    function getModifierOccurrences(modifier: Modifier["kind"], declaration: Node): Node[] {
+        return mapDefined(getNodesToSearchForModifier(declaration, modifierToFlag(modifier)), node => findModifier(node, modifier));
+    }
+
+    function getNodesToSearchForModifier(declaration: Node, modifierFlag: ModifierFlags): ReadonlyArray<Node> | undefined {
+        // Types of node whose children might have modifiers.
+        const container = declaration.parent as ModuleBlock | SourceFile | Block | CaseClause | DefaultClause | ConstructorDeclaration | MethodDeclaration | FunctionDeclaration | ClassLikeDeclaration;
         switch (container.kind) {
             case SyntaxKind.ModuleBlock:
             case SyntaxKind.SourceFile:
@@ -289,22 +201,24 @@ namespace ts.DocumentHighlights {
             case SyntaxKind.CaseClause:
             case SyntaxKind.DefaultClause:
                 // Container is either a class declaration or the declaration is a classDeclaration
-                if (modifierFlag & ModifierFlags.Abstract) {
-                    return [...(<ClassDeclaration>declaration).members, declaration];
+                if (modifierFlag & ModifierFlags.Abstract && isClassDeclaration(declaration)) {
+                    return [...declaration.members, declaration];
                 }
                 else {
-                    return (<ModuleBlock | SourceFile | Block | CaseClause | DefaultClause>container).statements;
+                    return container.statements;
                 }
             case SyntaxKind.Constructor:
-                return [...(<ConstructorDeclaration>container).parameters, ...(<ClassDeclaration>container.parent).members];
+            case SyntaxKind.MethodDeclaration:
+            case SyntaxKind.FunctionDeclaration:
+                return [...container.parameters, ...(isClassLike(container.parent) ? container.parent.members : [])];
             case SyntaxKind.ClassDeclaration:
             case SyntaxKind.ClassExpression:
-                const nodes = (<ClassLikeDeclaration>container).members;
+                const nodes = container.members;
 
                 // If we're an accessibility modifier, we're in an instance member and should search
                 // the constructor's parameter list for instance members as well.
                 if (modifierFlag & ModifierFlags.AccessibilityModifier) {
-                    const constructor = find((<ClassLikeDeclaration>container).members, isConstructorDeclaration);
+                    const constructor = find(container.members, isConstructorDeclaration);
                     if (constructor) {
                         return [...nodes, ...constructor.parameters];
                     }
@@ -314,38 +228,11 @@ namespace ts.DocumentHighlights {
                 }
                 return nodes;
             default:
-                Debug.fail("Invalid container kind.");
+                Debug.assertNever(container, "Invalid container kind.");
         }
     }
 
-    function isLegalModifier(modifier: SyntaxKind, declaration: Node): boolean {
-        const container = declaration.parent;
-        switch (modifier) {
-            case SyntaxKind.PrivateKeyword:
-            case SyntaxKind.ProtectedKeyword:
-            case SyntaxKind.PublicKeyword:
-                switch (container.kind) {
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                        return true;
-                    case SyntaxKind.Constructor:
-                        return declaration.kind === SyntaxKind.Parameter;
-                    default:
-                        return false;
-                }
-            case SyntaxKind.StaticKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || container.kind === SyntaxKind.ClassExpression;
-            case SyntaxKind.ExportKeyword:
-            case SyntaxKind.DeclareKeyword:
-                return container.kind === SyntaxKind.ModuleBlock || container.kind === SyntaxKind.SourceFile;
-            case SyntaxKind.AbstractKeyword:
-                return container.kind === SyntaxKind.ClassDeclaration || declaration.kind === SyntaxKind.ClassDeclaration;
-            default:
-                return false;
-        }
-    }
-
-    function pushKeywordIf(keywordList: Node[], token: Node, ...expected: SyntaxKind[]): boolean {
+    function pushKeywordIf(keywordList: Push<Node>, token: Node | undefined, ...expected: SyntaxKind[]): boolean {
         if (token && contains(expected, token.kind)) {
             keywordList.push(token);
             return true;
@@ -354,41 +241,10 @@ namespace ts.DocumentHighlights {
         return false;
     }
 
-    function getGetAndSetOccurrences(accessorDeclaration: AccessorDeclaration): Node[] {
-        const keywords: Node[] = [];
-
-        tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.GetAccessor);
-        tryPushAccessorKeyword(accessorDeclaration.symbol, SyntaxKind.SetAccessor);
-
-        return keywords;
-
-        function tryPushAccessorKeyword(accessorSymbol: Symbol, accessorKind: SyntaxKind): void {
-            const accessor = getDeclarationOfKind(accessorSymbol, accessorKind);
-
-            if (accessor) {
-                forEach(accessor.getChildren(), child => pushKeywordIf(keywords, child, SyntaxKind.GetKeyword, SyntaxKind.SetKeyword));
-            }
-        }
-    }
-
-    function getConstructorOccurrences(constructorDeclaration: ConstructorDeclaration): Node[] {
-        const declarations = constructorDeclaration.symbol.getDeclarations();
-
-        const keywords: Node[] = [];
-
-        forEach(declarations, declaration => {
-            forEach(declaration.getChildren(), token => {
-                return pushKeywordIf(keywords, token, SyntaxKind.ConstructorKeyword);
-            });
-        });
-
-        return keywords;
-    }
-
     function getLoopBreakContinueOccurrences(loopNode: IterationStatement): Node[] {
         const keywords: Node[] = [];
 
-        if (pushKeywordIf(keywords, loopNode.getFirstToken(), SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
+        if (pushKeywordIf(keywords, loopNode.getFirstToken()!, SyntaxKind.ForKeyword, SyntaxKind.WhileKeyword, SyntaxKind.DoKeyword)) {
             // If we succeeded and got a do-while loop, then start looking for a 'while' keyword.
             if (loopNode.kind === SyntaxKind.DoStatement) {
                 const loopTokens = loopNode.getChildren();
@@ -401,18 +257,16 @@ namespace ts.DocumentHighlights {
             }
         }
 
-        const breaksAndContinues = aggregateAllBreakAndContinueStatements(loopNode.statement);
-
-        forEach(breaksAndContinues, statement => {
+        forEach(aggregateAllBreakAndContinueStatements(loopNode.statement), statement => {
             if (ownsBreakOrContinueStatement(loopNode, statement)) {
-                pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
+                pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword, SyntaxKind.ContinueKeyword);
             }
         });
 
         return keywords;
     }
 
-    function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): Node[] {
+    function getBreakOrContinueStatementOccurrences(breakOrContinueStatement: BreakOrContinueStatement): Node[] | undefined {
         const owner = getBreakOrContinueOwner(breakOrContinueStatement);
 
         if (owner) {
@@ -435,17 +289,15 @@ namespace ts.DocumentHighlights {
     function getSwitchCaseDefaultOccurrences(switchStatement: SwitchStatement): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, switchStatement.getFirstToken(), SyntaxKind.SwitchKeyword);
+        pushKeywordIf(keywords, switchStatement.getFirstToken()!, SyntaxKind.SwitchKeyword);
 
         // Go through each clause in the switch statement, collecting the 'case'/'default' keywords.
         forEach(switchStatement.caseBlock.clauses, clause => {
-            pushKeywordIf(keywords, clause.getFirstToken(), SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
+            pushKeywordIf(keywords, clause.getFirstToken()!, SyntaxKind.CaseKeyword, SyntaxKind.DefaultKeyword);
 
-            const breaksAndContinues = aggregateAllBreakAndContinueStatements(clause);
-
-            forEach(breaksAndContinues, statement => {
+            forEach(aggregateAllBreakAndContinueStatements(clause), statement => {
                 if (ownsBreakOrContinueStatement(switchStatement, statement)) {
-                    pushKeywordIf(keywords, statement.getFirstToken(), SyntaxKind.BreakKeyword);
+                    pushKeywordIf(keywords, statement.getFirstToken()!, SyntaxKind.BreakKeyword);
                 }
             });
         });
@@ -456,21 +308,21 @@ namespace ts.DocumentHighlights {
     function getTryCatchFinallyOccurrences(tryStatement: TryStatement, sourceFile: SourceFile): Node[] {
         const keywords: Node[] = [];
 
-        pushKeywordIf(keywords, tryStatement.getFirstToken(), SyntaxKind.TryKeyword);
+        pushKeywordIf(keywords, tryStatement.getFirstToken()!, SyntaxKind.TryKeyword);
 
         if (tryStatement.catchClause) {
-            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken(), SyntaxKind.CatchKeyword);
+            pushKeywordIf(keywords, tryStatement.catchClause.getFirstToken()!, SyntaxKind.CatchKeyword);
         }
 
         if (tryStatement.finallyBlock) {
-            const finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile);
+            const finallyKeyword = findChildOfKind(tryStatement, SyntaxKind.FinallyKeyword, sourceFile)!;
             pushKeywordIf(keywords, finallyKeyword, SyntaxKind.FinallyKeyword);
         }
 
         return keywords;
     }
 
-    function getThrowOccurrences(throwStatement: ThrowStatement): Node[] {
+    function getThrowOccurrences(throwStatement: ThrowStatement, sourceFile: SourceFile): Node[] | undefined {
         const owner = getThrowStatementOwner(throwStatement);
 
         if (!owner) {
@@ -480,68 +332,94 @@ namespace ts.DocumentHighlights {
         const keywords: Node[] = [];
 
         forEach(aggregateOwnedThrowStatements(owner), throwStatement => {
-            pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+            keywords.push(findChildOfKind(throwStatement, SyntaxKind.ThrowKeyword, sourceFile)!);
         });
 
         // If the "owner" is a function, then we equate 'return' and 'throw' statements in their
         // ability to "jump out" of the function, and include occurrences for both.
         if (isFunctionBlock(owner)) {
             forEachReturnStatement(<Block>owner, returnStatement => {
-                pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+                keywords.push(findChildOfKind(returnStatement, SyntaxKind.ReturnKeyword, sourceFile)!);
             });
         }
 
         return keywords;
     }
 
-    function getReturnOccurrences(returnStatement: ReturnStatement): Node[] {
+    function getReturnOccurrences(returnStatement: ReturnStatement, sourceFile: SourceFile): Node[] | undefined {
         const func = <FunctionLikeDeclaration>getContainingFunction(returnStatement);
-
-        // If we didn't find a containing function with a block body, bail out.
-        if (!(func && hasKind(func.body, SyntaxKind.Block))) {
+        if (!func) {
             return undefined;
         }
 
         const keywords: Node[] = [];
-        forEachReturnStatement(<Block>func.body, returnStatement => {
-            pushKeywordIf(keywords, returnStatement.getFirstToken(), SyntaxKind.ReturnKeyword);
+        forEachReturnStatement(cast(func.body, isBlock), returnStatement => {
+            keywords.push(findChildOfKind(returnStatement, SyntaxKind.ReturnKeyword, sourceFile)!);
         });
 
         // Include 'throw' statements that do not occur within a try block.
-        forEach(aggregateOwnedThrowStatements(func.body), throwStatement => {
-            pushKeywordIf(keywords, throwStatement.getFirstToken(), SyntaxKind.ThrowKeyword);
+        forEach(aggregateOwnedThrowStatements(func.body!), throwStatement => {
+            keywords.push(findChildOfKind(throwStatement, SyntaxKind.ThrowKeyword, sourceFile)!);
         });
 
         return keywords;
     }
 
-    function getIfElseOccurrences(ifStatement: IfStatement, sourceFile: SourceFile): HighlightSpan[] {
+    function getAsyncAndAwaitOccurrences(node: Node): Node[] | undefined {
+        const func = <FunctionLikeDeclaration>getContainingFunction(node);
+        if (!func) {
+            return undefined;
+        }
+
         const keywords: Node[] = [];
 
-        // Traverse upwards through all parent if-statements linked by their else-branches.
-        while (hasKind(ifStatement.parent, SyntaxKind.IfStatement) && (<IfStatement>ifStatement.parent).elseStatement === ifStatement) {
-            ifStatement = <IfStatement>ifStatement.parent;
+        if (func.modifiers) {
+            func.modifiers.forEach(modifier => {
+                pushKeywordIf(keywords, modifier, SyntaxKind.AsyncKeyword);
+            });
         }
 
-        // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
-        while (ifStatement) {
-            const children = ifStatement.getChildren();
-            pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
-
-            // Generally the 'else' keyword is second-to-last, so we traverse backwards.
-            for (let i = children.length - 1; i >= 0; i--) {
-                if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
-                    break;
+        forEachChild(func, child => {
+            traverseWithoutCrossingFunction(child, node => {
+                if (isAwaitExpression(node)) {
+                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.AwaitKeyword);
                 }
-            }
+            });
+        });
 
-            if (!hasKind(ifStatement.elseStatement, SyntaxKind.IfStatement)) {
-                break;
-            }
 
-            ifStatement = <IfStatement>ifStatement.elseStatement;
+        return keywords;
+    }
+
+    function getYieldOccurrences(node: Node): Node[] | undefined {
+        const func = getContainingFunction(node) as FunctionDeclaration;
+        if (!func) {
+            return undefined;
         }
 
+        const keywords: Node[] = [];
+
+        forEachChild(func, child => {
+            traverseWithoutCrossingFunction(child, node => {
+                if (isYieldExpression(node)) {
+                    pushKeywordIf(keywords, node.getFirstToken(), SyntaxKind.YieldKeyword);
+                }
+            });
+        });
+
+        return keywords;
+    }
+
+    // Do not cross function/class/interface/module/type boundaries.
+    function traverseWithoutCrossingFunction(node: Node, cb: (node: Node) => void) {
+        cb(node);
+        if (!isFunctionLike(node) && !isClassLike(node) && !isInterfaceDeclaration(node) && !isModuleDeclaration(node) && !isTypeAliasDeclaration(node) && !isTypeNode(node)) {
+            forEachChild(node, child => traverseWithoutCrossingFunction(child, cb));
+        }
+    }
+
+    function getIfElseOccurrences(ifStatement: IfStatement, sourceFile: SourceFile): HighlightSpan[] {
+        const keywords = getIfElseKeywords(ifStatement, sourceFile);
         const result: HighlightSpan[] = [];
 
         // We'd like to highlight else/ifs together if they are only separated by whitespace
@@ -551,17 +429,17 @@ namespace ts.DocumentHighlights {
                 const elseKeyword = keywords[i];
                 const ifKeyword = keywords[i + 1]; // this *should* always be an 'if' keyword.
 
-                let shouldCombindElseAndIf = true;
+                let shouldCombineElseAndIf = true;
 
                 // Avoid recalculating getStart() by iterating backwards.
-                for (let j = ifKeyword.getStart() - 1; j >= elseKeyword.end; j--) {
+                for (let j = ifKeyword.getStart(sourceFile) - 1; j >= elseKeyword.end; j--) {
                     if (!isWhiteSpaceSingleLine(sourceFile.text.charCodeAt(j))) {
-                        shouldCombindElseAndIf = false;
+                        shouldCombineElseAndIf = false;
                         break;
                     }
                 }
 
-                if (shouldCombindElseAndIf) {
+                if (shouldCombineElseAndIf) {
                     result.push({
                         fileName: sourceFile.fileName,
                         textSpan: createTextSpanFromBounds(elseKeyword.getStart(), ifKeyword.end),
@@ -579,17 +457,41 @@ namespace ts.DocumentHighlights {
         return result;
     }
 
+    function getIfElseKeywords(ifStatement: IfStatement, sourceFile: SourceFile): Node[] {
+        const keywords: Node[] = [];
+
+        // Traverse upwards through all parent if-statements linked by their else-branches.
+        while (isIfStatement(ifStatement.parent) && ifStatement.parent.elseStatement === ifStatement) {
+            ifStatement = ifStatement.parent;
+        }
+
+        // Now traverse back down through the else branches, aggregating if/else keywords of if-statements.
+        while (true) {
+            const children = ifStatement.getChildren(sourceFile);
+            pushKeywordIf(keywords, children[0], SyntaxKind.IfKeyword);
+
+            // Generally the 'else' keyword is second-to-last, so we traverse backwards.
+            for (let i = children.length - 1; i >= 0; i--) {
+                if (pushKeywordIf(keywords, children[i], SyntaxKind.ElseKeyword)) {
+                    break;
+                }
+            }
+
+            if (!ifStatement.elseStatement || !isIfStatement(ifStatement.elseStatement)) {
+                break;
+            }
+
+            ifStatement = ifStatement.elseStatement;
+        }
+
+        return keywords;
+    }
+
     /**
      * Whether or not a 'node' is preceded by a label of the given string.
      * Note: 'node' cannot be a SourceFile.
      */
-    function isLabeledBy(node: Node, labelName: string) {
-        for (let owner = node.parent; owner.kind === SyntaxKind.LabeledStatement; owner = owner.parent) {
-            if ((<LabeledStatement>owner).label.escapedText === labelName) {
-                return true;
-            }
-        }
-
-        return false;
+    function isLabeledBy(node: Node, labelName: __String): boolean {
+        return !!findAncestor(node.parent, owner => !isLabeledStatement(owner) ? "quit" : owner.label.escapedText === labelName);
     }
 }

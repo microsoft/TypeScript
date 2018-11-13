@@ -1,9 +1,6 @@
 === tests/cases/compiler/duplicateIdentifiersAcrossContainerBoundaries.ts ===
 module M {
->M : typeof M
-
     export interface I { }
->I : I
 }
 module M {
 >M : typeof M
@@ -22,7 +19,7 @@ module M {
 >M : typeof M
 
     export class f { } // error
->f : M.f
+>f : f
 }
 
 module M {

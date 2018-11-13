@@ -7,6 +7,6 @@ class A {
 ===MODIFIED===
 
 class A {
-    x;
+    x
     a: boolean;
 }

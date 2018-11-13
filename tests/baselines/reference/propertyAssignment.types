@@ -8,6 +8,7 @@ var bar1: { x : number; }
 
 var foo2: { [index]; } // should be an error, used to be indexer, now it is a computed property
 >foo2 : {}
+>[index] : any
 >index : any
 
 var bar2: { x : number; }

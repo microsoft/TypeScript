@@ -2,17 +2,12 @@
 // Derived member is not optional but base member is, should be ok
 
 interface Base { foo: string; }
->Base : Base
 >foo : string
 
 interface Derived extends Base { bar: string; }
->Derived : Derived
->Base : Base
 >bar : string
 
 interface Derived2 extends Derived { baz: string; }
->Derived2 : Derived2
->Derived : Derived
 >baz : string
 
 // S is a subtype of a type T, and T is a supertype of S, if one of the following is true, where S' denotes the apparent type (section 3.8.1) of S:
@@ -24,64 +19,45 @@ interface Derived2 extends Derived { baz: string; }
 //          if M is a required property, N is also a required property.
 //      - M is an optional property and S' contains no property of the same name as M.
 interface T {
->T : T
-
     Foo?: Base;
 >Foo : Base
->Base : Base
 }
 
 interface S extends T {
->S : S
->T : T
-
     Foo: Derived
 >Foo : Derived
->Derived : Derived
 }
 
 interface T2 {
->T2 : T2
-
     1?: Base; 
->Base : Base
+>1 : Base
 }
 
 interface S2 extends T2 {
->S2 : S2
->T2 : T2
-
     1: Derived;
->Derived : Derived
+>1 : Derived
 }
 
 interface T3 {
->T3 : T3
-
     '1'?: Base;
->Base : Base
+>'1' : Base
 }
 
 interface S3 extends T3 {
->S3 : S3
->T3 : T3
-
     '1.': Derived;
->Derived : Derived
+>'1.' : Derived
 }
 
 // object literal case
 var a: { Foo?: Base; };
 >a : { Foo?: Base; }
 >Foo : Base
->Base : Base
 
 var b = { Foo: <Derived>null };
 >b : { Foo: Derived; }
 >{ Foo: <Derived>null } : { Foo: Derived; }
 >Foo : Derived
 ><Derived>null : Derived
->Derived : Derived
 >null : null
 
 var r = true ? a : b;
@@ -95,64 +71,45 @@ module TwoLevels {
 >TwoLevels : typeof TwoLevels
 
     interface T {
->T : T
-
         Foo?: Base;
 >Foo : Base
->Base : Base
     }
 
     interface S extends T {
->S : S
->T : T
-
         Foo: Derived2 
 >Foo : Derived2
->Derived2 : Derived2
     }
 
     interface T2 {
->T2 : T2
-
         1?: Base;
->Base : Base
+>1 : Base
     }
 
     interface S2 extends T2 {
->S2 : S2
->T2 : T2
-
         1: Derived2;
->Derived2 : Derived2
+>1 : Derived2
     }
 
     interface T3 {
->T3 : T3
-
         '1'?: Base;
->Base : Base
+>'1' : Base
     }
 
     interface S3 extends T3 {
->S3 : S3
->T3 : T3
-
         '1.': Derived2;
->Derived2 : Derived2
+>'1.' : Derived2
     }
 
     // object literal case
     var a: { Foo?: Base; };
 >a : { Foo?: Base; }
 >Foo : Base
->Base : Base
 
     var b = { Foo: <Derived2>null };
 >b : { Foo: Derived2; }
 >{ Foo: <Derived2>null } : { Foo: Derived2; }
 >Foo : Derived2
 ><Derived2>null : Derived2
->Derived2 : Derived2
 >null : null
 
     var r = true ? a : b;

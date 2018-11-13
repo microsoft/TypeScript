@@ -209,9 +209,9 @@ const arrayMap = <T, U>(f: (x: T) => U) => (a: T[]) => a.map(f);
 >U : Symbol(U, Decl(genericContextualTypes1.ts, 32, 20))
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 32, 44))
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 32, 18))
->a.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>a.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 32, 44))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(genericContextualTypes1.ts, 32, 24))
 
 const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
@@ -222,9 +222,9 @@ const arrayFilter = <T>(f: (x: T) => boolean) => (a: T[]) => a.filter(f);
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 33, 21))
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 33, 50))
 >T : Symbol(T, Decl(genericContextualTypes1.ts, 33, 21))
->a.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>a.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 33, 50))
->filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(genericContextualTypes1.ts, 33, 24))
 
 const f20: (a: string[]) => number[] = arrayMap(x => x.length);
@@ -232,9 +232,9 @@ const f20: (a: string[]) => number[] = arrayMap(x => x.length);
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 35, 12))
 >arrayMap : Symbol(arrayMap, Decl(genericContextualTypes1.ts, 32, 5))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 35, 48))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 35, 48))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 const f21: <A>(a: A[]) => A[][] = arrayMap(x => [x]);
 >f21 : Symbol(f21, Decl(genericContextualTypes1.ts, 36, 5))
@@ -271,9 +271,9 @@ const f30: (a: string[]) => string[] = arrayFilter(x => x.length > 10);
 >a : Symbol(a, Decl(genericContextualTypes1.ts, 40, 12))
 >arrayFilter : Symbol(arrayFilter, Decl(genericContextualTypes1.ts, 33, 5))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 40, 51))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericContextualTypes1.ts, 40, 51))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 const f31: <T extends Box<number>>(a: T[]) => T[] = arrayFilter(x => x.value > 10);
 >f31 : Symbol(f31, Decl(genericContextualTypes1.ts, 41, 5))

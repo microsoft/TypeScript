@@ -5,13 +5,17 @@
 ////}
 ////anonymousFunctionTest(5, "")(/*anonymousFunction1*/1, /*anonymousFunction2*/"");
 
-goTo.marker('anonymousFunction1');
-verify.signatureHelpCountIs(1);
-verify.currentSignatureParameterCountIs(2);
-verify.currentSignatureHelpIs('(a: number, b: string): string');
-verify.currentParameterHelpArgumentNameIs("a");
-verify.currentParameterSpanIs("a: number");
-
-goTo.marker('anonymousFunction2');
-verify.currentParameterHelpArgumentNameIs("b");
-verify.currentParameterSpanIs("b: string");
+verify.signatureHelp(
+    {
+        marker: "anonymousFunction1",
+        text: '(a: number, b: string): string',
+        parameterCount: 2,
+        parameterName: "a",
+        parameterSpan: "a: number",
+    },
+    {
+        marker: "anonymousFunction2",
+        parameterName: "b",
+        parameterSpan: "b: string",
+    },
+);

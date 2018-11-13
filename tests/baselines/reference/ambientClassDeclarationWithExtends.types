@@ -22,7 +22,6 @@ declare class D extends C { }
 
 var d: C = new D();
 >d : C
->C : C
 >new D() : D
 >D : typeof D
 
@@ -44,7 +43,6 @@ declare class F extends E { }
 
 var f: E = new F();
 >f : E
->E : E
 >new F() : F
 >F : typeof F
 

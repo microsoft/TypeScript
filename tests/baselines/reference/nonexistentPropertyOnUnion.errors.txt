@@ -1,0 +1,12 @@
+tests/cases/compiler/nonexistentPropertyOnUnion.ts(2,7): error TS2339: Property 'toLowerCase' does not exist on type 'string | Promise<string>'.
+  Property 'toLowerCase' does not exist on type 'Promise<string>'.
+
+
+==== tests/cases/compiler/nonexistentPropertyOnUnion.ts (1 errors) ====
+    function f(x: string | Promise<string>) {
+        x.toLowerCase();
+          ~~~~~~~~~~~
+!!! error TS2339: Property 'toLowerCase' does not exist on type 'string | Promise<string>'.
+!!! error TS2339:   Property 'toLowerCase' does not exist on type 'Promise<string>'.
+    }
+    

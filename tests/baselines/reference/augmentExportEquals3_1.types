@@ -1,10 +1,12 @@
 === tests/cases/compiler/file1.d.ts ===
 declare module "file1" {
+>"file1" : typeof import("file1")
+
     function foo(): void;
->foo : typeof foo
+>foo : typeof import("tests/cases/compiler/file1.d.ts")
 
     namespace foo {
->foo : typeof foo
+>foo : typeof import("tests/cases/compiler/file1.d.ts")
 
         export var v: number;
 >v : number
@@ -28,8 +30,9 @@ x.b = 1;
 
 // OK - './file1' is a namespace
 declare module "file1" {
+>"file1" : typeof x
+
     interface A { a }
->A : A
 >a : any
 
     let b: number;
@@ -44,7 +47,6 @@ import "file2";
 let a: x.A;
 >a : x.A
 >x : any
->A : x.A
 
 let b = x.b;
 >b : number

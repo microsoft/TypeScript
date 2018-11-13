@@ -1,0 +1,15 @@
+=== tests/cases/compiler/typeInferenceTypePredicate.ts ===
+declare function f<T>(predicate: (x: {}) => x is T): T;
+>f : <T>(predicate: (x: {}) => x is T) => T
+>predicate : (x: {}) => x is T
+>x : {}
+
+// 'res' should be of type 'number'.
+const res = f((n): n is number => true);
+>res : number
+>f((n): n is number => true) : number
+>f : <T>(predicate: (x: {}) => x is T) => T
+>(n): n is number => true : (n: {}) => n is number
+>n : {}
+>true : true
+

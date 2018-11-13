@@ -4,5 +4,5 @@ export class C {
 }
 
 export = B;
->B : No type information available!
+>B : any
 

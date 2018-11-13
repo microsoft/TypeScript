@@ -4,12 +4,8 @@
 
 function f<T>(x: T, y: string|T): T {
 >f : <T>(x: T, y: string | T) => T
->T : T
 >x : T
->T : T
 >y : string | T
->T : T
->T : T
 
     return x;
 >x : T
@@ -59,10 +55,7 @@ var a4 = f(undefined, "abc");
 
 function g<T>(value: [string, T]): T {
 >g : <T>(value: [string, T]) => T
->T : T
 >value : [string, T]
->T : T
->T : T
 
     return value[1];
 >value[1] : T
@@ -83,20 +76,17 @@ var b1 = g(["string", true]);
 
 function h<T>(x: string|boolean|T): T {
 >h : <T>(x: string | boolean | T) => T
->T : T
 >x : string | boolean | T
->T : T
->T : T
 
     return typeof x === "string" || typeof x === "boolean" ? undefined : x;
 >typeof x === "string" || typeof x === "boolean" ? undefined : x : T
 >typeof x === "string" || typeof x === "boolean" : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | boolean | T
 >"string" : "string"
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : boolean | T
 >"boolean" : "boolean"
 >undefined : undefined

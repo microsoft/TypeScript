@@ -141,7 +141,7 @@ verify.quickInfos({
     7: ["(parameter) param1: string", "param information first line\n\nparam information third line"],
 
     k: ["function k(param1: string): void", "This is firstLine\nThis is second Line"],
-    8: ["(parameter) param1: string", "hello   "],
+    8: ["(parameter) param1: string", "hello"],
 
     l: ["function l(param1: string): void", "This is firstLine\nThis is second Line"],
     9: ["(parameter) param1: string", "first Line text\nblank line that shouldnt be shown when starting this \nsecond time information about the param again"],

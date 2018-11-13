@@ -5,7 +5,6 @@ import foo = require("foo")
 
 var z: foo;
 >z : foo
->foo : foo
 
 z.bar("hello"); // This should be ok
 >z.bar("hello") : foo.A
@@ -17,7 +16,6 @@ z.bar("hello"); // This should be ok
 var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be error
 >x : foo.A
 >foo : any
->A : foo.A
 >foo.bar("hello") : any
 >foo.bar : any
 >foo : any
@@ -26,22 +24,17 @@ var x: foo.A = foo.bar("hello"); // foo.A should be ok but foo.bar should be err
 
 === tests/cases/compiler/aliasOnMergedModuleInterface_0.ts ===
 declare module "foo"
+>"foo" : typeof import("foo")
 {
     module B {
->B : any
-
         export interface A {
->A : A
         }
     }
     interface B {
->B : B
-
         bar(name: string): B.A;
 >bar : (name: string) => B.A
 >name : string
 >B : any
->A : B.A
     }
     export = B;
 >B : B

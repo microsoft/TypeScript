@@ -3,9 +3,9 @@ class C {
 >C : C
 
     public {[name:string]:VariableDeclaration};
-> : { [x: number]: any; VariableDeclaration: any; }
->{[name:string]:VariableDeclaration} : { [x: number]: any; VariableDeclaration: any; }
->name : any
+> : any
+>[name:string] : any[]
+>name : never
 >string : any
 >VariableDeclaration : any
 }

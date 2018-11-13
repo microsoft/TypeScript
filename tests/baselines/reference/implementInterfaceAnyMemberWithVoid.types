@@ -1,7 +1,5 @@
 === tests/cases/compiler/implementInterfaceAnyMemberWithVoid.ts ===
 interface I {
->I : I
-
     foo(value: number);
 >foo : (value: number) => any
 >value : number
@@ -9,7 +7,6 @@ interface I {
 
 class Bug implements I {
 >Bug : Bug
->I : I
 
     public foo(value: number) {
 >foo : (value: number) => void

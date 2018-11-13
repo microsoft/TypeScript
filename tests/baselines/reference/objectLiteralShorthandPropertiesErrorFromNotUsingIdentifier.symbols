@@ -4,7 +4,11 @@ var y = {
 >y : Symbol(y, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 3))
 
     "stringLiteral",
+>"stringLiteral" : Symbol("stringLiteral", Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 1, 9))
+
     42,
+>42 : Symbol(42, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 2, 20))
+
     get e,
 >e : Symbol(e, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 3, 7))
 
@@ -33,12 +37,17 @@ var x = {
 
     a.b,
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+> : Symbol((Missing), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 5))
 
     a["ss"],
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+>["ss"] : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
+>"ss" : Symbol(["ss"], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 5))
 
     a[1],
 >a : Symbol(a, Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 13, 9), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 14, 8), Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 15, 12))
+>[1] : Symbol([1], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 16, 5))
+>1 : Symbol([1], Decl(objectLiteralShorthandPropertiesErrorFromNotUsingIdentifier.ts, 16, 5))
 
 };
 

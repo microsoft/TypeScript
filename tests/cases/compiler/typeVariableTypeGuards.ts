@@ -7,7 +7,7 @@ interface Foo {
 }
 
 class A<P extends Partial<Foo>> {
-    props: Readonly<P>
+    constructor(public props: Readonly<P>) {}
     doSomething() {
         this.props.foo && this.props.foo()
     }
@@ -20,7 +20,7 @@ interface Banana {
 }
 
 class Monkey<T extends Banana | undefined> {
-    a: T;
+    constructor(public a: T) {}
     render() {
         if (this.a) {
             this.a.color;

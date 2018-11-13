@@ -1,0 +1,101 @@
+=== tests/cases/conformance/es2019/importMeta/example.ts ===
+// Adapted from https://github.com/tc39/proposal-import-meta/tree/c3902a9ffe2e69a7ac42c19d7ea74cbdcea9b7fb#example
+(async () => {
+  const response = await fetch(new URL("../hamsters.jpg", import.meta.url).toString());
+>response : Symbol(response, Decl(example.ts, 2, 7))
+>fetch : Symbol(fetch, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>new URL("../hamsters.jpg", import.meta.url).toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>toString : Symbol(Object.toString, Decl(lib.es5.d.ts, --, --))
+
+  const blob = await response.blob();
+>blob : Symbol(blob, Decl(example.ts, 3, 7))
+>response.blob : Symbol(Body.blob, Decl(lib.dom.d.ts, --, --))
+>response : Symbol(response, Decl(example.ts, 2, 7))
+>blob : Symbol(Body.blob, Decl(lib.dom.d.ts, --, --))
+
+  const size = import.meta.scriptElement.dataset.size || 300;
+>size : Symbol(size, Decl(example.ts, 5, 7))
+
+  const image = new Image();
+>image : Symbol(image, Decl(example.ts, 7, 7))
+>Image : Symbol(Image, Decl(lib.dom.d.ts, --, --))
+
+  image.src = URL.createObjectURL(blob);
+>image.src : Symbol(HTMLImageElement.src, Decl(lib.dom.d.ts, --, --))
+>image : Symbol(image, Decl(example.ts, 7, 7))
+>src : Symbol(HTMLImageElement.src, Decl(lib.dom.d.ts, --, --))
+>URL.createObjectURL : Symbol(createObjectURL, Decl(lib.dom.d.ts, --, --))
+>URL : Symbol(URL, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --))
+>createObjectURL : Symbol(createObjectURL, Decl(lib.dom.d.ts, --, --))
+>blob : Symbol(blob, Decl(example.ts, 3, 7))
+
+  image.width = image.height = size;
+>image.width : Symbol(HTMLImageElement.width, Decl(lib.dom.d.ts, --, --))
+>image : Symbol(image, Decl(example.ts, 7, 7))
+>width : Symbol(HTMLImageElement.width, Decl(lib.dom.d.ts, --, --))
+>image.height : Symbol(HTMLImageElement.height, Decl(lib.dom.d.ts, --, --))
+>image : Symbol(image, Decl(example.ts, 7, 7))
+>height : Symbol(HTMLImageElement.height, Decl(lib.dom.d.ts, --, --))
+>size : Symbol(size, Decl(example.ts, 5, 7))
+
+  document.body.appendChild(image);
+>document.body.appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>document.body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --))
+>body : Symbol(Document.body, Decl(lib.dom.d.ts, --, --))
+>appendChild : Symbol(Node.appendChild, Decl(lib.dom.d.ts, --, --))
+>image : Symbol(image, Decl(example.ts, 7, 7))
+
+})();
+
+=== tests/cases/conformance/es2019/importMeta/moduleLookingFile01.ts ===
+export let x = import.meta;
+>x : Symbol(x, Decl(moduleLookingFile01.ts, 0, 10))
+
+export let y = import.metal;
+>y : Symbol(y, Decl(moduleLookingFile01.ts, 1, 10))
+
+export let z = import.import.import.malkovich;
+>z : Symbol(z, Decl(moduleLookingFile01.ts, 2, 10))
+
+=== tests/cases/conformance/es2019/importMeta/scriptLookingFile01.ts ===
+let globalA = import.meta;
+>globalA : Symbol(globalA, Decl(scriptLookingFile01.ts, 0, 3))
+
+let globalB = import.metal;
+>globalB : Symbol(globalB, Decl(scriptLookingFile01.ts, 1, 3))
+
+let globalC = import.import.import.malkovich;
+>globalC : Symbol(globalC, Decl(scriptLookingFile01.ts, 2, 3))
+
+=== tests/cases/conformance/es2019/importMeta/assignmentTargets.ts ===
+export const foo: ImportMeta = import.meta.blah = import.meta.blue = import.meta;
+>foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
+>ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+
+import.meta = foo;
+>foo : Symbol(foo, Decl(assignmentTargets.ts, 0, 12))
+
+// @Filename augmentations.ts
+declare global {
+>global : Symbol(global, Decl(assignmentTargets.ts, 1, 18))
+
+  interface ImportMeta {
+>ImportMeta : Symbol(ImportMeta, Decl(lib.es5.d.ts, --, --), Decl(assignmentTargets.ts, 4, 16))
+
+    wellKnownProperty: { a: number, b: string, c: boolean };
+>wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
+>a : Symbol(a, Decl(assignmentTargets.ts, 6, 24))
+>b : Symbol(b, Decl(assignmentTargets.ts, 6, 35))
+>c : Symbol(c, Decl(assignmentTargets.ts, 6, 46))
+  }
+}
+
+const { a, b, c } = import.meta.wellKnownProperty;
+>a : Symbol(a, Decl(assignmentTargets.ts, 10, 7))
+>b : Symbol(b, Decl(assignmentTargets.ts, 10, 10))
+>c : Symbol(c, Decl(assignmentTargets.ts, 10, 13))
+>import.meta.wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
+>wellKnownProperty : Symbol(ImportMeta.wellKnownProperty, Decl(assignmentTargets.ts, 5, 24))
+

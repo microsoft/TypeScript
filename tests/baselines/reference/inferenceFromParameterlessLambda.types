@@ -1,28 +1,15 @@
 === tests/cases/compiler/inferenceFromParameterlessLambda.ts ===
 function foo<T>(o: Take<T>, i: Make<T>) { }
 >foo : <T>(o: Take<T>, i: Make<T>) => void
->T : T
 >o : Take<T>
->Take : Take<T>
->T : T
 >i : Make<T>
->Make : Make<T>
->T : T
 
 interface Make<T> {
->Make : Make<T>
->T : T
-
     (): T;
->T : T
 }
 interface Take<T> {
->Take : Take<T>
->T : T
-
     (n: T): void;
 >n : T
->T : T
 }
 // Infer string from second argument because it isn't context sensitive
 foo(n => n.length, () => 'hi');

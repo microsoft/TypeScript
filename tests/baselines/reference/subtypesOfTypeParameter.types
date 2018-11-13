@@ -3,33 +3,23 @@
 
 class C3<T> {
 >C3 : C3<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 class D1<T, U> extends C3<T> {
 >D1 : D1<T, U>
->T : T
->U : U
 >C3 : C3<T>
->T : T
 
     foo: U; // error
 >foo : U
->U : U
 }
 
 function f1<T, U>(x: T, y: U) {
 >f1 : <T, U>(x: T, y: U) => void
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
     var r = true ? x : y; // error
 >r : T | U
@@ -47,7 +37,6 @@ function f1<T, U>(x: T, y: U) {
 }
 
 interface I1 { foo: number; }
->I1 : I1
 >foo : number
 
 class C1 { foo: number; }
@@ -56,13 +45,11 @@ class C1 { foo: number; }
 
 class C2<T> { foo: T; }
 >C2 : C2<T>
->T : T
 >foo : T
->T : T
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 function f() { }
 >f : typeof f
@@ -89,12 +76,8 @@ module c {
 // errors throughout
 function f2<T, U>(x: T, y: U) {
 >f2 : <T, U>(x: T, y: U) => void
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
     var r0 = true ? x : null;
 >r0 : T
@@ -144,14 +127,14 @@ function f2<T, U>(x: T, y: U) {
 
     var r2 = true ? '' : x;
 >r2 : string | T
->true ? '' : x : T | ""
+>true ? '' : x : "" | T
 >true : true
 >'' : ""
 >x : T
 
     var r2 = true ? x : '';
 >r2 : string | T
->true ? x : '' : T | ""
+>true ? x : '' : "" | T
 >true : true
 >x : T
 >'' : ""
@@ -237,9 +220,7 @@ function f2<T, U>(x: T, y: U) {
 >true ? <T>(x: T) => { return x } : x : T | (<T>(x: T) => T)
 >true : true
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 >x : T
 
@@ -249,14 +230,11 @@ function f2<T, U>(x: T, y: U) {
 >true : true
 >x : T
 ><T>(x: T) => { return x } : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
     var i1: I1;
 >i1 : I1
->I1 : I1
 
     var r9 = true ? i1 : x;
 >r9 : I1 | T
@@ -274,7 +252,6 @@ function f2<T, U>(x: T, y: U) {
 
     var c1: C1;
 >c1 : C1
->C1 : C1
 
     var r10 = true ? c1 : x;
 >r10 : C1 | T
@@ -293,7 +270,6 @@ function f2<T, U>(x: T, y: U) {
 
     var c2: C2<number>;
 >c2 : C2<number>
->C2 : C2<T>
 
     var r12 = true ? c2 : x;
 >r12 : T | C2<number>
@@ -380,9 +356,7 @@ function f2<T, U>(x: T, y: U) {
 
     function f17<T>(a: T) {
 >f17 : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
         var r17 = true ? x : a;
 >r17 : T | T
@@ -401,11 +375,7 @@ function f2<T, U>(x: T, y: U) {
 
     function f18<T, U extends T>(a: U) {
 >f18 : <T, U extends T>(a: U) => void
->T : T
->U : U
->T : T
 >a : U
->U : U
 
         var r18 = true ? x : a;
 >r18 : T | U

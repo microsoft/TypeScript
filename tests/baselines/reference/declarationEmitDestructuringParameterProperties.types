@@ -19,7 +19,6 @@ class C2 {
 >x : string
 >y : number
 >z : boolean
->TupleType1 : [string, number, boolean]
     }
 }
 
@@ -36,6 +35,5 @@ class C3 {
 >x : number
 >y : string
 >z : boolean
->ObjType1 : ObjType1
     }
 }

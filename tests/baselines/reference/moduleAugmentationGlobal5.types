@@ -7,21 +7,23 @@ No type information for this code.
 No type information for this code.
 No type information for this code.=== tests/cases/compiler/f1.d.ts ===
 declare module "A" {
+>"A" : typeof import("A")
+
     global {
 >global : any
 
         interface Something {x}
->Something : Something
 >x : any
     }
 }
 === tests/cases/compiler/f2.d.ts ===
 declare module "B" {
+>"B" : typeof import("B")
+
     global {
 >global : any
 
         interface Something {y}
->Something : Something
 >y : any
     }
 }

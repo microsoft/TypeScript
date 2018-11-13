@@ -1,4 +1,4 @@
-tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2420: Class 'C' incorrectly implements interface 'A'.
+tests/cases/compiler/classImplementsClass5.ts(5,7): error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
   Types have separate declarations of a private property 'x'.
 tests/cases/compiler/classImplementsClass5.ts(16,1): error TS2322: Type 'C2' is not assignable to type 'C'.
   Types have separate declarations of a private property 'x'.
@@ -13,8 +13,8 @@ tests/cases/compiler/classImplementsClass5.ts(17,1): error TS2322: Type 'C' is n
     }
     class C implements A {
           ~
-!!! error TS2420: Class 'C' incorrectly implements interface 'A'.
-!!! error TS2420:   Types have separate declarations of a private property 'x'.
+!!! error TS2720: Class 'C' incorrectly implements class 'A'. Did you mean to extend 'A' and inherit its members as a subclass?
+!!! error TS2720:   Types have separate declarations of a private property 'x'.
         private x = 1;
         foo() {
             return 1;

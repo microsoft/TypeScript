@@ -1,12 +1,10 @@
-tests/cases/compiler/implementGenericWithMismatchedTypes.ts(7,7): error TS2420: Class 'C<T>' incorrectly implements interface 'IFoo<T>'.
-  Types of property 'foo' are incompatible.
-    Type '(x: string) => number' is not assignable to type '(x: T) => T'.
-      Types of parameters 'x' and 'x' are incompatible.
-        Type 'T' is not assignable to type 'string'.
-tests/cases/compiler/implementGenericWithMismatchedTypes.ts(16,7): error TS2420: Class 'C2<T>' incorrectly implements interface 'IFoo2<T>'.
-  Types of property 'foo' are incompatible.
-    Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
-      Type 'number' is not assignable to type 'T'.
+tests/cases/compiler/implementGenericWithMismatchedTypes.ts(8,5): error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
+  Type '(x: string) => number' is not assignable to type '(x: T) => T'.
+    Types of parameters 'x' and 'x' are incompatible.
+      Type 'T' is not assignable to type 'string'.
+tests/cases/compiler/implementGenericWithMismatchedTypes.ts(17,5): error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
+  Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
+    Type 'number' is not assignable to type 'T'.
 
 
 ==== tests/cases/compiler/implementGenericWithMismatchedTypes.ts (2 errors) ====
@@ -17,13 +15,12 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(16,7): error TS2420:
         foo(x: T): T;
     }
     class C<T> implements IFoo<T> { // error
-          ~
-!!! error TS2420: Class 'C<T>' incorrectly implements interface 'IFoo<T>'.
-!!! error TS2420:   Types of property 'foo' are incompatible.
-!!! error TS2420:     Type '(x: string) => number' is not assignable to type '(x: T) => T'.
-!!! error TS2420:       Types of parameters 'x' and 'x' are incompatible.
-!!! error TS2420:         Type 'T' is not assignable to type 'string'.
         foo(x: string): number {
+        ~~~
+!!! error TS2416: Property 'foo' in type 'C<T>' is not assignable to the same property in base type 'IFoo<T>'.
+!!! error TS2416:   Type '(x: string) => number' is not assignable to type '(x: T) => T'.
+!!! error TS2416:     Types of parameters 'x' and 'x' are incompatible.
+!!! error TS2416:       Type 'T' is not assignable to type 'string'.
             return null;
         }
     }
@@ -32,12 +29,11 @@ tests/cases/compiler/implementGenericWithMismatchedTypes.ts(16,7): error TS2420:
         foo(x: T): T;
     }
     class C2<T> implements IFoo2<T> { // error
-          ~~
-!!! error TS2420: Class 'C2<T>' incorrectly implements interface 'IFoo2<T>'.
-!!! error TS2420:   Types of property 'foo' are incompatible.
-!!! error TS2420:     Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
-!!! error TS2420:       Type 'number' is not assignable to type 'T'.
         foo<Tstring>(x: Tstring): number {
+        ~~~
+!!! error TS2416: Property 'foo' in type 'C2<T>' is not assignable to the same property in base type 'IFoo2<T>'.
+!!! error TS2416:   Type '<Tstring>(x: Tstring) => number' is not assignable to type '(x: T) => T'.
+!!! error TS2416:     Type 'number' is not assignable to type 'T'.
             return null;
         }
     }

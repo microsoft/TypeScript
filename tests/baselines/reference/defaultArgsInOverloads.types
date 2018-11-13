@@ -46,8 +46,6 @@ class C {
 }
 
 interface I {
->I : I
-
     fun(a: string);
 >fun : { (a: string): any; (a?: number): any; }
 >a : string

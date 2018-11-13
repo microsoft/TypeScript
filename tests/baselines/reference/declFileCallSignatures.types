@@ -1,14 +1,10 @@
 === tests/cases/compiler/declFileCallSignatures_0.ts ===
 export interface ICallSignature {
->ICallSignature : ICallSignature
-
     /** This comment should appear for foo*/
     (): string;
 }
 
 export interface ICallSignatureWithParameters {
->ICallSignatureWithParameters : ICallSignatureWithParameters
-
     /** This is comment for function signature*/
     (/** this is comment about a*/a: string,
 >a : string
@@ -19,16 +15,12 @@ export interface ICallSignatureWithParameters {
 }
 
 export interface ICallSignatureWithRestParameters {
->ICallSignatureWithRestParameters : ICallSignatureWithRestParameters
-
     (a: string, ...rests: string[]): string;
 >a : string
 >rests : string[]
 }
 
 export interface ICallSignatureWithOverloads {
->ICallSignatureWithOverloads : ICallSignatureWithOverloads
-
     (a: string): string;
 >a : string
 
@@ -37,36 +29,23 @@ export interface ICallSignatureWithOverloads {
 }
 
 export interface ICallSignatureWithTypeParameters<T> {
->ICallSignatureWithTypeParameters : ICallSignatureWithTypeParameters<T>
->T : T
-
     /** This comment should appear for foo*/
     (a: T): string;
 >a : T
->T : T
 }
 
 export interface ICallSignatureWithOwnTypeParametes {
->ICallSignatureWithOwnTypeParametes : ICallSignatureWithOwnTypeParametes
-
     <T extends ICallSignature>(a: T): string;
->T : T
->ICallSignature : ICallSignature
 >a : T
->T : T
 }
 
 === tests/cases/compiler/declFileCallSignatures_1.ts ===
 interface IGlobalCallSignature {
->IGlobalCallSignature : IGlobalCallSignature
-
     /** This comment should appear for foo*/
     (): string;
 }
 
 interface IGlobalCallSignatureWithParameters {
->IGlobalCallSignatureWithParameters : IGlobalCallSignatureWithParameters
-
     /** This is comment for function signature*/
     (/** this is comment about a*/a: string,
 >a : string
@@ -77,7 +56,6 @@ interface IGlobalCallSignatureWithParameters {
 }
 
 interface IGlobalCallSignatureWithRestParameters {
->IGlobalCallSignatureWithRestParameters : IGlobalCallSignatureWithRestParameters
 
     (a: string, ...rests: string[]): string;
 >a : string
@@ -86,8 +64,6 @@ interface IGlobalCallSignatureWithRestParameters {
 }
 
 interface IGlobalCallSignatureWithOverloads {
->IGlobalCallSignatureWithOverloads : IGlobalCallSignatureWithOverloads
-
     (a: string): string;
 >a : string
 
@@ -96,21 +72,12 @@ interface IGlobalCallSignatureWithOverloads {
 }
 
 interface IGlobalCallSignatureWithTypeParameters<T> {
->IGlobalCallSignatureWithTypeParameters : IGlobalCallSignatureWithTypeParameters<T>
->T : T
-
     /** This comment should appear for foo*/
     (a: T): string;
 >a : T
->T : T
 }
 
 interface IGlobalCallSignatureWithOwnTypeParametes {
->IGlobalCallSignatureWithOwnTypeParametes : IGlobalCallSignatureWithOwnTypeParametes
-
     <T extends IGlobalCallSignature>(a: T): string;
->T : T
->IGlobalCallSignature : IGlobalCallSignature
 >a : T
->T : T
 }

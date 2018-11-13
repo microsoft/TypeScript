@@ -7,7 +7,6 @@ import "./map";
 
 let x: Observable<number>;
 >x : Observable<number>
->Observable : Observable<T>
 
 let y = x.map(x => x + 1);
 >y : Observable<number>
@@ -55,19 +54,13 @@ import { Observable } from "observable"
 >function() { } : () => void
 
 declare module "observable" {
-    interface Observable<T> {
->Observable : Observable<T>
->T : T
+>"observable" : typeof import("observable")
 
+    interface Observable<T> {
         map<U>(proj: (e:T) => U): Observable<U>
 >map : <U>(proj: (e: T) => U) => Observable<U>
->U : U
 >proj : (e: T) => U
 >e : T
->T : T
->U : U
->Observable : Observable<T>
->U : U
     }
     namespace Observable {
 >Observable : typeof Observable
@@ -79,17 +72,15 @@ declare module "observable" {
 
 === tests/cases/compiler/observable.d.ts ===
 declare module "observable" {
+>"observable" : typeof import("observable")
+
     class Observable<T> {
 >Observable : Observable<T>
->T : T
 
         filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
 >pred : (e: T) => boolean
 >e : T
->T : T
->Observable : Observable<T>
->T : T
     }
     namespace Observable {
 >Observable : typeof Observable

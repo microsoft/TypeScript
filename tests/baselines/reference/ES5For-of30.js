@@ -7,6 +7,7 @@ for ([a = 1, b = ""] of tuple) {
 }
 
 //// [ES5For-of30.js]
+var _a, _b, _c;
 var a, b;
 var tuple = [2, "3"];
 for (var _i = 0, tuple_1 = tuple; _i < tuple_1.length; _i++) {
@@ -14,4 +15,3 @@ for (var _i = 0, tuple_1 = tuple; _i < tuple_1.length; _i++) {
     a;
     b;
 }
-var _a, _b, _c;

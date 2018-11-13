@@ -32,6 +32,7 @@ tests/cases/conformance/internalModules/DeclarationMerging/simple.ts(2,31): erro
         export var Instance = new A();
                                   ~
 !!! error TS2449: Class 'A' used before its declaration.
+!!! related TS2728 tests/cases/conformance/internalModules/DeclarationMerging/simple.ts:6:7: 'A' is declared here.
     }
     
     // duplicate identifier

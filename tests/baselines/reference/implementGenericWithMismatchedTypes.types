@@ -3,20 +3,12 @@
 // and that matches the original signature for assignability since we treat its T's as Object
 
 interface IFoo<T> {
->IFoo : IFoo<T>
->T : T
-
     foo(x: T): T;
 >foo : (x: T) => T
 >x : T
->T : T
->T : T
 }
 class C<T> implements IFoo<T> { // error
 >C : C<T>
->T : T
->IFoo : IFoo<T>
->T : T
 
     foo(x: string): number {
 >foo : (x: string) => number
@@ -28,26 +20,16 @@ class C<T> implements IFoo<T> { // error
 }
 
 interface IFoo2<T> {
->IFoo2 : IFoo2<T>
->T : T
-
     foo(x: T): T;
 >foo : (x: T) => T
 >x : T
->T : T
->T : T
 }
 class C2<T> implements IFoo2<T> { // error
 >C2 : C2<T>
->T : T
->IFoo2 : IFoo2<T>
->T : T
 
     foo<Tstring>(x: Tstring): number {
 >foo : <Tstring>(x: Tstring) => number
->Tstring : Tstring
 >x : Tstring
->Tstring : Tstring
 
         return null;
 >null : null

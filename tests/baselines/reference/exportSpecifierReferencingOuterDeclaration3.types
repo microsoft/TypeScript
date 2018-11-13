@@ -1,23 +1,17 @@
 === tests/cases/compiler/exportSpecifierReferencingOuterDeclaration3.ts ===
 declare module X { export interface bar { } }
->X : any
->bar : bar
-
 declare module "m" {
-    module X { export interface foo { } }
->X : any
->foo : foo
+>"m" : typeof import("m")
 
+    module X { export interface foo { } }
     export { X };
 >X : any
 
     export function foo(): X.foo;
 >foo : () => X.foo
 >X : any
->foo : X.foo
 
     export function bar(): X.bar; // error
 >bar : () => any
 >X : any
->bar : No type information available!
 }

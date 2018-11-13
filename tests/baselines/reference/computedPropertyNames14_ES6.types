@@ -6,20 +6,26 @@ class C {
 >C : C
 
     [b]() {}
+>[b] : () => void
 >b : boolean
 
     static [true]() { }
+>[true] : () => void
 >true : true
 
     [[]]() { }
+>[[]] : () => void
 >[] : undefined[]
 
     static [{}]() { }
+>[{}] : () => void
 >{} : {}
 
     [undefined]() { }
+>[undefined] : () => void
 >undefined : undefined
 
     static [null]() { }
+>[null] : () => void
 >null : null
 }

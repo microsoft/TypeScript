@@ -13,9 +13,9 @@ tests/cases/compiler/implicitAnyFunctionInvocationWithAnyArguements.ts(10,36): e
         ~~~~~~~~
 !!! error TS7005: Variable 'anyArray' implicitly has an 'any[]' type.
     var objL: { v; w; }             // error at "y,z"
-                ~~
+                ~
 !!! error TS7008: Member 'v' implicitly has an 'any' type.
-                   ~~
+                   ~
 !!! error TS7008: Member 'w' implicitly has an 'any' type.
     var funcL: (y2) => number;
                 ~~

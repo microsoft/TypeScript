@@ -8,6 +8,7 @@ function* g() {
 >C : typeof C
 
         *[yield 0]() {
+>[yield 0] : () => IterableIterator<number>
 >yield 0 : any
 >0 : 0
 

@@ -5,8 +5,7 @@
 ////}
 ////
 ////with (x) {
-////    var y: IFoo = { /*1*/ }; 
+////    var y: IFoo = { /*1*/ };
 ////}
 
-goTo.marker('1');
-verify.completionListIsEmpty();
+verify.completions({ marker: "1", exact: undefined });

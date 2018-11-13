@@ -3,6 +3,5 @@ foo(a,,b);
 >foo(a,,b) : any
 >foo : any
 >a : any
-> : undefined
 >b : any
 

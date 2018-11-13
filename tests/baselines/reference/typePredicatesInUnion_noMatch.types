@@ -1,0 +1,39 @@
+=== tests/cases/compiler/typePredicatesInUnion_noMatch.ts ===
+interface A {
+    pred(x: {}, y: {}): x is boolean;
+>pred : (x: {}, y: {}) => x is boolean
+>x : {}
+>y : {}
+}
+interface B {
+    pred(x: {}, y: {}): y is string;
+>pred : (x: {}, y: {}) => y is string
+>x : {}
+>y : {}
+}
+
+type Or = A | B;
+>Or : Or
+
+function f(o: Or, x: {}, y: {}) {
+>f : (o: Or, x: {}, y: {}) => void
+>o : Or
+>x : {}
+>y : {}
+
+    if (o.pred(x, y)) {
+>o.pred(x, y) : boolean
+>o.pred : ((x: {}, y: {}) => x is boolean) | ((x: {}, y: {}) => y is string)
+>o : Or
+>pred : ((x: {}, y: {}) => x is boolean) | ((x: {}, y: {}) => y is string)
+>x : {}
+>y : {}
+
+        x;
+>x : {}
+
+        y;
+>y : {}
+    }
+}
+

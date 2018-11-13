@@ -15,6 +15,5 @@ declare class MyComp<P = Prop> extends React.Component<P, {}> {
     internalProp: P;
 }
 
-// Error
 let x = <MyComp />
 let x1 = <MyComp a="hi"/>

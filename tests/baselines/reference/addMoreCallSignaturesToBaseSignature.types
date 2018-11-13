@@ -1,21 +1,15 @@
 === tests/cases/compiler/addMoreCallSignaturesToBaseSignature.ts ===
 interface Foo {
->Foo : Foo
-
     (): string;
 }
 
 interface Bar extends Foo {
->Bar : Bar
->Foo : Foo
-
     (key: string): string;
 >key : string
 }
 
 var a: Bar;
 >a : Bar
->Bar : Bar
 
 var kitty = a();
 >kitty : string

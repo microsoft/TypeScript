@@ -11,7 +11,7 @@
 ////        case 1:
 ////            {| "indentation": 12 |}
 ////            break;
-////            {| "indentation": 12 |} // content of case clauses is always indented relatively to case clause
+////            {| "indentation": 8 |} // since we just saw "break"
 ////    }
 ////    {| "indentation": 4 |}
 ////}

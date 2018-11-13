@@ -49,28 +49,20 @@ var c2: {
 
     func4?<T>(x: T): number;
 >func4 : { <T>(x: T): number; <T>(s: T): string; }
->T : T
 >x : T
->T : T
 
     func4? <T>(s: T): string;
 >func4 : { <T>(x: T): number; <T>(s: T): string; }
->T : T
 >s : T
->T : T
 
     func5?: {
 >func5 : { <T>(x: T): number; <T>(s: T): string; }
 
         <T>(x: T): number;
->T : T
 >x : T
->T : T
 
         <T>(s: T): string;
->T : T
 >s : T
->T : T
 
     };
 };

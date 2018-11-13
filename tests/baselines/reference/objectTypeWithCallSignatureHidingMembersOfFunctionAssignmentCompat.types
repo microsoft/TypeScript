@@ -1,17 +1,13 @@
 === tests/cases/conformance/types/members/objectTypeWithCallSignatureHidingMembersOfFunctionAssignmentCompat.ts ===
 interface I {
->I : I
-
     (): void;
 }
 
 var i: I;
 >i : I
->I : I
 
 var f: Object;
 >f : Object
->Object : Object
 
 f = i;
 >f = i : I

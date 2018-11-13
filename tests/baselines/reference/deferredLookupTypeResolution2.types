@@ -3,68 +3,40 @@
 
 type StringContains<S extends string, L extends string> = ({ [K in S]: 'true' } & { [key: string]: 'false'})[L];
 >StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->S : S
->L : L
->K : K
->S : S
 >key : string
->L : L
 
-type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>;
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->O : O
->L : L
->StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->O : O
->L : L
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>;
+>ObjectHasKey : ({ [K in Extract<keyof O, string>]: "true"; } & { [key: string]: "false"; })[L]
 
 type A<T> = ObjectHasKey<T, '0'>;
->A : ({ [K in S]: "true"; } & { [key: string]: "false"; })["0"]
->T : T
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->T : T
+>A : ({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["0"]
 
 type B = ObjectHasKey<[string, number], '1'>;  // "true"
 >B : "true"
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
 
 type C = ObjectHasKey<[string, number], '2'>;  // "false"
 >C : "false"
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
 
 type D = A<[string]>;  // "true"
 >D : "true"
->A : ({ [K in S]: "true"; } & { [key: string]: "false"; })["0"]
 
 // Error, "false" not handled
 type E<T> = { true: 'true' }[ObjectHasKey<T, '1'>];
->E : { true: "true"; }[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]
->T : T
+>E : { true: "true"; }[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
 >true : "true"
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->T : T
 
 type Juxtapose<T> = ({ true: 'otherwise' } & { [k: string]: 'true' })[ObjectHasKey<T, '1'>];
->Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]
->T : T
+>Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]
 >true : "otherwise"
 >k : string
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->T : T
 
 // Error, "otherwise" is missing
 type DeepError<T> = { true: 'true' }[Juxtapose<T>];
->DeepError : { true: "true"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]]
->T : T
+>DeepError : { true: "true"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
 >true : "true"
->Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]
->T : T
 
 type DeepOK<T> = { true: 'true', otherwise: 'false' }[Juxtapose<T>];
->DeepOK : { true: "true"; otherwise: "false"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]]
->T : T
+>DeepOK : { true: "true"; otherwise: "false"; }[({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["1"]]]
 >true : "true"
 >otherwise : "false"
->Juxtapose : ({ true: "otherwise"; } & { [k: string]: "true"; })[({ [K in S]: "true"; } & { [key: string]: "false"; })["1"]]
->T : T
 

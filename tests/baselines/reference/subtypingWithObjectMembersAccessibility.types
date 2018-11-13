@@ -21,7 +21,6 @@ class A {
 
     public foo: Base;
 >foo : Base
->Base : Base
 }
 
 class B extends A {
@@ -30,14 +29,13 @@ class B extends A {
 
     private foo: Derived; // error
 >foo : Derived
->Derived : Derived
 }
 
 class A2 {
 >A2 : A2
 
     public 1: Base; 
->Base : Base
+>1 : Base
 }
 
 class B2 extends A2 {
@@ -45,14 +43,14 @@ class B2 extends A2 {
 >A2 : A2
 
     private 1: Derived; // error
->Derived : Derived
+>1 : Derived
 }
 
 class A3 {
 >A3 : A3
 
     public '1': Base;
->Base : Base
+>'1' : Base
 }
 
 class B3 extends A3 {
@@ -60,5 +58,5 @@ class B3 extends A3 {
 >A3 : A3
 
     private '1': Derived; // error
->Derived : Derived
+>'1' : Derived
 }

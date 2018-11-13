@@ -17,9 +17,11 @@ function f<T, K extends keyof T>() {
 >v : Symbol(v, Decl(computedPropertyNames51_ES6.ts, 3, 7))
 
         [t]: 0,
+>[t] : Symbol([t], Decl(computedPropertyNames51_ES6.ts, 3, 13))
 >t : Symbol(t, Decl(computedPropertyNames51_ES6.ts, 1, 7))
 
         [k]: 1
+>[k] : Symbol([k], Decl(computedPropertyNames51_ES6.ts, 4, 15))
 >k : Symbol(k, Decl(computedPropertyNames51_ES6.ts, 2, 7))
 
     };

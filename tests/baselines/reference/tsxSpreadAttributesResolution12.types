@@ -12,7 +12,7 @@ const obj1: {x: 2} = {
 >{    x: 2} : { x: 2; }
 
     x: 2
->x : number
+>x : 2
 >2 : 2
 }
 const obj3: {y: false, overwrite: string} = {
@@ -23,7 +23,7 @@ const obj3: {y: false, overwrite: string} = {
 >{    y: false,    overwrite: "hi"} : { y: false; overwrite: string; }
 
     y: false,
->y : boolean
+>y : false
 >false : false
 
     overwrite: "hi"
@@ -32,8 +32,6 @@ const obj3: {y: false, overwrite: string} = {
 }
 
 interface Prop {
->Prop : Prop
-
     x: 2
 >x : 2
 
@@ -50,7 +48,6 @@ class OverWriteAttr extends React.Component<Prop, {}> {
 >React.Component : React.Component<Prop, {}>
 >React : typeof React
 >Component : typeof React.Component
->Prop : Prop
 
     render() {
 >render : () => JSX.Element
@@ -83,7 +80,7 @@ let x1 = <OverWriteAttr overwrite="hi" {...obj1} x={3} {...{y: true}} />
 >obj1 : { x: 2; }
 >x : number
 >3 : 3
->{y: true} : { y: true; }
+>{y: true} : { y: boolean; }
 >y : boolean
 >true : true
 
@@ -92,7 +89,7 @@ let x2 = <OverWriteAttr {...anyobj} x={3} />
 ><OverWriteAttr {...anyobj} x={3} /> : JSX.Element
 >OverWriteAttr : typeof OverWriteAttr
 >anyobj : any
->x : number
+>x : 3
 >3 : 3
 
 let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
@@ -101,7 +98,7 @@ let x3 = <OverWriteAttr overwrite="hi" {...obj1} {...{y: true}} />
 >OverWriteAttr : typeof OverWriteAttr
 >overwrite : string
 >obj1 : { x: 2; }
->{y: true} : { y: true; }
+>{y: true} : { y: boolean; }
 >y : boolean
 >true : true
 

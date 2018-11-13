@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.ts
 // Not included:
 ////export function abcde() {}
@@ -12,11 +14,10 @@
 // @Filename: /b.ts
 ////bdf/**/
 
-goTo.marker("");
-
-verify.not.completionListContains({ name: "abcde", source: "/a" });
-verify.not.completionListContains({ name: "dbf", source: "/a" });
-
-verify.completionListContains({ name: "bdf", source: "/a" }, "function bdf(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.completionListContains({ name: "abcdef", source: "/a" }, "function abcdef(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-verify.completionListContains({ name: "BDF", source: "/a" }, "function BDF(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
+verify.completions({
+    marker: "",
+    includes: ["bdf", "abcdef", "BDF"].map(name =>
+        ({ name, source: "/a", text: `function ${name}(): void`, hasAction: true, kind: "function", kindModifiers: "export", sourceDisplay: "./a" })),
+    excludes: ["abcde", "dbf"],
+    preferences: { includeCompletionsForModuleExports: true },
+})

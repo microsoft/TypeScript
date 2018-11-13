@@ -12,6 +12,7 @@ class A {
 >A : Symbol(A, Decl(typeParametersAndParametersInComputedNames.ts, 2, 1))
 
     [foo<T>(a)]<T>(a: T) {  
+>[foo<T>(a)] : Symbol(A[foo<T>(a)], Decl(typeParametersAndParametersInComputedNames.ts, 4, 9))
 >foo : Symbol(foo, Decl(typeParametersAndParametersInComputedNames.ts, 0, 0))
 >T : Symbol(T, Decl(typeParametersAndParametersInComputedNames.ts, 5, 16))
 >a : Symbol(a, Decl(typeParametersAndParametersInComputedNames.ts, 5, 19))

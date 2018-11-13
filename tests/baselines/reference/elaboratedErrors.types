@@ -1,7 +1,5 @@
 === tests/cases/compiler/elaboratedErrors.ts ===
 interface FileSystem {
->FileSystem : FileSystem
-
   read: number;
 >read : number
 }
@@ -9,43 +7,34 @@ interface FileSystem {
 function fn(s: WorkerFS): void;
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
 >s : WorkerFS
->WorkerFS : WorkerFS
 
 function fn(s: FileSystem): void;
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
 >s : FileSystem
->FileSystem : FileSystem
 
 function fn(s: FileSystem|WorkerFS) { }
 >fn : { (s: WorkerFS): void; (s: FileSystem): void; }
 >s : FileSystem | WorkerFS
->FileSystem : FileSystem
->WorkerFS : WorkerFS
 
 // This should issue a large error, not a small one
 class WorkerFS implements FileSystem {
 >WorkerFS : WorkerFS
->FileSystem : FileSystem
 
   read: string;
 >read : string
 }
 
 interface Alpha { x: string; }
->Alpha : Alpha
 >x : string
 
 interface Beta { y: number; }
->Beta : Beta
 >y : number
 
 var x: Alpha;
 >x : Alpha
->Alpha : Alpha
 
 var y: Beta;
 >y : Beta
->Beta : Beta
 
 // Only one of these errors should be large
 x = y;

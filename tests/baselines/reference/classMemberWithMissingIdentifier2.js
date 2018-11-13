@@ -6,8 +6,11 @@ class C {
 //// [classMemberWithMissingIdentifier2.js]
 var C = /** @class */ (function () {
     function C() {
-        this. = (_a = {}, _a[name] = string, _a.VariableDeclaration = VariableDeclaration, _a);
-        var _a;
     }
     return C;
 }());
+{
+    [name, string];
+    VariableDeclaration;
+}
+;

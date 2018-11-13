@@ -21,48 +21,36 @@ module OnlyDerived {
     class S { foo: Derived; }
 >S : S
 >foo : Derived
->Derived : Derived
 
     class T { foo: Derived2; }
 >T : T
 >foo : Derived2
->Derived2 : Derived2
 
     var s: S;
 >s : S
->S : S
 
     var t: T;
 >t : T
->T : T
 
     interface S2 { foo: Derived; }
->S2 : S2
 >foo : Derived
->Derived : Derived
 
     interface T2 { foo: Derived2; }
->T2 : T2
 >foo : Derived2
->Derived2 : Derived2
 
     var s2: S2;
 >s2 : S2
->S2 : S2
 
     var t2: T2;
 >t2 : T2
->T2 : T2
 
     var a: { foo: Derived; }
 >a : { foo: Derived; }
 >foo : Derived
->Derived : Derived
 
     var b: { foo: Derived2; }
 >b : { foo: Derived2; }
 >foo : Derived2
->Derived2 : Derived2
 
     var a2 = { foo: new Derived() };
 >a2 : { foo: Derived; }
@@ -194,48 +182,36 @@ module WithBase {
     class S { foo: Base; }
 >S : S
 >foo : Base
->Base : Base
 
     class T { foo: Derived2; }
 >T : T
 >foo : Derived2
->Derived2 : Derived2
 
     var s: S;
 >s : S
->S : S
 
     var t: T;
 >t : T
->T : T
 
     interface S2 { foo: Base; }
->S2 : S2
 >foo : Base
->Base : Base
 
     interface T2 { foo: Derived2; }
->T2 : T2
 >foo : Derived2
->Derived2 : Derived2
 
     var s2: S2;
 >s2 : S2
->S2 : S2
 
     var t2: T2;
 >t2 : T2
->T2 : T2
 
     var a: { foo: Base; }
 >a : { foo: Base; }
 >foo : Base
->Base : Base
 
     var b: { foo: Derived2; }
 >b : { foo: Derived2; }
 >foo : Derived2
->Derived2 : Derived2
 
     var a2 = { foo: new Base() };
 >a2 : { foo: Base; }

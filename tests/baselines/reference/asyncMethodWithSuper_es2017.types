@@ -5,6 +5,9 @@ class A {
     x() {
 >x : () => void
     }
+    y() {
+>y : () => void
+    }
 }
 
 class B extends A {
@@ -21,6 +24,13 @@ class B extends A {
 >super.x : () => void
 >super : A
 >x : () => void
+
+        // call additional property.
+        super.y();
+>super.y() : void
+>super.y : () => void
+>super : A
+>y : () => void
 
         // call with element access
         super["x"]();
@@ -121,3 +131,4 @@ class B extends A {
 >f : () => void
     }
 }
+

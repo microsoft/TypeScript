@@ -5,7 +5,6 @@ type BrandedNum = number & { __numberBrand: any };
 
 var x : BrandedNum;
 >x : BrandedNum
->BrandedNum : BrandedNum
 
 // operator >
 x > 0;
@@ -23,7 +22,6 @@ x > <BrandedNum>0;
 >x > <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator <
@@ -42,7 +40,6 @@ x < <BrandedNum>0;
 >x < <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator >=
@@ -61,7 +58,6 @@ x >= <BrandedNum>0;
 >x >= <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator <=
@@ -80,7 +76,6 @@ x <= <BrandedNum>0;
 >x <= <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator ==
@@ -99,7 +94,6 @@ x == <BrandedNum>0;
 >x == <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator !=
@@ -118,7 +112,6 @@ x != <BrandedNum>0;
 >x != <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator ===
@@ -137,7 +130,6 @@ x === <BrandedNum>0;
 >x === <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 
 // operator !==
@@ -156,6 +148,5 @@ x !== <BrandedNum>0;
 >x !== <BrandedNum>0 : boolean
 >x : BrandedNum
 ><BrandedNum>0 : BrandedNum
->BrandedNum : BrandedNum
 >0 : 0
 

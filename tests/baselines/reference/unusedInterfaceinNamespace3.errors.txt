@@ -1,4 +1,4 @@
-tests/cases/compiler/unusedInterfaceinNamespace3.ts(10,15): error TS6133: 'i3' is declared but its value is never read.
+tests/cases/compiler/unusedInterfaceinNamespace3.ts(10,15): error TS6196: 'i3' is declared but never used.
 
 
 ==== tests/cases/compiler/unusedInterfaceinNamespace3.ts (1 errors) ====
@@ -13,7 +13,7 @@ tests/cases/compiler/unusedInterfaceinNamespace3.ts(10,15): error TS6133: 'i3' i
     
         interface i3 extends i1 {
                   ~~
-!!! error TS6133: 'i3' is declared but its value is never read.
+!!! error TS6196: 'i3' is declared but never used.
     
         }
     }

@@ -25,7 +25,6 @@ import iArray = require('./expArray');
 
 var v4: Array<number> = iArray;
 >v4 : number[]
->Array : T[]
 >iArray : number[]
 
 import iObject = require('./expObject');
@@ -33,7 +32,6 @@ import iObject = require('./expObject');
 
 var v5: Object = iObject;
 >v5 : Object
->Object : Object
 >iObject : { answer: number; when: number; }
 
 import iAny = require('./expAny');
@@ -48,10 +46,7 @@ import iGeneric = require('./expGeneric');
 
 var v7: {<x>(p1: x): x} = iGeneric;
 >v7 : <x>(p1: x) => x
->x : x
 >p1 : x
->x : x
->x : x
 >iGeneric : <T>(a: T) => T
 
 === tests/cases/conformance/externalModules/expString.ts ===
@@ -110,9 +105,7 @@ export = x;
 === tests/cases/conformance/externalModules/expGeneric.ts ===
 function x<T>(a: T){
 >x : <T>(a: T) => T
->T : T
 >a : T
->T : T
 
 	return a;
 >a : T

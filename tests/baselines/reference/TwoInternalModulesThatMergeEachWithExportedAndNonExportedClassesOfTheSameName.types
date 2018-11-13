@@ -23,7 +23,6 @@ module A {
 >fromCarthesian : (p: A.Point) => { x: number; y: number; }
 >p : A.Point
 >A : any
->Point : A.Point
 
             return { x: p.x, y: p.y };
 >{ x: p.x, y: p.y } : { x: number; y: number; }
@@ -48,7 +47,6 @@ var p: { x: number; y: number; };
 var p: A.Point;
 >p : { x: number; y: number; }
 >A : any
->Point : A.Point
 
 module X.Y.Z {
 >X : typeof X
@@ -92,6 +90,5 @@ var l: X.Y.Z.Line;
 >X : any
 >Y : any
 >Z : any
->Line : X.Y.Z.Line
 
 

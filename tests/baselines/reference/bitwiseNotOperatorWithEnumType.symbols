@@ -5,6 +5,7 @@ enum ENUM1 { A, B, "" };
 >ENUM1 : Symbol(ENUM1, Decl(bitwiseNotOperatorWithEnumType.ts, 0, 0))
 >A : Symbol(ENUM1.A, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 12))
 >B : Symbol(ENUM1.B, Decl(bitwiseNotOperatorWithEnumType.ts, 2, 15))
+>"" : Symbol(ENUM1[""], Decl(bitwiseNotOperatorWithEnumType.ts, 2, 18))
 
 // enum type var
 var ResultIsNumber1 = ~ENUM1;

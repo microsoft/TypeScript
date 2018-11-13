@@ -8,6 +8,7 @@ declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX
 >l : Symbol(l, Decl(file.tsx, 2, 39))
 >prop : Symbol(prop, Decl(file.tsx, 2, 43))
 >U : Symbol(U, Decl(file.tsx, 2, 36))
+>"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 2, 51))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 

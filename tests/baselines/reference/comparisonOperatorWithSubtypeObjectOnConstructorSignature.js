@@ -223,9 +223,12 @@ var r8b9 = b9 !== a9;
 
 //// [comparisonOperatorWithSubtypeObjectOnConstructorSignature.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -431,4 +434,4 @@ var r8b6 = b6 !== a6;
 var r8b7 = b7 !== a7;
 var r8b8 = b8 !== a8;
 var r8b9 = b9 !== a9;
-//var r8b10 = b10 !== a10; 
+//var r8b10 = b10 !== a10;

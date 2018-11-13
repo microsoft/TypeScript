@@ -1,0 +1,17 @@
+tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts(2,24): error TS2313: Type parameter 'T' has a circular constraint.
+tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts(2,32): error TS2313: Type parameter 'P' has a circular constraint.
+tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts(3,5): error TS2365: Operator '+=' cannot be applied to types 'number' and 'T[K]'.
+
+
+==== tests/cases/compiler/incorrectRecursiveMappedTypeConstraint.ts (3 errors) ====
+    // #17847
+    function sum<T extends { [P in T]: number }, K extends keyof T>(n: number, v: T, k: K) {
+                           ~~~~~~~~~~~~~~~~~~~~
+!!! error TS2313: Type parameter 'T' has a circular constraint.
+                                   ~
+!!! error TS2313: Type parameter 'P' has a circular constraint.
+        n += v[k];
+        ~~~~~~~~~
+!!! error TS2365: Operator '+=' cannot be applied to types 'number' and 'T[K]'.
+    }
+    

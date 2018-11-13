@@ -3,6 +3,6 @@
 // Should return definition of locally declared functions
 
 //// he/*function_call*/llo();
-//// [|function hello() {}|]
+//// function [|hello|]() {}
 
 verify.allRangesAppearInImplementationList("function_call");

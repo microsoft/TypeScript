@@ -1,0 +1,8 @@
+=== tests/cases/compiler/metadataImportType.ts ===
+export class A {
+>A : Symbol(A, Decl(metadataImportType.ts, 0, 0))
+
+    @test
+    b: import('./b').B
+>b : Symbol(A.b, Decl(metadataImportType.ts, 0, 16))
+}

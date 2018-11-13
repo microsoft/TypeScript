@@ -4,44 +4,31 @@ import React = require('react')
 
 declare function OverloadComponent<U>(): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
->U : U
 >JSX : any
->Element : JSX.Element
 
 declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": boolean}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
->U : U
 >attr : { b: U; a?: string; "ignore-prop": boolean; }
 >b : U
->U : U
 >a : string
+>"ignore-prop" : boolean
 >JSX : any
->Element : JSX.Element
 
 declare function OverloadComponent<T, U>(attr: {b: U, a: T}): JSX.Element;
 >OverloadComponent : { <U>(): JSX.Element; <U>(attr: { b: U; a?: string; "ignore-prop": boolean; }): JSX.Element; <T, U>(attr: { b: U; a: T; }): JSX.Element; }
->T : T
->U : U
 >attr : { b: U; a: T; }
 >b : U
->U : U
 >a : T
->T : T
 >JSX : any
->Element : JSX.Element
 
 // OK
 function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, arg2: U) {
 >Baz : <T extends { b: number; }, U extends { a: boolean; b: string; }>(arg1: T, arg2: U) => void
->T : T
 >b : number
->U : U
 >a : boolean
 >b : string
 >arg1 : T
->T : T
 >arg2 : U
->U : U
 
     let a0 = <OverloadComponent {...arg1} a="hello" ignore-prop />;
 >a0 : JSX.Element
@@ -95,24 +82,18 @@ function Baz<T extends {b: number}, U extends {a: boolean, b:string}>(arg1: T, a
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
->U : U
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
->U : U
 >JSX : any
->Element : JSX.Element
 
 declare function Link<U>(l: {func: (arg1:U, arg2: string)=>void}): JSX.Element;
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
->U : U
 >l : { func: (arg1: U, arg2: string) => void; }
 >func : (arg1: U, arg2: string) => void
 >arg1 : U
->U : U
 >arg2 : string
 >JSX : any
->Element : JSX.Element
 
 function createLink(func: (a: number)=>void) {
 >createLink : (func: (a: number) => void) => void
@@ -130,8 +111,8 @@ function createLink(func: (a: number)=>void) {
 >o1 : JSX.Element
 ><Link func={(a:number, b:string)=>{}} /> : JSX.Element
 >Link : { <U>(l: { func: (arg: U) => void; }): JSX.Element; <U>(l: { func: (arg1: U, arg2: string) => void; }): JSX.Element; }
->func : (a: number, b: string) => any
->(a:number, b:string)=>{} : (a: number, b: string) => any
+>func : (a: number, b: string) => void
+>(a:number, b:string)=>{} : (a: number, b: string) => void
 >a : number
 >b : string
 }

@@ -5,13 +5,9 @@ export var ID = "test";
 
 export class DiffEditor<A, B, C> {
 >DiffEditor : DiffEditor<A, B, C>
->A : A
->B : B
->C : C
 
     private previousDiffAction: NavigateAction;
 >previousDiffAction : NavigateAction
->NavigateAction : NavigateAction
 
     constructor(id: string = ID) {
 >id : string
@@ -24,7 +20,6 @@ class NavigateAction {
     f(editor: DiffEditor<any, any, any>) {
 >f : (editor: DiffEditor<any, any, any>) => void
 >editor : DiffEditor<any, any, any>
->DiffEditor : DiffEditor<A, B, C>
     }
 }
 

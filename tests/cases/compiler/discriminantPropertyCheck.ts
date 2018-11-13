@@ -67,3 +67,35 @@ function foo6(x: Item) {
         x.foo.length;  // Error, intervening discriminant guard
     }
 }
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+
+type Instance = StrType | NumType;
+
+interface StrType {
+    type: Types.Str;
+    value: string;
+    length: number;
+}
+
+interface NumType {
+    type: Types.Num;
+    value: number;
+}
+
+function func2(inst: Instance) {
+    while (true) {
+        switch (inst.type) {
+            case Types.Str: {
+                inst.value.length;
+                break;
+            }
+            case Types.Num: {
+                inst.value.toExponential;
+                break;
+            }
+        }
+    }
+}

@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaceClassMerging.ts ===
 interface Foo {
->Foo : Foo
-
     method(a: number): string;
 >method : (a: number) => string
 >a : number

@@ -3,10 +3,10 @@ var iterableWithOptionalIterator: {
 >iterableWithOptionalIterator : { [Symbol.iterator]?(): Iterator<string>; }
 
     [Symbol.iterator]?(): Iterator<string>
+>[Symbol.iterator] : () => Iterator<string>
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->Iterator : Iterator<T>
 
 };
 

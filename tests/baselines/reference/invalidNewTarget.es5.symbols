@@ -9,6 +9,8 @@ class C {
 >C : Symbol(C, Decl(invalidNewTarget.es5.ts, 1, 27))
 
     [new.target]() { }
+>[new.target] : Symbol(C[new.target], Decl(invalidNewTarget.es5.ts, 3, 9))
+
     c() { return new.target; }
 >c : Symbol(C.c, Decl(invalidNewTarget.es5.ts, 4, 22))
 
@@ -24,6 +26,8 @@ class C {
 >f : Symbol(C.f, Decl(invalidNewTarget.es5.ts, 7, 32))
 
     static [new.target]() { }
+>[new.target] : Symbol(C[new.target], Decl(invalidNewTarget.es5.ts, 8, 25))
+
     static g() { return new.target; }
 >g : Symbol(C.g, Decl(invalidNewTarget.es5.ts, 10, 29))
 
@@ -43,6 +47,7 @@ const O = {
 >O : Symbol(O, Decl(invalidNewTarget.es5.ts, 17, 5))
 
     [new.target]: undefined,
+>[new.target] : Symbol([new.target], Decl(invalidNewTarget.es5.ts, 17, 11))
 >undefined : Symbol(undefined)
 
     k() { return new.target; },

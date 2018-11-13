@@ -3,35 +3,34 @@ declare module M {
 >M : typeof M
 
     export class Function {
->Function : Function
+>Function : M.Function
 
         constructor(...args: string[]);
 >args : string[]
     }
     export function Function(...args: any[]): any;
->Function : (...args: any[]) => any
+>Function : { (...args: any[]): any; (...args: string[]): Function; }
 >args : any[]
 
     export function Function(...args: string[]): Function;
->Function : (...args: string[]) => Function
+>Function : { (...args: any[]): any; (...args: string[]): Function; }
 >args : string[]
->Function : Function
 }
 
 
 (new M.Function("return 5"))();
 >(new M.Function("return 5"))() : any
->(new M.Function("return 5")) : M.Function
->new M.Function("return 5") : M.Function
->M.Function : typeof M.Function
+>(new M.Function("return 5")) : any
+>new M.Function("return 5") : any
+>M.Function : { (...args: any[]): any; (...args: string[]): Function; }
 >M : typeof M
->Function : typeof M.Function
+>Function : { (...args: any[]): any; (...args: string[]): Function; }
 >"return 5" : "return 5"
 
 M.Function("yo");
 >M.Function("yo") : any
->M.Function : typeof M.Function
+>M.Function : { (...args: any[]): any; (...args: string[]): Function; }
 >M : typeof M
->Function : typeof M.Function
+>Function : { (...args: any[]): any; (...args: string[]): Function; }
 >"yo" : "yo"
 

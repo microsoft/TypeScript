@@ -12,6 +12,8 @@ enum E2 { one }
 var numStrTuple: [number, string] = [5, "foo"];
 var emptyObjTuple = <[{}, {}]>numStrTuple;
 var numStrBoolTuple = <[number, string, boolean]>numStrTuple;
+var shorter = numStrBoolTuple as [number, string]
+var longer = numStrTuple as [number, string, boolean]
 var classCDTuple: [C, D] = [new C(), new D()];
 var interfaceIITuple = <[I, I]>classCDTuple;
 var classCDATuple = <[C, D, A]>classCDTuple;
@@ -34,9 +36,12 @@ t4[2] = 10;
 
 //// [castingTuple.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -89,6 +94,8 @@ var E2;
 var numStrTuple = [5, "foo"];
 var emptyObjTuple = numStrTuple;
 var numStrBoolTuple = numStrTuple;
+var shorter = numStrBoolTuple;
+var longer = numStrTuple;
 var classCDTuple = [new C(), new D()];
 var interfaceIITuple = classCDTuple;
 var classCDATuple = classCDTuple;

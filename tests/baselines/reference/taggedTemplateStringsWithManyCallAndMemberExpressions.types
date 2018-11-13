@@ -1,12 +1,8 @@
 === tests/cases/conformance/es6/templates/taggedTemplateStringsWithManyCallAndMemberExpressions.ts ===
 interface I {
->I : I
-
     (strs: TemplateStringsArray, ...subs: number[]): I;
 >strs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >subs : number[]
->I : I
 
     member: {
 >member : new (s: string) => new (n: number) => new () => boolean
@@ -24,7 +20,6 @@ interface I {
 }
 var f: I;
 >f : I
->I : I
 
 var x = new new new f `abc${ 0 }def`.member("hello")(42) === true;
 >x : boolean

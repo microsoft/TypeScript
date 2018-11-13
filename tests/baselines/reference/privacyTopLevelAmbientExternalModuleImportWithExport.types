@@ -92,6 +92,8 @@ export class c_public {
 // private elements
 // Export - Error ambient modules allowed only in global
 declare module 'm' {
+>'m' : typeof import("m")
+
     export class c_private {
 >c_private : c_private
 
@@ -103,6 +105,8 @@ declare module 'm' {
 
 === tests/cases/compiler/privacyTopLevelAmbientExternalModuleImportWithExport_require3.ts ===
 declare module 'm2' {
+>'m2' : typeof import("m2")
+
     export class c_private {
 >c_private : c_private
 

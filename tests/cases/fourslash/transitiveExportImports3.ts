@@ -13,9 +13,9 @@ verify.noErrors();
 const [f0, f1, g0, f2, g1] = test.ranges();
 
 const af = { definition: "function f(): void", ranges: [f0, f1] };
-const g0Group = { definition: "import g", ranges: [g0] };
-const g1Group = { definition: "import g", ranges: [g1] };
-const bf = { definition: "import f", ranges: [f2] };
+const g0Group = { definition: "(alias) function g(): void\nexport g", ranges: [g0] };
+const g1Group = { definition: "(alias) function g(): void\nimport g", ranges: [g1] };
+const bf = { definition: "(alias) function f(): void\nimport f", ranges: [f2] };
 
 verify.referenceGroups([f0, f1], [af, g0Group, g1Group, bf]);
 verify.referenceGroups(g0, [g0Group, g1Group]);

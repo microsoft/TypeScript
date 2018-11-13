@@ -1,0 +1,29 @@
+=== tests/cases/conformance/salsa/bug24754.js ===
+// #24754
+const webpack = function (){
+>webpack : { (): void; WebpackOptionsDefaulter: number; }
+>function (){} : { (): void; WebpackOptionsDefaulter: number; }
+}
+exports = module.exports = webpack;
+>exports = module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module.exports = webpack : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module.exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>module : { "tests/cases/conformance/salsa/bug24754": { (): void; WebpackOptionsDefaulter: number; version: number; }; }
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>webpack : { (): void; WebpackOptionsDefaulter: number; }
+
+exports.version = 1001;
+>exports.version = 1001 : 1001
+>exports.version : number
+>exports : { (): void; WebpackOptionsDefaulter: number; version: number; }
+>version : number
+>1001 : 1001
+
+webpack.WebpackOptionsDefaulter = 1111;
+>webpack.WebpackOptionsDefaulter = 1111 : 1111
+>webpack.WebpackOptionsDefaulter : number
+>webpack : { (): void; WebpackOptionsDefaulter: number; }
+>WebpackOptionsDefaulter : number
+>1111 : 1111
+

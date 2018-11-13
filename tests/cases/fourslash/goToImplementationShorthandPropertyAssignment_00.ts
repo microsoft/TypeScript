@@ -14,7 +14,7 @@
 ////     Foo: FooConstructor;
 //// }
 ////
-//// var x = /*classExpression*/class Foo {
+//// var x = class /*classExpression*/Foo {
 ////     createBarInClassExpression(): Bar {
 ////         return {
 ////             Fo/*classExpressionRef*/o
@@ -24,7 +24,7 @@
 ////     someFunction() {}
 //// }
 ////
-//// /*declaredClass*/class Foo {
+//// class /*declaredClass*/Foo {
 ////
 //// }
 ////

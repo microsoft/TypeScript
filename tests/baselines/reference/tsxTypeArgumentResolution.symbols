@@ -1,0 +1,197 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+import React = require('react');
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+
+interface Prop {
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+
+    a: number,
+>a : Symbol(Prop.a, Decl(file.tsx, 2, 16))
+
+    b: string
+>b : Symbol(Prop.b, Decl(file.tsx, 3, 14))
+}
+
+declare class MyComp<P> extends React.Component<P, {}> {
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+
+    internalProp: P;
+>internalProp : Symbol(MyComp.internalProp, Decl(file.tsx, 7, 56))
+>P : Symbol(P, Decl(file.tsx, 7, 21))
+}
+
+let x = <MyComp<Prop> a={10} b="hi" />; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 11, 21))
+>b : Symbol(b, Decl(file.tsx, 11, 28))
+
+x = <MyComp<Prop> a={10} b="hi"></MyComp>; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 13, 17))
+>b : Symbol(b, Decl(file.tsx, 13, 24))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+x = <MyComp<Prop> a={10} b={20} />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 15, 17))
+>b : Symbol(b, Decl(file.tsx, 15, 24))
+
+x = <MyComp<Prop> a={10} b={20}></MyComp>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 17, 17))
+>b : Symbol(b, Decl(file.tsx, 17, 24))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+x = <MyComp<Prop, Prop> a={10} b="hi" />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 19, 23))
+>b : Symbol(b, Decl(file.tsx, 19, 30))
+
+x = <MyComp<Prop, Prop> a={10} b="hi"></MyComp>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 21, 23))
+>b : Symbol(b, Decl(file.tsx, 21, 30))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+x = <MyComp<> a={10} b="hi" />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>a : Symbol(a, Decl(file.tsx, 23, 13))
+>b : Symbol(b, Decl(file.tsx, 23, 20))
+
+x = <MyComp<> a={10} b="hi"></MyComp>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>a : Symbol(a, Decl(file.tsx, 25, 13))
+>b : Symbol(b, Decl(file.tsx, 25, 20))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+x= <MyComp<{}> /> // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+x= <MyComp<{}>></MyComp> // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+>MyComp : Symbol(MyComp, Decl(file.tsx, 5, 1))
+
+declare class MyComp2<P extends { a: string }, P2 = {}> extends React.Component<P & P2, {}> {
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>P : Symbol(P, Decl(file.tsx, 31, 22))
+>a : Symbol(a, Decl(file.tsx, 31, 33))
+>P2 : Symbol(P2, Decl(file.tsx, 31, 46))
+>React.Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>React : Symbol(React, Decl(file.tsx, 0, 0))
+>Component : Symbol(React.Component, Decl(react.d.ts, 158, 55), Decl(react.d.ts, 161, 66))
+>P : Symbol(P, Decl(file.tsx, 31, 22))
+>P2 : Symbol(P2, Decl(file.tsx, 31, 46))
+
+    internalProp: [P, P2];
+>internalProp : Symbol(MyComp2.internalProp, Decl(file.tsx, 31, 93))
+>P : Symbol(P, Decl(file.tsx, 31, 22))
+>P2 : Symbol(P2, Decl(file.tsx, 31, 46))
+}
+x = <MyComp2<{a: string, b: string}> a="a" b="b" />; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 34, 14))
+>b : Symbol(b, Decl(file.tsx, 34, 24))
+>a : Symbol(a, Decl(file.tsx, 34, 36))
+>b : Symbol(b, Decl(file.tsx, 34, 42))
+
+x = <MyComp2<{a: string, b: string}> a="a" b="b"></MyComp2>; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 36, 14))
+>b : Symbol(b, Decl(file.tsx, 36, 24))
+>a : Symbol(a, Decl(file.tsx, 36, 36))
+>b : Symbol(b, Decl(file.tsx, 36, 42))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+
+x = <MyComp2<Prop> a={10} b="hi" />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 38, 18))
+>b : Symbol(b, Decl(file.tsx, 38, 25))
+
+x = <MyComp2<Prop> a={10} b="hi"></MyComp2>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 40, 18))
+>b : Symbol(b, Decl(file.tsx, 40, 25))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi" />; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 42, 14))
+>b : Symbol(b, Decl(file.tsx, 42, 27))
+>a : Symbol(a, Decl(file.tsx, 42, 38))
+>b : Symbol(b, Decl(file.tsx, 42, 45))
+
+x = <MyComp2<{a: string}, {b: string}> a="hi" b="hi"></MyComp2>; // OK
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 44, 14))
+>b : Symbol(b, Decl(file.tsx, 44, 27))
+>a : Symbol(a, Decl(file.tsx, 44, 38))
+>b : Symbol(b, Decl(file.tsx, 44, 45))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi" />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 46, 14))
+>b : Symbol(b, Decl(file.tsx, 46, 27))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 46, 44))
+>b : Symbol(b, Decl(file.tsx, 46, 51))
+
+x = <MyComp2<{a: string}, {b: string}, Prop> a="hi" b="hi"></MyComp2>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 48, 14))
+>b : Symbol(b, Decl(file.tsx, 48, 27))
+>Prop : Symbol(Prop, Decl(file.tsx, 0, 32))
+>a : Symbol(a, Decl(file.tsx, 48, 44))
+>b : Symbol(b, Decl(file.tsx, 48, 51))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi" />; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 50, 14))
+>b : Symbol(b, Decl(file.tsx, 50, 27))
+>a : Symbol(a, Decl(file.tsx, 50, 38))
+>b : Symbol(b, Decl(file.tsx, 50, 45))
+
+x = <MyComp2<{a: string}, {b: number}> a="hi" b="hi"></MyComp2>; // error
+>x : Symbol(x, Decl(file.tsx, 11, 3))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+>a : Symbol(a, Decl(file.tsx, 52, 14))
+>b : Symbol(b, Decl(file.tsx, 52, 27))
+>a : Symbol(a, Decl(file.tsx, 52, 38))
+>b : Symbol(b, Decl(file.tsx, 52, 45))
+>MyComp2 : Symbol(MyComp2, Decl(file.tsx, 29, 24))
+

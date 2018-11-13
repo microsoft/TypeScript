@@ -1,0 +1,23 @@
+=== tests/cases/conformance/salsa/a.js ===
+var obj = {};
+>obj : typeof obj
+>{} : {}
+
+obj.method = function (hunch) {
+>obj.method = function (hunch) {    return true;} : (hunch: any) => boolean
+>obj.method : (hunch: any) => boolean
+>obj : typeof obj
+>method : (hunch: any) => boolean
+>function (hunch) {    return true;} : (hunch: any) => boolean
+>hunch : any
+
+    return true;
+>true : true
+}
+var b = obj.method();
+>b : boolean
+>obj.method() : boolean
+>obj.method : (hunch: any) => boolean
+>obj : typeof obj
+>method : (hunch: any) => boolean
+

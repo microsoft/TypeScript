@@ -3,7 +3,6 @@
 /** @typedef {function} T */
 declare const x: T;
 >x : T
->T : T
 
 class T {
 >T : T
@@ -24,7 +23,6 @@ x.prop;
  */
 declare const myType: MyType; // should error, no such type
 >myType : any
->MyType : No type information available!
 
 // @param type has no effect.
 /**
@@ -65,27 +63,20 @@ z.x = 1; // Error
 // @template tag should not interfere with constraint or default.
 /** @template T */
 interface I<T extends number = 0> {}
->I : I<T>
->T : T
 
 /** @template T */
 function tem<T extends number>(t: T): I<T> { return {}; }
 >tem : <T extends number>(t: T) => I<T>
->T : T
 >t : T
->T : T
->I : I<T>
->T : T
 >{} : {}
 
 let i: I; // Should succeed thanks to type parameter default
 >i : I<0>
->I : I<T>
 
 /** @typedef {string} N.Str */
 import M = N; // Error: @typedef does not create namespaces in TypeScript code.
 >M : any
->N : No type information available!
+>N : any
 
 // Not legal JSDoc, but that shouldn't matter in TypeScript.
 /**
@@ -101,4 +92,22 @@ const obj = { foo: (a, b) => a + b };
 >a + b : any
 >a : any
 >b : any
+
+/** @enum {string} */
+var E = {};
+>E : {}
+>{} : {}
+
+E[""];
+>E[""] : any
+>E : {}
+>"" : ""
+
+// make sure import types in JSDoc are not resolved
+/** @type {import("should-not-be-resolved").Type} */
+var v = import(String());
+>v : Promise<any>
+>import(String()) : Promise<any>
+>String() : string
+>String : StringConstructor
 

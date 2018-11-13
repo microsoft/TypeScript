@@ -31,9 +31,9 @@ function f1() {
 >j : Symbol(j, Decl(nestedLoopTypeGuards.ts, 7, 20), Decl(nestedLoopTypeGuards.ts, 10, 24))
 
                     a.length; // Should not error here
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 3, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
                 }
             }
         }
@@ -56,9 +56,9 @@ function f2() {
 
                 while (1) {
                     a.length; // Should not error here
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(nestedLoopTypeGuards.ts, 19, 7))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
                 }
             }
         }

@@ -9,11 +9,9 @@ class Base {
 
         bar: Object;
 >bar : Object
->Object : Object
     }
     constructor(x: Object) {
 >x : Object
->Object : Object
     }
 }
 

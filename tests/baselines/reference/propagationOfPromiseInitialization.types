@@ -1,25 +1,15 @@
 === tests/cases/compiler/propagationOfPromiseInitialization.ts ===
 interface IPromise<T> {
->IPromise : IPromise<T>
->T : T
-
     then<TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult): IPromise<TResult>;
 >then : <TResult>(successCallback: (promiseValue: T) => TResult, errorCallback?: (reason: any) => TResult) => IPromise<TResult>
->TResult : TResult
 >successCallback : (promiseValue: T) => TResult
 >promiseValue : T
->T : T
->TResult : TResult
 >errorCallback : (reason: any) => TResult
 >reason : any
->TResult : TResult
->IPromise : IPromise<T>
->TResult : TResult
 }
 
 var foo: IPromise<number>;
 >foo : IPromise<number>
->IPromise : IPromise<T>
 
 foo.then((x) => {
 >foo.then((x) => {    // x is inferred to be a number    return "asdf";}).then((x) => {    // x is inferred to be string    x.length;    return 123;}) : IPromise<number>

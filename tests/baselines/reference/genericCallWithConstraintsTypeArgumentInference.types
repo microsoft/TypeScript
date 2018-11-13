@@ -17,22 +17,16 @@ class Derived2 extends Derived { baz: string; }
 
 var b: Base;
 >b : Base
->Base : Base
 
 var d1: Derived;
 >d1 : Derived
->Derived : Derived
 
 var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
 function foo<T extends Base>(t: T) {
 >foo : <T extends Base>(t: T) => T
->T : T
->Base : Base
 >t : T
->T : T
 
     return t;
 >t : T
@@ -52,14 +46,8 @@ var r2 = foo(d1); // Derived
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >foo2 : <T extends Base, U extends Derived>(t: T, u: U) => U
->T : T
->Base : Base
->U : U
->Derived : Derived
 >t : T
->T : T
 >u : U
->U : U
 
     return u;
 >u : U
@@ -67,16 +55,10 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 
 function foo2b<T extends Base, U extends Derived>(u: U) {
 >foo2b : <T extends Base, U extends Derived>(u: U) => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 >u : U
->U : U
 
     var x: T;
 >x : T
->T : T
 
     return x;
 >x : T
@@ -84,14 +66,9 @@ function foo2b<T extends Base, U extends Derived>(u: U) {
 
 function foo2c<T extends Base, U extends Derived>() {
 >foo2c : <T extends Base, U extends Derived>() => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 
     var x: T;
 >x : T
->T : T
 
     return x;
 >x : T
@@ -110,24 +87,16 @@ var r3b = foo2c(); // Base
 
 class C<T extends Base, U extends Derived> {
 >C : C<T, U>
->T : T
->Base : Base
->U : U
->Derived : Derived
 
     constructor(public t: T, public u: U) {
 >t : T
->T : T
 >u : U
->U : U
     }
 
     foo(t: T, u: U) {
 >foo : (t: T, u: U) => T
 >t : T
->T : T
 >u : U
->U : U
 
         return t;
 >t : T
@@ -136,9 +105,7 @@ class C<T extends Base, U extends Derived> {
     foo2(t: T, u: U) {
 >foo2 : (t: T, u: U) => U
 >t : T
->T : T
 >u : U
->U : U
 
         return u;
 >u : U
@@ -146,12 +113,8 @@ class C<T extends Base, U extends Derived> {
 
     foo3<T extends Derived>(t: T, u: U) {
 >foo3 : <T extends Derived>(t: T, u: U) => T
->T : T
->Derived : Derived
 >t : T
->T : T
 >u : U
->U : U
 
         return t;
 >t : T
@@ -159,12 +122,8 @@ class C<T extends Base, U extends Derived> {
 
     foo4<U extends Derived2>(t: T, u: U) {
 >foo4 : <U extends Derived2>(t: T, u: U) => T
->U : U
->Derived2 : Derived2
 >t : T
->T : T
 >u : U
->U : U
 
         return t;
 >t : T
@@ -172,14 +131,8 @@ class C<T extends Base, U extends Derived> {
 
     foo5<T extends Derived, U extends Derived2>(t: T, u: U) {
 >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->T : T
->Derived : Derived
->U : U
->Derived2 : Derived2
 >t : T
->T : T
 >u : U
->U : U
 
         return t;
 >t : T
@@ -187,14 +140,9 @@ class C<T extends Base, U extends Derived> {
 
     foo6<T extends Derived, U extends Derived2>() {
 >foo6 : <T extends Derived, U extends Derived2>() => T
->T : T
->Derived : Derived
->U : U
->Derived2 : Derived2
 
         var x: T;
 >x : T
->T : T
 
         return x;
 >x : T
@@ -202,16 +150,10 @@ class C<T extends Base, U extends Derived> {
 
     foo7<T extends Base, U extends Derived>(u: U) {
 >foo7 : <T extends Base, U extends Derived>(u: U) => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 >u : U
->U : U
 
         var x: T;
 >x : T
->T : T
 
         return x;
 >x : T
@@ -219,14 +161,9 @@ class C<T extends Base, U extends Derived> {
 
     foo8<T extends Base, U extends Derived>() {
 >foo8 : <T extends Base, U extends Derived>() => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 
         var x: T;
 >x : T
->T : T
 
         return x;
 >x : T
@@ -317,98 +254,48 @@ var r11 = c.foo8(); // Base
 >foo8 : <T extends Base, U extends Derived>() => T
 
 interface I<T extends Base, U extends Derived> {
->I : I<T, U>
->T : T
->Base : Base
->U : U
->Derived : Derived
-
     new (t: T, u: U);
 >t : T
->T : T
 >u : U
->U : U
 
     foo(t: T, u: U): T;
 >foo : (t: T, u: U) => T
 >t : T
->T : T
 >u : U
->U : U
->T : T
 
     foo2(t: T, u: U): U;
 >foo2 : (t: T, u: U) => U
 >t : T
->T : T
 >u : U
->U : U
->U : U
 
     foo3<T extends Derived>(t: T, u: U): T;
 >foo3 : <T extends Derived>(t: T, u: U) => T
->T : T
->Derived : Derived
 >t : T
->T : T
 >u : U
->U : U
->T : T
 
     foo4<U extends Derived2>(t: T, u: U): T;
 >foo4 : <U extends Derived2>(t: T, u: U) => T
->U : U
->Derived2 : Derived2
 >t : T
->T : T
 >u : U
->U : U
->T : T
 
     foo5<T extends Derived, U extends Derived2>(t: T, u: U): T;
 >foo5 : <T extends Derived, U extends Derived2>(t: T, u: U) => T
->T : T
->Derived : Derived
->U : U
->Derived2 : Derived2
 >t : T
->T : T
 >u : U
->U : U
->T : T
 
     foo6<T extends Derived, U extends Derived2>(): T;
 >foo6 : <T extends Derived, U extends Derived2>() => T
->T : T
->Derived : Derived
->U : U
->Derived2 : Derived2
->T : T
 
     foo7<T extends Base, U extends Derived>(u: U): T;
 >foo7 : <T extends Base, U extends Derived>(u: U) => T
->T : T
->Base : Base
->U : U
->Derived : Derived
 >u : U
->U : U
->T : T
 
     foo8<T extends Base, U extends Derived>(): T;
 >foo8 : <T extends Base, U extends Derived>() => T
->T : T
->Base : Base
->U : U
->Derived : Derived
->T : T
 }
 
 var i: I<Base, Derived>;
 >i : I<Base, Derived>
->I : I<T, U>
->Base : Base
->Derived : Derived
 
 var r4 = i.foo(d1, d2); // Base
 >r4 : Base

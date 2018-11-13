@@ -8,10 +8,11 @@ import ClassB = require("recursiveExportAssignmentAndFindAliasedType3_moduleB");
 
 export var b: ClassB; // This should result in type ClassB
 >b : ClassB
->ClassB : ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType3_moduleDef.d.ts ===
 declare module "moduleC" {
+>"moduleC" : typeof import("moduleC")
+
     import self = require("moduleD");
 >self : any
 
@@ -19,6 +20,8 @@ declare module "moduleC" {
 >self : any
 }
 declare module "moduleD" {
+>"moduleD" : typeof import("moduleD")
+
     import self = require("moduleE");
 >self : any
 
@@ -26,6 +29,8 @@ declare module "moduleD" {
 >self : any
 }
 declare module "moduleE" {
+>"moduleE" : typeof import("moduleE")
+
     import self = require("moduleC");
 >self : any
 

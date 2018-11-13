@@ -20,7 +20,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -36,7 +35,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;

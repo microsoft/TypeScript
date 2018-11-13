@@ -1,0 +1,70 @@
+=== tests/cases/conformance/enums/enumConstantMemberWithString.ts ===
+enum T1 {
+>T1 : Symbol(T1, Decl(enumConstantMemberWithString.ts, 0, 0))
+
+    a = "1",
+>a : Symbol(T1.a, Decl(enumConstantMemberWithString.ts, 0, 9))
+
+    b = "1" + "2",
+>b : Symbol(T1.b, Decl(enumConstantMemberWithString.ts, 1, 12))
+
+    c = "1" + "2" + "3",
+>c : Symbol(T1.c, Decl(enumConstantMemberWithString.ts, 2, 18))
+
+    d = "a" - "a",
+>d : Symbol(T1.d, Decl(enumConstantMemberWithString.ts, 3, 24))
+
+    e = "a" + 1
+>e : Symbol(T1.e, Decl(enumConstantMemberWithString.ts, 4, 18))
+}
+
+enum T2 {
+>T2 : Symbol(T2, Decl(enumConstantMemberWithString.ts, 6, 1))
+
+    a = "1",
+>a : Symbol(T2.a, Decl(enumConstantMemberWithString.ts, 8, 9))
+
+    b = "1" + "2"
+>b : Symbol(T2.b, Decl(enumConstantMemberWithString.ts, 9, 12))
+}
+
+enum T3 {
+>T3 : Symbol(T3, Decl(enumConstantMemberWithString.ts, 11, 1))
+
+    a = "1",
+>a : Symbol(T3.a, Decl(enumConstantMemberWithString.ts, 13, 9))
+
+    b = "1" + "2",
+>b : Symbol(T3.b, Decl(enumConstantMemberWithString.ts, 14, 12))
+
+    c = 1,
+>c : Symbol(T3.c, Decl(enumConstantMemberWithString.ts, 15, 18))
+
+    d = 1 + 2
+>d : Symbol(T3.d, Decl(enumConstantMemberWithString.ts, 16, 10))
+}
+
+enum T4 {
+>T4 : Symbol(T4, Decl(enumConstantMemberWithString.ts, 18, 1))
+
+    a = "1"
+>a : Symbol(T4.a, Decl(enumConstantMemberWithString.ts, 20, 9))
+}
+
+enum T5 {
+>T5 : Symbol(T5, Decl(enumConstantMemberWithString.ts, 22, 1))
+
+    a = "1" + "2"
+>a : Symbol(T5.a, Decl(enumConstantMemberWithString.ts, 24, 9))
+}
+
+declare enum T6 {
+>T6 : Symbol(T6, Decl(enumConstantMemberWithString.ts, 26, 1))
+
+    a = "1",
+>a : Symbol(T6.a, Decl(enumConstantMemberWithString.ts, 28, 17))
+
+    b = "1" + "2"
+>b : Symbol(T6.b, Decl(enumConstantMemberWithString.ts, 29, 12))
+}
+

@@ -5,7 +5,7 @@
  * @type Function
  */
 var isArray = Array.isArray;
->isArray : (arg: any) => arg is any[]
+>isArray : Function
 >Array.isArray : (arg: any) => arg is any[]
 >Array : ArrayConstructor
 >isArray : (arg: any) => arg is any[]

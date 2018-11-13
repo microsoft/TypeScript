@@ -5,7 +5,6 @@ class MyClass {
 
     public callableThing: CallableExtention<string>;
 >callableThing : CallableExtention<string>
->CallableExtention : CallableExtention<T>
 
     public myMethod() {
 >myMethod : () => void
@@ -21,20 +20,10 @@ class MyClass {
 }
 === tests/cases/compiler/genericWithCallSignatures_0.ts ===
 interface Callable<T> {
->Callable : Callable<T>
->T : T
-
     (): T;
->T : T
-
     (value: T): void;
 >value : T
->T : T
 }
 
 interface CallableExtention<T> extends Callable<T> { }
->CallableExtention : CallableExtention<T>
->T : T
->Callable : Callable<T>
->T : T
 

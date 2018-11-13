@@ -3,7 +3,6 @@ var tt = { aa; }
 >tt : { aa: any; }
 >{ aa; } : { aa: any; }
 >aa : any
-> : any
 
 var x = tt;
 >x : { aa: any; }

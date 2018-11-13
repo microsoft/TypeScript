@@ -2,7 +2,6 @@
 var x1: typeof {};
 >x1 : any
 > : any
->{} : {}
 
 var x2: typeof (): void;
 >x2 : any
@@ -31,8 +30,8 @@ var x6: typeof null;
 var x7: typeof function f() { };
 >x7 : any
 >function : any
->f() : any
 >f : any
+>() { } : () => void
 
 var x8: typeof /123/;
 >x8 : any

@@ -1,7 +1,7 @@
 //// [recursiveTypeRelations.ts]
 // Repro from #14896
 
-type Attributes<Keys extends string> = {
+type Attributes<Keys extends keyof any> = {
     [Key in Keys]: string;
 }
 

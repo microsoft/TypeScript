@@ -8,6 +8,7 @@ enum ENUM1 { A, B, "" };
 >ENUM1 : ENUM1
 >A : ENUM1.A
 >B : ENUM1.B
+>"" : ENUM1.
 
 // enum type var
 var ResultIsAny1 = void ENUM;

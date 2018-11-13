@@ -12,17 +12,11 @@
 ////module "ambientModule" {
 ////}
 
-verify.docCommentTemplateAt("namespaceN", /*indentation*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("namespaceN", /*indentation*/ 3,
+    "/** */");
 
-verify.docCommentTemplateAt("namespaceM", /*indentation*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("namespaceM", /*indentation*/ 3,
+    "/** */");
 
-verify.docCommentTemplateAt("namespaceM", /*indentation*/ 8,
-`/**
- * 
- */`);
+verify.docCommentTemplateAt("namespaceM", /*indentation*/ 3,
+    "/** */");

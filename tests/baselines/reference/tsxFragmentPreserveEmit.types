@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		[s: string]: any;
 >s : string
 	}
@@ -51,4 +45,7 @@ declare var React: any;
 ><span>3</span> : JSX.Element
 >span : any
 >span : any
+
+<>#</>; // # would cause scanning error if not in jsxtext
+><>#</> : JSX.Element
 

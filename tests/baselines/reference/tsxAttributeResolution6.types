@@ -1,13 +1,7 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: { n?: boolean; s?: string};
 >test1 : { n?: boolean; s?: string; }
 >n : boolean
@@ -43,7 +37,7 @@ declare module JSX {
 <test1 n={false} />;
 ><test1 n={false} /> : JSX.Element
 >test1 : any
->n : boolean
+>n : false
 >false : false
 
 <test2 n />;

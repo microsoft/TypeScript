@@ -22,7 +22,7 @@ declare module foo2 {
 >x : () => any
 }
 declare function foo2(); // Should error
->foo2 : () => any
+>foo2 : typeof foo2
 
 
 function foo3() { }

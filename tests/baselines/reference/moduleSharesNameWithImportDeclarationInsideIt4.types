@@ -15,8 +15,6 @@ module A.M {
 >M : typeof A.M
 
     interface M { }
->M : M
-
     import M = Z.M;
 >M : typeof M
 >Z : typeof Z

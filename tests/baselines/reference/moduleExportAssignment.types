@@ -1,0 +1,79 @@
+=== tests/cases/conformance/salsa/use.js ===
+var npmlog = require('./npmlog')
+>npmlog : typeof EE
+>require('./npmlog') : typeof EE
+>require : any
+>'./npmlog' : "./npmlog"
+
+npmlog.x
+>npmlog.x : number
+>npmlog : typeof EE
+>x : number
+
+npmlog.on
+>npmlog.on : (s: string) => void
+>npmlog : typeof EE
+>on : (s: string) => void
+
+=== tests/cases/conformance/salsa/npmlog.js ===
+class EE {
+>EE : EE
+
+    /** @param {string} s */
+    on(s) { }
+>on : (s: string) => void
+>s : string
+}
+var npmlog = module.exports = new EE()
+>npmlog : typeof EE
+>module.exports = new EE() : typeof EE
+>module.exports : typeof EE
+>module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>exports : typeof EE
+>new EE() : EE
+>EE : typeof EE
+
+npmlog.on('hi') // both references should see EE.on
+>npmlog.on('hi') : void
+>npmlog.on : (s: string) => void
+>npmlog : typeof EE
+>on : (s: string) => void
+>'hi' : "hi"
+
+module.exports.on('hi') // here too
+>module.exports.on('hi') : void
+>module.exports.on : (s: string) => void
+>module.exports : typeof EE
+>module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>exports : typeof EE
+>on : (s: string) => void
+>'hi' : "hi"
+
+npmlog.x = 1
+>npmlog.x = 1 : 1
+>npmlog.x : number
+>npmlog : typeof EE
+>x : number
+>1 : 1
+
+module.exports.y = 2
+>module.exports.y = 2 : 2
+>module.exports.y : number
+>module.exports : typeof EE
+>module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>exports : typeof EE
+>y : number
+>2 : 2
+
+npmlog.y
+>npmlog.y : number
+>npmlog : typeof EE
+>y : number
+
+module.exports.x
+>module.exports.x : number
+>module.exports : typeof EE
+>module : { "tests/cases/conformance/salsa/npmlog": typeof EE; }
+>exports : typeof EE
+>x : number
+

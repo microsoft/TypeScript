@@ -1,13 +1,10 @@
 === tests/cases/compiler/deleteReadonly.ts ===
 interface A {
->A : A
-
   readonly b
 >b : any
 }
 var a: A = {
 >a : A
->A : A
 >{  b: 123} : { b: number; }
 
   b: 123
@@ -23,18 +20,16 @@ delete a.b;
 >b : any
 
 interface B {
->B : B
-
   readonly [k: string]: string
 >k : string
 }
 
 var b: B = {
 >b : B
->B : B
 >{  'test': 'test'} : { 'test': string; }
 
   'test': 'test'
+>'test' : string
 >'test' : "test"
 
 };

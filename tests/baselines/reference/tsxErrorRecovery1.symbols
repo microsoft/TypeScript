@@ -8,7 +8,6 @@ function foo() {
 
 	var x = <div>  { </div>
 >x : Symbol(x, Decl(file.tsx, 3, 4))
->div : Symbol(unknown)
 }
 // Shouldn't see any errors down here
 var y = { a: 1 };

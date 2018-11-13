@@ -3,6 +3,7 @@ class C {
 >C : C
 
     set [e](v) { }
+>[e] : any
 >e : any
 >v : any
 }

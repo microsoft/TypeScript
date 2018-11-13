@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaceImplementation1.ts ===
 interface I1 {
->I1 : I1
-
     iObj:{ };
 >iObj : {}
 
@@ -16,8 +14,6 @@ interface I1 {
 }
 
 interface I2 {
->I2 : I2
-
 	iFn(n:number, s:string):void;
 >iFn : (n: number, s: string) => void
 >n : number
@@ -26,8 +22,6 @@ interface I2 {
 
 class C1 implements I1,I2 {
 >C1 : C1
->I1 : I1
->I2 : I2
 
     private iFn();
 >iFn : () => any
@@ -48,28 +42,19 @@ class C1 implements I1,I2 {
 }
 
 interface I3 {
->I3 : I3
-
     x: number;
 >x : number
 }
 
 interface I4 {
->I4 : I4
-
     ():I3;
->I3 : I3
-
     new ():I3;
->I3 : I3
-
     [call:number]:string;
 >call : number
 }
 
 class C2 implements I3 {
 >C2 : C2
->I3 : I3
 
     public x = 1;
 >x : number
@@ -78,7 +63,6 @@ class C2 implements I3 {
 
 var a:I4 = function(){ 
 >a : I4
->I4 : I4
 >function(){     return new C2();} : () => C2
 
     return new C2();
@@ -95,7 +79,6 @@ new b();
 
 var c:I4;
 >c : I4
->I4 : I4
 
 c[5];
 >c[5] : string

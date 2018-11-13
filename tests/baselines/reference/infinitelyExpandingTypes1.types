@@ -1,52 +1,32 @@
 === tests/cases/compiler/infinitelyExpandingTypes1.ts ===
 interface List<T> {
->List : List<T>
->T : T
-
     data: T;
 >data : T
->T : T
 
     next: List<T>;
 >next : List<T>
->List : List<T>
->T : T
 
     owner: List<List<T>>;
 >owner : List<List<T>>
->List : List<T>
->List : List<T>
->T : T
 }
 
 
 interface MyList<T> {
->MyList : MyList<T>
->T : T
-
     data: T;
 >data : T
->T : T
 
     next: MyList<T>;
 >next : MyList<T>
->MyList : MyList<T>
->T : T
 
     owner: MyList<MyList<T>>;
 >owner : MyList<MyList<T>>
->MyList : MyList<T>
->MyList : MyList<T>
->T : T
 }
 
 var l: List<number>;
 >l : List<number>
->List : List<T>
 
 var m: MyList<number>;
 >m : MyList<number>
->MyList : MyList<T>
 
 l == m; // should error
 >l == m : boolean
@@ -55,7 +35,6 @@ l == m; // should error
 
 var l2: List<string>;
 >l2 : List<string>
->List : List<T>
 
 l == l2; // should error;
 >l == l2 : boolean

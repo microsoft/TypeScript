@@ -48,3 +48,86 @@ declare enum E4 {
 >c : E4.c
 >0.1 : 0.1
 }
+
+enum E5 {
+>E5 : E5
+
+    a = 1 / 0,
+>a : E5
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+    b = 2 / 0.0,
+>b : E5
+>2 / 0.0 : number
+>2 : 2
+>0.0 : 0
+
+    c = 1.0 / 0.0,
+>c : E5
+>1.0 / 0.0 : number
+>1.0 : 1
+>0.0 : 0
+
+    d = 0.0 / 0.0,
+>d : E5
+>0.0 / 0.0 : number
+>0.0 : 0
+>0.0 : 0
+
+    e = NaN,
+>e : E5
+>NaN : number
+
+    f = Infinity,
+>f : E5
+>Infinity : number
+
+    g = -Infinity
+>g : E5
+>-Infinity : number
+>Infinity : number
+}
+
+const enum E6 {
+>E6 : E6
+
+    a = 1 / 0,
+>a : E6
+>1 / 0 : number
+>1 : 1
+>0 : 0
+
+    b = 2 / 0.0,
+>b : E6
+>2 / 0.0 : number
+>2 : 2
+>0.0 : 0
+
+    c = 1.0 / 0.0,
+>c : E6
+>1.0 / 0.0 : number
+>1.0 : 1
+>0.0 : 0
+
+    d = 0.0 / 0.0,
+>d : E6
+>0.0 / 0.0 : number
+>0.0 : 0
+>0.0 : 0
+
+    e = NaN,
+>e : E6
+>NaN : number
+
+    f = Infinity,
+>f : E6
+>Infinity : number
+
+    g = -Infinity
+>g : E6
+>-Infinity : number
+>Infinity : number
+}
+

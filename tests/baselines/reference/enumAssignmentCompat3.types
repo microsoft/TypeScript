@@ -67,8 +67,6 @@ namespace Cd {
     }
 }
 namespace Const {
->Const : typeof Const
-
     export const enum E {
 >E : E
 
@@ -134,52 +132,42 @@ namespace Merged2 {
 var abc: First.E;
 >abc : First.E
 >First : any
->E : First.E
 
 var secondAbc: Abc.E;
 >secondAbc : Abc.E
 >Abc : any
->E : Abc.E
 
 var secondAbcd: Abcd.E;
 >secondAbcd : Abcd.E
 >Abcd : any
->E : Abcd.E
 
 var secondAb: Ab.E;
 >secondAb : Ab.E
 >Ab : any
->E : Ab.E
 
 var secondCd: Cd.E;
 >secondCd : Cd.E
 >Cd : any
->E : Cd.E
 
 var nope: Abc.Nope;
 >nope : Abc.Nope
 >Abc : any
->Nope : Abc.Nope
 
 var k: Const.E;
 >k : Const.E
 >Const : any
->E : Const.E
 
 var decl: Decl.E;
 >decl : Decl.E
 >Decl : any
->E : Decl.E
 
 var merged: Merged.E;
 >merged : Merged.E
 >Merged : any
->E : Merged.E
 
 var merged2: Merged2.E;
 >merged2 : Merged2.E
 >Merged2 : any
->E : Merged2.E
 
 abc = secondAbc; // ok
 >abc = secondAbc : Abc.E

@@ -4,6 +4,7 @@ var obj = {
 >{    [Symbol.prototype]: 0} : { [Symbol.prototype]: number; }
 
     [Symbol.prototype]: 0
+>[Symbol.prototype] : number
 >Symbol.prototype : Symbol
 >Symbol : SymbolConstructor
 >prototype : Symbol

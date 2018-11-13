@@ -1,15 +1,15 @@
-tests/cases/compiler/letAndVarRedeclaration.ts(1,5): error TS2451: Cannot redeclare block-scoped variable 'e0'.
-tests/cases/compiler/letAndVarRedeclaration.ts(2,5): error TS2451: Cannot redeclare block-scoped variable 'e0'.
-tests/cases/compiler/letAndVarRedeclaration.ts(3,10): error TS2451: Cannot redeclare block-scoped variable 'e0'.
-tests/cases/compiler/letAndVarRedeclaration.ts(6,9): error TS2451: Cannot redeclare block-scoped variable 'x1'.
-tests/cases/compiler/letAndVarRedeclaration.ts(7,9): error TS2451: Cannot redeclare block-scoped variable 'x1'.
-tests/cases/compiler/letAndVarRedeclaration.ts(8,14): error TS2451: Cannot redeclare block-scoped variable 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(1,5): error TS2300: Duplicate identifier 'e0'.
+tests/cases/compiler/letAndVarRedeclaration.ts(2,5): error TS2300: Duplicate identifier 'e0'.
+tests/cases/compiler/letAndVarRedeclaration.ts(3,10): error TS2300: Duplicate identifier 'e0'.
+tests/cases/compiler/letAndVarRedeclaration.ts(6,9): error TS2300: Duplicate identifier 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(7,9): error TS2300: Duplicate identifier 'x1'.
+tests/cases/compiler/letAndVarRedeclaration.ts(8,14): error TS2300: Duplicate identifier 'x1'.
 tests/cases/compiler/letAndVarRedeclaration.ts(12,9): error TS2451: Cannot redeclare block-scoped variable 'x'.
 tests/cases/compiler/letAndVarRedeclaration.ts(14,13): error TS2451: Cannot redeclare block-scoped variable 'x'.
 tests/cases/compiler/letAndVarRedeclaration.ts(17,18): error TS2451: Cannot redeclare block-scoped variable 'x'.
-tests/cases/compiler/letAndVarRedeclaration.ts(22,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(23,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
-tests/cases/compiler/letAndVarRedeclaration.ts(24,14): error TS2451: Cannot redeclare block-scoped variable 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(22,9): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(23,9): error TS2300: Duplicate identifier 'x2'.
+tests/cases/compiler/letAndVarRedeclaration.ts(24,14): error TS2300: Duplicate identifier 'x2'.
 tests/cases/compiler/letAndVarRedeclaration.ts(28,9): error TS2451: Cannot redeclare block-scoped variable 'x2'.
 tests/cases/compiler/letAndVarRedeclaration.ts(30,13): error TS2451: Cannot redeclare block-scoped variable 'x2'.
 tests/cases/compiler/letAndVarRedeclaration.ts(33,18): error TS2451: Cannot redeclare block-scoped variable 'x2'.
@@ -24,24 +24,24 @@ tests/cases/compiler/letAndVarRedeclaration.ts(49,14): error TS2451: Cannot rede
 ==== tests/cases/compiler/letAndVarRedeclaration.ts (21 errors) ====
     let e0
         ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'e0'.
+!!! error TS2300: Duplicate identifier 'e0'.
     var e0;
         ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'e0'.
+!!! error TS2300: Duplicate identifier 'e0'.
     function e0() { }
              ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'e0'.
+!!! error TS2300: Duplicate identifier 'e0'.
     
     function f0() {
         let x1;
             ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x1'.
+!!! error TS2300: Duplicate identifier 'x1'.
         var x1;
             ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x1'.
+!!! error TS2300: Duplicate identifier 'x1'.
         function x1() { }
                  ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x1'.
+!!! error TS2300: Duplicate identifier 'x1'.
     }
     
     function f1() {
@@ -63,13 +63,13 @@ tests/cases/compiler/letAndVarRedeclaration.ts(49,14): error TS2451: Cannot rede
     module M0 {
         let x2;
             ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
+!!! error TS2300: Duplicate identifier 'x2'.
         var x2;
             ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
+!!! error TS2300: Duplicate identifier 'x2'.
         function x2() { }
                  ~~
-!!! error TS2451: Cannot redeclare block-scoped variable 'x2'.
+!!! error TS2300: Duplicate identifier 'x2'.
     }
     
     module M1 {

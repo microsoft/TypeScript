@@ -1,14 +1,9 @@
 === tests/cases/conformance/decorators/class/method/decoratorOnClassMethod5.ts ===
 declare function dec(): <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>;
 >dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->T : T
 >target : any
 >propertyKey : string
 >descriptor : TypedPropertyDescriptor<T>
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
 
 class C {
 >C : C
@@ -16,5 +11,6 @@ class C {
     @dec() ["method"]() {}
 >dec() : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
 >dec : () => <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
+>["method"] : () => void
 >"method" : "method"
 }

@@ -19,11 +19,9 @@ module m1 {
 
         constructor (m1_c3_c1: C1_public);
 >m1_c3_c1 : C1_public
->C1_public : C1_public
 
         constructor (m1_c3_c2: C2_private); //error
 >m1_c3_c2 : C2_private
->C2_private : C2_private
 
         constructor (m1_c3_c1_2: any) {
 >m1_c3_c1_2 : any
@@ -32,25 +30,21 @@ module m1 {
         private f1_private(m1_c3_f1_arg: C1_public) {
 >f1_private : (m1_c3_f1_arg: C1_public) => void
 >m1_c3_f1_arg : C1_public
->C1_public : C1_public
         }
 
         public f2_public(m1_c3_f2_arg: C1_public) {
 >f2_public : (m1_c3_f2_arg: C1_public) => void
 >m1_c3_f2_arg : C1_public
->C1_public : C1_public
         }
 
         private f3_private(m1_c3_f3_arg: C2_private) {
 >f3_private : (m1_c3_f3_arg: C2_private) => void
 >m1_c3_f3_arg : C2_private
->C2_private : C2_private
         }
 
         public f4_public(m1_c3_f4_arg: C2_private) { // error
 >f4_public : (m1_c3_f4_arg: C2_private) => void
 >m1_c3_f4_arg : C2_private
->C2_private : C2_private
         }
 
         private f5_private() {
@@ -87,7 +81,6 @@ module m1 {
 
         private f9_private(): C1_public {
 >f9_private : () => C1_public
->C1_public : C1_public
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -96,7 +89,6 @@ module m1 {
 
         public f10_public(): C1_public {
 >f10_public : () => C1_public
->C1_public : C1_public
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -105,7 +97,6 @@ module m1 {
 
         private f11_private(): C2_private {
 >f11_private : () => C2_private
->C2_private : C2_private
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -114,7 +105,6 @@ module m1 {
 
         public f12_public(): C2_private { // error
 >f12_public : () => C2_private
->C2_private : C2_private
 
             return new C2_private(); //error
 >new C2_private() : C2_private
@@ -127,11 +117,9 @@ module m1 {
 
         constructor (m1_c4_c1: C1_public);
 >m1_c4_c1 : C1_public
->C1_public : C1_public
 
         constructor (m1_c4_c2: C2_private);
 >m1_c4_c2 : C2_private
->C2_private : C2_private
 
         constructor (m1_c4_c1_2: any) {
 >m1_c4_c1_2 : any
@@ -139,25 +127,21 @@ module m1 {
         private f1_private(m1_c4_f1_arg: C1_public) {
 >f1_private : (m1_c4_f1_arg: C1_public) => void
 >m1_c4_f1_arg : C1_public
->C1_public : C1_public
         }
 
         public f2_public(m1_c4_f2_arg: C1_public) {
 >f2_public : (m1_c4_f2_arg: C1_public) => void
 >m1_c4_f2_arg : C1_public
->C1_public : C1_public
         }
 
         private f3_private(m1_c4_f3_arg: C2_private) {
 >f3_private : (m1_c4_f3_arg: C2_private) => void
 >m1_c4_f3_arg : C2_private
->C2_private : C2_private
         }
 
         public f4_public(m1_c4_f4_arg: C2_private) {
 >f4_public : (m1_c4_f4_arg: C2_private) => void
 >m1_c4_f4_arg : C2_private
->C2_private : C2_private
         }
 
 
@@ -196,7 +180,6 @@ module m1 {
 
         private f9_private(): C1_public {
 >f9_private : () => C1_public
->C1_public : C1_public
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -205,7 +188,6 @@ module m1 {
 
         public f10_public(): C1_public {
 >f10_public : () => C1_public
->C1_public : C1_public
 
             return new C1_public();
 >new C1_public() : C1_public
@@ -214,7 +196,6 @@ module m1 {
 
         private f11_private(): C2_private {
 >f11_private : () => C2_private
->C2_private : C2_private
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -223,7 +204,6 @@ module m1 {
 
         public f12_public(): C2_private {
 >f12_public : () => C2_private
->C2_private : C2_private
 
             return new C2_private();
 >new C2_private() : C2_private
@@ -236,7 +216,6 @@ module m1 {
 
         constructor (m1_c5_c: C1_public) {
 >m1_c5_c : C1_public
->C1_public : C1_public
         }
     }
     
@@ -245,7 +224,6 @@ module m1 {
 
         constructor (m1_c6_c: C1_public) {
 >m1_c6_c : C1_public
->C1_public : C1_public
         }
     }
     export class C7_public {
@@ -253,7 +231,6 @@ module m1 {
 
         constructor (m1_c7_c: C2_private) { // error
 >m1_c7_c : C2_private
->C2_private : C2_private
         }
     }
     
@@ -262,32 +239,27 @@ module m1 {
 
         constructor (m1_c8_c: C2_private) {
 >m1_c8_c : C2_private
->C2_private : C2_private
         }
     }
 
     function f1_public(m1_f1_arg: C1_public) {
 >f1_public : (m1_f1_arg: C1_public) => void
 >m1_f1_arg : C1_public
->C1_public : C1_public
     }
 
     export function f2_public(m1_f2_arg: C1_public) {
 >f2_public : (m1_f2_arg: C1_public) => void
 >m1_f2_arg : C1_public
->C1_public : C1_public
     }
 
     function f3_public(m1_f3_arg: C2_private) {
 >f3_public : (m1_f3_arg: C2_private) => void
 >m1_f3_arg : C2_private
->C2_private : C2_private
     }
 
     export function f4_public(m1_f4_arg: C2_private) { // error
 >f4_public : (m1_f4_arg: C2_private) => void
 >m1_f4_arg : C2_private
->C2_private : C2_private
     }
 
 
@@ -326,7 +298,6 @@ module m1 {
 
     function f9_private(): C1_public {
 >f9_private : () => C1_public
->C1_public : C1_public
 
         return new C1_public();
 >new C1_public() : C1_public
@@ -335,7 +306,6 @@ module m1 {
 
     export function f10_public(): C1_public {
 >f10_public : () => C1_public
->C1_public : C1_public
 
         return new C1_public();
 >new C1_public() : C1_public
@@ -344,7 +314,6 @@ module m1 {
 
     function f11_private(): C2_private {
 >f11_private : () => C2_private
->C2_private : C2_private
 
         return new C2_private();
 >new C2_private() : C2_private
@@ -353,7 +322,6 @@ module m1 {
 
     export function f12_public(): C2_private { // error
 >f12_public : () => C2_private
->C2_private : C2_private
 
         return new C2_private(); //error
 >new C2_private() : C2_private
@@ -370,7 +338,6 @@ class C7_public {
 
     constructor (c7_c2: C6_public);
 >c7_c2 : C6_public
->C6_public : C6_public
 
     constructor (c7_c1_2: any) {
 >c7_c1_2 : any
@@ -378,13 +345,11 @@ class C7_public {
     private f1_private(c7_f1_arg: C6_public) {
 >f1_private : (c7_f1_arg: C6_public) => void
 >c7_f1_arg : C6_public
->C6_public : C6_public
     }
 
     public f2_public(c7_f2_arg: C6_public) {
 >f2_public : (c7_f2_arg: C6_public) => void
 >c7_f2_arg : C6_public
->C6_public : C6_public
     }
 
     private f5_private() {
@@ -405,7 +370,6 @@ class C7_public {
 
     private f9_private(): C6_public {
 >f9_private : () => C6_public
->C6_public : C6_public
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -414,7 +378,6 @@ class C7_public {
 
     public f10_public(): C6_public {
 >f10_public : () => C6_public
->C6_public : C6_public
 
         return new C6_public();
 >new C6_public() : C6_public
@@ -427,7 +390,6 @@ class C9_public {
 
     constructor (c9_c: C6_public) {
 >c9_c : C6_public
->C6_public : C6_public
     }
 }
   
@@ -435,7 +397,6 @@ class C9_public {
 function f4_public(f4_arg: C6_public) {
 >f4_public : (f4_arg: C6_public) => void
 >f4_arg : C6_public
->C6_public : C6_public
 }
 
 
@@ -451,7 +412,6 @@ function f6_public() {
 
 function f10_public(): C6_public {
 >f10_public : () => C6_public
->C6_public : C6_public
 
     return new C6_public();
 >new C6_public() : C6_public

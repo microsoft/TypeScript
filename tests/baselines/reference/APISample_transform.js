@@ -1,7 +1,14 @@
+//// [tests/cases/compiler/APISample_transform.ts] ////
+
+//// [index.d.ts]
+declare module "typescript" {
+    export = ts;
+}
+
 //// [APISample_transform.ts]
 /*
- * Note: This test is a public API sample. The sample sources can be found 
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
+ * Note: This test is a public API sample. The sample sources can be found
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 
@@ -19,7 +26,7 @@ console.log(JSON.stringify(result));
 "use strict";
 /*
  * Note: This test is a public API sample. The sample sources can be found
-         at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
+ *       at: https://github.com/Microsoft/TypeScript/wiki/Using-the-Compiler-API#a-simple-transform-function
  *       Please log a "breaking change" issue for any API breaking change affecting this issue
  */
 exports.__esModule = true;

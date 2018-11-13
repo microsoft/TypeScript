@@ -38,7 +38,6 @@ var Shapes;
         function Point(x, y) {
             this.x = x;
             this.y = y;
-            this.con = "hello";
         }
         // Instance member
         Point.prototype.getDist = function () { return Math.sqrt(this.x * this.x + this.y * this.y); };

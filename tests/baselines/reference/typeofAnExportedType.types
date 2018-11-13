@@ -25,11 +25,9 @@ export class C {
 }
 export var c: C;
 >c : C
->C : C
 
 var c2: C;
 >c2 : C
->C : C
 
 export var r3: typeof C;
 >r3 : typeof C
@@ -44,18 +42,14 @@ export var r4b: typeof c2;
 >c2 : C
 
 export interface I {
->I : I
-
     foo: string;
 >foo : string
 }
 export var i: I;
 >i : I
->I : I
 
 var i2: I;
 >i2 : I
->I : I
 
 export var r5: typeof i;
 >r5 : I
@@ -107,7 +101,7 @@ export enum E {
 >E : E
 
     A
->A : E
+>A : E.A
 }
 export var r10: typeof E;
 >r10 : typeof E

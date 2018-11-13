@@ -41,15 +41,12 @@ var r2 = new Derived(1);
 
 class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
     a: T;
 >a : T
->T : T
 
     constructor(x: T) { this.a = x; }
 >x : T
->T : T
 >this.a = x : T
 >this.a : T
 >this : this
@@ -59,10 +56,7 @@ class Base2<T> {
 
 class D<T extends Date> extends Base2<T> {
 >D : D<T>
->T : T
->Date : Date
 >Base2 : Base2<T>
->T : T
 
     x = 2
 >x : number
@@ -70,7 +64,6 @@ class D<T extends Date> extends Base2<T> {
 
     y: T = null;
 >y : T
->T : T
 >null : null
 }
 

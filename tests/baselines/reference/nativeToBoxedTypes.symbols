@@ -1,7 +1,7 @@
 === tests/cases/compiler/nativeToBoxedTypes.ts ===
 var N = new Number();
 >N : Symbol(N, Decl(nativeToBoxedTypes.ts, 0, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var n = 100;
 >n : Symbol(n, Decl(nativeToBoxedTypes.ts, 1, 3))
@@ -12,7 +12,7 @@ n = N;
 
 var S = new String();
 >S : Symbol(S, Decl(nativeToBoxedTypes.ts, 4, 3))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var s = "foge";
 >s : Symbol(s, Decl(nativeToBoxedTypes.ts, 5, 3))
@@ -23,7 +23,7 @@ s = S;
 
 var B = new Boolean();
 >B : Symbol(B, Decl(nativeToBoxedTypes.ts, 8, 3))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var b = true;
 >b : Symbol(b, Decl(nativeToBoxedTypes.ts, 9, 3))
@@ -37,6 +37,7 @@ var sym: symbol;
 
 var Sym: Symbol;
 >Sym : Symbol(Sym, Decl(nativeToBoxedTypes.ts, 13, 3))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --))
 
 sym = Sym;
 >sym : Symbol(sym, Decl(nativeToBoxedTypes.ts, 12, 3))

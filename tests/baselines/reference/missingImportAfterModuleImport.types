@@ -9,7 +9,6 @@ class MainModule {
     // public static SubModule: SubModule;
     public SubModule: SubModule;
 >SubModule : SubModule
->SubModule : SubModule
 
     constructor() { }
 }
@@ -19,6 +18,8 @@ export = MainModule;
 
 === tests/cases/compiler/missingImportAfterModuleImport_0.ts ===
 declare module "SubModule" {
+>"SubModule" : typeof import("SubModule")
+
     class SubModule {
 >SubModule : SubModule
 

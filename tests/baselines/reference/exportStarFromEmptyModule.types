@@ -27,7 +27,6 @@ import * as X from "./exportStarFromEmptyModule_module3";
 var s: X.A;
 >s : X.A
 >X : any
->A : X.A
 
 X.A.q;
 >X.A.q : any

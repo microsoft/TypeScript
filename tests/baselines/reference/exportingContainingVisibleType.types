@@ -7,7 +7,6 @@ class Foo {
 
         var i: Foo;
 >i : Foo
->Foo : Foo
 
         return i; // Should be fine (previous bug report visibility error).
 >i : Foo

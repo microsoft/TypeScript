@@ -1,38 +1,29 @@
 === tests/cases/conformance/classes/classDeclarations/classAndInterfaceMerge.d.ts ===
 interface C { }
->C : C
 
 declare class C { }
 >C : C
 
 interface C { }
->C : C
 
 interface C { }
->C : C
 
 declare module M {
 >M : typeof M
 
     interface C1 { }
->C1 : C1
 
     class C1 { }
 >C1 : C1
 
     interface C1 { }
->C1 : C1
 
     interface C1 { }
->C1 : C1
 
     export class C2 { }
 >C2 : C2
 }
 
 declare module M {
->M : typeof M
-
     export interface C2 { }
->C2 : C2
 }

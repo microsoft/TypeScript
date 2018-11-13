@@ -1,5 +1,7 @@
 === tests/cases/compiler/quotedModuleNameMustBeAmbient.ts ===
 module 'M' {}
-No type information for this code.
-No type information for this code.declare module 'M2' {}
-No type information for this code.
+>'M' : typeof import("M")
+
+declare module 'M2' {}
+>'M2' : typeof import("M2")
+

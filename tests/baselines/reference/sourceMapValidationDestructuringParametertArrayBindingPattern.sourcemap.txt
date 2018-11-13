@@ -52,17 +52,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-3 >              [, nameA]: Robot
+2 >function 
+3 >         foo1
+4 >             (
+5 >              [, nameA]: Robot
 1 >Emitted(2, 1) Source(7, 1) + SourceIndex(0)
-2 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
-3 >Emitted(2, 17) Source(7, 31) + SourceIndex(0)
+2 >Emitted(2, 10) Source(7, 10) + SourceIndex(0)
+3 >Emitted(2, 14) Source(7, 14) + SourceIndex(0)
+4 >Emitted(2, 15) Source(7, 15) + SourceIndex(0)
+5 >Emitted(2, 17) Source(7, 31) + SourceIndex(0)
 ---
 >>>    var nameA = _a[1];
 1->^^^^^^^^
@@ -112,17 +118,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^->
 1->
   >
   >
-2 >function foo2(
-3 >              [numberB]: Robot
+2 >function 
+3 >         foo2
+4 >             (
+5 >              [numberB]: Robot
 1->Emitted(6, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
-3 >Emitted(6, 17) Source(11, 31) + SourceIndex(0)
+2 >Emitted(6, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(6, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(6, 15) Source(11, 15) + SourceIndex(0)
+5 >Emitted(6, 17) Source(11, 31) + SourceIndex(0)
 ---
 >>>    var numberB = _a[0];
 1->^^^^^^^^
@@ -172,17 +184,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
-2 >function foo3(
-3 >              [numberA2, nameA2, skillA2]: Robot
+2 >function 
+3 >         foo3
+4 >             (
+5 >              [numberA2, nameA2, skillA2]: Robot
 1->Emitted(10, 1) Source(15, 1) + SourceIndex(0)
-2 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
-3 >Emitted(10, 17) Source(15, 49) + SourceIndex(0)
+2 >Emitted(10, 10) Source(15, 10) + SourceIndex(0)
+3 >Emitted(10, 14) Source(15, 14) + SourceIndex(0)
+4 >Emitted(10, 15) Source(15, 15) + SourceIndex(0)
+5 >Emitted(10, 17) Source(15, 49) + SourceIndex(0)
 ---
 >>>    var numberA2 = _a[0], nameA2 = _a[1], skillA2 = _a[2];
 1->^^^^^^^^
@@ -243,17 +261,23 @@ sourceFile:sourceMapValidationDestructuringParametertArrayBindingPattern.ts
 ---
 >>>function foo4(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
   >
-2 >function foo4(
-3 >              [numberA3, ...robotAInfo]: Robot
+2 >function 
+3 >         foo4
+4 >             (
+5 >              [numberA3, ...robotAInfo]: Robot
 1->Emitted(14, 1) Source(19, 1) + SourceIndex(0)
-2 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
-3 >Emitted(14, 17) Source(19, 47) + SourceIndex(0)
+2 >Emitted(14, 10) Source(19, 10) + SourceIndex(0)
+3 >Emitted(14, 14) Source(19, 14) + SourceIndex(0)
+4 >Emitted(14, 15) Source(19, 15) + SourceIndex(0)
+5 >Emitted(14, 17) Source(19, 47) + SourceIndex(0)
 ---
 >>>    var numberA3 = _a[0], robotAInfo = _a.slice(1);
 1->^^^^^^^^

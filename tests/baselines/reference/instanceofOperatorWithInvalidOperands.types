@@ -96,11 +96,9 @@ var o1: {};
 
 var o2: Object;
 >o2 : Object
->Object : Object
 
 var o3: C;
 >o3 : C
->C : C
 
 var rb1 = x instanceof b1;
 >rb1 : boolean

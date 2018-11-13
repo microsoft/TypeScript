@@ -125,16 +125,12 @@ var objStrOrNum8: { prop: string; anotherP: string; } | { prop: number; anotherP
 
 };
 interface I11 {
->I11 : I11
-
     commonMethodDifferentReturnType(a: string, b: number): string;
 >commonMethodDifferentReturnType : (a: string, b: number) => string
 >a : string
 >b : number
 }
 interface I21 {
->I21 : I21
-
     commonMethodDifferentReturnType(a: string, b: number): number;
 >commonMethodDifferentReturnType : (a: string, b: number) => number
 >a : string
@@ -142,28 +138,20 @@ interface I21 {
 }
 var i11: I11;
 >i11 : I11
->I11 : I11
 
 var i21: I21;
 >i21 : I21
->I21 : I21
 
 var i11Ori21: I11 | I21 = i11;
 >i11Ori21 : I11 | I21
->I11 : I11
->I21 : I21
 >i11 : I11
 
 var i11Ori21: I11 | I21 = i21;
 >i11Ori21 : I11 | I21
->I11 : I11
->I21 : I21
 >i21 : I21
 
 var i11Ori21: I11 | I21 = { // Like i1
 >i11Ori21 : I11 | I21
->I11 : I11
->I21 : I21
 >{ // Like i1    commonMethodDifferentReturnType: (a, b) => {        var z = a.charAt(b);        return z;    },} : { commonMethodDifferentReturnType: (a: string, b: number) => string; }
 
     commonMethodDifferentReturnType: (a, b) => {
@@ -187,8 +175,6 @@ var i11Ori21: I11 | I21 = { // Like i1
 };
 var i11Ori21: I11 | I21 = { // Like i2
 >i11Ori21 : I11 | I21
->I11 : I11
->I21 : I21
 >{ // Like i2    commonMethodDifferentReturnType: (a, b) => {        var z = a.charCodeAt(b);        return z;    },} : { commonMethodDifferentReturnType: (a: string, b: number) => number; }
 
     commonMethodDifferentReturnType: (a, b) => {
@@ -215,8 +201,6 @@ var strOrNumber: string | number;
 
 var i11Ori21: I11 | I21 = { // Like i1 and i2 both
 >i11Ori21 : I11 | I21
->I11 : I11
->I21 : I21
 >{ // Like i1 and i2 both    commonMethodDifferentReturnType: (a, b) => strOrNumber,} : { commonMethodDifferentReturnType: (a: string, b: number) => string | number; }
 
     commonMethodDifferentReturnType: (a, b) => strOrNumber,

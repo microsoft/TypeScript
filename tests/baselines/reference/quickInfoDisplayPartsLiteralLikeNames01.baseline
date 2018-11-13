@@ -38,7 +38,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",
@@ -65,8 +65,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -131,8 +130,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -197,8 +195,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -267,8 +264,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -310,7 +306,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",
@@ -337,8 +333,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -380,7 +375,7 @@
         },
         {
           "text": "1",
-          "kind": "methodName"
+          "kind": "stringLiteral"
         },
         {
           "text": "]",
@@ -407,8 +402,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -473,8 +467,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -539,8 +532,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -605,8 +597,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   },
   {
@@ -675,8 +666,7 @@
           "kind": "keyword"
         }
       ],
-      "documentation": [],
-      "tags": []
+      "documentation": []
     }
   }
 ]

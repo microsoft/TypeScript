@@ -54,4 +54,4 @@ function f2() {
 //    }
 //    var x: U;
 //    x.getDate();
-//} 
+//}

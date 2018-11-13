@@ -23,39 +23,41 @@ class Foo {
 
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
->A : A
+>1.0 : A
 
     2.0: B; // ok
->B : B
+>2.0 : B
 
     "2.5": B // ok
->B : B
+>"2.5" : B
 
     3.0: number; // error
+>3.0 : number
+
     "4.0": string; // error
+>"4.0" : string
 }
 
 interface Foo2 {
->Foo2 : Foo2
-
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
->A : A
+>1.0 : A
 
     2.0: B; // ok
->B : B
+>2.0 : B
 
     "2.5": B // ok
->B : B
+>"2.5" : B
 
     3.0: number; // error
+>3.0 : number
+
     "4.0": string; // error
+>"4.0" : string
 }
 
 var a: {
@@ -63,43 +65,50 @@ var a: {
 
     [x: number]: A;
 >x : number
->A : A
 
     1.0: A; // ok
->A : A
+>1.0 : A
 
     2.0: B; // ok
->B : B
+>2.0 : B
 
     "2.5": B // ok
->B : B
+>"2.5" : B
 
     3.0: number; // error
+>3.0 : number
+
     "4.0": string; // error
+>"4.0" : string
+
 };
 
 // error
 var b: { [x: number]: A } = {
 >b : { [x: number]: A; }
 >x : number
->A : A
 >{    1.0: new A(),     2.0: new B(),     "2.5": new B(),    3.0: 1,    "4.0": ''} : { 1.0: A; 2.0: B; "2.5": B; 3.0: number; "4.0": string; }
 
     1.0: new A(), 
+>1.0 : A
 >new A() : A
 >A : typeof A
 
     2.0: new B(), 
+>2.0 : B
 >new B() : B
 >B : typeof B
 
     "2.5": new B(),
+>"2.5" : B
 >new B() : B
 >B : typeof B
 
     3.0: 1,
+>3.0 : number
 >1 : 1
 
     "4.0": ''
+>"4.0" : string
 >'' : ""
 }

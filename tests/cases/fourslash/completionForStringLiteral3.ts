@@ -9,12 +9,4 @@
 ////
 ////f("/*2*/
 
-goTo.marker('1');
-verify.completionListContains("A");
-verify.completionListAllowsNewIdentifier();
-verify.completionListCount(3);
-
-goTo.marker('2');
-verify.completionListContains("A");
-verify.completionListAllowsNewIdentifier();
-verify.completionListCount(3);
+verify.completions({ marker: ["1", "2"], exact: ["A", "B", "C"], isNewIdentifierLocation: true });

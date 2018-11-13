@@ -29,10 +29,8 @@
 ////}
 
 for (const varName of ["a", "b", "c", "d"]) {
-    verify.docCommentTemplateAt(varName, /*newTextOffset*/ 8,
-`/**
- * 
- */`);
+    verify.docCommentTemplateAt(varName, /*newTextOffset*/ 3,
+        "/** */");
 }
 
 verify.docCommentTemplateAt("e", /*newTextOffset*/ 8,

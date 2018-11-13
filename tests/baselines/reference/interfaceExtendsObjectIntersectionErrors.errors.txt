@@ -14,22 +14,16 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(11,11): error TS2430: Interface 'I5' incorrectly extends interface 'T5'.
   Types of property 'c' are incompatible.
     Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,7): error TS2415: Class 'C1' incorrectly extends base class 'T1'.
-  Types of property 'a' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,7): error TS2415: Class 'C2' incorrectly extends base class 'T2'.
-  Type 'C2' is not assignable to type '{ b: number; }'.
-    Types of property 'b' are incompatible.
-      Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,7): error TS2415: Class 'C3' incorrectly extends base class 'number[]'.
-  Types of property 'length' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,7): error TS2415: Class 'C4' incorrectly extends base class '[string, number]'.
-  Types of property '0' are incompatible.
-    Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(20,7): error TS2415: Class 'C5' incorrectly extends base class 'T5'.
-  Types of property 'c' are incompatible.
-    Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(16,38): error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(17,38): error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(18,38): error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(19,38): error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
+  Type 'number' is not assignable to type 'string'.
+tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(20,38): error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
+  Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectIntersectionErrors.ts(30,11): error TS2430: Interface 'I10' incorrectly extends interface 'typeof CX'.
   Types of property 'a' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -99,31 +93,25 @@ tests/cases/conformance/interfaces/interfaceDeclarations/interfaceExtendsObjectI
     declare function Constructor<T>(): Constructor<T>;
     
     class C1 extends Constructor<T1>() { a: string }
-          ~~
-!!! error TS2415: Class 'C1' incorrectly extends base class 'T1'.
-!!! error TS2415:   Types of property 'a' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'number'.
+                                         ~
+!!! error TS2416: Property 'a' in type 'C1' is not assignable to the same property in base type 'T1'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     class C2 extends Constructor<T2>() { b: string }
-          ~~
-!!! error TS2415: Class 'C2' incorrectly extends base class 'T2'.
-!!! error TS2415:   Type 'C2' is not assignable to type '{ b: number; }'.
-!!! error TS2415:     Types of property 'b' are incompatible.
-!!! error TS2415:       Type 'string' is not assignable to type 'number'.
+                                         ~
+!!! error TS2416: Property 'b' in type 'C2' is not assignable to the same property in base type 'T2'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     class C3 extends Constructor<T3>() { length: string }
-          ~~
-!!! error TS2415: Class 'C3' incorrectly extends base class 'number[]'.
-!!! error TS2415:   Types of property 'length' are incompatible.
-!!! error TS2415:     Type 'string' is not assignable to type 'number'.
+                                         ~~~~~~
+!!! error TS2416: Property 'length' in type 'C3' is not assignable to the same property in base type 'number[]'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     class C4 extends Constructor<T4>() { 0: number }
-          ~~
-!!! error TS2415: Class 'C4' incorrectly extends base class '[string, number]'.
-!!! error TS2415:   Types of property '0' are incompatible.
-!!! error TS2415:     Type 'number' is not assignable to type 'string'.
+                                         ~
+!!! error TS2416: Property '0' in type 'C4' is not assignable to the same property in base type '[string, number]'.
+!!! error TS2416:   Type 'number' is not assignable to type 'string'.
     class C5 extends Constructor<T5>() { c: number }
-          ~~
-!!! error TS2415: Class 'C5' incorrectly extends base class 'T5'.
-!!! error TS2415:   Types of property 'c' are incompatible.
-!!! error TS2415:     Type 'number' is not assignable to type 'string'.
+                                         ~
+!!! error TS2416: Property 'c' in type 'C5' is not assignable to the same property in base type 'T5'.
+!!! error TS2416:   Type 'number' is not assignable to type 'string'.
     
     declare class CX { static a: string }
     declare enum EX { A, B, C }

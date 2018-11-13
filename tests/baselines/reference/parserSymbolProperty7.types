@@ -3,6 +3,7 @@ class C {
 >C : C
 
     [Symbol.toStringTag](): void { }
+>[Symbol.toStringTag] : () => void
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol

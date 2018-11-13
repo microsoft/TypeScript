@@ -4,29 +4,22 @@ import React = require('react')
 
 declare function ComponentSpecific1<U>(l: {prop: U, "ignore-prop": string}): JSX.Element;
 >ComponentSpecific1 : <U>(l: { prop: U; "ignore-prop": string; }) => JSX.Element
->U : U
 >l : { prop: U; "ignore-prop": string; }
 >prop : U
->U : U
+>"ignore-prop" : string
 >JSX : any
->Element : JSX.Element
 
 declare function ComponentSpecific2<U>(l: {prop: U}): JSX.Element;
 >ComponentSpecific2 : <U>(l: { prop: U; }) => JSX.Element
->U : U
 >l : { prop: U; }
 >prop : U
->U : U
 >JSX : any
->Element : JSX.Element
 
 // Error
 function Bar<T extends {prop: number}>(arg: T) {
 >Bar : <T extends { prop: number; }>(arg: T) => void
->T : T
 >prop : number
 >arg : T
->T : T
 
     let a1 = <ComponentSpecific1 {...arg} ignore-prop={10} />;
 >a1 : JSX.Element
@@ -40,9 +33,7 @@ function Bar<T extends {prop: number}>(arg: T) {
 // Error
 function Baz<T>(arg: T) {
 >Baz : <T>(arg: T) => void
->T : T
 >arg : T
->T : T
 
     let a0 = <ComponentSpecific1 {...arg} />
 >a0 : JSX.Element
@@ -53,13 +44,10 @@ function Baz<T>(arg: T) {
 
 declare function Link<U>(l: {func: (arg: U)=>void}): JSX.Element;
 >Link : <U>(l: { func: (arg: U) => void; }) => JSX.Element
->U : U
 >l : { func: (arg: U) => void; }
 >func : (arg: U) => void
 >arg : U
->U : U
 >JSX : any
->Element : JSX.Element
 
 // Error
 function createLink(func: (a: number, b: string)=>void) {
@@ -77,28 +65,18 @@ function createLink(func: (a: number, b: string)=>void) {
 }
 
 interface InferParamProp<T> {
->InferParamProp : InferParamProp<T>
->T : T
-
     values: Array<T>;
 >values : T[]
->Array : T[]
->T : T
 
     selectHandler: (selectedVal: T) => void;
 >selectHandler : (selectedVal: T) => void
 >selectedVal : T
->T : T
 }
 
 declare function InferParamComponent<T>(attr: InferParamProp<T>): JSX.Element;
 >InferParamComponent : <T>(attr: InferParamProp<T>) => JSX.Element
->T : T
 >attr : InferParamProp<T>
->InferParamProp : InferParamProp<T>
->T : T
 >JSX : any
->Element : JSX.Element
 
 // Error
 let i = <InferParamComponent values={[1, 2, 3, 4]} selectHandler={(val: string) => { }} />;

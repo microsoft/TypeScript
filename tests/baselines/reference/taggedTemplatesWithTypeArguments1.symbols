@@ -1,0 +1,186 @@
+=== tests/cases/conformance/es6/templates/taggedTemplatesWithTypeArguments1.ts ===
+declare function f<T>(strs: TemplateStringsArray, ...callbacks: Array<(x: T) => any>): void;
+>f : Symbol(f, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 0))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 19))
+>strs : Symbol(strs, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 22))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>callbacks : Symbol(callbacks, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 49))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 71))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 19))
+
+interface Stuff {
+>Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+
+    x: number;
+>x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+
+    y: string;
+>y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+
+    z: boolean;
+>z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+}
+
+export const a = f<Stuff> `
+>a : Symbol(a, Decl(taggedTemplatesWithTypeArguments1.ts, 8, 12))
+>f : Symbol(f, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 0))
+>Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+
+    hello
+    ${stuff => stuff.x}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 10, 6))
+>stuff.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 10, 6))
+>x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+
+    brave
+    ${stuff => stuff.y}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 12, 6))
+>stuff.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 12, 6))
+>y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+
+    world
+    ${stuff => stuff.z}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 14, 6))
+>stuff.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 14, 6))
+>z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+
+`;
+
+declare function g<Input, T, U, V>(
+>g : Symbol(g, Decl(taggedTemplatesWithTypeArguments1.ts, 15, 2))
+>Input : Symbol(Input, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 19))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 25))
+>U : Symbol(U, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 28))
+>V : Symbol(V, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 31))
+
+    strs: TemplateStringsArray,
+>strs : Symbol(strs, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 35))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+
+    t: (i: Input) => T, u: (i: Input) => U, v: (i: Input) => V): T | U | V;
+>t : Symbol(t, Decl(taggedTemplatesWithTypeArguments1.ts, 18, 31))
+>i : Symbol(i, Decl(taggedTemplatesWithTypeArguments1.ts, 19, 8))
+>Input : Symbol(Input, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 19))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 25))
+>u : Symbol(u, Decl(taggedTemplatesWithTypeArguments1.ts, 19, 23))
+>i : Symbol(i, Decl(taggedTemplatesWithTypeArguments1.ts, 19, 28))
+>Input : Symbol(Input, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 19))
+>U : Symbol(U, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 28))
+>v : Symbol(v, Decl(taggedTemplatesWithTypeArguments1.ts, 19, 43))
+>i : Symbol(i, Decl(taggedTemplatesWithTypeArguments1.ts, 19, 48))
+>Input : Symbol(Input, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 19))
+>V : Symbol(V, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 31))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 25))
+>U : Symbol(U, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 28))
+>V : Symbol(V, Decl(taggedTemplatesWithTypeArguments1.ts, 17, 31))
+
+export const b = g<Stuff, number, string, boolean> `
+>b : Symbol(b, Decl(taggedTemplatesWithTypeArguments1.ts, 21, 12))
+>g : Symbol(g, Decl(taggedTemplatesWithTypeArguments1.ts, 15, 2))
+>Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+
+    hello
+    ${stuff => stuff.x}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 23, 6))
+>stuff.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 23, 6))
+>x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+
+    brave
+    ${stuff => stuff.y}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 25, 6))
+>stuff.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 25, 6))
+>y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+
+    world
+    ${stuff => stuff.z}
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 27, 6))
+>stuff.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+>stuff : Symbol(stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 27, 6))
+>z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+
+`;
+
+declare let obj: {
+>obj : Symbol(obj, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 11))
+
+    prop: <T>(strs: TemplateStringsArray, x: (input: T) => T) => {
+>prop : Symbol(prop, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 18))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 11))
+>strs : Symbol(strs, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 14))
+>TemplateStringsArray : Symbol(TemplateStringsArray, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 41))
+>input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 46))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 11))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 11))
+
+        returnedObjProp: T
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>T : Symbol(T, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 11))
+    }
+}
+
+export let c = obj["prop"]<Stuff> `${(input) => ({ ...input })}`
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>obj : Symbol(obj, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 11))
+>"prop" : Symbol(prop, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 18))
+>Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+>input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 38))
+>input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 38))
+
+c.returnedObjProp.x;
+>c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+
+c.returnedObjProp.y;
+>c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+
+c.returnedObjProp.z;
+>c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+
+c = obj.prop<Stuff> `${(input) => ({ ...input })}`
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>obj.prop : Symbol(prop, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 18))
+>obj : Symbol(obj, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 11))
+>prop : Symbol(prop, Decl(taggedTemplatesWithTypeArguments1.ts, 30, 18))
+>Stuff : Symbol(Stuff, Decl(taggedTemplatesWithTypeArguments1.ts, 0, 92))
+>input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 41, 24))
+>input : Symbol(input, Decl(taggedTemplatesWithTypeArguments1.ts, 41, 24))
+
+c.returnedObjProp.x;
+>c.returnedObjProp.x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>x : Symbol(Stuff.x, Decl(taggedTemplatesWithTypeArguments1.ts, 2, 17))
+
+c.returnedObjProp.y;
+>c.returnedObjProp.y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>y : Symbol(Stuff.y, Decl(taggedTemplatesWithTypeArguments1.ts, 3, 14))
+
+c.returnedObjProp.z;
+>c.returnedObjProp.z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+>c.returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>c : Symbol(c, Decl(taggedTemplatesWithTypeArguments1.ts, 36, 10))
+>returnedObjProp : Symbol(returnedObjProp, Decl(taggedTemplatesWithTypeArguments1.ts, 31, 66))
+>z : Symbol(Stuff.z, Decl(taggedTemplatesWithTypeArguments1.ts, 4, 14))
+

@@ -1,7 +1,6 @@
 === tests/cases/compiler/mismatchedClassConstructorVariable.ts ===
 var baz: foo;
 >baz : foo
->foo : foo
 
 class baz { }
 >baz : baz

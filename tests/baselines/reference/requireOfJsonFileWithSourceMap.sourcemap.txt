@@ -1,0 +1,145 @@
+===================================================================
+JsFile: file1.js
+mapUrl: file1.js.map
+sourceRoot: 
+sources: ../tests/cases/compiler/file1.ts
+===================================================================
+-------------------------------------------------------------------
+emittedFile:out/file1.js
+sourceFile:../tests/cases/compiler/file1.ts
+-------------------------------------------------------------------
+>>>"use strict";
+>>>exports.__esModule = true;
+>>>var b1 = require("./b.json");
+1 >
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1 >
+2 >import b1 = require('./b.json');
+1 >Emitted(3, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(3, 30) Source(1, 33) + SourceIndex(0)
+---
+>>>var x = b1.a;
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^^
+5 >        ^^
+6 >          ^
+7 >           ^
+8 >            ^
+9 >             ^^^^^^^^^^^^^^^^^->
+1 >
+  >
+2 >let 
+3 >    x
+4 >      = 
+5 >        b1
+6 >          .
+7 >           a
+8 >            ;
+1 >Emitted(4, 1) Source(2, 1) + SourceIndex(0)
+2 >Emitted(4, 5) Source(2, 5) + SourceIndex(0)
+3 >Emitted(4, 6) Source(2, 6) + SourceIndex(0)
+4 >Emitted(4, 9) Source(2, 9) + SourceIndex(0)
+5 >Emitted(4, 11) Source(2, 11) + SourceIndex(0)
+6 >Emitted(4, 12) Source(2, 12) + SourceIndex(0)
+7 >Emitted(4, 13) Source(2, 13) + SourceIndex(0)
+8 >Emitted(4, 14) Source(2, 14) + SourceIndex(0)
+---
+>>>var b2 = require("./b.json");
+1->
+2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+1->
+  >
+2 >import b2 = require('./b.json');
+1->Emitted(5, 1) Source(3, 1) + SourceIndex(0)
+2 >Emitted(5, 30) Source(3, 33) + SourceIndex(0)
+---
+>>>if (x) {
+1 >
+2 >^^^^
+3 >    ^
+4 >     ^^
+5 >       ^^^^^^^^^^^->
+1 >
+  >
+2 >if (
+3 >    x
+4 >     ) 
+1 >Emitted(6, 1) Source(4, 1) + SourceIndex(0)
+2 >Emitted(6, 5) Source(4, 5) + SourceIndex(0)
+3 >Emitted(6, 6) Source(4, 6) + SourceIndex(0)
+4 >Emitted(6, 8) Source(4, 8) + SourceIndex(0)
+---
+>>>    var b = b2.b;
+1->^^^^
+2 >    ^^^^
+3 >        ^
+4 >         ^^^
+5 >            ^^
+6 >              ^
+7 >               ^
+8 >                ^
+9 >                 ^^^^^->
+1->{
+  >    
+2 >    let 
+3 >        b
+4 >          = 
+5 >            b2
+6 >              .
+7 >               b
+8 >                ;
+1->Emitted(7, 5) Source(5, 5) + SourceIndex(0)
+2 >Emitted(7, 9) Source(5, 9) + SourceIndex(0)
+3 >Emitted(7, 10) Source(5, 10) + SourceIndex(0)
+4 >Emitted(7, 13) Source(5, 13) + SourceIndex(0)
+5 >Emitted(7, 15) Source(5, 15) + SourceIndex(0)
+6 >Emitted(7, 16) Source(5, 16) + SourceIndex(0)
+7 >Emitted(7, 17) Source(5, 17) + SourceIndex(0)
+8 >Emitted(7, 18) Source(5, 18) + SourceIndex(0)
+---
+>>>    x = (b1.b === b);
+1->^^^^
+2 >    ^
+3 >     ^^^
+4 >        ^
+5 >         ^^
+6 >           ^
+7 >            ^
+8 >             ^^^^^
+9 >                  ^
+10>                   ^
+11>                    ^
+1->
+  >    
+2 >    x
+3 >      = 
+4 >        (
+5 >         b1
+6 >           .
+7 >            b
+8 >              === 
+9 >                  b
+10>                   )
+11>                    ;
+1->Emitted(8, 5) Source(6, 5) + SourceIndex(0)
+2 >Emitted(8, 6) Source(6, 6) + SourceIndex(0)
+3 >Emitted(8, 9) Source(6, 9) + SourceIndex(0)
+4 >Emitted(8, 10) Source(6, 10) + SourceIndex(0)
+5 >Emitted(8, 12) Source(6, 12) + SourceIndex(0)
+6 >Emitted(8, 13) Source(6, 13) + SourceIndex(0)
+7 >Emitted(8, 14) Source(6, 14) + SourceIndex(0)
+8 >Emitted(8, 19) Source(6, 19) + SourceIndex(0)
+9 >Emitted(8, 20) Source(6, 20) + SourceIndex(0)
+10>Emitted(8, 21) Source(6, 21) + SourceIndex(0)
+11>Emitted(8, 22) Source(6, 22) + SourceIndex(0)
+---
+>>>}
+1 >^
+2 > ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+1 >
+  >}
+1 >Emitted(9, 2) Source(7, 2) + SourceIndex(0)
+---
+>>>//# sourceMappingURL=file1.js.map

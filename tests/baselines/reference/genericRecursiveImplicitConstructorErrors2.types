@@ -3,14 +3,8 @@ module TypeScript2 {
 >TypeScript2 : typeof TypeScript2
 
   export interface DeclKind { };
->DeclKind : DeclKind
-
   export interface PullTypesymbol { };
->PullTypesymbol : PullTypesymbol
-
   export interface SymbolLinkKind { };
->SymbolLinkKind : SymbolLinkKind
-
   export enum PullSymbolVisibility {
 >PullSymbolVisibility : PullSymbolVisibility
 
@@ -27,31 +21,18 @@ module TypeScript2 {
     constructor (name: string, declKind: DeclKind) {
 >name : string
 >declKind : DeclKind
->DeclKind : DeclKind
 
     }
     // link methods
     public addOutgoingLink<A,B,C>(linkTo: PullSymbol, kind: SymbolLinkKind) {
 >addOutgoingLink : <A, B, C>(linkTo: PullSymbol, kind: SymbolLinkKind) => void
->A : A
->B : B
->C : C
 >linkTo : PullSymbol
->PullSymbol : PullSymbol
 >kind : SymbolLinkKind
->SymbolLinkKind : SymbolLinkKind
 
     }
 
     public getType<A,B,C>(): PullTypeSymbol<A,B,C> {
 >getType : <A, B, C>() => PullTypeSymbol<A, B, C>
->A : A
->B : B
->C : C
->PullTypeSymbol : PullTypeSymbol<A, B, C>
->A : A
->B : B
->C : C
 
       return undefined;
 >undefined : undefined
@@ -59,9 +40,6 @@ module TypeScript2 {
   }
   export class PullTypeSymbol <A,B,C>extends PullSymbol {
 >PullTypeSymbol : PullTypeSymbol<A, B, C>
->A : A
->B : B
->C : C
 >PullSymbol : PullSymbol
   }
 }

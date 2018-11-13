@@ -13,11 +13,9 @@ class C1 {
 
 class T<T> {
 >T : T<T>
->T : T
 
     constructor(n?: T) { }
 >n : T
->T : T
 }
 
 var anyCtor: {
@@ -35,13 +33,9 @@ var anyCtor1: {
 };
 
 interface nestedCtor {
->nestedCtor : nestedCtor
-
     new (): nestedCtor;
->nestedCtor : nestedCtor
 }
 var nestedCtor: nestedCtor;
->nestedCtor : nestedCtor
 >nestedCtor : nestedCtor
 
 // Construct expression with no parentheses for construct signature with 0 parameters
@@ -52,7 +46,6 @@ var a = new C0;
 
 var a: C0;
 >a : C0
->C0 : C0
 
 
 // Generic construct expression with no parentheses
@@ -63,7 +56,6 @@ var c1 = new T;
 
 var c1: T<{}>;
 >c1 : T<{}>
->T : T<T>
 
 // Construct expression where constructor is of type 'any' with no parentheses
 var d = new anyCtor;
@@ -84,9 +76,7 @@ var d = new anyCtor1(undefined);
 // Construct expression of type where apparent type has a construct signature with 0 arguments
 function newFn1<T extends { new (): number }>(s: T) {
 >newFn1 : <T extends new () => number>(s: T) => void
->T : T
 >s : T
->T : T
 
     var p = new s;
 >p : number
@@ -100,10 +90,8 @@ function newFn1<T extends { new (): number }>(s: T) {
 // Construct expression of type where apparent type has a construct signature with 1 arguments
 function newFn2<T extends { new (s: number): string}>(s: T) {
 >newFn2 : <T extends new (s: number) => string>(s: T) => void
->T : T
 >s : number
 >s : T
->T : T
 
     var p = new s(32);
 >p : string

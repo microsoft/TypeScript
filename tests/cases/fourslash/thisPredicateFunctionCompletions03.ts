@@ -44,13 +44,7 @@
 //// }
 //// let checked/*14*/LeaderStatus = isLeader/*15*/Guard(a);
 
-
-goTo.marker("2");
-verify.completionListContains("lead");
-goTo.marker("4");
-verify.completionListContains("follow");
-
-goTo.marker("6");
-verify.completionListContains("lead");
-goTo.marker("8");
-verify.completionListContains("follow");
+verify.completions(
+    { marker: ["2", "6"], exact: ["lead", "isLeader", "isFollower"] },
+    { marker: ["4", "8"], exact: ["follow", "isLeader", "isFollower"] },
+);

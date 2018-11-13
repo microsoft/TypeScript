@@ -1,0 +1,29 @@
+=== tests/cases/conformance/es6/yieldExpressions/bug25149.js ===
+function* f() {
+>f : Symbol(f, Decl(bug25149.js, 0, 0))
+
+    var o
+>o : Symbol(o, Decl(bug25149.js, 1, 7))
+
+    while (true) {
+        o = yield o
+>o : Symbol(o, Decl(bug25149.js, 1, 7))
+>o : Symbol(o, Decl(bug25149.js, 1, 7))
+    }
+}
+
+=== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
+// fails in Typescript too
+function* g() {
+>g : Symbol(g, Decl(alsoFails.ts, 0, 0))
+
+    var o = []
+>o : Symbol(o, Decl(alsoFails.ts, 2, 7))
+
+    while (true) {
+        o = yield* o
+>o : Symbol(o, Decl(alsoFails.ts, 2, 7))
+>o : Symbol(o, Decl(alsoFails.ts, 2, 7))
+    }
+}
+

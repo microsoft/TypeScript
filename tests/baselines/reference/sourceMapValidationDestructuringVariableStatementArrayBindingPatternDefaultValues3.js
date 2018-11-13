@@ -55,6 +55,7 @@ function getMultiRobotB() {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24;
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 var multiRobotA = ["mower", ["mowing", ""]];
@@ -93,5 +94,4 @@ function getRobotB() {
 function getMultiRobotB() {
     return multiRobotB;
 }
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o, _p, _q, _r, _s, _t, _u, _v, _w, _x, _y, _z, _0, _1, _2, _3, _4, _5, _6, _7, _8, _9, _10, _11, _12, _13, _14, _15, _16, _17, _18, _19, _20, _21, _22, _23, _24;
 //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPatternDefaultValues3.js.map

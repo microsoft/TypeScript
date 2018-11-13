@@ -2,13 +2,14 @@
 namespace ts {
     export function createGetSymbolWalker(
         getRestTypeOfSignature: (sig: Signature) => Type,
+        getTypePredicateOfSignature: (sig: Signature) => TypePredicate | undefined,
         getReturnTypeOfSignature: (sig: Signature) => Type,
         getBaseTypes: (type: Type) => Type[],
         resolveStructuredTypeMembers: (type: ObjectType) => ResolvedType,
         getTypeOfSymbol: (sym: Symbol) => Type,
         getResolvedSymbol: (node: Node) => Symbol,
-        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type,
-        getConstraintFromTypeParameter: (typeParameter: TypeParameter) => Type,
+        getIndexTypeOfStructuredType: (type: Type, kind: IndexKind) => Type | undefined,
+        getConstraintOfTypeParameter: (typeParameter: TypeParameter) => Type | undefined,
         getFirstIdentifier: (node: EntityNameOrEntityNameExpression) => Identifier) {
 
         return getSymbolWalker;
@@ -40,7 +41,7 @@ namespace ts {
                 },
             };
 
-            function visitType(type: Type): void {
+            function visitType(type: Type | undefined): void {
                 if (!type) {
                     return;
                 }
@@ -92,7 +93,7 @@ namespace ts {
             }
 
             function visitTypeParameter(type: TypeParameter): void {
-                visitType(getConstraintFromTypeParameter(type));
+                visitType(getConstraintOfTypeParameter(type));
             }
 
             function visitUnionOrIntersectionType(type: UnionOrIntersectionType): void {
@@ -117,8 +118,9 @@ namespace ts {
             }
 
             function visitSignature(signature: Signature): void {
-                if (signature.typePredicate) {
-                    visitType(signature.typePredicate.type);
+                const typePredicate = getTypePredicateOfSignature(signature);
+                if (typePredicate) {
+                    visitType(typePredicate.type);
                 }
                 forEach(signature.typeParameters, visitType);
 
@@ -155,13 +157,13 @@ namespace ts {
                 }
             }
 
-            function visitSymbol(symbol: Symbol): boolean {
+            function visitSymbol(symbol: Symbol | undefined): boolean {
                 if (!symbol) {
-                    return;
+                    return false;
                 }
                 const symbolId = getSymbolId(symbol);
                 if (visitedSymbols[symbolId]) {
-                    return;
+                    return false;
                 }
                 visitedSymbols[symbolId] = symbol;
                 if (!accept(symbol)) {
@@ -169,7 +171,7 @@ namespace ts {
                 }
                 const t = getTypeOfSymbol(symbol);
                 visitType(t); // Should handle members on classes and such
-                if (symbol.flags & SymbolFlags.HasExports) {
+                if (symbol.exports) {
                     symbol.exports.forEach(visitSymbol);
                 }
                 forEach(symbol.declarations, d => {
@@ -183,6 +185,7 @@ namespace ts {
                         visitSymbol(entity);
                     }
                 });
+                return false;
             }
         }
     }

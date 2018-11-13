@@ -4,4 +4,5 @@ class C {
 
     // Used to be indexer, now it is a computed property
     [x]: string
+>[x] : Symbol(C[x], Decl(indexWithoutParamType2.ts, 0, 9))
 }

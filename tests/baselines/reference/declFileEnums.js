@@ -75,28 +75,28 @@ var e5;
 declare enum e1 {
     a = 0,
     b = 1,
-    c = 2,
+    c = 2
 }
 declare enum e2 {
     a = 10,
     b = 12,
-    c = 10,
+    c = 10
 }
 declare enum e3 {
     a = 10,
     b,
-    c = 13,
+    c = 13
 }
 declare enum e4 {
     a = 0,
     b = 1,
     c = 2,
     d = 10,
-    e = 11,
+    e = 11
 }
 declare enum e5 {
     "Friday" = 0,
     "Saturday" = 1,
     "Sunday" = 2,
-    "Weekend days" = 3,
+    "Weekend days" = 3
 }

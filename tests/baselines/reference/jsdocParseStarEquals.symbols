@@ -1,0 +1,14 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @param {...*=} args
+    @return {*=} */
+function f(...args) {
+>f : Symbol(f, Decl(a.js, 0, 0))
+>args : Symbol(args, Decl(a.js, 2, 11))
+
+    return null
+}
+
+/** @type *= */
+var x;
+>x : Symbol(x, Decl(a.js, 7, 3))
+

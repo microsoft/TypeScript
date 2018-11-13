@@ -213,6 +213,7 @@ class C21 {
 >C21 : Symbol(C21, Decl(yieldInClassComputedPropertyIsError.ts, 0, 0))
 
     async * [yield]() {
+>[yield] : Symbol(C21[yield], Decl(yieldInClassComputedPropertyIsError.ts, 0, 11))
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/yieldInNestedComputedPropertyIsOk.ts ===
@@ -224,6 +225,7 @@ class C22 {
 
         const x = { [yield]: 1 };
 >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 13))
+>[yield] : Symbol([yield], Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 19))
     }
 }
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/asyncGeneratorGetAccessorIsError.ts ===
@@ -253,4 +255,5 @@ class C25 {
 
     async * x = 1;
 >x : Symbol(C25.x, Decl(asyncGeneratorPropertyIsError.ts, 0, 11))
+>1 : Symbol(C25[1], Decl(asyncGeneratorPropertyIsError.ts, 1, 15))
 }

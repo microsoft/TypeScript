@@ -4,5 +4,4 @@ class A { }
 
 class C implements A { }
 >C : C
->A : A
 

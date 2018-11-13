@@ -1,12 +1,9 @@
 === tests/cases/compiler/unusedTypeParameters2.ts ===
 class greeter<typeparameter1, typeparameter2> {
 >greeter : greeter<typeparameter1, typeparameter2>
->typeparameter1 : typeparameter1
->typeparameter2 : typeparameter2
 
     private x: typeparameter2;
 >x : typeparameter2
->typeparameter2 : typeparameter2
 
     public function1() {
 >function1 : () => void

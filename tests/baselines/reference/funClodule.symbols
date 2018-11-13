@@ -13,16 +13,16 @@ declare class foo { } // Should error
 
 
 declare class foo2 { }
->foo2 : Symbol(foo2, Decl(funClodule.ts, 4, 21), Decl(funClodule.ts, 7, 22))
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 4, 21))
 
 declare module foo2 {
->foo2 : Symbol(foo2, Decl(funClodule.ts, 4, 21), Decl(funClodule.ts, 7, 22))
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1), Decl(funClodule.ts, 7, 22))
 
     export function x(): any;
 >x : Symbol(x, Decl(funClodule.ts, 8, 21))
 }
 declare function foo2(); // Should error
->foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1))
+>foo2 : Symbol(foo2, Decl(funClodule.ts, 10, 1), Decl(funClodule.ts, 7, 22))
 
 
 function foo3() { }

@@ -78,7 +78,7 @@ rest("d", ...ns)
 >ns : number[]
 
 
-// this covers the arguments case
+// extra arguments
 normal("g", ...ns)
 >normal("g", ...ns) : void
 >normal : (s: string) => void
@@ -86,37 +86,11 @@ normal("g", ...ns)
 >...ns : number
 >ns : number[]
 
-normal("h", ...mixed)
->normal("h", ...mixed) : void
->normal : (s: string) => void
->"h" : "h"
->...mixed : string | number
->mixed : (string | number)[]
-
-normal("i", ...tuple)
->normal("i", ...tuple) : void
->normal : (s: string) => void
->"i" : "i"
->...tuple : string | number
->tuple : [number, string]
-
 thunk(...ns)
 >thunk(...ns) : string
 >thunk : () => string
 >...ns : number
 >ns : number[]
-
-thunk(...mixed)
->thunk(...mixed) : string
->thunk : () => string
->...mixed : string | number
->mixed : (string | number)[]
-
-thunk(...tuple)
->thunk(...tuple) : string
->thunk : () => string
->...tuple : string | number
->tuple : [number, string]
 
 // bad
 all(...mixed)

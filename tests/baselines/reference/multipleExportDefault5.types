@@ -3,5 +3,5 @@ export default function bar() { }
 >bar : () => void
 
 export default class C {}
->C : C
+>C : import("tests/cases/conformance/externalModules/multipleExportDefault5").default
 

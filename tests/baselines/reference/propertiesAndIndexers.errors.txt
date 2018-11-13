@@ -40,7 +40,7 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
 !!! error TS2412: Property '1' of type 'Z' is not assignable to numeric index type 'string'.
         c: boolean;
         3: boolean;
-        ~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
         6(): string;
         ~~~~~~~~~~~~
@@ -49,7 +49,7 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
     
     interface B {
         4: boolean;
-        ~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '4' of type 'boolean' is not assignable to numeric index type 'string'.
         5: string;
     }
@@ -63,10 +63,10 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
         ~~~~~~~~~~~~~~~~~~~~
 !!! error TS2411: Property 'b' of type 'X' is not assignable to string index type 'number'.
         c: boolean;
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property 'c' of type 'boolean' is not assignable to string index type 'number'.
         3: boolean;
-        ~~~~~~~~~~~
+        ~
 !!! error TS2411: Property '3' of type 'boolean' is not assignable to string index type 'number'.
     }
     
@@ -80,15 +80,15 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
               ~
 !!! error TS2413: Numeric index type 'string' is not assignable to string index type 'number'.
         2: Z;
-        ~~~~~
+        ~
 !!! error TS2411: Property '2' of type 'Z' is not assignable to string index type 'number'.
-        ~~~~~
+        ~
 !!! error TS2412: Property '2' of type 'Z' is not assignable to numeric index type 'string'.
         Infinity: number;
-        ~~~~~~~~~~~~~~~~~
+        ~~~~~~~~
 !!! error TS2412: Property 'Infinity' of type 'number' is not assignable to numeric index type 'string'.
         zoo: string;
-        ~~~~~~~~~~~~
+        ~~~
 !!! error TS2411: Property 'zoo' of type 'string' is not assignable to string index type 'number'.
     }
     
@@ -98,7 +98,7 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
     
     class Q extends P {
         t: number;
-        ~~~~~~~~~~
+        ~
 !!! error TS2411: Property 't' of type 'number' is not assignable to string index type 'string'.
     }
     
@@ -106,6 +106,6 @@ tests/cases/compiler/propertiesAndIndexers.ts(50,5): error TS2412: Property '3' 
         [n: number]: string;
         c: boolean;
         3: boolean;
-        ~~~~~~~~~~~
+        ~
 !!! error TS2412: Property '3' of type 'boolean' is not assignable to numeric index type 'string'.
     };

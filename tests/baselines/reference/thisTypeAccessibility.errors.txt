@@ -1,0 +1,74 @@
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(17,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(20,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(21,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(26,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(29,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(30,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(35,10): error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(38,13): error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+tests/cases/conformance/types/thisType/thisTypeAccessibility.ts(39,13): error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+
+
+==== tests/cases/conformance/types/thisType/thisTypeAccessibility.ts (9 errors) ====
+    class MyClass {
+        private p: number = 123;
+        protected pp: number = 123;
+        public ppp: number = 123;
+        private static sp: number = 123;
+        protected static spp: number = 123;
+        public static sppp: number = 123;
+    }
+    
+    interface MyClass {
+        extension1(p: number): void;
+        extension2(p: number): void;
+        extension3(p: number): void;
+    }
+    
+    MyClass.prototype.extension1 = function (this: MyClass, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    MyClass.prototype.extension2 = function<T extends MyClass> (this: T, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    function extension3<T extends MyClass> (this: T, p: number) { 
+        this.p = p;
+             ~
+!!! error TS2341: Property 'p' is private and only accessible within class 'MyClass'.
+        this.pp = p;
+        this.ppp = p;
+        MyClass.sp = p;
+                ~~
+!!! error TS2341: Property 'sp' is private and only accessible within class 'MyClass'.
+        MyClass.spp = p;
+                ~~~
+!!! error TS2445: Property 'spp' is protected and only accessible within class 'MyClass' and its subclasses.
+        MyClass.sppp = p;
+    }
+    
+    MyClass.prototype.extension3 = extension3;
+    

@@ -13,10 +13,10 @@ class C {
 
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 
     // Computed properties
     get [1 << 6]() { return new Foo }
+>[1 << 6] : Foo
 >1 << 6 : number
 >1 : 1
 >6 : 6
@@ -24,9 +24,9 @@ class C {
 >Foo : typeof Foo
 
     set [1 << 6](p: Foo2) { }
+>[1 << 6] : Foo2
 >1 << 6 : number
 >1 : 1
 >6 : 6
 >p : Foo2
->Foo2 : Foo2
 }

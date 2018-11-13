@@ -24,7 +24,6 @@ function runTests() {
 >compiler : any
 ><TypeScript.TypeScriptCompiler>new TypeScript.TypeScriptCompiler(outerr) : any
 >TypeScript : any
->TypeScriptCompiler : No type information available!
 >new TypeScript.TypeScriptCompiler(outerr) : any
 >TypeScript.TypeScriptCompiler : any
 >TypeScript : any

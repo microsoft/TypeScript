@@ -4,21 +4,12 @@
 import Namespace from "./b";
 export var x = new Namespace.Foo();
 
-//// [b.ts]
+//// [b.d.ts]
 export class Foo {
 	member: string;
 }
 
 
-//// [b.js]
-"use strict";
-exports.__esModule = true;
-var Foo = /** @class */ (function () {
-    function Foo() {
-    }
-    return Foo;
-}());
-exports.Foo = Foo;
 //// [a.js]
 "use strict";
 exports.__esModule = true;

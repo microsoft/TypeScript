@@ -12,7 +12,6 @@ class LanguageSpec_section_4_5_inference {
     public set InferredGetterFromSetterAnnotation(a: A) { }
 >InferredGetterFromSetterAnnotation : A
 >a : A
->A : A
 
     public get InferredGetterFromSetterAnnotation() { return new B(); }
 >InferredGetterFromSetterAnnotation : A
@@ -27,7 +26,6 @@ class LanguageSpec_section_4_5_inference {
     public set InferredGetterFromSetterAnnotation_GetterFirst(a: A) { }
 >InferredGetterFromSetterAnnotation_GetterFirst : A
 >a : A
->A : A
     
 
     public get InferredFromGetter() { return new B(); }
@@ -54,13 +52,11 @@ class LanguageSpec_section_4_5_inference {
 
     public get InferredSetterFromGetterAnnotation() : A { return new B(); }
 >InferredSetterFromGetterAnnotation : A
->A : A
 >new B() : B
 >B : typeof B
 
     public get InferredSetterFromGetterAnnotation_GetterFirst() : A { return new B(); }
 >InferredSetterFromGetterAnnotation_GetterFirst : A
->A : A
 >new B() : B
 >B : typeof B
 

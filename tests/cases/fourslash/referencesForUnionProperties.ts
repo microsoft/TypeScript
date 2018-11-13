@@ -1,16 +1,16 @@
 /// <reference path='fourslash.ts'/>
 
 ////interface One {
-////    common: { [|{| "isWriteAccess": true, "isDefinition": true |}a|]: number; };
+////    common: { [|{| "isDefinition": true |}a|]: number; };
 ////}
 ////
 ////interface Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////    b: string;
 ////}
 ////
 ////interface HasAOrB extends Base {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////    b: string;
 ////}
 ////
@@ -23,15 +23,18 @@
 ////x.common.[|a|];
 
 const [one, base, hasAOrB, x] = test.ranges();
-verify.referenceGroups(one, [{ definition: "(property) a: number", ranges: [one, x] }]);
-verify.referenceGroups(base, [{ definition: "(property) Base.a: string", ranges: [base, hasAOrB, x] }]);
-verify.referenceGroups(hasAOrB, [
+verify.referenceGroups(one, [
+    { definition: "(property) a: number", ranges: [one] },
+    { definition: "(property) a: string | number", ranges: [x] },
+]);
+verify.referenceGroups([base, hasAOrB], [
     { definition: "(property) Base.a: string", ranges: [base] },
-    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB, x] }
+    { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
+    { definition: "(property) a: string | number", ranges: [x] },
 ]);
 verify.referenceGroups(x, [
     { definition: "(property) a: number", ranges: [one] },
     { definition: "(property) Base.a: string", ranges: [base] },
     { definition: "(property) HasAOrB.a: string", ranges: [hasAOrB] },
-    { definition: "(property) a: string | number", ranges: [x] }
+    { definition: "(property) a: string | number", ranges: [x] },
 ]);

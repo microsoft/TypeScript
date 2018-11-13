@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
-//// var index = { set p(x: [|*|]) { } };
+//// var index = { set p(x: [|*|]) { x; } };
 
 verify.codeFix({
-    description: "Change '*' to 'any'.",
+    description: "Change '*' to 'any'",
     newRangeContent: "any",
 });

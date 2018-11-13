@@ -11,7 +11,6 @@ class Comment {
     static getDocCommentText(comments: Comment[])
 >getDocCommentText : (comments: Comment[]) => void
 >comments : Comment[]
->Comment : Comment
     {
         comments[0].getDocCommentText();
 >comments[0].getDocCommentText() : void
@@ -23,7 +22,6 @@ class Comment {
 
         var c: Comment;
 >c : Comment
->Comment : Comment
 
         c.getDocCommentText();
 >c.getDocCommentText() : void

@@ -1,9 +1,7 @@
 === tests/cases/compiler/unusedInterfaceinNamespace1.ts ===
 namespace Validation {
->Validation : any
-
-    interface i1 {
->i1 : i1
-
-    }
-}
+No type information for this code.    interface i1 {
+No type information for this code.
+No type information for this code.    }
+No type information for this code.}
+No type information for this code.

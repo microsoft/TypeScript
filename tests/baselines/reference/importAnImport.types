@@ -1,21 +1,15 @@
 === tests/cases/compiler/importAnImport.ts ===
 module c.a.b {
->c : any
->a : any
->b : any
-
     import ma = a;
 >ma : any
 >a : any
 }
 
 module m0 {
->m0 : any
-
     import m8 = c.a.b.ma;
 >m8 : any
 >c : any
 >a : any
 >b : any
->ma : No type information available!
+>ma : any
 }

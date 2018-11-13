@@ -20,7 +20,7 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditoinIsAnyType.ts, 8, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var exprAny2: any;
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditoinIsAnyType.ts, 10, 3))
@@ -36,7 +36,7 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditoinIsAnyType.ts, 14, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 //Cond is an any type variable
 condAny ? exprAny1 : exprAny2;

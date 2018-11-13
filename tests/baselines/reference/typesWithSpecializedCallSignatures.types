@@ -21,17 +21,14 @@ class C {
     foo(x: 'hi'): Derived1;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
->Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "bye"
->Derived2 : Derived2
 
     foo(x: string): Base;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : string
->Base : Base
 
     foo(x) {
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
@@ -47,26 +44,20 @@ var c = new C();
 >C : typeof C
 
 interface I {
->I : I
-
     foo(x: 'hi'): Derived1;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
->Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "bye"
->Derived2 : Derived2
 
     foo(x: string): Base;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : string
->Base : Base
 }
 var i: I;
 >i : I
->I : I
 
 var a: {
 >a : { foo(x: "hi"): Derived1; foo(x: "bye"): Derived2; foo(x: string): Base; }
@@ -74,17 +65,14 @@ var a: {
     foo(x: 'hi'): Derived1;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "hi"
->Derived1 : Derived1
 
     foo(x: 'bye'): Derived2;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : "bye"
->Derived2 : Derived2
 
     foo(x: string): Base;
 >foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >x : string
->Base : Base
 
 };
 
@@ -120,7 +108,6 @@ a = i;
 
 var r1: Derived1 = c.foo('hi');
 >r1 : Derived1
->Derived1 : Derived1
 >c.foo('hi') : Derived1
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C
@@ -129,7 +116,6 @@ var r1: Derived1 = c.foo('hi');
 
 var r2: Derived2 = c.foo('bye');
 >r2 : Derived2
->Derived2 : Derived2
 >c.foo('bye') : Derived2
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C
@@ -138,7 +124,6 @@ var r2: Derived2 = c.foo('bye');
 
 var r3: Base = c.foo('hm');
 >r3 : Base
->Base : Base
 >c.foo('hm') : Base
 >c.foo : { (x: "hi"): Derived1; (x: "bye"): Derived2; (x: string): Base; }
 >c : C

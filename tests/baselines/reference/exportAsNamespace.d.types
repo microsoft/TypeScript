@@ -5,5 +5,5 @@ export var X;
 >X : any
 
 export as namespace N
->N : typeof "tests/cases/compiler/exportAsNamespace"
+>N : typeof import("tests/cases/compiler/exportAsNamespace")
 

@@ -7,14 +7,10 @@ function f1() {
 
         class C<X, Y> {
 >C : C<X, Y>
->X : X
->Y : Y
 
             constructor(public x: X, public y: Y) { }
 >x : X
->X : X
 >y : Y
->Y : Y
         }
         return C;
 >C : typeof C
@@ -49,13 +45,10 @@ function f2() {
 
     function f<X>(x: X) {
 >f : <X>(x: X) => typeof C
->X : X
 >x : X
->X : X
 
         class C<Y> {
 >C : C<Y>
->Y : Y
 
             public x = x;
 >x : X
@@ -63,7 +56,6 @@ function f2() {
 
             constructor(public y: Y) { }
 >y : Y
->Y : Y
         }
         return C;
 >C : typeof C
@@ -98,12 +90,8 @@ function f3() {
 
     function f<X, Y>(x: X, y: Y) {
 >f : <X, Y>(x: X, y: Y) => typeof C
->X : X
->Y : Y
 >x : X
->X : X
 >y : Y
->Y : Y
 
         class C {
 >C : C

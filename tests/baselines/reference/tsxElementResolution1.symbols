@@ -19,5 +19,3 @@ declare module JSX {
 
 // Fail
 <span />;
->span : Symbol(unknown)
-

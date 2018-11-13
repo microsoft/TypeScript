@@ -516,7 +516,7 @@ function foo3() {
     }
     for (let [y] = []; ;) {
 >y : any
->[] : [any]
+>[] : [undefined?]
 
         use(y);
 >use(y) : any
@@ -555,7 +555,7 @@ function foo4() {
     }
     for (const [y] = []; ;) {
 >y : any
->[] : [any]
+>[] : [undefined?]
 
         use(y);
 >use(y) : any

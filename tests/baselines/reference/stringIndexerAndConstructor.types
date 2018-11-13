@@ -11,14 +11,14 @@ class C {
 }
 
 interface I {
->I : I
-
     [s: string]: number;
 >s : string
 
     (): boolean;
     new (): boolean;
     "": string;
+>"" : string
+
     d: string;
 >d : string
 }

@@ -1,15 +1,10 @@
 === tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithObjectMembers5.ts ===
 interface Base {
->Base : Base
-
     foo: string;
 >foo : string
 }
 
 interface Derived extends Base {
->Derived : Derived
->Base : Base
-
     bar: string;
 >bar : string
 }
@@ -20,50 +15,39 @@ module NotOptional {
 >NotOptional : typeof NotOptional
 
     interface A {
->A : A
-
         foo: Base;
 >foo : Base
->Base : Base
     }
 
     class B implements A {
 >B : B
->A : A
 
         fooo: Derived; // error
 >fooo : Derived
->Derived : Derived
     }
 
     interface A2 {
->A2 : A2
-
         1: Base;
->Base : Base
+>1 : Base
     }
 
     class B2 implements A2 {
 >B2 : B2
->A2 : A2
 
         2: Derived; // error
->Derived : Derived
+>2 : Derived
     }
 
     interface A3 {
->A3 : A3
-
         '1': Base;
->Base : Base
+>'1' : Base
     }
 
     class B3 implements A3 {
 >B3 : B3
->A3 : A3
 
         '1.0': Derived; // error
->Derived : Derived
+>'1.0' : Derived
     }
 }
 
@@ -72,50 +56,39 @@ module Optional {
 >Optional : typeof Optional
 
     interface A {
->A : A
-
         foo?: Base;
 >foo : Base
->Base : Base
     }
 
     class B implements A {
 >B : B
->A : A
 
         fooo: Derived; // weak type error
 >fooo : Derived
->Derived : Derived
     }
 
     interface A2 {
->A2 : A2
-
         1?: Base;
->Base : Base
+>1 : Base
     }
 
     class B2 implements A2 {
 >B2 : B2
->A2 : A2
 
         2: Derived; // weak type error
->Derived : Derived
+>2 : Derived
     }
 
     interface A3 {
->A3 : A3
-
         '1'?: Base;
->Base : Base
+>'1' : Base
     }
 
     class B3 implements A3 {
 >B3 : B3
->A3 : A3
 
         '1.0': Derived; // weak type error
->Derived : Derived
+>'1.0' : Derived
     }
 }
 

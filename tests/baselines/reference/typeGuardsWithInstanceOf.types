@@ -1,15 +1,12 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOf.ts ===
 interface I { global: string; }
->I : I
 >global : string
 
 var result: I;
 >result : I
->I : I
 
 var result2: I;
 >result2 : I
->I : I
 
 if (!(result instanceof RegExp)) {
 >!(result instanceof RegExp) : boolean
@@ -25,7 +22,7 @@ if (!(result instanceof RegExp)) {
 
 } else if (!result.global) {
 >!result.global : boolean
->result.global : (string & true) | (string & false)
+>result.global : never
 >result : I & RegExp
->global : (string & true) | (string & false)
+>global : never
 }

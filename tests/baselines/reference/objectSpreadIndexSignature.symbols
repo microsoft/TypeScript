@@ -40,3 +40,14 @@ indexed3 = { ...b ? indexed3 : undefined };
 >indexed3 : Symbol(indexed3, Decl(objectSpreadIndexSignature.ts, 2, 11))
 >undefined : Symbol(undefined)
 
+declare var roindex: { readonly [x:string]: number };
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
+>x : Symbol(x, Decl(objectSpreadIndexSignature.ts, 13, 33))
+
+var writable = { ...roindex };
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
+>roindex : Symbol(roindex, Decl(objectSpreadIndexSignature.ts, 13, 11))
+
+writable.a = 0;  // should be ok.
+>writable : Symbol(writable, Decl(objectSpreadIndexSignature.ts, 14, 3))
+

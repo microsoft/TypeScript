@@ -43,6 +43,7 @@ module M {
 >new C[] : any
 >C[] : any
 >C : typeof C
+> : any
 
     a.length;
 >a.length : any

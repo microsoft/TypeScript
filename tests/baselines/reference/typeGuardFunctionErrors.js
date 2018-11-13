@@ -169,9 +169,12 @@ declare function newError3(x: number): x is NeedsFoo<number>; // should error
 
 //// [typeGuardFunctionErrors.js]
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -253,10 +256,8 @@ assign3 = function (p1, p2, p3) {
     return true;
 };
 // Type predicates in non-return type positions
-var b1 = is, A;
-function b2(a, A) {
-    if (a === void 0) { a = is; }
-}
+var b1, is, A;
+function b2(a, is, A) { }
 ;
 is;
 A;

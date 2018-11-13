@@ -52,8 +52,8 @@ function walk(ctx: Lint.WalkContext<void>, checkCatch: boolean, checkElse: boole
             return;
         }
 
-        const tryClosingBrace = tryBlock.getLastToken(sourceFile);
-        const catchKeyword = catchClause.getFirstToken(sourceFile);
+        const tryClosingBrace = tryBlock.getLastToken(sourceFile)!;
+        const catchKeyword = catchClause.getFirstToken(sourceFile)!;
         const tryClosingBraceLoc = sourceFile.getLineAndCharacterOfPosition(tryClosingBrace.getEnd());
         const catchKeywordLoc = sourceFile.getLineAndCharacterOfPosition(catchKeyword.getStart(sourceFile));
         if (tryClosingBraceLoc.line === catchKeywordLoc.line) {

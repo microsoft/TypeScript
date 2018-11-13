@@ -1,0 +1,40 @@
+=== tests/cases/compiler/Uppercased_Dir/src/index.ts ===
+import { TypeB } from './type-b';
+>TypeB : any
+
+export class Broken {
+>Broken : Broken
+
+    method () {
+>method : () => import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
+
+        return { } as TypeB;
+>{ } as TypeB : import("tests/cases/compiler/Uppercased_Dir/src/types").Merge<import("tests/cases/compiler/Uppercased_Dir/src/type-a").TypeA, { b: string; }>
+>{ } : {}
+    }
+}
+=== tests/cases/compiler/Uppercased_Dir/src/type-b.ts ===
+import { Merge } from './types';
+>Merge : any
+
+import { TypeA } from './type-a';
+>TypeA : any
+
+export type TypeB = Merge<TypeA, {
+>TypeB : Merge<TypeA, { b: string; }>
+
+    b: string;
+>b : string
+
+}>;
+=== tests/cases/compiler/Uppercased_Dir/src/type-a.ts ===
+export type TypeA = {
+>TypeA : TypeA
+
+    a: string;
+>a : string
+}
+=== tests/cases/compiler/Uppercased_Dir/src/types.ts ===
+export type Merge<T, U> = T & U;
+>Merge : Merge<T, U>
+

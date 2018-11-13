@@ -1,0 +1,40 @@
+=== tests/cases/conformance/types/intersection/intersectionReduction.ts ===
+// @strict
+
+declare const sym1: unique symbol;
+>sym1 : Symbol(sym1, Decl(intersectionReduction.ts, 2, 13))
+
+declare const sym2: unique symbol;
+>sym2 : Symbol(sym2, Decl(intersectionReduction.ts, 3, 13))
+
+type T1 = string & 'a';  // 'a'
+>T1 : Symbol(T1, Decl(intersectionReduction.ts, 3, 34))
+
+type T2 = 'a' & string & 'b';  // 'a' & 'b'
+>T2 : Symbol(T2, Decl(intersectionReduction.ts, 5, 23))
+
+type T3 = number & 10;  // 10
+>T3 : Symbol(T3, Decl(intersectionReduction.ts, 6, 29))
+
+type T4 = 10 & number & 20;  // 10 & 20
+>T4 : Symbol(T4, Decl(intersectionReduction.ts, 7, 22))
+
+type T5 = symbol & typeof sym1;  // typeof sym1
+>T5 : Symbol(T5, Decl(intersectionReduction.ts, 8, 27))
+>sym1 : Symbol(sym1, Decl(intersectionReduction.ts, 2, 13))
+
+type T6 = typeof sym1 & symbol & typeof sym2;  // typeof sym1 & typeof sym2
+>T6 : Symbol(T6, Decl(intersectionReduction.ts, 9, 31))
+>sym1 : Symbol(sym1, Decl(intersectionReduction.ts, 2, 13))
+>sym2 : Symbol(sym2, Decl(intersectionReduction.ts, 3, 13))
+
+type T7 = string & 'a' & number & 10 & symbol & typeof sym1;  // 'a' & 10 & typeof sym1
+>T7 : Symbol(T7, Decl(intersectionReduction.ts, 10, 45))
+>sym1 : Symbol(sym1, Decl(intersectionReduction.ts, 2, 13))
+
+type T10 = string & ('a' | 'b');  // 'a' | 'b'
+>T10 : Symbol(T10, Decl(intersectionReduction.ts, 11, 60))
+
+type T11 = (string | number) & ('a' | 10);  // 'a' | 10
+>T11 : Symbol(T11, Decl(intersectionReduction.ts, 13, 32))
+

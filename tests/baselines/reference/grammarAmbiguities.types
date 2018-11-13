@@ -6,17 +6,11 @@ function f(n: any) { return null; }
 
 function g<A, B>(x: any) { return null; }
 >g : <A, B>(x: any) => any
->A : A
->B : B
 >x : any
 >null : null
 
 interface A { }
->A : A
-
 interface B { }
->B : B
-
 var A, B;
 >A : any
 >B : any
@@ -26,8 +20,6 @@ f(g<A, B>(7));
 >f : (n: any) => any
 >g<A, B>(7) : any
 >g : <A, B>(x: any) => any
->A : A
->B : B
 >7 : 7
 
 f(g < A, B > 7); // Should error

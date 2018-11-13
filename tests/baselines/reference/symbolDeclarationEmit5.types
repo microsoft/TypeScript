@@ -1,8 +1,7 @@
 === tests/cases/conformance/es6/Symbols/symbolDeclarationEmit5.ts ===
 interface I {
->I : I
-
     [Symbol.isConcatSpreadable](): string;
+>[Symbol.isConcatSpreadable] : () => string
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

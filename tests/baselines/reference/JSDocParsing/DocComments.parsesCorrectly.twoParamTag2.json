@@ -6,12 +6,7 @@
         "0": {
             "kind": "JSDocParameterTag",
             "pos": 8,
-            "end": 32,
-            "atToken": {
-                "kind": "AtToken",
-                "pos": 8,
-                "end": 9
-            },
+            "end": 34,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 9,
@@ -35,18 +30,12 @@
                 "escapedText": "name1"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": ""
+            "isBracketed": false
         },
         "1": {
             "kind": "JSDocParameterTag",
             "pos": 34,
-            "end": 56,
-            "atToken": {
-                "kind": "AtToken",
-                "pos": 34,
-                "end": 35
-            },
+            "end": 58,
             "tagName": {
                 "kind": "Identifier",
                 "pos": 35,
@@ -70,11 +59,10 @@
                 "escapedText": "name2"
             },
             "isNameFirst": false,
-            "isBracketed": false,
-            "comment": ""
+            "isBracketed": false
         },
         "length": 2,
         "pos": 8,
-        "end": 56
+        "end": 58
     }
 }

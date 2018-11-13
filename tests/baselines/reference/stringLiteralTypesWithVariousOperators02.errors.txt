@@ -3,12 +3,12 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(8,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'number | "ABC" | "XYZ"'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(9,9): error TS2365: Operator '+' cannot be applied to types 'number | "ABC" | "XYZ"' and 'true'.
 tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(10,9): error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
-tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(11,9): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(12,11): error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(13,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(14,9): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(16,9): error TS2367: This condition will always return 'false' since the types '"ABC"' and '"XYZ"' have no overlap.
+tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts(17,9): error TS2367: This condition will always return 'true' since the types '"ABC"' and '"XYZ"' have no overlap.
 
 
 ==== tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperators02.ts (11 errors) ====
@@ -34,20 +34,20 @@ tests/cases/conformance/types/stringLiteral/stringLiteralTypesWithVariousOperato
 !!! error TS2365: Operator '+' cannot be applied to types 'false' and 'number | "ABC" | "XYZ"'.
     let f = abcOrXyzOrNumber++;
             ~~~~~~~~~~~~~~~~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
     let g = --abcOrXyzOrNumber;
               ~~~~~~~~~~~~~~~~
-!!! error TS2356: An arithmetic operand must be of type 'any', 'number' or an enum type.
+!!! error TS2356: An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.
     let h = abcOrXyzOrNumber ^ 10;
             ~~~~~~~~~~~~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     let i = abcOrXyzOrNumber | 10;
             ~~~~~~~~~~~~~~~~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     let j = abc < xyz;
     let k = abc === xyz;
             ~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types '"ABC"' and '"XYZ"'.
+!!! error TS2367: This condition will always return 'false' since the types '"ABC"' and '"XYZ"' have no overlap.
     let l = abc != xyz;
             ~~~~~~~~~~
-!!! error TS2365: Operator '!=' cannot be applied to types '"ABC"' and '"XYZ"'.
+!!! error TS2367: This condition will always return 'true' since the types '"ABC"' and '"XYZ"' have no overlap.

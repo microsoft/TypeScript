@@ -24,9 +24,7 @@ module ConstructSignature {
 
     var rarg2: new <T>(x: T) => string;
 >rarg2 : new <T>(x: T) => string
->T : T
 >x : T
->T : T
 
     var r2 = foo1(rarg2); // ok because base returns void
 >r2 : new (x: number) => void
@@ -58,9 +56,7 @@ module ConstructSignature {
 
     var r4arg1: new <T>(x: T) => string;
 >r4arg1 : new <T>(x: T) => string
->T : T
 >x : T
->T : T
 
     var r4 = foo2(r4arg1); // ok because base returns void
 >r4 : new (x: number, y: number) => void

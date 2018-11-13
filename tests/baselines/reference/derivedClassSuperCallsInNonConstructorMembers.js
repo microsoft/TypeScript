@@ -34,9 +34,12 @@ class Derived extends Base {
 //// [derivedClassSuperCallsInNonConstructorMembers.js]
 // error to use super calls outside a constructor
 var __extends = (this && this.__extends) || (function () {
-    var extendStatics = Object.setPrototypeOf ||
-        ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
-        function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+    var extendStatics = function (d, b) {
+        extendStatics = Object.setPrototypeOf ||
+            ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
+            function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
+        return extendStatics(d, b);
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -51,38 +54,39 @@ var Base = /** @class */ (function () {
 var Derived = /** @class */ (function (_super) {
     __extends(Derived, _super);
     function Derived() {
-        var _this = _super !== null && _super.apply(this, arguments) || this;
-        _this.a = ();
-        return _this;
+        return _super !== null && _super.apply(this, arguments) || this;
     }
-    Derived.prototype.b = function () {
-        _this = _super.call(this) || this;
-    };
-    Object.defineProperty(Derived.prototype, "C", {
-        get: function () {
-            _this = _super.call(this) || this;
-            return 1;
-        },
-        set: function (v) {
-            _this = _super.call(this) || this;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Derived.b = function () {
-        _this = _super.call(this) || this;
-    };
-    Object.defineProperty(Derived, "C", {
-        get: function () {
-            _this = _super.call(this) || this;
-            return 1;
-        },
-        set: function (v) {
-            _this = _super.call(this) || this;
-        },
-        enumerable: true,
-        configurable: true
-    });
-    Derived.a = ();
     return Derived;
 }(Base));
+();
+b();
+{
+    _this = _super.call(this) || this;
+}
+get;
+C();
+{
+    _this = _super.call(this) || this;
+    return 1;
+}
+set;
+C(v);
+{
+    _this = _super.call(this) || this;
+}
+a: _this = _super.call(this) || this;
+b();
+{
+    _this = _super.call(this) || this;
+}
+get;
+C();
+{
+    _this = _super.call(this) || this;
+    return 1;
+}
+set;
+C(v);
+{
+    _this = _super.call(this) || this;
+}

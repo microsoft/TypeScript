@@ -1,0 +1,37 @@
+=== tests/cases/compiler/hybrid/index.d.ts ===
+export function sayHello(): string;
+>sayHello : Symbol(sayHello, Decl(index.d.ts, 0, 0))
+
+=== tests/cases/compiler/path.d.ts ===
+declare const anything: any;
+>anything : Symbol(anything, Decl(path.d.ts, 0, 13))
+
+export = anything;
+>anything : Symbol(anything, Decl(path.d.ts, 0, 13))
+
+=== tests/cases/compiler/fs.d.ts ===
+declare const anything: any;
+>anything : Symbol(anything, Decl(fs.d.ts, 0, 13))
+
+export = anything;
+>anything : Symbol(anything, Decl(fs.d.ts, 0, 13))
+
+=== tests/cases/compiler/mjts.ts ===
+import { sayHello } from "./hybrid";
+>sayHello : Symbol(sayHello, Decl(mjts.ts, 0, 8))
+
+import path from "./path";
+>path : Symbol(path, Decl(mjts.ts, 1, 6))
+
+import * as fs from "./fs";
+>fs : Symbol(fs, Decl(mjts.ts, 2, 6))
+
+path;
+>path : Symbol(path, Decl(mjts.ts, 1, 6))
+
+sayHello();
+>sayHello : Symbol(sayHello, Decl(mjts.ts, 0, 8))
+
+fs;
+>fs : Symbol(fs, Decl(mjts.ts, 2, 6))
+

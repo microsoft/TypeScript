@@ -1,8 +1,9 @@
 tests/cases/compiler/jsxFactoryAndFragment.tsx(3,1): error TS17016: JSX fragment is not supported when using --jsxFactory
 tests/cases/compiler/jsxFactoryAndFragment.tsx(4,1): error TS17016: JSX fragment is not supported when using --jsxFactory
+tests/cases/compiler/jsxFactoryAndFragment.tsx(4,17): error TS17016: JSX fragment is not supported when using --jsxFactory
 
 
-==== tests/cases/compiler/jsxFactoryAndFragment.tsx (2 errors) ====
+==== tests/cases/compiler/jsxFactoryAndFragment.tsx (3 errors) ====
     declare var h: any;
     
     <></>;
@@ -10,4 +11,6 @@ tests/cases/compiler/jsxFactoryAndFragment.tsx(4,1): error TS17016: JSX fragment
 !!! error TS17016: JSX fragment is not supported when using --jsxFactory
     <><span>1</span><><span>2.1</span><span>2.2</span></></>;
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS17016: JSX fragment is not supported when using --jsxFactory
+                    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS17016: JSX fragment is not supported when using --jsxFactory

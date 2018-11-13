@@ -14,8 +14,8 @@
 //// inst2.blah/*b*/;
 
 goTo.marker('a');
-verify.completionListContains('property');
+verify.completions({ exact: ["property", "TestObj", "constructor", "instance", "class2", "prototype", "blah", "inst2"] });
 edit.backspace();
 
 goTo.marker('b');
-verify.quickInfoIs('(property) class2.blah: () => void');
+verify.quickInfoIs('(method) class2.blah(): void');

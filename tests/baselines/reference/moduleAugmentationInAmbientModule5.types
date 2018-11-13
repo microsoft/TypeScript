@@ -10,20 +10,24 @@ let x = [1];
 let y = x.getA().x;
 >y : number
 >x.getA().x : number
->x.getA() : A
->x.getA : () => A
+>x.getA() : import("A").A
+>x.getA : () => import("A").A
 >x : number[]
->getA : () => A
+>getA : () => import("A").A
 >x : number
 
 === tests/cases/compiler/array.d.ts ===
 declare module "A" {
+>"A" : typeof import("A")
+
     class A { x: number; }
 >A : A
 >x : number
 }
 
 declare module "array" {
+>"array" : typeof import("array")
+
     import {A} from "A";
 >A : typeof A
 
@@ -31,12 +35,8 @@ declare module "array" {
 >global : any
 
         interface Array<T> {
->Array : T[]
->T : T
-
             getA(): A;
 >getA : () => A
->A : A
         }
     }
 }

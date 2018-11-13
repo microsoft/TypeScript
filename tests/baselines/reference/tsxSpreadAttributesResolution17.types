@@ -1,0 +1,40 @@
+=== tests/cases/conformance/jsx/file.tsx ===
+declare global {
+>global : any
+
+    namespace JSX {
+        interface Element {}
+        interface ElementAttributesProperty { props: {} }
+>props : {}
+    }
+}
+declare var React: any;
+>React : any
+
+export class Empty extends React.Component<{}, {}> {
+>Empty : Empty
+>React.Component : any
+>React : any
+>Component : any
+
+    render() {
+>render : () => JSX.Element
+
+        return <div>Hello</div>;
+><div>Hello</div> : JSX.Element
+>div : any
+>div : any
+    }
+}
+
+declare const obj: { a: number | undefined } | undefined;
+>obj : { a: number | undefined; } | undefined
+>a : number | undefined
+
+// OK
+let unionedSpread = <Empty {...obj} />;
+>unionedSpread : JSX.Element
+><Empty {...obj} /> : JSX.Element
+>Empty : typeof Empty
+>obj : { a: number | undefined; } | undefined
+

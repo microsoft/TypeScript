@@ -15,15 +15,8 @@
 // @Filename: node_modules/package-name/package.json
 //// { "main": "bin/lib/libfile.js" }
 
-
-// In this case, importing the module by its package name:
-// import { f1 } from 'package-name'
-// could in theory work, however the resulting code compiles with a module resolution error
-// since bin/lib/libfile.d.ts isn't declared under "typings" in package.json
-// Therefore just import the module by its qualified path
-
 verify.importFixAtPosition([
-`import { f1 } from "package-name/bin/lib/libfile";
+`import { f1 } from "package-name";
 
 f1('');`
 ]);

@@ -19,10 +19,4 @@
 ////var n = new foo(undefined);
 ////n.[|{| "isWriteAccess": true |}p|] = null;
 
-const ranges = test.ranges();
-const [r0, r1, r2] = ranges;
-verify.referenceGroups([r0, r1], [{ definition: "(property) foo.p: any", ranges }]);
-verify.referenceGroups(r2, [
-    { definition: "(property) foo.p: any", ranges: [r0, r1] },
-    { definition: "(property) foo.p: any", ranges: [r2] }
-]);
+verify.singleReferenceGroup("(property) foo.p: any");

@@ -1,4 +1,5 @@
 EmitSkipped: false
+
 FileName : /tests/cases/fourslash/inputFile1.js
 var x = 5;
 var Bar = /** @class */ (function () {
@@ -6,6 +7,7 @@ var Bar = /** @class */ (function () {
     }
     return Bar;
 }());
+
 FileName : /tests/cases/fourslash/inputFile1.d.ts
 declare var x: number;
 declare class Bar {
@@ -14,6 +16,7 @@ declare class Bar {
 }
 
 EmitSkipped: false
+
 FileName : /tests/cases/fourslash/inputFile2.js
 var x1 = "hello world";
 var Foo = /** @class */ (function () {
@@ -21,6 +24,7 @@ var Foo = /** @class */ (function () {
     }
     return Foo;
 }());
+
 FileName : /tests/cases/fourslash/inputFile2.d.ts
 declare var x1: string;
 declare class Foo {

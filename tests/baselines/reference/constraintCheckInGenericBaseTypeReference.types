@@ -8,8 +8,6 @@ class Constraint {
 }
 class GenericBase<T extends Constraint> {
 >GenericBase : GenericBase<T>
->T : T
->Constraint : Constraint
 
     public items: any;
 >items : any
@@ -17,7 +15,6 @@ class GenericBase<T extends Constraint> {
 class Derived extends GenericBase<TypeArg> {
 >Derived : Derived
 >GenericBase : GenericBase<TypeArg>
->TypeArg : TypeArg
 
 }
 class TypeArg {
@@ -40,5 +37,4 @@ class Container {
 
     public static People: Derived
 >People : Derived
->Derived : Derived
 }

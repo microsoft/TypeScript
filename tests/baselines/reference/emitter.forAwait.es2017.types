@@ -48,3 +48,37 @@ async function* f4() {
 >y : any
     }
 }
+=== tests/cases/conformance/emitter/es2017/forAwait/file5.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function f5() {
+>f5 : () => Promise<void>
+
+    let y: any;
+>y : any
+
+    outer: for await (const x of y) {
+>outer : any
+>x : any
+>y : any
+
+        continue outer;
+>outer : any
+    }
+}
+=== tests/cases/conformance/emitter/es2017/forAwait/file6.ts ===
+// https://github.com/Microsoft/TypeScript/issues/21363
+async function* f6() {
+>f6 : () => AsyncIterableIterator<any>
+
+    let y: any;
+>y : any
+
+    outer: for await (const x of y) {
+>outer : any
+>x : any
+>y : any
+
+        continue outer;
+>outer : any
+    }
+}

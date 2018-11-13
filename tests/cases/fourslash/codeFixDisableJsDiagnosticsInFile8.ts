@@ -7,13 +7,13 @@
 // @Filename: a.js
 ////var x = 0;
 ////
-////function f(_a) {
+////function f(_a) {[|
 ////    /** comment for f */
-////    [|f(x());|]
-////}
+////    f(x());
+////|]}
 
 // Disable checking for next line
-verify.rangeAfterCodeFix(`f(
+verify.rangeAfterCodeFix(`    /** comment for f */
     // @ts-ignore
-    x());`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
+    f(x());`, /*includeWhiteSpace*/ false, /*errorCode*/ undefined, /*index*/ 0);
 

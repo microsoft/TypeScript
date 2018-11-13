@@ -50,9 +50,7 @@ class C {
 export declare function __extends(d: Function, b: Function): void;
 >__extends : (d: Function, b: Function) => void
 >d : Function
->Function : Function
 >b : Function
->Function : Function
 
 export declare function __assign(t: any, ...sources: any[]): any;
 >__assign : (t: any, ...sources: any[]) => any
@@ -62,7 +60,6 @@ export declare function __assign(t: any, ...sources: any[]): any;
 export declare function __decorate(decorators: Function[], target: any, key?: string | symbol, desc?: any): any;
 >__decorate : (decorators: Function[], target: any, key?: string | symbol, desc?: any) => any
 >decorators : Function[]
->Function : Function
 >target : any
 >key : string | symbol
 >desc : any
@@ -71,21 +68,16 @@ export declare function __param(paramIndex: number, decorator: Function): Functi
 >__param : (paramIndex: number, decorator: Function) => Function
 >paramIndex : number
 >decorator : Function
->Function : Function
->Function : Function
 
 export declare function __metadata(metadataKey: any, metadataValue: any): Function;
 >__metadata : (metadataKey: any, metadataValue: any) => Function
 >metadataKey : any
 >metadataValue : any
->Function : Function
 
 export declare function __awaiter(thisArg: any, _arguments: any, P: Function, generator: Function): any;
 >__awaiter : (thisArg: any, _arguments: any, P: Function, generator: Function) => any
 >thisArg : any
 >_arguments : any
 >P : Function
->Function : Function
 >generator : Function
->Function : Function
 

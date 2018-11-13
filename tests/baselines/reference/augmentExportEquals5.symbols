@@ -13,13 +13,15 @@ declare module Express {
 }
 
 declare module "express" {
+>"express" : Symbol("express", Decl(express.d.ts, 4, 1))
+
     function e(): e.Express;
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>e : Symbol("tests/cases/compiler/express.d.ts", Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 >e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28))
 >Express : Symbol(Express, Decl(express.d.ts, 52, 9))
 
     namespace e {
->e : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+>e : Symbol("tests/cases/compiler/express.d.ts", Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
 
         interface IRoute {
 >IRoute : Symbol(IRoute, Decl(express.d.ts, 8, 17))
@@ -37,7 +39,7 @@ declare module "express" {
 
             (name: string|RegExp, ...handlers: RequestHandler[]): T;
 >name : Symbol(name, Decl(express.d.ts, 14, 13))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >handlers : Symbol(handlers, Decl(express.d.ts, 14, 33))
 >RequestHandler : Symbol(RequestHandler, Decl(express.d.ts, 38, 9))
 >T : Symbol(T, Decl(express.d.ts, 13, 33))
@@ -67,7 +69,7 @@ declare module "express" {
         interface Errback { (err: Error): void; }
 >Errback : Symbol(Errback, Decl(express.d.ts, 23, 58))
 >err : Symbol(err, Decl(express.d.ts, 25, 29))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         interface Request extends Express.Request {
 >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
@@ -100,7 +102,7 @@ declare module "express" {
 >res : Symbol(res, Decl(express.d.ts, 37, 36))
 >Response : Symbol(Response, Decl(express.d.ts, 30, 9))
 >next : Symbol(next, Decl(express.d.ts, 37, 51))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
 
         interface RequestHandler {
@@ -112,7 +114,7 @@ declare module "express" {
 >res : Symbol(res, Decl(express.d.ts, 41, 26))
 >Response : Symbol(Response, Decl(express.d.ts, 30, 9))
 >next : Symbol(next, Decl(express.d.ts, 41, 41))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
         }
 
         interface Handler extends RequestHandler {}
@@ -128,7 +130,7 @@ declare module "express" {
 >res : Symbol(res, Decl(express.d.ts, 47, 26))
 >Response : Symbol(Response, Decl(express.d.ts, 30, 9))
 >next : Symbol(next, Decl(express.d.ts, 47, 41))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >param : Symbol(param, Decl(express.d.ts, 47, 57))
         }
 
@@ -167,6 +169,8 @@ import * as e from "express";
 >e : Symbol(e, Decl(augmentation.ts, 1, 6))
 
 declare module "express" {
+>"express" : Symbol(e, Decl(express.d.ts, 6, 26), Decl(express.d.ts, 7, 28), Decl(augmentation.ts, 1, 29))
+
     interface Request {
 >Request : Symbol(Request, Decl(express.d.ts, 25, 49), Decl(augmentation.ts, 2, 26))
 

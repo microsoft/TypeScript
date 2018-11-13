@@ -3,15 +3,9 @@
 >ko : typeof ko
 
    export interface Observable<T> {
->Observable : Observable<T>
->T : T
-
      (): T;
->T : T
-
      (value: T): any;
 >value : T
->T : T
 
      N: number;
 >N : number
@@ -21,15 +15,10 @@
 
      r: T;
 >r : T
->T : T
    }
    export function observable<T>(value: T): Observable<T>;
 >observable : <T>(value: T) => Observable<T>
->T : T
 >value : T
->T : T
->Observable : Observable<T>
->T : T
  }
  var o = {
 >o : { name: ko.Observable<string>; age: ko.Observable<number>; }

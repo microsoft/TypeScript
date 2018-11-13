@@ -28,14 +28,10 @@ A.prototype.foo = function () { return undefined; }
 >undefined : undefined
 
 namespace N {
->N : any
-
     export interface Ifc { a: number; }
->Ifc : Ifc
 >a : number
 
     export interface Cls { b: number; }
->Cls : Cls
 >b : number
 }
 import I = N.Ifc;
@@ -49,20 +45,17 @@ import C = N.Cls;
 >Cls : C
 
 declare module "./f1" {
-    interface A {
->A : A
+>"./f1" : typeof import("tests/cases/compiler/f1")
 
+    interface A {
         foo(): B;
 >foo : () => B
->B : B
 
         bar(): I;
 >bar : () => I
->I : I
 
         baz(): C;
 >baz : () => C
->C : C
     }
 }
 
@@ -74,15 +67,14 @@ import "./f3";
 
 let a: A;
 >a : A
->A : A
 
 let b = a.foo().n;
 >b : number
 >a.foo().n : number
->a.foo() : B
->a.foo : () => B
+>a.foo() : import("tests/cases/compiler/f2").B
+>a.foo : () => import("tests/cases/compiler/f2").B
 >a : A
->foo : () => B
+>foo : () => import("tests/cases/compiler/f2").B
 >n : number
 
 let c = a.bar().a;

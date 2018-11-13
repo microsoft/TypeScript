@@ -6,5 +6,4 @@ class C { foo: number }
 class D implements C extends C { }
 >D : D
 >C : C
->C : C
 

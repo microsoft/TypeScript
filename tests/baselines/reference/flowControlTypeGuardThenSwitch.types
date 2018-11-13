@@ -10,34 +10,23 @@ enum Kind {
 }
 
 interface Base {
->Base : Base
-
     kind: Kind;
 >kind : Kind
->Kind : Kind
 }
 
 interface A extends Base {
->A : A
->Base : Base
-
     kind: Kind.A;
 >kind : Kind.A
 >Kind : any
->A : Kind.A
 
     yar: any;
 >yar : any
 }
 
 interface B extends Base {
->B : B
->Base : Base
-
     kind: Kind.B;
 >kind : Kind.B
 >Kind : any
->B : Kind.B
 
     gar: any;
 >gar : any
@@ -45,15 +34,10 @@ interface B extends Base {
 
 type Both = A | B;
 >Both : Both
->A : A
->B : B
 
 function isBoth(x: Base): x is Both {
 >isBoth : (x: Base) => x is Both
 >x : Base
->Base : Base
->x : any
->Both : Both
 
     return true;
 >true : true
@@ -61,7 +45,6 @@ function isBoth(x: Base): x is Both {
 
 let foo: Base = undefined;
 >foo : Base
->Base : Base
 >undefined : undefined
 
 if (isBoth(foo)) {
@@ -81,7 +64,6 @@ if (isBoth(foo)) {
 
             const myA: A = foo; // Should not be an error
 >myA : A
->A : A
 >foo : A
 
             break;
@@ -92,7 +74,6 @@ if (isBoth(foo)) {
 
             const myB: B = foo;
 >myB : B
->B : B
 >foo : B
 
             break;

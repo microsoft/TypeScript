@@ -62,9 +62,9 @@ function area1(s: Shape) {
 >kind : Symbol(kind, Decl(discriminatedUnionTypes1.ts, 5, 21), Decl(discriminatedUnionTypes1.ts, 11, 18))
 
         return Math.PI * s.radius * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 18, 15))
 >radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
@@ -117,9 +117,9 @@ function area2(s: Shape) {
 >height : Symbol(Rectangle.height, Decl(discriminatedUnionTypes1.ts, 7, 18))
 
         case "circle": return Math.PI * s.radius * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 33, 15))
 >radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
@@ -134,7 +134,7 @@ function assertNever(x: never): never {
 >x : Symbol(x, Decl(discriminatedUnionTypes1.ts, 41, 21))
 
     throw new Error("Unexpected object: " + x);
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(discriminatedUnionTypes1.ts, 41, 21))
 }
 
@@ -165,9 +165,9 @@ function area3(s: Shape) {
 >height : Symbol(Rectangle.height, Decl(discriminatedUnionTypes1.ts, 7, 18))
 
         case "circle": return Math.PI * s.radius * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 45, 15))
 >radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
@@ -208,9 +208,9 @@ function area4(s: Shape) {
 >height : Symbol(Rectangle.height, Decl(discriminatedUnionTypes1.ts, 7, 18))
 
         case "circle": return Math.PI * s.radius * s.radius;
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 >s.radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
 >s : Symbol(s, Decl(discriminatedUnionTypes1.ts, 54, 15))
 >radius : Symbol(Circle.radius, Decl(discriminatedUnionTypes1.ts, 12, 19))
@@ -395,7 +395,7 @@ function f8(m: Message) {
             return;
         case "D":
             throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     m;  // { kind: "B" | "C", y: number }
 >m : Symbol(m, Decl(discriminatedUnionTypes1.ts, 133, 12))

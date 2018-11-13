@@ -1,29 +1,22 @@
 === tests/cases/compiler/passport.d.ts ===
 declare module 'passport' {
+>'passport' : typeof import("passport")
+
     namespace passport {
->passport : PassportStatic
-
         interface Passport {
->Passport : Passport
-
             use(): this;
 >use : () => this
         }
 
         interface PassportStatic extends Passport {
->PassportStatic : PassportStatic
->Passport : Passport
-
             Passport: {new(): Passport};
 >Passport : new () => Passport
->Passport : Passport
         }
     }
 
     const passport: passport.PassportStatic;
 >passport : passport.PassportStatic
 >passport : any
->PassportStatic : passport.PassportStatic
 
     export = passport;
 >passport : passport.PassportStatic
@@ -38,7 +31,6 @@ import { Passport } from "passport";
 
 let p: Passport = passport.use();
 >p : Passport
->Passport : Passport
 >passport.use() : passport.PassportStatic
 >passport.use : () => passport.PassportStatic
 >passport : passport.PassportStatic

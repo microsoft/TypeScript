@@ -14,14 +14,4 @@
 // @Filename: redeclaration.ts
 ////container = { "[|{| "isWriteAccess": true, "isDefinition": true |}42|]" : 18 };
 
-const ranges = test.ranges();
-const [r0, r1, r2, r3] = ranges;
-verify.referenceGroups(r0, [{ definition: "(property) 42: number", ranges }]);
-verify.referenceGroups([r1, r2], [
-    { definition: "(property) 42: number", ranges: [r0, r3] },
-    { definition: "(property) 42: number", ranges: [r1, r2] }
-]);
-verify.referenceGroups(r3, [
-    { definition: "(property) 42: number", ranges: [r0, r1, r2] },
-    { definition: '(property) "42": number', ranges: [r3] }
-]);
+verify.singleReferenceGroup("(property) 42: number");

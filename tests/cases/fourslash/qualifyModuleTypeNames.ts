@@ -4,5 +4,4 @@
 ////function x(arg: m.c) { return arg; }
 ////x(/**/
 
-goTo.marker();
-verify.currentSignatureHelpIs('x(arg: m.c): m.c');
+verify.signatureHelp({ marker: "", text: "x(arg: m.c): m.c" });

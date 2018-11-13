@@ -22,19 +22,14 @@ module Sammy {
 >1 : 1
 }
 interface JQueryStatic {
->JQueryStatic : JQueryStatic
-
     sammy: Sammy; // class instance
 >sammy : Sammy
->Sammy : Sammy
 }
 var $: JQueryStatic;
 >$ : JQueryStatic
->JQueryStatic : JQueryStatic
 
 var instanceOfClassSammy: Sammy = new $.sammy(); // should be error
 >instanceOfClassSammy : Sammy
->Sammy : Sammy
 >new $.sammy() : any
 >$.sammy : Sammy
 >$ : JQueryStatic

@@ -8,25 +8,18 @@
 ////var r2: m3f.I = r;
 ////r2./*6*/
 
-goTo.marker('1');
-verify.completionListContains('I');
-verify.not.completionListContains('foo');
+verify.completions({ marker: "1", includes: "I", excludes: "foo" });
 edit.insert('I;');
 
-goTo.marker('2');
-verify.completionListContains('m3f');
+verify.completions({ marker: "2", includes: "m3f" });
 
-goTo.marker('3');
-verify.currentSignatureHelpIs('m3f(): m3f');
+verify.signatureHelp({ marker: "3", text: "m3f(): m3f" });
 
 verify.quickInfoAt("4", "var r: m3f");
 
-goTo.marker('5');
-verify.completionListContains('foo');
+verify.completions({ marker: "5", includes: "foo" });
 edit.insert('foo(1)');
 
-goTo.marker('6');
-verify.completionListContains('foo');
+verify.completions({ marker: "6", includes: "foo" });
 edit.insert('foo(');
-verify.currentSignatureHelpIs('foo(): void');
-
+verify.signatureHelp({ text: "foo(): void" });

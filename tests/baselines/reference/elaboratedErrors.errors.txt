@@ -1,11 +1,8 @@
-tests/cases/compiler/elaboratedErrors.ts(10,7): error TS2420: Class 'WorkerFS' incorrectly implements interface 'FileSystem'.
-  Types of property 'read' are incompatible.
-    Type 'string' is not assignable to type 'number'.
-tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-  Property 'x' is missing in type 'Beta'.
+tests/cases/compiler/elaboratedErrors.ts(11,3): error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+  Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/elaboratedErrors.ts(20,1): error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
 tests/cases/compiler/elaboratedErrors.ts(21,1): error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-tests/cases/compiler/elaboratedErrors.ts(24,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
-  Property 'y' is missing in type 'Alpha'.
+tests/cases/compiler/elaboratedErrors.ts(24,1): error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
 tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
 
 
@@ -20,11 +17,10 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     
     // This should issue a large error, not a small one
     class WorkerFS implements FileSystem {
-          ~~~~~~~~
-!!! error TS2420: Class 'WorkerFS' incorrectly implements interface 'FileSystem'.
-!!! error TS2420:   Types of property 'read' are incompatible.
-!!! error TS2420:     Type 'string' is not assignable to type 'number'.
       read: string;
+      ~~~~
+!!! error TS2416: Property 'read' in type 'WorkerFS' is not assignable to the same property in base type 'FileSystem'.
+!!! error TS2416:   Type 'string' is not assignable to type 'number'.
     }
     
     interface Alpha { x: string; }
@@ -35,8 +31,8 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     // Only one of these errors should be large
     x = y;
     ~
-!!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
-!!! error TS2322:   Property 'x' is missing in type 'Beta'.
+!!! error TS2741: Property 'x' is missing in type 'Beta' but required in type 'Alpha'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:14:19: 'x' is declared here.
     x = y;
     ~
 !!! error TS2322: Type 'Beta' is not assignable to type 'Alpha'.
@@ -44,8 +40,8 @@ tests/cases/compiler/elaboratedErrors.ts(25,1): error TS2322: Type 'Alpha' is no
     // Only one of these errors should be large
     y = x;
     ~
-!!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.
-!!! error TS2322:   Property 'y' is missing in type 'Alpha'.
+!!! error TS2741: Property 'y' is missing in type 'Alpha' but required in type 'Beta'.
+!!! related TS2728 tests/cases/compiler/elaboratedErrors.ts:15:18: 'y' is declared here.
     y = x;
     ~
 !!! error TS2322: Type 'Alpha' is not assignable to type 'Beta'.

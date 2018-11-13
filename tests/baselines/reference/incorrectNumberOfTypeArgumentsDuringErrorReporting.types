@@ -1,47 +1,27 @@
 === tests/cases/compiler/incorrectNumberOfTypeArgumentsDuringErrorReporting.ts ===
 interface ObjA {
->ObjA : ObjA
-
   y?:string,
 >y : string
 }
 
 interface ObjB {[key:string]:any}
->ObjB : ObjB
 >key : string
 
 interface Opts<A, B> {a:A, b:B}
->Opts : Opts<A, B>
->A : A
->B : B
 >a : A
->A : A
 >b : B
->B : B
 
 const fn = <
 >fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
 ><  A extends ObjA,  B extends ObjB = ObjB>(opts:Opts<A, B>):string => 'Z' : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
 
   A extends ObjA,
->A : A
->ObjA : ObjA
-
   B extends ObjB = ObjB
->B : B
->ObjB : ObjB
->ObjB : ObjB
-
 >(opts:Opts<A, B>):string => 'Z'
 >opts : Opts<A, B>
->Opts : Opts<A, B>
->A : A
->B : B
 >'Z' : "Z"
 
 interface MyObjA {
->MyObjA : MyObjA
-
   x:string,
 >x : string
 }
@@ -49,7 +29,6 @@ interface MyObjA {
 fn<MyObjA>({
 >fn<MyObjA>({  a: {x: 'X', y: 'Y'},  b: {},}) : any
 >fn : <A extends ObjA, B extends ObjB = ObjB>(opts: Opts<A, B>) => string
->MyObjA : MyObjA
 >{  a: {x: 'X', y: 'Y'},  b: {},} : { a: { x: string; y: string; }; b: {}; }
 
   a: {x: 'X', y: 'Y'},

@@ -18,19 +18,16 @@ class Derived2 extends Base { baz: string; }
 
 var base: Base;
 >base : Base
->Base : Base
 
 var derived: Derived;
 >derived : Derived
->Derived : Derived
 
 var derived2: Derived2;
 >derived2 : Derived2
->Derived2 : Derived2
 
 var r2 = true ? 1 : '';
 >r2 : string | number
->true ? 1 : '' : 1 | ""
+>true ? 1 : '' : "" | 1
 >true : true
 >1 : 1
 >'' : ""
@@ -44,12 +41,8 @@ var r9 = true ? derived : derived2;
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => T | U
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     return true ? t : u;
 >true ? t : u : T | U
@@ -60,13 +53,8 @@ function foo<T, U>(t: T, u: U) {
 
 function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type parameter
 >foo2 : <T extends U, U>(t: T, u: U) => U
->T : T
->U : U
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     return true ? t : u; // Ok because BCT(T, U) = U
 >true ? t : u : U
@@ -77,15 +65,8 @@ function foo2<T extends U, U>(t: T, u: U) { // Error for referencing own type pa
 
 function foo3<T extends U, U extends V, V>(t: T, u: U) {
 >foo3 : <T extends U, U extends V, V>(t: T, u: U) => U
->T : T
->U : U
->U : U
->V : V
->V : V
 >t : T
->T : T
 >u : U
->U : U
 
     return true ? t : u;
 >true ? t : u : U

@@ -4,3 +4,7 @@
 function* g() {
     yield;
 }
+
+function* h() {
+    yield undefined;
+}

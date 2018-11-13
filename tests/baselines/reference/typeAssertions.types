@@ -2,9 +2,7 @@
 // Function call whose argument is a 1 arg generic function call with explicit type arguments
 function fn1<T>(t: T) { }
 >fn1 : <T>(t: T) => void
->T : T
 >t : T
->T : T
 
 function fn2(t: any) { }
 >fn2 : (t: any) => void
@@ -78,63 +76,54 @@ someBase = <SomeBase>someDerived;
 >someBase = <SomeBase>someDerived : SomeBase
 >someBase : SomeBase
 ><SomeBase>someDerived : SomeBase
->SomeBase : SomeBase
 >someDerived : SomeDerived
 
 someBase = <SomeBase>someBase;
 >someBase = <SomeBase>someBase : SomeBase
 >someBase : SomeBase
 ><SomeBase>someBase : SomeBase
->SomeBase : SomeBase
 >someBase : SomeBase
 
 someBase = <SomeBase>someOther; // Error
 >someBase = <SomeBase>someOther : SomeBase
 >someBase : SomeBase
 ><SomeBase>someOther : SomeBase
->SomeBase : SomeBase
 >someOther : SomeOther
 
 someDerived = <SomeDerived>someDerived;
 >someDerived = <SomeDerived>someDerived : SomeDerived
 >someDerived : SomeDerived
 ><SomeDerived>someDerived : SomeDerived
->SomeDerived : SomeDerived
 >someDerived : SomeDerived
 
 someDerived = <SomeDerived>someBase;
 >someDerived = <SomeDerived>someBase : SomeDerived
 >someDerived : SomeDerived
 ><SomeDerived>someBase : SomeDerived
->SomeDerived : SomeDerived
 >someBase : SomeBase
 
 someDerived = <SomeDerived>someOther; // Error
 >someDerived = <SomeDerived>someOther : SomeDerived
 >someDerived : SomeDerived
 ><SomeDerived>someOther : SomeDerived
->SomeDerived : SomeDerived
 >someOther : SomeOther
 
 someOther = <SomeOther>someDerived; // Error
 >someOther = <SomeOther>someDerived : SomeOther
 >someOther : SomeOther
 ><SomeOther>someDerived : SomeOther
->SomeOther : SomeOther
 >someDerived : SomeDerived
 
 someOther = <SomeOther>someBase; // Error
 >someOther = <SomeOther>someBase : SomeOther
 >someOther : SomeOther
 ><SomeOther>someBase : SomeOther
->SomeOther : SomeOther
 >someBase : SomeBase
 
 someOther = <SomeOther>someOther;
 >someOther = <SomeOther>someOther : SomeOther
 >someOther : SomeOther
 ><SomeOther>someOther : SomeOther
->SomeOther : SomeOther
 >someOther : SomeOther
 
 // Type assertion cannot be a type-predicate type
@@ -146,7 +135,6 @@ var str: string;
 
 if(<numOrStr is string>(numOrStr === undefined)) { // Error
 ><numOrStr is : any
->numOrStr : No type information available!
 >is : any
 >string>(numOrStr === undefined) : boolean
 >string : any
@@ -167,7 +155,6 @@ if((numOrStr === undefined) as numOrStr is string) { // Error
 >numOrStr === undefined : boolean
 >numOrStr : string | number
 >undefined : undefined
->numOrStr : No type information available!
 >is : any
 >string : any
 }

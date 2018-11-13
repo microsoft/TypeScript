@@ -43,7 +43,7 @@ function f5({e, e: {e}}, {e}, [d, e, [[e]]], ...e) { }
 >e : any[]
 
 function f6([f, ...f]) { }
->f6 : ([f, ...f]: any[]) => void
+>f6 : ([f, ...f]: [any, ...any[]]) => void
 >f : any
 >f : any[]
 

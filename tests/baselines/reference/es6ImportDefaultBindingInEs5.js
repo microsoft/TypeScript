@@ -20,3 +20,4 @@ Object.defineProperty(exports, "__esModule", { value: true });
 declare var a: number;
 export = a;
 //// [es6ImportDefaultBindingInEs5_1.d.ts]
+export {};

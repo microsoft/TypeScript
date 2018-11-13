@@ -2,29 +2,39 @@
 namespace ts.SymbolDisplay {
     // TODO(drosen): use contextual SemanticMeaning.
     export function getSymbolKind(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
-        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
+        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
+        if (result !== ScriptElementKind.unknown) {
+            return result;
+        }
 
+        const flags = getCombinedLocalAndExportSymbolFlags(symbol);
         if (flags & SymbolFlags.Class) {
             return getDeclarationOfKind(symbol, SyntaxKind.ClassExpression) ?
-            ScriptElementKind.localClassElement : ScriptElementKind.classElement;
+                ScriptElementKind.localClassElement : ScriptElementKind.classElement;
         }
         if (flags & SymbolFlags.Enum) return ScriptElementKind.enumElement;
         if (flags & SymbolFlags.TypeAlias) return ScriptElementKind.typeElement;
         if (flags & SymbolFlags.Interface) return ScriptElementKind.interfaceElement;
         if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
 
-        const result = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
-        if (result === ScriptElementKind.unknown) {
-            if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
-            if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
-            if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
-            if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
-        }
+        if (flags & SymbolFlags.TypeParameter) return ScriptElementKind.typeParameterElement;
+        if (flags & SymbolFlags.EnumMember) return ScriptElementKind.enumMemberElement;
+        if (flags & SymbolFlags.Alias) return ScriptElementKind.alias;
+        if (flags & SymbolFlags.Module) return ScriptElementKind.moduleElement;
 
         return result;
     }
 
     function getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker: TypeChecker, symbol: Symbol, location: Node): ScriptElementKind {
+        const roots = typeChecker.getRootSymbols(symbol);
+        // If this is a method from a mapped type, leave as a method so long as it still has a call signature.
+        if (roots.length === 1
+            && first(roots).flags & SymbolFlags.Method
+            // Ensure the mapped version is still a method, as opposed to `{ [K in keyof I]: number }`.
+            && typeChecker.getTypeOfSymbolAtLocation(symbol, location).getNonNullableType().getCallSignatures().length !== 0) {
+            return ScriptElementKind.memberFunctionElement;
+        }
+
         if (typeChecker.isUndefinedSymbol(symbol)) {
             return ScriptElementKind.variableElement;
         }
@@ -39,7 +49,7 @@ namespace ts.SymbolDisplay {
             if (isFirstDeclarationOfSymbolParameter(symbol)) {
                 return ScriptElementKind.parameterElement;
             }
-            else if (symbol.valueDeclaration && isConst(symbol.valueDeclaration)) {
+            else if (symbol.valueDeclaration && isVarConst(symbol.valueDeclaration as VariableDeclaration)) {
                 return ScriptElementKind.constElement;
             }
             else if (forEach(symbol.declarations, isLet)) {
@@ -75,40 +85,60 @@ namespace ts.SymbolDisplay {
                 }
                 return unionPropertyKind;
             }
-            if (location.parent && isJsxAttribute(location.parent)) {
-                return ScriptElementKind.jsxAttribute;
+            // If we requested completions after `x.` at the top-level, we may be at a source file location.
+            switch (location.parent && location.parent.kind) {
+                // If we've typed a character of the attribute name, will be 'JsxAttribute', else will be 'JsxOpeningElement'.
+                case SyntaxKind.JsxOpeningElement:
+                case SyntaxKind.JsxElement:
+                case SyntaxKind.JsxSelfClosingElement:
+                    return location.kind === SyntaxKind.Identifier ? ScriptElementKind.memberVariableElement : ScriptElementKind.jsxAttribute;
+                case SyntaxKind.JsxAttribute:
+                    return ScriptElementKind.jsxAttribute;
+                default:
+                    return ScriptElementKind.memberVariableElement;
             }
-            return ScriptElementKind.memberVariableElement;
         }
 
         return ScriptElementKind.unknown;
     }
 
     export function getSymbolModifiers(symbol: Symbol): string {
-        return symbol && symbol.declarations && symbol.declarations.length > 0
+        const nodeModifiers = symbol && symbol.declarations && symbol.declarations.length > 0
             ? getNodeModifiers(symbol.declarations[0])
             : ScriptElementKindModifier.none;
+
+        const symbolModifiers = symbol && symbol.flags & SymbolFlags.Optional ?
+            ScriptElementKindModifier.optionalModifier
+            : ScriptElementKindModifier.none;
+        return nodeModifiers && symbolModifiers ? nodeModifiers + "," + symbolModifiers : nodeModifiers || symbolModifiers;
     }
 
     interface SymbolDisplayPartsDocumentationAndSymbolKind {
         displayParts: SymbolDisplayPart[];
         documentation: SymbolDisplayPart[];
         symbolKind: ScriptElementKind;
-        tags: JSDocTagInfo[];
+        tags: JSDocTagInfo[] | undefined;
     }
 
     // TODO(drosen): Currently completion entry details passes the SemanticMeaning.All instead of using semanticMeaning of location
-    export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node,
-        location: Node, semanticMeaning = getMeaningFromLocation(location)): SymbolDisplayPartsDocumentationAndSymbolKind {
+    export function getSymbolDisplayPartsDocumentationAndSymbolKind(typeChecker: TypeChecker, symbol: Symbol, sourceFile: SourceFile, enclosingDeclaration: Node | undefined,
+        location: Node, semanticMeaning = getMeaningFromLocation(location), alias?: Symbol): SymbolDisplayPartsDocumentationAndSymbolKind {
 
         const displayParts: SymbolDisplayPart[] = [];
-        let documentation: SymbolDisplayPart[];
-        let tags: JSDocTagInfo[];
-        const symbolFlags = ts.getCombinedLocalAndExportSymbolFlags(symbol);
-        let symbolKind = getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location);
-        let hasAddedSymbolInfo: boolean;
-        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isExpression(location);
-        let type: Type;
+        let documentation: SymbolDisplayPart[] | undefined;
+        let tags: JSDocTagInfo[] | undefined;
+        const symbolFlags = getCombinedLocalAndExportSymbolFlags(symbol);
+        let symbolKind = semanticMeaning & SemanticMeaning.Value ? getSymbolKindOfConstructorPropertyMethodAccessorFunctionOrVar(typeChecker, symbol, location) : ScriptElementKind.unknown;
+        let hasAddedSymbolInfo = false;
+        const isThisExpression = location.kind === SyntaxKind.ThisKeyword && isInExpressionContext(location);
+        let type: Type | undefined;
+        let printer: Printer;
+        let documentationFromAlias: SymbolDisplayPart[] | undefined;
+        let tagsFromAlias: JSDocTagInfo[] | undefined;
+
+        if (location.kind === SyntaxKind.ThisKeyword && !isThisExpression) {
+            return { displayParts: [keywordPart(SyntaxKind.ThisKeyword)], documentation: [], symbolKind: ScriptElementKind.primitiveType, tags: undefined };
+        }
 
         // Class at constructor site need to be shown as constructor apart from property,method, vars
         if (symbolKind !== ScriptElementKind.unknown || symbolFlags & SymbolFlags.Class || symbolFlags & SymbolFlags.Alias) {
@@ -117,7 +147,7 @@ namespace ts.SymbolDisplay {
                 symbolKind = ScriptElementKind.memberVariableElement;
             }
 
-            let signature: Signature;
+            let signature: Signature | undefined;
             type = isThisExpression ? typeChecker.getTypeAtLocation(location) : typeChecker.getTypeOfSymbolAtLocation(symbol.exportSymbol || symbol, location);
 
             if (location.parent && location.parent.kind === SyntaxKind.PropertyAccessExpression) {
@@ -129,20 +159,20 @@ namespace ts.SymbolDisplay {
             }
 
             // try get the call/construct signature from the type if it matches
-            let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement;
+            let callExpressionLike: CallExpression | NewExpression | JsxOpeningLikeElement | undefined;
             if (isCallOrNewExpression(location)) {
-                callExpressionLike = <CallExpression | NewExpression>location;
+                callExpressionLike = location;
             }
             else if (isCallExpressionTarget(location) || isNewExpressionTarget(location)) {
                 callExpressionLike = <CallExpression | NewExpression>location.parent;
             }
             else if (location.parent && isJsxOpeningLikeElement(location.parent) && isFunctionLike(symbol.valueDeclaration)) {
-                callExpressionLike = <JsxOpeningLikeElement>location.parent;
+                callExpressionLike = location.parent;
             }
 
             if (callExpressionLike) {
                 const candidateSignatures: Signature[] = [];
-                signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures);
+                signature = typeChecker.getResolvedSignature(callExpressionLike, candidateSignatures)!; // TODO: GH#18217
 
                 const useConstructSignatures = callExpressionLike.kind === SyntaxKind.NewExpression || (isCallExpression(callExpressionLike) && callExpressionLike.expression.kind === SyntaxKind.SuperKeyword);
 
@@ -162,7 +192,7 @@ namespace ts.SymbolDisplay {
                     }
                     else if (symbolFlags & SymbolFlags.Alias) {
                         symbolKind = ScriptElementKind.alias;
-                        pushTypePart(symbolKind);
+                        pushSymbolKind(symbolKind);
                         displayParts.push(spacePart());
                         if (useConstructSignatures) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
@@ -185,12 +215,13 @@ namespace ts.SymbolDisplay {
                             // If it is call or construct signature of lambda's write type name
                             displayParts.push(punctuationPart(SyntaxKind.ColonToken));
                             displayParts.push(spacePart());
+                            if (!(getObjectFlags(type) & ObjectFlags.Anonymous) && type.symbol) {
+                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.AllowAnyNodeKind | SymbolFormatFlags.WriteTypeParametersOrArguments));
+                                displayParts.push(lineBreakPart());
+                            }
                             if (useConstructSignatures) {
                                 displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                                 displayParts.push(spacePart());
-                            }
-                            if (!(type.flags & TypeFlags.Object && (<ObjectType>type).objectFlags & ObjectFlags.Anonymous) && type.symbol) {
-                                addRange(displayParts, symbolToDisplayParts(typeChecker, type.symbol, enclosingDeclaration, /*meaning*/ undefined, SymbolFormatFlags.WriteTypeParametersOrArguments));
                             }
                             addSignatureDisplayParts(signature, allSignatures, TypeFormatFlags.WriteArrowStyleSignature);
                             break;
@@ -213,7 +244,7 @@ namespace ts.SymbolDisplay {
                 if (locationIsSymbolDeclaration) {
                     const allSignatures = functionDeclaration.kind === SyntaxKind.Constructor ? type.getNonNullableType().getConstructSignatures() : type.getNonNullableType().getCallSignatures();
                     if (!typeChecker.isImplementationOfOverload(functionDeclaration)) {
-                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration);
+                        signature = typeChecker.getSignatureFromDeclaration(functionDeclaration)!; // TODO: GH#18217
                     }
                     else {
                         signature = allSignatures[0];
@@ -236,11 +267,12 @@ namespace ts.SymbolDisplay {
             }
         }
         if (symbolFlags & SymbolFlags.Class && !hasAddedSymbolInfo && !isThisExpression) {
+            addAliasPrefixIfNecessary();
             if (getDeclarationOfKind(symbol, SyntaxKind.ClassExpression)) {
                 // Special case for class expressions because we would like to indicate that
                 // the class name is local to the class body (similar to function expression)
                 //      (local class) class <className>
-                pushTypePart(ScriptElementKind.localClassElement);
+                pushSymbolKind(ScriptElementKind.localClassElement);
             }
             else {
                 // Class declaration has name which is not local.
@@ -251,14 +283,14 @@ namespace ts.SymbolDisplay {
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
         if ((symbolFlags & SymbolFlags.Interface) && (semanticMeaning & SemanticMeaning.Type)) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             displayParts.push(keywordPart(SyntaxKind.InterfaceKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
             writeTypeParametersOfSymbol(symbol, sourceFile);
         }
-        if (symbolFlags & SymbolFlags.TypeAlias) {
-            addNewLineIfDisplayPartsExist();
+        if ((symbolFlags & SymbolFlags.TypeAlias) && (semanticMeaning & SemanticMeaning.Type)) {
+            prefixNextMeaning();
             displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
@@ -269,8 +301,8 @@ namespace ts.SymbolDisplay {
             addRange(displayParts, typeToDisplayParts(typeChecker, typeChecker.getDeclaredTypeOfSymbol(symbol), enclosingDeclaration, TypeFormatFlags.InTypeAlias));
         }
         if (symbolFlags & SymbolFlags.Enum) {
-            addNewLineIfDisplayPartsExist();
-            if (forEach(symbol.declarations, isConstEnumDeclaration)) {
+            prefixNextMeaning();
+            if (some(symbol.declarations, d => isEnumDeclaration(d) && isEnumConst(d))) {
                 displayParts.push(keywordPart(SyntaxKind.ConstKeyword));
                 displayParts.push(spacePart());
             }
@@ -279,7 +311,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
         }
         if (symbolFlags & SymbolFlags.Module) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             const declaration = getDeclarationOfKind<ModuleDeclaration>(symbol, SyntaxKind.ModuleDeclaration);
             const isNamespace = declaration && declaration.name && declaration.name.kind === SyntaxKind.Identifier;
             displayParts.push(keywordPart(isNamespace ? SyntaxKind.NamespaceKeyword : SyntaxKind.ModuleKeyword));
@@ -287,7 +319,7 @@ namespace ts.SymbolDisplay {
             addFullSymbolName(symbol);
         }
         if ((symbolFlags & SymbolFlags.TypeParameter) && (semanticMeaning & SemanticMeaning.Type)) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             displayParts.push(punctuationPart(SyntaxKind.OpenParenToken));
             displayParts.push(textPart("type parameter"));
             displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
@@ -302,13 +334,13 @@ namespace ts.SymbolDisplay {
             else {
                 // Method/function type parameter
                 const decl = getDeclarationOfKind(symbol, SyntaxKind.TypeParameter);
-                Debug.assert(decl !== undefined);
+                if (decl === undefined) return Debug.fail();
                 const declaration = decl.parent;
 
                 if (declaration) {
                     if (isFunctionLikeKind(declaration.kind)) {
                         addInPrefix();
-                        const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration);
+                        const signature = typeChecker.getSignatureFromDeclaration(<SignatureDeclaration>declaration)!; // TODO: GH#18217
                         if (declaration.kind === SyntaxKind.ConstructSignature) {
                             displayParts.push(keywordPart(SyntaxKind.NewKeyword));
                             displayParts.push(spacePart());
@@ -321,7 +353,7 @@ namespace ts.SymbolDisplay {
                     else if (declaration.kind === SyntaxKind.TypeAliasDeclaration) {
                         // Type alias type parameter
                         // For example
-                        //      type list<T> = T[];  // Both T will go through same code path
+                        //      type list<T> = T[]; // Both T will go through same code path
                         addInPrefix();
                         displayParts.push(keywordPart(SyntaxKind.TypeKeyword));
                         displayParts.push(spacePart());
@@ -347,7 +379,33 @@ namespace ts.SymbolDisplay {
             }
         }
         if (symbolFlags & SymbolFlags.Alias) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
+            if (!hasAddedSymbolInfo) {
+                const resolvedSymbol = typeChecker.getAliasedSymbol(symbol);
+                if (resolvedSymbol !== symbol && resolvedSymbol.declarations && resolvedSymbol.declarations.length > 0) {
+                    const resolvedNode = resolvedSymbol.declarations[0];
+                    const declarationName = getNameOfDeclaration(resolvedNode);
+                    if (declarationName) {
+                        const isExternalModuleDeclaration =
+                            isModuleWithStringLiteralName(resolvedNode) &&
+                            hasModifier(resolvedNode, ModifierFlags.Ambient);
+                        const shouldUseAliasName = symbol.name !== "default" && !isExternalModuleDeclaration;
+                        const resolvedInfo = getSymbolDisplayPartsDocumentationAndSymbolKind(
+                            typeChecker,
+                            resolvedSymbol,
+                            getSourceFileOfNode(resolvedNode),
+                            resolvedNode,
+                            declarationName,
+                            semanticMeaning,
+                            shouldUseAliasName ? symbol : resolvedSymbol);
+                        displayParts.push(...resolvedInfo.displayParts);
+                        displayParts.push(lineBreakPart());
+                        documentationFromAlias = resolvedInfo.documentation;
+                        tagsFromAlias = resolvedInfo.tags;
+                    }
+                }
+            }
+
             switch (symbol.declarations[0].kind) {
                 case SyntaxKind.NamespaceExportDeclaration:
                     displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
@@ -359,12 +417,15 @@ namespace ts.SymbolDisplay {
                     displayParts.push(spacePart());
                     displayParts.push(keywordPart((symbol.declarations[0] as ExportAssignment).isExportEquals ? SyntaxKind.EqualsToken : SyntaxKind.DefaultKeyword));
                     break;
+                case SyntaxKind.ExportSpecifier:
+                    displayParts.push(keywordPart(SyntaxKind.ExportKeyword));
+                    break;
                 default:
                     displayParts.push(keywordPart(SyntaxKind.ImportKeyword));
             }
             displayParts.push(spacePart());
             addFullSymbolName(symbol);
-            ts.forEach(symbol.declarations, declaration => {
+            forEach(symbol.declarations, declaration => {
                 if (declaration.kind === SyntaxKind.ImportEqualsDeclaration) {
                     const importEqualsDeclaration = <ImportEqualsDeclaration>declaration;
                     if (isExternalModuleImportEqualsDeclaration(importEqualsDeclaration)) {
@@ -393,7 +454,7 @@ namespace ts.SymbolDisplay {
             if (symbolKind !== ScriptElementKind.unknown) {
                 if (type) {
                     if (isThisExpression) {
-                        addNewLineIfDisplayPartsExist();
+                        prefixNextMeaning();
                         displayParts.push(keywordPart(SyntaxKind.ThisKeyword));
                     }
                     else {
@@ -411,7 +472,8 @@ namespace ts.SymbolDisplay {
                         // If the type is type parameter, format it specially
                         if (type.symbol && type.symbol.flags & SymbolFlags.TypeParameter) {
                             const typeParameterParts = mapToDisplayParts(writer => {
-                                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplay(<TypeParameter>type, writer, enclosingDeclaration);
+                                const param = typeChecker.typeParameterToDeclaration(type as TypeParameter, enclosingDeclaration)!;
+                                getPrinter().writeNode(EmitHint.Unspecified, param, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
                             });
                             addRange(displayParts, typeParameterParts);
                         }
@@ -438,7 +500,7 @@ namespace ts.SymbolDisplay {
         }
 
         if (!documentation) {
-            documentation = symbol.getDocumentationComment();
+            documentation = symbol.getDocumentationComment(typeChecker);
             tags = symbol.getJsDocTags();
             if (documentation.length === 0 && symbolFlags & SymbolFlags.Property) {
                 // For some special property access expressions like `exports.foo = foo` or `module.exports.foo = foo`
@@ -455,7 +517,7 @@ namespace ts.SymbolDisplay {
                             continue;
                         }
 
-                        documentation = rhsSymbol.getDocumentationComment();
+                        documentation = rhsSymbol.getDocumentationComment(typeChecker);
                         tags = rhsSymbol.getJsDocTags();
                         if (documentation.length > 0) {
                             break;
@@ -465,11 +527,33 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        return { displayParts, documentation, symbolKind, tags };
+        if (documentation.length === 0 && documentationFromAlias) {
+            documentation = documentationFromAlias;
+        }
+        if (tags!.length === 0 && tagsFromAlias) {
+            tags = tagsFromAlias;
+        }
 
-        function addNewLineIfDisplayPartsExist() {
+        return { displayParts, documentation, symbolKind, tags: tags!.length === 0 ? undefined : tags };
+
+        function getPrinter() {
+            if (!printer) {
+                printer = createPrinter({ removeComments: true });
+            }
+            return printer;
+        }
+
+        function prefixNextMeaning() {
             if (displayParts.length) {
                 displayParts.push(lineBreakPart());
+            }
+            addAliasPrefixIfNecessary();
+        }
+
+        function addAliasPrefixIfNecessary() {
+            if (alias) {
+                pushSymbolKind(ScriptElementKind.alias);
+                displayParts.push(spacePart());
             }
         }
 
@@ -479,24 +563,31 @@ namespace ts.SymbolDisplay {
             displayParts.push(spacePart());
         }
 
-        function addFullSymbolName(symbol: Symbol, enclosingDeclaration?: Node) {
-            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbol, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
-                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing);
+        function addFullSymbolName(symbolToDisplay: Symbol, enclosingDeclaration?: Node) {
+            if (alias && symbolToDisplay === symbol) {
+                symbolToDisplay = alias;
+            }
+            const fullSymbolDisplayParts = symbolToDisplayParts(typeChecker, symbolToDisplay, enclosingDeclaration || sourceFile, /*meaning*/ undefined,
+                SymbolFormatFlags.WriteTypeParametersOrArguments | SymbolFormatFlags.UseOnlyExternalAliasing | SymbolFormatFlags.AllowAnyNodeKind);
             addRange(displayParts, fullSymbolDisplayParts);
+
+            if (symbol.flags & SymbolFlags.Optional) {
+                displayParts.push(punctuationPart(SyntaxKind.QuestionToken));
+            }
         }
 
         function addPrefixForAnyFunctionOrVar(symbol: Symbol, symbolKind: string) {
-            addNewLineIfDisplayPartsExist();
+            prefixNextMeaning();
             if (symbolKind) {
-                pushTypePart(symbolKind);
-                if (!some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
+                pushSymbolKind(symbolKind);
+                if (symbol && !some(symbol.declarations, d => isArrowFunction(d) || (isFunctionExpression(d) || isClassExpression(d)) && !d.name)) {
                     displayParts.push(spacePart());
                     addFullSymbolName(symbol);
                 }
             }
         }
 
-        function pushTypePart(symbolKind: string) {
+        function pushSymbolKind(symbolKind: string) {
             switch (symbolKind) {
                 case ScriptElementKind.variableElement:
                 case ScriptElementKind.functionElement:
@@ -513,7 +604,7 @@ namespace ts.SymbolDisplay {
             }
         }
 
-        function addSignatureDisplayParts(signature: Signature, allSignatures: Signature[], flags?: TypeFormatFlags) {
+        function addSignatureDisplayParts(signature: Signature, allSignatures: ReadonlyArray<Signature>, flags = TypeFormatFlags.None) {
             addRange(displayParts, signatureToDisplayParts(typeChecker, signature, enclosingDeclaration, flags | TypeFormatFlags.WriteTypeArgumentsOfSignature));
             if (allSignatures.length > 1) {
                 displayParts.push(spacePart());
@@ -524,13 +615,15 @@ namespace ts.SymbolDisplay {
                 displayParts.push(textPart(allSignatures.length === 2 ? "overload" : "overloads"));
                 displayParts.push(punctuationPart(SyntaxKind.CloseParenToken));
             }
-            documentation = signature.getDocumentationComment();
+            const docComment = signature.getDocumentationComment(typeChecker);
+            documentation = docComment.length === 0 ? undefined : docComment;
             tags = signature.getJsDocTags();
         }
 
-        function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node) {
+        function writeTypeParametersOfSymbol(symbol: Symbol, enclosingDeclaration: Node | undefined) {
             const typeParameterParts = mapToDisplayParts(writer => {
-                typeChecker.getSymbolDisplayBuilder().buildTypeParameterDisplayFromSymbol(symbol, writer, enclosingDeclaration);
+                const params = typeChecker.symbolToTypeParameterDeclarations(symbol, enclosingDeclaration);
+                getPrinter().writeList(ListFormat.TypeParameters, params, getSourceFileOfNode(getParseTreeNode(enclosingDeclaration)), writer);
             });
             addRange(displayParts, typeParameterParts);
         }
@@ -541,7 +634,7 @@ namespace ts.SymbolDisplay {
             return false; // This is exported symbol
         }
 
-        return ts.forEach(symbol.declarations, declaration => {
+        return forEach(symbol.declarations, declaration => {
             // Function expressions are local
             if (declaration.kind === SyntaxKind.FunctionExpression) {
                 return true;

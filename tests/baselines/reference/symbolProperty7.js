@@ -9,11 +9,12 @@ class C {
 }
 
 //// [symbolProperty7.js]
+var _a;
 class C {
     constructor() {
-        this[Symbol()] = 0;
+        this[_a] = 0;
     }
-    [Symbol()]() { }
+    [(_a = Symbol(), Symbol(), Symbol())]() { }
     get [Symbol()]() {
         return 0;
     }

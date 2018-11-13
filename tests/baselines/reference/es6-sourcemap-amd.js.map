@@ -1,2 +1,2 @@
 //// [es6-sourcemap-amd.js.map]
-{"version":3,"file":"es6-sourcemap-amd.js","sourceRoot":"","sources":["es6-sourcemap-amd.ts"],"names":[],"mappings":"AAAA;IAEI;IAGA,CAAC;IAEM,CAAC;QAEJ,MAAM,CAAC,EAAE,CAAC;IACd,CAAC;CACJ"}
+{"version":3,"file":"es6-sourcemap-amd.js","sourceRoot":"","sources":["es6-sourcemap-amd.ts"],"names":[],"mappings":"AAAA,MAAM,CAAC;IAEH;IAGA,CAAC;IAEM,CAAC;QAEJ,OAAO,EAAE,CAAC;IACd,CAAC;CACJ"}

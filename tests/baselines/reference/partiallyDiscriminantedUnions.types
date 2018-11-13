@@ -2,8 +2,6 @@
 // Repro from #10586
 
 interface A1 {
->A1 : A1
-
     type: 'a';
 >type : "a"
 
@@ -12,8 +10,6 @@ interface A1 {
 }
 
 interface A2 {
->A2 : A2
-
     type: 'a';
 >type : "a"
 
@@ -25,23 +21,16 @@ interface A2 {
 }
 
 interface B {
->B : B
-
     type: 'b';
 >type : "b"
 }
 
 type AB = A1 | A2 | B;
 >AB : AB
->A1 : A1
->A2 : A2
->B : B
 
 const ab: AB = <AB>{};
 >ab : AB
->AB : AB
 ><AB>{} : AB
->AB : AB
 >{} : {}
 
 if (ab.type === 'a') {
@@ -77,21 +66,13 @@ class Circle { kind: "circle"; }
 
 type Shape = Circle | Square;
 >Shape : Shape
->Circle : Circle
->Square : Square
 
 type Shapes = Shape | Array<Shape>;
 >Shapes : Shapes
->Shape : Shape
->Array : T[]
->Shape : Shape
 
 function isShape(s : Shapes): s is Shape {
 >isShape : (s: Shapes) => s is Shape
 >s : Shapes
->Shapes : Shapes
->s : any
->Shape : Shape
 
     return !Array.isArray(s);
 >!Array.isArray(s) : boolean
@@ -105,7 +86,6 @@ function isShape(s : Shapes): s is Shape {
 function fail(s: Shapes) {
 >fail : (s: Shapes) => void
 >s : Shapes
->Shapes : Shapes
 
     if (isShape(s)) {
 >isShape(s) : boolean
@@ -121,7 +101,6 @@ function fail(s: Shapes) {
 
             let c: Circle = s;
 >c : Circle
->Circle : Circle
 >s : Circle
         }
     }

@@ -13,10 +13,9 @@ class C {
 
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 
     // Computed properties
     [""]: Foo;
+>[""] : Foo
 >"" : ""
->Foo : Foo
 }

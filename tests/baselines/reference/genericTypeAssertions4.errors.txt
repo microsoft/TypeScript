@@ -1,8 +1,8 @@
 tests/cases/compiler/genericTypeAssertions4.ts(19,5): error TS2322: Type 'A' is not assignable to type 'T'.
 tests/cases/compiler/genericTypeAssertions4.ts(20,5): error TS2322: Type 'B' is not assignable to type 'T'.
 tests/cases/compiler/genericTypeAssertions4.ts(21,5): error TS2322: Type 'C' is not assignable to type 'T'.
-tests/cases/compiler/genericTypeAssertions4.ts(23,9): error TS2352: Type 'B' cannot be converted to type 'T'.
-tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Type 'C' cannot be converted to type 'T'.
+tests/cases/compiler/genericTypeAssertions4.ts(23,9): error TS2352: Conversion of type 'B' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
+tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Conversion of type 'C' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 
 
 ==== tests/cases/compiler/genericTypeAssertions4.ts (5 errors) ====
@@ -36,8 +36,8 @@ tests/cases/compiler/genericTypeAssertions4.ts(24,9): error TS2352: Type 'C' can
         y = <T>a;
         y = <T>b; // error: cannot convert B to T
             ~~~~
-!!! error TS2352: Type 'B' cannot be converted to type 'T'.
+!!! error TS2352: Conversion of type 'B' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
         y = <T>c; // error: cannot convert C to T
             ~~~~
-!!! error TS2352: Type 'C' cannot be converted to type 'T'.
+!!! error TS2352: Conversion of type 'C' to type 'T' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
     }

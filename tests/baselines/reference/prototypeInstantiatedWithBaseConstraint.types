@@ -1,11 +1,9 @@
 === tests/cases/compiler/prototypeInstantiatedWithBaseConstraint.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 C.prototype.x.boo; // No error, prototype is instantiated to any

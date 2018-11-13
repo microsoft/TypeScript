@@ -89,4 +89,5 @@ let e4 = <EmptyProp data-prop />
 let e5 = <EmptyProp {...{ "data-prop": true}} />
 >e5 : Symbol(e5, Decl(file.tsx, 33, 3))
 >EmptyProp : Symbol(EmptyProp, Decl(file.tsx, 19, 30))
+>"data-prop" : Symbol("data-prop", Decl(file.tsx, 33, 25))
 

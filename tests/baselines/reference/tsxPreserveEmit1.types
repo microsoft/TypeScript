@@ -12,8 +12,8 @@ import Route = ReactRouter.Route;
 >Route : any
 
 var routes1 = <Route />;
->routes1 : any
-><Route /> : any
+>routes1 : error
+><Route /> : error
 >Route : any
 
 module M {
@@ -27,14 +27,16 @@ module M {
 
 	// Should emit 'M.X' in both opening and closing tags
 	var y = <X></X>;
->y : any
-><X></X> : any
+>y : error
+><X></X> : error
 >X : any
 >X : any
 }
 
 === tests/cases/conformance/jsx/react.d.ts ===
 declare module 'react' {
+>'react' : typeof import("react")
+
 	var x: any;
 >x : any
 
@@ -49,9 +51,10 @@ declare module ReactRouter {
 >Route : any
 
 	interface Thing { }
->Thing : Thing
 }
 declare module 'react-router' {
+>'react-router' : typeof import("react-router")
+
 	export = ReactRouter;
 >ReactRouter : typeof ReactRouter
 }

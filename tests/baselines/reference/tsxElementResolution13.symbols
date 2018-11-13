@@ -22,6 +22,5 @@ var obj1: Obj1;
 >Obj1 : Symbol(Obj1, Decl(file.tsx, 3, 1))
 
 <obj1 x={10} />; // Error
->obj1 : Symbol(unknown)
 >x : Symbol(x, Decl(file.tsx, 9, 5))
 

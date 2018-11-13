@@ -19,10 +19,10 @@ var x: {
 
     [idx: number]: A;
 >idx : number
->A : A
 
 } = { 0: new B() }
 >{ 0: new B() } : { 0: B; }
+>0 : B
 >new B() : B
 >B : typeof B
 

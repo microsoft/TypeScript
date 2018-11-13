@@ -1,8 +1,8 @@
 ===ORIGINAL===
 
-namespace M 
+namespace M
 {
-    namespace M2 
+    namespace M2
     {
         function foo() {
             // comment 1
@@ -22,7 +22,7 @@ namespace M
 }
 ===MODIFIED===
 
-namespace M 
+namespace M
 {
     function bar(): any
     {
@@ -37,7 +37,7 @@ namespace M
         const y = 2; // comment 3
         return 1;
     }
-    namespace M2 
+    namespace M2
     {
         function foo() {
             // comment 1

@@ -35,7 +35,6 @@ class MyTestClass {
 
         var t: MyTestClass;
 >t : this
->MyTestClass : MyTestClass
 
         //type of 'this' in member function body is the class instance type
         var p = this;
@@ -44,7 +43,6 @@ class MyTestClass {
 
         var p: MyTestClass;
 >p : this
->MyTestClass : MyTestClass
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
@@ -57,7 +55,6 @@ class MyTestClass {
 
         var p: MyTestClass;
 >p : this
->MyTestClass : MyTestClass
 
         return this;
 >this : this
@@ -72,7 +69,6 @@ class MyTestClass {
 
         var p: MyTestClass;
 >p : this
->MyTestClass : MyTestClass
 
         p = v;
 >p = v : this
@@ -96,7 +92,6 @@ class MyTestClass {
 
         var t: MyTestClass;
 >t : this
->MyTestClass : MyTestClass
 
     };
 
@@ -189,8 +184,6 @@ class MyTestClass {
 
 class MyGenericTestClass<T, U> {
 >MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
     private canary: number;
 >canary : number
@@ -225,9 +218,6 @@ class MyGenericTestClass<T, U> {
 
         var t: MyGenericTestClass<T, U>;
 >t : this
->MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
         //type of 'this' in member function body is the class instance type
         var p = this;
@@ -236,9 +226,6 @@ class MyGenericTestClass<T, U> {
 
         var p: MyGenericTestClass<T, U>;
 >p : this
->MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
     }
 
     //type of 'this' in member accessor(get and set) body is the class instance type
@@ -251,9 +238,6 @@ class MyGenericTestClass<T, U> {
 
         var p: MyGenericTestClass<T, U>;
 >p : this
->MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
         return this;
 >this : this
@@ -268,9 +252,6 @@ class MyGenericTestClass<T, U> {
 
         var p: MyGenericTestClass<T, U>;
 >p : this
->MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
         p = v;
 >p = v : this
@@ -294,9 +275,6 @@ class MyGenericTestClass<T, U> {
 
         var t: MyGenericTestClass<T, U>;
 >t : this
->MyGenericTestClass : MyGenericTestClass<T, U>
->T : T
->U : U
 
     };
 

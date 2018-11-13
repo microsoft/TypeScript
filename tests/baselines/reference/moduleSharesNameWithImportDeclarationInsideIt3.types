@@ -13,7 +13,6 @@ module Z {
         }
     }
     export interface I { }
->I : I
 }
 module A.M {
 >A : typeof A

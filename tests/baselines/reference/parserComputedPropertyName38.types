@@ -3,5 +3,6 @@ class C {
 >C : C
 
     [public]() { }
+>[public] : () => void
 >public : any
 }

@@ -16,7 +16,6 @@ module M {
 >C : C
 
         export export interface I { }
->I : I
     }  
 }
 
@@ -36,6 +35,5 @@ declare module A {
 >C : C
 
         export export interface I { }
->I : I
     }
 }

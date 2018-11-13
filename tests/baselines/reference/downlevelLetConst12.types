@@ -12,7 +12,7 @@ const bar = 1;
 
 let [baz] = [];
 >baz : any
->[] : [any]
+>[] : [undefined?]
 
 let {a: baz2} = { a: 1 };
 >a : any
@@ -23,7 +23,7 @@ let {a: baz2} = { a: 1 };
 
 const [baz3] = []
 >baz3 : any
->[] : [any]
+>[] : [undefined?]
 
 const {a: baz4} = { a: 1 };
 >a : any

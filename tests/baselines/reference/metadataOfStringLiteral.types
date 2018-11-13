@@ -2,7 +2,6 @@
 function PropDeco(target: Object, propKey: string | symbol) { }
 >PropDeco : (target: Object, propKey: string | symbol) => void
 >target : Object
->Object : Object
 >propKey : string | symbol
 
 class Foo {

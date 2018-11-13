@@ -18,14 +18,14 @@ tests/cases/compiler/interfacedeclWithIndexerErrors.ts(20,5): error TS2411: Prop
     
         p1;
         p2: string;
-        ~~~~~~~~~~~
+        ~~
 !!! error TS2411: Property 'p2' of type 'string' is not assignable to string index type '() => string'.
         p3?;
         p4?: number;
-        ~~~~~~~~~~~~
+        ~~
 !!! error TS2411: Property 'p4' of type 'number' is not assignable to string index type '() => string'.
         p5: (s: number) =>string;
-        ~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~
 !!! error TS2411: Property 'p5' of type '(s: number) => string' is not assignable to string index type '() => string'.
     
         f1();

@@ -1,15 +1,10 @@
 === tests/cases/conformance/types/literal/stringLiteralsWithEqualityChecks03.ts ===
 interface Runnable {
->Runnable : Runnable
-
     isRunning: boolean;
 >isRunning : boolean
 }
 
 interface Refrigerator extends Runnable {
->Refrigerator : Refrigerator
->Runnable : Runnable
-
     makesFoodGoBrrr: boolean;
 >makesFoodGoBrrr : boolean
 }
@@ -19,7 +14,6 @@ let x: string;
 
 let y: "foo" | Refrigerator;
 >y : Refrigerator | "foo"
->Refrigerator : Refrigerator
 
 let b: boolean;
 >b : boolean

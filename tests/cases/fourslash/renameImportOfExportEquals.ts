@@ -22,8 +22,8 @@ const bRanges = [b0, b1];
 const xRanges = [x0, x1];
 
 const nGroup = { definition: "namespace N", ranges: nRanges };
-const aGroup = { definition: "import N", ranges: aRanges };
-const bGroup = { definition: "import N", ranges: [b0, b1] };
+const aGroup = { definition: "(alias) namespace N\nimport N", ranges: aRanges };
+const bGroup = { definition: "(alias) namespace N\nimport N", ranges: [b0, b1] };
 
 verify.referenceGroups(nRanges, [nGroup, aGroup, bGroup]);
 verify.referenceGroups([a0, a1], [aGroup, nGroup, bGroup]);

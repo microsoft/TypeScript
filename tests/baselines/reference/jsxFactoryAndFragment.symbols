@@ -4,10 +4,3 @@ declare var h: any;
 
 <></>;
 <><span>1</span><><span>2.1</span><span>2.2</span></></>;
->span : Symbol(unknown)
->span : Symbol(unknown)
->span : Symbol(unknown)
->span : Symbol(unknown)
->span : Symbol(unknown)
->span : Symbol(unknown)
-

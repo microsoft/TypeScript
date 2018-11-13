@@ -3,23 +3,34 @@ class C {
 >C : C
 
     "a b": number;
+>"a b" : number
+
     "a b": number;
+>"a b" : number
+
     static "c d": number;
+>"c d" : number
+
     static "c d": number;
+>"c d" : number
 }
 
 interface I {
->I : I
+    "a b": number;
+>"a b" : number
 
     "a b": number;
-    "a b": number;
+>"a b" : number
 }
 
 var a: {
 >a : { "a b": number; }
 
     "a b": number;
+>"a b" : number
+
     "a b": number;
+>"a b" : number
 }
 
 var b = {
@@ -27,8 +38,10 @@ var b = {
 >{    "a b": 1    "a b": 1} : { "a b": number; }
 
     "a b": 1
+>"a b" : number
 >1 : 1
 
     "a b": 1
+>"a b" : number
 >1 : 1
 }

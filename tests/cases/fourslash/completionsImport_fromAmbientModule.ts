@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////declare module "m" {
 ////    export const x: number;
@@ -11,9 +13,8 @@
 verify.applyCodeActionFromCompletion("", {
     name: "x",
     source: "m",
-    description: `Import 'x' from "m".`,
-    // TODO: GH#18445
-    newFileContent: `import { x } from "m";\r
-\r
+    description: `Import 'x' from module "m"`,
+    newFileContent: `import { x } from "m";
+
 `,
 });

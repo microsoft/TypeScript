@@ -40,7 +40,7 @@ function withMultiParams(a : number, b, c: Object) {
 >a : Symbol(a, Decl(funcdecl.ts, 19, 25))
 >b : Symbol(b, Decl(funcdecl.ts, 19, 36))
 >c : Symbol(c, Decl(funcdecl.ts, 19, 39))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     return a;
 >a : Symbol(a, Decl(funcdecl.ts, 19, 25))

@@ -1,7 +1,7 @@
 /// <reference path="./fourslash.ts" />
 
 ////interface IFoo {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: string;
+////    [|{| "isDefinition": true |}a|]: string;
 ////}
 ////class C<T extends IFoo> {
 ////    method() {
@@ -17,14 +17,4 @@
 ////    [|{| "isWriteAccess": true, "isDefinition": true |}a|]: "ss"
 ////};
 
-const ranges = test.ranges();
-const [r0, r1, r2, r3] = ranges;
-verify.referenceGroups([r0, r2], [{ definition: "(property) IFoo.a: string", ranges }]);
-verify.referenceGroups(r1, [
-    { definition: "(property) IFoo.a: string", ranges: [r0, r2, r3] },
-    { definition: "(property) a: string", ranges: [r1] }
-]);
-verify.referenceGroups(r3, [
-    { definition: "(property) IFoo.a: string", ranges: [r0, r1, r2] },
-    { definition: "(property) a: string", ranges: [r3] }
-]);
+verify.singleReferenceGroup("(property) IFoo.a: string");

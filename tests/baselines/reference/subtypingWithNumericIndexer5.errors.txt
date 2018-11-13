@@ -1,7 +1,7 @@
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(11,7): error TS2420: Class 'B' incorrectly implements interface 'A'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'Derived'.
-      Property 'bar' is missing in type 'Base'.
+      Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts(32,11): error TS2420: Class 'B3<T>' incorrectly implements interface 'A<T>'.
   Index signatures are incompatible.
     Type 'Base' is not assignable to type 'T'.
@@ -29,7 +29,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2420: Class 'B' incorrectly implements interface 'A'.
 !!! error TS2420:   Index signatures are incompatible.
 !!! error TS2420:     Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2420:       Property 'bar' is missing in type 'Base'.
+!!! error TS2420:       Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer5.ts:4:34: 'bar' is declared here.
         [x: string]: Base; // error
     }
     

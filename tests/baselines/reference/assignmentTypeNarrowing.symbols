@@ -1,7 +1,7 @@
 === tests/cases/conformance/expressions/assignmentOperator/assignmentTypeNarrowing.ts ===
 let x: string | number | boolean | RegExp;
 >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 x = "";
 >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
@@ -61,4 +61,24 @@ for (x of a) {
     x; // string
 >x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 0, 3))
 }
+
+// Repro from #26405
+
+type AOrArrA<T> = T | T[];
+>AOrArrA : Symbol(AOrArrA, Decl(assignmentTypeNarrowing.ts, 27, 1))
+>T : Symbol(T, Decl(assignmentTypeNarrowing.ts, 31, 13))
+>T : Symbol(T, Decl(assignmentTypeNarrowing.ts, 31, 13))
+>T : Symbol(T, Decl(assignmentTypeNarrowing.ts, 31, 13))
+
+const arr: AOrArrA<{x?: "ok"}> = [{ x: "ok" }]; // weak type
+>arr : Symbol(arr, Decl(assignmentTypeNarrowing.ts, 32, 5))
+>AOrArrA : Symbol(AOrArrA, Decl(assignmentTypeNarrowing.ts, 27, 1))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 32, 20))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 32, 35))
+
+arr.push({ x: "ok" });
+>arr.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>arr : Symbol(arr, Decl(assignmentTypeNarrowing.ts, 32, 5))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>x : Symbol(x, Decl(assignmentTypeNarrowing.ts, 33, 10))
 

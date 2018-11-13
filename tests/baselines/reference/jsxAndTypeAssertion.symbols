@@ -10,53 +10,23 @@ var x: any;
 
 x = <any> { test: <any></any> };
 >x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
->any : Symbol(unknown)
->any : Symbol(unknown)
->any : Symbol(unknown)
 
 x = <any><any></any>;
->any : Symbol(unknown)
->any : Symbol(unknown)
->any : Symbol(unknown)
  
 x = <foo>hello {<foo>{}} </foo>;
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
 
 x = <foo test={<foo>{}}>hello</foo>;
->foo : Symbol(unknown)
 >test : Symbol(test, Decl(jsxAndTypeAssertion.tsx, 11, 8))
->foo : Symbol(unknown)
->foo : Symbol(unknown)
 
 x = <foo test={<foo>{}}>hello{<foo>{}}</foo>;
->foo : Symbol(unknown)
 >test : Symbol(test, Decl(jsxAndTypeAssertion.tsx, 13, 8))
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
 
 x = <foo>x</foo>, x = <foo/>;
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
 
 <foo>{<foo><foo>{/foo/.test(x) ? <foo><foo></foo> : <foo><foo></foo>}</foo>}</foo>
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->/foo/.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>/foo/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(jsxAndTypeAssertion.tsx, 4, 3))
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
->foo : Symbol(unknown)
 
     
 

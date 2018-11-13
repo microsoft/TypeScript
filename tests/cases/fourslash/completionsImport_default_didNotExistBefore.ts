@@ -1,20 +1,31 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////export default function foo() {}
 
 // @Filename: /b.ts
 ////f/**/;
 
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/a" }, "function foo(): void", "", "function", /*spanIndex*/ undefined, /*hasAction*/ true);
-
+verify.completions({
+    marker: "",
+    includes: {
+        name: "foo",
+        source: "/a",
+        sourceDisplay: "./a",
+        text: "function foo(): void",
+        kind: "function",
+        kindModifiers: "export",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
+});
 verify.applyCodeActionFromCompletion("", {
     name: "foo",
     source: "/a",
-    description: `Import 'foo' from "./a".`,
-    // TODO: GH#18445
-    newFileContent: `import foo from "./a";\r
-\r
+    description: `Import default 'foo' from module "./a"`,
+    newFileContent: `import foo from "./a";
+
 f;`,
 });

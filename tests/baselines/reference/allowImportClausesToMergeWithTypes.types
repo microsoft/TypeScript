@@ -8,8 +8,6 @@ export default zzz;
 
 === tests/cases/compiler/a.ts ===
 export default interface zzz {
->zzz : zzz
-
     x: string;
 >x : string
 }
@@ -19,7 +17,6 @@ import zzz from "./b";
 
 const x: zzz = { x: "" };
 >x : zzz
->zzz : zzz
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -37,7 +34,6 @@ import zzz from "./a";
 
 const x: zzz = { x: "" };
 >x : zzz
->zzz : zzz
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -53,6 +49,5 @@ originalZZZ;
 
 const y: originalZZZ = x;
 >y : any
->originalZZZ : No type information available!
 >x : zzz
 

@@ -11,8 +11,6 @@ module Foo1 {
     }
 
     export interface Bar { 
->Bar : Bar
-
         y: string;
 >y : string
     }
@@ -30,8 +28,6 @@ module Foo2 {
     }
 
     export interface Bar {
->Bar : Bar
-
         y: string;
 >y : string
     }
@@ -57,8 +53,6 @@ module Foo3 {
     }
 
     interface Bar { 
->Bar : Bar
-
         y: string;
 >y : string
     }

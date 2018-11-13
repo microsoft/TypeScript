@@ -6,6 +6,6 @@ declare class C{
 >x : number
 
 	method(readonly x: number);
->method : (readonly x: number) => any
+>method : (x: number) => any
 >x : number
 }

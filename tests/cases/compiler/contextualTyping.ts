@@ -205,13 +205,6 @@ declare class Point
 
 }
 
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
-
-    return this;
-}
-
 Point.origin = new Point(0, 0);
 
 Point.prototype.add = function(dx, dy) {

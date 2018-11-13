@@ -1,0 +1,7 @@
+=== tests/cases/compiler/unusedSemicolonInClass.ts ===
+class Unused {
+>Unused : Unused
+
+    ;
+}
+

@@ -11,8 +11,24 @@
 ////    "\u0031\u0062": "invalid unicode identifer name (1b)"
 ////};
 ////
-////x./*a*/;
+////x[|./*a*/|];
 ////x["/*b*/"];
 
-verify.completionsAt("a", ["bar", "break", "any", "$", "b"]);
-verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "\u0031\u0062"]);
+const replacementSpan = test.ranges()[0];
+verify.completions(
+    { marker: "b", exact: ["foo ", "bar", "break", "any", "#", "$", "b", "1b"] },
+    {
+        marker: "a",
+        exact: [
+            { name: "foo ", insertText: '["foo "]', replacementSpan },
+            "bar",
+            "break",
+            "any",
+            { name: "#", insertText: '["#"]', replacementSpan },
+            "$",
+            "b",
+            { name: "1b", insertText: '["1b"]', replacementSpan },
+        ],
+        preferences: { includeInsertTextCompletions: true },
+    },
+);

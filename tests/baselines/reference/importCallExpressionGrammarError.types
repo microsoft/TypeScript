@@ -26,11 +26,6 @@ const p2 = import();
 >p2 : Promise<any>
 >import() : Promise<any>
 
-const p3 = import(,);
->p3 : Promise<any>
->import(,) : Promise<any>
-> : undefined
-
 const p4 = import("pathToModule", "secondModule");
 >p4 : Promise<any>
 >import("pathToModule", "secondModule") : Promise<any>

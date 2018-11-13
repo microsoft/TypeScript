@@ -3,16 +3,9 @@
 
 declare function func<A extends string, B extends A>(a: A, b: B[]): (ab: A & B) => void;
 >func : <A extends string, B extends A>(a: A, b: B[]) => (ab: A & B) => void
->A : A
->B : B
->A : A
 >a : A
->A : A
 >b : B[]
->B : B
 >ab : A & B
->A : A
->B : B
 
 const q = func("x" as "x" | "y", ["x"]);
 >q : (ab: "x") => void

@@ -18,12 +18,10 @@ class MyClass {
     db: db.db;
 >db : db.db
 >db : any
->db : db.db
 
     constructor(db: db.db) { // collision with namespace of external module db
 >db : db.db
 >db : any
->db : db.db
 
         this.db = db;
 >this.db = db : db.db

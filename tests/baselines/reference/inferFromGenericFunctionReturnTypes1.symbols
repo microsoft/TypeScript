@@ -16,11 +16,11 @@ class SetOf<A> {
 >A : Symbol(A, Decl(inferFromGenericFunctionReturnTypes1.ts, 3, 12))
 
     this._store.push(a);
->this._store.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this._store.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this._store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes1.ts, 3, 16))
 >this : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes1.ts, 0, 0))
 >_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes1.ts, 3, 16))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes1.ts, 6, 6))
   }
 
@@ -49,11 +49,11 @@ class SetOf<A> {
 >index : Symbol(index, Decl(inferFromGenericFunctionReturnTypes1.ts, 14, 20))
 
       this._store.forEach((a, i) => fn(a, i));
->this._store.forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>this._store.forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >this._store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes1.ts, 3, 16))
 >this : Symbol(SetOf, Decl(inferFromGenericFunctionReturnTypes1.ts, 0, 0))
 >_store : Symbol(SetOf._store, Decl(inferFromGenericFunctionReturnTypes1.ts, 3, 16))
->forEach : Symbol(Array.forEach, Decl(lib.d.ts, --, --))
+>forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(inferFromGenericFunctionReturnTypes1.ts, 15, 27))
 >i : Symbol(i, Decl(inferFromGenericFunctionReturnTypes1.ts, 15, 29))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes1.ts, 14, 10))
@@ -124,9 +124,9 @@ function compose<T>(...fns: ((x: T) => T)[]): (x: T) => T {
   return (x: T) => fns.reduce((prev, fn) => fn(prev), x);
 >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes1.ts, 27, 10))
 >T : Symbol(T, Decl(inferFromGenericFunctionReturnTypes1.ts, 26, 17))
->fns.reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>fns.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >fns : Symbol(fns, Decl(inferFromGenericFunctionReturnTypes1.ts, 26, 20))
->reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >prev : Symbol(prev, Decl(inferFromGenericFunctionReturnTypes1.ts, 27, 31))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes1.ts, 27, 36))
 >fn : Symbol(fn, Decl(inferFromGenericFunctionReturnTypes1.ts, 27, 36))
@@ -263,9 +263,9 @@ testSet.transform(
     map(x => x.toUpperCase())
 >map : Symbol(map, Decl(inferFromGenericFunctionReturnTypes1.ts, 28, 1))
 >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes1.ts, 58, 8))
->x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>x.toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(inferFromGenericFunctionReturnTypes1.ts, 58, 8))
->toUpperCase : Symbol(String.toUpperCase, Decl(lib.d.ts, --, --))
+>toUpperCase : Symbol(String.toUpperCase, Decl(lib.es5.d.ts, --, --))
 
   )
 )

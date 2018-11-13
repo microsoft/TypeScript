@@ -1,5 +1,7 @@
 === tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts ===
 declare module "fs" {
+>"fs" : typeof import("fs")
+
     export class File {
 >File : File
 
@@ -10,8 +12,6 @@ declare module "fs" {
 >ReadAllText : () => string
     }
     export interface IFile {
->IFile : IFile
-
         [index: number]: string;
 >index : number
     }
@@ -19,7 +19,7 @@ declare module "fs" {
 
 import fs = module("fs");
 >fs : any
->module : No type information available!
+>module : any
 >("fs") : "fs"
 >"fs" : "fs"
 
@@ -74,8 +74,8 @@ module TypeScriptAllInOne {
 >4 : 4
 
                 if (retValue != 0) {
->if : (retValue?: boolean) => any
->retValue : boolean
+>if : (retValue: any) => any
+>retValue : any
 >!= 0 : boolean
 > : any
 >0 : 0
@@ -89,7 +89,7 @@ module TypeScriptAllInOne {
 
 
                 retValue = bfs.TYPES();
->retValue : boolean
+>retValue : any
 >bfs.TYPES() : any
 >bfs.TYPES : any
 >bfs : any
@@ -97,7 +97,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1 && 
@@ -108,7 +108,7 @@ module TypeScriptAllInOne {
 
                 retValue = bfs.OPERATOR ' );
 >retValue = bfs.OPERATOR : any
->retValue : boolean
+>retValue : any
 >bfs.OPERATOR : any
 >bfs : any
 >OPERATOR : any
@@ -116,7 +116,7 @@ module TypeScriptAllInOne {
 
                 if (retValue != 0) {
 >retValue != 0 : boolean
->retValue : boolean
+>retValue : any
 >0 : 0
 
                     return 1;
@@ -124,7 +124,6 @@ module TypeScriptAllInOne {
                 }
             }
             catch (e) {
->catch : (e: any) => void
 >e : any
 
                 console.log(e);
@@ -204,7 +203,6 @@ module TypeScriptAllInOne {
 >local5 : any
 ><fs.File>null : any
 >fs : any
->File : any
 >null : null
 
             var local6 = local5 instanceof fs.File;
@@ -250,6 +248,7 @@ module TypeScriptAllInOne {
             var objLit = { "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' };
 >objLit : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
 >{ "var": number = 42, equals: function (x) { return x["var"] === 42; },  instanceof : () => 'objLit{42}' } : { "var": number; equals: (x: any) => boolean; instanceof: () => string; }
+>"var" : number
 >number = 42 : 42
 >number : number
 >42 : 42
@@ -476,9 +475,9 @@ module TypeScriptAllInOne {
             for (var x in { x: 0, y: 1 }) {
 >x : string
 >{ x: 0, y: 1 } : { x: number; y: number; }
->x : string
+>x : number
 >0 : 0
->y : string
+>y : number
 >1 : 1
 
              ! 
@@ -521,7 +520,6 @@ module TypeScriptAllInOne {
 
             var xx: IF = c;
 >xx : IF
->IF : IF
 >c : CLASS
 
             retVal +=  catch .Property;
@@ -798,16 +796,12 @@ module TypeScriptAllInOne {
     }
 
     interface IF {
->IF : IF
-
         Foo(): bool;
 >Foo : () => any
->bool : No type information available!
     }
 
     class CLASS implements IF {
 >CLASS : CLASS
->IF : IF
 
          case  d = () => {  yield  0; };
 >d : () => void
@@ -827,7 +821,6 @@ module TypeScriptAllInOne {
         }
         public Foo(): bool {
 >Foo : () => any
->bool : No type information available!
 
             var myEvent = () => { return 1; };
 >myEvent : () => number
@@ -908,7 +901,6 @@ module TypeScriptAllInOne {
         constructor(private value: number, public name: string)  :  }
 >value : number
 >name : string
-> : No type information available!
        
         public Overloads(value: string);
 >Overloads(value: string) : any
@@ -927,6 +919,7 @@ module TypeScriptAllInOne {
 >rest : any
 >string[] : any
 >string : any
+> : any
 >&         public : number
 > : any
 
@@ -967,8 +960,6 @@ enum Fruit {
 }
 
 interface IDisposable {
->IDisposable : IDisposable
-
     Dispose(): void;
 >Dispose : () => void
 }

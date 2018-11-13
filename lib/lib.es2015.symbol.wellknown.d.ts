@@ -18,7 +18,7 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference path="lib.es2015.symbol.d.ts" />
+/// <reference lib="es2015.symbol" />
 
 interface SymbolConstructor {
     /**
@@ -83,7 +83,7 @@ interface SymbolConstructor {
 }
 
 interface Symbol {
-    readonly [Symbol.toStringTag]: "Symbol";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Array<T> {
@@ -127,23 +127,23 @@ interface Date {
 }
 
 interface Map<K, V> {
-    readonly [Symbol.toStringTag]: "Map";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface WeakMap<K extends object, V> {
-    readonly [Symbol.toStringTag]: "WeakMap";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Set<T> {
-    readonly [Symbol.toStringTag]: "Set";
+    readonly [Symbol.toStringTag]: string;
 }
 
-interface WeakSet<T> {
-    readonly [Symbol.toStringTag]: "WeakSet";
+interface WeakSet<T extends object> {
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface JSON {
-    readonly [Symbol.toStringTag]: "JSON";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Function {
@@ -158,19 +158,19 @@ interface Function {
 }
 
 interface GeneratorFunction {
-    readonly [Symbol.toStringTag]: "GeneratorFunction";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Math {
-    readonly [Symbol.toStringTag]: "Math";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Promise<T> {
-    readonly [Symbol.toStringTag]: "Promise";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface PromiseConstructor {
-    readonly [Symbol.species]: Function;
+    readonly [Symbol.species]: PromiseConstructor;
 }
 
 interface RegExp {
@@ -222,7 +222,7 @@ interface RegExp {
 }
 
 interface RegExpConstructor {
-    [Symbol.species](): RegExpConstructor;
+    readonly [Symbol.species]: RegExpConstructor;
 }
 
 interface String {
@@ -261,11 +261,11 @@ interface String {
 }
 
 interface ArrayBuffer {
-    readonly [Symbol.toStringTag]: "ArrayBuffer";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface DataView {
-    readonly [Symbol.toStringTag]: "DataView";
+    readonly [Symbol.toStringTag]: string;
 }
 
 interface Int8Array {
@@ -302,4 +302,17 @@ interface Float32Array {
 
 interface Float64Array {
     readonly [Symbol.toStringTag]: "Float64Array";
+}
+
+interface ArrayConstructor {
+    readonly [Symbol.species]: ArrayConstructor;
+}
+interface MapConstructor {
+    readonly [Symbol.species]: MapConstructor;
+}
+interface SetConstructor {
+    readonly [Symbol.species]: SetConstructor;
+}
+interface ArrayBufferConstructor {
+    readonly [Symbol.species]: ArrayBufferConstructor;
 }

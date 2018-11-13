@@ -1,8 +1,8 @@
 === tests/cases/compiler/declaredExternalModuleWithExportAssignment.ts ===
 declare module 'connect' {
-    interface connectModule {
->connectModule : connectModule
+>'connect' : typeof import("connect")
 
+    interface connectModule {
         (res, req, next): void;
 >res : any
 >req : any
@@ -10,13 +10,9 @@ declare module 'connect' {
     }
 
     interface connectExport {
->connectExport : connectExport
-
         use: (mod: connectModule) => connectExport;
 >use : (mod: connectModule) => connectExport
 >mod : connectModule
->connectModule : connectModule
->connectExport : connectExport
 
         listen: (port: number) => void;
 >listen : (port: number) => void
@@ -27,15 +23,11 @@ declare module 'connect' {
 >server : { (): connectExport; test1: connectModule; test2(): connectModule; }
 
         (): connectExport;
->connectExport : connectExport
-
         test1: connectModule;
 >test1 : connectModule
->connectModule : connectModule
 
         test2(): connectModule;
 >test2 : () => connectModule
->connectModule : connectModule
 
     };
     export = server;

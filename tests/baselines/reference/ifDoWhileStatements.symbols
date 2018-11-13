@@ -67,9 +67,9 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 25, 5))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 27, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 module N {
@@ -85,9 +85,9 @@ module N {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(ifDoWhileStatements.ts, 33, 5))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(ifDoWhileStatements.ts, 35, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 // literals

@@ -10,38 +10,26 @@ class B extends A { b }
 
 class C<T> extends Array<T> { c }
 >C : C<T>
->T : T
 >Array : T[]
->T : T
 >c : any
 
 declare var ara: A[];
 >ara : A[]
->A : A
 
 declare var arb: B[];
 >arb : B[]
->B : B
 
 declare var cra: C<A>;
 >cra : C<A>
->C : C<T>
->A : A
 
 declare var crb: C<B>;
 >crb : C<B>
->C : C<T>
->B : B
 
 declare var rra: ReadonlyArray<A>;
 >rra : ReadonlyArray<A>
->ReadonlyArray : ReadonlyArray<T>
->A : A
 
 declare var rrb: ReadonlyArray<B>;
 >rrb : ReadonlyArray<B>
->ReadonlyArray : ReadonlyArray<T>
->B : B
 
 rra = ara;
 >rra = ara : A[]

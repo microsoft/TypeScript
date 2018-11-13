@@ -1,39 +1,26 @@
 === tests/cases/compiler/propertiesAndIndexers.ts ===
 interface X { }
->X : X
-
 interface Y {
->Y : Y
-
     n: number;
 >n : number
 }
 interface Z {
->Z : Z
-
     s: string;
 >s : string
 }
 
 interface A {
->A : A
-
     a: Y;
 >a : Y
->Y : Y
 
     b: X;
 >b : X
->X : X
 
     1: Z;
->Z : Z
+>1 : Z
 }
 
 interface B extends A {
->B : B
->A : A
-
     [n: number]: string;
 >n : number
 
@@ -41,20 +28,21 @@ interface B extends A {
 >c : boolean
 
     3: boolean;
+>3 : boolean
+
     6(): string;
+>6 : () => string
 }
 
 interface B {
->B : B
-
     4: boolean;
+>4 : boolean
+
     5: string;
+>5 : string
 }
 
 interface C extends A {
->C : C
->A : A
-
     [s: string]: number;
 >s : string
 
@@ -62,15 +50,12 @@ interface C extends A {
 >c : boolean
 
     3: boolean;
+>3 : boolean
 }
 
 interface D extends B, C {
->D : D
->B : B
->C : C
-
     2: Z;
->Z : Z
+>2 : Z
 
     Infinity: number;
 >Infinity : number
@@ -104,4 +89,6 @@ var c: {
 >c : boolean
 
     3: boolean;
+>3 : boolean
+
 };

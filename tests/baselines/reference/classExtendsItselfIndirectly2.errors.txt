@@ -14,6 +14,7 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
 !!! error TS2506: 'C' is referenced directly or indirectly in its own base expression.
                       ~
 !!! error TS2449: Class 'E' used before its declaration.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts:9:18: 'E' is declared here.
     
     module M {
         export class D extends C { bar: string; }
@@ -34,6 +35,7 @@ tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/cla
 !!! error TS2506: 'C2' is referenced directly or indirectly in its own base expression.
                               ~~
 !!! error TS2449: Class 'E2' used before its declaration.
+!!! related TS2728 tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classExtendsItselfIndirectly2.ts:20:22: 'E2' is declared here.
     
         module P {
             export class D2<T> extends C2<T> { bar: T; }

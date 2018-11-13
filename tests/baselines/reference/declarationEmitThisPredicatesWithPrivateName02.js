@@ -21,3 +21,15 @@ exports.obj = {
         return dis.a != null && dis.b != null && dis.c != null;
     }
 };
+
+
+//// [declarationEmitThisPredicatesWithPrivateName02.d.ts]
+interface Foo {
+    a: string;
+    b: number;
+    c: boolean;
+}
+export declare const obj: {
+    m(): this is Foo;
+};
+export {};

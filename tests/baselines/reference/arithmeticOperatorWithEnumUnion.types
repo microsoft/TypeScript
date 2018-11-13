@@ -28,8 +28,6 @@ var b: number;
 
 var c: E | F;
 >c : E | F
->E : E
->F : F
 
 // operator *
 var ra1 = c * a;

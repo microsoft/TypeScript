@@ -1,0 +1,34 @@
+=== tests/cases/compiler/declarationEmitNestedGenerics.ts ===
+function f<T>(p: T) {
+>f : Symbol(f, Decl(declarationEmitNestedGenerics.ts, 0, 0))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 0, 11))
+>p : Symbol(p, Decl(declarationEmitNestedGenerics.ts, 0, 14))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 0, 11))
+
+    let g: <T>(x: T) => typeof p = null as any;
+>g : Symbol(g, Decl(declarationEmitNestedGenerics.ts, 1, 7))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 1, 12))
+>x : Symbol(x, Decl(declarationEmitNestedGenerics.ts, 1, 15))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 1, 12))
+>p : Symbol(p, Decl(declarationEmitNestedGenerics.ts, 0, 14))
+
+    return g;
+>g : Symbol(g, Decl(declarationEmitNestedGenerics.ts, 1, 7))
+}
+
+function g<T>(x: T) {
+>g : Symbol(g, Decl(declarationEmitNestedGenerics.ts, 3, 1))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 5, 11))
+>x : Symbol(x, Decl(declarationEmitNestedGenerics.ts, 5, 14))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 5, 11))
+
+    let y: typeof x extends (infer T)[] ? T : typeof x = null as any;
+>y : Symbol(y, Decl(declarationEmitNestedGenerics.ts, 6, 7))
+>x : Symbol(x, Decl(declarationEmitNestedGenerics.ts, 5, 14))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 6, 34))
+>T : Symbol(T, Decl(declarationEmitNestedGenerics.ts, 6, 34))
+>x : Symbol(x, Decl(declarationEmitNestedGenerics.ts, 5, 14))
+
+    return y;
+>y : Symbol(y, Decl(declarationEmitNestedGenerics.ts, 6, 7))
+}

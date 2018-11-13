@@ -124,29 +124,29 @@ var s: Strange<number>;
 s = "hello";
 >s : Symbol(s, Decl(genericTypeAliases.ts, 38, 3))
 
-interface Tuple<A, B> {
->Tuple : Symbol(Tuple, Decl(genericTypeAliases.ts, 39, 12))
->A : Symbol(A, Decl(genericTypeAliases.ts, 41, 16))
->B : Symbol(B, Decl(genericTypeAliases.ts, 41, 18))
+interface AB<A, B> {
+>AB : Symbol(AB, Decl(genericTypeAliases.ts, 39, 12))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 41, 13))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
 
     a: A;
->a : Symbol(Tuple.a, Decl(genericTypeAliases.ts, 41, 23))
->A : Symbol(A, Decl(genericTypeAliases.ts, 41, 16))
+>a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
+>A : Symbol(A, Decl(genericTypeAliases.ts, 41, 13))
 
     b: B;
->b : Symbol(Tuple.b, Decl(genericTypeAliases.ts, 42, 9))
->B : Symbol(B, Decl(genericTypeAliases.ts, 41, 18))
+>b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
+>B : Symbol(B, Decl(genericTypeAliases.ts, 41, 15))
 }
 
-type Pair<T> = Tuple<T, T>;
+type Pair<T> = AB<T, T>;
 >Pair : Symbol(Pair, Decl(genericTypeAliases.ts, 44, 1))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
->Tuple : Symbol(Tuple, Decl(genericTypeAliases.ts, 39, 12))
+>AB : Symbol(AB, Decl(genericTypeAliases.ts, 39, 12))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 46, 10))
 
 interface TaggedPair<T> extends Pair<T> {
->TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 27))
+>TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 24))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
 >Pair : Symbol(Pair, Decl(genericTypeAliases.ts, 44, 1))
 >T : Symbol(T, Decl(genericTypeAliases.ts, 48, 21))
@@ -157,17 +157,17 @@ interface TaggedPair<T> extends Pair<T> {
 
 var p: TaggedPair<number>;
 >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
->TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 27))
+>TaggedPair : Symbol(TaggedPair, Decl(genericTypeAliases.ts, 46, 24))
 
 p.a = 1;
->p.a : Symbol(Tuple.a, Decl(genericTypeAliases.ts, 41, 23))
+>p.a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
 >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
->a : Symbol(Tuple.a, Decl(genericTypeAliases.ts, 41, 23))
+>a : Symbol(AB.a, Decl(genericTypeAliases.ts, 41, 20))
 
 p.b = 2;
->p.b : Symbol(Tuple.b, Decl(genericTypeAliases.ts, 42, 9))
+>p.b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
 >p : Symbol(p, Decl(genericTypeAliases.ts, 52, 3))
->b : Symbol(Tuple.b, Decl(genericTypeAliases.ts, 42, 9))
+>b : Symbol(AB.b, Decl(genericTypeAliases.ts, 42, 9))
 
 p.tag = "test";
 >p.tag : Symbol(TaggedPair.tag, Decl(genericTypeAliases.ts, 48, 41))

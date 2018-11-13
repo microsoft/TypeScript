@@ -3,9 +3,7 @@
 
 function fn4<T extends string>(n: T) { }
 >fn4 : <T extends string>(n: T) => void
->T : T
 >n : T
->T : T
 
 fn4(null);
 >fn4(null) : void
@@ -14,10 +12,8 @@ fn4(null);
 
 function fn5<T extends { x: string }>(n: T) { }
 >fn5 : <T extends { x: string; }>(n: T) => void
->T : T
 >x : string
 >n : T
->T : T
 
 fn5({ x: null });
 >fn5({ x: null }) : void
@@ -28,15 +24,11 @@ fn5({ x: null });
 
 function fn6<T extends { x: string }>(n: T, fun: (x: T) => void, n2: T) { }
 >fn6 : <T extends { x: string; }>(n: T, fun: (x: T) => void, n2: T) => void
->T : T
 >x : string
 >n : T
->T : T
 >fun : (x: T) => void
 >x : T
->T : T
 >n2 : T
->T : T
 
 fn6({ x: null }, y => { }, { x: "" }); // y has type { x: any }, but ideally would have type { x: string }
 >fn6({ x: null }, y => { }, { x: "" }) : void

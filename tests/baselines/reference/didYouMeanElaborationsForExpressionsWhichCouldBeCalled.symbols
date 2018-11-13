@@ -1,0 +1,71 @@
+=== tests/cases/compiler/didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts ===
+class Bar {
+>Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
+
+    x!: string;
+>x : Symbol(Bar.x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 11))
+}
+
+declare function getNum(): number;
+>getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
+
+declare function foo(arg: { x: Bar, y: Date }, item: number, items?: [number, number, number]): void;
+>foo : Symbol(foo, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 4, 34))
+>arg : Symbol(arg, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 21))
+>x : Symbol(x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 27))
+>Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
+>y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 35))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>item : Symbol(item, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 46))
+>items : Symbol(items, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 6, 60))
+
+foo({
+>foo : Symbol(foo, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 4, 34))
+
+    x: Bar,
+>x : Symbol(x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 8, 5))
+>Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
+
+    y: Date
+>y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 9, 11))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+}, getNum());
+>getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
+
+foo({
+>foo : Symbol(foo, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 4, 34))
+
+    x: new Bar(),
+>x : Symbol(x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 13, 5))
+>Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
+
+    y: new Date()
+>y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 14, 17))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+}, getNum);
+>getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
+
+
+foo({
+>foo : Symbol(foo, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 4, 34))
+
+    x: new Bar(),
+>x : Symbol(x, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 19, 5))
+>Bar : Symbol(Bar, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 0, 0))
+
+    y: new Date()
+>y : Symbol(y, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 20, 17))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+
+}, getNum(), [
+>getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
+
+    1,
+    2,
+    getNum
+>getNum : Symbol(getNum, Decl(didYouMeanElaborationsForExpressionsWhichCouldBeCalled.ts, 2, 1))
+
+]);
+

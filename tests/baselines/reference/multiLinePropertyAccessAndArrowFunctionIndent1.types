@@ -12,7 +12,6 @@ return this.edit(role)
 >then : any
 >(role: Role) =>        this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : (role: any) => any
 >role : any
->Role : No type information available!
 
         this.roleService.add(role)
 >this.roleService.add(role)            .then((data: ng.IHttpPromiseCallbackArg<Role>) => data.data) : any
@@ -30,8 +29,6 @@ return this.edit(role)
 >(data: ng.IHttpPromiseCallbackArg<Role>) => data.data : (data: any) => any
 >data : any
 >ng : any
->IHttpPromiseCallbackArg : No type information available!
->Role : No type information available!
 >data.data : any
 >data : any
 >data : any

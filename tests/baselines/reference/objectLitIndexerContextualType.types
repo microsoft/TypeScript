@@ -1,15 +1,11 @@
 === tests/cases/compiler/objectLitIndexerContextualType.ts ===
 interface I {
->I : I
-
     [s: string]: (s: string) => number;
 >s : string
 >s : string
 }
 
 interface J {
->J : J
-
     [s: number]: (s: string) => number;
 >s : number
 >s : string
@@ -17,11 +13,9 @@ interface J {
 
 var x: I;
 >x : I
->I : I
 
 var y: J;
 >y : J
->J : J
 
 x = {
 >x = {    s: t => t * t, // Should error} : { s: (t: string) => number; }
@@ -43,6 +37,7 @@ x = {
 >{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
 
     0: t => t * t, // Should error
+>0 : (t: string) => number
 >t => t * t : (t: string) => number
 >t : string
 >t * t : number
@@ -70,6 +65,7 @@ y = {
 >{    0: t => t * t, // Should error} : { 0: (t: string) => number; }
 
     0: t => t * t, // Should error
+>0 : (t: string) => number
 >t => t * t : (t: string) => number
 >t : string
 >t * t : number

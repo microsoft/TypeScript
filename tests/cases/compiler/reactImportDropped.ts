@@ -5,7 +5,7 @@
 //@allowSyntheticDefaultImports: true
 //@allowJs: true
 //@jsx: react
-//@outDir: "build"
+//@outDir: build
 
 //@filename: react.d.ts
 export = React;

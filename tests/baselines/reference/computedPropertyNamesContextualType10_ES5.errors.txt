@@ -1,7 +1,7 @@
-tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES5.ts(5,5): error TS2322: Type '{ [x: number]: "" | 0; }' is not assignable to type 'I'.
+tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES5.ts(5,5): error TS2322: Type '{ [x: number]: string | number; }' is not assignable to type 'I'.
   Index signatures are incompatible.
-    Type '"" | 0' is not assignable to type 'boolean'.
-      Type '""' is not assignable to type 'boolean'.
+    Type 'string | number' is not assignable to type 'boolean'.
+      Type 'string' is not assignable to type 'boolean'.
 
 
 ==== tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType10_ES5.ts (1 errors) ====
@@ -11,10 +11,10 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualTy
     
     var o: I = {
         ~
-!!! error TS2322: Type '{ [x: number]: "" | 0; }' is not assignable to type 'I'.
+!!! error TS2322: Type '{ [x: number]: string | number; }' is not assignable to type 'I'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type '"" | 0' is not assignable to type 'boolean'.
-!!! error TS2322:       Type '""' is not assignable to type 'boolean'.
+!!! error TS2322:     Type 'string | number' is not assignable to type 'boolean'.
+!!! error TS2322:       Type 'string' is not assignable to type 'boolean'.
         [+"foo"]: "",
         [+"bar"]: 0
     }

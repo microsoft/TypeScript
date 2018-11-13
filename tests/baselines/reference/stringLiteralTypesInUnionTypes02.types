@@ -8,7 +8,6 @@ var x: "foo" | "bar" | "baz" | string = undefined;
 
 var y: T = undefined;
 >y : string
->T : string
 >undefined : undefined
 
 if (x === "foo") {

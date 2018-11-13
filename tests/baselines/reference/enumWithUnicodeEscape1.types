@@ -3,5 +3,6 @@ enum E {
 >E : E
 
   'gold \u2730'
+>'gold \u2730' : E.gold ✰
 }
 

@@ -3,6 +3,8 @@ class Test {
 >Test : Test
 
     "prop1": number;
+>"prop1" : number
+
     foo() {
 >foo : () => void
 

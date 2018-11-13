@@ -17,7 +17,7 @@ module m {
 >public2 : Symbol(public2, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 7, 15))
         }
     }
-    
+
     export class c {
 >c : Symbol(c, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 10, 5))
 
@@ -69,7 +69,7 @@ module m {
 >param : Symbol(param, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 38, 17))
 >private1 : Symbol(private1, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 0, 10))
         }
-    
+
         // getter with annotation
         get foo11(): public1 {
 >foo11 : Symbol(c.foo11, Decl(declFileTypeAnnotationVisibilityErrorAccessors.ts, 39, 9))

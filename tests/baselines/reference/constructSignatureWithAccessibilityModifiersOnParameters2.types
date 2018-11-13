@@ -34,8 +34,6 @@ class C3 {
 }
 
 interface I {
->I : I
-
     new (public x);
 >x : any
 
@@ -44,8 +42,6 @@ interface I {
 }
 
 interface I2 {
->I2 : I2
-
     new (private x);
 >x : any
 
@@ -54,7 +50,7 @@ interface I2 {
 }
 
 var a: {
->a : { new (public x: any): any; new (public y: any): any; }
+>a : { new (x: any): any; new (y: any): any; }
 
     new (public x);
 >x : any
@@ -64,7 +60,7 @@ var a: {
 }
 
 var b: {
->b : { new (private x: any): any; new (private y: any): any; }
+>b : { new (x: any): any; new (y: any): any; }
 
     new (private x);
 >x : any

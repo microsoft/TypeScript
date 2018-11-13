@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/input.js ===
 function C() {
->C : () => void
+>C : typeof C
 
     this.m = null;
 >this.m = null : null
@@ -13,15 +13,15 @@ C.prototype.m = function() {
 >C.prototype.m = function() {    this.nothing();} : () => void
 >C.prototype.m : any
 >C.prototype : any
->C : () => void
+>C : typeof C
 >prototype : any
 >m : any
 >function() {    this.nothing();} : () => void
 
     this.nothing();
->this.nothing() : any
->this.nothing : any
->this : { m: () => void; }
+>this.nothing() : error
+>this.nothing : error
+>this : C
 >nothing : any
 }
 class X {
@@ -43,16 +43,16 @@ class X {
 
         this.mistake = 'frankly, complete nonsense';
 >this.mistake = 'frankly, complete nonsense' : "frankly, complete nonsense"
->this.mistake : any
+>this.mistake : () => void
 >this : this
->mistake : any
+>mistake : () => void
 >'frankly, complete nonsense' : "frankly, complete nonsense"
     }
     m() {
 >m : () => void
     }
     mistake() {
->mistake : any
+>mistake : () => void
     }
 }
 let x = new X();
@@ -62,11 +62,11 @@ let x = new X();
 
 X.prototype.mistake = false;
 >X.prototype.mistake = false : false
->X.prototype.mistake : any
+>X.prototype.mistake : () => void
 >X.prototype : X
 >X : typeof X
 >prototype : X
->mistake : any
+>mistake : () => void
 >false : false
 
 x.m();
@@ -76,15 +76,15 @@ x.m();
 >m : () => void
 
 x.mistake;
->x.mistake : any
+>x.mistake : () => void
 >x : X
->mistake : any
+>mistake : () => void
 
 class Y {
 >Y : Y
 
     mistake() {
->mistake : any
+>mistake : () => void
     }
     m() {
 >m : () => void
@@ -105,19 +105,19 @@ class Y {
 
         this.mistake = 'even more nonsense';
 >this.mistake = 'even more nonsense' : "even more nonsense"
->this.mistake : any
+>this.mistake : () => void
 >this : this
->mistake : any
+>mistake : () => void
 >'even more nonsense' : "even more nonsense"
     }
 }
 Y.prototype.mistake = true;
 >Y.prototype.mistake = true : true
->Y.prototype.mistake : any
+>Y.prototype.mistake : () => void
 >Y.prototype : Y
 >Y : typeof Y
 >prototype : Y
->mistake : any
+>mistake : () => void
 >true : true
 
 let y = new Y();
@@ -132,8 +132,8 @@ y.m();
 >m : () => void
 
 y.mistake();
->y.mistake() : any
->y.mistake : any
+>y.mistake() : void
+>y.mistake : () => void
 >y : Y
->mistake : any
+>mistake : () => void
 

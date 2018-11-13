@@ -1,24 +1,14 @@
 === tests/cases/compiler/genericAndNonGenericInheritedSignature2.ts ===
 interface Foo {
->Foo : Foo
-
     f(x: any): any;
 >f : (x: any) => any
 >x : any
 }
 interface Bar {
->Bar : Bar
-
     f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 interface Hello extends Bar, Foo {
->Hello : Hello
->Bar : Bar
->Foo : Foo
 }
 

@@ -1,0 +1,38 @@
+=== tests/cases/compiler/deps.ts ===
+export function Input(): any { }
+>Input : () => any
+
+export class TemplateRef { }
+>TemplateRef : TemplateRef
+
+=== tests/cases/compiler/index.ts ===
+import { Input, TemplateRef } from './deps';
+>Input : () => any
+>TemplateRef : typeof TemplateRef
+
+export class MyComponent {
+>MyComponent : MyComponent
+
+    _ref: TemplateRef;
+>_ref : TemplateRef
+
+    @Input()
+>Input() : any
+>Input : () => any
+
+    get ref() { return this._ref; }
+>ref : TemplateRef
+>this._ref : TemplateRef
+>this : this
+>_ref : TemplateRef
+
+    set ref(value: TemplateRef) { this._ref = value; }
+>ref : TemplateRef
+>value : TemplateRef
+>this._ref = value : TemplateRef
+>this._ref : TemplateRef
+>this : this
+>_ref : TemplateRef
+>value : TemplateRef
+}
+

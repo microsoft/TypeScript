@@ -71,9 +71,9 @@ export var tests: TestRunner = (function () {
 >i : Symbol(i, Decl(duplicateLocalVariable2.ts, 21, 20), Decl(duplicateLocalVariable2.ts, 26, 20))
 
                 bytes.push(fb.readByte());
->bytes.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>bytes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >bytes : Symbol(bytes, Decl(duplicateLocalVariable2.ts, 25, 15))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >fb : Symbol(fb, Decl(duplicateLocalVariable2.ts, 18, 15))
             }
             var expected = [0xEF];

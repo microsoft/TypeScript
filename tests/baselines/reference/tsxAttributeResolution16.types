@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Address {
->Address : Address
-
   street: string;
 >street : string
 
@@ -13,32 +11,23 @@ interface Address {
 }
 
 interface CanadianAddress extends Address {
->CanadianAddress : CanadianAddress
->Address : Address
-
     postalCode: string;
 >postalCode : string
 }
 
 interface AmericanAddress extends Address {
->AmericanAddress : AmericanAddress
->Address : Address
-
     zipCode: string;
 >zipCode : string
 }
 
 type Properties = CanadianAddress | AmericanAddress;
->Properties : CanadianAddress | AmericanAddress
->CanadianAddress : CanadianAddress
->AmericanAddress : AmericanAddress
+>Properties : Properties
 
 export class AddressComp extends React.Component<Properties, void> {
 >AddressComp : AddressComp
->React.Component : React.Component<CanadianAddress | AmericanAddress, void>
+>React.Component : React.Component<Properties, void>
 >React : typeof React
 >Component : typeof React.Component
->Properties : CanadianAddress | AmericanAddress
 
   public render() {
 >render : () => any

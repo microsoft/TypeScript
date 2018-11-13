@@ -1,0 +1,69 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @typedef {Object} App
+ * @property {string} name
+ * @property {Object} icons
+ * @property {string} icons.image32
+ * @property {string} icons.image64
+ */
+var ex;
+>ex : Symbol(ex, Decl(a.js, 6, 3))
+
+/** @type {App} */
+const app = {
+>app : Symbol(app, Decl(a.js, 9, 5))
+
+    name: 'name',
+>name : Symbol(name, Decl(a.js, 9, 13))
+
+    icons: {
+>icons : Symbol(icons, Decl(a.js, 10, 17))
+
+        image32: 'x.png',
+>image32 : Symbol(image32, Decl(a.js, 11, 12))
+
+        image64: 'y.png',
+>image64 : Symbol(image64, Decl(a.js, 12, 25))
+    }
+}
+
+/** @typedef {Object} Opp
+ * @property {string} name
+ * @property {Object} oops
+ * @property {string} horrible
+ * @type {string} idea
+ */
+var intercessor = 1
+>intercessor : Symbol(intercessor, Decl(a.js, 23, 3))
+
+/** @type {Opp} */
+var mistake;
+>mistake : Symbol(mistake, Decl(a.js, 26, 3))
+
+/** @typedef {Object} Upp
+ * @property {string} name
+ * @property {Object} not
+ * @property {string} nested
+ */
+
+/** @type {Upp} */
+var sala = { name: 'uppsala', not: 0, nested: "ok" };
+>sala : Symbol(sala, Decl(a.js, 35, 3))
+>name : Symbol(name, Decl(a.js, 35, 12))
+>not : Symbol(not, Decl(a.js, 35, 29))
+>nested : Symbol(nested, Decl(a.js, 35, 37))
+
+sala.name
+>sala.name : Symbol(name, Decl(a.js, 29, 3))
+>sala : Symbol(sala, Decl(a.js, 35, 3))
+>name : Symbol(name, Decl(a.js, 29, 3))
+
+sala.not
+>sala.not : Symbol(not, Decl(a.js, 30, 3))
+>sala : Symbol(sala, Decl(a.js, 35, 3))
+>not : Symbol(not, Decl(a.js, 30, 3))
+
+sala.nested
+>sala.nested : Symbol(nested, Decl(a.js, 31, 3))
+>sala : Symbol(sala, Decl(a.js, 35, 3))
+>nested : Symbol(nested, Decl(a.js, 31, 3))
+

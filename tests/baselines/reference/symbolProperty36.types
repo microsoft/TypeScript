@@ -4,12 +4,14 @@ var x = {
 >{    [Symbol.isConcatSpreadable]: 0,    [Symbol.isConcatSpreadable]: 1} : { [Symbol.isConcatSpreadable]: number; }
 
     [Symbol.isConcatSpreadable]: 0,
+>[Symbol.isConcatSpreadable] : number
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 >0 : 0
 
     [Symbol.isConcatSpreadable]: 1
+>[Symbol.isConcatSpreadable] : number
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol

@@ -3,65 +3,40 @@
 
 type StringContains<S extends string, L extends string> = (
 >StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->S : S
->L : L
 
     { [K in S]:      'true' } &
->K : K
->S : S
-
     { [key: string]: 'false' }
 >key : string
 
   )[L]
->L : L
 
-type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->O : O
->L : L
->StringContains : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->O : O
->L : L
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
+>ObjectHasKey : ({ [K in Extract<keyof O, string>]: "true"; } & { [key: string]: "false"; })[L]
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
->First : ({ [K in S]: "true"; } & { [key: string]: "false"; })["0"]
->T : T
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
->T : T
+>First : ({ [K in Extract<keyof T, string>]: "true"; } & { [key: string]: "false"; })["0"]
 
 type T1 = ObjectHasKey<{ a: string }, 'a'>;  // 'true'
 >T1 : "true"
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
 >a : string
 
 type T2 = ObjectHasKey<{ a: string }, 'b'>;  // 'false'
 >T2 : "false"
->ObjectHasKey : ({ [K in S]: "true"; } & { [key: string]: "false"; })[L]
 >a : string
 
 // Verify that mapped type isn't eagerly resolved in type-to-string operation
 
 declare function f1<A extends string, B extends string>(a: A, b: B): { [P in A | B]: any };
 >f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
->A : A
->B : B
 >a : A
->A : A
 >b : B
->B : B
->P : P
->A : A
->B : B
 
 function f2<A extends string>(a: A) {
->f2 : <A extends string>(a: A) => { [P in A | B]: any; }
->A : A
+>f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
 >a : A
->A : A
 
     return f1(a, 'x');
->f1(a, 'x') : { [P in A | B]: any; }
+>f1(a, 'x') : { [P in A | "x"]: any; }
 >f1 : <A extends string, B extends string>(a: A, b: B) => { [P in A | B]: any; }
 >a : A
 >'x' : "x"
@@ -73,7 +48,7 @@ function f3(x: 'a' | 'b') {
 
     return f2(x);
 >f2(x) : { a: any; b: any; x: any; }
->f2 : <A extends string>(a: A) => { [P in A | B]: any; }
+>f2 : <A extends string>(a: A) => { [P in A | "x"]: any; }
 >x : "a" | "b"
 }
 

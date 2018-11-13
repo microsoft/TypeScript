@@ -7,7 +7,7 @@ var V = 12;
 
 import v = V;
 >v : any
->V : No type information available!
+>V : any
 
 class C {
 >C : C
@@ -18,7 +18,7 @@ class C {
 
 import c = C;
 >c : any
->C : No type information available!
+>C : any
 
 enum E {
 >E : E
@@ -33,13 +33,11 @@ import e = E;
 >E : E
 
 interface I {
->I : I
-
     id: number;
 >id : number
 }
 
 import i = I;
 >i : any
->I : No type information available!
+>I : any
 

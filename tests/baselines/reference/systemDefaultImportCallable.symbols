@@ -1,0 +1,39 @@
+=== tests/cases/compiler/core-js.d.ts ===
+declare module core {
+>core : Symbol(core, Decl(core-js.d.ts, 0, 0))
+
+    var String: {
+>String : Symbol(String, Decl(core-js.d.ts, 1, 7))
+
+        repeat(text: string, count: number): string;
+>repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
+>text : Symbol(text, Decl(core-js.d.ts, 2, 15))
+>count : Symbol(count, Decl(core-js.d.ts, 2, 28))
+
+    };
+}
+declare module "core-js/fn/string/repeat" {
+>"core-js/fn/string/repeat" : Symbol("core-js/fn/string/repeat", Decl(core-js.d.ts, 4, 1))
+
+    var repeat: typeof core.String.repeat;
+>repeat : Symbol(repeat, Decl(core-js.d.ts, 6, 7))
+>core.String.repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
+>core.String : Symbol(core.String, Decl(core-js.d.ts, 1, 7))
+>core : Symbol(core, Decl(core-js.d.ts, 0, 0))
+>String : Symbol(core.String, Decl(core-js.d.ts, 1, 7))
+>repeat : Symbol(repeat, Decl(core-js.d.ts, 1, 17))
+
+    export default repeat;
+>repeat : Symbol(repeat, Decl(core-js.d.ts, 6, 7))
+}
+=== tests/cases/compiler/greeter.ts ===
+import repeat from "core-js/fn/string/repeat";
+>repeat : Symbol(repeat, Decl(greeter.ts, 0, 6))
+
+const _: string = repeat(new Date().toUTCString() + " ", 2);
+>_ : Symbol(_, Decl(greeter.ts, 2, 5))
+>repeat : Symbol(repeat, Decl(greeter.ts, 0, 6))
+>new Date().toUTCString : Symbol(Date.toUTCString, Decl(lib.es5.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>toUTCString : Symbol(Date.toUTCString, Decl(lib.es5.d.ts, --, --))
+

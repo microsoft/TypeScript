@@ -19,24 +19,34 @@ tests/cases/compiler/maximum10SpellingSuggestions.ts(5,6): error TS2304: Cannot 
     bob; bob; bob; bob; bob; bob; bob; bob; bob; bob;
     ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
          ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
               ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                    ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                         ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                              ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                                   ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                                        ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                                             ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
                                                  ~~~
 !!! error TS2552: Cannot find name 'bob'. Did you mean 'blob'?
+!!! related TS2728 tests/cases/compiler/maximum10SpellingSuggestions.ts:3:5: 'blob' is declared here.
     bob; bob;
     ~~~
 !!! error TS2304: Cannot find name 'bob'.

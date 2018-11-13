@@ -505,6 +505,8 @@ class bigClass {
 >bigClass : Symbol(bigClass, Decl(convertKeywordsYes.ts, 171, 1))
 
     public "constructor" = 0;
+>"constructor" : Symbol(bigClass["constructor"], Decl(convertKeywordsYes.ts, 173, 16))
+
     public any = 0;
 >any : Symbol(bigClass.any, Decl(convertKeywordsYes.ts, 174, 29))
 

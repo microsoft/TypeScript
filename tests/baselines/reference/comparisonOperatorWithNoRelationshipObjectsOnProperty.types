@@ -29,19 +29,15 @@ class B2 {
 
 var a1: A1;
 >a1 : A1
->A1 : A1
 
 var b1: B1;
 >b1 : B1
->B1 : B1
 
 var a2: A2;
 >a2 : A2
->A2 : A2
 
 var b2: B2;
 >b2 : B2
->B2 : B2
 
 // operator <
 var r1a1 = a1 < b1;
