@@ -3,8 +3,7 @@ tests/cases/conformance/types/rest/objectRest.ts(7,20): error TS2339: Property '
 tests/cases/conformance/types/rest/objectRest.ts(43,8): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
 tests/cases/conformance/types/rest/objectRest.ts(43,35): error TS2537: Type '{ a: number; b: string; }' has no matching index signature for type 'string'.
 tests/cases/conformance/types/rest/objectRest.ts(43,57): error TS2403: Subsequent variable declarations must have the same type.  Variable 'o' must be of type '{ a: number; b: string; }', but here has type '{}'.
-tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2322: Type '{}' is not assignable to type '{ a: number; b: string; }'.
-  Property 'a' is missing in type '{}'.
+tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2739: Type '{}' is missing the following properties from type '{ a: number; b: string; }': a, b
 
 
 ==== tests/cases/conformance/types/rest/objectRest.ts (6 errors) ====
@@ -63,8 +62,7 @@ tests/cases/conformance/types/rest/objectRest.ts(44,53): error TS2322: Type '{}'
 !!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'o' must be of type '{ a: number; b: string; }', but here has type '{}'.
     ({ [computed]: stillNotGreat, [computed2]: soSo, ...o } = o);
                                                         ~
-!!! error TS2322: Type '{}' is not assignable to type '{ a: number; b: string; }'.
-!!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! error TS2739: Type '{}' is missing the following properties from type '{ a: number; b: string; }': a, b
     
     var noContextualType = ({ aNumber = 12, ...notEmptyObject }) => aNumber + notEmptyObject.anythingGoes;
     

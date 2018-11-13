@@ -2091,10 +2091,9 @@ namespace ts {
     }
 
     export function isJSDocConstructSignature(node: Node) {
-        return node.kind === SyntaxKind.JSDocFunctionType &&
-            (node as JSDocFunctionType).parameters.length > 0 &&
-            (node as JSDocFunctionType).parameters[0].name &&
-            ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
+        const param = isJSDocFunctionType(node) ? firstOrUndefined(node.parameters) : undefined;
+        const name = tryCast(param && param.name, isIdentifier);
+        return !!name && name.escapedText === "new";
     }
 
     export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag {
@@ -6980,8 +6979,8 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
+    export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -7060,7 +7059,7 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 

@@ -1011,10 +1011,6 @@
         "category": "Message",
         "code": 1350
     },
-    "Experimental support for BigInt is a feature that is subject to change in a future release. Set the 'experimentalBigInt' option to remove this warning.": {
-        "category": "Error",
-        "code": 1351
-    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -2505,7 +2501,7 @@
         "category": "Error",
         "code": 2736
     },
-    "BigInt literals are not available when targetting lower than ESNext.": {
+    "BigInt literals are not available when targeting lower than ESNext.": {
         "category": "Error",
         "code": 2737
     },
@@ -2513,13 +2509,25 @@
         "category": "Message",
         "code": 2738
     },
-    "No overload expects {0} type argument(s), but an overload does exist that expects {1} type argument(s).": {
+    "Type '{0}' is missing the following properties from type '{1}': {2}": {
         "category": "Error",
         "code": 2739
     },
-    "No overload expects {0} type argument(s), but overloads do exist that expect either {1} or {2} type argument(s).": {
+    "Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.": {
         "category": "Error",
         "code": 2740
+    },
+    "Property '{0}' is missing in type '{1}' but required in type '{2}'.": {
+        "category": "Error",
+        "code": 2741
+    },
+    "No overload expects {0} type argument(s), but an overload does exist that expects {1} type argument(s).": {
+        "category": "Error",
+        "code": 2742
+    },
+    "No overload expects {0} type argument(s), but overloads do exist that expect either {1} or {2} type argument(s).": {
+        "category": "Error",
+        "code": 2743
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3929,10 +3937,6 @@
         "category": "Error",
         "code": 6370
     },
-    "Enables experimental support for ESNext BigInt literals.": {
-        "category": "Message",
-        "code": 6371
-    },
 
     "The expected type comes from property '{0}' which is declared here on type '{1}'": {
         "category": "Message",
@@ -3974,6 +3978,10 @@
     "Construct signature, which lacks return-type annotation, implicitly has an 'any' return type.": {
         "category": "Error",
         "code": 7013
+    },
+    "Function type, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7014
     },
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",

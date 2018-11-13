@@ -1,4 +1,3 @@
-// @experimentalBigInt: true
 // @target: es5
 
 // Every line should error because these builtins are not declared

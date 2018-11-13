@@ -1532,6 +1532,7 @@ namespace ts.Completions {
             if (contextToken) {
                 const parent = contextToken.parent;
                 switch (contextToken.kind) {
+                    case SyntaxKind.GreaterThanToken: // End of a type argument list
                     case SyntaxKind.LessThanSlashToken:
                     case SyntaxKind.SlashToken:
                     case SyntaxKind.Identifier:
@@ -1540,6 +1541,10 @@ namespace ts.Completions {
                     case SyntaxKind.JsxAttribute:
                     case SyntaxKind.JsxSpreadAttribute:
                         if (parent && (parent.kind === SyntaxKind.JsxSelfClosingElement || parent.kind === SyntaxKind.JsxOpeningElement)) {
+                            if (contextToken.kind === SyntaxKind.GreaterThanToken) {
+                                const precedingToken = findPrecedingToken(contextToken.pos, sourceFile, /*startNode*/ undefined);
+                                if (!(parent as JsxOpeningLikeElement).typeArguments || (precedingToken && precedingToken.kind === SyntaxKind.SlashToken)) break;
+                            }
                             return <JsxOpeningLikeElement>parent;
                         }
                         else if (parent.kind === SyntaxKind.JsxAttribute) {

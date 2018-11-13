@@ -1,11 +1,9 @@
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(14,1): error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
   Index signatures are incompatible.
-    Type 'Base' is not assignable to type 'Derived'.
-      Property 'bar' is missing in type 'Base'.
+    Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(23,1): error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
   Index signatures are incompatible.
-    Type 'Derived' is not assignable to type 'Derived2'.
-      Property 'baz' is missing in type 'Derived'.
+    Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts(33,9): error TS2322: Type '{ [x: number]: Derived; }' is not assignable to type 'A<T>'.
   Index signatures are incompatible.
     Type 'Derived' is not assignable to type 'T'.
@@ -29,8 +27,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~
 !!! error TS2322: Type '{ [x: number]: Base; }' is not assignable to type 'A'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'Base' is not assignable to type 'Derived'.
-!!! error TS2322:       Property 'bar' is missing in type 'Base'.
+!!! error TS2322:     Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:4:34: 'bar' is declared here.
     b = a; // ok
     
     class B2 extends A {
@@ -43,8 +41,8 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     ~~
 !!! error TS2322: Type 'A' is not assignable to type '{ [x: number]: Derived2; }'.
 !!! error TS2322:   Index signatures are incompatible.
-!!! error TS2322:     Type 'Derived' is not assignable to type 'Derived2'.
-!!! error TS2322:       Property 'baz' is missing in type 'Derived'.
+!!! error TS2322:     Property 'baz' is missing in type 'Derived' but required in type 'Derived2'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithNumericIndexer3.ts:5:38: 'baz' is declared here.
     
     module Generics {
         class A<T extends Derived> {

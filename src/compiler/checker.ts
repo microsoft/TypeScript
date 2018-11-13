@@ -434,6 +434,8 @@ namespace ts {
         const numberOrBigIntType = getUnionType([numberType, bigintType]);
 
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        emptyJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes;
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
@@ -3199,7 +3201,8 @@ namespace ts {
                         getCurrentDirectory: host.getCurrentDirectory && (() => host.getCurrentDirectory!())
                     } : undefined },
                     encounteredError: false,
-                    visitedSymbols: undefined,
+                    visitedTypes: undefined,
+                    symbolDepth: undefined,
                     inferTypeParameters: undefined,
                     approximateLength: 0
                 };
@@ -3430,6 +3433,7 @@ namespace ts {
                 }
 
                 function createAnonymousTypeNode(type: ObjectType): TypeNode {
+                    const typeId = "" + type.id;
                     const symbol = type.symbol;
                     let id: string;
                     if (symbol) {
@@ -3446,7 +3450,7 @@ namespace ts {
                             shouldWriteTypeOfFunctionSymbol()) {
                             return symbolToTypeNode(symbol, context, SymbolFlags.Value);
                         }
-                        else if (context.visitedSymbols && context.visitedSymbols.has(id)) {
+                        else if (context.visitedTypes && context.visitedTypes.has(typeId)) {
                             // If type is an anonymous type literal in a type alias declaration, use type alias name
                             const typeAlias = getTypeAliasForTypeLiteral(type);
                             if (typeAlias) {
@@ -3455,19 +3459,35 @@ namespace ts {
                             }
                             else {
                                 context.approximateLength += 3;
+                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                                }
                                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
                             }
                         }
                         else {
                             // Since instantiations of the same anonymous type have the same symbol, tracking symbols instead
                             // of types allows us to catch circular references to instantiations of the same anonymous type
-                            if (!context.visitedSymbols) {
-                                context.visitedSymbols = createMap<true>();
+                            if (!context.visitedTypes) {
+                                context.visitedTypes = createMap<true>();
+                            }
+                            if (!context.symbolDepth) {
+                                context.symbolDepth = createMap<number>();
                             }
 
-                            context.visitedSymbols.set(id, true);
+                            const depth = context.symbolDepth.get(id) || 0;
+                            if (depth > 10) {
+                                context.approximateLength += 3;
+                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                                }
+                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                            }
+                            context.symbolDepth.set(id, depth + 1);
+                            context.visitedTypes.set(typeId, true);
                             const result = createTypeNodeFromObjectType(type);
-                            context.visitedSymbols.delete(id);
+                            context.visitedTypes.delete(typeId);
+                            context.symbolDepth.set(id, depth);
                             return result;
                         }
                     }
@@ -3484,7 +3504,7 @@ namespace ts {
                                     declaration.parent.kind === SyntaxKind.SourceFile || declaration.parent.kind === SyntaxKind.ModuleBlock));
                         if (isStaticMethodSymbol || isNonLocalFunctionSymbol) {
                             // typeof is allowed only for static/non local functions
-                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedSymbols && context.visitedSymbols.has(id))) && // it is type of the symbol uses itself recursively
+                            return (!!(context.flags & NodeBuilderFlags.UseTypeOfFunction) || (context.visitedTypes && context.visitedTypes.has(typeId))) && // it is type of the symbol uses itself recursively
                                 (!(context.flags & NodeBuilderFlags.UseStructuralFallback) || isValueSymbolAccessible(symbol, context.enclosingDeclaration!)); // TODO: GH#18217 // And the build is going to succeed without visibility error or there is no structural fallback allowed
                         }
                     }
@@ -4308,7 +4328,8 @@ namespace ts {
 
             // State
             encounteredError: boolean;
-            visitedSymbols: Map<true> | undefined;
+            visitedTypes: Map<true> | undefined;
+            symbolDepth: Map<number> | undefined;
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
@@ -9531,6 +9552,17 @@ namespace ts {
             return type.flags & TypeFlags.IndexedAccess ? getSimplifiedIndexedAccessType(<IndexedAccessType>type) : type;
         }
 
+        function distributeIndexOverObjectType(objectType: Type, indexType: Type) {
+            // (T | U)[K] -> T[K] | U[K]
+            if (objectType.flags & TypeFlags.Union) {
+                return mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
+            }
+            // (T & U)[K] -> T[K] & U[K]
+            if (objectType.flags & TypeFlags.Intersection) {
+                return getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+            }
+        }
+
         // Transform an indexed access to a simpler form, if possible. Return the simpler form, or return
         // the type itself if no transformation is possible.
         function getSimplifiedIndexedAccessType(type: IndexedAccessType): Type {
@@ -9548,13 +9580,9 @@ namespace ts {
             }
             // Only do the inner distributions if the index can no longer be instantiated to cause index distribution again
             if (!(indexType.flags & TypeFlags.Instantiable)) {
-                // (T | U)[K] -> T[K] | U[K]
-                if (objectType.flags & TypeFlags.Union) {
-                    return type.simplified = mapType(objectType, t => getSimplifiedType(getIndexedAccessType(t, indexType)));
-                }
-                // (T & U)[K] -> T[K] & U[K]
-                if (objectType.flags & TypeFlags.Intersection) {
-                    return type.simplified = getIntersectionType(map((objectType as IntersectionType).types, t => getSimplifiedType(getIndexedAccessType(t, indexType))));
+                const simplified = distributeIndexOverObjectType(objectType, indexType);
+                if (simplified) {
+                    return type.simplified = simplified;
                 }
             }
             // So ultimately:
@@ -11407,6 +11435,7 @@ namespace ts {
         ): boolean {
 
             let errorInfo: DiagnosticMessageChain | undefined;
+            let relatedInfo: [DiagnosticRelatedInformation, ...DiagnosticRelatedInformation[]] | undefined;
             let maybeKeys: string[];
             let sourceStack: Type[];
             let targetStack: Type[];
@@ -11414,6 +11443,7 @@ namespace ts {
             let depth = 0;
             let expandingFlags = ExpandingFlags.None;
             let overflow = false;
+            let suppressNextError = false;
 
             Debug.assert(relation !== identityRelation || !errorNode, "no error reporting in identity checking");
 
@@ -11444,6 +11474,9 @@ namespace ts {
                 }
 
                 const diag = createDiagnosticForNodeFromMessageChain(errorNode!, errorInfo, relatedInformation);
+                if (relatedInfo) {
+                    addRelatedInfo(diag, ...relatedInfo);
+                }
                 if (errorOutputContainer) {
                     errorOutputContainer.error = diag;
                 }
@@ -11451,9 +11484,19 @@ namespace ts {
             }
             return result !== Ternary.False;
 
-            function reportError(message: DiagnosticMessage, arg0?: string, arg1?: string, arg2?: string): void {
+            function reportError(message: DiagnosticMessage, arg0?: string | number, arg1?: string | number, arg2?: string | number, arg3?: string | number): void {
                 Debug.assert(!!errorNode);
-                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2);
+                errorInfo = chainDiagnosticMessages(errorInfo, message, arg0, arg1, arg2, arg3);
+            }
+
+            function associateRelatedInfo(info: DiagnosticRelatedInformation) {
+                Debug.assert(!!errorInfo);
+                if (!relatedInfo) {
+                    relatedInfo = [info];
+                }
+                else {
+                    relatedInfo.push(info);
+                }
             }
 
             function reportRelationError(message: DiagnosticMessage | undefined, source: Type, target: Type) {
@@ -11661,13 +11704,15 @@ namespace ts {
                 }
 
                 if (!result && reportErrors) {
+                    const maybeSuppress = suppressNextError;
+                    suppressNextError = false;
                     if (source.flags & TypeFlags.Object && target.flags & TypeFlags.Primitive) {
                         tryElaborateErrorsForPrimitivesAndObjects(source, target);
                     }
                     else if (source.symbol && source.flags & TypeFlags.Object && globalObjectType === source) {
                         reportError(Diagnostics.The_Object_type_is_assignable_to_very_few_other_types_Did_you_mean_to_use_the_any_type_instead);
                     }
-                    else if (getObjectFlags(source) & ObjectFlags.JsxAttributes && target.flags & TypeFlags.Intersection) {
+                    else if (isComparingJsxAttributes && target.flags & TypeFlags.Intersection) {
                         const targetTypes = (target as IntersectionType).types;
                         const intrinsicAttributes = getJsxType(JsxNames.IntrinsicAttributes, errorNode);
                         const intrinsicClassAttributes = getJsxType(JsxNames.IntrinsicClassAttributes, errorNode);
@@ -11676,6 +11721,10 @@ namespace ts {
                             // do not report top error
                             return result;
                         }
+                    }
+                    if (!headMessage && maybeSuppress) {
+                        // Used by, eg, missing property checking to replace the top-level message with a more informative one
+                        return result;
                     }
                     reportRelationError(headMessage, source, target);
                 }
@@ -12310,7 +12359,24 @@ namespace ts {
                 const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        reportError(Diagnostics.Property_0_is_missing_in_type_1, symbolToString(unmatchedProperty), typeToString(source));
+                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
+                        if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
+                            headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
+                            suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
+                        }
+                        if (props.length === 1) {
+                            const propName = symbolToString(unmatchedProperty);
+                            reportError(Diagnostics.Property_0_is_missing_in_type_1_but_required_in_type_2, propName, typeToString(source), typeToString(target));
+                            if (length(unmatchedProperty.declarations)) {
+                                associateRelatedInfo(createDiagnosticForNode(unmatchedProperty.declarations[0], Diagnostics._0_is_declared_here, propName));
+                            }
+                        }
+                        else if (props.length > 5) { // arbitrary cutoff for too-long list form
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2_and_3_more, typeToString(source), typeToString(target), map(props.slice(0, 4), p => symbolToString(p)).join(", "), props.length - 4);
+                        }
+                        else {
+                            reportError(Diagnostics.Type_0_is_missing_the_following_properties_from_type_1_Colon_2, typeToString(source), typeToString(target), map(props, p => symbolToString(p)).join(", "));
+                        }
                     }
                     return Ternary.False;
                 }
@@ -13494,6 +13560,9 @@ namespace ts {
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
                     break;
+                case SyntaxKind.JSDocFunctionType:
+                    error(declaration, Diagnostics.Function_type_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
+                    return;
                 case SyntaxKind.FunctionDeclaration:
                 case SyntaxKind.MethodDeclaration:
                 case SyntaxKind.MethodSignature:
@@ -13701,17 +13770,20 @@ namespace ts {
             return getTypeFromInference(inference);
         }
 
-        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean) {
             const properties = target.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>target) : getPropertiesOfObjectType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                     if (!sourceProp) {
-                        return targetProp;
+                        yield targetProp;
                     }
                 }
             }
-            return undefined;
+        }
+
+        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean): Symbol | undefined {
+            return getUnmatchedProperties(source, target, requireOptionalProperties).next().value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -13842,10 +13914,17 @@ namespace ts {
                         // Infer to the simplified version of an indexed access, if possible, to (hopefully) expose more bare type parameters to the inference engine
                         const simplified = getSimplifiedType(target);
                         if (simplified !== target) {
-                            const key = source.id + "," + simplified.id;
-                            if (!visited || !visited.get(key)) {
-                                (visited || (visited = createMap<boolean>())).set(key, true);
-                                inferFromTypes(source, simplified);
+                            inferFromTypesOnce(source, simplified);
+                        }
+                        else if (target.flags & TypeFlags.IndexedAccess) {
+                            const indexType = getSimplifiedType((target as IndexedAccessType).indexType);
+                            // Generally simplifications of instantiable indexes are avoided to keep relationship checking correct, however if our target is an access, we can consider
+                            // that key of that access to be "instantiated", since we're looking to find the infernce goal in any way we can.
+                            if (indexType.flags & TypeFlags.Instantiable) {
+                                const simplified = distributeIndexOverObjectType(getSimplifiedType((target as IndexedAccessType).objectType), indexType);
+                                if (simplified && simplified !== target) {
+                                    inferFromTypesOnce(source, simplified);
+                                }
                             }
                         }
                     }
@@ -13966,6 +14045,14 @@ namespace ts {
                         else {
                             inferFromObjectTypes(source, target);
                         }
+                    }
+                }
+
+                function inferFromTypesOnce(source: Type, target: Type) {
+                    const key = source.id + "," + target.id;
+                    if (!visited || !visited.get(key)) {
+                        (visited || (visited = createMap<boolean>())).set(key, true);
+                        inferFromTypes(source, target);
                     }
                 }
             }
@@ -17914,7 +18001,7 @@ namespace ts {
         function createJsxAttributesTypeFromAttributesProperty(openingLikeElement: JsxOpeningLikeElement, checkMode: CheckMode | undefined) {
             const attributes = openingLikeElement.attributes;
             let attributesTable = createSymbolTable();
-            let spread: Type = emptyObjectType;
+            let spread: Type = emptyJsxObjectType;
             let hasSpreadAnyType = false;
             let typeToIntersect: Type | undefined;
             let explicitlySpecifyChildrenAttribute = false;
@@ -17998,10 +18085,10 @@ namespace ts {
             if (hasSpreadAnyType) {
                 return anyType;
             }
-            if (typeToIntersect && spread !== emptyObjectType) {
+            if (typeToIntersect && spread !== emptyJsxObjectType) {
                 return getIntersectionType([typeToIntersect, spread]);
             }
-            return typeToIntersect || (spread === emptyObjectType ? createJsxAttributesType() : spread);
+            return typeToIntersect || (spread === emptyJsxObjectType ? createJsxAttributesType() : spread);
 
             /**
              * Create anonymous type from given attributes symbol table.
@@ -20050,7 +20137,7 @@ namespace ts {
                 }
                 else {
                     let relatedInformation: DiagnosticRelatedInformation | undefined;
-                    if (node.arguments.length === 1 && isTypeAssertion(first(node.arguments))) {
+                    if (node.arguments.length === 1) {
                         const text = getSourceFileOfNode(node).text;
                         if (isLineBreak(text.charCodeAt(skipTrivia(text, node.expression.end, /* stopAfterLineBreak */ true) - 1))) {
                             relatedInformation = createDiagnosticForNode(node.expression, Diagnostics.It_is_highly_likely_that_you_are_missing_a_semicolon);
@@ -24375,6 +24462,13 @@ namespace ts {
             }
         }
 
+        function checkJSDocFunctionType(node: JSDocFunctionType): void {
+            if (produceDiagnostics && !node.type && !isJSDocConstructSignature(node)) {
+                reportImplicitAny(node, anyType);
+            }
+            checkSignatureDeclaration(node);
+        }
+
         function checkJSDocAugmentsTag(node: JSDocAugmentsTag): void {
             const classLike = getJSDocHost(node);
             if (!isClassDeclaration(classLike) && !isClassExpression(classLike)) {
@@ -27378,7 +27472,7 @@ namespace ts {
                 case SyntaxKind.JSDocParameterTag:
                     return checkJSDocParameterTag(node as JSDocParameterTag);
                 case SyntaxKind.JSDocFunctionType:
-                    checkSignatureDeclaration(node as JSDocFunctionType);
+                    checkJSDocFunctionType(node as JSDocFunctionType);
                     // falls through
                 case SyntaxKind.JSDocNonNullableType:
                 case SyntaxKind.JSDocNullableType:
@@ -30565,12 +30659,9 @@ namespace ts {
                 isPrefixUnaryExpression(node.parent) && isLiteralTypeNode(node.parent.parent);
             if (!literalType) {
                 if (languageVersion < ScriptTarget.ESNext) {
-                    if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targetting_lower_than_ESNext)) {
+                    if (grammarErrorOnNode(node, Diagnostics.BigInt_literals_are_not_available_when_targeting_lower_than_ESNext)) {
                         return true;
                     }
-                }
-                if (!compilerOptions.experimentalBigInt) {
-                    return grammarErrorOnNode(node, Diagnostics.Experimental_support_for_BigInt_is_a_feature_that_is_subject_to_change_in_a_future_release_Set_the_experimentalBigInt_option_to_remove_this_warning);
                 }
             }
             return false;
