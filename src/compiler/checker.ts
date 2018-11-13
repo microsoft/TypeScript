@@ -2361,7 +2361,7 @@ namespace ts {
             return links.target;
         }
 
-        function markExportAsReferenced(node: ImportEqualsDeclaration | ExportAssignment | ExportSpecifier) {
+        function markExportAsReferenced(node: ImportEqualsDeclaration | ExportSpecifier) {
             const symbol = getSymbolOfNode(node);
             const target = resolveAlias(symbol);
             if (target) {
@@ -2383,15 +2383,10 @@ namespace ts {
                 links.referenced = true;
                 const node = getDeclarationOfAliasSymbol(symbol);
                 if (!node) return Debug.fail();
-                if (node.kind === SyntaxKind.ExportAssignment) {
-                    // export default <symbol>
-                    checkExpressionCached((<ExportAssignment>node).expression);
-                }
-                else if (node.kind === SyntaxKind.ExportSpecifier) {
-                    // export { <symbol> } or export { <symbol> as foo }
-                    checkExpressionCached((<ExportSpecifier>node).propertyName || (<ExportSpecifier>node).name);
-                }
-                else if (isInternalModuleImportEqualsDeclaration(node)) {
+                // We defer checking of the reference of an `import =` until the import itself is referenced,
+                // This way a chain of imports can be elided if ultimately the final input is only used in a type
+                // position.
+                if (isInternalModuleImportEqualsDeclaration(node)) {
                     // import foo = <symbol>
                     checkExpressionCached(<Expression>node.moduleReference);
                 }
@@ -17815,7 +17810,7 @@ namespace ts {
         }
 
         function markAliasReferenced(symbol: Symbol, location: Node) {
-            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol))) {
+            if (isNonLocalAlias(symbol, /*excludes*/ SymbolFlags.Value) && !isInTypeQuery(location) && (compilerOptions.preserveConstEnums || !isConstEnumOrConstEnumOnlyModule(resolveAlias(symbol)))) {
                 markAliasSymbolAsReferenced(symbol);
             }
         }
@@ -20326,8 +20321,8 @@ namespace ts {
                 // if jsx emit was not react as there wont be error being emitted
                 reactSym.isReferenced = SymbolFlags.All;
 
-                // If react symbol is alias, mark it as referenced
-                if (reactSym.flags & SymbolFlags.Alias && !isConstEnumOrConstEnumOnlyModule(resolveAlias(reactSym))) {
+                // If react symbol is alias, mark it as refereced
+                if (reactSym.flags & SymbolFlags.Alias) {
                     markAliasSymbolAsReferenced(reactSym);
                 }
             }
@@ -24878,7 +24873,7 @@ namespace ts {
             return result;
         }
 
-        function checkExpressionCached(node: Expression, checkMode?: CheckMode): Type {
+        function checkExpressionCached(node: Expression | QualifiedName, checkMode?: CheckMode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
                 if (checkMode && checkMode !== CheckMode.Normal) {
@@ -25206,7 +25201,8 @@ namespace ts {
                 (node.parent.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>node.parent).expression === node) ||
                 (node.parent.kind === SyntaxKind.ElementAccessExpression && (<ElementAccessExpression>node.parent).expression === node) ||
                 ((node.kind === SyntaxKind.Identifier || node.kind === SyntaxKind.QualifiedName) && isInRightSideOfImportOrExportAssignment(<Identifier>node) ||
-                    (node.parent.kind === SyntaxKind.TypeQuery && (<TypeQueryNode>node.parent).exprName === node));
+                    (node.parent.kind === SyntaxKind.TypeQuery && (<TypeQueryNode>node.parent).exprName === node)) ||
+                (node.parent.kind === SyntaxKind.ExportSpecifier); // We allow reexporting const enums
 
             if (!ok) {
                 error(node, Diagnostics.const_enums_can_only_be_used_in_property_or_index_access_expressions_or_the_right_hand_side_of_an_import_declaration_or_export_assignment_or_type_query);
@@ -30145,6 +30141,10 @@ namespace ts {
                 }
                 else {
                     markExportAsReferenced(node);
+                    const target = symbol && (symbol.flags & SymbolFlags.Alias ? resolveAlias(symbol) : symbol);
+                    if (!target || target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                        checkExpressionCached(node.propertyName || node.name);
+                    }
                 }
             }
         }
@@ -30171,7 +30171,17 @@ namespace ts {
                 grammarErrorOnFirstToken(node, Diagnostics.An_export_assignment_cannot_have_modifiers);
             }
             if (node.expression.kind === SyntaxKind.Identifier) {
-                markExportAsReferenced(node);
+                const id = node.expression as Identifier;
+                const sym = resolveEntityName(id, SymbolFlags.All, /*ignoreErrors*/ true, /*dontResolveAlias*/ true, node);
+                if (sym) {
+                    markAliasReferenced(sym, id);
+                    // If not a value, we're interpreting the identifier as a type export, along the lines of (`export { Id as default }`)
+                    const target = sym.flags & SymbolFlags.Alias ? resolveAlias(sym) : sym;
+                    if (target === unknownSymbol || target.flags & SymbolFlags.Value) {
+                        // However if it is a value, we need to check it's being used correctly
+                        checkExpressionCached(node.expression);
+                    }
+                }
 
                 if (getEmitDeclarations(compilerOptions)) {
                     collectLinkedAliases(node.expression as Identifier, /*setVisibility*/ true);
