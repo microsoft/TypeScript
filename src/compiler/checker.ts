@@ -1262,13 +1262,13 @@ namespace ts {
                             if (meaning & result.flags & SymbolFlags.Variable) {
                                 // expression inside parameter will lookup as normal variable scope when targeting es2015+
                                 const functionLocation = <FunctionLikeDeclaration>location;
-                                if (findAncestor(originalLocation, isFunctionLikeDeclaration) !== functionLocation &&
-                                    functionLocation.body && result.valueDeclaration.pos >= functionLocation.body.pos) {
-                                    useResult = false
-                                }
-                                else if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation) &&
-                                    functionLocation.body && result.valueDeclaration.pos >= functionLocation.body.pos && result.valueDeclaration.end <= functionLocation.body.end) {
-                                    useResult = false;
+                                if (functionLocation.body && result.valueDeclaration.pos >= functionLocation.body.pos && result.valueDeclaration.end <= functionLocation.body.end) {
+                                    if (findAncestor(originalLocation, isFunctionLikeDeclaration) !== functionLocation) {
+                                        useResult = false
+                                    }
+                                    else if (compilerOptions.target && compilerOptions.target >= ScriptTarget.ES2015 && isParameter(lastLocation)) {
+                                        useResult = false;
+                                    }
                                 }
                                 else if (result.flags & SymbolFlags.FunctionScopedVariable) {
                                     // parameters are visible only inside function body, parameter list and return type
