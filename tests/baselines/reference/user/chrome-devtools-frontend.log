@@ -3286,7 +3286,7 @@ node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTes
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(59,9): error TS2403: Subsequent variable declarations must have the same type.  Variable 'url' must be of type 'any', but here has type 'string'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/BindingsTestRunner.js(108,11): error TS2339: Property 'src' does not exist on type 'HTMLElement'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(103,8): error TS2339: Property '_fileSystem' does not exist on type 'typeof TestFileSystem'.
-node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(104,8): error TS2540: Cannot assign to 'name' because it is a constant or a read-only property.
+node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(104,8): error TS2540: Cannot assign to 'name' because it is a read-only property.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(105,8): error TS2339: Property '_children' does not exist on type 'typeof TestFileSystem'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(106,8): error TS2339: Property '_childrenMap' does not exist on type 'typeof TestFileSystem'.
 node_modules/chrome-devtools-frontend/front_end/bindings_test_runner/IsolatedFilesystemTestRunner.js(107,8): error TS2339: Property 'isDirectory' does not exist on type 'typeof TestFileSystem'.
@@ -5827,7 +5827,7 @@ node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTes
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(429,28): error TS2339: Property 'sprintf' does not exist on type 'StringConstructor'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(490,15): error TS2339: Property 'runtime' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(549,33): error TS2339: Property 'elements' does not exist on type 'any[]'.
-node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(735,11): error TS2540: Cannot assign to 'name' because it is a constant or a read-only property.
+node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(735,11): error TS2588: Cannot assign to 'name' because it is a constant.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1024,26): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1048,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
 node_modules/chrome-devtools-frontend/front_end/elements_test_runner/ElementsTestRunner.js(1052,13): error TS2339: Property 'elements' does not exist on type 'any[]'.
