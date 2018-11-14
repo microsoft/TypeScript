@@ -26,30 +26,11 @@ namespace ts.codefix {
         const implementedType = checker.getTypeAtLocation(parent) as InterfaceType;
         const props: Symbol[] = checker.getPropertiesOfType(implementedType);
 
-        // let str = "";
-
-        /// show props of interface
-        // for (const p of props) {
-        //    str += p.name.toString();
-        // }
-
-        // const existingProps: string[] = objLiteral.properties.map(p => {
-        //     if (isIdentifier(p)) return p.name!.getText();
-        //     return undefined;
-        // }).filter(e => e !== undefined).map(e => e!);
-        // const setProps = new Set(existingProps);
-
         const existingMem = objLiteral.symbol.members;
         const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
 
         const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
         let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
-
-        const aa = objLiteral.properties[0];
-        if (isPropertyAssignment(aa)) {
-            const newEx = aa.initializer as NewExpression;
-            str = newEx.expression.kind.toString();
-        }
 
         const newProps: ObjectLiteralElementLike[] = nonExistingProps.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
@@ -63,6 +44,8 @@ namespace ts.codefix {
             if (isUnionTypeNode(typeNode)) {
                 kind = typeNode.types[0].kind;
             }
+
+            str = kind.toString();
 
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
@@ -105,6 +88,17 @@ namespace ts.codefix {
                     const de = symbol.declarations[0] as PropertySignature;
                     const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
                     return createPropertyAssignment(symbol.name, newObj);
+
+                case SyntaxKind.TypeLiteral:
+                    const te = checker.getTypeAtLocation(symbol.declarations[0]);
+                    const neuvoP: Symbol[] = checker.getPropertiesOfType(te);
+                    str = neuvoP.map(e => e.name.toString()).reduce((acc, val) => acc + " " + val);
+
+                    // TODO call function -> ObjectLiteralElementLike[]
+                    // TOOD create new ObjectLiteral
+                    // TODO do changeTracker forEach on new ObjectLiteral
+
+                    return createPropertyAssignment(symbol.name, createArrayLiteral());
                 default:
                     return undefined;
             }
