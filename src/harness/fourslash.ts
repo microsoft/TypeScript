@@ -2783,11 +2783,6 @@ Actual: ${stringify(fullActual)}`);
             assert.deepEqual(unique(this.getApplicableRefactorsAtSelection(), r => r.name), names);
         }
 
-        public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
-            const actualRefactors = this.getApplicableRefactorsAtSelection().filter(r => r.name === name && r.actions.some(a => a.name === actionName));
-            this.assertObjectsEqual(actualRefactors, refactors);
-        }
-
         public verifyApplicableRefactorAvailableForRange(negative: boolean) {
             const ranges = this.getRanges();
             if (!(ranges && ranges.length === 1)) {
@@ -3820,10 +3815,6 @@ namespace FourSlashInterface {
 
         public refactorsAvailable(names: ReadonlyArray<string>): void {
             this.state.verifyRefactorsAvailable(names);
-        }
-
-        public refactor(options: VerifyRefactorOptions) {
-            this.state.verifyRefactor(options);
         }
 
         public refactorAvailable(name: string, actionName?: string) {
