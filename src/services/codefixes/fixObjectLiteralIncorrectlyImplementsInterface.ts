@@ -33,25 +33,30 @@ namespace ts.codefix {
         //    str += p.name.toString();
         // }
 
-        const existingProps = objLiteral.properties.filter(p => p.name && isIdentifier(p)).map(p => p.name!.getText());
-        const setProps = new Set(existingProps);
-        // const symbolTableExistingProps = objLiteral.symbol.members!;
+        // const existingProps: string[] = objLiteral.properties.map(p => {
+        //     if (isIdentifier(p)) return p.name!.getText();
+        //     return undefined;
+        // }).filter(e => e !== undefined).map(e => e!);
+        // const setProps = new Set(existingProps);
 
-        const nonExistingProps = props.filter(and(p => !setProps.has(p.name), symbolPointsToNonPrivateMember));
-        let str = nonExistingProps.map(a => a.name).reduce((acc, val) => acc + val);
+        const existingMem = objLiteral.symbol.members;
+        const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
+
+        const nonExistingProps = props.filter(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember));
+        let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
 
 
         const newProps: PropertyAssignment[] = nonExistingProps.map(symbol => {
-            const type = checker.getWidenedType(checker.getTypeOfSymbolAtLocation(symbol, objLiteral));
+            const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
             const typeNode = checker.typeToTypeNode(type, objLiteral);
 
-            // TODO better way to solve than via typeNode
-            // TODO initialize other Objects
-            // TODO complete literals
             // TODO stub functions
+            // TODO stub class
+            // TODO stub other ObjectLiterals (aka Recursion)
 
             switch (typeNode!.kind) {
+                case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral(""));
                 case SyntaxKind.NumberKeyword:
@@ -60,6 +65,8 @@ namespace ts.codefix {
                     return createPropertyAssignment(symbol.name, createBigIntLiteral("0"));
                 case SyntaxKind.BooleanKeyword:
                     return createPropertyAssignment(symbol.name, createFalse());
+                case SyntaxKind.ArrayType:
+                    return createPropertyAssignment(symbol.name, createArrayLiteral());
                 default:
                     return undefined;
             }
