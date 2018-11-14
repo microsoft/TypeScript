@@ -1,0 +1,8 @@
+=== tests/cases/compiler/abstractAsync.ts ===
+abstract class ShouldFailClass {
+>ShouldFailClass : Symbol(ShouldFailClass, Decl(abstractAsync.ts, 0, 0))
+
+  async abstract badMethod(): Promise<number>;
+>badMethod : Symbol(ShouldFailClass.badMethod, Decl(abstractAsync.ts, 0, 32))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+}

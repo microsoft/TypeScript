@@ -1,0 +1,8 @@
+=== tests/cases/compiler/abstractAsync.ts ===
+abstract class ShouldFailClass {
+>ShouldFailClass : ShouldFailClass
+
+  async abstract badMethod(): Promise<number>;
+>badMethod : () => Promise<number>
+>Promise : Promise<T>
+}
