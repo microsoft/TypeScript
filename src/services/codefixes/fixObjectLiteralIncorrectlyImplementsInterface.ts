@@ -42,17 +42,25 @@ namespace ts.codefix {
         const existingMem = objLiteral.symbol.members;
         const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
 
-        const nonExistingProps = props.filter(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember));
+        const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
         let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
+
 
         const newProps: ObjectLiteralElementLike[] = nonExistingProps.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
-            const typeNode = checker.typeToTypeNode(type, objLiteral);
+            const typeNode = checker.typeToTypeNode(type, objLiteral)!;
 
             // TODO stub class
             // TODO stub other ObjectLiterals (aka Recursion)
+            // TODO intersection types
 
-            switch (typeNode!.kind) {
+            let kind = typeNode.kind;
+
+            if (isUnionTypeNode(typeNode)) {
+                kind = typeNode.types[0].kind;
+            }
+
+            switch (kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral(""));
@@ -68,6 +76,9 @@ namespace ts.codefix {
 
                 case SyntaxKind.ArrayType:
                     return createPropertyAssignment(symbol.name, createArrayLiteral());
+
+                case SyntaxKind.NullKeyword:
+                    return createPropertyAssignment(symbol.name, createNull());
 
                 case SyntaxKind.FunctionType:
                     const decli = symbol.declarations[0] as MethodDeclaration;
@@ -103,6 +114,12 @@ namespace ts.codefix {
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
         return !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
+    }
+
+    function symbolPointsToNonNullable(symbol: Symbol): boolean {
+        const declaration = symbol.declarations[0];
+        if (!isPropertySignature(declaration) || !declaration.questionToken) return true;
+        return false;
     }
 
     function createStubbedMethodBody(): Block {
