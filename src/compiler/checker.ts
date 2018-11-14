@@ -24655,7 +24655,7 @@ namespace ts {
 
         function registerForUnusedIdentifiersCheck(node: PotentiallyUnusedIdentifier): void {
             // May be in a call such as getTypeOfNode that happened to call this. But potentiallyUnusedIdentifiers is only defined in the scope of `checkSourceFile`.
-            if (produceDiagnostics) {
+            if (produceDiagnostics && !(node.flags & NodeFlags.Ambient)) {
                 const sourceFile = getSourceFileOfNode(node);
                 let potentiallyUnusedIdentifiers = allPotentiallyUnusedIdentifiers.get(sourceFile.path);
                 if (!potentiallyUnusedIdentifiers) {
@@ -24682,9 +24682,6 @@ namespace ts {
                         checkUnusedClassMembers(node, addDiagnostic);
                         checkUnusedTypeParameters(node, addDiagnostic);
                         break;
-                    case SyntaxKind.InterfaceDeclaration:
-                        checkUnusedTypeParameters(node, addDiagnostic);
-                        break;
                     case SyntaxKind.SourceFile:
                     case SyntaxKind.ModuleDeclaration:
                     case SyntaxKind.Block:
@@ -24701,7 +24698,7 @@ namespace ts {
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
-                        if (node.body) {
+                        if (node.body) { // Don't report unused parameters in overloads
                             checkUnusedLocalsAndParameters(node, addDiagnostic);
                         }
                         checkUnusedTypeParameters(node, addDiagnostic);
@@ -24712,8 +24709,11 @@ namespace ts {
                     case SyntaxKind.FunctionType:
                     case SyntaxKind.ConstructorType:
                     case SyntaxKind.TypeAliasDeclaration:
-                    case SyntaxKind.InferType:
+                    case SyntaxKind.InterfaceDeclaration:
                         checkUnusedTypeParameters(node, addDiagnostic);
+                        break;
+                    case SyntaxKind.InferType:
+                        checkUnusedInferTypeParameter(node, addDiagnostic);
                         break;
                     default:
                         Debug.assertNever(node, "Node should not have been registered for unused identifiers check");
@@ -24732,76 +24732,73 @@ namespace ts {
         }
 
         function checkUnusedClassMembers(node: ClassDeclaration | ClassExpression, addDiagnostic: AddUnusedDiagnostic): void {
-            if (!(node.flags & NodeFlags.Ambient)) {
-                for (const member of node.members) {
-                    switch (member.kind) {
-                        case SyntaxKind.MethodDeclaration:
-                        case SyntaxKind.PropertyDeclaration:
-                        case SyntaxKind.GetAccessor:
-                        case SyntaxKind.SetAccessor:
-                            if (member.kind === SyntaxKind.SetAccessor && member.symbol.flags & SymbolFlags.GetAccessor) {
-                                // Already would have reported an error on the getter.
-                                break;
-                            }
-                            const symbol = getSymbolOfNode(member);
-                            if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
-                                addDiagnostic(member, UnusedKind.Local, createDiagnosticForNode(member.name!, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
-                            }
+            for (const member of node.members) {
+                switch (member.kind) {
+                    case SyntaxKind.MethodDeclaration:
+                    case SyntaxKind.PropertyDeclaration:
+                    case SyntaxKind.GetAccessor:
+                    case SyntaxKind.SetAccessor:
+                        if (member.kind === SyntaxKind.SetAccessor && member.symbol.flags & SymbolFlags.GetAccessor) {
+                            // Already would have reported an error on the getter.
                             break;
-                        case SyntaxKind.Constructor:
-                            for (const parameter of (<ConstructorDeclaration>member).parameters) {
-                                if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
-                                    addDiagnostic(parameter, UnusedKind.Local, createDiagnosticForNode(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
-                                }
+                        }
+                        const symbol = getSymbolOfNode(member);
+                        if (!symbol.isReferenced && hasModifier(member, ModifierFlags.Private)) {
+                            addDiagnostic(member, UnusedKind.Local, createDiagnosticForNode(member.name!, Diagnostics._0_is_declared_but_its_value_is_never_read, symbolToString(symbol)));
+                        }
+                        break;
+                    case SyntaxKind.Constructor:
+                        for (const parameter of (<ConstructorDeclaration>member).parameters) {
+                            if (!parameter.symbol.isReferenced && hasModifier(parameter, ModifierFlags.Private)) {
+                                addDiagnostic(parameter, UnusedKind.Local, createDiagnosticForNode(parameter.name, Diagnostics.Property_0_is_declared_but_its_value_is_never_read, symbolName(parameter.symbol)));
                             }
-                            break;
-                        case SyntaxKind.IndexSignature:
-                        case SyntaxKind.SemicolonClassElement:
-                            // Can't be private
-                            break;
-                        default:
-                            Debug.fail();
-                    }
+                        }
+                        break;
+                    case SyntaxKind.IndexSignature:
+                    case SyntaxKind.SemicolonClassElement:
+                        // Can't be private
+                        break;
+                    default:
+                        Debug.fail();
                 }
             }
         }
 
-        function checkUnusedTypeParameters(node: ClassLikeDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration | InferTypeNode, addDiagnostic: AddUnusedDiagnostic): void {
+        function checkUnusedInferTypeParameter(node: InferTypeNode, addDiagnostic: AddUnusedDiagnostic): void {
+            const { typeParameter } = node;
+            if (isTypeParameterUnused(typeParameter)) {
+                addDiagnostic(node, UnusedKind.Parameter, createDiagnosticForNode(node, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(typeParameter.name)));
+            }
+        }
+
+        function checkUnusedTypeParameters(node: ClassLikeDeclaration | SignatureDeclaration | InterfaceDeclaration | TypeAliasDeclaration, addDiagnostic: AddUnusedDiagnostic): void {
             // Only report errors on the last declaration for the type parameter container;
             // this ensures that all uses have been accounted for.
-            if (node.flags & NodeFlags.Ambient || node.kind !== SyntaxKind.InferType && last(getSymbolOfNode(node).declarations) !== node) return;
+            if (last(getSymbolOfNode(node).declarations) !== node) return;
 
-            if (node.kind === SyntaxKind.InferType) {
-                const { typeParameter } = node;
-                if (isTypeParameterUnused(typeParameter)) {
-                    addDiagnostic(node, UnusedKind.Parameter, createDiagnosticForNode(node, Diagnostics._0_is_declared_but_its_value_is_never_read, idText(typeParameter.name)));
+            const typeParameters = getEffectiveTypeParameterDeclarations(node);
+            const seenParentsWithEveryUnused = new NodeSet<DeclarationWithTypeParameterChildren>();
+
+            for (const typeParameter of typeParameters) {
+                if (!isTypeParameterUnused(typeParameter)) continue;
+
+                const name = idText(typeParameter.name);
+                const { parent } = typeParameter;
+                if (parent.kind !== SyntaxKind.InferType && parent.typeParameters!.every(isTypeParameterUnused)) {
+                    if (seenParentsWithEveryUnused.tryAdd(parent)) {
+                        const range = isJSDocTemplateTag(parent)
+                            // Whole @template tag
+                            ? rangeOfNode(parent)
+                            // Include the `<>` in the error message
+                            : rangeOfTypeParameters(parent.typeParameters!);
+                        const only = typeParameters.length === 1;
+                        const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
+                        const arg0 = only ? name : undefined;
+                        addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(getSourceFileOfNode(parent), range.pos, range.end - range.pos, message, arg0));
+                    }
                 }
-            }
-            else {
-                const typeParameters = getEffectiveTypeParameterDeclarations(node);
-                const seenParentsWithEveryUnused = new NodeSet<DeclarationWithTypeParameterChildren>();
-
-                for (const typeParameter of typeParameters) {
-                    if (!isTypeParameterUnused(typeParameter)) continue;
-
-                    const name = idText(typeParameter.name);
-                    const { parent } = typeParameter;
-                    if (parent.kind !== SyntaxKind.InferType && parent.typeParameters!.every(isTypeParameterUnused)) {
-                        if (seenParentsWithEveryUnused.tryAdd(parent)) {
-                            const range = isJSDocTemplateTag(parent)
-                                // Whole @template tag
-                                ? rangeOfNode(parent)
-                                // Include the `<>` in the error message
-                                : rangeOfTypeParameters(parent.typeParameters!);
-                            const only = typeParameters.length === 1;
-                            const message = only ? Diagnostics._0_is_declared_but_its_value_is_never_read : Diagnostics.All_type_parameters_are_unused;
-                            const arg0 = only ? name : undefined;
-                            addDiagnostic(typeParameter, UnusedKind.Parameter, createFileDiagnostic(getSourceFileOfNode(parent), range.pos, range.end - range.pos, message, arg0));
-                        }
-                    }
-                    else {
-                        addDiagnostic(typeParameter, UnusedKind.Parameter, createDiagnosticForNode(typeParameter, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
-                    }
+                else {
+                    addDiagnostic(typeParameter, UnusedKind.Parameter, createDiagnosticForNode(typeParameter, Diagnostics._0_is_declared_but_its_value_is_never_read, name));
                 }
             }
         }
