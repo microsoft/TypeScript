@@ -55,6 +55,7 @@ namespace ts {
         let cancellationToken: CancellationToken | undefined;
         let requestedExternalEmitHelpers: ExternalEmitHelpers;
         let externalHelpersModule: Symbol;
+        let isInTypeOf = false;
 
         // tslint:disable variable-name
         const Symbol = objectAllocator.getSymbolConstructor();
@@ -1478,7 +1479,7 @@ namespace ts {
             // We just climbed up parents looking for the name, meaning that we started in a descendant node of `lastLocation`.
             // If `result === lastSelfReferenceLocation.symbol`, that means that we are somewhere inside `lastSelfReferenceLocation` looking up a name, and resolving to `lastLocation` itself.
             // That means that this is a self-reference of `lastLocation`, and shouldn't count this when considering whether `lastLocation` is used.
-            if (isUse && result && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol)) {
+            if (isUse && result && (!lastSelfReferenceLocation || result !== lastSelfReferenceLocation.symbol) && !isInTypeOf) {
                 result.isReferenced! |= meaning;
             }
 
@@ -8657,11 +8658,14 @@ namespace ts {
         function getTypeFromTypeQueryNode(node: TypeQueryNode): Type {
             const links = getNodeLinks(node);
             if (!links.resolvedType) {
+                const saveIsInTypeOf = isInTypeOf;
+                isInTypeOf = true;
                 // TypeScript 1.0 spec (April 2014): 3.6.3
                 // The expression is processed as an identifier expression (section 4.3)
                 // or property access expression(section 4.10),
                 // the widened type(section 3.9) of which becomes the result.
                 links.resolvedType = getRegularTypeOfLiteralType(getWidenedType(checkExpression(node.exprName)));
+                isInTypeOf = saveIsInTypeOf;
             }
             return links.resolvedType;
         }
