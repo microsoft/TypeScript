@@ -45,12 +45,16 @@ namespace ts.codefix {
         const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
         let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
+        const aa = objLiteral.properties[0];
+        if (isPropertyAssignment(aa)) {
+            const newEx = aa.initializer as NewExpression;
+            str = newEx.expression.kind.toString();
+        }
 
         const newProps: ObjectLiteralElementLike[] = nonExistingProps.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
             const typeNode = checker.typeToTypeNode(type, objLiteral)!;
 
-            // TODO stub class
             // TODO stub other ObjectLiterals (aka Recursion)
             // TODO intersection types
 
@@ -94,6 +98,13 @@ namespace ts.codefix {
                         decli.type,
                         createStubbedMethodBody()
                     );
+
+                case SyntaxKind.TypeReference:
+                    //     return createPropertyAssignment(symbol.name, createNull());
+
+                    const de = symbol.declarations[0] as PropertySignature;
+                    const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
+                    return createPropertyAssignment(symbol.name, newObj);
                 default:
                     return undefined;
             }
