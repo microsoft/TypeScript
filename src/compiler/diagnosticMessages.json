@@ -4125,6 +4125,10 @@
         "category": "Suggestion",
         "code": 7050
     },
+    "Parameter '{0}' has no declared type, but is itself a type, so should have a parameter name 'x: {0}'.": {
+        "category": "Error",
+        "code": 7051
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

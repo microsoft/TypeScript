@@ -13629,6 +13629,13 @@ namespace ts {
                     diagnostic = noImplicitAny ? Diagnostics.Member_0_implicitly_has_an_1_type : Diagnostics.Member_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
                     break;
                 case SyntaxKind.Parameter:
+                    const param = declaration as ParameterDeclaration;
+                    if (isIdentifier(param.name) &&
+                        (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
+                        resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true)) {
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_0_has_no_declared_type_but_is_itself_a_type_so_should_have_a_parameter_name_x_Colon_0, declarationNameToString(param.name));
+                        return;
+                    }
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?
                         noImplicitAny ? Diagnostics.Rest_parameter_0_implicitly_has_an_any_type : Diagnostics.Rest_parameter_0_implicitly_has_an_any_type_but_a_better_type_may_be_inferred_from_usage :
                         noImplicitAny ? Diagnostics.Parameter_0_implicitly_has_an_1_type : Diagnostics.Parameter_0_implicitly_has_an_1_type_but_a_better_type_may_be_inferred_from_usage;
