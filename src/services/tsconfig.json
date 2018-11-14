@@ -53,6 +53,7 @@
         "codefixes/convertToEs6Module.ts",
         "codefixes/correctQualifiedNameToIndexedAccessType.ts",
         "codefixes/fixClassIncorrectlyImplementsInterface.ts",
+        "codefixes/fixObjectLiteralIncorrectlyImplementsInterface.ts",
         "codefixes/importFixes.ts",
         "codefixes/fixSpelling.ts",
         "codefixes/fixAddMissingMember.ts",
