@@ -23,7 +23,7 @@ export function createElement(): void;
 >createElement : Symbol(createElement, Decl(renderer.d.ts, 8, 33))
 
 export { dom as default };
->dom : Symbol(default, Decl(renderer.d.ts, 10, 8))
+>dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
 >default : Symbol(default, Decl(renderer.d.ts, 10, 8))
 
 === tests/cases/conformance/jsx/inline/otherreacty.tsx ===
@@ -38,7 +38,7 @@ import * as React from "./renderer";
 === tests/cases/conformance/jsx/inline/other.tsx ===
 /** @jsx h */
 import { dom as h } from "./renderer"
->dom : Symbol(h, Decl(other.tsx, 1, 8))
+>dom : Symbol(h, Decl(renderer.d.ts, 6, 1))
 >h : Symbol(h, Decl(other.tsx, 1, 8))
 
 export const prerendered = <h></h>;
