@@ -1,7 +1,7 @@
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(3,1): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'RegExp': exec, test, source, global, and 4 more.
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,31): error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
-tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,31): error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(5,31): error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+tests/cases/compiler/assigningFromObjectToAnythingElse.ts(6,31): error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
 tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2696: The 'Object' type is assignable to very few other types. Did you mean to use the 'any' type instead?
   Type 'Object' is missing the following properties from type 'Error': name, message
 
@@ -16,10 +16,10 @@ tests/cases/compiler/assigningFromObjectToAnythingElse.ts(8,5): error TS2696: Th
     
     var a: String = Object.create<Object>("");
                                   ~~~~~~
-!!! error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+!!! error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
     var c: String = Object.create<Number>(1);
                                   ~~~~~~
-!!! error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+!!! error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
     
     var w: Error = new Object();
         ~

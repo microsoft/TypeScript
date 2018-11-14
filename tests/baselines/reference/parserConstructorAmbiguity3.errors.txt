@@ -1,5 +1,5 @@
 tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.ts(1,10): error TS2304: Cannot find name 'A'.
-tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.ts(1,10): error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.ts(1,10): error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
 tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.ts(1,12): error TS1005: '(' expected.
 
 
@@ -8,6 +8,6 @@ tests/cases/conformance/parser/ecmascript5/Generics/parserConstructorAmbiguity3.
              ~
 !!! error TS2304: Cannot find name 'A'.
              ~
-!!! error TS2742: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
+!!! error TS2743: No overload expects 1 type argument(s), but an overload does exist that expects 0 type argument(s).
                
 !!! error TS1005: '(' expected.
