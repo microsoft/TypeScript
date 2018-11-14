@@ -1,4 +1,4 @@
-//// [unusedSwitchStatment.ts]
+//// [unusedSwitchStatement.ts]
 switch (1) {
     case 0:
         let x;
@@ -18,7 +18,7 @@ switch (2) {
         x++;
 }
 
-//// [unusedSwitchStatment.js]
+//// [unusedSwitchStatement.js]
 switch (1) {
     case 0:
         var x = void 0;
