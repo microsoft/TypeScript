@@ -45,13 +45,10 @@ namespace ts.codefix {
         const nonExistingProps = props.filter(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember));
         let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
-
-
-        const newProps: PropertyAssignment[] = nonExistingProps.map(symbol => {
+        const newProps: ObjectLiteralElementLike[] = nonExistingProps.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
             const typeNode = checker.typeToTypeNode(type, objLiteral);
 
-            // TODO stub functions
             // TODO stub class
             // TODO stub other ObjectLiterals (aka Recursion)
 
@@ -59,14 +56,33 @@ namespace ts.codefix {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral(""));
+
                 case SyntaxKind.NumberKeyword:
                     return createPropertyAssignment(symbol.name, createNumericLiteral("0"));
+
                 case SyntaxKind.BigIntKeyword:
                     return createPropertyAssignment(symbol.name, createBigIntLiteral("0"));
+
                 case SyntaxKind.BooleanKeyword:
                     return createPropertyAssignment(symbol.name, createFalse());
+
                 case SyntaxKind.ArrayType:
                     return createPropertyAssignment(symbol.name, createArrayLiteral());
+
+                case SyntaxKind.FunctionType:
+                    const decli = symbol.declarations[0] as MethodDeclaration;
+
+                    return createMethod(
+                        decli.decorators,
+                        decli.modifiers,
+                        decli.asteriskToken,
+                        decli.name,
+                        decli.questionToken,
+                        decli.typeParameters,
+                        decli.parameters,
+                        decli.type,
+                        createStubbedMethodBody()
+                    );
                 default:
                     return undefined;
             }
@@ -87,6 +103,16 @@ namespace ts.codefix {
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
         return !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
+    }
+
+    function createStubbedMethodBody(): Block {
+        return createBlock(
+            [createThrow(
+                createNew(
+                    createIdentifier("Error"),
+                    /*typeArguments*/ undefined,
+                    [createStringLiteral("Method not implemented.")]))],
+            /*multiline*/ true);
     }
 
 }
