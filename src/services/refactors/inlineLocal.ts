@@ -18,10 +18,10 @@ namespace ts.refactor.inlineLocal {
         readonly selectedUsage: Identifier | undefined;
     }
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, program, startPosition } = context;
         const info = getLocalInfo(file, program, startPosition);
-        if (!info) return undefined;
+        if (!info) return emptyArray;
         const { selectedUsage } = info;
         const refactorInfo = {
             name: refactorName,
