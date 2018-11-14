@@ -1227,9 +1227,10 @@ namespace ts {
         SyntaxKind.UniqueKeyword,
         SyntaxKind.UnknownKeyword,
     ];
+    const typeKeywordsSet = arrayToSet(typeKeywords as unknown as ReadonlyArray<string>);
 
     export function isTypeKeyword(kind: SyntaxKind): boolean {
-        return contains(typeKeywords, kind);
+        return typeKeywordsSet.has(kind as unknown as string);
     }
 
     /** True if the symbol is for an external module, as opposed to a namespace. */
