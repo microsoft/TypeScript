@@ -98,18 +98,14 @@ namespace ts.refactor.inlineLocal {
         const info = getLocalInfo(file, program, startPosition);
         if (!info) return undefined;
         const { declaration, usages, selectedUsage } = info;
-        const edits: FileTextChanges[] = [];
         switch (actionName) {
             case inlineAllActionName:
                 return { edits: getInlineAllEdits(context, declaration, usages) };
-                break;
             case inlineHereActionName:
                 return { edits: getInlineHereEdits(context, declaration, usages, selectedUsage!) };
-                break;
             default:
                 return Debug.fail("invalid action");
         }
-        return { edits };
     }
 
     function getInlineAllEdits(
