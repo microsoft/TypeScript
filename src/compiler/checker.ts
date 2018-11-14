@@ -5894,7 +5894,7 @@ namespace ts {
                 return type.resolvedBaseTypes = emptyArray;
             }
             if (!isValidBaseType(baseType)) {
-                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(baseType));
                 return type.resolvedBaseTypes = emptyArray;
             }
             if (type === baseType || hasBaseType(baseType, type)) {
@@ -5952,7 +5952,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                                error(node, Diagnostics.An_interface_can_only_extend_an_object_type_or_intersection_of_object_types_with_statically_known_members);
                             }
                         }
                     }
@@ -26454,7 +26454,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                                error(typeRefNode, Diagnostics.A_class_can_only_implement_an_object_type_or_intersection_of_object_types_with_statically_known_members);
                             }
                         }
                     }
