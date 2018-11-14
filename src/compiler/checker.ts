@@ -242,17 +242,7 @@ namespace ts {
                 const parsed = getParseTreeNode(node, isFunctionLike);
                 return parsed ? isImplementationOfOverload(parsed) : undefined;
             },
-            getImmediateAliasedSymbol: symbol => {
-                Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
-                const links = getSymbolLinks(symbol);
-                if (!links.immediateTarget) {
-                    const node = getDeclarationOfAliasSymbol(symbol);
-                    if (!node) return Debug.fail();
-                    links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
-                }
-
-                return links.immediateTarget;
-            },
+            getImmediateAliasedSymbol,
             getAliasedSymbol: resolveAlias,
             getEmitResolver,
             getExportsOfModule: getExportsOfModuleAsArray,
@@ -2599,6 +2589,44 @@ namespace ts {
             return getMergedSymbol(symbol.parent && getLateBoundSymbol(symbol.parent));
         }
 
+        function getAlternativeContainingModules(symbol: Symbol, enclosingDeclaration: Node): Symbol[] {
+            const containingFile = getSourceFileOfNode(enclosingDeclaration);
+            const id = "" + getNodeId(containingFile);
+            const links = getSymbolLinks(symbol);
+            let results: Symbol[] | undefined;
+            if (links.extendedContainersByFile && (results = links.extendedContainersByFile.get(id))) {
+                return results;
+            }
+            if (containingFile && containingFile.imports) {
+                // Try to make an import using an import already in the enclosing file, if possible
+                for (const importRef of containingFile.imports) {
+                    if (nodeIsSynthesized(importRef)) continue; // Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
+                    const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef);
+                    if (!resolvedModule) continue;
+                    const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
+                    if (!ref) continue;
+                    results = append(results, resolvedModule);
+                }
+                if (length(results)) {
+                    (links.extendedContainersByFile || (links.extendedContainersByFile = createMap())).set(id, results!);
+                    return results!;
+                }
+            }
+            if (links.extendedContainers) {
+                return links.extendedContainers;
+            }
+            // No results from files already being imported by this file - expand search (expensive, but not location-specific, so cached)
+            const otherFiles = host.getSourceFiles();
+            for (const file of otherFiles) {
+                if (!isExternalModule(file)) continue;
+                const sym = getSymbolOfNode(file);
+                const ref = getAliasForSymbolInContainer(sym, symbol);
+                if (!ref) continue;
+                results = append(results, sym);
+            }
+            return links.extendedContainers = results || emptyArray;
+        }
+
         /**
          * Attempts to find the symbol corresponding to the container a symbol is in - usually this
          * is just its' `.parent`, but for locals, this value is `undefined`
@@ -2607,10 +2635,12 @@ namespace ts {
             const container = getParentOfSymbol(symbol);
             if (container) {
                 const additionalContainers = mapDefined(container.declarations, fileSymbolIfFileSymbolExportEqualsContainer);
+                const reexportContainers = enclosingDeclaration && getAlternativeContainingModules(symbol, enclosingDeclaration);
                 if (enclosingDeclaration && getAccessibleSymbolChain(container, enclosingDeclaration, SymbolFlags.Namespace, /*externalOnly*/ false)) {
-                    return concatenate([container], additionalContainers); // This order expresses a preference for the real container if it is in scope
+                    return concatenate(concatenate([container], additionalContainers), reexportContainers); // This order expresses a preference for the real container if it is in scope
                 }
-                return append(additionalContainers, container);
+                const res = append(additionalContainers, container);
+                return concatenate(res, reexportContainers);
             }
             const candidates = mapDefined(symbol.declarations, d => !isAmbientModule(d) && d.parent && hasNonGlobalAugmentationExternalModuleSymbol(d.parent) ? getSymbolOfNode(d.parent) : undefined);
             if (!length(candidates)) {
@@ -3458,11 +3488,7 @@ namespace ts {
                                 return symbolToTypeNode(typeAlias, context, SymbolFlags.Type);
                             }
                             else {
-                                context.approximateLength += 3;
-                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
-                                }
-                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                                return createElidedInformationPlaceholder(context);
                             }
                         }
                         else {
@@ -3477,11 +3503,7 @@ namespace ts {
 
                             const depth = context.symbolDepth.get(id) || 0;
                             if (depth > 10) {
-                                context.approximateLength += 3;
-                                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
-                                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
-                                }
-                                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                                return createElidedInformationPlaceholder(context);
                             }
                             context.symbolDepth.set(id, depth + 1);
                             context.visitedTypes.set(typeId, true);
@@ -3674,10 +3696,15 @@ namespace ts {
                         typeElements.push(<ConstructSignatureDeclaration>signatureToSignatureDeclarationHelper(signature, SyntaxKind.ConstructSignature, context));
                     }
                     if (resolvedType.stringIndexInfo) {
-                        const indexInfo = resolvedType.objectFlags & ObjectFlags.ReverseMapped ?
-                            createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration) :
-                            resolvedType.stringIndexInfo;
-                        typeElements.push(indexInfoToIndexSignatureDeclarationHelper(indexInfo, IndexKind.String, context));
+                        let indexSignature: IndexSignatureDeclaration;
+                        if (resolvedType.objectFlags & ObjectFlags.ReverseMapped) {
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(createIndexInfo(anyType, resolvedType.stringIndexInfo.isReadonly, resolvedType.stringIndexInfo.declaration), IndexKind.String, context);
+                            indexSignature.type = createElidedInformationPlaceholder(context);
+                        }
+                        else {
+                            indexSignature = indexInfoToIndexSignatureDeclarationHelper(resolvedType.stringIndexInfo, IndexKind.String, context);
+                        }
+                        typeElements.push(indexSignature);
                     }
                     if (resolvedType.numberIndexInfo) {
                         typeElements.push(indexInfoToIndexSignatureDeclarationHelper(resolvedType.numberIndexInfo, IndexKind.Number, context));
@@ -3711,8 +3738,17 @@ namespace ts {
                 }
             }
 
+            function createElidedInformationPlaceholder(context: NodeBuilderContext) {
+                context.approximateLength += 3;
+                if (!(context.flags & NodeBuilderFlags.NoTruncation)) {
+                    return createTypeReferenceNode(createIdentifier("..."), /*typeArguments*/ undefined);
+                }
+                return createKeywordTypeNode(SyntaxKind.AnyKeyword);
+            }
+
             function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
-                const propertyType = getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
+                const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
+                const propertyType = propertyIsReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
                     anyType : getTypeOfSymbol(propertySymbol);
                 const saveEnclosingDeclaration = context.enclosingDeclaration;
                 context.enclosingDeclaration = undefined;
@@ -3741,8 +3777,14 @@ namespace ts {
                 }
                 else {
                     const savedFlags = context.flags;
-                    context.flags |= !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped) ? NodeBuilderFlags.InReverseMappedType : 0;
-                    const propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    context.flags |= propertyIsReverseMapped ? NodeBuilderFlags.InReverseMappedType : 0;
+                    let propertyTypeNode: TypeNode;
+                    if (propertyIsReverseMapped && !!(savedFlags & NodeBuilderFlags.InReverseMappedType)) {
+                        propertyTypeNode = createElidedInformationPlaceholder(context);
+                    }
+                    else {
+                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                    }
                     context.flags = savedFlags;
 
                     const modifiers = isReadonlySymbol(propertySymbol) ? [createToken(SyntaxKind.ReadonlyKeyword)] : undefined;
@@ -3969,14 +4011,21 @@ namespace ts {
                 /** @param endOfChain Set to false for recursive calls; non-recursive calls should always output something. */
                 function getSymbolChain(symbol: Symbol, meaning: SymbolFlags, endOfChain: boolean): Symbol[] | undefined {
                     let accessibleSymbolChain = getAccessibleSymbolChain(symbol, context.enclosingDeclaration, meaning, !!(context.flags & NodeBuilderFlags.UseOnlyExternalAliasing));
-
+                    let parentSpecifiers: (string | undefined)[];
                     if (!accessibleSymbolChain ||
                         needsQualification(accessibleSymbolChain[0], context.enclosingDeclaration, accessibleSymbolChain.length === 1 ? meaning : getQualifiedLeftMeaning(meaning))) {
 
                         // Go up and add our parent.
                         const parents = getContainersOfSymbol(accessibleSymbolChain ? accessibleSymbolChain[0] : symbol, context.enclosingDeclaration);
                         if (length(parents)) {
-                            for (const parent of parents!) {
+                            parentSpecifiers = parents!.map(symbol =>
+                                some(symbol.declarations, hasNonGlobalAugmentationExternalModuleSymbol)
+                                    ? getSpecifierForModuleSymbol(symbol, context)
+                                    : undefined);
+                            const indices = parents!.map((_, i) => i);
+                            indices.sort(sortByBestName);
+                            const sortedParents = indices.map(i => parents![i]);
+                            for (const parent of sortedParents) {
                                 const parentChain = getSymbolChain(parent, getQualifiedLeftMeaning(meaning), /*endOfChain*/ false);
                                 if (parentChain) {
                                     accessibleSymbolChain = parentChain.concat(accessibleSymbolChain || [getAliasForSymbolInContainer(parent, symbol) || symbol]);
@@ -3999,6 +4048,25 @@ namespace ts {
                             return;
                         }
                         return [symbol];
+                    }
+
+                    function sortByBestName(a: number, b: number) {
+                        const specifierA = parentSpecifiers[a];
+                        const specifierB = parentSpecifiers[b];
+                        if (specifierA && specifierB) {
+                            const isBRelative = pathIsRelative(specifierB);
+                            if (pathIsRelative(specifierA) === isBRelative) {
+                                // Both relative or both non-relative, sort by number of parts
+                                return moduleSpecifiers.countPathComponents(specifierA) - moduleSpecifiers.countPathComponents(specifierB);
+                            }
+                            if (isBRelative) {
+                                // A is non-relative, B is relative: prefer A
+                                return -1;
+                            }
+                            // A is relative, B is non-relative: prefer B
+                            return 1;
+                        }
+                        return 0;
                     }
                 }
             }
@@ -4103,6 +4171,14 @@ namespace ts {
                     const nonRootParts = chain.length > 1 ? createAccessFromSymbolChain(chain, chain.length - 1, 1) : undefined;
                     const typeParameterNodes = overrideTypeArguments || lookupTypeParameterNodes(chain, 0, context);
                     const specifier = getSpecifierForModuleSymbol(chain[0], context);
+                    if (!(context.flags & NodeBuilderFlags.AllowNodeModulesRelativePaths) && getEmitModuleResolutionKind(compilerOptions) === ModuleResolutionKind.NodeJs && specifier.indexOf("/node_modules/") >= 0) {
+                        // If ultimately we can only name the symbol with a reference that dives into a `node_modules` folder, we should error
+                        // since declaration files with these kinds of references are liable to fail when published :(
+                        context.encounteredError = true;
+                        if (context.tracker.reportLikelyUnsafeImportRequiredError) {
+                            context.tracker.reportLikelyUnsafeImportRequiredError(specifier);
+                        }
+                    }
                     const lit = createLiteralTypeNode(createLiteral(specifier));
                     if (context.tracker.trackExternalModuleSymbolOfImportTypeNode) context.tracker.trackExternalModuleSymbolOfImportTypeNode(chain[0]);
                     context.approximateLength += specifier.length + 10; // specifier + import("")
@@ -5808,7 +5884,7 @@ namespace ts {
                 return type.resolvedBaseTypes = emptyArray;
             }
             if (!isValidBaseType(baseType)) {
-                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_a_class_or_interface_type, typeToString(baseType));
+                error(baseTypeNode.expression, Diagnostics.Base_constructor_return_type_0_is_not_an_object_type_or_intersection_of_object_types_with_statically_known_members, typeToString(baseType));
                 return type.resolvedBaseTypes = emptyArray;
             }
             if (type === baseType || hasBaseType(baseType, type)) {
@@ -5866,7 +5942,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(node, Diagnostics.An_interface_may_only_extend_a_class_or_another_interface);
+                                error(node, Diagnostics.An_interface_can_only_extend_an_object_type_or_intersection_of_object_types_with_statically_known_members);
                             }
                         }
                     }
@@ -9443,7 +9519,7 @@ namespace ts {
                     if (accessExpression) {
                         markPropertyAsReferenced(prop, accessExpression, /*isThisAccess*/ accessExpression.expression.kind === SyntaxKind.ThisKeyword);
                         if (isAssignmentTarget(accessExpression) && (isReferenceToReadonlyEntity(accessExpression, prop) || isReferenceThroughNamespaceImport(accessExpression))) {
-                            error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(prop));
+                            error(accessExpression.argumentExpression, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(prop));
                             return missingType;
                         }
                         if (cacheSymbol) {
@@ -16103,7 +16179,12 @@ namespace ts {
                     return errorType;
                 }
                 if (isReadonlySymbol(localOrExportSymbol)) {
-                    error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, symbolToString(symbol));
+                    if (localOrExportSymbol.flags & SymbolFlags.Variable) {
+                        error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant, symbolToString(symbol));
+                    }
+                    else {
+                        error(node, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, symbolToString(symbol));
+                    }
                     return errorType;
                 }
             }
@@ -17737,6 +17818,18 @@ namespace ts {
             return createIndexInfo(unionType, /*isReadonly*/ false);
         }
 
+        function getImmediateAliasedSymbol(symbol: Symbol): Symbol | undefined {
+            Debug.assert((symbol.flags & SymbolFlags.Alias) !== 0, "Should only get Alias here.");
+            const links = getSymbolLinks(symbol);
+            if (!links.immediateTarget) {
+                const node = getDeclarationOfAliasSymbol(symbol);
+                if (!node) return Debug.fail();
+                links.immediateTarget = getTargetOfAliasDeclaration(node, /*dontRecursivelyResolve*/ true);
+            }
+
+            return links.immediateTarget;
+        }
+
         function checkObjectLiteral(node: ObjectLiteralExpression, checkMode?: CheckMode): Type {
             const inDestructuringPattern = isAssignmentTarget(node);
             // Grammar checking
@@ -18688,7 +18781,7 @@ namespace ts {
                 checkPropertyAccessibility(node, left.kind === SyntaxKind.SuperKeyword, apparentType, prop);
                 if (assignmentKind) {
                     if (isReferenceToReadonlyEntity(<Expression>node, prop) || isReferenceThroughNamespaceImport(<Expression>node)) {
-                        error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property, idText(right));
+                        error(right, Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property, idText(right));
                         return errorType;
                     }
                 }
@@ -26380,7 +26473,7 @@ namespace ts {
                                 }
                             }
                             else {
-                                error(typeRefNode, Diagnostics.A_class_may_only_implement_another_class_or_interface);
+                                error(typeRefNode, Diagnostics.A_class_can_only_implement_an_object_type_or_intersection_of_object_types_with_statically_known_members);
                             }
                         }
                     }
@@ -28144,7 +28237,10 @@ namespace ts {
 
             if (isDeclarationNameOrImportPropertyName(node)) {
                 // This is a declaration, call getSymbolOfNode
-                return getSymbolOfNode(parent);
+                const parentSymbol = getSymbolOfNode(parent)!;
+                return isImportOrExportSpecifier(node.parent) && node.parent.propertyName === node
+                    ? getImmediateAliasedSymbol(parentSymbol)
+                    : parentSymbol;
             }
             else if (isLiteralComputedPropertyDeclarationName(node)) {
                 return getSymbolOfNode(parent.parent);
