@@ -58,6 +58,8 @@ namespace ts.codefix {
 
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
+                    return createPropertyAssignment(symbol.name, createStringLiteral("any"));
+
                 case SyntaxKind.StringKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral(""));
 
@@ -107,19 +109,22 @@ namespace ts.codefix {
                     return createPropertyAssignment(symbol.name, subObjLiteral);
 
                 case SyntaxKind.IntersectionType:
-                    let intersectedTypes: Type[]
+                    let intersectedTypes: Type[];
 
-                    if (symbol.declarations.length === 1){
-                        const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType
+                    if (symbol.declarations.length === 1) {
+                        const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType;
                         intersectedTypes = intersectedTyped.types;
                     }
-                    else
-                    {
-                        intersectedTypes = symbol.declarations.map(d => checker.getTypeAtLocation(d))
+                    else {
+                        intersectedTypes = symbol.declarations.map(d => checker.getTypeAtLocation(d));
                     }
-                    const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t)).reduce((arr, ele) => arr.concat(ele));
+                    const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t))
+                    .reduce((arr, ele) => {
+                        const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
+                        return arr.concat(newEle);
+                    });
                     const intersectStubs = getNewMembers(intersectedProps, checker, objLiteral);
-                    
+
                     const interObjLiteral = createObjectLiteral(intersectStubs, /* multiline */ true);
                     return createPropertyAssignment(symbol.name, interObjLiteral);
                 default:
@@ -129,7 +134,7 @@ namespace ts.codefix {
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
-        return symbol.declarations.map(d => !(getModifierFlags(d) & ModifierFlags.Private)).reduce((r,l) => r && l);
+        return symbol.declarations.map(d => !(getModifierFlags(d) & ModifierFlags.Private)).reduce((r, l) => r && l);
     }
 
     function symbolPointsToNonNullable(symbol: Symbol): boolean {
