@@ -2238,8 +2238,8 @@ namespace ts {
             return initializer || decl;
         }
 
-        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression): Symbol | undefined {
-            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, Diagnostics.Cannot_find_module_0);
+        function resolveExternalModuleName(location: Node, moduleReferenceExpression: Expression, ignoreErrors?: boolean): Symbol | undefined {
+            return resolveExternalModuleNameWorker(location, moduleReferenceExpression, ignoreErrors ? undefined : Diagnostics.Cannot_find_module_0);
         }
 
         function resolveExternalModuleNameWorker(location: Node, moduleReferenceExpression: Expression, moduleNotFoundError: DiagnosticMessage | undefined, isForAugmentation = false): Symbol | undefined {
@@ -2601,7 +2601,7 @@ namespace ts {
                 // Try to make an import using an import already in the enclosing file, if possible
                 for (const importRef of containingFile.imports) {
                     if (nodeIsSynthesized(importRef)) continue; // Synthetic names can't be resolved by `resolveExternalModuleName` - they'll cause a debug assert if they error
-                    const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef);
+                    const resolvedModule = resolveExternalModuleName(enclosingDeclaration, importRef, /*ignoreErrors*/ true);
                     if (!resolvedModule) continue;
                     const ref = getAliasForSymbolInContainer(resolvedModule, symbol);
                     if (!ref) continue;
