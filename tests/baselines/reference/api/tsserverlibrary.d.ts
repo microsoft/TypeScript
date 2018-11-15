@@ -8437,11 +8437,17 @@ declare namespace ts.server {
     }
     interface FileStats {
         readonly js: number;
+        readonly jsSize?: number;
         readonly jsx: number;
+        readonly jsxSize?: number;
         readonly ts: number;
+        readonly tsSize?: number;
         readonly tsx: number;
+        readonly tsxSize?: number;
         readonly dts: number;
+        readonly dtsSize?: number;
         readonly deferred: number;
+        readonly deferredSize?: number;
     }
     interface OpenFileInfo {
         readonly checkJs: boolean;
