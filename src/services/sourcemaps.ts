@@ -18,9 +18,7 @@ namespace ts {
         log(s: string): void;
     }
 
-    export function getSourceMapper(
-        host: SourceMapperHost
-    ): SourceMapper {
+    export function getSourceMapper(host: SourceMapperHost): SourceMapper {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         const currentDirectory = host.getCurrentDirectory();
         const sourceFileLike = createMap<SourceFileLike | false>();
@@ -94,9 +92,12 @@ namespace ts {
         }
 
         function tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined {
-            const program = host.getProgram();
-            if (!program) return undefined;
+            if (isDeclarationFileName(info.fileName)) return undefined;
 
+            const sourceFile = getSourceFile(info.fileName);
+            if (!sourceFile) return undefined;
+
+            const program = host.getProgram()!;
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;
 
@@ -114,7 +115,12 @@ namespace ts {
 
         function getSourceFile(fileName: string) {
             const program = host.getProgram();
-            return program && program.getSourceFileByPath(toPath(fileName));
+            if (!program) return undefined;
+
+            const path = toPath(fileName);
+            // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
+            const file = program.getSourceFileByPath(path);
+            return file && file.resolvedPath === path ? file : undefined;
         }
 
         function getSourceFileLikeFromCache(fileName: string): SourceFileLike | undefined {
@@ -143,9 +149,7 @@ namespace ts {
 
         // This can be called from source mapper in either source program or program that includes generated file
         function getSourceFileLike(fileName: string) {
-            const sourceFile = getSourceFile(fileName);
-            // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
-            return sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getSourceFileLikeFromCache(fileName);
+            return getSourceFile(fileName) || getSourceFileLikeFromCache(fileName);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
