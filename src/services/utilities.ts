@@ -1212,6 +1212,7 @@ namespace ts {
 
     export const typeKeywords: ReadonlyArray<SyntaxKind> = [
         SyntaxKind.AnyKeyword,
+        SyntaxKind.BigIntKeyword,
         SyntaxKind.BooleanKeyword,
         SyntaxKind.FalseKeyword,
         SyntaxKind.KeyOfKeyword,

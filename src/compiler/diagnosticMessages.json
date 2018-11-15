@@ -4788,8 +4788,16 @@
         "category": "Message",
         "code": 95070
     },
-    "Add names to all parameters without names": {
+    "Add missing 'new' operator to call": {
         "category": "Message",
         "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
+    },
+    "Add names to all parameters without names": {
+        "category": "Message",
+        "code": 95073
     }
 }
