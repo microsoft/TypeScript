@@ -32,11 +32,20 @@ namespace ts.codefix {
         const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
         let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
-        const newProps: ObjectLiteralElementLike[] = nonExistingProps.map(symbol => {
+        const newProps: ObjectLiteralElementLike[] = getNewMembers(nonExistingProps, checker, objLiteral);
+
+        a = textChanges.ChangeTracker.with(context, t => {
+            newProps.forEach(pa => t.insertNodeAtObjectStart(context.sourceFile, objLiteral, pa!));
+        });
+
+        return [createCodeFixAction(fixId, a, [Diagnostics.Implement_interface_0, str], fixId, Diagnostics.Implement_all_unimplemented_interfaces)];
+    }
+
+    function getNewMembers(symbols: Symbol[], checker: TypeChecker, objLiteral: ObjectLiteralExpression): ObjectLiteralElementLike[] {
+        return symbols.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
             const typeNode = checker.typeToTypeNode(type, objLiteral)!;
-
-            // TODO stub other ObjectLiterals (aka Recursion)
+            
             // TODO intersection types
 
             let kind = typeNode.kind;
@@ -44,8 +53,6 @@ namespace ts.codefix {
             if (isUnionTypeNode(typeNode)) {
                 kind = typeNode.types[0].kind;
             }
-
-            str = kind.toString();
 
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
@@ -83,7 +90,6 @@ namespace ts.codefix {
                     );
 
                 case SyntaxKind.TypeReference:
-                    //     return createPropertyAssignment(symbol.name, createNull());
 
                     const de = symbol.declarations[0] as PropertySignature;
                     const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
@@ -92,23 +98,15 @@ namespace ts.codefix {
                 case SyntaxKind.TypeLiteral:
                     const te = checker.getTypeAtLocation(symbol.declarations[0]);
                     const neuvoP: Symbol[] = checker.getPropertiesOfType(te);
-                    str = neuvoP.map(e => e.name.toString()).reduce((acc, val) => acc + " " + val);
 
-                    // TODO call function -> ObjectLiteralElementLike[]
-                    // TOOD create new ObjectLiteral
-                    // TODO do changeTracker forEach on new ObjectLiteral
+                    const neuvoStubbed = getNewMembers(neuvoP, checker, objLiteral);
+                    const subObjLiteral = createObjectLiteral(neuvoStubbed, /* multiline */ true);
 
-                    return createPropertyAssignment(symbol.name, createArrayLiteral());
+                    return createPropertyAssignment(symbol.name, subObjLiteral);
                 default:
                     return undefined;
             }
         }).filter(pa => pa !== undefined).map(p => p!);
-
-        a = textChanges.ChangeTracker.with(context, t => {
-            newProps.forEach(pa => t.insertNodeAtObjectStart(context.sourceFile, objLiteral, pa!));
-        });
-
-        return [createCodeFixAction(fixId, a, [Diagnostics.Implement_interface_0, str], fixId, Diagnostics.Implement_all_unimplemented_interfaces)];
     }
 
     function getAllCodeActions(context: CodeFixAllContext): CombinedCodeActions {
