@@ -53,6 +53,13 @@ namespace ts.codefix {
                 kind = typeNode.types[0].kind;
             }
 
+            if (kind === SyntaxKind.TypeReference) {
+                const tInterface = checker.getTypeAtLocation(symbol.declarations[0]);
+                if (tInterface.isClassOrInterface() && !tInterface.isClass()) {
+                    kind = SyntaxKind.TypeLiteral;
+                }
+            }
+
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.StringKeyword:
