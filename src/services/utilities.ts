@@ -246,6 +246,10 @@ namespace ts {
         return isLabelOfLabeledStatement(node) || isJumpStatementTarget(node);
     }
 
+    export function isTagName(node: Node): boolean {
+        return isJSDocTag(node.parent) && node.parent.tagName === node;
+    }
+
     export function isRightSideOfQualifiedName(node: Node) {
         return node.parent.kind === SyntaxKind.QualifiedName && (<QualifiedName>node.parent).right === node;
     }

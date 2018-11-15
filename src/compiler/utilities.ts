@@ -6841,7 +6841,7 @@ namespace ts {
 
     // TODO: determine what this does before making it public.
     /* @internal */
-    export function isJSDocTag(node: Node): boolean {
+    export function isJSDocTag(node: Node): node is JSDocTag {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
