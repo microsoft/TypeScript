@@ -9,15 +9,21 @@ namespace ts {
         clearCache(): void;
     }
 
+    export interface SourceMapperHost {
+        useCaseSensitiveFileNames(): boolean;
+        getCurrentDirectory(): string;
+        getProgram(): Program | undefined;
+        fileExists(path: string): boolean;
+        readFile(path: string, encoding?: string): string | undefined;
+        log(s: string): void;
+    }
+
     export function getSourceMapper(
-        useCaseSensitiveFileNames: boolean,
-        currentDirectory: string,
-        log: (message: string) => void,
-        host: LanguageServiceHost,
-        getProgram: () => Program,
+        host: SourceMapperHost
     ): SourceMapper {
-        const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
-        let sourcemappedFileCache: SourceFileLikeCache;
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        const currentDirectory = host.getCurrentDirectory();
+        const generatedFileCache = createMap<SourceFileLike | false>();
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
         function toPath(fileName: string) {
@@ -25,7 +31,7 @@ namespace ts {
         }
 
         function scanForSourcemapURL(fileName: string) {
-            const mappedFile = sourcemappedFileCache.get(toPath(fileName));
+            const mappedFile = generatedFileCache.get(toPath(fileName));
             if (!mappedFile) {
                 return;
             }
@@ -41,26 +47,13 @@ namespace ts {
             }
 
             return file.sourceMapper = createDocumentPositionMapper({
-                getSourceFileLike: s => {
-                    const program = getProgram();
-                    // Lookup file in program, if provided
-                    const file = program && program.getSourceFileByPath(s);
-                    // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
-                    if (file === undefined || file.resolvedPath !== s) {
-                        // Otherwise check the cache (which may hit disk)
-                        return sourcemappedFileCache.get(s);
-                    }
-                    return file;
-                },
+                getSourceFileLike,
                 getCanonicalFileName,
-                log,
+                log: s => host.log(s),
             }, map, mapFileName);
         }
 
         function getSourceMapper(fileName: string, file: SourceFileLike): DocumentPositionMapper {
-            if (!host.readFile || !host.fileExists) {
-                return file.sourceMapper = identitySourceMapConsumer;
-            }
             if (file.sourceMapper) {
                 return file.sourceMapper;
             }
@@ -101,7 +94,9 @@ namespace ts {
         }
 
         function tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined {
-            const program = getProgram();
+            const program = host.getProgram();
+            if (!program) return undefined;
+
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;
 
@@ -118,49 +113,47 @@ namespace ts {
         }
 
         function getSourceFile(fileName: string) {
-            const program = getProgram();
+            const program = host.getProgram();
             return program && program.getSourceFileByPath(toPath(fileName));
         }
 
-        function getGeneratedFile(fileName: string) {
-            return sourcemappedFileCache.get(toPath(fileName)); // TODO: should ask host instead?
+        function getGeneratedFile(fileName: string): SourceFileLike | undefined {
+            const path = toPath(fileName);
+            const fileFromCache = generatedFileCache.get(path);
+            if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
+
+            // TODO: should ask host instead?
+            if (!host.fileExists(path)) {
+                generatedFileCache.set(path, false);
+                return undefined;
+            }
+
+            // And failing that, check the disk
+            const text = host.readFile(path);
+            const file: SourceFileLike | false = text ? {
+                text,
+                lineMap: undefined,
+                getLineAndCharacterOfPosition(pos: number) {
+                    return computeLineAndCharacterOfPosition(getLineStarts(this as SourceFileLike), pos);
+                }
+            } : false;
+            generatedFileCache.set(path, file);
+            return file ? file : undefined;
+        }
+
+        function getSourceFileLike(fileName: string) {
+            const sourceFile = getSourceFile(fileName);
+            // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
+            return sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getGeneratedFile(fileName);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
-            const sourceFile = getSourceFile(fileName);
-            const file = sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getGeneratedFile(fileName)!; // TODO: GH#18217
+            const file = getSourceFileLike(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
 
         function clearCache(): void {
-            sourcemappedFileCache = createSourceFileLikeCache(host);
+            generatedFileCache.clear();
         }
-    }
-
-    interface SourceFileLikeCache {
-        get(path: Path): SourceFileLike | undefined;
-    }
-
-    function createSourceFileLikeCache(host: { readFile?: (path: string) => string | undefined, fileExists?: (path: string) => boolean }): SourceFileLikeCache {
-        const cached = createMap<SourceFileLike>();
-        return {
-            get(path: Path) {
-                if (cached.has(path)) {
-                    return cached.get(path);
-                }
-                if (!host.fileExists || !host.readFile || !host.fileExists(path)) return;
-                // And failing that, check the disk
-                const text = host.readFile(path)!; // TODO: GH#18217
-                const file = {
-                    text,
-                    lineMap: undefined,
-                    getLineAndCharacterOfPosition(pos: number) {
-                        return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
-                    }
-                } as SourceFileLike;
-                cached.set(path, file);
-                return file;
-            }
-        };
     }
 }

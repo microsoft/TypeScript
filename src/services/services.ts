@@ -1139,7 +1139,14 @@ namespace ts {
         const useCaseSensitiveFileNames = hostUsesCaseSensitiveFileNames(host);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
-        const sourceMapper = getSourceMapper(useCaseSensitiveFileNames, currentDirectory, log, host, () => program);
+        const sourceMapper = getSourceMapper({
+            useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
+            getCurrentDirectory: () => currentDirectory,
+            getProgram,
+            fileExists: host.fileExists ? f => host.fileExists!(f) : returnFalse,
+            readFile: host.readFile ? (f, encoding) => host.readFile!(f, encoding) : () => undefined,
+            log
+        });
 
         function getValidSourceFile(fileName: string): SourceFile {
             const sourceFile = program.getSourceFile(fileName);
@@ -1203,15 +1210,7 @@ namespace ts {
                 writeFile: noop,
                 getCurrentDirectory: () => currentDirectory,
                 fileExists,
-                readFile(fileName) {
-                    // stub missing host functionality
-                    const path = toPath(fileName, currentDirectory, getCanonicalFileName);
-                    const entry = hostCache && hostCache.getEntryByPath(path);
-                    if (entry) {
-                        return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
-                    }
-                    return host.readFile && host.readFile(fileName);
-                },
+                readFile,
                 realpath: host.realpath && (path => host.realpath!(path)),
                 directoryExists: directoryName => {
                     return directoryProbablyExists(directoryName, host);
@@ -1270,6 +1269,16 @@ namespace ts {
                 return entry ?
                     !isString(entry) :
                     (!!host.fileExists && host.fileExists(fileName));
+            }
+
+            function readFile(fileName: string) {
+                // stub missing host functionality
+                const path = toPath(fileName, currentDirectory, getCanonicalFileName);
+                const entry = hostCache && hostCache.getEntryByPath(path);
+                if (entry) {
+                    return isString(entry) ? undefined : getSnapshotText(entry.scriptSnapshot);
+                }
+                return host.readFile && host.readFile(fileName);
             }
 
             // Release any files we have acquired in the old program but are
