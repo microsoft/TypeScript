@@ -13632,8 +13632,9 @@ namespace ts {
                     const param = declaration as ParameterDeclaration;
                     if (isIdentifier(param.name) &&
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
-                        resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true)) {
-                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_0_has_no_declared_type_but_is_itself_a_type_so_should_have_a_parameter_name_x_Colon_0, declarationNameToString(param.name));
+                        (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
+                         param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_x_Colon_0, declarationNameToString(param.name));
                         return;
                     }
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?

@@ -1,0 +1,33 @@
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(2,17): error TS7051: Parameter has a name but no type. Did you mean 'x: string'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(2,25): error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,19): error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(3,22): error TS7051: Parameter has a name but no type. Did you mean 'x: number'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,20): error TS7051: Parameter has a name but no type. Did you mean 'x: boolean'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,29): error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,32): error TS7051: Parameter has a name but no type. Did you mean 'x: object'?
+tests/cases/compiler/noImplicitAnyNamelessParameter.ts(4,40): error TS7051: Parameter has a name but no type. Did you mean 'x: undefined'?
+
+
+==== tests/cases/compiler/noImplicitAnyNamelessParameter.ts (8 errors) ====
+    class C { }
+    declare var x: (string, C) => void;
+                    ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: string'?
+                            ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+    declare var y: { (C, number): void };
+                      ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+                         ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: number'?
+    declare var z: { m(boolean, C, object, undefined): void }
+                       ~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: boolean'?
+                                ~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: C'?
+                                   ~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: object'?
+                                           ~~~~~~~~~
+!!! error TS7051: Parameter has a name but no type. Did you mean 'x: undefined'?
+    // note: null and void do not parse correctly without a preceding parameter name
+    
