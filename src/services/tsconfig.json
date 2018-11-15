@@ -45,6 +45,7 @@
         "refactorProvider.ts",
         "codefixes/addConvertToUnknownForNonOverlappingTypes.ts",
         "codefixes/addMissingInvocationForDecorator.ts",
+        "codefixes/addNameToNamelessParameter.ts",
         "codefixes/annotateWithTypeFromJSDoc.ts",
         "codefixes/inferFromUsage.ts",
         "codefixes/convertFunctionToEs6Class.ts",

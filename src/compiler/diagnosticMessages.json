@@ -4512,6 +4512,10 @@
         "category": "Message",
         "code": 90033
     },
+    "Add parameter name": {
+        "category": "Message",
+        "code": 90034
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -4752,7 +4756,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4784,5 +4787,9 @@
     "Add 'unknown' to all conversions of non-overlapping types": {
         "category": "Message",
         "code": 95070
+    },
+    "Add names to all parameters without names": {
+        "category": "Message",
+        "code": 95071
     }
 }
