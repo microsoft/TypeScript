@@ -2,13 +2,11 @@
 namespace ts.codefix {
     const errorCodes = [Diagnostics.Type_0_is_not_assignable_to_type_1.code];
     const fixId = "fixObjectLiteralIncorrectlyImplementsInterface";
-    let str = ""
 
     registerCodeFix({
         errorCodes,
         getCodeActions,
-        fixIds: [fixId],
-        getAllCodeActions
+        fixIds: [fixId]
     });
 
     function getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined {
@@ -30,7 +28,6 @@ namespace ts.codefix {
         const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
 
         const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
-        str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
         const newProps: ObjectLiteralElementLike[] = getNewMembers(nonExistingProps, checker, objLiteral);
 
@@ -38,7 +35,7 @@ namespace ts.codefix {
             newProps.forEach(pa => t.insertNodeAtObjectStart(context.sourceFile, objLiteral, pa!));
         });
 
-        return [createCodeFixAction(fixId, a, [Diagnostics.Implement_interface_0, str], fixId, Diagnostics.Implement_all_unimplemented_interfaces)];
+        return [createCodeFixActionNoFixId(fixId, a, [Diagnostics.Implement_interface_0, parent.type.getText()])];
     }
 
     function getNewMembers(symbols: Symbol[], checker: TypeChecker, objLiteral: ObjectLiteralExpression): ObjectLiteralElementLike[] {
@@ -129,12 +126,6 @@ namespace ts.codefix {
                     return undefined;
             }
         }).filter(pa => pa !== undefined).map(p => p!);
-    }
-
-    function getAllCodeActions(context: CodeFixAllContext): CombinedCodeActions {
-        return codeFixAll(context, errorCodes, () => {
-            //
-        });
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
