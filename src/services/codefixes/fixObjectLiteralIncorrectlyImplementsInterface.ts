@@ -23,8 +23,7 @@ namespace ts.codefix {
         if (!isVariableDeclaration(parent) || !parent.type || !parent.initializer || !isObjectLiteralExpression(parent.initializer)) return undefined;
         const objLiteral: ObjectLiteralExpression = parent.initializer;
 
-        // const interfaceName = parent.type;
-        const implementedType = checker.getTypeAtLocation(parent) as InterfaceType;
+        const implementedType = checker.getTypeAtLocation(parent);
         const props: Symbol[] = checker.getPropertiesOfType(implementedType);
 
         const existingMem = objLiteral.symbol.members;
@@ -111,9 +110,17 @@ namespace ts.codefix {
                     return createPropertyAssignment(symbol.name, subObjLiteral);
 
                 case SyntaxKind.IntersectionType:
-                    const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType
-                    const intersectedProps = intersectedTyped.types.map(t => checker.getPropertiesOfType(t)).reduce((arr, ele) => arr.concat(ele));
+                    let intersectedTypes: Type[]
 
+                    if (symbol.declarations.length === 1){
+                        const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType
+                        intersectedTypes = intersectedTyped.types;
+                    }
+                    else
+                    {
+                        intersectedTypes = symbol.declarations.map(d => checker.getTypeAtLocation(d))
+                    }
+                    const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t)).reduce((arr, ele) => arr.concat(ele));
                     const intersectStubs = getNewMembers(intersectedProps, checker, objLiteral);
                     
                     const interObjLiteral = createObjectLiteral(intersectStubs, /* multiline */ true);
@@ -131,7 +138,7 @@ namespace ts.codefix {
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
-        return !(getModifierFlags(symbol.valueDeclaration) & ModifierFlags.Private);
+        return symbol.declarations.map(d => !(getModifierFlags(d) & ModifierFlags.Private)).reduce((r,l) => r && l);
     }
 
     function symbolPointsToNonNullable(symbol: Symbol): boolean {
