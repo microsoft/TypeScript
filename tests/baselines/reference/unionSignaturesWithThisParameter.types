@@ -3,30 +3,24 @@
 
 function x<T>(ctor: {
 >x : <T>(ctor: { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }, t: T) => void
->T : T
 >ctor : { (this: {}, v: T): void; new (v: T): void; } | { (v: T): void; new (v: T): void; }
 
     (this: {}, v: T): void;
 >this : {}
 >v : T
->T : T
 
     new(v: T): void;
 >v : T
->T : T
 
 } | {
     (v: T): void;
 >v : T
->T : T
 
     new(v: T): void;
 >v : T
->T : T
 
 }, t: T) {
 >t : T
->T : T
 
     new ctor(t);
 >new ctor(t) : void

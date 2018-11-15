@@ -1,5 +1,4 @@
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(25,35): error TS2345: Argument of type '3' is not assignable to parameter of type 'string'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(51,19): error TS2304: Cannot find name 'Window'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(61,39): error TS2345: Argument of type '(x: string) => string' is not assignable to parameter of type '(x: number) => void'.
   Types of parameters 'x' and 'x' are incompatible.
     Type 'number' is not assignable to type 'string'.
@@ -10,15 +9,12 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
   Types of parameters 'n' and 'b' are incompatible.
     Type 'number' is not assignable to type 'string'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(106,33): error TS2345: Argument of type '0' is not assignable to parameter of type '""'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(118,9): error TS2304: Cannot find name 'Window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(120,51): error TS2304: Cannot find name 'window'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(121,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
-tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,56): error TS2304: Cannot find name 'window'.
+tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(121,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
 tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts(122,74): error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.
 
 
-==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts (11 errors) ====
+==== tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstructSignatures.ts (7 errors) ====
     // Generic call with no parameters
     interface NoParams {
         new <T>();
@@ -72,8 +68,6 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     var someGenerics3: someGenerics3;
     new someGenerics3(() => '');
     new someGenerics3<Window>(() => undefined);
-                      ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     new someGenerics3<number>(() => 3);
     
     // 2 parameter generic call with argument 1 of type parameter type and argument 2 of function type whose parameter is of type parameter type
@@ -155,18 +149,12 @@ tests/cases/conformance/expressions/functionCalls/typeArgumentInferenceConstruct
     interface A92 {
         x: number;
         z?: Window;
-            ~~~~~~
-!!! error TS2304: Cannot find name 'Window'.
     }
     var a9e = new someGenerics9(undefined, { x: 6, z: window }, { x: 6, y: '' });
-                                                      ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
     var a9e: {};
         ~~~
-!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: any; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
+!!! error TS2403: Subsequent variable declarations must have the same type.  Variable 'a9e' must be of type '{ x: number; z: Window; y?: undefined; } | { x: number; y: string; z?: undefined; }', but here has type '{}'.
     var a9f = new someGenerics9<A92>(undefined, { x: 6, z: window }, { x: 6, y: '' });
-                                                           ~~~~~~
-!!! error TS2304: Cannot find name 'window'.
                                                                              ~~~~~
 !!! error TS2345: Argument of type '{ x: number; y: string; }' is not assignable to parameter of type 'A92'.
 !!! error TS2345:   Object literal may only specify known properties, and 'y' does not exist in type 'A92'.

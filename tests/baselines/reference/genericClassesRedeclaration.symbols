@@ -262,34 +262,34 @@ declare module TypeScript {
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 5, 25), Decl(genericClassesRedeclaration.ts, 44, 25))
     }
     class StringHashTable<T> implements IHashTable<T> {
->StringHashTable : Symbol(TypeScript.StringHashTable, Decl(genericClassesRedeclaration.ts, 53, 5))
+>StringHashTable : Symbol(StringHashTable, Decl(genericClassesRedeclaration.ts, 53, 5))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 54, 26))
 >IHashTable : Symbol(IHashTable, Decl(genericClassesRedeclaration.ts, 4, 56), Decl(genericClassesRedeclaration.ts, 43, 56))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 54, 26))
 
         private itemCount;
->itemCount : Symbol(TypeScript.StringHashTable.itemCount, Decl(genericClassesRedeclaration.ts, 54, 55))
+>itemCount : Symbol(StringHashTable.itemCount, Decl(genericClassesRedeclaration.ts, 54, 55))
 
         private table;
->table : Symbol(TypeScript.StringHashTable.table, Decl(genericClassesRedeclaration.ts, 55, 26))
+>table : Symbol(StringHashTable.table, Decl(genericClassesRedeclaration.ts, 55, 26))
 
         public getAllKeys(): string[];
->getAllKeys : Symbol(TypeScript.StringHashTable.getAllKeys, Decl(genericClassesRedeclaration.ts, 56, 22))
+>getAllKeys : Symbol(StringHashTable.getAllKeys, Decl(genericClassesRedeclaration.ts, 56, 22))
 
         public add(key: string, data: T): boolean;
->add : Symbol(TypeScript.StringHashTable.add, Decl(genericClassesRedeclaration.ts, 57, 38))
+>add : Symbol(StringHashTable.add, Decl(genericClassesRedeclaration.ts, 57, 38))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 58, 19))
 >data : Symbol(data, Decl(genericClassesRedeclaration.ts, 58, 31))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 54, 26))
 
         public addOrUpdate(key: string, data: T): boolean;
->addOrUpdate : Symbol(TypeScript.StringHashTable.addOrUpdate, Decl(genericClassesRedeclaration.ts, 58, 50))
+>addOrUpdate : Symbol(StringHashTable.addOrUpdate, Decl(genericClassesRedeclaration.ts, 58, 50))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 59, 27))
 >data : Symbol(data, Decl(genericClassesRedeclaration.ts, 59, 39))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 54, 26))
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
->map : Symbol(TypeScript.StringHashTable.map, Decl(genericClassesRedeclaration.ts, 59, 58))
+>map : Symbol(StringHashTable.map, Decl(genericClassesRedeclaration.ts, 59, 58))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 60, 19))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 60, 24))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 60, 34))
@@ -298,7 +298,7 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 60, 67))
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
->every : Symbol(TypeScript.StringHashTable.every, Decl(genericClassesRedeclaration.ts, 60, 88))
+>every : Symbol(StringHashTable.every, Decl(genericClassesRedeclaration.ts, 60, 88))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 61, 21))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 61, 26))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 61, 36))
@@ -307,7 +307,7 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 61, 69))
 
         public some(fn: (k: string, value: T, context: any) => void, context: any): boolean;
->some : Symbol(TypeScript.StringHashTable.some, Decl(genericClassesRedeclaration.ts, 61, 93))
+>some : Symbol(StringHashTable.some, Decl(genericClassesRedeclaration.ts, 61, 93))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 62, 20))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 62, 25))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 62, 35))
@@ -316,40 +316,40 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 62, 68))
 
         public count(): number;
->count : Symbol(TypeScript.StringHashTable.count, Decl(genericClassesRedeclaration.ts, 62, 92))
+>count : Symbol(StringHashTable.count, Decl(genericClassesRedeclaration.ts, 62, 92))
 
         public lookup(key: string): T;
->lookup : Symbol(TypeScript.StringHashTable.lookup, Decl(genericClassesRedeclaration.ts, 63, 31))
+>lookup : Symbol(StringHashTable.lookup, Decl(genericClassesRedeclaration.ts, 63, 31))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 64, 22))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 54, 26))
 
         public remove(key: string): void;
->remove : Symbol(TypeScript.StringHashTable.remove, Decl(genericClassesRedeclaration.ts, 64, 38))
+>remove : Symbol(StringHashTable.remove, Decl(genericClassesRedeclaration.ts, 64, 38))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 65, 22))
     }
     class IdentiferNameHashTable<T> extends StringHashTable<T> {
->IdentiferNameHashTable : Symbol(TypeScript.IdentiferNameHashTable, Decl(genericClassesRedeclaration.ts, 66, 5))
+>IdentiferNameHashTable : Symbol(IdentiferNameHashTable, Decl(genericClassesRedeclaration.ts, 66, 5))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 67, 33))
 >StringHashTable : Symbol(StringHashTable, Decl(genericClassesRedeclaration.ts, 14, 5))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 67, 33))
 
         public getAllKeys(): string[];
->getAllKeys : Symbol(TypeScript.IdentiferNameHashTable.getAllKeys, Decl(genericClassesRedeclaration.ts, 67, 64))
+>getAllKeys : Symbol(IdentiferNameHashTable.getAllKeys, Decl(genericClassesRedeclaration.ts, 67, 64))
 
         public add(key: string, data: T): boolean;
->add : Symbol(TypeScript.IdentiferNameHashTable.add, Decl(genericClassesRedeclaration.ts, 68, 38))
+>add : Symbol(IdentiferNameHashTable.add, Decl(genericClassesRedeclaration.ts, 68, 38))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 69, 19))
 >data : Symbol(data, Decl(genericClassesRedeclaration.ts, 69, 31))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 67, 33))
 
         public addOrUpdate(key: string, data: T): boolean;
->addOrUpdate : Symbol(TypeScript.IdentiferNameHashTable.addOrUpdate, Decl(genericClassesRedeclaration.ts, 69, 50))
+>addOrUpdate : Symbol(IdentiferNameHashTable.addOrUpdate, Decl(genericClassesRedeclaration.ts, 69, 50))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 70, 27))
 >data : Symbol(data, Decl(genericClassesRedeclaration.ts, 70, 39))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 67, 33))
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
->map : Symbol(TypeScript.IdentiferNameHashTable.map, Decl(genericClassesRedeclaration.ts, 70, 58))
+>map : Symbol(IdentiferNameHashTable.map, Decl(genericClassesRedeclaration.ts, 70, 58))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 71, 19))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 71, 24))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 71, 34))
@@ -358,7 +358,7 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 71, 67))
 
         public every(fn: (k: string, value: T, context: any) => void, context: any): boolean;
->every : Symbol(TypeScript.IdentiferNameHashTable.every, Decl(genericClassesRedeclaration.ts, 71, 88))
+>every : Symbol(IdentiferNameHashTable.every, Decl(genericClassesRedeclaration.ts, 71, 88))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 72, 21))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 72, 26))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 72, 36))
@@ -367,7 +367,7 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 72, 69))
 
         public some(fn: (k: string, value: any, context: any) => void, context: any): boolean;
->some : Symbol(TypeScript.IdentiferNameHashTable.some, Decl(genericClassesRedeclaration.ts, 72, 93))
+>some : Symbol(IdentiferNameHashTable.some, Decl(genericClassesRedeclaration.ts, 72, 93))
 >fn : Symbol(fn, Decl(genericClassesRedeclaration.ts, 73, 20))
 >k : Symbol(k, Decl(genericClassesRedeclaration.ts, 73, 25))
 >value : Symbol(value, Decl(genericClassesRedeclaration.ts, 73, 35))
@@ -375,7 +375,7 @@ declare module TypeScript {
 >context : Symbol(context, Decl(genericClassesRedeclaration.ts, 73, 70))
 
         public lookup(key: string): T;
->lookup : Symbol(TypeScript.IdentiferNameHashTable.lookup, Decl(genericClassesRedeclaration.ts, 73, 94))
+>lookup : Symbol(IdentiferNameHashTable.lookup, Decl(genericClassesRedeclaration.ts, 73, 94))
 >key : Symbol(key, Decl(genericClassesRedeclaration.ts, 74, 22))
 >T : Symbol(T, Decl(genericClassesRedeclaration.ts, 67, 33))
     }

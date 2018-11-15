@@ -1,0 +1,78 @@
+=== tests/cases/conformance/jsdoc/use.js ===
+var mod = require('./mod1.js');
+>mod : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>require('./mod1.js') : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>require : any
+>'./mod1.js' : "./mod1.js"
+
+/** @type {import("./mod1.js").Baz} */
+var b;
+>b : number
+
+/** @type {mod.Baz} */
+var bb;
+>bb : number
+
+var bbb = new mod.Baz();
+>bbb : any
+>new mod.Baz() : any
+>mod.Baz : any
+>mod : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>Baz : any
+
+=== tests/cases/conformance/jsdoc/mod1.js ===
+// error
+
+/** @typedef {number} Foo */
+class Foo { } // should error
+>Foo : Foo
+
+/** @typedef {number} Bar */
+exports.Bar = class { }
+>exports.Bar = class { } : typeof Bar
+>exports.Bar : typeof Bar
+>exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>Bar : typeof Bar
+>class { } : typeof Bar
+
+/** @typedef {number} Baz */
+module.exports = {
+>module.exports = {    Baz: class { }} : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>module.exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>module : { "tests/cases/conformance/jsdoc/mod1": { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }; }
+>exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>{    Baz: class { }} : { Baz: typeof Baz; }
+
+    Baz: class { }
+>Baz : typeof Baz
+>class { } : typeof Baz
+}
+
+// ok
+
+/** @typedef {number} Qux */
+var Qux = 2;
+>Qux : number
+>2 : 2
+
+/** @typedef {number} Quid */
+exports.Quid = 2;
+>exports.Quid = 2 : 2
+>exports.Quid : any
+>exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>Quid : any
+>2 : 2
+
+/** @typedef {number} Quack */
+module.exports = {
+>module.exports = {    Quack: 2} : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>module.exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>module : { "tests/cases/conformance/jsdoc/mod1": { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }; }
+>exports : { Baz: any; Bar: typeof Bar; Quid: any; } | { Quack: any; Bar: typeof Bar; Quid: any; }
+>{    Quack: 2} : { Quack: number; }
+
+    Quack: 2
+>Quack : number
+>2 : 2
+}
+

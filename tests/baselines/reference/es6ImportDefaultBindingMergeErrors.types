@@ -11,7 +11,6 @@ import defaultBinding from "./es6ImportDefaultBindingMergeErrors_0";
 >defaultBinding : number
 
 interface defaultBinding { // This is ok
->defaultBinding : defaultBinding
 }
 var x = defaultBinding;
 >x : number

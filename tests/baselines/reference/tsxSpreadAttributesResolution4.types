@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface PoisonedProp {
->PoisonedProp : PoisonedProp
-
     x: string;
 >x : string
 
@@ -17,7 +15,6 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >React.Component : React.Component<PoisonedProp, {}>
 >React : typeof React
 >Component : typeof React.Component
->PoisonedProp : PoisonedProp
 
     render() {
 >render : () => JSX.Element
@@ -31,7 +28,6 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 
 const obj: PoisonedProp = {
 >obj : PoisonedProp
->PoisonedProp : PoisonedProp
 >{    x: "hello world",    y: 2} : { x: string; y: 2; }
 
     x: "hello world",
@@ -108,5 +104,6 @@ let e5 = <EmptyProp {...{ "data-prop": true}} />
 ><EmptyProp {...{ "data-prop": true}} /> : JSX.Element
 >EmptyProp : typeof EmptyProp
 >{ "data-prop": true} : { "data-prop": boolean; }
+>"data-prop" : boolean
 >true : true
 

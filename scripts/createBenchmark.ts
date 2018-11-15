@@ -32,7 +32,7 @@ sourceFiles.forEach(f=> {
 });
 var compilerSoruces = `var compilerSources = ${JSON.stringify(rawCompilerSources) };`;
 
-// .js code for the compiler, what we are actuallty testing
+// .js code for the compiler, what we are actually testing
 var rawCompilerJavaScript = fs.readFileSync(path.join(tsBuildDir, "tsc.js")).toString();
 rawCompilerJavaScript = rawCompilerJavaScript.replace("ts.executeCommandLine(ts.sys.args);", "");
 

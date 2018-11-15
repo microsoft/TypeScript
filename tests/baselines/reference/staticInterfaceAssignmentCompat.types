@@ -4,7 +4,6 @@ class Shape {
 
     static create(): Shape {
 >create : () => Shape
->Shape : Shape
 
         return new Shape();
 >new Shape() : Shape
@@ -13,15 +12,11 @@ class Shape {
 }
 
 interface ShapeFactory {
->ShapeFactory : ShapeFactory
-
     create(): Shape;
 >create : () => Shape
->Shape : Shape
 }
 
 var x: ShapeFactory = Shape;
 >x : ShapeFactory
->ShapeFactory : ShapeFactory
 >Shape : typeof Shape
 

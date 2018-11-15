@@ -13,7 +13,7 @@ const enum E {
 >E : E
 
     V = 100
->V : E
+>V : E.V
 >100 : 100
 }
 

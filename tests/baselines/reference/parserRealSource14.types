@@ -71,7 +71,6 @@ module TypeScript {
         public asts: TypeScript.AST[] = [];
 >asts : any[]
 >TypeScript : any
->AST : No type information available!
 >[] : undefined[]
 
         public top: number = -1;
@@ -110,7 +109,6 @@ module TypeScript {
 
         public clone(): AstPath {
 >clone : () => AstPath
->AstPath : AstPath
 
             var clone = new AstPath();
 >clone : AstPath
@@ -148,7 +146,6 @@ module TypeScript {
         public pop(): TypeScript.AST {
 >pop : () => any
 >TypeScript : any
->AST : No type information available!
 
             var head = this.ast();
 >head : any
@@ -191,7 +188,6 @@ module TypeScript {
 >push : (ast: any) => void
 >ast : any
 >TypeScript : any
->AST : No type information available!
 
             while (this.asts.length > this.count()) {
 >this.asts.length > this.count() : boolean
@@ -288,7 +284,6 @@ module TypeScript {
         public nodeType(): TypeScript.NodeType {
 >nodeType : () => any
 >TypeScript : any
->NodeType : No type information available!
 
             if (this.ast() == null)
 >this.ast() == null : boolean
@@ -320,7 +315,6 @@ module TypeScript {
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1));
 ><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
 >TypeScript : any
->AST : No type information available!
 >AstPath.reverseIndexOf(this.asts, this.asts.length - (this.top + 1)) : any
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
 >AstPath : typeof AstPath
@@ -348,7 +342,6 @@ module TypeScript {
             return <TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top);
 ><TypeScript.AST>AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
 >TypeScript : any
->AST : No type information available!
 >AstPath.reverseIndexOf(this.asts, this.asts.length - this.top) : any
 >AstPath.reverseIndexOf : (items: any[], index: number) => any
 >AstPath : typeof AstPath
@@ -382,7 +375,6 @@ module TypeScript {
 >get : (index: number) => any
 >index : number
 >TypeScript : any
->AST : No type information available!
 
             return this.asts[index];
 >this.asts[index] : any
@@ -452,7 +444,6 @@ module TypeScript {
 >(<TypeScript.InterfaceDeclaration>this.parent()) : any
 ><TypeScript.InterfaceDeclaration>this.parent() : any
 >TypeScript : any
->InterfaceDeclaration : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -524,7 +515,6 @@ module TypeScript {
 >(<TypeScript.InterfaceDeclaration>this.parent()) : any
 ><TypeScript.InterfaceDeclaration>this.parent() : any
 >TypeScript : any
->InterfaceDeclaration : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -596,7 +586,6 @@ module TypeScript {
 >(<TypeScript.ArgDecl>this.parent()) : any
 ><TypeScript.ArgDecl>this.parent() : any
 >TypeScript : any
->ArgDecl : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -668,7 +657,6 @@ module TypeScript {
 >(<TypeScript.VarDecl>this.parent()) : any
 ><TypeScript.VarDecl>this.parent() : any
 >TypeScript : any
->VarDecl : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -740,7 +728,6 @@ module TypeScript {
 >(<TypeScript.ModuleDeclaration>this.parent()) : any
 ><TypeScript.ModuleDeclaration>this.parent() : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -812,7 +799,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.parent()) : any
 ><TypeScript.FuncDecl>this.parent() : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.parent() : any
 >this.parent : () => any
 >this : this
@@ -1160,7 +1146,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
 ><TypeScript.FuncDecl>this.asts[this.top - 2] : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -1179,7 +1164,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
 ><TypeScript.FuncDecl>this.asts[this.top - 2] : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -1207,7 +1191,6 @@ module TypeScript {
 >(<TypeScript.ClassDeclaration>this.asts[this.top - 4]) : any
 ><TypeScript.ClassDeclaration>this.asts[this.top - 4] : any
 >TypeScript : any
->ClassDeclaration : No type information available!
 >this.asts[this.top - 4] : any
 >this.asts : any[]
 >this : this
@@ -1340,7 +1323,6 @@ module TypeScript {
 >(<TypeScript.ModuleDeclaration>this.asts[this.top]) : any
 ><TypeScript.ModuleDeclaration>this.asts[this.top] : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >this.asts[this.top] : any
 >this.asts : any[]
 >this : this
@@ -1415,7 +1397,6 @@ module TypeScript {
 >(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
 ><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1445,7 +1426,6 @@ module TypeScript {
 >(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
 ><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1501,7 +1481,6 @@ module TypeScript {
 >(<TypeScript.Script>this.asts[this.top - 1]) : any
 ><TypeScript.Script>this.asts[this.top - 1] : any
 >TypeScript : any
->Script : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1561,7 +1540,6 @@ module TypeScript {
 >(<TypeScript.SwitchStatement>this.asts[this.top - 1]) : any
 ><TypeScript.SwitchStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->SwitchStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1621,7 +1599,6 @@ module TypeScript {
 >(<TypeScript.ModuleDeclaration>this.asts[this.top - 1]) : any
 ><TypeScript.ModuleDeclaration>this.asts[this.top - 1] : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1681,7 +1658,6 @@ module TypeScript {
 >(<TypeScript.ClassDeclaration>this.asts[this.top - 1]) : any
 ><TypeScript.ClassDeclaration>this.asts[this.top - 1] : any
 >TypeScript : any
->ClassDeclaration : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1741,7 +1717,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any
 ><TypeScript.FuncDecl>this.asts[this.top - 1] : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1801,7 +1776,6 @@ module TypeScript {
 >(<TypeScript.InterfaceDeclaration>this.asts[this.top - 1]) : any
 ><TypeScript.InterfaceDeclaration>this.asts[this.top - 1] : any
 >TypeScript : any
->InterfaceDeclaration : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1861,7 +1835,6 @@ module TypeScript {
 >(<TypeScript.Block>this.asts[this.top - 1]) : any
 ><TypeScript.Block>this.asts[this.top - 1] : any
 >TypeScript : any
->Block : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1921,7 +1894,6 @@ module TypeScript {
 >(<TypeScript.ForStatement>this.asts[this.top - 1]) : any
 ><TypeScript.ForStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->ForStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -1981,7 +1953,6 @@ module TypeScript {
 >(<TypeScript.CaseStatement>this.asts[this.top - 1]) : any
 ><TypeScript.CaseStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->CaseStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2041,7 +2012,6 @@ module TypeScript {
 >(<TypeScript.Try>this.asts[this.top - 1]) : any
 ><TypeScript.Try>this.asts[this.top - 1] : any
 >TypeScript : any
->Try : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2101,7 +2071,6 @@ module TypeScript {
 >(<TypeScript.Catch>this.asts[this.top - 1]) : any
 ><TypeScript.Catch>this.asts[this.top - 1] : any
 >TypeScript : any
->Catch : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2161,7 +2130,6 @@ module TypeScript {
 >(<TypeScript.DoWhileStatement>this.asts[this.top - 1]) : any
 ><TypeScript.DoWhileStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->DoWhileStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2221,7 +2189,6 @@ module TypeScript {
 >(<TypeScript.WhileStatement>this.asts[this.top - 1]) : any
 ><TypeScript.WhileStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->WhileStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2281,7 +2248,6 @@ module TypeScript {
 >(<TypeScript.ForInStatement>this.asts[this.top - 1]) : any
 ><TypeScript.ForInStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->ForInStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2341,7 +2307,6 @@ module TypeScript {
 >(<TypeScript.WithStatement>this.asts[this.top - 1]) : any
 ><TypeScript.WithStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->WithStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2401,7 +2366,6 @@ module TypeScript {
 >(<TypeScript.Finally>this.asts[this.top - 1]) : any
 ><TypeScript.Finally>this.asts[this.top - 1] : any
 >TypeScript : any
->Finally : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2481,7 +2445,6 @@ module TypeScript {
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
 ><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
 >TypeScript : any
->SwitchStatement : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -2562,7 +2525,6 @@ module TypeScript {
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
 ><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
 >TypeScript : any
->SwitchStatement : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -2589,7 +2551,6 @@ module TypeScript {
 >(<TypeScript.SwitchStatement>this.asts[this.top - 2]) : any
 ><TypeScript.SwitchStatement>this.asts[this.top - 2] : any
 >TypeScript : any
->SwitchStatement : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -2669,7 +2630,6 @@ module TypeScript {
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
 ><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->UnaryExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2760,7 +2720,6 @@ module TypeScript {
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
 ><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->UnaryExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -2788,7 +2747,6 @@ module TypeScript {
 >(<TypeScript.ASTList>this.asts[this.top - 0]) : any
 ><TypeScript.ASTList>this.asts[this.top - 0] : any
 >TypeScript : any
->ASTList : No type information available!
 >this.asts[this.top - 0] : any
 >this.asts : any[]
 >this : this
@@ -2881,7 +2839,6 @@ module TypeScript {
 >(<TypeScript.UnaryExpression>this.asts[this.top - 2]) : any
 ><TypeScript.UnaryExpression>this.asts[this.top - 2] : any
 >TypeScript : any
->UnaryExpression : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -3001,7 +2958,6 @@ module TypeScript {
 >(<TypeScript.UnaryExpression>this.asts[this.top - 3]) : any
 ><TypeScript.UnaryExpression>this.asts[this.top - 3] : any
 >TypeScript : any
->UnaryExpression : No type information available!
 >this.asts[this.top - 3] : any
 >this.asts : any[]
 >this : this
@@ -3081,7 +3037,6 @@ module TypeScript {
 >(<TypeScript.UnaryExpression>this.asts[this.top - 1]) : any
 ><TypeScript.UnaryExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->UnaryExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3141,7 +3096,6 @@ module TypeScript {
 >(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any
 ><TypeScript.BinaryExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->BinaryExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3201,7 +3155,6 @@ module TypeScript {
 >(<TypeScript.BinaryExpression>this.asts[this.top - 1]) : any
 ><TypeScript.BinaryExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->BinaryExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3295,7 +3248,6 @@ module TypeScript {
 >(<TypeScript.IfStatement>this.asts[this.top - 1]) : any
 ><TypeScript.IfStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->IfStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3355,7 +3307,6 @@ module TypeScript {
 >(<TypeScript.IfStatement>this.asts[this.top - 1]) : any
 ><TypeScript.IfStatement>this.asts[this.top - 1] : any
 >TypeScript : any
->IfStatement : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3424,7 +3375,6 @@ module TypeScript {
 >(<TypeScript.ASTList>this.asts[this.top]) : any
 ><TypeScript.ASTList>this.asts[this.top] : any
 >TypeScript : any
->ASTList : No type information available!
 >this.asts[this.top] : any
 >this.asts : any[]
 >this : this
@@ -3495,7 +3445,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.asts[this.top - 1]) : any
 ><TypeScript.FuncDecl>this.asts[this.top - 1] : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3575,7 +3524,6 @@ module TypeScript {
 >(<TypeScript.FuncDecl>this.asts[this.top - 2]) : any
 ><TypeScript.FuncDecl>this.asts[this.top - 2] : any
 >TypeScript : any
->FuncDecl : No type information available!
 >this.asts[this.top - 2] : any
 >this.asts : any[]
 >this : this
@@ -3655,7 +3603,6 @@ module TypeScript {
 >(<TypeScript.CallExpression>this.asts[this.top - 1]) : any
 ><TypeScript.CallExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->CallExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3735,7 +3682,6 @@ module TypeScript {
 >(<TypeScript.CallExpression>this.asts[this.top - 1]) : any
 ><TypeScript.CallExpression>this.asts[this.top - 1] : any
 >TypeScript : any
->CallExpression : No type information available!
 >this.asts[this.top - 1] : any
 >this.asts : any[]
 >this : this
@@ -3795,7 +3741,6 @@ module TypeScript {
 >(<TypeScript.Block>this.asts[this.top - 0]) : any
 ><TypeScript.Block>this.asts[this.top - 0] : any
 >TypeScript : any
->Block : No type information available!
 >this.asts[this.top - 0] : any
 >this.asts : any[]
 >this : this
@@ -3814,7 +3759,6 @@ module TypeScript {
 >isValidAstNode : (ast: any) => boolean
 >ast : any
 >TypeScript : any
->ASTSpan : No type information available!
 
         if (ast === null)
 >ast === null : boolean
@@ -3889,21 +3833,18 @@ module TypeScript {
 >getAstPathToPosition : (script: any, pos: number, options?: GetAstPathOptions) => AstPath
 >script : any
 >TypeScript : any
->AST : No type information available!
 >pos : number
 >options : GetAstPathOptions
 >GetAstPathOptions.Default : GetAstPathOptions
 >GetAstPathOptions : typeof GetAstPathOptions
 >Default : GetAstPathOptions
 >TypeScript : any
->AstPath : AstPath
 
         var lookInComments = (comments: TypeScript.Comment[]) => {
 >lookInComments : (comments: any[]) => void
 >(comments: TypeScript.Comment[]) => {            if (comments && comments.length > 0) {                for (var i = 0; i < comments.length; i++) {                    var minChar = comments[i].minChar;                    var limChar = comments[i].limChar;                    if (!comments[i].isBlockComment) {                        limChar++; // For single line comments, include 1 more character (for the newline)                    }                    if (pos >= minChar && pos < limChar) {                        ctx.path.push(comments[i]);                    }                }            }        } : (comments: any[]) => void
 >comments : any[]
 >TypeScript : any
->Comment : No type information available!
 
             if (comments && comments.length > 0) {
 >comments && comments.length > 0 : boolean
@@ -3982,12 +3923,9 @@ module TypeScript {
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: IAstWalker) {            if (isValidAstNode(cur)) {                // Add "cur" to the stack if it contains our position                // For "identifier" nodes, we need a special case: A position equal to "limChar" is                // valid, since the position corresponds to a caret position (in between characters)                // For example:                //  bar                //  0123                // If "position == 3", the caret is at the "right" of the "r" character, which should be considered valid                var inclusive =                    hasFlag(options, GetAstPathOptions.EdgeInclusive) ||                    cur.nodeType === TypeScript.NodeType.Name ||                    pos === script.limChar; // Special "EOF" case                var minChar = cur.minChar;                var limChar = cur.limChar + (inclusive ? 1 : 0)                if (pos >= minChar && pos < limChar) {                    // TODO: Since AST is sometimes not correct wrt to position, only add "cur" if it's better                    //       than top of the stack.                    var previous = ctx.path.ast();                    if (previous == null || (cur.minChar >= previous.minChar && cur.limChar <= previous.limChar)) {                        ctx.path.push(cur);                    }                    else {                        //logger.log("TODO: Ignoring node because minChar, limChar not better than previous node in stack");                    }                }                // The AST walker skips comments, but we might be in one, so check the pre/post comments for this node manually                if (pos < limChar) {                    lookInComments(cur.preComments);                }                if (pos >= minChar) {                    lookInComments(cur.postComments);                }                if (!hasFlag(options, GetAstPathOptions.DontPruneSearchBasedOnPosition)) {                    // Don't go further down the tree if pos is outside of [minChar, limChar]                    walker.options.goChildren = (minChar <= pos && pos <= limChar);                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
->AST : No type information available!
 >parent : any
 >TypeScript : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
             if (isValidAstNode(cur)) {
 >isValidAstNode(cur) : boolean
@@ -4196,7 +4134,6 @@ module TypeScript {
 >getTokenizationOffset : (script: any, position: number) => number
 >script : any
 >TypeScript : any
->Script : No type information available!
 >position : number
 
         var bestOffset = 0;
@@ -4208,15 +4145,11 @@ module TypeScript {
 >(cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker): TypeScript.AST => {            if (TypeScript.isValidAstNode(cur)) {                // Did we find a closer offset?                if (cur.minChar <= position) {                    bestOffset = max(bestOffset, cur.minChar);                }                // Stop the walk if this node is not related to "minChar"                if (cur.minChar > position || cur.limChar < bestOffset) {                    walker.options.goChildren = false;                }            }            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
->AST : No type information available!
 >parent : any
 >TypeScript : any
->AST : No type information available!
 >walker : any
 >TypeScript : any
->IAstWalker : No type information available!
 >TypeScript : any
->AST : No type information available!
 
             if (TypeScript.isValidAstNode(cur)) {
 >TypeScript.isValidAstNode(cur) : boolean
@@ -4295,31 +4228,24 @@ module TypeScript {
 >walkAST : (ast: any, callback: (path: AstPath, walker: any) => void) => void
 >ast : any
 >TypeScript : any
->AST : No type information available!
 >callback : (path: AstPath, walker: any) => void
 >path : AstPath
->AstPath : AstPath
 >walker : any
 >TypeScript : any
->IAstWalker : No type information available!
 
         var pre = function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {
 >pre : (cur: any, parent: any, walker: any) => any
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.push(cur);            callback(path, walker);            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
->AST : No type information available!
 >parent : any
 >TypeScript : any
->AST : No type information available!
 >walker : any
 >TypeScript : any
->IAstWalker : No type information available!
 
             var path: TypeScript.AstPath = walker.state;
 >path : AstPath
 >TypeScript : any
->AstPath : AstPath
 >walker.state : any
 >walker : any
 >state : any
@@ -4345,18 +4271,14 @@ module TypeScript {
 >function (cur: TypeScript.AST, parent: TypeScript.AST, walker: TypeScript.IAstWalker) {            var path: TypeScript.AstPath = walker.state;            path.pop();            return cur;        } : (cur: any, parent: any, walker: any) => any
 >cur : any
 >TypeScript : any
->AST : No type information available!
 >parent : any
 >TypeScript : any
->AST : No type information available!
 >walker : any
 >TypeScript : any
->IAstWalker : No type information available!
 
             var path: TypeScript.AstPath = walker.state;
 >path : AstPath
 >TypeScript : any
->AstPath : AstPath
 >walker.state : any
 >walker : any
 >state : any

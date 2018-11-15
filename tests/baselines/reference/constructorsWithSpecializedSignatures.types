@@ -63,8 +63,6 @@ class D2 {
 
 // errors
 interface I {
->I : I
-
     new (x: "hi");
 >x : "hi"
 
@@ -77,8 +75,6 @@ interface I {
 
 // ok
 interface I2 {
->I2 : I2
-
     new (x: "hi");
 >x : "hi"
 

@@ -1,9 +1,10 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
-/////*a*/module/*b*/.exports = {
+////module.exports = {
 ////    x: 0,
 ////    f: function() {},
 ////    g: () => {},
@@ -11,12 +12,13 @@
 ////    C: class {},
 ////};
 
-goTo.select("a", "b");
-edit.applyRefactor({
-    refactorName: "Convert to ES6 module",
-    actionName: "Convert to ES6 module",
-    actionDescription: "Convert to ES6 module",
-    newContent: `export const x = 0;
+// @Filename: /b.js
+////const a = require("./a.js");
+
+verify.codeFix({
+    description: "Convert to ES6 module",
+    newFileContent:
+`export const x = 0;
 export function f() { }
 export function g() { }
 export function h() { }

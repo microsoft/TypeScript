@@ -8,7 +8,7 @@
 ////    property: string;
 /////*invalid2*/}
 ////
-////cl/*invalid3*/ass bar imple/*invalid4*/ments IFoo {
+////class bar imple/*invalid4*/ments IFoo {
 ////    constructor(   /*invalid5*/  ) {
 ////
 ////    }

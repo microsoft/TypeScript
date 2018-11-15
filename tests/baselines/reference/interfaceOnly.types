@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaceOnly.ts ===
 interface foo {
->foo : foo
-
     foo();
 >foo : () => any
 

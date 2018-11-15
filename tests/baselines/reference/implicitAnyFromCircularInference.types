@@ -16,7 +16,6 @@ var c: typeof b;
 // Error expected
 var d: Array<typeof d>;
 >d : any
->Array : T[]
 >d : any
 
 function f() { return f; }
@@ -67,8 +66,6 @@ function h() {
 }
 
 interface A {
->A : A
-
     s: string;
 >s : string
 }
@@ -76,7 +73,6 @@ interface A {
 function foo(x: A): string { return "abc"; }
 >foo : (x: A) => string
 >x : A
->A : A
 >"abc" : "abc"
 
 class C {

@@ -2,8 +2,6 @@
 // 3.8.4 Assignment Compatibility 
 
 interface Callable {
->Callable : Callable
-
     call(blah: any); // also works for 'apply'
 >call : (blah: any) => any
 >blah : any
@@ -11,7 +9,6 @@ interface Callable {
 
 var x: Callable;
 >x : Callable
->Callable : Callable
 
 // Should fail
 x = '';
@@ -47,7 +44,6 @@ x = f;
 function fn(c: Callable) { }
 >fn : (c: Callable) => void
 >c : Callable
->Callable : Callable
 
 // Should Fail
 fn('');

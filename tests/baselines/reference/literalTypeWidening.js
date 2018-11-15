@@ -60,6 +60,18 @@ function f5() {
     let v4 = c4;
 }
 
+declare function widening<T>(x: T): T;
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+
+function f6(cond: boolean) {
+    let x1 = widening('a');
+    let x2 = widening(10);
+    let x3 = widening(cond ? 'a' : 10);
+    let y1 = nonWidening('a');
+    let y2 = nonWidening(10);
+    let y3 = nonWidening(cond ? 'a' : 10);
+}
+
 // Repro from #10898
 
 type FAILURE = "FAILURE";
@@ -97,8 +109,31 @@ function onMouseOver(): TestEvent { return "onmouseover"; }
 
 let x = onMouseOver();
 
+// Repro from #23649
+
+export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
+  const result = {} as Record<K, true | undefined>
+  keys.forEach(key => result[key] = true)
+  return result
+}
+
+export function keys<K extends string, V>(obj: Record<K, V>): K[] {
+  return Object.keys(obj) as K[]
+}
+
+type Obj = { code: LangCode }
+
+const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
+export type LangCode = keyof typeof langCodeSet
+export const langCodes = keys(langCodeSet)
+
+const arr: Obj[] = langCodes.map(code => ({ code }))
+
+
 //// [literalTypeWidening.js]
+"use strict";
 // Widening vs. non-widening literal types
+exports.__esModule = true;
 function f1() {
     var c1 = "hello"; // Widening type "hello"
     var v1 = c1; // Type string
@@ -153,6 +188,14 @@ function f5() {
     var c4 = "foo";
     var v4 = c4;
 }
+function f6(cond) {
+    var x1 = widening('a');
+    var x2 = widening(10);
+    var x3 = widening(cond ? 'a' : 10);
+    var y1 = nonWidening('a');
+    var y2 = nonWidening(10);
+    var y3 = nonWidening(cond ? 'a' : 10);
+}
 var FAILURE = "FAILURE";
 function doWork() {
     return FAILURE;
@@ -172,3 +215,21 @@ if (isSuccess(result)) {
 }
 function onMouseOver() { return "onmouseover"; }
 var x = onMouseOver();
+// Repro from #23649
+function Set() {
+    var keys = [];
+    for (var _i = 0; _i < arguments.length; _i++) {
+        keys[_i] = arguments[_i];
+    }
+    var result = {};
+    keys.forEach(function (key) { return result[key] = true; });
+    return result;
+}
+exports.Set = Set;
+function keys(obj) {
+    return Object.keys(obj);
+}
+exports.keys = keys;
+var langCodeSet = Set('fr', 'en', 'es', 'it', 'nl');
+exports.langCodes = keys(langCodeSet);
+var arr = exports.langCodes.map(function (code) { return ({ code: code }); });

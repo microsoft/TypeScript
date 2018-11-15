@@ -3,6 +3,5 @@ var v: typeof A<B>
 >v : any
 >A : any
 ><B> : any
->B : No type information available!
 > : any
 

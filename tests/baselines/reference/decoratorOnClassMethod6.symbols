@@ -15,5 +15,6 @@ class C {
 
     @dec ["method"]() {}
 >dec : Symbol(dec, Decl(decoratorOnClassMethod6.ts, 0, 0))
+>["method"] : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
 >"method" : Symbol(C["method"], Decl(decoratorOnClassMethod6.ts, 2, 9))
 }

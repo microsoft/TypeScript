@@ -13,7 +13,7 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Symbol(OBJECT, Decl(commaOperatorsMultipleOperators.ts, 4, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 //Expected: work well
 ANY, BOOLEAN, NUMBER;
@@ -76,10 +76,10 @@ var resultIsObject1 = (NUMBER, STRING, OBJECT);
 null, true, 1;
 ++NUMBER, STRING.charAt(0), new Object();
 >NUMBER : Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
->STRING.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var resultIsNumber2 = (null, true, 1);
 >resultIsNumber2 : Symbol(resultIsNumber2, Decl(commaOperatorsMultipleOperators.ts, 24, 3))
@@ -87,8 +87,8 @@ var resultIsNumber2 = (null, true, 1);
 var resultIsObject2 = (++NUMBER, STRING.charAt(0), new Object());
 >resultIsObject2 : Symbol(resultIsObject2, Decl(commaOperatorsMultipleOperators.ts, 25, 3))
 >NUMBER : Symbol(NUMBER, Decl(commaOperatorsMultipleOperators.ts, 2, 3))
->STRING.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>STRING.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >STRING : Symbol(STRING, Decl(commaOperatorsMultipleOperators.ts, 3, 3))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 

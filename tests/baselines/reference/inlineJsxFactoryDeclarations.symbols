@@ -1,0 +1,80 @@
+=== tests/cases/conformance/jsx/inline/renderer.d.ts ===
+declare global {
+>global : Symbol(global, Decl(renderer.d.ts, 0, 0))
+
+    namespace JSX {
+>JSX : Symbol(JSX, Decl(renderer.d.ts, 0, 16))
+
+        interface IntrinsicElements {
+>IntrinsicElements : Symbol(IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+            [e: string]: any;
+>e : Symbol(e, Decl(renderer.d.ts, 3, 13))
+        }
+    }
+}
+export function dom(): void;
+>dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+
+export function otherdom(): void;
+>otherdom : Symbol(otherdom, Decl(renderer.d.ts, 7, 28))
+
+export function createElement(): void;
+>createElement : Symbol(createElement, Decl(renderer.d.ts, 8, 33))
+
+export { dom as default };
+>dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
+>default : Symbol(default, Decl(renderer.d.ts, 10, 8))
+
+=== tests/cases/conformance/jsx/inline/otherreacty.tsx ===
+/** @jsx React.createElement */
+import * as React from "./renderer";
+>React : Symbol(React, Decl(otherreacty.tsx, 1, 6))
+
+<h></h>
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/other.tsx ===
+/** @jsx h */
+import { dom as h } from "./renderer"
+>dom : Symbol(h, Decl(renderer.d.ts, 6, 1))
+>h : Symbol(h, Decl(other.tsx, 1, 8))
+
+export const prerendered = <h></h>;
+>prerendered : Symbol(prerendered, Decl(other.tsx, 2, 12))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/othernoalias.tsx ===
+/** @jsx otherdom */
+import { otherdom } from "./renderer"
+>otherdom : Symbol(otherdom, Decl(othernoalias.tsx, 1, 8))
+
+export const prerendered2 = <h></h>;
+>prerendered2 : Symbol(prerendered2, Decl(othernoalias.tsx, 2, 12))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/reacty.tsx ===
+import React from "./renderer"
+>React : Symbol(React, Decl(reacty.tsx, 0, 6))
+
+export const prerendered3 = <h></h>;
+>prerendered3 : Symbol(prerendered3, Decl(reacty.tsx, 1, 12))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+=== tests/cases/conformance/jsx/inline/index.tsx ===
+/** @jsx dom */
+import { dom } from "./renderer"
+>dom : Symbol(dom, Decl(index.tsx, 1, 8))
+
+<h></h>
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+>h : Symbol(JSX.IntrinsicElements, Decl(renderer.d.ts, 1, 19))
+
+export * from "./other";
+export * from "./othernoalias";
+export * from "./reacty";
+

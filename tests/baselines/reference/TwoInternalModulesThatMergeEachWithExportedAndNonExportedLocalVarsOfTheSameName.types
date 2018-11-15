@@ -3,8 +3,6 @@ module A {
 >A : typeof A
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -17,10 +15,7 @@ module A {
 
         export function mirror<T extends Point>(p: T) {
 >mirror : <T extends Point>(p: T) => { x: number; y: number; }
->T : T
->Point : Point
 >p : T
->T : T
 
             return { x: p.y, y: p.x };
 >{ x: p.y, y: p.x } : { x: number; y: number; }
@@ -36,7 +31,6 @@ module A {
     }
     export var Origin: Point = { x: 0, y: 0 };
 >Origin : Point
->Point : Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -61,9 +55,7 @@ module A {
 
             constructor(public tl: Point, public br: Point) { }
 >tl : Point
->Point : Point
 >br : Point
->Point : Point
         }
     }
 }
@@ -79,7 +71,6 @@ var o: { x: number; y: number };
 var o: A.Point;
 >o : { x: number; y: number; }
 >A : any
->Point : A.Point
 
 var o = A.Origin;
 >o : { x: number; y: number; }
@@ -101,16 +92,13 @@ var p: { tl: A.Point; br: A.Point };
 >p : { tl: A.Point; br: A.Point; }
 >tl : A.Point
 >A : any
->Point : A.Point
 >br : A.Point
 >A : any
->Point : A.Point
 
 var p: A.Utils.Plane;
 >p : { tl: A.Point; br: A.Point; }
 >A : any
 >Utils : any
->Plane : A.Utils.Plane
 
 var p = new A.Utils.Plane(o, { x: 1, y: 1 });
 >p : { tl: A.Point; br: A.Point; }

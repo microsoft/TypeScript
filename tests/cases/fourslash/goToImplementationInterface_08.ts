@@ -11,7 +11,7 @@
 //// interface C extends B, A {}
 ////
 //// class X implements B {
-////     [|hello() {}|]
+////     [|hello|]() {}
 //// }
 ////
 //// function someFunction(d : A) {

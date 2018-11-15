@@ -24,8 +24,6 @@ export class Empty extends React.Component<{}, {}> {
 >render : Symbol(Empty.render, Decl(file.tsx, 8, 52))
 
         return <div>Hello</div>;
->div : Symbol(unknown)
->div : Symbol(unknown)
     }
 }
 

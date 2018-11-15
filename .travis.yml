@@ -1,14 +1,14 @@
 language: node_js
 
 node_js:
-  - 'stable'
-  - '8'
+  - 'node'
+  - '10'
   - '6'
 
 sudo: false
 
 env:
-  - workerCount=3
+  - workerCount=3 timeout=600000
 
 matrix:
   fast_finish: true
@@ -16,9 +16,11 @@ matrix:
 branches:
   only:
   - master
-  - release-2.5
-  - release-2.6
   - release-2.7
+  - release-2.8
+  - release-2.9
+  - release-3.0
+  - release-3.1
 
 install:
   - npm uninstall typescript --no-save

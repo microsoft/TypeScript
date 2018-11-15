@@ -20,6 +20,7 @@ namespace M {
     // comment 6
     var a = 4; // comment 7
 }
+
 public class class1 implements interface1
 {
     property1: boolean;

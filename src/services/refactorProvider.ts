@@ -5,7 +5,7 @@ namespace ts {
         getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined;
 
         /** Compute (quickly) which actions are available here */
-        getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined;
+        getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo>;
     }
 
     export interface RefactorContext extends textChanges.TextChangesContext {
@@ -14,6 +14,7 @@ namespace ts {
         endPosition?: number;
         program: Program;
         cancellationToken?: CancellationToken;
+        preferences: UserPreferences;
     }
 
     export namespace refactor {
@@ -37,7 +38,7 @@ namespace ts {
         }
     }
 
-    export function getRefactorContextLength(context: RefactorContext): number {
-        return context.endPosition === undefined ? 0 : context.endPosition - context.startPosition;
+    export function getRefactorContextSpan({ startPosition, endPosition }: RefactorContext): TextSpan {
+        return createTextSpanFromBounds(startPosition, endPosition === undefined ? startPosition : endPosition);
     }
 }

@@ -1,19 +1,27 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: file1.ts
-/////*1*/class Greeter {
-////    public hello(name: string) { }
+// @Filename: /a.ts
+////class Greeter {
+////    [|public hello(name: string) { }|]
 ////}
 ////var x = new Greeter();
-// @Filename: file2.ts
-/////*2*/class MyGreeter {
-////    public hello(name: string) { }
+// @Filename: /b.ts
+////class MyGreeter {
+////    [|{| "containerName": "MyGreeter" |}public hello(name: string) { }|]
 ////}
 ////class MyOtherGreeter {
-////    public hello(name: string) { }
+////    [|{| "containerName": "MyOtherGreeter" |}public hello(name: string) { }|]
 ////}
 
-verify.navigationItemsListCount(3, "hello");
-verify.navigationItemsListCount(1, "hello", undefined, test.marker("1").fileName);
-verify.navigationItemsListContains("hello", "method", "hello", "exact", test.marker("1").fileName);
-verify.navigationItemsListCount(2, "hello", undefined, test.marker("2").fileName);
+const [r0, r1, r2] = test.ranges();
+const aTs: ReadonlyArray<FourSlashInterface.ExpectedNavigateToItem> = [
+    { name: "hello", kind: "method", kindModifiers: "public", range: r0, containerName: "Greeter", containerKind: "class" },
+];
+const bTs: ReadonlyArray<FourSlashInterface.ExpectedNavigateToItem> = [r1, r2].map((range): FourSlashInterface.ExpectedNavigateToItem =>
+    ({ name: "hello", kind: "method", kindModifiers: "public", range, containerName: range.marker.data.containerName, containerKind: "class" }));
+
+verify.navigateTo(
+    { pattern: "hello", expected: [...aTs, ...bTs] },
+    { pattern: "hello", fileName: "/a.ts", expected: aTs },
+    { pattern: "hello", fileName: "/b.ts", expected: bTs },
+);

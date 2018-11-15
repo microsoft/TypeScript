@@ -8,7 +8,7 @@ type StringContains<S extends string, L extends string> = (
     { [key: string]: 'false' }
   )[L]
 
-type ObjectHasKey<O, L extends string> = StringContains<keyof O, L>
+type ObjectHasKey<O, L extends string> = StringContains<Extract<keyof O, string>, L>
 
 type First<T> = ObjectHasKey<T, '0'>;  // Should be deferred
 

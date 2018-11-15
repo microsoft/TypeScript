@@ -4,8 +4,8 @@ class C {
 
     public foo() { [1,2,3].map<any,any>((x) => { return this; })}
 >foo : Symbol(C.foo, Decl(thisExpressionInCallExpressionWithTypeArguments.ts, 0, 9))
->[1,2,3].map : Symbol(Array.map, Decl(lib.d.ts, --, --))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>[1,2,3].map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(thisExpressionInCallExpressionWithTypeArguments.ts, 1, 41))
 >this : Symbol(C, Decl(thisExpressionInCallExpressionWithTypeArguments.ts, 0, 0))
 }

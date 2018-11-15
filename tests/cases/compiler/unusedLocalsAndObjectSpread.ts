@@ -1,4 +1,5 @@
-//@noUnusedLocals:true
+// @lib: es5
+// @noUnusedLocals:true
 
 declare var console: { log(a: any): void };
 

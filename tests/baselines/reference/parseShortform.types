@@ -1,13 +1,10 @@
 === tests/cases/compiler/parseShortform.ts ===
 interface I {
->I : I
-
     w: {
 >w : { (): boolean; [s: string]: { x: any; y: any; }; [n: number]: { x: any; y: any; }; z: I; }
 
         z: I;
 >z : I
->I : I
 
         (): boolean;
         [s: string]: { x: any; y: any; };
@@ -30,5 +27,4 @@ interface I {
 
     z: I; 
 >z : I
->I : I
 }

@@ -1,6 +1,6 @@
-tests/cases/conformance/dynamicImport/1.ts(1,1): error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
-tests/cases/conformance/dynamicImport/1.ts(2,10): error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
-tests/cases/conformance/dynamicImport/1.ts(8,16): error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+tests/cases/conformance/dynamicImport/1.ts(1,1): error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
+tests/cases/conformance/dynamicImport/1.ts(2,10): error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
+tests/cases/conformance/dynamicImport/1.ts(8,16): error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
 
 
 ==== tests/cases/conformance/dynamicImport/0.ts (0 errors) ====
@@ -9,10 +9,10 @@ tests/cases/conformance/dynamicImport/1.ts(8,16): error TS1323: Dynamic import c
 ==== tests/cases/conformance/dynamicImport/1.ts (3 errors) ====
     import("./0");
     ~~~~~~~~~~~~~
-!!! error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+!!! error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
     var p1 = import("./0");
              ~~~~~~~~~~~~~
-!!! error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+!!! error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
     p1.then(zero => {
         return zero.foo();
     })
@@ -20,5 +20,5 @@ tests/cases/conformance/dynamicImport/1.ts(8,16): error TS1323: Dynamic import c
     function foo() {
         const p2 = import("./0");
                    ~~~~~~~~~~~~~
-!!! error TS1323: Dynamic import cannot be used when targeting ECMAScript 2015 modules.
+!!! error TS1323: Dynamic import is only supported when '--module' flag is 'commonjs' or 'esNext'.
     }

@@ -1369,7 +1369,7 @@ var TypeScript;
                     fgSym.declAST = ast;
                 }
             }
-            else {
+            else { // there exists a symbol with this name
                 if ((fgSym.kind() == SymbolKind.Type)) {
                     fgSym = context.checker.createFunctionSignature(funcDecl, containerSym, containerScope, fgSym, false).declAST.type.symbol;
                 }
@@ -1428,7 +1428,7 @@ var TypeScript;
                 funcDecl.accessorSymbol = context.checker.createAccessorSymbol(funcDecl, fgSym, containerSym.type, (funcDecl.isMethod() && isStatic), true, containerScope, containerSym);
             }
             funcDecl.type.symbol.declAST = ast;
-            if (funcDecl.isConstructor) {
+            if (funcDecl.isConstructor) { // REVIEW: Remove when classes completely replace oldclass
                 go = true;
             }
             ;
@@ -1482,6 +1482,8 @@ var TypeScript;
         else if (ast.nodeType == NodeType.InterfaceDeclaration) {
             go = preCollectInterfaceTypes(ast, parent, context);
         }
+        // This will be a constructor arg because this pass only traverses
+        // constructor arg lists
         else if (ast.nodeType == NodeType.ArgDecl) {
             go = preCollectArgDeclTypes(ast, parent, context);
         }

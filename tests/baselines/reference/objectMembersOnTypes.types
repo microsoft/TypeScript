@@ -1,10 +1,7 @@
 === tests/cases/compiler/objectMembersOnTypes.ts ===
 interface I {}
->I : I
-
 class AAA implements I { }
 >AAA : AAA
->I : I
 
 var x: number;
 >x : number
@@ -17,7 +14,6 @@ x.toString();
 
 var i: I;
 >i : I
->I : I
 
 i.toString(); // used to be an error
 >i.toString() : string
@@ -27,7 +23,6 @@ i.toString(); // used to be an error
 
 var c: AAA;
 >c : AAA
->AAA : AAA
 
 c.toString(); // used to be an error
 >c.toString() : string

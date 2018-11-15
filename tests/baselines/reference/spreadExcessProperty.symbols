@@ -1,0 +1,17 @@
+=== tests/cases/conformance/types/spread/spreadExcessProperty.ts ===
+type A = { a: string, b: string };
+>A : Symbol(A, Decl(spreadExcessProperty.ts, 0, 0))
+>a : Symbol(a, Decl(spreadExcessProperty.ts, 0, 10))
+>b : Symbol(b, Decl(spreadExcessProperty.ts, 0, 21))
+
+const extra1 = { a: "a", b: "b", extra: "extra" };
+>extra1 : Symbol(extra1, Decl(spreadExcessProperty.ts, 1, 5))
+>a : Symbol(a, Decl(spreadExcessProperty.ts, 1, 16))
+>b : Symbol(b, Decl(spreadExcessProperty.ts, 1, 24))
+>extra : Symbol(extra, Decl(spreadExcessProperty.ts, 1, 32))
+
+const a1: A = { ...extra1 }; // spread should not give excess property errors
+>a1 : Symbol(a1, Decl(spreadExcessProperty.ts, 2, 5))
+>A : Symbol(A, Decl(spreadExcessProperty.ts, 0, 0))
+>extra1 : Symbol(extra1, Decl(spreadExcessProperty.ts, 1, 5))
+

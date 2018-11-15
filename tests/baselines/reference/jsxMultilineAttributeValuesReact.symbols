@@ -4,28 +4,20 @@ declare var React: any;
 
 const a = <input value="
 >a : Symbol(a, Decl(jsxMultilineAttributeValuesReact.tsx, 1, 5))
->input : Symbol(unknown)
 >value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 1, 16))
 
 foo: 23
 "></input>;
->input : Symbol(unknown)
-
 const b = <input value='
 >b : Symbol(b, Decl(jsxMultilineAttributeValuesReact.tsx, 4, 5))
->input : Symbol(unknown)
 >value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 4, 16))
 
 foo: 23
 '></input>;
->input : Symbol(unknown)
-
 const c = <input value='
 >c : Symbol(c, Decl(jsxMultilineAttributeValuesReact.tsx, 7, 5))
->input : Symbol(unknown)
 >value : Symbol(value, Decl(jsxMultilineAttributeValuesReact.tsx, 7, 16))
 
 foo: 23\n
 '></input>;
->input : Symbol(unknown)
 

@@ -1,8 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
 let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
->RegExp : RegExp
->Function : Function
 
 let obj: any;
 >obj : any

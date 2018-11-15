@@ -1,0 +1,51 @@
+=== tests/cases/conformance/jsx/tsxIntrinsicAttributeErrors.tsx ===
+declare namespace JSX {
+    interface Element { }
+    interface ElementClass {
+        render: any;
+>render : any
+    }
+    interface IntrinsicAttributes {
+        key: string | number
+>key : string | number
+    }
+    interface IntrinsicClassAttributes<T> {
+        ref: T
+>ref : T
+    }
+    interface IntrinsicElements {
+        div: {
+>div : { text?: string; width?: number; }
+
+            text?: string;
+>text : string
+
+            width?: number;
+>width : number
+        }
+
+        span: any;
+>span : any
+    }
+}
+
+interface I {
+    new(n: string): {
+>n : string
+
+        x: number
+>x : number
+
+        render(): void
+>render : () => void
+    }
+}
+var E: I;
+>E : I
+
+<E x={10} />
+><E x={10} /> : JSX.Element
+>E : I
+>x : number
+>10 : 10
+

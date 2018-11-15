@@ -6,7 +6,6 @@ export function bar() { }
 >bar : () => void
 
 export interface Buzz { }
->Buzz : Buzz
 
 === tests/cases/compiler/index.ts ===
 import {foo} from "./utils";

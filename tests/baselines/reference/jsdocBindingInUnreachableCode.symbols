@@ -1,0 +1,12 @@
+=== tests/cases/conformance/jsdoc/bug27341.js ===
+if (false) {
+    /**
+     * @param {string} s
+     */
+    const x = function (s) {
+>x : Symbol(x, Decl(bug27341.js, 4, 9))
+>s : Symbol(s, Decl(bug27341.js, 4, 24))
+
+    };
+}
+

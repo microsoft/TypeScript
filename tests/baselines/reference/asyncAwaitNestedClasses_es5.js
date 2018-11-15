@@ -20,6 +20,7 @@ A.B.C.func();
 var A = /** @class */ (function () {
     function A() {
     }
+    var _a;
     A.B = (_a = /** @class */ (function () {
             function B() {
             }
@@ -47,6 +48,5 @@ var A = /** @class */ (function () {
         }()),
         _a);
     return A;
-    var _a;
 }());
 A.B.C.func();

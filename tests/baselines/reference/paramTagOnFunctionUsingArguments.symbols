@@ -1,0 +1,47 @@
+=== tests/cases/conformance/jsdoc/decls.d.ts ===
+declare function factory(type: string): {};
+>factory : Symbol(factory, Decl(decls.d.ts, 0, 0))
+>type : Symbol(type, Decl(decls.d.ts, 0, 25))
+
+=== tests/cases/conformance/jsdoc/a.js ===
+/**
+ * @param {string} first
+ */
+function concat(/* first, second, ... */) {
+>concat : Symbol(concat, Decl(a.js, 0, 0))
+
+  var s = ''
+>s : Symbol(s, Decl(a.js, 4, 5))
+
+  for (var i = 0, l = arguments.length; i < l; i++) {
+>i : Symbol(i, Decl(a.js, 5, 10))
+>l : Symbol(l, Decl(a.js, 5, 17))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>arguments : Symbol(arguments)
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
+>i : Symbol(i, Decl(a.js, 5, 10))
+>l : Symbol(l, Decl(a.js, 5, 17))
+>i : Symbol(i, Decl(a.js, 5, 10))
+
+    s += arguments[i]
+>s : Symbol(s, Decl(a.js, 4, 5))
+>arguments : Symbol(arguments)
+>i : Symbol(i, Decl(a.js, 5, 10))
+  }
+  return s
+>s : Symbol(s, Decl(a.js, 4, 5))
+}
+
+/**
+ * @param {...string} strings
+ */
+function correct() {
+>correct : Symbol(correct, Decl(a.js, 9, 1))
+
+    arguments
+>arguments : Symbol(arguments)
+}
+
+correct(1,2,3) // oh no
+>correct : Symbol(correct, Decl(a.js, 9, 1))
+

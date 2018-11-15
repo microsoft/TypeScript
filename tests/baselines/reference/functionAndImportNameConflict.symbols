@@ -5,7 +5,7 @@ export function f() {
 
 === tests/cases/compiler/f2.ts ===
 import {f} from './f1';
->f : Symbol(f, Decl(f2.ts, 0, 8), Decl(f2.ts, 0, 23))
+>f : Symbol(f, Decl(f2.ts, 0, 23), Decl(f2.ts, 0, 8))
 
 export function f() {
 >f : Symbol(f, Decl(f2.ts, 0, 23))

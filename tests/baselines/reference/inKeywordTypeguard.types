@@ -10,8 +10,6 @@ class B { b: string; }
 function negativeClassesTest(x: A | B) {
 >negativeClassesTest : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -38,8 +36,6 @@ function negativeClassesTest(x: A | B) {
 function positiveClassesTest(x: A | B) {
 >positiveClassesTest : (x: A | B) => void
 >x : A | B
->A : A
->B : B
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -74,8 +70,6 @@ class BWithOptionalProp { b?: string; }
 function positiveTestClassesWithOptionalProperties(x: AWithOptionalProp | BWithOptionalProp) {
 >positiveTestClassesWithOptionalProperties : (x: AWithOptionalProp | BWithOptionalProp) => void
 >x : AWithOptionalProp | BWithOptionalProp
->AWithOptionalProp : AWithOptionalProp
->BWithOptionalProp : BWithOptionalProp
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -118,8 +112,6 @@ class BWithMethod {
 function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMembers : (x: AWithMethod | BWithMethod) => void
 >x : AWithMethod | BWithMethod
->AWithMethod : AWithMethod
->BWithMethod : BWithMethod
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -145,8 +137,6 @@ function negativeTestClassesWithMembers(x: AWithMethod | BWithMethod) {
 function negativeTestClassesWithMemberMissingInBothClasses(x: AWithMethod | BWithMethod) {
 >negativeTestClassesWithMemberMissingInBothClasses : (x: AWithMethod | BWithMethod) => void
 >x : AWithMethod | BWithMethod
->AWithMethod : AWithMethod
->BWithMethod : BWithMethod
 
     if ("c" in x) {
 >"c" in x : boolean
@@ -191,10 +181,6 @@ class D { a: string; }
 function negativeMultipleClassesTest(x: A | B | C | D) {
 >negativeMultipleClassesTest : (x: A | B | C | D) => void
 >x : A | B | C | D
->A : A
->B : B
->C : C
->D : D
 
     if ("a" in x) {
 >"a" in x : boolean
@@ -221,13 +207,10 @@ function negativeMultipleClassesTest(x: A | B | C | D) {
 class ClassWithUnionProp { prop: A | B }
 >ClassWithUnionProp : ClassWithUnionProp
 >prop : A | B
->A : A
->B : B
 
 function negativePropTest(x: ClassWithUnionProp) {
 >negativePropTest : (x: ClassWithUnionProp) => void
 >x : ClassWithUnionProp
->ClassWithUnionProp : ClassWithUnionProp
 
     if ("a" in x.prop) {
 >"a" in x.prop : boolean
@@ -260,8 +243,6 @@ class NegativeClassTest {
 
     protected prop: A | B;
 >prop : A | B
->A : A
->B : B
 
     inThis() {
 >inThis : () => void

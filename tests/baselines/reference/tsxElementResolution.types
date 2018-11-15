@@ -1,16 +1,15 @@
 === tests/cases/conformance/jsx/tsxElementResolution.tsx ===
 declare namespace JSX {
->JSX : any
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		foundFirst: { x: string };
 >foundFirst : { x: string; }
 >x : string
 
 		'string_named';
+>'string_named' : any
+
 		'var';
+>'var' : any
 	}
 }
 
@@ -29,27 +28,27 @@ module Dotted {
 
 // Should find the intrinsic element, not the class element
 var a = <foundFirst  x="hello" />;
->a : any
-><foundFirst  x="hello" /> : any
+>a : error
+><foundFirst  x="hello" /> : error
 >foundFirst : typeof foundFirst
 >x : string
 
 var b = <string_named />;
->b : any
-><string_named /> : any
+>b : error
+><string_named /> : error
 >string_named : any
 
 // TODO: This should not be a parse error (should
 //        parse a property name here, not identifier)
 // var c = <var />;
 var d = <Other />;
->d : any
-><Other /> : any
+>d : error
+><Other /> : error
 >Other : typeof Other
 
 var e = <Dotted.Name />;
->e : any
-><Dotted.Name /> : any
+>e : error
+><Dotted.Name /> : error
 >Dotted.Name : typeof Dotted.Name
 >Dotted : typeof Dotted
 >Name : typeof Dotted.Name

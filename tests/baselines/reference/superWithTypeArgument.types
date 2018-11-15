@@ -6,7 +6,6 @@ class C {
 
 class D<T> extends C {
 >D : D<T>
->T : T
 >C : C
 
     constructor() {
@@ -15,6 +14,5 @@ class D<T> extends C {
 >super : any
 >super : C
 > : any
->T : T
     }
 }

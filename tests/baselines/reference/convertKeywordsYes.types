@@ -77,50 +77,21 @@ function bigGeneric<
 >bigGeneric : <constructor, implements, interface, let, module, package, private, protected, public, set, static, get, yield, declare>(c: constructor, a: any, b2: boolean, i: implements, i2: interface, l: let, m: module, n: number, p: package, p2: private, p3: protected, p4: public, s: set, s2: static, s3: string, g: get, y: yield, d: declare) => void
 
     constructor,
->constructor : constructor
-
     implements ,
->implements : implements
-
     interface ,
->interface : interface
-
     let,
->let : let
-
     module ,
->module : module
-
     package,
->package : package
-
     private ,
->private : private
-
     protected,
->protected : protected
-
     public ,
->public : public
-
     set ,
->set : set
-
     static ,
->static : static
-
     get ,
->get : get
-
     yield,
->yield : yield
-
     declare
->declare : declare
-
     >(c: constructor,
 >c : constructor
->constructor : constructor
 
     a: any,
 >a : any
@@ -130,61 +101,48 @@ function bigGeneric<
 
     i: implements ,
 >i : implements
->implements : implements
 
     i2: interface ,
 >i2 : interface
->interface : interface
 
     l: let,
 >l : let
->let : let
 
     m: module ,
 >m : module
->module : module
 
     n: number,
 >n : number
 
     p: package,
 >p : package
->package : package
 
     p2: private ,
 >p2 : private
->private : private
 
     p3: protected,
 >p3 : protected
->protected : protected
 
     p4: public ,
 >p4 : public
->public : public
 
     s: set ,
 >s : set
->set : set
 
     s2: static ,
 >s2 : static
->static : static
 
     s3: string,
 >s3 : string
 
     g: get ,
 >g : get
->get : get
 
     y: yield,
 >y : yield
->yield : yield
 
     d: declare ) { }
 >d : declare
->declare : declare
 
 var bigObject = {
 >bigObject : { constructor: number; any: number; boolean: number; implements: number; interface: number; let: number; module: number; number: number; package: number; private: number; protected: number; public: number; set: number; static: number; string: number; get: number; yield: number; break: number; case: number; catch: number; class: number; continue: number; const: number; debugger: number; declare: number; default: number; delete: number; do: number; else: number; enum: number; export: number; extends: number; false: number; finally: number; for: number; function: number; if: number; import: number; in: number; instanceof: number; new: number; null: number; return: number; super: number; switch: number; this: number; throw: number; true: number; try: number; typeof: number; var: number; void: number; while: number; with: number; }
@@ -409,8 +367,6 @@ var bigObject = {
 };
 
 interface bigInterface {
->bigInterface : bigInterface
-
     constructor;
 >constructor : any
 
@@ -578,6 +534,7 @@ class bigClass {
 >bigClass : bigClass
 
     public "constructor" = 0;
+>"constructor" : number
 >0 : 0
 
     public any = 0;

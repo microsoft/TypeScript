@@ -27,31 +27,18 @@ const aRanges = [a0, a1, a2];
 const bRanges = [b0, b1, b2];
 const cRanges = [c0, c1, c2];
 
-verify.referenceGroups(a0, [
-    { definition: "function a(): void\nnamespace a", ranges: aRanges },
-    { definition: "(alias) function b(): void\n(alias) namespace b\nimport b", ranges: bRanges },
-    { definition: "(alias) function a(): void\n(alias) namespace a\nimport a", ranges: cRanges }
-]);
-verify.referenceGroups([a1, a2], [
+verify.referenceGroups([a0, a1, a2], [
     { definition: "namespace a\nfunction a(): void", ranges: aRanges },
     { definition: "(alias) function b(): void\n(alias) namespace b\nimport b", ranges: bRanges },
     { definition: "(alias) function a(): void\n(alias) namespace a\nimport a", ranges: cRanges }
 ]);
 
-verify.referenceGroups([b0, b0], [
+verify.referenceGroups([b0, b1], [
     { definition: "(alias) function b(): void\n(alias) namespace b\nimport b", ranges: bRanges }
 ]);
-verify.referenceGroups(b1, [
-    { definition: "(alias) b(): void\nimport b", ranges: bRanges }
-]);
 
-verify.referenceGroups([c0, c2], [
+verify.referenceGroups([c0, c1, c2], [
     { definition: "(alias) function a(): void\n(alias) namespace a\nimport a", ranges: cRanges },
-    { definition: "namespace a\nfunction a(): void", ranges: aRanges },
-    { definition: "(alias) function b(): void\n(alias) namespace b\nimport b", ranges: bRanges }
-]);
-verify.referenceGroups(c1, [
-    { definition: "(alias) a(): void\nimport a", ranges: cRanges },
     { definition: "namespace a\nfunction a(): void", ranges: aRanges },
     { definition: "(alias) function b(): void\n(alias) namespace b\nimport b", ranges: bRanges }
 ]);

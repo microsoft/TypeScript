@@ -37,7 +37,7 @@ var func2: {
     (s: string, t: any): RegExp;
 >s : Symbol(s, Decl(overloadResolutionWithAny.ts, 13, 5))
 >t : Symbol(t, Decl(overloadResolutionWithAny.ts, 13, 15))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     (s: any, t: any): string;
 >s : Symbol(s, Decl(overloadResolutionWithAny.ts, 14, 5))

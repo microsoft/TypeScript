@@ -7,21 +7,14 @@ module onlyT {
 
     function foo<T>(a: (x: T) => T, b: (x: T) => T) {
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: T) => T
 >x : T
->T : T
->T : T
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T
@@ -41,10 +34,7 @@ module onlyT {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->T : T
->Date : Date
 >x : T
->T : T
 
         var r7 = foo((a: T) => a, (b: T) => b); // T => T
 >r7 : (x: T) => T
@@ -52,11 +42,9 @@ module onlyT {
 >foo : <T>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T
->T : T
 >a : T
 >(b: T) => b : (b: T) => T
 >b : T
->T : T
 >b : T
 
         // BUG 835518
@@ -76,22 +64,14 @@ module onlyT {
 
     function foo2<T extends Date>(a: (x: T) => T, b: (x: T) => T) {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
->Date : Date
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: T) => T
 >x : T
->T : T
->T : T
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T
@@ -99,10 +79,7 @@ module onlyT {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->T : T
->RegExp : RegExp
 >x : T
->T : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); // error
 >r7 : any
@@ -110,11 +87,9 @@ module onlyT {
 >foo2 : <T extends Date>(a: (x: T) => T, b: (x: T) => T) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T
->T : T
 >a : T
 >(b: T) => b : (b: T) => T
 >b : T
->T : T
 >b : T
 
         var r7b = foo2((a) => a, (b) => b); // valid, T is inferred to be Date
@@ -131,31 +106,23 @@ module onlyT {
 
     enum E { A }
 >E : E
->A : E
+>A : E.A
 
     enum F { A }
 >F : F
->A : F
+>A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: T) => T) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: T) => T) => (x: T) => T
->T : T
 >x : T
->T : T
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: T) => T
 >x : T
->T : T
->T : T
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T
@@ -185,22 +152,14 @@ module TU {
 
     function foo<T, U>(a: (x: T) => T, b: (x: U) => U) {
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->T : T
->U : U
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: U) => U
 >x : U
->U : U
->U : U
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T
@@ -220,10 +179,7 @@ module TU {
 
     function other2<T extends Date>(x: T) {
 >other2 : <T extends Date>(x: T) => void
->T : T
->Date : Date
 >x : T
->T : T
 
         var r7 = foo((a: T) => a, (b: T) => b); 
 >r7 : (x: T) => T
@@ -231,11 +187,9 @@ module TU {
 >foo : <T, U>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T
->T : T
 >a : T
 >(b: T) => b : (b: T) => T
 >b : T
->T : T
 >b : T
 
         var r9 = r7(new Date()); 
@@ -254,24 +208,14 @@ module TU {
 
     function foo2<T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) {
 >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
->T : T
->Date : Date
->U : U
->Date : Date
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: U) => U
 >x : U
->U : U
->U : U
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T
@@ -279,10 +223,7 @@ module TU {
 
     function other3<T extends RegExp>(x: T) {
 >other3 : <T extends RegExp>(x: T) => void
->T : T
->RegExp : RegExp
 >x : T
->T : T
 
         var r7 = foo2((a: T) => a, (b: T) => b); 
 >r7 : any
@@ -290,11 +231,9 @@ module TU {
 >foo2 : <T extends Date, U extends Date>(a: (x: T) => T, b: (x: U) => U) => (x: T) => T
 >(a: T) => a : (a: T) => T
 >a : T
->T : T
 >a : T
 >(b: T) => b : (b: T) => T
 >b : T
->T : T
 >b : T
 
         var r7b = foo2((a) => a, (b) => b); 
@@ -311,31 +250,23 @@ module TU {
 
     enum E { A }
 >E : E
->A : E
+>A : E.A
 
     enum F { A }
 >F : F
->A : F
+>A : F.A
 
     function foo3<T>(x: T, a: (x: T) => T, b: (x: U) => U) {
 >foo3 : <T>(x: T, a: (x: T) => T, b: (x: any) => any) => (x: T) => T
->T : T
 >x : T
->T : T
 >a : (x: T) => T
 >x : T
->T : T
->T : T
 >b : (x: any) => any
 >x : any
->U : No type information available!
->U : No type information available!
 
         var r: (x: T) => T;
 >r : (x: T) => T
 >x : T
->T : T
->T : T
 
         return r;
 >r : (x: T) => T

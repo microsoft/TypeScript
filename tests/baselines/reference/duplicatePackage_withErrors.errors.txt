@@ -1,4 +1,4 @@
-/node_modules/a/node_modules/x/index.d.ts(1,18): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal.
+/node_modules/a/node_modules/x/index.d.ts(1,18): error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
 
 
 ==== /src/a.ts (0 errors) ====
@@ -11,7 +11,7 @@
 ==== /node_modules/a/node_modules/x/index.d.ts (1 errors) ====
     export const x = 1 + 1;
                      ~~~~~
-!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal.
+!!! error TS1254: A 'const' initializer in an ambient context must be a string or numeric literal or literal enum reference.
     
 ==== /node_modules/a/node_modules/x/package.json (0 errors) ====
     { "name": "x", "version": "1.2.3" }

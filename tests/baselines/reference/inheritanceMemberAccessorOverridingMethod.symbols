@@ -16,11 +16,11 @@ class b extends a {
     get x() {
 >x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
 
-        return "20";
+        return () => "20";
     }
-    set x(aValue: string) {
+    set x(aValue) {
 >x : Symbol(b.x, Decl(inheritanceMemberAccessorOverridingMethod.ts, 6, 19), Decl(inheritanceMemberAccessorOverridingMethod.ts, 9, 5))
 >aValue : Symbol(aValue, Decl(inheritanceMemberAccessorOverridingMethod.ts, 10, 10))
-
+        
     }
 }

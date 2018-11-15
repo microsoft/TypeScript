@@ -2,13 +2,13 @@
   {
     "marker": {
       "fileName": "/tests/cases/fourslash/quickInfoJsDocTags.ts",
-      "position": 258
+      "position": 256
     },
     "quickInfo": {
       "kind": "function",
       "kindModifiers": "",
       "textSpan": {
-        "start": 258,
+        "start": 256,
         "length": 3
       },
       "displayParts": [
@@ -78,7 +78,7 @@
         },
         {
           "name": "template",
-          "text": "{T} A template"
+          "text": "T A template"
         },
         {
           "name": "type",

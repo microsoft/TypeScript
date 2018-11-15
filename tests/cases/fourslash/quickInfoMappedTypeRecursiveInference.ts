@@ -17,40 +17,54 @@
 //// oub.b.a.n.a.n.a/*10*/
 
 verify.quickInfoAt('1', `const out: {
-    a: any;
+    a: {
+        a: ...;
+    };
 }`);
 verify.quickInfoAt('2', `function foo<{
-    a: any;
+    a: {
+        a: ...;
+    };
 }>(deep: Deep<{
-    a: any;
+    a: {
+        a: ...;
+    };
 }>): {
-    a: any;
+    a: {
+        a: ...;
+    };
 }`);
 verify.quickInfoAt('3', `(property) a: {
-    a: any;
+    a: {
+        a: ...;
+    };
 }`);
 verify.quickInfoAt('4', `(property) a: {
-    a: any;
+    a: {
+        a: ...;
+    };
 }`);
 verify.quickInfoAt('5', `(property) a: {
-    a: any;
+    a: {
+        a: ...;
+    };
 }`);
 verify.quickInfoAt('6', `const oub: {
-    [x: string]: any;
+    [x: string]: ...;
 }`);
 verify.quickInfoAt('7', `function foo<{
-    [x: string]: any;
+    [x: string]: ...;
 }>(deep: Deep<{
-    [x: string]: any;
+    [x: string]: ...;
 }>): {
-    [x: string]: any;
+    [x: string]: ...;
 }`);
 verify.quickInfoAt('8', `{
-    [x: string]: any;
+    [x: string]: ...;
 }`);
 verify.quickInfoAt('9', `{
-    [x: string]: any;
+    [x: string]: ...;
 }`);
 verify.quickInfoAt('10', `{
-    [x: string]: any;
+    [x: string]: ...;
 }`);

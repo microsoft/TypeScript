@@ -3,10 +3,7 @@
 
 function f<T>(x: T): T { return null; }
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 
 var r = f(1);
@@ -18,10 +15,7 @@ var r = f(1);
 var f2 = <T>(x: T): T => { return null; }
 >f2 : <T>(x: T) => T
 ><T>(x: T): T => { return null; } : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 
 var r2 = f2(1);
@@ -32,10 +26,7 @@ var r2 = f2(1);
 
 var f3: { <T>(x: T): T; }
 >f3 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var r3 = f3(1);
 >r3 : number
@@ -48,10 +39,7 @@ class C {
 
     f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         return null;
 >null : null
@@ -68,18 +56,12 @@ var r4 = (new C()).f(1);
 >1 : 1
 
 interface I {
->I : I
-
     f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 var i: I;
 >i : I
->I : I
 
 var r5 = i.f(1);
 >r5 : number
@@ -91,13 +73,10 @@ var r5 = i.f(1);
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     f(x: T): T {
 >f : (x: T) => T
 >x : T
->T : T
->T : T
 
         return null;
 >null : null
@@ -114,18 +93,12 @@ var r6 = (new C2()).f(1);
 >1 : 1
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     f(x: T): T;
 >f : (x: T) => T
 >x : T
->T : T
->T : T
 }
 var i2: I2<number>;
 >i2 : I2<number>
->I2 : I2<T>
 
 var r7 = i2.f(1);
 >r7 : number

@@ -6,8 +6,6 @@ import moduleA = require("./aliasUsageInObjectLiteral_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
 >Backbone.Model : typeof Backbone.Model
@@ -25,7 +23,6 @@ var a: { x: typeof moduleA } = { x: moduleA };
 var b: { x: IHasVisualizationModel } = { x: moduleA };
 >b : { x: IHasVisualizationModel; }
 >x : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >{ x: moduleA } : { x: typeof moduleA; }
 >x : typeof moduleA
 >moduleA : typeof moduleA
@@ -34,7 +31,6 @@ var c: { y: { z: IHasVisualizationModel } } = { y: { z: moduleA } };
 >c : { y: { z: IHasVisualizationModel; }; }
 >y : { z: IHasVisualizationModel; }
 >z : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >{ y: { z: moduleA } } : { y: { z: typeof moduleA; }; }
 >y : { z: typeof moduleA; }
 >{ z: moduleA } : { z: typeof moduleA; }

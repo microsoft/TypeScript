@@ -1,11 +1,9 @@
 === tests/cases/conformance/types/forAwait/types.forAwait.esnext.2.ts ===
 declare const asyncIterable: AsyncIterable<number>;
 >asyncIterable : AsyncIterable<number>
->AsyncIterable : AsyncIterable<T>
 
 declare const iterable: Iterable<number>;
 >iterable : Iterable<number>
->Iterable : Iterable<T>
 
 async function f() {
 >f : () => Promise<void>

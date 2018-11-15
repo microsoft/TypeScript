@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     interface I {
->I : I
-
         salt:number;
 >salt : number
 
@@ -14,7 +12,6 @@ module M {
 
     var x:I={salt:2,pepper:0};
 >x : I
->I : I
 >{salt:2,pepper:0} : { salt: number; pepper: number; }
 >salt : number
 >2 : 2

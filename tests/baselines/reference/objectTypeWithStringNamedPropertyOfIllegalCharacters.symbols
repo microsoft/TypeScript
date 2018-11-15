@@ -3,10 +3,19 @@ class C {
 >C : Symbol(C, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 0))
 
     "   ": number;
+>"   " : Symbol(C["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 0, 9))
+
     "a   b": string;
+>"a   b" : Symbol(C["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 1, 18))
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(C["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 2, 20))
+
     "a\a": number;
+>"a\a" : Symbol(C["aa"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 3, 41))
+
     static "a ": number
+>"a " : Symbol(C["a "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 4, 18))
 }
 
 var c: C;
@@ -37,8 +46,13 @@ interface I {
 >I : Symbol(I, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 13, 41))
 
     "   ": number;
+>"   " : Symbol(I["   "], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 15, 13))
+
     "a   b": string;
+>"a   b" : Symbol(I["a   b"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 16, 18))
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol(I["~!@#$%^&*()_+{}|:'<>?/.,`"], Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 17, 20))
 }
 
 var i: I;
@@ -70,8 +84,13 @@ var a: {
 >a : Symbol(a, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 29, 3))
 
     "   ": number;
+>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 29, 8))
+
     "a   b": string;
+>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 30, 18))
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": number;
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 31, 20))
 }
 
 var r = a["   "];
@@ -98,8 +117,13 @@ var b = {
 >b : Symbol(b, Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 41, 3))
 
     "   ": 1,
+>"   " : Symbol("   ", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 41, 9))
+
     "a   b": "",
+>"a   b" : Symbol("a   b", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 42, 13))
+
     "~!@#$%^&*()_+{}|:'<>?\/.,`": 1,
+>"~!@#$%^&*()_+{}|:'<>?\/.,`" : Symbol("~!@#$%^&*()_+{}|:'<>?\/.,`", Decl(objectTypeWithStringNamedPropertyOfIllegalCharacters.ts, 43, 16))
 }
 
 var r = b["   "];

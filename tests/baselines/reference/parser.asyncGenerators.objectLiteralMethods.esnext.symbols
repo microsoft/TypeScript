@@ -219,6 +219,7 @@ const o21 = {
 
         const x = { [yield]: 1 };
 >x : Symbol(x, Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 13))
+>[yield] : Symbol([yield], Decl(yieldInNestedComputedPropertyIsOk.ts, 2, 19))
     }
 };
 === tests/cases/conformance/parser/ecmascriptnext/asyncGenerators/asyncGeneratorGetAccessorIsError.ts ===

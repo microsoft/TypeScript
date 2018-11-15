@@ -25,7 +25,6 @@ var e: { a: number };
 
 var f: Number;
 >f : Number
->Number : Number
 
 // All of the below should be an error unless otherwise noted
 // operator *

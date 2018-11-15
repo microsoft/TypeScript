@@ -31,6 +31,7 @@ class FooArrayIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -49,7 +50,6 @@ function fun(...[[a = new Foo], b = [new Foo]]: Bar[][]) { }
 >[new Foo] : Foo[]
 >new Foo : Foo
 >Foo : typeof Foo
->Bar : Bar
 
 fun(...new FooArrayIterator);
 >fun(...new FooArrayIterator) : void

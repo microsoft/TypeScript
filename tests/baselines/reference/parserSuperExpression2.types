@@ -10,7 +10,6 @@ class C {
 >super : any
 >super : any
 > : any
->T : No type information available!
 >0 : 0
   }
 }

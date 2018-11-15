@@ -14,63 +14,30 @@ type AB = {
 
 type T1<K extends keyof AB> = { [key in AB[K]]: true };
 >T1 : T1<K>
->K : K
->AB : AB
->key : key
->AB : AB
->K : K
 >true : true
 
 type T2<K extends 'a'|'b'> = T1<K>[K]; // Error
 >T2 : T1<K>[K]
->K : K
->T1 : T1<K>
->K : K
->K : K
 
 type R = AB[keyof AB]; // "a"
 >R : "a"
->AB : AB
->AB : AB
 
 type T3 = { [key in R]: true };
 >T3 : T3
->key : key
->R : "a"
 >true : true
 
 type T4<K extends 'a'|'b'> = T3[K] // Error
 >T4 : T3[K]
->K : K
->T3 : T3
->K : K
 
 type T5<S extends 'a'|'b'|'extra'> = {[key in AB[S]]: true}[S]; // Error
 >T5 : { [key in AB[S]]: true; }[S]
->S : S
->key : key
->AB : AB
->S : S
 >true : true
->S : S
 
 type T6<S extends 'a'|'b', L extends 'a'|'b'> = {[key in AB[S]]: true}[L]; // Error
 >T6 : { [key in AB[S]]: true; }[L]
->S : S
->L : L
->key : key
->AB : AB
->S : S
 >true : true
->L : L
 
 type T7<S extends 'a'|'b', L extends 'a'> = {[key in AB[S]]: true}[L];
 >T7 : { [key in AB[S]]: true; }[L]
->S : S
->L : L
->key : key
->AB : AB
->S : S
 >true : true
->L : L
 

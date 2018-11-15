@@ -22,13 +22,11 @@ function declSpace() {
 >'this is a string' : "this is a string"
 }
 interface Point { x: number; y: number; }
->Point : Point
 >x : number
 >y : number
 
 for (var p: Point; ;) { }
 >p : Point
->Point : Point
 
 for (var p = { x: 1, y: 2 }; ;) { }
 >p : Point
@@ -40,7 +38,6 @@ for (var p = { x: 1, y: 2 }; ;) { }
 
 for (var p: Point = { x: 0, y: undefined }; ;) { }
 >p : Point
->Point : Point
 >{ x: 0, y: undefined } : { x: number; y: undefined; }
 >x : number
 >0 : 0

@@ -9,7 +9,27 @@ namespace ts.OutliningElementsCollector {
 
     function addNodeOutliningSpans(sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         let depthRemaining = 40;
-        sourceFile.forEachChild(function walk(n) {
+        let current = 0;
+        const statements = sourceFile.statements;
+        const n = statements.length;
+        while (current < n) {
+            while (current < n && !isAnyImportSyntax(statements[current])) {
+                visitNonImportNode(statements[current]);
+                current++;
+            }
+            if (current === n) break;
+            const firstImport = current;
+            while (current < n && isAnyImportSyntax(statements[current])) {
+                addOutliningForLeadingCommentsForNode(statements[current], sourceFile, cancellationToken, out);
+                current++;
+            }
+            const lastImport = current - 1;
+            if (lastImport !== firstImport) {
+                out.push(createOutliningSpanFromBounds(findChildOfKind(statements[firstImport], SyntaxKind.ImportKeyword, sourceFile)!.getStart(sourceFile), statements[lastImport].getEnd(), OutliningSpanKind.Imports));
+            }
+        }
+
+        function visitNonImportNode(n: Node) {
             if (depthRemaining === 0) return;
             cancellationToken.throwIfCancellationRequested();
 
@@ -21,9 +41,19 @@ namespace ts.OutliningElementsCollector {
             if (span) out.push(span);
 
             depthRemaining--;
-            n.forEachChild(walk);
+            if (isIfStatement(n) && n.elseStatement && isIfStatement(n.elseStatement)) {
+                // Consider an 'else if' to be on the same depth as the 'if'.
+                visitNonImportNode(n.expression);
+                visitNonImportNode(n.thenStatement);
+                depthRemaining++;
+                visitNonImportNode(n.elseStatement);
+                depthRemaining--;
+            }
+            else {
+                n.forEachChild(visitNonImportNode);
+            }
             depthRemaining++;
-        });
+        }
     }
 
     function addRegionOutliningSpans(sourceFile: SourceFile, out: Push<OutliningSpan>): void {
@@ -33,14 +63,14 @@ namespace ts.OutliningElementsCollector {
             const currentLineStart = lineStarts[i];
             const lineEnd = i + 1 === lineStarts.length ? sourceFile.getEnd() : lineStarts[i + 1] - 1;
             const lineText = sourceFile.text.substring(currentLineStart, lineEnd);
-            const result = lineText.match(/^\s*\/\/\s*#(end)?region(?:\s+(.*))?$/);
+            const result = isRegionDelimiter(lineText);
             if (!result || isInComment(sourceFile, currentLineStart)) {
                 continue;
             }
 
             if (!result[1]) {
                 const span = createTextSpanFromBounds(sourceFile.text.indexOf("//", currentLineStart), lineEnd);
-                regions.push(createOutliningSpan(span, span, /*autoCollapse*/ false, result[2] || "#region"));
+                regions.push(createOutliningSpan(span, OutliningSpanKind.Region, span, /*autoCollapse*/ false, result[2] || "#region"));
             }
             else {
                 const region = regions.pop();
@@ -53,16 +83,30 @@ namespace ts.OutliningElementsCollector {
         }
     }
 
+    const regionDelimiterRegExp = /^\s*\/\/\s*#(end)?region(?:\s+(.*))?(?:\r)?$/;
+    function isRegionDelimiter(lineText: string) {
+        return regionDelimiterRegExp.exec(lineText);
+    }
+
     function addOutliningForLeadingCommentsForNode(n: Node, sourceFile: SourceFile, cancellationToken: CancellationToken, out: Push<OutliningSpan>): void {
         const comments = getLeadingCommentRangesOfNode(n, sourceFile);
         if (!comments) return;
         let firstSingleLineCommentStart = -1;
         let lastSingleLineCommentEnd = -1;
         let singleLineCommentCount = 0;
+        const sourceText = sourceFile.getFullText();
         for (const { kind, pos, end } of comments) {
             cancellationToken.throwIfCancellationRequested();
             switch (kind) {
                 case SyntaxKind.SingleLineCommentTrivia:
+                    // never fold region delimiters into single-line comment regions
+                    const commentText = sourceText.slice(pos, end);
+                    if (isRegionDelimiter(commentText)) {
+                        combineAndAddMultipleSingleLineComments();
+                        singleLineCommentCount = 0;
+                        break;
+                    }
+
                     // For single line comments, combine consecutive ones (2 or more) into
                     // a single span from the start of the first till the end of the last
                     if (singleLineCommentCount === 0) {
@@ -73,7 +117,7 @@ namespace ts.OutliningElementsCollector {
                     break;
                 case SyntaxKind.MultiLineCommentTrivia:
                     combineAndAddMultipleSingleLineComments();
-                    out.push(createOutliningSpanFromBounds(pos, end));
+                    out.push(createOutliningSpanFromBounds(pos, end, OutliningSpanKind.Comment));
                     singleLineCommentCount = 0;
                     break;
                 default:
@@ -85,13 +129,13 @@ namespace ts.OutliningElementsCollector {
         function combineAndAddMultipleSingleLineComments(): void {
             // Only outline spans of two or more consecutive single line comments
             if (singleLineCommentCount > 1) {
-                out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd));
+                out.push(createOutliningSpanFromBounds(firstSingleLineCommentStart, lastSingleLineCommentEnd, OutliningSpanKind.Comment));
             }
         }
     }
 
-    function createOutliningSpanFromBounds(pos: number, end: number): OutliningSpan {
-        return createOutliningSpan(createTextSpanFromBounds(pos, end));
+    function createOutliningSpanFromBounds(pos: number, end: number, kind: OutliningSpanKind): OutliningSpan {
+        return createOutliningSpan(createTextSpanFromBounds(pos, end), kind);
     }
 
     function getOutliningSpanForNode(n: Node, sourceFile: SourceFile): OutliningSpan | undefined {
@@ -126,7 +170,7 @@ namespace ts.OutliningElementsCollector {
                     default:
                         // Block was a standalone block.  In this case we want to only collapse
                         // the span of the block, independent of any parent span.
-                        return createOutliningSpan(createTextSpanFromNode(n, sourceFile));
+                        return createOutliningSpan(createTextSpanFromNode(n, sourceFile), OutliningSpanKind.Code);
                 }
             case SyntaxKind.ModuleBlock:
                 return spanForNode(n.parent);
@@ -139,6 +183,26 @@ namespace ts.OutliningElementsCollector {
                 return spanForObjectOrArrayLiteral(n);
             case SyntaxKind.ArrayLiteralExpression:
                 return spanForObjectOrArrayLiteral(n, SyntaxKind.OpenBracketToken);
+            case SyntaxKind.JsxElement:
+                return spanForJSXElement(<JsxElement>n);
+            case SyntaxKind.JsxSelfClosingElement:
+            case SyntaxKind.JsxOpeningElement:
+                return spanForJSXAttributes((<JsxOpeningLikeElement>n).attributes);
+        }
+
+        function spanForJSXElement(node: JsxElement): OutliningSpan | undefined {
+            const textSpan = createTextSpanFromBounds(node.openingElement.getStart(sourceFile), node.closingElement.getEnd());
+            const tagName = node.openingElement.tagName.getText(sourceFile);
+            const bannerText = "<" + tagName + ">...</" + tagName + ">";
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, textSpan, /*autoCollapse*/ false, bannerText);
+        }
+
+        function spanForJSXAttributes(node: JsxAttributes): OutliningSpan | undefined {
+            if (node.properties.length === 0) {
+                return undefined;
+            }
+
+            return createOutliningSpanFromBounds(node.getStart(sourceFile), node.getEnd(), OutliningSpanKind.Code);
         }
 
         function spanForObjectOrArrayLiteral(node: Node, open: SyntaxKind.OpenBraceToken | SyntaxKind.OpenBracketToken = SyntaxKind.OpenBraceToken): OutliningSpan | undefined {
@@ -156,11 +220,11 @@ namespace ts.OutliningElementsCollector {
                 return undefined;
             }
             const textSpan = createTextSpanFromBounds(useFullStart ? openToken.getFullStart() : openToken.getStart(sourceFile), closeToken.getEnd());
-            return createOutliningSpan(textSpan, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
+            return createOutliningSpan(textSpan, OutliningSpanKind.Code, createTextSpanFromNode(hintSpanNode, sourceFile), autoCollapse);
         }
     }
 
-    function createOutliningSpan(textSpan: TextSpan, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
-        return { textSpan, hintSpan, bannerText, autoCollapse };
+    function createOutliningSpan(textSpan: TextSpan, kind: OutliningSpanKind, hintSpan: TextSpan = textSpan, autoCollapse = false, bannerText = "..."): OutliningSpan {
+        return { textSpan, kind, hintSpan, bannerText, autoCollapse };
     }
 }

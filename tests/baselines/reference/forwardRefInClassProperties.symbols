@@ -23,7 +23,7 @@ class Test
     method()
 >method : Symbol(Test.method, Decl(forwardRefInClassProperties.ts, 6, 18))
     {
-        let a = b; // Block-scoped variable 'b' used before its declaration
+        let a = b; // Property 'b' is used before its initialization.
 >a : Symbol(a, Decl(forwardRefInClassProperties.ts, 10, 11))
 >b : Symbol(b, Decl(forwardRefInClassProperties.ts, 11, 11))
 

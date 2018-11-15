@@ -32,18 +32,18 @@ import {Cls} from "./m1";
 >"1" : "1"
 
 declare module "./m1" {
-    interface Cls {
->Cls : Cls
+>"./m1" : typeof import("tests/cases/compiler/m1")
 
+    interface Cls {
         foo(): number;
 >foo : () => number
     }
 }
 
 declare module "./m1" {
-    interface Cls {
->Cls : Cls
+>"./m1" : typeof import("tests/cases/compiler/m1")
 
+    interface Cls {
         bar(): string;
 >bar : () => string
     }
@@ -91,22 +91,20 @@ import {C1, C2} from "./m3";
 >undefined : undefined
 
 declare module "./m1" {
-    interface Cls {
->Cls : Cls
+>"./m1" : typeof import("tests/cases/compiler/m1")
 
+    interface Cls {
         baz1(): C1;
 >baz1 : () => C1
->C1 : C1
     }
 }
 
 declare module "./m1" {
-    interface Cls {
->Cls : Cls
+>"./m1" : typeof import("tests/cases/compiler/m1")
 
+    interface Cls {
         baz2(): C2;
 >baz2 : () => C2
->C2 : C2
     }
 }
 
@@ -118,7 +116,6 @@ import "m2";
 import "m4";
 let c: Cls;
 >c : Cls
->Cls : Cls
 
 c.foo().toExponential();
 >c.foo().toExponential() : string
@@ -142,10 +139,10 @@ c.baz1().x.toExponential();
 >c.baz1().x.toExponential() : string
 >c.baz1().x.toExponential : (fractionDigits?: number) => string
 >c.baz1().x : number
->c.baz1() : C1
->c.baz1 : () => C1
+>c.baz1() : import("tests/cases/compiler/m3").C1
+>c.baz1 : () => import("tests/cases/compiler/m3").C1
 >c : Cls
->baz1 : () => C1
+>baz1 : () => import("tests/cases/compiler/m3").C1
 >x : number
 >toExponential : (fractionDigits?: number) => string
 
@@ -153,10 +150,10 @@ c.baz2().x.toLowerCase();
 >c.baz2().x.toLowerCase() : string
 >c.baz2().x.toLowerCase : () => string
 >c.baz2().x : string
->c.baz2() : C2
->c.baz2 : () => C2
+>c.baz2() : import("tests/cases/compiler/m3").C2
+>c.baz2 : () => import("tests/cases/compiler/m3").C2
 >c : Cls
->baz2 : () => C2
+>baz2 : () => import("tests/cases/compiler/m3").C2
 >x : string
 >toLowerCase : () => string
 

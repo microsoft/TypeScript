@@ -38,7 +38,7 @@ function compare(a, b) {
 declare class C</**docComment for type parameter*/ T> {
     method</**docComment of method type parameter */ U extends T>(a: U): void;
     static staticmethod</**docComment of method type parameter */ U>(a: U): void;
-    private privatemethod</**docComment of method type parameter */ U>(a);
-    private static privatestaticmethod</**docComment of method type parameter */ U>(a);
+    private privatemethod;
+    private static privatestaticmethod;
 }
 declare function compare</**type*/ T>(a: T, b: T): boolean;

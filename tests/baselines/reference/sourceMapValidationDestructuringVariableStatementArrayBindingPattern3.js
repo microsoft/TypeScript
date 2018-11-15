@@ -57,6 +57,7 @@ function getMultiRobotB() {
 }
 
 //// [sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 var robotA = [1, "mower", "mowing"];
 var robotB = [2, "trimmer", "trimming"];
 var multiRobotA = ["mower", ["mowing", ""]];
@@ -98,5 +99,4 @@ function getRobotB() {
 function getMultiRobotB() {
     return multiRobotB;
 }
-var _a, _b, _c, _d, _e, _f, _g, _h, _j, _k, _l, _m, _o;
 //# sourceMappingURL=sourceMapValidationDestructuringVariableStatementArrayBindingPattern3.js.map

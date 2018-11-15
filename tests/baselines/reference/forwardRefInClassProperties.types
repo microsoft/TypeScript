@@ -25,7 +25,7 @@ class Test
     method()
 >method : () => void
     {
-        let a = b; // Block-scoped variable 'b' used before its declaration
+        let a = b; // Property 'b' is used before its initialization.
 >a : number
 >b : number
 

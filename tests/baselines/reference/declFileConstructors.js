@@ -228,8 +228,8 @@ export declare class SimpleConstructor {
 export declare class ConstructorWithParameters {
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number);
+    /** this is comment for b*/
+    b: number);
 }
 export declare class ConstructorWithRestParamters {
     constructor(a: string, ...rests: string[]);
@@ -247,7 +247,7 @@ export declare class ConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 export declare class ConstructorWithOptionalParameterProperty {
-    x: string;
+    x?: string;
     constructor(x?: string);
 }
 export declare class ConstructorWithParameterInitializer {
@@ -262,8 +262,8 @@ declare class GlobalSimpleConstructor {
 declare class GlobalConstructorWithParameters {
     /** This is comment for function signature*/
     constructor(/** this is comment about a*/ a: string, 
-        /** this is comment for b*/
-        b: number);
+    /** this is comment for b*/
+    b: number);
 }
 declare class GlobalConstructorWithRestParamters {
     constructor(a: string, ...rests: string[]);
@@ -281,7 +281,7 @@ declare class GlobalConstructorWithPrivateParameterProperty {
     constructor(x: string);
 }
 declare class GlobalConstructorWithOptionalParameterProperty {
-    x: string;
+    x?: string;
     constructor(x?: string);
 }
 declare class GlobalConstructorWithParameterInitializer {

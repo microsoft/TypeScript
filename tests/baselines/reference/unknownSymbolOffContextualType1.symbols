@@ -1,18 +1,18 @@
 === tests/cases/compiler/unknownSymbolOffContextualType1.ts ===
 declare var document: Document;
->document : Symbol(document, Decl(unknownSymbolOffContextualType1.ts, 0, 11))
->Document : Symbol(Document, Decl(unknownSymbolOffContextualType1.ts, 0, 31))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 0, 11))
+>Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 0, 31))
 
 interface Document {
->Document : Symbol(Document, Decl(unknownSymbolOffContextualType1.ts, 0, 31))
+>Document : Symbol(Document, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 0, 31))
 
     getElementById(elementId: string): HTMLElement;
->getElementById : Symbol(Document.getElementById, Decl(unknownSymbolOffContextualType1.ts, 1, 20))
+>getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
 >elementId : Symbol(elementId, Decl(unknownSymbolOffContextualType1.ts, 2, 19))
->HTMLElement : Symbol(HTMLElement, Decl(unknownSymbolOffContextualType1.ts, 3, 1))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 3, 1))
 }
 interface HTMLElement {
->HTMLElement : Symbol(HTMLElement, Decl(unknownSymbolOffContextualType1.ts, 3, 1))
+>HTMLElement : Symbol(HTMLElement, Decl(lib.dom.d.ts, --, --), Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 3, 1))
 
     isDisabled: boolean;
 >isDisabled : Symbol(HTMLElement.isDisabled, Decl(unknownSymbolOffContextualType1.ts, 4, 23))
@@ -23,23 +23,23 @@ function getMaxWidth(elementNames: string[]) {
 
     var elements = elementNames.map(function (name) {
 >elements : Symbol(elements, Decl(unknownSymbolOffContextualType1.ts, 8, 7))
->elementNames.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>elementNames.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >elementNames : Symbol(elementNames, Decl(unknownSymbolOffContextualType1.ts, 7, 21))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >name : Symbol(name, Decl(unknownSymbolOffContextualType1.ts, 8, 46))
 
         return document.getElementById(name);
->document.getElementById : Symbol(Document.getElementById, Decl(unknownSymbolOffContextualType1.ts, 1, 20))
->document : Symbol(document, Decl(unknownSymbolOffContextualType1.ts, 0, 11))
->getElementById : Symbol(Document.getElementById, Decl(unknownSymbolOffContextualType1.ts, 1, 20))
+>document.getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
+>document : Symbol(document, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 0, 11))
+>getElementById : Symbol(Document.getElementById, Decl(lib.dom.d.ts, --, --), Decl(unknownSymbolOffContextualType1.ts, 1, 20))
 >name : Symbol(name, Decl(unknownSymbolOffContextualType1.ts, 8, 46))
 
     });
     var enabled = elements.filter(function (e) {
 >enabled : Symbol(enabled, Decl(unknownSymbolOffContextualType1.ts, 11, 7))
->elements.filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>elements.filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >elements : Symbol(elements, Decl(unknownSymbolOffContextualType1.ts, 8, 7))
->filter : Symbol(Array.filter, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>filter : Symbol(Array.filter, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 11, 44))
 
         return !e.isDisabled;
@@ -50,9 +50,9 @@ function getMaxWidth(elementNames: string[]) {
     });
     var widths = enabled.map(function (e) {
 >widths : Symbol(widths, Decl(unknownSymbolOffContextualType1.ts, 14, 7))
->enabled.map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>enabled.map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >enabled : Symbol(enabled, Decl(unknownSymbolOffContextualType1.ts, 11, 7))
->map : Symbol(Array.map, Decl(lib.d.ts, --, --))
+>map : Symbol(Array.map, Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(unknownSymbolOffContextualType1.ts, 14, 39))
 
         return e.xyxyxyx;  // error expected here
@@ -61,9 +61,9 @@ function getMaxWidth(elementNames: string[]) {
     });
     var maxWidth = widths.reduce(function (a, b) {
 >maxWidth : Symbol(maxWidth, Decl(unknownSymbolOffContextualType1.ts, 17, 7))
->widths.reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>widths.reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >widths : Symbol(widths, Decl(unknownSymbolOffContextualType1.ts, 14, 7))
->reduce : Symbol(Array.reduce, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>reduce : Symbol(Array.reduce, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unknownSymbolOffContextualType1.ts, 17, 43))
 >b : Symbol(b, Decl(unknownSymbolOffContextualType1.ts, 17, 45))
 

@@ -27,9 +27,9 @@
     "File '/tslib.jsx' does not exist.",
     "======== Module name 'tslib' was not resolved. ========",
     "======== Resolving module 'tslib' from '/a/b/c/lib1.ts'. ========",
-    "Resolution for module 'tslib' was found in cache.",
+    "Resolution for module 'tslib' was found in cache from location '/a/b/c'.",
     "======== Module name 'tslib' was not resolved. ========",
     "======== Resolving module 'tslib' from '/a/b/c/lib2.ts'. ========",
-    "Resolution for module 'tslib' was found in cache.",
+    "Resolution for module 'tslib' was found in cache from location '/a/b/c'.",
     "======== Module name 'tslib' was not resolved. ========"
 ]

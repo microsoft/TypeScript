@@ -18,5 +18,9 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-/// <reference path="lib.es2017.d.ts" />
-/// <reference path="lib.esnext.asynciterable.d.ts" />
+/// <reference lib="es2018" />
+/// <reference lib="esnext.asynciterable" />
+/// <reference lib="esnext.array" />
+/// <reference lib="esnext.bigint" />
+/// <reference lib="esnext.symbol" />
+/// <reference lib="esnext.intl" />

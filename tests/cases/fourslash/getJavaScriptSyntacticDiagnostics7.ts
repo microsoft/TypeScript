@@ -2,14 +2,9 @@
 
 // @allowJs: true
 // @Filename: a.js
-//// module M { }
+////module [|M|] { }
 
-verify.getSyntacticDiagnostics(`[
-  {
-    "message": "'module declarations' can only be used in a .ts file.",
-    "start": 7,
-    "length": 1,
-    "category": "error",
-    "code": 8007
-  }
-]`);
+verify.getSyntacticDiagnostics([{
+    message: "'module declarations' can only be used in a .ts file.",
+    code: 8007
+}]);

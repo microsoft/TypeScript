@@ -4,9 +4,7 @@ declare class Base {
 
     check<TProp extends this>(prop: TProp): boolean;
 >check : <TProp extends this>(prop: TProp) => boolean
->TProp : TProp
 >prop : TProp
->TProp : TProp
 }
 
 class Test extends Base {

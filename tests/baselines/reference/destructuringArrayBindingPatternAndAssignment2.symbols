@@ -20,10 +20,11 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 
 interface J extends Array<Number> {
 >J : Symbol(J, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 8, 63))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     2: number;
+>2 : Symbol(J[2], Decl(destructuringArrayBindingPatternAndAssignment2.ts, 9, 35))
 }
 
 function bar(): J {
@@ -67,6 +68,7 @@ function foo(idx: number): F {
 
     return {
         2: true
+>2 : Symbol(2, Decl(destructuringArrayBindingPatternAndAssignment2.ts, 29, 12))
     }
 }
 var [c4, c5, c6] = foo(1);  // Error

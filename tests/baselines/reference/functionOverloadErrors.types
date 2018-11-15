@@ -26,7 +26,6 @@ function fn2b(n: number[]);
 function fn2b(n: Array<number>);
 >fn2b : { (n: number[]): any; (n: number[]): any; }
 >n : number[]
->Array : T[]
 
 function fn2b() {
 >fn2b : { (n: number[]): any; (n: number[]): any; }
@@ -77,12 +76,10 @@ function fn7() { }
 //Function overloads that differ only by type parameter name
 function fn8<T>(n: string);
 >fn8 : { <T>(n: string): any; <S>(n: string): any; }
->T : T
 >n : string
 
 function fn8<S>(n: string);
 >fn8 : { <T>(n: string): any; <S>(n: string): any; }
->S : S
 >n : string
 
 function fn8() { }
@@ -91,70 +88,48 @@ function fn8() { }
 //Function overloads that differ only by type parameter name when used in parameter type annotations
 function fn9<T>(n: T);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
->T : T
 >n : T
->T : T
 
 function fn9<S>(n: S);
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
->S : S
 >n : S
->S : S
 
 function fn9() { }
 >fn9 : { <T>(n: T): any; <S>(n: S): any; }
 
 //Function overloads that differ only by type parameter constraints
 function fn10<T extends Window>();
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
->T : T
->Window : No type information available!
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 
 function fn10<S extends Date>();
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
->S : S
->Date : Date
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 
 function fn10() { }
->fn10 : { <T extends any>(): any; <S extends Date>(): any; }
+>fn10 : { <T extends Window>(): any; <S extends Date>(): any; }
 
 // (actually OK)
 
 //Function overloads that differ only by type parameter constraints where constraints are structually identical
 function fn11<T extends Window>();
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
->T : T
->Window : No type information available!
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
 
 function fn11<S extends typeof window>();
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
->S : S
->window : any
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
+>window : Window
 
 function fn11() { }
->fn11 : { <T extends any>(): any; <S extends any>(): any; }
+>fn11 : { <T extends Window>(): any; <S extends Window>(): any; }
 
 //Function overloads that differ only by type parameter constraints where constraints include infinitely recursive type reference
 interface List<T> {
->List : List<T>
->T : T
-
     parents: List<List<T>>;
 >parents : List<List<T>>
->List : List<T>
->List : List<T>
->T : T
 }
 function fn12<T extends List<List<any>>>();
 >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
->T : T
->List : List<T>
->List : List<T>
 
 function fn12<T extends List<any>>();
 >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
->T : T
->List : List<T>
 
 function fn12() { }
 >fn12 : { <T extends List<List<any>>>(): any; <T extends List<any>>(): any; }
@@ -263,16 +238,9 @@ function fn14() {
 //Function overloads where return types are different infinitely recursive type reference
 function fn15<T extends List<List<any>>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
->T : T
->List : List<T>
->List : List<T>
->T : T
 
 function fn15<T extends List<any>>(): T;
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }
->T : T
->List : List<T>
->T : T
 
 function fn15() {
 >fn15 : { <T extends List<List<any>>>(): T; <T extends List<any>>(): T; }

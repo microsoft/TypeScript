@@ -18,6 +18,8 @@ declare function require(moduleName: string): any;
 >moduleName : Symbol(moduleName, Decl(node.d.ts, 0, 25))
 
 declare module "fs" {
+>"fs" : Symbol("fs", Decl(node.d.ts, 0, 50))
+
     export function readFileSync(s: string): string;
 >readFileSync : Symbol(readFileSync, Decl(node.d.ts, 2, 21))
 >s : Symbol(s, Decl(node.d.ts, 3, 33))

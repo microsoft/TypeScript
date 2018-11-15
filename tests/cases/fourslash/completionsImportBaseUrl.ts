@@ -3,7 +3,8 @@
 // @Filename: /tsconfig.json
 ////{
 ////    "compilerOptions": {
-////        "baseUrl": "."
+////        "baseUrl": ".",
+////        "module": "esnext"
 ////    }
 ////}
 
@@ -14,8 +15,16 @@
 ////fo/**/
 
 // Test that it prefers a relative import (see sourceDisplay).
-goTo.marker("");
-verify.completionListContains({ name: "foo", source: "/src/a" }, "const foo: 0", "", "const", undefined, /*hasAction*/ true, {
-    includeExternalModuleExports: true,
-    sourceDisplay: "./a",
+verify.completions({
+    marker: "",
+    includes: {
+        name: "foo",
+        source: "/src/a",
+        sourceDisplay: "./a",
+        text: "const foo: 0",
+        kind: "const",
+        kindModifiers: "export",
+        hasAction: true,
+    },
+    preferences: { includeCompletionsForModuleExports: true },
 });

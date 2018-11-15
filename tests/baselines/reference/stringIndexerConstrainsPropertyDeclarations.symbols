@@ -3,7 +3,7 @@
 
 interface MyString extends String {
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: number;
 >foo : Symbol(MyString.foo, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 2, 35))
@@ -27,11 +27,23 @@ class C {
 >c : Symbol(C.c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 12, 14))
 
     "d": string; // ok
+>"d" : Symbol(C["d"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 13, 15))
+
     "e": number; // error
+>"e" : Symbol(C["e"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 14, 16))
+
     1.0: string; // ok
+>1.0 : Symbol(C[1.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 15, 16))
+
     2.0: number; // error
+>2.0 : Symbol(C[2.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 16, 16))
+
     "3.0": string; // ok
+>"3.0" : Symbol(C["3.0"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 17, 16))
+
     "4.0": number; // error
+>"4.0" : Symbol(C["4.0"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 18, 18))
+
     f: MyString; // error
 >f : Symbol(C.f, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 19, 18))
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
@@ -83,9 +95,17 @@ interface I {
 >c : Symbol(I.c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 44, 14))
 
     "d": string; // ok
+>"d" : Symbol(I["d"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 45, 15))
+
     "e": number; // error
+>"e" : Symbol(I["e"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 46, 16))
+
     1.0: string; // ok
+>1.0 : Symbol(I[1.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 47, 16))
+
     2.0: number; // error
+>2.0 : Symbol(I[2.0], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 48, 16))
+
     (): string; // ok
     (x): number // ok
 >x : Symbol(x, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 51, 5))
@@ -94,7 +114,11 @@ interface I {
 >foo : Symbol(I.foo, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 51, 15))
 
     "3.0": string; // ok
+>"3.0" : Symbol(I["3.0"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 52, 18))
+
     "4.0": number; // error
+>"4.0" : Symbol(I["4.0"], Decl(stringIndexerConstrainsPropertyDeclarations.ts, 53, 18))
+
     f: MyString; // error
 >f : Symbol(I.f, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 54, 18))
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
@@ -116,9 +140,17 @@ var a: {
 >c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 62, 14))
 
     "d": string; // ok
+>"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 63, 15))
+
     "e": number; // error
+>"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 64, 16))
+
     1.0: string; // ok
+>1.0 : Symbol(1.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 65, 16))
+
     2.0: number; // error
+>2.0 : Symbol(2.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 66, 16))
+
     (): string; // ok
     (x): number // ok
 >x : Symbol(x, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 69, 5))
@@ -127,7 +159,11 @@ var a: {
 >foo : Symbol(foo, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 69, 15))
 
     "3.0": string; // ok
+>"3.0" : Symbol("3.0", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 70, 18))
+
     "4.0": number; // error
+>"4.0" : Symbol("4.0", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 71, 18))
+
     f: MyString; // error
 >f : Symbol(f, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 72, 18))
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))
@@ -148,11 +184,23 @@ var b: { [x: string]: string; } = {
 >c : Symbol(c, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 79, 9))
 
     "d": '', 
+>"d" : Symbol("d", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 80, 17))
+
     "e": 1, 
+>"e" : Symbol("e", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 81, 12))
+
     1.0: '',
+>1.0 : Symbol(1.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 82, 11))
+
     2.0: 1, 
+>2.0 : Symbol(2.0, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 83, 12))
+
     "3.0": '', 
+>"3.0" : Symbol("3.0", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 84, 11))
+
     "4.0": 1, 
+>"4.0" : Symbol("4.0", Decl(stringIndexerConstrainsPropertyDeclarations.ts, 85, 14))
+
     f: <MyString>null, 
 >f : Symbol(f, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 86, 13))
 >MyString : Symbol(MyString, Decl(stringIndexerConstrainsPropertyDeclarations.ts, 0, 0))

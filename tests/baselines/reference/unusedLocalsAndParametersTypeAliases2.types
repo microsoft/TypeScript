@@ -1,7 +1,7 @@
 === tests/cases/compiler/unusedLocalsAndParametersTypeAliases2.ts ===
 // unused
 type handler1 = () => void;
->handler1 : () => void
+>handler1 : handler1
 
 
 function foo() {

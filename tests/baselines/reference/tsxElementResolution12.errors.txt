@@ -1,11 +1,12 @@
 tests/cases/conformance/jsx/file.tsx(23,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+tests/cases/conformance/jsx/file.tsx(23,2): error TS2322: Type '{ x: number; }' is not assignable to type '{}'.
+  Property 'x' does not exist on type '{}'.
 tests/cases/conformance/jsx/file.tsx(25,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
-tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-  Types of property 'x' are incompatible.
-    Type 'string' is not assignable to type 'number'.
+tests/cases/conformance/jsx/file.tsx(26,1): error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type 'string' is not assignable to type 'number'.
 
 
-==== tests/cases/conformance/jsx/file.tsx (3 errors) ====
+==== tests/cases/conformance/jsx/file.tsx (5 errors) ====
     declare module JSX {
     	interface Element { }
     	interface ElementAttributesProperty { pr: any; }
@@ -31,11 +32,16 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '{ x: string; }' 
     <Obj3 x={10} />; // Error
     ~~~~~~~~~~~~~~~
 !!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
+     ~~~~
+!!! error TS2322: Type '{ x: number; }' is not assignable to type '{}'.
+!!! error TS2322:   Property 'x' does not exist on type '{}'.
     var attributes: any;
     <Obj3 {...attributes} />; // Error
     ~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
     <Obj3 {...{}} />; // OK
+    ~~~~~~~~~~~~~~~~
+!!! error TS2607: JSX element class does not support attributes because it does not have a 'pr' property.
     
     interface Obj4type {
     	new(n: string): { x: number; pr: { x: number; } };
@@ -43,8 +49,7 @@ tests/cases/conformance/jsx/file.tsx(33,7): error TS2322: Type '{ x: string; }' 
     var Obj4: Obj4type;
     <Obj4 x={10} />; // OK
     <Obj4 x={'10'} />; // Error
-          ~~~~~~~~
-!!! error TS2322: Type '{ x: string; }' is not assignable to type '{ x: number; }'.
-!!! error TS2322:   Types of property 'x' are incompatible.
-!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+          ~
+!!! error TS2322: Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:29:37: The expected type comes from property 'x' which is declared here on type '{ x: number; }'
     

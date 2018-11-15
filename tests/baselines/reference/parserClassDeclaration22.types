@@ -3,5 +3,8 @@ class C {
 >C : C
 
     "foo"();
+>"foo" : () => any
+
     "bar"() { }
+>"bar" : () => void
 }

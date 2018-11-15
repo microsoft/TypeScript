@@ -1,6 +1,7 @@
 EmitSkipped: false
 
 EmitSkipped: false
+
 FileName : /tests/cases/fourslash/inputFile2.js
 var x1 = "hello world";
 var Foo = /** @class */ (function () {

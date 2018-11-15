@@ -5,9 +5,7 @@ function foo(a: string): string;
 
 function foo<T>(a: T): number;
 >foo : { (a: string): string; <T>(a: T): number; }
->T : T
 >a : T
->T : T
 
 function foo(a: any): any {
 >foo : { (a: string): string; <T>(a: T): number; }

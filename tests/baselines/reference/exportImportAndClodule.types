@@ -16,8 +16,6 @@ module K {
 >12 : 12
 
         export interface Point {
->Point : Point
-
             x: number;
 >x : number
 
@@ -55,5 +53,4 @@ var p: M.D.Point;
 >p : { x: number; y: number; }
 >M : any
 >D : any
->Point : K.L.Point
 

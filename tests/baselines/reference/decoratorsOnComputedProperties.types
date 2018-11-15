@@ -1,9 +1,8 @@
 === tests/cases/compiler/decoratorsOnComputedProperties.ts ===
 function x(o: object, k: PropertyKey) { }
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
 >o : object
->k : PropertyKey
->PropertyKey : PropertyKey
+>k : string | number | symbol
 
 let i = 0;
 >i : number
@@ -32,69 +31,83 @@ class A {
 >A : A
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 }
@@ -105,69 +118,83 @@ void class B {
 >B : typeof B
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 
@@ -177,73 +204,88 @@ class C {
 >C : C
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
@@ -255,73 +297,88 @@ void class D {
 >D : typeof D
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
@@ -332,74 +389,89 @@ class E {
 >E : E
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 }
@@ -410,74 +482,89 @@ void class F {
 >F : typeof F
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 
@@ -487,79 +574,95 @@ class G {
 >G : G
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     ["some" + "method2"]() {}
+>["some" + "method2"] : () => void
 >"some" + "method2" : string
 >"some" : "some"
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 }
@@ -570,79 +673,95 @@ void class H {
 >H : typeof H
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     ["some" + "method"]() {}
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     ["some" + "method2"]() {}
+>["some" + "method2"] : () => void
 >"some" + "method2" : string
 >"some" : "some"
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 
@@ -652,80 +771,96 @@ class I {
 >I : I
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     @x ["some" + "method"]() {}
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     ["some" + "method2"]() {}
+>["some" + "method2"] : () => void
 >"some" + "method2" : string
 >"some" : "some"
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 }
@@ -736,80 +871,96 @@ void class J {
 >J : typeof J
 
     @x ["property"]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property"] : any
 >"property" : "property"
 
     @x [Symbol.toStringTag]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.toStringTag] : any
 >Symbol.toStringTag : symbol
 >Symbol : SymbolConstructor
 >toStringTag : symbol
 
     @x ["property2"]: any = 2;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["property2"] : any
 >"property2" : "property2"
 >2 : 2
 
     @x [Symbol.iterator]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[Symbol.iterator] : any
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
 >null : null
 
     ["property3"]: any;
+>["property3"] : any
 >"property3" : "property3"
 
     [Symbol.isConcatSpreadable]: any;
+>[Symbol.isConcatSpreadable] : any
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
 
     ["property4"]: any = 2;
+>["property4"] : any
 >"property4" : "property4"
 >2 : 2
 
     [Symbol.match]: any = null;
+>[Symbol.match] : any
 >Symbol.match : symbol
 >Symbol : SymbolConstructor
 >match : symbol
 >null : null
 
     [foo()]: any;
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 
     @x [foo()]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[foo()] : any
 >foo() : string
 >foo : () => string
 >null : null
 
     @x ["some" + "method"]() {}
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>["some" + "method"] : () => void
 >"some" + "method" : string
 >"some" : "some"
 >"method" : "method"
 
     [fieldNameA]: any;
+>[fieldNameA] : any
 >fieldNameA : string
 
     @x [fieldNameB]: any;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameB] : any
 >fieldNameB : string
 
     ["some" + "method2"]() {}
+>["some" + "method2"] : () => void
 >"some" + "method2" : string
 >"some" : "some"
 >"method2" : "method2"
 
     @x [fieldNameC]: any = null;
->x : (o: object, k: PropertyKey) => void
+>x : (o: object, k: string | number | symbol) => void
+>[fieldNameC] : any
 >fieldNameC : string
 >null : null
 

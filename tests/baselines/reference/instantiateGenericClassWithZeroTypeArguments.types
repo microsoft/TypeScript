@@ -3,11 +3,9 @@
 
 class C<T> {
 >C : C<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 var c = new C();
@@ -17,16 +15,12 @@ var c = new C();
 
 class D<T, U> {
 >D : D<T, U>
->T : T
->U : U
 
     x: T
 >x : T
->T : T
 
     y: U
 >y : U
->U : U
 }
 
 var d = new D();

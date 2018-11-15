@@ -1,6 +1,8 @@
 === tests/cases/compiler/refs.d.ts ===
 declare module "path";
-No type information for this code.=== tests/cases/compiler/file.ts ===
+>"path" : any
+
+=== tests/cases/compiler/file.ts ===
 import path from "path";
 >path : any
 

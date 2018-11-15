@@ -12,7 +12,6 @@ let x = async function() {
 // async function with which promised type is void - return can be omitted
 async function f2(): Promise<void> {
 >f2 : () => Promise<void>
->Promise : Promise<T>
     
 }
 
@@ -27,7 +26,6 @@ async function f3(x) {
 
 async function f4(): Promise<number> {
 >f4 : () => Promise<number>
->Promise : Promise<T>
     
 }
 

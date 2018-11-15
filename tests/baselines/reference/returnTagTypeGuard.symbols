@@ -1,0 +1,115 @@
+=== tests/cases/conformance/jsdoc/bug25127.js ===
+class Entry {
+>Entry : Symbol(Entry, Decl(bug25127.js, 0, 0))
+
+    constructor() {
+        this.c = 1
+>this.c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
+>this : Symbol(Entry, Decl(bug25127.js, 0, 0))
+>c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
+    }
+    /**
+     * @param {any} x
+     * @return {this is Entry}
+     */
+    isInit(x) {
+>isInit : Symbol(Entry.isInit, Decl(bug25127.js, 3, 5))
+>x : Symbol(x, Decl(bug25127.js, 8, 11))
+
+        return true
+    }
+}
+class Group {
+>Group : Symbol(Group, Decl(bug25127.js, 11, 1))
+
+    constructor() {
+        this.d = 'no'
+>this.d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
+>this : Symbol(Group, Decl(bug25127.js, 11, 1))
+>d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
+    }
+    /**
+     * @param {any} x
+     * @return {false}
+     */
+    isInit(x) {
+>isInit : Symbol(Group.isInit, Decl(bug25127.js, 15, 5))
+>x : Symbol(x, Decl(bug25127.js, 20, 11))
+
+        return false
+    }
+}
+/** @param {Entry | Group} chunk */
+function f(chunk) {
+>f : Symbol(f, Decl(bug25127.js, 23, 1))
+>chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+
+    let x = chunk.isInit(chunk) ? chunk.c : chunk.d
+>x : Symbol(x, Decl(bug25127.js, 26, 7))
+>chunk.isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
+>chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>isInit : Symbol(isInit, Decl(bug25127.js, 3, 5), Decl(bug25127.js, 15, 5))
+>chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>chunk.c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
+>chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>c : Symbol(Entry.c, Decl(bug25127.js, 1, 19))
+>chunk.d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
+>chunk : Symbol(chunk, Decl(bug25127.js, 25, 11))
+>d : Symbol(Group.d, Decl(bug25127.js, 13, 19))
+
+    return x
+>x : Symbol(x, Decl(bug25127.js, 26, 7))
+}
+
+/**
+ * @param {any} value
+ * @return {value is boolean}
+ */
+function isBoolean(value) {
+>isBoolean : Symbol(isBoolean, Decl(bug25127.js, 28, 1))
+>value : Symbol(value, Decl(bug25127.js, 34, 19))
+
+    return typeof value === "boolean";
+>value : Symbol(value, Decl(bug25127.js, 34, 19))
+}
+
+/** @param {boolean | number} val */
+function foo(val) {
+>foo : Symbol(foo, Decl(bug25127.js, 36, 1))
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+
+    if (isBoolean(val)) {
+>isBoolean : Symbol(isBoolean, Decl(bug25127.js, 28, 1))
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+
+        val;
+>val : Symbol(val, Decl(bug25127.js, 39, 13))
+    }
+}
+
+/**
+ * @callback Cb
+ * @param {unknown} x
+ * @return {x is number}
+ */
+
+/** @type {Cb} */
+function isNumber(x) { return typeof x === "number" }
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+>x : Symbol(x, Decl(bug25127.js, 52, 18))
+
+/** @param {unknown} x */
+function g(x) {
+>g : Symbol(g, Decl(bug25127.js, 52, 53))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+    if (isNumber(x)) {
+>isNumber : Symbol(isNumber, Decl(bug25127.js, 43, 1))
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+
+        x * 2;
+>x : Symbol(x, Decl(bug25127.js, 55, 11))
+    }
+}
+

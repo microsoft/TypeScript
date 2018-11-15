@@ -12,7 +12,7 @@ function register(kind: string): void | never {
 >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
 
     throw new Error(`Class with kind "${kind}" is already registered.`);
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >kind : Symbol(kind, Decl(declarationNoDanglingGenerics.ts, 2, 18))
   }
   kindCache[kind] = true;

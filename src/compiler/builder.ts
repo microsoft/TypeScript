@@ -1,10 +1,9 @@
-/// <reference path="builderState.ts" />
-
 /*@internal*/
 namespace ts {
     /**
      * State to store the changed files, affected files and cache semantic diagnostics
      */
+    // TODO: GH#18217 Properties of this interface are frequently asserted to be defined.
     export interface BuilderProgramState extends BuilderState {
         /**
          * Cache of semantic diagnostics for files with their Path being the key
@@ -32,24 +31,30 @@ namespace ts {
          */
         currentAffectedFilesSignatures: Map<string> | undefined;
         /**
+         * Newly computed visible to outside referencedSet
+         */
+        currentAffectedFilesExportedModulesMap: BuilderState.ComputingExportedModulesMap | undefined;
+        /**
          * Already seen affected files
          */
         seenAffectedFiles: Map<true> | undefined;
+        /**
+         * whether this program has cleaned semantic diagnostics cache for lib files
+         */
+        cleanedDiagnosticsOfLibFiles?: boolean;
+        /**
+         * True if the semantic diagnostics were copied from the old state
+         */
+        semanticDiagnosticsFromOldState?: Map<true>;
         /**
          * program corresponding to this state
          */
         program: Program;
     }
 
-    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined) {
-        if (map1 === undefined) {
-            return map2 === undefined;
-        }
-        if (map2 === undefined) {
-            return map1 === undefined;
-        }
+    function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
         // Has same size and every key is present in both maps
-        return map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
+        return map1 as ReadonlyMap<T | U> === map2 || map1 !== undefined && map2 !== undefined && map1.size === map2.size && !forEachKey(map1, key => !map2.has(key));
     }
 
     /**
@@ -63,46 +68,60 @@ namespace ts {
             state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         }
         state.changedFilesSet = createMap<true>();
+
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
-        const canCopySemanticDiagnostics = useOldState && oldState.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile;
+        const oldCompilerOptions = useOldState ? oldState!.program.getCompilerOptions() : undefined;
+        const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
+            !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
         if (useOldState) {
             // Verify the sanity of old state
-            if (!oldState.currentChangedFilePath) {
-                Debug.assert(!oldState.affectedFiles && (!oldState.currentAffectedFilesSignatures || !oldState.currentAffectedFilesSignatures.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
+            if (!oldState!.currentChangedFilePath) {
+                Debug.assert(!oldState!.affectedFiles && (!oldState!.currentAffectedFilesSignatures || !oldState!.currentAffectedFilesSignatures!.size), "Cannot reuse if only few affected files of currentChangedFile were iterated");
             }
             if (canCopySemanticDiagnostics) {
-                Debug.assert(!forEachKey(oldState.changedFilesSet, path => oldState.semanticDiagnosticsPerFile.has(path)), "Semantic diagnostics shouldnt be available for changed files");
+                Debug.assert(!forEachKey(oldState!.changedFilesSet, path => oldState!.semanticDiagnosticsPerFile!.has(path)), "Semantic diagnostics shouldnt be available for changed files");
             }
 
             // Copy old state's changed files set
-            copyEntries(oldState.changedFilesSet, state.changedFilesSet);
+            copyEntries(oldState!.changedFilesSet, state.changedFilesSet);
         }
 
         // Update changed files and copy semantic diagnostics if we can
         const referencedMap = state.referencedMap;
-        const oldReferencedMap = useOldState && oldState.referencedMap;
+        const oldReferencedMap = useOldState ? oldState!.referencedMap : undefined;
+        const copyDeclarationFileDiagnostics = canCopySemanticDiagnostics && !compilerOptions.skipLibCheck === !oldCompilerOptions!.skipLibCheck;
+        const copyLibFileDiagnostics = copyDeclarationFileDiagnostics && !compilerOptions.skipDefaultLibCheck === !oldCompilerOptions!.skipDefaultLibCheck;
         state.fileInfos.forEach((info, sourceFilePath) => {
-            let oldInfo: Readonly<BuilderState.FileInfo>;
-            let newReferences: BuilderState.ReferencedSet;
+            let oldInfo: Readonly<BuilderState.FileInfo> | undefined;
+            let newReferences: BuilderState.ReferencedSet | undefined;
 
             // if not using old state, every file is changed
             if (!useOldState ||
                 // File wasnt present in old state
-                !(oldInfo = oldState.fileInfos.get(sourceFilePath)) ||
+                !(oldInfo = oldState!.fileInfos.get(sourceFilePath)) ||
                 // versions dont match
                 oldInfo.version !== info.version ||
                 // Referenced files changed
                 !hasSameKeys(newReferences = referencedMap && referencedMap.get(sourceFilePath), oldReferencedMap && oldReferencedMap.get(sourceFilePath)) ||
                 // Referenced file was deleted in the new program
-                newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState.fileInfos.has(path))) {
+                newReferences && forEachKey(newReferences, path => !state.fileInfos.has(path) && oldState!.fileInfos.has(path))) {
                 // Register file as changed file and do not copy semantic diagnostics, since all changed files need to be re-evaluated
                 state.changedFilesSet.set(sourceFilePath, true);
             }
             else if (canCopySemanticDiagnostics) {
+                const sourceFile = state.program.getSourceFileByPath(sourceFilePath as Path)!;
+
+                if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
+                if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
+
                 // Unchanged file copy diagnostics
-                const diagnostics = oldState.semanticDiagnosticsPerFile.get(sourceFilePath);
+                const diagnostics = oldState!.semanticDiagnosticsPerFile!.get(sourceFilePath);
                 if (diagnostics) {
-                    state.semanticDiagnosticsPerFile.set(sourceFilePath, diagnostics);
+                    state.semanticDiagnosticsPerFile!.set(sourceFilePath, diagnostics);
+                    if (!state.semanticDiagnosticsFromOldState) {
+                        state.semanticDiagnosticsFromOldState = createMap<true>();
+                    }
+                    state.semanticDiagnosticsFromOldState.set(sourceFilePath, true);
                 }
             }
         });
@@ -114,7 +133,7 @@ namespace ts {
      * Verifies that source file is ok to be used in calls that arent handled by next
      */
     function assertSourceFileOkWithoutNextAffectedCall(state: BuilderProgramState, sourceFile: SourceFile | undefined) {
-        Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex - 1] !== sourceFile || !state.semanticDiagnosticsPerFile.has(sourceFile.path));
+        Debug.assert(!sourceFile || !state.affectedFiles || state.affectedFiles[state.affectedFilesIndex! - 1] !== sourceFile || !state.semanticDiagnosticsPerFile!.has(sourceFile.path));
     }
 
     /**
@@ -127,14 +146,14 @@ namespace ts {
         while (true) {
             const { affectedFiles } = state;
             if (affectedFiles) {
-                const { seenAffectedFiles, semanticDiagnosticsPerFile } = state;
-                let { affectedFilesIndex } = state;
+                const seenAffectedFiles = state.seenAffectedFiles!;
+                let affectedFilesIndex = state.affectedFilesIndex!; // TODO: GH#18217
                 while (affectedFilesIndex < affectedFiles.length) {
                     const affectedFile = affectedFiles[affectedFilesIndex];
                     if (!seenAffectedFiles.has(affectedFile.path)) {
                         // Set the next affected file as seen and remove the cached semantic diagnostics
                         state.affectedFilesIndex = affectedFilesIndex;
-                        semanticDiagnosticsPerFile.delete(affectedFile.path);
+                        cleanSemanticDiagnosticsOfAffectedFile(state, affectedFile);
                         return affectedFile;
                     }
                     seenAffectedFiles.set(affectedFile.path, true);
@@ -142,11 +161,12 @@ namespace ts {
                 }
 
                 // Remove the changed file from the change set
-                state.changedFilesSet.delete(state.currentChangedFilePath);
+                state.changedFilesSet.delete(state.currentChangedFilePath!);
                 state.currentChangedFilePath = undefined;
                 // Commit the changes in file signature
-                BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures);
-                state.currentAffectedFilesSignatures.clear();
+                BuilderState.updateSignaturesFromCache(state, state.currentAffectedFilesSignatures!);
+                state.currentAffectedFilesSignatures!.clear();
+                BuilderState.updateExportedFilesMapFromCache(state, state.currentAffectedFilesExportedModulesMap);
                 state.affectedFiles = undefined;
             }
 
@@ -167,12 +187,118 @@ namespace ts {
 
             // Get next batch of affected files
             state.currentAffectedFilesSignatures = state.currentAffectedFilesSignatures || createMap();
-            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures);
+            if (state.exportedModulesMap) {
+                state.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap || createMap<BuilderState.ReferencedSet | false>();
+            }
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value as Path;
-            state.semanticDiagnosticsPerFile.delete(nextKey.value as Path);
             state.affectedFilesIndex = 0;
             state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
         }
+    }
+
+    /**
+     * Remove the semantic diagnostics cached from old state for affected File and the files that are referencing modules that export entities from affected file
+     */
+    function cleanSemanticDiagnosticsOfAffectedFile(state: BuilderProgramState, affectedFile: SourceFile) {
+        if (removeSemanticDiagnosticsOf(state, affectedFile.path)) {
+            // If there are no more diagnostics from old cache, done
+            return;
+        }
+
+        // Clean lib file diagnostics if its all files excluding default files to emit
+        if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles && !state.cleanedDiagnosticsOfLibFiles) {
+            state.cleanedDiagnosticsOfLibFiles = true;
+            const options = state.program.getCompilerOptions();
+            if (forEach(state.program.getSourceFiles(), f =>
+                state.program.isSourceFileDefaultLibrary(f) &&
+                !skipTypeChecking(f, options) &&
+                removeSemanticDiagnosticsOf(state, f.path)
+            )) {
+                return;
+            }
+        }
+
+        // If there was change in signature for the changed file,
+        // then delete the semantic diagnostics for files that are affected by using exports of this module
+
+        if (!state.exportedModulesMap || state.affectedFiles!.length === 1 || !state.changedFilesSet.has(affectedFile.path)) {
+            return;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        const seenFileAndExportsOfFile = createMap<true>();
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(affectedFile.path) &&
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        )) {
+            return;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        forEachEntry(state.exportedModulesMap, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(affectedFile.path) &&
+            removeSemanticDiagnosticsOfFilesReferencingPath(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        );
+    }
+
+    /**
+     * removes the semantic diagnostics of files referencing referencedPath and
+     * returns true if there are no more semantic diagnostics from old state
+     */
+    function removeSemanticDiagnosticsOfFilesReferencingPath(state: BuilderProgramState, referencedPath: Path, seenFileAndExportsOfFile: Map<true>) {
+        return forEachEntry(state.referencedMap!, (referencesInFile, filePath) =>
+            referencesInFile.has(referencedPath) && removeSemanticDiagnosticsOfFileAndExportsOfFile(state, filePath as Path, seenFileAndExportsOfFile)
+        );
+    }
+
+    /**
+     * Removes semantic diagnostics of file and anything that exports this file
+     */
+    function removeSemanticDiagnosticsOfFileAndExportsOfFile(state: BuilderProgramState, filePath: Path, seenFileAndExportsOfFile: Map<true>): boolean {
+        if (!addToSeen(seenFileAndExportsOfFile, filePath)) {
+            return false;
+        }
+
+        if (removeSemanticDiagnosticsOf(state, filePath)) {
+            // If there are no more diagnostics from old cache, done
+            return true;
+        }
+
+        Debug.assert(!!state.currentAffectedFilesExportedModulesMap);
+        // Go through exported modules from cache first
+        // If exported modules has path, all files referencing file exported from are affected
+        if (forEachEntry(state.currentAffectedFilesExportedModulesMap!, (exportedModules, exportedFromPath) =>
+            exportedModules &&
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        )) {
+            return true;
+        }
+
+        // If exported from path is not from cache and exported modules has path, all files referencing file exported from are affected
+        return !!forEachEntry(state.exportedModulesMap!, (exportedModules, exportedFromPath) =>
+            !state.currentAffectedFilesExportedModulesMap!.has(exportedFromPath) && // If we already iterated this through cache, ignore it
+            exportedModules.has(filePath) &&
+            removeSemanticDiagnosticsOfFileAndExportsOfFile(state, exportedFromPath as Path, seenFileAndExportsOfFile)
+        );
+    }
+
+    /**
+     * Removes semantic diagnostics for path and
+     * returns true if there are no more semantic diagnostics from the old state
+     */
+    function removeSemanticDiagnosticsOf(state: BuilderProgramState, path: Path) {
+        if (!state.semanticDiagnosticsFromOldState) {
+            return true;
+        }
+        state.semanticDiagnosticsFromOldState.delete(path);
+        state.semanticDiagnosticsPerFile!.delete(path);
+        return !state.semanticDiagnosticsFromOldState.size;
     }
 
     /**
@@ -184,8 +310,8 @@ namespace ts {
             state.changedFilesSet.clear();
         }
         else {
-            state.seenAffectedFiles.set((affected as SourceFile).path, true);
-            state.affectedFilesIndex++;
+            state.seenAffectedFiles!.set((affected as SourceFile).path, true);
+            state.affectedFilesIndex!++;
         }
     }
 
@@ -203,7 +329,7 @@ namespace ts {
      */
     function getSemanticDiagnosticsOfFile(state: BuilderProgramState, sourceFile: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
         const path = sourceFile.path;
-        const cachedDiagnostics = state.semanticDiagnosticsPerFile.get(path);
+        const cachedDiagnostics = state.semanticDiagnosticsPerFile!.get(path);
         // Report the semantic diagnostics from the cache if we already have those diagnostics present
         if (cachedDiagnostics) {
             return cachedDiagnostics;
@@ -211,7 +337,7 @@ namespace ts {
 
         // Diagnostics werent cached, get them from program, and cache the result
         const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
-        state.semanticDiagnosticsPerFile.set(path, diagnostics);
+        state.semanticDiagnosticsPerFile!.set(path, diagnostics);
         return diagnostics;
     }
 
@@ -224,30 +350,48 @@ namespace ts {
         newProgram: Program;
         host: BuilderProgramHost;
         oldProgram: BuilderProgram | undefined;
+        configFileParsingDiagnostics: ReadonlyArray<Diagnostic>;
     }
 
-    export function getBuilderCreationParameters(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderCreationParameters {
+    export function getBuilderCreationParameters(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: BuilderProgram | CompilerHost, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderCreationParameters {
         let host: BuilderProgramHost;
         let newProgram: Program;
-        if (isArray(newProgramOrRootNames)) {
-            newProgram = createProgram(newProgramOrRootNames, hostOrOptions as CompilerOptions, oldProgramOrHost as CompilerHost, oldProgram && oldProgram.getProgram());
+        let oldProgram: BuilderProgram;
+        if (newProgramOrRootNames === undefined) {
+            Debug.assert(hostOrOptions === undefined);
+            host = oldProgramOrHost as CompilerHost;
+            oldProgram = configFileParsingDiagnosticsOrOldProgram as BuilderProgram;
+            Debug.assert(!!oldProgram);
+            newProgram = oldProgram.getProgram();
+        }
+        else if (isArray(newProgramOrRootNames)) {
+            oldProgram = configFileParsingDiagnosticsOrOldProgram as BuilderProgram;
+            newProgram = createProgram({
+                rootNames: newProgramOrRootNames,
+                options: hostOrOptions as CompilerOptions,
+                host: oldProgramOrHost as CompilerHost,
+                oldProgram: oldProgram && oldProgram.getProgram(),
+                configFileParsingDiagnostics,
+                projectReferences
+            });
             host = oldProgramOrHost as CompilerHost;
         }
         else {
-            newProgram = newProgramOrRootNames as Program;
+            newProgram = newProgramOrRootNames;
             host = hostOrOptions as BuilderProgramHost;
             oldProgram = oldProgramOrHost as BuilderProgram;
+            configFileParsingDiagnostics = configFileParsingDiagnosticsOrOldProgram as ReadonlyArray<Diagnostic>;
         }
-        return { host, newProgram, oldProgram };
+        return { host, newProgram, oldProgram, configFileParsingDiagnostics: configFileParsingDiagnostics || emptyArray };
     }
 
     export function createBuilderProgram(kind: BuilderProgramKind.SemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): SemanticDiagnosticsBuilderProgram;
     export function createBuilderProgram(kind: BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, builderCreationParameters: BuilderCreationParameters): EmitAndSemanticDiagnosticsBuilderProgram;
-    export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram }: BuilderCreationParameters) {
+    export function createBuilderProgram(kind: BuilderProgramKind, { newProgram, host, oldProgram, configFileParsingDiagnostics }: BuilderCreationParameters) {
         // Return same program if underlying program doesnt change
         let oldState = oldProgram && oldProgram.getState();
-        if (oldState && newProgram === oldState.program) {
-            newProgram = undefined;
+        if (oldState && newProgram === oldState.program && configFileParsingDiagnostics === newProgram.getConfigFileParsingDiagnostics()) {
+            newProgram = undefined!; // TODO: GH#18217
             oldState = undefined;
             return oldProgram;
         }
@@ -263,7 +407,7 @@ namespace ts {
         const state = createBuilderProgramState(newProgram, getCanonicalFileName, oldState);
 
         // To ensure that we arent storing any references to old program or new program without state
-        newProgram = undefined;
+        newProgram = undefined!; // TODO: GH#18217
         oldProgram = undefined;
         oldState = undefined;
 
@@ -275,6 +419,7 @@ namespace ts {
             getSourceFiles: () => state.program.getSourceFiles(),
             getOptionsDiagnostics: cancellationToken => state.program.getOptionsDiagnostics(cancellationToken),
             getGlobalDiagnostics: cancellationToken => state.program.getGlobalDiagnostics(cancellationToken),
+            getConfigFileParsingDiagnostics: () => configFileParsingDiagnostics || state.program.getConfigFileParsingDiagnostics(),
             getSyntacticDiagnostics: (sourceFile, cancellationToken) => state.program.getSyntacticDiagnostics(sourceFile, cancellationToken),
             getSemanticDiagnostics,
             emit,
@@ -331,9 +476,9 @@ namespace ts {
                 assertSourceFileOkWithoutNextAffectedCall(state, targetSourceFile);
                 if (!targetSourceFile) {
                     // Emit and report any errors we ran into.
-                    let sourceMaps: SourceMapData[] = [];
-                    let emitSkipped: boolean;
-                    let diagnostics: Diagnostic[];
+                    let sourceMaps: SourceMapEmitResult[] = [];
+                    let emitSkipped = false;
+                    let diagnostics: Diagnostic[] | undefined;
                     let emittedFiles: string[] = [];
 
                     let affectedEmitResult: AffectedFileResult<EmitResult>;
@@ -419,7 +564,7 @@ namespace ts {
                 }
             }
 
-            let diagnostics: Diagnostic[];
+            let diagnostics: Diagnostic[] | undefined;
             for (const sourceFile of state.program.getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
@@ -477,6 +622,10 @@ namespace ts {
          * Get the diagnostics that dont belong to any file
          */
         getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics from config file parsing
+         */
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
         /**
          * Get the syntax diagnostics, for all source files if source file is not supplied
          */
@@ -539,29 +688,29 @@ namespace ts {
     /**
      * Create the builder to manage semantic diagnostics and cache them
      */
-    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
-    export function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram): SemanticDiagnosticsBuilderProgram;
-    export function createSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram, oldProgram?: SemanticDiagnosticsBuilderProgram) {
-        return createBuilderProgram(BuilderProgramKind.SemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
+    export function createSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): SemanticDiagnosticsBuilderProgram;
+    export function createSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | SemanticDiagnosticsBuilderProgram, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | SemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>) {
+        return createBuilderProgram(BuilderProgramKind.SemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences));
     }
 
     /**
      * Create the builder that can handle the changes in program and iterate through changed files
      * to emit the those files and manage semantic diagnostics cache as well
      */
-    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
-    export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram): EmitAndSemanticDiagnosticsBuilderProgram;
-    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram) {
-        return createBuilderProgram(BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram));
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgram: Program, host: BuilderProgramHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): EmitAndSemanticDiagnosticsBuilderProgram;
+    export function createEmitAndSemanticDiagnosticsBuilderProgram(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | EmitAndSemanticDiagnosticsBuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>) {
+        return createBuilderProgram(BuilderProgramKind.EmitAndSemanticDiagnosticsBuilderProgram, getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences));
     }
 
     /**
      * Creates a builder thats just abstraction over program and can be used with watch
      */
-    export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram): BuilderProgram;
-    export function createAbstractBuilder(rootNames: ReadonlyArray<string>, options: CompilerOptions, host?: CompilerHost, oldProgram?: BuilderProgram): BuilderProgram;
-    export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string>, hostOrOptions: BuilderProgramHost | CompilerOptions, oldProgramOrHost?: CompilerHost | BuilderProgram, oldProgram?: BuilderProgram): BuilderProgram {
-        const { newProgram: program } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, oldProgram);
+    export function createAbstractBuilder(newProgram: Program, host: BuilderProgramHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>): BuilderProgram;
+    export function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
+    export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | BuilderProgram, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram {
+        const { newProgram: program } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
         return {
             // Only return program, all other methods are not implemented
             getProgram: () => program,
@@ -571,6 +720,7 @@ namespace ts {
             getSourceFiles: notImplemented,
             getOptionsDiagnostics: notImplemented,
             getGlobalDiagnostics: notImplemented,
+            getConfigFileParsingDiagnostics: notImplemented,
             getSyntacticDiagnostics: notImplemented,
             getSemanticDiagnostics: notImplemented,
             emit: notImplemented,

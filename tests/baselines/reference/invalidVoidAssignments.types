@@ -25,16 +25,13 @@ class C { foo: string; }
 
 var e: C = x;
 >e : C
->C : C
 >x : void
 
 interface I { bar: string; }
->I : I
 >bar : string
 
 var f: I = x;
 >f : I
->I : I
 >x : void
 
 var g: { baz: string } = 1;
@@ -44,6 +41,7 @@ var g: { baz: string } = 1;
 
 var g2: { 0: number } = 1;
 >g2 : { 0: number; }
+>0 : number
 >1 : 1
 
 module M { export var x = 1; }
@@ -58,9 +56,7 @@ M = x;
 
 function i<T>(a: T) {
 >i : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     a = x;
 >a = x : void
@@ -74,7 +70,7 @@ i = x;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 x = E;
 >x = E : typeof E

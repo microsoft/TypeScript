@@ -1,7 +1,5 @@
 === tests/cases/compiler/prototypeOnConstructorFunctions.ts ===
 interface I1 {
->I1 : I1
-
     const: new (options?, element?) => any;
 >const : new (options?: any, element?: any) => any
 >options : any
@@ -11,7 +9,6 @@ interface I1 {
 
 var i: I1;
 >i : I1
->I1 : I1
 
 
 i.const.prototype.prop = "yo";

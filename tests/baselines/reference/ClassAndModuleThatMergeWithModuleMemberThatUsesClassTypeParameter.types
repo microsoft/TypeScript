@@ -3,14 +3,12 @@
 
 class clodule1<T>{
 >clodule1 : clodule1<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 }
 
 module clodule1 {
@@ -19,19 +17,16 @@ module clodule1 {
     function f(x: T) { }
 >f : (x: any) => void
 >x : any
->T : No type information available!
 }
 
 class clodule2<T>{
 >clodule2 : clodule2<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 }
 
 module clodule2 {
@@ -39,32 +34,26 @@ module clodule2 {
 
     var x: T;
 >x : any
->T : No type information available!
 
     class D<U extends T>{
 >D : D<U>
->U : U
->T : No type information available!
 
         id: string;
 >id : string
 
         value: U;
 >value : U
->U : U
     }
 }
 
 class clodule3<T>{
 >clodule3 : clodule3<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 }
 
 module clodule3 {
@@ -79,14 +68,12 @@ module clodule3 {
 
 class clodule4<T>{
 >clodule4 : clodule4<T>
->T : T
 
     id: string;
 >id : string
 
     value: T;
 >value : T
->T : T
 }
 
 module clodule4 {
@@ -97,7 +84,6 @@ module clodule4 {
 
         name: T;
 >name : any
->T : No type information available!
     }
 }
 

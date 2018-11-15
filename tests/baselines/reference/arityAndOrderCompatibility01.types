@@ -1,10 +1,11 @@
 === tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
 interface StrNum extends Array<string|number> {
->StrNum : StrNum
->Array : T[]
-
     0: string;
+>0 : string
+
     1: number;
+>1 : number
+
     length: 2;
 >length : 2
 }
@@ -14,13 +15,16 @@ var x: [string, number];
 
 var y: StrNum
 >y : StrNum
->StrNum : StrNum
 
 var z: {
 >z : { 0: string; 1: number; length: 2; }
 
     0: string;
+>0 : string
+
     1: number;
+>1 : number
+
     length: 2;
 >length : 2
 }

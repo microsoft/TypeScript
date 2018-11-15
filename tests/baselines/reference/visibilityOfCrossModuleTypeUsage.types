@@ -6,19 +6,18 @@ function run(configuration: commands.IConfiguration) {
 >run : (configuration: commands.IConfiguration) => void
 >configuration : commands.IConfiguration
 >commands : any
->IConfiguration : commands.IConfiguration
 
     var absoluteWorkspacePath = configuration.workspace.toAbsolutePath(configuration.server);
 >absoluteWorkspacePath : string
 >configuration.workspace.toAbsolutePath(configuration.server) : string
->configuration.workspace.toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->configuration.workspace : IWorkspace
+>configuration.workspace.toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
 >configuration : commands.IConfiguration
->workspace : IWorkspace
->toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
->configuration.server : IServer
+>workspace : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IWorkspace
+>toAbsolutePath : (server: import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer, workspaceRelativePath?: string) => string
+>configuration.server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
 >configuration : commands.IConfiguration
->server : IServer
+>server : import("tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server").IServer
 }
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_commands.ts ===
 //visibilityOfCrossModuleTypeUsage
@@ -30,31 +29,23 @@ import server = require('./visibilityOfCrossModuleTypeUsage_server');
 >server : typeof server
 
 export interface IConfiguration {
->IConfiguration : IConfiguration
-
     workspace: server.IWorkspace;
 >workspace : server.IWorkspace
 >server : any
->IWorkspace : server.IWorkspace
 
     server?: server.IServer;
 >server : server.IServer
 >server : any
->IServer : server.IServer
 }
 
 === tests/cases/compiler/visibilityOfCrossModuleTypeUsage_server.ts ===
 export interface IServer {
->IServer : IServer
 }
 
 export interface IWorkspace {
->IWorkspace : IWorkspace
-
     toAbsolutePath(server: IServer, workspaceRelativePath?: string): string;
 >toAbsolutePath : (server: IServer, workspaceRelativePath?: string) => string
 >server : IServer
->IServer : IServer
 >workspaceRelativePath : string
 }
 

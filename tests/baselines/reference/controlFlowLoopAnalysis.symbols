@@ -93,9 +93,9 @@ function mapUntilCant<a, b>(
     for (let index = 0, length = values.length; index < length; index++) {
 >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
 >length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
->values.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>values.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >values : Symbol(values, Decl(controlFlowLoopAnalysis.ts, 32, 28))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
 >length : Symbol(length, Decl(controlFlowLoopAnalysis.ts, 38, 23))
 >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
@@ -111,9 +111,9 @@ function mapUntilCant<a, b>(
 >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))
 
             result.push(mapping(value, index));
->result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(controlFlowLoopAnalysis.ts, 37, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >mapping : Symbol(mapping, Decl(controlFlowLoopAnalysis.ts, 34, 50))
 >value : Symbol(value, Decl(controlFlowLoopAnalysis.ts, 39, 11))
 >index : Symbol(index, Decl(controlFlowLoopAnalysis.ts, 38, 12))

@@ -22,11 +22,9 @@ class A {}
 
 export var e: A;
 >e : A
->A : A
 
 export let f: A;
 >f : A
->A : A
 
 namespace B {
 >B : typeof B
@@ -92,13 +90,11 @@ export let f1 = new D;
 
 export var g1: D = new D;
 >g1 : D
->D : D
 >new D : D
 >D : typeof D
 
 export let h1: D = new D;
 >h1 : D
->D : D
 >new D : D
 >D : typeof D
 

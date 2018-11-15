@@ -6,7 +6,9 @@
 >({ "1": "one", "2": "two" } as { [key: string]: string }) : { [key: string]: string; }
 >{ "1": "one", "2": "two" } as { [key: string]: string } : { [key: string]: string; }
 >{ "1": "one", "2": "two" } : { "1": string; "2": string; }
+>"1" : string
 >"one" : "one"
+>"2" : string
 >"two" : "two"
 >key : string
 >x : any
@@ -18,7 +20,9 @@
 >({ "1": "one", "2": "two" } as { [key: string]: string }) : { [key: string]: string; }
 >{ "1": "one", "2": "two" } as { [key: string]: string } : { [key: string]: string; }
 >{ "1": "one", "2": "two" } : { "1": string; "2": string; }
+>"1" : string
 >"one" : "one"
+>"2" : string
 >"two" : "two"
 >key : string
 >x : string

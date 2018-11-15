@@ -31,8 +31,6 @@ class SomeDerived3 extends SomeBase {
 }
 
 interface fn1 {
->fn1 : fn1
-
     new (s: string): string;
 >s : string
 
@@ -40,7 +38,6 @@ interface fn1 {
 >s : number
 }
 var fn1: fn1;
->fn1 : fn1
 >fn1 : fn1
 
 // Ambiguous call picks the first overload in declaration order
@@ -61,34 +58,26 @@ new fn1({}); // Error
 
 // Generic and non - generic overload where generic overload is the only candidate when called with type arguments
 interface fn2 {
->fn2 : fn2
-
     new (s: string, n: number): number;
 >s : string
 >n : number
 
     new <T>(n: number, t: T): T;
->T : T
 >n : number
 >t : T
->T : T
->T : T
 }
 var fn2: fn2;
->fn2 : fn2
 >fn2 : fn2
 
 var d = new fn2<Date>(0, undefined);
 >d : Date
 >new fn2<Date>(0, undefined) : Date
 >fn2 : fn2
->Date : Date
 >0 : 0
 >undefined : undefined
 
 var d: Date;
 >d : Date
->Date : Date
 
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = new fn2(0, '');
@@ -102,7 +91,6 @@ var s = new fn2(0, '');
 new fn2<Date>('', 0); // Error
 >new fn2<Date>('', 0) : any
 >fn2 : fn2
->Date : Date
 >'' : ""
 >0 : 0
 
@@ -115,36 +103,20 @@ new fn2('', 0); // OK
 
 // Generic overloads with differing arity called without type arguments
 interface fn3 {
->fn3 : fn3
-
     new<T>(n: T): string;
->T : T
 >n : T
->T : T
 
     new<T, U>(s: string, t: T, u: U): U;
->T : T
->U : U
 >s : string
 >t : T
->T : T
 >u : U
->U : U
->U : U
 
     new<T, U, V>(v: V, u: U, t: T): number;
->T : T
->U : U
->V : V
 >v : V
->V : V
 >u : U
->U : U
 >t : T
->T : T
 }
 var fn3: fn3;
->fn3 : fn3
 >fn3 : fn3
 
 var s = new fn3(3);
@@ -202,26 +174,15 @@ new fn3<number, number, number, number>(); // Error
 
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 interface fn4 {
->fn4 : fn4
-
     new<T extends string, U extends number>(n: T, m: U);
->T : T
->U : U
 >n : T
->T : T
 >m : U
->U : U
 
     new<T extends number, U extends string>(n: T, m: U);
->T : T
->U : U
 >n : T
->T : T
 >m : U
->U : U
 }
 var fn4: fn4;
->fn4 : fn4
 >fn4 : fn4
 
 new fn4<string, number>('', 3);
@@ -277,7 +238,6 @@ new fn4('', null);
 new fn4<boolean, Date>(null, null); // Error
 >new fn4<boolean, Date>(null, null) : any
 >fn4 : fn4
->Date : Date
 >null : null
 >null : null
 
@@ -296,8 +256,6 @@ new fn4(null, true); // Error
 
 // Non - generic overloads where contextual typing of function arguments has errors
 interface fn5 {
->fn5 : fn5
-
     new(f: (n: string) => void): string;
 >f : (n: string) => void
 >n : string
@@ -307,7 +265,6 @@ interface fn5 {
 >n : number
 }
 var fn5: fn5;
->fn5 : fn5
 >fn5 : fn5
 
 var n = new fn5((n) => n.toFixed());

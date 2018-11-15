@@ -18,6 +18,7 @@
 
 verify.codeFixAll({
   fixId: "correctQualifiedNameToIndexedAccessType",
+  fixAllDescription: "Rewrite all as indexed access types",
   newFileContent:
 `/**
  * @typedef Foo

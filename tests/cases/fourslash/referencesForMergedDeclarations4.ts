@@ -22,6 +22,4 @@
 ////[|testClass|].s;
 ////new [|testClass|]();
 
-const ranges = test.ranges();
-verify.referenceGroups(ranges.slice(0, 8), [{ definition: "class testClass\nnamespace testClass", ranges }]);
-verify.referenceGroups(ranges[8], [{ definition: "constructor testClass(): testClass\nnamespace testClass", ranges }]);
+verify.singleReferenceGroup("class testClass\nnamespace testClass");

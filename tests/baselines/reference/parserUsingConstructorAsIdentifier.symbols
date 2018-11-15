@@ -50,18 +50,18 @@
 
                 constructor.prototype = Object.create(basePrototype);
 >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
->Object.create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->create : Symbol(ObjectConstructor.create, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object.create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>create : Symbol(ObjectConstructor.create, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >basePrototype : Symbol(basePrototype, Decl(parserUsingConstructorAsIdentifier.ts, 15, 19))
 
                 PluginUtilities.Utilities.markSupportedForProcessing(constructor);
 >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
 
                 Object.defineProperty(constructor.prototype, "constructor", { value: constructor, writable: true, configurable: true, enumerable: true });
->Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.d.ts, --, --))
+>Object.defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>defineProperty : Symbol(ObjectConstructor.defineProperty, Decl(lib.es5.d.ts, --, --))
 >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
 >value : Symbol(value, Decl(parserUsingConstructorAsIdentifier.ts, 18, 77))
 >constructor : Symbol(constructor, Decl(parserUsingConstructorAsIdentifier.ts, 12, 34))
@@ -110,9 +110,9 @@
             for (i = 1, len = arguments.length; i < len; i++) {
 >i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
 >len : Symbol(len, Decl(parserUsingConstructorAsIdentifier.ts, 33, 18))
->arguments.length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>arguments.length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >arguments : Symbol(arguments)
->length : Symbol(IArguments.length, Decl(lib.d.ts, --, --))
+>length : Symbol(IArguments.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))
 >len : Symbol(len, Decl(parserUsingConstructorAsIdentifier.ts, 33, 18))
 >i : Symbol(i, Decl(parserUsingConstructorAsIdentifier.ts, 33, 15))

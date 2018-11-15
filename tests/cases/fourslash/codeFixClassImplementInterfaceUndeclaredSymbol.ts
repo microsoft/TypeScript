@@ -4,7 +4,7 @@
 ////    x: T;
 //// }
 ////
-//// class C implements I { } 
+//// class C implements I { }
 
 // T is not a declared symbol. There are a couple fixes:
 // 1) Declare T.
@@ -14,6 +14,6 @@
 // In the latter two cases, it is premature to copy `x:T` into C.
 // Since we can't guess the programmer's intent here, we do nothing.
 
-verify.codeFixAvailable();
 // TODO: (aozgaa) Acknowledge other errors on class/implemented interface/extended abstract class.
-// verify.not.codeFixAvailable();
+// Should be verify.codeFixAvailable([]);
+verify.codeFixAvailable([{ description: "Implement interface 'I'" }]);

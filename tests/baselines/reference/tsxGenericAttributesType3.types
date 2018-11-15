@@ -4,13 +4,11 @@ import React = require('react');
 
 class B1<T extends { x: string } = { x:string } > extends React.Component<T, {}> {
 >B1 : B1<T>
->T : T
 >x : string
 >x : string
 >React.Component : React.Component<T, {}>
 >React : typeof React
 >Component : typeof React.Component
->T : T
 
     render() {
 >render : () => JSX.Element
@@ -23,11 +21,9 @@ class B1<T extends { x: string } = { x:string } > extends React.Component<T, {}>
 }
 class B<U> extends React.Component<U, {}> {
 >B : B<U>
->U : U
 >React.Component : React.Component<U, {}>
 >React : typeof React
 >Component : typeof React.Component
->U : U
 
     render() {
 >render : () => JSX.Element

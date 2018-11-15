@@ -6,16 +6,16 @@ import moment = require("moment-timezone");
 
 === tests/cases/compiler/node_modules/moment/index.d.ts ===
 declare function moment(): moment.Moment;
->moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
+>moment : Symbol("tests/cases/compiler/node_modules/moment/index.d.ts", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
 >moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41))
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26))
 
 declare namespace moment {
->moment : Symbol(moment, Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
+>moment : Symbol("tests/cases/compiler/node_modules/moment/index.d.ts", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
 
   interface Moment extends Object {
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26), Decl(idx.ts, 1, 25), Decl(idx.ts, 6, 34), Decl(index.d.ts, 2, 25))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     valueOf(): number;
 >valueOf : Symbol(Moment.valueOf, Decl(index.d.ts, 2, 35))
@@ -32,6 +32,8 @@ export = moment;
 >moment : Symbol(moment, Decl(index.d.ts, 0, 6))
 
 declare module "moment" {
+>"moment" : Symbol("tests/cases/compiler/node_modules/moment/index.d.ts", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
+
     interface Moment {
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26), Decl(idx.ts, 1, 25), Decl(idx.ts, 6, 34), Decl(index.d.ts, 2, 25))
 
@@ -44,6 +46,8 @@ import * as _moment from "moment";
 >_moment : Symbol(_moment, Decl(idx.ts, 0, 6))
 
 declare module "moment" {
+>"moment" : Symbol("tests/cases/compiler/node_modules/moment/index.d.ts", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(index.d.ts, 1, 16))
+
     interface Moment {
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26), Decl(idx.ts, 1, 25), Decl(idx.ts, 6, 34), Decl(index.d.ts, 2, 25))
 
@@ -53,6 +57,8 @@ declare module "moment" {
     }
 }
 declare module "moment-timezone" {
+>"moment-timezone" : Symbol("tests/cases/compiler/node_modules/moment/index.d.ts", Decl(index.d.ts, 0, 0), Decl(index.d.ts, 0, 41), Decl(idx.ts, 0, 34), Decl(idx.ts, 5, 1))
+
     interface Moment {
 >Moment : Symbol(Moment, Decl(index.d.ts, 1, 26), Decl(idx.ts, 1, 25), Decl(idx.ts, 6, 34), Decl(index.d.ts, 2, 25))
 

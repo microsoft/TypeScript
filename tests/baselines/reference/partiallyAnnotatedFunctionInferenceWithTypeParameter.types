@@ -16,27 +16,16 @@ class D extends C {
 
 declare function test<T extends C>(a: (t: T, t1: T) => void): T
 >test : <T extends C>(a: (t: T, t1: T) => void) => T
->T : T
->C : C
 >a : (t: T, t1: T) => void
 >t : T
->T : T
 >t1 : T
->T : T
->T : T
 
 declare function testRest<T extends C>(a: (t: T, t1: T, ...ts: T[]) => void): T
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
->T : T
->C : C
 >a : (t: T, t1: T, ...ts: T[]) => void
 >t : T
->T : T
 >t1 : T
->T : T
 >ts : T[]
->T : T
->T : T
 
 
 // exactly
@@ -45,7 +34,6 @@ test((t1: D, t2) => { t2.test2 })
 >test : <T extends C>(a: (t: T, t1: T) => void) => T
 >(t1: D, t2) => { t2.test2 } : (t1: D, t2: D) => void
 >t1 : D
->D : D
 >t2 : D
 >t2.test2 : string
 >t2 : D
@@ -57,7 +45,6 @@ test((t1, t2: D) => { t2.test2 })
 >(t1, t2: D) => { t2.test2 } : (t1: D, t2: D) => void
 >t1 : D
 >t2 : D
->D : D
 >t2.test2 : string
 >t2 : D
 >test2 : string
@@ -74,7 +61,6 @@ test((t1: D) => {})
 >test : <T extends C>(a: (t: T, t1: T) => void) => T
 >(t1: D) => {} : (t1: D) => void
 >t1 : D
->D : D
 
 // rest arg
 test((...ts: D[]) => {})
@@ -82,7 +68,6 @@ test((...ts: D[]) => {})
 >test : <T extends C>(a: (t: T, t1: T) => void) => T
 >(...ts: D[]) => {} : (...ts: D[]) => void
 >ts : D[]
->D : D
 
 // source function has rest arg
 testRest((t1: D) => {})
@@ -90,7 +75,6 @@ testRest((t1: D) => {})
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
 >(t1: D) => {} : (t1: D) => void
 >t1 : D
->D : D
 
 testRest((t1, t2, t3) => {})
 >testRest((t1, t2, t3) => {}) : C
@@ -105,7 +89,6 @@ testRest((t1: D, t2, t3) => {})
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
 >(t1: D, t2, t3) => {} : (t1: D, t2: D, t3: D) => void
 >t1 : D
->D : D
 >t2 : D
 >t3 : D
 
@@ -115,16 +98,14 @@ testRest((t1, t2: D, t3) => {})
 >(t1, t2: D, t3) => {} : (t1: D, t2: D, t3: D) => void
 >t1 : D
 >t2 : D
->D : D
 >t3 : D
 
 testRest((t2: D, ...t3) => {})
->testRest((t2: D, ...t3) => {}) : any
+>testRest((t2: D, ...t3) => {}) : D
 >testRest : <T extends C>(a: (t: T, t1: T, ...ts: T[]) => void) => T
->(t2: D, ...t3) => {} : (t2: D, ...t3: any[]) => void
+>(t2: D, ...t3) => {} : (t2: D, t1: D, ...ts: D[]) => void
 >t2 : D
->D : D
->t3 : any[]
+>t3 : [D, ...D[]]
 
 testRest((t2, ...t3: D[]) => {})
 >testRest((t2, ...t3: D[]) => {}) : C
@@ -132,5 +113,4 @@ testRest((t2, ...t3: D[]) => {})
 >(t2, ...t3: D[]) => {} : (t2: C, ...t3: D[]) => void
 >t2 : C
 >t3 : D[]
->D : D
 

@@ -1,0 +1,15 @@
+{
+    "compilerOptions": {
+        "target": "es2015",
+        "module": "commonjs",
+        "declaration": false,
+        "removeComments": true,
+        "noResolve": false,
+        "stripInternal": false,
+        "sourceMap": true,
+        "outFile": "../built/local/perftsc.js"
+    },
+    "files": [
+        "perftsc.ts"
+    ]
+}

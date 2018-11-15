@@ -6,8 +6,6 @@
 ////var r = new c5b();
 ////r./*2*/
 
-goTo.marker('1');
-verify.completionListContains('prototype', '(property) c5b.prototype: c5b');
+verify.completions({ marker: "1", includes: { name: "prototype", text: '(property) c5b.prototype: c5b' } });
 edit.insert('y;');
-goTo.marker('2');
-verify.completionListContains('foo', '(method) c5b.foo(): void');
+verify.completions({ marker: "2", includes: { name: "foo", text: '(method) c5b.foo(): void' } });

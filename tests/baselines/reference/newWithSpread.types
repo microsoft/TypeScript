@@ -12,8 +12,6 @@ function f2(...x: string[]) {
 }
 
 interface A {
->A : A
-
     f: {
 >f : new (x: number, y: number, ...z: string[]) => any
 
@@ -34,16 +32,14 @@ class B {
 }
 
 interface C {
->C : C
-
     "a-b": typeof B;
+>"a-b" : typeof B
 >B : typeof B
 }
 
 interface D {
->D : D
-
     1: typeof B;
+>1 : typeof B
 >B : typeof B
 }
 
@@ -52,33 +48,26 @@ var a: string[];
 
 var b: A;
 >b : A
->A : A
 
 var c: C;
 >c : C
->C : C
 
 var d: A[];
 >d : A[]
->A : A
 
 var e: { [key: string]: A };
 >e : { [key: string]: A; }
 >key : string
->A : A
 
 var g: C[];
 >g : C[]
->C : C
 
 var h: { [key: string]: C };
 >h : { [key: string]: C; }
 >key : string
->C : C
 
 var i: C[][];
 >i : C[][]
->C : C
 
 // Basic expression
 new f(1, 2, "string");

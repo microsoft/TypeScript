@@ -32,7 +32,7 @@ class C1 {
 >strOrNum : string | number
 >typeof this.pp1 === "string" && this.pp1 : string
 >typeof this.pp1 === "string" : boolean
->typeof this.pp1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.pp1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.pp1 : string | number
 >this : this
 >pp1 : string | number
@@ -46,7 +46,7 @@ class C1 {
 >strOrNum : string | number
 >typeof this.pp2 === "string" && this.pp2 : string
 >typeof this.pp2 === "string" : boolean
->typeof this.pp2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.pp2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.pp2 : string | number
 >this : this
 >pp2 : string | number
@@ -60,7 +60,7 @@ class C1 {
 >strOrNum : string | number
 >typeof this.pp3 === "string" && this.pp3 : string
 >typeof this.pp3 === "string" : boolean
->typeof this.pp3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.pp3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.pp3 : string | number
 >this : this
 >pp3 : string | number
@@ -72,14 +72,13 @@ class C1 {
 }
 var c1: C1;
 >c1 : C1
->C1 : C1
 
 strOrNum = typeof c1.pp2 === "string" && c1.pp2; // string | number
 >strOrNum = typeof c1.pp2 === "string" && c1.pp2 : string
 >strOrNum : string | number
 >typeof c1.pp2 === "string" && c1.pp2 : string
 >typeof c1.pp2 === "string" : boolean
->typeof c1.pp2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof c1.pp2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >c1.pp2 : string | number
 >c1 : C1
 >pp2 : string | number
@@ -93,7 +92,7 @@ strOrNum = typeof c1.pp3 === "string" && c1.pp3; // string | number
 >strOrNum : string | number
 >typeof c1.pp3 === "string" && c1.pp3 : string
 >typeof c1.pp3 === "string" : boolean
->typeof c1.pp3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof c1.pp3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >c1.pp3 : string | number
 >c1 : C1
 >pp3 : string | number
@@ -114,7 +113,7 @@ strOrNum = typeof obj1.x === "string" && obj1.x;  // string | number
 >strOrNum : string | number
 >typeof obj1.x === "string" && obj1.x : string
 >typeof obj1.x === "string" : boolean
->typeof obj1.x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof obj1.x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >obj1.x : string | number
 >obj1 : { x: string | number; }
 >x : string | number

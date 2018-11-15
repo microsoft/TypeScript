@@ -25,9 +25,9 @@ for (var propname in HTMLDOMPropertyConfig.Properties) {
 >mapFrom : Symbol(mapFrom, Decl(controlFlowPropertyDeclarations.ts, 13, 5))
 >HTMLDOMPropertyConfig : Symbol(HTMLDOMPropertyConfig, Decl(controlFlowPropertyDeclarations.ts, 4, 3))
 >propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
->propname.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>propname.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >propname : Symbol(propname, Decl(controlFlowPropertyDeclarations.ts, 8, 8))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 }
 
 /**
@@ -52,7 +52,7 @@ function repeatString(string, times) {
   }
   if (times < 0) { throw new Error(); }
 >times : Symbol(times, Decl(controlFlowPropertyDeclarations.ts, 25, 29))
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
   var repeated = '';
 >repeated : Symbol(repeated, Decl(controlFlowPropertyDeclarations.ts, 30, 5))
@@ -149,8 +149,8 @@ function isEmpty(string) {
 >string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
 
    return !/[^\s]/.test(string);
->/[^\s]/.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>/[^\s]/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >string : Symbol(string, Decl(controlFlowPropertyDeclarations.ts, 79, 17))
 }
 
@@ -166,8 +166,8 @@ function isConvertiblePixelValue(value) {
 >value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
 
   return /^\d+px$/.test(value);
->/^\d+px$/.test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
->test : Symbol(RegExp.test, Decl(lib.d.ts, --, --))
+>/^\d+px$/.test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
+>test : Symbol(RegExp.test, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(controlFlowPropertyDeclarations.ts, 90, 33))
 }
 
@@ -220,30 +220,30 @@ export class HTMLtoJSX {
       // wrapping newlines and sequences of two or more spaces in variables.
       text = text
 >text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
->text        .replace(/\r/g, '')        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->text        .replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>text        .replace(/\r/g, '')        .replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>text        .replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
 
         .replace(/\r/g, '')
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
         .replace(/( {2,}|\n|\t|\{|\})/g, function(whitespace) {
->replace : Symbol(String.replace, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>replace : Symbol(String.replace, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
 
           return '{' + JSON.stringify(whitespace) + '}';
->JSON.stringify : Symbol(JSON.stringify, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->JSON : Symbol(JSON, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->stringify : Symbol(JSON.stringify, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>JSON.stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>JSON : Symbol(JSON, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>stringify : Symbol(JSON.stringify, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >whitespace : Symbol(whitespace, Decl(controlFlowPropertyDeclarations.ts, 121, 50))
 
         });
     } else {
       // If there's a newline in the text, adjust the indent level
       if (text.indexOf('\n') > -1) {
->text.indexOf : Symbol(String.indexOf, Decl(lib.d.ts, --, --))
+>text.indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
 >text : Symbol(text, Decl(controlFlowPropertyDeclarations.ts, 113, 7))
->indexOf : Symbol(String.indexOf, Decl(lib.d.ts, --, --))
+>indexOf : Symbol(String.indexOf, Decl(lib.es5.d.ts, --, --))
       }
     }
     this.output += text;
@@ -276,11 +276,11 @@ export class StyleParser {
 >styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
 
       if (!this.styles.hasOwnProperty(key)) {
->this.styles.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>this.styles.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >this.styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
 >this : Symbol(StyleParser, Decl(controlFlowPropertyDeclarations.ts, 134, 2))
 >styles : Symbol(StyleParser.styles, Decl(controlFlowPropertyDeclarations.ts, 139, 26))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(controlFlowPropertyDeclarations.ts, 142, 12))
       }
     }

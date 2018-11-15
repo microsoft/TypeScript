@@ -1,7 +1,5 @@
 === tests/cases/conformance/declarationEmit/typePredicates/declarationEmitThisPredicatesWithPrivateName02.ts ===
 interface Foo {
->Foo : Foo
-
     a: string;
 >a : string
 
@@ -18,14 +16,12 @@ export const obj = {
 
     m(): this is Foo {
 >m : () => this is Foo
->Foo : Foo
 
         let dis = this as {} as Foo;
 >dis : Foo
 >this as {} as Foo : Foo
 >this as {} : {}
 >this : any
->Foo : Foo
 
         return dis.a != null && dis.b != null && dis.c != null;
 >dis.a != null && dis.b != null && dis.c != null : boolean

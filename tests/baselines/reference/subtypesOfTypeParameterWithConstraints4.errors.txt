@@ -1,20 +1,20 @@
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
   Type 'V' is not assignable to type 'Foo'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(47,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'U' is not assignable to type 'T'.
     Type 'Foo' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(57,5): error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
   Type 'V' is not assignable to type 'T'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(62,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'T' is not assignable to type 'U'.
     Type 'Foo' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(67,5): error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
+tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
   Type 'V' is not assignable to type 'U'.
-tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts(77,5): error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOfTypeParameterWithConstraints4.ts (10 errors) ====
@@ -66,10 +66,10 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         [x: string]: Foo;
         foo: V; // error
         ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
+        ~~~
 !!! error TS2416: Property 'foo' in type 'D3<T, U, V>' is not assignable to the same property in base type 'B1<Foo>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'Foo'.
-        ~~~~~~~
-!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'Foo'.
     }
     
     class D4<T extends Foo, U extends Foo, V> extends B1<T> {
@@ -81,32 +81,32 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         [x: string]: T;
         foo: U; // error
         ~~~
+!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
+        ~~~
 !!! error TS2416: Property 'foo' in type 'D5<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
 !!! error TS2416:   Type 'U' is not assignable to type 'T'.
 !!! error TS2416:     Type 'Foo' is not assignable to type 'T'.
-        ~~~~~~~
-!!! error TS2411: Property 'foo' of type 'U' is not assignable to string index type 'T'.
     }
     
     class D6<T extends Foo, U extends Foo, V> extends B1<T> {
         [x: string]: T;
         foo: V; // error
         ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
+        ~~~
 !!! error TS2416: Property 'foo' in type 'D6<T, U, V>' is not assignable to the same property in base type 'B1<T>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'T'.
-        ~~~~~~~
-!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'T'.
     }
     
     class D7<T extends Foo, U extends Foo, V> extends B1<U> {
         [x: string]: U;
         foo: T; // error
         ~~~
+!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
+        ~~~
 !!! error TS2416: Property 'foo' in type 'D7<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
 !!! error TS2416:   Type 'T' is not assignable to type 'U'.
 !!! error TS2416:     Type 'Foo' is not assignable to type 'U'.
-        ~~~~~~~
-!!! error TS2411: Property 'foo' of type 'T' is not assignable to string index type 'U'.
     }
     
     class D8<T extends Foo, U extends Foo, V> extends B1<U> {
@@ -118,8 +118,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypesOf
         [x: string]: U;
         foo: V; // error
         ~~~
+!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
+        ~~~
 !!! error TS2416: Property 'foo' in type 'D9<T, U, V>' is not assignable to the same property in base type 'B1<U>'.
 !!! error TS2416:   Type 'V' is not assignable to type 'U'.
-        ~~~~~~~
-!!! error TS2411: Property 'foo' of type 'V' is not assignable to string index type 'U'.
     }

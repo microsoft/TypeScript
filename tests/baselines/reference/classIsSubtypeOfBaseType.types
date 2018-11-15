@@ -1,11 +1,9 @@
 === tests/cases/conformance/classes/classDeclarations/classHeritageSpecification/classIsSubtypeOfBaseType.ts ===
 class Base<T> {
 >Base : Base<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 class Derived extends Base<{ bar: string; }> {

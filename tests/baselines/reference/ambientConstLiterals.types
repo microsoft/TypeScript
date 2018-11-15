@@ -1,20 +1,18 @@
 === tests/cases/compiler/ambientConstLiterals.ts ===
 function f<T>(x: T): T {
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
     return x;
 >x : T
 }
 
-enum E { A, B, C }
+enum E { A, B, C, "non identifier" }
 >E : E
 >A : E.A
 >B : E.B
 >C : E.C
+>"non identifier" : E.non identifier
 
 const c1 = "abc";
 >c1 : "abc"
@@ -54,6 +52,12 @@ const c8 = E.A;
 >E.A : E.A
 >E : typeof E
 >A : E.A
+
+const c8b = E["non identifier"];
+>c8b : E.non identifier
+>E["non identifier"] : E.non identifier
+>E : typeof E
+>"non identifier" : "non identifier"
 
 const c9 = { x: "abc" };
 >c9 : { x: string; }

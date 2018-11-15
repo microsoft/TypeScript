@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/typeRelationships/comparable/optionalProperties01.ts ===
 interface Foo {
->Foo : Foo
-
   required1: string;
 >required1 : string
 
@@ -18,7 +16,6 @@ const foo1 = { required1: "hello" } as Foo;
 >{ required1: "hello" } : { required1: string; }
 >required1 : string
 >"hello" : "hello"
->Foo : Foo
 
 const foo2 = { required1: "hello", optional: "bar" } as Foo;
 >foo2 : Foo
@@ -28,5 +25,4 @@ const foo2 = { required1: "hello", optional: "bar" } as Foo;
 >"hello" : "hello"
 >optional : string
 >"bar" : "bar"
->Foo : Foo
 

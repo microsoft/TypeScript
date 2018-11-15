@@ -1,3 +1,4 @@
+// @lib: es5
 // @allowUnreachableCode: true
 
 declare module "fs" {

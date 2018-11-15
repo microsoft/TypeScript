@@ -68,21 +68,18 @@ sourceFile:sourceMapValidationFunctionExpressions.ts
 ---
 >>>    return greetings;
 1->^^^^
-2 >    ^^^^^^
-3 >          ^
-4 >           ^^^^^^^^^
-5 >                    ^
+2 >    ^^^^^^^
+3 >           ^^^^^^^^^
+4 >                    ^
 1->
   >    
-2 >    return
-3 >           
-4 >           greetings
-5 >                    ;
+2 >    return 
+3 >           greetings
+4 >                    ;
 1->Emitted(4, 5) Source(4, 5) + SourceIndex(0)
-2 >Emitted(4, 11) Source(4, 11) + SourceIndex(0)
-3 >Emitted(4, 12) Source(4, 12) + SourceIndex(0)
-4 >Emitted(4, 21) Source(4, 21) + SourceIndex(0)
-5 >Emitted(4, 22) Source(4, 22) + SourceIndex(0)
+2 >Emitted(4, 12) Source(4, 12) + SourceIndex(0)
+3 >Emitted(4, 21) Source(4, 21) + SourceIndex(0)
+4 >Emitted(4, 22) Source(4, 22) + SourceIndex(0)
 ---
 >>>};
 1 >

@@ -15,6 +15,7 @@ declare function OverloadComponent<U>(attr: {b: U, a?: string, "ignore-prop": bo
 >b : Symbol(b, Decl(file.tsx, 3, 45))
 >U : Symbol(U, Decl(file.tsx, 3, 35))
 >a : Symbol(a, Decl(file.tsx, 3, 50))
+>"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 3, 62))
 >JSX : Symbol(JSX, Decl(react.d.ts, 2353, 1))
 >Element : Symbol(JSX.Element, Decl(react.d.ts, 2356, 27))
 

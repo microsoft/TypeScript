@@ -1,0 +1,31 @@
+=== tests/cases/conformance/moduleResolution/main.ts ===
+import { a } from "ext";
+>a : "ts3.1 a"
+
+import { b } from "ext/other";
+>b : "ts3.1 b"
+
+const aa: "ts3.1 a" = a;
+>aa : "ts3.1 a"
+>a : "ts3.1 a"
+
+const bb: "ts3.1 b" = b;
+>bb : "ts3.1 b"
+>b : "ts3.1 b"
+
+=== tests/cases/conformance/moduleResolution/node_modules/ext/ts3.1/index.d.ts ===
+declare module "ext" {
+>"ext" : typeof import("ext")
+
+    export const a = "ts3.1 a";
+>a : "ts3.1 a"
+>"ts3.1 a" : "ts3.1 a"
+}
+declare module "ext/other" {
+>"ext/other" : typeof import("ext/other")
+
+    export const b = "ts3.1 b";
+>b : "ts3.1 b"
+>"ts3.1 b" : "ts3.1 b"
+}
+

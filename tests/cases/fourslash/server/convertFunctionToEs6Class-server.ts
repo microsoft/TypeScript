@@ -11,11 +11,11 @@
 ////     console.log('hello world');
 //// }
 
-verify.applicableRefactorAvailableAtMarker('1');
-// NOTE: '// Comment' should be included, but due to incorrect handling of trivia,
-// it's omitted right now.
-verify.fileAfterApplyingRefactorAtMarker('1',
-`class fn {\r
+verify.codeFix({
+    description: "Convert function to an ES2015 class",
+    newFileContent:
+`// Comment\r
+class fn {\r
     constructor() {\r
         this.baz = 10;\r
     }\r
@@ -23,4 +23,5 @@ verify.fileAfterApplyingRefactorAtMarker('1',
         console.log('hello world');\r
     }\r
 }\r
-`, 'Convert to ES2015 class', 'convert');
+`,
+});

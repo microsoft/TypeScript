@@ -1,44 +1,26 @@
 === tests/cases/conformance/types/mapped/mappedTypes3.ts ===
 class Box<P> {
 >Box : Box<P>
->P : P
 
     value: P;
 >value : P
->P : P
 }
 
 type Boxified<T> = {
 >Boxified : Boxified<T>
->T : T
 
     [K in keyof T]: Box<T[K]>;
->K : K
->T : T
->Box : Box<P>
->T : T
->K : K
 }
 
 declare function boxify<T>(obj: T): Boxified<T>;
 >boxify : <T>(obj: T) => Boxified<T>
->T : T
 >obj : T
->T : T
->Boxified : Boxified<T>
->T : T
 
 declare function unboxify<T>(obj: Boxified<T>): T;
 >unboxify : <T>(obj: Boxified<T>) => T
->T : T
 >obj : Boxified<T>
->Boxified : Boxified<T>
->T : T
->T : T
 
 interface Bacon {
->Bacon : Bacon
-
     isPerfect: boolean;
 >isPerfect : boolean
 
@@ -47,21 +29,16 @@ interface Bacon {
 }
 
 interface BoxifiedBacon {
->BoxifiedBacon : BoxifiedBacon
-
     isPerfect: Box<boolean>;
 >isPerfect : Box<boolean>
->Box : Box<P>
 
     weight: Box<number>;
 >weight : Box<number>
->Box : Box<P>
 }
 
 function f1(b: Bacon) {
 >f1 : (b: Bacon) => void
 >b : Bacon
->Bacon : Bacon
 
     let bb = boxify(b);
 >bb : Boxified<Bacon>
@@ -89,8 +66,6 @@ function f1(b: Bacon) {
 function f2(bb: Boxified<Bacon>) {
 >f2 : (bb: Boxified<Bacon>) => void
 >bb : Boxified<Bacon>
->Boxified : Boxified<T>
->Bacon : Bacon
 
     let b = unboxify(bb);  // Infer Bacon for T
 >b : Bacon
@@ -114,13 +89,11 @@ function f2(bb: Boxified<Bacon>) {
 function f3(bb: BoxifiedBacon) {
 >f3 : (bb: BoxifiedBacon) => void
 >bb : BoxifiedBacon
->BoxifiedBacon : BoxifiedBacon
 
     let b = unboxify<Bacon>(bb);  // Explicit type parameter required
 >b : Bacon
 >unboxify<Bacon>(bb) : Bacon
 >unboxify : <T>(obj: Boxified<T>) => T
->Bacon : Bacon
 >bb : BoxifiedBacon
 
     let bool = b.isPerfect;

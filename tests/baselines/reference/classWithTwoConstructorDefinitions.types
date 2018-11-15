@@ -9,15 +9,11 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     constructor(x: T) { } // error
 >x : T
->T : T
 
     constructor(x: T, y: T) { } // error
 >x : T
->T : T
 >y : T
->T : T
 }

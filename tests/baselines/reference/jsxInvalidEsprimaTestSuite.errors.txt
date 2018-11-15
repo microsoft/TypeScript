@@ -58,9 +58,9 @@ tests/cases/conformance/jsx/25.tsx(1,39): error TS1109: Expression expected.
 tests/cases/conformance/jsx/28.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/28.tsx(1,6): error TS1005: '{' expected.
 tests/cases/conformance/jsx/28.tsx(2,1): error TS1005: '</' expected.
-tests/cases/conformance/jsx/29.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
+tests/cases/conformance/jsx/29.tsx(1,1): error TS2695: Left side of comma operator is unused and has no side effects.
 tests/cases/conformance/jsx/29.tsx(1,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/29.tsx(1,7): error TS1109: Expression expected.
+tests/cases/conformance/jsx/29.tsx(1,7): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/29.tsx(2,1): error TS1005: '</' expected.
 tests/cases/conformance/jsx/3.tsx(1,1): error TS1109: Expression expected.
 tests/cases/conformance/jsx/3.tsx(1,2): error TS1109: Expression expected.
@@ -69,10 +69,6 @@ tests/cases/conformance/jsx/3.tsx(1,6): error TS1109: Expression expected.
 tests/cases/conformance/jsx/3.tsx(1,7): error TS1109: Expression expected.
 tests/cases/conformance/jsx/31.tsx(1,4): error TS1003: Identifier expected.
 tests/cases/conformance/jsx/4.tsx(1,6): error TS1005: '{' expected.
-tests/cases/conformance/jsx/4.tsx(1,6): error TS2304: Cannot find name 'd'.
-tests/cases/conformance/jsx/4.tsx(1,9): error TS1109: Expression expected.
-tests/cases/conformance/jsx/4.tsx(1,10): error TS1109: Expression expected.
-tests/cases/conformance/jsx/4.tsx(1,11): error TS1005: '/' expected.
 tests/cases/conformance/jsx/5.tsx(1,2): error TS17008: JSX element 'a' has no corresponding closing tag.
 tests/cases/conformance/jsx/5.tsx(1,5): error TS1005: '</' expected.
 tests/cases/conformance/jsx/6.tsx(1,4): error TS17002: Expected corresponding JSX closing tag for 'a'.
@@ -112,18 +108,10 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 !!! error TS1109: Expression expected.
           ~
 !!! error TS1109: Expression expected.
-==== tests/cases/conformance/jsx/4.tsx (5 errors) ====
+==== tests/cases/conformance/jsx/4.tsx (1 errors) ====
     <a b=d />;
          ~
 !!! error TS1005: '{' expected.
-         ~
-!!! error TS2304: Cannot find name 'd'.
-            ~
-!!! error TS1109: Expression expected.
-             ~
-!!! error TS1109: Expression expected.
-              
-!!! error TS1005: '/' expected.
 ==== tests/cases/conformance/jsx/5.tsx (2 errors) ====
     <a>;
      ~
@@ -315,12 +303,12 @@ tests/cases/conformance/jsx/9.tsx(1,16): error TS1109: Expression expected.
 !!! error TS1005: '</' expected.
 ==== tests/cases/conformance/jsx/29.tsx (4 errors) ====
     <a b=<}>;
-     ~
-!!! error TS17008: JSX element 'a' has no corresponding closing tag.
+    ~~~~~
+!!! error TS2695: Left side of comma operator is unused and has no side effects.
          ~
 !!! error TS1005: '{' expected.
           ~
-!!! error TS1109: Expression expected.
+!!! error TS1003: Identifier expected.
     
     
 !!! error TS1005: '</' expected.

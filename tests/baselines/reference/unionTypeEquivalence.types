@@ -10,12 +10,9 @@ class D extends C { foo() { } }
 
 var x: C;
 >x : C
->C : C
 
 var x : C | D;
 >x : C
->C : C
->D : D
 
 // A | B is equivalent to B | A.
 var y: string | number;

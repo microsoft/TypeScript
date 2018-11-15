@@ -1,7 +1,5 @@
 === tests/cases/compiler/file1.ts ===
 export namespace Library {
->Library : any
-
     export type Bar = { a: number };
 >Bar : Bar
 >a : number
@@ -9,7 +7,6 @@ export namespace Library {
 var x: Library.Bar; // should work
 >x : Library.Bar
 >Library : any
->Bar : Library.Bar
 
 Library.foo; // should be an error
 >Library.foo : any
@@ -35,7 +32,6 @@ Lib.foo; // should work
 var x: Lib.Bar; // should be an error
 >x : any
 >Lib : any
->Bar : No type information available!
 
 export { Lib }
 >Lib : typeof Lib

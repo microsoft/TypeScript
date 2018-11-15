@@ -1,56 +1,33 @@
 === tests/cases/compiler/promisesWithConstraints.ts ===
 interface Promise<T> {
->Promise : Promise<T>
->T : T
-
     then<U>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : { <TResult1 = T, TResult2 = never>(onfulfilled?: (value: T) => TResult1 | PromiseLike<TResult1>, onrejected?: (reason: any) => TResult2 | PromiseLike<TResult2>): Promise<TResult1 | TResult2>; <U>(cb: (x: T) => Promise<U>): Promise<U>; }
->U : U
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 }
 
 interface CPromise<T extends { x: any; }> {
->CPromise : CPromise<T>
->T : T
 >x : any
 
     then<U extends { x: any; }>(cb: (x: T) => Promise<U>): Promise<U>;
 >then : <U extends { x: any; }>(cb: (x: T) => Promise<U>) => Promise<U>
->U : U
 >x : any
 >cb : (x: T) => Promise<U>
 >x : T
->T : T
->Promise : Promise<T>
->U : U
->Promise : Promise<T>
->U : U
 }
 
 interface Foo { x; }
->Foo : Foo
 >x : any
 
 interface Bar { x; y; }
->Bar : Bar
 >x : any
 >y : any
 
 var a: Promise<Foo>;
 >a : Promise<Foo>
->Promise : Promise<T>
->Foo : Foo
 
 var b: Promise<Bar>;
 >b : Promise<Bar>
->Promise : Promise<T>
->Bar : Bar
 
 a = b; // ok
 >a = b : Promise<Bar>
@@ -64,13 +41,9 @@ b = a; // ok
 
 var a2: CPromise<Foo>;
 >a2 : CPromise<Foo>
->CPromise : CPromise<T>
->Foo : Foo
 
 var b2: CPromise<Bar>;
 >b2 : CPromise<Bar>
->CPromise : CPromise<T>
->Bar : Bar
 
 a2 = b2; // ok
 >a2 = b2 : CPromise<Bar>

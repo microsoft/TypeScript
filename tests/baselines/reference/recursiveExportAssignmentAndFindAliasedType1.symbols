@@ -12,6 +12,8 @@ export var b: ClassB; // This should result in type ClassB
 
 === tests/cases/compiler/recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts ===
 declare module "moduleC" {
+>"moduleC" : Symbol("moduleC", Decl(recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts, 0, 0))
+
     import self = require("moduleC");
 >self : Symbol(self, Decl(recursiveExportAssignmentAndFindAliasedType1_moduleDef.d.ts, 0, 26))
 

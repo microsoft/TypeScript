@@ -9,8 +9,6 @@ class Baz { z: number }
 
 function* g(): IterableIterator<Foo> {
 >g : () => IterableIterator<Foo>
->IterableIterator : IterableIterator<T>
->Foo : Foo
 
     yield;
 >yield : any

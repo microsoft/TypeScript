@@ -1,0 +1,159 @@
+=== tests/cases/conformance/expressions/typeGuards/typeGuardOfFormTypeOfFunction.ts ===
+function f1(x: any) {
+>f1 : Symbol(f1, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 0))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 12))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 12))
+
+        x;  // any
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 0, 12))
+    }
+}
+
+function f2(x: unknown) {
+>f2 : Symbol(f2, Decl(typeGuardOfFormTypeOfFunction.ts, 4, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 6, 12))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 6, 12))
+
+        x;  // Function
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 6, 12))
+    }
+}
+
+function f3(x: {}) {
+>f3 : Symbol(f3, Decl(typeGuardOfFormTypeOfFunction.ts, 10, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 12, 12))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 12, 12))
+
+        x;  // Function
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 12, 12))
+    }
+}
+
+function f4<T>(x: T) {
+>f4 : Symbol(f4, Decl(typeGuardOfFormTypeOfFunction.ts, 16, 1))
+>T : Symbol(T, Decl(typeGuardOfFormTypeOfFunction.ts, 18, 12))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 18, 15))
+>T : Symbol(T, Decl(typeGuardOfFormTypeOfFunction.ts, 18, 12))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 18, 15))
+
+        x;  // T & Function
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 18, 15))
+    }
+}
+
+function f5(x: { s: string }) {
+>f5 : Symbol(f5, Decl(typeGuardOfFormTypeOfFunction.ts, 22, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 24, 12))
+>s : Symbol(s, Decl(typeGuardOfFormTypeOfFunction.ts, 24, 16))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 24, 12))
+
+        x;  // never
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 24, 12))
+    }
+}
+
+function f6(x: () => string) {
+>f6 : Symbol(f6, Decl(typeGuardOfFormTypeOfFunction.ts, 28, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 30, 12))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 30, 12))
+
+        x;  // () => string
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 30, 12))
+    }
+}
+
+function f10(x: string | (() => string)) {
+>f10 : Symbol(f10, Decl(typeGuardOfFormTypeOfFunction.ts, 34, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 36, 13))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 36, 13))
+
+        x;  // () => string
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 36, 13))
+    }
+    else {
+        x;  // string
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 36, 13))
+    }
+}
+
+function f11(x: { s: string } | (() => string)) {
+>f11 : Symbol(f11, Decl(typeGuardOfFormTypeOfFunction.ts, 43, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 45, 13))
+>s : Symbol(s, Decl(typeGuardOfFormTypeOfFunction.ts, 45, 17))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 45, 13))
+
+        x;  // () => string
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 45, 13))
+    }
+    else {
+        x;  // { s: string }
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 45, 13))
+    }
+}
+
+function f12(x: { s: string } | { n: number }) {
+>f12 : Symbol(f12, Decl(typeGuardOfFormTypeOfFunction.ts, 52, 1))
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 13))
+>s : Symbol(s, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 17))
+>n : Symbol(n, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 33))
+
+    if (typeof x === "function") {
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 13))
+
+        x;  // never
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 13))
+    }
+    else {
+        x;  // { s: string } | { n: number }
+>x : Symbol(x, Decl(typeGuardOfFormTypeOfFunction.ts, 54, 13))
+    }
+}
+
+// Repro from #18238
+
+function f100<T, K extends keyof T>(obj: T, keys: K[]) : void {
+>f100 : Symbol(f100, Decl(typeGuardOfFormTypeOfFunction.ts, 61, 1))
+>T : Symbol(T, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 14))
+>K : Symbol(K, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 16))
+>T : Symbol(T, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 14))
+>obj : Symbol(obj, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 36))
+>T : Symbol(T, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 14))
+>keys : Symbol(keys, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 43))
+>K : Symbol(K, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 16))
+
+    for (const k of keys) {
+>k : Symbol(k, Decl(typeGuardOfFormTypeOfFunction.ts, 66, 14))
+>keys : Symbol(keys, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 43))
+
+        const item = obj[k];
+>item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
+>obj : Symbol(obj, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 36))
+>k : Symbol(k, Decl(typeGuardOfFormTypeOfFunction.ts, 66, 14))
+
+        if (typeof item == 'function')
+>item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
+
+            item.call(obj);
+>item.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>item : Symbol(item, Decl(typeGuardOfFormTypeOfFunction.ts, 67, 13))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
+>obj : Symbol(obj, Decl(typeGuardOfFormTypeOfFunction.ts, 65, 36))
+    }
+}
+

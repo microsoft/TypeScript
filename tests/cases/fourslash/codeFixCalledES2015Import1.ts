@@ -6,13 +6,15 @@
 ////export = foo;
 
 // @Filename: index.ts
-////[|import * as foo from "./foo";|]
+////import * as foo from "./foo";
 ////function invoke(f: () => void) { f(); }
-////invoke(foo);
+////invoke([|foo|]);
 
 goTo.file(1);
 verify.codeFix({
     description: `Replace import with 'import foo = require("./foo");'.`,
-    newRangeContent: `import foo = require("./foo");`,
+    newFileContent: `import foo = require("./foo");
+function invoke(f: () => void) { f(); }
+invoke(foo);`,
     index: 1,
 });

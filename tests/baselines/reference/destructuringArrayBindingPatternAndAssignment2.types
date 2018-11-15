@@ -4,7 +4,7 @@
 var [[a0], [[a1]]] = []         // Error
 >a0 : any
 >a1 : any
->[] : [undefined, undefined]
+>[] : [undefined?, undefined?]
 
 var [[a2], [[a3]]] = undefined  // Error
 >a2 : any
@@ -24,16 +24,12 @@ var [b0, b1, b2]: [number, boolean, string] = [1, 2, "string"];  // Error
 >"string" : "string"
 
 interface J extends Array<Number> {
->J : J
->Array : T[]
->Number : Number
-
     2: number;
+>2 : number
 }
 
 function bar(): J {
 >bar : () => J
->J : J
 
     return <[number, number, number]>[1, 2, 3];
 ><[number, number, number]>[1, 2, 3] : [number, number, number]
@@ -43,7 +39,7 @@ function bar(): J {
 >3 : 3
 }
 var [b3 = "string", b4, b5] = bar();  // Error
->b3 : Number | "string"
+>b3 : string | Number
 >"string" : "string"
 >b4 : Number
 >b5 : Number
@@ -74,8 +70,6 @@ var [c2, c3]: [string, string] = [...temp];  // Error
 >temp : number[]
 
 interface F {
->F : F
-
     [idx: number]: boolean
 >idx : number
 }
@@ -83,12 +77,12 @@ interface F {
 function foo(idx: number): F {
 >foo : (idx: number) => F
 >idx : number
->F : F
 
     return {
 >{        2: true    } : { 2: true; }
 
         2: true
+>2 : true
 >true : true
     }
 }

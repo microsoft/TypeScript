@@ -3,6 +3,8 @@
 // Tests that we don't filter out a completion for an alias,
 // so long as it's not an alias to a different module.
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////const foo = 0;
 ////export { foo };
@@ -17,13 +19,15 @@
 // @Filename: /b.ts
 ////fo/**/
 
-goTo.marker("");
-const options = { includeExternalModuleExports: true, sourceDisplay: "./a" };
-// TODO: https://github.com/Microsoft/TypeScript/issues/14003
-//TODO: verify that there's only one!
-verify.completionListContains({ name: "foo", source: "/a" }, "(alias) const foo: 0\nimport foo", "", "alias", /*spanIndex*/ undefined, /*hasAction*/ true, options);
-verify.not.completionListContains({ name: "foo", source: "/a_reexport" }, undefined, undefined, undefined, undefined, undefined, options);
-verify.not.completionListContains({ name: "foo", source: "/a_reexport_2" }, undefined, undefined, undefined, undefined, undefined, options);
+verify.completions({
+    marker: "",
+    includes: [
+        "undefined",
+        { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport foo", kind: "alias", hasAction: true },
+        ...completion.statementKeywordsWithTypes,
+    ],
+    preferences: { includeCompletionsForModuleExports: true },
+});
 
 verify.applyCodeActionFromCompletion("", {
     name: "foo",

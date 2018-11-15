@@ -1,0 +1,82 @@
+=== tests/cases/compiler/collectionPatternNoError.ts ===
+interface MsgConstructor<T extends Message> {
+  new(data: Array<{}>): T;
+>data : {}[]
+}
+class Message {
+>Message : Message
+
+  clone(): this {
+>clone : () => this
+
+    return this;
+>this : this
+  }
+}
+interface MessageList<T extends Message> extends Message {
+  methodOnMessageList(): T[];
+>methodOnMessageList : () => T[]
+}
+
+function fetchMsg<V extends Message>(protoCtor: MsgConstructor<V>): V {
+>fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
+>protoCtor : MsgConstructor<V>
+
+  return null!;
+>null! : null
+>null : null
+}
+
+class DataProvider<T extends Message, U extends MessageList<T>> {
+>DataProvider : DataProvider<T, U>
+
+  constructor(
+    private readonly message: MsgConstructor<T>,
+>message : MsgConstructor<T>
+
+    private readonly messageList: MsgConstructor<U>,
+>messageList : MsgConstructor<U>
+
+  ) { }
+
+  fetch() {
+>fetch : () => void
+
+    const messageList = fetchMsg(this.messageList);
+>messageList : U
+>fetchMsg(this.messageList) : U
+>fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
+>this.messageList : MsgConstructor<U>
+>this : this
+>messageList : MsgConstructor<U>
+
+    messageList.methodOnMessageList();
+>messageList.methodOnMessageList() : T[]
+>messageList.methodOnMessageList : () => T[]
+>messageList : U
+>methodOnMessageList : () => T[]
+  }
+}
+
+// The same bug as the above but using indexed accesses
+// (won't surface directly unless unsound indexed access assignments are forbidden)
+function f<
+>f : <U extends { TType: MessageList<T>; }, T extends Message>(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) => void
+
+  U extends {TType: MessageList<T>},
+>TType : MessageList<T>
+
+  T extends Message
+>(message: MsgConstructor<T>, messageList: MsgConstructor<U["TType"]>) {
+>message : MsgConstructor<T>
+>messageList : MsgConstructor<U["TType"]>
+
+  fetchMsg(messageList).methodOnMessageList();
+>fetchMsg(messageList).methodOnMessageList() : T[]
+>fetchMsg(messageList).methodOnMessageList : () => T[]
+>fetchMsg(messageList) : U["TType"]
+>fetchMsg : <V extends Message>(protoCtor: MsgConstructor<V>) => V
+>messageList : MsgConstructor<U["TType"]>
+>methodOnMessageList : () => T[]
+}
+

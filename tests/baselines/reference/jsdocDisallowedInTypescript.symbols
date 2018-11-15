@@ -2,13 +2,13 @@
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
 >ara : Symbol(ara, Decl(jsdocDisallowedInTypescript.ts, 1, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function f(x: ?number, y: Array.<number>) {
 >f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 1, 34))
 >x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
 >y : Symbol(y, Decl(jsdocDisallowedInTypescript.ts, 3, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     return x ? x + y[1] : y[0];
 >x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
@@ -45,33 +45,26 @@ var g: function(number, number): number = (n,m) => n + m;
 >n : Symbol(n, Decl(jsdocDisallowedInTypescript.ts, 14, 43))
 >m : Symbol(m, Decl(jsdocDisallowedInTypescript.ts, 14, 45))
 
-var variadic: ...boolean = [true, false, true];
->variadic : Symbol(variadic, Decl(jsdocDisallowedInTypescript.ts, 15, 3))
-
 var most: !string = 'definite';
->most : Symbol(most, Decl(jsdocDisallowedInTypescript.ts, 16, 3))
+>most : Symbol(most, Decl(jsdocDisallowedInTypescript.ts, 15, 3))
 
 var postfixdef: number! = 101;
->postfixdef : Symbol(postfixdef, Decl(jsdocDisallowedInTypescript.ts, 17, 3))
+>postfixdef : Symbol(postfixdef, Decl(jsdocDisallowedInTypescript.ts, 16, 3))
 
 var postfixopt: number? = undefined;
->postfixopt : Symbol(postfixopt, Decl(jsdocDisallowedInTypescript.ts, 18, 3))
+>postfixopt : Symbol(postfixopt, Decl(jsdocDisallowedInTypescript.ts, 17, 3))
 >undefined : Symbol(undefined)
 
 var nns: Array<?number>;
->nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 20, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 19, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var dns: Array<!number>;
->dns : Symbol(dns, Decl(jsdocDisallowedInTypescript.ts, 21, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>dns : Symbol(dns, Decl(jsdocDisallowedInTypescript.ts, 20, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var anys: Array<*>;
->anys : Symbol(anys, Decl(jsdocDisallowedInTypescript.ts, 22, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
-
-var vars: Array<...number>;
->vars : Symbol(vars, Decl(jsdocDisallowedInTypescript.ts, 23, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>anys : Symbol(anys, Decl(jsdocDisallowedInTypescript.ts, 21, 3))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 

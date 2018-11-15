@@ -25,7 +25,6 @@ export const bar = Cls.bar();
 
 === /types/lib/index.d.ts ===
 interface Lib { x }
->Lib : Lib
 >x : any
 
 === /main.ts ===
@@ -53,19 +52,17 @@ Cls.prototype.foo = function() { return undefined; }
 >undefined : undefined
 
 declare module "./main" {
-    interface Cls {
->Cls : Cls
+>"./main" : typeof import("/main")
 
+    interface Cls {
         foo(): Lib;
 >foo : () => Lib
->Lib : Lib
     }
     namespace Cls {
 >Cls : typeof Cls
 
         function bar(): Lib;
 >bar : () => Lib
->Lib : Lib
     }
 }
 

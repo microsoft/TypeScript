@@ -7,7 +7,6 @@ class Test {
 
     get Property(): Result {
 >Property : Result
->Result : Result
 
         var x = 1;
 >x : number

@@ -23,7 +23,7 @@ class MyList<T> {
 >this.data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
 >this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))
 >data : Symbol(MyList.data, Decl(genericCloneReturnTypes2.ts, 1, 24))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(genericCloneReturnTypes2.ts, 0, 13))
 >this.size : Symbol(MyList.size, Decl(genericCloneReturnTypes2.ts, 0, 17))
 >this : Symbol(MyList, Decl(genericCloneReturnTypes2.ts, 0, 0))

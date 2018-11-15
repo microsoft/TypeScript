@@ -9,7 +9,6 @@ Foo.fn();
 let x: Foo.Thing;
 >x : Foo.Thing
 >Foo : any
->Thing : Foo.Thing
 
 let y: number = x.n;
 >y : number
@@ -25,10 +24,9 @@ export function fn(): void;
 >fn : () => void
 
 export interface Thing { n: typeof x }
->Thing : Thing
 >n : number
 >x : number
 
 export as namespace Foo;
->Foo : typeof "tests/cases/conformance/externalModules/foo"
+>Foo : typeof import("tests/cases/conformance/externalModules/foo")
 

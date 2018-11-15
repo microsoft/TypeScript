@@ -270,11 +270,11 @@ module TypeScript {
 >s : Symbol(s, Decl(parserRealSource1.ts, 91, 19))
 
             this.logContents.push(s);
->this.logContents.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>this.logContents.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >this.logContents : Symbol(BufferedLogger.logContents, Decl(parserRealSource1.ts, 83, 52))
 >this : Symbol(BufferedLogger, Decl(parserRealSource1.ts, 81, 5))
 >logContents : Symbol(BufferedLogger.logContents, Decl(parserRealSource1.ts, 83, 52))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >s : Symbol(s, Decl(parserRealSource1.ts, 91, 19))
         }
     }
@@ -288,7 +288,7 @@ module TypeScript {
 
         var start = +new Date();
 >start : Symbol(start, Decl(parserRealSource1.ts, 97, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
         var result = func();
 >result : Symbol(result, Decl(parserRealSource1.ts, 98, 11))
@@ -296,7 +296,7 @@ module TypeScript {
 
         var end = +new Date();
 >end : Symbol(end, Decl(parserRealSource1.ts, 99, 11))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
         logger.log(funcDescription + " completed in " + (end - start) + " msec");
 >logger.log : Symbol(ILogger.log, Decl(parserRealSource1.ts, 43, 25))
@@ -324,9 +324,9 @@ module TypeScript {
 
             var ch = value.charCodeAt(index);
 >ch : Symbol(ch, Decl(parserRealSource1.ts, 108, 15))
->value.charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>value.charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->charCodeAt : Symbol(String.charCodeAt, Decl(lib.d.ts, --, --))
+>charCodeAt : Symbol(String.charCodeAt, Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(parserRealSource1.ts, 107, 23))
 
             switch (ch) {
@@ -375,18 +375,18 @@ module TypeScript {
                 default:
                     result += value.charAt(index);
 >result : Symbol(result, Decl(parserRealSource1.ts, 105, 11))
->value.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>value.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >index : Symbol(index, Decl(parserRealSource1.ts, 107, 23))
             }
         }
 
         var tooLong = (value.length > length);
 >tooLong : Symbol(tooLong, Decl(parserRealSource1.ts, 139, 11))
->value.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
 
         if (tooLong) {
@@ -409,14 +409,14 @@ module TypeScript {
 
             for (var i = value.length - mid; i < value.length; i++) addChar(i);
 >i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
->value.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >mid : Symbol(mid, Decl(parserRealSource1.ts, 141, 15))
 >i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
->value.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
 >addChar : Symbol(addChar, Decl(parserRealSource1.ts, 107, 11))
 >i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))
@@ -424,9 +424,9 @@ module TypeScript {
         else {
             length = value.length;
 >length : Symbol(length, Decl(parserRealSource1.ts, 104, 50))
->value.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>value.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >value : Symbol(value, Decl(parserRealSource1.ts, 104, 36))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
             for (var i = 0; i < length; i++) addChar(i);
 >i : Symbol(i, Decl(parserRealSource1.ts, 142, 20), Decl(parserRealSource1.ts, 144, 20), Decl(parserRealSource1.ts, 148, 20))

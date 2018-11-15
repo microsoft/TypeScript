@@ -1,0 +1,30 @@
+=== tests/cases/compiler/include.d.ts ===
+declare module "foo";
+>"foo" : Symbol("foo", Decl(include.d.ts, 0, 0))
+
+=== tests/cases/compiler/default.ts ===
+/*1*/ export /*2*/ default /*3*/ Array /*4*/;
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --) ... and 2 more)
+
+=== tests/cases/compiler/index.ts ===
+/*1*/ import /*2*/ D /*3*/, /*4*/ { /*5*/ A /*6*/, /*7*/ B /*8*/ as /*9*/ C /*10*/ } /*11*/ from /*12*/ "foo";
+>D : Symbol(D, Decl(index.ts, 0, 12))
+>A : Symbol(A, Decl(index.ts, 0, 35))
+>B : Symbol(D, Decl(include.d.ts, 0, 0))
+>C : Symbol(C, Decl(index.ts, 0, 50))
+
+/*1*/ import /*2*/ * /*3*/ as /*4*/ foo /*5*/ from /*6*/ "foo";
+>foo : Symbol(foo, Decl(index.ts, 1, 12))
+
+void D, A, C, foo; // Use the variables to prevent ellision
+>D : Symbol(D, Decl(index.ts, 0, 12))
+>A : Symbol(A, Decl(index.ts, 0, 35))
+>C : Symbol(C, Decl(index.ts, 0, 50))
+>foo : Symbol(foo, Decl(index.ts, 1, 12))
+
+/*1*/ export /*2*/ { /*3*/ A /*4*/, /*5*/ B /*6*/ as /*7*/ C /*8*/ } /*9*/ from /*10*/ "foo";
+>A : Symbol(A, Decl(index.ts, 5, 20))
+>B : Symbol(D, Decl(include.d.ts, 0, 0))
+>C : Symbol(C, Decl(index.ts, 5, 35))
+
+/*1*/ export /*2*/ * /*3*/ from /*4*/ "foo"

@@ -22,12 +22,8 @@ var e: any;
 >e : any
 
 interface Foo<T> { }
->Foo : Foo<T>
->T : T
-
 var f: Array<typeof f>;
 >f : any
->Array : T[]
 >f : any
 
 var f: any;
@@ -35,7 +31,6 @@ var f: any;
 
 var f2: Foo<typeof f2>;
 >f2 : any
->Foo : Foo<T>
 >f2 : any
 
 var f2: any;
@@ -43,7 +38,6 @@ var f2: any;
 
 var f3: Foo<typeof f3>[];
 >f3 : any
->Foo : Foo<T>
 >f3 : any
 
 var f3: any;
@@ -85,11 +79,8 @@ var i = i(i);
 
 var j: <T extends typeof j>(x: T) => T;
 >j : <T extends any>(x: T) => T
->T : T
 >j : <T extends any>(x: T) => T
 >x : T
->T : T
->T : T
 
 var j = j(j);
 >j : <T extends any>(x: T) => T
@@ -121,11 +112,8 @@ var i2 = new i2(i2);
 
 var j2: new <T extends typeof j2>(x: T) => T;
 >j2 : new <T extends any>(x: T) => T
->T : T
 >j2 : new <T extends any>(x: T) => T
 >x : T
->T : T
->T : T
 
 var j2 = new j2(j2);
 >j2 : new <T extends any>(x: T) => T
@@ -171,7 +159,6 @@ var hy1 = hy1[0].x;
 var hy2: { x: Array<typeof hy2> };
 >hy2 : { x: any[]; }
 >x : { x: any[]; }[]
->Array : T[]
 >hy2 : { x: any[]; }
 
 var hy2 = hy2.x[0];
@@ -183,14 +170,10 @@ var hy2 = hy2.x[0];
 >0 : 0
 
 interface Foo2<T, U> { }
->Foo2 : Foo2<T, U>
->T : T
->U : U
 
 // This one should be an error because the first type argument is not contained inside a type literal
 var hy3: Foo2<typeof hy3, { x: typeof hy3 }>;
 >hy3 : any
->Foo2 : Foo2<T, U>
 >hy3 : any
 >x : any
 >hy3 : any

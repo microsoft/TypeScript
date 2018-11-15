@@ -1,11 +1,9 @@
 === tests/cases/compiler/somelib.d.ts ===
 export declare class Foo<T> {
 >Foo : Foo<T>
->T : T
 
     prop: T;
 >prop : T
->T : T
 }
 === tests/cases/compiler/index.js ===
 import {Foo} from "./somelib";

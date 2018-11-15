@@ -70,6 +70,7 @@ export interface InterfaceWithPrivateNamedProperties {
 >InterfaceWithPrivateNamedProperties : Symbol(InterfaceWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 25, 1))
 
     [s]: any;
+>[s] : Symbol(InterfaceWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 27, 54))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -77,6 +78,7 @@ export interface InterfaceWithPrivateNamedMethods {
 >InterfaceWithPrivateNamedMethods : Symbol(InterfaceWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 29, 1))
 
     [s](): any;
+>[s] : Symbol(InterfaceWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 31, 51))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -84,6 +86,7 @@ export type TypeLiteralWithPrivateNamedProperties = {
 >TypeLiteralWithPrivateNamedProperties : Symbol(TypeLiteralWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 33, 1))
 
     [s]: any;
+>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 35, 53))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -91,6 +94,7 @@ export type TypeLiteralWithPrivateNamedMethods = {
 >TypeLiteralWithPrivateNamedMethods : Symbol(TypeLiteralWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 37, 1))
 
     [s](): any;
+>[s] : Symbol([s], Decl(uniqueSymbolsDeclarationsErrors.ts, 39, 50))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -98,9 +102,11 @@ export class ClassWithPrivateNamedProperties {
 >ClassWithPrivateNamedProperties : Symbol(ClassWithPrivateNamedProperties, Decl(uniqueSymbolsDeclarationsErrors.ts, 41, 1))
 
     [s]: any;
+>[s] : Symbol(ClassWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 43, 46))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 
     static [s]: any;
+>[s] : Symbol(ClassWithPrivateNamedProperties[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 44, 13))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -108,9 +114,11 @@ export class ClassWithPrivateNamedMethods {
 >ClassWithPrivateNamedMethods : Symbol(ClassWithPrivateNamedMethods, Decl(uniqueSymbolsDeclarationsErrors.ts, 46, 1))
 
     [s]() {}
+>[s] : Symbol(ClassWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 48, 43))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 
     static [s]() {}
+>[s] : Symbol(ClassWithPrivateNamedMethods[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 49, 12))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 }
 
@@ -118,18 +126,22 @@ export class ClassWithPrivateNamedAccessors {
 >ClassWithPrivateNamedAccessors : Symbol(ClassWithPrivateNamedAccessors, Decl(uniqueSymbolsDeclarationsErrors.ts, 51, 1))
 
     get [s](): any { return undefined; }
+>[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 >undefined : Symbol(undefined)
 
     set [s](v: any) { }
+>[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 53, 45), Decl(uniqueSymbolsDeclarationsErrors.ts, 54, 40))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 >v : Symbol(v, Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 12))
 
     static get [s](): any { return undefined; }
+>[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 >undefined : Symbol(undefined)
 
     static set [s](v: any) { }
+>[s] : Symbol(ClassWithPrivateNamedAccessors[s], Decl(uniqueSymbolsDeclarationsErrors.ts, 55, 23), Decl(uniqueSymbolsDeclarationsErrors.ts, 56, 47))
 >s : Symbol(s, Decl(uniqueSymbolsDeclarationsErrors.ts, 0, 13))
 >v : Symbol(v, Decl(uniqueSymbolsDeclarationsErrors.ts, 57, 19))
 }

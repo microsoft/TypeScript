@@ -384,3 +384,25 @@ export declare function createExportedWidget1(): Widgets.Widget1;
 export declare function createExportedWidget2(): Widgets.SpecializedWidget.Widget2;
 export declare function createExportedWidget3(): Widgets1.Widget3;
 export declare function createExportedWidget4(): Widgets1.SpecializedGlobalWidget.Widget4;
+//// [privacyFunctionReturnTypeDeclFile_consumer.d.ts]
+/// <reference path="privacyFunctionReturnTypeDeclFile_GlobalWidgets.d.ts" />
+export declare class publicClassWithWithPrivateParmeterTypes {
+    static myPublicStaticMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+    private static myPrivateStaticMethod;
+    myPublicMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+    private myPrivateMethod;
+    static myPublicStaticMethod1(): import("GlobalWidgets").Widget3;
+    private static myPrivateStaticMethod1;
+    myPublicMethod1(): import("GlobalWidgets").Widget3;
+    private myPrivateMethod1;
+}
+export declare function publicFunctionWithPrivateParmeterTypes(): import("./privacyFunctionReturnTypeDeclFile_Widgets").Widget1;
+export declare function publicFunctionWithPrivateParmeterTypes1(): import("GlobalWidgets").Widget3;
+export declare class publicClassWithPrivateModuleReturnTypes {
+    static myPublicStaticMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+    myPublicMethod(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+    static myPublicStaticMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+    myPublicMethod1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;
+}
+export declare function publicFunctionWithPrivateModuleReturnTypes(): import("./privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2;
+export declare function publicFunctionWithPrivateModuleReturnTypes1(): import("GlobalWidgets").SpecializedGlobalWidget.Widget4;

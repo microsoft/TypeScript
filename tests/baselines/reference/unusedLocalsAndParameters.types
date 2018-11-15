@@ -152,4 +152,14 @@ namespace N {
 >x : any
 }
 
-    
+for (let x: y) {
+>x : any
+
+    z(x);
+>z : any
+>(x) : any
+>x : any
+}
+> : any
+> : any
+

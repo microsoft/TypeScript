@@ -5,12 +5,14 @@ class C {
 >C : C
 
     1: number;
+>1 : number
+
     1.1: string;
+>1.1 : string
 }
 
 var c: C;
 >c : C
->C : C
 
 var r1 = c[1];
 >r1 : number
@@ -37,15 +39,15 @@ var r4 = c['1.1'];
 >'1.1' : "1.1"
 
 interface I {
->I : I
-
     1: number;
+>1 : number
+
     1.1: string;
+>1.1 : string
 }
 
 var i: I;
 >i : I
->I : I
 
 var r1 = i[1];
 >r1 : number
@@ -75,7 +77,10 @@ var a: {
 >a : { 1: number; 1.1: string; }
 
     1: number;
+>1 : number
+
     1.1: string;
+>1.1 : string
 }
 
 var r1 = a[1];
@@ -107,9 +112,11 @@ var b = {
 >{    1: 1,    1.1: ""} : { 1: number; 1.1: string; }
 
     1: 1,
+>1 : number
 >1 : 1
 
     1.1: ""
+>1.1 : string
 >"" : ""
 }
 

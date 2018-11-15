@@ -1,6 +1,5 @@
 === tests/cases/compiler/circularModuleImports.ts ===
 module M
->M : any
  
 {
  

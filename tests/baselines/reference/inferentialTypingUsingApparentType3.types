@@ -1,18 +1,12 @@
 === tests/cases/compiler/inferentialTypingUsingApparentType3.ts ===
 interface Field<T> {
->Field : Field<T>
->T : T
-
     clean(input: T): T
 >clean : (input: T) => T
 >input : T
->T : T
->T : T
 }
 
 class CharField implements Field<string> {
 >CharField : CharField
->Field : Field<T>
 
     clean(input: string) {
 >clean : (input: string) => string
@@ -25,7 +19,6 @@ class CharField implements Field<string> {
 
 class NumberField implements Field<number> {
 >NumberField : NumberField
->Field : Field<T>
 
     clean(input: number) {
 >clean : (input: number) => number
@@ -38,14 +31,10 @@ class NumberField implements Field<number> {
 
 class ObjectField<A, T extends { [name: string]: Field<any> }> {
 >ObjectField : ObjectField<A, T>
->A : A
->T : T
 >name : string
->Field : Field<T>
 
     constructor(public fields: T) { }
 >fields : T
->T : T
 }
 
 var person = new ObjectField({

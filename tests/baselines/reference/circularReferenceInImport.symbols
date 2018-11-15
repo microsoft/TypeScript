@@ -18,5 +18,5 @@ export function foo() {
 >foo : Symbol(foo, Decl(app.ts, 0, 26))
 
     return new Object()
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }

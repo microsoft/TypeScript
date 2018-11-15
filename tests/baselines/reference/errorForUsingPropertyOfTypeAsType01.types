@@ -3,8 +3,6 @@ namespace Test1 {
 >Test1 : typeof Test1
 
     export interface Foo {
->Foo : Foo
-
         bar: string;
 >bar : string
     }
@@ -12,14 +10,12 @@ namespace Test1 {
     var x: Foo.bar = "";
 >x : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 
     var y: Test1.Foo.bar = "";
 >y : any
 >Test1 : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 }
 
@@ -36,14 +32,12 @@ namespace Test2 {
     var x: Foo.bar = "";
 >x : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 
     var y: Test2.Foo.bar = "";
 >y : any
 >Test2 : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 }
 
@@ -60,14 +54,12 @@ namespace Test3 {
     var x: Foo.bar = "";
 >x : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 
     var y: Test3.Foo.bar = "";
 >y : any
 >Test3 : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 }
 
@@ -84,14 +76,12 @@ namespace Test4 {
     var x: Foo.bar = "";
 >x : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 
     var y: Test4.Foo.bar = "";
 >y : any
 >Test4 : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 }
 
@@ -108,20 +98,18 @@ namespace Test5 {
     var x: Foo.bar = "";
 >x : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 
     var y: Test5.Foo.bar = "";
 >y : any
 >Test5 : any
 >Foo : any
->bar : No type information available!
 >"" : ""
 }
 
 import lol = Test5.Foo.
 >lol : any
 >Test5 : typeof Test5
->Foo : No type information available!
-> : No type information available!
+>Foo : any
+> : any
 

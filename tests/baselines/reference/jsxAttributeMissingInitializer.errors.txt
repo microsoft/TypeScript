@@ -1,0 +1,9 @@
+tests/cases/compiler/jsxAttributeMissingInitializer.tsx(1,21): error TS1005: '{' expected.
+
+
+==== tests/cases/compiler/jsxAttributeMissingInitializer.tsx (1 errors) ====
+    const x = <div foo= ></div>;
+                        ~
+!!! error TS1005: '{' expected.
+    const y = 0;
+    

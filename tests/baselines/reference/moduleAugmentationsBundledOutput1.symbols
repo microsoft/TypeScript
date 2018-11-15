@@ -18,6 +18,8 @@ import {Cls} from "./m1";
 >prototype : Symbol(Cls.prototype)
 
 declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
 
@@ -27,6 +29,8 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
 
@@ -65,6 +69,8 @@ import {C1, C2} from "./m3";
 >undefined : Symbol(undefined)
 
 declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
 
@@ -75,6 +81,8 @@ declare module "./m1" {
 }
 
 declare module "./m1" {
+>"./m1" : Symbol("tests/cases/compiler/m1", Decl(m1.ts, 0, 0), Decl(m2.ts, 2, 54), Decl(m2.ts, 8, 1), Decl(m4.ts, 3, 60), Decl(m4.ts, 9, 1))
+
     interface Cls {
 >Cls : Symbol(Cls, Decl(m1.ts, 0, 0), Decl(m2.ts, 4, 23), Decl(m2.ts, 10, 23), Decl(m4.ts, 5, 23), Decl(m4.ts, 11, 23))
 
@@ -95,34 +103,34 @@ let c: Cls;
 >Cls : Symbol(Cls, Decl(test.ts, 0, 8))
 
 c.foo().toExponential();
->c.foo().toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>c.foo().toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >c.foo : Symbol(Cls.foo, Decl(m2.ts, 5, 19))
 >c : Symbol(c, Decl(test.ts, 3, 3))
 >foo : Symbol(Cls.foo, Decl(m2.ts, 5, 19))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 c.bar().toLowerCase();
->c.bar().toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>c.bar().toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >c.bar : Symbol(Cls.bar, Decl(m2.ts, 11, 19))
 >c : Symbol(c, Decl(test.ts, 3, 3))
 >bar : Symbol(Cls.bar, Decl(m2.ts, 11, 19))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
 c.baz1().x.toExponential();
->c.baz1().x.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>c.baz1().x.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >c.baz1().x : Symbol(C1.x, Decl(m3.ts, 0, 17))
 >c.baz1 : Symbol(Cls.baz1, Decl(m4.ts, 6, 19))
 >c : Symbol(c, Decl(test.ts, 3, 3))
 >baz1 : Symbol(Cls.baz1, Decl(m4.ts, 6, 19))
 >x : Symbol(C1.x, Decl(m3.ts, 0, 17))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 
 c.baz2().x.toLowerCase();
->c.baz2().x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>c.baz2().x.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >c.baz2().x : Symbol(C2.x, Decl(m3.ts, 1, 17))
 >c.baz2 : Symbol(Cls.baz2, Decl(m4.ts, 12, 19))
 >c : Symbol(c, Decl(test.ts, 3, 3))
 >baz2 : Symbol(Cls.baz2, Decl(m4.ts, 12, 19))
 >x : Symbol(C2.x, Decl(m3.ts, 1, 17))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 

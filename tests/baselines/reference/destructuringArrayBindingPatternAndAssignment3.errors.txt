@@ -9,9 +9,11 @@ tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAss
     const [c, d = c, e = e] = [1]; // error for e = e
                          ~
 !!! error TS2448: Block-scoped variable 'e' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts:2:18: 'e' is declared here.
     const [f, g = f, h = i, i = f] = [1]; // error for h = i
                          ~
 !!! error TS2448: Block-scoped variable 'i' used before its declaration.
+!!! related TS2728 tests/cases/conformance/es6/destructuring/destructuringArrayBindingPatternAndAssignment3.ts:3:25: 'i' is declared here.
     
     (function ([a, b = a]) { // ok
     })([1]);

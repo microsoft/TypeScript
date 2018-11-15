@@ -35,6 +35,7 @@ export interface HyphenProps extends ClickableProps {
 >ClickableProps : Symbol(ClickableProps, Decl(file.tsx, 0, 31))
 
     "data-format": string;
+>"data-format" : Symbol(HyphenProps["data-format"], Decl(file.tsx, 15, 53))
 }
 
 let obj0 = {

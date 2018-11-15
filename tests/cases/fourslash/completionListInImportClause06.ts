@@ -3,7 +3,7 @@
 // @typeRoots: T1,T2
 
 // @Filename: app.ts
-////import * as A from "[|/*1*/|]";
+////import * as A from "/*1*/";
 
 // @Filename: T1/a__b/index.d.ts
 ////export declare let x: number;
@@ -12,6 +12,4 @@
 ////export declare let x: number;
 
 // Confirm that entries are de-dup'd.
-verify.completionsAt("1", [
-    { name: "@a/b", replacementSpan: test.ranges()[0] },
-]);
+verify.completions({ marker: "1", exact: "@a/b", isNewIdentifierLocation: true });

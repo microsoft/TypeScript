@@ -2,7 +2,7 @@
 //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
 var condObject: Object;
 >condObject : Symbol(condObject, Decl(conditionalOperatorConditionIsObjectType.ts, 1, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var exprAny1: any;
 >exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsObjectType.ts, 3, 3))
@@ -18,7 +18,7 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsObjectType.ts, 7, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var exprAny2: any;
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 9, 3))
@@ -34,7 +34,7 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsObjectType.ts, 13, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function foo() { };
 >foo : Symbol(foo, Decl(conditionalOperatorConditionIsObjectType.ts, 13, 26))
@@ -77,17 +77,17 @@ condObject ? exprString1 : exprBoolean1; // union
 //Cond is an object type literal
 ((a: string) => a.length) ? exprAny1 : exprAny2;
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 27, 2))
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 27, 2))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsObjectType.ts, 3, 3))
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 9, 3))
 
 ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 28, 2))
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 28, 2))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 
@@ -120,7 +120,7 @@ foo() ? exprAny1 : exprAny2;
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 9, 3))
 
 new Date() ? exprBoolean1 : exprBoolean2;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 
@@ -137,14 +137,14 @@ C.doIt() ? exprString1 : exprString2;
 >exprString2 : Symbol(exprString2, Decl(conditionalOperatorConditionIsObjectType.ts, 12, 3))
 
 condObject.valueOf() ? exprIsObject1 : exprIsObject2;
->condObject.valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
+>condObject.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
 >condObject : Symbol(condObject, Decl(conditionalOperatorConditionIsObjectType.ts, 1, 3))
->valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
+>valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
 >exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsObjectType.ts, 7, 3))
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsObjectType.ts, 13, 3))
 
 new Date() ? exprString1 : exprBoolean1; // union
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >exprString1 : Symbol(exprString1, Decl(conditionalOperatorConditionIsObjectType.ts, 6, 3))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 
@@ -188,18 +188,18 @@ var resultIsStringOrBoolean1 = condObject ? exprString1 : exprBoolean1; // union
 var resultIsAny2 = ((a: string) => a.length) ? exprAny1 : exprAny2;
 >resultIsAny2 : Symbol(resultIsAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 50, 3))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 50, 21))
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 50, 21))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprAny1 : Symbol(exprAny1, Decl(conditionalOperatorConditionIsObjectType.ts, 3, 3))
 >exprAny2 : Symbol(exprAny2, Decl(conditionalOperatorConditionIsObjectType.ts, 9, 3))
 
 var resultIsBoolean2 = ((a: string) => a.length) ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean2 : Symbol(resultIsBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 51, 3))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 51, 25))
->a.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(conditionalOperatorConditionIsObjectType.ts, 51, 25))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 
@@ -237,7 +237,7 @@ var resultIsAny3 = foo() ? exprAny1 : exprAny2;
 
 var resultIsBoolean3 = new Date() ? exprBoolean1 : exprBoolean2;
 >resultIsBoolean3 : Symbol(resultIsBoolean3, Decl(conditionalOperatorConditionIsObjectType.ts, 58, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >exprBoolean1 : Symbol(exprBoolean1, Decl(conditionalOperatorConditionIsObjectType.ts, 4, 3))
 >exprBoolean2 : Symbol(exprBoolean2, Decl(conditionalOperatorConditionIsObjectType.ts, 10, 3))
 
@@ -257,9 +257,9 @@ var resultIsString3 = C.doIt() ? exprString1 : exprString2;
 
 var resultIsObject3 = condObject.valueOf() ? exprIsObject1 : exprIsObject2;
 >resultIsObject3 : Symbol(resultIsObject3, Decl(conditionalOperatorConditionIsObjectType.ts, 61, 3))
->condObject.valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
+>condObject.valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
 >condObject : Symbol(condObject, Decl(conditionalOperatorConditionIsObjectType.ts, 1, 3))
->valueOf : Symbol(Object.valueOf, Decl(lib.d.ts, --, --))
+>valueOf : Symbol(Object.valueOf, Decl(lib.es5.d.ts, --, --))
 >exprIsObject1 : Symbol(exprIsObject1, Decl(conditionalOperatorConditionIsObjectType.ts, 7, 3))
 >exprIsObject2 : Symbol(exprIsObject2, Decl(conditionalOperatorConditionIsObjectType.ts, 13, 3))
 

@@ -13,9 +13,9 @@ foo((y): (y2: number) => void => {
 
     var z = y.charAt(0); // Should be string
 >z : Symbol(z, Decl(contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts, 4, 7))
->y.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>y.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >y : Symbol(y, Decl(contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts, 3, 5))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
     return null;
 });
@@ -29,9 +29,9 @@ foo((y: string) => {
 
         var z = y2.toFixed(); // Should be string
 >z : Symbol(z, Decl(contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts, 10, 11))
->y2.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>y2.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >y2 : Symbol(y2, Decl(contextuallyTypedFunctionExpressionsAndReturnAnnotations.ts, 9, 10))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
         return 0;
     };

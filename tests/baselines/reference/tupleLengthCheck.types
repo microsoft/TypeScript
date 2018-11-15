@@ -1,0 +1,49 @@
+=== tests/cases/conformance/types/tuple/tupleLengthCheck.ts ===
+declare const a: [number, string]
+>a : [number, string]
+
+declare const rest: [number, string, ...boolean[]]
+>rest : [number, string, ...boolean[]]
+
+const a1 = a[1]
+>a1 : string
+>a[1] : string
+>a : [number, string]
+>1 : 1
+
+const a2 = a[2]
+>a2 : undefined
+>a[2] : undefined
+>a : [number, string]
+>2 : 2
+
+const a3 = a[1000]
+>a3 : undefined
+>a[1000] : undefined
+>a : [number, string]
+>1000 : 1000
+
+const a4 = rest[1]
+>a4 : string
+>rest[1] : string
+>rest : [number, string, ...boolean[]]
+>1 : 1
+
+const a5 = rest[2]
+>a5 : boolean
+>rest[2] : boolean
+>rest : [number, string, ...boolean[]]
+>2 : 2
+
+const a6 = rest[3]
+>a6 : boolean
+>rest[3] : boolean
+>rest : [number, string, ...boolean[]]
+>3 : 3
+
+const a7 = rest[1000]
+>a7 : boolean
+>rest[1000] : boolean
+>rest : [number, string, ...boolean[]]
+>1000 : 1000
+

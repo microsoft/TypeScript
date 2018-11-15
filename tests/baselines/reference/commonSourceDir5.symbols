@@ -13,9 +13,9 @@ import {pi} from "B:/baz";
 
 export var i = Math.sqrt(-1);
 >i : Symbol(i, Decl(foo.ts, 1, 10))
->Math.sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->sqrt : Symbol(Math.sqrt, Decl(lib.d.ts, --, --))
+>Math.sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>sqrt : Symbol(Math.sqrt, Decl(lib.es5.d.ts, --, --))
 
 export var z = pi * pi;
 >z : Symbol(z, Decl(foo.ts, 2, 10))
@@ -31,9 +31,9 @@ import {i} from "A:/foo";
 
 export var pi = Math.PI;
 >pi : Symbol(pi, Decl(baz.ts, 2, 10))
->Math.PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
->Math : Symbol(Math, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->PI : Symbol(Math.PI, Decl(lib.d.ts, --, --))
+>Math.PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>PI : Symbol(Math.PI, Decl(lib.es5.d.ts, --, --))
 
 export var y = x * i;
 >y : Symbol(y, Decl(baz.ts, 3, 10))

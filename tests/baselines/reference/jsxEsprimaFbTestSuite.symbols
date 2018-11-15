@@ -21,14 +21,12 @@ declare var props;
 >props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
 
 <a />;
->a : Symbol(unknown)
 
 //<n:a n:v />; Namespace unsuported
 
 //<a n:foo="bar"> {value} <b><c /></b></a>;  Namespace unsuported
 
 <a b={" "} c=" " d="&amp;" e="id=1&group=2" f="&#123456789" g="&#123*;" h="&#x;" />;
->a : Symbol(unknown)
 >b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 14, 2))
 >c : Symbol(c, Decl(jsxEsprimaFbTestSuite.tsx, 14, 10))
 >d : Symbol(d, Decl(jsxEsprimaFbTestSuite.tsx, 14, 16))
@@ -38,12 +36,9 @@ declare var props;
 >h : Symbol(h, Decl(jsxEsprimaFbTestSuite.tsx, 14, 71))
 
 <a b="&notanentity;" />;
->a : Symbol(unknown)
 >b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 16, 2))
 
 <a
->a : Symbol(unknown)
-
 />;
 
 <日本語></日本語>;
@@ -62,36 +57,20 @@ baz
 >AbC_def : Symbol(AbC_def, Decl(jsxEsprimaFbTestSuite.tsx, 2, 11))
 
 <a b={x ? <c /> : <d />} />;
->a : Symbol(unknown)
 >b : Symbol(b, Decl(jsxEsprimaFbTestSuite.tsx, 28, 2))
 >x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
->c : Symbol(unknown)
->d : Symbol(unknown)
 
 <a>{}</a>;
->a : Symbol(unknown)
->a : Symbol(unknown)
 
 <a>{/* this is a comment */}</a>;
->a : Symbol(unknown)
->a : Symbol(unknown)
 
 <div>@test content</div>;
->div : Symbol(unknown)
->div : Symbol(unknown)
 
 <div><br />7x invalid-js-identifier</div>;
->div : Symbol(unknown)
->br : Symbol(unknown)
->div : Symbol(unknown)
 
 <LeftRight left=<a /> right=<b>monkeys /> gorillas</b> />;
 >LeftRight : Symbol(LeftRight, Decl(jsxEsprimaFbTestSuite.tsx, 3, 11))
 >left : Symbol(left, Decl(jsxEsprimaFbTestSuite.tsx, 38, 10))
->a : Symbol(unknown)
->right : Symbol(right, Decl(jsxEsprimaFbTestSuite.tsx, 38, 21))
->b : Symbol(unknown)
->b : Symbol(unknown)
 
 <a.b></a.b>;
 >a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
@@ -102,26 +81,19 @@ baz
 >a : Symbol(a, Decl(jsxEsprimaFbTestSuite.tsx, 5, 11))
 
 (<div />) < x;
->div : Symbol(unknown)
 >x : Symbol(x, Decl(jsxEsprimaFbTestSuite.tsx, 4, 11))
 
 <div {...props} />;
->div : Symbol(unknown)
 >props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
 
 <div {...props} post="attribute" />;
->div : Symbol(unknown)
 >props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
 >post : Symbol(post, Decl(jsxEsprimaFbTestSuite.tsx, 48, 15))
 
 <div pre="leading" pre2="attribute" {...props}></div>;
->div : Symbol(unknown)
 >pre : Symbol(pre, Decl(jsxEsprimaFbTestSuite.tsx, 50, 4))
 >pre2 : Symbol(pre2, Decl(jsxEsprimaFbTestSuite.tsx, 50, 18))
 >props : Symbol(props, Decl(jsxEsprimaFbTestSuite.tsx, 6, 11))
->div : Symbol(unknown)
 
 <a>    </a>;
->a : Symbol(unknown)
->a : Symbol(unknown)
 

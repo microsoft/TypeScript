@@ -2,12 +2,14 @@
 
 ////class C {
 ////    /** @type {number | null} */
-////    /*1*/p = null
+////    p = null
 ////}
 
-verify.applicableRefactorAvailableAtMarker('1');
-verify.fileAfterApplyingRefactorAtMarker('1',
+verify.codeFix({
+    description: "Annotate with type from JSDoc",
+    newFileContent:
 `class C {
     /** @type {number | null} */
-    p: number | null = null;
-}`, 'Annotate with type from JSDoc', 'annotate');
+    p: number | null = null
+}`,
+});

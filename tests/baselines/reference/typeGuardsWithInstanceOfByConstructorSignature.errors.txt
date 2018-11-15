@@ -258,9 +258,11 @@ tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstru
         obj16.foo1;
               ~~~~
 !!! error TS2551: Property 'foo1' does not exist on type 'H'. Did you mean 'foo'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts:175:5: 'foo' is declared here.
         obj16.foo2;
               ~~~~
 !!! error TS2551: Property 'foo2' does not exist on type 'H'. Did you mean 'foo'?
+!!! related TS2728 tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts:175:5: 'foo' is declared here.
     }
     
     var obj17: any;

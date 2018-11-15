@@ -13,7 +13,7 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Symbol(OBJECT, Decl(commaOperatorWithSecondOperandAnyType.ts, 4, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 //The second operand type is any
 ANY, ANY;
@@ -75,8 +75,8 @@ var x: any;
 
 "string", [null, 1];
 "string".charAt(0), [null, 1];
->"string".charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>"string".charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 
 true, x("any");
 >x : Symbol(x, Decl(commaOperatorWithSecondOperandAnyType.ts, 21, 3))
@@ -99,8 +99,8 @@ var resultIsAny8 = ("string", null);
 
 var resultIsAny9 = ("string".charAt(0), undefined);
 >resultIsAny9 : Symbol(resultIsAny9, Decl(commaOperatorWithSecondOperandAnyType.ts, 33, 3))
->"string".charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>"string".charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >undefined : Symbol(undefined)
 
 var resultIsAny10 = (true, x("any"));

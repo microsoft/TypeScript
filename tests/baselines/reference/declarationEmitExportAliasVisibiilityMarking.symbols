@@ -1,0 +1,39 @@
+=== tests/cases/compiler/Types.ts ===
+type Suit = 'Hearts' | 'Spades' | 'Clubs' | 'Diamonds';
+>Suit : Symbol(Suit, Decl(Types.ts, 0, 0))
+
+type Rank = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9 | 10 | 'Jack' | 'Queen' | 'King';
+>Rank : Symbol(Rank, Decl(Types.ts, 0, 55))
+
+export { Suit, Rank };
+>Suit : Symbol(Suit, Decl(Types.ts, 2, 8))
+>Rank : Symbol(Rank, Decl(Types.ts, 2, 14))
+
+=== tests/cases/compiler/Card.ts ===
+import { Suit, Rank } from './Types';
+>Suit : Symbol(Suit, Decl(Card.ts, 0, 8))
+>Rank : Symbol(Rank, Decl(Card.ts, 0, 14))
+
+export default (suit: Suit, rank: Rank) => ({suit, rank});
+>suit : Symbol(suit, Decl(Card.ts, 1, 16))
+>Suit : Symbol(Suit, Decl(Card.ts, 0, 8))
+>rank : Symbol(rank, Decl(Card.ts, 1, 27))
+>Rank : Symbol(Rank, Decl(Card.ts, 0, 14))
+>suit : Symbol(suit, Decl(Card.ts, 1, 45))
+>rank : Symbol(rank, Decl(Card.ts, 1, 50))
+
+=== tests/cases/compiler/index.ts ===
+export let lazyCard = () => import('./Card').then(a => a.default);
+>lazyCard : Symbol(lazyCard, Decl(index.ts, 0, 10))
+>import('./Card').then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>'./Card' : Symbol("tests/cases/compiler/Card", Decl(Card.ts, 0, 0))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --))
+>a : Symbol(a, Decl(index.ts, 0, 50))
+>a.default : Symbol(default, Decl(Card.ts, 0, 37))
+>a : Symbol(a, Decl(index.ts, 0, 50))
+>default : Symbol(default, Decl(Card.ts, 0, 37))
+
+export { Suit, Rank } from './Types';
+>Suit : Symbol(Suit, Decl(index.ts, 1, 8))
+>Rank : Symbol(Rank, Decl(index.ts, 1, 14))
+

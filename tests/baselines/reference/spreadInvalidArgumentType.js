@@ -28,18 +28,18 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
     var e: E;
 
-    var o1 = { ...p1 };   // Error, generic type paramterre
-    var o2 = { ...p2 };   // OK
-    var o3 = { ...t };   // Error, generic type paramter
-    var o4 = { ...i };   // Error, index access
+    var o1 = { ...p1 };  // OK, generic type paramterre
+    var o2 = { ...p2 };  // OK
+    var o3 = { ...t };   // OK, generic type paramter
+    var o4 = { ...i };   // OK, index access
     var o5 = { ...k };   // Error, index
-    var o6 = { ...mapped_generic }; // Error, generic mapped object type
+    var o6 = { ...mapped_generic }; // OK, generic mapped object type
     var o7 = { ...mapped };  // OK, non-generic mapped type
 
-    var o8 = { ...union_generic };  // Error, union with generic type parameter
+    var o8 = { ...union_generic };  // OK, union with generic type parameter
     var o9 = { ...union_primitive };  // Error, union with generic type parameter
 
-    var o10 = { ...intersection_generic };  // Error, intersection with generic type parameter
+    var o10 = { ...intersection_generic };  // OK, intersection with generic type parameter
     var o11 = { ...intersection_primitive };  // Error, intersection with generic type parameter
 
     var o12 = { ...num };  // Error
@@ -58,13 +58,16 @@ function f<T extends { b: string }>(p1: T, p2: T[]) {
 
 
 //// [spreadInvalidArgumentType.js]
-var __assign = (this && this.__assign) || Object.assign || function(t) {
-    for (var s, i = 1, n = arguments.length; i < n; i++) {
-        s = arguments[i];
-        for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
-            t[p] = s[p];
-    }
-    return t;
+var __assign = (this && this.__assign) || function () {
+    __assign = Object.assign || function(t) {
+        for (var s, i = 1, n = arguments.length; i < n; i++) {
+            s = arguments[i];
+            for (var p in s) if (Object.prototype.hasOwnProperty.call(s, p))
+                t[p] = s[p];
+        }
+        return t;
+    };
+    return __assign.apply(this, arguments);
 };
 var E;
 (function (E) {
@@ -90,16 +93,16 @@ function f(p1, p2) {
     var n;
     var a;
     var e;
-    var o1 = __assign({}, p1); // Error, generic type paramterre
+    var o1 = __assign({}, p1); // OK, generic type paramterre
     var o2 = __assign({}, p2); // OK
-    var o3 = __assign({}, t); // Error, generic type paramter
-    var o4 = __assign({}, i); // Error, index access
+    var o3 = __assign({}, t); // OK, generic type paramter
+    var o4 = __assign({}, i); // OK, index access
     var o5 = __assign({}, k); // Error, index
-    var o6 = __assign({}, mapped_generic); // Error, generic mapped object type
+    var o6 = __assign({}, mapped_generic); // OK, generic mapped object type
     var o7 = __assign({}, mapped); // OK, non-generic mapped type
-    var o8 = __assign({}, union_generic); // Error, union with generic type parameter
+    var o8 = __assign({}, union_generic); // OK, union with generic type parameter
     var o9 = __assign({}, union_primitive); // Error, union with generic type parameter
-    var o10 = __assign({}, intersection_generic); // Error, intersection with generic type parameter
+    var o10 = __assign({}, intersection_generic); // OK, intersection with generic type parameter
     var o11 = __assign({}, intersection_primitive); // Error, intersection with generic type parameter
     var o12 = __assign({}, num); // Error
     var o13 = __assign({}, str); // Error

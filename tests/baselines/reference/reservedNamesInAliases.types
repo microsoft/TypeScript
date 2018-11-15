@@ -1,22 +1,16 @@
 === tests/cases/conformance/types/typeAliases/reservedNamesInAliases.ts ===
 interface I {}
->I : I
-
 type any = I;
 >any : I
->I : I
 
 type number = I;
 >number : I
->I : I
 
 type boolean = I;
 >boolean : I
->I : I
 
 type string = I;
 >string : I
->I : I
 
 type void = I;
 >type : any
@@ -26,5 +20,4 @@ type void = I;
 
 type object = I;
 >object : I
->I : I
 

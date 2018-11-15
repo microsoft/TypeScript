@@ -8,11 +8,9 @@ namespace Test {
 
 		isFSO: this is FileSystemObject;
 >isFSO : boolean
->FileSystemObject : FileSystemObject
 
 		get isFile(): this is File {
 >isFile : boolean
->File : File
 
 			return this instanceof File;
 >this instanceof File : boolean
@@ -27,7 +25,6 @@ namespace Test {
 		}
 		get isDirectory(): this is Directory {
 >isDirectory : boolean
->Directory : Directory
 
 			return this instanceof Directory;
 >this instanceof Directory : boolean
@@ -36,7 +33,6 @@ namespace Test {
 		}
 		isNetworked: this is (Networked & this);
 >isNetworked : boolean
->Networked : Networked
 
 		constructor(public path: string) {}
 >path : string
@@ -59,18 +55,14 @@ namespace Test {
 
 		children: FileSystemObject[];
 >children : FileSystemObject[]
->FileSystemObject : FileSystemObject
 	}
 	export interface Networked {
->Networked : Networked
-
 		host: string;
 >host : string
 	}
 
 	let file: FileSystemObject = new File("foo/bar.txt", "foo");
 >file : FileSystemObject
->FileSystemObject : FileSystemObject
 >new File("foo/bar.txt", "foo") : File
 >File : typeof File
 >"foo/bar.txt" : "foo/bar.txt"

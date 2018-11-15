@@ -12,49 +12,41 @@ namespace ts.codefix {
             if (!info) return undefined;
             const { typeNode, type } = info;
             const original = typeNode.getText(sourceFile);
-            const actions = [fix(type, fixIdPlain)];
+            const actions = [fix(type, fixIdPlain, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript)];
             if (typeNode.kind === SyntaxKind.JSDocNullableType) {
                 // for nullable types, suggest the flow-compatible `T | null | undefined`
                 // in addition to the jsdoc/closure-compatible `T | null`
-                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable));
+                actions.push(fix(checker.getNullableType(type, TypeFlags.Undefined), fixIdNullable, Diagnostics.Change_all_jsdoc_style_types_to_TypeScript_and_add_undefined_to_nullable_types));
             }
             return actions;
 
-            function fix(type: Type, fixId: string): CodeFixAction {
-                const newText = typeString(type, checker);
-                return {
-                    description: formatStringFromArgs(getLocaleSpecificMessage(Diagnostics.Change_0_to_1), [original, newText]),
-                    changes: [createFileTextChanges(sourceFile.fileName, [createChange(typeNode, sourceFile, newText)])],
-                    fixId,
-                };
+            function fix(type: Type, fixId: string, fixAllDescription: DiagnosticMessage): CodeFixAction {
+                const changes = textChanges.ChangeTracker.with(context, t => doChange(t, sourceFile, typeNode, type, checker));
+                return createCodeFixAction("jdocTypes", changes, [Diagnostics.Change_0_to_1, original, checker.typeToString(type)], fixId, fixAllDescription);
             }
         },
         fixIds: [fixIdPlain, fixIdNullable],
         getAllCodeActions(context) {
             const { fixId, program, sourceFile } = context;
             const checker = program.getTypeChecker();
-            return codeFixAllWithTextChanges(context, errorCodes, (changes, err) => {
-                const info = getInfo(err.file, err.start!, checker);
+            return codeFixAll(context, errorCodes, (changes, err) => {
+                const info = getInfo(err.file, err.start, checker);
                 if (!info) return;
                 const { typeNode, type } = info;
                 const fixedType = typeNode.kind === SyntaxKind.JSDocNullableType && fixId === fixIdNullable ? checker.getNullableType(type, TypeFlags.Undefined) : type;
-                changes.push(createChange(typeNode, sourceFile, typeString(fixedType, checker)));
+                doChange(changes, sourceFile, typeNode, fixedType, checker);
             });
         }
     });
 
-    function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, type: Type } {
-        const decl = findAncestor(getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false), isTypeContainer);
+    function doChange(changes: textChanges.ChangeTracker, sourceFile: SourceFile, oldTypeNode: TypeNode, newType: Type, checker: TypeChecker): void {
+        changes.replaceNode(sourceFile, oldTypeNode, checker.typeToTypeNode(newType, /*enclosingDeclaration*/ oldTypeNode)!); // TODO: GH#18217
+    }
+
+    function getInfo(sourceFile: SourceFile, pos: number, checker: TypeChecker): { readonly typeNode: TypeNode, readonly type: Type } | undefined {
+        const decl = findAncestor(getTokenAtPosition(sourceFile, pos), isTypeContainer);
         const typeNode = decl && decl.type;
         return typeNode && { typeNode, type: checker.getTypeFromTypeNode(typeNode) };
-    }
-
-    function createChange(declaration: TypeNode, sourceFile: SourceFile, newText: string): TextChange {
-        return createTextChange(createTextSpanFromNode(declaration, sourceFile), newText);
-    }
-
-    function typeString(type: Type, checker: TypeChecker): string {
-        return checker.typeToString(type, /*enclosingDeclaration*/ undefined, TypeFormatFlags.NoTruncation);
     }
 
     // TODO: GH#19856 Node & { type: TypeNode }

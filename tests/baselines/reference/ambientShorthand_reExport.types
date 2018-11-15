@@ -1,7 +1,8 @@
 === tests/cases/conformance/ambient/declarations.d.ts ===
 declare module "jquery";
-No type information for this code.
-No type information for this code.=== tests/cases/conformance/ambient/reExportX.ts ===
+>"jquery" : any
+
+=== tests/cases/conformance/ambient/reExportX.ts ===
 export {x} from "jquery";
 >x : any
 

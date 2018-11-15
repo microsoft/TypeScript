@@ -12,8 +12,6 @@ module A {
 }
 
 module B {
->B : any
-
     import a = A;
 >a : typeof a
 >A : typeof a

@@ -14,6 +14,7 @@ verify.codeFix({
     newFileContent: `class C {
     static p = ()=>{ this.foo === 10 };
 }
+
 C.foo = undefined;
 `
 });

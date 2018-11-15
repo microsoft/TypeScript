@@ -48,7 +48,7 @@ export { Account2 as Acc };
 //// [index.d.ts]
 export * from "./account";
 //// [index.d.ts]
-declare global  {
+declare global {
     interface Account {
         someProp: number;
     }

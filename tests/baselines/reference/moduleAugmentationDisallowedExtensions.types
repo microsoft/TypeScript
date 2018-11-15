@@ -13,6 +13,8 @@ namespace N1 {
 }
 
 declare module "./observable" {
+>"./observable" : typeof import("tests/cases/compiler/observable")
+
     var x: number;
 >x : number
 
@@ -40,7 +42,6 @@ declare module "./observable" {
 >arr : number[]
 
     interface A { x }
->A : A
 >x : any
 
     namespace N {
@@ -70,6 +71,8 @@ declare module "./observable" {
 }
 
 declare module "./test" {
+>"./test" : typeof import("tests/cases/compiler/test")
+
     export = N1;
 >N1 : typeof N1
 }
@@ -78,15 +81,11 @@ export {}
 === tests/cases/compiler/observable.ts ===
 export declare class Observable<T> {
 >Observable : Observable<T>
->T : T
 
     filter(pred: (e:T) => boolean): Observable<T>;
 >filter : (pred: (e: T) => boolean) => Observable<T>
 >pred : (e: T) => boolean
 >e : T
->T : T
->Observable : Observable<T>
->T : T
 }
 export var x = 1;
 >x : number

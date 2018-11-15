@@ -19,7 +19,13 @@ verify.importFixAtPosition([
 `import { f1 } from "b/x";
 
 f1();`,
+]);
+
+verify.importFixAtPosition([
 `import { f1 } from "../b/x";
 
-f1();`
-]);
+f1();`,
+], /*errorCode*/ undefined, {
+    importModuleSpecifierPreference: "relative",
+});
+

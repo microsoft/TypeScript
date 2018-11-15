@@ -14,8 +14,6 @@ class c11 {
 }
 
 interface c11 {
->c11 : c11
-
     bar(): void;
 >bar : () => void
 }
@@ -34,7 +32,7 @@ class c33 {
 }
 enum c33 { One };
 >c33 : c33
->One : c33
+>One : c33.One
 
 // class then import
 class c44 {

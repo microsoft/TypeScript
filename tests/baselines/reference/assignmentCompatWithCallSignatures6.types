@@ -21,101 +21,60 @@ class OtherDerived extends Base { bing: string; }
 >bing : string
 
 interface A {
->A : A
-
     a: <T>(x: T) => T[];
 >a : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
     a2: <T>(x: T) => string[];
 >a2 : <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
     a3: <T>(x: T) => void;
 >a3 : <T>(x: T) => void
->T : T
 >x : T
->T : T
 
     a4: <T,U>(x: T, y: U) => string;
 >a4 : <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
     a5: <T,U>(x: (arg: T) => U) => T;
 >a5 : <T, U>(x: (arg: T) => U) => T
->T : T
->U : U
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
     a6: <T extends Base>(x: (arg: T) => Derived) => T;
 >a6 : <T extends Base>(x: (arg: T) => Derived) => T
->T : T
->Base : Base
 >x : (arg: T) => Derived
 >arg : T
->T : T
->Derived : Derived
->T : T
 
     a11: <T>(x: { foo: T }, y: { foo: T; bar: T }) => Base;
 >a11 : <T>(x: { foo: T; }, y: { foo: T; bar: T; }) => Base
->T : T
 >x : { foo: T; }
 >foo : T
->T : T
 >y : { foo: T; bar: T; }
 >foo : T
->T : T
 >bar : T
->T : T
->Base : Base
 
     a15: <T>(x: { a: T; b: T }) => T[];
 >a15 : <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
     a16: <T extends Base>(x: { a: T; b: T }) => T[];
 >a16 : <T extends Base>(x: { a: T; b: T; }) => T[]
->T : T
->Base : Base
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 }
 
 var x: A;
 >x : A
->A : A
 
 var b: <T>(x: T) => T[]; 
 >b : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 x.a = b;
 >x.a = b : <T>(x: T) => T[]
@@ -133,9 +92,7 @@ b = x.a;
 
 var b2: <T>(x: T) => string[]; 
 >b2 : <T>(x: T) => string[]
->T : T
 >x : T
->T : T
 
 x.a2 = b2;
 >x.a2 = b2 : <T>(x: T) => string[]
@@ -153,10 +110,7 @@ b2 = x.a2;
 
 var b3: <T>(x: T) => T;
 >b3 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 x.a3 = b3;
 >x.a3 = b3 : <T>(x: T) => T
@@ -174,12 +128,8 @@ b3 = x.a3;
 
 var b4: <T, U>(x: T, y: U) => string; 
 >b4 : <T, U>(x: T, y: U) => string
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
 
 x.a4 = b4;
 >x.a4 = b4 : <T, U>(x: T, y: U) => string
@@ -197,13 +147,8 @@ b4 = x.a4;
 
 var b5: <T, U>(x: (arg: T) => U) => T; 
 >b5 : <T, U>(x: (arg: T) => U) => T
->T : T
->U : U
 >x : (arg: T) => U
 >arg : T
->T : T
->U : U
->T : T
 
 x.a5 = b5;
 >x.a5 = b5 : <T, U>(x: (arg: T) => U) => T
@@ -221,17 +166,11 @@ b5 = x.a5;
 
 var b11: <T, U>(x: { foo: T }, y: { foo: U; bar: U }) => Base; 
 >b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
->T : T
->U : U
 >x : { foo: T; }
 >foo : T
->T : T
 >y : { foo: U; bar: U; }
 >foo : U
->U : U
 >bar : U
->U : U
->Base : Base
 
 x.a11 = b11;
 >x.a11 = b11 : <T, U>(x: { foo: T; }, y: { foo: U; bar: U; }) => Base
@@ -249,13 +188,9 @@ b11 = x.a11;
 
 var b16: <T>(x: { a: T; b: T }) => T[]; 
 >b16 : <T>(x: { a: T; b: T; }) => T[]
->T : T
 >x : { a: T; b: T; }
 >a : T
->T : T
 >b : T
->T : T
->T : T
 
 x.a16 = b16;
 >x.a16 = b16 : <T>(x: { a: T; b: T; }) => T[]

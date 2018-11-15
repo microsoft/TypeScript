@@ -8,7 +8,7 @@ function f (m: string) {
 //// [commaOperatorInConditionalExpression.js]
 function f(m) {
     [1, 2, 3].map(function (i) {
-        return true ? (_a = {}, _a[m] = i, _a) : (_b = {}, _b[m] = i + 1, _b);
         var _a, _b;
+        return true ? (_a = {}, _a[m] = i, _a) : (_b = {}, _b[m] = i + 1, _b);
     });
 }

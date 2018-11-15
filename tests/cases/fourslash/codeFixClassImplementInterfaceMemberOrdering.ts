@@ -84,7 +84,6 @@ class C implements I {
     20: any;
     21: any;
     22: any;
-    /** a nice safe prime */
     23: any;
 }`,
 });

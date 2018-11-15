@@ -49,7 +49,7 @@ var C = /** @class */ (function () {
 declare class C {
     private static x;
     static y: number;
-    private static a();
+    private static a;
     static b(): void;
     private static readonly c;
     static readonly d: number;

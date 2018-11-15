@@ -3,19 +3,11 @@
 
 function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r {
 >fold : <a, r>(values: a[], result: r, fold: (result: r, value: a) => r) => r
->a : a
->r : r
 >values : a[]
->a : a
 >result : r
->r : r
 >fold : (result: r, value: a) => r
 >result : r
->r : r
 >value : a
->a : a
->r : r
->r : r
 
     for (let value of values) {
 >value : a
@@ -35,14 +27,8 @@ function fold<a, r>(values: a[], result: r, fold: (result: r, value: a) => r): r
 
 function append<a, b extends a>(values: a[], value: b): a[] {
 >append : <a, b extends a>(values: a[], value: b) => a[]
->a : a
->b : b
->a : a
 >values : a[]
->a : a
 >value : b
->b : b
->a : a
 
     values.push(value);
 >values.push(value) : number

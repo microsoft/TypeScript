@@ -1,0 +1,45 @@
+=== /a.ts ===
+export const a = 0;
+>a : Symbol(a, Decl(a.ts, 0, 12))
+
+export const b = 0;
+>b : Symbol(b, Decl(a.ts, 1, 12))
+
+export default 0;
+
+=== /b.ts ===
+import d1, { a as a1, b as b1 } from "./a";
+>d1 : Symbol(d1, Decl(b.ts, 0, 6))
+>a : Symbol(a1, Decl(a.ts, 0, 12))
+>a1 : Symbol(a1, Decl(b.ts, 0, 12))
+>b : Symbol(b1, Decl(a.ts, 1, 12))
+>b1 : Symbol(b1, Decl(b.ts, 0, 21))
+
+import d2, * as ns from "./a";
+>d2 : Symbol(d2, Decl(b.ts, 1, 6))
+>ns : Symbol(ns, Decl(b.ts, 1, 10))
+
+import d3, { a as a2, b as b2 } from "./a";
+>d3 : Symbol(d3, Decl(b.ts, 3, 6))
+>a : Symbol(a1, Decl(a.ts, 0, 12))
+>a2 : Symbol(a2, Decl(b.ts, 3, 12))
+>b : Symbol(b1, Decl(a.ts, 1, 12))
+>b2 : Symbol(b2, Decl(b.ts, 3, 21))
+
+d3;
+>d3 : Symbol(d3, Decl(b.ts, 3, 6))
+
+import d4, * as ns2 from "./a";
+>d4 : Symbol(d4, Decl(b.ts, 5, 6))
+>ns2 : Symbol(ns2, Decl(b.ts, 5, 10))
+
+d4;
+>d4 : Symbol(d4, Decl(b.ts, 5, 6))
+
+import d5, * as ns3 from "./a";
+>d5 : Symbol(d5, Decl(b.ts, 7, 6))
+>ns3 : Symbol(ns3, Decl(b.ts, 7, 10))
+
+ns3;
+>ns3 : Symbol(ns3, Decl(b.ts, 7, 10))
+

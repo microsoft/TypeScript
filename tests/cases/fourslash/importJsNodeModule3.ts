@@ -24,15 +24,20 @@
 goTo.file('consumer.js');
 goTo.marker();
 edit.insert('.');
-verify.completionListContains("n", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("s", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
-verify.completionListContains("b", /*displayText:*/ undefined, /*documentation*/ undefined, "property");
+verify.completions({ includes: ["n", "s", "b"].map(name => ({ name, kind: "property" })) });;
 edit.insert('n.');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 
 edit.backspace(4);
 edit.insert('y.');
-verify.completionListContains("toUpperCase", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ includes: { name: "toUpperCase", kind: "method", kindModifiers: "declare" } });
 edit.backspace(2);
 edit.insert('z(');
-verify.currentSignatureHelpIs("z(a: number | boolean, b: string[]): string");
+verify.signatureHelp({
+    text: "z(a: number | boolean, b: string[]): string",
+    parameterDocComment: "The first param",
+    tags: [
+        { name: "param", text: "a The first param" },
+        { name: "param", text: "b The second param" },
+    ],
+});

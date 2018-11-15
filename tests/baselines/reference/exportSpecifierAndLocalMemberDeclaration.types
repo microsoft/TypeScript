@@ -1,10 +1,9 @@
 === tests/cases/compiler/exportSpecifierAndLocalMemberDeclaration.ts ===
 declare module "m2" {
-    module X {
->X : any
+>"m2" : typeof import("m2")
 
+    module X {
         interface I { }
->I : I
     }
     function Y();
 >Y : () => any
@@ -16,12 +15,12 @@ declare module "m2" {
     function Z(): X.I;
 >Z : () => X.I
 >X : any
->I : X.I
 }
 
 declare module "m2" {
+>"m2" : typeof import("m2")
+
     function Z2(): X.I;
 >Z2 : () => any
 >X : any
->I : No type information available!
 }

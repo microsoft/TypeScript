@@ -10,6 +10,7 @@ class C {
 >{            [this.bar()]() { }        } : { [x: number]: () => void; }
 
             [this.bar()]() { }
+>[this.bar()] : () => void
 >this.bar() : number
 >this.bar : () => number
 >this : this

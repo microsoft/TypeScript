@@ -5,14 +5,12 @@ import * as Bluebird from 'bluebird';
 
 async function a(): Bluebird<void> {
 >a : () => Promise<void>
->Bluebird : Promise<T>
 
   try {
     const b = async function b(): Bluebird<void> {
 >b : () => Promise<void>
 >async function b(): Bluebird<void> {      try {        await Bluebird.resolve(); // -- remove this and it compiles      } catch (error) { }    } : () => Promise<void>
 >b : () => Promise<void>
->Bluebird : Promise<T>
 
       try {
         await Bluebird.resolve(); // -- remove this and it compiles
@@ -38,11 +36,10 @@ async function a(): Bluebird<void> {
 
 === tests/cases/compiler/bluebird.d.ts ===
 declare module "bluebird" {
+>"bluebird" : typeof import("bluebird")
+
     type Bluebird<T> = Promise<T>;
 >Bluebird : Promise<T>
->T : T
->Promise : Promise<T>
->T : T
 
     const Bluebird: typeof Promise;
 >Bluebird : PromiseConstructor

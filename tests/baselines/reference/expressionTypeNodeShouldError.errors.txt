@@ -2,15 +2,12 @@ tests/cases/compiler/base.d.ts(1,23): error TS1005: ',' expected.
 tests/cases/compiler/base.d.ts(1,34): error TS1005: ',' expected.
 tests/cases/compiler/boolean.ts(7,23): error TS1005: ',' expected.
 tests/cases/compiler/boolean.ts(7,24): error TS1134: Variable declaration expected.
-tests/cases/compiler/boolean.ts(11,16): error TS2304: Cannot find name 'document'.
 tests/cases/compiler/boolean.ts(12,22): error TS1005: ';' expected.
 tests/cases/compiler/number.ts(7,26): error TS1005: ',' expected.
 tests/cases/compiler/number.ts(7,27): error TS1134: Variable declaration expected.
-tests/cases/compiler/number.ts(11,16): error TS2304: Cannot find name 'document'.
 tests/cases/compiler/number.ts(12,20): error TS1005: ';' expected.
 tests/cases/compiler/string.ts(7,20): error TS1005: ',' expected.
 tests/cases/compiler/string.ts(7,21): error TS1134: Variable declaration expected.
-tests/cases/compiler/string.ts(11,15): error TS2304: Cannot find name 'document'.
 tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
 
 
@@ -21,7 +18,7 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
                                      ~
 !!! error TS1005: ',' expected.
     
-==== tests/cases/compiler/string.ts (4 errors) ====
+==== tests/cases/compiler/string.ts (3 errors) ====
     interface String {
         typeof<T>(x: T): T;
     }
@@ -37,13 +34,11 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
     }
     
     const nodes = document.getElementsByTagName("li");
-                  ~~~~~~~~
-!!! error TS2304: Cannot find name 'document'.
     type ItemType = "".typeof(nodes.item(0));
                       ~
 !!! error TS1005: ';' expected.
     
-==== tests/cases/compiler/number.ts (4 errors) ====
+==== tests/cases/compiler/number.ts (3 errors) ====
     interface Number {
         typeof<T>(x: T): T;
     }
@@ -59,13 +54,11 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
     }
     
     const nodes2 = document.getElementsByTagName("li");
-                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'document'.
     type ItemType2 = 4..typeof(nodes.item(0));
                        ~
 !!! error TS1005: ';' expected.
     
-==== tests/cases/compiler/boolean.ts (4 errors) ====
+==== tests/cases/compiler/boolean.ts (3 errors) ====
     interface Boolean {
         typeof<T>(x: T): T;
     }
@@ -81,8 +74,6 @@ tests/cases/compiler/string.ts(12,19): error TS1005: ';' expected.
     }
     
     const nodes3 = document.getElementsByTagName("li");
-                   ~~~~~~~~
-!!! error TS2304: Cannot find name 'document'.
     type ItemType3 = true.typeof(nodes.item(0));
                          ~
 !!! error TS1005: ';' expected.

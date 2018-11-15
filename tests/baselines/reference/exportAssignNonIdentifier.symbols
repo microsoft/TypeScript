@@ -24,8 +24,8 @@ export = void; // Error, void operator requires an argument
 No type information for this code.
 No type information for this code.=== tests/cases/conformance/externalModules/foo7.ts ===
 export = Date || String; // Ok
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 === tests/cases/conformance/externalModules/foo8.ts ===
 export = null; // Ok

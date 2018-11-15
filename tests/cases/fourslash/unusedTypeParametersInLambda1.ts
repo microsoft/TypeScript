@@ -7,6 +7,6 @@
 //// }
 
 verify.codeFix({
-    description: "Remove declaration for: 'T'",
-    newRangeContent: "return(x:number) => {x}",
+    description: "Remove type parameters",
+    newRangeContent: "return (x:number) => {x}",
 });

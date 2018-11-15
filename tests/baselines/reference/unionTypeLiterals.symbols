@@ -12,7 +12,7 @@ var arrayOfUnions: (string | number)[];
 
 var arrayOfUnions: Array<string | number>;
 >arrayOfUnions : Symbol(arrayOfUnions, Decl(unionTypeLiterals.ts, 5, 3), Decl(unionTypeLiterals.ts, 6, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var unionOfFunctionType: (() => string) | (() => number);
 >unionOfFunctionType : Symbol(unionOfFunctionType, Decl(unionTypeLiterals.ts, 8, 3), Decl(unionTypeLiterals.ts, 9, 3), Decl(unionTypeLiterals.ts, 10, 3))

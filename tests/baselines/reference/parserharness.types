@@ -22,7 +22,6 @@
 declare var assert: Harness.Assert;
 >assert : any
 >Harness : any
->Assert : No type information available!
 
 declare var it;
 >it : any
@@ -35,7 +34,6 @@ declare var run;
 
 declare var IO: IIO;
 >IO : any
->IIO : No type information available!
 
 declare var __dirname; // Node-specific
 >__dirname : any
@@ -116,7 +114,7 @@ var typescriptServiceFile = IO.readFile(typescriptServiceFileName);
 
 if (typeof ActiveXObject === "function") {
 >typeof ActiveXObject === "function" : boolean
->typeof ActiveXObject : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof ActiveXObject : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >ActiveXObject : any
 >"function" : "function"
 
@@ -127,7 +125,7 @@ if (typeof ActiveXObject === "function") {
 
 } else if (typeof require === "function") {
 >typeof require === "function" : boolean
->typeof require : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof require : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >require : any
 >"function" : "function"
 
@@ -163,7 +161,6 @@ declare module process {
 >on : (event: string, listener: Function) => any
 >event : string
 >listener : Function
->Function : Function
 }
 
 module Harness {
@@ -190,8 +187,6 @@ module Harness {
 >false : false
 
     export interface ITestMetadata {
->ITestMetadata : ITestMetadata
-
         id: string;
 >id : string
 
@@ -222,8 +217,6 @@ module Harness {
         };
     }
     export interface IScenarioMetadata {
->IScenarioMetadata : IScenarioMetadata
-
         id: string;
 >id : string
 
@@ -249,7 +242,6 @@ module Harness {
 >throwAssertError : (error: Error) => never
 >(error: Error) => {            throw error;        } : (error: Error) => never
 >error : Error
->Error : Error
 
             throw error;
 >error : Error
@@ -455,7 +447,6 @@ module Harness {
 >compilerWarning : (result: Compiler.CompilerResult, line: number, column: number, desc: string) => void
 >result : Compiler.CompilerResult
 >Compiler : any
->CompilerResult : Compiler.CompilerResult
 >line : number
 >column : number
 >desc : string
@@ -866,8 +857,6 @@ module Harness {
 
     // Logger
     export interface ILogger {
->ILogger : ILogger
-
         start: (fileName?: string, priority?: number) => void;
 >start : (fileName?: string, priority?: number) => void
 >fileName : string
@@ -880,41 +869,32 @@ module Harness {
         scenarioStart: (scenario: IScenarioMetadata) => void;
 >scenarioStart : (scenario: IScenarioMetadata) => void
 >scenario : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 
         scenarioEnd: (scenario: IScenarioMetadata, error?: Error) => void;
 >scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
 >scenario : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 >error : Error
->Error : Error
 
         testStart: (test: ITestMetadata) => void;
 >testStart : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         pass: (test: ITestMetadata) => void;
 >pass : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         bug: (test: ITestMetadata) => void;
 >bug : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         fail: (test: ITestMetadata) => void;
 >fail : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         error: (test: ITestMetadata, error: Error) => void;
 >error : (test: ITestMetadata, error: Error) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 >error : Error
->Error : Error
 
         comment: (comment: string) => void;
 >comment : (comment: string) => void
@@ -923,7 +903,6 @@ module Harness {
         verify: (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void;
 >verify : (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 >passed : boolean
 >actual : any
 >expected : any
@@ -932,7 +911,6 @@ module Harness {
 
     export class Logger implements ILogger {
 >Logger : Logger
->ILogger : ILogger
 
         public start(fileName?: string, priority?: number) { }
 >start : (fileName?: string, priority?: number) => void
@@ -946,41 +924,32 @@ module Harness {
         public scenarioStart(scenario: IScenarioMetadata) { }
 >scenarioStart : (scenario: IScenarioMetadata) => void
 >scenario : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 
         public scenarioEnd(scenario: IScenarioMetadata, error?: Error) { }
 >scenarioEnd : (scenario: IScenarioMetadata, error?: Error) => void
 >scenario : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 >error : Error
->Error : Error
 
         public testStart(test: ITestMetadata) { }
 >testStart : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         public pass(test: ITestMetadata) { }
 >pass : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         public bug(test: ITestMetadata) { }
 >bug : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         public fail(test: ITestMetadata) { }
 >fail : (test: ITestMetadata) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 
         public error(test: ITestMetadata, error: Error) { }
 >error : (test: ITestMetadata, error: Error) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 >error : Error
->Error : Error
 
         public comment(comment: string) { }
 >comment : (comment: string) => void
@@ -989,7 +958,6 @@ module Harness {
         public verify(test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) { }
 >verify : (test: ITestMetadata, passed: boolean, actual: any, expected: any, message: string) => void
 >test : ITestMetadata
->ITestMetadata : ITestMetadata
 >passed : boolean
 >actual : any
 >expected : any
@@ -999,13 +967,11 @@ module Harness {
     // Logger-related functions
     var loggers: ILogger[] = [];
 >loggers : ILogger[]
->ILogger : ILogger
 >[] : undefined[]
 
     export function registerLogger(logger: ILogger) {
 >registerLogger : (logger: ILogger) => void
 >logger : ILogger
->ILogger : ILogger
 
         loggers.push(logger);
 >loggers.push(logger) : number
@@ -1032,7 +998,7 @@ module Harness {
 
             if (typeof loggers[i][field] === 'function') {
 >typeof loggers[i][field] === 'function' : boolean
->typeof loggers[i][field] : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof loggers[i][field] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >loggers[i][field] : any
 >loggers[i] : ILogger
 >loggers : ILogger[]
@@ -1059,11 +1025,8 @@ module Harness {
 
     // BDD Framework
     export interface IDone {
->IDone : IDone
-
         (e?: Error): void;
 >e : Error
->Error : Error
     }
     export class Runnable {
 >Runnable : Runnable
@@ -1075,13 +1038,11 @@ module Harness {
         // The current stack of Runnable objects
         static currentStack: Runnable[] = [];
 >currentStack : Runnable[]
->Runnable : Runnable
 >[] : undefined[]
 
         // The error, if any, that occurred when running 'block'
         public error: Error = null;
 >error : Error
->Error : Error
 >null : null
 
         // Whether or not this object has any failures (including in its descendants)
@@ -1097,13 +1058,11 @@ module Harness {
         // A list of all our child Runnables
         public children: Runnable[] = [];
 >children : Runnable[]
->Runnable : Runnable
 >[] : undefined[]
 
         public addChild(child: Runnable): void {
 >addChild : (child: Runnable) => void
 >child : Runnable
->Runnable : Runnable
 
             this.children.push(child);
 >this.children.push(child) : number
@@ -1123,9 +1082,7 @@ module Harness {
 >call : (fn: (done?: IDone) => void, done: IDone) => boolean
 >fn : (done?: IDone) => void
 >done : IDone
->IDone : IDone
 >done : IDone
->IDone : IDone
 
             var isAsync = true;
 >isAsync : boolean
@@ -1203,12 +1160,10 @@ module Harness {
         public run(done: IDone) { }
 >run : (done: IDone) => void
 >done : IDone
->IDone : IDone
 
         public runBlock(done: IDone) {
 >runBlock : (done: IDone) => boolean
 >done : IDone
->IDone : IDone
 
             return this.call(this.block, done);
 >this.call(this.block, done) : boolean
@@ -1225,7 +1180,6 @@ module Harness {
 >runChild : (index: number, done: IDone) => boolean
 >index : number
 >done : IDone
->IDone : IDone
 
             return this.call(<any>((done) => this.children[index].run(done)), done);
 >this.call(<any>((done) => this.children[index].run(done)), done) : boolean
@@ -1251,13 +1205,11 @@ module Harness {
         static errorHandlerStack: { (e: Error): void; }[] = [];
 >errorHandlerStack : ((e: Error) => void)[]
 >e : Error
->Error : Error
 >[] : undefined[]
 
         static pushGlobalErrorHandler(done: IDone) {
 >pushGlobalErrorHandler : (done: IDone) => void
 >done : IDone
->IDone : IDone
 
             errorHandlerStack.push(function (e) {
 >errorHandlerStack.push(function (e) {                done(e);            }) : any
@@ -1288,7 +1240,6 @@ module Harness {
         static handleError(e: Error) {
 >handleError : (e: Error) => void
 >e : Error
->Error : Error
 
             if (errorHandlerStack.length === 0) {
 >errorHandlerStack.length === 0 : boolean
@@ -1358,7 +1309,6 @@ module Harness {
         public addChild(child: Runnable): void {
 >addChild : (child: Runnable) => void
 >child : Runnable
->Runnable : Runnable
 
             throw new Error("Testcases may not be nested inside other testcases");
 >new Error("Testcases may not be nested inside other testcases") : Error
@@ -1370,7 +1320,6 @@ module Harness {
         public run(done: IDone) {
 >run : (done: IDone) => void
 >done : IDone
->IDone : IDone
 
             var that = this;
 >that : this
@@ -1518,7 +1467,6 @@ module Harness {
         public run(done: IDone) {
 >run : (done: IDone) => void
 >done : IDone
->IDone : IDone
 
             var that = this;
 >that : this
@@ -1580,7 +1528,6 @@ module Harness {
 
                     var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: false, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 >{ id: undefined, desc: this.description, pass: false, bugs: assert.bugIds } : { id: undefined; desc: any; pass: false; bugs: any; }
 >id : undefined
 >undefined : undefined
@@ -1647,7 +1594,6 @@ module Harness {
         public runChildren(done: IDone, index = 0) {
 >runChildren : (done: IDone, index?: number) => void
 >done : IDone
->IDone : IDone
 >index : number
 >0 : 0
 
@@ -1722,7 +1668,6 @@ module Harness {
 
             var metadata: IScenarioMetadata = { id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds };
 >metadata : IScenarioMetadata
->IScenarioMetadata : IScenarioMetadata
 >{ id: undefined, desc: this.description, pass: this.passed, bugs: assert.bugIds } : { id: undefined; desc: string; pass: any; bugs: any; }
 >id : undefined
 >undefined : undefined
@@ -1904,11 +1849,11 @@ module Harness {
             if (typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined") {
 >typeof WScript !== "undefined" && typeof global['WScript'].InitializeProjection !== "undefined" : boolean
 >typeof WScript !== "undefined" : boolean
->typeof WScript : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof WScript : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >WScript : typeof WScript
 >"undefined" : "undefined"
 >typeof global['WScript'].InitializeProjection !== "undefined" : boolean
->typeof global['WScript'].InitializeProjection : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof global['WScript'].InitializeProjection : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >global['WScript'].InitializeProjection : any
 >global['WScript'] : any
 >global : any
@@ -2270,10 +2215,8 @@ module Harness {
             public results: { [x: string]: Dataset; } = <{ [x: string]: Dataset; }>{};
 >results : { [x: string]: Dataset; }
 >x : string
->Dataset : Dataset
 ><{ [x: string]: Dataset; }>{} : { [x: string]: Dataset; }
 >x : string
->Dataset : Dataset
 >{} : {}
 
             public addTimingFor(name: string, timing: number) {
@@ -2312,7 +2255,6 @@ module Harness {
 
         export var benchmarks: { new (): Benchmark; }[] = [];
 >benchmarks : (new () => Benchmark)[]
->Benchmark : Benchmark
 >[] : undefined[]
 
         var timeFunction: (
@@ -2320,7 +2262,6 @@ module Harness {
 
             benchmark: Benchmark,
 >benchmark : Benchmark
->Benchmark : Benchmark
 
             description?: string,
 >description : string
@@ -2341,7 +2282,6 @@ module Harness {
 
             benchmark: Benchmark,
 >benchmark : Benchmark
->Benchmark : Benchmark
 
             description: string = benchmark.description,
 >description : string
@@ -2607,7 +2547,6 @@ module Harness {
          */
         export class WriterAggregator implements ITextWriter {
 >WriterAggregator : WriterAggregator
->ITextWriter : No type information available!
 
             public lines: string[] = [];
 >lines : string[]
@@ -2705,9 +2644,7 @@ module Harness {
         /** Mimics having multiple files, later concatenated to a single file. */
         export class EmitterIOHost implements TypeScript.EmitterIOHost {
 >EmitterIOHost : EmitterIOHost
->TypeScript.EmitterIOHost : any
 >TypeScript : any
->EmitterIOHost : No type information available!
 
             private fileCollection = {};
 >fileCollection : {}
@@ -2718,7 +2655,6 @@ module Harness {
 >createFile : (s: string, useUTF8?: boolean) => any
 >s : string
 >useUTF8 : boolean
->ITextWriter : No type information available!
 
                 if (this.fileCollection[s]) {
 >this.fileCollection[s] : any
@@ -2729,7 +2665,6 @@ module Harness {
 
                     return <ITextWriter>this.fileCollection[s];
 ><ITextWriter>this.fileCollection[s] : any
->ITextWriter : No type information available!
 >this.fileCollection[s] : any
 >this.fileCollection : {}
 >this : this
@@ -2768,7 +2703,7 @@ module Harness {
 >fileExists : (s: string) => boolean
 >s : string
 >typeof this.fileCollection[s] !== 'undefined' : boolean
->typeof this.fileCollection[s] : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this.fileCollection[s] : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this.fileCollection[s] : any
 >this.fileCollection : {}
 >this : this
@@ -2793,13 +2728,11 @@ module Harness {
 >toArray : () => { filename: string; file: WriterAggregator; }[]
 >filename : string
 >file : WriterAggregator
->WriterAggregator : WriterAggregator
 
                 var result: { filename: string; file: WriterAggregator; }[] = [];
 >result : { filename: string; file: WriterAggregator; }[]
 >filename : string
 >file : WriterAggregator
->WriterAggregator : WriterAggregator
 >[] : undefined[]
 
                 for (var p in this.fileCollection) {
@@ -2810,11 +2743,11 @@ module Harness {
 
                     if (this.fileCollection.hasOwnProperty(p)) {
 >this.fileCollection.hasOwnProperty(p) : boolean
->this.fileCollection.hasOwnProperty : (v: string) => boolean
+>this.fileCollection.hasOwnProperty : (v: string | number | symbol) => boolean
 >this.fileCollection : {}
 >this : this
 >fileCollection : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >p : string
 
                         var current = <Harness.Compiler.WriterAggregator>this.fileCollection[p];
@@ -2822,7 +2755,6 @@ module Harness {
 ><Harness.Compiler.WriterAggregator>this.fileCollection[p] : WriterAggregator
 >Harness : any
 >Compiler : any
->WriterAggregator : WriterAggregator
 >this.fileCollection[p] : any
 >this.fileCollection : {}
 >this : this
@@ -2935,7 +2867,6 @@ module Harness {
 >makeDefaultCompilerForTest : (c?: any) => any
 >c : any
 >TypeScript : any
->TypeScriptCompiler : No type information available!
 
             var compiler = c || new TypeScript.TypeScriptCompiler(stderr);
 >compiler : any
@@ -3049,7 +2980,6 @@ module Harness {
         var compiler: TypeScript.TypeScriptCompiler;
 >compiler : any
 >TypeScript : any
->TypeScriptCompiler : No type information available!
 
         recreate();
 >recreate() : void
@@ -3194,7 +3124,6 @@ module Harness {
             public isSubtypeOf(other: Type) {
 >isSubtypeOf : (other: Type) => boolean
 >other : Type
->Type : Type
 
                 var testCode = 'class __test1__ {\n';
 >testCode : string
@@ -3428,7 +3357,6 @@ module Harness {
             public isAssignmentCompatibleWith(other: Type) {
 >isAssignmentCompatibleWith : (other: Type) => boolean
 >other : Type
->Type : Type
 
                 var testCode = 'module __test1__ {\n';
 >testCode : string
@@ -3675,19 +3603,15 @@ module Harness {
 
             public any: Type;
 >any : Type
->Type : Type
 
             public number: Type;
 >number : Type
->Type : Type
 
             public string: Type;
 >string : Type
->Type : Type
 
             public boolean: Type;
 >boolean : Type
->Type : Type
 
             constructor() {
                 this.any = this.get('var x : any', 'x');
@@ -3755,7 +3679,7 @@ module Harness {
 
                 if (typeof target === "string") {
 >typeof target === "string" : boolean
->typeof target : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >target : any
 >"string" : "string"
 
@@ -3766,7 +3690,7 @@ module Harness {
                 }
                 else if (typeof target === "number") {
 >typeof target === "number" : boolean
->typeof target : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >target : any
 >"number" : "number"
 
@@ -3781,8 +3705,8 @@ module Harness {
 >Error : ErrorConstructor
 >"Expected string or number not " + (typeof target) : string
 >"Expected string or number not " : "Expected string or number not "
->(typeof target) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof target : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof target) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof target : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >target : any
                 }
 
@@ -3827,7 +3751,6 @@ module Harness {
 
                 var matchingIdentifiers: Type[] = [];
 >matchingIdentifiers : Type[]
->Type : Type
 >[] : undefined[]
 
                 if (!usePull) {
@@ -3874,7 +3797,6 @@ module Harness {
 >NullLogger : any
 ><TypeScript.Script>script : any
 >TypeScript : any
->Script : No type information available!
 >script : any
 >new TypeScript.StringSourceText(code) : any
 >TypeScript.StringSourceText : any
@@ -3954,7 +3876,6 @@ module Harness {
 >script2 : any
 ><TypeScript.Script>compiler.scripts.members[m] : any
 >TypeScript : any
->Script : No type information available!
 >compiler.scripts.members[m] : any
 >compiler.scripts.members : any
 >compiler.scripts : any
@@ -4202,7 +4123,6 @@ module Harness {
 >getTypeInfoName : (ast: any) => string
 >ast : any
 >TypeScript : any
->AST : No type information available!
 
                 var name = '';
 >name : string
@@ -4315,7 +4235,6 @@ module Harness {
 >(<TypeScript.RegexLiteral>ast) : any
 ><TypeScript.RegexLiteral>ast : any
 >TypeScript : any
->RegexLiteral : No type information available!
 >ast : any
 >text : any
 
@@ -4351,7 +4270,6 @@ module Harness {
 >(<TypeScript.NumberLiteral>ast) : any
 ><TypeScript.NumberLiteral>ast : any
 >TypeScript : any
->NumberLiteral : No type information available!
 >ast : any
 >text : any
 
@@ -4380,7 +4298,6 @@ module Harness {
 >(<TypeScript.InterfaceDeclaration>ast) : any
 ><TypeScript.InterfaceDeclaration>ast : any
 >TypeScript : any
->InterfaceDeclaration : No type information available!
 >ast : any
 >name : any
 >actualText : any
@@ -4401,7 +4318,6 @@ module Harness {
 >(<TypeScript.ModuleDeclaration>ast) : any
 ><TypeScript.ModuleDeclaration>ast : any
 >TypeScript : any
->ModuleDeclaration : No type information available!
 >ast : any
 >name : any
 >actualText : any
@@ -4422,7 +4338,6 @@ module Harness {
 >(<TypeScript.ClassDeclaration>ast) : any
 ><TypeScript.ClassDeclaration>ast : any
 >TypeScript : any
->ClassDeclaration : No type information available!
 >ast : any
 >name : any
 >actualText : any
@@ -4444,7 +4359,6 @@ module Harness {
 >(<TypeScript.FuncDecl>ast) : any
 ><TypeScript.FuncDecl>ast : any
 >TypeScript : any
->FuncDecl : No type information available!
 >ast : any
 >name : any
 >"" : ""
@@ -4453,7 +4367,6 @@ module Harness {
 >(<TypeScript.FuncDecl>ast) : any
 ><TypeScript.FuncDecl>ast : any
 >TypeScript : any
->FuncDecl : No type information available!
 >ast : any
 >name : any
 >actualText : any
@@ -4565,10 +4478,8 @@ module Harness {
 >compilationContext : CompilationContext
 >Harness : any
 >Compiler : any
->CompilationContext : CompilationContext
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
 
             reset();
 >reset() : void
@@ -4720,7 +4631,6 @@ module Harness {
 ><Harness.Compiler.WriterAggregator>outputs[fn] : WriterAggregator
 >Harness : any
 >Compiler : any
->WriterAggregator : WriterAggregator
 >outputs[fn] : any
 >outputs : {}
 >fn : string
@@ -4841,18 +4751,15 @@ module Harness {
 
             public errors: CompilerError[];
 >errors : CompilerError[]
->CompilerError : CompilerError
 
             /** @param fileResults an array of strings for the filename and an ITextWriter with its code */
             constructor(public fileResults: { filename: string; file: WriterAggregator; }[], errorLines: string[], public scripts: TypeScript.Script[]) {
 >fileResults : { filename: string; file: WriterAggregator; }[]
 >filename : string
 >file : WriterAggregator
->WriterAggregator : WriterAggregator
 >errorLines : string[]
 >scripts : any[]
 >TypeScript : any
->Script : No type information available!
 
                 var lines = [];
 >lines : any[]
@@ -5196,8 +5103,6 @@ module Harness {
         // Defines functions to invoke before compiling a piece of code and a post compile action intended to clean up the
         // effects of preCompile, preferably with something lighter weight than a full recreate()
         export interface CompilationContext {
->CompilationContext : CompilationContext
-
             filename: string;
 >filename : string
 
@@ -5216,12 +5121,10 @@ module Harness {
 >isDeclareFile : boolean
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
 
             var script: TypeScript.Script = null;
 >script : any
 >TypeScript : any
->Script : No type information available!
 >null : null
 
             var uName = unitName || '0' + (isDeclareFile ? '.d.ts' : '.ts');
@@ -5271,7 +5174,6 @@ module Harness {
 >script : any
 ><TypeScript.Script>compiler.scripts.members[i] : any
 >TypeScript : any
->Script : No type information available!
 >compiler.scripts.members[i] : any
 >compiler.scripts.members : any
 >compiler.scripts : any
@@ -5352,16 +5254,12 @@ module Harness {
 >path : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->CompilerResult : CompilerResult
 >settingsCallback : (settings?: any) => void
 >settings : any
 >TypeScript : any
->CompilationSettings : No type information available!
 >context : CompilationContext
->CompilationContext : CompilationContext
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
 
             path = switchToForwardSlashes(path);
 >path = switchToForwardSlashes(path) : string
@@ -5403,16 +5301,12 @@ module Harness {
 >filename : string
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
->CompilerResult : CompilerResult
 >settingsCallback : (settings?: any) => void
 >settings : any
 >TypeScript : any
->CompilationSettings : No type information available!
 >context : CompilationContext
->CompilationContext : CompilationContext
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
 
             // not recursive
             function clone/* <T> */(source: any, target: any) {
@@ -5541,11 +5435,9 @@ module Harness {
 >compileUnits : (units: TestCaseParser.TestUnitData[], callback: (res: CompilerResult) => void, settingsCallback?: () => void) => void
 >units : TestCaseParser.TestUnitData[]
 >TestCaseParser : any
->TestUnitData : TestCaseParser.TestUnitData
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
->CompilerResult : CompilerResult
 >settingsCallback : () => void
 
             var lastUnit = units[units.length - 1];
@@ -5614,7 +5506,6 @@ module Harness {
         export function emitToOutfile(outfile: WriterAggregator) {
 >emitToOutfile : (outfile: WriterAggregator) => void
 >outfile : WriterAggregator
->WriterAggregator : WriterAggregator
 
             compiler.emitToOutfile(outfile);
 >compiler.emitToOutfile(outfile) : any
@@ -5628,7 +5519,6 @@ module Harness {
 >emit : (ioHost: any, usePullEmitter?: boolean) => void
 >ioHost : any
 >TypeScript : any
->EmitterIOHost : No type information available!
 >usePullEmitter : boolean
 
             compiler.emit(ioHost, usePullEmitter);
@@ -5647,17 +5537,13 @@ module Harness {
 >callback : (res: CompilerResult) => void
 >res : CompilerResult
 >Compiler : any
->CompilerResult : CompilerResult
 >context : CompilationContext
->CompilationContext : CompilationContext
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
 
             var scripts: TypeScript.Script[] = [];
 >scripts : any[]
 >TypeScript : any
->Script : No type information available!
 >[] : undefined[]
 
             reset();
@@ -5791,8 +5677,6 @@ module Harness {
 >filename : string
 >dependencies : TestCaseParser.TestUnitData[]
 >TestCaseParser : any
->TestUnitData : TestCaseParser.TestUnitData
->CompilationContext : CompilationContext
 
             // if the given file has no dependencies, there is no context to return, it can be compiled without additional work
             if (dependencies.length == 0) {
@@ -5906,8 +5790,6 @@ module Harness {
 
         /** all the necesarry information to set the right compiler settings */
         export interface CompilerSetting {
->CompilerSetting : CompilerSetting
-
             flag: string;
 >flag : string
 
@@ -5917,8 +5799,6 @@ module Harness {
 
         /** All the necessary information to turn a multi file test into useful units for later compilation */
         export interface TestUnitData {
->TestUnitData : TestUnitData
-
             content: string;
 >content : string
 
@@ -5931,7 +5811,6 @@ module Harness {
             references: TypeScript.IFileReference[];
 >references : any[]
 >TypeScript : any
->IFileReference : No type information available!
         }
 
         // Regex for parsing options in the format "@Alpha: Value of any sort"
@@ -5956,7 +5835,6 @@ module Harness {
         function extractCompilerSettings(content: string): CompilerSetting[] {
 >extractCompilerSettings : (content: string) => CompilerSetting[]
 >content : string
->CompilerSetting : CompilerSetting
 
             var opts = [];
 >opts : any[]
@@ -6003,9 +5881,7 @@ module Harness {
 >code : string
 >filename : string
 >settings : CompilerSetting[]
->CompilerSetting : CompilerSetting
 >testUnitData : TestUnitData[]
->TestUnitData : TestUnitData
 
             var settings = extractCompilerSettings(code);
 >settings : CompilerSetting[]
@@ -6016,7 +5892,6 @@ module Harness {
             // List of all the subfiles we've parsed out
             var files: TestUnitData[] = [];
 >files : TestUnitData[]
->TestUnitData : TestUnitData
 >[] : undefined[]
 
             var lines = splitContentByNewlines(code);
@@ -6041,7 +5916,6 @@ module Harness {
             var refs: TypeScript.IFileReference[] = [];
 >refs : any[]
 >TypeScript : any
->IFileReference : No type information available!
 >[] : undefined[]
 
             for (var i = 0; i < lines.length; i++) {
@@ -6367,7 +6241,6 @@ module Harness {
 >length : number
 >editRange : any
 >TypeScript : any
->ScriptEditRange : No type information available!
 >[] : undefined[]
 
         constructor(public name: string, public content: string, public isResident: boolean, public maxScriptVersions: number) {
@@ -6539,7 +6412,6 @@ module Harness {
 >getEditRangeSinceVersion : (version: number) => any
 >version : number
 >TypeScript : any
->ScriptEditRange : No type information available!
 
             if (this.version == version) {
 >this.version == version : boolean
@@ -6699,19 +6571,15 @@ module Harness {
 
     export class TypeScriptLS implements Services.ILanguageServiceShimHost {
 >TypeScriptLS : TypeScriptLS
->Services.ILanguageServiceShimHost : any
 >Services : any
->ILanguageServiceShimHost : No type information available!
 
         private ls: Services.ILanguageServiceShim = null;
 >ls : any
 >Services : any
->ILanguageServiceShim : No type information available!
 >null : null
 
         public scripts: ScriptInfo[] = [];
 >scripts : ScriptInfo[]
->ScriptInfo : ScriptInfo
 >[] : undefined[]
 
         public maxScriptVersions = 100;
@@ -7092,7 +6960,6 @@ module Harness {
         public getLanguageService(): Services.ILanguageServiceShim {
 >getLanguageService : () => any
 >Services : any
->ILanguageServiceShim : No type information available!
 
             var ls = new Services.TypeScriptServicesFactory().createLanguageServiceShim(this);
 >ls : any
@@ -7129,9 +6996,7 @@ module Harness {
 >fileName : string
 >sourceText : any
 >TypeScript : any
->ISourceText : No type information available!
 >TypeScript : any
->Script : No type information available!
 
             var parser = new TypeScript.Parser();
 >parser : any
@@ -7283,7 +7148,6 @@ module Harness {
 >fileName : string
 >position : number
 >TypeScript : any
->ILineCol : No type information available!
 
             var script = this.ls.languageService.getScriptAST(fileName);
 >script : any
@@ -7346,7 +7210,6 @@ module Harness {
 >baselineFileName : string
 >edits : any[]
 >Services : any
->TextEdit : No type information available!
 
             var script = readFile(sourceFileName);
 >script : any
@@ -7393,7 +7256,6 @@ module Harness {
 >content : string
 >edits : any[]
 >Services : any
->TextEdit : No type information available!
 
             var result = content;
 >result : string
@@ -7472,24 +7334,19 @@ module Harness {
 >normalizeEdits : (edits: any[]) => any[]
 >edits : any[]
 >Services : any
->TextEdit : No type information available!
 >Services : any
->TextEdit : No type information available!
 
             var result: Services.TextEdit[] = [];
 >result : any[]
 >Services : any
->TextEdit : No type information available!
 >[] : undefined[]
 
             function mapEdits(edits: Services.TextEdit[]): { edit: Services.TextEdit; index: number; }[] {
 >mapEdits : (edits: any[]) => { edit: any; index: number; }[]
 >edits : any[]
 >Services : any
->TextEdit : No type information available!
 >edit : any
 >Services : any
->TextEdit : No type information available!
 >index : number
 
                 var result = [];
@@ -7785,7 +7642,7 @@ module Harness {
 
         if (typeof process !== "undefined") {
 >typeof process !== "undefined" : boolean
->typeof process : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof process : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >process : typeof process
 >"undefined" : "undefined"
 
@@ -7822,7 +7679,6 @@ module Harness {
 >path : string
 >callback : (error: Error, result: any) => void
 >error : Error
->Error : Error
 >result : any
 
             path = switchToForwardSlashes(path);
@@ -7853,7 +7709,6 @@ module Harness {
 >code : string
 >callback : (error: Error, result: any) => void
 >error : Error
->Error : Error
 >result : any
 
             // List of names that get overriden by various test code we eval
@@ -7954,7 +7809,6 @@ module Harness {
 >unitName : string
 >callback : (error: Error, result: any) => void
 >error : Error
->Error : Error
 >result : any
 
             Compiler.compileString(code, unitName, function (res) {
@@ -8078,8 +7932,6 @@ module Harness {
 >"</style>" : "</style>"
 
         export interface BaselineOptions {
->BaselineOptions : BaselineOptions
-
             LineEndingSensitive?: boolean;
 >LineEndingSensitive : boolean
         }
@@ -8308,7 +8160,6 @@ module Harness {
 >actual : string
 >relativeFilename : string
 >opts : BaselineOptions
->BaselineOptions : BaselineOptions
 
             // actual is now either undefined (the generator had an error), null (no file requested),
             // or some real output of the function
@@ -8525,7 +8376,6 @@ module Harness {
 
             opts?: BaselineOptions) {
 >opts : BaselineOptions
->BaselineOptions : BaselineOptions
 
             var actual = <string>undefined;
 >actual : string

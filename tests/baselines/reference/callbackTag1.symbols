@@ -1,0 +1,28 @@
+=== tests/cases/conformance/jsdoc/cb.js ===
+/** @callback Sid
+ * @param {string} s
+ * @returns {string} What were you expecting
+ */
+var x = 1
+>x : Symbol(x, Decl(cb.js, 4, 3))
+
+/** @type {Sid} smallId */
+var sid = s => s + "!";
+>sid : Symbol(sid, Decl(cb.js, 7, 3))
+>s : Symbol(s, Decl(cb.js, 7, 9))
+>s : Symbol(s, Decl(cb.js, 7, 9))
+
+
+/** @type {NoReturn} */
+var noreturn = obj => void obj.title
+>noreturn : Symbol(noreturn, Decl(cb.js, 11, 3))
+>obj : Symbol(obj, Decl(cb.js, 11, 14))
+>obj.title : Symbol(title, Decl(cb.js, 15, 34))
+>obj : Symbol(obj, Decl(cb.js, 11, 14))
+>title : Symbol(title, Decl(cb.js, 15, 34))
+
+/**
+ * @callback NoReturn
+ * @param {{ e: number, m: number, title: string }} s - Knee deep, shores, etc
+ */
+

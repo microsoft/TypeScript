@@ -25,7 +25,7 @@ exports["default"] = x;
 
 
 //// [0.d.ts]
-export {  };
+export {};
 //// [1.d.ts]
 declare var x: string | number;
 export default x;

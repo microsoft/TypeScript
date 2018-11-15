@@ -7,8 +7,6 @@ declare var console: {
 >msg : string
 }
 interface Robot {
->Robot : Robot
-
     name: string;
 >name : string
 
@@ -25,7 +23,6 @@ interface Robot {
 }
 var robotA: Robot = { name: "mower", skills: { primary: "mowing", secondary: "none" } };
 >robotA : Robot
->Robot : Robot
 >{ name: "mower", skills: { primary: "mowing", secondary: "none" } } : { name: string; skills: { primary: string; secondary: string; }; }
 >name : string
 >"mower" : "mower"
@@ -60,7 +57,6 @@ function foo1(
 >"someSkill" : "someSkill"
 
     }: Robot = robotA) {
->Robot : Robot
 >robotA : Robot
 
     console.log(primaryA);
@@ -99,7 +95,6 @@ function foo2(
 >"someSkill" : "someSkill"
 
     }: Robot = robotA) {
->Robot : Robot
 >robotA : Robot
 
     console.log(secondaryB);
@@ -117,7 +112,6 @@ function foo3({ skills = { primary: "SomeSkill", secondary: "someSkill" }  }: Ro
 >"SomeSkill" : "SomeSkill"
 >secondary : string
 >"someSkill" : "someSkill"
->Robot : Robot
 >robotA : Robot
 
     console.log(skills.primary);

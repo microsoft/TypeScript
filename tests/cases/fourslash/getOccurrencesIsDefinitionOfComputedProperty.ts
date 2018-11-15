@@ -1,5 +1,5 @@
 /// <reference path='fourslash.ts' />
-////let o = { ["[|{| "isDefinition": true |}foo|]"]: 12 };
+////let o = { ["[|{| "isWriteAccess": true, "isDefinition": true |}foo|]"]: 12 };
 ////let y = o.[|foo|];
 ////let z = o['[|foo|]'];
 

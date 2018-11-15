@@ -3,23 +3,13 @@ declare module TypeScript {
 >TypeScript : typeof TypeScript
 
     interface IIndexable<T> {
->IIndexable : IIndexable<T>
->T : T
-
         [s: string]: T;
 >s : string
->T : T
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
->T : T
->IIndexable : IIndexable<T>
->T : T
 
     interface IHashTable<T> {
->IHashTable : IHashTable<T>
->T : T
-
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
 
@@ -27,20 +17,17 @@ declare module TypeScript {
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
 >key : string
 >data : T
->T : T
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
 >key : string
 >data : T
->T : T
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -49,7 +36,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -58,7 +44,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -68,13 +53,9 @@ declare module TypeScript {
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
 >key : string
->T : T
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : StringHashTable<T>
->T : T
->IHashTable : IHashTable<T>
->T : T
 
         private itemCount;
 >itemCount : any
@@ -89,20 +70,17 @@ declare module TypeScript {
 >add : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -111,7 +89,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -120,7 +97,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -130,7 +106,6 @@ declare module TypeScript {
         public lookup(key: string): T;
 >lookup : (key: string) => T
 >key : string
->T : T
 
         public remove(key: string): void;
 >remove : (key: string) => void
@@ -138,9 +113,7 @@ declare module TypeScript {
     }
     class IdentiferNameHashTable<T> extends StringHashTable<T> {
 >IdentiferNameHashTable : IdentiferNameHashTable<T>
->T : T
 >StringHashTable : StringHashTable<T>
->T : T
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
@@ -149,20 +122,17 @@ declare module TypeScript {
 >add : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -171,7 +141,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -186,7 +155,6 @@ declare module TypeScript {
         public lookup(key: string): T;
 >lookup : (key: string) => T
 >key : string
->T : T
     }
 }
 
@@ -194,23 +162,13 @@ declare module TypeScript {
 >TypeScript : typeof TypeScript
 
     interface IIndexable<T> {
->IIndexable : IIndexable<T>
->T : T
-
         [s: string]: T;
 >s : string
->T : T
     }
     function createIntrinsicsObject<T>(): IIndexable<T>;
 >createIntrinsicsObject : { <T>(): IIndexable<T>; <T>(): IIndexable<T>; }
->T : T
->IIndexable : IIndexable<T>
->T : T
 
     interface IHashTable<T> {
->IHashTable : IHashTable<T>
->T : T
-
         getAllKeys(): string[];
 >getAllKeys : { (): string[]; (): string[]; }
 
@@ -218,20 +176,17 @@ declare module TypeScript {
 >add : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
 >key : string
 >data : T
->T : T
 
         addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : { (key: string, data: T): boolean; (key: string, data: T): boolean; }
 >key : string
 >data : T
->T : T
 
         map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : { (fn: (k: string, value: T, context: any) => void, context: any): void; (fn: (k: string, value: T, context: any) => void, context: any): void; }
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -240,7 +195,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -249,7 +203,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -259,13 +212,9 @@ declare module TypeScript {
         lookup(key: string): T;
 >lookup : { (key: string): T; (key: string): T; }
 >key : string
->T : T
     }
     class StringHashTable<T> implements IHashTable<T> {
 >StringHashTable : TypeScript.StringHashTable<T>
->T : T
->IHashTable : IHashTable<T>
->T : T
 
         private itemCount;
 >itemCount : any
@@ -280,20 +229,17 @@ declare module TypeScript {
 >add : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -302,7 +248,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -311,7 +256,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -321,7 +265,6 @@ declare module TypeScript {
         public lookup(key: string): T;
 >lookup : (key: string) => T
 >key : string
->T : T
 
         public remove(key: string): void;
 >remove : (key: string) => void
@@ -329,9 +272,7 @@ declare module TypeScript {
     }
     class IdentiferNameHashTable<T> extends StringHashTable<T> {
 >IdentiferNameHashTable : TypeScript.IdentiferNameHashTable<T>
->T : T
 >StringHashTable : TypeScript.StringHashTable<T>
->T : T
 
         public getAllKeys(): string[];
 >getAllKeys : () => string[]
@@ -340,20 +281,17 @@ declare module TypeScript {
 >add : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public addOrUpdate(key: string, data: T): boolean;
 >addOrUpdate : (key: string, data: T) => boolean
 >key : string
 >data : T
->T : T
 
         public map(fn: (k: string, value: T, context: any) => void, context: any): void;
 >map : (fn: (k: string, value: T, context: any) => void, context: any) => void
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -362,7 +300,6 @@ declare module TypeScript {
 >fn : (k: string, value: T, context: any) => void
 >k : string
 >value : T
->T : T
 >context : any
 >context : any
 
@@ -377,6 +314,5 @@ declare module TypeScript {
         public lookup(key: string): T;
 >lookup : (key: string) => T
 >key : string
->T : T
     }
 }

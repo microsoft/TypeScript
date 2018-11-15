@@ -1,58 +1,42 @@
 === tests/cases/conformance/types/typeRelationships/recursiveTypes/arrayLiteralsWithRecursiveGenerics.ts ===
 class List<T> {
 >List : List<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     next: List<List<T>>;
 >next : List<List<T>>
->List : List<T>
->List : List<T>
->T : T
 }
 
 class DerivedList<U> extends List<U> {
 >DerivedList : DerivedList<U>
->U : U
 >List : List<U>
->U : U
 
     foo: U;
 >foo : U
->U : U
 
     // next: List<List<U>>
 }
 
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     next: MyList<MyList<T>>;
 >next : MyList<MyList<T>>
->MyList : MyList<T>
->MyList : MyList<T>
->T : T
 }
 
 var list: List<number>;
 >list : List<number>
->List : List<T>
 
 var list2: List<string>;
 >list2 : List<string>
->List : List<T>
 
 var myList: MyList<number>;
 >myList : MyList<number>
->MyList : MyList<T>
 
 var xs = [list, myList]; // {}[]
 >xs : (List<number> | MyList<number>)[]
@@ -74,7 +58,6 @@ var zs = [list, null]; // List<number>[]
 
 var myDerivedList: DerivedList<number>;
 >myDerivedList : DerivedList<number>
->DerivedList : DerivedList<U>
 
 var as = [list, myDerivedList]; // List<number>[]
 >as : List<number>[]

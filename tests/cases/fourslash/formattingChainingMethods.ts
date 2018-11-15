@@ -16,6 +16,10 @@
 ////           )
 ////         )
 ////     );
+////
+////1
+////    .toFixed(
+////        2);
 
 format.document();
 verify.currentFileContentIs(`z$ = this.store.select(this.fake())
@@ -33,5 +37,9 @@ verify.currentFileContentIs(`z$ = this.store.select(this.fake())
                     })
                 )
         )
-    );`
+    );
+
+1
+    .toFixed(
+        2);`
 );

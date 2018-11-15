@@ -7,7 +7,7 @@
         "a.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts"
+        "lib.es5.d.ts"
     ],
     "emittedFiles": []
 }

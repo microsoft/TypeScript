@@ -53,7 +53,7 @@ interface I5 {
 
     foo: Date;
 >foo : Symbol(I5.foo, Decl(subtypesOfAny.ts, 27, 21))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 
@@ -65,7 +65,7 @@ interface I6 {
 
     foo: RegExp;
 >foo : Symbol(I6.foo, Decl(subtypesOfAny.ts, 33, 21))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 
@@ -261,7 +261,7 @@ interface I19 {
 
     foo: Object;
 >foo : Symbol(I19.foo, Decl(subtypesOfAny.ts, 124, 21))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 

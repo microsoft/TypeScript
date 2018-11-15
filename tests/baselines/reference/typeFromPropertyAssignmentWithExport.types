@@ -1,0 +1,22 @@
+=== tests/cases/conformance/salsa/a.js ===
+// this is a javascript file...
+
+export const Adapter = {};
+>Adapter : typeof Adapter
+>{} : {}
+
+Adapter.prop = {};
+>Adapter.prop = {} : {}
+>Adapter.prop : {}
+>Adapter : typeof Adapter
+>prop : {}
+>{} : {}
+
+// comment this out, and it works
+Adapter.asyncMethod = function() {}
+>Adapter.asyncMethod = function() {} : () => void
+>Adapter.asyncMethod : () => void
+>Adapter : typeof Adapter
+>asyncMethod : () => void
+>function() {} : () => void
+

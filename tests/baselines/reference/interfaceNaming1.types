@@ -3,8 +3,6 @@ interface { }
 >interface : any
 
 interface interface{ }
->interface : interface
-
 interface & { }
 >interface & { } : number
 >interface : any

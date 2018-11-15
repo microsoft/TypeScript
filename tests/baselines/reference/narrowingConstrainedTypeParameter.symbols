@@ -33,7 +33,7 @@ export function speak<TPet extends Pet>(pet: TPet, voice: (pet: TPet) => string)
 >pet : Symbol(pet, Decl(narrowingConstrainedTypeParameter.ts, 10, 40))
 
         throw new Error("Expected \"pet\" to be a Pet");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     return voice(pet);
 >voice : Symbol(voice, Decl(narrowingConstrainedTypeParameter.ts, 10, 50))

@@ -3,7 +3,7 @@ class C {
 >C : C
 
     foo(public x) {
->foo : (public x: any) => void
+>foo : (x: any) => void
 >x : any
     }
 }

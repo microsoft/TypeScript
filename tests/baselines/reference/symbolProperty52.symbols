@@ -3,7 +3,8 @@ var obj = {
 >obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
 
     [Symbol.nonsense]: 0
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>[Symbol.nonsense] : Symbol([Symbol.nonsense], Decl(symbolProperty52.ts, 0, 11))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
 };
 
@@ -12,5 +13,5 @@ obj = {};
 
 obj[Symbol.nonsense];
 >obj : Symbol(obj, Decl(symbolProperty52.ts, 0, 3))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 

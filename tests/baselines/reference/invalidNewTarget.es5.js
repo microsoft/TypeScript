@@ -25,6 +25,7 @@ const O = {
 };
 
 //// [invalidNewTarget.es5.js]
+var _a;
 var a = _newTarget;
 var b = function () { return _newTarget; };
 var C = /** @class */ (function () {
@@ -74,4 +75,3 @@ var O = (_a = {},
     }),
     _a.n = _newTarget,
     _a);
-var _a;

@@ -6,7 +6,6 @@
  * @param {number?[]} a - (number | null)[]
  * @param {?number[]} b - number[] | null
  * @param {(number[])?} c - number[] | null
- * @param {?...number} d - number[] | null
  * @param {...?number} e - (number | null)[]
  * @param {...number?} f - number[] | null
  * @param {...number!?} g - number[] | null
@@ -15,15 +14,14 @@
  * @param {...number![]?} j - number[][] | null
  * @param {...number?[]!} k - (number[] | null)[]
  */
-function f(x, y, z, a, b, c, d, e, f, g, h, i, j, k) {
->f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, d: number | null | undefined, e: number | null | undefined, f: number | null | undefined, g: number | null | undefined, h: number | null | undefined, i: number[] | undefined, j: number[] | null | undefined, ...args: (number | null)[][]) => void
+function f(x, y, z, a, b, c, e, f, g, h, i, j, k) {
+>f : (x: number[], y: number[], z: number[], a: (number | null)[], b: number[] | null, c: number[] | null, e: number | null | undefined, f: number | null | undefined, g: number | null | undefined, h: number | null | undefined, i: number[] | undefined, j: number[] | null | undefined, k: (number | null)[] | undefined) => void
 >x : number[]
 >y : number[]
 >z : number[]
 >a : (number | null)[]
 >b : number[] | null
 >c : number[] | null
->d : number | null | undefined
 >e : number | null | undefined
 >f : number | null | undefined
 >g : number | null | undefined

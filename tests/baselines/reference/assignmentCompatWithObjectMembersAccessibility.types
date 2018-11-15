@@ -13,8 +13,6 @@ module TargetIsPublic {
     }
 
     interface I {
->I : I
-
         foo: string;
 >foo : string
     }
@@ -25,11 +23,9 @@ module TargetIsPublic {
 
     var b: Base;
 >b : Base
->Base : Base
 
     var i: I;
 >i : I
->I : I
 
     // sources
     class D {
@@ -47,11 +43,9 @@ module TargetIsPublic {
     }
     var d: D;
 >d : D
->D : D
 
     var e: E;
 >e : E
->E : E
 
     a = b;
 >a = b : Base
@@ -172,8 +166,6 @@ module TargetIsPublic {
     }
 
     interface I extends Base {
->I : I
->Base : Base
     }
 
     var a: { foo: string; }
@@ -182,11 +174,9 @@ module TargetIsPublic {
 
     var b: Base;
 >b : Base
->Base : Base
 
     var i: I;
 >i : I
->I : I
 
     // sources
     class D {
@@ -205,11 +195,9 @@ module TargetIsPublic {
 
     var d: D;
 >d : D
->D : D
 
     var e: E;
 >e : E
->E : E
 
     a = b; // error
 >a = b : Base

@@ -7,22 +7,18 @@ var x1: any;
 
 var x2: Function;
 >x2 : Function
->Function : Function
 
 var a: {};
 >a : {}
 
 var b: Object;
 >b : Object
->Object : Object
 
 var c: C;
 >c : C
->C : C
 
 var d: string | C;
 >d : string | C
->C : C
 
 var r1 = a instanceof x1;
 >r1 : boolean

@@ -1,11 +1,11 @@
 === tests/cases/compiler/arithmeticOnInvalidTypes.ts ===
 var x: Number;
 >x : Symbol(x, Decl(arithmeticOnInvalidTypes.ts, 0, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var y: Number;
 >y : Symbol(y, Decl(arithmeticOnInvalidTypes.ts, 1, 3))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var z = x + y;
 >z : Symbol(z, Decl(arithmeticOnInvalidTypes.ts, 2, 3))

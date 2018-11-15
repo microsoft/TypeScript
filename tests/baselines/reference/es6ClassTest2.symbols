@@ -39,6 +39,9 @@ m1.health = 0;
 >health : Symbol(BasicMonster.health, Decl(es6ClassTest2.ts, 1, 36))
 
 console.log((<any>m5.isAlive).toString());
+>console.log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
+>console : Symbol(console, Decl(lib.dom.d.ts, --, --))
+>log : Symbol(Console.log, Decl(lib.dom.d.ts, --, --))
 >m5.isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
 >m5 : Symbol(m5, Decl(es6ClassTest2.ts, 63, 3))
 >isAlive : Symbol(OverloadedMonster.isAlive, Decl(es6ClassTest2.ts, 58, 5))
@@ -79,7 +82,7 @@ class GetSetMonster {
 >value : Symbol(value, Decl(es6ClassTest2.ts, 34, 15))
 
             throw new Error('Health must be non-negative.')
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
         this._health = value
 >this._health : Symbol(GetSetMonster._health, Decl(es6ClassTest2.ts, 19, 36))

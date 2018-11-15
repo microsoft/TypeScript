@@ -1,29 +1,23 @@
 /// <reference path="fourslash.ts"/>
 
-/////// Module
-////{| "itemName": "Shapes", "kind": "module", "parentName": "" |}module Shapes {
-////
-////    // Class
-////    {| "itemName": "Point", "kind": "class", "parentName": "Shapes" |}export class Point {
-////        // Instance member
-////        {| "itemName": "originality", "kind": "property", "parentName": "Point", "matchKind": "prefix"|}private originality = 0.0;
-////
-////        {| "itemName": "distanceFromOrig", "kind": "property", "parentName": "Point", "matchKind": "prefix"|}private distanceFromOrig = 0.0;
-////
-////        // Getter
-////        {| "itemName": "distanceFarFarAway", "kind": "getter", "parentName": "Point", "matchKind": "prefix" |}get distanceFarFarAway(): number { return 0; }
-////    }
-////}
-////
-////// Local variables
-////{| "itemName": "pointsSquareBox", "kind": "var", "parentName": "", "matchKind": "prefix"  |}var pointsSquareBox = new Shapes.Point();
+// @noLib: true
 
-//// Testing for exact matching of navigationItems
-// var searchValue = "origin distance points shape";
+////[|{| "name": "Shapes", "kind": "module" |}module Shapes {
+////    [|{| "name": "Point", "kind": "class", "kindModifiers": "export", "containerName": "Shapes", "containerKind": "module" |}export class Point {
+////        [|{| "name": "originality", "kind": "property", "kindModifiers": "private", "containerName": "Point", "containerKind": "class" |}private originality = 0.0;|]
+////
+////        [|{| "name": "distanceFromOrig", "kind": "property", "kindModifiers": "private", "containerName": "Point", "containerKind": "class" |}private distanceFromOrig = 0.0;|]
+////
+////        [|{| "name": "distanceFarFarAway", "kind": "getter", "containerName": "Point", "containerKind": "class" |}get distanceFarFarAway(): number { return 0; }|]
+////    }|]
+////}|]
+////
+////var [|{| "name": "xyz", "kind": "var" |}xyz = new Shapes.Point()|];
 
-test.markers().forEach((marker) => {
-    if (marker.data) {
-        var itemName = marker.data.itemName;
-        verify.navigationItemsListContains(itemName, marker.data.kind, itemName.substr(0, itemName.length - 1), marker.data.matchKind, marker.fileName, marker.data.parentName);
-    }
-});
+for (const range of test.ranges()) {
+    const { name } = range.marker.data;
+    verify.navigateTo({
+        pattern: name.slice(0, name.length - 1),
+        expected: [{ ...range.marker.data, range, matchKind: "prefix" }],
+    });
+}

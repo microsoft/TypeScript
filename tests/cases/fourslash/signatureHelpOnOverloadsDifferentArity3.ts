@@ -7,20 +7,26 @@
 ////
 ////f(/**/
 
-goTo.marker();
-verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs("f(): any");
-verify.currentSignatureParameterCountIs(0);
-verify.signatureHelpArgumentCountIs(0);
+verify.signatureHelp({
+    marker: "",
+    overloadsCount: 4,
+    text: "f(): any",
+    parameterCount: 0,
+    argumentCount: 0,
+});
 
 edit.insert("x, ");
-verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
-verify.currentSignatureParameterCountIs(2);
-verify.currentParameterHelpArgumentNameIs("b");
-verify.currentParameterSpanIs("b: boolean");
+verify.signatureHelp({
+    overloadsCount: 4,
+    text: "f(s: string, b: boolean): any",
+    parameterCount: 2,
+    parameterName: "b",
+    parameterSpan: "b: boolean",
+});
 
 edit.insert("x, ");
-verify.signatureHelpCountIs(4);
-verify.currentSignatureHelpIs("f(s: string, b: boolean): any");
-verify.currentSignatureParameterCountIs(2);
+verify.signatureHelp({
+    overloadsCount: 4,
+    text: "f(s: string, b: boolean): any",
+    parameterCount: 2,
+});

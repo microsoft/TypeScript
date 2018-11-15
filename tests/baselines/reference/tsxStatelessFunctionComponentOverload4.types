@@ -5,7 +5,6 @@ import React = require('react')
 declare function OneThing(): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
 >JSX : any
->Element : JSX.Element
 
 declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >OneThing : { (): JSX.Element; (l: { yy: number; yy1: string; }): JSX.Element; }
@@ -13,7 +12,6 @@ declare function OneThing(l: {yy: number, yy1: string}): JSX.Element;
 >yy : number
 >yy1 : string
 >JSX : any
->Element : JSX.Element
 
 let obj = {
 >obj : { yy: number; yy1: string; }
@@ -96,8 +94,8 @@ const c7 = <OneThing {...obj2} yy />;  // Should error as there is extra attribu
 declare function TestingOneThing(j: {"extra-data": string}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
 >j : { "extra-data": string; }
+>"extra-data" : string
 >JSX : any
->Element : JSX.Element
 
 declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Element;
 >TestingOneThing : { (j: { "extra-data": string; }): JSX.Element; (n: { yy: string; direction?: number; }): JSX.Element; }
@@ -105,7 +103,6 @@ declare function TestingOneThing(n: {yy: string, direction?: number}): JSX.Eleme
 >yy : string
 >direction : number
 >JSX : any
->Element : JSX.Element
 
 // Error
 const d1 = <TestingOneThing extra-data />
@@ -127,7 +124,6 @@ declare function TestingOptional(a: {y1?: string, y2?: number}): JSX.Element;
 >y1 : string
 >y2 : number
 >JSX : any
->Element : JSX.Element
 
 declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Element}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
@@ -136,9 +132,7 @@ declare function TestingOptional(a: {y1?: string, y2?: number, children: JSX.Ele
 >y2 : number
 >children : JSX.Element
 >JSX : any
->Element : JSX.Element
 >JSX : any
->Element : JSX.Element
 
 declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JSX.Element;
 >TestingOptional : { (a: { y1?: string; y2?: number; }): JSX.Element; (a: { y1?: string; y2?: number; children: JSX.Element; }): JSX.Element; (a: { y1: boolean; y2?: number; y3: boolean; }): JSX.Element; }
@@ -147,7 +141,6 @@ declare function TestingOptional(a: {y1: boolean, y2?: number, y3: boolean}): JS
 >y2 : number
 >y3 : boolean
 >JSX : any
->Element : JSX.Element
 
 // Error
 const e1 = <TestingOptional y1 y3="hello"/>

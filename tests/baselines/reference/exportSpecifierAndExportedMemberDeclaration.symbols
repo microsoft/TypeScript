@@ -1,5 +1,7 @@
 === tests/cases/compiler/exportSpecifierAndExportedMemberDeclaration.ts ===
 declare module "m2" {
+>"m2" : Symbol("m2", Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 0), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 7, 1))
+
     export module X {
 >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
 
@@ -10,7 +12,7 @@ declare module "m2" {
 >Y : Symbol(Y, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 3, 5))
 
     export { Y as X };
->Y : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
+>Y : Symbol(Y, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 3, 5))
 >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))
 
     function Z(): X.I;
@@ -20,6 +22,8 @@ declare module "m2" {
 }
 
 declare module "m2" {
+>"m2" : Symbol("m2", Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 0), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 7, 1))
+
     function Z2(): X.I;
 >Z2 : Symbol(Z2, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 9, 21))
 >X : Symbol(X, Decl(exportSpecifierAndExportedMemberDeclaration.ts, 0, 21), Decl(exportSpecifierAndExportedMemberDeclaration.ts, 5, 12))

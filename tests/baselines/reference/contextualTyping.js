@@ -205,13 +205,6 @@ declare class Point
 
 }
 
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
-
-    return this;
-}
-
 Point.origin = new Point(0, 0);
 
 Point.prototype.add = function(dx, dy) {
@@ -357,11 +350,6 @@ var c12t14 = ({
 });
 function EF1(a, b) { return a + b; }
 var efv = EF1(1, 2);
-function Point(x, y) {
-    this.x = x;
-    this.y = y;
-    return this;
-}
 Point.origin = new Point(0, 0);
 Point.prototype.add = function (dx, dy) {
     return new Point(this.x + dx, this.y + dy);

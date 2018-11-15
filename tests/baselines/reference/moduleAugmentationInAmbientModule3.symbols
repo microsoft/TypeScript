@@ -25,21 +25,29 @@ x.foo2().x2;
 
 === tests/cases/compiler/O.d.ts ===
 declare module "Observable" {
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
+
     class Observable {}
 >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 }
 
 declare module "M" {
+>"M" : Symbol("M", Decl(O.d.ts, 2, 1))
+
     class Cls { x: number }
 >Cls : Symbol(Cls, Decl(O.d.ts, 4, 20))
 >x : Symbol(Cls.x, Decl(O.d.ts, 5, 15))
 }
 
 declare module "Map" {
+>"Map" : Symbol("Map", Decl(O.d.ts, 6, 1), Decl(O.d.ts, 15, 1))
+
     import { Cls } from "M";
 >Cls : Symbol(Cls, Decl(O.d.ts, 9, 12))
 
     module "Observable" {
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
+
         interface Observable {
 >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 
@@ -51,11 +59,15 @@ declare module "Map" {
 }
 
 declare module "Map" {
+>"Map" : Symbol("Map", Decl(O.d.ts, 6, 1), Decl(O.d.ts, 15, 1))
+
     class Cls2 { x2: number }
 >Cls2 : Symbol(Cls2, Decl(O.d.ts, 17, 22))
 >x2 : Symbol(Cls2.x2, Decl(O.d.ts, 18, 16))
 
     module "Observable" {
+>"Observable" : Symbol("Observable", Decl(O.d.ts, 0, 0), Decl(O.d.ts, 9, 28), Decl(O.d.ts, 18, 29))
+
         interface Observable {
 >Observable : Symbol(Observable, Decl(O.d.ts, 0, 29), Decl(O.d.ts, 10, 25), Decl(O.d.ts, 19, 25))
 

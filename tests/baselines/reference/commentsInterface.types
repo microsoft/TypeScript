@@ -1,23 +1,17 @@
 === tests/cases/compiler/commentsInterface.ts ===
 /** this is interface 1*/
 interface i1 {
->i1 : i1
 }
 var i1_i: i1;
 >i1_i : i1
->i1 : i1
 
 interface nc_i1 {
->nc_i1 : nc_i1
 }
 var nc_i1_i: nc_i1;
 >nc_i1_i : nc_i1
->nc_i1 : nc_i1
 
 /** this is interface 2 with memebers*/
 interface i2 {
->i2 : i2
-
     /** this is x*/
     x: number;
 >x : number
@@ -34,7 +28,6 @@ interface i2 {
     /**new method*/
     new (/** param*/i: i1);
 >i : i1
->i1 : i1
 
     nc_x: number;
 >nc_x : number
@@ -66,7 +59,6 @@ interface i2 {
 }
 var i2_i: i2;
 >i2_i : i2
->i2 : i2
 
 var i2_i_x = i2_i.x;
 >i2_i_x : number
@@ -162,8 +154,6 @@ var i2_i_nc_fnfoo_r = i2_i.nc_fnfoo(10);
 >10 : 10
 
 interface i3 {
->i3 : i3
-
     /** Comment i3 x*/
     x: number;
 >x : number
@@ -191,7 +181,6 @@ interface i3 {
 }
 var i3_i: i3;
 >i3_i : i3
->i3 : i3
 
 i3_i = {
 >i3_i = {    f: /**own f*/ (/**i3_i a*/a: number) => "Hello" + a,    l: this.f,    /** own x*/    x: this.f(10),    nc_x: this.l(this.x),    nc_f: this.f,    nc_l: this.l} : { f: (a: number) => string; l: any; x: any; nc_x: any; nc_f: any; nc_l: any; }

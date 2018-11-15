@@ -8,15 +8,11 @@ export var Foo = 42; // Should error
 >42 : 42
 
 export interface Bar {
->Bar : Bar
-
 	_brand1: any;
 >_brand1 : any
 }
 
 export interface Bar { // Shouldn't error
->Bar : Bar
-
 	_brand2: any;
 >_brand2 : any
 }
@@ -46,7 +42,7 @@ export class Kettle {
 }
 
 export class Kettle { // Should error
->Kettle : Kettle
+>Kettle : import("tests/cases/compiler/moduleDuplicateIdentifiers").Kettle
 
 	member2 = 42;
 >member2 : number

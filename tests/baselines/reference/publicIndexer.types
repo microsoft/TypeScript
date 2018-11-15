@@ -17,9 +17,7 @@ class D {
 
 class E<T> {
 >E : E<T>
->T : T
 
     public [x: string]: T;
 >x : string
->T : T
 }

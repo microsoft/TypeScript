@@ -1,28 +1,21 @@
 === tests/cases/compiler/unusedTypeParametersCheckedByNoUnusedParameters.ts ===
 function f<T>() { }
 >f : <T>() => void
->T : T
 
 type T<T> = { };
 >T : {}
->T : T
 
 interface I<T> { };
->I : I<T>
->T : T
 
 class C<T> {
 >C : C<T>
->T : T
 
     public m<V>() { }
 >m : <V>() => void
->V : V
 
 };
 
 let l = <T>() => { };
 >l : <T>() => void
 ><T>() => { } : <T>() => void
->T : T
 

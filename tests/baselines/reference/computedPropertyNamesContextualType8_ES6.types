@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType8_ES6.ts ===
 interface I {
->I : I
-
     [s: string]: boolean;
 >s : string
 
@@ -11,16 +9,17 @@ interface I {
 
 var o: I = {
 >o : I
->I : I
 >{    [""+"foo"]: "",    [""+"bar"]: 0} : { [x: string]: string | number; }
 
     [""+"foo"]: "",
+>[""+"foo"] : string
 >""+"foo" : string
 >"" : ""
 >"foo" : "foo"
 >"" : ""
 
     [""+"bar"]: 0
+>[""+"bar"] : number
 >""+"bar" : string
 >"" : ""
 >"bar" : "bar"

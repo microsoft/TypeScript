@@ -8,5 +8,4 @@ class A {
 
 class B implements A {}
 >B : B
->A : A
 

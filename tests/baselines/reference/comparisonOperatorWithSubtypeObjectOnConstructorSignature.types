@@ -16,104 +16,76 @@ class Derived extends Base {
 
 var a1: { new (): Base };
 >a1 : new () => Base
->Base : Base
 
 var b1: { new (): Base };
 >b1 : new () => Base
->Base : Base
 
 var a2: { new (a: number, b: string): Base };
 >a2 : new (a: number, b: string) => Base
 >a : number
 >b : string
->Base : Base
 
 var b2: { new (a: number, b: string): Base };
 >b2 : new (a: number, b: string) => Base
 >a : number
 >b : string
->Base : Base
 
 var a3: { new (a: number, b: string): Base };
 >a3 : new (a: number, b: string) => Base
 >a : number
 >b : string
->Base : Base
 
 var b3: { new (a: number): Base };
 >b3 : new (a: number) => Base
 >a : number
->Base : Base
 
 var a4: { new (a: number, b: string): Base };
 >a4 : new (a: number, b: string) => Base
 >a : number
 >b : string
->Base : Base
 
 var b4: { new (): Base };
 >b4 : new () => Base
->Base : Base
 
 var a5: { new (a: Base): Base };
 >a5 : new (a: Base) => Base
 >a : Base
->Base : Base
->Base : Base
 
 var b5: { new (a: Derived): Base };
 >b5 : new (a: Derived) => Base
 >a : Derived
->Derived : Derived
->Base : Base
 
 var a6: { new (a: Derived, b: Base): Base };
 >a6 : new (a: Derived, b: Base) => Base
 >a : Derived
->Derived : Derived
 >b : Base
->Base : Base
->Base : Base
 
 var b6: { new (a: Base, b: Derived): Base };
 >b6 : new (a: Base, b: Derived) => Base
 >a : Base
->Base : Base
 >b : Derived
->Derived : Derived
->Base : Base
 
 var a7: { new (): Base };
 >a7 : new () => Base
->Base : Base
 
 var b7: { new (): Derived };
 >b7 : new () => Derived
->Derived : Derived
 
 var a8: { new (a?: Base): Base };
 >a8 : new (a?: Base) => Base
 >a : Base
->Base : Base
->Base : Base
 
 var b8: { new (a?: Derived): Base };
 >b8 : new (a?: Derived) => Base
 >a : Derived
->Derived : Derived
->Base : Base
 
 var a9: { new (...a: Base[]): Base };
 >a9 : new (...a: Base[]) => Base
 >a : Base[]
->Base : Base
->Base : Base
 
 var b9: { new (...a: Derived[]): Base };
 >b9 : new (...a: Derived[]) => Base
 >a : Derived[]
->Derived : Derived
->Base : Base
 
 //var a10: { <T, U extends T>(t: T, u: U): T[] };
 //var b10: { <A, B extends A>(a: A, b: B): A[] };

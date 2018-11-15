@@ -19,6 +19,8 @@ interface I {
     (): boolean;
     new (): boolean;
     "": string;
+>"" : Symbol(I[""], Decl(stringIndexerAndConstructor.ts, 9, 20))
+
     d: string;
 >d : Symbol(I.d, Decl(stringIndexerAndConstructor.ts, 10, 15))
 }

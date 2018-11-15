@@ -10,39 +10,43 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { program, sourceFile, span } = context;
             const changes = textChanges.ChangeTracker.with(context, t =>
-                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t));
-            return changes.length === 0 ? undefined : [{ description: getLocaleSpecificMessage(Diagnostics.Implement_inherited_abstract_class), changes, fixId }];
+                addMissingMembers(getClass(sourceFile, span.start), sourceFile, program.getTypeChecker(), t, context.preferences));
+            return changes.length === 0 ? undefined : [createCodeFixAction(fixId, changes, Diagnostics.Implement_inherited_abstract_class, fixId, Diagnostics.Implement_all_inherited_abstract_classes)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => {
-            addMissingMembers(getClass(diag.file!, diag.start!), context.sourceFile, context.program.getTypeChecker(), changes);
-        }),
+        getAllCodeActions: context => {
+            const seenClassDeclarations = createMap<true>();
+            return codeFixAll(context, errorCodes, (changes, diag) => {
+                const classDeclaration = getClass(diag.file, diag.start);
+                if (addToSeen(seenClassDeclarations, getNodeId(classDeclaration))) {
+                    addMissingMembers(classDeclaration, context.sourceFile, context.program.getTypeChecker(), changes, context.preferences);
+                }
+            });
+        },
     });
 
     function getClass(sourceFile: SourceFile, pos: number): ClassLikeDeclaration {
-        // This is the identifier in the case of a class declaration
+        // Token is the identifier in the case of a class declaration
         // or the class keyword token in the case of a class expression.
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
-        const classDeclaration = token.parent;
-        Debug.assert(isClassLike(classDeclaration));
-        return classDeclaration as ClassLikeDeclaration;
+        const token = getTokenAtPosition(sourceFile, pos);
+        return cast(token.parent, isClassLike);
     }
 
-    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker): void {
-        const extendsNode = getClassExtendsHeritageClauseElement(classDeclaration);
+    function addMissingMembers(classDeclaration: ClassLikeDeclaration, sourceFile: SourceFile, checker: TypeChecker, changeTracker: textChanges.ChangeTracker, preferences: UserPreferences): void {
+        const extendsNode = getEffectiveBaseTypeNode(classDeclaration)!;
         const instantiatedExtendsType = checker.getTypeAtLocation(extendsNode);
 
         // Note that this is ultimately derived from a map indexed by symbol names,
         // so duplicates cannot occur.
         const abstractAndNonPrivateExtendsSymbols = checker.getPropertiesOfType(instantiatedExtendsType).filter(symbolPointsToNonPrivateAndAbstractMember);
 
-        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
+        createMissingMemberNodes(classDeclaration, abstractAndNonPrivateExtendsSymbols, checker, preferences, member => changeTracker.insertNodeAtClassStart(sourceFile, classDeclaration, member));
     }
 
     function symbolPointsToNonPrivateAndAbstractMember(symbol: Symbol): boolean {
         // See `codeFixClassExtendAbstractProtectedProperty.ts` in https://github.com/Microsoft/TypeScript/pull/11547/files
         // (now named `codeFixClassExtendAbstractPrivateProperty.ts`)
-        const flags = getModifierFlags(first(symbol.getDeclarations()));
+        const flags = getModifierFlags(first(symbol.getDeclarations()!));
         return !(flags & ModifierFlags.Private) && !!(flags & ModifierFlags.Abstract);
     }
 }

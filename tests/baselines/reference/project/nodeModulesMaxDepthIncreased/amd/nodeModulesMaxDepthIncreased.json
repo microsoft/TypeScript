@@ -6,7 +6,7 @@
     "moduleResolution": "node",
     "project": "maxDepthIncreased",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "maxDepthIncreased/node_modules/m2/node_modules/m3/index.js",
         "maxDepthIncreased/node_modules/m2/entry.js",
         "maxDepthIncreased/node_modules/m1/index.js",

@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface Prop {
->Prop : Prop
-
     a: number,
 >a : number
 
@@ -14,9 +12,7 @@ interface Prop {
     children: JSX.Element | JSX.Element[];
 >children : JSX.Element | JSX.Element[]
 >JSX : any
->Element : JSX.Element
 >JSX : any
->Element : JSX.Element
 }
 
 class Button extends React.Component<any, any> {
@@ -49,7 +45,6 @@ function AnotherButton(p: any) {
 function Comp(p: Prop) {
 >Comp : (p: Prop) => JSX.Element
 >p : Prop
->Prop : Prop
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element
@@ -104,8 +99,6 @@ let k3 = <Comp a={10} b="hi"><><Button /><AnotherButton /></></Comp>;
 >Comp : (p: Prop) => JSX.Element
 
 interface SingleChildProp {
->SingleChildProp : SingleChildProp
-
     a: number,
 >a : number
 
@@ -115,13 +108,11 @@ interface SingleChildProp {
     children: JSX.Element;
 >children : JSX.Element
 >JSX : any
->Element : JSX.Element
 }
 
 function SingleChildComp(p: SingleChildProp) {
 >SingleChildComp : (p: SingleChildProp) => JSX.Element
 >p : SingleChildProp
->SingleChildProp : SingleChildProp
 
     return <div>{p.b}</div>;
 ><div>{p.b}</div> : JSX.Element

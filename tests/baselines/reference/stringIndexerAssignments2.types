@@ -28,15 +28,12 @@ class C3 {
 
 var x: C1;
 >x : C1
->C1 : C1
 
 var a: C2;
 >a : C2
->C2 : C2
 
 var b: C3;
 >b : C3
->C3 : C3
 
 x = a;
 >x = a : C2

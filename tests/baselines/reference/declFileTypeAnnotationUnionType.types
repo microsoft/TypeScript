@@ -16,7 +16,6 @@ module m {
     }
     export class g<T> {
 >g : g<T>
->T : T
 
         private r: string;
 >r : string
@@ -24,7 +23,6 @@ module m {
 }
 class g<T> {
 >g : g<T>
->T : T
 
     private s: string;
 >s : string
@@ -33,9 +31,7 @@ class g<T> {
 // Just the name
 var k: c | m.c = new c() || new m.c();
 >k : c | m.c
->c : c
 >m : any
->c : m.c
 >new c() || new m.c() : c | m.c
 >new c() : c
 >c : typeof c
@@ -56,10 +52,7 @@ var l = new c() || new m.c();
 
 var x: g<string> | m.g<number> |  (() => c) = new g<string>() ||  new m.g<number>() || (() => new c());
 >x : g<string> | m.g<number> | (() => c)
->g : g<T>
 >m : any
->g : m.g<T>
->c : c
 >new g<string>() ||  new m.g<number>() || (() => new c()) : g<string> | m.g<number> | (() => c)
 >new g<string>() ||  new m.g<number>() : g<string> | m.g<number>
 >new g<string>() : g<string>

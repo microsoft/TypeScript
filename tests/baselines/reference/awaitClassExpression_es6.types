@@ -4,12 +4,10 @@ declare class C { }
 
 declare var p: Promise<typeof C>;
 >p : Promise<typeof C>
->Promise : Promise<T>
 >C : typeof C
 
 async function func(): Promise<void> {
 >func : () => Promise<void>
->Promise : Promise<T>
 
     class D extends (await p) {
 >D : D

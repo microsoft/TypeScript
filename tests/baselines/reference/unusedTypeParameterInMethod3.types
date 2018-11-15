@@ -4,17 +4,12 @@ class A {
 
     public f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
->X : X
->Y : Y
->Z : Z
 
         var a: X;
 >a : X
->X : X
 
         var b: Y;
 >b : Y
->Y : Y
 
         a;
 >a : X

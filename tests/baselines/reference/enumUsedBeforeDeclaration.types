@@ -1,14 +1,12 @@
 === tests/cases/compiler/enumUsedBeforeDeclaration.ts ===
 const v: Color = Color.Green;
 >v : Color
->Color : Color
 >Color.Green : Color.Green
 >Color : typeof Color
 >Green : Color.Green
 
 const v2: ConstColor = ConstColor.Green;
 >v2 : ConstColor
->ConstColor : ConstColor
 >ConstColor.Green : ConstColor.Green
 >ConstColor : typeof ConstColor
 >Green : ConstColor.Green

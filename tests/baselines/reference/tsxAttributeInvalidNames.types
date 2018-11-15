@@ -1,18 +1,14 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: { "data-foo"?: string };
 >test1 : { "data-foo"?: string; }
+>"data-foo" : string
 
 		test2: { "data-foo"?: string };
 >test2 : { "data-foo"?: string; }
+>"data-foo" : string
 	}
 }
 
@@ -26,6 +22,7 @@ declare module JSX {
 >{32} /> : boolean
 >{32} / : number
 >{32} : { 32: any; }
+>32 : any
 > : any
 > : any
 > : any

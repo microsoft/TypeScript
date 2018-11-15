@@ -6,4 +6,4 @@
 ////var x = new [|X|]();
 
 const ranges = test.ranges();
-verify.referenceGroups(ranges[0], [{ definition: "constructor X(): X", ranges }]);
+verify.referenceGroups(ranges[0], [{ definition: "class X", ranges }]);

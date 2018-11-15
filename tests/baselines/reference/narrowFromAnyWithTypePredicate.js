@@ -36,17 +36,17 @@ if (isDate(x)) {
 
 
 //// [narrowFromAnyWithTypePredicate.js]
-if (isFunction(x)) {
+if (isFunction(x)) { // 'any' is not narrowed when target type is 'Function'
     x();
     x(1, 2, 3);
     x("hello!");
     x.prop;
 }
-if (isObject(x)) {
+if (isObject(x)) { // 'any' is not narrowed when target type is 'Object'
     x.method();
     x();
 }
-if (isAnything(x)) {
+if (isAnything(x)) { // 'any' is narrowed to types other than 'Function'/'Object' (including {})
     x.method();
     x();
 }

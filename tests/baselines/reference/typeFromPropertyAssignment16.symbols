@@ -1,0 +1,53 @@
+=== tests/cases/conformance/salsa/a.js ===
+var Outer = {};
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
+
+Outer.Inner = function () {}
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+
+Outer.Inner.prototype = {
+>Outer.Inner.prototype : Symbol(Outer.Inner.prototype, Decl(a.js, 2, 28))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>prototype : Symbol(Outer.Inner.prototype, Decl(a.js, 2, 28))
+
+    x: 1,
+>x : Symbol(x, Decl(a.js, 3, 25))
+
+    m() { }
+>m : Symbol(m, Decl(a.js, 4, 9))
+}
+
+/** @type {Outer.Inner} */
+var inner
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+
+inner.x
+>inner.x : Symbol(x, Decl(a.js, 3, 25))
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+>x : Symbol(x, Decl(a.js, 3, 25))
+
+inner.m()
+>inner.m : Symbol(m, Decl(a.js, 4, 9))
+>inner : Symbol(inner, Decl(a.js, 9, 3))
+>m : Symbol(m, Decl(a.js, 4, 9))
+
+var inno = new Outer.Inner()
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+>Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15), Decl(a.js, 2, 28))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15), Decl(a.js, 3, 6))
+
+inno.x
+>inno.x : Symbol(x, Decl(a.js, 3, 25))
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+>x : Symbol(x, Decl(a.js, 3, 25))
+
+inno.m()
+>inno.m : Symbol(m, Decl(a.js, 4, 9))
+>inno : Symbol(inno, Decl(a.js, 12, 3))
+>m : Symbol(m, Decl(a.js, 4, 9))
+

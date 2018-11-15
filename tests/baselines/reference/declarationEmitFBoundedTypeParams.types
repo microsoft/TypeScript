@@ -3,14 +3,8 @@
 
 function append<a, b extends a>(result: a[], value: b): a[] {
 >append : <a, b extends a>(result: a[], value: b) => a[]
->a : a
->b : b
->a : a
 >result : a[]
->a : a
 >value : b
->b : b
->a : a
 
     result.push(value);
 >result.push(value) : number

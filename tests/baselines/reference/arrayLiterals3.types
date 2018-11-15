@@ -10,7 +10,7 @@
 
 var a0: [any, any, any] = [];                             // Error
 >a0 : [any, any, any]
->[] : undefined[]
+>[] : []
 
 var a1: [boolean, string, number] = ["string", 1, true];  // Error
 >a1 : [boolean, string, number]
@@ -61,25 +61,16 @@ var temp2: [number[], string[]] = [[1, 2, 3], ["hello", "string"]];
 >"string" : "string"
 
 interface tup {
->tup : tup
-
     0: number[]|string[];
+>0 : number[] | string[]
+
     1: number[]|string[];
+>1 : number[] | string[]
 }
 interface myArray extends Array<Number> { }
->myArray : myArray
->Array : T[]
->Number : Number
-
 interface myArray2 extends Array<Number|String> { }
->myArray2 : myArray2
->Array : T[]
->Number : Number
->String : String
-
 var c0: tup = [...temp2];                         // Error
 >c0 : tup
->tup : tup
 >[...temp2] : (number[] | string[])[]
 >...temp2 : number[] | string[]
 >temp2 : [number[], string[]]
@@ -92,7 +83,6 @@ var c1: [number, number, number] = [...temp1];    // Error cannot assign number[
 
 var c2: myArray = [...temp1, ...temp];            // Error cannot assign (number|string)[] to number[]
 >c2 : myArray
->myArray : myArray
 >[...temp1, ...temp] : (string | number)[]
 >...temp1 : number
 >temp1 : number[]

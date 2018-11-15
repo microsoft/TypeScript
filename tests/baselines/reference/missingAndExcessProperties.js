@@ -44,12 +44,12 @@ function f1() {
 }
 // Missing properties
 function f2() {
+    var _a, _b, _c, _d, _e, _f, _g, _h;
     var x, y;
     (_a = {}, x = _a.x, y = _a.y);
     (_b = {}, _c = _b.x, x = _c === void 0 ? 1 : _c, y = _b.y);
     (_d = {}, x = _d.x, _e = _d.y, y = _e === void 0 ? 1 : _e);
     (_f = {}, _g = _f.x, x = _g === void 0 ? 1 : _g, _h = _f.y, y = _h === void 0 ? 1 : _h);
-    var _a, _b, _c, _d, _e, _f, _g, _h;
 }
 // Excess properties
 function f3() {
@@ -60,10 +60,10 @@ function f3() {
 }
 // Excess properties
 function f4() {
+    var _a;
     var x, y;
     ({ x: 0, y: 0 });
     (x = { x: 0, y: 0 }.x);
     (y = { x: 0, y: 0 }.y);
     (_a = { x: 0, y: 0 }, x = _a.x, y = _a.y);
-    var _a;
 }

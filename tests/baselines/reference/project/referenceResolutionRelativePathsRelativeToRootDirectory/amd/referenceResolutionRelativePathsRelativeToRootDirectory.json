@@ -7,7 +7,7 @@
     "declaration": true,
     "baselineCheck": true,
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "../../../bar/bar.ts",
         "../../../src/ts/foo/foo.ts"
     ],

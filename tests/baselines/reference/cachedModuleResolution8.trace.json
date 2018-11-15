@@ -40,6 +40,6 @@
     "======== Module name 'foo' was not resolved. ========",
     "======== Resolving module 'foo' from '/a/b/c/lib.ts'. ========",
     "Explicitly specified module resolution kind: 'Classic'.",
-    "Resolution for module 'foo' was found in cache.",
+    "Resolution for module 'foo' was found in cache from location '/a/b/c'.",
     "======== Module name 'foo' was not resolved. ========"
 ]

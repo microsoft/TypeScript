@@ -1,7 +1,4 @@
-tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode; }'.
-  Type '{ x: true; }' is not assignable to type 'Prop'.
-    Types of property 'x' are incompatible.
-      Type 'true' is not assignable to type 'false'.
+tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type 'true' is not assignable to type 'false'.
 
 
 ==== tests/cases/conformance/jsx/file.tsx (1 errors) ====
@@ -19,7 +16,5 @@ tests/cases/conformance/jsx/file.tsx(13,19): error TS2322: Type '{ x: true; }' i
     // Error
     let p = <Poisoned x/>;
                       ~
-!!! error TS2322: Type '{ x: true; }' is not assignable to type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode; }'.
-!!! error TS2322:   Type '{ x: true; }' is not assignable to type 'Prop'.
-!!! error TS2322:     Types of property 'x' are incompatible.
-!!! error TS2322:       Type 'true' is not assignable to type 'false'.
+!!! error TS2322: Type 'true' is not assignable to type 'false'.
+!!! related TS6500 tests/cases/conformance/jsx/file.tsx:4:5: The expected type comes from property 'x' which is declared here on type 'IntrinsicAttributes & IntrinsicClassAttributes<Poisoned> & Prop & { children?: ReactNode; }'

@@ -6,15 +6,18 @@
 ////declare function fn2(x: string, y: number);
 ////fn('', fn2(/*1*/
 
-goTo.marker('1');
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("fn2(x: string): any");
-verify.currentParameterHelpArgumentNameIs("x");
-verify.currentParameterSpanIs("x: string");
+verify.signatureHelp({
+    marker: "1",
+    overloadsCount: 2,
+    text: "fn2(x: string): any",
+    parameterName: "x",
+    parameterSpan: "x: string",
+});
 
 edit.insert("'',");
-
-verify.signatureHelpCountIs(2);
-verify.currentSignatureHelpIs("fn2(x: string, y: number): any");
-verify.currentParameterHelpArgumentNameIs("y");
-verify.currentParameterSpanIs("y: number");
+verify.signatureHelp({
+    overloadsCount: 2,
+    text: "fn2(x: string, y: number): any",
+    parameterName: "y",
+    parameterSpan: "y: number",
+});

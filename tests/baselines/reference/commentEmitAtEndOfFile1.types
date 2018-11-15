@@ -13,6 +13,5 @@ module foo {
 }
 // test #3
 module empty {
->empty : any
 }
 // test #4

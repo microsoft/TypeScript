@@ -1,7 +1,5 @@
 === tests/cases/compiler/interfaceImplementation3.ts ===
 interface I1 {
->I1 : I1
-
     iObj:{ };
 >iObj : {}
 
@@ -17,7 +15,6 @@ interface I1 {
 
 class C4 implements I1 {
 >C4 : C4
->I1 : I1
 
     public iObj:{ };
 >iObj : {}

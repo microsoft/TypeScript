@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 // @noImplicitAny: true
-//// function f(new C(100, 3, undefined)
+////function f(new C(100, 3, undefined)
 
-verify.not.codeFixAvailable([]);
-
+verify.codeFixAvailable([
+    { "description": "Infer parameter types from usage" }
+]); // Parse error, so no unused diagnostics

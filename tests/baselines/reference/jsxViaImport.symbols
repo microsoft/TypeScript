@@ -34,6 +34,8 @@ declare module React {
 >U : Symbol(U, Decl(component.d.ts, 4, 20))
 }
 declare module "BaseComponent" {
+>"BaseComponent" : Symbol("BaseComponent", Decl(component.d.ts, 5, 1))
+
     var base: React.Component<any, {}>;
 >base : Symbol(base, Decl(component.d.ts, 7, 7))
 >React : Symbol(React, Decl(component.d.ts, 2, 1))

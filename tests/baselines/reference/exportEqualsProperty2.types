@@ -4,7 +4,6 @@ import B = require("./a");
 
 const x: B = { c: B };
 >x : B
->B : B
 >{ c: B } : { c: number; }
 >c : number
 >B : number
@@ -19,10 +18,7 @@ class C {
 >B : number
 }
 namespace C {
->C : typeof C
-
     export interface B { c: number }
->B : B
 >c : number
 }
 

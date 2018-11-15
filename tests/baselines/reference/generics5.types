@@ -1,31 +1,19 @@
 === tests/cases/compiler/generics5.ts ===
 interface A { a: string; }
->A : A
 >a : string
 
 interface B extends A { b: string; }
->B : B
->A : A
 >b : string
 
 interface C extends B { c: string; }
->C : C
->B : B
 >c : string
 
 interface G<T, U extends B> {
->G : G<T, U>
->T : T
->U : U
->B : B
 
 
 }
 
 var v3: G<A, A>;               // Error, A not valid argument for U
 >v3 : G<A, A>
->G : G<T, U>
->A : A
->A : A
 
 

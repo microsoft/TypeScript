@@ -1,0 +1,124 @@
+=== tests/cases/conformance/async/es2017/asyncMethodWithSuperConflict_es6.ts ===
+class A {
+>A : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+
+    x() {
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+    }
+    y() {
+>y : Symbol(A.y, Decl(asyncMethodWithSuperConflict_es6.ts, 2, 5))
+    }
+}
+
+class B extends A {
+>B : Symbol(B, Decl(asyncMethodWithSuperConflict_es6.ts, 5, 1))
+>A : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+
+    // async method with only call/get on 'super' does not require a binding
+    async simple() {
+>simple : Symbol(B.simple, Decl(asyncMethodWithSuperConflict_es6.ts, 7, 19))
+
+        const _super = null;
+>_super : Symbol(_super, Decl(asyncMethodWithSuperConflict_es6.ts, 10, 13))
+
+        const _superIndex = null;
+>_superIndex : Symbol(_superIndex, Decl(asyncMethodWithSuperConflict_es6.ts, 11, 13))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // call additional property.
+        super.y();
+>super.y : Symbol(A.y, Decl(asyncMethodWithSuperConflict_es6.ts, 2, 5))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>y : Symbol(A.y, Decl(asyncMethodWithSuperConflict_es6.ts, 2, 5))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuperConflict_es6.ts, 21, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // element access (read)
+        const b = super["x"];
+>b : Symbol(b, Decl(asyncMethodWithSuperConflict_es6.ts, 24, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+    }
+
+    // async method with assignment/destructuring on 'super' requires a binding
+    async advanced() {
+>advanced : Symbol(B.advanced, Decl(asyncMethodWithSuperConflict_es6.ts, 25, 5))
+
+        const _super = null;
+>_super : Symbol(_super, Decl(asyncMethodWithSuperConflict_es6.ts, 29, 13))
+
+        const _superIndex = null;
+>_superIndex : Symbol(_superIndex, Decl(asyncMethodWithSuperConflict_es6.ts, 30, 13))
+
+        const f = () => {};
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 31, 13))
+
+        // call with property access
+        super.x();
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // call with element access
+        super["x"]();
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // property access (read)
+        const a = super.x;
+>a : Symbol(a, Decl(asyncMethodWithSuperConflict_es6.ts, 40, 13))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // element access (read)
+        const b = super["x"];
+>b : Symbol(b, Decl(asyncMethodWithSuperConflict_es6.ts, 43, 13))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+
+        // property access (assign)
+        super.x = f;
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 31, 13))
+
+        // element access (assign)
+        super["x"] = f;
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 31, 13))
+
+        // destructuring assign with property access
+        ({ f: super.x } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 52, 10))
+>super.x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>x : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 52, 27))
+
+        // destructuring assign with element access
+        ({ f: super["x"] } = { f });
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 55, 10))
+>super : Symbol(A, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 0))
+>"x" : Symbol(A.x, Decl(asyncMethodWithSuperConflict_es6.ts, 0, 9))
+>f : Symbol(f, Decl(asyncMethodWithSuperConflict_es6.ts, 55, 30))
+    }
+}
+

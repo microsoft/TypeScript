@@ -1,20 +1,15 @@
 === tests/cases/compiler/parameterReferenceInInitializer1.ts ===
 function fn<a>(y: Y, set: (y: Y, x: number) => void): a {
 >fn : <a>(y: Y, set: (y: Y, x: number) => void) => a
->a : a
 >y : Y
->Y : Y
 >set : (y: Y, x: number) => void
 >y : Y
->Y : Y
 >x : number
->a : a
 
     return undefined;
 >undefined : undefined
 }
 interface Y { x: number }
->Y : Y
 >x : number
 
 class C {
@@ -23,7 +18,6 @@ class C {
     constructor(
         y: Y,
 >y : Y
->Y : Y
 
         public x = fn(y, (y, x) => y.x = x) // expected to work, but actually doesn't
 >x : {}

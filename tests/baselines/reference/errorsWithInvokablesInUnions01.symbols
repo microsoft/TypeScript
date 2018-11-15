@@ -1,0 +1,49 @@
+=== tests/cases/compiler/errorsWithInvokablesInUnions01.ts ===
+interface ConstructableA {
+>ConstructableA : Symbol(ConstructableA, Decl(errorsWithInvokablesInUnions01.ts, 0, 0))
+
+  new(): { somePropA: any };
+>somePropA : Symbol(somePropA, Decl(errorsWithInvokablesInUnions01.ts, 1, 10))
+}
+
+interface IDirectiveLinkFn<TScope> {
+>IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+>TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 4, 27))
+
+    (scope: TScope): void;
+>scope : Symbol(scope, Decl(errorsWithInvokablesInUnions01.ts, 5, 5))
+>TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 4, 27))
+}
+
+interface IDirectivePrePost<TScope> {
+>IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
+>TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+
+    pre?: IDirectiveLinkFn<TScope>;
+>pre : Symbol(IDirectivePrePost.pre, Decl(errorsWithInvokablesInUnions01.ts, 8, 37))
+>IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+>TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+
+    post?: IDirectiveLinkFn<TScope>;
+>post : Symbol(IDirectivePrePost.post, Decl(errorsWithInvokablesInUnions01.ts, 9, 35))
+>IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+>TScope : Symbol(TScope, Decl(errorsWithInvokablesInUnions01.ts, 8, 28))
+}
+
+export let blah: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = (x: string) => {}
+>blah : Symbol(blah, Decl(errorsWithInvokablesInUnions01.ts, 13, 10))
+>IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+>ConstructableA : Symbol(ConstructableA, Decl(errorsWithInvokablesInUnions01.ts, 0, 0))
+>IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
+>x : Symbol(x, Decl(errorsWithInvokablesInUnions01.ts, 13, 90))
+
+export let ctor: IDirectiveLinkFn<number> | ConstructableA | IDirectivePrePost<number> = class {
+>ctor : Symbol(ctor, Decl(errorsWithInvokablesInUnions01.ts, 15, 10))
+>IDirectiveLinkFn : Symbol(IDirectiveLinkFn, Decl(errorsWithInvokablesInUnions01.ts, 2, 1))
+>ConstructableA : Symbol(ConstructableA, Decl(errorsWithInvokablesInUnions01.ts, 0, 0))
+>IDirectivePrePost : Symbol(IDirectivePrePost, Decl(errorsWithInvokablesInUnions01.ts, 6, 1))
+
+    someUnaccountedProp: any;
+>someUnaccountedProp : Symbol(ctor.someUnaccountedProp, Decl(errorsWithInvokablesInUnions01.ts, 15, 96))
+}
+

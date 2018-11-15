@@ -1,16 +1,11 @@
 === tests/cases/conformance/interfaces/interfaceDeclarations/interfaceThatHidesBaseProperty2.ts ===
 interface Base {
->Base : Base
-
     x: { a: number };
 >x : { a: number; }
 >a : number
 }
 
 interface Derived extends Base { // error
->Derived : Derived
->Base : Base
-
     x: {
 >x : { a: string; }
 

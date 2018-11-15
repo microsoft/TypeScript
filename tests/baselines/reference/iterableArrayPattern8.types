@@ -30,6 +30,7 @@ class FooIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -41,12 +42,11 @@ class FooIterator {
 
 var a: Bar, b: string;
 >a : Bar
->Bar : Bar
 >b : string
 
 [a, ...b] = new FooIterator;
 >[a, ...b] = new FooIterator : FooIterator
->[a, ...b] : (string | Bar)[]
+>[a, ...b] : [Bar, ...string[]]
 >a : Bar
 >...b : string
 >b : string

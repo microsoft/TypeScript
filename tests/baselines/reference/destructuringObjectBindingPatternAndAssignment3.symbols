@@ -19,7 +19,9 @@ var { f2: {f21} = { f212: "string" } }: any = undefined;
 
 var {1} = { 1 };
 > : Symbol((Missing), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 5), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 5))
+>1 : Symbol(1, Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 11))
 
 var {"prop"} = { "prop": 1 };
 > : Symbol((Missing), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 5, 5), Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 5))
+>"prop" : Symbol("prop", Decl(destructuringObjectBindingPatternAndAssignment3.ts, 6, 16))
 

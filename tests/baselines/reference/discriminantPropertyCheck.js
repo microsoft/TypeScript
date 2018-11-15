@@ -67,6 +67,39 @@ function foo6(x: Item) {
     }
 }
 
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+
+type Instance = StrType | NumType;
+
+interface StrType {
+    type: Types.Str;
+    value: string;
+    length: number;
+}
+
+interface NumType {
+    type: Types.Num;
+    value: number;
+}
+
+function func2(inst: Instance) {
+    while (true) {
+        switch (inst.type) {
+            case Types.Str: {
+                inst.value.length;
+                break;
+            }
+            case Types.Num: {
+                inst.value.toExponential;
+                break;
+            }
+        }
+    }
+}
+
+
 //// [discriminantPropertyCheck.js]
 function goo1(x) {
     if (x.kind === "A" && x.foo !== undefined) {
@@ -106,5 +139,25 @@ function foo5(x) {
 function foo6(x) {
     if (x.foo !== undefined && x.qux) {
         x.foo.length; // Error, intervening discriminant guard
+    }
+}
+// Repro from #27493
+var Types;
+(function (Types) {
+    Types[Types["Str"] = 1] = "Str";
+    Types[Types["Num"] = 2] = "Num";
+})(Types || (Types = {}));
+function func2(inst) {
+    while (true) {
+        switch (inst.type) {
+            case Types.Str: {
+                inst.value.length;
+                break;
+            }
+            case Types.Num: {
+                inst.value.toExponential;
+                break;
+            }
+        }
     }
 }

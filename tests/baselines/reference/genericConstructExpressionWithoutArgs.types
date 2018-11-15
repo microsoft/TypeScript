@@ -9,11 +9,9 @@ var b = new B; // no error
  
 class C<T> {
 >C : C<T>
->T : T
 
    x: T;
 >x : T
->T : T
 }
 
 var c = new C // C<any>

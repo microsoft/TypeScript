@@ -5,7 +5,6 @@ abstract class A { }
 // var AA: typeof A;
 var AAA: new() => A;
 >AAA : new () => A
->A : A
 
 // AA = A; // okay
 AAA = A; // error. 

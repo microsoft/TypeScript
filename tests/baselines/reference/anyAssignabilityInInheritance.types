@@ -2,8 +2,6 @@
 // any is not a subtype of any other types, errors expected on all the below derived classes unless otherwise noted
 
 interface I {
->I : I
-
     [x: string]: any;
 >x : string
 
@@ -59,8 +57,6 @@ var r3 = foo3(a); // any
 declare function foo5(x: Date): Date;
 >foo5 : { (x: Date): Date; (x: any): any; }
 >x : Date
->Date : Date
->Date : Date
 
 declare function foo5(x: any): any;
 >foo5 : { (x: Date): Date; (x: any): any; }
@@ -75,8 +71,6 @@ var r3 = foo3(a); // any
 declare function foo6(x: RegExp): RegExp;
 >foo6 : { (x: RegExp): RegExp; (x: any): any; }
 >x : RegExp
->RegExp : RegExp
->RegExp : RegExp
 
 declare function foo6(x: any): any;
 >foo6 : { (x: RegExp): RegExp; (x: any): any; }
@@ -119,14 +113,11 @@ var r3 = foo3(a); // any
 >a : any
 
 interface I8 { foo: string }
->I8 : I8
 >foo : string
 
 declare function foo9(x: I8): I8;
 >foo9 : { (x: I8): I8; (x: any): any; }
 >x : I8
->I8 : I8
->I8 : I8
 
 declare function foo9(x: any): any;
 >foo9 : { (x: I8): I8; (x: any): any; }
@@ -145,8 +136,6 @@ class A { foo: number; }
 declare function foo10(x: A): A;
 >foo10 : { (x: A): A; (x: any): any; }
 >x : A
->A : A
->A : A
 
 declare function foo10(x: any): any;
 >foo10 : { (x: A): A; (x: any): any; }
@@ -160,15 +149,11 @@ var r3 = foo3(a); // any
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
->T : T
 
 declare function foo11(x: A2<string>): A2<string>;
 >foo11 : { (x: A2<string>): A2<string>; (x: any): any; }
 >x : A2<string>
->A2 : A2<T>
->A2 : A2<T>
 
 declare function foo11(x: any): any;
 >foo11 : { (x: A2<string>): A2<string>; (x: any): any; }
@@ -199,14 +184,8 @@ var r3 = foo3(a); // any
 declare function foo13(x: <T>(x: T) => T): <T>(x: T) => T;
 >foo13 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: any): any; }
 >x : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 declare function foo13(x: any): any;
 >foo13 : { (x: <T>(x: T) => T): <T>(x: T) => T; (x: any): any; }
@@ -220,13 +199,11 @@ var r3 = foo3(a); // any
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 declare function foo14(x: E): E;
 >foo14 : { (x: E): E; (x: any): any; }
 >x : E
->E : E
->E : E
 
 declare function foo14(x: any): any;
 >foo14 : { (x: E): E; (x: any): any; }
@@ -278,8 +255,6 @@ module CC {
 declare function foo16(x: CC): CC;
 >foo16 : { (x: CC): CC; (x: any): any; }
 >x : CC
->CC : CC
->CC : CC
 
 declare function foo16(x: any): any;
 >foo16 : { (x: CC): CC; (x: any): any; }
@@ -294,8 +269,6 @@ var r3 = foo3(a); // any
 declare function foo17(x: Object): Object;
 >foo17 : { (x: Object): Object; (x: any): any; }
 >x : Object
->Object : Object
->Object : Object
 
 declare function foo17(x: any): any;
 >foo17 : { (x: Object): Object; (x: any): any; }

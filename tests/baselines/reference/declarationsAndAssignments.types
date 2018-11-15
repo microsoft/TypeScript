@@ -24,7 +24,7 @@ function f0() {
 >x : number
 >y : string
 >z : any
->[1, "hello"] : [number, string, undefined]
+>[1, "hello"] : [number, string, undefined?]
 >1 : 1
 >"hello" : "hello"
 
@@ -238,7 +238,7 @@ function f7() {
     var [x = 0, y = 1] = [1, "hello"];  // Error, initializer for y must be string
 >x : number
 >0 : 0
->y : string | 1
+>y : string | number
 >1 : 1
 >[1, "hello"] : [number, string]
 >1 : 1
@@ -248,23 +248,23 @@ function f7() {
 >x : number
 
     var y: string;
->y : string | 1
+>y : string | number
 }
 
 function f8() {
 >f8 : () => void
 
-    var [a, b, c] = [];   // Ok, [] is an array
+    var [a, b, c] = [];   // Error, [] is an empty tuple
 >a : any
 >b : any
 >c : any
->[] : [undefined, undefined, undefined]
+>[] : [undefined?, undefined?, undefined?]
 
     var [d, e, f] = [1];  // Error, [1] is a tuple
 >d : number
 >e : any
 >f : any
->[1] : [number, undefined, undefined]
+>[1] : [number, undefined?, undefined?]
 >1 : 1
 }
 
@@ -280,7 +280,9 @@ function f9() {
 >c : number
 >d : number
 >{ 0: 10, 1: 20 } : { 0: number; 1: number; }
+>0 : number
 >10 : 10
+>1 : number
 >20 : 20
 
     var [e, f] = [10, 20];
@@ -323,14 +325,18 @@ function f11() {
 >a : number
 >b : string
 >{ 0: 10, 1: "hello" } : { 0: number; 1: string; }
+>0 : number
 >10 : 10
+>1 : string
 >"hello" : "hello"
 
     var { "<": a, ">": b } = { "<": 10, ">": "hello" };
 >a : number
 >b : string
 >{ "<": 10, ">": "hello" } : { "<": number; ">": string; }
+>"<" : number
 >10 : 10
+>">" : string
 >"hello" : "hello"
 
     var { 0: a, 1: b } = [10, "hello"];
@@ -672,11 +678,9 @@ function f19() {
 >2 : 2
 }
 
-function f20() {
->f20 : () => void
-
-    var a: number[];
->a : number[]
+function f20(v: [number, number, number]) {
+>f20 : (v: [number, number, number]) => void
+>v : [number, number, number]
 
     var x: number;
 >x : number
@@ -687,180 +691,154 @@ function f20() {
     var z: number;
 >z : number
 
-    var [...a] = [1, 2, 3];
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
+    var a0: [];
+>a0 : []
 
-    var [x, ...a] = [1, 2, 3];
+    var a1: [number];
+>a1 : [number]
+
+    var a2: [number, number];
+>a2 : [number, number]
+
+    var a3: [number, number, number];
+>a3 : [number, number, number]
+
+    var [...a3] = v;
+>a3 : [number, number, number]
+>v : [number, number, number]
+
+    var [x, ...a2] = v;
 >x : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
+>a2 : [number, number]
+>v : [number, number, number]
 
-    var [x, y, ...a] = [1, 2, 3];
->x : number
->y : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
-
-    var [x, y, z, ...a] = [1, 2, 3];
+    var [x, y, ...a1] = v;
 >x : number
 >y : number
->z : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
+>a1 : [number]
+>v : [number, number, number]
 
-    [...a] = [1, 2, 3];
->[...a] = [1, 2, 3] : number[]
->[...a] : number[]
->...a : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
-
-    [x, ...a] = [1, 2, 3];
->[x, ...a] = [1, 2, 3] : number[]
->[x, ...a] : number[]
->x : number
->...a : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
-
-    [x, y, ...a] = [1, 2, 3];
->[x, y, ...a] = [1, 2, 3] : number[]
->[x, y, ...a] : number[]
->x : number
->y : number
->...a : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
-
-    [x, y, z, ...a] = [1, 2, 3];
->[x, y, z, ...a] = [1, 2, 3] : number[]
->[x, y, z, ...a] : number[]
+    var [x, y, z, ...a0] = v;
 >x : number
 >y : number
 >z : number
->...a : number
->a : number[]
->[1, 2, 3] : number[]
->1 : 1
->2 : 2
->3 : 3
+>a0 : []
+>v : [number, number, number]
+
+    [...a3] = v;
+>[...a3] = v : [number, number, number]
+>[...a3] : number[]
+>...a3 : number
+>a3 : [number, number, number]
+>v : [number, number, number]
+
+    [x, ...a2] = v;
+>[x, ...a2] = v : [number, number, number]
+>[x, ...a2] : [number, ...number[]]
+>x : number
+>...a2 : number
+>a2 : [number, number]
+>v : [number, number, number]
+
+    [x, y, ...a1] = v;
+>[x, y, ...a1] = v : [number, number, number]
+>[x, y, ...a1] : [number, number, ...number[]]
+>x : number
+>y : number
+>...a1 : number
+>a1 : [number]
+>v : [number, number, number]
+
+    [x, y, z, ...a0] = v;
+>[x, y, z, ...a0] = v : [number, number, number]
+>[x, y, z, ...a0] : [number, number, number, ...never[]]
+>x : number
+>y : number
+>z : number
+>...a0 : never
+>a0 : []
+>v : [number, number, number]
 }
 
-function f21() {
->f21 : () => void
+function f21(v: [number, string, boolean]) {
+>f21 : (v: [number, string, boolean]) => void
+>v : [number, string, boolean]
 
-    var a: (number | string | boolean)[];
->a : (string | number | boolean)[]
+    var x: number;
+>x : number
 
-    var x: number | string | boolean;
->x : string | number | boolean
+    var y: string;
+>y : string
 
-    var y: number | string | boolean;
->y : string | number | boolean
+    var z: boolean;
+>z : boolean
 
-    var z: number | string | boolean;
->z : string | number | boolean
+    var a0: [number, string, boolean];
+>a0 : [number, string, boolean]
 
-    var [...a] = [1, "hello", true];
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var a1: [string, boolean];
+>a1 : [string, boolean]
 
-    var [x, ...a] = [1, "hello", true];
->x : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var a2: [boolean];
+>a2 : [boolean]
 
-    var [x, y, ...a] = [1, "hello", true];
->x : string | number | boolean
->y : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var a3: [];
+>a3 : []
 
-    var [x, y, z, ...a] = [1, "hello", true];
->x : string | number | boolean
->y : string | number | boolean
->z : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | boolean)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var [...a0] = v;
+>a0 : [number, string, boolean]
+>v : [number, string, boolean]
 
-    [...a] = [1, "hello", true];
->[...a] = [1, "hello", true] : (string | number | true)[]
->[...a] : (string | number | boolean)[]
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var [x, ...a1] = v;
+>x : number
+>a1 : [string, boolean]
+>v : [number, string, boolean]
 
-    [x, ...a] = [1, "hello", true];
->[x, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var [x, y, ...a2] = v;
+>x : number
+>y : string
+>a2 : [boolean]
+>v : [number, string, boolean]
 
-    [x, y, ...a] = [1, "hello", true];
->[x, y, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, y, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->y : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
->1 : 1
->"hello" : "hello"
->true : true
+    var [x, y, z, ...a3] = v;
+>x : number
+>y : string
+>z : boolean
+>a3 : []
+>v : [number, string, boolean]
 
-    [x, y, z, ...a] = [1, "hello", true];
->[x, y, z, ...a] = [1, "hello", true] : (string | number | true)[]
->[x, y, z, ...a] : (string | number | boolean)[]
->x : string | number | boolean
->y : string | number | boolean
->z : string | number | boolean
->...a : string | number | boolean
->a : (string | number | boolean)[]
->[1, "hello", true] : (string | number | true)[]
->1 : 1
->"hello" : "hello"
->true : true
+    [...a0] = v;
+>[...a0] = v : [number, string, boolean]
+>[...a0] : (string | number | boolean)[]
+>...a0 : string | number | boolean
+>a0 : [number, string, boolean]
+>v : [number, string, boolean]
+
+    [x, ...a1] = v;
+>[x, ...a1] = v : [number, string, boolean]
+>[x, ...a1] : [number, ...(string | boolean)[]]
+>x : number
+>...a1 : string | boolean
+>a1 : [string, boolean]
+>v : [number, string, boolean]
+
+    [x, y, ...a2] = v;
+>[x, y, ...a2] = v : [number, string, boolean]
+>[x, y, ...a2] : [number, string, ...boolean[]]
+>x : number
+>y : string
+>...a2 : boolean
+>a2 : [boolean]
+>v : [number, string, boolean]
+
+    [x, y, z, ...a3] = v;
+>[x, y, z, ...a3] = v : [number, string, boolean]
+>[x, y, z, ...a3] : [number, string, boolean, ...never[]]
+>x : number
+>y : string
+>z : boolean
+>...a3 : never
+>a3 : []
+>v : [number, string, boolean]
 }
 

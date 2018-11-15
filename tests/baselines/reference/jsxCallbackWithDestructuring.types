@@ -1,18 +1,11 @@
 === tests/cases/compiler/jsxCallbackWithDestructuring.tsx ===
 // minimal component
 interface Component<P = {}, S = {}> { }
->Component : Component<P, S>
->P : P
->S : S
-
 declare class Component<P, S> {
 >Component : Component<P, S>
->P : P
->S : S
 
     constructor(props: P, context?: any);
 >props : P
->P : P
 >context : any
 
     render(): {};
@@ -20,47 +13,30 @@ declare class Component<P, S> {
 
     props: Readonly<{ children?: {} }> & Readonly<P>;
 >props : Readonly<{ children?: {} | undefined; }> & Readonly<P>
->Readonly : Readonly<T>
 >children : {} | undefined
->Readonly : Readonly<T>
->P : P
 }
 
 declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface Element  { }
->Element : Element
-
         interface ElementClass  {
->ElementClass : ElementClass
-
             render(): {};
 >render : () => {}
         }
         interface ElementAttributesProperty { props: {}; }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
 
         interface ElementChildrenAttribute { children: {}; }
->ElementChildrenAttribute : ElementChildrenAttribute
 >children : {}
 
         interface IntrinsicAttributes  { }
->IntrinsicAttributes : IntrinsicAttributes
-
         interface IntrinsicClassAttributes<T> { }
->IntrinsicClassAttributes : IntrinsicClassAttributes<T>
->T : T
     }
 }
 
 export interface RouteProps {
->RouteProps : RouteProps
-
     children?: (props: { x: number }) => any;
 >children : ((props: { x: number; }) => any) | undefined
 >props : { x: number; }
@@ -68,11 +44,7 @@ export interface RouteProps {
 }
 export class MyComponent<T extends RouteProps = RouteProps> extends Component<T> { }
 >MyComponent : MyComponent<T>
->T : T
->RouteProps : RouteProps
->RouteProps : RouteProps
 >Component : Component<T, {}>
->T : T
 
 <MyComponent children={({ x }) => {}}/>
 ><MyComponent children={({ x }) => {}}/> : JSX.Element

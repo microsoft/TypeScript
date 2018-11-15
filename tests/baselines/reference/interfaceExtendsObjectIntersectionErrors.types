@@ -5,7 +5,6 @@ type T1 = { a: number };
 
 type T2 = T1 & { b: number };
 >T2 : T2
->T1 : T1
 >b : number
 
 type T3 = number[];
@@ -16,75 +15,56 @@ type T4 = [string, number];
 
 type T5 = { [P in 'a' | 'b' | 'c']: string };
 >T5 : T5
->P : P
 
 interface I1 extends T1 { a: string }
->I1 : I1
->T1 : T1
 >a : string
 
 interface I2 extends T2 { b: string }
->I2 : I2
->T2 : T2
 >b : string
 
 interface I3 extends T3 { length: string }
->I3 : I3
->T3 : number[]
 >length : string
 
 interface I4 extends T4 { 0: number }
->I4 : I4
->T4 : [string, number]
+>0 : number
 
 interface I5 extends T5 { c: number }
->I5 : I5
->T5 : T5
 >c : number
 
 type Constructor<T> = new () => T;
 >Constructor : Constructor<T>
->T : T
->T : T
 
 declare function Constructor<T>(): Constructor<T>;
 >Constructor : <T>() => Constructor<T>
->T : T
->Constructor : Constructor<T>
->T : T
 
 class C1 extends Constructor<T1>() { a: string }
 >C1 : C1
 >Constructor<T1>() : T1
 >Constructor : <T>() => Constructor<T>
->T1 : T1
 >a : string
 
 class C2 extends Constructor<T2>() { b: string }
 >C2 : C2
 >Constructor<T2>() : T2
 >Constructor : <T>() => Constructor<T>
->T2 : T2
 >b : string
 
 class C3 extends Constructor<T3>() { length: string }
 >C3 : C3
 >Constructor<T3>() : number[]
 >Constructor : <T>() => Constructor<T>
->T3 : number[]
 >length : string
 
 class C4 extends Constructor<T4>() { 0: number }
 >C4 : C4
 >Constructor<T4>() : [string, number]
 >Constructor : <T>() => Constructor<T>
->T4 : [string, number]
+>0 : number
 
 class C5 extends Constructor<T5>() { c: number }
 >C5 : C5
 >Constructor<T5>() : T5
 >Constructor : <T>() => Constructor<T>
->T5 : T5
 >c : number
 
 declare class CX { static a: string }
@@ -115,63 +95,37 @@ type TNX = typeof NX;
 >NX : typeof NX
 
 interface I10 extends TCX { a: number }
->I10 : I10
->TCX : typeof CX
 >a : number
 
 interface I11 extends TEX { C: string }
->I11 : I11
->TEX : typeof EX
 >C : string
 
 interface I12 extends TNX { a: number }
->I12 : I12
->TNX : typeof NX
 >a : number
 
 interface I14 extends TCX { [x: string]: number }
->I14 : I14
->TCX : typeof CX
 >x : string
 
 interface I15 extends TEX { [x: string]: number }
->I15 : I15
->TEX : typeof EX
 >x : string
 
 interface I16 extends TNX { [x: string]: number }
->I16 : I16
->TNX : typeof NX
 >x : string
 
 type Identifiable<T> = { _id: string } & T;
 >Identifiable : Identifiable<T>
->T : T
 >_id : string
->T : T
 
 interface I20 extends Partial<T1> { a: string }
->I20 : I20
->Partial : Partial<T>
->T1 : T1
 >a : string
 
 interface I21 extends Readonly<T1> { a: string }
->I21 : I21
->Readonly : Readonly<T>
->T1 : T1
 >a : string
 
 interface I22 extends Identifiable<T1> { a: string }
->I22 : I22
->Identifiable : Identifiable<T>
->T1 : T1
 >a : string
 
 interface I23 extends Identifiable<T1 & { b: number}> { a: string }
->I23 : I23
->Identifiable : Identifiable<T>
->T1 : T1
 >b : number
 >a : string
 
@@ -181,13 +135,8 @@ type U = { a: number } | { b: string };
 >b : string
 
 interface I30 extends U { x: string }
->I30 : I30
->U : U
 >x : string
 
 interface I31<T> extends T { x: string }
->I31 : I31<T>
->T : T
->T : T
 >x : string
 

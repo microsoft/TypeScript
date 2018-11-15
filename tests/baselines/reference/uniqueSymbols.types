@@ -123,7 +123,6 @@ function* genFuncYieldVarCall() { yield varCall; }
 // generator function yield with return type query
 function* genFuncYieldConstCallWithTypeQuery(): IterableIterator<typeof constCall> { yield constCall; }
 >genFuncYieldConstCallWithTypeQuery : () => IterableIterator<unique symbol>
->IterableIterator : IterableIterator<T>
 >constCall : unique symbol
 >yield constCall : any
 >constCall : unique symbol
@@ -191,7 +190,6 @@ class C {
 }
 declare const c: C;
 >c : C
->C : C
 
 const constInitToCReadonlyStaticCall = C.readonlyStaticCall;
 >constInitToCReadonlyStaticCall : symbol
@@ -285,28 +283,23 @@ const constInitToCReadwriteCallWithTypeQuery: typeof c.readwriteCall = c.readwri
 
 const constInitToCReadonlyCallWithIndexedAccess: C["readonlyCall"] = c.readonlyCall;
 >constInitToCReadonlyCallWithIndexedAccess : symbol
->C : C
 >c.readonlyCall : symbol
 >c : C
 >readonlyCall : symbol
 
 const constInitToCReadwriteCallWithIndexedAccess: C["readwriteCall"] = c.readwriteCall;
 >constInitToCReadwriteCallWithIndexedAccess : symbol
->C : C
 >c.readwriteCall : symbol
 >c : C
 >readwriteCall : symbol
 
 // interfaces
 interface I {
->I : I
-
     readonly readonlyType: unique symbol;
 >readonlyType : unique symbol
 }
 declare const i: I;
 >i : I
->I : I
 
 const constInitToIReadonlyType = i.readonlyType;
 >constInitToIReadonlyType : symbol
@@ -325,7 +318,6 @@ const constInitToIReadonlyTypeWithTypeQuery: typeof i.readonlyType = i.readonlyT
 
 const constInitToIReadonlyTypeWithIndexedAccess: I["readonlyType"] = i.readonlyType;
 >constInitToIReadonlyTypeWithIndexedAccess : unique symbol
->I : I
 >i.readonlyType : unique symbol
 >i : I
 >readonlyType : unique symbol
@@ -346,7 +338,6 @@ type L = {
 };
 declare const l: L;
 >l : L
->L : L
 
 const constInitToLReadonlyType = l.readonlyType;
 >constInitToLReadonlyType : symbol
@@ -386,14 +377,12 @@ const constInitToLReadonlyNestedTypeWithTypeQuery: typeof l.nested.readonlyNeste
 
 const constInitToLReadonlyTypeWithIndexedAccess: L["readonlyType"] = l.readonlyType;
 >constInitToLReadonlyTypeWithIndexedAccess : unique symbol
->L : L
 >l.readonlyType : unique symbol
 >l : L
 >readonlyType : unique symbol
 
 const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNestedType"] = l.nested.readonlyNestedType;
 >constInitToLReadonlyNestedTypeWithIndexedAccess : unique symbol
->L : L
 >l.nested.readonlyNestedType : unique symbol
 >l.nested : { readonly readonlyNestedType: unique symbol; }
 >l : L
@@ -402,8 +391,8 @@ const constInitToLReadonlyNestedTypeWithIndexedAccess: L["nested"]["readonlyNest
 
 // type argument inference
 const promiseForConstCall = Promise.resolve(constCall);
->promiseForConstCall : Promise<symbol>
->Promise.resolve(constCall) : Promise<symbol>
+>promiseForConstCall : Promise<unique symbol>
+>Promise.resolve(constCall) : Promise<unique symbol>
 >Promise.resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
 >Promise : PromiseConstructor
 >resolve : { <T>(value: T | PromiseLike<T>): Promise<T>; (): Promise<void>; }
@@ -424,17 +413,16 @@ declare namespace N { const s: unique symbol; }
 
 declare const o: { [s]: "a", [N.s]: "b" };
 >o : { [s]: "a"; [N.s]: "b"; }
+>[s] : "a"
 >s : unique symbol
+>[N.s] : "b"
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
 declare function f<T>(x: T): T;
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 declare function g(x: typeof s): void;
 >g : { (x: unique symbol): void; (x: unique symbol): void; }
@@ -452,19 +440,19 @@ declare function g(x: typeof N.s): void;
 
 // argument inference
 f(s);
->f(s) : symbol
+>f(s) : unique symbol
 >f : <T>(x: T) => T
 >s : unique symbol
 
 f(N.s);
->f(N.s) : symbol
+>f(N.s) : unique symbol
 >f : <T>(x: T) => T
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
 f(N["s"]);
->f(N["s"]) : symbol
+>f(N["s"]) : unique symbol
 >f : <T>(x: T) => T
 >N["s"] : unique symbol
 >N : typeof N
@@ -697,19 +685,19 @@ g(N["s"]);
 
 // falsy expressions
 s || "";
->s || "" : unique symbol | ""
+>s || "" : "" | unique symbol
 >s : unique symbol
 >"" : ""
 
 N.s || "";
->N.s || "" : unique symbol | ""
+>N.s || "" : "" | unique symbol
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 >"" : ""
 
 N["s"] || "";
->N["s"] || "" : unique symbol | ""
+>N["s"] || "" : "" | unique symbol
 >N["s"] : unique symbol
 >N : typeof N
 >"s" : "s"
@@ -759,10 +747,12 @@ Math.random() * 2 ? N["s"] : "a";
 >{    [s]: "a",    [N.s]: "b",} : { [s]: string; [N.s]: string; }
 
     [s]: "a",
+>[s] : string
 >s : unique symbol
 >"a" : "a"
 
     [N.s]: "b",
+>[N.s] : string
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
@@ -774,17 +764,21 @@ class C1 {
 >C1 : C1
 
     static [s]: "a";
+>[s] : "a"
 >s : unique symbol
 
     static [N.s]: "b";
+>[N.s] : "b"
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
 
     [s]: "a";
+>[s] : "a"
 >s : unique symbol
 
     [N.s]: "b";
+>[N.s] : "b"
 >N.s : unique symbol
 >N : typeof N
 >s : unique symbol
@@ -793,25 +787,20 @@ class C1 {
 // contextual types
 
 interface Context {
->Context : Context
-
     method1(): typeof s;
 >method1 : () => unique symbol
 >s : unique symbol
 
     method2(): Promise<typeof s>;
 >method2 : () => Promise<unique symbol>
->Promise : Promise<T>
 >s : unique symbol
 
     method3(): AsyncIterableIterator<typeof s>;
 >method3 : () => AsyncIterableIterator<unique symbol>
->AsyncIterableIterator : AsyncIterableIterator<T>
 >s : unique symbol
 
     method4(): IterableIterator<typeof s>;
 >method4 : () => IterableIterator<unique symbol>
->IterableIterator : IterableIterator<T>
 >s : unique symbol
 
     method5(p?: typeof s): typeof s;
@@ -823,7 +812,6 @@ interface Context {
 
 const o3: Context = {
 >o3 : Context
->Context : Context
 >{    method1() {        return s; // return type should not widen due to contextual type    },    async method2() {        return s; // return type should not widen due to contextual type    },    async * method3() {        yield s; // yield type should not widen due to contextual type    },    * method4() {        yield s; // yield type should not widen due to contextual type    },    method5(p = s) { // parameter should not widen due to contextual type        return p;    },} : { method1(): unique symbol; method2(): Promise<unique symbol>; method3(): AsyncIterableIterator<unique symbol>; method4(): IterableIterator<unique symbol>; method5(p?: unique symbol): unique symbol; }
 
     method1() {
@@ -886,8 +874,6 @@ const o4 = {
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: unique symbol) => unique symbol
 >p : unique symbol
->I : I
->I : I
 
         return p;
 >p : unique symbol
@@ -910,8 +896,6 @@ const ce0 = class {
     method2(p: I["readonlyType"]): I["readonlyType"] {
 >method2 : (p: unique symbol) => unique symbol
 >p : unique symbol
->I : I
->I : I
 
         return p;
 >p : unique symbol

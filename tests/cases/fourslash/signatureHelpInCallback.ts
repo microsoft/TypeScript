@@ -5,7 +5,5 @@
 ////    /*2*/
 ////});
 
-goTo.marker('1');
-verify.signatureHelpPresent();
-goTo.marker('2');
-verify.not.signatureHelpPresent();
+verify.signatureHelp({ marker: "1", text: "forEach(f: () => void): any" })
+verify.noSignatureHelp("2");

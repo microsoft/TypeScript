@@ -18,7 +18,7 @@ verify.referenceGroups([r0, r2], [
 ]);
 
 verify.referenceGroups(r1, [
-    { definition: "constructor A(): A", ranges: [r1] },
+    { definition: "class A", ranges: [r1] },
     { definition: "const A: typeof A", ranges: [r4] }
 ]);
 
@@ -26,6 +26,6 @@ verify.referenceGroups(r3, [
     { definition: "const A: typeof A", ranges: [r3, r4] }
 ]);
 verify.referenceGroups(r4, [
-    { definition: "const A: new () => A", ranges: [r3, r4] }
+    { definition: "const A: typeof A", ranges: [r3, r4] }
 ]);
 

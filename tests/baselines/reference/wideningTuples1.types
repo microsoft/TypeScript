@@ -1,10 +1,7 @@
 === tests/cases/conformance/types/tuple/wideningTuples1.ts ===
 declare function foo<T extends [any]>(x: T): T;
 >foo : <T extends [any]>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var y = foo([undefined]);
 >y : [any]

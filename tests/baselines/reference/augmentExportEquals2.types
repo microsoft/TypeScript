@@ -6,7 +6,6 @@ import "./file2";
 let a: x.A; // should not work
 >a : any
 >x : any
->A : No type information available!
 
 === tests/cases/compiler/file1.ts ===
 function foo() {}
@@ -21,8 +20,9 @@ import x = require("./file1");
 
 // should error since './file1' does not have namespace meaning
 declare module "./file1" {
+>"./file1" : any
+
     interface A { a }
->A : A
 >a : any
 }
 

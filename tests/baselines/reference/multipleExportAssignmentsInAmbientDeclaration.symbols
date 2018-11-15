@@ -1,5 +1,7 @@
 === tests/cases/compiler/multipleExportAssignmentsInAmbientDeclaration.ts ===
 declare module "m1" {
+>"m1" : Symbol("m1", Decl(multipleExportAssignmentsInAmbientDeclaration.ts, 0, 0))
+
     var a: number
 >a : Symbol(a, Decl(multipleExportAssignmentsInAmbientDeclaration.ts, 1, 7))
 

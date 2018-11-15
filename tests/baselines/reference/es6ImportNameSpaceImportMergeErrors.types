@@ -8,7 +8,6 @@ import * as nameSpaceBinding from "./es6ImportNameSpaceImportMergeErrors_0";
 >nameSpaceBinding : typeof nameSpaceBinding
 
 interface nameSpaceBinding { } // this should be ok
->nameSpaceBinding : nameSpaceBinding
 
 import * as nameSpaceBinding1 from "./es6ImportNameSpaceImportMergeErrors_0"; // should be error
 >nameSpaceBinding1 : typeof nameSpaceBinding

@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 ////interface I<T> {
-////    [|{| "isWriteAccess": true, "isDefinition": true |}x|]: boolean;
+////    [|{| "isDefinition": true |}x|]: boolean;
 ////}
 ////declare const i: I<number>;
 ////const { [|{| "isWriteAccess": true, "isDefinition": true |}x|] } = i;

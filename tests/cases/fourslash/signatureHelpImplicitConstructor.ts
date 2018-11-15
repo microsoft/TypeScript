@@ -4,7 +4,8 @@
 ////}
 ////var implicitConstructor = new ImplicitConstructor(/**/);
 
-goTo.marker();
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("ImplicitConstructor(): ImplicitConstructor");
-verify.currentSignatureParameterCountIs(0);
+verify.signatureHelp({
+    marker: "",
+    text: "ImplicitConstructor(): ImplicitConstructor",
+    parameterCount: 0,
+});

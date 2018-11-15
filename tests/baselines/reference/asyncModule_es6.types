@@ -1,4 +1,4 @@
 === tests/cases/conformance/async/es6/asyncModule_es6.ts ===
 async module M {   
->M : any
-}
+No type information for this code.}
+No type information for this code.

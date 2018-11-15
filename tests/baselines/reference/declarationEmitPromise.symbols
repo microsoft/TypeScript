@@ -5,7 +5,7 @@ export class bluebird<T> {
 
     static all: Array<bluebird<any>>;
 >all : Symbol(bluebird.all, Decl(declarationEmitPromise.ts, 0, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >bluebird : Symbol(bluebird, Decl(declarationEmitPromise.ts, 0, 0))
 }
 

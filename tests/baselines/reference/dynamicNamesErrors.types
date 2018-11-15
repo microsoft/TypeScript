@@ -8,45 +8,41 @@ const c1 = 1;
 >1 : 1
 
 interface T0 {
->T0 : T0
-
     [c0]: number;
+>[c0] : number
 >c0 : "1"
 
     1: number;
+>1 : number
 }
 
 interface T1 {
->T1 : T1
-
     [c0]: number;
+>[c0] : number
 >c0 : "1"
 }
 
 interface T2 {
->T2 : T2
-
     [c0]: string;
+>[c0] : string
 >c0 : "1"
 }
 
 interface T3 {
->T3 : T3
-
     [c0]: number;
+>[c0] : number
 >c0 : "1"
 
     [c1]: string;
+>[c1] : number
 >c1 : 1
 }
 
 let t1: T1;
 >t1 : T1
->T1 : T1
 
 let t2: T2;
 >t2 : T2
->T2 : T2
 
 t1 = t2;
 >t1 = t2 : T2
@@ -79,12 +75,12 @@ const w = Symbol();
 >Symbol : SymbolConstructor
 
 export interface InterfaceMemberVisibility {
->InterfaceMemberVisibility : InterfaceMemberVisibility
-
     [x]: number;
+>[x] : number
 >x : unique symbol
 
     [y](): number;
+>[y] : () => number
 >y : unique symbol
 }
 
@@ -92,32 +88,40 @@ export class ClassMemberVisibility {
 >ClassMemberVisibility : ClassMemberVisibility
 
     static [x]: number;
+>[x] : number
 >x : unique symbol
 
     static [y](): number { return 0; }
+>[y] : () => number
 >y : unique symbol
 >0 : 0
 
     static get [z](): number { return 0; }
+>[z] : number
 >z : unique symbol
 >0 : 0
 
     static set [w](value: number) { }
+>[w] : number
 >w : unique symbol
 >value : number
 
     [x]: number;
+>[x] : number
 >x : unique symbol
 
     [y](): number { return 0; }
+>[y] : () => number
 >y : unique symbol
 >0 : 0
 
     get [z](): number { return 0; }
+>[z] : number
 >z : unique symbol
 >0 : 0
 
     set [w](value: number) { }
+>[w] : number
 >w : unique symbol
 >value : number
 }
@@ -126,9 +130,11 @@ export type ObjectTypeVisibility = {
 >ObjectTypeVisibility : ObjectTypeVisibility
 
     [x]: number;
+>[x] : number
 >x : unique symbol
 
     [y](): number;
+>[y] : () => number
 >y : unique symbol
 
 };
@@ -138,18 +144,22 @@ export const ObjectLiteralVisibility = {
 >{    [x]: 0,    [y](): number { return 0; },    get [z](): number { return 0; },    set [w](value: number) { },} : { [x]: number; [y](): number; readonly [z]: number; [w]: number; }
 
     [x]: 0,
+>[x] : number
 >x : unique symbol
 >0 : 0
 
     [y](): number { return 0; },
+>[y] : () => number
 >y : unique symbol
 >0 : 0
 
     get [z](): number { return 0; },
+>[z] : number
 >z : unique symbol
 >0 : 0
 
     set [w](value: number) { },
+>[w] : number
 >w : unique symbol
 >value : number
 

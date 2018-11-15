@@ -6,14 +6,14 @@ namespace ts.codefix {
         errorCodes,
         getCodeActions: (context) => {
             const changes = textChanges.ChangeTracker.with(context, t => makeChange(t, context.sourceFile, context.span.start));
-            return [{ description: getLocaleSpecificMessage(Diagnostics.Call_decorator_expression), changes, fixId }];
+            return [createCodeFixAction(fixId, changes, Diagnostics.Call_decorator_expression, fixId, Diagnostics.Add_to_all_uncalled_decorators)];
         },
         fixIds: [fixId],
-        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file!, diag.start!)),
+        getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) => makeChange(changes, diag.file, diag.start)),
     });
 
     function makeChange(changeTracker: textChanges.ChangeTracker, sourceFile: SourceFile, pos: number) {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         const decorator = findAncestor(token, isDecorator)!;
         Debug.assert(!!decorator, "Expected position to be owned by a decorator.");
         const replacement = createCall(decorator.expression, /*typeArguments*/ undefined, /*argumentsArray*/ undefined);

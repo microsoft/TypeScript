@@ -1,8 +1,8 @@
 === tests/cases/compiler/resolveModuleNameWithSameLetDeclarationName2.ts ===
 declare module "punycode" {
-    interface ucs2 {
->ucs2 : ucs2
+>"punycode" : typeof import("punycode")
 
+    interface ucs2 {
         decode(string: string): string;
 >decode : (string: string) => string
 >string : string
@@ -13,6 +13,5 @@ declare module "punycode" {
     }
 
     export let ucs2: ucs2;
->ucs2 : ucs2
 >ucs2 : ucs2
 }

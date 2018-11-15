@@ -7,20 +7,32 @@ class C {
 >C : Symbol(C, Decl(objectTypeWithStringNamedNumericProperty.ts, 0, 0))
 
     "0.1": void;
+>"0.1" : Symbol(C["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 4, 9))
+
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>".1" : Symbol(C[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 5, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "1": number;
+>"1" : Symbol(C["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 6, 17))
+
     "1.": string;
+>"1." : Symbol(C["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 7, 16))
+
     "1..": boolean;
+>"1.." : Symbol(C["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 8, 17))
+
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"1.0" : Symbol(C["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 9, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1.0" : Symbol(C["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 10, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1" : Symbol(C["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 11, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 var c: C;
@@ -113,20 +125,32 @@ interface I {
 >I : Symbol(I, Decl(objectTypeWithStringNamedNumericProperty.ts, 33, 16))
 
     "0.1": void;
+>"0.1" : Symbol(I["0.1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 35, 13))
+
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>".1" : Symbol(I[".1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 36, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "1": number;
+>"1" : Symbol(I["1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 37, 17))
+
     "1.": string;
+>"1." : Symbol(I["1."], Decl(objectTypeWithStringNamedNumericProperty.ts, 38, 16))
+
     "1..": boolean;
+>"1.." : Symbol(I["1.."], Decl(objectTypeWithStringNamedNumericProperty.ts, 39, 17))
+
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"1.0" : Symbol(I["1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 40, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1.0" : Symbol(I["-1.0"], Decl(objectTypeWithStringNamedNumericProperty.ts, 41, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1" : Symbol(I["-1"], Decl(objectTypeWithStringNamedNumericProperty.ts, 42, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 var i: I;
@@ -219,20 +243,32 @@ var a: {
 >a : Symbol(a, Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 3))
 
     "0.1": void;
+>"0.1" : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 66, 8))
+
     ".1": Object;
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>".1" : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 67, 16))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "1": number;
+>"1" : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 68, 17))
+
     "1.": string;
+>"1." : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 69, 16))
+
     "1..": boolean;
+>"1.." : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 70, 17))
+
     "1.0": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 71, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     "-1.0": RegExp;
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 72, 16))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "-1": Date;
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 73, 19))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 var r1 = a['0.1'];
@@ -321,18 +357,31 @@ var b = {
 >b : Symbol(b, Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 3))
 
     "0.1": <void>null,
+>"0.1" : Symbol("0.1", Decl(objectTypeWithStringNamedNumericProperty.ts, 96, 9))
+
     ".1": new Object(),
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>".1" : Symbol(".1", Decl(objectTypeWithStringNamedNumericProperty.ts, 97, 22))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     "1": 1,
+>"1" : Symbol("1", Decl(objectTypeWithStringNamedNumericProperty.ts, 98, 23))
+
     "1.": "",
+>"1." : Symbol("1.", Decl(objectTypeWithStringNamedNumericProperty.ts, 99, 11))
+
     "1..": true,
+>"1.." : Symbol("1..", Decl(objectTypeWithStringNamedNumericProperty.ts, 100, 13))
+
     "1.0": new Date(),
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"1.0" : Symbol("1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 101, 16))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     "-1.0": /123/,
+>"-1.0" : Symbol("-1.0", Decl(objectTypeWithStringNamedNumericProperty.ts, 102, 22))
+
     "-1": Date
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>"-1" : Symbol("-1", Decl(objectTypeWithStringNamedNumericProperty.ts, 103, 18))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 };
 

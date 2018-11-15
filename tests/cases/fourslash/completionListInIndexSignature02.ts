@@ -13,4 +13,8 @@
 ////type T = {
 ////    [xyz: /*5*/
 
-goTo.eachMarker(() => verify.not.completionListAllowsNewIdentifier());
+const exact = completion.globalTypesPlus(["I", "C"]);
+verify.completions(
+    { marker: ["1", "2"], exact: ["T", ...exact] },
+    { marker: ["3", "4", "5"], exact: completion.globalTypesPlus(["I", "C", "T"]) },
+);

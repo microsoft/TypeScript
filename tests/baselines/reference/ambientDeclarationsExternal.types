@@ -20,6 +20,8 @@ var n: number;
 === tests/cases/conformance/ambient/decls.ts ===
 // Ambient external module with export assignment
 declare module 'equ' {
+>'equ' : typeof import("equ")
+
     var x;
 >x : any
 
@@ -28,6 +30,8 @@ declare module 'equ' {
 }
 
 declare module 'equ2' {
+>'equ2' : typeof import("equ2")
+
     var x: number;
 >x : number
 }

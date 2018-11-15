@@ -1,7 +1,5 @@
 === tests/cases/compiler/staticMemberOfClassAndPublicMemberOfAnotherClassAssignment.ts ===
 interface A {
->A : A
-
     prop();
 >prop : () => any
 }
@@ -20,7 +18,6 @@ class C {
 
 var a: A = new B();
 >a : A
->A : A
 >new B() : B
 >B : typeof B
 
@@ -42,7 +39,6 @@ a = C;
 
 var b: B = new C(); // error prop is missing
 >b : B
->B : B
 >new C() : C
 >C : typeof C
 
@@ -63,7 +59,6 @@ b = a;
 
 var c: C = new B();
 >c : C
->C : C
 >new B() : B
 >B : typeof B
 

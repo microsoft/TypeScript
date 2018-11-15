@@ -1,7 +1,5 @@
 === tests/cases/compiler/newOperator.ts ===
 interface ifc { }
->ifc : ifc
-
 // Attempting to 'new' an interface yields poor error
 var i = new ifc();
 >i : any
@@ -49,6 +47,7 @@ var t3 = new string[]( );
 >new string[]( ) : any
 >string[] : any
 >string : any
+> : any
 
 var t4 =
 >t4 : any
@@ -62,6 +61,8 @@ string
 
 [
     ]
+> : any
+
     (
         );
 
@@ -101,7 +102,6 @@ class S {
     public get xs(): M.T[] {
 >xs : M.T[]
 >M : any
->T : M.T
 
         return new M.T[];
 >new M.T[] : any
@@ -109,6 +109,7 @@ class S {
 >M.T : typeof M.T
 >M : typeof M
 >T : typeof M.T
+> : any
     }
 }
 

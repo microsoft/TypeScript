@@ -2,7 +2,7 @@
 export declare class ObservableArray<T> implements Array<T> { // MS.Entertainment.ObservableArray
 >ObservableArray : Symbol(ObservableArray, Decl(genericArrayExtenstions.ts, 0, 0))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(genericArrayExtenstions.ts, 0, 37))
 
 concat<U extends T[]>(...items: U[]): T[];

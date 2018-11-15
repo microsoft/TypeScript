@@ -6,76 +6,76 @@ export class publicClassWithWithPrivateParmeterTypes {
 >publicClassWithWithPrivateParmeterTypes : publicClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod() { // Error
->myPublicStaticMethod : () => Widget1
+>myPublicStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod() {
->myPrivateStaticMethod : () => Widget1
+>myPrivateStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod() { // Error
->myPublicMethod : () => Widget1
+>myPublicMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod() {
->myPrivateMethod : () => Widget1
+>myPrivateMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => Widget3
+>myPublicStaticMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     private static myPrivateStaticMethod1() {
->myPrivateStaticMethod1 : () => Widget3
+>myPrivateStaticMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     myPublicMethod1() { // Error
->myPublicMethod1 : () => Widget3
+>myPublicMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     private myPrivateMethod1() {
->myPrivateMethod1 : () => Widget3
+>myPrivateMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
 }
 
@@ -83,236 +83,238 @@ class privateClassWithWithPrivateParmeterTypes {
 >privateClassWithWithPrivateParmeterTypes : privateClassWithWithPrivateParmeterTypes
 
     static myPublicStaticMethod() { 
->myPublicStaticMethod : () => Widget1
+>myPublicStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private static myPrivateStaticMethod() {
->myPrivateStaticMethod : () => Widget1
+>myPrivateStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     myPublicMethod() { 
->myPublicMethod : () => Widget1
+>myPublicMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     private myPrivateMethod() {
->myPrivateMethod : () => Widget1
+>myPrivateMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
         return exporter.createExportedWidget1();;
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
     }
     static myPublicStaticMethod1() { 
->myPublicStaticMethod1 : () => Widget3
+>myPublicStaticMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     private static myPrivateStaticMethod1() {
->myPrivateStaticMethod1 : () => Widget3
+>myPrivateStaticMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     myPublicMethod1() { 
->myPublicMethod1 : () => Widget3
+>myPublicMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
     private myPrivateMethod1() {
->myPrivateMethod1 : () => Widget3
+>myPrivateMethod1 : () => import("GlobalWidgets").Widget3
 
         return exporter.createExportedWidget3();;
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
     }
 }
 
 export function publicFunctionWithPrivateParmeterTypes() { // Error
->publicFunctionWithPrivateParmeterTypes : () => Widget1
+>publicFunctionWithPrivateParmeterTypes : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
     return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 }
 function privateFunctionWithPrivateParmeterTypes()   {
->privateFunctionWithPrivateParmeterTypes : () => Widget1
+>privateFunctionWithPrivateParmeterTypes : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 
     return exporter.createExportedWidget1();
->exporter.createExportedWidget1() : Widget1
->exporter.createExportedWidget1 : () => Widget1
+>exporter.createExportedWidget1() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
+>exporter.createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 >exporter : typeof exporter
->createExportedWidget1 : () => Widget1
+>createExportedWidget1 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").Widget1
 }
 export function publicFunctionWithPrivateParmeterTypes1() { // Error
->publicFunctionWithPrivateParmeterTypes1 : () => Widget3
+>publicFunctionWithPrivateParmeterTypes1 : () => import("GlobalWidgets").Widget3
 
     return exporter.createExportedWidget3();
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
 }
 function privateFunctionWithPrivateParmeterTypes1() {
->privateFunctionWithPrivateParmeterTypes1 : () => Widget3
+>privateFunctionWithPrivateParmeterTypes1 : () => import("GlobalWidgets").Widget3
 
     return exporter.createExportedWidget3();
->exporter.createExportedWidget3() : Widget3
->exporter.createExportedWidget3 : () => Widget3
+>exporter.createExportedWidget3() : import("GlobalWidgets").Widget3
+>exporter.createExportedWidget3 : () => import("GlobalWidgets").Widget3
 >exporter : typeof exporter
->createExportedWidget3 : () => Widget3
+>createExportedWidget3 : () => import("GlobalWidgets").Widget3
 }
 
 export class publicClassWithPrivateModuleReturnTypes {
 >publicClassWithPrivateModuleReturnTypes : publicClassWithPrivateModuleReturnTypes
 
     static myPublicStaticMethod() { // Error
->myPublicStaticMethod : () => SpecializedWidget.Widget2
+>myPublicStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod() { // Error
->myPublicMethod : () => SpecializedWidget.Widget2
+>myPublicMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => SpecializedGlobalWidget.Widget4
+>myPublicStaticMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
         return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
     }
     myPublicMethod1() { // Error
->myPublicMethod1 : () => SpecializedGlobalWidget.Widget4
+>myPublicMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
         return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
     }
 }
 export function publicFunctionWithPrivateModuleReturnTypes() { // Error
->publicFunctionWithPrivateModuleReturnTypes : () => SpecializedWidget.Widget2
+>publicFunctionWithPrivateModuleReturnTypes : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
     return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 export function publicFunctionWithPrivateModuleReturnTypes1() { // Error
->publicFunctionWithPrivateModuleReturnTypes1 : () => SpecializedGlobalWidget.Widget4
+>publicFunctionWithPrivateModuleReturnTypes1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
     return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 }
 
 class privateClassWithPrivateModuleReturnTypes {
 >privateClassWithPrivateModuleReturnTypes : privateClassWithPrivateModuleReturnTypes
 
     static myPublicStaticMethod() { 
->myPublicStaticMethod : () => SpecializedWidget.Widget2
+>myPublicStaticMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     myPublicMethod() { 
->myPublicMethod : () => SpecializedWidget.Widget2
+>myPublicMethod : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
         return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
     }
     static myPublicStaticMethod1() { // Error
->myPublicStaticMethod1 : () => SpecializedGlobalWidget.Widget4
+>myPublicStaticMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
         return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
     }
     myPublicMethod1() { // Error
->myPublicMethod1 : () => SpecializedGlobalWidget.Widget4
+>myPublicMethod1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
         return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
     }
 }
 function privateFunctionWithPrivateModuleReturnTypes() { 
->privateFunctionWithPrivateModuleReturnTypes : () => SpecializedWidget.Widget2
+>privateFunctionWithPrivateModuleReturnTypes : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 
     return exporter.createExportedWidget2();
->exporter.createExportedWidget2() : SpecializedWidget.Widget2
->exporter.createExportedWidget2 : () => SpecializedWidget.Widget2
+>exporter.createExportedWidget2() : import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
+>exporter.createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 >exporter : typeof exporter
->createExportedWidget2 : () => SpecializedWidget.Widget2
+>createExportedWidget2 : () => import("tests/cases/compiler/privacyFunctionReturnTypeDeclFile_Widgets").SpecializedWidget.Widget2
 }
 function privateFunctionWithPrivateModuleReturnTypes1() {
->privateFunctionWithPrivateModuleReturnTypes1 : () => SpecializedGlobalWidget.Widget4
+>privateFunctionWithPrivateModuleReturnTypes1 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 
     return exporter.createExportedWidget4();
->exporter.createExportedWidget4() : SpecializedGlobalWidget.Widget4
->exporter.createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4() : import("GlobalWidgets").SpecializedGlobalWidget.Widget4
+>exporter.createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 >exporter : typeof exporter
->createExportedWidget4 : () => SpecializedGlobalWidget.Widget4
+>createExportedWidget4 : () => import("GlobalWidgets").SpecializedGlobalWidget.Widget4
 }
 
 === tests/cases/compiler/privacyFunctionReturnTypeDeclFile_GlobalWidgets.ts ===
 declare module "GlobalWidgets" {
+>"GlobalWidgets" : typeof import("GlobalWidgets")
+
     export class Widget3 {
 >Widget3 : Widget3
 
@@ -321,7 +323,6 @@ declare module "GlobalWidgets" {
     }
     export function createWidget3(): Widget3;
 >createWidget3 : () => Widget3
->Widget3 : Widget3
 
     export module SpecializedGlobalWidget {
 >SpecializedGlobalWidget : typeof SpecializedGlobalWidget
@@ -334,7 +335,6 @@ declare module "GlobalWidgets" {
         }
         function createWidget4(): Widget4;
 >createWidget4 : () => Widget4
->Widget4 : Widget4
     }
 }
 

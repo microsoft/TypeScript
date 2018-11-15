@@ -13,7 +13,6 @@ var STRING: string;
 
 var OBJECT: Object;
 >OBJECT : Object
->Object : Object
 
 class CLASS {
 >CLASS : CLASS

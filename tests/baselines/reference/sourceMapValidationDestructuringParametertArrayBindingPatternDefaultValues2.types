@@ -11,7 +11,6 @@ type Robot = [string, string[]];
 
 var robotA: Robot = ["trimmer", ["trimming", "edging"]];
 >robotA : [string, string[]]
->Robot : [string, string[]]
 >["trimmer", ["trimming", "edging"]] : [string, string[]]
 >"trimmer" : "trimmer"
 >["trimming", "edging"] : string[]
@@ -25,7 +24,6 @@ function foo1([, skillA = ["noSkill", "noSkill"]]: Robot= ["name", ["skill1", "s
 >["noSkill", "noSkill"] : string[]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->Robot : [string, string[]]
 >["name", ["skill1", "skill2"]] : [string, string[]]
 >"name" : "name"
 >["skill1", "skill2"] : string[]
@@ -44,7 +42,6 @@ function foo2([nameMB = "noName"]: Robot = ["name", ["skill1", "skill2"]]) {
 >foo2 : ([nameMB]?: [string, string[]]) => void
 >nameMB : string
 >"noName" : "noName"
->Robot : [string, string[]]
 >["name", ["skill1", "skill2"]] : [string, string[]]
 >"name" : "name"
 >["skill1", "skill2"] : string[]
@@ -76,7 +73,6 @@ function foo3([nameMA = "noName", [
 >["noSkill", "noSkill"] : [string, string]
 >"noSkill" : "noSkill"
 >"noSkill" : "noSkill"
->Robot : [string, string[]]
 
     console.log(nameMA);
 >console.log(nameMA) : void

@@ -1,0 +1,20 @@
+=== tests/cases/compiler/jsxNestedWithinTernaryParsesCorrectly.tsx ===
+const emptyMessage = null as any;
+>emptyMessage : Symbol(emptyMessage, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 0, 5))
+
+const a = (
+>a : Symbol(a, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 1, 5))
+
+    <div>
+      {0 ? (
+        emptyMessage // must be identifier?
+>emptyMessage : Symbol(emptyMessage, Decl(jsxNestedWithinTernaryParsesCorrectly.tsx, 0, 5))
+
+      ) : (
+          // must be exactly two expression holes
+        <span>
+          {0}{0}
+        </span>
+      )}
+    </div>
+);

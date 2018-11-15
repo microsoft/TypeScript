@@ -11,7 +11,10 @@ const A = require("./other");
 const a = new A().id;
 
 const B = function() { this.id = 1; }
-const b = new B().id;
+B.prototype.m = function() { this.x = 2; }
+const b = new B();
+b.id;
+b.x;
 
 // @filename: other.js
 function A() { this.id = 1; }

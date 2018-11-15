@@ -12,7 +12,7 @@
 ////[|alias|].call(this); // value
 
 verify.singleReferenceGroup([
-    "(alias) namespace alias",
     "(alias) function alias(): void",
+    "(alias) namespace alias",
     "import alias = ATest"
 ].join("\n"));

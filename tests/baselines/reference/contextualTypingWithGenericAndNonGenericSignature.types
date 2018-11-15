@@ -9,13 +9,8 @@ var f2: {
 >y : number
 
     <T, U>(x: T, y: U): T
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
 
 };
 
@@ -31,13 +26,8 @@ var f3: {
 >f3 : { <T, U>(x: T, y: U): T; (x: string, y: number): string; }
 
     <T, U>(x: T, y: U): T
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
 
     (x: string, y: number): string;
 >x : string

@@ -1,10 +1,14 @@
 === tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts ===
 interface StrNum extends Array<string|number> {
 >StrNum : Symbol(StrNum, Decl(arityAndOrderCompatibility01.ts, 0, 0))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     0: string;
+>0 : Symbol(StrNum[0], Decl(arityAndOrderCompatibility01.ts, 0, 47))
+
     1: number;
+>1 : Symbol(StrNum[1], Decl(arityAndOrderCompatibility01.ts, 1, 14))
+
     length: 2;
 >length : Symbol(StrNum.length, Decl(arityAndOrderCompatibility01.ts, 2, 14))
 }
@@ -20,7 +24,11 @@ var z: {
 >z : Symbol(z, Decl(arityAndOrderCompatibility01.ts, 8, 3))
 
     0: string;
+>0 : Symbol(0, Decl(arityAndOrderCompatibility01.ts, 8, 8))
+
     1: number;
+>1 : Symbol(1, Decl(arityAndOrderCompatibility01.ts, 9, 14))
+
     length: 2;
 >length : Symbol(length, Decl(arityAndOrderCompatibility01.ts, 10, 14))
 }

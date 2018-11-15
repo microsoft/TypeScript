@@ -17,10 +17,12 @@ class C {
 
     // Computed properties
     get ["get1"]() { return new Foo }
+>["get1"] : Symbol(C["get1"], Decl(computedPropertyNames36_ES6.ts, 4, 22))
 >"get1" : Symbol(C["get1"], Decl(computedPropertyNames36_ES6.ts, 4, 22))
 >Foo : Symbol(Foo, Decl(computedPropertyNames36_ES6.ts, 0, 0))
 
     set ["set1"](p: Foo2) { }
+>["set1"] : Symbol(C["set1"], Decl(computedPropertyNames36_ES6.ts, 7, 37))
 >"set1" : Symbol(C["set1"], Decl(computedPropertyNames36_ES6.ts, 7, 37))
 >p : Symbol(p, Decl(computedPropertyNames36_ES6.ts, 8, 17))
 >Foo2 : Symbol(Foo2, Decl(computedPropertyNames36_ES6.ts, 0, 15))

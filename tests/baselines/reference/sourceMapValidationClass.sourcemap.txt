@@ -128,39 +128,36 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>        return "<h1>" + this.greeting + "</h1>";
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^^^
-5 >                     ^^^
-6 >                        ^^^^
-7 >                            ^
-8 >                             ^^^^^^^^
-9 >                                     ^^^
-10>                                        ^^^^^^^
-11>                                               ^
+2 >        ^^^^^^^
+3 >               ^^^^^^
+4 >                     ^^^
+5 >                        ^^^^
+6 >                            ^
+7 >                             ^^^^^^^^
+8 >                                     ^^^
+9 >                                        ^^^^^^^
+10>                                               ^
 1->greet() {
   >        
-2 >        return
-3 >               
-4 >               "<h1>"
-5 >                      + 
-6 >                        this
-7 >                            .
-8 >                             greeting
-9 >                                      + 
-10>                                        "</h1>"
-11>                                               ;
+2 >        return 
+3 >               "<h1>"
+4 >                      + 
+5 >                        this
+6 >                            .
+7 >                             greeting
+8 >                                      + 
+9 >                                        "</h1>"
+10>                                               ;
 1->Emitted(11, 9) Source(5, 9) + SourceIndex(0)
-2 >Emitted(11, 15) Source(5, 15) + SourceIndex(0)
-3 >Emitted(11, 16) Source(5, 16) + SourceIndex(0)
-4 >Emitted(11, 22) Source(5, 22) + SourceIndex(0)
-5 >Emitted(11, 25) Source(5, 25) + SourceIndex(0)
-6 >Emitted(11, 29) Source(5, 29) + SourceIndex(0)
-7 >Emitted(11, 30) Source(5, 30) + SourceIndex(0)
-8 >Emitted(11, 38) Source(5, 38) + SourceIndex(0)
-9 >Emitted(11, 41) Source(5, 41) + SourceIndex(0)
-10>Emitted(11, 48) Source(5, 48) + SourceIndex(0)
-11>Emitted(11, 49) Source(5, 49) + SourceIndex(0)
+2 >Emitted(11, 16) Source(5, 16) + SourceIndex(0)
+3 >Emitted(11, 22) Source(5, 22) + SourceIndex(0)
+4 >Emitted(11, 25) Source(5, 25) + SourceIndex(0)
+5 >Emitted(11, 29) Source(5, 29) + SourceIndex(0)
+6 >Emitted(11, 30) Source(5, 30) + SourceIndex(0)
+7 >Emitted(11, 38) Source(5, 38) + SourceIndex(0)
+8 >Emitted(11, 41) Source(5, 41) + SourceIndex(0)
+9 >Emitted(11, 48) Source(5, 48) + SourceIndex(0)
+10>Emitted(11, 49) Source(5, 49) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -189,27 +186,24 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>        return this.greeting;
 1->^^^^^^^^
-2 >        ^^^^^^
-3 >              ^
-4 >               ^^^^
-5 >                   ^
-6 >                    ^^^^^^^^
-7 >                            ^
+2 >        ^^^^^^^
+3 >               ^^^^
+4 >                   ^
+5 >                    ^^^^^^^^
+6 >                            ^
 1->private fn() {
   >        
-2 >        return
-3 >               
-4 >               this
-5 >                   .
-6 >                    greeting
-7 >                            ;
+2 >        return 
+3 >               this
+4 >                   .
+5 >                    greeting
+6 >                            ;
 1->Emitted(14, 9) Source(10, 9) + SourceIndex(0)
-2 >Emitted(14, 15) Source(10, 15) + SourceIndex(0)
-3 >Emitted(14, 16) Source(10, 16) + SourceIndex(0)
-4 >Emitted(14, 20) Source(10, 20) + SourceIndex(0)
-5 >Emitted(14, 21) Source(10, 21) + SourceIndex(0)
-6 >Emitted(14, 29) Source(10, 29) + SourceIndex(0)
-7 >Emitted(14, 30) Source(10, 30) + SourceIndex(0)
+2 >Emitted(14, 16) Source(10, 16) + SourceIndex(0)
+3 >Emitted(14, 20) Source(10, 20) + SourceIndex(0)
+4 >Emitted(14, 21) Source(10, 21) + SourceIndex(0)
+5 >Emitted(14, 29) Source(10, 29) + SourceIndex(0)
+6 >Emitted(14, 30) Source(10, 30) + SourceIndex(0)
 ---
 >>>    };
 1 >^^^^
@@ -241,27 +235,24 @@ sourceFile:sourceMapValidationClass.ts
 ---
 >>>            return this.greeting;
 1->^^^^^^^^^^^^
-2 >            ^^^^^^
-3 >                  ^
-4 >                   ^^^^
-5 >                       ^
-6 >                        ^^^^^^^^
-7 >                                ^
+2 >            ^^^^^^^
+3 >                   ^^^^
+4 >                       ^
+5 >                        ^^^^^^^^
+6 >                                ^
 1->get greetings() {
   >        
-2 >            return
-3 >                   
-4 >                   this
-5 >                       .
-6 >                        greeting
-7 >                                ;
+2 >            return 
+3 >                   this
+4 >                       .
+5 >                        greeting
+6 >                                ;
 1->Emitted(18, 13) Source(13, 9) + SourceIndex(0)
-2 >Emitted(18, 19) Source(13, 15) + SourceIndex(0)
-3 >Emitted(18, 20) Source(13, 16) + SourceIndex(0)
-4 >Emitted(18, 24) Source(13, 20) + SourceIndex(0)
-5 >Emitted(18, 25) Source(13, 21) + SourceIndex(0)
-6 >Emitted(18, 33) Source(13, 29) + SourceIndex(0)
-7 >Emitted(18, 34) Source(13, 30) + SourceIndex(0)
+2 >Emitted(18, 20) Source(13, 16) + SourceIndex(0)
+3 >Emitted(18, 24) Source(13, 20) + SourceIndex(0)
+4 >Emitted(18, 25) Source(13, 21) + SourceIndex(0)
+5 >Emitted(18, 33) Source(13, 29) + SourceIndex(0)
+6 >Emitted(18, 34) Source(13, 30) + SourceIndex(0)
 ---
 >>>        },
 1 >^^^^^^^^

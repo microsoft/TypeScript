@@ -1,42 +1,46 @@
 === tests/cases/conformance/salsa/index.js ===
-Common.Item = class I {}
->Common.Item = class I {} : typeof I
->Common.Item : typeof I
->Common : typeof Common
+First.Item = class I {}
+>First.Item = class I {} : typeof I
+>First.Item : typeof I
+>First : typeof First
 >Item : typeof I
 >class I {} : typeof I
 >I : typeof I
 
-Common.Object = class extends Common.Item {}
->Common.Object = class extends Common.Item {} : typeof (Anonymous class)
->Common.Object : typeof (Anonymous class)
+Common.Object = class extends First.Item {}
+>Common.Object = class extends First.Item {} : typeof Object
+>Common.Object : typeof Object
 >Common : typeof Common
->Object : typeof (Anonymous class)
->class extends Common.Item {} : typeof (Anonymous class)
->Common.Item : I
->Common : typeof Common
+>Object : typeof Object
+>class extends First.Item {} : typeof Object
+>First.Item : I
+>First : typeof First
 >Item : typeof I
 
 Workspace.Object = class extends Common.Object {}
->Workspace.Object = class extends Common.Object {} : typeof (Anonymous class)
->Workspace.Object : typeof (Anonymous class)
+>Workspace.Object = class extends Common.Object {} : typeof Object
+>Workspace.Object : typeof Object
 >Workspace : typeof Workspace
->Object : typeof (Anonymous class)
->class extends Common.Object {} : typeof (Anonymous class)
->Common.Object : (Anonymous class)
+>Object : typeof Object
+>class extends Common.Object {} : typeof Object
+>Common.Object : Object
 >Common : typeof Common
->Object : typeof (Anonymous class)
+>Object : typeof Object
 
 /** @type {Workspace.Object} */
 var am;
->am : (Anonymous class)
+>am : Object
 
 === tests/cases/conformance/salsa/roots.js ===
+var First = {};
+>First : typeof First
+>{} : {}
+
 var Common = {};
 >Common : typeof Common
->{} : { [x: string]: any; }
+>{} : {}
 
 var Workspace = {};
 >Workspace : typeof Workspace
->{} : { [x: string]: any; }
+>{} : {}
 

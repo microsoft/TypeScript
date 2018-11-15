@@ -1,15 +1,14 @@
 === tests/cases/compiler/objectLiteralWithNumericPropertyName.ts ===
 interface A {
->A : A
-
     0: string;
+>0 : string
 }
 var x: A = {
 >x : A
->A : A
 >{    0: 3} : { 0: number; }
 
     0: 3
+>0 : number
 >3 : 3
 
 };

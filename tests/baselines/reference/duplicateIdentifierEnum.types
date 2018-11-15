@@ -1,0 +1,63 @@
+=== tests/cases/compiler/duplicateIdentifierEnum_A.ts ===
+// Test the error message when attempting to merge an enum with a class, an interface, or a function.
+enum A {
+>A : A
+
+    bar
+>bar : A.bar
+}
+class A {
+>A : A
+
+    foo: number;
+>foo : number
+}
+
+interface B {
+    foo: number;
+>foo : number
+}
+const enum B {
+>B : B
+
+    bar
+>bar : B.bar
+}
+
+const enum C {
+>C : C
+
+}
+function C() {
+>C : () => number
+
+    return 0;
+>0 : 0
+}
+
+enum D {
+>D : D
+
+    bar
+>bar : D.bar
+}
+class E {
+>E : E
+
+    foo: number;
+>foo : number
+}
+// also make sure the error appears when trying to merge an enum in a separate file.
+=== tests/cases/compiler/duplicateIdentifierEnum_B.ts ===
+function D() {
+>D : () => number
+
+    return 0;
+>0 : 0
+}
+enum E {
+>E : E
+
+    bar
+>bar : E.bar
+}

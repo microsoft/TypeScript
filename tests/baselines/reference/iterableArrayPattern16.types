@@ -3,8 +3,6 @@ function fun(...[a, b]: [Bar, Bar][]) { }
 >fun : (...[a, b]: [Bar, Bar][]) => void
 >a : [Bar, Bar]
 >b : [Bar, Bar]
->Bar : Bar
->Bar : Bar
 
 fun(...new FooIteratorIterator);
 >fun(...new FooIteratorIterator) : void
@@ -44,6 +42,7 @@ class FooIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
@@ -75,6 +74,7 @@ class FooIteratorIterator {
     }
 
     [Symbol.iterator]() {
+>[Symbol.iterator] : () => this
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol

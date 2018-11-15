@@ -1,4 +1,9 @@
-/// <reference path="../src/compiler/sys.ts" />
+/// <reference types="node"/>
+import { normalize } from "path";
+import assert = require("assert");
+import { readFileSync, writeFileSync } from "fs";
+const args = process.argv.slice(2);
+
 
 /**
  * A minimal description for a parsed package.json object.
@@ -10,28 +15,27 @@ interface PackageJson {
 }
 
 function main(): void {
-    const sys = ts.sys;
-    if (sys.args.length < 3) {
-        sys.write("Usage:" + sys.newLine)
-        sys.write("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>" + sys.newLine);
+    if (args.length < 3) {
+        console.log("Usage:");
+        console.log("\tnode configureNightly.js <dev|insiders> <package.json location> <file containing version>");
         return;
     }
 
-    const tag = sys.args[0];
+    const tag = args[0];
     if (tag !== "dev" && tag !== "insiders") {
         throw new Error(`Unexpected tag name '${tag}'.`);
     }
 
     // Acquire the version from the package.json file and modify it appropriately.
-    const packageJsonFilePath = ts.normalizePath(sys.args[1]);
-    const packageJsonValue: PackageJson = JSON.parse(sys.readFile(packageJsonFilePath));
+    const packageJsonFilePath = normalize(args[1]);
+    const packageJsonValue: PackageJson = JSON.parse(readFileSync(packageJsonFilePath).toString());
 
     const { majorMinor, patch } = parsePackageJsonVersion(packageJsonValue.version);
     const prereleasePatch = getPrereleasePatch(tag, patch);
 
     // Acquire and modify the source file that exposes the version string.
-    const tsFilePath = ts.normalizePath(sys.args[2]);
-    const tsFileContents = ts.sys.readFile(tsFilePath);
+    const tsFilePath = normalize(args[2]);
+    const tsFileContents = readFileSync(tsFilePath).toString();
     const modifiedTsFileContents = updateTsFile(tsFilePath, tsFileContents, majorMinor, patch, prereleasePatch);
 
     // Ensure we are actually changing something - the user probably wants to know that the update failed.
@@ -44,21 +48,21 @@ function main(): void {
     // Finally write the changes to disk.
     // Modify the package.json structure
     packageJsonValue.version = `${majorMinor}.${prereleasePatch}`;
-    sys.writeFile(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
-    sys.writeFile(tsFilePath, modifiedTsFileContents);
+    writeFileSync(packageJsonFilePath, JSON.stringify(packageJsonValue, /*replacer:*/ undefined, /*space:*/ 4))
+    writeFileSync(tsFilePath, modifiedTsFileContents);
 }
 
 function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: string, patch: string, nightlyPatch: string): string {
     const majorMinorRgx = /export const versionMajorMinor = "(\d+\.\d+)"/;
     const majorMinorMatch = majorMinorRgx.exec(tsFileContents);
-    ts.Debug.assert(majorMinorMatch !== null, "", () => `The file seems to no longer have a string matching '${majorMinorRgx}'.`);
-    const parsedMajorMinor = majorMinorMatch[1];
-    ts.Debug.assert(parsedMajorMinor === majorMinor, "versionMajorMinor does not match.", () => `${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
+    assert(majorMinorMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${majorMinorRgx}'.`);
+    const parsedMajorMinor = majorMinorMatch![1];
+    assert(parsedMajorMinor === majorMinor, `versionMajorMinor does not match. ${tsFilePath}: '${parsedMajorMinor}'; package.json: '${majorMinor}'`);
 
-    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)`;/;
+    const versionRgx = /export const version = `\$\{versionMajorMinor\}\.(\d)(-dev)?`;/;
     const patchMatch = versionRgx.exec(tsFileContents);
-    ts.Debug.assert(patchMatch !== null, "The file seems to no longer have a string matching", () => versionRgx.toString());
-    const parsedPatch = patchMatch[1];
+    assert(patchMatch !== null, `The file '${tsFilePath}' seems to no longer have a string matching '${versionRgx.toString()}'.`);
+    const parsedPatch = patchMatch![1];
     if (parsedPatch !== patch) {
         throw new Error(`patch does not match. ${tsFilePath}: '${parsedPatch}; package.json: '${patch}'`);
     }
@@ -69,8 +73,8 @@ function updateTsFile(tsFilePath: string, tsFileContents: string, majorMinor: st
 function parsePackageJsonVersion(versionString: string): { majorMinor: string, patch: string } {
     const versionRgx = /(\d+\.\d+)\.(\d+)($|\-)/;
     const match = versionString.match(versionRgx);
-    ts.Debug.assert(match !== null, "package.json 'version' should match", () => versionRgx.toString());
-    return { majorMinor: match[1], patch: match[2] };
+    assert(match !== null, "package.json 'version' should match " + versionRgx.toString());
+    return { majorMinor: match![1], patch: match![2] };
 }
 
 /** e.g. 0-dev.20170707 */

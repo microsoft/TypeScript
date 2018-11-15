@@ -24,8 +24,8 @@ function bar2(_a) {
 
 
 //// [declarationEmitDestructuring5.d.ts]
-declare function baz([ , z,  , ]: [any, any, any]): void;
-declare function foo([ , b, ]: [any, any]): void;
-declare function bar([z,  ,  , ]: [any, any, any]): void;
-declare function bar1([z,  ,  , ]?: [number, number, number, number, number]): void;
-declare function bar2([ ,  , z,  ,  , ]: [any, any, any, any, any]): void;
+declare function baz([, z, ,]: [any, any, any?]): void;
+declare function foo([, b,]: [any, any]): void;
+declare function bar([z, , ,]: [any, any?, any?]): void;
+declare function bar1([z, , ,]?: [number, number, number, number, number]): void;
+declare function bar2([, , z, , ,]: [any, any, any, any?, any?]): void;

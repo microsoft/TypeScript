@@ -20,18 +20,21 @@ class C {
 >"BYE" : "BYE"
     }
     static get ["computedname"]() {
+>["computedname"] : string
 >"computedname" : "computedname"
 
         return "";
 >"" : ""
     }
     get ["computedname1"]() {
+>["computedname1"] : string
 >"computedname1" : "computedname1"
 
         return "";
 >"" : ""
     }
     get ["computedname2"]() {
+>["computedname2"] : string
 >"computedname2" : "computedname2"
 
         return "";
@@ -39,10 +42,12 @@ class C {
     }
 
     set ["computedname3"](x: any) {
+>["computedname3"] : any
 >"computedname3" : "computedname3"
 >x : any
     }
     set ["computedname4"](y: string) {
+>["computedname4"] : string
 >"computedname4" : "computedname4"
 >y : string
     }
@@ -56,6 +61,7 @@ class C {
 >b : number
 
     static set ["computedname"](b: string) { }
+>["computedname"] : string
 >"computedname" : "computedname"
 >b : string
 }

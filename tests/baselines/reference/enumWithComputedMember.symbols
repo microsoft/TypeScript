@@ -4,8 +4,8 @@ enum A {
 
     X = "".length, 
 >X : Symbol(A.X, Decl(enumWithComputedMember.ts, 0, 8))
->"".length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>"".length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     Y = X,
 >Y : Symbol(A.Y, Decl(enumWithComputedMember.ts, 1, 18))

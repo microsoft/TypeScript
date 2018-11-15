@@ -1,7 +1,6 @@
 === tests/cases/compiler/es2017basicAsync.ts ===
 async (): Promise<void> => {
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
->Promise : Promise<T>
 
     await 0;
 >await 0 : 0
@@ -19,7 +18,6 @@ async function asyncFunc() {
 const asyncArrowFunc = async (): Promise<void> => {
 >asyncArrowFunc : () => Promise<void>
 >async (): Promise<void> => {    await 0;} : () => Promise<void>
->Promise : Promise<T>
 
     await 0;
 >await 0 : 0
@@ -38,7 +36,6 @@ async function asyncIIFE() {
 >(async function(): Promise<void> {        await 1;    })() : Promise<void>
 >(async function(): Promise<void> {        await 1;    }) : () => Promise<void>
 >async function(): Promise<void> {        await 1;    } : () => Promise<void>
->Promise : Promise<T>
 
         await 1;
 >await 1 : 1
@@ -52,7 +49,6 @@ async function asyncIIFE() {
 >(async function asyncNamedFunc(): Promise<void> {        await 1;    }) : () => Promise<void>
 >async function asyncNamedFunc(): Promise<void> {        await 1;    } : () => Promise<void>
 >asyncNamedFunc : () => Promise<void>
->Promise : Promise<T>
 
         await 1;
 >await 1 : 1
@@ -65,7 +61,6 @@ async function asyncIIFE() {
 >(async (): Promise<void> => {        await 1;    })() : Promise<void>
 >(async (): Promise<void> => {        await 1;    }) : () => Promise<void>
 >async (): Promise<void> => {        await 1;    } : () => Promise<void>
->Promise : Promise<T>
 
         await 1;
 >await 1 : 1
@@ -80,7 +75,6 @@ class AsyncClass {
     asyncPropFunc = async function(): Promise<void> {
 >asyncPropFunc : () => Promise<void>
 >async function(): Promise<void> {        await 2;    } : () => Promise<void>
->Promise : Promise<T>
 
         await 2;
 >await 2 : 2
@@ -91,7 +85,6 @@ class AsyncClass {
 >asyncPropNamedFunc : () => Promise<void>
 >async function namedFunc(): Promise<void> {        await 2;    } : () => Promise<void>
 >namedFunc : () => Promise<void>
->Promise : Promise<T>
 
         await 2;
 >await 2 : 2
@@ -101,7 +94,6 @@ class AsyncClass {
     asyncPropArrowFunc = async (): Promise<void> => {
 >asyncPropArrowFunc : () => Promise<void>
 >async (): Promise<void> => {        await 2;    } : () => Promise<void>
->Promise : Promise<T>
 
         await 2;
 >await 2 : 2
@@ -110,7 +102,6 @@ class AsyncClass {
 
     async asyncMethod(): Promise<void> {
 >asyncMethod : () => Promise<void>
->Promise : Promise<T>
 
         await 2;
 >await 2 : 2

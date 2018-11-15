@@ -1,0 +1,25 @@
+=== tests/cases/conformance/salsa/a.js ===
+this.a = 10;
+>this.a = 10 : 10
+>this.a : any
+>this : any
+>a : any
+>10 : 10
+
+this.a;
+>this.a : any
+>this : any
+>a : any
+
+a;
+>a : error
+
+=== tests/cases/conformance/salsa/b.js ===
+this.a;
+>this.a : any
+>this : any
+>a : any
+
+a;
+>a : error
+

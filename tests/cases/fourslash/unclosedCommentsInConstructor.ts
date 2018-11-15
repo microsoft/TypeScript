@@ -1,8 +1,7 @@
 /// <reference path="fourslash.ts" />
 
 ////class Foo {
-////    constructor(/*/**/) { }
+////    constructor(/* /**/) { }
 ////}
 
-goTo.marker();
-// verify.completionListIsEmpty(); // TODO: difference between LS and FourSlash
+verify.completions({ marker: "", exact: undefined, isNewIdentifierLocation: true });

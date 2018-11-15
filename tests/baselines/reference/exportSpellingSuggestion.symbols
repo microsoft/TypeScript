@@ -1,0 +1,15 @@
+=== tests/cases/conformance/es6/modules/a.ts ===
+export function assertNever(x: never, msg: string) {
+>assertNever : Symbol(assertNever, Decl(a.ts, 0, 0))
+>x : Symbol(x, Decl(a.ts, 0, 28))
+>msg : Symbol(msg, Decl(a.ts, 0, 37))
+
+    throw new Error("Unexpected " + msg);
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>msg : Symbol(msg, Decl(a.ts, 0, 37))
+}
+
+=== tests/cases/conformance/es6/modules/b.ts ===
+import { assertNevar } from "./a";
+>assertNevar : Symbol(assertNevar, Decl(b.ts, 0, 8))
+

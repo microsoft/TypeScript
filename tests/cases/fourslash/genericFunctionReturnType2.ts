@@ -11,12 +11,10 @@
 ////var /*2*/r = x.foo(/*1*/3);
 ////var /*4*/r2 = r(/*3*/4);
 
-goTo.marker('1');
-verify.currentSignatureHelpIs('foo(x: number): (a: number) => number');
+verify.signatureHelp({ marker: "1", text: "foo(x: number): (a: number) => number" });
 
 verify.quickInfoAt("2", "var r: (a: number) => number");
 
-goTo.marker('3');
-verify.currentSignatureHelpIs('r(a: number): number');
+verify.signatureHelp({ marker: "3", text: "r(a: number): number" });
 
 verify.quickInfoAt("4", "var r2: number");

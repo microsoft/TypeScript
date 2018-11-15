@@ -15,6 +15,7 @@
 >K : Symbol(K, Decl(moduleElementsInWrongContext.ts, 6, 16))
 
     declare module "ambient" {
+>"ambient" : Symbol(Foo, Decl(moduleElementsInWrongContext.ts, 6, 21))
 
     }
 
@@ -32,7 +33,6 @@
 >foo : Symbol(foo, Decl(moduleElementsInWrongContext.ts, 14, 10), Decl(moduleElementsInWrongContext.ts, 17, 12))
 
     export { baz as b } from "ambient";
->baz : Symbol(b, Decl(moduleElementsInWrongContext.ts, 18, 12))
 >b : Symbol(b, Decl(moduleElementsInWrongContext.ts, 18, 12))
 
     export default v;

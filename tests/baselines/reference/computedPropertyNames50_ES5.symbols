@@ -13,13 +13,19 @@ var x = {
         }
     },
     get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames50_ES5.ts, 6, 6))
+
         throw 10;
     },
     set [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames50_ES5.ts, 9, 6))
+
         // just throw
         throw 10;
     },
     get [1 + 1]() {
+>[1 + 1] : Symbol([1 + 1], Decl(computedPropertyNames50_ES5.ts, 13, 6))
+
         return 10;
     },
     get foo() {

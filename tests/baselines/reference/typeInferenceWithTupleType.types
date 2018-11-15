@@ -1,14 +1,8 @@
 === tests/cases/conformance/types/tuple/typeInferenceWithTupleType.ts ===
 function combine<T, U>(x: T, y: U): [T, U] {
 >combine : <T, U>(x: T, y: U) => [T, U]
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
->U : U
 
     return [x, y];
 >[x, y] : [T, U]
@@ -37,14 +31,8 @@ var combineEle2 = combineResult[1]; // number
 
 function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 >zip : <T, U>(array1: T[], array2: U[]) => [[T, U]]
->T : T
->U : U
 >array1 : T[]
->T : T
 >array2 : U[]
->U : U
->T : T
->U : U
 
     if (array1.length != array2.length) {
 >array1.length != array2.length : boolean
@@ -69,8 +57,6 @@ function zip<T, U>(array1: T[], array2: U[]): [[T, U]] {
 
     var zipResult: [[T, U]];
 >zipResult : [[T, U]]
->T : T
->U : U
 
     for (var i = 0; i < length; ++i) {
 >i : number

@@ -27,7 +27,6 @@ class C {
     explicitC(this: C, m: number): number {
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
         return this.n + m;
@@ -66,8 +65,6 @@ class D extends C { }
 >C : C
 
 interface I {
->I : I
-
     a: number;
 >a : number
 
@@ -87,7 +84,6 @@ interface I {
     explicitInterface(this: I): number;
 >explicitInterface : (this: I) => number
 >this : I
->I : I
 
     explicitThis(this: this): number;
 >explicitThis : (this: this) => number
@@ -131,7 +127,6 @@ function implicitThis(n: number): number {
 }
 let impl: I = {
 >impl : I
->I : I
 >{    a: 12,    explicitVoid2: () => this.a, // ok, this: any because it refers to some outer object (window?)    explicitVoid1() { return 12; },    explicitStructural() {        return this.a;    },    explicitInterface() {        return this.a;    },    explicitThis() {        return this.a;    },} : { a: number; explicitVoid2: () => any; explicitVoid1(this: void): number; explicitStructural(this: { a: number; }): number; explicitInterface(this: I): number; explicitThis(this: I): number; }
 
     a: 12,
@@ -350,13 +345,11 @@ let reconstructed: {
     explicitThis(this: C, m: number): number, // note: this: this is not allowed in an object literal type.
 >explicitThis : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitC(this: C, m: number): number,
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitProperty: (this: {n : number}, m: number) => number,
@@ -496,7 +489,6 @@ let specifiedLambdaToSpecified: (this: {y: number}, x: number) => number = speci
 let explicitCFunction: (this: C, m: number) => number;
 >explicitCFunction : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
 let explicitPropertyFunction: (this: {n: number}, m: number) => number;
@@ -519,7 +511,6 @@ c.explicitC = function(this: C, m: number) { return this.n + m };
 >explicitC : (this: C, m: number) => number
 >function(this: C, m: number) { return this.n + m } : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 >this.n + m : number
 >this.n : number
@@ -642,7 +633,6 @@ c.explicitThis = function(this: C, m: number) { return this.n + m };
 >explicitThis : (this: C, m: number) => number
 >function(this: C, m: number) { return this.n + m } : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 >this.n + m : number
 >this.n : number
@@ -713,7 +703,6 @@ c.explicitC = function(this: B, m: number) { return this.n + m };
 >explicitC : (this: C, m: number) => number
 >function(this: B, m: number) { return this.n + m } : (this: B, m: number) => number
 >this : B
->B : B
 >m : number
 >this.n + m : number
 >this.n : number
@@ -748,7 +737,6 @@ class Base1 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -787,7 +775,6 @@ class Base2 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -878,7 +865,6 @@ b1.explicit = d2.polymorphic // ok, 'x' and 'y' not in Base1: { x }
 function InterfaceThis(this: I) {
 >InterfaceThis : (this: I) => void
 >this : I
->I : I
 
     this.a = 12;
 >this.a = 12 : 12
@@ -935,12 +921,9 @@ declare var f: {
 
     call<U>(this: (...argArray: any[]) => U, ...argArray: any[]): U;
 >call : <U>(this: (...argArray: any[]) => U, ...argArray: any[]) => U
->U : U
 >this : (...argArray: any[]) => U
 >argArray : any[]
->U : U
 >argArray : any[]
->U : U
 
 };
 let n: number = f.call(12);

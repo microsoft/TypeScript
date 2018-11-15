@@ -1,6 +1,6 @@
 === tests/cases/compiler/es5ExportEquals.ts ===
 export function f() { }
->f : () => void
+>f : typeof f
 
 export = f;
 >f : () => void

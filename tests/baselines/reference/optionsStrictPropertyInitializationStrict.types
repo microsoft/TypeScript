@@ -1,0 +1,4 @@
+=== tests/cases/compiler/optionsStrictPropertyInitializationStrict.ts ===
+var x;
+>x : any
+

@@ -62,9 +62,9 @@ var [b2 = 3, b3 = true, b4 = temp] = [3, false, { t1: false, t2: "hello" }];
 >"hello" : "hello"
 
 var [b5 = 3, b6 = true, b7 = temp] = [undefined, undefined, undefined];
->b5 : 3
+>b5 : number
 >3 : 3
->b6 : true
+>b6 : boolean
 >true : true
 >b7 : { t1: boolean; t2: string; }
 >temp : { t1: boolean; t2: string; }
@@ -113,9 +113,9 @@ var temp1 = [true, false, true]
 >true : true
 
 var [d3, d4] = [1, "string", ...temp1];
->d3 : string | number | boolean
->d4 : string | number | boolean
->[1, "string", ...temp1] : (string | number | boolean)[]
+>d3 : number
+>d4 : string
+>[1, "string", ...temp1] : [number, string, ...boolean[]]
 >1 : 1
 >"string" : "string"
 >...temp1 : boolean
@@ -151,9 +151,9 @@ var {f: [f1, f2, { f3: f4, f5 }, , ]} = { f: [1, 2, { f3: 4, f5: 0 }] };
 >f4 : number
 >f5 : number
 > : undefined
->{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }, undefined]; }
->f : [number, number, { f3: number; f5: number; }, undefined]
->[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }, undefined]
+>{ f: [1, 2, { f3: 4, f5: 0 }] } : { f: [number, number, { f3: number; f5: number; }, undefined?]; }
+>f : [number, number, { f3: number; f5: number; }, undefined?]
+>[1, 2, { f3: 4, f5: 0 }] : [number, number, { f3: number; f5: number; }, undefined?]
 >1 : 1
 >2 : 2
 >{ f3: 4, f5: 0 } : { f3: number; f5: number; }

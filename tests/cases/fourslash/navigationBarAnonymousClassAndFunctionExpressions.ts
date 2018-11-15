@@ -18,6 +18,8 @@
 ////    // These will only show up as childItems.
 ////    function z() {}
 ////    console.log(function() {})
+////    describe("this", 'function', () => {});
+////    [].map(() => {});
 ////})
 ////(function classes() {
 ////    // Classes show up in top-level regardless of whether they have names or inner declarations.
@@ -71,7 +73,15 @@ verify.navigationTree({
             "kind": "function",
             "childItems": [
                 {
-                    "text": "<function>",
+                    "text": "console.log() callback",
+                    "kind": "function"
+                },
+                {
+                    "text": `describe("this", 'function') callback`,
+                    "kind": "function"
+                },
+                {
+                    "text": `map() callback`,
                     "kind": "function"
                 },
                 {
@@ -99,7 +109,7 @@ verify.navigationTree({
             ]
         },
         {
-            "text": "global.cls",
+            "text": "cls",
             "kind": "class"
         }
     ]
@@ -123,7 +133,7 @@ verify.navigationBar([
                 "kind": "function"
             },
             {
-                "text": "global.cls",
+                "text": "cls",
                 "kind": "class"
             }
         ]
@@ -185,7 +195,15 @@ verify.navigationBar([
         "kind": "function",
         "childItems": [
             {
-                "text": "<function>",
+                "text": "console.log() callback",
+                "kind": "function"
+            },
+            {
+                "text": `describe("this", 'function') callback`,
+                "kind": "function"
+            },
+            {
+                "text": `map() callback`,
                 "kind": "function"
             },
             {
@@ -225,7 +243,7 @@ verify.navigationBar([
         "indent": 2
     },
     {
-        "text": "global.cls",
+        "text": "cls",
         "kind": "class",
         "indent": 1
     }

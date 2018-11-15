@@ -7,9 +7,7 @@ const enum E { A, B, C }
 
 function foo<T extends number>(x: T) {
 >foo : <T extends number>(x: T) => void
->T : T
 >x : T
->T : T
 
     var y: number = x;  // Ok
 >y : number
@@ -38,16 +36,10 @@ class B { b }
 
 function bar<T extends A | B>(x: T) {
 >bar : <T extends A | B>(x: T) => void
->T : T
->A : A
->B : B
 >x : T
->T : T
 
     var y: A | B = x;  // Ok
 >y : A | B
->A : A
->B : B
 >x : T
 }
 

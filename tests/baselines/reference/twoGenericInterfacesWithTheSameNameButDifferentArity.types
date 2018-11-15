@@ -1,96 +1,50 @@
 === tests/cases/conformance/interfaces/declarationMerging/twoGenericInterfacesWithTheSameNameButDifferentArity.ts ===
 interface A<T> {
->A : A<T, U>
->T : T
-
     x: T;
 >x : T
->T : T
 }
 
 interface A<T, U> { // error
->A : A<T, U>
->T : T
->U : U
-
     y: T;
 >y : T
->T : T
 }
 
 module M {
->M : any
-
     interface A<T> {
->A : A<T, U>
->T : T
-
         x: T;
 >x : T
->T : T
     }
 
     interface A<T, U> { // error
->A : A<T, U>
->T : T
->U : U
-
         y: T;
 >y : T
->T : T
     }
 }
 
 module M2 {
->M2 : any
-
     interface A<T> {
->A : A<T>
->T : T
-
         x: T;
 >x : T
->T : T
     }
 }
 
 module M2 {
->M2 : any
-
     interface A<T, U> { // ok, different declaration space than other M2
->A : A<T, U>
->T : T
->U : U
-
         y: T;
 >y : T
->T : T
     }
 }
 
 module M3 {
->M3 : any
-
     export interface A<T> {
->A : A<T, U>
->T : T
-
         x: T;
 >x : T
->T : T
     }
 }
 
 module M3 {
->M3 : any
-
     export interface A<T, U> { // error
->A : A<T, U>
->T : T
->U : U
-
         y: T;
 >y : T
->T : T
     }
 }

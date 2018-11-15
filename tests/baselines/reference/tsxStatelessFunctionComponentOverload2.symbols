@@ -39,6 +39,7 @@ let obj2 = {
 >yy : Symbol(yy, Decl(file.tsx, 13, 12))
 
     "ignore-prop": "hello"
+>"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 14, 12))
 }
 
 let defaultObj: any;
@@ -93,6 +94,7 @@ const c8 = <OneThing ignore-prop={100} />
 const c9 = <OneThing {...{ "ignore-prop":200 }} />;
 >c9 : Symbol(c9, Decl(file.tsx, 29, 5))
 >OneThing : Symbol(OneThing, Decl(file.tsx, 0, 31), Decl(file.tsx, 1, 41))
+>"ignore-prop" : Symbol("ignore-prop", Decl(file.tsx, 29, 26))
 
 const c10 = <OneThing {...obj2} yy1="boo" />;
 >c10 : Symbol(c10, Decl(file.tsx, 30, 5))

@@ -27,14 +27,12 @@ function walk(ctx: Lint.WalkContext<void>): void {
     /** Skip certain function/method names whose parameter names are not informative. */
     function shouldIgnoreCalledExpression(expression: ts.Expression): boolean {
         if (expression.kind === ts.SyntaxKind.PropertyAccessExpression) {
-            const methodName = (expression as ts.PropertyAccessExpression).name.text as string;
-            if (methodName.indexOf("set") === 0) {
+            const methodName = (expression as ts.PropertyAccessExpression).name.text;
+            if (methodName.startsWith("set") || methodName.startsWith("assert")) {
                 return true;
             }
             switch (methodName) {
                 case "apply":
-                case "assert":
-                case "assertEqual":
                 case "call":
                 case "equal":
                 case "fail":
@@ -45,12 +43,11 @@ function walk(ctx: Lint.WalkContext<void>): void {
             }
         }
         else if (expression.kind === ts.SyntaxKind.Identifier) {
-            const functionName = (expression as ts.Identifier).text as string;
-            if (functionName.indexOf("set") === 0) {
+            const functionName = (expression as ts.Identifier).text;
+            if (functionName.startsWith("set") || functionName.startsWith("assert")) {
                 return true;
             }
             switch (functionName) {
-                case "assert":
                 case "contains":
                 case "createAnonymousType":
                 case "createImportSpecifier":

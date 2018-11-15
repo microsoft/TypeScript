@@ -2,8 +2,6 @@
 // interfaces that merge must not have members that conflict
 
 interface A {
->A : A
-
     foo(x: number): number;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
 >x : number
@@ -14,23 +12,15 @@ interface A {
 }
 
 interface A {
->A : A
-
     foo(x: Date): Date;
 >foo : { (x: number): number; (x: string): string; (x: Date): Date; }
 >x : Date
->Date : Date
->Date : Date
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     foo(x: T): number;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
 >x : T
->T : T
 
     foo(x: string): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
@@ -38,24 +28,17 @@ interface B<T> {
 }
 
 interface B<T> {
->B : B<T>
->T : T
-
     foo(x: T): Date;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
 >x : T
->T : T
->Date : Date
 
     foo(x: Date): string;
 >foo : { (x: T): number; (x: string): string; (x: T): Date; (x: Date): string; }
 >x : Date
->Date : Date
 }
 
 var b: B<boolean>;
 >b : B<boolean>
->B : B<T>
 
 var r = b.foo(true); // returns Date
 >r : Date
@@ -67,16 +50,10 @@ var r = b.foo(true); // returns Date
 
 // add generic overload
 interface C<T, U> {
->C : C<T, U>
->T : T
->U : U
-
     foo(x: T, y: U): string;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
 >x : T
->T : T
 >y : U
->U : U
 
     foo(x: string, y: string): number;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
@@ -85,24 +62,14 @@ interface C<T, U> {
 }
 
 interface C<T, U> {
->C : C<T, U>
->T : T
->U : U
-
     foo<W>(x: W, y: W): W;
 >foo : { (x: T, y: U): string; (x: string, y: string): number; <W>(x: W, y: W): W; }
->W : W
 >x : W
->W : W
 >y : W
->W : W
->W : W
 }
 
 var c: C<boolean, Date>;
 >c : C<boolean, Date>
->C : C<T, U>
->Date : Date
 
 var r2 = c.foo(1, 2); // number
 >r2 : number
@@ -115,47 +82,27 @@ var r2 = c.foo(1, 2); // number
 
 // add generic overload that would be ambiguous
 interface D<T, U> {
->D : D<T, U>
->T : T
->U : U
-
     a: T;
 >a : T
->T : T
 
     b: U;
 >b : U
->U : U
 
     foo<A>(x: A, y: A): U;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
->A : A
 >x : A
->A : A
 >y : A
->A : A
->U : U
 }
 
 interface D<T, U> {
->D : D<T, U>
->T : T
->U : U
-
     foo<W>(x: W, y: W): T;
 >foo : { <A>(x: A, y: A): U; <W>(x: W, y: W): T; }
->W : W
 >x : W
->W : W
 >y : W
->W : W
->T : T
 }
 
 var d: D<boolean, Date>;
 >d : D<boolean, Date>
->D : D<T, U>
->Date : Date
 
 var r3 = d.foo(1, 1); // boolean, last definition wins
 >r3 : boolean
