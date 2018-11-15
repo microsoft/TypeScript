@@ -39,9 +39,10 @@ namespace ts {
                 // obviously invalid map
                 return file.sourceMapper = identitySourceMapConsumer;
             }
-            const program = getProgram();
+
             return file.sourceMapper = createDocumentPositionMapper({
                 getSourceFileLike: s => {
+                    const program = getProgram();
                     // Lookup file in program, if provided
                     const file = program && program.getSourceFileByPath(s);
                     // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
