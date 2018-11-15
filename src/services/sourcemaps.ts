@@ -93,8 +93,9 @@ namespace ts {
         function tryGetSourcePosition(info: DocumentPosition): DocumentPosition | undefined {
             if (!isDeclarationFileName(info.fileName)) return undefined;
 
-            const file = getFile(info.fileName);
+            const file = getSourceFile(info.fileName);
             if (!file) return undefined;
+
             const newLoc = getSourceMapper(info.fileName, file).getSourcePosition(info);
             return newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
         }
@@ -103,27 +104,31 @@ namespace ts {
             const program = getProgram();
             const options = program.getCompilerOptions();
             const outPath = options.outFile || options.out;
+
             const declarationPath = outPath ?
                 removeFileExtension(outPath) + Extension.Dts :
                 getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
-            const declarationFile = getFile(declarationPath);
+
+            const declarationFile = getGeneratedFile(declarationPath);
             if (!declarationFile) return undefined;
+
             const newLoc = getSourceMapper(declarationPath, declarationFile).getGeneratedPosition(info);
             return newLoc === info ? undefined : newLoc;
         }
 
-        function getFile(fileName: string): SourceFileLike | undefined {
-            const path = toPath(fileName);
-            const file = getProgram().getSourceFileByPath(path);
-            if (file && file.resolvedPath === path) {
-                return file;
-            }
-            return sourcemappedFileCache.get(path);
+        function getSourceFile(fileName: string) {
+            const program = getProgram();
+            return program && program.getSourceFileByPath(toPath(fileName));
+        }
+
+        function getGeneratedFile(fileName: string) {
+            return sourcemappedFileCache.get(toPath(fileName)); // TODO: should ask host instead?
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
-            const file = getFile(fileName)!; // TODO: GH#18217
+            const sourceFile = getSourceFile(fileName);
+            const file = sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getGeneratedFile(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
 
