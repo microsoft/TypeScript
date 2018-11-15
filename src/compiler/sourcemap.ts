@@ -592,11 +592,9 @@ namespace ts {
         const mapDirectory = getDirectoryPath(mapPath);
         const sourceRoot = map.sourceRoot ? getNormalizedAbsolutePath(map.sourceRoot, mapDirectory) : mapDirectory;
         const generatedAbsoluteFilePath = getNormalizedAbsolutePath(map.file, mapDirectory);
-        const generatedCanonicalFilePath = host.getCanonicalFileName(generatedAbsoluteFilePath) as Path;
-        const generatedFile = host.getSourceFileLike(generatedCanonicalFilePath);
+        const generatedFile = host.getSourceFileLike(generatedAbsoluteFilePath);
         const sourceFileAbsolutePaths = map.sources.map(source => getNormalizedAbsolutePath(source, sourceRoot));
-        const sourceFileCanonicalPaths = sourceFileAbsolutePaths.map(source => host.getCanonicalFileName(source) as Path);
-        const sourceToSourceIndexMap = createMapFromEntries(sourceFileCanonicalPaths.map((source, i) => [source, i] as [string, number]));
+        const sourceToSourceIndexMap = createMapFromEntries(sourceFileAbsolutePaths.map((source, i) => [host.getCanonicalFileName(source), i] as [string, number]));
         let decodedMappings: ReadonlyArray<MappedPosition> | undefined;
         let generatedMappings: SortedReadonlyArray<MappedPosition> | undefined;
         let sourceMappings: ReadonlyArray<SortedReadonlyArray<SourceMappedPosition>> | undefined;
@@ -613,8 +611,7 @@ namespace ts {
             let source: string | undefined;
             let sourcePosition: number | undefined;
             if (isSourceMapping(mapping)) {
-                const sourceFilePath = sourceFileCanonicalPaths[mapping.sourceIndex];
-                const sourceFile = host.getSourceFileLike(sourceFilePath);
+                const sourceFile = host.getSourceFileLike(sourceFileAbsolutePaths[mapping.sourceIndex]);
                 source = map.sources[mapping.sourceIndex];
                 sourcePosition = sourceFile !== undefined
                     ? getPositionOfLineAndCharacterWithEdits(sourceFile, mapping.sourceLine, mapping.sourceCharacter)

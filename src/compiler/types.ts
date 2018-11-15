@@ -5528,7 +5528,7 @@ namespace ts {
 
     /* @internal */
     export interface DocumentPositionMapperHost {
-        getSourceFileLike(path: Path): SourceFileLike | undefined;
+        getSourceFileLike(fileName: string): SourceFileLike | undefined;
         getCanonicalFileName(path: string): string;
         log(text: string): void;
     }

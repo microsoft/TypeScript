@@ -23,7 +23,7 @@ namespace ts {
     ): SourceMapper {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         const currentDirectory = host.getCurrentDirectory();
-        const generatedFileCache = createMap<SourceFileLike | false>();
+        const sourceFileLike = createMap<SourceFileLike | false>();
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
         function toPath(fileName: string) {
@@ -31,7 +31,7 @@ namespace ts {
         }
 
         function scanForSourcemapURL(fileName: string) {
-            const mappedFile = generatedFileCache.get(toPath(fileName));
+            const mappedFile = sourceFileLike.get(toPath(fileName));
             if (!mappedFile) {
                 return;
             }
@@ -39,7 +39,7 @@ namespace ts {
             return tryGetSourceMappingURL(mappedFile.text, getLineStarts(mappedFile));
         }
 
-        function convertDocumentToSourceMapper(file: { sourceMapper?: DocumentPositionMapper }, contents: string, mapFileName: string) {
+        function convertDocumentToSourceMapper(file: SourceFileLike, contents: string, mapFileName: string) {
             const map = tryParseRawSourceMap(contents);
             if (!map || !map.sources || !map.file || !map.mappings) {
                 // obviously invalid map
@@ -75,9 +75,9 @@ namespace ts {
             }
             possibleMapLocations.push(fileName + ".map");
             for (const location of possibleMapLocations) {
-                const mapPath = ts.toPath(location, getDirectoryPath(fileName), getCanonicalFileName);
-                if (host.fileExists(mapPath)) {
-                    return convertDocumentToSourceMapper(file, host.readFile(mapPath)!, mapPath); // TODO: GH#18217
+                const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(fileName));
+                if (host.fileExists(mapFileName)) {
+                    return convertDocumentToSourceMapper(file, host.readFile(mapFileName)!, mapFileName); // TODO: GH#18217
                 }
             }
             return file.sourceMapper = identitySourceMapConsumer;
@@ -105,7 +105,7 @@ namespace ts {
                 getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
 
-            const declarationFile = getGeneratedFile(declarationPath);
+            const declarationFile = getSourceFileLikeFromCache(declarationPath);
             if (!declarationFile) return undefined;
 
             const newLoc = getSourceMapper(declarationPath, declarationFile).getGeneratedPosition(info);
@@ -117,14 +117,14 @@ namespace ts {
             return program && program.getSourceFileByPath(toPath(fileName));
         }
 
-        function getGeneratedFile(fileName: string): SourceFileLike | undefined {
+        function getSourceFileLikeFromCache(fileName: string): SourceFileLike | undefined {
             const path = toPath(fileName);
-            const fileFromCache = generatedFileCache.get(path);
+            const fileFromCache = sourceFileLike.get(path);
             if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 
             // TODO: should ask host instead?
             if (!host.fileExists(path)) {
-                generatedFileCache.set(path, false);
+                sourceFileLike.set(path, false);
                 return undefined;
             }
 
@@ -137,14 +137,15 @@ namespace ts {
                     return computeLineAndCharacterOfPosition(getLineStarts(this as SourceFileLike), pos);
                 }
             } : false;
-            generatedFileCache.set(path, file);
+            sourceFileLike.set(path, file);
             return file ? file : undefined;
         }
 
+        // This can be called from source mapper in either source program or program that includes generated file
         function getSourceFileLike(fileName: string) {
             const sourceFile = getSourceFile(fileName);
             // file returned here could be .d.ts when asked for .ts file if projectReferences and module resolution created this source file
-            return sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getGeneratedFile(fileName);
+            return sourceFile && sourceFile.resolvedPath === toPath(fileName) ? sourceFile : getSourceFileLikeFromCache(fileName);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
@@ -153,7 +154,7 @@ namespace ts {
         }
 
         function clearCache(): void {
-            generatedFileCache.clear();
+            sourceFileLike.clear();
         }
     }
 }
