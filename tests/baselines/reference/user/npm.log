@@ -623,6 +623,7 @@ node_modules/npm/lib/pack.js(177,25): error TS2339: Property 'config' does not e
 node_modules/npm/lib/pack.js(299,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/pack.js(300,20): error TS2345: Argument of type 'string' is not assignable to parameter of type 'never'.
 node_modules/npm/lib/pack.js(300,36): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
+node_modules/npm/lib/pack.js(333,15): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/pack.js(335,17): error TS2339: Property 'code' does not exist on type 'Error'.
 node_modules/npm/lib/pack.js(336,17): error TS2339: Property 'signal' does not exist on type 'Error'.
 node_modules/npm/lib/pack.js(354,36): error TS2339: Property 'tmp' does not exist on type 'typeof EventEmitter'.

@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+src/App.tsx(2,8): error TS2307: Cannot find module './App.css'.
+src/components/Hello.tsx(2,8): error TS2307: Cannot find module './Hello.css'.
+
+
+
+Standard error:
