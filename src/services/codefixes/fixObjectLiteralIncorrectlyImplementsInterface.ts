@@ -2,6 +2,7 @@
 namespace ts.codefix {
     const errorCodes = [Diagnostics.Type_0_is_not_assignable_to_type_1.code];
     const fixId = "fixObjectLiteralIncorrectlyImplementsInterface";
+    let str = ""
 
     registerCodeFix({
         errorCodes,
@@ -30,7 +31,7 @@ namespace ts.codefix {
         const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
 
         const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
-        let str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
+        str = nonExistingProps.map(p => p.name).reduce((acc, val) => acc + " " + val);
 
         const newProps: ObjectLiteralElementLike[] = getNewMembers(nonExistingProps, checker, objLiteral);
 
@@ -45,8 +46,6 @@ namespace ts.codefix {
         return symbols.map(symbol => {
             const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
             const typeNode = checker.typeToTypeNode(type, objLiteral)!;
-            
-            // TODO intersection types
 
             let kind = typeNode.kind;
 
@@ -103,6 +102,15 @@ namespace ts.codefix {
                     const subObjLiteral = createObjectLiteral(neuvoStubbed, /* multiline */ true);
 
                     return createPropertyAssignment(symbol.name, subObjLiteral);
+
+                case SyntaxKind.IntersectionType:
+                    const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType
+                    const intersectedProps = intersectedTyped.types.map(t => checker.getPropertiesOfType(t)).reduce((arr, ele) => arr.concat(ele));
+
+                    const intersectStubs = getNewMembers(intersectedProps, checker, objLiteral);
+                    
+                    const interObjLiteral = createObjectLiteral(intersectStubs, /* multiline */ true);
+                    return createPropertyAssignment(symbol.name, interObjLiteral);
                 default:
                     return undefined;
             }
