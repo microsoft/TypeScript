@@ -13634,7 +13634,7 @@ namespace ts {
                         (isCallSignatureDeclaration(param.parent) || isMethodSignature(param.parent) || isFunctionTypeNode(param.parent)) &&
                         (resolveName(param, param.name.escapedText, SymbolFlags.Type, undefined, param.name.escapedText, /*isUse*/ true) ||
                          param.name.originalKeywordKind && isTypeNodeKind(param.name.originalKeywordKind))) {
-                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_x_Colon_0, declarationNameToString(param.name));
+                        errorOrSuggestion(noImplicitAny, declaration, Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_arg_Colon_0, declarationNameToString(param.name));
                         return;
                     }
                     diagnostic = (<ParameterDeclaration>declaration).dotDotDotToken ?

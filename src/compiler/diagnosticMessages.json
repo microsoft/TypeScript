@@ -4125,7 +4125,7 @@
         "category": "Suggestion",
         "code": 7050
     },
-    "Parameter has a name but no type. Did you mean 'x: {0}'?": {
+    "Parameter has a name but no type. Did you mean 'arg: {0}'?": {
         "category": "Error",
         "code": 7051
     },
