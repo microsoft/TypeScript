@@ -19022,7 +19022,7 @@ namespace ts {
         }
 
         function markPropertyAsReferenced(prop: Symbol, nodeForCheckWriteOnly: Node | undefined, isThisAccess: boolean) {
-            if (!prop || !(prop.flags & SymbolFlags.ClassMember) || !prop.valueDeclaration || !hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
+            if (!(prop.flags & SymbolFlags.ClassMember) || !prop.valueDeclaration || !hasModifier(prop.valueDeclaration, ModifierFlags.Private)) {
                 return;
             }
             if (nodeForCheckWriteOnly && isWriteOnlyAccess(nodeForCheckWriteOnly) && !(prop.flags & SymbolFlags.SetAccessor && !(prop.flags & SymbolFlags.GetAccessor))) {
@@ -25280,10 +25280,10 @@ namespace ts {
                 if (!isBindingPattern(name)) {
                     const nameText = getTextOfPropertyName(name);
                     if (nameText) {
-                        const property = getPropertyOfType(parentType!, nameText)!; // TODO: GH#18217
-                        markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
-                        if (parent.initializer && property) {
-                            checkPropertyAccessibility(parent, parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
+                        const property = getPropertyOfType(parentType!, nameText); // TODO: GH#18217
+                        if (property) {
+                            markPropertyAsReferenced(property, /*nodeForCheckWriteOnly*/ undefined, /*isThisAccess*/ false); // A destructuring is never a write-only reference.
+                            checkPropertyAccessibility(parent, !!parent.initializer && parent.initializer.kind === SyntaxKind.SuperKeyword, parentType!, property);
                         }
                     }
                 }
