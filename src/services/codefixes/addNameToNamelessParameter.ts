@@ -1,7 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "addNameToNamelessParameter";
-    const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_arg_Colon_0.code];
+    const errorCodes = [Diagnostics.Parameter_has_a_name_but_no_type_Did_you_mean_0_Colon_1.code];
     registerCodeFix({
         errorCodes,
         getCodeActions: (context) => {
