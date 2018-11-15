@@ -4748,7 +4748,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4780,5 +4779,13 @@
     "Add 'unknown' to all conversions of non-overlapping types": {
         "category": "Message",
         "code": 95070
+    },
+    "Add missing 'new' operator to call": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
     }
 }
