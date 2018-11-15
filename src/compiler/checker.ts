@@ -22321,8 +22321,17 @@ namespace ts {
                         leftType;
                 case SyntaxKind.EqualsToken:
                     const declKind = isBinaryExpression(left.parent) ? getAssignmentDeclarationKind(left.parent) : AssignmentDeclarationKind.None;
-                    checkAssignmentDeclaration(declKind, right);
+                    checkAssignmentDeclaration(declKind, rightType);
                     if (isAssignmentDeclaration(declKind)) {
+                        if (!(rightType.flags & TypeFlags.Object) ||
+                            declKind !== AssignmentDeclarationKind.ModuleExports &&
+                            declKind !== AssignmentDeclarationKind.Prototype &&
+                            !isEmptyObjectType(rightType) &&
+                            !isFunctionObjectType(rightType as ObjectType) &&
+                            !(getObjectFlags(rightType) & ObjectFlags.Class)) {
+                            // don't check assignability of module.exports=, C.prototype=, or expando types because they will necessarily be incomplete
+                            checkAssignmentOperator(rightType);
+                        }
                         return leftType;
                     }
                     else {
@@ -22339,9 +22348,8 @@ namespace ts {
                     return Debug.fail();
             }
 
-            function checkAssignmentDeclaration(kind: AssignmentDeclarationKind, right: Expression) {
+            function checkAssignmentDeclaration(kind: AssignmentDeclarationKind, rightType: Type) {
                 if (kind === AssignmentDeclarationKind.ModuleExports) {
-                    const rightType = checkExpression(right, checkMode);
                     for (const prop of getPropertiesOfObjectType(rightType)) {
                         const propType = getTypeOfSymbol(prop);
                         if (propType.symbol && propType.symbol.flags & SymbolFlags.Class) {
