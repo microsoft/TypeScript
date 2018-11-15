@@ -317,6 +317,11 @@ namespace ts.server {
         }
 
         /*@internal*/
+        getTelemetryFileSize() {
+            return this.textStorage.getTelemetryFileSize();
+        }
+
+        /*@internal*/
         public isDynamicOrHasMixedContent() {
             return this.hasMixedContent || this.isDynamic;
         }
