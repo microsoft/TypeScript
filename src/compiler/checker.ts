@@ -18355,16 +18355,31 @@ namespace ts {
             return getNameFromJsxElementAttributesContainer(JsxNames.ElementChildrenAttributeNameContainer, jsxNamespace);
         }
 
-        function getUninstantiatedJsxSignaturesOfType(elementType: Type): ReadonlyArray<Signature> {
+        function getUninstantiatedJsxSignaturesOfType(elementType: Type, caller: JsxOpeningLikeElement): ReadonlyArray<Signature> {
+            if (elementType.flags & TypeFlags.String) {
+                return [anySignature];
+            }
+            else if (elementType.flags & TypeFlags.StringLiteral) {
+                const intrinsicType = getIntrinsicAttributesTypeFromStringLiteralType(elementType as StringLiteralType, caller);
+                if (!intrinsicType) {
+                    error(caller, Diagnostics.Property_0_does_not_exist_on_type_1, (elementType as StringLiteralType).value, "JSX." + JsxNames.IntrinsicElements);
+                    return emptyArray;
+                }
+                else {
+                    const fakeSignature = createSignatureForJSXIntrinsic(caller, intrinsicType);
+                    return [fakeSignature];
+                }
+            }
+            const apparentElemType = getApparentType(elementType);
             // Resolve the signatures, preferring constructor
-            let signatures = getSignaturesOfType(elementType, SignatureKind.Construct);
+            let signatures = getSignaturesOfType(apparentElemType, SignatureKind.Construct);
             if (signatures.length === 0) {
                 // No construct signatures, try call signatures
-                signatures = getSignaturesOfType(elementType, SignatureKind.Call);
+                signatures = getSignaturesOfType(apparentElemType, SignatureKind.Call);
             }
-            if (signatures.length === 0 && elementType.flags & TypeFlags.Union) {
+            if (signatures.length === 0 && apparentElemType.flags & TypeFlags.Union) {
                 // If each member has some combination of new/call signatures; make a union signature list for those
-                signatures = getUnionSignatures(map((elementType as UnionType).types, getUninstantiatedJsxSignaturesOfType));
+                signatures = getUnionSignatures(map((apparentElemType as UnionType).types, t => getUninstantiatedJsxSignaturesOfType(t, caller)));
             }
             return signatures;
         }
@@ -20547,21 +20562,8 @@ namespace ts {
                 return resolveErrorCall(node);
             }
 
-            if (exprTypes.flags & TypeFlags.StringLiteral) {
-                const intrinsicType = getIntrinsicAttributesTypeFromStringLiteralType(exprTypes as StringLiteralType, node);
-                if (!intrinsicType) {
-                    error(node, Diagnostics.Property_0_does_not_exist_on_type_1, (exprTypes as StringLiteralType).value, "JSX." + JsxNames.IntrinsicElements);
-                    return resolveUntypedCall(node);
-                }
-                else {
-                    const fakeSignature = createSignatureForJSXIntrinsic(node, intrinsicType);
-                    checkTypeAssignableToAndOptionallyElaborate(checkExpressionWithContextualType(node.attributes, getEffectiveFirstArgumentForJsxSignature(fakeSignature, node), /*mapper*/ undefined), intrinsicType, node.tagName, node.attributes);
-                    return fakeSignature;
-                }
-            }
-
-            const signatures = getUninstantiatedJsxSignaturesOfType(apparentType);
-            if (exprTypes.flags & TypeFlags.String || isUntypedFunctionCall(exprTypes, apparentType, signatures.length, /*constructSignatures*/ 0)) {
+            const signatures = getUninstantiatedJsxSignaturesOfType(exprTypes, node);
+            if (isUntypedFunctionCall(exprTypes, apparentType, signatures.length, /*constructSignatures*/ 0)) {
                 return resolveUntypedCall(node);
             }
 
