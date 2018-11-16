@@ -5,7 +5,6 @@ module M {
 >M : typeof M
 
     export interface Point { x: number; y: number }
->Point : Point
 >x : number
 >y : number
 
@@ -46,7 +45,6 @@ var p1: { x: number; y: number; }
 var p1: M.Point;
 >p1 : { x: number; y: number; }
 >M : any
->Point : M.Point
 
 // making the point a class instead of an interface 
 // makes this an instantiated mmodule
@@ -64,7 +62,6 @@ module M2 {
 
         static Origin(): Point {
 >Origin : () => Point
->Point : Point
 
             return { x: 0, y: 0 };
 >{ x: 0, y: 0 } : { x: number; y: number; }
@@ -106,7 +103,6 @@ var a2 = M2.Point;
 var o: M2.Point = a2.Origin();
 >o : M2.Point
 >M2 : any
->Point : M2.Point
 >a2.Origin() : M2.Point
 >a2.Origin : () => M2.Point
 >a2 : typeof M2.Point
@@ -120,7 +116,6 @@ var p2: { x: number; y: number }
 var p2: M2.Point;
 >p2 : { x: number; y: number; }
 >M2 : any
->Point : M2.Point
 
 var p2 = new m2.Point();
 >p2 : { x: number; y: number; }
@@ -174,7 +169,6 @@ var a3 = M3.Color;
 var blue: M3.Color = a3.Blue;
 >blue : M3.Color
 >M3 : any
->Color : M3.Color
 >a3.Blue : M3.Color.Blue
 >a3 : typeof M3.Color
 >Blue : M3.Color.Blue
@@ -182,7 +176,6 @@ var blue: M3.Color = a3.Blue;
 var p3: M3.Color;
 >p3 : M3.Color
 >M3 : any
->Color : M3.Color
 
 var p3 = M3.Color.Red;
 >p3 : M3.Color

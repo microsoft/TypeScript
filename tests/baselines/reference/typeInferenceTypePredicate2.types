@@ -14,7 +14,6 @@
 >filter : { <S extends boolean>(callbackfn: (value: boolean, index: number, array: boolean[]) => value is S, thisArg?: any): S[]; (callbackfn: (value: boolean, index: number, array: boolean[]) => any, thisArg?: any): boolean[]; }
 >(thing): thing is boolean => thing !== null : (thing: boolean) => thing is boolean
 >thing : boolean
->thing : any
 >thing !== null : boolean
 >thing : boolean
 >null : null

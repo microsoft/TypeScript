@@ -303,7 +303,7 @@ function f50() {
 
 // Repro from #21862
 
-type OldDiff<T extends string, U extends string> = (
+type OldDiff<T extends keyof any, U extends keyof any> = (
     & { [P in T]: P; }
     & { [P in U]: never; }
     & { [x: string]: never; }
@@ -341,3 +341,15 @@ declare interface ExtractFooBar<FB extends FooBar> { }
 type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
 }
+
+// Repro from #22985
+
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+    T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+
+var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})

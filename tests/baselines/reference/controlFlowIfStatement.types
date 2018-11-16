@@ -1,7 +1,6 @@
 === tests/cases/conformance/controlFlow/controlFlowIfStatement.ts ===
 let x: string | number | boolean | RegExp;
 >x : string | number | boolean | RegExp
->RegExp : RegExp
 
 let cond: boolean;
 >cond : boolean
@@ -92,14 +91,11 @@ function b() {
 }
 function c<T>(data: string | T): T {
 >c : <T>(data: string | T) => T
->T : T
 >data : string | T
->T : T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 
@@ -108,7 +104,7 @@ function c<T>(data: string | T): T {
 >JSON.parse : (text: string, reviver?: (key: any, value: any) => any) => any
 >JSON : JSON
 >parse : (text: string, reviver?: (key: any, value: any) => any) => any
->data : string
+>data : string | (T & string)
     }
     else {
         return data;
@@ -117,13 +113,11 @@ function c<T>(data: string | T): T {
 }
 function d<T extends string>(data: string | T): never {
 >d : <T extends string>(data: string | T) => never
->T : T
 >data : string | T
->T : T
 
     if (typeof data === 'string') {
 >typeof data === 'string' : boolean
->typeof data : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof data : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >data : string | T
 >'string' : "string"
 

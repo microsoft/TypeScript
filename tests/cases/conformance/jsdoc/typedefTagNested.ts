@@ -27,6 +27,19 @@ const app = {
  * @property {string} horrible
  * @type {string} idea
  */
+var intercessor = 1
 
 /** @type {Opp} */
 var mistake;
+
+/** @typedef {Object} Upp
+ * @property {string} name
+ * @property {Object} not
+ * @property {string} nested
+ */
+
+/** @type {Upp} */
+var sala = { name: 'uppsala', not: 0, nested: "ok" };
+sala.name
+sala.not
+sala.nested

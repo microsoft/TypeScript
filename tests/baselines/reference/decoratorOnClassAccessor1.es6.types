@@ -1,14 +1,9 @@
 === tests/cases/conformance/es6/decorators/class/accessor/decoratorOnClassAccessor1.es6.ts ===
 declare function dec<T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>): TypedPropertyDescriptor<T>;
 >dec : <T>(target: any, propertyKey: string, descriptor: TypedPropertyDescriptor<T>) => TypedPropertyDescriptor<T>
->T : T
 >target : any
 >propertyKey : string
 >descriptor : TypedPropertyDescriptor<T>
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
->TypedPropertyDescriptor : TypedPropertyDescriptor<T>
->T : T
 
 export default class {
     @dec get accessor() { return 1; }

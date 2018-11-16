@@ -1,11 +1,7 @@
 === tests/cases/compiler/typeArgumentInferenceApparentType1.ts ===
 function method<T>(iterable: Iterable<T>): T {
 >method : <T>(iterable: Iterable<T>) => T
->T : T
 >iterable : Iterable<T>
->Iterable : Iterable<T>
->T : T
->T : T
 
     return;
 }

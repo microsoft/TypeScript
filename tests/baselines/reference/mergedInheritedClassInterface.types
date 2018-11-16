@@ -1,7 +1,5 @@
 === tests/cases/conformance/classes/classDeclarations/mergedInheritedClassInterface.ts ===
 interface BaseInterface {
->BaseInterface : BaseInterface
-
     required: number;
 >required : number
 
@@ -20,9 +18,6 @@ class BaseClass {
 }
 
 interface Child extends BaseInterface {
->Child : Child
->BaseInterface : BaseInterface
-
     additional: number;
 >additional : number
 }
@@ -39,9 +34,6 @@ class Child extends BaseClass {
 }
 
 interface ChildNoBaseClass extends BaseInterface {
->ChildNoBaseClass : ChildNoBaseClass
->BaseInterface : BaseInterface
-
     additional2: string;
 >additional2 : string
 }
@@ -62,7 +54,6 @@ class Grandchild extends ChildNoBaseClass {
 // checks if properties actually were merged
 var child : Child;
 >child : Child
->Child : Child
 
 child.required;
 >child.required : number
@@ -103,7 +94,6 @@ child.method();
 
 var grandchild: Grandchild;
 >grandchild : Grandchild
->Grandchild : Grandchild
 
 grandchild.required;
 >grandchild.required : number

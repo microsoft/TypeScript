@@ -11,7 +11,7 @@ tests/cases/compiler/superAccess2.ts(11,59): error TS2336: 'super' cannot be ref
 tests/cases/compiler/superAccess2.ts(11,59): error TS17011: 'super' must be called before accessing a property of 'super' in the constructor of a derived class.
 tests/cases/compiler/superAccess2.ts(11,64): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superAccess2.ts(15,19): error TS1034: 'super' must be followed by an argument list or member access.
-tests/cases/compiler/superAccess2.ts(17,15): error TS2339: Property 'y' does not exist on type 'P'.
+tests/cases/compiler/superAccess2.ts(17,15): error TS2576: Property 'y' is a static member of type 'P'
 tests/cases/compiler/superAccess2.ts(20,26): error TS1034: 'super' must be followed by an argument list or member access.
 tests/cases/compiler/superAccess2.ts(21,15): error TS2339: Property 'x' does not exist on type 'typeof P'.
 
@@ -61,7 +61,7 @@ tests/cases/compiler/superAccess2.ts(21,15): error TS2339: Property 'x' does not
             super.x();
             super.y(); // error
                   ~
-!!! error TS2339: Property 'y' does not exist on type 'P'.
+!!! error TS2576: Property 'y' is a static member of type 'P'
         }
     
         static bar(zz = super) {

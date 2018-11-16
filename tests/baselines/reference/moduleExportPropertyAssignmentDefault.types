@@ -1,0 +1,21 @@
+=== tests/cases/conformance/salsa/axios.js ===
+var axios = {}
+>axios : { default: { default: any; }; }
+>{} : {}
+
+module.exports = axios // both assignments should be ok
+>module.exports = axios : { default: { default: any; }; }
+>module.exports : { default: { default: any; }; }
+>module : { "tests/cases/conformance/salsa/axios": { default: { default: any; }; }; }
+>exports : { default: { default: any; }; }
+>axios : { default: { default: any; }; }
+
+module.exports.default = axios
+>module.exports.default = axios : { default: { default: any; }; }
+>module.exports.default : { default: any; }
+>module.exports : { default: { default: any; }; }
+>module : { "tests/cases/conformance/salsa/axios": { default: { default: any; }; }; }
+>exports : { default: { default: any; }; }
+>default : { default: any; }
+>axios : { default: { default: any; }; }
+

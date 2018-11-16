@@ -49,7 +49,7 @@ for (let [v] of v) { }
 let [x2 = x2] = []
 >x2 : any
 >x2 : any
->[] : [any]
+>[] : [any?]
 
 let z0 = () => z0;
 >z0 : () => any
@@ -63,7 +63,7 @@ let z1 = function () { return z1; }
 
 let z2 = { f() { return z2;}}
 >z2 : { f(): any; }
->{ f() { return z2;}} : { f(): any; }
+>{ f() { return z2;}} : { f(): { f(): any; }; }
 >f : () => { f(): any; }
 >z2 : { f(): any; }
 

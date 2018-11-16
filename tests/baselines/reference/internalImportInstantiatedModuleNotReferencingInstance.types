@@ -3,7 +3,6 @@ module A {
 >A : typeof A
 
     export interface X { s: string }
->X : X
 >s : string
 
     export var a = 10;

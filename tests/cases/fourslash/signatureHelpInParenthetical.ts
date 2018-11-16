@@ -3,7 +3,6 @@
 //// class base { constructor (public n: number, public y: string) { } }
 //// (new base(/**/
 
-goTo.marker();
-verify.currentParameterHelpArgumentNameIs('n');
+verify.signatureHelp({ marker: "", parameterName: "n" });
 edit.insert('0, ');
-verify.currentParameterHelpArgumentNameIs('y');
+verify.signatureHelp({ parameterName: "y" });

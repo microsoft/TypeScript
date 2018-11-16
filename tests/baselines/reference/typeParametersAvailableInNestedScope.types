@@ -1,22 +1,17 @@
 === tests/cases/conformance/types/typeParameters/typeParameterLists/typeParametersAvailableInNestedScope.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     data: T;
 >data : T
->T : T
 
     x = <U>(a: U) => {
 >x : <U>(a: U) => T
 ><U>(a: U) => {        var y: T;        return y;    } : <U>(a: U) => T
->U : U
 >a : U
->U : U
 
         var y: T;
 >y : T
->T : T
 
         return y;
 >y : T
@@ -27,13 +22,10 @@ class C<T> {
 
         function temp<U>(a: U) {
 >temp : <U>(a: U) => T
->U : U
 >a : U
->U : U
 
             var y: T;
 >y : T
->T : T
 
             return y;
 >y : T
@@ -42,7 +34,6 @@ class C<T> {
 >temp(<T>null) : T
 >temp : <U>(a: U) => T
 ><T>null : T
->T : T
 >null : null
     }
 }

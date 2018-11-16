@@ -11,7 +11,6 @@ class C {
 
     ".1": Object;
 >".1" : Object
->Object : Object
 
     "1": number;
 >"1" : number
@@ -24,20 +23,16 @@ class C {
 
     "1.0": Date;
 >"1.0" : Date
->Date : Date
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
->RegExp : RegExp
 
     "-1": Date;
 >"-1" : Date
->Date : Date
 }
 
 var c: C;
 >c : C
->C : C
 
 var r1 = c['0.1'];
 >r1 : void
@@ -147,14 +142,11 @@ var r13 = i[-01]
 >01 : 1
 
 interface I {
->I : I
-
     "0.1": void;
 >"0.1" : void
 
     ".1": Object;
 >".1" : Object
->Object : Object
 
     "1": number;
 >"1" : number
@@ -167,20 +159,16 @@ interface I {
 
     "1.0": Date;
 >"1.0" : Date
->Date : Date
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
->RegExp : RegExp
 
     "-1": Date;
 >"-1" : Date
->Date : Date
 }
 
 var i: I;
 >i : I
->I : I
 
 var r1 = i['0.1'];
 >r1 : void
@@ -297,7 +285,6 @@ var a: {
 
     ".1": Object;
 >".1" : Object
->Object : Object
 
     "1": number;
 >"1" : number
@@ -310,15 +297,12 @@ var a: {
 
     "1.0": Date;
 >"1.0" : Date
->Date : Date
 
     "-1.0": RegExp;
 >"-1.0" : RegExp
->RegExp : RegExp
 
     "-1": Date;
 >"-1" : Date
->Date : Date
 }
 
 var r1 = a['0.1'];

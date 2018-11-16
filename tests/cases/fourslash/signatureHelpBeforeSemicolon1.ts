@@ -5,11 +5,10 @@
 ////
 ////Foo(/**/;
 
-goTo.marker();
-verify.signatureHelpPresent();
-verify.signatureHelpCountIs(1);
-
-verify.currentSignatureHelpIs("Foo(arg1: string, arg2: string): void");
-verify.currentSignatureParameterCountIs(2);
-verify.currentParameterHelpArgumentNameIs("arg1");
-verify.currentParameterSpanIs("arg1: string");
+verify.signatureHelp({
+    marker: "",
+    text: "Foo(arg1: string, arg2: string): void",
+    parameterCount: 2,
+    parameterName: "arg1",
+    parameterSpan: "arg1: string",
+});

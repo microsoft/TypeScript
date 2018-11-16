@@ -1,0 +1,38 @@
+=== tests/cases/compiler/items.ts ===
+export default {
+    foob: "a"
+>foob : Symbol(foob, Decl(items.ts, 0, 16))
+}
+
+export const q = {
+>q : Symbol(q, Decl(items.ts, 4, 12))
+
+    foob: "b"
+>foob : Symbol(foob, Decl(items.ts, 4, 18))
+}
+=== tests/cases/compiler/index.ts ===
+import B, {q} from "./items";
+>B : Symbol(B, Decl(index.ts, 0, 6))
+>q : Symbol(q, Decl(index.ts, 0, 11))
+
+interface IFoo {
+>IFoo : Symbol(IFoo, Decl(index.ts, 0, 29))
+
+    foo: string;
+>foo : Symbol(IFoo.foo, Decl(index.ts, 2, 16))
+}
+
+function nFoo(x: IFoo) {}
+>nFoo : Symbol(nFoo, Decl(index.ts, 4, 1))
+>x : Symbol(x, Decl(index.ts, 6, 14))
+>IFoo : Symbol(IFoo, Decl(index.ts, 0, 29))
+
+
+nFoo(q); // for comparison
+>nFoo : Symbol(nFoo, Decl(index.ts, 4, 1))
+>q : Symbol(q, Decl(index.ts, 0, 11))
+
+nFoo(B);
+>nFoo : Symbol(nFoo, Decl(index.ts, 4, 1))
+>B : Symbol(B, Decl(index.ts, 0, 6))
+

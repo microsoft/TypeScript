@@ -12,7 +12,6 @@ class A {
 }
 class C implements A {
 >C : C
->A : A
 
     private x = 1;
 >x : number
@@ -32,11 +31,9 @@ class C2 extends A {}
 
 var c: C;
 >c : C
->C : C
 
 var c2: C2;
 >c2 : C2
->C2 : C2
 
 c = c2;
 >c = c2 : C2

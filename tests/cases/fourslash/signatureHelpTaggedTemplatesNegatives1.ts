@@ -5,4 +5,4 @@
 ////
 //// /*1*/f/*2*/ /*3*/` qwerty ${ 123 } asdf ${   41234   }  zxcvb ${ g `    ` }     `/*4*/
 
-goTo.eachMarker(() => verify.not.signatureHelpPresent());
+verify.noSignatureHelp(...test.markerNames());

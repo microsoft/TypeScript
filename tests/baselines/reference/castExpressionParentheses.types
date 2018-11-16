@@ -182,7 +182,7 @@ declare var A;
 >(<any>typeof A).x : any
 >(<any>typeof A) : any
 ><any>typeof A : any
->typeof A : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof A : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >A : any
 >x : any
 
@@ -205,7 +205,6 @@ new (<any>A());
 >(<Tany>()=> {})() : void
 >(<Tany>()=> {}) : <Tany>() => void
 ><Tany>()=> {} : <Tany>() => void
->Tany : Tany
 
 (<any>function foo() { })();
 >(<any>function foo() { })() : any

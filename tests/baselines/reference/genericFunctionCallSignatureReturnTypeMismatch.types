@@ -1,19 +1,12 @@
 === tests/cases/compiler/genericFunctionCallSignatureReturnTypeMismatch.ts ===
 interface Array<T> {}
->Array : T[]
->T : T
 
 var f : { <T>(x:T): T; }
 >f : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var g : { <S>() : S[]; };
 >g : <S>() => S[]
->S : S
->S : S
 
 f = g;
 >f = g : <S>() => S[]
@@ -30,9 +23,9 @@ var s = f("str").toUpperCase();
 >toUpperCase : () => string
 
 console.log(s);
->console.log(s) : any
->console.log : any
->console : any
->log : any
+>console.log(s) : void
+>console.log : (message?: any, ...optionalParams: any[]) => void
+>console : Console
+>log : (message?: any, ...optionalParams: any[]) => void
 >s : string
 

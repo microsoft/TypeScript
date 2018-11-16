@@ -14,4 +14,3 @@ declare module "gulp-insert" {
 }
 
 declare module "sorcery";
-declare module "travis-fold";

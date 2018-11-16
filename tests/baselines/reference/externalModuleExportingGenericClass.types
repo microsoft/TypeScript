@@ -4,7 +4,6 @@ import a = require('./externalModuleExportingGenericClass_file0');
 
 var v: a; // this should report error
 >v : any
->a : a<T>
 
 var v2: any = (new a()).foo;
 >v2 : any
@@ -25,11 +24,9 @@ var v3: number = (new a<number>()).foo;
 === tests/cases/compiler/externalModuleExportingGenericClass_file0.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 export = C;
 >C : C<T>

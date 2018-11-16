@@ -93,11 +93,11 @@ class Base2 {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 28, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     [x: number]: Date;
 >x : Symbol(x, Decl(derivedClassIncludesInheritedMembers.ts, 29, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 }
 
 class Derived2 extends Base2 {

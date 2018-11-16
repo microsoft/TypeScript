@@ -1,5 +1,7 @@
 /// <reference path="fourslash.ts" />
 
+// @module: esnext
+
 // @Filename: /a.ts
 ////declare module "m" {
 ////    export const x: number;

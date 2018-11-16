@@ -1,22 +1,13 @@
 === tests/cases/compiler/inferentialTypingWithFunctionTypeSyntacticScenarios.ts ===
 declare function map<T, U>(array: T, func: (x: T) => U): U;
 >map : <T, U>(array: T, func: (x: T) => U) => U
->T : T
->U : U
 >array : T
->T : T
 >func : (x: T) => U
 >x : T
->T : T
->U : U
->U : U
 
 declare function identity<V>(y: V): V;
 >identity : <V>(y: V) => V
->V : V
 >y : V
->V : V
->V : V
 
 var s: string;
 >s : string
@@ -63,14 +54,11 @@ s = map("", (() => identity)());
 
 // construct
 interface IdentityConstructor {
->IdentityConstructor : IdentityConstructor
-
     new (): typeof identity;
 >identity : <V>(y: V) => V
 }
 var ic: IdentityConstructor;
 >ic : IdentityConstructor
->IdentityConstructor : IdentityConstructor
 
 s = map("", new ic());
 >s = map("", new ic()) : string

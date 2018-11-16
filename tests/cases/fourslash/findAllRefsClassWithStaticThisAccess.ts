@@ -4,7 +4,12 @@
 ////    static s() {
 ////        [|this|];
 ////    }
-////    static get f() { return [|this|]; }
+////    static get f() {
+////        return [|this|];
+////
+////        function inner() { this; }
+////        class Inner { x = this; }
+////    }
 ////}
 
 const [r0, r1, r2] = test.ranges();

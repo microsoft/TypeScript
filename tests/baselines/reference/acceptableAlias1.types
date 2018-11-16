@@ -3,11 +3,10 @@ module M {
 >M : typeof M
 
     export module N {
->N : any
     }
     export import X = N;
 >X : any
->N : any
+>N : error
 }
 
 import r = M.X;

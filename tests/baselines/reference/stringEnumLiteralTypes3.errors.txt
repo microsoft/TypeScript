@@ -7,9 +7,9 @@ tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(19,5): error TS
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(37,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(39,5): error TS2322: Type 'Choice.No' is not assignable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(40,5): error TS2322: Type 'Choice.Unknown' is not assignable to type 'YesNo'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(52,5): error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.Unknown'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(54,5): error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.No'.
-tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(55,5): error TS2365: Operator '===' cannot be applied to types 'YesNo' and 'Choice.Unknown'.
+tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(52,5): error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
+tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(54,5): error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.No' have no overlap.
+tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(55,5): error TS2367: This condition will always return 'false' since the types 'YesNo' and 'Choice.Unknown' have no overlap.
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(87,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(89,14): error TS2678: Type 'Choice.No' is not comparable to type 'Choice.Yes'.
 tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(96,14): error TS2678: Type 'Choice.Unknown' is not comparable to type 'YesNo'.
@@ -86,14 +86,14 @@ tests/cases/conformance/types/literal/stringEnumLiteralTypes3.ts(96,14): error T
     function f6(a: Yes, b: YesNo, c: UnknownYesNo, d: Choice) {
         a === Choice.Unknown;
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.Unknown'.
+!!! error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.Unknown' have no overlap.
         a === Choice.Yes;
         a === Choice.No;
         ~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'Choice.Yes' and 'Choice.No'.
+!!! error TS2367: This condition will always return 'false' since the types 'Choice.Yes' and 'Choice.No' have no overlap.
         b === Choice.Unknown;
         ~~~~~~~~~~~~~~~~~~~~
-!!! error TS2365: Operator '===' cannot be applied to types 'YesNo' and 'Choice.Unknown'.
+!!! error TS2367: This condition will always return 'false' since the types 'YesNo' and 'Choice.Unknown' have no overlap.
         b === Choice.Yes;
         b === Choice.No;
         c === Choice.Unknown;

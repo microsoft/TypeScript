@@ -7,24 +7,17 @@ class Foo {
 }
 
 interface I extends Foo { // error
->I : I
->Foo : Foo
-
     x: string;
 >x : string
 }
 
 interface I2 extends Foo {
->I2 : I2
->Foo : Foo
-
     y: string;
 >y : string
 }
 
 var i: I2;
 >i : I2
->I2 : I2
 
 var r = i.y;
 >r : string

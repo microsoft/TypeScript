@@ -7,6 +7,7 @@
 ////    case /*1*/:
 ////}
 
-goTo.eachMarker((_, idx) => {
-    verify.completionListContains("Enu", "enum Enu", "", "enum", undefined, undefined, { isRecommended: true });
+verify.completions({
+    marker: test.markers(),
+    includes: { name: "Enu", text: "enum Enu", kind: "enum", isRecommended: true },
 });

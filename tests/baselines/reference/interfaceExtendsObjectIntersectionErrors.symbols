@@ -148,13 +148,13 @@ type Identifiable<T> = { _id: string } & T;
 
 interface I20 extends Partial<T1> { a: string }
 >I20 : Symbol(I20, Decl(interfaceExtendsObjectIntersectionErrors.ts, 36, 43))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
 >a : Symbol(I20.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 38, 35))
 
 interface I21 extends Readonly<T1> { a: string }
 >I21 : Symbol(I21, Decl(interfaceExtendsObjectIntersectionErrors.ts, 38, 47))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T1 : Symbol(T1, Decl(interfaceExtendsObjectIntersectionErrors.ts, 0, 0))
 >a : Symbol(I21.a, Decl(interfaceExtendsObjectIntersectionErrors.ts, 39, 36))
 

@@ -8,7 +8,7 @@
 //// }
 ////
 //// class Bar implements Foo {
-////     [|hello() {}|]
+////     [|hello|]() {}
 ////     public sure() {}
 //// }
 ////

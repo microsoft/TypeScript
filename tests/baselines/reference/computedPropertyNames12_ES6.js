@@ -17,6 +17,7 @@ class C {
 }
 
 //// [computedPropertyNames12_ES6.js]
+var _a, _b, _c;
 var s;
 var n;
 var a;
@@ -29,4 +30,3 @@ class C {
 }
 _a = n, s + s, _b = s + n, +s, _c = `hello ${a} bye`;
 C[_c] = 0;
-var _a, _b, _c;

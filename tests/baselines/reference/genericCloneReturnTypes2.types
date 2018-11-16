@@ -1,14 +1,12 @@
 === tests/cases/compiler/genericCloneReturnTypes2.ts ===
 class MyList<T> {
 >MyList : MyList<T>
->T : T
 
     public size: number;
 >size : number
 
     public data: T[];
 >data : T[]
->T : T
 
     constructor(n: number) {
 >n : number
@@ -27,7 +25,6 @@ class MyList<T> {
 >data : T[]
 >new Array<T>(this.size) : T[]
 >Array : ArrayConstructor
->T : T
 >this.size : number
 >this : this
 >size : number
@@ -38,7 +35,6 @@ class MyList<T> {
         return new MyList<T>(this.size);
 >new MyList<T>(this.size) : MyList<T>
 >MyList : typeof MyList
->T : T
 >this.size : number
 >this : this
 >size : number
@@ -46,11 +42,9 @@ class MyList<T> {
 }
 var a: MyList<string>;
 >a : MyList<string>
->MyList : MyList<T>
 
 var b: MyList<any> = a.clone(); // ok
 >b : MyList<any>
->MyList : MyList<T>
 >a.clone() : MyList<string>
 >a.clone : () => MyList<string>
 >a : MyList<string>
@@ -58,7 +52,6 @@ var b: MyList<any> = a.clone(); // ok
 
 var c: MyList<string> = a.clone(); // bug was there was an error on this line
 >c : MyList<string>
->MyList : MyList<T>
 >a.clone() : MyList<string>
 >a.clone : () => MyList<string>
 >a : MyList<string>
@@ -66,7 +59,6 @@ var c: MyList<string> = a.clone(); // bug was there was an error on this line
 
 var d: MyList<number> = a.clone(); // error
 >d : MyList<number>
->MyList : MyList<T>
 >a.clone() : MyList<string>
 >a.clone : () => MyList<string>
 >a : MyList<string>

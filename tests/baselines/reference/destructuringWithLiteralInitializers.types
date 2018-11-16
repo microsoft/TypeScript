@@ -235,7 +235,7 @@ g1([1, 1]);
 
 // (arg: [number, number]) => void
 function g2([x = 0, y = 0]) { }
->g2 : ([x, y]: [number, number]) => void
+>g2 : ([x, y]: [number?, number?]) => void
 >x : number
 >0 : 0
 >y : number
@@ -243,7 +243,7 @@ function g2([x = 0, y = 0]) { }
 
 g2([1, 1]);
 >g2([1, 1]) : void
->g2 : ([x, y]: [number, number]) => void
+>g2 : ([x, y]: [number?, number?]) => void
 >[1, 1] : [number, number]
 >1 : 1
 >1 : 1
@@ -270,40 +270,40 @@ g3([1, 1]);
 
 // (arg?: [number, number]) => void
 function g4([x, y = 0] = [0]) { }
->g4 : ([x, y]?: [number, number]) => void
+>g4 : ([x, y]?: [number, number?]) => void
 >x : number
 >y : number
 >0 : 0
->[0] : [number, number]
+>[0] : [number, number?]
 >0 : 0
 
 g4();
 >g4() : void
->g4 : ([x, y]?: [number, number]) => void
+>g4 : ([x, y]?: [number, number?]) => void
 
 g4([1, 1]);
 >g4([1, 1]) : void
->g4 : ([x, y]?: [number, number]) => void
+>g4 : ([x, y]?: [number, number?]) => void
 >[1, 1] : [number, number]
 >1 : 1
 >1 : 1
 
 // (arg?: [number, number]) => void
 function g5([x = 0, y = 0] = []) { }
->g5 : ([x, y]?: [number, number]) => void
+>g5 : ([x, y]?: [number?, number?]) => void
 >x : number
 >0 : 0
 >y : number
 >0 : 0
->[] : [number, number]
+>[] : [number?, number?]
 
 g5();
 >g5() : void
->g5 : ([x, y]?: [number, number]) => void
+>g5 : ([x, y]?: [number?, number?]) => void
 
 g5([1, 1]);
 >g5([1, 1]) : void
->g5 : ([x, y]?: [number, number]) => void
+>g5 : ([x, y]?: [number?, number?]) => void
 >[1, 1] : [number, number]
 >1 : 1
 >1 : 1

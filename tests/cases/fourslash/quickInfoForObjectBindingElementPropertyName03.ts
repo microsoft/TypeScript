@@ -9,5 +9,5 @@
 ////}
 
 for (const marker of test.markerNames()) {
-    verify.quickInfoAt(marker, "(property) Recursive.next: Recursive");
+    verify.quickInfoAt(marker, "(property) Recursive.next?: Recursive");
 }

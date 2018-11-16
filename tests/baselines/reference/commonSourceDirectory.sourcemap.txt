@@ -1,7 +1,7 @@
 ===================================================================
 JsFile: index.js
-mapUrl: /app/myMapRoot/index.js.map
-sourceRoot: /app/mySourceRoot/
+mapUrl: ../myMapRoot/index.js.map
+sourceRoot: mySourceRoot/
 sources: index.ts
 ===================================================================
 -------------------------------------------------------------------
@@ -43,7 +43,7 @@ sourceFile:index.ts
 3 >       ^^^
 4 >          ^^^^^^^
 5 >                 ^
-6 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+6 >                  ^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
 2 >x
@@ -56,4 +56,4 @@ sourceFile:index.ts
 4 >Emitted(6, 18) Source(4, 6) + SourceIndex(0)
 5 >Emitted(6, 19) Source(4, 7) + SourceIndex(0)
 ---
->>>//# sourceMappingURL=/app/myMapRoot/index.js.map
+>>>//# sourceMappingURL=../myMapRoot/index.js.map

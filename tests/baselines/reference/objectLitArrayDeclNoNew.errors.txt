@@ -1,7 +1,8 @@
+tests/cases/compiler/objectLitArrayDeclNoNew.ts(22,20): error TS1011: An element access expression should take an argument.
 tests/cases/compiler/objectLitArrayDeclNoNew.ts(27,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/objectLitArrayDeclNoNew.ts (1 errors) ====
+==== tests/cases/compiler/objectLitArrayDeclNoNew.ts (2 errors) ====
     declare var console;
     "use strict";
     module Test {
@@ -24,6 +25,8 @@ tests/cases/compiler/objectLitArrayDeclNoNew.ts(27,1): error TS1128: Declaration
           var state:IState= null;
           return {
            tokens: Gar[],//IToken[],  // Missing new. Correct syntax is: tokens: new IToken[]
+                       
+!!! error TS1011: An element access expression should take an argument.
            endState: state
           };
          }

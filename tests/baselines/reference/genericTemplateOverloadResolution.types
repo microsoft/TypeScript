@@ -1,0 +1,23 @@
+=== tests/cases/compiler/genericTemplateOverloadResolution.ts ===
+interface IFooFn {
+    (strings: TemplateStringsArray): Promise<{}>;
+>strings : TemplateStringsArray
+
+    <T>(strings: TemplateStringsArray): Promise<T>;
+>strings : TemplateStringsArray
+}
+
+declare const fooFn: IFooFn;
+>fooFn : IFooFn
+
+declare function expect(x: Promise<number>): void;
+>expect : (x: Promise<number>) => void
+>x : Promise<number>
+
+expect(fooFn<number>``);
+>expect(fooFn<number>``) : void
+>expect : (x: Promise<number>) => void
+>fooFn<number>`` : Promise<number>
+>fooFn : IFooFn
+>`` : ""
+

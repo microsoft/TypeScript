@@ -301,7 +301,7 @@ function f50() {
 
 // Repro from #21862
 
-type OldDiff<T extends string, U extends string> = (
+type OldDiff<T extends keyof any, U extends keyof any> = (
     & { [P in T]: P; }
     & { [P in U]: never; }
     & { [x: string]: never; }
@@ -339,6 +339,18 @@ declare interface ExtractFooBar<FB extends FooBar> { }
 type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
 }
+
+// Repro from #22985
+
+type RecursivePartial<T> = {
+  [P in keyof T]?: T[P] extends Array<any> ? {[index: number]: RecursivePartial<T[P][0]>} :
+    T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+
+var a = {o: 1, b: 2, c: [{a: 1, c: '213'}]}
+assign(a, {o: 2, c: {0: {a: 2, c: '213123'}}})
 
 
 //// [conditionalTypes1.js]
@@ -435,6 +447,8 @@ var f45 = function (value) { return value; }; // Error
 // Repro from #21863
 function f50() {
 }
+var a = { o: 1, b: 2, c: [{ a: 1, c: '213' }] };
+assign(a, { o: 2, c: { 0: { a: 2, c: '213123' } } });
 
 
 //// [conditionalTypes1.d.ts]
@@ -642,7 +656,7 @@ declare type T95<T> = T extends string ? boolean : number;
 declare const f44: <U>(value: T94<U>) => T95<U>;
 declare const f45: <U>(value: T95<U>) => T94<U>;
 declare function f50(): void;
-declare type OldDiff<T extends string, U extends string> = ({
+declare type OldDiff<T extends keyof any, U extends keyof any> = ({
     [P in T]: P;
 } & {
     [P in U]: never;
@@ -686,4 +700,18 @@ declare interface ExtractFooBar<FB extends FooBar> {
 }
 declare type Extracted<Struct> = {
     [K in keyof Struct]: Struct[K] extends FooBar ? ExtractFooBar<Struct[K]> : Struct[K];
+};
+declare type RecursivePartial<T> = {
+    [P in keyof T]?: T[P] extends Array<any> ? {
+        [index: number]: RecursivePartial<T[P][0]>;
+    } : T[P] extends object ? RecursivePartial<T[P]> : T[P];
+};
+declare function assign<T>(o: T, a: RecursivePartial<T>): void;
+declare var a: {
+    o: number;
+    b: number;
+    c: {
+        a: number;
+        c: string;
+    }[];
 };

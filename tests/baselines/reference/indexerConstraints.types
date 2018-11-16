@@ -1,95 +1,59 @@
 === tests/cases/compiler/indexerConstraints.ts ===
 interface A { a: number; }
->A : A
 >a : number
 
 interface B extends A { b: number; }
->B : B
->A : A
 >b : number
 
 // Good case
 interface D {
->D : D
-
     [s: string]: A;
 >s : string
->A : A
 }
 interface D {
->D : D
-
     [n: number]: B;
 >n : number
->B : B
 }
 
 // Bad case
 interface E {
->E : E
-
     [s: string]: B;
 >s : string
->B : B
 }
 interface E {
->E : E
-
     [n: number]: A;
 >n : number
->A : A
 }
 
 // Inheritance
 interface F {
->F : F
-
     [s: string]: B;
 >s : string
->B : B
 }
 interface G extends F {
->G : G
->F : F
-
     [n: number]: A;
 >n : number
->A : A
 }
 
 // Other way
 interface H {
->H : H
-
     [n: number]: A;
 >n : number
->A : A
 }
 interface I extends H {
->I : I
->H : H
-
     [s: string]: B;
 >s : string
->B : B
 }
 
 // With hidden indexer
 interface J {
->J : J
-
     [n: number]: {};
 >n : number
 }
 interface K extends J {
->K : K
->J : J
-
     [n: number]: A;
 >n : number
->A : A
 
     [s: string]: B;
 >s : string
->B : B
 }

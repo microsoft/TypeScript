@@ -2,19 +2,13 @@
 // Repro from #17041
 
 interface Named {
->Named : Named
-
     name: string;
 >name : string
 }
 
 function parrot<T extends Named>(obj: T): T {
 >parrot : <T extends Named>(obj: T) => T
->T : T
->Named : Named
 >obj : T
->T : T
->T : T
 
     return obj;
 >obj : T

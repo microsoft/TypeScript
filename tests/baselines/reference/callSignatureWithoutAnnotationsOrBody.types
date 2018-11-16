@@ -12,15 +12,12 @@ var r = foo(1); // void since there's a body
 >1 : 1
 
 interface I {
->I : I
-
     ();
     f();
 >f : () => any
 }
 var i: I;
 >i : I
->I : I
 
 var r2 = i();
 >r2 : any

@@ -1,7 +1,6 @@
 === tests/cases/compiler/constructorWithCapturedSuper.ts ===
 let oneA: A;
 >oneA : A
->A : A
 
 class A {
 >A : A

@@ -25,7 +25,7 @@ module M {
 >this.fa : Symbol(Gar.fa, Decl(newArrays.ts, 2, 12))
 >this : Symbol(Gar, Decl(newArrays.ts, 1, 13))
 >fa : Symbol(Gar.fa, Decl(newArrays.ts, 2, 12))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(newArrays.ts, 0, 10))
 >this.x : Symbol(Gar.x, Decl(newArrays.ts, 3, 19))
 >this : Symbol(Gar, Decl(newArrays.ts, 1, 13))

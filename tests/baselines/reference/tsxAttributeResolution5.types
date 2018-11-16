@@ -1,42 +1,28 @@
 === tests/cases/conformance/jsx/file.tsx ===
 declare module JSX {
->JSX : any
-
 	interface Element { }
->Element : Element
-
 	interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
 		test1: Attribs1;
 >test1 : Attribs1
->Attribs1 : Attribs1
 
 		test2: Attribs2;
 >test2 : Attribs2
->Attribs2 : Attribs2
 	}
 }
 interface Attribs1 {
->Attribs1 : Attribs1
-
 	x: string;
 >x : string
 }
 
 interface Attribs2 {
->Attribs2 : Attribs2
-
 	toString(): string;
 >toString : () => string
 }
 
 function make1<T extends {x: string}> (obj: T) {
 >make1 : <T extends { x: string; }>(obj: T) => JSX.Element
->T : T
 >x : string
 >obj : T
->T : T
 
 	return <test1 {...obj} />; // OK
 ><test1 {...obj} /> : JSX.Element
@@ -46,10 +32,8 @@ function make1<T extends {x: string}> (obj: T) {
 
 function make2<T extends {x: number}> (obj: T) {
 >make2 : <T extends { x: number; }>(obj: T) => JSX.Element
->T : T
 >x : number
 >obj : T
->T : T
 
 	return <test1 {...obj} />; // Error (x is number, not string)
 ><test1 {...obj} /> : JSX.Element
@@ -59,10 +43,8 @@ function make2<T extends {x: number}> (obj: T) {
 
 function make3<T extends {y: string}> (obj: T) {
 >make3 : <T extends { y: string; }>(obj: T) => JSX.Element
->T : T
 >y : string
 >obj : T
->T : T
 
 	return <test1 {...obj} />; // Error, missing x
 ><test1 {...obj} /> : JSX.Element

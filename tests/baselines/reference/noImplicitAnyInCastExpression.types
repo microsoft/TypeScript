@@ -2,8 +2,6 @@
 // verify no noImplictAny errors reported with cast expression
 
 interface IFoo {
->IFoo : IFoo
-
     a: number;
 >a : number
 
@@ -15,7 +13,6 @@ interface IFoo {
 (<IFoo>{ a: null });
 >(<IFoo>{ a: null }) : IFoo
 ><IFoo>{ a: null } : IFoo
->IFoo : IFoo
 >{ a: null } : { a: null; }
 >a : null
 >null : null
@@ -24,7 +21,6 @@ interface IFoo {
 (<IFoo>{ a: 2, b: undefined });
 >(<IFoo>{ a: 2, b: undefined }) : IFoo
 ><IFoo>{ a: 2, b: undefined } : IFoo
->IFoo : IFoo
 >{ a: 2, b: undefined } : { a: number; b: undefined; }
 >a : number
 >2 : 2
@@ -35,7 +31,6 @@ interface IFoo {
 (<IFoo>{ c: null });
 >(<IFoo>{ c: null }) : IFoo
 ><IFoo>{ c: null } : IFoo
->IFoo : IFoo
 >{ c: null } : { c: null; }
 >c : null
 >null : null

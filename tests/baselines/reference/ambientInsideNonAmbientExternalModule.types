@@ -12,5 +12,3 @@ export declare enum E { }
 >E : E
 
 export declare module M { }
->M : any
-

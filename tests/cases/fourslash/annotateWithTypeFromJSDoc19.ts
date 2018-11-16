@@ -6,10 +6,12 @@
 //// * @param {T} b
 //// */
 ////function f(a, b) {
+////    return a || b;
 ////}
 
 verify.codeFix({
     description: "Annotate with type from JSDoc",
+    index: 2,
     newFileContent:
 `/**
  * @template T
@@ -17,5 +19,6 @@ verify.codeFix({
  * @param {T} b
  */
 function f<T>(a: number, b: T) {
+    return a || b;
 }`,
 });

@@ -3,13 +3,8 @@ declare global {
 >global : any
 
     namespace JSX {
->JSX : any
-
         interface Element {}
->Element : Element
-
         interface ElementAttributesProperty { props: {} }
->ElementAttributesProperty : ElementAttributesProperty
 >props : {}
     }
 }

@@ -1,0 +1,21 @@
+=== tests/cases/conformance/jsdoc/namespaced.js ===
+/**
+ * @callback NS.Nested.Inner
+ * @param {Object} space - spaaaaaaaaace
+ * @param {Object} peace - peaaaaaaaaace
+ * @return {string | number}
+ */
+var x = 1;
+>x : number
+>1 : 1
+
+/** @type {NS.Nested.Inner} */
+function f(space, peace) {
+>f : (space: any, peace: any) => string | number
+>space : any
+>peace : any
+
+    return '1'
+>'1' : "1"
+}
+

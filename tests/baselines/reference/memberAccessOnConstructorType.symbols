@@ -3,7 +3,7 @@ var f: new () => void;
 >f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
 
 f.arguments == 0;
->f.arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>f.arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 >f : Symbol(f, Decl(memberAccessOnConstructorType.ts, 0, 3))
->arguments : Symbol(Function.arguments, Decl(lib.d.ts, --, --))
+>arguments : Symbol(Function.arguments, Decl(lib.es5.d.ts, --, --))
 

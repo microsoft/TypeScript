@@ -11,7 +11,7 @@ goTo.eof();
 edit.insertLine("");
 
 // Attempt to resolve a symbol
-verify.quickInfoAt("IPointRef", ""); // not found
+verify.quickInfoAt("IPointRef", "any"); // not found
 
 // trigger typecheck after the partial resolve, we should see errors
 verify.errorExistsAfterMarker("IPointRef");

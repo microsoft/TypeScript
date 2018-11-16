@@ -2,8 +2,6 @@
 // any is not a subtype of any other types, but is assignable, all the below should work
 
 interface I {
->I : I
-
     [x: string]: any;
 >x : string
 
@@ -13,8 +11,6 @@ interface I {
 
 
 interface I2 {
->I2 : I2
-
     [x: string]: number;
 >x : string
 
@@ -24,8 +20,6 @@ interface I2 {
 
 
 interface I3 {
->I3 : I3
-
     [x: string]: string;
 >x : string
 
@@ -35,8 +29,6 @@ interface I3 {
 
 
 interface I4 {
->I4 : I4
-
     [x: string]: boolean;
 >x : string
 
@@ -46,11 +38,8 @@ interface I4 {
 
 
 interface I5 {
->I5 : I5
-
     [x: string]: Date;
 >x : string
->Date : Date
 
     foo: any;
 >foo : any
@@ -58,11 +47,8 @@ interface I5 {
 
 
 interface I6 {
->I6 : I6
-
     [x: string]: RegExp;
 >x : string
->RegExp : RegExp
 
     foo: any;
 >foo : any
@@ -70,8 +56,6 @@ interface I6 {
 
 
 interface I7 {
->I7 : I7
-
     [x: string]: { bar: number };
 >x : string
 >bar : number
@@ -82,8 +66,6 @@ interface I7 {
 
 
 interface I8 {
->I8 : I8
-
     [x: string]: number[];
 >x : string
 
@@ -93,11 +75,8 @@ interface I8 {
 
 
 interface I9 {
->I9 : I9
-
     [x: string]: I8;
 >x : string
->I8 : I8
 
     foo: any;
 >foo : any
@@ -108,11 +87,8 @@ class A { foo: number; }
 >foo : number
 
 interface I10 {
->I10 : I10
-
     [x: string]: A;
 >x : string
->A : A
 
     foo: any;
 >foo : any
@@ -120,16 +96,11 @@ interface I10 {
 
 class A2<T> { foo: T; }
 >A2 : A2<T>
->T : T
 >foo : T
->T : T
 
 interface I11 {
->I11 : I11
-
     [x: string]: A2<number>;
 >x : string
->A2 : A2<T>
 
     foo: any;
 >foo : any
@@ -137,8 +108,6 @@ interface I11 {
 
 
 interface I12 {
->I12 : I12
-
     [x: string]: (x) => number;
 >x : string
 >x : any
@@ -149,14 +118,9 @@ interface I12 {
 
 
 interface I13 {
->I13 : I13
-
     [x: string]: <T>(x: T) => T;
 >x : string
->T : T
 >x : T
->T : T
->T : T
 
     foo: any;
 >foo : any
@@ -165,14 +129,11 @@ interface I13 {
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 interface I14 {
->I14 : I14
-
     [x: string]: E;
 >x : string
->E : E
 
     foo: any;
 >foo : any
@@ -190,8 +151,6 @@ module f {
 >1 : 1
 }
 interface I15 {
->I15 : I15
-
     [x: string]: typeof f;
 >x : string
 >f : typeof f
@@ -213,8 +172,6 @@ module c {
 >1 : 1
 }
 interface I16 {
->I16 : I16
-
     [x: string]: typeof c;
 >x : string
 >c : typeof c
@@ -225,12 +182,8 @@ interface I16 {
 
 
 interface I17<T> {
->I17 : I17<T>
->T : T
-
     [x: string]: T;
 >x : string
->T : T
 
     foo: any;
 >foo : any
@@ -238,14 +191,8 @@ interface I17<T> {
 
 
 interface I18<T, U extends T> {
->I18 : I18<T, U>
->T : T
->U : U
->T : T
-
     [x: string]: U;
 >x : string
->U : U
 
     foo: any;
 >foo : any
@@ -253,11 +200,8 @@ interface I18<T, U extends T> {
 
 
 interface I19 {
->I19 : I19
-
     [x: string]: Object;
 >x : string
->Object : Object
 
     foo: any;
 >foo : any
@@ -265,8 +209,6 @@ interface I19 {
 
 
 interface I20 {
->I20 : I20
-
     [x: string]: {};
 >x : string
 

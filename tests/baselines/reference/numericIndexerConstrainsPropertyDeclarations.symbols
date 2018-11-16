@@ -3,7 +3,7 @@
 
 interface MyNumber extends Number {
 >MyNumber : Symbol(MyNumber, Decl(numericIndexerConstrainsPropertyDeclarations.ts, 0, 0))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: number;
 >foo : Symbol(MyNumber.foo, Decl(numericIndexerConstrainsPropertyDeclarations.ts, 2, 35))

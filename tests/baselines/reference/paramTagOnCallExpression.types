@@ -9,7 +9,7 @@ declare function factory(type: string): {};
 exports.inherits = factory('inherits')
 >exports.inherits = factory('inherits') : {}
 >exports.inherits : {}
->exports : typeof "tests/cases/conformance/jsdoc/a"
+>exports : typeof import("tests/cases/conformance/jsdoc/a")
 >inherits : {}
 >factory('inherits') : {}
 >factory : (type: string) => {}

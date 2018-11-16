@@ -10,7 +10,7 @@ var c = new A();
 
 === tests/cases/compiler/ambientExternalModuleWithoutInternalImportDeclaration_0.ts ===
 declare module 'M' {
->'M' : typeof 'M'
+>'M' : typeof import("M")
 
     module C {
 >C : typeof C

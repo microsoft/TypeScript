@@ -10,18 +10,18 @@
  * @param {Opts} opts
  */
 function foo(opts) {
->foo : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
->opts : { x: string; y?: string; z?: string; w?: string; }
+>foo : (opts: Opts) => void
+>opts : Opts
 
     opts.x;
 >opts.x : string
->opts : { x: string; y?: string; z?: string; w?: string; }
+>opts : Opts
 >x : string
 }
 
 foo({x: 'abc'});
 >foo({x: 'abc'}) : void
->foo : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
+>foo : (opts: Opts) => void
 >{x: 'abc'} : { x: string; }
 >x : string
 >'abc' : "abc"
@@ -34,18 +34,18 @@ foo({x: 'abc'});
  * @param {AnotherOpts} opts
  */
 function foo1(opts) {
->foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
->opts : { anotherX: string; anotherY?: string; }
+>foo1 : (opts: AnotherOpts) => void
+>opts : AnotherOpts
 
     opts.anotherX;
 >opts.anotherX : string
->opts : { anotherX: string; anotherY?: string; }
+>opts : AnotherOpts
 >anotherX : string
 }
 
 foo1({anotherX: "world"});
 >foo1({anotherX: "world"}) : void
->foo1 : (opts: { anotherX: string; anotherY?: string; }) => void
+>foo1 : (opts: AnotherOpts) => void
 >{anotherX: "world"} : { anotherX: string; }
 >anotherX : string
 >"world" : "world"
@@ -60,17 +60,17 @@ foo1({anotherX: "world"});
  * @param {Opts1} opts
  */
 function foo2(opts) {
->foo2 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
->opts : { x: string; y?: string; z?: string; w?: string; }
+>foo2 : (opts: Opts1) => void
+>opts : Opts1
 
     opts.x;
 >opts.x : string
->opts : { x: string; y?: string; z?: string; w?: string; }
+>opts : Opts1
 >x : string
 }
 foo2({x: 'abc'});
 >foo2({x: 'abc'}) : void
->foo2 : (opts: { x: string; y?: string; z?: string; w?: string; }) => void
+>foo2 : (opts: Opts1) => void
 >{x: 'abc'} : { x: string; }
 >x : string
 >'abc' : "abc"

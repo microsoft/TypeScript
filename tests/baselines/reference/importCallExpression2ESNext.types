@@ -11,7 +11,6 @@ export class B {
 function foo(x: Promise<any>) {
 >foo : (x: Promise<any>) => void
 >x : Promise<any>
->Promise : Promise<T>
 
     x.then(value => {
 >x.then(value => {        let b = new value.B();        b.print();    }) : Promise<void>
@@ -40,6 +39,6 @@ function foo(x: Promise<any>) {
 foo(import("./0"));
 >foo(import("./0")) : void
 >foo : (x: Promise<any>) => void
->import("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>import("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >"./0" : "./0"
 

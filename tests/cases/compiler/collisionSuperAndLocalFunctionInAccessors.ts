@@ -1,3 +1,4 @@
+// @target: es5
 function _super() { // No error
 }
 class Foo {

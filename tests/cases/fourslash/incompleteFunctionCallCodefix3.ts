@@ -3,5 +3,4 @@
 // @noImplicitAny: true
 //// function ...q) {}} f(10);
 
-verify.not.codeFixAvailable([]);
-
+verify.not.codeFixAvailable();

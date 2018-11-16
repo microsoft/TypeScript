@@ -2,27 +2,22 @@
 Foo<T>();
 >Foo<T>() : any
 >Foo : any
->T : No type information available!
 
 Foo.Bar<T>();
 >Foo.Bar<T>() : any
 >Foo.Bar : any
 >Foo : any
 >Bar : any
->T : No type information available!
 
 Foo<T>.Bar();
 >Foo<T>.Bar() : any
 >Foo : any
->T : No type information available!
 >Bar() : any
 >Bar : any
 
 Foo<T>.Bar<T>();
 >Foo<T>.Bar<T>() : any
 >Foo : any
->T : No type information available!
 >Bar<T>() : any
 >Bar : any
->T : No type information available!
 

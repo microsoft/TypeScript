@@ -42,7 +42,6 @@ class FooIterator {
 
 var a: Bar, b: string[];
 >a : Bar
->Bar : Bar
 >b : string[]
 
 [a, b] = new FooIterator;

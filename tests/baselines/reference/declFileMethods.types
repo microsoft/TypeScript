@@ -196,8 +196,6 @@ export class c1 {
 }
 
 export interface I1 {
->I1 : I1
-
     /** This comment should appear for foo*/
     foo(): string;
 >foo : () => string
@@ -423,8 +421,6 @@ class c2 {
 }
 
 interface I2 {
->I2 : I2
-
     /** This comment should appear for foo*/
     foo(): string;
 >foo : () => string

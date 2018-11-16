@@ -54,10 +54,19 @@ testBlock(12, 'h.ts', "d3");
 testBlock(16, 'h.ts', "d3");
 testBlock(20, 'h.ts', "d3");
 testBlock(24, 'h.ts', "d3");
-verify.completionsAt("28", ["g.ts", "d2"], { isNewIdentifierLocation: true });
+verify.completions({ marker: "28", exact: ["g.ts", "d2"], isNewIdentifierLocation: true });
 
 function testBlock(offset: number, fileName: string, dir: string) {
     const names = [fileName, dir];
-    verify.completionsAt([offset, offset + 1, offset + 2].map(String), names, { isNewIdentifierLocation: true });
-    verify.completionsAt(String(offset + 3), names.map(name => ({ name, replacementSpan: test.ranges()[offset / 4] })), { isNewIdentifierLocation: true });
+    verify.completions(
+        {
+            marker: [offset, offset + 1, offset + 2].map(String),
+            exact: names,
+            isNewIdentifierLocation: true,
+        },
+        {
+            marker: String(offset + 3),
+            exact: names.map(name => ({ name, replacementSpan: test.ranges()[offset / 4] })),
+            isNewIdentifierLocation: true,
+        });
 }

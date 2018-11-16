@@ -67,7 +67,7 @@ function f1(x) {
     }
     else {
         throw new Error("123");
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     var x;
 >x : Symbol(x, Decl(reachabilityChecks1.ts, 34, 12), Decl(reachabilityChecks1.ts, 41, 7))
@@ -109,7 +109,7 @@ function f4() {
 
     if (true) {
         throw new Error();
->Error : Symbol(Error, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Error : Symbol(Error, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
     const enum E {
 >E : Symbol(E, Decl(reachabilityChecks1.ts, 67, 5))

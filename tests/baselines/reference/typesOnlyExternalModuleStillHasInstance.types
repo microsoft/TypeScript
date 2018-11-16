@@ -12,13 +12,10 @@ var x: typeof foo0 = {};
 var y: {M2: Object} = foo0;
 >y : { M2: Object; }
 >M2 : Object
->Object : Object
 >foo0 : typeof foo0
 
 === tests/cases/conformance/externalModules/foo_0.ts ===
 export interface Person {
->Person : Person
-
 	name: string;
 >name : string
 
@@ -27,14 +24,9 @@ export interface Person {
 }
 
 export module M2 {
->M2 : any
-
 	export interface I2 {
->I2 : I2
-
 		x: Person;
 >x : Person
->Person : Person
 	}
 }
 

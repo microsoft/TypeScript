@@ -1,11 +1,9 @@
 === tests/cases/compiler/emitDecoratorMetadata_restArgs.ts ===
 declare const MyClassDecorator: ClassDecorator;
 >MyClassDecorator : ClassDecorator
->ClassDecorator : ClassDecorator
 
 declare const MyMethodDecorator: MethodDecorator;
 >MyMethodDecorator : MethodDecorator
->MethodDecorator : MethodDecorator
 
 @MyClassDecorator
 >MyClassDecorator : ClassDecorator

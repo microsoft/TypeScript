@@ -84,7 +84,7 @@ module Others {
 
     var ee: Date = e;
 >ee : Symbol(ee, Decl(enumAssignability.ts, 30, 7))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     var f: any = e; // ok
@@ -97,7 +97,7 @@ module Others {
 
     var h: Object = e;
 >h : Symbol(h, Decl(enumAssignability.ts, 33, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     var i: {} = e;
@@ -110,7 +110,7 @@ module Others {
 
     var k: Function = e;
 >k : Symbol(k, Decl(enumAssignability.ts, 36, 7))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     var l: (x: number) => string = e;
@@ -145,12 +145,12 @@ module Others {
 
     var p: Number = e;
 >p : Symbol(p, Decl(enumAssignability.ts, 43, 7))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     var q: String = e;
 >q : Symbol(q, Decl(enumAssignability.ts, 44, 7))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >e : Symbol(e, Decl(enumAssignability.ts, 5, 3))
 
     function foo<T, U extends T, V extends Date, A extends Number, B extends E>(x: T, y: U, z: V) {
@@ -159,9 +159,9 @@ module Others {
 >U : Symbol(U, Decl(enumAssignability.ts, 46, 19))
 >T : Symbol(T, Decl(enumAssignability.ts, 46, 17))
 >V : Symbol(V, Decl(enumAssignability.ts, 46, 32))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >A : Symbol(A, Decl(enumAssignability.ts, 46, 48))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >B : Symbol(B, Decl(enumAssignability.ts, 46, 66))
 >E : Symbol(E, Decl(enumAssignability.ts, 0, 0))
 >x : Symbol(x, Decl(enumAssignability.ts, 46, 80))

@@ -1,22 +1,13 @@
 === tests/cases/compiler/genericAndNonGenericOverload1.ts ===
 interface callable2<T> {
->callable2 : callable2<T>
->T : T
-
     (a: T): T;
 >a : T
->T : T
->T : T
 
     <Z>(a: T): Z;
->Z : Z
 >a : T
->T : T
->Z : Z
 }
 var c2: callable2<number>;
 >c2 : callable2<number>
->callable2 : callable2<T>
 
 c2<string>(1);
 >c2<string>(1) : string

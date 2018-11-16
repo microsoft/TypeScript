@@ -40,7 +40,6 @@ class D1A extends Base {
 
     foo: String;
 >foo : String
->String : String
 }
 
 
@@ -58,7 +57,6 @@ class D2A extends Base {
 
     foo: Number;
 >foo : Number
->Number : Number
 }
 
 
@@ -76,7 +74,6 @@ class D3A extends Base {
 
     foo: Boolean;
 >foo : Boolean
->Boolean : Boolean
 }
 
 
@@ -86,7 +83,6 @@ class D4 extends Base {
 
     foo: RegExp;
 >foo : RegExp
->RegExp : RegExp
 }
 
 class D5 extends Base {
@@ -95,7 +91,6 @@ class D5 extends Base {
 
     foo: Date;
 >foo : Date
->Date : Date
 }
 
 
@@ -123,12 +118,9 @@ class D8 extends Base {
 
     foo: D7;
 >foo : D7
->D7 : D7
 }
 
 interface I1 {
->I1 : I1
-
     bar: string;
 >bar : string
 }
@@ -138,7 +130,6 @@ class D9 extends Base {
 
     foo: I1;
 >foo : I1
->I1 : I1
 }
 
 
@@ -152,7 +143,7 @@ class D10 extends Base {
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 class D11 extends Base {
 >D11 : D11
@@ -160,7 +151,6 @@ class D11 extends Base {
 
     foo: E;
 >foo : E
->E : E
 }
 
 function f() { }
@@ -206,24 +196,19 @@ class D13 extends Base {
 
 class D14<T> extends Base {
 >D14 : D14<T>
->T : T
 >Base : Base
 
     foo: T;
 >foo : T
->T : T
 }
 
 
 class D15<T, U> extends Base {
 >D15 : D15<T, U>
->T : T
->U : U
 >Base : Base
 
     foo: U;
 >foo : U
->U : U
 }
 
 //class D15<T, U extends T> extends Base {
@@ -237,7 +222,6 @@ class D16 extends Base {
 
     foo: Object;
 >foo : Object
->Object : Object
 }
 
 

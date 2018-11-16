@@ -1,23 +1,14 @@
 === tests/cases/compiler/genericConstraint2.ts ===
 interface Comparable<T> {
->Comparable : Comparable<T>
->T : T
-
     comparer(other: T): number;
 >comparer : (other: T) => number
 >other : T
->T : T
 }
 
 function compare<T extends Comparable<T>>(x: T, y: T): number {
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->T : T
->Comparable : Comparable<T>
->T : T
 >x : T
->T : T
 >y : T
->T : T
 
     if (x == null) return y == null ? 0 : -1;
 >x == null : boolean
@@ -47,7 +38,6 @@ function compare<T extends Comparable<T>>(x: T, y: T): number {
 
 class ComparableString implements Comparable<string>{
 >ComparableString : ComparableString
->Comparable : Comparable<T>
 
     constructor(public currentValue: string) { }
 >currentValue : string
@@ -77,7 +67,6 @@ var c = compare<ComparableString>(a, b);
 >c : any
 >compare<ComparableString>(a, b) : any
 >compare : <T extends Comparable<T>>(x: T, y: T) => number
->ComparableString : ComparableString
 >a : ComparableString
 >b : ComparableString
 

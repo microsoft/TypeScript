@@ -1,17 +1,12 @@
 === tests/cases/compiler/unusedTypeParameterInFunction4.ts ===
 function f1<X, Y, Z>() {
 >f1 : <X, Y, Z>() => void
->X : X
->Y : Y
->Z : Z
 
     var a: Y;
 >a : Y
->Y : Y
 
     var b: Z;
 >b : Z
->Z : Z
 
     a;
 >a : Y

@@ -14,9 +14,9 @@ function foo(x: number | string) {
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
 
         ? x.length // string
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         : x++; // number
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 7, 13))
@@ -151,9 +151,9 @@ function foo9(x: number | string) {
 
         ? ((y = x.length) && x === "hello") // boolean
 >y : Symbol(y, Decl(typeGuardsInConditionalExpression.ts, 55, 7))
->x.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>x.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 54, 14))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 54, 14))
 
         : x === 10; // boolean
@@ -181,9 +181,9 @@ function foo10(x: number | string | boolean) {
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 61, 15))
 
         && x.toString()); // x is number
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 61, 15))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 function foo11(x: number | string | boolean) {
 >foo11 : Symbol(foo11, Decl(typeGuardsInConditionalExpression.ts, 69, 1))
@@ -225,11 +225,11 @@ function foo12(x: number | string | boolean) {
 
         ? ((x = 10) && x.toString().length) // number
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 80, 15))
->x.toString().length : Symbol(String.length, Decl(lib.d.ts, --, --))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString().length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(typeGuardsInConditionalExpression.ts, 80, 15))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
         : ((b = x) // x is number | boolean
 >b : Symbol(b, Decl(typeGuardsInConditionalExpression.ts, 82, 7))

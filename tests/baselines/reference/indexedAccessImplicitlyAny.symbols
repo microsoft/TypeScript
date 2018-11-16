@@ -1,0 +1,15 @@
+=== tests/cases/compiler/indexedAccessImplicitlyAny.ts ===
+interface I { foof: number };
+>I : Symbol(I, Decl(indexedAccessImplicitlyAny.ts, 0, 0))
+>foof : Symbol(I.foof, Decl(indexedAccessImplicitlyAny.ts, 0, 13))
+
+declare const i: I;
+>i : Symbol(i, Decl(indexedAccessImplicitlyAny.ts, 1, 13))
+>I : Symbol(I, Decl(indexedAccessImplicitlyAny.ts, 0, 0))
+
+i.foo;
+>i : Symbol(i, Decl(indexedAccessImplicitlyAny.ts, 1, 13))
+
+i["foo"];
+>i : Symbol(i, Decl(indexedAccessImplicitlyAny.ts, 1, 13))
+

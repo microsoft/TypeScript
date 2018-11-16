@@ -33,8 +33,6 @@ import e = E;
 >E : E
 
 interface I {
->I : I
-
     id: number;
 >id : number
 }

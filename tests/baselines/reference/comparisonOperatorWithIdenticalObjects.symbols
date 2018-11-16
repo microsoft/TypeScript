@@ -16,7 +16,7 @@ class A1 {
 
     public e: Object;
 >e : Symbol(A1.e, Decl(comparisonOperatorWithIdenticalObjects.ts, 4, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     public fn(a: string): string {
 >fn : Symbol(A1.fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 5, 21))
@@ -42,7 +42,7 @@ class B1 {
 
     public e: Object;
 >e : Symbol(B1.e, Decl(comparisonOperatorWithIdenticalObjects.ts, 14, 18))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     public fn(b: string): string {
 >fn : Symbol(B1.fn, Decl(comparisonOperatorWithIdenticalObjects.ts, 15, 21))

@@ -5,7 +5,6 @@ class A {
     public f1 = function<X>() {
 >f1 : <X>() => void
 >function<X>() {    } : <X>() => void
->X : X
 
     }
 }

@@ -1,7 +1,6 @@
 === tests/cases/compiler/es5ExportDefaultClassDeclaration3.ts ===
 var before: C = new C();
 >before : C
->C : C
 >new C() : C
 >C : typeof C
 
@@ -10,7 +9,6 @@ export default class C {
 
     method(): C {
 >method : () => C
->C : C
 
         return new C();
 >new C() : C
@@ -20,7 +18,6 @@ export default class C {
 
 var after: C = new C();
 >after : C
->C : C
 >new C() : C
 >C : typeof C
 

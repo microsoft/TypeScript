@@ -22,8 +22,6 @@ class C {
 }
 
 interface I {
->I : I
-
     (x: 'a');
 >x : "a"
 

@@ -5,28 +5,33 @@ type Recurse = {
 >Recurse : any
 
     [K in keyof Recurse]: Recurse[K]
->K : K
->Recurse : any
->Recurse : any
->K : K
 }
 
 type Recurse1 = {
 >Recurse1 : any
 
     [K in keyof Recurse2]: Recurse2[K]
->K : K
->Recurse2 : any
->Recurse2 : any
->K : K
 }
 
 type Recurse2 = {
 >Recurse2 : any
 
     [K in keyof Recurse1]: Recurse1[K]
->K : K
->Recurse1 : any
->Recurse1 : any
->K : K
 }
+
+// Repro from #27881
+
+export type Circular<T> = {[P in keyof T]: Circular<T>};
+>Circular : Circular<T>
+
+type tup = [number, number, number, number];
+>tup : [number, number, number, number]
+
+function foo(arg: Circular<tup>): tup {
+>foo : (arg: [any, any, any, any]) => [number, number, number, number]
+>arg : [any, any, any, any]
+
+  return arg;
+>arg : [any, any, any, any]
+}
+

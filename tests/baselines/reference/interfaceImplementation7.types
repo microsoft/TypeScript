@@ -1,30 +1,20 @@
 === tests/cases/compiler/interfaceImplementation7.ts ===
 interface i1{ name(): { s: string; }; }
->i1 : i1
 >name : () => { s: string; }
 >s : string
 
 interface i2{ name(): { n: number; }; }
->i2 : i2
 >name : () => { n: number; }
 >n : number
 
 interface i3 extends i1, i2 { }
->i3 : i3
->i1 : i1
->i2 : i2
-
 interface i4 extends i1, i2 { name(): { s: string; n: number; }; }
->i4 : i4
->i1 : i1
->i2 : i2
 >name : () => { s: string; n: number; }
 >s : string
 >n : number
 
 class C1 implements i4 {
 >C1 : C1
->i4 : i4
 
     public name(): string { return ""; }
 >name : () => string

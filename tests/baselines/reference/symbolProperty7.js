@@ -9,6 +9,7 @@ class C {
 }
 
 //// [symbolProperty7.js]
+var _a;
 class C {
     constructor() {
         this[_a] = 0;
@@ -18,4 +19,3 @@ class C {
         return 0;
     }
 }
-var _a;

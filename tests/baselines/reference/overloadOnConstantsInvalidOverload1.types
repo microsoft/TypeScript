@@ -21,12 +21,10 @@ class Derived3 extends Base { biz() { } }
 function foo(name: "SPAN"): Derived1;
 >foo : (name: "SPAN") => Derived1
 >name : "SPAN"
->Derived1 : Derived1
 
 function foo(name: "DIV"): Derived2 {
 >foo : (name: "SPAN") => Derived1
 >name : "DIV"
->Derived2 : Derived2
 
     return null;
 >null : null

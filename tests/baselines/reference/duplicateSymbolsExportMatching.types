@@ -1,64 +1,31 @@
 === tests/cases/compiler/duplicateSymbolsExportMatching.ts ===
 module M {
->M : typeof M
-
     export interface E { }
->E : E
-
     interface I { }
->I : I
 }
 module M {
->M : typeof M
-
     export interface E { } // ok
->E : E
-
     interface I { } // ok
->I : I
 }
 
 // Doesn't match export visibility, but it's in a different parent, so it's ok
 module M {
->M : typeof M
-
     interface E { } // ok
->E : E
-
     export interface I { } // ok
->I : I
 }
 
 module N {
->N : any
-
     interface I { }
->I : I
-
     interface I { } // ok
->I : I
-
     export interface E { }
->E : E
-
     export interface E { } // ok
->E : E
 }
 
 module N2 {
->N2 : any
-
     interface I { }
->I : I
-
     export interface I { } // error
->I : N2.I
-
     export interface E { }
->E : N2.E
-
     interface E { } // error
->E : E
 }
 
 // Should report error only once for instantiated module
@@ -116,8 +83,6 @@ module M {
 >C : C
 
     module C { }
->C : typeof C
-
     export module C { // Two visibility errors (one for the clodule symbol, and one for the merged container symbol)
 >C : typeof M.C
 
@@ -128,8 +93,4 @@ module M {
 
 // Top level
 interface D { }
->D : D
-
 export interface D { }
->D : D
-

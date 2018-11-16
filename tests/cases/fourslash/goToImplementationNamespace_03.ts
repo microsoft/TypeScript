@@ -7,14 +7,14 @@
 ////         hello(): void;
 ////     }
 ////
-////     [|class BarImpl implements Bar {
+////     class [|BarImpl|] implements Bar {
 ////         hello() {}
-////     }|]
+////     }
 //// }
 ////
-//// [|class Baz implements Foo.Bar {
+//// class [|Baz|] implements Foo.Bar {
 ////     hello() {}
-//// }|]
+//// }
 ////
 //// var someVar1 : Foo.Bar = [|{ hello: () => {/**1*/} }|];
 ////

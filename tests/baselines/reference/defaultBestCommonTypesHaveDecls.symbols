@@ -7,7 +7,7 @@ obj1.length;
 
 var obj2: Object;
 >obj2 : Symbol(obj2, Decl(defaultBestCommonTypesHaveDecls.ts, 3, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 obj2.length;
 >obj2 : Symbol(obj2, Decl(defaultBestCommonTypesHaveDecls.ts, 3, 3))

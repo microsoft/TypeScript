@@ -6,7 +6,9 @@
 ////
 ////foo(/**/
 
-goTo.marker();
-verify.currentSignatureHelpIs("foo(n: number): string");
-verify.currentParameterHelpArgumentNameIs("n");
-verify.currentParameterSpanIs("n: number");
+verify.signatureHelp({
+    marker: "",
+    text: "foo(n: number): string",
+    parameterName: "n",
+    parameterSpan: "n: number",
+});

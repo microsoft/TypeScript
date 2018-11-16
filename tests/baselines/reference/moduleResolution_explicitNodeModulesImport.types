@@ -6,7 +6,7 @@ import { x } from "../node_modules/foo";
 exports.x = 0;
 >exports.x = 0 : 0
 >exports.x : number
->exports : typeof "/node_modules/foo/index"
+>exports : typeof import("/node_modules/foo/index")
 >x : number
 >0 : 0
 

@@ -1,8 +1,6 @@
 /// <reference path='fourslash.ts' />
 
 ////abstract class A {
-////    private _a: string;
-////
 ////    abstract get a(): string;
 ////    abstract set a(newName: string);
 ////
@@ -17,8 +15,6 @@ verify.codeFix({
     description: "Implement interface 'A'",
     newFileContent:
 `abstract class A {
-    private _a: string;
-
     abstract get a(): string;
     abstract set a(newName: string);
 

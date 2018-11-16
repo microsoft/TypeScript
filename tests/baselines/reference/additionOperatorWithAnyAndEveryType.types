@@ -35,7 +35,6 @@ var d: string;
 
 var e: Object;
 >e : Object
->Object : Object
 
 // any as left operand, result is type Any except plusing string
 var r1 = a + a;

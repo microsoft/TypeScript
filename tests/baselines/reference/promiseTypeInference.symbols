@@ -1,17 +1,17 @@
 === tests/cases/compiler/promiseTypeInference.ts ===
 declare class Promise<T> {
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 22))
 
     then<U>(success?: (value: T) => Promise<U>): Promise<U>;
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
 >success : Symbol(success, Decl(promiseTypeInference.ts, 1, 12))
 >value : Symbol(value, Decl(promiseTypeInference.ts, 1, 23))
->T : Symbol(T, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 22))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
+>T : Symbol(T, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 22))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
 >U : Symbol(U, Decl(promiseTypeInference.ts, 1, 9))
 }
 interface IPromise<T> {
@@ -32,7 +32,7 @@ interface IPromise<T> {
 declare function load(name: string): Promise<string>;
 >load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
 >name : Symbol(name, Decl(promiseTypeInference.ts, 6, 22))
->Promise : Symbol(Promise, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 0))
 
 declare function convert(s: string): IPromise<number>;
 >convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 53))
@@ -41,9 +41,9 @@ declare function convert(s: string): IPromise<number>;
 
 var $$x = load("something").then(s => convert(s));
 >$$x : Symbol($$x, Decl(promiseTypeInference.ts, 9, 3))
->load("something").then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>load("something").then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >load : Symbol(load, Decl(promiseTypeInference.ts, 5, 1))
->then : Symbol(Promise.then, Decl(lib.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
+>then : Symbol(Promise.then, Decl(lib.es5.d.ts, --, --), Decl(promiseTypeInference.ts, 0, 26))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))
 >convert : Symbol(convert, Decl(promiseTypeInference.ts, 6, 53))
 >s : Symbol(s, Decl(promiseTypeInference.ts, 9, 33))

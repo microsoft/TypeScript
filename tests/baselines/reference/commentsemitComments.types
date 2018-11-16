@@ -100,8 +100,6 @@ var i = new c();
 
 /** interface comments*/
 interface i1 {
->i1 : i1
-
     /** caller comments*/
     (a: number): number;
 >a : number
@@ -127,7 +125,6 @@ interface i1 {
 /**interface instance comments*/
 var i1_i: i1;
 >i1_i : i1
->i1 : i1
 
 /** this is module comment*/
 module m1 {
@@ -145,7 +142,6 @@ module m1 {
 
     /// module m2
     export module m2 {
->m2 : any
     }
 }
 

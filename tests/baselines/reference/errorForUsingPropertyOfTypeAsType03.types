@@ -17,7 +17,6 @@ namespace Test1 {
 
     type C1 = Color;
 >C1 : Color
->Color : Color
 
     type C2 = typeof Color;
 >C2 : typeof Color
@@ -27,16 +26,13 @@ namespace Test1 {
 >a1 : any
 >Color : any
 >Red : any
->toString : No type information available!
 
     let a2: Color.Red["toString"];
 >a2 : (radix?: number) => string
 >Color : any
->Red : Color.Red
 
     let a3: Color["Red"]["toString"];
 >a3 : any
->Color : Color
 
     //let b1: (typeof Color).Red.toString;
     //let b2: (typeof Color).Red["toString"];
@@ -48,29 +44,23 @@ namespace Test1 {
 >c1 : any
 >C1 : any
 >Red : any
->toString : No type information available!
 
     let c2: C1.Red["toString"];
 >c2 : any
 >C1 : any
->Red : No type information available!
 
     let c3: C1["Red"]["toString"];
 >c3 : any
->C1 : Color
 
     let d1: C2.Red.toString;
 >d1 : any
 >C2 : any
 >Red : any
->toString : No type information available!
 
     let d2: C2.Red["toString"];
 >d2 : any
 >C2 : any
->Red : No type information available!
 
     let d3: C2["Red"]["toString"];
 >d3 : (radix?: number) => string
->C2 : typeof Color
 }

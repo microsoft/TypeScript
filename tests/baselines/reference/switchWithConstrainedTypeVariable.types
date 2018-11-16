@@ -3,9 +3,7 @@
 
 function function1<T extends 'a' | 'b'>(key: T) {
 >function1 : <T extends "a" | "b">(key: T) => void
->T : T
 >key : T
->T : T
 
   switch (key) {
 >key : T

@@ -1,0 +1,105 @@
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(11,29): error TS1257: A required element cannot follow an optional element.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(15,5): error TS2322: Type '[number, string, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+  Types of property '2' are incompatible.
+    Type 'boolean | undefined' is not assignable to type 'boolean'.
+      Type 'undefined' is not assignable to type 'boolean'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(16,5): error TS2322: Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+  Types of property '1' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(17,5): error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+  Types of property '0' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(20,5): error TS2322: Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'.
+  Types of property '1' are incompatible.
+    Type 'string | undefined' is not assignable to type 'string'.
+      Type 'undefined' is not assignable to type 'string'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(21,5): error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'.
+  Types of property '0' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+tests/cases/conformance/types/tuple/optionalTupleElements1.ts(25,5): error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+  Types of property '0' are incompatible.
+    Type 'number | undefined' is not assignable to type 'number'.
+      Type 'undefined' is not assignable to type 'number'.
+
+
+==== tests/cases/conformance/types/tuple/optionalTupleElements1.ts (7 errors) ====
+    type T1 = [number, string, boolean];
+    type T2 = [number, string, boolean?];
+    type T3 = [number, string?, boolean?];
+    type T4 = [number?, string?, boolean?];
+    
+    type L1 = T1["length"];
+    type L2 = T2["length"];
+    type L3 = T3["length"];
+    type L4 = T4["length"];
+    
+    type T5 = [number, string?, boolean];  // Error
+                                ~~~~~~~
+!!! error TS1257: A required element cannot follow an optional element.
+    
+    function f1(t1: T1, t2: T2, t3: T3, t4: T4) {
+        t1 = t1;
+        t1 = t2;  // Error
+        ~~
+!!! error TS2322: Type '[number, string, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+!!! error TS2322:   Types of property '2' are incompatible.
+!!! error TS2322:     Type 'boolean | undefined' is not assignable to type 'boolean'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'boolean'.
+        t1 = t3;  // Error
+        ~~
+!!! error TS2322: Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+!!! error TS2322:   Types of property '1' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+        t1 = t4;  // Error
+        ~~
+!!! error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, boolean]'.
+!!! error TS2322:   Types of property '0' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+        t2 = t1;
+        t2 = t2;
+        t2 = t3;  // Error
+        ~~
+!!! error TS2322: Type '[number, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'.
+!!! error TS2322:   Types of property '1' are incompatible.
+!!! error TS2322:     Type 'string | undefined' is not assignable to type 'string'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'string'.
+        t2 = t4;  // Error
+        ~~
+!!! error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, string, (boolean | undefined)?]'.
+!!! error TS2322:   Types of property '0' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+        t3 = t1;
+        t3 = t2;
+        t3 = t3;
+        t3 = t4;  // Error
+        ~~
+!!! error TS2322: Type '[(number | undefined)?, (string | undefined)?, (boolean | undefined)?]' is not assignable to type '[number, (string | undefined)?, (boolean | undefined)?]'.
+!!! error TS2322:   Types of property '0' are incompatible.
+!!! error TS2322:     Type 'number | undefined' is not assignable to type 'number'.
+!!! error TS2322:       Type 'undefined' is not assignable to type 'number'.
+        t4 = t1;
+        t4 = t2;
+        t4 = t3;
+        t4 = t4;
+    }
+    
+    let t2: T2;
+    let t3: T3;
+    let t4: T4;
+    
+    t2 = [42, "hello"];
+    t3 = [42, "hello"];
+    t3 = [42,,true]
+    t3 = [42];
+    t4 = [42, "hello"];
+    t4 = [42,,true];
+    t4 = [,"hello", true];
+    t4 = [,,true];
+    t4 = [];
+    

@@ -1,6 +1,5 @@
 === tests/cases/compiler/constructorOverloads5.ts ===
  interface IArguments {}
->IArguments : IArguments
 
  declare module M {
 >M : typeof M
@@ -8,13 +7,11 @@
     export function RegExp(pattern: string): RegExp;
 >RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
 >pattern : string
->RegExp : RegExp
 
     export function RegExp(pattern: string, flags: string): RegExp;
 >RegExp : { (pattern: string): RegExp; (pattern: string, flags: string): RegExp; }
 >pattern : string
 >flags : string
->RegExp : RegExp
 
     export class RegExp {
 >RegExp : M.RegExp

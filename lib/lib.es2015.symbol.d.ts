@@ -18,14 +18,6 @@ and limitations under the License.
 /// <reference no-default-lib="true"/>
 
 
-interface Symbol {
-    /** Returns a string representation of an object. */
-    toString(): string;
-
-    /** Returns the primitive value of the specified object. */
-    valueOf(): symbol;
-}
-
 interface SymbolConstructor {
     /**
      * A reference to the prototype.

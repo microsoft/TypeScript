@@ -27,11 +27,9 @@ class C {
 
 class D<T> {
 >D : D<T>
->T : T
 
     a: T;
 >a : T
->T : T
 
     get x() {
 >x : number

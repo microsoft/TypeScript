@@ -8,13 +8,12 @@ export function foo() { return "foo"; }
 >"use strict" : "use strict"
 
 var p1 = import<Promise<any>>("./0");  // error
->p1 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
->import<Promise<any>>("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
->Promise : Promise<T>
+>p1 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import<Promise<any>>("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >"./0" : "./0"
 
 var p2 = import<>("./0");  // error
->p2 : Promise<typeof "tests/cases/conformance/dynamicImport/0">
->import<>("./0") : Promise<typeof "tests/cases/conformance/dynamicImport/0">
+>p2 : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
+>import<>("./0") : Promise<typeof import("tests/cases/conformance/dynamicImport/0")>
 >"./0" : "./0"
 

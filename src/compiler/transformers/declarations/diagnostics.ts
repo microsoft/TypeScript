@@ -90,7 +90,7 @@ namespace ts {
             }
         }
 
-        function getMethodNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+        function getMethodNameVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
             const diagnosticMessage = getMethodNameVisibilityDiagnosticMessage(symbolAccessibilityResult);
             return diagnosticMessage !== undefined ? {
                 diagnosticMessage,
@@ -122,7 +122,7 @@ namespace ts {
         }
     }
 
-    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing) {
+    export function createGetSymbolAccessibilityDiagnosticForNode(node: DeclarationDiagnosticProducing): (symbolAccessibilityResult: SymbolAccessibilityResult) => SymbolAccessibilityDiagnostic | undefined {
         if (isVariableDeclaration(node) || isPropertyDeclaration(node) || isPropertySignature(node) || isBindingElement(node) || isConstructorDeclaration(node)) {
             return getVariableDeclarationTypeVisibilityError;
         }
@@ -151,7 +151,7 @@ namespace ts {
             return getTypeAliasDeclarationVisibilityError;
         }
         else {
-            Debug.assertNever(node, `Attempted to set a declaration diagnostic context for unhandled node kind: ${(ts as any).SyntaxKind[(node as any).kind]}`);
+            return Debug.assertNever(node, `Attempted to set a declaration diagnostic context for unhandled node kind: ${(ts as any).SyntaxKind[(node as any).kind]}`);
         }
 
         function getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult: SymbolAccessibilityResult) {
@@ -190,7 +190,7 @@ namespace ts {
             }
         }
 
-        function getVariableDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+        function getVariableDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
             const diagnosticMessage = getVariableDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
             return diagnosticMessage !== undefined ? {
                 diagnosticMessage,
@@ -233,7 +233,7 @@ namespace ts {
             }
             return {
                 diagnosticMessage,
-                errorNode: (node as NamedDeclaration).name,
+                errorNode: (node as NamedDeclaration).name!,
                 typeName: (node as NamedDeclaration).name
             };
         }
@@ -295,7 +295,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail("This is unknown kind for signature: " + node.kind);
+                    return Debug.fail("This is unknown kind for signature: " + node.kind);
             }
 
             return {
@@ -304,7 +304,7 @@ namespace ts {
             };
         }
 
-        function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic {
+        function getParameterDeclarationTypeVisibilityError(symbolAccessibilityResult: SymbolAccessibilityResult): SymbolAccessibilityDiagnostic | undefined {
             const diagnosticMessage: DiagnosticMessage = getParameterDeclarationTypeVisibilityDiagnosticMessage(symbolAccessibilityResult);
             return diagnosticMessage !== undefined ? {
                 diagnosticMessage,
@@ -373,7 +373,7 @@ namespace ts {
                         Diagnostics.Parameter_0_of_exported_function_has_or_is_using_private_name_1;
 
                 default:
-                    Debug.fail(`Unknown parent for parameter: ${(ts as any).SyntaxKind[node.parent.kind]}`);
+                    return Debug.fail(`Unknown parent for parameter: ${(ts as any).SyntaxKind[node.parent.kind]}`);
             }
         }
 
@@ -419,7 +419,7 @@ namespace ts {
                     break;
 
                 default:
-                    Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
+                    return Debug.fail("This is unknown parent for type parameter: " + node.parent.kind);
             }
 
             return {
@@ -434,7 +434,7 @@ namespace ts {
             // Heritage clause is written by user so it can always be named
             if (node.parent.parent.kind === SyntaxKind.ClassDeclaration) {
                 // Class or Interface implemented/extended is inaccessible
-                diagnosticMessage = (node as ExpressionWithTypeArguments).parent.token === SyntaxKind.ImplementsKeyword ?
+                diagnosticMessage = isHeritageClause(node.parent) && node.parent.token === SyntaxKind.ImplementsKeyword ?
                     Diagnostics.Implements_clause_of_exported_class_0_has_or_is_using_private_name_1 :
                     Diagnostics.extends_clause_of_exported_class_0_has_or_is_using_private_name_1;
             }
@@ -446,7 +446,7 @@ namespace ts {
             return {
                 diagnosticMessage,
                 errorNode: node,
-                typeName: getNameOfDeclaration((node as ExpressionWithTypeArguments).parent.parent)
+                typeName: getNameOfDeclaration(node.parent.parent as Declaration)
             };
         }
 

@@ -10,7 +10,7 @@ function x() {
 //// [collisionThisExpressionAndLocalVarInFunction.js]
 var console;
 function x() {
-    var _this = this;
+    var _this_1 = this;
     var _this = 5;
-    (function (x) { console.log(_this.x); });
+    (function (x) { console.log(_this_1.x); });
 }

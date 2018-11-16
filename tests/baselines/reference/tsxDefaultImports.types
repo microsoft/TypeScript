@@ -3,7 +3,7 @@ enum SomeEnum {
 >SomeEnum : SomeEnum
 
   one,
->one : SomeEnum
+>one : SomeEnum.one
 }
 export default class SomeClass {
 >SomeClass : SomeClass

@@ -424,9 +424,9 @@ module Formatting {
                         var tokenStartPosition = lineStartPosition + lineIndent.length;
 >tokenStartPosition : Symbol(tokenStartPosition, Decl(parserindenter.ts, 169, 27))
 >lineStartPosition : Symbol(lineStartPosition, Decl(parserindenter.ts, 164, 23))
->lineIndent.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>lineIndent.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >lineIndent : Symbol(lineIndent, Decl(parserindenter.ts, 165, 23))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
                         var commentIndentationEdit = this.GetIndentEdit(commentIndentationInfo, tokenStartPosition, false);
 >commentIndentationEdit : Symbol(commentIndentationEdit, Decl(parserindenter.ts, 170, 27))
@@ -473,16 +473,16 @@ module Formatting {
             for (var i = 0; i < text.length; i++) {
 >i : Symbol(i, Decl(parserindenter.ts, 188, 20))
 >i : Symbol(i, Decl(parserindenter.ts, 188, 20))
->text.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>text.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >text : Symbol(text, Decl(parserindenter.ts, 185, 37))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserindenter.ts, 188, 20))
 
                 var c = text.charAt(i);
 >c : Symbol(c, Decl(parserindenter.ts, 189, 19))
->text.charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>text.charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >text : Symbol(text, Decl(parserindenter.ts, 185, 37))
->charAt : Symbol(String.charAt, Decl(lib.d.ts, --, --))
+>charAt : Symbol(String.charAt, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(parserindenter.ts, 188, 20))
 
                 if (c == '\t')

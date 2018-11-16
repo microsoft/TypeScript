@@ -2,6 +2,7 @@
 
 // @noImplicitAny: true
 ////function f(a: number, [|...rest |]){
+////    a; rest;
 ////}
 ////f(1);
 ////f(2, "s1");

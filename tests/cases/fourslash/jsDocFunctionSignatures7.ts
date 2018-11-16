@@ -13,4 +13,4 @@
 ////
 ////var /**/test = new Test("");
 goTo.marker();
-verify.quickInfoIs('var test: {\n    P0: string;\n    P1: string;\n}');
+verify.quickInfoIs('var test: Test');

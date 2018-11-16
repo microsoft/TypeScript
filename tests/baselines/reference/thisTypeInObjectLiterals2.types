@@ -92,7 +92,6 @@ type Point = {
 
 let p1: Point = {
 >p1 : Point
->Point : Point
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -142,7 +141,6 @@ let p1: Point = {
 
 let p2: Point | null = {
 >p2 : Point | null
->Point : Point
 >null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
@@ -193,7 +191,6 @@ let p2: Point | null = {
 
 let p3: Point | undefined = {
 >p3 : Point | undefined
->Point : Point
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
     x: 10,
@@ -243,7 +240,6 @@ let p3: Point | undefined = {
 
 let p4: Point | null | undefined = {
 >p4 : Point | null | undefined
->Point : Point
 >null : null
 >{    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }} : { x: number; y: number; moveBy(dx: number, dy: number, dz: number | undefined): void; }
 
@@ -295,7 +291,6 @@ let p4: Point | null | undefined = {
 declare function f1(p: Point): void;
 >f1 : (p: Point) => void
 >p : Point
->Point : Point
 
 f1({
 >f1({    x: 10,    y: 20,    moveBy(dx, dy, dz) {        this.x += dx;        this.y += dy;        if (this.z && dz) {            this.z += dz;        }    }}) : void
@@ -350,7 +345,6 @@ f1({
 declare function f2(p: Point | null | undefined): void;
 >f2 : (p: Point | null | undefined) => void
 >p : Point | null | undefined
->Point : Point
 >null : null
 
 f2({
@@ -408,31 +402,17 @@ f2({
 
 type ObjectDescriptor<D, M> = {
 >ObjectDescriptor : ObjectDescriptor<D, M>
->D : D
->M : M
 
     data?: D;
 >data : D | undefined
->D : D
 
     methods?: M & ThisType<D & M>;  // Type of 'this' in methods is D & M
 >methods : (M & ThisType<D & M>) | undefined
->M : M
->ThisType : ThisType<T>
->D : D
->M : M
 }
 
 declare function makeObject<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->D : D
->M : M
 >desc : ObjectDescriptor<D, M>
->ObjectDescriptor : ObjectDescriptor<D, M>
->D : D
->M : M
->D : D
->M : M
 
 let x1 = makeObject({
 >x1 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
@@ -479,31 +459,17 @@ let x1 = makeObject({
 
 type ObjectDescriptor2<D, M> = ThisType<D & M> & {
 >ObjectDescriptor2 : ObjectDescriptor2<D, M>
->D : D
->M : M
->ThisType : ThisType<T>
->D : D
->M : M
 
     data?: D;
 >data : D | undefined
->D : D
 
     methods?: M;
 >methods : M | undefined
->M : M
 }
 
 declare function makeObject2<D, M>(desc: ObjectDescriptor<D, M>): D & M;
 >makeObject2 : <D, M>(desc: ObjectDescriptor<D, M>) => D & M
->D : D
->M : M
 >desc : ObjectDescriptor<D, M>
->ObjectDescriptor : ObjectDescriptor<D, M>
->D : D
->M : M
->D : D
->M : M
 
 let x2 = makeObject2({
 >x2 : { x: number; y: number; } & { moveBy(dx: number, dy: number): void; }
@@ -549,66 +515,34 @@ let x2 = makeObject2({
 
 type PropDesc<T> = {
 >PropDesc : PropDesc<T>
->T : T
 
     value?: T;
 >value : T | undefined
->T : T
 
     get?(): T;
 >get : (() => T) | undefined
->T : T
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
 >value : T
->T : T
 }
 
 type PropDescMap<T> = {
 >PropDescMap : PropDescMap<T>
->T : T
 
     [K in keyof T]: PropDesc<T[K]>;
->K : K
->T : T
->PropDesc : PropDesc<T>
->T : T
->K : K
 }
 
 declare function defineProp<T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>): T & Record<K, U>;
 >defineProp : <T, K extends string, U>(obj: T, name: K, desc: PropDesc<U> & ThisType<T>) => T & Record<K, U>
->T : T
->K : K
->U : U
 >obj : T
->T : T
 >name : K
->K : K
 >desc : PropDesc<U> & ThisType<T>
->PropDesc : PropDesc<T>
->U : U
->ThisType : ThisType<T>
->T : T
->T : T
->Record : Record<K, T>
->K : K
->U : U
 
 declare function defineProps<T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>): T & U;
 >defineProps : <T, U>(obj: T, descs: PropDescMap<U> & ThisType<T>) => T & U
->T : T
->U : U
 >obj : T
->T : T
 >descs : PropDescMap<U> & ThisType<T>
->PropDescMap : PropDescMap<T>
->U : U
->ThisType : ThisType<T>
->T : T
->T : T
->U : U
 
 let p10 = defineProp(p1, "foo", { value: 42 });
 >p10 : Point & Record<"foo", number>
@@ -739,73 +673,38 @@ p12.bar = p12.bar + 1;
 
 type Accessors<T> = { [K in keyof T]: (() => T[K]) | Computed<T[K]> };
 >Accessors : Accessors<T>
->T : T
->K : K
->T : T
->T : T
->K : K
->Computed : Computed<T>
->T : T
->K : K
 
 type Dictionary<T> = { [x: string]: T }
 >Dictionary : Dictionary<T>
->T : T
 >x : string
->T : T
 
 type Computed<T> = {
 >Computed : Computed<T>
->T : T
 
     get?(): T;
 >get : (() => T) | undefined
->T : T
 
     set?(value: T): void;
 >set : ((value: T) => void) | undefined
 >value : T
->T : T
 }
 
 type VueOptions<D, M, P> = ThisType<D & M & P> & {
 >VueOptions : VueOptions<D, M, P>
->D : D
->M : M
->P : P
->ThisType : ThisType<T>
->D : D
->M : M
->P : P
 
     data?: D | (() => D);
 >data : D | (() => D) | undefined
->D : D
->D : D
 
     methods?: M;
 >methods : M | undefined
->M : M
 
     computed?: Accessors<P>;
 >computed : Accessors<P> | undefined
->Accessors : Accessors<T>
->P : P
 }
 
 declare const Vue: new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P;
 >Vue : new <D, M, P>(options: VueOptions<D, M, P>) => D & M & P
->D : D
->M : M
->P : P
 >options : VueOptions<D, M, P>
->VueOptions : VueOptions<D, M, P>
->D : D
->M : M
->P : P
->D : D
->M : M
->P : P
 
 let vue = new Vue({
 >vue : { x: number; y: number; } & { f(x: string): number; } & { test: number; hello: string; }

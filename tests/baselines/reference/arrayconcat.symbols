@@ -39,29 +39,29 @@ class parser {
 >this.options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
 >this : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
 >options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
->this.options.sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>this.options.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >this.options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
 >this : Symbol(parser, Decl(arrayconcat.ts, 8, 1))
 >options : Symbol(parser.options, Decl(arrayconcat.ts, 10, 14))
->sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(arrayconcat.ts, 14, 44))
 >b : Symbol(b, Decl(arrayconcat.ts, 14, 46))
 
             var aName = a.name.toLowerCase();
 >aName : Symbol(aName, Decl(arrayconcat.ts, 15, 15))
->a.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>a.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >a.name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
 >a : Symbol(a, Decl(arrayconcat.ts, 14, 44))
 >name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
             var bName = b.name.toLowerCase();
 >bName : Symbol(bName, Decl(arrayconcat.ts, 16, 15))
->b.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>b.name.toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 >b.name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
 >b : Symbol(b, Decl(arrayconcat.ts, 14, 46))
 >name : Symbol(IOptions.name, Decl(arrayconcat.ts, 0, 20))
->toLowerCase : Symbol(String.toLowerCase, Decl(lib.d.ts, --, --))
+>toLowerCase : Symbol(String.toLowerCase, Decl(lib.es5.d.ts, --, --))
 
             if (aName > bName) {
 >aName : Symbol(aName, Decl(arrayconcat.ts, 15, 15))

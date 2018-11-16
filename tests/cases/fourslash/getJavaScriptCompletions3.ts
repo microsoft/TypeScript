@@ -6,5 +6,4 @@
 ////var v;
 ////v./**/
 
-goTo.marker();
-verify.completionListContains("concat", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "", includes: { name: "concat", kind: "method", kindModifiers: "declare" } });

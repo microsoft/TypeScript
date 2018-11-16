@@ -6,46 +6,26 @@
  */
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T;
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >tempStrs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T;
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >tempStrs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >h : (y: T) => T
 >y : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
 function tempFun<T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T {
 >tempFun : { <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, x: T): T; <T>(tempStrs: TemplateStringsArray, g: (x: T) => T, h: (y: T) => T, x: T): T; }
->T : T
 >tempStrs : TemplateStringsArray
->TemplateStringsArray : TemplateStringsArray
 >g : (x: T) => T
 >x : T
->T : T
->T : T
 >x : T
->T : T
->T : T
 
     return g(x);
 >g(x) : T

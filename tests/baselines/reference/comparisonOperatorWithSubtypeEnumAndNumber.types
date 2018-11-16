@@ -7,7 +7,6 @@ enum E { a, b, c }
 
 var a: E;
 >a : E
->E : E
 
 var b: number;
 >b : number

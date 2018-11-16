@@ -1,7 +1,5 @@
 === tests/cases/compiler/contextualTypingOfLambdaWithMultipleSignatures.ts ===
 interface Foo {
->Foo : Foo
-
     getFoo(n: number): void;
 >getFoo : { (n: number): void; (s: string): void; }
 >n : number
@@ -13,7 +11,6 @@ interface Foo {
 
 var foo: Foo;
 >foo : Foo
->Foo : Foo
 
 foo.getFoo = bar => { };
 >foo.getFoo = bar => { } : (bar: any) => void

@@ -13,7 +13,7 @@ var map = new Map([["", true]]);
 >true : true
 
 for ([k, ...[v]] of map) {
->[k, ...[v]] : (string | boolean)[]
+>[k, ...[v]] : [string, ...boolean[]]
 >k : string
 >...[v] : boolean
 >[v] : [boolean]

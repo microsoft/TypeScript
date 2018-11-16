@@ -140,17 +140,23 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 ---
 >>>function getRobot() {
 1 >
-2 >^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^
+4 >                 ^->
 1 >
   >
+2 >function 
+3 >         getRobot
 1 >Emitted(3, 1) Source(19, 1) + SourceIndex(0)
+2 >Emitted(3, 10) Source(19, 10) + SourceIndex(0)
+3 >Emitted(3, 18) Source(19, 18) + SourceIndex(0)
 ---
 >>>    return robot;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^
 4 >                ^
-1->function getRobot() {
+1->() {
   >    
 2 >    return 
 3 >           robot
@@ -172,17 +178,23 @@ sourceFile:sourceMapValidationDestructuringForObjectBindingPattern.ts
 ---
 >>>function getMultiRobot() {
 1->
-2 >^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^^^^^^^^^^
+4 >                      ^->
 1->
   >
+2 >function 
+3 >         getMultiRobot
 1->Emitted(6, 1) Source(22, 1) + SourceIndex(0)
+2 >Emitted(6, 10) Source(22, 10) + SourceIndex(0)
+3 >Emitted(6, 23) Source(22, 23) + SourceIndex(0)
 ---
 >>>    return multiRobot;
 1->^^^^
 2 >    ^^^^^^^
 3 >           ^^^^^^^^^^
 4 >                     ^
-1->function getMultiRobot() {
+1->() {
   >    
 2 >    return 
 3 >           multiRobot

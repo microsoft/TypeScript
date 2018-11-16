@@ -1,25 +1,26 @@
 /// <reference path="fourslash.ts" />
 
-////import {| "itemName": "ns", "kind": "alias", "parentName": "" |}* as ns from "a";
-////
-////import { {| "itemName": "a", "kind": "alias", "parentName": "" |}a }  from "a";
-////
-////import { {| "itemName": "B", "kind": "alias", "parentName": "" |}b as B }  from "a";
-////
-////import { {| "itemName": "c", "kind": "alias", "parentName": "" |}c,
-////            {| "itemName": "D", "kind": "alias", "parentName": "" |}d as D }  from "a";
-////
-////import {| "itemName": "d1", "kind": "alias", "parentName": "" |}d1, { 
-////            {| "itemName": "e", "kind": "alias", "parentName": "" |}e }  from "a";
-////
-////{| "itemName": "f", "kind": "alias", "parentName": "" |}import f = require("a");
+// @noLib: true
 
-test.markers().forEach(marker => {
-    verify.navigationItemsListContains(
-        marker.data.itemName,
-        marker.data.kind,
-        marker.data.itemName,
-        "exact",
-        marker.fileName,
-        marker.data.parentName);
-});
+////import [|{| "name": "ns", "kind": "alias" |}* as ns|] from "a";
+////
+////import { [|{| "name": "a", "kind": "alias" |}a|] }  from "a";
+////
+////import { [|{| "name": "B", "kind": "alias" |}b as B|] }  from "a";
+////
+////import { [|{| "name": "c", "kind": "alias" |}c|],
+////            [|{| "name": "dee", "kind": "alias" |}d as dee|] }  from "a";
+////
+////import [|{| "name": "d1", "kind": "alias" |}d1|], {
+////            [|{| "name": "e", "kind": "alias" |}e|] }  from "a";
+////
+////[|{| "name": "f", "kind": "alias" |}import f = require("a");|]
+
+// TODO: GH#25237 (range for `d1` is too big)
+
+for (const range of test.ranges()) {
+    verify.navigateTo({
+        pattern: range.marker.data.name,
+        expected: [{ ...range.marker.data, range }],
+    });
+}

@@ -9,7 +9,7 @@ interface Foo {
     new (): any;
     new (x: string): Object;
 >x : Symbol(x, Decl(interfaceWithOverloadedCallAndConstructSignatures.ts, 5, 9))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 var f: Foo;

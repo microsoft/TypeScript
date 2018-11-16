@@ -1,16 +1,11 @@
 === tests/cases/conformance/types/primitives/boolean/extendBooleanInterface.ts ===
 interface Boolean {
->Boolean : Boolean
-
     doStuff(): string;
 >doStuff : () => string
 
     doOtherStuff<T>(x: T): T;
 >doOtherStuff : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 }
 
 var x = true;

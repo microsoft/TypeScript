@@ -1,12 +1,9 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithObjectLiteralArgs.ts ===
 function foo<T>(x: { bar: T; baz: T }) {
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
->T : T
 >x : { bar: T; baz: T; }
 >bar : T
->T : T
 >baz : T
->T : T
 
     return x;
 >x : { bar: T; baz: T; }
@@ -33,8 +30,8 @@ var r2 = foo({ bar: 1, baz: 1 }); // T = number
 >1 : 1
 
 var r3 = foo({ bar: foo, baz: foo }); // T = typeof foo
->r3 : { bar: <T>(x: any) => any; baz: <T>(x: any) => any; }
->foo({ bar: foo, baz: foo }) : { bar: <T>(x: any) => any; baz: <T>(x: any) => any; }
+>r3 : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
+>foo({ bar: foo, baz: foo }) : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
 >{ bar: foo, baz: foo } : { bar: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; baz: <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }; }
 >bar : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
@@ -46,7 +43,6 @@ var r4 = foo<Object>({ bar: 1, baz: '' }); // T = Object
 >r4 : { bar: Object; baz: Object; }
 >foo<Object>({ bar: 1, baz: '' }) : { bar: Object; baz: Object; }
 >foo : <T>(x: { bar: T; baz: T; }) => { bar: T; baz: T; }
->Object : Object
 >{ bar: 1, baz: '' } : { bar: number; baz: string; }
 >bar : number
 >1 : 1

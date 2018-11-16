@@ -2,7 +2,7 @@
 
 ////class C2 {
 ////}
-////let I: {
+////let /*I*/I: {
 ////    /*constructSignature*/new(): C2;
 ////};
 ////new [|/*invokeExpression1*/I|]();
@@ -11,6 +11,6 @@
 ////new [|/*invokeExpression2*/I2|]();
 
 verify.goToDefinition({
-    invokeExpression1: "constructSignature",
+    invokeExpression1: ["I", "constructSignature"],
     invokeExpression2: "symbolDeclaration"
 });

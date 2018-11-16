@@ -14,8 +14,6 @@ class A {
 
 === tests/cases/compiler/file2.ts ===
 interface A {
->A : A
-
     run();
 >run : () => any
 }

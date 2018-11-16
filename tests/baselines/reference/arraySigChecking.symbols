@@ -65,11 +65,11 @@ isEmpty([]);
 
 isEmpty(new Array(3));
 >isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 isEmpty(new Array<string>(3));
 >isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 isEmpty(['a']);
 >isEmpty : Symbol(isEmpty, Decl(arraySigChecking.ts, 21, 19))

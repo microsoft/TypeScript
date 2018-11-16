@@ -1,0 +1,12 @@
+=== tests/cases/compiler/nonexistentPropertyAvailableOnPromisedType.ts ===
+function f(x: Promise<string>) {
+>f : (x: Promise<string>) => void
+>x : Promise<string>
+
+    x.toLowerCase();
+>x.toLowerCase() : any
+>x.toLowerCase : any
+>x : Promise<string>
+>toLowerCase : any
+}
+

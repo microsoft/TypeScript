@@ -8,16 +8,13 @@ function readdir(path: string, accept: (stat: fs.Stats, name: string) => boolean
 >accept : (stat: any, name: string) => boolean
 >stat : any
 >fs : any
->Stats : any
 >name : string
 >callback : (error: Error, results: { name: string; stat: any; }[]) => void
 >error : Error
->Error : Error
 >results : { name: string; stat: any; }[]
 >name : string
 >stat : any
 >fs : any
->Stats : any
 
 function join(...paths: string[]) {}
 >join : (...paths: string[]) => void
@@ -46,7 +43,6 @@ function instrumentFile(covFileDir: string, covFileName: string, originalFilePat
         } , (error: Error, files: {}[]) => {
 >(error: Error, files: {}[]) => {                files.forEach((file) => {                    var fullPath = join(IDoNotExist);                } );            } : (error: Error, files: {}[]) => void
 >error : Error
->Error : Error
 >files : {}[]
 
                 files.forEach((file) => {

@@ -1,10 +1,8 @@
 === tests/cases/compiler/genericOfACloduleType2.ts ===
 class G<T>{ bar(x: T) { return x; } }
 >G : G<T>
->T : T
 >bar : (x: T) => T
 >x : T
->T : T
 >x : T
 
 module M {
@@ -26,7 +24,6 @@ module M {
 >g1 : G<C>
 >new G<C>() : G<C>
 >G : typeof G
->C : C
 
     g1.bar(null).foo(); // no error
 >g1.bar(null).foo() : void
@@ -47,5 +44,4 @@ module N {
 >new G<M.C>() : G<M.C>
 >G : typeof G
 >M : any
->C : M.C
 }

@@ -1,7 +1,5 @@
 === tests/cases/compiler/indexerSignatureWithRestParam.ts ===
 interface I {
->I : I
-
     [...x]: string;
 >x : any[]
 }

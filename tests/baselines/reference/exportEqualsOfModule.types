@@ -1,13 +1,13 @@
 === tests/cases/compiler/exportEqualsOfModule.ts ===
 declare module '~popsicle/dist/request' {
->'~popsicle/dist/request' : typeof '~popsicle/dist/request'
+>'~popsicle/dist/request' : typeof import("~popsicle/dist/request")
 
     export class Request {}
 >Request : Request
 }
 
 declare module '~popsicle/dist/common' {
->'~popsicle/dist/common' : typeof '~popsicle/dist/common'
+>'~popsicle/dist/common' : typeof import("~popsicle/dist/common")
 
     import { Request } from '~popsicle/dist/request';
 >Request : typeof Request
@@ -17,7 +17,7 @@ declare module '~popsicle/dist/common' {
 }
 
 declare module 'popsicle' {
->'popsicle' : typeof 'popsicle'
+>'popsicle' : typeof import("popsicle")
 
     import alias = require('~popsicle/dist/common');
 >alias : typeof alias
@@ -27,7 +27,7 @@ declare module 'popsicle' {
 }
 
 declare module 'popsicle-proxy-agent' {
->'popsicle-proxy-agent' : typeof 'popsicle-proxy-agent'
+>'popsicle-proxy-agent' : typeof import("popsicle-proxy-agent")
 
     import { Request } from 'popsicle';
 >Request : typeof Request
@@ -35,7 +35,6 @@ declare module 'popsicle-proxy-agent' {
     function proxy(): (request: Request) => any;
 >proxy : () => (request: Request) => any
 >request : Request
->Request : Request
 
     export = proxy;
 >proxy : () => (request: Request) => any

@@ -1,0 +1,27 @@
+[96mtests/cases/compiler/index.ts[0m:[93m3[0m:[93m8[0m - [91merror[0m[90m TS2345: [0mArgument of type '{ default: () => void; }' is not assignable to parameter of type '() => void'.
+  Type '{ default: () => void; }' provides no match for the signature '(): void'.
+
+[7m3[0m invoke(foo);
+[7m [0m [91m       ~~~[0m
+
+  [96mtests/cases/compiler/index.ts[0m:[93m1[0m:[93m1[0m
+    [7m1[0m import * as foo from "./foo";
+    [7m [0m [96m~~~~~~~~~~~~~~~~~~~~~~~~~~~~~[0m
+    Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
+
+
+==== tests/cases/compiler/foo.d.ts (0 errors) ====
+    declare function foo(): void;
+    declare namespace foo {}
+    export = foo;
+==== tests/cases/compiler/index.ts (1 errors) ====
+    import * as foo from "./foo";
+    function invoke(f: () => void) { f(); }
+    invoke(foo);
+           ~~~
+!!! error TS2345: Argument of type '{ default: () => void; }' is not assignable to parameter of type '() => void'.
+!!! error TS2345:   Type '{ default: () => void; }' provides no match for the signature '(): void'.
+!!! related TS7038 tests/cases/compiler/index.ts:1:1: Type originates at this import. A namespace-style import cannot be called or constructed, and will cause a failure at runtime. Consider using a default import or import require here instead.
+    
+Found 1 error.
+

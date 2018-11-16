@@ -14,7 +14,7 @@ exports.A = function () {
 >A : Symbol(A, Decl(a-ext.js, 0, 0))
 
     this.x = 1;
->x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 25))
 
 };
 
@@ -28,9 +28,9 @@ const { A } = require("./a-ext");
 function a(p) { p.x; }
 >a : Symbol(a, Decl(a.js, 0, 33))
 >p : Symbol(p, Decl(a.js, 3, 11))
->p.x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>p.x : Symbol(A.x, Decl(a-ext.js, 0, 25))
 >p : Symbol(p, Decl(a.js, 3, 11))
->x : Symbol((Anonymous function).x, Decl(a-ext.js, 0, 25))
+>x : Symbol(A.x, Decl(a-ext.js, 0, 25))
 
 === tests/cases/conformance/salsa/b-ext.js ===
 exports.B = class {
@@ -40,9 +40,9 @@ exports.B = class {
 
     constructor() {
         this.x = 1;
->this.x : Symbol((Anonymous class).x, Decl(b-ext.js, 1, 19))
->this : Symbol((Anonymous class), Decl(b-ext.js, 0, 11))
->x : Symbol((Anonymous class).x, Decl(b-ext.js, 1, 19))
+>this.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
+>this : Symbol(B, Decl(b-ext.js, 0, 11))
+>x : Symbol(B.x, Decl(b-ext.js, 1, 19))
     }
 };
 
@@ -56,9 +56,9 @@ const { B } = require("./b-ext");
 function b(p) { p.x; }
 >b : Symbol(b, Decl(b.js, 0, 33))
 >p : Symbol(p, Decl(b.js, 3, 11))
->p.x : Symbol((Anonymous class).x, Decl(b-ext.js, 1, 19))
+>p.x : Symbol(B.x, Decl(b-ext.js, 1, 19))
 >p : Symbol(p, Decl(b.js, 3, 11))
->x : Symbol((Anonymous class).x, Decl(b-ext.js, 1, 19))
+>x : Symbol(B.x, Decl(b-ext.js, 1, 19))
 
 === tests/cases/conformance/salsa/c-ext.js ===
 export function C() {

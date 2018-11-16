@@ -1,0 +1,60 @@
+[96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+
+[7m1[0m declare module "someMod" {
+[7m [0m [91m~~~~~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m3[0m:[93m1[0m
+    [7m3[0m declare module "someMod" {
+    [7m [0m [96m~~~~~~~[0m
+    Conflicts are in this file.
+[96mtests/cases/compiler/file2.ts[0m:[93m3[0m:[93m1[0m - [91merror[0m[90m TS6200: [0mDefinitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+
+[7m3[0m declare module "someMod" {
+[7m [0m [91m~~~~~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m1[0m
+    [7m1[0m declare module "someMod" {
+    [7m [0m [96m~~~~~~~[0m
+    Conflicts are in this file.
+
+
+==== tests/cases/compiler/file2.ts (1 errors) ====
+    /// <reference path="./file1" />
+    
+    declare module "someMod" {
+    ~~~~~~~
+!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+!!! related TS6201 tests/cases/compiler/file1.ts:1:1: Conflicts are in this file.
+        export interface TopLevel {
+            duplicate1(): number;
+            duplicate2(): number;
+            duplicate3(): number;
+            duplicate4(): number;
+            duplicate5(): number;
+            duplicate6(): number;
+            duplicate7(): number;
+            duplicate8(): number;
+            duplicate9(): number;
+        }
+    }
+    export {};
+    
+==== tests/cases/compiler/file1.ts (1 errors) ====
+    declare module "someMod" {
+    ~~~~~~~
+!!! error TS6200: Definitions of the following identifiers conflict with those in another file: duplicate1, duplicate2, duplicate3, duplicate4, duplicate5, duplicate6, duplicate7, duplicate8, duplicate9
+!!! related TS6201 tests/cases/compiler/file2.ts:3:1: Conflicts are in this file.
+        export interface TopLevel {
+            duplicate1: () => string;
+            duplicate2: () => string;
+            duplicate3: () => string;
+            duplicate4: () => string;
+            duplicate5: () => string;
+            duplicate6: () => string;
+            duplicate7: () => string;
+            duplicate8: () => string;
+            duplicate9: () => string;
+        }
+    }
+Found 2 errors.
+

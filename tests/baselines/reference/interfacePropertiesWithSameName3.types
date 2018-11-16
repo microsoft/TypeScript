@@ -1,16 +1,11 @@
 === tests/cases/compiler/interfacePropertiesWithSameName3.ts ===
 interface D { a: number; }
->D : D
 >a : number
 
 interface E { a: string; }
->E : E
 >a : string
 
 interface F extends E, D { } // error
->F : F
->E : E
->D : D
 
 class D2 { a: number; }
 >D2 : D2
@@ -21,7 +16,4 @@ class E2 { a: string; }
 >a : string
 
 interface F2 extends E2, D2 { } // error
->F2 : F2
->E2 : E2
->D2 : D2
 

@@ -10,12 +10,12 @@ export function bar() {
 //// [dottedNamesInSystem.js]
 System.register([], function (exports_1, context_1) {
     "use strict";
+    var A;
     var __moduleName = context_1 && context_1.id;
     function bar() {
         return A.B.C.foo();
     }
     exports_1("bar", bar);
-    var A;
     return {
         setters: [],
         execute: function () {

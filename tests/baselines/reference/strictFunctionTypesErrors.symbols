@@ -5,18 +5,18 @@ export {}
 declare let f1: (x: Object) => Object;
 >f1 : Symbol(f1, Decl(strictFunctionTypesErrors.ts, 3, 11))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 3, 17))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let f2: (x: Object) => string;
 >f2 : Symbol(f2, Decl(strictFunctionTypesErrors.ts, 4, 11))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 4, 17))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let f3: (x: string) => Object;
 >f3 : Symbol(f3, Decl(strictFunctionTypesErrors.ts, 5, 11))
 >x : Symbol(x, Decl(strictFunctionTypesErrors.ts, 5, 17))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let f4: (x: string) => string;
 >f4 : Symbol(f4, Decl(strictFunctionTypesErrors.ts, 6, 11))
@@ -81,18 +81,18 @@ type Func<T, U> = (x: T) => U;
 declare let g1: Func<Object, Object>;
 >g1 : Symbol(g1, Decl(strictFunctionTypesErrors.ts, 26, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let g2: Func<Object, string>;
 >g2 : Symbol(g2, Decl(strictFunctionTypesErrors.ts, 27, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let g3: Func<string, Object>;
 >g3 : Symbol(g3, Decl(strictFunctionTypesErrors.ts, 28, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let g4: Func<string, string>;
 >g4 : Symbol(g4, Decl(strictFunctionTypesErrors.ts, 29, 11))
@@ -150,20 +150,20 @@ declare let h1: Func<Func<Object, void>, Object>;
 >h1 : Symbol(h1, Decl(strictFunctionTypesErrors.ts, 47, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let h2: Func<Func<Object, void>, string>;
 >h2 : Symbol(h2, Decl(strictFunctionTypesErrors.ts, 48, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let h3: Func<Func<string, void>, Object>;
 >h3 : Symbol(h3, Decl(strictFunctionTypesErrors.ts, 49, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let h4: Func<Func<string, void>, string>;
 >h4 : Symbol(h4, Decl(strictFunctionTypesErrors.ts, 50, 11))
@@ -221,21 +221,21 @@ h4 = h3;  // Error
 declare let i1: Func<Object, Func<Object, void>>;
 >i1 : Symbol(i1, Decl(strictFunctionTypesErrors.ts, 68, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let i2: Func<Object, Func<string, void>>;
 >i2 : Symbol(i2, Decl(strictFunctionTypesErrors.ts, 69, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
 
 declare let i3: Func<string, Func<Object, void>>;
 >i3 : Symbol(i3, Decl(strictFunctionTypesErrors.ts, 70, 11))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
 >Func : Symbol(Func, Decl(strictFunctionTypesErrors.ts, 22, 8))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare let i4: Func<string, Func<string, void>>;
 >i4 : Symbol(i4, Decl(strictFunctionTypesErrors.ts, 71, 11))

@@ -12,8 +12,6 @@ declare global {
 >global : typeof global
 
     interface SymbolConstructor {
->SymbolConstructor : SymbolConstructor
-
         observable: symbol;
 >observable : symbol
     }

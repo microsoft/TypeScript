@@ -1,13 +1,12 @@
-tests/cases/compiler/lastPropertyInLiteralWins.ts(7,6): error TS2345: Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
-  Types of property 'thunk' are incompatible.
-    Type '(num: number) => void' is not assignable to type '(str: string) => void'.
-      Types of parameters 'num' and 'str' are incompatible.
-        Type 'string' is not assignable to type 'number'.
+tests/cases/compiler/lastPropertyInLiteralWins.ts(8,5): error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
+  Types of parameters 'num' and 'str' are incompatible.
+    Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2300: Duplicate identifier 'thunk'.
+tests/cases/compiler/lastPropertyInLiteralWins.ts(9,5): error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
 tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate identifier 'thunk'.
 
 
-==== tests/cases/compiler/lastPropertyInLiteralWins.ts (3 errors) ====
+==== tests/cases/compiler/lastPropertyInLiteralWins.ts (4 errors) ====
     interface Thing {
         thunk: (str: string) => void;
     }
@@ -15,20 +14,19 @@ tests/cases/compiler/lastPropertyInLiteralWins.ts(14,5): error TS2300: Duplicate
         thing.thunk("str");
     }
     test({ // Should error, as last one wins, and is wrong type
-         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         thunk: (str: string) => {},
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+        ~~~~~
+!!! error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
+!!! error TS2322:   Types of parameters 'num' and 'str' are incompatible.
+!!! error TS2322:     Type 'string' is not assignable to type 'number'.
+!!! related TS6500 tests/cases/compiler/lastPropertyInLiteralWins.ts:2:5: The expected type comes from property 'thunk' which is declared here on type 'Thing'
         thunk: (num: number) => {}
-    ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
         ~~~~~
 !!! error TS2300: Duplicate identifier 'thunk'.
+        ~~~~~
+!!! error TS2322: Type '(num: number) => void' is not assignable to type '(str: string) => void'.
+!!! related TS6500 tests/cases/compiler/lastPropertyInLiteralWins.ts:2:5: The expected type comes from property 'thunk' which is declared here on type 'Thing'
     });
-    ~
-!!! error TS2345: Argument of type '{ thunk: (num: number) => void; }' is not assignable to parameter of type 'Thing'.
-!!! error TS2345:   Types of property 'thunk' are incompatible.
-!!! error TS2345:     Type '(num: number) => void' is not assignable to type '(str: string) => void'.
-!!! error TS2345:       Types of parameters 'num' and 'str' are incompatible.
-!!! error TS2345:         Type 'string' is not assignable to type 'number'.
     
     test({ // Should be OK.  Last 'thunk' is of correct type
         thunk: (num: number) => {},

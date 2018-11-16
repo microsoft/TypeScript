@@ -24,7 +24,6 @@ module ExplicitPublic {
 
         private foo: Base;
 >foo : Base
->Base : Base
     }
 
     class B extends A {
@@ -33,7 +32,6 @@ module ExplicitPublic {
 
         public foo: Derived; // error
 >foo : Derived
->Derived : Derived
     }
 
     class A2 {
@@ -41,7 +39,6 @@ module ExplicitPublic {
 
         private 1: Base;
 >1 : Base
->Base : Base
     }
 
     class B2 extends A2 {
@@ -50,7 +47,6 @@ module ExplicitPublic {
 
         public 1: Derived; // error
 >1 : Derived
->Derived : Derived
     }
 
     class A3 {
@@ -58,7 +54,6 @@ module ExplicitPublic {
 
         private '1': Base;
 >'1' : Base
->Base : Base
     }
 
     class B3 extends A3 {
@@ -67,7 +62,6 @@ module ExplicitPublic {
 
         public '1': Derived; // error
 >'1' : Derived
->Derived : Derived
     }
 }
 
@@ -79,7 +73,6 @@ module ImplicitPublic {
 
         private foo: Base;
 >foo : Base
->Base : Base
     }
 
     class B extends A {
@@ -88,7 +81,6 @@ module ImplicitPublic {
 
         foo: Derived; // error
 >foo : Derived
->Derived : Derived
     }
 
     class A2 {
@@ -96,7 +88,6 @@ module ImplicitPublic {
 
         private 1: Base;
 >1 : Base
->Base : Base
     }
 
     class B2 extends A2 {
@@ -105,7 +96,6 @@ module ImplicitPublic {
 
         1: Derived; // error
 >1 : Derived
->Derived : Derived
     }
 
     class A3 {
@@ -113,7 +103,6 @@ module ImplicitPublic {
 
         private '1': Base;
 >'1' : Base
->Base : Base
     }
 
     class B3 extends A3 {
@@ -122,6 +111,5 @@ module ImplicitPublic {
 
         '1': Derived; // error
 >'1' : Derived
->Derived : Derived
     }
 }

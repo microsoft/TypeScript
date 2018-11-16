@@ -33,7 +33,6 @@ class C extends B {
 }
 var c: C;
 >c : C
->C : C
 
 var z = c.foo().bar().baz();  // Fluent pattern
 >z : C

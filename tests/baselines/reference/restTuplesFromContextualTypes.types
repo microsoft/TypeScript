@@ -1,0 +1,391 @@
+=== tests/cases/conformance/types/rest/restTuplesFromContextualTypes.ts ===
+declare const t1: [number, boolean, string];
+>t1 : [number, boolean, string]
+
+(function (a, b, c){})(...t1);
+>(function (a, b, c){})(...t1) : void
+>(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
+>function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
+>a : number
+>b : boolean
+>c : string
+>...t1 : string | number | boolean
+>t1 : [number, boolean, string]
+
+(function (...x){})(...t1);
+>(function (...x){})(...t1) : void
+>(function (...x){}) : (x_0: number, x_1: boolean, x_2: string) => void
+>function (...x){} : (x_0: number, x_1: boolean, x_2: string) => void
+>x : [number, boolean, string]
+>...t1 : string | number | boolean
+>t1 : [number, boolean, string]
+
+(function (a, ...x){})(...t1);
+>(function (a, ...x){})(...t1) : void
+>(function (a, ...x){}) : (a: number, x_0: boolean, x_1: string) => void
+>function (a, ...x){} : (a: number, x_0: boolean, x_1: string) => void
+>a : number
+>x : [boolean, string]
+>...t1 : string | number | boolean
+>t1 : [number, boolean, string]
+
+(function (a, b, ...x){})(...t1);
+>(function (a, b, ...x){})(...t1) : void
+>(function (a, b, ...x){}) : (a: number, b?: boolean, x_0: string) => void
+>function (a, b, ...x){} : (a: number, b?: boolean, x_0: string) => void
+>a : number
+>b : boolean
+>x : [string]
+>...t1 : string | number | boolean
+>t1 : [number, boolean, string]
+
+(function (a, b, c, ...x){})(...t1);
+>(function (a, b, c, ...x){})(...t1) : void
+>(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string) => void
+>function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string) => void
+>a : number
+>b : boolean
+>c : string
+>x : []
+>...t1 : string | number | boolean
+>t1 : [number, boolean, string]
+
+declare function f1(cb: (...args: typeof t1) => void): void;
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>cb : (args_0: number, args_1: boolean, args_2: string) => void
+>args : [number, boolean, string]
+>t1 : [number, boolean, string]
+
+f1((a, b, c) => {})
+>f1((a, b, c) => {}) : void
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>a : number
+>b : boolean
+>c : string
+
+f1((...x) => {})
+>f1((...x) => {}) : void
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>(...x) => {} : (args_0: number, args_1: boolean, args_2: string) => void
+>x : [number, boolean, string]
+
+f1((a, ...x) => {})
+>f1((a, ...x) => {}) : void
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>(a, ...x) => {} : (a: number, args_1: boolean, args_2: string) => void
+>a : number
+>x : [boolean, string]
+
+f1((a, b, ...x) => {})
+>f1((a, b, ...x) => {}) : void
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>(a, b, ...x) => {} : (a: number, b: boolean, args_2: string) => void
+>a : number
+>b : boolean
+>x : [string]
+
+f1((a, b, c, ...x) => {})
+>f1((a, b, c, ...x) => {}) : void
+>f1 : (cb: (args_0: number, args_1: boolean, args_2: string) => void) => void
+>(a, b, c, ...x) => {} : (a: number, b: boolean, c: string) => void
+>a : number
+>b : boolean
+>c : string
+>x : []
+
+declare const t2: [number, boolean, ...string[]];
+>t2 : [number, boolean, ...string[]]
+
+(function (a, b, c){})(...t2);
+>(function (a, b, c){})(...t2) : void
+>(function (a, b, c){}) : (a: number, b?: boolean, c?: string) => void
+>function (a, b, c){} : (a: number, b?: boolean, c?: string) => void
+>a : number
+>b : boolean
+>c : string
+>...t2 : string | number | boolean
+>t2 : [number, boolean, ...string[]]
+
+(function (...x){})(...t2);
+>(function (...x){})(...t2) : void
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>x : [number, boolean, ...string[]]
+>...t2 : string | number | boolean
+>t2 : [number, boolean, ...string[]]
+
+(function (a, ...x){})(...t2);
+>(function (a, ...x){})(...t2) : void
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
+>function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>a : number
+>x : [boolean, ...string[]]
+>...t2 : string | number | boolean
+>t2 : [number, boolean, ...string[]]
+
+(function (a, b, ...x){})(...t2);
+>(function (a, b, ...x){})(...t2) : void
+>(function (a, b, ...x){}) : (a: number, b?: boolean, ...x: string[]) => void
+>function (a, b, ...x){} : (a: number, b?: boolean, ...x: string[]) => void
+>a : number
+>b : boolean
+>x : string[]
+>...t2 : string | number | boolean
+>t2 : [number, boolean, ...string[]]
+
+(function (a, b, c, ...x){})(...t2);
+>(function (a, b, c, ...x){})(...t2) : void
+>(function (a, b, c, ...x){}) : (a: number, b?: boolean, c?: string, ...x: string[]) => void
+>function (a, b, c, ...x){} : (a: number, b?: boolean, c?: string, ...x: string[]) => void
+>a : number
+>b : boolean
+>c : string
+>x : string[]
+>...t2 : string | number | boolean
+>t2 : [number, boolean, ...string[]]
+
+declare function f2(cb: (...args: typeof t2) => void): void;
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>cb : (args_0: number, args_1: boolean, ...args_2: string[]) => void
+>args : [number, boolean, ...string[]]
+>t2 : [number, boolean, ...string[]]
+
+f2((a, b, c) => {})
+>f2((a, b, c) => {}) : void
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>a : number
+>b : boolean
+>c : string
+
+f2((...x) => {})
+>f2((...x) => {}) : void
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>(...x) => {} : (args_0: number, args_1: boolean, ...args_2: string[]) => void
+>x : [number, boolean, ...string[]]
+
+f2((a, ...x) => {})
+>f2((a, ...x) => {}) : void
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>(a, ...x) => {} : (a: number, args_1: boolean, ...args_2: string[]) => void
+>a : number
+>x : [boolean, ...string[]]
+
+f2((a, b, ...x) => {})
+>f2((a, b, ...x) => {}) : void
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
+>a : number
+>b : boolean
+>x : string[]
+
+f2((a, b, c, ...x) => {})
+>f2((a, b, c, ...x) => {}) : void
+>f2 : (cb: (args_0: number, args_1: boolean, ...args_2: string[]) => void) => void
+>(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>a : number
+>b : boolean
+>c : string
+>x : string[]
+
+declare const t3: [boolean, ...string[]];
+>t3 : [boolean, ...string[]]
+
+(function (a, b, c){})(1, ...t3);
+>(function (a, b, c){})(1, ...t3) : void
+>(function (a, b, c){}) : (a: number, b: boolean, c?: string) => void
+>function (a, b, c){} : (a: number, b: boolean, c?: string) => void
+>a : number
+>b : boolean
+>c : string
+>1 : 1
+>...t3 : string | boolean
+>t3 : [boolean, ...string[]]
+
+(function (...x){})(1, ...t3);
+>(function (...x){})(1, ...t3) : void
+>(function (...x){}) : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>function (...x){} : (x_0: number, x_1: boolean, ...x_2: string[]) => void
+>x : [number, boolean, ...string[]]
+>1 : 1
+>...t3 : string | boolean
+>t3 : [boolean, ...string[]]
+
+(function (a, ...x){})(1, ...t3);
+>(function (a, ...x){})(1, ...t3) : void
+>(function (a, ...x){}) : (a: number, x_0: boolean, ...x_1: string[]) => void
+>function (a, ...x){} : (a: number, x_0: boolean, ...x_1: string[]) => void
+>a : number
+>x : [boolean, ...string[]]
+>1 : 1
+>...t3 : string | boolean
+>t3 : [boolean, ...string[]]
+
+(function (a, b, ...x){})(1, ...t3);
+>(function (a, b, ...x){})(1, ...t3) : void
+>(function (a, b, ...x){}) : (a: number, b: boolean, ...x: string[]) => void
+>function (a, b, ...x){} : (a: number, b: boolean, ...x: string[]) => void
+>a : number
+>b : boolean
+>x : string[]
+>1 : 1
+>...t3 : string | boolean
+>t3 : [boolean, ...string[]]
+
+(function (a, b, c, ...x){})(1, ...t3);
+>(function (a, b, c, ...x){})(1, ...t3) : void
+>(function (a, b, c, ...x){}) : (a: number, b: boolean, c?: string, ...x: string[]) => void
+>function (a, b, c, ...x){} : (a: number, b: boolean, c?: string, ...x: string[]) => void
+>a : number
+>b : boolean
+>c : string
+>x : string[]
+>1 : 1
+>...t3 : string | boolean
+>t3 : [boolean, ...string[]]
+
+declare function f3(cb: (x: number, ...args: typeof t3) => void): void;
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>cb : (x: number, args_0: boolean, ...args_1: string[]) => void
+>x : number
+>args : [boolean, ...string[]]
+>t3 : [boolean, ...string[]]
+
+f3((a, b, c) => {})
+>f3((a, b, c) => {}) : void
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>(a, b, c) => {} : (a: number, b: boolean, c: string) => void
+>a : number
+>b : boolean
+>c : string
+
+f3((...x) => {})
+>f3((...x) => {}) : void
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>(...x) => {} : (x: number, args_0: boolean, ...args_1: string[]) => void
+>x : [number, boolean, ...string[]]
+
+f3((a, ...x) => {})
+>f3((a, ...x) => {}) : void
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>(a, ...x) => {} : (a: number, args_0: boolean, ...args_1: string[]) => void
+>a : number
+>x : [boolean, ...string[]]
+
+f3((a, b, ...x) => {})
+>f3((a, b, ...x) => {}) : void
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>(a, b, ...x) => {} : (a: number, b: boolean, ...x: string[]) => void
+>a : number
+>b : boolean
+>x : string[]
+
+f3((a, b, c, ...x) => {})
+>f3((a, b, c, ...x) => {}) : void
+>f3 : (cb: (x: number, args_0: boolean, ...args_1: string[]) => void) => void
+>(a, b, c, ...x) => {} : (a: number, b: boolean, c: string, ...x: string[]) => void
+>a : number
+>b : boolean
+>c : string
+>x : string[]
+
+function f4<T extends any[]>(t: T) {
+>f4 : <T extends any[]>(t: T) => void
+>t : T
+
+    (function(...x){})(...t);
+>(function(...x){})(...t) : void
+>(function(...x){}) : (...x: T) => void
+>function(...x){} : (...x: T) => void
+>x : T
+>...t : any
+>t : T
+
+    (function(a, ...x){})(1, ...t);
+>(function(a, ...x){})(1, ...t) : void
+>(function(a, ...x){}) : (a: number, ...x: T) => void
+>function(a, ...x){} : (a: number, ...x: T) => void
+>a : number
+>x : T
+>1 : 1
+>...t : any
+>t : T
+
+    (function(a, ...x){})(1, 2, ...t);
+>(function(a, ...x){})(1, 2, ...t) : void
+>(function(a, ...x){}) : (a: number, x_0: number, ...x_1: any[]) => void
+>function(a, ...x){} : (a: number, x_0: number, ...x_1: any[]) => void
+>a : number
+>x : [number, ...any[]]
+>1 : 1
+>2 : 2
+>...t : any
+>t : T
+
+    function f(cb: (x: number, ...args: T) => void) {}
+>f : (cb: (x: number, ...args: T) => void) => void
+>cb : (x: number, ...args: T) => void
+>x : number
+>args : T
+
+    f((...x) => {});
+>f((...x) => {}) : void
+>f : (cb: (x: number, ...args: T) => void) => void
+>(...x) => {} : (x: number, ...args: any[]) => void
+>x : [number, ...any[]]
+
+    f((a, ...x) => {});
+>f((a, ...x) => {}) : void
+>f : (cb: (x: number, ...args: T) => void) => void
+>(a, ...x) => {} : (a: number, ...x: T) => void
+>a : number
+>x : T
+
+    f((a, b, ...x) => {});
+>f((a, b, ...x) => {}) : void
+>f : (cb: (x: number, ...args: T) => void) => void
+>(a, b, ...x) => {} : (a: number, b: any, ...x: any[]) => void
+>a : number
+>b : any
+>x : any[]
+}
+
+// Repro from #25288
+
+declare var tuple: [number, string];
+>tuple : [number, string]
+
+(function foo(a, b){}(...tuple));
+>(function foo(a, b){}(...tuple)) : void
+>function foo(a, b){}(...tuple) : void
+>function foo(a, b){} : (a: number, b?: string) => void
+>foo : (a: number, b?: string) => void
+>a : number
+>b : string
+>...tuple : string | number
+>tuple : [number, string]
+
+// Repro from #25289
+
+declare function take(cb: (a: number, b: string) => void): void;
+>take : (cb: (a: number, b: string) => void) => void
+>cb : (a: number, b: string) => void
+>a : number
+>b : string
+
+(function foo(...rest){}(1, ''));
+>(function foo(...rest){}(1, '')) : void
+>function foo(...rest){}(1, '') : void
+>function foo(...rest){} : (rest_0: number, rest_1: string) => void
+>foo : (rest_0: number, rest_1: string) => void
+>rest : [number, string]
+>1 : 1
+>'' : ""
+
+take(function(...rest){});
+>take(function(...rest){}) : void
+>take : (cb: (a: number, b: string) => void) => void
+>function(...rest){} : (a: number, b: string) => void
+>rest : [number, string]
+

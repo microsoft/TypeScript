@@ -1,6 +1,6 @@
 === tests/cases/compiler/protoAssignment.ts ===
 interface Number extends Comparable<number> {
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(protoAssignment.ts, 0, 0))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(protoAssignment.ts, 0, 0))
 
     compareTo(other: number);
 >compareTo : Symbol(Number.compareTo, Decl(protoAssignment.ts, 0, 45))
@@ -10,9 +10,9 @@ interface Number extends Comparable<number> {
 
 Number.prototype.compareTo = function (other: number) {
 >Number.prototype.compareTo : Symbol(Number.compareTo, Decl(protoAssignment.ts, 0, 45))
->Number.prototype : Symbol(NumberConstructor.prototype, Decl(lib.d.ts, --, --))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(protoAssignment.ts, 0, 0))
->prototype : Symbol(NumberConstructor.prototype, Decl(lib.d.ts, --, --))
+>Number.prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(protoAssignment.ts, 0, 0))
+>prototype : Symbol(NumberConstructor.prototype, Decl(lib.es5.d.ts, --, --))
 >compareTo : Symbol(Number.compareTo, Decl(protoAssignment.ts, 0, 45))
 >other : Symbol(other, Decl(protoAssignment.ts, 6, 39))
 

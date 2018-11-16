@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////module.exports = 0;
@@ -13,11 +14,9 @@
 
 verify.codeFix({
     description: "Convert to ES6 module",
-    newFileContent: "export default 0;",
+    newFileContent: {
+        "/a.js": "export default 0;",
+        "/b.ts": 'import a from "./a";',
+        "/c.js": 'const a = require("./a").default;',
+    }
 });
-
-goTo.file("/b.ts");
-verify.currentFileContentIs('import a from "./a";');
-
-goTo.file("/c.js");
-verify.currentFileContentIs('const a = require("./a").default;');

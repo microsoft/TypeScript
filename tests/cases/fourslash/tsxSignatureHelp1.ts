@@ -16,7 +16,7 @@
 //// }
 
 //// function _buildMainButton({ onClick, children, className }: ButtonProps): JSX.Element {
-////     return(<button className={className} onClick={onClick}>{ children || 'MAIN BUTTON'}</button>);  
+////     return(<button className={className} onClick={onClick}>{ children || 'MAIN BUTTON'}</button>);
 //// }
 
 //// export function MainButton(props: ButtonProps): JSX.Element {
@@ -24,12 +24,15 @@
 //// }
 //// let e1 = <MainButton/*1*/ /*2*/
 
-goTo.marker("1");
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("MainButton(props: ButtonProps): any");
-verify.currentParameterSpanIs("props: ButtonProps");
-
-goTo.marker("2");
-verify.signatureHelpCountIs(1);
-verify.currentSignatureHelpIs("MainButton(props: ButtonProps): any");
-verify.currentParameterSpanIs("props: ButtonProps");
+verify.signatureHelp(
+    {
+        marker: "1",
+        text: "MainButton(props: ButtonProps): any",
+        parameterSpan: "props: ButtonProps",
+    },
+    {
+        marker: "2",
+        text: "MainButton(props: ButtonProps): any",
+        parameterSpan: "props: ButtonProps",
+    },
+);

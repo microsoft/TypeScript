@@ -21,7 +21,6 @@ function fn5(): boolean { return true; }
 
 function fn6(): Date { return new Date(12); }
 >fn6 : () => Date
->Date : Date
 >new Date(12) : Date
 >Date : DateConstructor
 >12 : 12
@@ -34,12 +33,10 @@ function fn8(): any { return; } // OK, eq. to 'return undefined'
 >fn8 : () => any
 
 interface I { id: number }
->I : I
 >id : number
 
 class C implements I {
 >C : C
->I : I
 
     id: number;
 >id : number
@@ -56,25 +53,21 @@ class D extends C {
 }
 function fn10(): I { return { id: 12 }; } 
 >fn10 : () => I
->I : I
 >{ id: 12 } : { id: number; }
 >id : number
 >12 : 12
 
 function fn11(): I { return new C(); }
 >fn11 : () => I
->I : I
 >new C() : C
 >C : typeof C
 
 function fn12(): C { return new D(); }
 >fn12 : () => C
->C : C
 >new D() : D
 >D : typeof D
 
 function fn13(): C { return null; }
 >fn13 : () => C
->C : C
 >null : null
 

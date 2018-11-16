@@ -1,11 +1,11 @@
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(6,5): error TS2412: Property '"1"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(7,5): error TS2412: Property '"-1"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(8,5): error TS2412: Property '"-2.5"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(9,5): error TS2412: Property '"3.141592"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(10,5): error TS2412: Property '"1.2e-20"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(11,5): error TS2412: Property '"Infinity"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(12,5): error TS2412: Property '"-Infinity"' of type 'string' is not assignable to numeric index type 'number'.
-tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(13,5): error TS2412: Property '"NaN"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(6,12): error TS2412: Property '"1"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(7,12): error TS2412: Property '"-1"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(8,12): error TS2412: Property '"-2.5"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(9,12): error TS2412: Property '"3.141592"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(10,12): error TS2412: Property '"1.2e-20"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(11,12): error TS2412: Property '"Infinity"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(12,12): error TS2412: Property '"-Infinity"' of type 'string' is not assignable to numeric index type 'number'.
+tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(13,12): error TS2412: Property '"NaN"' of type 'string' is not assignable to numeric index type 'number'.
 
 
 ==== tests/cases/compiler/propertiesAndIndexersForNumericNames.ts (8 errors) ====
@@ -15,28 +15,28 @@ tests/cases/compiler/propertiesAndIndexersForNumericNames.ts(13,5): error TS2412
         // These all have numeric names; they should error
         // because their types are not compatible with the numeric indexer.
         public "1": string = "number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~
 !!! error TS2412: Property '"1"' of type 'string' is not assignable to numeric index type 'number'.
         public "-1": string = "negative number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~
 !!! error TS2412: Property '"-1"' of type 'string' is not assignable to numeric index type 'number'.
         public "-2.5": string = "negative number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~
 !!! error TS2412: Property '"-2.5"' of type 'string' is not assignable to numeric index type 'number'.
         public "3.141592": string = "pi-sitive number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~
 !!! error TS2412: Property '"3.141592"' of type 'string' is not assignable to numeric index type 'number'.
         public "1.2e-20": string = "really small number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~
 !!! error TS2412: Property '"1.2e-20"' of type 'string' is not assignable to numeric index type 'number'.
         public "Infinity": string = "A gillion"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~
 !!! error TS2412: Property '"Infinity"' of type 'string' is not assignable to numeric index type 'number'.
         public "-Infinity": string = "Negative-a-gillion"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~~~~~~~
 !!! error TS2412: Property '"-Infinity"' of type 'string' is not assignable to numeric index type 'number'.
         public "NaN": string = "not a number"; // Error
-        ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+               ~~~~~
 !!! error TS2412: Property '"NaN"' of type 'string' is not assignable to numeric index type 'number'.
         
         // These all have *partially* numeric names,

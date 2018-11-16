@@ -23,8 +23,3 @@
 ////[|else|] { }
 
 verify.rangesAreOccurrences(false);
-
-goTo.marker();
-for (const range of test.ranges()) {
-    verify.occurrencesAtPositionContains(range, false);
-}

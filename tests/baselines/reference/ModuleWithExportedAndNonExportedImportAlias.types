@@ -1,10 +1,6 @@
 === tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedImportAlias.ts ===
 module A {
->A : any
-
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -13,9 +9,6 @@ module A {
     }
 
     interface Point3d extends Point {
->Point3d : Point3d
->Point : Point
-
         z: number;
 >z : number
     }
@@ -30,10 +23,8 @@ module B {
         constructor(public start: A.Point, public end: A.Point) { }
 >start : A.Point
 >A : any
->Point : A.Point
 >end : A.Point
 >A : any
->Point : A.Point
     }
 }
 
@@ -51,7 +42,6 @@ module Geometry {
     export var Origin: Points.Point = { x: 0, y: 0 };
 >Origin : Points.Point
 >Points : any
->Point : Points.Point
 >{ x: 0, y: 0 } : { x: number; y: number; }
 >x : number
 >0 : 0
@@ -62,7 +52,6 @@ module Geometry {
     export var Unit: Lines.Line = new Lines.Line(Origin, { x: 1, y: 0 });
 >Unit : Lines.Line
 >Lines : any
->Line : Lines.Line
 >new Lines.Line(Origin, { x: 1, y: 0 }) : Lines.Line
 >Lines.Line : typeof Lines.Line
 >Lines : typeof Lines
@@ -85,7 +74,6 @@ var p: Geometry.Points.Point;
 >p : { x: number; y: number; }
 >Geometry : any
 >Points : any
->Point : A.Point
 
 var p = Geometry.Origin;
 >p : { x: number; y: number; }

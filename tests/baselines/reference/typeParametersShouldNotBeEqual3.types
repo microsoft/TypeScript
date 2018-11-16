@@ -1,18 +1,11 @@
 === tests/cases/compiler/typeParametersShouldNotBeEqual3.ts ===
 function ff<T extends Object, U extends Object>(x: T, y: U) {
 >ff : <T extends Object, U extends Object>(x: T, y: U) => void
->T : T
->Object : Object
->U : U
->Object : Object
 >x : T
->T : T
 >y : U
->U : U
 
     var z: Object;
 >z : Object
->Object : Object
 
     x = x;  // Ok
 >x = x : T

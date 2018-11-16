@@ -18,7 +18,7 @@ exports.x;
 >Cls : Symbol(Cls, Decl(a.js, 4, 1))
 
         this.x = 0;
->x : Symbol((Anonymous function).x, Decl(a.js, 6, 30))
+>x : Symbol(Cls.x, Decl(a.js, 6, 30))
     }
 }
 

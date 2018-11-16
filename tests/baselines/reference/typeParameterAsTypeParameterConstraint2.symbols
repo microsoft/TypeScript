@@ -22,7 +22,7 @@ foo(1, {});
 
 interface NumberVariant extends Number {
 >NumberVariant : Symbol(NumberVariant, Decl(typeParameterAsTypeParameterConstraint2.ts, 6, 11))
->Number : Symbol(Number, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Number : Symbol(Number, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     x: number;
 >x : Symbol(NumberVariant.x, Decl(typeParameterAsTypeParameterConstraint2.ts, 8, 40))

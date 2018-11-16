@@ -3,11 +3,10 @@ declare module test {
 >test : typeof test
 
     module mstring { }
->mstring : any
 
     // Should be fine; this does not clobber any declared values.
     export import string = mstring;
 >string : any
->mstring : any
+>mstring : error
 }
 

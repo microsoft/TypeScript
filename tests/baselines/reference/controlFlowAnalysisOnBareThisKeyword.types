@@ -2,7 +2,6 @@
 declare function isBig(x: any): x is { big: true };
 >isBig : (x: any) => x is { big: true; }
 >x : any
->x : any
 >big : true
 >true : true
 
@@ -28,7 +27,7 @@ function bar(this: string | number) {
 
     if (typeof this === "string") {
 >typeof this === "string" : boolean
->typeof this : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof this : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >this : string | number
 >"string" : "string"
 

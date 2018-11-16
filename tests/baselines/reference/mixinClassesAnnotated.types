@@ -1,9 +1,7 @@
 === tests/cases/conformance/classes/mixinClassesAnnotated.ts ===
 type Constructor<T> = new(...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 class Base {
 >Base : Base
@@ -31,8 +29,6 @@ class Derived extends Base {
 }
 
 interface Printable {
->Printable : Printable
-
     print(): void;
 >print : () => void
 }
@@ -40,18 +36,11 @@ interface Printable {
 const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>
 >Printable : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
 ><T extends Constructor<Base>>(superClass: T): Constructor<Printable> & { message: string } & T =>    class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : <T extends Constructor<Base>>(superClass: T) => Constructor<Printable> & { message: string; } & T
->T : T
->Constructor : Constructor<T>
->Base : Base
 >superClass : T
->T : T
->Constructor : Constructor<T>
->Printable : Printable
 >message : string
->T : T
 
     class extends superClass {
->class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); message: string; } & T
+>class extends superClass {        static message = "hello";        print() {            const output = this.x + "," + this.y;        }    } : { new (...args: any[]): (Anonymous class); prototype: Printable<any>.(Anonymous class); message: string; } & T
 >superClass : Base
 
         static message = "hello";
@@ -76,21 +65,13 @@ const Printable = <T extends Constructor<Base>>(superClass: T): Constructor<Prin
     }
 
 interface Tagged {
->Tagged : Tagged
-
     _tag: string;
 >_tag : string
 }
 
 function Tagged<T extends Constructor<{}>>(superClass: T): Constructor<Tagged> & T {
 >Tagged : <T extends Constructor<{}>>(superClass: T) => Constructor<Tagged> & T
->T : T
->Constructor : Constructor<T>
 >superClass : T
->T : T
->Constructor : Constructor<T>
->Tagged : Tagged
->T : T
 
     class C extends superClass {
 >C : C

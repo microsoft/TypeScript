@@ -1,10 +1,11 @@
 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(16,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
-  Property '0' is missing in type '(string | number | boolean)[]'.
-tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
+  Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
+tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(17,5): error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
+  Types of property 'length' are incompatible.
+    Type 'number' is not assignable to type '3'.
 tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts(18,5): error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
   Types of property 'x' are incompatible.
-    Type '(string | number)[]' is not assignable to type '[any, any]'.
-      Property '0' is missing in type '(string | number)[]'.
+    Type '(string | number)[]' is missing the following properties from type '[any, any]': 0, 1
 
 
 ==== tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextualTyping.ts (3 errors) ====
@@ -26,13 +27,14 @@ tests/cases/conformance/expressions/contextualTyping/argumentExpressionContextua
     baz(array);                          // Error
         ~~~~~
 !!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
-!!! error TS2345:   Property '0' is missing in type '(string | number | boolean)[]'.
+!!! error TS2345:   Type '(string | number | boolean)[]' is missing the following properties from type '[string, number, boolean]': 0, 1, 2
     baz(["string", 1, true, ...array]);  // Error
         ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2345: Argument of type '(string | number | boolean)[]' is not assignable to parameter of type '[string, number, boolean]'.
+!!! error TS2345: Argument of type '[string, number, true, ...(string | number | boolean)[]]' is not assignable to parameter of type '[string, number, boolean]'.
+!!! error TS2345:   Types of property 'length' are incompatible.
+!!! error TS2345:     Type 'number' is not assignable to type '3'.
     foo(o);                              // Error because x has an array type namely (string|number)[]
         ~
 !!! error TS2345: Argument of type '{ x: (string | number)[]; y: { c: boolean; d: string; e: number; }; }' is not assignable to parameter of type '{ x: [any, any]; y: { c: any; d: any; e: any; }; }'.
 !!! error TS2345:   Types of property 'x' are incompatible.
-!!! error TS2345:     Type '(string | number)[]' is not assignable to type '[any, any]'.
-!!! error TS2345:       Property '0' is missing in type '(string | number)[]'.
+!!! error TS2345:     Type '(string | number)[]' is missing the following properties from type '[any, any]': 0, 1

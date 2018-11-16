@@ -58,7 +58,7 @@ interface I5 {
 
     [x: string]: Date;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 5))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I5.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 28, 22))
@@ -71,7 +71,7 @@ interface I6 {
 
     [x: string]: RegExp;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 5))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: E;
 >foo : Symbol(I6.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 34, 24))
@@ -277,7 +277,7 @@ interface I19 {
 
     [x: string]: Object;
 >x : Symbol(x, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 121, 5))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     foo: E; // BUG 831833
 >foo : Symbol(I19.foo, Decl(enumIsNotASubtypeOfAnythingButNumber.ts, 121, 24))

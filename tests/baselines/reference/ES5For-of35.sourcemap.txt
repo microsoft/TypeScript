@@ -18,8 +18,9 @@ sourceFile:ES5For-of35.ts
 >>>        }
 >>>    };
 >>>};
+>>>var e_1, _a;
 >>>try {
->>>    for (var _a = __values([2, 3]), _b = _a.next(); !_b.done; _b = _a.next()) {
+>>>    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {
 1 >^^^^
 2 >    ^^^^^
 3 >         ^^^^
@@ -47,21 +48,21 @@ sourceFile:ES5For-of35.ts
 11>                                 
 12>                                  
 13>                                                  ) 
-1 >Emitted(12, 5) Source(1, 1) + SourceIndex(0)
-2 >Emitted(12, 10) Source(1, 36) + SourceIndex(0)
-3 >Emitted(12, 14) Source(1, 36) + SourceIndex(0)
-4 >Emitted(12, 19) Source(1, 36) + SourceIndex(0)
-5 >Emitted(12, 28) Source(1, 36) + SourceIndex(0)
-6 >Emitted(12, 29) Source(1, 37) + SourceIndex(0)
-7 >Emitted(12, 30) Source(1, 38) + SourceIndex(0)
-8 >Emitted(12, 32) Source(1, 40) + SourceIndex(0)
-9 >Emitted(12, 33) Source(1, 41) + SourceIndex(0)
-10>Emitted(12, 34) Source(1, 42) + SourceIndex(0)
-11>Emitted(12, 35) Source(1, 42) + SourceIndex(0)
-12>Emitted(12, 51) Source(1, 42) + SourceIndex(0)
-13>Emitted(12, 79) Source(1, 44) + SourceIndex(0)
+1 >Emitted(13, 5) Source(1, 1) + SourceIndex(0)
+2 >Emitted(13, 10) Source(1, 36) + SourceIndex(0)
+3 >Emitted(13, 14) Source(1, 36) + SourceIndex(0)
+4 >Emitted(13, 19) Source(1, 36) + SourceIndex(0)
+5 >Emitted(13, 28) Source(1, 36) + SourceIndex(0)
+6 >Emitted(13, 29) Source(1, 37) + SourceIndex(0)
+7 >Emitted(13, 30) Source(1, 38) + SourceIndex(0)
+8 >Emitted(13, 32) Source(1, 40) + SourceIndex(0)
+9 >Emitted(13, 33) Source(1, 41) + SourceIndex(0)
+10>Emitted(13, 34) Source(1, 42) + SourceIndex(0)
+11>Emitted(13, 35) Source(1, 42) + SourceIndex(0)
+12>Emitted(13, 51) Source(1, 42) + SourceIndex(0)
+13>Emitted(13, 79) Source(1, 44) + SourceIndex(0)
 ---
->>>        var _c = _b.value, _d = _c.x, a = _d === void 0 ? 0 : _d, _e = _c.y, b = _e === void 0 ? 1 : _e;
+>>>        var _d = _c.value, _e = _d.x, a = _e === void 0 ? 0 : _e, _f = _d.y, b = _f === void 0 ? 1 : _f;
 1->^^^^^^^^
 2 >        ^^^^
 3 >            ^^^^^^^^^^^^^
@@ -84,17 +85,17 @@ sourceFile:ES5For-of35.ts
 9 >                                                                  y: b = 1
 10>                                                                           
 11>                                                                             y: b = 1
-1->Emitted(13, 9) Source(1, 12) + SourceIndex(0)
-2 >Emitted(13, 13) Source(1, 12) + SourceIndex(0)
-3 >Emitted(13, 26) Source(1, 32) + SourceIndex(0)
-4 >Emitted(13, 28) Source(1, 13) + SourceIndex(0)
-5 >Emitted(13, 37) Source(1, 21) + SourceIndex(0)
-6 >Emitted(13, 39) Source(1, 13) + SourceIndex(0)
-7 >Emitted(13, 65) Source(1, 21) + SourceIndex(0)
-8 >Emitted(13, 67) Source(1, 23) + SourceIndex(0)
-9 >Emitted(13, 76) Source(1, 31) + SourceIndex(0)
-10>Emitted(13, 78) Source(1, 23) + SourceIndex(0)
-11>Emitted(13, 104) Source(1, 31) + SourceIndex(0)
+1->Emitted(14, 9) Source(1, 12) + SourceIndex(0)
+2 >Emitted(14, 13) Source(1, 12) + SourceIndex(0)
+3 >Emitted(14, 26) Source(1, 32) + SourceIndex(0)
+4 >Emitted(14, 28) Source(1, 13) + SourceIndex(0)
+5 >Emitted(14, 37) Source(1, 21) + SourceIndex(0)
+6 >Emitted(14, 39) Source(1, 13) + SourceIndex(0)
+7 >Emitted(14, 65) Source(1, 21) + SourceIndex(0)
+8 >Emitted(14, 67) Source(1, 23) + SourceIndex(0)
+9 >Emitted(14, 76) Source(1, 31) + SourceIndex(0)
+10>Emitted(14, 78) Source(1, 23) + SourceIndex(0)
+11>Emitted(14, 104) Source(1, 31) + SourceIndex(0)
 ---
 >>>        a;
 1 >^^^^^^^^
@@ -105,9 +106,9 @@ sourceFile:ES5For-of35.ts
   >    
 2 >        a
 3 >         ;
-1 >Emitted(14, 9) Source(2, 5) + SourceIndex(0)
-2 >Emitted(14, 10) Source(2, 6) + SourceIndex(0)
-3 >Emitted(14, 11) Source(2, 7) + SourceIndex(0)
+1 >Emitted(15, 9) Source(2, 5) + SourceIndex(0)
+2 >Emitted(15, 10) Source(2, 6) + SourceIndex(0)
+3 >Emitted(15, 11) Source(2, 7) + SourceIndex(0)
 ---
 >>>        b;
 1->^^^^^^^^
@@ -117,23 +118,22 @@ sourceFile:ES5For-of35.ts
   >    
 2 >        b
 3 >         ;
-1->Emitted(15, 9) Source(3, 5) + SourceIndex(0)
-2 >Emitted(15, 10) Source(3, 6) + SourceIndex(0)
-3 >Emitted(15, 11) Source(3, 7) + SourceIndex(0)
+1->Emitted(16, 9) Source(3, 5) + SourceIndex(0)
+2 >Emitted(16, 10) Source(3, 6) + SourceIndex(0)
+3 >Emitted(16, 11) Source(3, 7) + SourceIndex(0)
 ---
 >>>    }
 1 >^^^^^
 1 >
   >}
-1 >Emitted(16, 6) Source(4, 2) + SourceIndex(0)
+1 >Emitted(17, 6) Source(4, 2) + SourceIndex(0)
 ---
 >>>}
 >>>catch (e_1_1) { e_1 = { error: e_1_1 }; }
 >>>finally {
 >>>    try {
->>>        if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
+>>>        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
 >>>    }
 >>>    finally { if (e_1) throw e_1.error; }
 >>>}
->>>var e_1, _f;
 >>>//# sourceMappingURL=ES5For-of35.js.map

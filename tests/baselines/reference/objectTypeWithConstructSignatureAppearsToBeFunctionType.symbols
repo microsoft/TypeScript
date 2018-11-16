@@ -23,9 +23,9 @@ var r2c: (x: any, y?: any) => any = i.apply;
 >r2c : Symbol(r2c, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 9, 3))
 >x : Symbol(x, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 9, 10))
 >y : Symbol(y, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 9, 17))
->i.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>i.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 6, 3))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 
 var b: {
 >b : Symbol(b, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 11, 3))
@@ -45,7 +45,7 @@ var r4c: (x: any, y?: any) => any = b.apply;
 >r4c : Symbol(r4c, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 17, 3))
 >x : Symbol(x, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 17, 10))
 >y : Symbol(y, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 17, 17))
->b.apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>b.apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(objectTypeWithConstructSignatureAppearsToBeFunctionType.ts, 11, 3))
->apply : Symbol(Function.apply, Decl(lib.d.ts, --, --))
+>apply : Symbol(Function.apply, Decl(lib.es5.d.ts, --, --))
 

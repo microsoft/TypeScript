@@ -13,9 +13,9 @@ class C {
 
 === tests/cases/compiler/bar.ts ===
 (new C()).p.push("string");
->(new C()).p.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>(new C()).p.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >(new C()).p : Symbol(C.p, Decl(foo.js, 1, 19))
 >C : Symbol(C, Decl(foo.js, 0, 0))
 >p : Symbol(C.p, Decl(foo.js, 1, 19))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 

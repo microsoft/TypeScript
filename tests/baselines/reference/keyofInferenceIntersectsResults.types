@@ -1,7 +1,5 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/keyofInferenceIntersectsResults.ts ===
 interface X {
->X : X
-
     a: string;
 >a : string
 
@@ -11,28 +9,18 @@ interface X {
 
 declare function foo<T = X>(x: keyof T, y: keyof T): T;
 >foo : <T = X>(x: keyof T, y: keyof T) => T
->T : T
->X : X
 >x : keyof T
->T : T
 >y : keyof T
->T : T
->T : T
 
 declare function bar<T>(x: keyof T, y: keyof T): T;
 >bar : <T>(x: keyof T, y: keyof T) => T
->T : T
 >x : keyof T
->T : T
 >y : keyof T
->T : T
->T : T
 
 const a = foo<X>('a', 'b'); // compiles cleanly
 >a : X
 >foo<X>('a', 'b') : X
 >foo : <T = X>(x: keyof T, y: keyof T) => T
->X : X
 >'a' : "a"
 >'b' : "b"
 

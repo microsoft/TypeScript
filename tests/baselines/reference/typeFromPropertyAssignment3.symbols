@@ -7,9 +7,9 @@ var Outer = function O() {
 >y : Symbol(O.y, Decl(a.js, 0, 26))
 }
 Outer.Inner = class I {
->Outer.Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 2, 1))
->Inner : Symbol(O.Inner, Decl(a.js, 2, 1))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 2, 1))
 >I : Symbol(I, Decl(a.js, 3, 13))
 
     constructor() {

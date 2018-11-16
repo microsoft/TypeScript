@@ -1,11 +1,9 @@
 === tests/cases/compiler/typeParameterAsElementType.ts ===
 function fee<T>() {
 >fee : <T>() => void
->T : T
 
     var t: T;
 >t : T
->T : T
 
     var arr = [t, ""];
 >arr : (string | T)[]

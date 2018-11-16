@@ -1,7 +1,5 @@
 === tests/cases/compiler/abstractPropertyNegative.ts ===
 interface A {
->A : A
-
     prop: string;
 >prop : string
 
@@ -10,7 +8,6 @@ interface A {
 }
 abstract class B implements A {
 >B : B
->A : A
 
     abstract prop: string;
 >prop : string

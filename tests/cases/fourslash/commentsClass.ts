@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-/////** This is class c2 without constuctor*/
+/////** This is class c2 without constructor*/
 ////class c/*1*/2 {
 ////}
 ////var i/*2*/2 = new c/*28*/2(/*3*/);
@@ -38,7 +38,7 @@
 ////var i6/*24*/_c = c/*25*/6;
 /////*26*/
 ////class a {
-////    /** 
+////    /**
 ////    constructor for a
 ////    @param a this is my a
 ////    */
@@ -59,22 +59,20 @@
 ////var myVar = new m.m2.c/*33*/1();
 
 verify.quickInfos({
-    1: ["class c2", "This is class c2 without constuctor"],
+    1: ["class c2", "This is class c2 without constructor"],
     2: "var i2: c2"
 });
 
-goTo.marker('3');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "3", docComment: "" });
 
 verify.quickInfos({
     4: "var i2_c: typeof c2",
-    5: ["class c2", "This is class c2 without constuctor"],
+    5: ["class c2", "This is class c2 without constructor"],
     6: "class c3",
     7: "var i3: c3"
 });
 
-goTo.marker('8');
-verify.currentSignatureHelpDocCommentIs("Constructor comment");
+verify.signatureHelp({ marker: "8", docComment: "Constructor comment" });
 
 verify.quickInfos({
     9: "var i3_c: typeof c3",
@@ -83,8 +81,7 @@ verify.quickInfos({
     12: "var i4: c4"
 });
 
-goTo.marker('13');
-verify.currentSignatureHelpDocCommentIs("Constructor comment");
+verify.signatureHelp({ marker: "13", docComment: "Constructor comment" });
 
 verify.quickInfos({
     14: "var i4_c: typeof c4",
@@ -93,8 +90,7 @@ verify.quickInfos({
     17: "var i5: c5"
 });
 
-goTo.marker('18');
-verify.currentSignatureHelpDocCommentIs("");
+verify.signatureHelp({ marker: "18", docComment: "" });
 
 verify.quickInfos({
     19: "var i5_c: typeof c5",
@@ -103,40 +99,46 @@ verify.quickInfos({
     22: "var i6: c6"
 });
 
-goTo.marker('23');
-verify.currentSignatureHelpDocCommentIs("constructor comment");
+verify.signatureHelp({ marker: "23", docComment: "constructor comment" });
 
 verify.quickInfos({
     24: "var i6_c: typeof c6",
     25: ["class c6", "class with statics and constructor"]
 });
 
-goTo.marker('26');
-verify.completionListContains("c2", "class c2", "This is class c2 without constuctor");
-verify.completionListContains("i2", "var i2: c2", "");
-verify.completionListContains("i2_c", "var i2_c: typeof c2", "");
-verify.completionListContains("c3", "class c3", "");
-verify.completionListContains("i3", "var i3: c3", "");
-verify.completionListContains("i3_c", "var i3_c: typeof c3", "");
-verify.completionListContains("c4", "class c4", "Class comment");
-verify.completionListContains("i4", "var i4: c4", "");
-verify.completionListContains("i4_c", "var i4_c: typeof c4", "");
-verify.completionListContains("c5", "class c5", "Class with statics");
-verify.completionListContains("i5", "var i5: c5", "");
-verify.completionListContains("i5_c", "var i5_c: typeof c5");
-verify.completionListContains("c6", "class c6", "class with statics and constructor");
-verify.completionListContains("i6", "var i6: c6", "");
-verify.completionListContains("i6_c", "var i6_c: typeof c6", "");
+verify.completions({
+    marker: "26",
+    includes: [
+        { name: "c2", text: "class c2", documentation: "This is class c2 without constructor" },
+        { name: "i2", text: "var i2: c2" },
+        { name: "i2_c", text: "var i2_c: typeof c2" },
+        { name: "c3", text: "class c3" },
+        { name: "i3", text: "var i3: c3" },
+        { name: "i3_c", text: "var i3_c: typeof c3" },
+        { name: "c4", text: "class c4", documentation: "Class comment" },
+        { name: "i4", text: "var i4: c4" },
+        { name: "i4_c", text: "var i4_c: typeof c4" },
+        { name: "c5", text: "class c5", documentation: "Class with statics" },
+        { name: "i5", text: "var i5: c5" },
+        { name: "i5_c", text: "var i5_c: typeof c5" },
+        { name: "c6", text: "class c6", documentation: "class with statics and constructor" },
+        { name: "i6", text: "var i6: c6" },
+        { name: "i6_c", text: "var i6_c: typeof c6" },
+    ],
+});
 
-goTo.marker('27');
-verify.currentSignatureHelpDocCommentIs("constructor for a");
-verify.currentParameterHelpArgumentDocCommentIs("this is my a");
+verify.signatureHelp({
+    marker: "27",
+    docComment: "constructor for a",
+    parameterDocComment: "this is my a",
+    tags: [{ name: "param", text: "a this is my a" }],
+});
 
 verify.quickInfos({
-    28: "constructor c2(): c2",
+    28: ["constructor c2(): c2", "This is class c2 without constructor"],
     29: ["constructor c3(): c3", "Constructor comment"],
     30: ["constructor c4(): c4", "Constructor comment"],
-    31: "constructor c5(): c5",
+    31: ["constructor c5(): c5", "Class with statics"],
     32: ["constructor c6(): c6", "constructor comment"],
     33: ["constructor m.m2.c1(): m.m2.c1", "constructor comment"]
 });

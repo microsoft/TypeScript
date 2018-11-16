@@ -1,8 +1,8 @@
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2304: Cannot find name 'module'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2503: Cannot find namespace 'module'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,13): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(11,19): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,35): error TS1005: ')' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(22,39): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,28): error TS1005: ':' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(24,29): error TS1005: ',' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(27,18): error TS1128: Declaration or statement expected.
@@ -21,8 +21,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,41): error TS
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(40,45): error TS1002: Unterminated string literal.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(41,21): error TS2304: Cannot find name 'retValue'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(46,13): error TS1005: 'try' expected.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2304: Cannot find name 'console'.
-tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2304: Cannot find name 'console'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(47,17): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(53,13): error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(58,5): error TS1128: Declaration or statement expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(69,13): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(72,37): error TS1127: Invalid character.
@@ -77,6 +77,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,33): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,35): error TS2693: 'string' only refers to a type, but is being used as a value here.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,43): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,52): error TS2693: 'string' only refers to a type, but is being used as a value here.
+tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,59): error TS1011: An element access expression should take an argument.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,60): error TS1005: ';' expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(257,65): error TS1109: Expression expected.
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,9): error TS2304: Cannot find name 'public'.
@@ -89,7 +90,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(259,55): error T
 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS1128: Declaration or statement expected.
 
 
-==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (89 errors) ====
+==== tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts (90 errors) ====
     declare module "fs" {
         export class File {
             constructor(filename: string);
@@ -102,9 +103,9 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     
     import fs = module("fs");
                 ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
-                ~~~~~~
 !!! error TS2503: Cannot find namespace 'module'.
+                ~~~~~~
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                       ~
 !!! error TS1005: ';' expected.
     
@@ -131,7 +132,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1005: ',' expected.
                     }
     ~~~~~~~~~~~~~~~~~
-!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     
                      case  = bfs.STATEMENTS(4);
                      ~~~~
@@ -187,7 +188,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1005: 'try' expected.
                     console.log(e);
                     ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
                 }
                 finally {
     
@@ -195,7 +196,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
     
                 console.log('Done');
                 ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
+!!! error TS2584: Cannot find name 'console'. Do you need to change your target library? Try changing the `lib` compiler option to include 'dom'.
     
                 return 0;
     
@@ -465,6 +466,7 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
                 return this.method1(2);
                             ~~~~~~~
 !!! error TS2551: Property 'method1' does not exist on type 'B'. Did you mean 'method2'?
+!!! related TS2728 tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts:245:16: 'method2' is declared here.
             }
         }
     
@@ -508,6 +510,8 @@ tests/cases/compiler/constructorWithIncompleteTypeAnnotation.ts(261,1): error TS
 !!! error TS1109: Expression expected.
                                                        ~~~~~~
 !!! error TS2693: 'string' only refers to a type, but is being used as a value here.
+                                                              
+!!! error TS1011: An element access expression should take an argument.
                                                                ~
 !!! error TS1005: ';' expected.
                                                                     ~

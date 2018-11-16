@@ -13,12 +13,9 @@ enum Strs {
 }
 type TestStrs = { [key in Strs]: string }
 >TestStrs : TestStrs
->key : key
->Strs : Strs
 
 const x: TestStrs = {
 >x : TestStrs
->TestStrs : TestStrs
 >{    [Strs.A]: 'xo',    [Strs.B]: 'xe'} : { [Strs.A]: string; [Strs.B]: string; }
 
     [Strs.A]: 'xo',
@@ -55,7 +52,6 @@ const ux = {
 }
 const y: TestStrs = {
 >y : TestStrs
->TestStrs : TestStrs
 >{    ['a']: 'yo',    ['b']: 'ye'} : { ['a']: string; ['b']: string; }
 
     ['a']: 'yo',
@@ -78,7 +74,6 @@ const b = 'b';
 
 const z: TestStrs = {
 >z : TestStrs
->TestStrs : TestStrs
 >{    [a]: 'zo',    [b]: 'ze'} : { [a]: string; [b]: string; }
 
     [a]: 'zo',
@@ -122,7 +117,6 @@ type TestNums = { 0: number, 1: number }
 
 const n: TestNums = {
 >n : TestNums
->TestNums : TestNums
 >{    [Nums.A]: 1,    [Nums.B]: 2} : { [Nums.A]: number; [Nums.B]: number; }
 
     [Nums.A]: 1,
@@ -167,7 +161,6 @@ const bn = 1;
 
 const m: TestNums = {
 >m : TestNums
->TestNums : TestNums
 >{    [an]: 5,    [bn]: 6} : { [an]: number; [bn]: number; }
 
     [an]: 5,

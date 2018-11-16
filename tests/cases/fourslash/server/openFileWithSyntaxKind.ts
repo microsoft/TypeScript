@@ -16,4 +16,4 @@
 
 goTo.file("test.ts", /*content*/ undefined, "JS");
 goTo.eof();
-verify.completionListContains("toExponential");
+verify.completions({ includes: "toExponential" });

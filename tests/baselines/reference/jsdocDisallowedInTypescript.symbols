@@ -2,13 +2,13 @@
 // grammar error from checker
 var ara: Array.<number> = [1,2,3];
 >ara : Symbol(ara, Decl(jsdocDisallowedInTypescript.ts, 1, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 function f(x: ?number, y: Array.<number>) {
 >f : Symbol(f, Decl(jsdocDisallowedInTypescript.ts, 1, 34))
 >x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
 >y : Symbol(y, Decl(jsdocDisallowedInTypescript.ts, 3, 22))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     return x ? x + y[1] : y[0];
 >x : Symbol(x, Decl(jsdocDisallowedInTypescript.ts, 3, 11))
@@ -57,14 +57,14 @@ var postfixopt: number? = undefined;
 
 var nns: Array<?number>;
 >nns : Symbol(nns, Decl(jsdocDisallowedInTypescript.ts, 19, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var dns: Array<!number>;
 >dns : Symbol(dns, Decl(jsdocDisallowedInTypescript.ts, 20, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var anys: Array<*>;
 >anys : Symbol(anys, Decl(jsdocDisallowedInTypescript.ts, 21, 3))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 

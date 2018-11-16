@@ -12,6 +12,7 @@ tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.t
     foo(): Bar { }
     ~~~
 !!! error TS2552: Cannot find name 'foo'. Did you mean 'Foo'?
+!!! related TS2728 tests/cases/conformance/parser/ecmascript5/SkippedTokens/parserSkippedTokens16.ts:2:10: 'Foo' is declared here.
          ~
 !!! error TS1005: ';' expected.
            ~~~

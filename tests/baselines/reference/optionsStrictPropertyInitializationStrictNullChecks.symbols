@@ -1,0 +1,4 @@
+=== tests/cases/compiler/optionsStrictPropertyInitializationStrictNullChecks.ts ===
+var x;
+>x : Symbol(x, Decl(optionsStrictPropertyInitializationStrictNullChecks.ts, 0, 3))
+

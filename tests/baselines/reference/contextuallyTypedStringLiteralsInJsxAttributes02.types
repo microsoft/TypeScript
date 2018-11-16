@@ -3,8 +3,6 @@ import React = require('react')
 >React : typeof React
 
 export interface ClickableProps {
->ClickableProps : ClickableProps
-
     children?: string;
 >children : string
 
@@ -13,18 +11,12 @@ export interface ClickableProps {
 }
 
 export interface ButtonProps extends ClickableProps {
->ButtonProps : ButtonProps
->ClickableProps : ClickableProps
-
     onClick: (k: "left" | "right") => void;
 >onClick : (k: "left" | "right") => void
 >k : "left" | "right"
 }
 
 export interface LinkProps extends ClickableProps {
->LinkProps : LinkProps
->ClickableProps : ClickableProps
-
     goTo: "home" | "contact";
 >goTo : "home" | "contact"
 }
@@ -32,30 +24,22 @@ export interface LinkProps extends ClickableProps {
 export function MainButton(buttonProps: ButtonProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
 >buttonProps : ButtonProps
->ButtonProps : ButtonProps
 >JSX : any
->Element : JSX.Element
 
 export function MainButton(linkProps: LinkProps): JSX.Element;
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
 >linkProps : LinkProps
->LinkProps : LinkProps
 >JSX : any
->Element : JSX.Element
 
 export function MainButton(props: ButtonProps | LinkProps): JSX.Element {
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
 >props : ButtonProps | LinkProps
->ButtonProps : ButtonProps
->LinkProps : LinkProps
 >JSX : any
->Element : JSX.Element
 
     const linkProps = props as LinkProps;
 >linkProps : LinkProps
 >props as LinkProps : LinkProps
 >props : ButtonProps | LinkProps
->LinkProps : LinkProps
 
     if(linkProps.goTo) {
 >linkProps.goTo : "home" | "contact"
@@ -97,22 +81,22 @@ const b2 = <MainButton onClick={(k)=>{console.log(k)}} extra />;  // k has type 
 >b2 : JSX.Element
 ><MainButton onClick={(k)=>{console.log(k)}} extra /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->onClick : (k: "left" | "right") => void
->(k)=>{console.log(k)} : (k: "left" | "right") => void
->k : "left" | "right"
+>onClick : (k: any) => void
+>(k)=>{console.log(k)} : (k: any) => void
+>k : any
 >console.log(k) : void
 >console.log : (message?: any, ...optionalParams: any[]) => void
 >console : Console
 >log : (message?: any, ...optionalParams: any[]) => void
->k : "left" | "right"
+>k : any
 >extra : true
 
 const b3 = <MainButton {...{goTo:"home"}} extra />;  // goTo has type"home" | "contact"
 >b3 : JSX.Element
 ><MainButton {...{goTo:"home"}} extra /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->{goTo:"home"} : { goTo: "home"; }
->goTo : "home"
+>{goTo:"home"} : { goTo: string; }
+>goTo : string
 >"home" : "home"
 >extra : true
 
@@ -120,15 +104,13 @@ const b4 = <MainButton goTo="home" extra />;  // goTo has type "home" | "contact
 >b4 : JSX.Element
 ><MainButton goTo="home" extra /> : JSX.Element
 >MainButton : { (buttonProps: ButtonProps): JSX.Element; (linkProps: LinkProps): JSX.Element; }
->goTo : "home"
+>goTo : string
 >extra : true
 
 export function NoOverload(buttonProps: ButtonProps): JSX.Element { return undefined }
 >NoOverload : (buttonProps: ButtonProps) => JSX.Element
 >buttonProps : ButtonProps
->ButtonProps : ButtonProps
 >JSX : any
->Element : JSX.Element
 >undefined : undefined
 
 const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k has type any
@@ -149,17 +131,15 @@ const c1 = <NoOverload  {...{onClick: (k) => {console.log(k)}}} extra />;  // k 
 export function NoOverload1(linkProps: LinkProps): JSX.Element { return undefined }
 >NoOverload1 : (linkProps: LinkProps) => JSX.Element
 >linkProps : LinkProps
->LinkProps : LinkProps
 >JSX : any
->Element : JSX.Element
 >undefined : undefined
 
 const d1 = <NoOverload1 {...{goTo:"home"}} extra  />;  // goTo has type "home" | "contact"
 >d1 : JSX.Element
 ><NoOverload1 {...{goTo:"home"}} extra  /> : JSX.Element
 >NoOverload1 : (linkProps: LinkProps) => JSX.Element
->{goTo:"home"} : { goTo: "home"; }
->goTo : "home"
+>{goTo:"home"} : { goTo: string; }
+>goTo : string
 >"home" : "home"
 >extra : true
 

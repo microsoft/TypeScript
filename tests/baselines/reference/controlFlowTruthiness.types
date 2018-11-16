@@ -157,3 +157,50 @@ function f6() {
     }
 }
 
+function f7(x: {}) {
+>f7 : (x: {}) => void
+>x : {}
+
+    if (x) {
+>x : {}
+
+        x; // {}
+>x : {}
+    }
+    else {
+        x; // {}
+>x : {}
+    }
+}
+
+function f8<T>(x: T) {
+>f8 : <T>(x: T) => void
+>x : T
+
+    if (x) {
+>x : T
+
+        x; // {}
+>x : T
+    }
+    else {
+        x; // {}
+>x : T
+    }
+}
+
+function f9<T extends object>(x: T) {
+>f9 : <T extends object>(x: T) => void
+>x : T
+
+    if (x) {
+>x : T
+
+        x; // {}
+>x : T
+    }
+    else {
+        x; // never
+>x : never
+    }
+}

@@ -1,0 +1,48 @@
+=== tests/cases/compiler/noCrashOnMixin.ts ===
+class Abstract {
+>Abstract : Symbol(Abstract, Decl(noCrashOnMixin.ts, 0, 0))
+
+    protected constructor() {
+    }
+}
+
+class Concrete extends Abstract {
+>Concrete : Symbol(Concrete, Decl(noCrashOnMixin.ts, 3, 1))
+>Abstract : Symbol(Abstract, Decl(noCrashOnMixin.ts, 0, 0))
+}
+
+type Constructor<T = {}> = new (...args: any[]) => T;
+>Constructor : Symbol(Constructor, Decl(noCrashOnMixin.ts, 6, 1))
+>T : Symbol(T, Decl(noCrashOnMixin.ts, 8, 17))
+>args : Symbol(args, Decl(noCrashOnMixin.ts, 8, 32))
+>T : Symbol(T, Decl(noCrashOnMixin.ts, 8, 17))
+
+function Mixin<TBase extends Constructor>(Base: TBase) {
+>Mixin : Symbol(Mixin, Decl(noCrashOnMixin.ts, 8, 53))
+>TBase : Symbol(TBase, Decl(noCrashOnMixin.ts, 10, 15))
+>Constructor : Symbol(Constructor, Decl(noCrashOnMixin.ts, 6, 1))
+>Base : Symbol(Base, Decl(noCrashOnMixin.ts, 10, 42))
+>TBase : Symbol(TBase, Decl(noCrashOnMixin.ts, 10, 15))
+
+    return class extends Base {
+>Base : Symbol(Base, Decl(noCrashOnMixin.ts, 10, 42))
+
+    };
+}
+
+class Empty {
+>Empty : Symbol(Empty, Decl(noCrashOnMixin.ts, 13, 1))
+}
+
+class CrashTrigger extends Mixin(Empty) {
+>CrashTrigger : Symbol(CrashTrigger, Decl(noCrashOnMixin.ts, 16, 1))
+>Mixin : Symbol(Mixin, Decl(noCrashOnMixin.ts, 8, 53))
+>Empty : Symbol(Empty, Decl(noCrashOnMixin.ts, 13, 1))
+
+    public trigger() {
+>trigger : Symbol(CrashTrigger.trigger, Decl(noCrashOnMixin.ts, 18, 41))
+
+        new Concrete();
+>Concrete : Symbol(Concrete, Decl(noCrashOnMixin.ts, 3, 1))
+    }
+}

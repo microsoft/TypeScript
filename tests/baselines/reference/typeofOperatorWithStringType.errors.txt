@@ -1,14 +1,7 @@
 tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(44,1): error TS2695: Left side of comma operator is unused and has no side effects.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(50,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(51,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(52,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(54,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(55,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(56,1): error TS7028: Unused label.
-tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts(57,1): error TS7028: Unused label.
 
 
-==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts (8 errors) ====
+==== tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperatorWithStringType.ts (1 errors) ====
     // typeof  operator on string type
     var STRING: string;
     var STRING1: string[] = ["", "abc"];
@@ -61,24 +54,10 @@ tests/cases/conformance/expressions/unaryOperators/typeofOperator/typeofOperator
     var x: string[];
     var r: () => string;
     z: typeof STRING;
-    ~
-!!! error TS7028: Unused label.
     x: typeof STRING1;
-    ~
-!!! error TS7028: Unused label.
     r: typeof foo;
-    ~
-!!! error TS7028: Unused label.
     var y = { a: "", b: "" };
     z: typeof y.a;
-    ~
-!!! error TS7028: Unused label.
     z: typeof objA.a;
-    ~
-!!! error TS7028: Unused label.
     z: typeof A.foo;
-    ~
-!!! error TS7028: Unused label.
     z: typeof M.n;
-    ~
-!!! error TS7028: Unused label.

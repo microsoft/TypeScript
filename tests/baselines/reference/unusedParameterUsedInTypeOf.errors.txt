@@ -1,0 +1,9 @@
+tests/cases/compiler/unusedParameterUsedInTypeOf.ts(1,14): error TS6133: 'a' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedParameterUsedInTypeOf.ts (1 errors) ====
+    function f1 (a: number, b: typeof a) {
+                 ~
+!!! error TS6133: 'a' is declared but its value is never read.
+        return b;
+    }

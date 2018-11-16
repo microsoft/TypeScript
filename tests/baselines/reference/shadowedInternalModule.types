@@ -13,8 +13,6 @@ module A {
 >0 : 0
 
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -43,11 +41,7 @@ module X {
 >X : typeof X
 
     export module Y {
->Y : typeof Y
-
         export interface Point{
->Point : Point
-
             x: number;
 >x : number
 

@@ -7,8 +7,9 @@ tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionConte
 tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(8,5): error TS2322: Type '[number, number, number, string]' is not assignable to type '[number, number, number]'.
   Types of property 'length' are incompatible.
     Type '4' is not assignable to type '3'.
-tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
-  Property '0' is missing in type 'number[]'.
+tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts(14,5): error TS2322: Type '[number, number, number, ...number[]]' is not assignable to type '[number, number, number]'.
+  Types of property 'length' are incompatible.
+    Type 'number' is not assignable to type '3'.
 
 
 ==== tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionContextualTyping.ts (4 errors) ====
@@ -39,6 +40,7 @@ tests/cases/conformance/expressions/contextualTyping/arrayLiteralExpressionConte
     var spr1 = [1, 2, 3, ...tup];
     var spr2:[number, number, number] = [1, 2, 3, ...tup];  // Error
         ~~~~
-!!! error TS2322: Type 'number[]' is not assignable to type '[number, number, number]'.
-!!! error TS2322:   Property '0' is missing in type 'number[]'.
+!!! error TS2322: Type '[number, number, number, ...number[]]' is not assignable to type '[number, number, number]'.
+!!! error TS2322:   Types of property 'length' are incompatible.
+!!! error TS2322:     Type 'number' is not assignable to type '3'.
     

@@ -2,13 +2,13 @@
 
 //// interface Fo/*interface_definition*/o { hello(): void }
 ////
-//// [|class SuperBar implements Foo {
+//// class [|SuperBar|] implements Foo {
 ////     hello () {}
-//// }|]
+//// }
 ////
-//// [|abstract class AbstractBar implements Foo {
+//// abstract class [|AbstractBar|] implements Foo {
 ////     abstract hello (): void;
-//// }|]
+//// }
 ////
 //// class Bar extends SuperBar {
 //// }

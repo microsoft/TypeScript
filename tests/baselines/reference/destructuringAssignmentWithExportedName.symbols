@@ -1,0 +1,54 @@
+=== tests/cases/compiler/destructuringAssignmentWithExportedName.ts ===
+export let exportedFoo: any;
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+
+let nonexportedFoo: any;
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+
+// sanity checks
+exportedFoo = null;
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+
+nonexportedFoo = null;
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+
+if (null as any) {
+    ({ exportedFoo, nonexportedFoo } = null as any);
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 8, 6))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 8, 19))
+}
+else if (null as any) {
+	({ foo: exportedFoo, bar: nonexportedFoo } = null as any);
+>foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 11, 3))
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+>bar : Symbol(bar, Decl(destructuringAssignmentWithExportedName.ts, 11, 21))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+}
+else if (null as any) {
+	({ foo: { bar: exportedFoo, baz: nonexportedFoo } } = null as any);
+>foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 14, 3))
+>bar : Symbol(bar, Decl(destructuringAssignmentWithExportedName.ts, 14, 10))
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+>baz : Symbol(baz, Decl(destructuringAssignmentWithExportedName.ts, 14, 28))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+}
+else if (null as any) {
+	([exportedFoo, nonexportedFoo] = null as any);
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+}
+else {
+	([[exportedFoo, nonexportedFoo]] = null as any);
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+}
+
+export { nonexportedFoo };
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 23, 8))
+
+export { exportedFoo as foo, nonexportedFoo as nfoo };
+>exportedFoo : Symbol(exportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 0, 10))
+>foo : Symbol(foo, Decl(destructuringAssignmentWithExportedName.ts, 24, 8))
+>nonexportedFoo : Symbol(nonexportedFoo, Decl(destructuringAssignmentWithExportedName.ts, 1, 3))
+>nfoo : Symbol(nfoo, Decl(destructuringAssignmentWithExportedName.ts, 24, 28))
+

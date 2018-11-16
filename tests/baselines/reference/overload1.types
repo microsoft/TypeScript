@@ -19,8 +19,6 @@ module O {
     }
 
     export interface I {
->I : I
-
         f(s:string):number;
 >f : { (s: string): number; (n: number): string; }
 >s : string
@@ -41,13 +39,10 @@ module O {
         g(a:A):C;
 >g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
 >a : A
->A : A
->C : C
 
         g(c:C):string;
 >g : { (n1: number, n2: number): number; (n: number): string; (a: A): C; (c: C): string; }
 >c : C
->C : C
 
         h(s1:string,s2:number):string;
 >h : { (s1: string, s2: number): string; (s1: number, s2: string): number; }
@@ -64,7 +59,6 @@ module O {
 declare var x:O.I;
 >x : O.I
 >O : any
->I : O.I
 
 var e:string=x.g(new O.A()); // matches overload but bad assignment
 >e : string

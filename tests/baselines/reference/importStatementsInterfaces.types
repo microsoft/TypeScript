@@ -1,10 +1,6 @@
 === tests/cases/conformance/internalModules/codeGeneration/importStatementsInterfaces.ts ===
 module A {
->A : any
-
     export interface Point {
->Point : Point
-
         x: number;
 >x : number
 
@@ -13,12 +9,7 @@ module A {
     }
 
     export module inA {
->inA : any
-
         export interface Point3D extends Point {
->Point3D : Point3D
->Point : Point
-
             z: number;
 >z : number
         }
@@ -27,8 +18,6 @@ module A {
 
 // no code gen expected
 module B {
->B : any
-
     import a = A;
 >a : any
 >A : any
@@ -54,7 +43,6 @@ module C {
     var p: b.Point3D;
 >p : b.Point3D
 >b : any
->Point3D : b.Point3D
 
     var p = {x:0, y:0, z: 0 };
 >p : b.Point3D
@@ -78,7 +66,6 @@ module D {
     var p : a.Point;
 >p : a.Point
 >a : any
->Point : a.Point
 }
 
 // no code gen expected
@@ -94,7 +81,6 @@ module E {
 >xDist : (x: a.Point3D) => number
 >x : a.Point3D
 >a : any
->Point3D : a.Point3D
 
         return 0 - x.x;
 >0 - x.x : number

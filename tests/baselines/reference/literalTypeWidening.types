@@ -219,6 +219,61 @@ function f5() {
 >c4 : "foo"
 }
 
+declare function widening<T>(x: T): T;
+>widening : <T>(x: T) => T
+>x : T
+
+declare function nonWidening<T extends string | number | symbol>(x: T): T;
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>x : T
+
+function f6(cond: boolean) {
+>f6 : (cond: boolean) => void
+>cond : boolean
+
+    let x1 = widening('a');
+>x1 : string
+>widening('a') : "a"
+>widening : <T>(x: T) => T
+>'a' : "a"
+
+    let x2 = widening(10);
+>x2 : number
+>widening(10) : 10
+>widening : <T>(x: T) => T
+>10 : 10
+
+    let x3 = widening(cond ? 'a' : 10);
+>x3 : string | number
+>widening(cond ? 'a' : 10) : "a" | 10
+>widening : <T>(x: T) => T
+>cond ? 'a' : 10 : "a" | 10
+>cond : boolean
+>'a' : "a"
+>10 : 10
+
+    let y1 = nonWidening('a');
+>y1 : "a"
+>nonWidening('a') : "a"
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>'a' : "a"
+
+    let y2 = nonWidening(10);
+>y2 : 10
+>nonWidening(10) : 10
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>10 : 10
+
+    let y3 = nonWidening(cond ? 'a' : 10);
+>y3 : "a" | 10
+>nonWidening(cond ? 'a' : 10) : "a" | 10
+>nonWidening : <T extends string | number | symbol>(x: T) => T
+>cond ? 'a' : 10 : "a" | 10
+>cond : boolean
+>'a' : "a"
+>10 : 10
+}
+
 // Repro from #10898
 
 type FAILURE = "FAILURE";
@@ -230,15 +285,9 @@ const FAILURE = "FAILURE";
 
 type Result<T> = T | FAILURE;
 >Result : Result<T>
->T : T
->T : T
->FAILURE : "FAILURE"
 
 function doWork<T>(): Result<T> {
 >doWork : <T>() => Result<T>
->T : T
->Result : Result<T>
->T : T
 
   return FAILURE;
 >FAILURE : "FAILURE"
@@ -246,12 +295,7 @@ function doWork<T>(): Result<T> {
 
 function isSuccess<T>(result: Result<T>): result is T {
 >isSuccess : <T>(result: Result<T>) => result is T
->T : T
 >result : Result<T>
->Result : Result<T>
->T : T
->result : any
->T : T
 
   return !isFailure(result);
 >!isFailure(result) : boolean
@@ -262,12 +306,7 @@ function isSuccess<T>(result: Result<T>): result is T {
 
 function isFailure<T>(result: Result<T>): result is FAILURE {
 >isFailure : <T>(result: Result<T>) => result is "FAILURE"
->T : T
 >result : Result<T>
->Result : Result<T>
->T : T
->result : any
->FAILURE : "FAILURE"
 
   return result === FAILURE;
 >result === FAILURE : boolean
@@ -308,11 +347,89 @@ type TestEvent = "onmouseover" | "onmouseout";
 
 function onMouseOver(): TestEvent { return "onmouseover"; }
 >onMouseOver : () => TestEvent
->TestEvent : TestEvent
 >"onmouseover" : "onmouseover"
 
 let x = onMouseOver();
 >x : TestEvent
 >onMouseOver() : TestEvent
 >onMouseOver : () => TestEvent
+
+// Repro from #23649
+
+export function Set<K extends string>(...keys: K[]): Record<K, true | undefined> {
+>Set : <K extends string>(...keys: K[]) => Record<K, true>
+>keys : K[]
+>true : true
+
+  const result = {} as Record<K, true | undefined>
+>result : Record<K, true>
+>{} as Record<K, true | undefined> : Record<K, true>
+>{} : {}
+>true : true
+
+  keys.forEach(key => result[key] = true)
+>keys.forEach(key => result[key] = true) : void
+>keys.forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
+>keys : K[]
+>forEach : (callbackfn: (value: K, index: number, array: K[]) => void, thisArg?: any) => void
+>key => result[key] = true : (key: K) => boolean
+>key : K
+>result[key] = true : true
+>result[key] : Record<K, true>[K]
+>result : Record<K, true>
+>key : K
+>true : true
+
+  return result
+>result : Record<K, true>
+}
+
+export function keys<K extends string, V>(obj: Record<K, V>): K[] {
+>keys : <K extends string, V>(obj: Record<K, V>) => K[]
+>obj : Record<K, V>
+
+  return Object.keys(obj) as K[]
+>Object.keys(obj) as K[] : K[]
+>Object.keys(obj) : string[]
+>Object.keys : (o: {}) => string[]
+>Object : ObjectConstructor
+>keys : (o: {}) => string[]
+>obj : Record<K, V>
+}
+
+type Obj = { code: LangCode }
+>Obj : Obj
+>code : "fr" | "en" | "es" | "it" | "nl"
+
+const langCodeSet = Set('fr', 'en', 'es', 'it', 'nl')
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+>Set('fr', 'en', 'es', 'it', 'nl') : Record<"fr" | "en" | "es" | "it" | "nl", true>
+>Set : <K extends string>(...keys: K[]) => Record<K, true>
+>'fr' : "fr"
+>'en' : "en"
+>'es' : "es"
+>'it' : "it"
+>'nl' : "nl"
+
+export type LangCode = keyof typeof langCodeSet
+>LangCode : "fr" | "en" | "es" | "it" | "nl"
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+
+export const langCodes = keys(langCodeSet)
+>langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
+>keys(langCodeSet) : ("fr" | "en" | "es" | "it" | "nl")[]
+>keys : <K extends string, V>(obj: Record<K, V>) => K[]
+>langCodeSet : Record<"fr" | "en" | "es" | "it" | "nl", true>
+
+const arr: Obj[] = langCodes.map(code => ({ code }))
+>arr : Obj[]
+>langCodes.map(code => ({ code })) : { code: "fr" | "en" | "es" | "it" | "nl"; }[]
+>langCodes.map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
+>langCodes : ("fr" | "en" | "es" | "it" | "nl")[]
+>map : <U>(callbackfn: (value: "fr" | "en" | "es" | "it" | "nl", index: number, array: ("fr" | "en" | "es" | "it" | "nl")[]) => U, thisArg?: any) => U[]
+>code => ({ code }) : (code: "fr" | "en" | "es" | "it" | "nl") => { code: "fr" | "en" | "es" | "it" | "nl"; }
+>code : "fr" | "en" | "es" | "it" | "nl"
+>({ code }) : { code: "fr" | "en" | "es" | "it" | "nl"; }
+>{ code } : { code: "fr" | "en" | "es" | "it" | "nl"; }
+>code : "fr" | "en" | "es" | "it" | "nl"
 

@@ -6,19 +6,19 @@
 ////     he/*declaration*/llo: () => void
 //// }
 ////
-//// var bar: Foo = { [|hello: helloImpl|] };
-//// var baz: Foo = { [|"hello": helloImpl|] };
+//// var bar: Foo = { [|hello|]: helloImpl };
+//// var baz: Foo = { "[|hello|]": helloImpl };
 ////
 //// function helloImpl () {}
 ////
-//// function whatever(x: Foo = { [|hello() {/**1*/}|] }) {
+//// function whatever(x: Foo = { [|hello|]() {/**1*/} }) {
 ////     x.he/*function_call*/llo()
 //// }
 ////
 //// class Bar {
-////     x: Foo = { [|hello() {/*2*/}|] }
+////     x: Foo = { [|hello|]() {/*2*/} }
 ////
-////     constructor(public f: Foo = { [|hello() {/**3*/}|] } ) {}
+////     constructor(public f: Foo = { [|hello|]() {/**3*/} } ) {}
 //// }
 
 verify.allRangesAppearInImplementationList("function_call");

@@ -1,7 +1,6 @@
 === tests/cases/compiler/generativeRecursionWithTypeOf.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     static foo(x: number) { }
 >foo : (x: number) => void
@@ -9,7 +8,6 @@ class C<T> {
 
     type: T;
 >type : T
->T : T
 }
 
 module M {

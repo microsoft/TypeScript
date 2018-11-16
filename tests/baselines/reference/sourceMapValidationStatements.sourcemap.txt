@@ -10,9 +10,15 @@ sourceFile:sourceMapValidationStatements.ts
 -------------------------------------------------------------------
 >>>function f() {
 1 >
-2 >^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^
+4 >          ^->
 1 >
+2 >function 
+3 >         f
 1 >Emitted(1, 1) Source(1, 1) + SourceIndex(0)
+2 >Emitted(1, 10) Source(1, 10) + SourceIndex(0)
+3 >Emitted(1, 11) Source(1, 11) + SourceIndex(0)
 ---
 >>>    var y;
 1->^^^^
@@ -20,7 +26,7 @@ sourceFile:sourceMapValidationStatements.ts
 3 >        ^
 4 >         ^
 5 >          ^^^^^->
-1->function f() {
+1->() {
   >    
 2 >    var 
 3 >        y

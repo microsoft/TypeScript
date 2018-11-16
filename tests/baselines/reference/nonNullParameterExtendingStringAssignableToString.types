@@ -5,12 +5,8 @@ declare function foo(p: string): void;
 
 function fn<T extends string | undefined, U extends string>(one: T, two: U) {
 >fn : <T extends string | undefined, U extends string>(one: T, two: U) => void
->T : T
->U : U
 >one : T
->T : T
 >two : U
->U : U
 
     let three = Boolean() ? one : two;
 >three : T | U

@@ -1,6 +1,6 @@
 === tests/cases/compiler/typeAliasExport.ts ===
 declare module "a" {
->"a" : typeof "a"
+>"a" : typeof import("a")
 
   export default undefined
 >undefined : undefined

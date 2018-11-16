@@ -1,9 +1,7 @@
 === tests/cases/conformance/types/typeRelationships/typeInference/genericCallWithArrayLiteralArgs.ts ===
 function foo<T>(t: T) {
 >foo : <T>(t: T) => T
->T : T
 >t : T
->T : T
 
     return t;
 >t : T
@@ -65,7 +63,6 @@ var r6 = foo<Object[]>([1, '']); // Object[]
 >r6 : Object[]
 >foo<Object[]>([1, '']) : Object[]
 >foo : <T>(t: T) => T
->Object : Object
 >[1, ''] : (string | number)[]
 >1 : 1
 >'' : ""

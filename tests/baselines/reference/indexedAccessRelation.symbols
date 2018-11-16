@@ -10,7 +10,7 @@ class Component<S> {
 >K : Symbol(K, Decl(indexedAccessRelation.ts, 3, 13))
 >S : Symbol(S, Decl(indexedAccessRelation.ts, 2, 16))
 >state : Symbol(state, Decl(indexedAccessRelation.ts, 3, 32))
->Pick : Symbol(Pick, Decl(lib.d.ts, --, --))
+>Pick : Symbol(Pick, Decl(lib.es5.d.ts, --, --))
 >S : Symbol(S, Decl(indexedAccessRelation.ts, 2, 16))
 >K : Symbol(K, Decl(indexedAccessRelation.ts, 3, 13))
 }

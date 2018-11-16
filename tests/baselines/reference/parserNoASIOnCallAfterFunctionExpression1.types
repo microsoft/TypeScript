@@ -7,6 +7,6 @@ var x = function () { }
 
 (<any>window).foo;
 ><any>window : any
->window : any
+>window : Window
 >foo : any
 

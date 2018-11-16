@@ -31,7 +31,6 @@ class C {
     explicitC(this: C, m: number): number {
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
         return this.n + m;
@@ -88,7 +87,6 @@ class D {
 	explicitD(this: D, m: number): number {
 >explicitD : (this: D, m: number) => number
 >this : D
->D : D
 >m : number
 
 		return this.x + m;
@@ -100,8 +98,6 @@ class D {
 	}
 }
 interface I {
->I : I
-
     a: number;
 >a : number
 
@@ -121,7 +117,6 @@ interface I {
     explicitInterface(this: I): number;
 >explicitInterface : (this: I) => number
 >this : I
->I : I
 
     explicitThis(this: this): number; // TODO: Allow `this` types for interfaces
 >explicitThis : (this: this) => number
@@ -129,7 +124,6 @@ interface I {
 }
 let impl: I = {
 >impl : I
->I : I
 >{    a: 12,    explicitVoid1() {        return this.a; // error, no 'a' in 'void'    },    explicitVoid2: () => this.a, // ok, `this:any` because it refers to an outer object    explicitStructural: () => 12,    explicitInterface: () => 12,    explicitThis() {        return this.a;    },} : { a: number; explicitVoid1(this: void): any; explicitVoid2: () => any; explicitStructural: () => number; explicitInterface: () => number; explicitThis(this: I): number; }
 
     a: 12,
@@ -406,13 +400,11 @@ let reconstructed: {
     explicitThis(this: C, m: number): number, // note: this: this is not allowed in an object literal type.
 >explicitThis : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitC(this: C, m: number): number,
 >explicitC : (this: C, m: number) => number
 >this : C
->C : C
 >m : number
 
     explicitProperty: (this: {n : number}, m: number) => number,
@@ -479,7 +471,6 @@ c.explicitC = function(this: D, m: number) { return this.x + m };
 >explicitC : (this: C, m: number) => number
 >function(this: D, m: number) { return this.x + m } : (this: D, m: number) => number
 >this : D
->D : D
 >m : number
 >this.x + m : number
 >this.x : number
@@ -584,7 +575,6 @@ class Base1 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -620,7 +610,6 @@ class Base2 {
     explicit(this: Base1): number { return this.x; }
 >explicit : (this: Base1) => number
 >this : Base1
->Base1 : Base1
 >this.x : number
 >this : Base1
 >x : number
@@ -698,16 +687,12 @@ class ThisConstructor {
 
     constructor(this: ThisConstructor, private n: number) {
 >this : ThisConstructor
->ThisConstructor : ThisConstructor
 >n : number
     }
 }
 interface ThisConstructorInterface {
->ThisConstructorInterface : ThisConstructorInterface
-
     new(this: ThisConstructor, n: number);
 >this : ThisConstructor
->ThisConstructor : ThisConstructor
 >n : number
 }
 var thisConstructorType: new (this: number) => number;
@@ -718,17 +703,15 @@ function notFirst(a: number, this: C): number { return this.n; }
 >notFirst : (a: number, this: C) => number
 >a : number
 >this : C
->C : C
 >this.n : any
 >this : any
 >n : any
 
 ///// parse errors /////
 function modifiers(async this: C): number { return this.n; }
->modifiers : (async : any, this: C) => number
+>modifiers : (: any, this: C) => number
 > : any
 >this : C
->C : C
 >this.n : any
 >this : any
 >n : any
@@ -737,7 +720,6 @@ function restParam(...this: C): number { return this.n; }
 >restParam : (...: any[], this: C) => number
 > : any[]
 >this : C
->C : C
 >this.n : any
 >this : any
 >n : any
@@ -746,7 +728,6 @@ function optional(this?: C): number { return this.n; }
 >optional : (this: any, ?: C) => number
 >this : any
 > : C
->C : C
 >this.n : any
 >this : any
 >n : any
@@ -757,7 +738,6 @@ function decorated(@deco() this: C): number { return this.n; }
 >deco : any
 > : any
 >this : C
->C : C
 >this.n : any
 >this : any
 >n : any
@@ -765,7 +745,6 @@ function decorated(@deco() this: C): number { return this.n; }
 function initializer(this: C = new C()): number { return this.n; }
 >initializer : (this: C, : any, C: any) => any
 >this : C
->C : C
 > : any
 >C : any
 >() : any
@@ -777,16 +756,51 @@ function initializer(this: C = new C()): number { return this.n; }
 
 // can't name parameters 'this' in a lambda.
 c.explicitProperty = (this, m) => m + this.n;
->c.explicitProperty = (this, m) : any
+>c.explicitProperty = (this, m) => m + this.n : (this: { n: number; }, m: number) => any
 >c.explicitProperty : (this: { n: number; }, m: number) => number
 >c : C
 >explicitProperty : (this: { n: number; }, m: number) => number
->(this, m) : any
->this, m : any
->this : any
->m : any
+>(this, m) => m + this.n : (this: { n: number; }, m: number) => any
+>this : { n: number; }
+>m : number
 >m + this.n : any
->m : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f2 = <T>(this: {n: number}, m: number) => m + this.n;
+>f2 : <T>(this: { n: number; }, m: number) => any
+><T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => any
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f3 = async (this: {n: number}, m: number) => m + this.n;
+>f3 : (this: { n: number; }, m: number) => Promise<any>
+>async (this: {n: number}, m: number) => m + this.n : (this: { n: number; }, m: number) => Promise<any>
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
+>this.n : any
+>this : any
+>n : any
+
+const f4 = async <T>(this: {n: number}, m: number) => m + this.n;
+>f4 : <T>(this: { n: number; }, m: number) => Promise<any>
+>async <T>(this: {n: number}, m: number) => m + this.n : <T>(this: { n: number; }, m: number) => Promise<any>
+>this : { n: number; }
+>n : number
+>m : number
+>m + this.n : any
+>m : number
 >this.n : any
 >this : any
 >n : any

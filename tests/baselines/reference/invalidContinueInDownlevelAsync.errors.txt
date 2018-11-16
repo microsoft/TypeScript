@@ -1,8 +1,7 @@
 tests/cases/compiler/invalidContinueInDownlevelAsync.ts(3,9): error TS1107: Jump target cannot cross function boundary.
-tests/cases/compiler/invalidContinueInDownlevelAsync.ts(6,9): error TS7027: Unreachable code detected.
 
 
-==== tests/cases/compiler/invalidContinueInDownlevelAsync.ts (2 errors) ====
+==== tests/cases/compiler/invalidContinueInDownlevelAsync.ts (1 errors) ====
     async function func() {
         if (true) {
             continue;
@@ -11,7 +10,5 @@ tests/cases/compiler/invalidContinueInDownlevelAsync.ts(6,9): error TS7027: Unre
         }
         else {
             await 1;
-            ~~~~~
-!!! error TS7027: Unreachable code detected.
         }
     }

@@ -1,7 +1,5 @@
 === tests/cases/compiler/selfInLambdas.ts ===
 interface MouseEvent {
->MouseEvent : MouseEvent
-
     x: number;
 >x : number
 
@@ -11,15 +9,11 @@ interface MouseEvent {
 
 declare var window: Window;
 >window : Window
->Window : Window
 
 interface Window {
->Window : Window
-
     onmousemove: (ev: MouseEvent) => any;
 >onmousemove : (ev: MouseEvent) => any
 >ev : MouseEvent
->MouseEvent : MouseEvent
     
 }
 var o = {

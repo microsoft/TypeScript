@@ -7,27 +7,18 @@ class Base {
 }
 
 interface Foo extends Base { // error
->Foo : Foo
->Base : Base
-
     x(): any;
 >x : () => any
 }
 
 class Base2<T> {
 >Base2 : Base2<T>
->T : T
 
     private x() { }
 >x : () => void
 }
 
 interface Foo2<T> extends Base2<T> { // error
->Foo2 : Foo2<T>
->T : T
->Base2 : Base2<T>
->T : T
-
     x(): any;
 >x : () => any
 }

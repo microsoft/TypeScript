@@ -131,12 +131,12 @@ function f1<T>(x: Required<T>, y: T, z: Partial<T>) {
 >f1 : Symbol(f1, Decl(mappedTypes6.ts, 18, 51))
 >T : Symbol(T, Decl(mappedTypes6.ts, 20, 12))
 >x : Symbol(x, Decl(mappedTypes6.ts, 20, 15))
->Required : Symbol(Required, Decl(lib.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 20, 12))
 >y : Symbol(y, Decl(mappedTypes6.ts, 20, 30))
 >T : Symbol(T, Decl(mappedTypes6.ts, 20, 12))
 >z : Symbol(z, Decl(mappedTypes6.ts, 20, 36))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 20, 12))
 
     x = x;
@@ -181,7 +181,7 @@ type Denullified<T> = { [P in keyof T]-?: NonNullable<T[P]> };
 >T : Symbol(T, Decl(mappedTypes6.ts, 32, 17))
 >P : Symbol(P, Decl(mappedTypes6.ts, 32, 25))
 >T : Symbol(T, Decl(mappedTypes6.ts, 32, 17))
->NonNullable : Symbol(NonNullable, Decl(lib.d.ts, --, --))
+>NonNullable : Symbol(NonNullable, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 32, 17))
 >P : Symbol(P, Decl(mappedTypes6.ts, 32, 25))
 
@@ -192,12 +192,12 @@ function f2<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >Denullified : Symbol(Denullified, Decl(mappedTypes6.ts, 30, 1))
 >T : Symbol(T, Decl(mappedTypes6.ts, 34, 12))
 >x : Symbol(x, Decl(mappedTypes6.ts, 34, 33))
->Required : Symbol(Required, Decl(lib.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 34, 12))
 >y : Symbol(y, Decl(mappedTypes6.ts, 34, 49))
 >T : Symbol(T, Decl(mappedTypes6.ts, 34, 12))
 >z : Symbol(z, Decl(mappedTypes6.ts, 34, 55))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 34, 12))
 
     w = w;
@@ -273,12 +273,12 @@ function f3<T>(w: Denullified<T>, x: Required<T>, y: T, z: Partial<T>) {
 >Denullified : Symbol(Denullified, Decl(mappedTypes6.ts, 30, 1))
 >T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
 >x : Symbol(x, Decl(mappedTypes6.ts, 54, 33))
->Required : Symbol(Required, Decl(lib.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
 >y : Symbol(y, Decl(mappedTypes6.ts, 54, 49))
 >T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
 >z : Symbol(z, Decl(mappedTypes6.ts, 54, 55))
->Partial : Symbol(Partial, Decl(lib.d.ts, --, --))
+>Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 54, 12))
 
     w = {};  // Error
@@ -309,7 +309,7 @@ function f10<T>(x: Readonly<T>, y: T, z: Readwrite<T>) {
 >f10 : Symbol(f10, Decl(mappedTypes6.ts, 63, 1))
 >T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
 >x : Symbol(x, Decl(mappedTypes6.ts, 65, 16))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
 >y : Symbol(y, Decl(mappedTypes6.ts, 65, 31))
 >T : Symbol(T, Decl(mappedTypes6.ts, 65, 13))
@@ -418,7 +418,7 @@ x1 = { a: 1, b: 1, c: 1, d: 1 };
 
 declare let x2: Required<Foo>;
 >x2 : Symbol(x2, Decl(mappedTypes6.ts, 96, 11))
->Required : Symbol(Required, Decl(lib.d.ts, --, --))
+>Required : Symbol(Required, Decl(lib.es5.d.ts, --, --))
 >Foo : Symbol(Foo, Decl(mappedTypes6.ts, 75, 1))
 
 x1.a;  // number
@@ -489,7 +489,7 @@ x3.b = 1;  // Error
 
 declare let x4: Readonly<Bar>;
 >x4 : Symbol(x4, Decl(mappedTypes6.ts, 117, 11))
->Readonly : Symbol(Readonly, Decl(lib.d.ts, --, --))
+>Readonly : Symbol(Readonly, Decl(lib.es5.d.ts, --, --))
 >Bar : Symbol(Bar, Decl(mappedTypes6.ts, 106, 32))
 
 x4.a = 1;  // Error

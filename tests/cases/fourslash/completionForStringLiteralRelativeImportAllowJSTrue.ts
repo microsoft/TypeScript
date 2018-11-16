@@ -15,34 +15,24 @@
 //// var foo6 = require("./f/*require1*/
 
 // @Filename: f1.ts
-//// /f1*/
+////
 // @Filename: f2.js
-//// /*f2*/
+////
 // @Filename: f3.d.ts
-//// /*f3*/
+////
 // @Filename: f4.tsx
-//// /*f4*/
+////
 // @Filename: f5.js
-//// /*f5*/
+////
 // @Filename: f6.jsx
-//// /*f6*/
+////
 // @Filename: g1.ts
-//// /*g1*/
+////
 // @Filename: g2.js
-//// /*g2*/
-const kinds = ["import_as", "import_equals", "require"];
+////
 
-for (const kind of kinds) {
-    for(let i = 0; i < 2; ++i) {
-    goTo.marker(kind + i);
-    verify.completionListContains("f1");
-    verify.completionListContains("f2");
-    verify.completionListContains("f3");
-    verify.completionListContains("f4");
-    verify.completionListContains("f5");
-    verify.completionListContains("f6");
-    verify.completionListContains("g1");
-    verify.completionListContains("g2");
-    verify.not.completionListItemsCountIsGreaterThan(8);
-    }
-}
+verify.completions({
+    marker: test.markers(),
+    exact: ["f1", "f2", "f3", "f4", "f5", "f6", "g1", "g2"],
+    isNewIdentifierLocation: true,
+});

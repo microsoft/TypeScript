@@ -7,7 +7,6 @@ module M {
 
     export var x: Value;
 >x : Value
->Value : Value
 
     export class c {
 >c : c
@@ -15,7 +14,6 @@ module M {
 
     export type C = c;
 >C : c
->c : c
 
     export module m {
 >m : typeof m
@@ -28,16 +26,12 @@ module M {
     export type MC = m.c;
 >MC : m.c
 >m : any
->c : m.c
 
     export type fc = () => c;
 >fc : fc
->c : c
 }
 
 interface Window {
->Window : Window
-
     someMethod();
 >someMethod : () => any
 }
@@ -47,7 +41,6 @@ module M {
 
     export type W = Window | string;
 >W : W
->Window : Window
 
     export module N {
 >N : typeof N
@@ -57,6 +50,5 @@ module M {
 
         export var p: W;
 >p : W
->W : W
     }
 }

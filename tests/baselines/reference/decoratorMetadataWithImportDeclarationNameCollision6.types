@@ -26,11 +26,9 @@ class MyClass {
 
     db: database;
 >db : database
->database : database
 
     constructor(db: database) { // no collision
 >db : database
->database : database
 
         this.db = db;
 >this.db = db : database

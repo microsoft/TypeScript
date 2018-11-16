@@ -1,13 +1,7 @@
 === tests/cases/compiler/index.tsx ===
 declare namespace JSX {
->JSX : any
-
     interface Element { }
->Element : Element
-
     interface IntrinsicElements {
->IntrinsicElements : IntrinsicElements
-
         div: {
 >div : { static?: boolean; }
 

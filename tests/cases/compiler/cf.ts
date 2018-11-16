@@ -1,3 +1,4 @@
+// @allowUnreachableCode: false
 function f() {
     var z;
     var x=10;
@@ -38,7 +39,7 @@ function f() {
     }
     catch (e) {
         x++;
-    }    
+    }
     finally {
         x+=3;
     }

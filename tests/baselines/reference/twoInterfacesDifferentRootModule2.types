@@ -5,34 +5,25 @@ module M {
 >M : typeof M
 
     export interface A {
->A : A
-
         foo: string;
 >foo : string
     }
 
     export interface B<T> {
->B : B<T>
->T : T
-
         foo: T;
 >foo : T
->T : T
     }
 
     module M2 {
 >M2 : typeof M2
 
         export interface A {
->A : A
-
             bar: number;
 >bar : number
         }
 
         var a: A;
 >a : A
->A : A
 
         var r1 = a.foo; // error
 >r1 : any
@@ -47,17 +38,12 @@ module M {
 >bar : number
 
         export interface B<T> {
->B : B<T>
->T : T
-
             bar: T;
 >bar : T
->T : T
         }
 
         var b: B<string>;
 >b : B<string>
->B : B<T>
 
         var r3 = b.foo; // error
 >r3 : any
@@ -74,7 +60,6 @@ module M {
 
     var a: A;
 >a : A
->A : A
 
     var r1 = a.foo; 
 >r1 : string
@@ -90,7 +75,6 @@ module M {
 
     var b: B<string>;
 >b : B<string>
->B : B<T>
 
     var r3 = b.foo; 
 >r3 : string

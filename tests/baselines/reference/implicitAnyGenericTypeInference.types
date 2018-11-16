@@ -1,21 +1,13 @@
 === tests/cases/compiler/implicitAnyGenericTypeInference.ts ===
 interface Comparer<T> {
->Comparer : Comparer<T>
->T : T
-
     compareTo<U>(x: T, y: U): U;
 >compareTo : <U>(x: T, y: U) => U
->U : U
 >x : T
->T : T
 >y : U
->U : U
->U : U
 }
 
 var c: Comparer<any>;
 >c : Comparer<any>
->Comparer : Comparer<T>
 
 c = { compareTo: (x, y) => { return y; } };
 >c = { compareTo: (x, y) => { return y; } } : { compareTo: <U>(x: any, y: U) => U; }

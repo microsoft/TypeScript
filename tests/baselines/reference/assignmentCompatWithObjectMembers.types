@@ -15,27 +15,21 @@ module SimpleTypes {
 
     var s: S;
 >s : S
->S : S
 
     var t: T;
 >t : T
->T : T
 
     interface S2 { foo: string; }
->S2 : S2
 >foo : string
 
     interface T2 { foo: string; }
->T2 : T2
 >foo : string
 
     var s2: S2;
 >s2 : S2
->S2 : S2
 
     var t2: T2;
 >t2 : T2
->T2 : T2
 
     var a: { foo: string; }
 >a : { foo: string; }
@@ -159,38 +153,28 @@ module ObjectTypes {
     class S { foo: S; }
 >S : S
 >foo : S
->S : S
 
     class T { foo: T; }
 >T : T
 >foo : T
->T : T
 
     var s: S;
 >s : S
->S : S
 
     var t: T;
 >t : T
->T : T
 
     interface S2 { foo: S2; }
->S2 : S2
 >foo : S2
->S2 : S2
 
     interface T2 { foo: T2; }
->T2 : T2
 >foo : T2
->T2 : T2
 
     var s2: S2;
 >s2 : S2
->S2 : S2
 
     var t2: T2;
 >t2 : T2
->T2 : T2
 
     var a: { foo: typeof a; }
 >a : { foo: any; }

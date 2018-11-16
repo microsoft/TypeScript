@@ -3,11 +3,7 @@
 >"use strict" : "use strict"
 
 interface public { }
->public : public
-
 interface implements {
->implements : implements
-
     foo(package, protected);
 >foo : (package: any, protected: any) => any
 >package : any

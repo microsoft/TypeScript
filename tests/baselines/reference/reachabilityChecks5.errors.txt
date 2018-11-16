@@ -109,7 +109,7 @@ tests/cases/compiler/reachabilityChecks5.ts(122,13): error TS7027: Unreachable c
             }
             else {
                 return 1;
-                ~~~~~~
+                ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
             }
         }
@@ -124,7 +124,7 @@ tests/cases/compiler/reachabilityChecks5.ts(122,13): error TS7027: Unreachable c
         try {
             while (false) {
                 return 1;
-                ~~~~~~
+                ~~~~~~~~~
 !!! error TS7027: Unreachable code detected.
             }
         }
@@ -154,7 +154,7 @@ tests/cases/compiler/reachabilityChecks5.ts(122,13): error TS7027: Unreachable c
                     break test;
                 } while (true);
                 x++;
-                ~
+                ~~~~
 !!! error TS7027: Unreachable code detected.
             } while (true);
         }

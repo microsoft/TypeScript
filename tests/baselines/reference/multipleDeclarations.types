@@ -1,6 +1,6 @@
 === tests/cases/conformance/salsa/input.js ===
 function C() {
->C : () => void
+>C : typeof C
 
     this.m = null;
 >this.m = null : null
@@ -13,15 +13,15 @@ C.prototype.m = function() {
 >C.prototype.m = function() {    this.nothing();} : () => void
 >C.prototype.m : any
 >C.prototype : any
->C : () => void
+>C : typeof C
 >prototype : any
 >m : any
 >function() {    this.nothing();} : () => void
 
     this.nothing();
->this.nothing() : any
->this.nothing : any
->this : { m: () => void; }
+>this.nothing() : error
+>this.nothing : error
+>this : C
 >nothing : any
 }
 class X {

@@ -53,9 +53,9 @@ module M {
     export function F2(x: number): string { return x.toString(); }
 >F2 : Symbol(F2, Decl(throwStatements.ts, 21, 5))
 >x : Symbol(x, Decl(throwStatements.ts, 23, 23))
->x.toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>x.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(throwStatements.ts, 23, 23))
->toString : Symbol(Number.toString, Decl(lib.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
 }
 
 var aNumber = 9.9;
@@ -72,14 +72,14 @@ throw aString;
 
 var aDate = new Date(12);
 >aDate : Symbol(aDate, Decl(throwStatements.ts, 30, 3))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 throw aDate;
 >aDate : Symbol(aDate, Decl(throwStatements.ts, 30, 3))
 
 var anObject = new Object();
 >anObject : Symbol(anObject, Decl(throwStatements.ts, 32, 3))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 throw anObject;
 >anObject : Symbol(anObject, Decl(throwStatements.ts, 32, 3))
@@ -202,13 +202,13 @@ throw [];
 throw ['a', ['b']];
 throw /[a-z]/;
 throw new Date();
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 throw new C();
 >C : Symbol(C, Decl(throwStatements.ts, 4, 1))
 
 throw new Object();
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 throw new D<number>();
 >D : Symbol(D, Decl(throwStatements.ts, 8, 1))

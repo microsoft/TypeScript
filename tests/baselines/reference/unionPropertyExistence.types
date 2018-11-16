@@ -1,7 +1,5 @@
 === tests/cases/compiler/unionPropertyExistence.ts ===
 interface A {
->A : A
-
     inAll: string;
 >inAll : string
 
@@ -13,8 +11,6 @@ interface A {
 }
 
 interface B {
->B : B
-
     inAll: boolean;
 >inAll : boolean
 
@@ -26,8 +22,6 @@ interface B {
 }
 
 interface C {
->C : C
-
     inAll: number;
 >inAll : number
 
@@ -37,28 +31,21 @@ interface C {
 
 type AB = A | B;
 >AB : AB
->A : A
->B : B
 
 type ABC = C | AB;
 >ABC : ABC
->C : C
->AB : AB
 
 var ab: AB;
 >ab : AB
->AB : AB
 
 var abc: ABC;
 >abc : ABC
->ABC : ABC
 
 declare const x: "foo" | "bar";
 >x : "foo" | "bar"
 
 declare const bFoo: B | "foo";
 >bFoo : B | "foo"
->B : B
 
 x.nope();
 >x.nope() : any

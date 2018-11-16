@@ -13,5 +13,4 @@ verify.quickInfos({
     2: "(parameter) value: T"
 });
 
-goTo.marker('3');
-verify.currentSignatureHelpIs('map(fn: (k: string, value: number, context: any) => void, context: any): void');
+verify.signatureHelp({ marker: "3", text: "map(fn: (k: string, value: number, context: any) => void, context: any): void" });

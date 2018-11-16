@@ -165,7 +165,6 @@ var sameType2 = { get x(): Array<number> { return undefined; }, set x(n: number[
 >sameType2 : { x: number[]; }
 >{ get x(): Array<number> { return undefined; }, set x(n: number[]) { } } : { x: number[]; }
 >x : number[]
->Array : T[]
 >undefined : undefined
 >x : number[]
 >n : number[]
@@ -183,11 +182,9 @@ var sameType4 = { get x(): Date { return undefined; }, set x(n: Date) { } };
 >sameType4 : { x: Date; }
 >{ get x(): Date { return undefined; }, set x(n: Date) { } } : { x: Date; }
 >x : Date
->Date : Date
 >undefined : undefined
 >x : Date
 >n : Date
->Date : Date
 
 // Type of unannotated get accessor return type is the type annotation of the set accessor param
 var setParamType1 = {

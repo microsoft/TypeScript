@@ -6,13 +6,18 @@
 ////functionOverload(/*functionOverload1*/);
 ////functionOverload(""/*functionOverload2*/);
 
-goTo.marker('functionOverload1');
-verify.signatureHelpCountIs(2);
-verify.currentSignatureParameterCountIs(0);
-verify.currentSignatureHelpIs('functionOverload(): any');
-
-goTo.marker('functionOverload2');
-verify.currentSignatureParameterCountIs(1);
-verify.currentSignatureHelpIs('functionOverload(test: string): any');
-verify.currentParameterHelpArgumentNameIs("test");
-verify.currentParameterSpanIs("test: string");
+verify.signatureHelp(
+    {
+        marker: "functionOverload1",
+        overloadsCount: 2,
+        text: "functionOverload(): any",
+        parameterCount: 0,
+    },
+    {
+        marker: "functionOverload2",
+        overloadsCount: 2,
+        text: "functionOverload(test: string): any",
+        parameterName: "test",
+        parameterSpan: "test: string",
+    },
+);

@@ -50,8 +50,6 @@ module TypeScript {
     }
 
     export interface IHashTable {
->IHashTable : IHashTable
-
         getAllKeys(): string[];
 >getAllKeys : () => string[]
 
@@ -99,7 +97,6 @@ module TypeScript {
 
     export class StringHashTable implements IHashTable {
 >StringHashTable : StringHashTable
->IHashTable : IHashTable
 
         public itemCount = 0;
 >itemCount : number
@@ -405,7 +402,6 @@ module TypeScript {
     // REVIEW:  WARNING:  For performance reasons, neither the primary nor secondary table may be null
     export class DualStringHashTable implements IHashTable {
 >DualStringHashTable : DualStringHashTable
->IHashTable : IHashTable
 
         public insertPrimary = true;
 >insertPrimary : boolean
@@ -413,11 +409,9 @@ module TypeScript {
 
         constructor (public primaryTable: IHashTable,
 >primaryTable : IHashTable
->IHashTable : IHashTable
 
                                         public secondaryTable: IHashTable) { }
 >secondaryTable : IHashTable
->IHashTable : IHashTable
 
         public getAllKeys(): string[]{
 >getAllKeys : () => string[]
@@ -729,7 +723,6 @@ module TypeScript {
 
         public next: HashEntry;
 >next : HashEntry
->HashEntry : HashEntry
 
         constructor (public key, public data) { }
 >key : any
@@ -748,6 +741,7 @@ module TypeScript {
 >new HashEntry[] : any
 >HashEntry[] : any
 >HashEntry : typeof HashEntry
+> : any
 
         constructor (public size: number, public hashFn: (key) =>number,
 >size : number
@@ -788,11 +782,9 @@ module TypeScript {
 
             var current: HashEntry;
 >current : HashEntry
->HashEntry : HashEntry
 
             var entry: HashEntry = new HashEntry(key, data);
 >entry : HashEntry
->HashEntry : HashEntry
 >new HashEntry(key, data) : HashEntry
 >HashEntry : typeof HashEntry
 >key : any
@@ -882,7 +874,6 @@ module TypeScript {
 
             var current: HashEntry;
 >current : HashEntry
->HashEntry : HashEntry
 
             var val: number = this.hashFn(key);
 >val : number
@@ -907,7 +898,6 @@ module TypeScript {
 
             var prevEntry: HashEntry = null;
 >prevEntry : HashEntry
->HashEntry : HashEntry
 >null : null
 
             for (current = this.table[val]; current != null ; current = current.next) {
@@ -997,7 +987,6 @@ module TypeScript {
 
             var current: HashEntry;
 >current : HashEntry
->HashEntry : HashEntry
 
             var val: number = this.hashFn(key);
 >val : number

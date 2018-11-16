@@ -1,20 +1,13 @@
 === tests/cases/compiler/typeArgInference2.ts ===
 interface Item {
->Item : Item
-
     name: string;
 >name : string
 }
 
 declare function foo<T extends Item>(x?: T, y?: T): T;
 >foo : <T extends Item>(x?: T, y?: T) => T
->T : T
->Item : Item
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 var z1 = foo(null);                   // any
 >z1 : any

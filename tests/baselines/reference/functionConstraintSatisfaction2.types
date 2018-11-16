@@ -3,11 +3,7 @@
 
 function foo<T extends Function>(x: T): T { return x; }
 >foo : <T extends Function>(x: T) => T
->T : T
->Function : Function
 >x : T
->T : T
->T : T
 >x : T
 
 foo(1);
@@ -29,11 +25,8 @@ foo(1, () => { });
 
 function foo2<T extends (x: string) => string>(x: T): T { return x; }
 >foo2 : <T extends (x: string) => string>(x: T) => T
->T : T
 >x : string
 >x : T
->T : T
->T : T
 >x : T
 
 class C {
@@ -49,19 +42,14 @@ var b: { new (x: string): string };
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var r = foo2(new Function());
 >r : any
@@ -95,9 +83,7 @@ var r8 = foo2(<U>(x: U) => x); // no error expected
 >foo2(<U>(x: U) => x) : (x: string) => string
 >foo2 : <T extends (x: string) => string>(x: T) => T
 ><U>(x: U) => x : <U>(x: U) => U
->U : U
 >x : U
->U : U
 >x : U
 
 var r11 = foo2(<U, V>(x: U, y: V) => x);
@@ -105,12 +91,8 @@ var r11 = foo2(<U, V>(x: U, y: V) => x);
 >foo2(<U, V>(x: U, y: V) => x) : any
 >foo2 : <T extends (x: string) => string>(x: T) => T
 ><U, V>(x: U, y: V) => x : <U, V>(x: U, y: V) => U
->U : U
->V : V
 >x : U
->U : U
 >y : V
->V : V
 >x : U
 
 var r13 = foo2(C2);
@@ -126,13 +108,10 @@ var r14 = foo2(b2);
 >b2 : new <T>(x: T) => T
 
 interface F2 extends Function { foo: string; }
->F2 : F2
->Function : Function
 >foo : string
 
 var f2: F2;
 >f2 : F2
->F2 : F2
 
 var r16 = foo2(f2);
 >r16 : any
@@ -142,13 +121,8 @@ var r16 = foo2(f2);
 
 function fff<T extends { (): void }, U extends T>(x: T, y: U) {
 >fff : <T extends () => void, U extends T>(x: T, y: U) => void
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
 
     foo2(x);
 >foo2(x) : any

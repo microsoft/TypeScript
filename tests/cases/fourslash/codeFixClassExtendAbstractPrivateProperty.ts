@@ -2,6 +2,7 @@
 
 //// abstract class A {
 ////    private abstract x: number;
+////    m() { this.x; } // Avoid unused private
 //// }
 ////
 //// class C extends A {[| |]}

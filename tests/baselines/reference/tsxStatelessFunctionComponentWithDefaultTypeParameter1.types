@@ -3,18 +3,13 @@ import React = require('react')
 >React : typeof React
 
 interface MyComponentProp {
->MyComponentProp : MyComponentProp
-
     values: string;
 >values : string
 }
 
 function MyComponent<T = MyComponentProp>(attr: T) {
 >MyComponent : <T = MyComponentProp>(attr: T) => JSX.Element
->T : T
->MyComponentProp : MyComponentProp
 >attr : T
->T : T
 
     return <div>attr.values</div>
 ><div>attr.values</div> : JSX.Element

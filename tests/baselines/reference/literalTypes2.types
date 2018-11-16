@@ -153,7 +153,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
 >true : true
 >p4 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -181,7 +180,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
     var v5: E.A = E.A;
 >v5 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -209,7 +207,6 @@ function f2(p1: 1 = 1, p2: "abc" = "abc", p3: true = true, p4: E.A = E.A) {
     let x5: E.A = E.A;
 >x5 : E.A
 >E : any
->A : E.A
 >E.A : E.A
 >E : typeof E
 >A : E.A
@@ -555,7 +552,7 @@ class C2 {
 >bar : () => 1 | 0
 
         return cond ? 0 : 1;
->cond ? 0 : 1 : 1 | 0
+>cond ? 0 : 1 : 0 | 1
 >cond : boolean
 >0 : 0
 >1 : 1
@@ -605,71 +602,40 @@ function f20() {
 
 declare function g1<T>(x: T): T;
 >g1 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 declare function g2<T>(x: T, y: T): T;
 >g2 : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 declare function g3<T, U>(x: T, y: U): T | U;
 >g3 : <T, U>(x: T, y: U) => T | U
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
->U : U
 
 declare function g4<T>(x: T): T[];
 >g4 : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
 declare function g5<T extends number>(x: T, y: T): T[];
 >g5 : <T extends number>(x: T, y: T) => T[]
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 declare function g6<T>(x: T[]): T;
 >g6 : <T>(x: T[]) => T
->T : T
 >x : T[]
->T : T
->T : T
 
 declare function g7<T>(x: T[]): T[];
 >g7 : <T>(x: T[]) => T[]
->T : T
 >x : T[]
->T : T
->T : T
 
 declare function g8<T>(x: T, f: (p: T) => T): T;
 >g8 : <T>(x: T, f: (p: T) => T) => T
->T : T
 >x : T
->T : T
 >f : (p: T) => T
 >p : T
->T : T
->T : T
->T : T
 
 const a: (1 | 2)[] = [1, 2];
 >a : (1 | 2)[]
@@ -759,10 +725,7 @@ const x11 = g8(1, x => x + 1);  // Type number
 
 function makeArray<T>(x: T): T[] {
 >makeArray : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
->T : T
 
     return [x];
 >[x] : T[]
@@ -771,12 +734,8 @@ function makeArray<T>(x: T): T[] {
 
 function append<T>(a: T[], x: T): T[] {
 >append : <T>(a: T[], x: T) => T[]
->T : T
 >a : T[]
->T : T
 >x : T
->T : T
->T : T
 
     let result = a.slice();
 >result : T[]
@@ -803,7 +762,6 @@ let aa = makeArray<Bit>(0);
 >aa : (0 | 1)[]
 >makeArray<Bit>(0) : (0 | 1)[]
 >makeArray : <T>(x: T) => T[]
->Bit : 0 | 1
 >0 : 0
 
 aa = append(aa, 1);

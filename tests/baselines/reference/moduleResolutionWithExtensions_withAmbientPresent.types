@@ -5,7 +5,7 @@ import { x } from "js";
 
 === /declarations.d.ts ===
 declare module "js" {
->"js" : typeof "js"
+>"js" : typeof import("js")
 
     export const x = 0;
 >x : 0

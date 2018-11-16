@@ -21,14 +21,14 @@
 verify.quickInfoAt("1", [
     "(alias) interface Foo",
     "import Foo",
-].join("\n"), "This is an interface ");
+].join("\n"), "This is an interface");
 
 verify.quickInfoAt("2", [
     "(alias) type Bar = 1 | 2",
     "import Bar",
-].join("\n"), "One or two ");
+].join("\n"), "One or two");
 
 verify.quickInfoAt("3", [
     "(alias) class Baz<T extends {}>",
     "import Baz",
-].join("\n"), "This is a class ");
+].join("\n"), "This is a class");

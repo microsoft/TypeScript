@@ -30,7 +30,6 @@ var a0: (n: number, s: string) => number = (num, str) => {
 
 class Class<T> {
 >Class : Class<T>
->T : T
 
     foo() { }
 >foo : () => void
@@ -39,8 +38,6 @@ class Class<T> {
 var a1: (c: Class<Number>) => number = (a1) => {
 >a1 : (c: Class<Number>) => number
 >c : Class<Number>
->Class : Class<T>
->Number : Number
 >(a1) => {    a1.foo();    return 1;} : (a1: Class<Number>) => number
 >a1 : Class<Number>
 
@@ -113,7 +110,6 @@ b3 = (name, number) => { };
 var b4: (n: E) => string = (number = 1) => { return "hello"; };
 >b4 : (n: E) => string
 >n : E
->E : E
 >(number = 1) => { return "hello"; } : (number?: E) => string
 >number : E
 >1 : 1
@@ -177,21 +173,14 @@ b7 = (j, m) => { };  // Per spec, no contextual signature can be extracted in th
 
 class C<T, U> {
 >C : C<T, U>
->T : T
->U : U
 
     constructor() {
         var k: ((j: T, k: U) => (T|U)[]) | ((j: number,k :U) => number[]) = (j, k) => {
 >k : ((j: T, k: U) => (T | U)[]) | ((j: number, k: U) => number[])
 >j : T
->T : T
 >k : U
->U : U
->T : T
->U : U
 >j : number
 >k : U
->U : U
 >(j, k) => {            return [j, k];        } : (j: any, k: any) => any[]
 >j : any
 >k : any

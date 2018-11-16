@@ -3,21 +3,15 @@
 
 function foo<T extends (x: string) => string>(x: T): T { return x; }
 >foo : <T extends (x: string) => string>(x: T) => T
->T : T
 >x : string
 >x : T
->T : T
->T : T
 >x : T
 
 interface I {
->I : I
-
     (): string;
 }
 var i: I;
 >i : I
->I : I
 
 class C {
 >C : C
@@ -81,62 +75,39 @@ var r8 = foo(c);
 >c : { (): string; (x: any): string; }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     (x: T): T;
 >x : T
->T : T
->T : T
 }
 var i2: I2<string>;
 >i2 : I2<string>
->I2 : I2<T>
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 }
 
 var a2: { <T>(x: T): T };
 >a2 : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var b2: { new <T>(x: T): T };
 >b2 : new <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var c2: { <T>(x: T): T; <T>(x: T, y: T): T };
 >c2 : { <T>(x: T): T; <T>(x: T, y: T): T; }
->T : T
 >x : T
->T : T
->T : T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 var r9 = foo(function <U>(x: U) { return x; });
 >r9 : (x: string) => string
 >foo(function <U>(x: U) { return x; }) : (x: string) => string
 >foo : <T extends (x: string) => string>(x: T) => T
 >function <U>(x: U) { return x; } : <U>(x: U) => U
->U : U
 >x : U
->U : U
 >x : U
 
 var r10 = foo(<U extends string>(x: U) => x);
@@ -144,9 +115,7 @@ var r10 = foo(<U extends string>(x: U) => x);
 >foo(<U extends string>(x: U) => x) : (x: string) => string
 >foo : <T extends (x: string) => string>(x: T) => T
 ><U extends string>(x: U) => x : <U extends string>(x: U) => U
->U : U
 >x : U
->U : U
 >x : U
 
 var r12 = foo(i2);

@@ -1,7 +1,5 @@
 === tests/cases/compiler/instanceOfAssignability.ts ===
 interface Base {
->Base : Base
-
 	foo: string|number;
 >foo : string | number
 
@@ -12,7 +10,6 @@ interface Base {
 // Derived1 is assignable to, but not a subtype of, Base
 class Derived1 implements Base {
 >Derived1 : Derived1
->Base : Base
 
 	foo: string;
 >foo : string
@@ -20,7 +17,6 @@ class Derived1 implements Base {
 // Derived2 is a subtype of Base that is not assignable to Derived1
 class Derived2 implements Base {
 >Derived2 : Derived2
->Base : Base
 
 	foo: number;
 >foo : number
@@ -48,8 +44,6 @@ class Giraffe extends Mammal { neck; }
 function fn1(x: Array<number>|Array<string>|boolean) {
 >fn1 : (x: boolean | number[] | string[]) => void
 >x : boolean | number[] | string[]
->Array : T[]
->Array : T[]
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
@@ -67,7 +61,6 @@ function fn1(x: Array<number>|Array<string>|boolean) {
 function fn2(x: Base) {
 >fn2 : (x: Base) => void
 >x : Base
->Base : Base
 
 	if(x instanceof Derived1) {
 >x instanceof Derived1 : boolean
@@ -85,8 +78,6 @@ function fn2(x: Base) {
 function fn3(x: Base|Derived1) {
 >fn3 : (x: Base | Derived1) => void
 >x : Base | Derived1
->Base : Base
->Derived1 : Derived1
 
 	if(x instanceof Derived2) {
 >x instanceof Derived2 : boolean
@@ -104,8 +95,6 @@ function fn3(x: Base|Derived1) {
 function fn4(x: Base|Derived2) {
 >fn4 : (x: Base | Derived2) => void
 >x : Base | Derived2
->Base : Base
->Derived2 : Derived2
 
 	if(x instanceof Derived1) {
 >x instanceof Derived1 : boolean
@@ -123,7 +112,6 @@ function fn4(x: Base|Derived2) {
 function fn5(x: Derived1) {
 >fn5 : (x: Derived1) => void
 >x : Derived1
->Derived1 : Derived1
 
 	if(x instanceof Derived2) {
 >x instanceof Derived2 : boolean
@@ -141,8 +129,6 @@ function fn5(x: Derived1) {
 function fn6(x: Animal|Mammal) {
 >fn6 : (x: Animal | Mammal) => void
 >x : Animal | Mammal
->Animal : Animal
->Mammal : Mammal
 
 	if(x instanceof Giraffe) {
 >x instanceof Giraffe : boolean
@@ -160,8 +146,6 @@ function fn6(x: Animal|Mammal) {
 function fn7(x: Array<number>|Array<string>) {
 >fn7 : (x: number[] | string[]) => void
 >x : number[] | string[]
->Array : T[]
->Array : T[]
 
 	if(x instanceof Array) {
 >x instanceof Array : boolean
@@ -177,15 +161,12 @@ function fn7(x: Array<number>|Array<string>) {
 }
 
 interface Alpha { a }
->Alpha : Alpha
 >a : any
 
 interface Beta { b }
->Beta : Beta
 >b : any
 
 interface Gamma { c }
->Gamma : Gamma
 >c : any
 
 class ABC { a; b; c; }
@@ -197,9 +178,6 @@ class ABC { a; b; c; }
 function fn8(x: Alpha|Beta|Gamma) {
 >fn8 : (x: Alpha | Beta | Gamma) => void
 >x : Alpha | Beta | Gamma
->Alpha : Alpha
->Beta : Beta
->Gamma : Gamma
 
 	if(x instanceof ABC) {
 >x instanceof ABC : boolean

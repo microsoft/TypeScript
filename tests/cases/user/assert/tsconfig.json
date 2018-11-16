@@ -8,6 +8,7 @@
         "allowJs": true,
         "checkJs": true,
         "types": ["node"],
+        "lib": ["esnext", "dom"],
     },
     "include": ["node_modules/assert"]
 }

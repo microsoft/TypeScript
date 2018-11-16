@@ -197,8 +197,6 @@ function func7( {a: {b, c = 6} = {b: 4, c: 5}, d}: {a: {b: number, c?: number}, 
 }
 
 interface Foo {
->Foo : Foo
-
   readonly bar?: number;
 >bar : number | undefined
 }
@@ -206,7 +204,6 @@ interface Foo {
 function performFoo({ bar }: Foo = {}) {
 >performFoo : ({ bar }?: Foo) => void
 >bar : number | undefined
->Foo : Foo
 >{} : {}
 
   useBar(bar);
@@ -225,15 +222,14 @@ performFoo();
 
 function performFoo2({ bar = null }: Foo = {}) {
 >performFoo2 : ({ bar }?: Foo) => void
->bar : number | null
+>bar : number
 >null : null
->Foo : Foo
 >{} : {}
 
   useBar2(bar);
 >useBar2(bar) : void
 >useBar2 : (bar: number | undefined) => void
->bar : number | null
+>bar : number
 }
 
 declare function useBar2(bar: number | undefined): void;

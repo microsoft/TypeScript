@@ -272,28 +272,28 @@ module ts {
 >Signature : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
 
             return this.parameters.length === other.parameters.length &&
->this.parameters.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.parameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
 >this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
 >parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
->other.parameters.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.parameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >other.parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
 >other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
 >parameters : Symbol(Signature.parameters, Decl(unspecializedConstraints.ts, 83, 59))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                 this.typeParameters.length === other.typeParameters.length &&
->this.typeParameters.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>this.typeParameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >this.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
 >this : Symbol(Signature, Decl(unspecializedConstraints.ts, 80, 5))
 >typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
->other.typeParameters.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>other.typeParameters.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >other.typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
 >other : Symbol(other, Decl(unspecializedConstraints.ts, 86, 23))
 >typeParameters : Symbol(Signature.typeParameters, Decl(unspecializedConstraints.ts, 83, 20))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
                 arrayEquals(this.parameters, other.parameters) &&
 >arrayEquals : Symbol(arrayEquals, Decl(unspecializedConstraints.ts, 132, 5))
@@ -396,11 +396,11 @@ module ts {
    
     var hasOwnProperty = Object.prototype.hasOwnProperty;
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
->Object.prototype.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
->Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->prototype : Symbol(ObjectConstructor.prototype, Decl(lib.d.ts, --, --))
->hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.d.ts, --, --))
+>Object.prototype.hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
+>Object.prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>prototype : Symbol(ObjectConstructor.prototype, Decl(lib.es5.d.ts, --, --))
+>hasOwnProperty : Symbol(Object.hasOwnProperty, Decl(lib.es5.d.ts, --, --))
 
     function getProperty<T>(map: Map<T>, key: string): T {
 >getProperty : Symbol(getProperty, Decl(unspecializedConstraints.ts, 115, 57))
@@ -412,9 +412,9 @@ module ts {
 >T : Symbol(T, Decl(unspecializedConstraints.ts, 117, 25))
 
         if (!hasOwnProperty.call(map, key)) return undefined;
->hasOwnProperty.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 117, 28))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 117, 40))
 >undefined : Symbol(undefined)
@@ -433,9 +433,9 @@ module ts {
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
 
         return hasOwnProperty.call(map, key);
->hasOwnProperty.call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>hasOwnProperty.call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >hasOwnProperty : Symbol(hasOwnProperty, Decl(unspecializedConstraints.ts, 115, 7))
->call : Symbol(Function.call, Decl(lib.d.ts, --, --))
+>call : Symbol(Function.call, Decl(lib.es5.d.ts, --, --))
 >map : Symbol(map, Decl(unspecializedConstraints.ts, 122, 28))
 >key : Symbol(key, Decl(unspecializedConstraints.ts, 122, 40))
     }
@@ -452,9 +452,9 @@ module ts {
 
         var len = a.length;
 >len : Symbol(len, Decl(unspecializedConstraints.ts, 127, 11))
->a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unspecializedConstraints.ts, 126, 48))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         for (var i = 0; i < len; i++) {
 >i : Symbol(i, Decl(unspecializedConstraints.ts, 128, 16))
@@ -484,14 +484,14 @@ module ts {
 
         var len = a.length;
 >len : Symbol(len, Decl(unspecializedConstraints.ts, 135, 11))
->a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unspecializedConstraints.ts, 134, 46))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         if (b.length !== len) return false;
->b.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(unspecializedConstraints.ts, 134, 53))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >len : Symbol(len, Decl(unspecializedConstraints.ts, 135, 11))
 
         for (var i = 0; i < len; i++) {
@@ -523,14 +523,14 @@ module ts {
 
         var len = a.length;
 >len : Symbol(len, Decl(unspecializedConstraints.ts, 144, 11))
->a.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>a.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(unspecializedConstraints.ts, 143, 44))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
         if (b.length !== len) return false;
->b.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>b.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(unspecializedConstraints.ts, 143, 51))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >len : Symbol(len, Decl(unspecializedConstraints.ts, 144, 11))
 
         for (var i = 0; i < len; i++) {

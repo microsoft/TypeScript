@@ -131,15 +131,12 @@ class Derived2 extends Base { baz: string; }
 
 var base: Base;
 >base : Base
->Base : Base
 
 var derived: Derived;
 >derived : Derived
->Derived : Derived
 
 var derived2: Derived2;
 >derived2 : Derived2
->Derived2 : Derived2
 
 module Derived {
 >Derived : typeof Derived
@@ -242,25 +239,21 @@ module WithContextualType {
     // no errors
     var a: Base[] = [derived, derived2];
 >a : Base[]
->Base : Base
 >[derived, derived2] : (Derived | Derived2)[]
 >derived : Derived
 >derived2 : Derived2
 
     var b: Derived[] = [null];
 >b : Derived[]
->Derived : Derived
 >[null] : null[]
 >null : null
 
     var c: Derived[] = [];
 >c : Derived[]
->Derived : Derived
 >[] : undefined[]
 
     var d: { (): Base }[] = [() => derived, () => derived2];
 >d : (() => Base)[]
->Base : Base
 >[() => derived, () => derived2] : ((() => Derived) | (() => Derived2))[]
 >() => derived : () => Derived
 >derived : Derived
@@ -270,12 +263,8 @@ module WithContextualType {
 
 function foo<T, U>(t: T, u: U) {
 >foo : <T, U>(t: T, u: U) => void
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
     var a = [t, t]; // T[]
 >a : T[]
@@ -322,14 +311,8 @@ function foo<T, U>(t: T, u: U) {
 
 function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 >foo2 : <T extends Base, U extends Derived>(t: T, u: U) => void
->T : T
->Base : Base
->U : U
->Derived : Derived
 >t : T
->T : T
 >u : U
->U : U
 
     var a = [t, t]; // T[]
 >a : T[]
@@ -400,14 +383,8 @@ function foo2<T extends Base, U extends Derived>(t: T, u: U) {
 
 function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 >foo3 : <T extends Derived, U extends Derived>(t: T, u: U) => void
->T : T
->Derived : Derived
->U : U
->Derived : Derived
 >t : T
->T : T
 >u : U
->U : U
 
     var a = [t, t]; // T[]
 >a : T[]
@@ -478,14 +455,8 @@ function foo3<T extends Derived, U extends Derived>(t: T, u: U) {
 
 function foo4<T extends Base, U extends Base>(t: T, u: U) {
 >foo4 : <T extends Base, U extends Base>(t: T, u: U) => void
->T : T
->Base : Base
->U : U
->Base : Base
 >t : T
->T : T
 >u : U
->U : U
 
     var a = [t, t]; // T[]
 >a : T[]
@@ -555,7 +526,6 @@ function foo4<T extends Base, U extends Base>(t: T, u: U) {
 
     var k: Base[] = [t, u];
 >k : Base[]
->Base : Base
 >[t, u] : (T | U)[]
 >t : T
 >u : U

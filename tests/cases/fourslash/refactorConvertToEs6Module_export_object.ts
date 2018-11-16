@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////module.exports = {
@@ -10,6 +11,9 @@
 ////    h() {},
 ////    C: class {},
 ////};
+
+// @Filename: /b.js
+////const a = require("./a.js");
 
 verify.codeFix({
     description: "Convert to ES6 module",

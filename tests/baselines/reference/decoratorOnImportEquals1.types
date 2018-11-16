@@ -1,10 +1,7 @@
 === tests/cases/conformance/decorators/invalid/decoratorOnImportEquals1.ts ===
 declare function dec<T>(target: T): T;
 >dec : <T>(target: T) => T
->T : T
 >target : T
->T : T
->T : T
 
 module M1 {
 >M1 : typeof M1
@@ -14,8 +11,6 @@ module M1 {
 }
 
 module M2 {
->M2 : any
-
     @dec
 >dec : <T>(target: T) => T
 

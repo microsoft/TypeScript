@@ -1,6 +1,6 @@
 === tests/cases/compiler/types.d.ts ===
 declare module "tslib" { export const __exportStar: any; export const __importDefault: any; export const __importStar: any; }
->"tslib" : typeof "tslib"
+>"tslib" : typeof import("tslib")
 >__exportStar : any
 >__importDefault : any
 >__importStar : any

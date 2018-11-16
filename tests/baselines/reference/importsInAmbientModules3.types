@@ -1,6 +1,6 @@
 === tests/cases/compiler/main.ts ===
 declare module "M" {
->"M" : typeof "M"
+>"M" : typeof import("M")
 
     import C = require("external");
 >C : typeof C

@@ -17,21 +17,15 @@ class C {
 
 class D<T, U> {
 >D : D<T, U>
->T : T
->U : U
 
     constructor(x: T, y: U);
 >x : T
->T : T
 >y : U
->U : U
 
     constructor(x: T = 1, public y: U = x) { // error
 >x : T
->T : T
 >1 : 1
 >y : U
->U : U
 >x : T
 
         var z = x;
@@ -42,15 +36,12 @@ class D<T, U> {
 
 class E<T extends Date> {
 >E : E<T>
->T : T
->Date : Date
 
     constructor(x);
 >x : any
 
     constructor(x: T = new Date()) { // error
 >x : T
->T : T
 >new Date() : Date
 >Date : DateConstructor
 

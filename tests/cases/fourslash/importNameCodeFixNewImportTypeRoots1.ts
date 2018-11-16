@@ -16,8 +16,9 @@
 ////     }
 //// }
 
+// "typeRoots" does not affect module resolution, though "baseUrl" does. Importing from "random" would be a compile error.
 verify.importFixAtPosition([
-`import { foo } from "random";
+`import { foo } from "types/random";
 
-foo();`
+foo();`,
 ]);

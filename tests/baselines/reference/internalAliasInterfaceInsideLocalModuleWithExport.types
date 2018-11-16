@@ -1,9 +1,6 @@
 === tests/cases/compiler/internalAliasInterfaceInsideLocalModuleWithExport.ts ===
 export module a {
->a : any
-
     export interface I {
->I : I
     }
 }
 
@@ -17,6 +14,5 @@ export module c {
 
     export var x: b;
 >x : b
->b : b
 }
 

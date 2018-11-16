@@ -14,10 +14,6 @@ class C2 {
 }
 
 interface A extends C, C2 { // error
->A : A
->C : C
->C2 : C2
-
     y: string;
 >y : string
 }

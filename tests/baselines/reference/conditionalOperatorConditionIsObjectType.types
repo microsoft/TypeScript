@@ -2,7 +2,6 @@
 //Cond ? Expr1 : Expr2,  Cond is of object type, Expr1 and Expr2 have the same type
 var condObject: Object;
 >condObject : Object
->Object : Object
 
 var exprAny1: any;
 >exprAny1 : any
@@ -18,7 +17,6 @@ var exprString1: string;
 
 var exprIsObject1: Object;
 >exprIsObject1 : Object
->Object : Object
 
 var exprAny2: any;
 >exprAny2 : any
@@ -34,7 +32,6 @@ var exprString2: string;
 
 var exprIsObject2: Object;
 >exprIsObject2 : Object
->Object : Object
 
 function foo() { };
 >foo : () => void

@@ -1,12 +1,10 @@
 === tests/cases/compiler/callOverloads4.ts ===
 function Foo():Foo; // error
 >Foo : { (): any; (s: string): any; }
->Foo : No type information available!
 
 function Foo(s:string):Foo; // error
 >Foo : { (): any; (s: string): any; }
 >s : string
->Foo : No type information available!
 
 class Foo { // error
 >Foo : Foo

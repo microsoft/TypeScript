@@ -7,7 +7,6 @@ import * as a from "a";
 
 const o: Foo = a.o;
 >o : Foo
->Foo : Foo
 >a.o : Foo
 >a : typeof a
 >o : Foo
@@ -18,7 +17,6 @@ import Foo from "foo/Foo";
 
 export const o: Foo;
 >o : Foo
->Foo : Foo
 
 === /node_modules/a/node_modules/foo/Foo.d.ts ===
 export default class Foo {

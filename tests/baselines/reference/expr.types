@@ -1,6 +1,5 @@
 === tests/cases/compiler/expr.ts ===
 interface I {
->I : I
 }
 
 enum E {
@@ -32,11 +31,9 @@ function f() {
 
     var i:I;
 >i : I
->I : I
 
     var e:E;
 >e : E
->E : E
 
     n&&a;
 >n&&a : any

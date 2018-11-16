@@ -14,8 +14,6 @@ function f(x) { return x; }
 
 function g<T, U>(x) { return f(x); }
 >g : <T, U>(x: any) => any
->T : T
->U : U
 >x : any
 >f(x) : any
 >f : (x: any) => any
@@ -24,8 +22,6 @@ function g<T, U>(x) { return f(x); }
 g<A, B>(7)
 >g<A, B>(7) : any
 >g : <T, U>(x: any) => any
->A : A
->B : B
 >7 : 7
 
 f(g<A, B>(7));
@@ -33,8 +29,6 @@ f(g<A, B>(7));
 >f : (x: any) => any
 >g<A, B>(7) : any
 >g : <T, U>(x: any) => any
->A : A
->B : B
 >7 : 7
 
 f(g < A, B > 7);

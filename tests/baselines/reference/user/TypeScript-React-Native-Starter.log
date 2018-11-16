@@ -1,0 +1,8 @@
+Exit Code: 1
+Standard output:
+node_modules/@types/react-native/index.d.ts(3895,26): error TS2693: 'setImmediate' only refers to a type, but is being used as a value here.
+node_modules/@types/react-native/index.d.ts(3896,28): error TS2693: 'clearImmediate' only refers to a type, but is being used as a value here.
+
+
+
+Standard error:

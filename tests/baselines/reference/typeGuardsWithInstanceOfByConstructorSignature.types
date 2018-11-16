@@ -1,23 +1,16 @@
 === tests/cases/conformance/expressions/typeGuards/typeGuardsWithInstanceOfByConstructorSignature.ts ===
 interface AConstructor {
->AConstructor : AConstructor
-
     new (): A;
->A : A
 }
 interface A {
->A : A
-
     foo: string;
 >foo : string
 }
 declare var A: AConstructor;
 >A : AConstructor
->AConstructor : AConstructor
 
 var obj1: A | string;
 >obj1 : string | A
->A : A
 
 if (obj1 instanceof A) { // narrowed to A.
 >obj1 instanceof A : boolean
@@ -56,28 +49,17 @@ if (obj2 instanceof A) {
 
 // a construct signature with generics
 interface BConstructor {
->BConstructor : BConstructor
-
     new <T>(): B<T>;
->T : T
->B : B<T>
->T : T
 }
 interface B<T> {
->B : B<T>
->T : T
-
     foo: T;
 >foo : T
->T : T
 }
 declare var B: BConstructor;
 >B : BConstructor
->BConstructor : BConstructor
 
 var obj3: B<number> | string;
 >obj3 : string | B<number>
->B : B<T>
 
 if (obj3 instanceof B) { // narrowed to B<number>.
 >obj3 instanceof B : boolean
@@ -138,19 +120,13 @@ if (obj4 instanceof B) {
 
 // has multiple construct signature
 interface CConstructor {
->CConstructor : CConstructor
-
     new (value: string): C1;
 >value : string
->C1 : C1
 
     new (value: number): C2;
 >value : number
->C2 : C2
 }
 interface C1 {
->C1 : C1
-
     foo: string;
 >foo : string
 
@@ -161,8 +137,6 @@ interface C1 {
 >bar1 : number
 }
 interface C2 {
->C2 : C2
-
     foo: string;
 >foo : string
 
@@ -174,12 +148,9 @@ interface C2 {
 }
 declare var C: CConstructor;
 >C : CConstructor
->CConstructor : CConstructor
 
 var obj5: C1 | A;
 >obj5 : A | C1
->C1 : C1
->A : A
 
 if (obj5 instanceof C) { // narrowed to C1|C2.
 >obj5 instanceof C : boolean
@@ -233,18 +204,14 @@ if (obj6 instanceof C) {
 
 // with object type literal
 interface D {
->D : D
-
     foo: string;
 >foo : string
 }
 declare var D: { new (): D; };
 >D : new () => D
->D : D
 
 var obj7: D | string;
 >obj7 : string | D
->D : D
 
 if (obj7 instanceof D) { // narrowed to D.
 >obj7 instanceof D : boolean
@@ -283,15 +250,9 @@ if (obj8 instanceof D) {
 
 // a construct signature that returns a union type
 interface EConstructor {
->EConstructor : EConstructor
-
     new (): E1 | E2;
->E1 : E1
->E2 : E2
 }
 interface E1 {
->E1 : E1
-
     foo: string;
 >foo : string
 
@@ -299,8 +260,6 @@ interface E1 {
 >bar1 : number
 }
 interface E2 {
->E2 : E2
-
     foo: string;
 >foo : string
 
@@ -309,12 +268,9 @@ interface E2 {
 }
 declare var E: EConstructor;
 >E : EConstructor
->EConstructor : EConstructor
 
 var obj9: E1 | A;
 >obj9 : A | E1
->E1 : E1
->A : A
 
 if (obj9 instanceof E) { // narrowed to E1 | E2
 >obj9 instanceof E : boolean
@@ -363,13 +319,9 @@ if (obj10 instanceof E) {
 
 // a construct signature that returns any
 interface FConstructor {
->FConstructor : FConstructor
-
     new (): any;
 }
 interface F {
->F : F
-
     foo: string;
 >foo : string
 
@@ -378,11 +330,9 @@ interface F {
 }
 declare var F: FConstructor;
 >F : FConstructor
->FConstructor : FConstructor
 
 var obj11: F | string;
 >obj11 : string | F
->F : F
 
 if (obj11 instanceof F) { // can't type narrowing, construct signature returns any.
 >obj11 instanceof F : boolean
@@ -421,39 +371,28 @@ if (obj12 instanceof F) {
 
 // a type with a prototype, it overrides the construct signature
 interface GConstructor {
->GConstructor : GConstructor
-
     prototype: G1; // high priority
 >prototype : G1
->G1 : G1
 
     new (): G2;    // low priority
->G2 : G2
 }
 interface G1 {
->G1 : G1
-
     foo1: number;
 >foo1 : number
 }
 interface G2 {
->G2 : G2
-
     foo2: boolean;
 >foo2 : boolean
 }
 declare var G: GConstructor;
 >G : GConstructor
->GConstructor : GConstructor
 
 var obj13: G1 | G2;
->obj13 : G2 | G1
->G1 : G1
->G2 : G2
+>obj13 : G1 | G2
 
 if (obj13 instanceof G) { // narrowed to G1. G1 is return type of prototype property.
 >obj13 instanceof G : boolean
->obj13 : G2 | G1
+>obj13 : G1 | G2
 >G : GConstructor
 
     obj13.foo1;
@@ -488,27 +427,20 @@ if (obj14 instanceof G) {
 
 // a type with a prototype that has any type
 interface HConstructor {
->HConstructor : HConstructor
-
     prototype: any; // high priority, but any type is ignored. interface has implicit `prototype: any`.
 >prototype : any
 
     new (): H;      // low priority
->H : H
 }
 interface H {
->H : H
-
     foo: number;
 >foo : number
 }
 declare var H: HConstructor;
 >H : HConstructor
->HConstructor : HConstructor
 
 var obj15: H | string;
 >obj15 : string | H
->H : H
 
 if (obj15 instanceof H) { // narrowed to H.
 >obj15 instanceof H : boolean

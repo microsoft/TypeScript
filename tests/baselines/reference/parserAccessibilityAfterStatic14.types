@@ -4,6 +4,5 @@ class Outer
 {
 static public<T>() {}
 >public : <T>() => void
->T : T
 }
 

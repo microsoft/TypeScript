@@ -4,5 +4,4 @@ class C {
 
   get foo<T>() { }
 >foo : void
->T : T
 }

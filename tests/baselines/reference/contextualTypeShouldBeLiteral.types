@@ -1,7 +1,5 @@
 === tests/cases/compiler/contextualTypeShouldBeLiteral.ts ===
 interface X {
->X : X
-
     type: 'x';
 >type : "x"
 
@@ -13,8 +11,6 @@ interface X {
 }
 
 interface Y {
->Y : Y
-
     type: 'y';
 >type : "y"
 
@@ -28,8 +24,6 @@ interface Y {
 function foo(bar: X | Y) { }
 >foo : (bar: X | Y) => void
 >bar : X | Y
->X : X
->Y : Y
 
 foo({
 >foo({    type: 'y',    value: 'done',    method() {        this;        this.type;        this.value;    }}) : void
@@ -63,8 +57,6 @@ foo({
 });
 
 interface X2 {
->X2 : X2
-
     type1: 'x';
 >type1 : "x"
 
@@ -76,8 +68,6 @@ interface X2 {
 }
 
 interface Y2 {
->Y2 : Y2
-
     type2: 'y';
 >type2 : "y"
 
@@ -91,8 +81,6 @@ interface Y2 {
 function foo2(bar: X2 | Y2) { }
 >foo2 : (bar: X2 | Y2) => void
 >bar : X2 | Y2
->X2 : X2
->Y2 : Y2
 
 foo2({
 >foo2({    type2: 'y',    value: 'done',    method() {        this;        this.value;    }}) : void
@@ -121,8 +109,6 @@ foo2({
 });
 
 interface X3 {
->X3 : X3
-
     type: 'x';
 >type : "x"
 
@@ -134,8 +120,6 @@ interface X3 {
 }
 
 interface Y3 {
->Y3 : Y3
-
     type: 'y';
 >type : "y"
 
@@ -148,8 +132,6 @@ interface Y3 {
 
 let xy: X3 | Y3 = {
 >xy : X3 | Y3
->X3 : X3
->Y3 : Y3
 >{    type: 'y',    value: 11,    ytra: 12} : { type: "y"; value: 11; ytra: number; }
 
     type: 'y',
@@ -171,8 +153,6 @@ xy;
 
 
 interface LikeA {
->LikeA : LikeA
-
     x: 'x';
 >x : "x"
 
@@ -187,8 +167,6 @@ interface LikeA {
 }
 
 interface LikeB {
->LikeB : LikeB
-
     x: 'xx';
 >x : "xx"
 
@@ -204,8 +182,6 @@ interface LikeB {
 
 let xyz: LikeA | LikeB = {
 >xyz : LikeA | LikeB
->LikeA : LikeA
->LikeB : LikeB
 >{    x: 'x',    y: 'y',    value: "foo",    method() {        this;        this.x;        this.y;        this.value;    }} : { x: "x"; y: "y"; value: string; method(): void; }
 
     x: 'x',

@@ -20,28 +20,20 @@ class D {
 
 function foo<T, U extends T>(t: T, t2: U) {
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->T : T
->U : U
->T : T
 >t : T
->T : T
 >t2 : U
->U : U
 
     return (x: T) => t2;
 >(x: T) => t2 : (x: T) => U
 >x : T
->T : T
 >t2 : U
 }
 
 var c: C;
 >c : C
->C : C
 
 var d: D;
 >d : D
->D : D
 
 var r2 = foo(d, c); // the constraints are self-referencing, no downstream error
 >r2 : any
@@ -60,16 +52,11 @@ var r9 = foo(() => 1, () => { }); // the constraints are self-referencing, no do
 
 function other<T, U extends T>() {
 >other : <T, U extends T>() => void
->T : T
->U : U
->T : T
 
     var r5 = foo<T, U>(c, d); // error
 >r5 : any
 >foo<T, U>(c, d) : any
 >foo : <T, U extends T>(t: T, t2: U) => (x: T) => U
->T : T
->U : U
 >c : C
 >d : D
 }

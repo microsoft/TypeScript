@@ -1,15 +1,13 @@
 === tests/cases/compiler/inOperatorWithGeneric.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo(x:T) {
 >foo : (x: T) => void
 >x : T
->T : T
 
         for (var p in x) {
->p : keyof T
+>p : Extract<keyof T, string>
 >x : T
         }
     }

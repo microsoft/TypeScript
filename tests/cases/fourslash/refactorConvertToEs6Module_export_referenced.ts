@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////exports.x = 0;
@@ -11,8 +12,8 @@
 ////exports.y;
 ////
 ////exports.z = 2;
-////function f(z) {
-////    exports.z;
+////exports.f = function(z) {
+////    exports.z; z;
 ////}
 
 verify.codeFix({
@@ -28,7 +29,7 @@ _y;
 
 const _z = 2;
 export { _z as z };
-function f(z) {
-    _z;
+export function f(z) {
+    _z; z;
 }`,
 });

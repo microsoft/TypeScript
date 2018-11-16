@@ -2,8 +2,6 @@
 // Binding for an import statement in a typeref position is being added to the global scope
 // Shouldn't compile b.B is not defined in C
 module A {
->A : any
-
     import b = B;
 >b : typeof b
 >B : typeof b
@@ -34,6 +32,5 @@ module C {
     function hello(): b.B { return null; }
 >hello : () => any
 >b : any
->B : No type information available!
 >null : null
 }

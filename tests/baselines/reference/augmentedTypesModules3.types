@@ -1,8 +1,6 @@
 === tests/cases/compiler/augmentedTypesModules3.ts ===
 //// module then class
 module m3 { }
->m3 : typeof m3
-
 class m3 { } // ok since the module is not instantiated
 >m3 : m3
 

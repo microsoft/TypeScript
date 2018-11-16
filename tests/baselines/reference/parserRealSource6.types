@@ -12,14 +12,11 @@ module TypeScript {
 
         public script: Script = null;
 >script : any
->Script : No type information available!
 >null : null
 
         constructor (public scopeChain: ScopeChain, public checker: TypeChecker) {
 >scopeChain : any
->ScopeChain : No type information available!
 >checker : any
->TypeChecker : No type information available!
         }
     }
 
@@ -28,17 +25,14 @@ module TypeScript {
 
         public type: Type = null;
 >type : any
->Type : No type information available!
 >null : null
 
         public ast: AST = null;
 >ast : any
->AST : No type information available!
 >null : null
 
         public scope: SymbolScope;
 >scope : any
->SymbolScope : No type information available!
 
         public options = new AstWalkOptions();
 >options : any
@@ -47,10 +41,8 @@ module TypeScript {
 
         constructor (public flow: TypeFlow, public pos: number, public matchFlag: ASTFlags) {
 >flow : any
->TypeFlow : No type information available!
 >pos : number
 >matchFlag : any
->ASTFlags : No type information available!
         }
     }
 
@@ -59,17 +51,14 @@ module TypeScript {
 
         public scopeGetter: () => SymbolScope = null;
 >scopeGetter : () => any
->SymbolScope : No type information available!
 >null : null
 
         public objectLiteralScopeGetter: () => SymbolScope = null;
 >objectLiteralScopeGetter : () => any
->SymbolScope : No type information available!
 >null : null
 
         public scopeStartAST: AST = null;
 >scopeStartAST : any
->AST : No type information available!
 >null : null
 
         public skipNextFuncDeclForClass = false;
@@ -78,17 +67,14 @@ module TypeScript {
 
         public deepestModuleDecl: ModuleDeclaration = null;
 >deepestModuleDecl : any
->ModuleDeclaration : No type information available!
 >null : null
 
         public enclosingClassDecl: TypeDeclaration = null;
 >enclosingClassDecl : any
->TypeDeclaration : No type information available!
 >null : null
 
         public enclosingObjectLit: UnaryExpression = null;
 >enclosingObjectLit : any
->UnaryExpression : No type information available!
 >null : null
 
         public publicsOnly = true;
@@ -101,19 +87,15 @@ module TypeScript {
 
         private scriptFragment: Script;
 >scriptFragment : any
->Script : No type information available!
 
         constructor (public logger: ILogger,
 >logger : any
->ILogger : No type information available!
 
                     public script: Script,
 >script : any
->Script : No type information available!
 
                     public text: ISourceText,
 >text : any
->ISourceText : No type information available!
 
                     public pos: number,
 >pos : number
@@ -124,7 +106,6 @@ module TypeScript {
 
         public getScope(): SymbolScope {
 >getScope : () => any
->SymbolScope : No type information available!
 
             return this.scopeGetter();
 >this.scopeGetter() : any
@@ -135,7 +116,6 @@ module TypeScript {
 
         public getObjectLiteralScope(): SymbolScope {
 >getObjectLiteralScope : () => any
->SymbolScope : No type information available!
 
             return this.objectLiteralScopeGetter();
 >this.objectLiteralScopeGetter() : any
@@ -166,7 +146,6 @@ module TypeScript {
 
         public getScriptFragmentStartAST(): AST {
 >getScriptFragmentStartAST : () => any
->AST : No type information available!
 
             return this.scopeStartAST;
 >this.scopeStartAST : any
@@ -188,7 +167,6 @@ module TypeScript {
 
         public getScriptFragment(): Script {
 >getScriptFragment : () => any
->Script : No type information available!
 
             if (this.scriptFragment == null) {
 >this.scriptFragment == null : boolean
@@ -258,15 +236,11 @@ module TypeScript {
     export function preFindMemberScope(ast: AST, parent: AST, walker: IAstWalker) {
 >preFindMemberScope : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var memScope: MemberScopeContext = walker.state;
 >memScope : MemberScopeContext
->MemberScopeContext : MemberScopeContext
 >walker.state : any
 >walker : any
 >state : any
@@ -354,41 +328,32 @@ module TypeScript {
     }
 
     export function pushTypeCollectionScope(container: Symbol,
->pushTypeCollectionScope : (container: any, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
->container : any
->Symbol : No type information available!
+>pushTypeCollectionScope : (container: Symbol, valueMembers: any, ambientValueMembers: any, enclosedTypes: any, ambientEnclosedTypes: any, context: TypeCollectionContext, thisType: any, classType: any, moduleDecl: any) => void
+>container : Symbol
 
         valueMembers: ScopedMembers,
 >valueMembers : any
->ScopedMembers : No type information available!
 
         ambientValueMembers: ScopedMembers,
 >ambientValueMembers : any
->ScopedMembers : No type information available!
 
         enclosedTypes: ScopedMembers,
 >enclosedTypes : any
->ScopedMembers : No type information available!
 
         ambientEnclosedTypes: ScopedMembers,
 >ambientEnclosedTypes : any
->ScopedMembers : No type information available!
 
         context: TypeCollectionContext,
 >context : TypeCollectionContext
->TypeCollectionContext : TypeCollectionContext
 
         thisType: Type,
 >thisType : any
->Type : No type information available!
 
         classType: Type,
 >classType : any
->Type : No type information available!
 
         moduleDecl: ModuleDeclaration) {
 >moduleDecl : any
->ModuleDeclaration : No type information available!
 
         var builder = new SymbolScopeBuilder(valueMembers, ambientValueMembers, enclosedTypes, ambientEnclosedTypes, null, container);
 >builder : any
@@ -399,14 +364,13 @@ module TypeScript {
 >enclosedTypes : any
 >ambientEnclosedTypes : any
 >null : null
->container : any
+>container : Symbol
 
         var chain: ScopeChain = new ScopeChain(container, context.scopeChain, builder);
 >chain : any
->ScopeChain : No type information available!
 >new ScopeChain(container, context.scopeChain, builder) : any
 >ScopeChain : any
->container : any
+>container : Symbol
 >context.scopeChain : any
 >context : TypeCollectionContext
 >scopeChain : any
@@ -444,7 +408,6 @@ module TypeScript {
     export function popTypeCollectionScope(context: TypeCollectionContext) {
 >popTypeCollectionScope : (context: TypeCollectionContext) => void
 >context : TypeCollectionContext
->TypeCollectionContext : TypeCollectionContext
 
         context.scopeChain = context.scopeChain.previous;
 >context.scopeChain = context.scopeChain.previous : any
@@ -461,15 +424,11 @@ module TypeScript {
     export function preFindEnclosingScope(ast: AST, parent: AST, walker: IAstWalker) {
 >preFindEnclosingScope : (ast: any, parent: any, walker: any) => any
 >ast : any
->AST : No type information available!
 >parent : any
->AST : No type information available!
 >walker : any
->IAstWalker : No type information available!
 
         var context: EnclosingScopeContext = walker.state;
 >context : EnclosingScopeContext
->EnclosingScopeContext : EnclosingScopeContext
 >walker.state : any
 >walker : any
 >state : any
@@ -540,7 +499,6 @@ module TypeScript {
                     var script = <Script>ast;
 >script : any
 ><Script>ast : any
->Script : No type information available!
 >ast : any
 
                     context.scopeGetter = function () {
@@ -627,7 +585,6 @@ module TypeScript {
 >context : EnclosingScopeContext
 >enclosingClassDecl : any
 ><TypeDeclaration>ast : any
->TypeDeclaration : No type information available!
 >ast : any
 
                     break;
@@ -640,7 +597,6 @@ module TypeScript {
                     var objectLit = <UnaryExpression>ast;
 >objectLit : any
 ><UnaryExpression>ast : any
->UnaryExpression : No type information available!
 >ast : any
 
                     // Only consider target-typed object literals
@@ -698,7 +654,6 @@ module TypeScript {
 >context : EnclosingScopeContext
 >deepestModuleDecl : any
 ><ModuleDeclaration>ast : any
->ModuleDeclaration : No type information available!
 >ast : any
 
                     context.scopeGetter = function () {
@@ -777,7 +732,6 @@ module TypeScript {
                     var funcDecl = <FuncDecl>ast;
 >funcDecl : any
 ><FuncDecl>ast : any
->FuncDecl : No type information available!
 >ast : any
 
                     if (context.skipNextFuncDeclForClass) {
@@ -907,14 +861,10 @@ module TypeScript {
     export function findEnclosingScopeAt(logger: ILogger, script: Script, text: ISourceText, pos: number, isMemberCompletion: boolean): EnclosingScopeContext {
 >findEnclosingScopeAt : (logger: any, script: any, text: any, pos: number, isMemberCompletion: boolean) => EnclosingScopeContext
 >logger : any
->ILogger : No type information available!
 >script : any
->Script : No type information available!
 >text : any
->ISourceText : No type information available!
 >pos : number
 >isMemberCompletion : boolean
->EnclosingScopeContext : EnclosingScopeContext
 
         var context = new EnclosingScopeContext(logger, script, text, pos, isMemberCompletion);
 >context : EnclosingScopeContext

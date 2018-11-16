@@ -2,15 +2,15 @@
 
 //// class class1 extends class1 {
 ////     [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() { }     // r0
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string; // r1
+////     [|{| "isDefinition": true |}propName|]: string; // r1
 //// }
 //// interface interface1 extends interface1 {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|](): void;   // r2
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;  // r3
+////     [|{| "isDefinition": true |}doStuff|](): void;   // r2
+////     [|{| "isDefinition": true |}propName|]: string;  // r3
 //// }
 //// class class2 extends class1 implements interface1 {
 ////     [|{| "isWriteAccess": true, "isDefinition": true |}doStuff|]() { }      // r4
-////     [|{| "isWriteAccess": true, "isDefinition": true |}propName|]: string;  // r5
+////     [|{| "isDefinition": true |}propName|]: string;  // r5
 //// }
 ////
 //// var v: class2;

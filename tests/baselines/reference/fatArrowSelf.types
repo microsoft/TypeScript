@@ -3,8 +3,6 @@ module Events {
 >Events : typeof Events
 
     export interface ListenerCallback {
->ListenerCallback : ListenerCallback
-
         (value:any):void;
 >value : any
     }
@@ -15,7 +13,6 @@ module Events {
 >addListener : (type: string, listener: ListenerCallback) => void
 >type : string
 >listener : ListenerCallback
->ListenerCallback : ListenerCallback
          }
     }
 }
@@ -29,7 +26,6 @@ module Consumer {
         constructor (private emitter: Events.EventEmitter) { }
 >emitter : Events.EventEmitter
 >Events : any
->EventEmitter : Events.EventEmitter
 
         private register() {
 >register : () => void

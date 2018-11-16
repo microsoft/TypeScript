@@ -33,5 +33,4 @@ var d = "foo" === ("bar" as EnhancedString);
 >("bar" as EnhancedString) : EnhancedString
 >"bar" as EnhancedString : EnhancedString
 >"bar" : "bar"
->EnhancedString : EnhancedString
 

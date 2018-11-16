@@ -27,10 +27,8 @@ class MyClass {
     db: db.db;
 >db : any
 >db : any
->db : any
 
     constructor(db: db.db) {
->db : any
 >db : any
 >db : any
 

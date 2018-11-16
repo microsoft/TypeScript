@@ -77,11 +77,9 @@ module Generics {
 
     class C<T> {
 >C : C<T>
->T : T
 
         constructor(x: T) { }
 >x : T
->T : T
     }
 
     var c = new C(); // error
@@ -97,18 +95,13 @@ module Generics {
 
     class C2<T,U> {
 >C2 : C2<T, U>
->T : T
->U : U
 
         constructor(x: T);
 >x : T
->T : T
 
         constructor(x: T, y: U);
 >x : T
->T : T
 >y : U
->U : U
 
         constructor(x: any) { }
 >x : any
@@ -134,11 +127,7 @@ module Generics {
 
     class D<T, U> extends C2<T, U> { }
 >D : D<T, U>
->T : T
->U : U
 >C2 : C2<T, U>
->T : T
->U : U
 
     var d = new D(); // error
 >d : any

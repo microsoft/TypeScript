@@ -3,8 +3,8 @@
 >"use strict" : "use strict"
 
 var a = {
->a : { [x: string]: any; a: number; b: number; }
->{    a: "hello", // error    b: 10,    a: 10 // error} : { [x: string]: any; a: number; b: number; }
+>a : { a: number; b: number; }
+>{    a: "hello", // error    b: 10,    a: 10 // error} : { a: number; b: number; }
 
     a: "hello", // error
 >a : string
@@ -25,7 +25,7 @@ var let = 10; // error
 
 delete a; // error
 >delete a : boolean
->a : { [x: string]: any; a: number; b: number; }
+>a : { a: number; b: number; }
 
 try {
 } catch (eval) { // error
@@ -36,7 +36,7 @@ function arguments() { // error
 }
 
 with (a) {
->a : { [x: string]: any; a: number; b: number; }
+>a : { a: number; b: number; }
 
     b = 10;
 >b = 10 : any
