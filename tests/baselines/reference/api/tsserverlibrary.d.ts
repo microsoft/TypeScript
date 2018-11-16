@@ -8210,7 +8210,6 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
-        private readMapFile;
         private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**

@@ -42,12 +42,12 @@ namespace ts {
             }
             else if (host.readFile) {
                 const file = getSourceFileLike(fileName);
-                mapper = file && ts.getDocumentPositionMapper({
-                    getSourceFileLike,
-                    getCanonicalFileName,
-                    log: s => host.log(s),
-                    readMapFile: f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
-                }, fileName, getLineInfo(file.text, getLineStarts(file)));
+                mapper = file && ts.getDocumentPositionMapper(
+                    { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
+                    fileName,
+                    getLineInfo(file.text, getLineStarts(file)),
+                    f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
+                );
             }
             documentPositionMappers.set(path, mapper || identitySourceMapConsumer);
             return mapper || identitySourceMapConsumer;
@@ -118,7 +118,6 @@ namespace ts {
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
-            // TODO:: shkamat
             const file = getSourceFileLike(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
@@ -129,11 +128,11 @@ namespace ts {
         }
     }
 
-    export interface GetDocumentPositionMapperHost extends DocumentPositionMapperHost {
-        readMapFile(fileName: string): string | undefined;
-    }
-
-    export function getDocumentPositionMapper(host: GetDocumentPositionMapperHost, generatedFileName: string, generatedFileLineInfo: LineInfo) {
+    export function getDocumentPositionMapper(
+        host: DocumentPositionMapperHost,
+        generatedFileName: string,
+        generatedFileLineInfo: LineInfo,
+        readMapFile: (fileName: string) => string | undefined) {
         let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
         if (mapFileName) {
             const match = base64UrlRegExp.exec(mapFileName);
@@ -153,7 +152,7 @@ namespace ts {
         possibleMapLocations.push(generatedFileName + ".map");
         for (const location of possibleMapLocations) {
             const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
-            const mapFileContents = host.readMapFile(mapFileName);
+            const mapFileContents = readMapFile(mapFileName);
             if (mapFileContents) {
                 return convertDocumentToSourceMapper(host, mapFileContents, mapFileName);
             }

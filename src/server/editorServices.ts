@@ -2195,6 +2195,70 @@ namespace ts.server {
             return this.filenameToScriptInfo.get(fileName);
         }
 
+        /*@internal*/
+        getDocumentPositionMapper(fileName: string, project: Project): DocumentPositionMapper | undefined {
+            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
+            if (!declarationInfo) return undefined;
+
+            declarationInfo.getSnapshot(); // Ensure synchronized
+            const existingMapper = declarationInfo.textStorage.mapper;
+            if (existingMapper !== undefined) {
+                return existingMapper ? existingMapper : undefined;
+            }
+
+            // Create the mapper
+            declarationInfo.mapInfo = undefined;
+
+            let readMapFile: ((fileName: string) => string | undefined) | undefined = fileName => {
+                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
+                if (!mapInfo) return undefined;
+                declarationInfo.mapInfo = mapInfo;
+                const snap = mapInfo.getSnapshot();
+                return snap.getText(0, snap.getLength());
+            };
+            const projectName = project.projectName;
+            const mapper = getDocumentPositionMapper(
+                { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName) },
+                declarationInfo.fileName,
+                declarationInfo.textStorage.getLineInfo(),
+                readMapFile
+            );
+            readMapFile = undefined; // Remove ref to project
+            declarationInfo.textStorage.mapper = mapper || false;
+            return mapper;
+        }
+
+        /*@internal*/
+        getSourceFileLike(fileName: string, projectName: string | Project) {
+            const project = (projectName as Project).projectName ? projectName as Project : this.findProject(projectName as string);
+            if (project) {
+                const path = project.toPath(fileName);
+                const sourceFile = project.getSourceFile(path);
+                if (sourceFile && sourceFile.resolvedPath === path) return sourceFile;
+            }
+
+            // Need to look for other files.
+            const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.host);
+            if (!info) return undefined;
+
+            // Key doesnt matter since its only for text and lines
+            if (info.cacheSourceFile) return info.cacheSourceFile.sourceFile;
+            if (info.textStorage.sourceFileLike) return info.textStorage.sourceFileLike;
+
+            info.textStorage.sourceFileLike = {
+                get text() {
+                    Debug.fail("shouldnt need text");
+                    return "";
+                },
+                getLineAndCharacterOfPosition: pos => {
+                    const lineOffset = info.positionToLineOffset(pos);
+                    return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
+                },
+                getPositionOfLineAndCharacter: (line, character) => info.lineOffsetToPosition(line + 1, character + 1)
+            };
+            return info.textStorage.sourceFileLike;
+        }
+
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
             if (args.file) {
                 const info = this.getScriptInfoForNormalizedPath(toNormalizedPath(args.file));
