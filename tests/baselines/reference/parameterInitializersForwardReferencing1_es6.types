@@ -4,33 +4,33 @@ let foo: string = "";
 >"" : ""
 
 function f1 (bar = foo) { // unexpected compiler error; works at runtime
->f1 : (bar?: number) => number
->bar : number
->foo : number
+>f1 : (bar?: string) => string
+>bar : string
+>foo : string
 
     var foo: number = 2;
 >foo : number
 >2 : 2
 
     return bar; // returns 1
->bar : number
+>bar : string
 }
 
 function f2 (bar = (baz = foo) => baz) { // unexpected compiler error; works at runtime
->f2 : (bar?: (baz?: number) => number) => number
->bar : (baz?: number) => number
->(baz = foo) => baz : (baz?: number) => number
->baz : number
->foo : number
->baz : number
+>f2 : (bar?: (baz?: string) => string) => string
+>bar : (baz?: string) => string
+>(baz = foo) => baz : (baz?: string) => string
+>baz : string
+>foo : string
+>baz : string
 
     var foo: number = 2;
 >foo : number
 >2 : 2
 
     return bar(); // returns 1
->bar() : number
->bar : (baz?: number) => number
+>bar() : string
+>bar : (baz?: string) => string
 }
 
 function f3 (bar = foo, foo = 2) { // correct compiler error, error at runtime
@@ -74,7 +74,7 @@ function f6 (async = async) {
 
 function f7({[foo]: bar}: any[]) {
 >f7 : ({ [foo]: bar }: any[]) => void
->foo : number
+>foo : string
 >bar : any
 
     let foo: number = 2;

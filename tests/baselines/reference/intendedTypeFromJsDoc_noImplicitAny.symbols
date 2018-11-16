@@ -7,11 +7,12 @@
  * @param {object} e
  * @param {Array} f
  */
-function f(a, b, c, d, e) {}
+function f(a, b, c, d, e, f) {}
 >f : Symbol(f, Decl(a.js, 0, 0))
 >a : Symbol(a, Decl(a.js, 8, 11))
 >b : Symbol(b, Decl(a.js, 8, 13))
 >c : Symbol(c, Decl(a.js, 8, 16))
 >d : Symbol(d, Decl(a.js, 8, 19))
 >e : Symbol(e, Decl(a.js, 8, 22))
+>f : Symbol(f, Decl(a.js, 8, 25))
 

@@ -56,37 +56,26 @@ namespace ts.Rename {
             fileToRename: name,
             kind,
             displayName: name,
-            localizedErrorMessage: undefined,
             fullDisplayName: name,
             kindModifiers: ScriptElementKindModifier.none,
             triggerSpan,
         };
     }
 
-    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfo {
+    function getRenameInfoSuccess(displayName: string, fullDisplayName: string, kind: ScriptElementKind, kindModifiers: string, node: Node, sourceFile: SourceFile): RenameInfoSuccess {
         return {
             canRename: true,
             fileToRename: undefined,
             kind,
             displayName,
-            localizedErrorMessage: undefined,
             fullDisplayName,
             kindModifiers,
             triggerSpan: createTriggerSpanForNode(node, sourceFile)
         };
     }
 
-    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfo {
-        // TODO: GH#18217
-        return {
-            canRename: false,
-            localizedErrorMessage: getLocaleSpecificMessage(diagnostic),
-            displayName: undefined!,
-            fullDisplayName: undefined!,
-            kind: undefined!,
-            kindModifiers: undefined!,
-            triggerSpan: undefined!
-        };
+    function getRenameInfoError(diagnostic: DiagnosticMessage): RenameInfoFailure {
+        return { canRename: false, localizedErrorMessage: getLocaleSpecificMessage(diagnostic) };
     }
 
     function createTriggerSpanForNode(node: Node, sourceFile: SourceFile) {

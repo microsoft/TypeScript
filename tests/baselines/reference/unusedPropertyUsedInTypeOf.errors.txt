@@ -1,0 +1,11 @@
+tests/cases/compiler/unusedPropertyUsedInTypeOf.ts(2,29): error TS6133: 'x' is declared but its value is never read.
+
+
+==== tests/cases/compiler/unusedPropertyUsedInTypeOf.ts (1 errors) ====
+    class C {
+        private static readonly x: number;
+                                ~
+!!! error TS6133: 'x' is declared but its value is never read.
+        m(p: typeof C.x) { return p; }
+    }
+    

@@ -39,7 +39,7 @@ declare function value<V extends string>(val: V): Value<V>;
 >val : V
 
 declare function ensureNoDuplicates<
->ensureNoDuplicates : <T extends { [K in keyof T]: never; }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 
   T extends {
     [K in keyof T]: Extract<T[K], Value>["val"] extends Extract<T[Exclude<keyof T, K>], Value>["val"]
@@ -50,9 +50,9 @@ declare function ensureNoDuplicates<
 >vals : T
 
 const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2")});
->noError : any
->ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : any
->ensureNoDuplicates : <T extends { [K in keyof T]: never; }>(vals: T) => void
+>noError : void
+>ensureNoDuplicates({main: value("test"), alternate: value("test2")}) : void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("test"), alternate: value("test2")} : { main: Record<"val", "test">; alternate: Record<"val", "test2">; }
 >main : Record<"val", "test">
 >value("test") : Record<"val", "test">
@@ -64,9 +64,9 @@ const noError = ensureNoDuplicates({main: value("test"), alternate: value("test2
 >"test2" : "test2"
 
 const shouldBeNoError = ensureNoDuplicates({main: value("test")});
->shouldBeNoError : any
->ensureNoDuplicates({main: value("test")}) : any
->ensureNoDuplicates : <T extends { [K in keyof T]: never; }>(vals: T) => void
+>shouldBeNoError : void
+>ensureNoDuplicates({main: value("test")}) : void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("test")} : { main: Record<"val", "test">; }
 >main : Record<"val", "test">
 >value("test") : Record<"val", "test">
@@ -76,7 +76,7 @@ const shouldBeNoError = ensureNoDuplicates({main: value("test")});
 const shouldBeError = ensureNoDuplicates({main: value("dup"), alternate: value("dup")});
 >shouldBeError : any
 >ensureNoDuplicates({main: value("dup"), alternate: value("dup")}) : any
->ensureNoDuplicates : <T extends { [K in keyof T]: never; }>(vals: T) => void
+>ensureNoDuplicates : <T extends { [K in keyof T]: Extract<T[K], Record<"val", string>>["val"] extends Extract<T[Exclude<keyof T, K>], Record<"val", string>>["val"] ? never : any; }>(vals: T) => void
 >{main: value("dup"), alternate: value("dup")} : { main: Record<"val", "dup">; alternate: Record<"val", "dup">; }
 >main : Record<"val", "dup">
 >value("dup") : Record<"val", "dup">

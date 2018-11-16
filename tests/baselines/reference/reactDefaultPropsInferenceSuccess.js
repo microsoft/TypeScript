@@ -4,7 +4,8 @@
 import React from 'react';
 
 interface BaseProps {
-  when?: (value: string) => boolean;
+  when?: ((value: string) => boolean) | "a" | "b";
+  error?: boolean;
 }
 
 interface Props extends BaseProps {
@@ -26,6 +27,21 @@ const Test1 = () => <FieldFeedback when={value => !!value} />;
 // Error: Void not assignable to boolean
 const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 
+class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
+  static defaultProps: BaseProps = {
+    when: () => true
+  };
+
+  render() {
+    return <div>Hello</div>;
+  }
+}
+
+// OK
+const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
+
+// Error: Void not assignable to boolean
+const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
 
 interface MyPropsProps extends Props {
   when: (value: string) => boolean;
@@ -61,7 +77,7 @@ var __extends = (this && this.__extends) || (function () {
             ({ __proto__: [] } instanceof Array && function (d, b) { d.__proto__ = b; }) ||
             function (d, b) { for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p]; };
         return extendStatics(d, b);
-    }
+    };
     return function (d, b) {
         extendStatics(d, b);
         function __() { this.constructor = d; }
@@ -90,6 +106,23 @@ var FieldFeedback = /** @class */ (function (_super) {
 var Test1 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return !!value; } }); };
 // Error: Void not assignable to boolean
 var Test2 = function () { return react_1["default"].createElement(FieldFeedback, { when: function (value) { return console.log(value); } }); };
+var FieldFeedbackBeta = /** @class */ (function (_super) {
+    __extends(FieldFeedbackBeta, _super);
+    function FieldFeedbackBeta() {
+        return _super !== null && _super.apply(this, arguments) || this;
+    }
+    FieldFeedbackBeta.prototype.render = function () {
+        return react_1["default"].createElement("div", null, "Hello");
+    };
+    FieldFeedbackBeta.defaultProps = {
+        when: function () { return true; }
+    };
+    return FieldFeedbackBeta;
+}(react_1["default"].Component));
+// OK
+var Test1a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return !!value; }, error: true }, "Hah"); };
+// Error: Void not assignable to boolean
+var Test2a = function () { return react_1["default"].createElement(FieldFeedbackBeta, { when: function (value) { return console.log(value); }, error: true }, "Hah"); };
 var FieldFeedback2 = /** @class */ (function (_super) {
     __extends(FieldFeedback2, _super);
     function FieldFeedback2() {

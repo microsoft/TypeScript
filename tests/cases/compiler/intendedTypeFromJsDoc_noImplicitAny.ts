@@ -12,4 +12,4 @@
  * @param {object} e
  * @param {Array} f
  */
-function f(a, b, c, d, e) {}
+function f(a, b, c, d, e, f) {}

@@ -14,6 +14,7 @@ b;`,
         "/l.ts":
 `import { a } from "m";
 let l;
-a;`,
+a;
+`,
     }
 });

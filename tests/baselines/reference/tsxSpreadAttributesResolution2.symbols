@@ -31,32 +31,38 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 const obj = {};
 >obj : Symbol(obj, Decl(file.tsx, 13, 5))
 
+// OK
+<Poisoned {...{x: "ok", y: "2"}} />;
+>Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
+>x : Symbol(x, Decl(file.tsx, 16, 15))
+>y : Symbol(y, Decl(file.tsx, 16, 23))
+
 // Error
 let p = <Poisoned {...obj} />;
->p : Symbol(p, Decl(file.tsx, 16, 3))
+>p : Symbol(p, Decl(file.tsx, 19, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
 >obj : Symbol(obj, Decl(file.tsx, 13, 5))
 
 let y = <Poisoned />;
->y : Symbol(y, Decl(file.tsx, 17, 3))
+>y : Symbol(y, Decl(file.tsx, 20, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
 
 let z = <Poisoned x y/>;
->z : Symbol(z, Decl(file.tsx, 18, 3))
+>z : Symbol(z, Decl(file.tsx, 21, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
->x : Symbol(x, Decl(file.tsx, 18, 17))
->y : Symbol(y, Decl(file.tsx, 18, 19))
+>x : Symbol(x, Decl(file.tsx, 21, 17))
+>y : Symbol(y, Decl(file.tsx, 21, 19))
 
 let w = <Poisoned {...{x: 5, y: "2"}}/>;
->w : Symbol(w, Decl(file.tsx, 19, 3))
+>w : Symbol(w, Decl(file.tsx, 22, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
->x : Symbol(x, Decl(file.tsx, 19, 23))
->y : Symbol(y, Decl(file.tsx, 19, 28))
+>x : Symbol(x, Decl(file.tsx, 22, 23))
+>y : Symbol(y, Decl(file.tsx, 22, 28))
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
->w1 : Symbol(w1, Decl(file.tsx, 20, 3))
+>w1 : Symbol(w1, Decl(file.tsx, 23, 3))
 >Poisoned : Symbol(Poisoned, Decl(file.tsx, 5, 1))
->x : Symbol(x, Decl(file.tsx, 20, 24))
->y : Symbol(y, Decl(file.tsx, 20, 29))
->X : Symbol(X, Decl(file.tsx, 20, 38))
+>x : Symbol(x, Decl(file.tsx, 23, 24))
+>y : Symbol(y, Decl(file.tsx, 23, 29))
+>X : Symbol(X, Decl(file.tsx, 23, 38))
 

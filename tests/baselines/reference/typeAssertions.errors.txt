@@ -1,12 +1,12 @@
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(5,9): error TS2558: Expected 0 type arguments, but got 1.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(31,12): error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'p' is missing in type 'SomeOther'.
+  Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(35,15): error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'x' is missing in type 'SomeOther'.
+  Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(37,13): error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'q' is missing in type 'SomeDerived'.
+  Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(38,13): error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-  Property 'q' is missing in type 'SomeBase'.
+  Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,5): error TS2304: Cannot find name 'numOrStr'.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS1005: '>' expected.
 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(44,14): error TS2304: Cannot find name 'is'.
@@ -59,23 +59,26 @@ tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts(48,50): err
     someBase = <SomeBase>someOther; // Error
                ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeOther' to type 'SomeBase' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'p' is missing in type 'SomeOther'.
+!!! error TS2352:   Property 'p' is missing in type 'SomeOther' but required in type 'SomeBase'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:15:13: 'p' is declared here.
     
     someDerived = <SomeDerived>someDerived;
     someDerived = <SomeDerived>someBase;
     someDerived = <SomeDerived>someOther; // Error
                   ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeOther' to type 'SomeDerived' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'x' is missing in type 'SomeOther'.
+!!! error TS2352:   Type 'SomeOther' is missing the following properties from type 'SomeDerived': x, p
     
     someOther = <SomeOther>someDerived; // Error
                 ~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeDerived' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'q' is missing in type 'SomeDerived'.
+!!! error TS2352:   Property 'q' is missing in type 'SomeDerived' but required in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
     someOther = <SomeOther>someBase; // Error
                 ~~~~~~~~~~~~~~~~~~~
 !!! error TS2352: Conversion of type 'SomeBase' to type 'SomeOther' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
-!!! error TS2352:   Property 'q' is missing in type 'SomeBase'.
+!!! error TS2352:   Property 'q' is missing in type 'SomeBase' but required in type 'SomeOther'.
+!!! related TS2728 tests/cases/conformance/expressions/typeAssertions/typeAssertions.ts:21:13: 'q' is declared here.
     someOther = <SomeOther>someOther;
     
     // Type assertion cannot be a type-predicate type

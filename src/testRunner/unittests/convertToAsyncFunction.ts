@@ -1236,10 +1236,35 @@ function [#|f|]() {
 }
 `);
 
+    _testConvertToAsyncFunction("convertToAsyncFunction_callbackReturnsRejectedPromiseInTryBlock", `
+function [#|f|]() {
+    return Promise.resolve(1)
+        .then(x => Promise.reject(x))
+        .catch(err => console.log(err));
+}    
+`);
 
 _testConvertToAsyncFunction("convertToAsyncFunction_nestedPromises", `
 function [#|f|]() {
     return fetch('https://typescriptlang.org').then(x => Promise.resolve(3).then(y => Promise.resolve(x.statusText.length + y)));
+}
+`);
+_testConvertToAsyncFunction("convertToAsyncFunction_noArgs", `
+function delay(millis: number): Promise<void> {
+    throw "no"
+}
+
+function [#|main2|]() {
+    console.log("Please wait. Loading.");
+    return delay(500)
+        .then(() => { console.log("."); return delay(500); })
+        .then(() => { console.log("."); return delay(500); })
+        .then(() => { console.log("."); return delay(500); })
+}
+`);
+_testConvertToAsyncFunction("convertToAsyncFunction_exportModifier", `
+export function [#|foo|]() {
+    return fetch('https://typescriptlang.org').then(s => console.log(s));
 }
 `);
     });

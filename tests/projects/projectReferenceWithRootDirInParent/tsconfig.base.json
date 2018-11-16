@@ -3,7 +3,8 @@
     "composite": true,
     "declaration": true,
     "rootDir": "./src/",
-    "outDir": "./dist/"
+    "outDir": "./dist/",
+    "skipDefaultLibCheck": true
   },
   "exclude": [
     "node_modules"

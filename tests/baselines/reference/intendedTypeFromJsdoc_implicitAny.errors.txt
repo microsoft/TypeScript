@@ -1,4 +1,4 @@
-/a.js(4,12): error TS2735: 'Object' key type must be 'string' or 'number'.
+/a.js(4,12): error TS1023: An index signature parameter type must be 'string' or 'number'.
 /a.js(7,19): error TS8024: JSDoc '@param' tag has name 'f', but there is no parameter with that name.
 
 
@@ -8,7 +8,7 @@
      * @param {Object<number, boolean>} b
      * @param {Object<boolean, boolean>} c
                ~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2735: 'Object' key type must be 'string' or 'number'.
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
      * @param {Object} d
      * @param {object} e
      * @param {Array} f

@@ -72,7 +72,7 @@ Your pull request should:
     * Requests need not be a single commit, but should be a linear sequence of commits (i.e. no merge commits in your PR)
 * It is desirable, but not necessary, for the tests to pass at each commit
 * Have clear commit messages 
-    * e.g. "Refactor feature", "Fix issue", "Add tests for issue"
+    * e.g. "Minor refactor in goToTypeDefinition", "Fix iterated type in for-await-of", "Add test for preserveWatchOutput on command line"
 * Include adequate tests 
     * At least one test should fail in the absence of your non-test code changes. If your PR does not match this criteria, please specify why
     * Tests should include reasonable permutations of the target fix/change
@@ -104,7 +104,7 @@ To run all tests, invoke the `runtests-parallel` target using jake:
 jake runtests-parallel
 ```
 
-This run will all tests; to run only a specific subset of tests, use:
+This will run all tests; to run only a specific subset of tests, use:
 
 ```Shell
 jake runtests tests=<regex>
@@ -137,10 +137,10 @@ You can specify which browser to use for debugging. Currently Chrome and IE are 
 jake runtests-browser tests=2dArrays browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `jake runtests debug=true`:
+You can debug with VS Code or Node instead with `jake runtests inspect=true`:
 
 ```Shell
-jake runtests tests=2dArrays debug=true
+jake runtests tests=2dArrays inspect=true
 ```
 
 ## Adding a Test
@@ -153,7 +153,7 @@ The supported names and values are the same as those supported in the compiler i
 They are useful for tests relating to modules.
 See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
+**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder.
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
 
 ### Tests for multiple files
@@ -194,6 +194,6 @@ to establish the new baselines as the desired behavior. This will change the fil
 ## Localization
 
 All strings the user may see are stored in [`diagnosticMessages.json`](./src/compiler/diagnosticMessages.json).
-If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in [`diagnosticInformationMap.generated.ts`](./src/compiler/diagnosticInformationMap.generated.ts).
+If you make changes to it, run `jake generate-diagnostics` to push them to the `Diagnostic` interface in `diagnosticInformationMap.generated.ts`.
 
 See [coding guidelines on diagnostic messages](https://github.com/Microsoft/TypeScript/wiki/Coding-guidelines#diagnostic-messages).

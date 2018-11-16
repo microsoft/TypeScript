@@ -6,7 +6,8 @@
 import React from 'react';
 
 interface BaseProps {
-  when?: (value: string) => boolean;
+  when?: ((value: string) => boolean) | "a" | "b";
+  error?: boolean;
 }
 
 interface Props extends BaseProps {
@@ -28,6 +29,21 @@ const Test1 = () => <FieldFeedback when={value => !!value} />;
 // Error: Void not assignable to boolean
 const Test2 = () => <FieldFeedback when={value => console.log(value)} />;
 
+class FieldFeedbackBeta<P extends Props = BaseProps> extends React.Component<P> {
+  static defaultProps: BaseProps = {
+    when: () => true
+  };
+
+  render() {
+    return <div>Hello</div>;
+  }
+}
+
+// OK
+const Test1a = () => <FieldFeedbackBeta when={value => !!value} error>Hah</FieldFeedbackBeta>;
+
+// Error: Void not assignable to boolean
+const Test2a = () => <FieldFeedbackBeta when={value => console.log(value)} error>Hah</FieldFeedbackBeta>;
 
 interface MyPropsProps extends Props {
   when: (value: string) => boolean;

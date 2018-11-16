@@ -32,6 +32,15 @@ namespace ts {
 
         let enclosingFunctionParameterNames: UnderscoreEscapedMap<true>;
 
+        /**
+         * Keeps track of property names accessed on super (`super.x`) within async functions.
+         */
+        let capturedSuperProperties: UnderscoreEscapedMap<true>;
+        /** Whether the async function contains an element access on super (`super[x]`). */
+        let hasSuperElementAccess: boolean;
+        /** A set of node IDs for generated super accessors (variable statements). */
+        const substitutedSuperAccessors: boolean[] = [];
+
         // Save the previous transformation hooks.
         const previousOnEmitNode = context.onEmitNode;
         const previousOnSubstituteNode = context.onSubstituteNode;
@@ -56,7 +65,6 @@ namespace ts {
             if ((node.transformFlags & TransformFlags.ContainsES2017) === 0) {
                 return node;
             }
-
             switch (node.kind) {
                 case SyntaxKind.AsyncKeyword:
                     // ES2017 async modifier should be elided for targets < ES2017
@@ -76,6 +84,18 @@ namespace ts {
 
                 case SyntaxKind.ArrowFunction:
                     return visitArrowFunction(<ArrowFunction>node);
+
+                case SyntaxKind.PropertyAccessExpression:
+                    if (capturedSuperProperties && isPropertyAccessExpression(node) && node.expression.kind === SyntaxKind.SuperKeyword) {
+                        capturedSuperProperties.set(node.name.escapedText, true);
+                    }
+                    return visitEachChild(node, visitor, context);
+
+                case SyntaxKind.ElementAccessExpression:
+                    if (capturedSuperProperties && (<ElementAccessExpression>node).expression.kind === SyntaxKind.SuperKeyword) {
+                        hasSuperElementAccess = true;
+                    }
+                    return visitEachChild(node, visitor, context);
 
                 default:
                     return visitEachChild(node, visitor, context);
@@ -398,6 +418,11 @@ namespace ts {
                 recordDeclarationName(parameter, enclosingFunctionParameterNames);
             }
 
+            const savedCapturedSuperProperties = capturedSuperProperties;
+            const savedHasSuperElementAccess = hasSuperElementAccess;
+            capturedSuperProperties = createUnderscoreEscapedMap<true>();
+            hasSuperElementAccess = false;
+
             let result: ConciseBody;
             if (!isArrowFunction) {
                 const statements: Statement[] = [];
@@ -415,18 +440,26 @@ namespace ts {
 
                 addStatementsAfterPrologue(statements, endLexicalEnvironment());
 
+                // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
+                // This step isn't needed if we eventually transform this to ES5.
+                const emitSuperHelpers = languageVersion >= ScriptTarget.ES2015 && resolver.getNodeCheckFlags(node) & (NodeCheckFlags.AsyncMethodWithSuperBinding | NodeCheckFlags.AsyncMethodWithSuper);
+
+                if (emitSuperHelpers) {
+                    enableSubstitutionForAsyncMethodsWithSuper();
+                    const variableStatement = createSuperAccessVariableStatement(resolver, node, capturedSuperProperties);
+                    substitutedSuperAccessors[getNodeId(variableStatement)] = true;
+                    addStatementsAfterPrologue(statements, [variableStatement]);
+                }
+
                 const block = createBlock(statements, /*multiLine*/ true);
                 setTextRange(block, node.body);
 
-                // Minor optimization, emit `_super` helper to capture `super` access in an arrow.
-                // This step isn't needed if we eventually transform this to ES5.
-                if (languageVersion >= ScriptTarget.ES2015) {
+                if (emitSuperHelpers && hasSuperElementAccess) {
+                    // Emit helpers for super element access expressions (`super[x]`).
                     if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) {
-                        enableSubstitutionForAsyncMethodsWithSuper();
                         addEmitHelper(block, advancedAsyncSuperHelper);
                     }
                     else if (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuper) {
-                        enableSubstitutionForAsyncMethodsWithSuper();
                         addEmitHelper(block, asyncSuperHelper);
                     }
                 }
@@ -452,6 +485,8 @@ namespace ts {
             }
 
             enclosingFunctionParameterNames = savedEnclosingFunctionParameterNames;
+            capturedSuperProperties = savedCapturedSuperProperties;
+            hasSuperElementAccess = savedHasSuperElementAccess;
             return result;
         }
 
@@ -493,6 +528,8 @@ namespace ts {
                 context.enableEmitNotification(SyntaxKind.GetAccessor);
                 context.enableEmitNotification(SyntaxKind.SetAccessor);
                 context.enableEmitNotification(SyntaxKind.Constructor);
+                // We need to be notified when entering the generated accessor arrow functions.
+                context.enableEmitNotification(SyntaxKind.VariableStatement);
             }
         }
 
@@ -515,6 +552,14 @@ namespace ts {
                     enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
                     return;
                 }
+            }
+            // Disable substitution in the generated super accessor itself.
+            else if (enabledSubstitutions && substitutedSuperAccessors[getNodeId(node)]) {
+                const savedEnclosingSuperContainerFlags = enclosingSuperContainerFlags;
+                enclosingSuperContainerFlags = 0;
+                previousOnEmitNode(hint, node, emitCallback);
+                enclosingSuperContainerFlags = savedEnclosingSuperContainerFlags;
+                return;
             }
             previousOnEmitNode(hint, node, emitCallback);
         }
@@ -548,8 +593,10 @@ namespace ts {
 
         function substitutePropertyAccessExpression(node: PropertyAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                return createSuperAccessInAsyncMethod(
-                    createLiteral(idText(node.name)),
+                return setTextRange(
+                    createPropertyAccess(
+                        createFileLevelUniqueName("_super"),
+                        node.name),
                     node
                 );
             }
@@ -558,7 +605,7 @@ namespace ts {
 
         function substituteElementAccessExpression(node: ElementAccessExpression) {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
-                return createSuperAccessInAsyncMethod(
+                return createSuperElementAccessInAsyncMethod(
                     node.argumentExpression,
                     node
                 );
@@ -593,12 +640,12 @@ namespace ts {
                 || kind === SyntaxKind.SetAccessor;
         }
 
-        function createSuperAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
+        function createSuperElementAccessInAsyncMethod(argumentExpression: Expression, location: TextRange): LeftHandSideExpression {
             if (enclosingSuperContainerFlags & NodeCheckFlags.AsyncMethodWithSuperBinding) {
                 return setTextRange(
                     createPropertyAccess(
                         createCall(
-                            createFileLevelUniqueName("_super"),
+                            createFileLevelUniqueName("_superIndex"),
                             /*typeArguments*/ undefined,
                             [argumentExpression]
                         ),
@@ -610,7 +657,7 @@ namespace ts {
             else {
                 return setTextRange(
                     createCall(
-                        createFileLevelUniqueName("_super"),
+                        createFileLevelUniqueName("_superIndex"),
                         /*typeArguments*/ undefined,
                         [argumentExpression]
                     ),
@@ -618,6 +665,89 @@ namespace ts {
                 );
             }
         }
+    }
+
+    /** Creates a variable named `_super` with accessor properties for the given property names. */
+    export function createSuperAccessVariableStatement(resolver: EmitResolver, node: FunctionLikeDeclaration, names: UnderscoreEscapedMap<true>) {
+        // Create a variable declaration with a getter/setter (if binding) definition for each name:
+        //   const _super = Object.create(null, { x: { get: () => super.x, set: (v) => super.x = v }, ... });
+        const hasBinding = (resolver.getNodeCheckFlags(node) & NodeCheckFlags.AsyncMethodWithSuperBinding) !== 0;
+        const accessors: PropertyAssignment[] = [];
+        names.forEach((_, key) => {
+            const name = unescapeLeadingUnderscores(key);
+            const getterAndSetter: PropertyAssignment[] = [];
+            getterAndSetter.push(createPropertyAssignment(
+                "get",
+                createArrowFunction(
+                    /* modifiers */ undefined,
+                    /* typeParameters */ undefined,
+                    /* parameters */ [],
+                    /* type */ undefined,
+                    /* equalsGreaterThanToken */ undefined,
+                    createPropertyAccess(
+                        createSuper(),
+                        name
+                    )
+                )
+            ));
+            if (hasBinding) {
+                getterAndSetter.push(
+                    createPropertyAssignment(
+                        "set",
+                        createArrowFunction(
+                            /* modifiers */ undefined,
+                            /* typeParameters */ undefined,
+                            /* parameters */ [
+                                createParameter(
+                                    /* decorators */ undefined,
+                                    /* modifiers */ undefined,
+                                    /* dotDotDotToken */ undefined,
+                                    "v",
+                                    /* questionToken */ undefined,
+                                    /* type */ undefined,
+                                    /* initializer */ undefined
+                                )
+                            ],
+                            /* type */ undefined,
+                            /* equalsGreaterThanToken */ undefined,
+                            createAssignment(
+                                createPropertyAccess(
+                                    createSuper(),
+                                    name),
+                                createIdentifier("v")
+                            )
+                        )
+                    )
+                );
+            }
+            accessors.push(
+                createPropertyAssignment(
+                    name,
+                    createObjectLiteral(getterAndSetter),
+                )
+            );
+        });
+        return createVariableStatement(
+            /* modifiers */ undefined,
+            createVariableDeclarationList(
+                [
+                    createVariableDeclaration(
+                        createFileLevelUniqueName("_super"),
+                        /* type */ undefined,
+                        createCall(
+                            createPropertyAccess(
+                                createIdentifier("Object"),
+                                "create"
+                            ),
+                            /* typeArguments */ undefined,
+                            [
+                                createNull(),
+                                createObjectLiteral(accessors, /* multiline */ true)
+                            ]
+                        )
+                    )
+                ],
+                NodeFlags.Const));
     }
 
     const awaiterHelper: EmitHelper = {
@@ -667,14 +797,14 @@ namespace ts {
         name: "typescript:async-super",
         scoped: true,
         text: helperString`
-            const ${"_super"} = name => super[name];`
+            const ${"_superIndex"} = name => super[name];`
     };
 
     export const advancedAsyncSuperHelper: EmitHelper = {
         name: "typescript:advanced-async-super",
         scoped: true,
         text: helperString`
-            const ${"_super"} = (function (geti, seti) {
+            const ${"_superIndex"} = (function (geti, seti) {
                 const cache = Object.create(null);
                 return name => cache[name] || (cache[name] = { get value() { return geti(name); }, set value(v) { seti(name, v); } });
             })(name => super[name], (name, value) => super[name] = value);`

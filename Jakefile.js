@@ -147,14 +147,14 @@ task(TaskNames.local, [
 task("default", [TaskNames.local]);
 
 const RunTestsPrereqs = [TaskNames.lib, Paths.servicesDefinitionFile, Paths.typescriptDefinitionFile, Paths.tsserverLibraryDefinitionFile];
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... i[nspect]=true.");
 task(TaskNames.runtestsParallel, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests("min", /*parallel*/ true);
     });
 }, { async: true });
 
-desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... d[ebug]=true.");
+desc("Runs all the tests in parallel using the built run.js file. Optional arguments are: t[ests]=category1|category2|... i[nspect]=true.");
 task(TaskNames.runtests, RunTestsPrereqs, function () {
     tsbuild([ConfigFileFor.runjs], true, () => {
         runConsoleTests('mocha-fivemat-progress-reporter', /*runInParallel*/ false);
@@ -520,7 +520,6 @@ function runConsoleTests(defaultReporter, runInParallel) {
     }
 
     let testTimeout = process.env.timeout || defaultTestTimeout;
-    const debug = process.env.debug || process.env["debug-brk"] || process.env.d;
     const inspect = process.env.inspect || process.env["inspect-brk"] || process.env.i;
     const runners = process.env.runners || process.env.runner || process.env.ru;
     const tests = process.env.test || process.env.tests || process.env.t;
