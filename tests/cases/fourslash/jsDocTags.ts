@@ -76,10 +76,13 @@ verify.signatureHelp(
     { marker: "13", tags: [{ name: "returns", text: "a value" }] },
 );
 
-goTo.marker('14');
-verify.completionEntryDetailIs(
-    "newMethod",
-    "(method) Foo.newMethod(): void",
-    "method documentation",
-    "method",
-    [{name: "mytag", text: "a JSDoc tag"}]);
+verify.completions({
+    marker: "14",
+    includes: {
+        name: "newMethod",
+        text: "(method) Foo.newMethod(): void",
+        documentation: "method documentation",
+        kind: "method",
+        tags: [{ name: "mytag", text: "a JSDoc tag" }],
+    },
+});

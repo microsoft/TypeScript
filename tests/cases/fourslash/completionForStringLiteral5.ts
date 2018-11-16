@@ -8,8 +8,4 @@
 ////function f<K extends keyof Foo>(a: K) { };
 ////f("/*1*/
 
-goTo.marker('1');
-verify.completionListContains("foo");
-verify.completionListContains("bar");
-verify.completionListCount(2);
-
+verify.completions({ marker: "1", exact: ["foo", "bar"] });

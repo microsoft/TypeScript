@@ -7,18 +7,18 @@ namespace ts.refactor.extractSymbol {
      * Compute the associated code actions
      * Exported for tests.
      */
-    export function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
+    export function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const rangeToExtract = getRangeToExtract(context.file, getRefactorContextSpan(context));
 
         const targetRange = rangeToExtract.targetRange;
         if (targetRange === undefined) {
-            return undefined;
+            return emptyArray;
         }
 
         const extractions = getPossibleExtractions(targetRange, context);
         if (extractions === undefined) {
             // No extractions possible
-            return undefined;
+            return emptyArray;
         }
 
         const functionActions: RefactorActionInfo[] = [];
@@ -82,7 +82,7 @@ namespace ts.refactor.extractSymbol {
             });
         }
 
-        return infos.length ? infos : undefined;
+        return infos.length ? infos : emptyArray;
     }
 
     /* Exported for tests */
@@ -677,7 +677,7 @@ namespace ts.refactor.extractSymbol {
             case SyntaxKind.ArrowFunction:
                 return "arrow function";
             case SyntaxKind.MethodDeclaration:
-                return `method '${scope.name.getText()}`;
+                return `method '${scope.name.getText()}'`;
             case SyntaxKind.GetAccessor:
                 return `'get ${scope.name.getText()}'`;
             case SyntaxKind.SetAccessor:

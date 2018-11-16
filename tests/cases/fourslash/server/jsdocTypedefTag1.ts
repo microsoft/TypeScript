@@ -9,12 +9,11 @@
 ////  */
 //// function foo() { }
 
-//// /** 
+//// /**
 ////  * @param {MyType} my
 ////  */
 //// function a(my) {
 ////     my.yes./*1*/
 //// }
 
-goTo.marker('1');
-verify.completionListContains('charAt');
+verify.completions({ marker: "1", includes: "charAt" });

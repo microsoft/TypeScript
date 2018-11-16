@@ -16,19 +16,19 @@ declare class Cls2 {
 === tests/cases/compiler/file2.ts ===
 export {Cls1, Cls1 as CCls1};
 >Cls1 : Symbol(Cls1, Decl(file2.ts, 0, 8))
->Cls1 : Symbol(CCls1, Decl(file2.ts, 0, 13))
+>Cls1 : Symbol(Cls1, Decl(file1.d.ts, 0, 0))
 >CCls1 : Symbol(CCls1, Decl(file2.ts, 0, 13))
 
 export {Cls2, Cls2 as CCls2};
 >Cls2 : Symbol(Cls2, Decl(file2.ts, 1, 8))
->Cls2 : Symbol(CCls2, Decl(file2.ts, 1, 13))
+>Cls2 : Symbol(Cls2, Decl(file1.d.ts, 2, 1))
 >CCls2 : Symbol(CCls2, Decl(file2.ts, 1, 13))
 
 export {Cls1 as CCCls1};
->Cls1 : Symbol(CCCls1, Decl(file2.ts, 2, 8))
+>Cls1 : Symbol(Cls1, Decl(file1.d.ts, 0, 0))
 >CCCls1 : Symbol(CCCls1, Decl(file2.ts, 2, 8))
 
 export {Cls2 as CCCls2};
->Cls2 : Symbol(CCCls2, Decl(file2.ts, 3, 8))
+>Cls2 : Symbol(Cls2, Decl(file1.d.ts, 2, 1))
 >CCCls2 : Symbol(CCCls2, Decl(file2.ts, 3, 8))
 

@@ -2,5 +2,4 @@
 
 ////5../**/
 
-goTo.marker();
-verify.completionListContains("toFixed");
+verify.completions({ marker: "", exact: ["toString", "toFixed", "toExponential", "toPrecision", "valueOf", "toLocaleString"] });

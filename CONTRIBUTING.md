@@ -137,10 +137,10 @@ You can specify which browser to use for debugging. Currently Chrome and IE are 
 jake runtests-browser tests=2dArrays browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `jake runtests debug=true`:
+You can debug with VS Code or Node instead with `jake runtests inspect=true`:
 
 ```Shell
-jake runtests tests=2dArrays debug=true
+jake runtests tests=2dArrays inspect=true
 ```
 
 ## Adding a Test
@@ -153,7 +153,7 @@ The supported names and values are the same as those supported in the compiler i
 They are useful for tests relating to modules.
 See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
+**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder.
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
 
 ### Tests for multiple files

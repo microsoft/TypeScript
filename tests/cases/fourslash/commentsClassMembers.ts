@@ -132,342 +132,163 @@
 ////    }
 ////}
 
+const publicProperties: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "p1", text: "(property) c1.p1: number", documentation: "p1 is property of c1" },
+    { name: "p2", text: "(method) c1.p2(b: number): number", documentation: "sum with property" },
+    { name: "p3", text: "(property) c1.p3: number", documentation: "getter property 1\nsetter property 1" },
+];
+const publicNcProperties: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "nc_p1", text: "(property) c1.nc_p1: number" },
+    { name: "nc_p2", text: "(method) c1.nc_p2(b: number): number" },
+    { name: "nc_p3", text: "(property) c1.nc_p3: number" },
+];
+const locals: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    { name: "c1", text: "class c1", documentation: "This is comment for c1" },
+    { name: "i1", text: "var i1: c1" },
+    { name: "i1_p", text: "var i1_p: number" },
+    { name: "i1_f", text: "var i1_f: (b: number) => number" },
+    { name: "i1_r", text: "var i1_r: number" },
+    { name: "i1_prop", text: "var i1_prop: number" },
+    { name: "i1_nc_p", text: "var i1_nc_p: number" },
+    { name: "i1_ncf", text: "var i1_ncf: (b: number) => number" },
+    { name: "i1_ncr", text: "var i1_ncr: number" },
+    { name: "i1_ncprop", text: "var i1_ncprop: number" },
+    { name: "i1_s_p", text: "var i1_s_p: number" },
+    { name: "i1_s_f", text: "var i1_s_f: (b: number) => number" },
+    { name: "i1_s_r", text: "var i1_s_r: number" },
+    { name: "i1_s_prop", text: "var i1_s_prop: number" },
+    { name: "i1_s_nc_p", text: "var i1_s_nc_p: number" },
+    { name: "i1_s_ncf", text: "var i1_s_ncf: (b: number) => number" },
+    { name: "i1_s_ncr", text: "var i1_s_ncr: number" },
+    { name: "i1_s_ncprop", text: "var i1_s_ncprop: number" },
+    { name: "i1_c", text: "var i1_c: typeof c1" },
+];
+
+verify.completions(
+    {
+        marker: ["4", "7", "9", "11", "12", "16", "19", "21", "23", "24"],
+        exact: [
+            ...publicProperties,
+            { name: "pp1", text: "(property) c1.pp1: number", documentation: "pp1 is property of c1" },
+            { name: "pp2", text: "(method) c1.pp2(b: number): number", documentation: "sum with property" },
+            { name: "pp3", text: "(property) c1.pp3: number", documentation: "getter property 2\nsetter property 2" },
+            ...publicNcProperties,
+            { name: "nc_pp1", text: "(property) c1.nc_pp1: number" },
+            { name: "nc_pp2", text: "(method) c1.nc_pp2(b: number): number" },
+            { name: "nc_pp3", text: "(property) c1.nc_pp3: number" },
+        ],
+    },
+    {
+        marker: ["5", "17"],
+        includes: { name: "b", text: "(parameter) b: number", documentation: "number to add" },
+    },
+    {
+        marker: ["13", "25"],
+        includes: [{ name: "value", text: "(parameter) value: number", documentation: "this is value" }],
+        isNewIdentifierLocation: true,
+    },
+    {
+        marker: ["30", "34", "36", "39", "41", "88"],
+        exact: [
+            "prototype",
+            { name: "s1", text: "(property) c1.s1: number", documentation: "s1 is static property of c1" },
+            { name: "s2", text: "(method) c1.s2(b: number): number", documentation: "static sum with property" },
+            { name: "s3", text: "(property) c1.s3: number", documentation: "static getter property\nsetter property 3" },
+            { name: "nc_s1", text: "(property) c1.nc_s1: number" },
+            { name: "nc_s2", text: "(method) c1.nc_s2(b: number): number" },
+            { name: "nc_s3", text: "(property) c1.nc_s3: number" },
+            ...completion.functionMembers,
+        ],
+    },
+    { marker: ["29", "33", "38", "109"], includes: locals },
+    { marker: ["35", "40", "87"], includes: locals, isNewIdentifierLocation: true },
+    { marker: "31", includes: { name: "b", text: "(parameter) b: number", documentation: "number to add" } },
+    { marker: "42", includes: { name: "value", text: "(parameter) value: number", documentation: "this is value" }, isNewIdentifierLocation: true },
+    { marker: ["45", "52", "59"], includes: { name: "b", text: "(parameter) b: number" } },
+    { marker: ["49", "56", "63"], includes: { name: "value", text: "(parameter) value: number" }, isNewIdentifierLocation: true },
+    { marker: "67", exact: [...publicProperties, ...publicNcProperties] },
+    {
+        marker: "110",
+        includes: [
+            { name: "p1", text: "(property) cProperties.p1: number", documentation: "getter only property" },
+            { name: "p2", text: "(property) cProperties.p2: number", documentation: "setter only property" },
+            { name: "nc_p1", text: "(property) cProperties.nc_p1: number" },
+            { name: "nc_p2", text: "(property) cProperties.nc_p2: number" },
+        ],
+    },
+    {
+        marker: "114",
+        includes: {
+            name: "a",
+            text: "(property) cWithConstructorProperty.a: number",
+            documentation: "more info about a\nthis is first parameter a",
+            tags: [{ name: "param", text: "a this is first parameter a" }],
+        },
+    },
+    {
+        marker: "115",
+        includes: {
+            name: "a",
+            text: "(parameter) a: number",
+            documentation: "more info about a\nthis is first parameter a",
+            tags: [{ name: "param", text: "a this is first parameter a" }],
+        },
+        isNewIdentifierLocation: true,
+    },
+);
+
+verify.signatureHelp(
+    { marker: ["8", "13", "20", "25", "71"], docComment: "sum with property", parameterDocComment: "number to add" },
+    { marker: ["35", "42", "92"], docComment: "static sum with property", parameterDocComment: "number to add" },
+    { marker: ["47", "49", "54", "56", "61", "63", "81", "102"], docComment: "" },
+    { marker: "65", docComment: "Constructor method" },
+);
+
 verify.quickInfos({
     1: ["class c1", "This is comment for c1"],
     2: ["(property) c1.p1: number", "p1 is property of c1"],
-    3: ["(method) c1.p2(b: number): number", "sum with property"]
-});
-
-goTo.marker('4');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-goTo.marker('5');
-verify.completionListContains("b", "(parameter) b: number", "number to add");
-
-verify.quickInfoAt("6", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-
-goTo.marker('7');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.signatureHelp({ marker: "8", docComment: "sum with property", parameterDocComment: "number to add" });
-verify.quickInfoAt("8q", "(method) c1.p2(b: number): number", "sum with property");
-
-goTo.marker('9');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.quickInfoAt("10", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-
-goTo.marker('11');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-goTo.marker('12');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.signatureHelp({ marker: "13", docComment: "sum with property", parameterDocComment: "number to add" });
-verify.completionListContains("value", "(parameter) value: number", "this is value");
-
-verify.quickInfos({
+    3: ["(method) c1.p2(b: number): number", "sum with property"],
+    6: ["(property) c1.p3: number", "getter property 1\nsetter property 1"],
+    "8q": ["(method) c1.p2(b: number): number", "sum with property"],
+    10: ["(property) c1.p3: number", "getter property 1\nsetter property 1"],
     "13q": ["(method) c1.p2(b: number): number", "sum with property"],
     14: ["(property) c1.pp1: number", "pp1 is property of c1"],
-    15: ["(method) c1.pp2(b: number): number", "sum with property"]
-});
-
-goTo.marker('16');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-goTo.marker('17');
-verify.completionListContains("b", "(parameter) b: number", "number to add");
-
-verify.quickInfoAt("18", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-
-goTo.marker('19');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.signatureHelp({ marker: "20", docComment: "sum with property", parameterDocComment: "number to add" });
-verify.quickInfoAt("20q", "(method) c1.pp2(b: number): number", "sum with property");
-
-goTo.marker('21');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.quickInfoAt("22", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-
-goTo.marker('23');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-goTo.marker('24');
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("pp1", "(property) c1.pp1: number", "pp1 is property of c1");
-verify.completionListContains("pp2", "(method) c1.pp2(b: number): number", "sum with property");
-verify.completionListContains("pp3", "(property) c1.pp3: number", "getter property 2\nsetter property 2");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-verify.completionListContains("nc_pp1", "(property) c1.nc_pp1: number", "");
-verify.completionListContains("nc_pp2", "(method) c1.nc_pp2(b: number): number", "");
-verify.completionListContains("nc_pp3", "(property) c1.nc_pp3: number", "");
-
-verify.signatureHelp({ marker: "25", docComment: "sum with property", parameterDocComment: "number to add" });
-verify.completionListContains("value", "(parameter) value: number", "this is value");
-
-verify.quickInfos({
+    15: ["(method) c1.pp2(b: number): number", "sum with property"],
+    18: ["(property) c1.pp3: number", "getter property 2\nsetter property 2"],
+    "20q": ["(method) c1.pp2(b: number): number", "sum with property"],
+    22: ["(property) c1.pp3: number", "getter property 2\nsetter property 2"],
     "25q": ["(method) c1.pp2(b: number): number", "sum with property"],
     26: ["constructor c1(): c1", "Constructor method"],
     27: ["(property) c1.s1: number", "s1 is static property of c1"],
-    28: ["(method) c1.s2(b: number): number", "static sum with property"]
-});
-
-goTo.marker('29');
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-
-goTo.marker('30');
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-goTo.marker('31');
-verify.completionListContains("b", "(parameter) b: number", "number to add");
-
-verify.quickInfoAt("32", "(property) c1.s3: number", "static getter property\nsetter property 3");
-
-goTo.marker('33');
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-
-goTo.marker('34');
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-verify.signatureHelp({ marker: "35", docComment: "static sum with property", parameterDocComment: "number to add" });
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-verify.quickInfoAt("35q", "(method) c1.s2(b: number): number", "static sum with property");
-
-goTo.marker('36');
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-verify.quickInfoAt("37", "(property) c1.s3: number", "static getter property\nsetter property 3");
-
-goTo.marker('38');
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-
-goTo.marker('39');
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-goTo.marker('40');
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-
-goTo.marker('41');
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-verify.signatureHelp({ marker: "42", docComment: "static sum with property", parameterDocComment: "number to add" });
-verify.completionListContains("value", "(parameter) value: number", "this is value");
-verify.quickInfos({
+    28: ["(method) c1.s2(b: number): number", "static sum with property"],
+    32: ["(property) c1.s3: number", "static getter property\nsetter property 3"],
+    "35q": ["(method) c1.s2(b: number): number", "static sum with property"],
+    37: ["(property) c1.s3: number", "static getter property\nsetter property 3"],
     "42q": ["(method) c1.s2(b: number): number", "static sum with property"],
     43: "(property) c1.nc_p1: number",
-    44: "(method) c1.nc_p2(b: number): number"
-});
-
-goTo.marker('45');
-verify.completionListContains("b", "(parameter) b: number", "");
-
-verify.quickInfoAt("46", "(property) c1.nc_p3: number");
-
-verify.signatureHelp({ marker: "47", docComment: "" });
-verify.quickInfos({
+    44: "(method) c1.nc_p2(b: number): number",
+    46: "(property) c1.nc_p3: number",
     "47q": "(method) c1.nc_p2(b: number): number",
-    48: "(property) c1.nc_p3: number"
-});
-
-verify.signatureHelp({ marker: "49", docComment: "" });
-verify.completionListContains("value", "(parameter) value: number", "");
-verify.quickInfos({
+    48: "(property) c1.nc_p3: number",
     "49q": "(method) c1.nc_p2(b: number): number",
     50: "(property) c1.nc_pp1: number",
-    51: "(method) c1.nc_pp2(b: number): number"
-});
-
-goTo.marker('52');
-verify.completionListContains("b", "(parameter) b: number", "");
-
-verify.quickInfoAt("53", "(property) c1.nc_pp3: number");
-
-verify.signatureHelp({ marker: "54", docComment: "" });
-verify.quickInfos({
+    51: "(method) c1.nc_pp2(b: number): number",
+    53: "(property) c1.nc_pp3: number",
     "54q": "(method) c1.nc_pp2(b: number): number",
-    55: "(property) c1.nc_pp3: number"
-});
-
-verify.signatureHelp({ marker: "56", docComment: "" });
-verify.completionListContains("value", "(parameter) value: number", "");
-verify.quickInfos({
+    55: "(property) c1.nc_pp3: number",
     "56q": "(method) c1.nc_pp2(b: number): number",
     57: "(property) c1.nc_s1: number",
-    58: "(method) c1.nc_s2(b: number): number"
-});
-
-goTo.marker('59');
-verify.completionListContains("b", "(parameter) b: number", "");
-
-verify.quickInfoAt("60", "(property) c1.nc_s3: number");
-
-verify.signatureHelp({ marker: "61", docComment: "" });
-verify.quickInfos({
+    58: "(method) c1.nc_s2(b: number): number",
+    60: "(property) c1.nc_s3: number",
     "61q": "(method) c1.nc_s2(b: number): number",
-    62: "(property) c1.nc_s3: number"
-});
-
-verify.signatureHelp({ marker: "63", docComment: "" });
-verify.completionListContains("value", "(parameter) value: number", "");
-verify.quickInfos({
+    62: "(property) c1.nc_s3: number",
     "63q": "(method) c1.nc_s2(b: number): number",
-    64: "var i1: c1"
-});
-
-verify.signatureHelp({ marker: "65", docComment: "Constructor method" });
-verify.quickInfos({
+    64: "var i1: c1",
     "65q": ["constructor c1(): c1", "Constructor method"],
-    66: "var i1_p: number"
-});
-
-goTo.marker("67");
-verify.quickInfoIs("(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p1", "(property) c1.p1: number", "p1 is property of c1");
-verify.completionListContains("p2", "(method) c1.p2(b: number): number", "sum with property");
-verify.completionListContains("p3", "(property) c1.p3: number", "getter property 1\nsetter property 1");
-verify.completionListContains("nc_p1", "(property) c1.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(method) c1.nc_p2(b: number): number", "");
-verify.completionListContains("nc_p3", "(property) c1.nc_p3: number", "");
-
-verify.quickInfos({
+    66: "var i1_p: number",
     68: "var i1_f: (b: number) => number",
     69: ["(method) c1.p2(b: number): number", "sum with property"],
-    70: "var i1_r: number"
-});
-
-verify.signatureHelp({ marker: "71", docComment: "sum with property", parameterDocComment: "number to add" });
-
-verify.quickInfos({
+    70: "var i1_r: number",
     "71q": ["(method) c1.p2(b: number): number", "sum with property"],
     72: "var i1_prop: number",
     73: ["(property) c1.p3: number", "getter property 1\nsetter property 1"],
@@ -477,42 +298,17 @@ verify.quickInfos({
     77: "(property) c1.nc_p1: number",
     78: "var i1_ncf: (b: number) => number",
     79: "(method) c1.nc_p2(b: number): number",
-    80: "var i1_ncr: number"
-});
-
-verify.signatureHelp({ marker: "81", docComment: "" });
-
-verify.quickInfos({
+    80: "var i1_ncr: number",
     "81q": "(method) c1.nc_p2(b: number): number",
     82: "var i1_ncprop: number",
     83: "(property) c1.nc_p3: number",
     84: "(property) c1.nc_p3: number",
     85: "var i1_ncprop: number",
-    86: "var i1_s_p: number"
-});
-
-goTo.marker('87');
-verify.quickInfoIs("class c1", "This is comment for c1");
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-
-goTo.marker('88');
-verify.quickInfoIs("(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s1", "(property) c1.s1: number", "s1 is static property of c1");
-verify.completionListContains("s2", "(method) c1.s2(b: number): number", "static sum with property");
-verify.completionListContains("s3", "(property) c1.s3: number", "static getter property\nsetter property 3");
-verify.completionListContains("nc_s1", "(property) c1.nc_s1: number", "");
-verify.completionListContains("nc_s2", "(method) c1.nc_s2(b: number): number", "");
-verify.completionListContains("nc_s3", "(property) c1.nc_s3: number", "");
-
-verify.quickInfos({
+    86: "var i1_s_p: number",
+    87: ["class c1", "This is comment for c1"],
     89: "var i1_s_f: (b: number) => number",
     90: ["(method) c1.s2(b: number): number", "static sum with property"],
-    91: "var i1_s_r: number"
-});
-
-verify.signatureHelp({ marker: "92", docComment: "static sum with property", parameterDocComment: "number to add" });
-
-verify.quickInfos({
+    91: "var i1_s_r: number",
     "92q": ["(method) c1.s2(b: number): number", "static sum with property"],
     93: "var i1_s_prop: number",
     94: ["(property) c1.s3: number", "static getter property\nsetter property 3"],
@@ -522,69 +318,25 @@ verify.quickInfos({
     98: "(property) c1.nc_s1: number",
     99: "var i1_s_ncf: (b: number) => number",
     100: "(method) c1.nc_s2(b: number): number",
-    101: "var i1_s_ncr: number"
-});
-
-verify.signatureHelp({ marker: "102", docComment: "" });
-verify.quickInfos({
+    101: "var i1_s_ncr: number",
     "102q": "(method) c1.nc_s2(b: number): number",
     103: "var i1_s_ncprop: number",
     104: "(property) c1.nc_s3: number",
     105: "(property) c1.nc_s3: number",
     106: "var i1_s_ncprop: number",
     107: "var i1_c: typeof c1",
-    108: ["class c1", "This is comment for c1"]
-});
-
-goTo.marker('109');
-verify.completionListContains("c1", "class c1", "This is comment for c1");
-verify.completionListContains("i1", "var i1: c1", "");
-verify.completionListContains("i1_p", "var i1_p: number", "");
-verify.completionListContains("i1_f", "var i1_f: (b: number) => number", "");
-verify.completionListContains("i1_r", "var i1_r: number", "");
-verify.completionListContains("i1_prop", "var i1_prop: number", "");
-verify.completionListContains("i1_nc_p", "var i1_nc_p: number", "");
-verify.completionListContains("i1_ncf", "var i1_ncf: (b: number) => number", "");
-verify.completionListContains("i1_ncr", "var i1_ncr: number", "");
-verify.completionListContains("i1_ncprop", "var i1_ncprop: number", "");
-verify.completionListContains("i1_s_p", "var i1_s_p: number", "");
-verify.completionListContains("i1_s_f", "var i1_s_f: (b: number) => number", "");
-verify.completionListContains("i1_s_r", "var i1_s_r: number", "");
-verify.completionListContains("i1_s_prop", "var i1_s_prop: number", "");
-verify.completionListContains("i1_s_nc_p", "var i1_s_nc_p: number", "");
-verify.completionListContains("i1_s_ncf", "var i1_s_ncf: (b: number) => number", "");
-verify.completionListContains("i1_s_ncr", "var i1_s_ncr: number", "");
-verify.completionListContains("i1_s_ncprop", "var i1_s_ncprop: number", "");
-
-verify.completionListContains("i1_c", "var i1_c: typeof c1", "");
-
-goTo.marker('110');
-verify.quickInfoIs("(property) cProperties.p2: number", "setter only property");
-verify.completionListContains("p1", "(property) cProperties.p1: number", "getter only property");
-verify.completionListContains("p2", "(property) cProperties.p2: number", "setter only property");
-verify.completionListContains("nc_p1", "(property) cProperties.nc_p1: number", "");
-verify.completionListContains("nc_p2", "(property) cProperties.nc_p2: number", "");
-
-verify.quickInfos({
+    108: ["class c1", "This is comment for c1"],
+    110: ["(property) cProperties.p2: number", "setter only property"],
     111: ["(property) cProperties.p1: number", "getter only property"],
     112: "(property) cProperties.nc_p2: number",
-    113: "(property) cProperties.nc_p1: number"
-});
-
-goTo.marker('114');
-verify.completionListContains("a", "(property) cWithConstructorProperty.a: number", "more info about a\nthis is first parameter a");
-verify.quickInfoIs("(property) cWithConstructorProperty.a: number", "more info about a\nthis is first parameter a");
-
-goTo.marker('115');
-verify.completionListContains("a", "(parameter) a: number", "more info about a\nthis is first parameter a");
-verify.quickInfoIs("(parameter) a: number", "more info about a\nthis is first parameter a");
-
-verify.quickInfos({
+    113: "(property) cProperties.nc_p1: number",
+    114: ["(property) cWithConstructorProperty.a: number", "more info about a\nthis is first parameter a"],
+    115: ["(parameter) a: number", "more info about a\nthis is first parameter a"],
     116: "this: this",
     117: "(local var) bbbb: number",
     118: "(local var) bbbb: number",
     119: [
         "constructor cWithConstructorProperty(a: number): cWithConstructorProperty",
         "this is class cWithConstructorProperty's constructor"
-    ]
+    ],
 });

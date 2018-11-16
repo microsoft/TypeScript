@@ -1,0 +1,20 @@
+=== tests/cases/compiler/thisShadowingErrorSpans.ts ===
+class C {
+>C : Symbol(C, Decl(thisShadowingErrorSpans.ts, 0, 0))
+
+    m() {
+>m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+
+        this.m();
+>this.m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+>this : Symbol(C, Decl(thisShadowingErrorSpans.ts, 0, 0))
+>m : Symbol(C.m, Decl(thisShadowingErrorSpans.ts, 0, 9))
+
+        function f() {
+>f : Symbol(f, Decl(thisShadowingErrorSpans.ts, 2, 17))
+
+            this.m();
+        }
+    }
+}
+

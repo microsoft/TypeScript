@@ -21,6 +21,4 @@ goTo.marker('1');
 verify.numberOfErrorsInCurrentFile(0);
 goTo.eof();
 edit.insert("x.");
-verify.completionListContains('enable');
-verify.completionListContains('post');
-verify.completionListCount(2);
+verify.completions({ exact: ["enable", "post"] });

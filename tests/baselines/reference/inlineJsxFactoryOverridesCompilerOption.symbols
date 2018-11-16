@@ -17,7 +17,7 @@ export function dom(): void;
 >dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
 
 export { dom as p };
->dom : Symbol(p, Decl(renderer.d.ts, 8, 8))
+>dom : Symbol(dom, Decl(renderer.d.ts, 6, 1))
 >p : Symbol(p, Decl(renderer.d.ts, 8, 8))
 
 === tests/cases/conformance/jsx/inline/reacty.tsx ===

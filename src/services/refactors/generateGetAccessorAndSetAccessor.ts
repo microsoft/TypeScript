@@ -20,8 +20,8 @@ namespace ts.refactor.generateGetAccessorAndSetAccessor {
         readonly renameAccessor: boolean;
     }
 
-    function getAvailableActions(context: RefactorContext): ApplicableRefactorInfo[] | undefined {
-        if (!getConvertibleFieldAtPosition(context)) return undefined;
+    function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
+        if (!getConvertibleFieldAtPosition(context)) return emptyArray;
 
         return [{
             name: actionName,

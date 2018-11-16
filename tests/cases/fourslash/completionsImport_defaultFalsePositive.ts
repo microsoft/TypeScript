@@ -14,9 +14,15 @@ goTo.file("/a.ts");
 
 verify.completions({
     marker: "",
-    includes: [
-        { name: "concat", source: "/node_modules/bar/concat", sourceDisplay: "bar/concat", text: "const concat: 0", kind: "const", hasAction: true },
-    ],
+    includes: {
+        name: "concat",
+        source: "/node_modules/bar/concat",
+        sourceDisplay: "bar/concat",
+        text: "const concat: 0",
+        kind: "const",
+        kindModifiers: "export,declare",
+        hasAction: true,
+    },
     preferences: { includeCompletionsForModuleExports: true },
 });
 

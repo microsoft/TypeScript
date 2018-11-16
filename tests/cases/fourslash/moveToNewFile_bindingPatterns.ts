@@ -13,7 +13,8 @@ verify.moveToNewFile({
         "/a.ts": "",
 
         "/x.ts":
-`export const [x, { p: y }] = [0, { p: 1 }];`,
+`export const [x, { p: y }] = [0, { p: 1 }];
+`,
 
         "/b.ts":
 `

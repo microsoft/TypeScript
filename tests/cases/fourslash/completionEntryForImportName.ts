@@ -2,10 +2,9 @@
 
 ////import /*1*/ /*2*/
 
-goTo.marker('1');
-verify.completionListIsEmpty();
+verify.completions({ marker: "1", exact: undefined });
 edit.insert('q');
-verify.completionListIsEmpty();
+verify.completions({ exact: undefined });
 verifyIncompleteImportName();
 
 goTo.marker('2');
@@ -18,7 +17,6 @@ edit.insert("a.");
 verifyIncompleteImportName();
 
 function verifyIncompleteImportName() {
-    goTo.marker('1');
-    verify.completionListIsEmpty();
+    verify.completions({ marker: "1", exact: undefined });
     verify.quickInfoIs("import q");
 }

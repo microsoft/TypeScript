@@ -4,7 +4,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(21,7): error TS2552: Cannot find name 'array2'. Did you mean 'Array'?
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(22,11): error TS2322: Type 'string' is not assignable to type '[[any]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(23,4): error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]]]'.
-  Property '2' is missing in type '[number, number]'.
+  Property '2' is missing in type '[number, number]' but required in type '[any, any, [[any]]]'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(24,11): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(29,17): error TS1317: A parameter property cannot be declared using a rest parameter.
 tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(34,22): error TS2304: Cannot find name 'E1'.
@@ -48,7 +48,7 @@ tests/cases/conformance/es6/destructuring/destructuringParameterDeclaration4.ts(
     a5([1, 2]);                              // Error, parameter type is [any, any, [[any]]]
        ~~~~~~
 !!! error TS2345: Argument of type '[number, number]' is not assignable to parameter of type '[any, any, [[any]]]'.
-!!! error TS2345:   Property '2' is missing in type '[number, number]'.
+!!! error TS2345:   Property '2' is missing in type '[number, number]' but required in type '[any, any, [[any]]]'.
     a6([1, 2, "string"]);                   // Error, parameter type is number[]
               ~~~~~~~~
 !!! error TS2322: Type 'string' is not assignable to type 'number'.

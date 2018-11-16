@@ -2,9 +2,9 @@ tests/cases/conformance/jsdoc/importer.js(3,5): error TS2339: Property 'other' d
 tests/cases/conformance/jsdoc/importer.js(4,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
 tests/cases/conformance/jsdoc/importer.js(11,5): error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
 tests/cases/conformance/jsdoc/importer.js(12,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
-tests/cases/conformance/jsdoc/importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a constant or a read-only property.
-tests/cases/conformance/jsdoc/importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a constant or a read-only property.
-tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a constant or a read-only property.
+tests/cases/conformance/jsdoc/importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a read-only property.
+tests/cases/conformance/jsdoc/importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a read-only property.
+tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a read-only property.
 
 
 ==== tests/cases/conformance/jsdoc/importer.js (7 errors) ====
@@ -30,13 +30,13 @@ tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 
 !!! error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
     mod.bad1 = 0;
         ~~~~
-!!! error TS2540: Cannot assign to 'bad1' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'bad1' because it is a read-only property.
     mod.bad2 = 0;
         ~~~~
-!!! error TS2540: Cannot assign to 'bad2' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'bad2' because it is a read-only property.
     mod.bad3 = 0;
         ~~~~
-!!! error TS2540: Cannot assign to 'bad3' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'bad3' because it is a read-only property.
     
 ==== tests/cases/conformance/jsdoc/mod1.js (0 errors) ====
     const obj = { value: 42, writable: true };
