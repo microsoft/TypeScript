@@ -3141,6 +3141,7 @@ namespace ts {
         /* @internal */ getNeverType(): Type;
         /* @internal */ getUnionType(types: Type[], subtypeReduction?: UnionReduction): Type;
         /* @internal */ createArrayType(elementType: Type): Type;
+        /* @internal */ getElementTypeOfArrayType(arrayType: Type): Type | undefined;
         /* @internal */ createPromiseType(type: Type): Type;
 
         /* @internal */ createAnonymousType(symbol: Symbol, members: SymbolTable, callSignatures: Signature[], constructSignatures: Signature[], stringIndexInfo: IndexInfo | undefined, numberIndexInfo: IndexInfo | undefined): Type;

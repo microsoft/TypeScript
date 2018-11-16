@@ -283,6 +283,7 @@ namespace ts {
             getNumberType: () => numberType,
             createPromiseType,
             createArrayType,
+            getElementTypeOfArrayType,
             getBooleanType: () => booleanType,
             getFalseType: (fresh?) => fresh ? falseType : regularFalseType,
             getTrueType: (fresh?) => fresh ? trueType : regularTrueType,
@@ -13220,6 +13221,10 @@ namespace ts {
 
         function isReadonlyArrayType(type: Type): boolean {
             return !!(getObjectFlags(type) & ObjectFlags.Reference) && (<TypeReference>type).target === globalReadonlyArrayType;
+        }
+
+        function getElementTypeOfArrayType(type: Type): Type | undefined {
+            return isArrayType(type) && (type as TypeReference).typeArguments ? (type as TypeReference).typeArguments![0] : undefined;
         }
 
         function isArrayLikeType(type: Type): boolean {

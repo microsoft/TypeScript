@@ -413,10 +413,9 @@ namespace ts.codefix {
                 cancellationToken.throwIfCancellationRequested();
                 inferTypeFromContext(reference, checker, usageContext);
             }
-            const isConstructor = declaration.kind === SyntaxKind.Constructor;
-            const callContexts = isConstructor ? usageContext.constructContexts : usageContext.callContexts;
-            return callContexts && declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
-                const types: Type[] = [];
+            const callContexts = [...usageContext.constructContexts || [], ...usageContext.callContexts || []];
+            return declaration.parameters.map((parameter, parameterIndex): ParameterInference => {
+                const types = [];
                 const isRest = isRestParameter(parameter);
                 let isOptional = false;
                 for (const callContext of callContexts) {
@@ -434,7 +433,8 @@ namespace ts.codefix {
                     }
                 }
                 if (isIdentifier(parameter.name)) {
-                    types.push(...inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken));
+                    const inferred = inferTypesFromReferences(getReferences(parameter.name, program, cancellationToken), checker, cancellationToken);
+                    types.push(...(isRest ? mapDefined(inferred, checker.getElementTypeOfArrayType) : inferred));
                 }
                 const type = unifyFromContext(types, checker);
                 return {
