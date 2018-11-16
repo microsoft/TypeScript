@@ -8046,6 +8046,7 @@ declare namespace ts.server {
         readonly containingProjects: Project[];
         private formatSettings;
         private preferences;
+        private textStorage;
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
         isScriptOpen(): boolean;
         open(newText: string): void;

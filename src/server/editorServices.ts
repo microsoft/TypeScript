@@ -2201,7 +2201,7 @@ namespace ts.server {
             if (!declarationInfo) return undefined;
 
             declarationInfo.getSnapshot(); // Ensure synchronized
-            const existingMapper = declarationInfo.textStorage.mapper;
+            const existingMapper = declarationInfo.mapper;
             if (existingMapper !== undefined) {
                 return existingMapper ? existingMapper : undefined;
             }
@@ -2220,11 +2220,11 @@ namespace ts.server {
             const mapper = getDocumentPositionMapper(
                 { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName) },
                 declarationInfo.fileName,
-                declarationInfo.textStorage.getLineInfo(),
+                declarationInfo.getLineInfo(),
                 readMapFile
             );
             readMapFile = undefined; // Remove ref to project
-            declarationInfo.textStorage.mapper = mapper || false;
+            declarationInfo.mapper = mapper || false;
             return mapper;
         }
 
@@ -2243,20 +2243,22 @@ namespace ts.server {
 
             // Key doesnt matter since its only for text and lines
             if (info.cacheSourceFile) return info.cacheSourceFile.sourceFile;
-            if (info.textStorage.sourceFileLike) return info.textStorage.sourceFileLike;
 
-            info.textStorage.sourceFileLike = {
-                get text() {
-                    Debug.fail("shouldnt need text");
-                    return "";
-                },
-                getLineAndCharacterOfPosition: pos => {
-                    const lineOffset = info.positionToLineOffset(pos);
-                    return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
-                },
-                getPositionOfLineAndCharacter: (line, character) => info.lineOffsetToPosition(line + 1, character + 1)
-            };
-            return info.textStorage.sourceFileLike;
+            // Create sourceFileLike
+            if (!info.sourceFileLike) {
+                info.sourceFileLike = {
+                    get text() {
+                        Debug.fail("shouldnt need text");
+                        return "";
+                    },
+                    getLineAndCharacterOfPosition: pos => {
+                        const lineOffset = info.positionToLineOffset(pos);
+                        return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
+                    },
+                    getPositionOfLineAndCharacter: (line, character) => info.lineOffsetToPosition(line + 1, character + 1)
+                };
+            }
+            return info.sourceFileLike;
         }
 
         setHostConfiguration(args: protocol.ConfigureRequestArguments) {
