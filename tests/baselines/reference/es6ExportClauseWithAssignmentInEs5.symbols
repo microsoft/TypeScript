@@ -32,7 +32,7 @@ bizz--; // similarly
 export { foo, baz, baz as quux, buzz, bizz };
 >foo : Symbol(foo, Decl(server.ts, 14, 8))
 >baz : Symbol(baz, Decl(server.ts, 14, 13))
->baz : Symbol(quux, Decl(server.ts, 14, 18))
+>baz : Symbol(baz, Decl(server.ts, 3, 3))
 >quux : Symbol(quux, Decl(server.ts, 14, 18))
 >buzz : Symbol(buzz, Decl(server.ts, 14, 31))
 >bizz : Symbol(bizz, Decl(server.ts, 14, 37))

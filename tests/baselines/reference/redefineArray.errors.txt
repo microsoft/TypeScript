@@ -1,7 +1,7 @@
-tests/cases/compiler/redefineArray.ts(1,1): error TS2540: Cannot assign to 'Array' because it is a constant or a read-only property.
+tests/cases/compiler/redefineArray.ts(1,1): error TS2588: Cannot assign to 'Array' because it is a constant.
 
 
 ==== tests/cases/compiler/redefineArray.ts (1 errors) ====
     Array = function (n:number, s:string) {return n;};
     ~~~~~
-!!! error TS2540: Cannot assign to 'Array' because it is a constant or a read-only property.
+!!! error TS2588: Cannot assign to 'Array' because it is a constant.

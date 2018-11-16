@@ -22,7 +22,7 @@ module m1 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -35,7 +35,7 @@ module m1 {
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
->typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 
@@ -59,7 +59,7 @@ module m1 {
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
->typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
 >"string" : "string"
 
@@ -94,7 +94,7 @@ module m2 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -107,7 +107,7 @@ module m2 {
 >num : number
 >typeof var2 === "string" && var2.length : number
 >typeof var2 === "string" : boolean
->typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 >var2.length : number
@@ -120,7 +120,7 @@ module m2 {
 >strOrNum : string | number
 >typeof var3 === "string" && var3 : string
 >typeof var3 === "string" : boolean
->typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
 >"string" : "string"
 >var3 : string
@@ -131,7 +131,7 @@ module m2 {
 
         if (typeof var4 === "string") {
 >typeof var4 === "string" : boolean
->typeof var4 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var4 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var4 : string | number
 >"string" : "string"
 
@@ -155,7 +155,7 @@ module m2 {
 
         if (typeof var5 === "string") {
 >typeof var5 === "string" : boolean
->typeof var5 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var5 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var5 : string | number
 >"string" : "string"
 
@@ -183,7 +183,7 @@ module m3.m4 {
 >num : number
 >typeof var1 === "string" && var1.length : number
 >typeof var1 === "string" : boolean
->typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 >var1.length : number
@@ -196,7 +196,7 @@ module m3.m4 {
 
     if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
->typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 
@@ -220,7 +220,7 @@ module m3.m4 {
 
     if (typeof var3 === "string") {
 >typeof var3 === "string" : boolean
->typeof var3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var3 : string | number
 >"string" : "string"
 

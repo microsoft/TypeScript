@@ -25,7 +25,7 @@ const Target = {
 >OK_I_GUESS : number
 >2 : 2
 }
-/** @enum {number} */
+/** @enum number */
 const Second = {
 >Second : { MISTAKE: string; OK: number; FINE: number; }
 >{    MISTAKE: "end",    OK: 1,    /** @type {number} */    FINE: 2,} : { MISTAKE: string; OK: number; FINE: number; }

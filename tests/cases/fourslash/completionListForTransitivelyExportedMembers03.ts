@@ -32,9 +32,4 @@
 ////import * as c from "./C";
 ////var x: c./**/
 
-goTo.marker();
-verify.completionListContains("I1");
-verify.completionListContains("I2");
-verify.completionListContains("I1_OR_I2");
-verify.completionListContains("C1");
-verify.not.completionListContains("__export");
+verify.completions({ marker: "", includes: ["I1", "I2", "I1_OR_I2", "C1"] });

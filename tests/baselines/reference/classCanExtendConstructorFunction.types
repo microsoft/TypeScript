@@ -268,16 +268,30 @@ soup.flavour
 >soup : typeof Soup
 >flavour : number
 
-var chowder = new Chowder();
->chowder : Chowder
->new Chowder() : Chowder
+var chowder = new Chowder({ claim: "ignorant" });
+>chowder : any
+>new Chowder({ claim: "ignorant" }) : any
 >Chowder : typeof Chowder
+>{ claim: "ignorant" } : { claim: "ignorant"; }
+>claim : "ignorant"
+>"ignorant" : "ignorant"
 
 chowder.flavour.claim
 >chowder.flavour.claim : any
 >chowder.flavour : any
->chowder : Chowder
+>chowder : any
 >flavour : any
 >claim : any
+
+var errorNoArgs = new Chowder();
+>errorNoArgs : any
+>new Chowder() : any
+>Chowder : typeof Chowder
+
+var errorArgType = new Chowder(0);
+>errorArgType : any
+>new Chowder(0) : any
+>Chowder : typeof Chowder
+>0 : 0
 
 

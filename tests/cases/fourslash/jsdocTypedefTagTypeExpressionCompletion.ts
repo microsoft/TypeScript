@@ -30,111 +30,53 @@
 ////  */
 ////var y;
 
-function verifySymbolPresentWithKind(symbol: string, kind: string) {
-    return verify.completionListContains(symbol, /*text*/ undefined, /*documentation*/ undefined, kind);
-}
-
-function verifySymbolNotPresent(symbol: string) {
-    return verify.not.completionListContains(symbol);
-}
-
-goTo.marker("type1");
-verifySymbolPresentWithKind("Foo", "class");
-verifySymbolPresentWithKind("I", "interface");
-verifySymbolNotPresent("Namespace");
-verifySymbolNotPresent("SomeType");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolNotPresent("method1");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("typeFooMember");
-verifySymbolNotPresent("Foo");
-verifySymbolNotPresent("I");
-verifySymbolPresentWithKind("Namespace", "module");
-verifySymbolNotPresent("SomeType");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolNotPresent("method1");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("NamespaceMember");
-verifySymbolNotPresent("Foo");
-verifySymbolNotPresent("I");
-verifySymbolNotPresent("Namespace");
-verifySymbolPresentWithKind("SomeType", "interface");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolNotPresent("method1");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("globalValue");
-verifySymbolPresentWithKind("Foo", "class");
-verifySymbolNotPresent("I");
-verifySymbolNotPresent("Namespace");
-verifySymbolNotPresent("SomeType");
-verifySymbolPresentWithKind("x", "var");
-verifySymbolPresentWithKind("x1", "var");
-verifySymbolPresentWithKind("y", "var");
-verifySymbolNotPresent("method1");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("valueMemberOfSomeType");
-verifySymbolNotPresent("Foo");
-verifySymbolNotPresent("I");
-verifySymbolNotPresent("Namespace");
-verifySymbolNotPresent("SomeType");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolNotPresent("method1");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("valueMemberOfFooInstance");
-verifySymbolNotPresent("Foo");
-verifySymbolNotPresent("I");
-verifySymbolNotPresent("Namespace");
-verifySymbolNotPresent("SomeType");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolNotPresent("method1");
-verifySymbolPresentWithKind("property1", "property");
-verifySymbolPresentWithKind("method3", "method");
-verifySymbolPresentWithKind("method4", "method");
-verifySymbolNotPresent("foo");
-
-goTo.marker("valueMemberOfFoo");
-verifySymbolNotPresent("Foo");
-verifySymbolNotPresent("I");
-verifySymbolNotPresent("Namespace");
-verifySymbolNotPresent("SomeType");
-verifySymbolNotPresent("x");
-verifySymbolNotPresent("x1");
-verifySymbolNotPresent("y");
-verifySymbolPresentWithKind("method1", "method");
-verifySymbolNotPresent("property1");
-verifySymbolNotPresent("method3");
-verifySymbolNotPresent("method4");
-verifySymbolNotPresent("foo");
-
-goTo.marker("propertyName");
-verify.completionListIsEmpty();
+verify.completions(
+    {
+        marker: "type1",
+        includes: [
+            { name: "Foo", kind: "class" },
+            { name: "I", kind: "interface" },
+        ],
+        excludes: ["Namespace", "SomeType", "x", "x1", "y", "method1", "property1", "method3", "method4", "foo"],
+    },
+    {
+        marker: "typeFooMember",
+        exact: { name: "Namespace", kind: "module", kindModifiers: "export" },
+    },
+    {
+        marker: "NamespaceMember",
+        exact: { name: "SomeType", kind: "interface", kindModifiers: "export" },
+    },
+    {
+        marker: "globalValue",
+        includes: [
+            { name: "Foo", kind: "class" },
+            { name: "x", kind: "var" },
+            { name: "x1", kind: "var" },
+            { name: "y", kind: "var" },
+        ],
+        excludes: ["I", "Namespace", "SomeType", "method1", "property1", "method3", "method4", "foo"],
+    },
+    // This is TypeScript code, so the @type tag doesn't change the type of `x`.
+    { marker: "valueMemberOfSomeType", exact: undefined },
+    {
+        marker: "valueMemberOfFooInstance",
+        exact: [
+            { name: "property1", kind: "property" },
+            { name: "method3", kind: "method" },
+            { name: "method4", kind: "method" },
+        ],
+    },
+    {
+        marker: "valueMemberOfFoo",
+        exact: [
+            "prototype",
+            { name: "method1", kind: "method", kindModifiers: "static" },
+            ...completion.functionMembers,
+        ],
+    },
+    {
+        marker: "propertyName",
+        exact: undefined,
+    },
+);

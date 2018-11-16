@@ -9,7 +9,7 @@ declare namespace Q {
 >args : Symbol(args, Decl(exportDeclarationsInAmbientNamespaces.ts, 1, 35))
 
     export { _try as try };
->_try : Symbol(try, Decl(exportDeclarationsInAmbientNamespaces.ts, 2, 12))
+>_try : Symbol(_try, Decl(exportDeclarationsInAmbientNamespaces.ts, 0, 21))
 >try : Symbol(try, Decl(exportDeclarationsInAmbientNamespaces.ts, 2, 12))
 }
 

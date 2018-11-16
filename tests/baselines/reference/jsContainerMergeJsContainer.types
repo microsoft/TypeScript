@@ -6,18 +6,18 @@ const a = {};
 
 a.d = function() {};
 >a.d = function() {} : { (): void; prototype: {}; }
->a.d : typeof a.d
+>a.d : { (): void; prototype: {}; }
 >a : typeof a
->d : typeof a.d
+>d : { (): void; prototype: {}; }
 >function() {} : { (): void; prototype: {}; }
 
 === tests/cases/conformance/salsa/b.js ===
 a.d.prototype = {};
 >a.d.prototype = {} : {}
 >a.d.prototype : {}
->a.d : typeof a.d
+>a.d : { (): void; prototype: {}; }
 >a : typeof a
->d : typeof a.d
+>d : { (): void; prototype: {}; }
 >prototype : {}
 >{} : {}
 

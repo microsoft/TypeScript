@@ -8,5 +8,6 @@
 
 verify.codeFix({
     description: "Add 'this.' to unresolved variable",
+    index: 0,
     newRangeContent: "this.foo = 10",
 });

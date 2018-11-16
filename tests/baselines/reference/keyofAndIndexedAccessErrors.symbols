@@ -412,3 +412,77 @@ function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
 >tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
 }
 
+// The constraint of 'keyof T' is 'keyof T'
+function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+>f4 : Symbol(f4, Decl(keyofAndIndexedAccessErrors.ts, 117, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 120, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+
+    k = 42; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+
+    k = "hello"; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+}
+
+// Repro from #27470
+
+type UndefinedKeys<T extends Record<string, any>> = {
+>UndefinedKeys : Symbol(UndefinedKeys, Decl(keyofAndIndexedAccessErrors.ts, 123, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  [K in keyof T]: undefined extends T[K] ? K : never
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+
+};
+
+type MyType = {a: string, b: string | undefined}
+>MyType : Symbol(MyType, Decl(keyofAndIndexedAccessErrors.ts, 129, 2))
+>a : Symbol(a, Decl(keyofAndIndexedAccessErrors.ts, 131, 15))
+>b : Symbol(b, Decl(keyofAndIndexedAccessErrors.ts, 131, 25))
+
+type Result1 = UndefinedKeys<MyType>;
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+>UndefinedKeys : Symbol(UndefinedKeys, Decl(keyofAndIndexedAccessErrors.ts, 123, 1))
+>MyType : Symbol(MyType, Decl(keyofAndIndexedAccessErrors.ts, 129, 2))
+
+const a1: Result1['a'] = 'a';  // Error
+>a1 : Symbol(a1, Decl(keyofAndIndexedAccessErrors.ts, 135, 5))
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+
+const b1: Result1['b'] = 'b';
+>b1 : Symbol(b1, Decl(keyofAndIndexedAccessErrors.ts, 136, 5))
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+
+function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+>test1 : Symbol(test1, Decl(keyofAndIndexedAccessErrors.ts, 136, 29))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 138, 45))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 138, 45))
+
+    t[k] = 42;  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+
+    t[k] = "hello";  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+
+    t[k] = [10, 20];  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+}
+

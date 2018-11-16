@@ -68,6 +68,32 @@ function f6() {
     }
 }
 
+function f7(x: {}) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+
+function f8<T>(x: T) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+
+function f9<T extends object>(x: T) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // never
+    }
+}
 
 //// [controlFlowTruthiness.js]
 function f1() {
@@ -129,5 +155,29 @@ function f6() {
     else {
         x; // string | undefined
         y; // string | undefined
+    }
+}
+function f7(x) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+function f8(x) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // {}
+    }
+}
+function f9(x) {
+    if (x) {
+        x; // {}
+    }
+    else {
+        x; // never
     }
 }

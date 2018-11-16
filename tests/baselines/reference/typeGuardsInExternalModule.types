@@ -11,7 +11,7 @@ var var1: string | number;
 
 if (typeof var1 === "string") {
 >typeof var1 === "string" : boolean
->typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 
@@ -38,7 +38,7 @@ export var var2: string | number;
 
 if (typeof var2 === "string") {
 >typeof var2 === "string" : boolean
->typeof var2 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var2 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var2 : string | number
 >"string" : "string"
 

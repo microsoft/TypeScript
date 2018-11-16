@@ -5,6 +5,9 @@ class A {
     x() {
 >x : () => void
     }
+    y() {
+>y : () => void
+    }
 }
 
 class B extends A {
@@ -19,12 +22,23 @@ class B extends A {
 >_super : any
 >null : null
 
+        const _superIndex = null;
+>_superIndex : any
+>null : null
+
         // call with property access
         super.x();
 >super.x() : void
 >super.x : () => void
 >super : A
 >x : () => void
+
+        // call additional property.
+        super.y();
+>super.y() : void
+>super.y : () => void
+>super : A
+>y : () => void
 
         // call with element access
         super["x"]();
@@ -54,6 +68,10 @@ class B extends A {
 
         const _super = null;
 >_super : any
+>null : null
+
+        const _superIndex = null;
+>_superIndex : any
 >null : null
 
         const f = () => {};
@@ -129,3 +147,4 @@ class B extends A {
 >f : () => void
     }
 }
+

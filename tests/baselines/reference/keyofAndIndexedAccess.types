@@ -145,7 +145,7 @@ type Q30 = [string, number][0];  // string
 type Q31 = [string, number][1];  // number
 >Q31 : number
 
-type Q32 = [string, number][2];  // string | number
+type Q32 = [string, number][number];  // string | number
 >Q32 : string | number
 
 type Q33 = [string, number][E.A];  // string
@@ -156,15 +156,11 @@ type Q34 = [string, number][E.B];  // number
 >Q34 : number
 >E : any
 
-type Q35 = [string, number][E.C];  // string | number
->Q35 : string | number
->E : any
+type Q35 = [string, number]["0"];  // string
+>Q35 : string
 
-type Q36 = [string, number]["0"];  // string
->Q36 : string
-
-type Q37 = [string, number]["1"];  // string
->Q37 : number
+type Q36 = [string, number]["1"];  // string
+>Q36 : number
 
 type Q40 = (Shape | Options)["visible"];  // boolean | "yes" | "no"
 >Q40 : boolean | "yes" | "no"
@@ -1207,12 +1203,11 @@ type S2 = {
 
 };
 
-function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K], x4: T[K]) {
->f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K], x4: T[K]) => void
+function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2], x3: S2[K]) {
+>f90 : <T extends S2, K extends "a" | "b">(x1: string, x2: T["a" | "b"], x3: S2[K]) => void
 >x1 : string
 >x2 : T["a" | "b"]
 >x3 : S2[K]
->x4 : T[K]
 
     x1 = x2;
 >x1 = x2 : T["a" | "b"]
@@ -1224,11 +1219,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x1 : string
 >x3 : S2[K]
 
-    x1 = x4;
->x1 = x4 : T[K]
->x1 : string
->x4 : T[K]
-
     x2 = x1;
 >x2 = x1 : string
 >x2 : T["a" | "b"]
@@ -1239,11 +1229,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x2 : T["a" | "b"]
 >x3 : S2[K]
 
-    x2 = x4;
->x2 = x4 : T[K]
->x2 : T["a" | "b"]
->x4 : T[K]
-
     x3 = x1;
 >x3 = x1 : string
 >x3 : S2[K]
@@ -1253,26 +1238,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
 >x3 = x2 : T["a" | "b"]
 >x3 : S2[K]
 >x2 : T["a" | "b"]
-
-    x3 = x4;
->x3 = x4 : T[K]
->x3 : S2[K]
->x4 : T[K]
-
-    x4 = x1;
->x4 = x1 : string
->x4 : T[K]
->x1 : string
-
-    x4 = x2;
->x4 = x2 : T["a" | "b"]
->x4 : T[K]
->x2 : T["a" | "b"]
-
-    x4 = x3;
->x4 = x3 : S2[K]
->x4 : T[K]
->x3 : S2[K]
 
     x1.length;
 >x1.length : number
@@ -1287,11 +1252,6 @@ function f90<T extends S2, K extends keyof S2>(x1: S2[keyof S2], x2: T[keyof S2]
     x3.length;
 >x3.length : number
 >x3 : S2[K]
->length : number
-
-    x4.length;
->x4.length : number
->x4 : T[K]
 >length : number
 }
 

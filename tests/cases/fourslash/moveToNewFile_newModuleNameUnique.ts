@@ -15,6 +15,7 @@ verify.moveToNewFile({
 ``,
 
         "/x.2.ts":
-`export const x = 0;`,
+`export const x = 0;
+`,
     },
 });

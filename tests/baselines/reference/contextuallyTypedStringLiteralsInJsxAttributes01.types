@@ -36,11 +36,11 @@ const FooComponent = (props: { foo: "A" | "B" | "C" }) => <span>{props.foo}</spa
 <FooComponent foo={"f"} />;
 ><FooComponent foo={"f"} /> : JSX.Element
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->foo : "f"
+>foo : string
 >"f" : "f"
 
 <FooComponent foo="f"   />;
 ><FooComponent foo="f"   /> : JSX.Element
 >FooComponent : (props: { foo: "A" | "B" | "C"; }) => JSX.Element
->foo : "f"
+>foo : string
 

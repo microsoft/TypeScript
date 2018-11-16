@@ -22,5 +22,5 @@
 //// <[|SFC/*one*/Comp|] x />
 
 verify.goToDefinition({
-    "one": ["def", "pt1"],
+    "one": ["def"],
 });

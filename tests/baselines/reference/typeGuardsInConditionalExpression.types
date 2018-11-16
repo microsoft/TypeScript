@@ -13,7 +13,7 @@ function foo(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? x.length // string        : x++ : number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -33,7 +33,7 @@ function foo2(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? ((x = "hello") && x) // string        : x : string | number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -56,7 +56,7 @@ function foo3(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? ((x = 10) && x) // number        : x : number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -79,7 +79,7 @@ function foo4(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? x // string        : ((x = 10) && x) : string | number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -102,7 +102,7 @@ function foo5(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? x // string        : ((x = "hello") && x) : string
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -126,7 +126,7 @@ function foo6(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? ((x = 10) && x) // number        : ((x = "hello") && x) : string | number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -155,7 +155,7 @@ function foo7(x: number | string | boolean) {
     return typeof x === "string"
 >typeof x === "string"        ? x === "hello" // boolean        : typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -167,7 +167,7 @@ function foo7(x: number | string | boolean) {
         : typeof x === "boolean"
 >typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"boolean" : "boolean"
 
@@ -189,7 +189,7 @@ function foo8(x: number | string | boolean) {
     return typeof x === "string"
 >typeof x === "string"        ? x === "hello"        : ((b = x) && //  number | boolean        (typeof x === "boolean"        ? x // boolean        : x == 10)) : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -210,7 +210,7 @@ function foo8(x: number | string | boolean) {
 >(typeof x === "boolean"        ? x // boolean        : x == 10) : boolean
 >typeof x === "boolean"        ? x // boolean        : x == 10 : boolean
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"boolean" : "boolean"
 
@@ -234,7 +234,7 @@ function foo9(x: number | string) {
     return typeof x === "string"
 >typeof x === "string"        ? ((y = x.length) && x === "hello") // boolean        : x === 10 : boolean
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -267,7 +267,7 @@ function foo10(x: number | string | boolean) {
     return typeof x === "string"
 >typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && x.toString()) : string
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -285,7 +285,7 @@ function foo10(x: number | string | boolean) {
 
         && typeof x === "number"
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 
@@ -306,7 +306,7 @@ function foo11(x: number | string | boolean) {
     return typeof x === "string"
 >typeof x === "string"        ? x // string        : ((b = x) // x is number | boolean        && typeof x === "number"        && (x = 10) // assignment to x        && x) : string | number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -325,7 +325,7 @@ function foo11(x: number | string | boolean) {
 
         && typeof x === "number"
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 
@@ -349,7 +349,7 @@ function foo12(x: number | string | boolean) {
     return typeof x === "string"
 >typeof x === "string"        ? ((x = 10) && x.toString().length) // number        : ((b = x) // x is number | boolean        && typeof x === "number"        && x) : number
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -378,7 +378,7 @@ function foo12(x: number | string | boolean) {
 
         && typeof x === "number"
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 

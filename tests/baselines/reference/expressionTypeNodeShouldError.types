@@ -20,7 +20,7 @@ class C {
 
         const x: "".typeof(this.foo);
 >x : ""
->typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
 >this : this
@@ -38,7 +38,7 @@ const nodes = document.getElementsByTagName("li");
 
 type ItemType = "".typeof(nodes.item(0));
 >ItemType : ""
->typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(nodes.item(0)) : HTMLLIElement
 >nodes.item(0) : HTMLLIElement
 >nodes.item : (index: number) => HTMLLIElement
@@ -61,7 +61,7 @@ class C2 {
 
         const x: 3.141592.typeof(this.foo);
 >x : 3.141592
->typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
 >this : this
@@ -79,7 +79,7 @@ const nodes2 = document.getElementsByTagName("li");
 
 type ItemType2 = 4..typeof(nodes.item(0));
 >ItemType2 : 4
->typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(nodes.item(0)) : HTMLLIElement
 >nodes.item(0) : HTMLLIElement
 >nodes.item : (index: number) => HTMLLIElement
@@ -103,7 +103,7 @@ class C3 {
         const x: false.typeof(this.foo);
 >x : false
 >false : false
->typeof(this.foo) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(this.foo) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(this.foo) : () => void
 >this.foo : () => void
 >this : this
@@ -122,7 +122,7 @@ const nodes3 = document.getElementsByTagName("li");
 type ItemType3 = true.typeof(nodes.item(0));
 >ItemType3 : true
 >true : true
->typeof(nodes.item(0)) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(nodes.item(0)) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(nodes.item(0)) : HTMLLIElement
 >nodes.item(0) : HTMLLIElement
 >nodes.item : (index: number) => HTMLLIElement

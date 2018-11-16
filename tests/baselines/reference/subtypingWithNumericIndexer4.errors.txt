@@ -5,7 +5,7 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'Base'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts(20,23): error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
-  Property 'bar' is missing in type 'Base'.
+  Property 'bar' is missing in type 'Base' but required in type 'Derived'.
 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts(24,11): error TS2415: Class 'B3<T>' incorrectly extends base class 'A<T>'.
   Index signatures are incompatible.
     Type 'string' is not assignable to type 'T'.
@@ -42,7 +42,8 @@ tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingW
 !!! error TS2415:     Type 'string' is not assignable to type 'Base'.
                           ~~~~
 !!! error TS2344: Type 'Base' does not satisfy the constraint 'Derived'.
-!!! error TS2344:   Property 'bar' is missing in type 'Base'.
+!!! error TS2344:   Property 'bar' is missing in type 'Base' but required in type 'Derived'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/subtypesAndSuperTypes/subtypingWithNumericIndexer4.ts:4:34: 'bar' is declared here.
             [x: number]: string; // error
         }
     

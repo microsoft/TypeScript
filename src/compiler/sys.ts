@@ -36,23 +36,6 @@ namespace ts {
         Low = 250
     }
 
-    function getPriorityValues(highPriorityValue: number): [number, number, number] {
-        const mediumPriorityValue = highPriorityValue * 2;
-        const lowPriorityValue = mediumPriorityValue * 4;
-        return [highPriorityValue, mediumPriorityValue, lowPriorityValue];
-    }
-
-    function pollingInterval(watchPriority: PollingInterval): number {
-        return pollingIntervalsForPriority[watchPriority];
-    }
-
-    const pollingIntervalsForPriority = getPriorityValues(250);
-
-    /* @internal */
-    export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: PollingInterval): FileWatcher {
-        return host.watchFile!(fileName, callback, pollingInterval(watchPriority));
-    }
-
     /* @internal */
     export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval | undefined) => FileWatcher;
     /* @internal */
@@ -317,16 +300,20 @@ namespace ts {
         const newTime = modifiedTime.getTime();
         if (oldTime !== newTime) {
             watchedFile.mtime = modifiedTime;
-            const eventKind = oldTime === 0
-                ? FileWatcherEventKind.Created
-                : newTime === 0
-                    ? FileWatcherEventKind.Deleted
-                    : FileWatcherEventKind.Changed;
-            watchedFile.callback(watchedFile.fileName, eventKind);
+            watchedFile.callback(watchedFile.fileName, getFileWatcherEventKind(oldTime, newTime));
             return true;
         }
 
         return false;
+    }
+
+    /*@internal*/
+    export function getFileWatcherEventKind(oldTime: number, newTime: number) {
+        return oldTime === 0
+            ? FileWatcherEventKind.Created
+            : newTime === 0
+                ? FileWatcherEventKind.Deleted
+                : FileWatcherEventKind.Changed;
     }
 
     /*@internal*/
@@ -792,11 +779,10 @@ namespace ts {
                         dirName,
                         (_eventName: string, relativeFileName) => {
                             // When files are deleted from disk, the triggered "rename" event would have a relativefileName of "undefined"
-                            const fileName = !isString(relativeFileName)
-                                ? undefined! // TODO: GH#18217
-                                : getNormalizedAbsolutePath(relativeFileName, dirName);
+                            if (!isString(relativeFileName)) { return; }
+                            const fileName = getNormalizedAbsolutePath(relativeFileName, dirName);
                             // Some applications save a working file via rename operations
-                            const callbacks = fileWatcherCallbacks.get(toCanonicalName(fileName));
+                            const callbacks = fileName && fileWatcherCallbacks.get(toCanonicalName(fileName));
                             if (callbacks) {
                                 for (const fileCallback of callbacks) {
                                     fileCallback(fileName, FileWatcherEventKind.Changed);
@@ -843,7 +829,7 @@ namespace ts {
                 }
             }
 
-            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string) => void;
+            type FsWatchCallback = (eventName: "rename" | "change", relativeFileName: string | undefined) => void;
 
             function createFileWatcherCallback(callback: FsWatchCallback): FileWatcherCallback {
                 return (_fileName, eventKind) => callback(eventKind === FileWatcherEventKind.Changed ? "change" : "rename", "");

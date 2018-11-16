@@ -5,7 +5,7 @@ namespace ts {
             return []; // No declaration diagnostics for js for now
         }
         const compilerOptions = host.getCompilerOptions();
-        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJavascript), [transformDeclarations], /*allowDtsFiles*/ false);
+        const result = transformNodes(resolver, host, compilerOptions, file ? [file] : filter(host.getSourceFiles(), isSourceFileNotJS), [transformDeclarations], /*allowDtsFiles*/ false);
         return result.diagnostics;
     }
 
@@ -45,6 +45,7 @@ namespace ts {
             reportInaccessibleThisError,
             reportInaccessibleUniqueSymbolError,
             reportPrivateInBaseOfClassExpression,
+            reportLikelyUnsafeImportRequiredError,
             moduleResolverHost: host,
             trackReferencedAmbientModule,
             trackExternalModuleSymbolOfImportTypeNode
@@ -150,6 +151,14 @@ namespace ts {
                 context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_references_an_inaccessible_1_type_A_type_annotation_is_necessary,
                     declarationNameToString(errorNameNode),
                     "this"));
+            }
+        }
+
+        function reportLikelyUnsafeImportRequiredError(specifier: string) {
+            if (errorNameNode) {
+                context.addDiagnostic(createDiagnosticForNode(errorNameNode, Diagnostics.The_inferred_type_of_0_cannot_be_named_without_a_reference_to_1_This_is_likely_not_portable_A_type_annotation_is_necessary,
+                    declarationNameToString(errorNameNode),
+                    specifier));
             }
         }
 
@@ -275,7 +284,7 @@ namespace ts {
                     else {
                         if (isBundledEmit && contains((node as Bundle).sourceFiles, file)) return; // Omit references to files which are being merged
                         const paths = getOutputPathsFor(file, host, /*forceDtsPaths*/ true);
-                        declFileName = paths.declarationFilePath || paths.jsFilePath;
+                        declFileName = paths.declarationFilePath || paths.jsFilePath || file.fileName;
                     }
 
                     if (declFileName) {
@@ -373,7 +382,7 @@ namespace ts {
 
         function ensureNoInitializer(node: CanHaveLiteralInitializer) {
             if (shouldPrintWithInitializer(node)) {
-                return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer); // TODO: Make safe
+                return resolver.createLiteralConstValue(getParseTreeNode(node) as CanHaveLiteralInitializer, symbolTracker); // TODO: Make safe
             }
             return undefined;
         }
@@ -1043,7 +1052,7 @@ namespace ts {
                     const modifiers = createNodeArray(ensureModifiers(input, isPrivate));
                     const typeParameters = ensureTypeParams(input, input.typeParameters);
                     const ctor = getFirstConstructorWithBody(input);
-                    let parameterProperties: PropertyDeclaration[] | undefined;
+                    let parameterProperties: ReadonlyArray<PropertyDeclaration> | undefined;
                     if (ctor) {
                         const oldDiag = getSymbolAccessibilityDiagnostic;
                         parameterProperties = compact(flatMap(ctor.parameters, param => {

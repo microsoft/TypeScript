@@ -79,7 +79,7 @@ function isBoolean(value) {
 
     return typeof value === "boolean";
 >typeof value === "boolean" : boolean
->typeof value : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof value : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >value : any
 >"boolean" : "boolean"
 }
@@ -110,7 +110,7 @@ function isNumber(x) { return typeof x === "number" }
 >isNumber : (x: unknown) => x is number
 >x : unknown
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : unknown
 >"number" : "number"
 
