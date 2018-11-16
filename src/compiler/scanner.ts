@@ -349,7 +349,13 @@ namespace ts {
     /* @internal */
     export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string, allowEdits?: true): number {
         if (line < 0 || line >= lineStarts.length) {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            if (allowEdits) {
+                // Clamp line to nearest allowable value
+                line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
+            }
+            else {
+                Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            }
         }
 
         const res = lineStarts[line] + character;
