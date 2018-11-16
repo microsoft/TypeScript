@@ -18,7 +18,7 @@ namespace ts.textStorage {
             const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, /*info*/undefined!);
 
             ts1.useScriptVersionCache_TestOnly();
-            ts2.useText_TestOnly();
+            ts2.useText();
 
             const lineMap = computeLineStarts(f.content);
 
@@ -57,7 +57,7 @@ namespace ts.textStorage {
             ts1.edit(0, 5, "   ");
             assert.isTrue(ts1.hasScriptVersionCache_TestOnly(), "have script version cache - 1");
 
-            ts1.useText_TestOnly();
+            ts1.useText();
             assert.isFalse(ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 2");
 
             ts1.getLineInfo(0);
@@ -77,7 +77,7 @@ namespace ts.textStorage {
             // Since script info is not used in these tests, just cheat by passing undefined
             const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, /*info*/undefined!);
 
-            ts1.useText_TestOnly(f.content);
+            ts1.useText(f.content);
             assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
 
             assert.strictEqual(f.content.length, ts1.getTelemetryFileSize());

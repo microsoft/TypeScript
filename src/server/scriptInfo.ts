@@ -64,7 +64,8 @@ namespace ts.server {
             this.switchToScriptVersionCache();
         }
 
-        public useText_TestOnly(newText?: string) {
+        /** Public for testing */
+        public useText(newText?: string) {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
@@ -90,22 +91,13 @@ namespace ts.server {
             // Reload always has fresh content
             this.pendingReloadFromDisk = false;
 
-            // We only need both this.text and this.fileSize if this.text
-            // is artificially empty because it was too large.
-            // We assume that an empty string passed to reload is not
-            // for a file that was too large to store.
-            this.fileSize = undefined;
-
             // If text changed set the text
             // This also ensures that if we had switched to version cache,
             // we are switching back to text.
             // The change to version cache will happen when needed
             // Thus avoiding the computation if there are no changes
             if (this.text !== newText) {
-                this.text = newText;
-                this.version.text++;
-                this.svc = undefined;
-                this.lineMap = undefined;
+                this.useText(newText);
                 // We cant guarantee new text is own file text
                 this.ownFileText = false;
                 return true;
