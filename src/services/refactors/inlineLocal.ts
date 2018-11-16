@@ -142,7 +142,7 @@ namespace ts.refactor.inlineLocal {
         getNodeId(node);
     }
 
-    function parenthesizeIfNecessary(target: Node, expression: Expression): Expression {
+    export function parenthesizeIfNecessary(target: Node, expression: Expression): Expression {
         const parent = target.parent;
         if (isBinaryExpression(expression) &&
             isUnaryExpression(parent) &&
@@ -157,7 +157,7 @@ namespace ts.refactor.inlineLocal {
         return expression;
     }
 
-    export function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker, withDeclaration: boolean): ReadonlyArray<Identifier> {
+    function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker, withDeclaration: boolean): ReadonlyArray<Identifier> {
         const symbol = checker.getSymbolAtLocation(target);
         return findDescendants(scope, n =>
             checker.getSymbolAtLocation(n) === symbol &&

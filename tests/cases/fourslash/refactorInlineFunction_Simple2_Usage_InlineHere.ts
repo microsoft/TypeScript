@@ -11,8 +11,8 @@
 goTo.select("x", "w");
 edit.applyRefactor({
     refactorName: "Inline function",
-    actionName: "Inline all",
-    actionDescription: "Inline all",
+    actionName: "Inline here",
+    actionDescription: "Inline here",
     newContent: `function bar() {
     const num = 42;
     const meaningOfLife = num;
