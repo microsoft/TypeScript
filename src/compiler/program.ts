@@ -1376,7 +1376,7 @@ namespace ts {
         }
 
         function getTypeChecker() {
-            return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = createTypeChecker(program, /*produceDiagnostics:*/ false));
+            return noDiagnosticsTypeChecker || (noDiagnosticsTypeChecker = diagnosticsProducingTypeChecker || createTypeChecker(program, /*produceDiagnostics:*/ false));
         }
 
         function emit(sourceFile?: SourceFile, writeFileCallback?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, transformers?: CustomTransformers): EmitResult {
