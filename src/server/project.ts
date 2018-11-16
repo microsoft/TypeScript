@@ -10,26 +10,43 @@ namespace ts.server {
     export type Mutable<T> = { -readonly [K in keyof T]: T[K]; };
 
     /* @internal */
-    export function countEachFileTypes(infos: ScriptInfo[]): FileStats {
-        const result: Mutable<FileStats> = { js: 0, jsx: 0, ts: 0, tsx: 0, dts: 0, deferred: 0 };
+    export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): FileStats {
+        const result: Mutable<FileStats> = {
+            js: 0, jsSize: 0,
+            jsx: 0, jsxSize: 0,
+            ts: 0, tsSize: 0,
+            tsx: 0, tsxSize: 0,
+            dts: 0, dtsSize: 0,
+            deferred: 0, deferredSize: 0,
+        };
         for (const info of infos) {
+            const fileSize = includeSizes ? info.getTelemetryFileSize() : 0;
             switch (info.scriptKind) {
                 case ScriptKind.JS:
                     result.js += 1;
+                    result.jsSize! += fileSize;
                     break;
                 case ScriptKind.JSX:
                     result.jsx += 1;
+                    result.jsxSize! += fileSize;
                     break;
                 case ScriptKind.TS:
-                    fileExtensionIs(info.fileName, Extension.Dts)
-                        ? result.dts += 1
-                        : result.ts += 1;
+                    if (fileExtensionIs(info.fileName, Extension.Dts)) {
+                        result.dts += 1;
+                        result.dtsSize! += fileSize;
+                    }
+                    else {
+                        result.ts += 1;
+                        result.tsSize! += fileSize;
+                    }
                     break;
                 case ScriptKind.TSX:
                     result.tsx += 1;
+                    result.tsxSize! += fileSize;
                     break;
                 case ScriptKind.Deferred:
                     result.deferred += 1;
+                    result.deferredSize! += fileSize;
                     break;
             }
         }

@@ -123,11 +123,22 @@ namespace ts.server {
 
     export interface FileStats {
         readonly js: number;
+        readonly jsSize?: number;
+
         readonly jsx: number;
+        readonly jsxSize?: number;
+
         readonly ts: number;
+        readonly tsSize?: number;
+
         readonly tsx: number;
+        readonly tsxSize?: number;
+
         readonly dts: number;
+        readonly dtsSize?: number;
+
         readonly deferred: number;
+        readonly deferredSize?: number;
     }
 
     export interface OpenFileInfo {
@@ -1600,7 +1611,7 @@ namespace ts.server {
             setProjectOptionsUsed(project);
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createSHA256Hash(project.projectName),
-                fileStats: countEachFileTypes(project.getScriptInfos()),
+                fileStats: countEachFileTypes(project.getScriptInfos(), /*includeSizes*/ true),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilationSettings()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
                 extends: projectOptions && projectOptions.configHasExtendsProperty,

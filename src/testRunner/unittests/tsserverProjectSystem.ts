@@ -183,7 +183,7 @@ namespace ts.projectSystem {
     }
 
     export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
-        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
+        return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
     }
 
     export interface ConfigFileDiagnostic {
