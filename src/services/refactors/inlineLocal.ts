@@ -63,7 +63,7 @@ namespace ts.refactor.inlineLocal {
 
     function createInfo(checker: TypeChecker, declaration: VariableDeclaration, token?: Identifier): Info | undefined {
         const name = declaration.name;
-        const usages = getReferencesInScope(ts.getEnclosingBlockScopeContainer(name), name, checker);
+        const usages = getReferencesInScope(getEnclosingBlockScopeContainer(name), name, checker);
         return canInline(declaration, usages) ? {
             declaration,
             usages,
@@ -75,7 +75,7 @@ namespace ts.refactor.inlineLocal {
         let hasErrors = false;
         if (!declaration.initializer) hasErrors = true;
         if (containsProhibitedModifiers(declaration.parent.parent.modifiers)) hasErrors = true;
-        ts.forEach(usages, usage => {
+        forEach(usages, usage => {
             if (isAssigned(usage)) hasErrors = true;
         });
         return !hasErrors;
@@ -114,7 +114,7 @@ namespace ts.refactor.inlineLocal {
         usages: ReadonlyArray<Identifier>): FileTextChanges[] {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
-            ts.forEach(usages, oldNode => {
+            forEach(usages, oldNode => {
                 const { initializer } = declaration;
                 makeIdUnique(initializer!); // since there is no node-copying function
                 const expression = parenthesizeIfNecessary(oldNode, initializer!);
@@ -160,7 +160,7 @@ namespace ts.refactor.inlineLocal {
     function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker): ReadonlyArray<Identifier> {
         const nodes: Node[] = [];
         function getNodes(node: Node) {
-            ts.forEachChild(node, n => {
+            forEachChild(node, n => {
                 nodes.push(n);
                 getNodes(n);
             });
