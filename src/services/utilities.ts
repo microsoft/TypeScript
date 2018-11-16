@@ -1210,29 +1210,6 @@ namespace ts {
         return { span, newText };
     }
 
-    export const typeKeywords: ReadonlyArray<SyntaxKind> = [
-        SyntaxKind.AnyKeyword,
-        SyntaxKind.BooleanKeyword,
-        SyntaxKind.FalseKeyword,
-        SyntaxKind.KeyOfKeyword,
-        SyntaxKind.NeverKeyword,
-        SyntaxKind.NullKeyword,
-        SyntaxKind.NumberKeyword,
-        SyntaxKind.ObjectKeyword,
-        SyntaxKind.StringKeyword,
-        SyntaxKind.SymbolKeyword,
-        SyntaxKind.TrueKeyword,
-        SyntaxKind.VoidKeyword,
-        SyntaxKind.UndefinedKeyword,
-        SyntaxKind.UniqueKeyword,
-        SyntaxKind.UnknownKeyword,
-    ];
-    const typeKeywordsSet = arrayToSet(typeKeywords as unknown as ReadonlyArray<string>);
-
-    export function isTypeKeyword(kind: SyntaxKind): boolean {
-        return typeKeywordsSet.has(kind as unknown as string);
-    }
-
     /** True if the symbol is for an external module, as opposed to a namespace. */
     export function isExternalModuleSymbol(moduleSymbol: Symbol): boolean {
         return !!(moduleSymbol.flags & SymbolFlags.Module) && moduleSymbol.name.charCodeAt(0) === CharacterCodes.doubleQuote;

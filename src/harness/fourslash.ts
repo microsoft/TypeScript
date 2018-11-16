@@ -4439,11 +4439,8 @@ namespace FourSlashInterface {
         const interfaceEntry = (name: string): ExpectedCompletionEntryObject => ({ name, kind: "interface", kindModifiers: "declare" });
         const typeEntry = (name: string): ExpectedCompletionEntryObject => ({ name, kind: "type", kindModifiers: "declare" });
 
-        const res: ExpectedCompletionEntryObject[] = [];
-        for (let i = ts.SyntaxKind.FirstKeyword; i <= ts.SyntaxKind.LastKeyword; i++) {
-            res.push({ name: ts.Debug.assertDefined(ts.tokenToString(i)), kind: "keyword" });
-        }
-        export const keywordsWithUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = res;
+        export const keywordsWithUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = ts.allKeywords().map((kw): ExpectedCompletionEntryObject =>
+            ({ name: ts.Debug.assertDefined(ts.tokenToString(kw)), kind: "keyword" }));
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =

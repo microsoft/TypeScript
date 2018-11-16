@@ -1899,18 +1899,12 @@ namespace ts.Completions {
 
     // A cache of completion entries for keywords, these do not change between sessions
     const _keywordCompletions: ReadonlyArray<CompletionEntry>[] = [];
-    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = memoize(() => {
-        const res: CompletionEntry[] = [];
-        for (let i = SyntaxKind.FirstKeyword; i <= SyntaxKind.LastKeyword; i++) {
-            res.push({
-                name: tokenToString(i)!,
-                kind: ScriptElementKind.keyword,
-                kindModifiers: ScriptElementKindModifier.none,
-                sortText: "0"
-            });
-        }
-        return res;
-    });
+    const allKeywordsCompletions: () => ReadonlyArray<CompletionEntry> = memoize(() => allKeywords().map((kw): CompletionEntry => ({
+        name: tokenToString(kw)!,
+        kind: ScriptElementKind.keyword,
+        kindModifiers: ScriptElementKindModifier.none,
+        sortText: "0"
+    })));
     function getKeywordCompletions(keywordFilter: KeywordCompletionFilters): ReadonlyArray<CompletionEntry> {
         return _keywordCompletions[keywordFilter] || (_keywordCompletions[keywordFilter] = allKeywordsCompletions().filter(entry => {
             const kind = stringToToken(entry.name)!;

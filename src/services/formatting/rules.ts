@@ -29,7 +29,7 @@ namespace ts.formatting {
         const unaryPredecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.OpenParenToken, SyntaxKind.ThisKeyword, SyntaxKind.NewKeyword];
         const unaryPostdecrementExpressions = [SyntaxKind.Identifier, SyntaxKind.CloseParenToken, SyntaxKind.CloseBracketToken, SyntaxKind.NewKeyword];
         const comments = [SyntaxKind.SingleLineCommentTrivia, SyntaxKind.MultiLineCommentTrivia];
-        const typeNames = [SyntaxKind.Identifier, ...typeKeywords];
+        const typeNames = [SyntaxKind.Identifier, ...allKeywords(isTypeKeyword)];
 
         // Place a space before open brace in a function declaration
         // TypeScript: Function can have return types, which can be made of tons of different token kinds
