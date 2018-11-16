@@ -437,7 +437,8 @@ namespace ts.server {
         /**
          * Container of all known scripts
          */
-        private readonly filenameToScriptInfo = createMap<ScriptInfo>();
+        /*@internal*/
+        readonly filenameToScriptInfo = createMap<ScriptInfo>();
         private readonly scriptInfoInNodeModulesWatchers = createMap <ScriptInfoInNodeModulesWatcher>();
         /**
          * Contains all the deleted script info's version information so that
@@ -2209,6 +2210,7 @@ namespace ts.server {
             // Create the mapper
             declarationInfo.mapInfo = undefined;
 
+            // TODO: shkamat Lifetime of declarationInfo and mapInfo
             let readMapFile: ((fileName: string) => string | undefined) | undefined = fileName => {
                 const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
                 if (!mapInfo) return undefined;
@@ -2218,7 +2220,7 @@ namespace ts.server {
             };
             const projectName = project.projectName;
             const mapper = getDocumentPositionMapper(
-                { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName) },
+                { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
                 declarationInfo.fileName,
                 declarationInfo.getLineInfo(),
                 readMapFile
@@ -2229,8 +2231,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getSourceFileLike(fileName: string, projectName: string | Project) {
-            const project = (projectName as Project).projectName ? projectName as Project : this.findProject(projectName as string);
+        getSourceFileLike(fileName: string, projectNameOrProject: string | Project, declarationInfo?: ScriptInfo) {
+            const project = (projectNameOrProject as Project).projectName ? projectNameOrProject as Project : this.findProject(projectNameOrProject as string);
             if (project) {
                 const path = project.toPath(fileName);
                 const sourceFile = project.getSourceFile(path);
@@ -2240,6 +2242,11 @@ namespace ts.server {
             // Need to look for other files.
             const info = this.getOrCreateScriptInfoNotOpenedByClient(fileName, (project || this).currentDirectory, project ? project.directoryStructureHost : this.host);
             if (!info) return undefined;
+
+            // Attach as source
+            if (declarationInfo && declarationInfo.mapInfo && info !== declarationInfo) {
+                (declarationInfo.mapInfo.sourceInfos || (declarationInfo.mapInfo.sourceInfos = createMap())).set(info.path, true);
+            }
 
             // Key doesnt matter since its only for text and lines
             if (info.cacheSourceFile) return info.cacheSourceFile.sourceFile;
@@ -2556,13 +2563,7 @@ namespace ts.server {
             // when some file/s were closed which resulted in project removal.
             // It was then postponed to cleanup these script infos so that they can be reused if
             // the file from that old project is reopened because of opening file from here.
-            this.filenameToScriptInfo.forEach(info => {
-                if (!info.isScriptOpen() && info.isOrphan()) {
-                    // if there are not projects that include this script info - delete it
-                    this.stopWatchingScriptInfo(info);
-                    this.deleteScriptInfo(info);
-                }
-            });
+            this.removeOrphanScriptInfos();
 
             this.printProjects();
 
@@ -2603,6 +2604,27 @@ namespace ts.server {
                     project.originalConfiguredProjects.forEach((_value, configuredProjectPath) => toRemoveConfiguredProjects.delete(configuredProjectPath));
                 }
             }
+        }
+
+        private removeOrphanScriptInfos() {
+            const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
+            this.filenameToScriptInfo.forEach(info => {
+                if (info.isScriptOpen() || !info.isOrphan()) {
+                    toRemoveScriptInfos.delete(info.path);
+                    if (info.mapInfo) {
+                        toRemoveScriptInfos.delete(info.mapInfo.path);
+                        if (info.mapInfo.sourceInfos) {
+                            info.mapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
+                        }
+                    }
+                }
+            });
+
+            toRemoveScriptInfos.forEach(info => {
+                // if there are not projects that include this script info - delete it
+                this.stopWatchingScriptInfo(info);
+                this.deleteScriptInfo(info);
+            });
         }
 
         private telemetryOnOpenFile(scriptInfo: ScriptInfo): void {

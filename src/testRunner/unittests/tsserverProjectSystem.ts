@@ -475,6 +475,10 @@ namespace ts.projectSystem {
         checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     }
 
+    function checkScriptInfos(projectService: server.ProjectService, expectedFiles: ReadonlyArray<string>) {
+        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    }
+
     function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
         const start = str.indexOf(substring);
         Debug.assert(start !== -1);
@@ -10667,7 +10671,7 @@ declare class TestLib {
             });
         });
 
-        it("can go to definition correctly", () => {
+        describe("with main and depedency project", () => {
             const projectLocation = "/user/username/projects/myproject";
             const dependecyLocation = `${projectLocation}/dependency`;
             const mainLocation = `${projectLocation}/main`;
@@ -10704,24 +10708,79 @@ fn5();`
                 })
             };
 
-            const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile];
-            const host = createHost(files, [mainConfig.path]);
-            const session = createSession(host);
-            const service = session.getProjectService();
-            openFilesForSession([mainTs], session);
-            checkNumberOfProjects(service, { configuredProjects: 1 });
-            checkProjectActualFiles(service.configuredProjects.get(mainConfig.path)!, [mainTs.path, libFile.path, mainConfig.path, `${dependecyLocation}/fns.d.ts`]);
-            for (let i = 0; i < 5; i++) {
-                const startSpan = { line: i + 5, offset: 1 };
-                const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
-                    command: protocol.CommandTypes.DefinitionAndBoundSpan,
-                    arguments: { file: mainTs.path, ...startSpan }
-                }).response as protocol.DefinitionInfoAndBoundSpan;
-                assert.deepEqual(response, {
-                    definitions: [{ file: dependencyTs.path, start: { line: i + 1, offset: 17 }, end: { line: i + 1, offset: 20 } }],
-                    textSpan: { start: startSpan, end: { line: startSpan.line, offset: startSpan.offset + 3 } }
-                });
+            const randomFile: File = {
+                path: `${projectLocation}/random/random.ts`,
+                content: "let a = 10;"
+            };
+            const randomConfig: File = {
+                path: `${projectLocation}/random/tsconfig.json`,
+                content: "{}"
+            };
+
+            const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
+
+            function verifyInfos(service: server.ProjectService, host: TestServerHost, openInfos: ReadonlyArray<string>, closedInfos: ReadonlyArray<string>, otherWatchedFiles: ReadonlyArray<string>) {
+                checkScriptInfos(service, openInfos.concat(closedInfos));
+                checkWatchedFiles(host, closedInfos.concat(otherWatchedFiles).map(f => f.toLowerCase()));
             }
+
+            it("can go to definition correctly", () => {
+                const host = createHost(files, [mainConfig.path]);
+                const session = createSession(host);
+                const service = session.getProjectService();
+                openFilesForSession([mainTs], session);
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                checkProjectActualFiles(service.configuredProjects.get(mainConfig.path)!, [mainTs.path, libFile.path, mainConfig.path, `${dependecyLocation}/fns.d.ts`]);
+                for (let i = 0; i < 5; i++) {
+                    const startSpan = { line: i + 5, offset: 1 };
+                    const response = session.executeCommandSeq<protocol.DefinitionAndBoundSpanRequest>({
+                        command: protocol.CommandTypes.DefinitionAndBoundSpan,
+                        arguments: { file: mainTs.path, ...startSpan }
+                    }).response as protocol.DefinitionInfoAndBoundSpan;
+                    assert.deepEqual(response, {
+                        definitions: [{ file: dependencyTs.path, start: { line: i + 1, offset: 17 }, end: { line: i + 1, offset: 20 } }],
+                        textSpan: { start: startSpan, end: { line: startSpan.line, offset: startSpan.offset + 3 } }
+                    });
+                }
+                checkNumberOfProjects(service, { configuredProjects: 1 });
+                const closedInfos = [dependencyTs.path, dependencyConfig.path, libFile.path, `${dependecyLocation}/fns.d.ts`, `${dependecyLocation}/FnS.d.ts.map`];
+                verifyInfos(service, host, [mainTs.path], closedInfos, [mainConfig.path]);
+
+                openFilesForSession([randomFile], session);
+                verifyInfos(service, host, [mainTs.path, randomFile.path], closedInfos, [mainConfig.path, randomConfig.path]);
+            });
+
+            it("rename locations from depedency", () => {
+                const host = createHost(files, [mainConfig.path]);
+                const session = createSession(host);
+                const service = session.getProjectService();
+                openFilesForSession([dependencyTs, randomFile], session);
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                checkProjectActualFiles(service.configuredProjects.get(dependencyConfig.path)!, [dependencyTs.path, libFile.path, dependencyConfig.path]);
+                debugger;
+                for (let i = 0; i < 5; i++) {
+                    const startSpan = { line: i + 1, offset: 17 };
+                    const response = session.executeCommandSeq<protocol.RenameRequest>({
+                        command: protocol.CommandTypes.Rename,
+                        arguments: { file: dependencyTs.path, ...startSpan }
+                    }).response as protocol.RenameResponseBody;
+                    assert.deepEqual(response.locs, [{
+                        file: dependencyTs.path,
+                        locs: [{ start: startSpan, end: { line: startSpan.line, offset: startSpan.offset + 3 } }]
+                    }]);
+                }
+                checkNumberOfProjects(service, { configuredProjects: 2 });
+                const openInfos = [dependencyTs.path, randomFile.path];
+                const closedInfos = [libFile.path, `${dependecyLocation}/FnS.d.ts`, `${dependecyLocation}/FnS.d.ts.map`];
+                const otherWatchedFiles = [dependencyConfig.path, randomConfig.path];
+                verifyInfos(service, host, openInfos, closedInfos, otherWatchedFiles);
+
+                // Collect the orphan projects and infos
+                closeFilesForSession([randomFile], session);
+                openFilesForSession([randomFile], session);
+
+                verifyInfos(service, host, openInfos, closedInfos, otherWatchedFiles);
+            });
         });
     });
 

@@ -8497,10 +8497,6 @@ declare namespace ts.server {
         syntaxOnly?: boolean;
     }
     class ProjectService {
-        /**
-         * Container of all known scripts
-         */
-        private readonly filenameToScriptInfo;
         private readonly scriptInfoInNodeModulesWatchers;
         /**
          * Contains all the deleted script info's version information so that

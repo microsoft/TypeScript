@@ -302,6 +302,8 @@ namespace ts.server {
         /*@internal*/
         mapInfo?: ScriptInfo;
         /*@internal*/
+        sourceInfos?: Map<true>;
+        /*@internal*/
         mapper: DocumentPositionMapper | false | undefined = false;
         /*@internal*/
         sourceFileLike: SourceFileLike | undefined;
