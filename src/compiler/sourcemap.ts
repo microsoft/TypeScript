@@ -608,7 +608,7 @@ namespace ts {
 
         function processMapping(mapping: Mapping): MappedPosition {
             const generatedPosition = generatedFile !== undefined
-                ? getPositionOfLineAndCharacter(generatedFile, mapping.generatedLine, mapping.generatedCharacter)
+                ? getPositionOfLineAndCharacterWithEdits(generatedFile, mapping.generatedLine, mapping.generatedCharacter)
                 : -1;
             let source: string | undefined;
             let sourcePosition: number | undefined;
@@ -617,7 +617,7 @@ namespace ts {
                 const sourceFile = host.getSourceFileLike(sourceFilePath);
                 source = map.sources[mapping.sourceIndex];
                 sourcePosition = sourceFile !== undefined
-                    ? getPositionOfLineAndCharacter(sourceFile, mapping.sourceLine, mapping.sourceCharacter)
+                    ? getPositionOfLineAndCharacterWithEdits(sourceFile, mapping.sourceLine, mapping.sourceCharacter)
                     : -1;
             }
             return {
