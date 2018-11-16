@@ -7,12 +7,18 @@
 ////}
 ////Foo./**/
 
-goTo.marker("");
-verify.completionListContains("x");
+const sortedFunctionMembers = completion.functionMembersWithPrototype.slice().sort((a, b) => a.name.localeCompare(b.name));
+const exact: ReadonlyArray<FourSlashInterface.ExpectedCompletionEntry> = [
+    ...sortedFunctionMembers.map(e =>
+        e.name === "arguments" ? { ...e, kind: "property", kindModifiers: "declare" } :
+        e.name === "prototype" ? { ...e, kindModifiers: undefined } : e),
+    { name: "x", text: "var Foo.x: number" },
+];
+verify.completions({ marker: "", exact });
 
 // Make an edit
 edit.insert("a");
 edit.backspace();
 
 // Checking for completion details after edit should work too
-verify.completionEntryDetailIs("x", "var Foo.x: number");
+verify.completions({ exact });

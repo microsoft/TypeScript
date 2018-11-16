@@ -40,13 +40,11 @@
 ////     obj./*5*/;
 //// }
 
-goTo.marker("1");
-verify.completionListContains("content");
-goTo.marker("2");
-verify.completionListContains("host");
-goTo.marker("3");
-verify.completionListContains("children");
-goTo.marker("4");
-verify.completionListContains("host");
-goTo.marker("5");
-verify.completionListContains("host");
+const common: ReadonlyArray<string> = ["isFile", "isDirectory", "isNetworked", "path"];
+verify.completions(
+    { marker: "1", exact: ["content", ...common] },
+    { marker: "2", exact: ["host", "content", ...common] },
+    { marker: "3", exact: ["children", ...common] },
+    { marker: "4", exact: ["host", "children", ...common] },
+    { marker: "5", exact: ["host", ...common] },
+);

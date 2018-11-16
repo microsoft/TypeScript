@@ -9,5 +9,4 @@
 //// import * as mod from "./mod"
 //// mod./**/
 
-goTo.marker();
-verify.completionListContains('a');
+verify.completions({ marker: "", includes: "a" });

@@ -15,5 +15,4 @@ goTo.marker();
 edit.insert('.');
 
 // Check members of the function
-verify.completionListContains('foo', undefined, undefined, 'property');
-verify.completionListContains('bar', undefined, undefined, 'property');
+verify.completions({ includes: ["foo", "bar"].map(name => ({ name, kind: "property" })) });

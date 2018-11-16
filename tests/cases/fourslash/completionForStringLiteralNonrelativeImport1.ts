@@ -42,7 +42,9 @@
 //// /*unlisted-module*/
 
 ["import_as", "import_equals", "require"].forEach((kind, i) => {
-    verify.completionsAt(`${kind}0`, ["fake-module", "fake-module-dev"], { isNewIdentifierLocation: true });
-    verify.completionsAt(`${kind}1`, ["dts", "index", "ts", "tsx"], { isNewIdentifierLocation: true });
-    verify.completionsAt(`${kind}2`, ["fake-module", "fake-module-dev"].map(name => ({ name, replacementSpan: test.ranges()[i] })), { isNewIdentifierLocation: true });
+    verify.completions(
+        { marker: `${kind}0`, exact: ["fake-module", "fake-module-dev"], isNewIdentifierLocation: true },
+        { marker: `${kind}1`, exact: ["dts", "index", "ts", "tsx"], isNewIdentifierLocation: true },
+        { marker: `${kind}2`, exact: ["fake-module", "fake-module-dev"].map(name => ({ name, replacementSpan: test.ranges()[i] })), isNewIdentifierLocation: true },
+    );
 });

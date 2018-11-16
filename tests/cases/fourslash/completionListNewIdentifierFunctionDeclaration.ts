@@ -1,8 +1,11 @@
 /// <reference path='fourslash.ts' />
 
+// @noLib: true
+
 ////function F(pref: (a/*1*/
 
-goTo.eachMarker(() => {
-    verify.not.completionListIsEmpty();
-    verify.completionListAllowsNewIdentifier();
+verify.completions({
+    marker: "1",
+    exact: completion.typeKeywords,
+    isNewIdentifierLocation: true,
 });

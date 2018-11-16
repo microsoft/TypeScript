@@ -578,3 +578,229 @@ let spreadNonPrimitive = { ...<object>{}};
 ><object>{} : object
 >{} : {}
 
+// generic spreads
+
+function f<T, U>(t: T, u: U) {
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>t : T
+>u : U
+
+    return { ...t, ...u, id: 'id' };
+>{ ...t, ...u, id: 'id' } : T & U & { id: string; }
+>t : T
+>u : U
+>id : string
+>'id' : "id"
+}
+
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+>exclusive : { id: string; a: number; b: string; c: string; d: boolean; }
+>id : string
+>a : number
+>b : string
+>c : string
+>d : boolean
+
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+>f({ a: 1, b: 'yes' }, { c: 'no', d: false }) : { a: number; b: string; } & { c: string; d: boolean; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>{ a: 1, b: 'yes' } : { a: number; b: string; }
+>a : number
+>1 : 1
+>b : string
+>'yes' : "yes"
+>{ c: 'no', d: false } : { c: string; d: false; }
+>c : string
+>'no' : "no"
+>d : false
+>false : false
+
+let overlap: { id: string, a: number, b: string } =
+>overlap : { id: string; a: number; b: string; }
+>id : string
+>a : number
+>b : string
+
+    f({ a: 1 }, { a: 2, b: 'extra' })
+>f({ a: 1 }, { a: 2, b: 'extra' }) : { a: number; } & { a: number; b: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>{ a: 2, b: 'extra' } : { a: number; b: string; }
+>a : number
+>2 : 2
+>b : string
+>'extra' : "extra"
+
+let overlapConflict: { id:string, a: string } =
+>overlapConflict : { id: string; a: string; }
+>id : string
+>a : string
+
+    f({ a: 1 }, { a: 'mismatch' })
+>f({ a: 1 }, { a: 'mismatch' }) : { a: number; } & { a: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>{ a: 1 } : { a: number; }
+>a : number
+>1 : 1
+>{ a: 'mismatch' } : { a: string; }
+>a : string
+>'mismatch' : "mismatch"
+
+let overwriteId: { id: string, a: number, c: number, d: string } =
+>overwriteId : { id: string; a: number; c: number; d: string; }
+>id : string
+>a : number
+>c : number
+>d : string
+
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
+>f({ a: 1, id: true }, { c: 1, d: 'no' }) : { a: number; id: boolean; } & { c: number; d: string; } & { id: string; }
+>f : <T, U>(t: T, u: U) => T & U & { id: string; }
+>{ a: 1, id: true } : { a: number; id: true; }
+>a : number
+>1 : 1
+>id : true
+>true : true
+>{ c: 1, d: 'no' } : { c: number; d: string; }
+>c : number
+>1 : 1
+>d : string
+>'no' : "no"
+
+function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
+>genericSpread : <T, U>(t: T, u: U, v: T | U, w: T | { s: string; }, obj: { x: number; }) => void
+>t : T
+>u : U
+>v : T | U
+>w : T | { s: string; }
+>s : string
+>obj : { x: number; }
+>x : number
+
+    let x01 = { ...t };
+>x01 : T
+>{ ...t } : T
+>t : T
+
+    let x02 = { ...t, ...t };
+>x02 : T
+>{ ...t, ...t } : T
+>t : T
+>t : T
+
+    let x03 = { ...t, ...u };
+>x03 : T & U
+>{ ...t, ...u } : T & U
+>t : T
+>u : U
+
+    let x04 = { ...u, ...t };
+>x04 : U & T
+>{ ...u, ...t } : U & T
+>u : U
+>t : T
+
+    let x05 = { a: 5, b: 'hi', ...t };
+>x05 : { a: number; b: string; } & T
+>{ a: 5, b: 'hi', ...t } : { a: number; b: string; } & T
+>a : number
+>5 : 5
+>b : string
+>'hi' : "hi"
+>t : T
+
+    let x06 = { ...t, a: 5, b: 'hi' };
+>x06 : T & { a: number; b: string; }
+>{ ...t, a: 5, b: 'hi' } : T & { a: number; b: string; }
+>t : T
+>a : number
+>5 : 5
+>b : string
+>'hi' : "hi"
+
+    let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
+>x07 : { a: number; b: string; } & T & { x: number; c: boolean; }
+>{ a: 5, b: 'hi', ...t, c: true, ...obj } : { a: number; b: string; } & T & { x: number; c: boolean; }
+>a : number
+>5 : 5
+>b : string
+>'hi' : "hi"
+>t : T
+>c : boolean
+>true : true
+>obj : { x: number; }
+
+    let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
+>x09 : { a: number; } & T & { x: number; b: string; c: boolean; }
+>{ a: 5, ...t, b: 'hi', c: true, ...obj } : { a: number; } & T & { x: number; b: string; c: boolean; }
+>a : number
+>5 : 5
+>t : T
+>b : string
+>'hi' : "hi"
+>c : boolean
+>true : true
+>obj : { x: number; }
+
+    let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
+>x10 : { a: number; } & T & { b: string; } & U & { x: number; }
+>{ a: 5, ...t, b: 'hi', ...u, ...obj } : { a: number; } & T & { b: string; } & U & { x: number; }
+>a : number
+>5 : 5
+>t : T
+>b : string
+>'hi' : "hi"
+>u : U
+>obj : { x: number; }
+
+    let x11 = { ...v };
+>x11 : T | U
+>{ ...v } : T | U
+>v : T | U
+
+    let x12 = { ...v, ...obj };
+>x12 : (T & { x: number; }) | (U & { x: number; })
+>{ ...v, ...obj } : (T & { x: number; }) | (U & { x: number; })
+>v : T | U
+>obj : { x: number; }
+
+    let x13 = { ...w };
+>x13 : T | { s: string; }
+>{ ...w } : T | { s: string; }
+>w : T | { s: string; }
+
+    let x14 = { ...w, ...obj };
+>x14 : (T & { x: number; }) | { x: number; s: string; }
+>{ ...w, ...obj } : (T & { x: number; }) | { x: number; s: string; }
+>w : T | { s: string; }
+>obj : { x: number; }
+
+    let x15 = { ...t, ...v };
+>x15 : T | (T & U)
+>{ ...t, ...v } : T | (T & U)
+>t : T
+>v : T | U
+
+    let x16 = { ...t, ...w };
+>x16 : T | (T & { s: string; })
+>{ ...t, ...w } : T | (T & { s: string; })
+>t : T
+>w : T | { s: string; }
+
+    let x17 = { ...t, ...w, ...obj };
+>x17 : (T & { x: number; }) | (T & { x: number; s: string; })
+>{ ...t, ...w, ...obj } : (T & { x: number; }) | (T & { x: number; s: string; })
+>t : T
+>w : T | { s: string; }
+>obj : { x: number; }
+
+    let x18 = { ...t, ...v, ...w };
+>x18 : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
+>{ ...t, ...v, ...w } : T | (T & U) | (T & { s: string; }) | (T & U & { s: string; })
+>t : T
+>v : T | U
+>w : T | { s: string; }
+}
+

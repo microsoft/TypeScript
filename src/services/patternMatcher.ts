@@ -461,11 +461,11 @@ namespace ts {
         };
     }
 
-    /* @internal */ export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
+    export function breakIntoCharacterSpans(identifier: string): TextSpan[] {
         return breakIntoSpans(identifier, /*word:*/ false);
     }
 
-    /* @internal */ export function breakIntoWordSpans(identifier: string): TextSpan[] {
+    export function breakIntoWordSpans(identifier: string): TextSpan[] {
         return breakIntoSpans(identifier, /*word:*/ true);
     }
 

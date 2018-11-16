@@ -13,7 +13,4 @@
 ////
 ////var x: Foo./**/
 
-goTo.marker();
-verify.completionListCount(1);
-verify.completionListContains('Bar');
-verify.not.completionListContains('Blah');
+verify.completions({ marker: "", exact: "Bar" });

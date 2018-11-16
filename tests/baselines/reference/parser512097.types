@@ -1,9 +1,8 @@
 === tests/cases/conformance/parser/ecmascript5/RegressionTests/parser512097.ts ===
-var tt = { aa; } // After this point, no useful parsing occurs in the entire file
+var tt = { aa; }
 >tt : { aa: any; }
 >{ aa; } : { aa: any; }
 >aa : any
-> : any
 
 if (true) {
 >true : true
