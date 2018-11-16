@@ -12,7 +12,7 @@ export class C {
 >method : Symbol(C.method, Decl(es6modulekindWithES5Target.ts, 2, 10))
 }
 export { C as C2 };
->C : Symbol(C2, Decl(es6modulekindWithES5Target.ts, 5, 8))
+>C : Symbol(C, Decl(es6modulekindWithES5Target.ts, 0, 0))
 >C2 : Symbol(C2, Decl(es6modulekindWithES5Target.ts, 5, 8))
 
 declare function foo(...args: any[]): any;
@@ -35,7 +35,7 @@ export class D {
 >method : Symbol(D.method, Decl(es6modulekindWithES5Target.ts, 11, 10))
 }
 export { D as D2 };
->D : Symbol(D2, Decl(es6modulekindWithES5Target.ts, 14, 8))
+>D : Symbol(D, Decl(es6modulekindWithES5Target.ts, 7, 42))
 >D2 : Symbol(D2, Decl(es6modulekindWithES5Target.ts, 14, 8))
 
 class E { }

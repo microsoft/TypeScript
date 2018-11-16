@@ -30,7 +30,7 @@ node_modules/npm/bin/npm-cli.js(132,17): error TS2339: Property 'config' does no
 node_modules/npm/bin/npm-cli.js(134,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(136,17): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/bin/npm-cli.js(140,32): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type '[any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/html/static/toc.js(3,40): error TS2531: Object is possibly 'null'.
 node_modules/npm/lib/access.js(58,46): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/access.js(65,18): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
@@ -61,7 +61,7 @@ node_modules/npm/lib/auth/legacy.js(35,16): error TS2339: Property 'config' does
 node_modules/npm/lib/auth/legacy.js(69,33): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/oauth.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type '[any?, any?, any?, any?]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/auth/saml.js(5,7): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/auth/saml.js(6,29): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, any?, any?, any?]'.
 node_modules/npm/lib/auth/sso.js(7,21): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -151,7 +151,7 @@ node_modules/npm/lib/config/core.js(409,29): error TS2345: Argument of type '(or
   Type 'string | undefined' is not assignable to type 'string'.
     Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/lib/config/defaults.js(20,52): error TS2345: Argument of type 'never[]' is not assignable to parameter of type '[any, ...any[]]'.
-  Property '0' is missing in type 'never[]'.
+  Property '0' is missing in type 'never[]' but required in type '[any, ...any[]]'.
 node_modules/npm/lib/config/gentle-fs.js(16,11): error TS2339: Property 'prefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(17,11): error TS2339: Property 'globalPrefix' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/config/gentle-fs.js(18,11): error TS2339: Property 'dir' does not exist on type 'typeof EventEmitter'.
@@ -839,7 +839,7 @@ node_modules/npm/lib/utils/metrics.js(62,7): error TS2339: Property 'load' does 
 node_modules/npm/lib/utils/metrics.js(64,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/metrics.js(65,9): error TS2339: Property 'registry' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/lib/utils/output.js(6,30): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '[any?, ...any[]]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type '[any?, ...any[]]': pop, push, concat, join, and 26 more.
 node_modules/npm/lib/utils/perf.js(9,12): error TS2345: Argument of type '"time"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/perf.js(10,12): error TS2345: Argument of type '"timeEnd"' is not assignable to parameter of type 'Signals'.
 node_modules/npm/lib/utils/read-local-package.js(7,11): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -910,12 +910,11 @@ node_modules/npm/test/broken-under-nyc-and-travis/lifecycle-path.js(18,23): erro
   Type 'undefined' is not assignable to type 'string'.
 node_modules/npm/test/broken-under-nyc-and-travis/whoami.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/common-tap.js(5,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
-node_modules/npm/test/common-tap.js(10,3): error TS2322: Type '(...args: any[]) => void' is not assignable to type 'typeof setImmediate'.
-  Property '__promisify__' is missing in type '(...args: any[]) => void'.
+node_modules/npm/test/common-tap.js(10,3): error TS2741: Property '__promisify__' is missing in type '(...args: any[]) => void' but required in type 'typeof setImmediate'.
 node_modules/npm/test/common-tap.js(10,36): error TS2322: Type '(...args: any[]) => void' is not assignable to type '(callback: (...args: any[]) => void, ...args: any[]) => Immediate'.
   Type 'void' is not assignable to type 'Immediate'.
 node_modules/npm/test/common-tap.js(12,28): error TS2345: Argument of type 'any[]' is not assignable to parameter of type '[(...args: any[]) => void, number, ...any[]]'.
-  Property '0' is missing in type 'any[]'.
+  Type 'any[]' is missing the following properties from type '[(...args: any[]) => void, number, ...any[]]': 0, 1
 node_modules/npm/test/common-tap.js(175,17): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(181,31): error TS2339: Property '_storage' does not exist on type 'Environment'.
 node_modules/npm/test/common-tap.js(192,12): error TS2339: Property '_storage' does not exist on type 'Environment'.
@@ -935,7 +934,7 @@ node_modules/npm/test/need-npm5-update/legacy-dir-bin.js(11,21): error TS2307: C
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(12,47): error TS2339: Property '_extend' does not exist on type 'typeof import("util")'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(34,42): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'string[]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type 'string[]': pop, push, concat, join, and 26 more.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(48,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
 node_modules/npm/test/need-npm5-update/legacy-npm-self-install.js(49,3): error TS2322: Type 'null' is not assignable to type 'string | undefined'.
 node_modules/npm/test/need-npm5-update/legacy-optional-deps.js(4,20): error TS2307: Cannot find module 'tap'.
@@ -1252,7 +1251,7 @@ node_modules/npm/test/tap/init-interrupt.js(28,7): error TS2339: Property 'load'
 node_modules/npm/test/tap/install-actions.js(4,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-actions.js(13,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/install-actions.js(108,27): error TS2345: Argument of type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }' is not assignable to parameter of type '{ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; }'.
-  Property 'name' is missing in type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }'.
+  Property 'name' is missing in type '{ path: string; package: { dependencies: { b: string; }; optionalDependencies: { a: string; }; }; children: ({ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; } | { ...; })[]; requires: ({ ...; } | { ...; })[]; isTop: boolean; }' but required in type '{ name: string; path: string; package: { scripts: { postinstall: string; }; dependencies: { b: string; }; }; isTop: boolean; }'.
 node_modules/npm/test/tap/install-at-locally.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bad-dep-format.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/install-bad-man.js(7,20): error TS2307: Cannot find module 'tap'.
@@ -1440,7 +1439,7 @@ node_modules/npm/test/tap/outdated-json.js(8,20): error TS2307: Cannot find modu
 node_modules/npm/test/tap/outdated-long.js(5,18): error TS2307: Cannot find module 'npm-registry-mock'.
 node_modules/npm/test/tap/outdated-long.js(7,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/outdated-long.js(63,31): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/npm/test/tap/outdated-long.js(66,9): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-long.js(74,13): error TS2339: Property 'install' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/outdated-long.js(76,15): error TS2339: Property 'config' does not exist on type 'typeof EventEmitter'.
@@ -1652,7 +1651,7 @@ node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(2,20): error TS2307: Ca
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(3,29): error TS2307: Cannot find module 'require-inject'.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(32,26): error TS2345: Argument of type '{ requires: { requiredBy: never[]; }[]; }' is not assignable to parameter of type 'never'.
 node_modules/npm/test/tap/unit-deps-removeObsoleteDep.js(40,26): error TS2345: Argument of type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }' is not assignable to parameter of type '{ isTop: boolean; }'.
-  Property 'isTop' is missing in type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }'.
+  Property 'isTop' is missing in type '{ requires: { requiredBy: { isTop: boolean; }[]; }[]; }' but required in type '{ isTop: boolean; }'.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(2,20): error TS2307: Cannot find module 'tap'.
 node_modules/npm/test/tap/unit-deps-replaceModule.js(6,7): error TS2339: Property 'load' does not exist on type 'typeof EventEmitter'.
 node_modules/npm/test/tap/unit-module-name.js(2,20): error TS2307: Cannot find module 'tap'.

@@ -584,12 +584,6 @@ namespace ts {
             category: Diagnostics.Experimental_Options,
             description: Diagnostics.Enables_experimental_support_for_emitting_type_metadata_for_decorators
         },
-        {
-            name: "experimentalBigInt",
-            type: "boolean",
-            category: Diagnostics.Experimental_Options,
-            description: Diagnostics.Enables_experimental_support_for_ESNext_BigInt_literals
-        },
 
         // Advanced
         {
@@ -777,7 +771,7 @@ namespace ts {
         {
             name: "maxNodeModuleJsDepth",
             type: "number",
-            // TODO: GH#27108 affectsModuleResolution: true,
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
@@ -2812,7 +2806,7 @@ namespace ts {
     }
 
     /**
-     * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
+     * Produces a cleaned version of compiler options with personally identifying info (aka, paths) removed.
      * Also converts enum values back to strings.
      */
     /* @internal */

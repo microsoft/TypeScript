@@ -64,7 +64,6 @@ namespace ts {
             getText: () => str,
             write: writeText,
             rawWrite: writeText,
-            writeTextOfNode: writeText,
             writeKeyword: writeText,
             writeOperator: writeText,
             writePunctuation: writeText,
@@ -73,7 +72,9 @@ namespace ts {
             writeLiteral: writeText,
             writeParameter: writeText,
             writeProperty: writeText,
-            writeSymbol: writeText,
+            writeSymbol: (s, _) => writeText(s),
+            writeTrailingSemicolon: writeText,
+            writeComment: writeText,
             getTextPos: () => str.length,
             getLine: () => 0,
             getColumn: () => 0,
@@ -2090,10 +2091,9 @@ namespace ts {
     }
 
     export function isJSDocConstructSignature(node: Node) {
-        return node.kind === SyntaxKind.JSDocFunctionType &&
-            (node as JSDocFunctionType).parameters.length > 0 &&
-            (node as JSDocFunctionType).parameters[0].name &&
-            ((node as JSDocFunctionType).parameters[0].name as Identifier).escapedText === "new";
+        const param = isJSDocFunctionType(node) ? firstOrUndefined(node.parameters) : undefined;
+        const name = tryCast(param && param.name, isIdentifier);
+        return !!name && name.escapedText === "new";
     }
 
     export function isJSDocTypeAlias(node: Node): node is JSDocTypedefTag | JSDocCallbackTag {
@@ -3201,18 +3201,11 @@ namespace ts {
             }
         }
 
-        function writeTextOfNode(text: string, node: Node) {
-            const s = getTextOfNodeFromSourceText(text, node);
-            write(s);
-            updateLineCountAndPosFor(s);
-        }
-
         reset();
 
         return {
             write,
             rawWrite,
-            writeTextOfNode,
             writeLiteral,
             writeLine,
             increaseIndent: () => { indent++; },
@@ -3235,7 +3228,79 @@ namespace ts {
             writePunctuation: write,
             writeSpace: write,
             writeStringLiteral: write,
-            writeSymbol: write
+            writeSymbol: (s, _) => write(s),
+            writeTrailingSemicolon: write,
+            writeComment: write
+        };
+    }
+
+    export function getTrailingSemicolonOmittingWriter(writer: EmitTextWriter): EmitTextWriter {
+        let pendingTrailingSemicolon = false;
+
+        function commitPendingTrailingSemicolon() {
+            if (pendingTrailingSemicolon) {
+                writer.writeTrailingSemicolon(";");
+                pendingTrailingSemicolon = false;
+            }
+        }
+
+        return {
+            ...writer,
+            writeTrailingSemicolon() {
+                pendingTrailingSemicolon = true;
+            },
+            writeLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeLiteral(s);
+            },
+            writeStringLiteral(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeStringLiteral(s);
+            },
+            writeSymbol(s, sym) {
+                commitPendingTrailingSemicolon();
+                writer.writeSymbol(s, sym);
+            },
+            writePunctuation(s) {
+                commitPendingTrailingSemicolon();
+                writer.writePunctuation(s);
+            },
+            writeKeyword(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeKeyword(s);
+            },
+            writeOperator(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeOperator(s);
+            },
+            writeParameter(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeParameter(s);
+            },
+            writeSpace(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeSpace(s);
+            },
+            writeProperty(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeProperty(s);
+            },
+            writeComment(s) {
+                commitPendingTrailingSemicolon();
+                writer.writeComment(s);
+            },
+            writeLine() {
+                commitPendingTrailingSemicolon();
+                writer.writeLine();
+            },
+            increaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.increaseIndent();
+            },
+            decreaseIndent() {
+                commitPendingTrailingSemicolon();
+                writer.decreaseIndent();
+            }
         };
     }
 
@@ -3515,13 +3580,13 @@ namespace ts {
         writeComment: (text: string, lineMap: ReadonlyArray<number>, writer: EmitTextWriter, commentPos: number, commentEnd: number, newLine: string) => void) {
         if (comments && comments.length > 0) {
             if (leadingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
 
             let emitInterveningSeparator = false;
             for (const comment of comments) {
                 if (emitInterveningSeparator) {
-                    writer.write(" ");
+                    writer.writeSpace(" ");
                     emitInterveningSeparator = false;
                 }
 
@@ -3535,7 +3600,7 @@ namespace ts {
             }
 
             if (emitInterveningSeparator && trailingSeparator) {
-                writer.write(" ");
+                writer.writeSpace(" ");
             }
         }
     }
@@ -3669,7 +3734,7 @@ namespace ts {
         }
         else {
             // Single line comment of style //....
-            writer.write(text.substring(commentPos, commentEnd));
+            writer.writeComment(text.substring(commentPos, commentEnd));
         }
     }
 
@@ -3678,14 +3743,14 @@ namespace ts {
         const currentLineText = text.substring(pos, end).replace(/^\s+|\s+$/g, "");
         if (currentLineText) {
             // trimmed forward and ending spaces text
-            writer.write(currentLineText);
+            writer.writeComment(currentLineText);
             if (end !== commentEnd) {
                 writer.writeLine();
             }
         }
         else {
             // Empty string - make sure we write empty line
-            writer.writeLiteral(newLine);
+            writer.rawWrite(newLine);
         }
     }
 
@@ -4500,6 +4565,31 @@ namespace ts {
 
     export function isObjectTypeDeclaration(node: Node): node is ObjectTypeDeclaration {
         return isClassLike(node) || isInterfaceDeclaration(node) || isTypeLiteralNode(node);
+    }
+
+    export function isTypeNodeKind(kind: SyntaxKind) {
+        return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
+            || kind === SyntaxKind.AnyKeyword
+            || kind === SyntaxKind.UnknownKeyword
+            || kind === SyntaxKind.NumberKeyword
+            || kind === SyntaxKind.BigIntKeyword
+            || kind === SyntaxKind.ObjectKeyword
+            || kind === SyntaxKind.BooleanKeyword
+            || kind === SyntaxKind.StringKeyword
+            || kind === SyntaxKind.SymbolKeyword
+            || kind === SyntaxKind.ThisKeyword
+            || kind === SyntaxKind.VoidKeyword
+            || kind === SyntaxKind.UndefinedKeyword
+            || kind === SyntaxKind.NullKeyword
+            || kind === SyntaxKind.NeverKeyword
+            || kind === SyntaxKind.ExpressionWithTypeArguments
+            || kind === SyntaxKind.JSDocAllType
+            || kind === SyntaxKind.JSDocUnknownType
+            || kind === SyntaxKind.JSDocNullableType
+            || kind === SyntaxKind.JSDocNonNullableType
+            || kind === SyntaxKind.JSDocOptionalType
+            || kind === SyntaxKind.JSDocFunctionType
+            || kind === SyntaxKind.JSDocVariadicType;
     }
 }
 
@@ -6046,6 +6136,10 @@ namespace ts {
             || kind === SyntaxKind.TemplateTail;
     }
 
+    export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier {
+        return isImportSpecifier(node) || isExportSpecifier(node);
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
@@ -6219,31 +6313,6 @@ namespace ts {
     }
 
     // Type
-
-    function isTypeNodeKind(kind: SyntaxKind) {
-        return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
-            || kind === SyntaxKind.AnyKeyword
-            || kind === SyntaxKind.UnknownKeyword
-            || kind === SyntaxKind.NumberKeyword
-            || kind === SyntaxKind.BigIntKeyword
-            || kind === SyntaxKind.ObjectKeyword
-            || kind === SyntaxKind.BooleanKeyword
-            || kind === SyntaxKind.StringKeyword
-            || kind === SyntaxKind.SymbolKeyword
-            || kind === SyntaxKind.ThisKeyword
-            || kind === SyntaxKind.VoidKeyword
-            || kind === SyntaxKind.UndefinedKeyword
-            || kind === SyntaxKind.NullKeyword
-            || kind === SyntaxKind.NeverKeyword
-            || kind === SyntaxKind.ExpressionWithTypeArguments
-            || kind === SyntaxKind.JSDocAllType
-            || kind === SyntaxKind.JSDocUnknownType
-            || kind === SyntaxKind.JSDocNullableType
-            || kind === SyntaxKind.JSDocNonNullableType
-            || kind === SyntaxKind.JSDocOptionalType
-            || kind === SyntaxKind.JSDocFunctionType
-            || kind === SyntaxKind.JSDocVariadicType;
-    }
 
     /**
      * Node test that determines whether a node is a valid type node.
@@ -6772,7 +6841,7 @@ namespace ts {
 
     // TODO: determine what this does before making it public.
     /* @internal */
-    export function isJSDocTag(node: Node): boolean {
+    export function isJSDocTag(node: Node): node is JSDocTag {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 
@@ -6914,8 +6983,8 @@ namespace ts {
         getSourceMapSourceConstructor: () => <any>SourceMapSource,
     };
 
-    export function formatStringFromArgs(text: string, args: ArrayLike<string>, baseIndex = 0): string {
-        return text.replace(/{(\d+)}/g, (_match, index: string) => Debug.assertDefined(args[+index + baseIndex]));
+    export function formatStringFromArgs(text: string, args: ArrayLike<string | number>, baseIndex = 0): string {
+        return text.replace(/{(\d+)}/g, (_match, index: string) => "" + Debug.assertDefined(args[+index + baseIndex]));
     }
 
     export let localizedDiagnosticMessages: MapLike<string> | undefined;
@@ -6994,7 +7063,7 @@ namespace ts {
         };
     }
 
-    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | undefined)[]): DiagnosticMessageChain;
+    export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage, ...args: (string | number | undefined)[]): DiagnosticMessageChain;
     export function chainDiagnosticMessages(details: DiagnosticMessageChain | undefined, message: DiagnosticMessage): DiagnosticMessageChain {
         let text = getLocaleSpecificMessage(message);
 

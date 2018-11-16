@@ -16,9 +16,9 @@ node_modules/bluebird/js/release/debuggability.js(30,24): error TS2367: This con
 node_modules/bluebird/js/release/debuggability.js(168,17): error TS2403: Subsequent variable declarations must have the same type.  Variable 'event' must be of type 'CustomEvent<any>', but here has type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(174,26): error TS2339: Property 'detail' does not exist on type 'Event'.
 node_modules/bluebird/js/release/debuggability.js(199,48): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type '["multipleResolves", MultipleResolveListener]'.
-  Property '0' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type '["multipleResolves", MultipleResolveListener]': 0, 1, pop, push, and 28 more.
 node_modules/bluebird/js/release/debuggability.js(242,56): error TS2345: Argument of type 'IArguments' is not assignable to parameter of type 'any[]'.
-  Property 'pop' is missing in type 'IArguments'.
+  Type 'IArguments' is missing the following properties from type 'any[]': pop, push, concat, join, and 26 more.
 node_modules/bluebird/js/release/debuggability.js(491,19): error TS2350: Only a void function can be called with the 'new' keyword.
 node_modules/bluebird/js/release/debuggability.js(562,46): error TS2554: Expected 0 arguments, but got 1.
 node_modules/bluebird/js/release/debuggability.js(736,5): error TS2721: Cannot invoke an object which is possibly 'null'.

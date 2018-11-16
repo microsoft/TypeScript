@@ -379,8 +379,8 @@ namespace ts.codefix {
         interface UsageContext {
             isNumber?: boolean;
             isString?: boolean;
-            hasNonVacuousType?: boolean;
-            hasNonVacuousNonAnonymousType?: boolean;
+            /** Used ambiguously, eg x + ___ or object[___]; results in string | number if no other evidence exists */
+            isNumberOrString?: boolean;
 
             candidateTypes?: Type[];
             properties?: UnderscoreEscapedMap<UsageContext>;
@@ -510,8 +510,7 @@ namespace ts.codefix {
                     break;
 
                 case SyntaxKind.PlusToken:
-                    usageContext.isNumber = true;
-                    usageContext.isString = true;
+                    usageContext.isNumberOrString = true;
                     break;
 
                 // case SyntaxKind.ExclamationToken:
@@ -582,8 +581,7 @@ namespace ts.codefix {
                         usageContext.isString = true;
                     }
                     else {
-                        usageContext.isNumber = true;
-                        usageContext.isString = true;
+                        usageContext.isNumberOrString = true;
                     }
                     break;
 
@@ -657,8 +655,7 @@ namespace ts.codefix {
 
         function inferTypeFromPropertyElementExpressionContext(parent: ElementAccessExpression, node: Expression, checker: TypeChecker, usageContext: UsageContext): void {
             if (node === parent.argumentExpression) {
-                usageContext.isNumber = true;
-                usageContext.isString = true;
+                usageContext.isNumberOrString = true;
                 return;
             }
             else {
@@ -674,17 +671,50 @@ namespace ts.codefix {
             }
         }
 
+        interface Priority {
+            high: (t: Type) => boolean;
+            low: (t: Type) => boolean;
+        }
+
+        function removeLowPriorityInferences(inferences: ReadonlyArray<Type>, priorities: Priority[]): Type[] {
+            const toRemove: ((t: Type) => boolean)[] = [];
+            for (const i of inferences) {
+                for (const { high, low } of priorities) {
+                    if (high(i)) {
+                        Debug.assert(!low(i));
+                        toRemove.push(low);
+                    }
+                }
+            }
+            return inferences.filter(i => toRemove.every(f => !f(i)));
+        }
+
         export function unifyFromContext(inferences: ReadonlyArray<Type>, checker: TypeChecker, fallback = checker.getAnyType()): Type {
             if (!inferences.length) return fallback;
-            const hasNonVacuousType = inferences.some(i => !(i.flags & (TypeFlags.Any | TypeFlags.Void)));
-            const hasNonVacuousNonAnonymousType = inferences.some(
-                i => !(i.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
-            const anons = inferences.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
-            const good = [];
-            if (!hasNonVacuousNonAnonymousType && anons.length) {
+
+            // 1. string or number individually override string | number
+            // 2. non-any, non-void overrides any or void
+            // 3. non-nullable, non-any, non-void, non-anonymous overrides anonymous types
+            const stringNumber = checker.getUnionType([checker.getStringType(), checker.getNumberType()]);
+            const priorities: Priority[] = [
+                {
+                    high: t => t === checker.getStringType() || t === checker.getNumberType(),
+                    low: t => t === stringNumber
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Any | TypeFlags.Void)),
+                    low: t => !!(t.flags & (TypeFlags.Any | TypeFlags.Void))
+                },
+                {
+                    high: t => !(t.flags & (TypeFlags.Nullable | TypeFlags.Any | TypeFlags.Void)) && !(checker.getObjectFlags(t) & ObjectFlags.Anonymous),
+                    low: t => !!(checker.getObjectFlags(t) & ObjectFlags.Anonymous)
+                }];
+            let good = removeLowPriorityInferences(inferences, priorities);
+            const anons = good.filter(i => checker.getObjectFlags(i) & ObjectFlags.Anonymous) as AnonymousType[];
+            if (anons.length) {
+                good = good.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous));
                 good.push(unifyAnonymousTypes(anons, checker));
             }
-            good.push(...inferences.filter(i => !(checker.getObjectFlags(i) & ObjectFlags.Anonymous) && !(hasNonVacuousType && i.flags & (TypeFlags.Any | TypeFlags.Void))));
             return checker.getWidenedType(checker.getUnionType(good));
         }
 
@@ -731,11 +761,15 @@ namespace ts.codefix {
 
         function inferFromContext(usageContext: UsageContext, checker: TypeChecker) {
             const types = [];
+
             if (usageContext.isNumber) {
                 types.push(checker.getNumberType());
             }
             if (usageContext.isString) {
                 types.push(checker.getStringType());
+            }
+            if (usageContext.isNumberOrString) {
+                types.push(checker.getUnionType([checker.getStringType(), checker.getNumberType()]));
             }
 
             types.push(...(usageContext.candidateTypes || []).map(t => checker.getBaseTypeOfLiteralType(t)));
@@ -750,7 +784,7 @@ namespace ts.codefix {
             }
 
             if (usageContext.numberIndexContext) {
-                return [checker.createArrayType(recur(usageContext.numberIndexContext))];
+                types.push(checker.createArrayType(recur(usageContext.numberIndexContext)));
             }
             else if (usageContext.properties || usageContext.callContexts || usageContext.constructContexts || usageContext.stringIndexContext) {
                 const members = createUnderscoreEscapedMap<Symbol>();

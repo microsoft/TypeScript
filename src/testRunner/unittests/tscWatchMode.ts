@@ -1473,7 +1473,7 @@ foo().hello`
             checkOutputErrorsIncremental(host, emptyArray);
         });
 
-        it("updates errors when file transitively exported file changes", () => {
+        describe("updates errors when file transitively exported file changes", () => {
             const projectLocation = "/user/username/projects/myproject";
             const config: File = {
                 path: `${projectLocation}/tsconfig.json`,
@@ -1521,19 +1521,188 @@ export class Data {
     title: string;
 }`
             };
-            const filesWithoutConfig = [libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface];
-            const files = [config, ...filesWithoutConfig];
-            const host = createWatchedSystem(files, { currentDirectory: projectLocation });
-            const watch = createWatchOfConfigFile(config.path, host);
-            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-            checkOutputErrorsInitial(host, emptyArray);
 
-            host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
-            host.checkTimeoutQueueLengthAndRun(1);
-            checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
-            checkOutputErrorsIncremental(host, [
-                "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+            function verifyTransitiveExports(filesWithoutConfig: ReadonlyArray<File>) {
+                const files = [config, ...filesWithoutConfig];
+                const host = createWatchedSystem(files, { currentDirectory: projectLocation });
+                const watch = createWatchOfConfigFile(config.path, host);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsInitial(host, emptyArray);
+
+                host.writeFile(lib1ToolsInterface.path, lib1ToolsInterface.content.replace("title", "title2"));
+                host.checkTimeoutQueueLengthAndRun(1);
+                checkProgramActualFiles(watch(), filesWithoutConfig.map(f => f.path));
+                checkOutputErrorsIncremental(host, [
+                    "lib2/data.ts(5,13): error TS2322: Type '{ title: string; }' is not assignable to type 'ITest'.\n  Object literal may only specify known properties, but 'title' does not exist in type 'ITest'. Did you mean to write 'title2'?\n"
+                ]);
+
+            }
+            it("when there are no circular import and exports", () => {
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
+
+            it("when there are circular import and exports", () => {
+                const lib2Data: File = {
+                    path: `${projectLocation}/lib2/data.ts`,
+                    content: `import { ITest } from "lib1/public"; import { Data2 } from "./data2";
+export class Data {
+    public dat?: Data2; public test() {
+        const result: ITest = {
+            title: "title"
+        }
+        return result;
+    }
+}`
+                };
+                const lib2Data2: File = {
+                    path: `${projectLocation}/lib2/data2.ts`,
+                    content: `import { Data } from "./data";
+export class Data2 {
+    public dat?: Data;
+}`
+                };
+                verifyTransitiveExports([libFile, app, lib2Public, lib2Data, lib2Data2, lib1Public, lib1ToolsPublic, lib1ToolsInterface]);
+            });
+        });
+
+        describe("updates errors in lib file", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const field = "fullscreen";
+            const fieldWithoutReadonly = `interface Document {
+	${field}: boolean;
+}`;
+
+            const libFileWithDocument: File = {
+                path: libFile.path,
+                content: `${libFile.content}
+interface Document {
+    readonly ${field}: boolean;
+}`
+            };
+
+            function getDiagnostic(program: Program, file: File) {
+                return getDiagnosticOfFileFromProgram(program, file.path, file.content.indexOf(field), field.length, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, field);
+            }
+
+            function verifyLibFileErrorsWith(aFile: File) {
+                const files = [aFile, libFileWithDocument];
+
+                function verifyLibErrors(options: CompilerOptions) {
+                    const host = createWatchedSystem(files, { currentDirectory });
+                    const watch = createWatchOfFilesAndCompilerOptions([aFile.path], host, options);
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsInitial(host, getErrors());
+
+                    host.writeFile(aFile.path, aFile.content.replace(fieldWithoutReadonly, "var x: string;"));
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, emptyArray);
+
+                    host.writeFile(aFile.path, aFile.content);
+                    host.runQueuedTimeoutCallbacks();
+                    checkProgramActualFiles(watch(), [aFile.path, libFile.path]);
+                    checkOutputErrorsIncremental(host, getErrors());
+
+                    function getErrors() {
+                        return [
+                            ...(options.skipLibCheck || options.skipDefaultLibCheck ? [] : [getDiagnostic(watch(), libFileWithDocument)]),
+                            getDiagnostic(watch(), aFile)
+                        ];
+                    }
+                }
+
+                it("with default options", () => {
+                    verifyLibErrors({});
+                });
+                it("with skipLibCheck", () => {
+                    verifyLibErrors({ skipLibCheck: true });
+                });
+                it("with skipDefaultLibCheck", () => {
+                    verifyLibErrors({ skipDefaultLibCheck: true });
+                });
+            }
+
+            describe("when non module file changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `${fieldWithoutReadonly}
+var y: number;`
+                };
+                verifyLibFileErrorsWith(aFile);
+            });
+
+            describe("when module file with global definitions changes", () => {
+                const aFile: File = {
+                    path: `${currentDirectory}/a.ts`,
+                    content: `export {}
+declare global {
+${fieldWithoutReadonly}
+var y: number;
+}`
+                };
+                verifyLibFileErrorsWith(aFile);
+            });
+        });
+
+        it("when skipLibCheck and skipDefaultLibCheck changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const field = "fullscreen";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `interface Document {
+	${field}: boolean;
+}`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.d.ts`,
+                content: `interface Document {
+	${field}: boolean;
+}`
+            };
+            const libFileWithDocument: File = {
+                path: libFile.path,
+                content: `${libFile.content}
+interface Document {
+    readonly ${field}: boolean;
+}`
+            };
+            const configFile: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: "{}"
+            };
+
+            const files = [aFile, bFile, configFile, libFileWithDocument];
+
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            verifyProgramFiles();
+            checkOutputErrorsInitial(host, [
+                getDiagnostic(libFileWithDocument),
+                getDiagnostic(aFile),
+                getDiagnostic(bFile)
             ]);
+
+            verifyConfigChange({ skipLibCheck: true }, [aFile]);
+            verifyConfigChange({ skipDefaultLibCheck: true }, [aFile, bFile]);
+            verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
+            verifyConfigChange({ skipDefaultLibCheck: true }, [aFile, bFile]);
+            verifyConfigChange({ skipLibCheck: true }, [aFile]);
+            verifyConfigChange({}, [libFileWithDocument, aFile, bFile]);
+
+            function verifyConfigChange(compilerOptions: CompilerOptions, errorInFiles: ReadonlyArray<File>) {
+                host.writeFile(configFile.path, JSON.stringify({ compilerOptions }));
+                host.runQueuedTimeoutCallbacks();
+                verifyProgramFiles();
+                checkOutputErrorsIncremental(host, errorInFiles.map(getDiagnostic));
+            }
+
+            function getDiagnostic(file: File) {
+                return getDiagnosticOfFileFromProgram(watch(), file.path, file.content.indexOf(field), field.length, Diagnostics.All_declarations_of_0_must_have_identical_modifiers, field);
+            }
+
+            function verifyProgramFiles() {
+                checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
+            }
         });
     });
 

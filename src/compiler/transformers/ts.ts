@@ -1928,7 +1928,10 @@ namespace ts {
 
                 case SyntaxKind.IntersectionType:
                 case SyntaxKind.UnionType:
-                    return serializeUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
+                    return serializeTypeList((<UnionOrIntersectionTypeNode>node).types);
+
+                case SyntaxKind.ConditionalType:
+                    return serializeTypeList([(<ConditionalTypeNode>node).trueType, (<ConditionalTypeNode>node).falseType]);
 
                 case SyntaxKind.TypeQuery:
                 case SyntaxKind.TypeOperator:
@@ -1941,6 +1944,7 @@ namespace ts {
                 case SyntaxKind.ImportType:
                     break;
 
+
                 default:
                     return Debug.failBadSyntaxKind(node);
             }
@@ -1948,11 +1952,11 @@ namespace ts {
             return createIdentifier("Object");
         }
 
-        function serializeUnionOrIntersectionType(node: UnionOrIntersectionTypeNode): SerializedTypeNode {
+        function serializeTypeList(types: ReadonlyArray<TypeNode>): SerializedTypeNode {
             // Note when updating logic here also update getEntityNameForDecoratorMetadata
             // so that aliases can be marked as referenced
             let serializedUnion: SerializedTypeNode | undefined;
-            for (let typeNode of node.types) {
+            for (let typeNode of types) {
                 while (typeNode.kind === SyntaxKind.ParenthesizedType) {
                     typeNode = (typeNode as ParenthesizedTypeNode).type; // Skip parens if need be
                 }
@@ -1998,6 +2002,11 @@ namespace ts {
             const kind = resolver.getTypeReferenceSerializationKind(node.typeName, currentNameScope || currentLexicalScope);
             switch (kind) {
                 case TypeReferenceSerializationKind.Unknown:
+                    // From conditional type type reference that cannot be resolved is Similar to any or unknown
+                    if (findAncestor(node, n => n.parent && isConditionalTypeNode(n.parent) && (n.parent.trueType === n || n.parent.falseType === n))) {
+                        return createIdentifier("Object");
+                    }
+
                     const serialized = serializeEntityNameAsExpressionFallback(node.typeName);
                     const temp = createTempVariable(hoistVariableDeclaration);
                     return createConditional(

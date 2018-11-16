@@ -1379,6 +1379,7 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
+            node.tagName.parent = node;
             if (node.fullName) {
                 setParentPointers(node, node.fullName);
             }
@@ -2921,7 +2922,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
         return isExportsIdentifier(node) ||
             isModuleExportsPropertyAccessExpression(node) ||
@@ -3898,7 +3898,6 @@ namespace ts {
      *       For performance reasons, `computeTransformFlagsForNode` uses local constant values rather
      *       than calling this function.
      */
-    /* @internal */
     export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
         if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
             return TransformFlags.TypeExcludes;
