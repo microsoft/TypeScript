@@ -211,6 +211,26 @@ namespace ts.projectSystem {
             }, "/jsconfig.json");
         });
 
+        it("sends telemetry for file sizes", () => {
+            const jsFile = makeFile("/a.js", "1");
+            const tsFile = makeFile("/b.ts", "12");
+            const tsconfig = makeFile("/jsconfig.json", {
+                compilerOptions: autoJsCompilerOptions
+            });
+            const et = new TestServerEventManager([tsconfig, jsFile, tsFile]);
+            et.service.openClientFile(jsFile.path);
+            et.assertProjectInfoTelemetryEvent({
+                fileStats: fileStats({ js: 1, jsSize: 1, ts: 1, tsSize: 2 }),
+                compilerOptions: autoJsCompilerOptions,
+                typeAcquisition: {
+                    enable: true,
+                    include: false,
+                    exclude: false,
+                },
+                configFileName: "jsconfig.json",
+            }, "/jsconfig.json");
+        });
+
         it("detects whether language service was disabled", () => {
             const file = makeFile("/a.js");
             const tsconfig = makeFile("/jsconfig.json", {});
