@@ -157,14 +157,14 @@ namespace ts.refactor.inlineLocal {
         return expression;
     }
 
-    function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker, withDeclaration: boolean): ReadonlyArray<Identifier> {
+    export function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker, withDeclaration: boolean): ReadonlyArray<Identifier> {
         const symbol = checker.getSymbolAtLocation(target);
         return findDescendants(scope, n =>
             checker.getSymbolAtLocation(n) === symbol &&
             (withDeclaration || !isDeclaration(n.parent))) as Identifier[];
     }
 
-    function findDescendants(node: Node, predicate: (n: Node) => boolean) {
+    export function findDescendants(node: Node, predicate: (n: Node) => boolean) {
         const nodes: Node[] = [];
         visitDescendants(node);
 

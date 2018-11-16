@@ -62,7 +62,8 @@ namespace ts.refactor.inlineFunction {
         const usages = inlineLocal.getReferencesInScope(
             getEnclosingBlockScopeContainer(declaration),
             declaration.name!,
-            checker);
+            checker,
+            /* withDeclaration */ false);
         return canInline(declaration, usages) ? {
             declaration,
             usages,
