@@ -6,8 +6,6 @@ module Salt {
 >Pepper : Pepper
 
   export module Basil { }
->Basil : any
-
   var z = Basil.Pepper;
 >z : any
 >Basil.Pepper : any

@@ -5,9 +5,9 @@ function Greeter() {
     //...
 }
 Greeter.prototype.greet = function () {
->Greeter.prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>Greeter.prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 >Greeter : Symbol(Greeter, Decl(exportAssignmentWithoutIdentifier1.ts, 0, 0))
->prototype : Symbol(Function.prototype, Decl(lib.d.ts, --, --))
+>prototype : Symbol(Function.prototype, Decl(lib.es5.d.ts, --, --))
 
     //...
 }

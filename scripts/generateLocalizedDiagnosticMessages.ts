@@ -65,11 +65,10 @@ function main(): void {
      * There are three exceptions, zh-CN, zh-TW and pt-BR.
      */
     function getPreferedLocaleName(localeName: string) {
-        localeName = localeName.toLowerCase();
         switch (localeName) {
-            case "zh-cn":
-            case "zh-tw":
-            case "pt-br":
+            case "zh-CN":
+            case "zh-TW":
+            case "pt-BR":
                 return localeName;
             default:
                 return localeName.split("-")[0];

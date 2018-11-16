@@ -12,13 +12,9 @@ type G = (x: any) => any;
 
 var fg: F & G;
 >fg : F & G
->F : F
->G : G
 
 var gf: G & F;
 >gf : G & F
->G : G
->F : F
 
 var x = fg("abc");
 >x : string

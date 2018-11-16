@@ -3,5 +3,4 @@
 ////var a = 0;
 /////**/
 
-goTo.marker();
-verify.completionListContains("a");
+verify.completions({ marker: "", includes: "a" });

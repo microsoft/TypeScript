@@ -1,8 +1,8 @@
 === tests/cases/conformance/controlFlow/controlFlowForInStatement.ts ===
 let x: string | number | boolean | RegExp | Function;
 >x : Symbol(x, Decl(controlFlowForInStatement.ts, 0, 3))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 let obj: any;
 >obj : Symbol(obj, Decl(controlFlowForInStatement.ts, 1, 3))

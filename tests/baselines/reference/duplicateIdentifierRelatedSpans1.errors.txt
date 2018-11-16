@@ -1,0 +1,96 @@
+[96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m7[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
+
+[7m1[0m class Foo { }
+[7m [0m [91m      ~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m6[0m
+    [7m1[0m type Foo = number;
+    [7m [0m [96m     ~~~[0m
+    'Foo' was also declared here.
+  [96mtests/cases/compiler/file3.ts[0m:[93m1[0m:[93m6[0m
+    [7m1[0m type Foo = 54;
+    [7m [0m [96m     ~~~[0m
+    and here.
+[96mtests/cases/compiler/file1.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+
+[7m2[0m const Bar = 3;
+[7m [0m [91m      ~~~[0m
+
+  [96mtests/cases/compiler/file2.ts[0m:[93m2[0m:[93m7[0m
+    [7m2[0m class Bar {}
+    [7m [0m [96m      ~~~[0m
+    'Bar' was also declared here.
+  [96mtests/cases/compiler/file3.ts[0m:[93m2[0m:[93m5[0m
+    [7m2[0m let Bar = 42
+    [7m [0m [96m    ~~~[0m
+    and here.
+[96mtests/cases/compiler/file2.ts[0m:[93m1[0m:[93m6[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
+
+[7m1[0m type Foo = number;
+[7m [0m [91m     ~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m class Foo { }
+    [7m [0m [96m      ~~~[0m
+    'Foo' was also declared here.
+[96mtests/cases/compiler/file2.ts[0m:[93m2[0m:[93m7[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+
+[7m2[0m class Bar {}
+[7m [0m [91m      ~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m2[0m:[93m7[0m
+    [7m2[0m const Bar = 3;
+    [7m [0m [96m      ~~~[0m
+    'Bar' was also declared here.
+[96mtests/cases/compiler/file3.ts[0m:[93m1[0m:[93m6[0m - [91merror[0m[90m TS2300: [0mDuplicate identifier 'Foo'.
+
+[7m1[0m type Foo = 54;
+[7m [0m [91m     ~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m1[0m:[93m7[0m
+    [7m1[0m class Foo { }
+    [7m [0m [96m      ~~~[0m
+    'Foo' was also declared here.
+[96mtests/cases/compiler/file3.ts[0m:[93m2[0m:[93m5[0m - [91merror[0m[90m TS2451: [0mCannot redeclare block-scoped variable 'Bar'.
+
+[7m2[0m let Bar = 42
+[7m [0m [91m    ~~~[0m
+
+  [96mtests/cases/compiler/file1.ts[0m:[93m2[0m:[93m7[0m
+    [7m2[0m const Bar = 3;
+    [7m [0m [96m      ~~~[0m
+    'Bar' was also declared here.
+
+
+==== tests/cases/compiler/file1.ts (2 errors) ====
+    class Foo { }
+          ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file2.ts:1:6: 'Foo' was also declared here.
+!!! related TS6204 tests/cases/compiler/file3.ts:1:6: and here.
+    const Bar = 3;
+          ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file2.ts:2:7: 'Bar' was also declared here.
+!!! related TS6204 tests/cases/compiler/file3.ts:2:5: and here.
+==== tests/cases/compiler/file2.ts (2 errors) ====
+    type Foo = number;
+         ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file1.ts:1:7: 'Foo' was also declared here.
+    class Bar {}
+          ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file1.ts:2:7: 'Bar' was also declared here.
+==== tests/cases/compiler/file3.ts (2 errors) ====
+    type Foo = 54;
+         ~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+!!! related TS6203 tests/cases/compiler/file1.ts:1:7: 'Foo' was also declared here.
+    let Bar = 42
+        ~~~
+!!! error TS2451: Cannot redeclare block-scoped variable 'Bar'.
+!!! related TS6203 tests/cases/compiler/file1.ts:2:7: 'Bar' was also declared here.
+    
+Found 6 errors.
+

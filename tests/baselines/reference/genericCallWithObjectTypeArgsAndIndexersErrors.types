@@ -3,9 +3,7 @@
 
 function foo<T>(x: T) {
 >foo : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -13,20 +11,16 @@ function foo<T>(x: T) {
 
 function other<T>(arg: T) {
 >other : <T>(arg: T) => void
->T : T
 >arg : T
->T : T
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
 
         [x: string]: Object;
 >x : string
->Object : Object
 
         [x: number]: T; // ok, T is a subtype of Object because its apparent type is {}
 >x : number
->T : T
 
     };
     var r2 = foo(b); // T
@@ -38,23 +32,16 @@ function other<T>(arg: T) {
 
 function other3<T extends U, U extends Date>(arg: T) {
 >other3 : <T extends U, U extends Date>(arg: T) => void
->T : T
->U : U
->U : U
->Date : Date
 >arg : T
->T : T
 
     var b: {
 >b : { [x: string]: Object; [x: number]: T; }
 
         [x: string]: Object;
 >x : string
->Object : Object
 
         [x: number]: T;
 >x : number
->T : T
 
     };
     var r2 = foo(b);
@@ -77,7 +64,6 @@ function other3<T extends U, U extends Date>(arg: T) {
 
     var u: U = r2[1]; // ok
 >u : U
->U : U
 >r2[1] : T
 >r2 : { [x: string]: Object; [x: number]: T; }
 >1 : 1

@@ -26,15 +26,12 @@ class Derived2 extends Base {
 
 var b: Base;
 >b : Base
->Base : Base
 
 var d1: Derived;
 >d1 : Derived
->Derived : Derived
 
 var d2: Derived2;
 >d2 : Derived2
->Derived2 : Derived2
 
 b = d1;
 >b = d1 : Derived
@@ -48,7 +45,6 @@ b = d2;
 
 var r: Base[] = [d1, d2];
 >r : Base[]
->Base : Base
 >[d1, d2] : (Derived | Derived2)[]
 >d1 : Derived
 >d2 : Derived2

@@ -3,8 +3,6 @@ module M {
 >M : typeof M
 
     interface I { }
->I : I
-
     export class C {
 >C : C
 
@@ -13,7 +11,6 @@ module M {
 >Symbol.iterator : symbol
 >Symbol : SymbolConstructor
 >iterator : symbol
->I : I
 
         [Symbol.toPrimitive](x: I) { }
 >[Symbol.toPrimitive] : (x: I) => void
@@ -21,14 +18,12 @@ module M {
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >x : I
->I : I
 
         [Symbol.isConcatSpreadable](): I {
 >[Symbol.isConcatSpreadable] : () => I
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
->I : I
 
             return undefined
 >undefined : undefined
@@ -46,6 +41,5 @@ module M {
 >Symbol : SymbolConstructor
 >toPrimitive : symbol
 >x : I
->I : I
     }
 }

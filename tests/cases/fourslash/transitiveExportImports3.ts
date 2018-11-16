@@ -13,7 +13,7 @@ verify.noErrors();
 const [f0, f1, g0, f2, g1] = test.ranges();
 
 const af = { definition: "function f(): void", ranges: [f0, f1] };
-const g0Group = { definition: "(alias) function g(): void\nimport g", ranges: [g0] };
+const g0Group = { definition: "(alias) function g(): void\nexport g", ranges: [g0] };
 const g1Group = { definition: "(alias) function g(): void\nimport g", ranges: [g1] };
 const bf = { definition: "(alias) function f(): void\nimport f", ranges: [f2] };
 
@@ -22,4 +22,7 @@ verify.referenceGroups(g0, [g0Group, g1Group]);
 verify.referenceGroups(g1, [g1Group, g0Group]);
 verify.referenceGroups(f2, [bf, af, g0Group, g1Group]);
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.renameLocations([f0, f1], [f0, f1, f2]);
+verify.renameLocations(f2, [{ range: f2, prefixText: "f as " }]);
+verify.renameLocations(g0, [g0, g1]);
+verify.renameLocations(g1, [{ range: g1, prefixText: "g as " }]);

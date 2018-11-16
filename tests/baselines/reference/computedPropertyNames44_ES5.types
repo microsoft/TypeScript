@@ -13,7 +13,6 @@ class C {
 
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 
     get ["get1"]() { return new Foo }
 >["get1"] : Foo
@@ -30,5 +29,4 @@ class D extends C {
 >["set1"] : Foo
 >"set1" : "set1"
 >p : Foo
->Foo : Foo
 }

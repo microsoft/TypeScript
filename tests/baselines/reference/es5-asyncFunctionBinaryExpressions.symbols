@@ -259,7 +259,7 @@ async function binaryComma0() {
 
 async function binaryComma1(): Promise<any> {
 >binaryComma1 : Symbol(binaryComma1, Decl(es5-asyncFunctionBinaryExpressions.ts, 117, 1))
->Promise : Symbol(Promise, Decl(lib.es2015.promise.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Promise : Symbol(Promise, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.promise.d.ts, --, --))
 
     return x, await y;
 >x : Symbol(x, Decl(es5-asyncFunctionBinaryExpressions.ts, 0, 11))

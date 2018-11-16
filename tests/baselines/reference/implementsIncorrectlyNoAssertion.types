@@ -13,12 +13,9 @@ declare class Bar {
 }
 type Wrapper = Foo & Bar;
 >Wrapper : Wrapper
->Foo : Foo
->Bar : Bar
 
 class Baz implements Wrapper {
 >Baz : Baz
->Wrapper : Wrapper
 
     x: number;
 >x : number

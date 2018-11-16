@@ -2,34 +2,23 @@
 // Test that callback parameters are related covariantly
 
 interface P<T> {
->P : P<T>
->T : T
-
     then(cb: (value: T) => void): void;
 >then : (cb: (value: T) => void) => void
 >cb : (value: T) => void
 >value : T
->T : T
 
 };
 
 interface A { a: string }
->A : A
 >a : string
 
 interface B extends A { b: string }
->B : B
->A : A
 >b : string
 
 function f1(a: P<A>, b: P<B>) {
 >f1 : (a: P<A>, b: P<B>) => void
 >a : P<A>
->P : P<T>
->A : A
 >b : P<B>
->P : P<T>
->B : B
 
     a = b;
 >a = b : P<B>
@@ -45,11 +34,7 @@ function f1(a: P<A>, b: P<B>) {
 function f2(a: Promise<A>, b: Promise<B>) {
 >f2 : (a: Promise<A>, b: Promise<B>) => void
 >a : Promise<A>
->Promise : Promise<T>
->A : A
 >b : Promise<B>
->Promise : Promise<T>
->B : B
 
     a = b;
 >a = b : Promise<B>
@@ -63,31 +48,23 @@ function f2(a: Promise<A>, b: Promise<B>) {
 }
 
 interface AList1 {
->AList1 : AList1
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
 >item : A
->A : A
 }
 
 interface BList1 {
->BList1 : BList1
-
     forEach(cb: (item: B) => void): void;
 >forEach : (cb: (item: B) => void) => void
 >cb : (item: B) => void
 >item : B
->B : B
 }
 
 function f11(a: AList1, b: BList1) {
 >f11 : (a: AList1, b: BList1) => void
 >a : AList1
->AList1 : AList1
 >b : BList1
->BList1 : BList1
 
     a = b;
 >a = b : BList1
@@ -101,31 +78,23 @@ function f11(a: AList1, b: BList1) {
 }
 
 interface AList2 {
->AList2 : AList2
-
     forEach(cb: (item: A) => boolean): void;
 >forEach : (cb: (item: A) => boolean) => void
 >cb : (item: A) => boolean
 >item : A
->A : A
 }
 
 interface BList2 {
->BList2 : BList2
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
 >item : A
->A : A
 }
 
 function f12(a: AList2, b: BList2) {
 >f12 : (a: AList2, b: BList2) => void
 >a : AList2
->AList2 : AList2
 >b : BList2
->BList2 : BList2
 
     a = b;
 >a = b : BList2
@@ -139,32 +108,24 @@ function f12(a: AList2, b: BList2) {
 }
 
 interface AList3 {
->AList3 : AList3
-
     forEach(cb: (item: A) => void): void;
 >forEach : (cb: (item: A) => void) => void
 >cb : (item: A) => void
 >item : A
->A : A
 }
 
 interface BList3 {
->BList3 : BList3
-
     forEach(cb: (item: A, context: any) => void): void;
 >forEach : (cb: (item: A, context: any) => void) => void
 >cb : (item: A, context: any) => void
 >item : A
->A : A
 >context : any
 }
 
 function f13(a: AList3, b: BList3) {
 >f13 : (a: AList3, b: BList3) => void
 >a : AList3
->AList3 : AList3
 >b : BList3
->BList3 : BList3
 
     a = b;
 >a = b : BList3
@@ -178,33 +139,23 @@ function f13(a: AList3, b: BList3) {
 }
 
 interface AList4 {
->AList4 : AList4
-
     forEach(cb: (item: A) => A): void;
 >forEach : (cb: (item: A) => A) => void
 >cb : (item: A) => A
 >item : A
->A : A
->A : A
 }
 
 interface BList4 {
->BList4 : BList4
-
     forEach(cb: (item: B) => B): void;
 >forEach : (cb: (item: B) => B) => void
 >cb : (item: B) => B
 >item : B
->B : B
->B : B
 }
 
 function f14(a: AList4, b: BList4) {
 >f14 : (a: AList4, b: BList4) => void
 >a : AList4
->AList4 : AList4
 >b : BList4
->BList4 : BList4
 
     a = b;
 >a = b : BList4

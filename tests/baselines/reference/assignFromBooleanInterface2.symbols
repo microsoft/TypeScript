@@ -1,6 +1,6 @@
 === tests/cases/conformance/types/primitives/boolean/assignFromBooleanInterface2.ts ===
 interface Boolean {
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
 
     doStuff(): string;
 >doStuff : Symbol(Boolean.doStuff, Decl(assignFromBooleanInterface2.ts, 0, 19))
@@ -18,7 +18,7 @@ var x = true;
 
 var a: Boolean;
 >a : Symbol(a, Decl(assignFromBooleanInterface2.ts, 9, 3))
->Boolean : Symbol(Boolean, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
+>Boolean : Symbol(Boolean, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(assignFromBooleanInterface2.ts, 0, 0))
 
 var b: NotBoolean;
 >b : Symbol(b, Decl(assignFromBooleanInterface2.ts, 10, 3))

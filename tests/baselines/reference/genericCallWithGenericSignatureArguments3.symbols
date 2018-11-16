@@ -31,7 +31,7 @@ var r1 = foo('', (x: string) => '', (x: Object) => null); // any => any
 >foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments3.ts, 0, 0))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 8, 18))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 8, 37))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r1ii = foo('', (x) => '', (x) => null); // string => string
 >r1ii : Symbol(r1ii, Decl(genericCallWithGenericSignatureArguments3.ts, 9, 3))
@@ -44,13 +44,13 @@ var r2 = foo('', (x: string) => '', (x: Object) => ''); // string => string
 >foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments3.ts, 0, 0))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 10, 18))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 10, 37))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r3 = foo(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r3 : Symbol(r3, Decl(genericCallWithGenericSignatureArguments3.ts, 11, 3))
 >foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments3.ts, 0, 0))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 11, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 11, 39))
 
 var r4 = foo(null, (x) => '', (x) => ''); // any => any
@@ -62,7 +62,7 @@ var r4 = foo(null, (x) => '', (x) => ''); // any => any
 var r5 = foo(new Object(), (x) => '', (x) => ''); // Object => Object
 >r5 : Symbol(r5, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 3))
 >foo : Symbol(foo, Decl(genericCallWithGenericSignatureArguments3.ts, 0, 0))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 28))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 13, 39))
 
@@ -132,7 +132,7 @@ var r10 = foo2(null, (x: Object) => '', (x: string) => ''); // Object => Object
 >r10 : Symbol(r10, Decl(genericCallWithGenericSignatureArguments3.ts, 28, 3))
 >foo2 : Symbol(foo2, Decl(genericCallWithGenericSignatureArguments3.ts, 18, 53))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 28, 22))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(genericCallWithGenericSignatureArguments3.ts, 28, 41))
 
 var x: (a: string) => boolean;
@@ -146,7 +146,7 @@ var r11 = foo2(x, (a1: (y: string) => string) => (n: Object) => 1, (a2: (z: stri
 >a1 : Symbol(a1, Decl(genericCallWithGenericSignatureArguments3.ts, 31, 19))
 >y : Symbol(y, Decl(genericCallWithGenericSignatureArguments3.ts, 31, 24))
 >n : Symbol(n, Decl(genericCallWithGenericSignatureArguments3.ts, 31, 50))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a2 : Symbol(a2, Decl(genericCallWithGenericSignatureArguments3.ts, 31, 68))
 >z : Symbol(z, Decl(genericCallWithGenericSignatureArguments3.ts, 31, 73))
 
@@ -157,7 +157,7 @@ var r12 = foo2(x, (a1: (y: string) => boolean) => (n: Object) => 1, (a2: (z: str
 >a1 : Symbol(a1, Decl(genericCallWithGenericSignatureArguments3.ts, 32, 19))
 >y : Symbol(y, Decl(genericCallWithGenericSignatureArguments3.ts, 32, 24))
 >n : Symbol(n, Decl(genericCallWithGenericSignatureArguments3.ts, 32, 51))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >a2 : Symbol(a2, Decl(genericCallWithGenericSignatureArguments3.ts, 32, 69))
 >z : Symbol(z, Decl(genericCallWithGenericSignatureArguments3.ts, 32, 74))
 

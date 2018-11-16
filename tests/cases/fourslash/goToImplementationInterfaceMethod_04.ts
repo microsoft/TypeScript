@@ -7,11 +7,11 @@
 //// }
 ////
 //// class Bar extends SuperBar {
-////     [|hello() {}|]
+////     [|hello|]() {}
 //// }
 ////
 //// class SuperBar implements Foo {
-////     [|hello() {}|]
+////     [|hello|]() {}
 //// }
 ////
 //// class OtherBar implements Foo {

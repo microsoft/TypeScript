@@ -1,35 +1,26 @@
 === tests/cases/conformance/types/contextualTypes/methodDeclarations/contextuallyTypedObjectLiteralMethodDeclaration01.ts ===
 interface A {
->A : A
-
     numProp: number;
 >numProp : number
 }
 
 interface B  {
->B : B
-
     strProp: string;
 >strProp : string
 }
 
 interface Foo {
->Foo : Foo
-
     method1(arg: A): void;
 >method1 : (arg: A) => void
 >arg : A
->A : A
 
     method2(arg: B): void;
 >method2 : (arg: B) => void
 >arg : B
->B : B
 }
 
 function getFoo1(): Foo {
 >getFoo1 : () => Foo
->Foo : Foo
 
     return {
 >{        method1(arg) {            arg.numProp = 10;        },        method2(arg) {            arg.strProp = "hello";        }    } : { method1(arg: A): void; method2(arg: B): void; }
@@ -62,7 +53,6 @@ function getFoo1(): Foo {
 
 function getFoo2(): Foo {
 >getFoo2 : () => Foo
->Foo : Foo
 
     return {
 >{        method1: (arg) => {            arg.numProp = 10;        },        method2: (arg) => {            arg.strProp = "hello";        }    } : { method1: (arg: A) => void; method2: (arg: B) => void; }
@@ -97,7 +87,6 @@ function getFoo2(): Foo {
 
 function getFoo3(): Foo {
 >getFoo3 : () => Foo
->Foo : Foo
 
     return {
 >{        method1: function (arg) {            arg.numProp = 10;        },        method2: function (arg) {            arg.strProp = "hello";        }    } : { method1: (arg: A) => void; method2: (arg: B) => void; }

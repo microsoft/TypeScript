@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////exports.x = 0;
@@ -14,8 +15,6 @@
 ////exports.f = function(z) {
 ////    exports.z; z;
 ////}
-
-// TODO: GH#22492 Should be a able access `exports.z` inside `exports.f`
 
 verify.codeFix({
     description: "Convert to ES6 module",

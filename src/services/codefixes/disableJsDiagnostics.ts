@@ -12,7 +12,7 @@ namespace ts.codefix {
         getCodeActions(context) {
             const { sourceFile, program, span, host, formatContext } = context;
 
-            if (!isInJavaScriptFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
+            if (!isInJSFile(sourceFile) || !isCheckJsEnabledForFile(sourceFile, program.getCompilerOptions())) {
                 return undefined;
             }
 
@@ -38,8 +38,8 @@ namespace ts.codefix {
         getAllCodeActions: context => {
             const seenLines = createMap<true>();
             return codeFixAll(context, errorCodes, (changes, diag) => {
-                if (textChanges.isValidLocationToAddComment(diag.file!, diag.start!)) {
-                    makeChange(changes, diag.file!, diag.start!, seenLines);
+                if (textChanges.isValidLocationToAddComment(diag.file, diag.start)) {
+                    makeChange(changes, diag.file, diag.start, seenLines);
                 }
             });
         },

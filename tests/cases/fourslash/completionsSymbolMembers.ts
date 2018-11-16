@@ -11,5 +11,15 @@
 ////declare const j: J;
 ////j[|./*j*/|];
 
-verify.completionsAt("i", [{ name: "s", insertText: "[s]", replacementSpan: test.ranges()[0] }], { includeInsertTextCompletions: true });
-verify.completionsAt("j", [{ name: "N", insertText: "[N]", replacementSpan: test.ranges()[1] }], { includeInsertTextCompletions: true })
+verify.completions(
+    {
+        marker: "i",
+        exact: { name: "s", insertText: "[s]", replacementSpan: test.ranges()[0] },
+        preferences: { includeInsertTextCompletions: true },
+    },
+    {
+        marker: "j",
+        exact: { name: "N", insertText: "[N]", replacementSpan: test.ranges()[1] },
+        preferences: { includeInsertTextCompletions: true },
+    }
+);

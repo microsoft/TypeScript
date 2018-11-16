@@ -371,11 +371,11 @@ export class StyleParser {
       if (!this.styles.hasOwnProperty(key)) {
 >!this.styles.hasOwnProperty(key) : boolean
 >this.styles.hasOwnProperty(key) : boolean
->this.styles.hasOwnProperty : (v: string) => boolean
+>this.styles.hasOwnProperty : (v: string | number | symbol) => boolean
 >this.styles : {}
 >this : this
 >styles : {}
->hasOwnProperty : (v: string) => boolean
+>hasOwnProperty : (v: string | number | symbol) => boolean
 >key : string
       }
     }

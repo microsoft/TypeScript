@@ -1,12 +1,8 @@
 === tests/cases/compiler/typeInferenceTypePredicate.ts ===
 declare function f<T>(predicate: (x: {}) => x is T): T;
 >f : <T>(predicate: (x: {}) => x is T) => T
->T : T
 >predicate : (x: {}) => x is T
 >x : {}
->x : any
->T : T
->T : T
 
 // 'res' should be of type 'number'.
 const res = f((n): n is number => true);
@@ -15,6 +11,5 @@ const res = f((n): n is number => true);
 >f : <T>(predicate: (x: {}) => x is T) => T
 >(n): n is number => true : (n: {}) => n is number
 >n : {}
->n : any
 >true : true
 

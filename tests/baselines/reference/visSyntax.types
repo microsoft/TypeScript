@@ -7,7 +7,6 @@ module M {
     }
 
     export interface I {
->I : I
 	
     }
 

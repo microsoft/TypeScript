@@ -6,4 +6,4 @@
 //// import("[|./foo|]")
 //// var x = import("[|./foo|]")
 
-verify.rangesReferenceEachOther();
+verify.singleReferenceGroup('module "/tests/cases/fourslash/foo"');

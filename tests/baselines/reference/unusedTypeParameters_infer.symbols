@@ -1,0 +1,8 @@
+=== tests/cases/compiler/unusedTypeParameters_infer.ts ===
+type Length<T> = T extends ArrayLike<infer U> ? number : never;
+>Length : Symbol(Length, Decl(unusedTypeParameters_infer.ts, 0, 0))
+>T : Symbol(T, Decl(unusedTypeParameters_infer.ts, 0, 12))
+>T : Symbol(T, Decl(unusedTypeParameters_infer.ts, 0, 12))
+>ArrayLike : Symbol(ArrayLike, Decl(lib.es5.d.ts, --, --))
+>U : Symbol(U, Decl(unusedTypeParameters_infer.ts, 0, 42))
+

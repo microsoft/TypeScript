@@ -1,0 +1,26 @@
+=== tests/cases/compiler/blockScopedEnumVariablesUseBeforeDef_preserve.ts ===
+function foo1() {
+>foo1 : () => E
+
+    return E.A
+>E.A : E
+>E : typeof E
+>A : E
+
+    enum E { A }
+>E : E
+>A : E.A
+}
+
+function foo2() {
+>foo2 : () => E
+
+    return E.A
+>E.A : E
+>E : typeof E
+>A : E
+
+    const enum E { A }
+>E : E
+>A : E.A
+}

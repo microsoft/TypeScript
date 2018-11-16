@@ -83,17 +83,23 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>function foo1(_a) {
 1 >
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1 >
   >
   >
-2 >function foo1(
-3 >              { name: nameA = "<NoName>" }: Robot = { }
+2 >function 
+3 >         foo1
+4 >             (
+5 >              { name: nameA = "<NoName>" }: Robot = { }
 1 >Emitted(3, 1) Source(11, 1) + SourceIndex(0)
-2 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
-3 >Emitted(3, 17) Source(11, 56) + SourceIndex(0)
+2 >Emitted(3, 10) Source(11, 10) + SourceIndex(0)
+3 >Emitted(3, 14) Source(11, 14) + SourceIndex(0)
+4 >Emitted(3, 15) Source(11, 15) + SourceIndex(0)
+5 >Emitted(3, 17) Source(11, 56) + SourceIndex(0)
 ---
 >>>    var _b = (_a === void 0 ? {} : _a).name, nameA = _b === void 0 ? "<NoName>" : _b;
 1->^^^^^^^^
@@ -148,16 +154,22 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>function foo2(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo2(
-3 >              { name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}
+2 >function 
+3 >         foo2
+4 >             (
+5 >              { name: nameB = "<NoName>", skill: skillB = "noSkill" }: Robot = {}
 1->Emitted(7, 1) Source(14, 1) + SourceIndex(0)
-2 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
-3 >Emitted(7, 17) Source(14, 82) + SourceIndex(0)
+2 >Emitted(7, 10) Source(14, 10) + SourceIndex(0)
+3 >Emitted(7, 14) Source(14, 14) + SourceIndex(0)
+4 >Emitted(7, 15) Source(14, 15) + SourceIndex(0)
+5 >Emitted(7, 17) Source(14, 82) + SourceIndex(0)
 ---
 >>>    var _b = _a === void 0 ? {} : _a, _c = _b.name, nameB = _c === void 0 ? "<NoName>" : _c, _d = _b.skill, skillB = _d === void 0 ? "noSkill" : _d;
 1->^^^^^^^^
@@ -230,16 +242,22 @@ sourceFile:sourceMapValidationDestructuringParameterObjectBindingPatternDefaultV
 ---
 >>>function foo3(_a) {
 1->
-2 >^^^^^^^^^^^^^^
-3 >              ^^
-4 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^^^^
+3 >         ^^^^
+4 >             ^
+5 >              ^^
+6 >                ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
 1->
   >
-2 >function foo3(
-3 >              { name = "<NoName>" }: Robot = {}
+2 >function 
+3 >         foo3
+4 >             (
+5 >              { name = "<NoName>" }: Robot = {}
 1->Emitted(11, 1) Source(17, 1) + SourceIndex(0)
-2 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
-3 >Emitted(11, 17) Source(17, 48) + SourceIndex(0)
+2 >Emitted(11, 10) Source(17, 10) + SourceIndex(0)
+3 >Emitted(11, 14) Source(17, 14) + SourceIndex(0)
+4 >Emitted(11, 15) Source(17, 15) + SourceIndex(0)
+5 >Emitted(11, 17) Source(17, 48) + SourceIndex(0)
 ---
 >>>    var _b = (_a === void 0 ? {} : _a).name, name = _b === void 0 ? "<NoName>" : _b;
 1->^^^^^^^^

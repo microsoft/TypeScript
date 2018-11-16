@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface OptionProp {
->OptionProp : OptionProp
-
     x?: 2
 >x : 2
 }
@@ -14,7 +12,6 @@ class Opt extends React.Component<OptionProp, {}> {
 >React.Component : React.Component<OptionProp, {}>
 >React : typeof React
 >Component : typeof React.Component
->OptionProp : OptionProp
 
     render() {
 >render : () => JSX.Element
@@ -28,12 +25,10 @@ class Opt extends React.Component<OptionProp, {}> {
 
 const obj: OptionProp = {};
 >obj : OptionProp
->OptionProp : OptionProp
 >{} : {}
 
 const obj1: OptionProp = {
 >obj1 : OptionProp
->OptionProp : OptionProp
 >{    x: 2} : { x: 2; }
 
     x: 2
@@ -47,7 +42,7 @@ let y = <Opt {...obj} x={3}/>;
 ><Opt {...obj} x={3}/> : JSX.Element
 >Opt : typeof Opt
 >obj : OptionProp
->x : 3
+>x : number
 >3 : 3
 
 let y1 = <Opt {...obj1} x="Hi"/>;
@@ -62,7 +57,7 @@ let y2 = <Opt {...obj1} x={3}/>;
 ><Opt {...obj1} x={3}/> : JSX.Element
 >Opt : typeof Opt
 >obj1 : OptionProp
->x : 3
+>x : number
 >3 : 3
 
 let y3 = <Opt x />;

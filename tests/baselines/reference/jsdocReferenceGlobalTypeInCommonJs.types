@@ -19,8 +19,6 @@ export as namespace Puppeteer;
 >Puppeteer : typeof import("tests/cases/compiler/puppet")
 
 export interface Keyboard {
->Keyboard : Keyboard
-
     key: string
 >key : string
 }

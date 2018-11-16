@@ -17,7 +17,7 @@ var r2 = y<string>();
 
 var c: Function;
 >c : Symbol(c, Decl(untypedFunctionCallsWithTypeParameters1.ts, 6, 3))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var r3 = c<number>(); // should be an error
 >r3 : Symbol(r3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 7, 3))
@@ -25,7 +25,7 @@ var r3 = c<number>(); // should be an error
 
 class C implements Function {
 >C : Symbol(C, Decl(untypedFunctionCallsWithTypeParameters1.ts, 7, 21))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     prototype = null;
 >prototype : Symbol(C.prototype, Decl(untypedFunctionCallsWithTypeParameters1.ts, 9, 29))
@@ -50,7 +50,7 @@ var r4 = c2<number>(); // should be an error
 
 class C2 extends Function { } // error
 >C2 : Symbol(C2, Decl(untypedFunctionCallsWithTypeParameters1.ts, 17, 22))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var c3: C2;
 >c3 : Symbol(c3, Decl(untypedFunctionCallsWithTypeParameters1.ts, 20, 3))

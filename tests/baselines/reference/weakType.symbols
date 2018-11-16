@@ -93,15 +93,15 @@ function del(options: ConfigurableStartEnd = {},
 >ChangeOptions : Symbol(ChangeOptions, Decl(weakType.ts, 29, 1))
 
     changes.push(options);
->changes.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >changes : Symbol(changes, Decl(weakType.ts, 34, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >options : Symbol(options, Decl(weakType.ts, 32, 13))
 
     changes.push(error);
->changes.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>changes.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >changes : Symbol(changes, Decl(weakType.ts, 34, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >error : Symbol(error, Decl(weakType.ts, 32, 48))
 }
 

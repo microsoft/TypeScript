@@ -3,6 +3,7 @@
 // Test that we leave it alone if the name is a keyword.
 
 // @allowJs: true
+// @target: esnext
 
 // @Filename: /a.js
 ////exports.class = 0;

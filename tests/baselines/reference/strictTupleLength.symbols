@@ -31,9 +31,9 @@ var len2: 2 = t2.length;
 
 var lena: number = arr.length;
 >lena : Symbol(lena, Decl(strictTupleLength.ts, 8, 3))
->arr.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>arr.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >arr : Symbol(arr, Decl(strictTupleLength.ts, 3, 3))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 
 var t1 = t2; // error
 >t1 : Symbol(t1, Decl(strictTupleLength.ts, 1, 3), Decl(strictTupleLength.ts, 10, 3))

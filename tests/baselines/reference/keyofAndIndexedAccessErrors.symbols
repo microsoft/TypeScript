@@ -26,27 +26,27 @@ type T00 = keyof K0;  // Error
 
 type T01 = keyof Object;
 >T01 : Symbol(T01, Decl(keyofAndIndexedAccessErrors.ts, 9, 20))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T02 = keyof keyof Object;
 >T02 : Symbol(T02, Decl(keyofAndIndexedAccessErrors.ts, 11, 24))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T03 = keyof keyof keyof Object;
 >T03 : Symbol(T03, Decl(keyofAndIndexedAccessErrors.ts, 12, 30))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T04 = keyof keyof keyof keyof Object;
 >T04 : Symbol(T04, Decl(keyofAndIndexedAccessErrors.ts, 13, 36))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T05 = keyof keyof keyof keyof keyof Object;
 >T05 : Symbol(T05, Decl(keyofAndIndexedAccessErrors.ts, 14, 42))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T06 = keyof keyof keyof keyof keyof keyof Object;
 >T06 : Symbol(T06, Decl(keyofAndIndexedAccessErrors.ts, 15, 48))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 type T10 = Shape["name"];
 >T10 : Symbol(T10, Decl(keyofAndIndexedAccessErrors.ts, 16, 54))
@@ -219,141 +219,270 @@ function f10(shape: Shape) {
 >cond : Symbol(cond, Decl(keyofAndIndexedAccessErrors.ts, 50, 11))
 }
 
-function f20<T, U>(k1: keyof (T | U), k2: keyof (T & U), o1: T | U, o2: T & U) {
+function f20<T, U>(x: T | U, y: T & U, k1: keyof (T | U), k2: keyof T & keyof U, k3: keyof (T & U), k4: keyof T | keyof U) {
 >f20 : Symbol(f20, Decl(keyofAndIndexedAccessErrors.ts, 67, 1))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
->k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
->k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
+>y : Symbol(y, Decl(keyofAndIndexedAccessErrors.ts, 69, 28))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
->o1 : Symbol(o1, Decl(keyofAndIndexedAccessErrors.ts, 69, 56))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
->o2 : Symbol(o2, Decl(keyofAndIndexedAccessErrors.ts, 69, 67))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
 >T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 69, 13))
 >U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 69, 15))
 
-    o1[k1];
->o1 : Symbol(o1, Decl(keyofAndIndexedAccessErrors.ts, 69, 56))
->k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+    x[k1];
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
 
-    o1[k2];   // Error
->o1 : Symbol(o1, Decl(keyofAndIndexedAccessErrors.ts, 69, 56))
->k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
+    x[k2];
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
 
-    o2[k1];
->o2 : Symbol(o2, Decl(keyofAndIndexedAccessErrors.ts, 69, 67))
->k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+    x[k3];  // Error
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
 
-    o2[k2];
->o2 : Symbol(o2, Decl(keyofAndIndexedAccessErrors.ts, 69, 67))
->k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
+    x[k4];  // Error
+>x : Symbol(x, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
 
-    o1 = o2;
->o1 : Symbol(o1, Decl(keyofAndIndexedAccessErrors.ts, 69, 56))
->o2 : Symbol(o2, Decl(keyofAndIndexedAccessErrors.ts, 69, 67))
+    y[k1];
+>y : Symbol(y, Decl(keyofAndIndexedAccessErrors.ts, 69, 28))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
 
-    o2 = o1;  // Error
->o2 : Symbol(o2, Decl(keyofAndIndexedAccessErrors.ts, 69, 67))
->o1 : Symbol(o1, Decl(keyofAndIndexedAccessErrors.ts, 69, 56))
+    y[k2];
+>y : Symbol(y, Decl(keyofAndIndexedAccessErrors.ts, 69, 28))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
 
-    k1 = k2;  // Error
->k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
->k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
+    y[k3];
+>y : Symbol(y, Decl(keyofAndIndexedAccessErrors.ts, 69, 28))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+
+    y[k4];
+>y : Symbol(y, Decl(keyofAndIndexedAccessErrors.ts, 69, 28))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+
+    k1 = k2;
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+
+    k1 = k3;  // Error
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+
+    k1 = k4;  // Error
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
 
     k2 = k1;
->k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 37))
->k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 19))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+
+    k2 = k3;  // Error
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+
+    k2 = k4;  // Error
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+
+    k3 = k1;
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+
+    k3 = k2;
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+
+    k3 = k4;
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+
+    k4 = k1;
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+>k1 : Symbol(k1, Decl(keyofAndIndexedAccessErrors.ts, 69, 38))
+
+    k4 = k2;
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+>k2 : Symbol(k2, Decl(keyofAndIndexedAccessErrors.ts, 69, 57))
+
+    k4 = k3;
+>k4 : Symbol(k4, Decl(keyofAndIndexedAccessErrors.ts, 69, 99))
+>k3 : Symbol(k3, Decl(keyofAndIndexedAccessErrors.ts, 69, 80))
 }
 
 // Repro from #17166
-function f3<T, K extends keyof T, U extends T, J extends K>(
->f3 : Symbol(f3, Decl(keyofAndIndexedAccessErrors.ts, 78, 1))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 81, 33))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 81, 46))
->K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
+function f3<T, K extends Extract<keyof T, string>, U extends T, J extends K>(
+>f3 : Symbol(f3, Decl(keyofAndIndexedAccessErrors.ts, 95, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
+>Extract : Symbol(Extract, Decl(lib.es5.d.ts, --, --))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 98, 63))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
 
     t: T, k: K, tk: T[K], u: U, j: J, uk: U[K], tj: T[J], uj: U[J]): void {
->t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 81, 60))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 82, 9))
->K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
->u : Symbol(u, Decl(keyofAndIndexedAccessErrors.ts, 82, 25))
->U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 81, 33))
->j : Symbol(j, Decl(keyofAndIndexedAccessErrors.ts, 82, 31))
->J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 81, 46))
->uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 82, 37))
->U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 81, 33))
->K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 81, 14))
->tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 82, 47))
->T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 81, 12))
->J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 81, 46))
->uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 82, 57))
->U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 81, 33))
->J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 81, 46))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 98, 77))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 99, 9))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
+>u : Symbol(u, Decl(keyofAndIndexedAccessErrors.ts, 99, 25))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
+>j : Symbol(j, Decl(keyofAndIndexedAccessErrors.ts, 99, 31))
+>J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 98, 63))
+>uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 99, 37))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 98, 14))
+>tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 99, 47))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 98, 12))
+>J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 98, 63))
+>uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 99, 57))
+>U : Symbol(U, Decl(keyofAndIndexedAccessErrors.ts, 98, 50))
+>J : Symbol(J, Decl(keyofAndIndexedAccessErrors.ts, 98, 63))
 
     for (let key in t) {
->key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 83, 12))
->t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 81, 60))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 100, 12))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 98, 77))
 
         key = k // ok, K ==> keyof T
->key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 83, 12))
->k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 82, 9))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 100, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 99, 9))
 
         k = key // error, keyof T =/=> K
->k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 82, 9))
->key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 83, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 99, 9))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 100, 12))
 
         t[key] = tk; // ok, T[K] ==> T[keyof T]
->t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 81, 60))
->key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 83, 12))
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 98, 77))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 100, 12))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
 
         tk = t[key]; // error, T[keyof T] =/=> T[K]
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
->t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 81, 60))
->key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 83, 12))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 98, 77))
+>key : Symbol(key, Decl(keyofAndIndexedAccessErrors.ts, 100, 12))
     }
     tk = uk;
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
->uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 82, 37))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+>uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 99, 37))
 
     uk = tk; // error
->uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 82, 37))
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
+>uk : Symbol(uk, Decl(keyofAndIndexedAccessErrors.ts, 99, 37))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
 
     tj = uj;
->tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 82, 47))
->uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 82, 57))
+>tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 99, 47))
+>uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 99, 57))
 
     uj = tj; // error
->uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 82, 57))
->tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 82, 47))
+>uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 99, 57))
+>tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 99, 47))
 
     tk = tj;
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
->tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 82, 47))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+>tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 99, 47))
 
     tj = tk; // error
->tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 82, 47))
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
+>tj : Symbol(tj, Decl(keyofAndIndexedAccessErrors.ts, 99, 47))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
 
     tk = uj;
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
->uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 82, 57))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+>uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 99, 57))
 
     uj = tk; // error
->uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 82, 57))
->tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 82, 15))
+>uj : Symbol(uj, Decl(keyofAndIndexedAccessErrors.ts, 99, 57))
+>tk : Symbol(tk, Decl(keyofAndIndexedAccessErrors.ts, 99, 15))
+}
+
+// The constraint of 'keyof T' is 'keyof T'
+function f4<T extends { [K in keyof T]: string }>(k: keyof T) {
+>f4 : Symbol(f4, Decl(keyofAndIndexedAccessErrors.ts, 117, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 120, 25))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 120, 12))
+
+    k = 42; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+
+    k = "hello"; // error
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 120, 50))
+}
+
+// Repro from #27470
+
+type UndefinedKeys<T extends Record<string, any>> = {
+>UndefinedKeys : Symbol(UndefinedKeys, Decl(keyofAndIndexedAccessErrors.ts, 123, 1))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+
+  [K in keyof T]: undefined extends T[K] ? K : never
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 127, 19))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 128, 3))
+
+};
+
+type MyType = {a: string, b: string | undefined}
+>MyType : Symbol(MyType, Decl(keyofAndIndexedAccessErrors.ts, 129, 2))
+>a : Symbol(a, Decl(keyofAndIndexedAccessErrors.ts, 131, 15))
+>b : Symbol(b, Decl(keyofAndIndexedAccessErrors.ts, 131, 25))
+
+type Result1 = UndefinedKeys<MyType>;
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+>UndefinedKeys : Symbol(UndefinedKeys, Decl(keyofAndIndexedAccessErrors.ts, 123, 1))
+>MyType : Symbol(MyType, Decl(keyofAndIndexedAccessErrors.ts, 129, 2))
+
+const a1: Result1['a'] = 'a';  // Error
+>a1 : Symbol(a1, Decl(keyofAndIndexedAccessErrors.ts, 135, 5))
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+
+const b1: Result1['b'] = 'b';
+>b1 : Symbol(b1, Decl(keyofAndIndexedAccessErrors.ts, 136, 5))
+>Result1 : Symbol(Result1, Decl(keyofAndIndexedAccessErrors.ts, 131, 48))
+
+function test1<T extends Record<string, any>, K extends keyof T>(t: T, k: K) {
+>test1 : Symbol(test1, Decl(keyofAndIndexedAccessErrors.ts, 136, 29))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 138, 45))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>T : Symbol(T, Decl(keyofAndIndexedAccessErrors.ts, 138, 15))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+>K : Symbol(K, Decl(keyofAndIndexedAccessErrors.ts, 138, 45))
+
+    t[k] = 42;  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+
+    t[k] = "hello";  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
+
+    t[k] = [10, 20];  // Error
+>t : Symbol(t, Decl(keyofAndIndexedAccessErrors.ts, 138, 65))
+>k : Symbol(k, Decl(keyofAndIndexedAccessErrors.ts, 138, 70))
 }
 

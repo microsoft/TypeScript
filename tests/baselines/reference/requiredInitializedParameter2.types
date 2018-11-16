@@ -1,14 +1,11 @@
 === tests/cases/compiler/requiredInitializedParameter2.ts ===
 interface I1 {
->I1 : I1
-
     method();
 >method : () => any
 }
 
 class C1 implements I1 {
 >C1 : C1
->I1 : I1
 
     method(a = 0, b) { }
 >method : (a: number, b: any) => void

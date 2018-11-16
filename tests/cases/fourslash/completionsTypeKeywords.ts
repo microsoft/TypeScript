@@ -1,7 +1,10 @@
 /// <reference path="fourslash.ts" />
 
+// @noLib: true
+
 ////type T = /**/
 
-goTo.marker();
-verify.completionListContains("undefined", "undefined", undefined, "keyword");
-verify.not.completionListContains("await");
+verify.completions({
+    marker: "",
+    exact: ["T", ...completion.typeKeywords],
+});

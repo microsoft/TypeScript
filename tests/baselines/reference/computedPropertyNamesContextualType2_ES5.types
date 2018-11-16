@@ -1,7 +1,5 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNamesContextualType2_ES5.ts ===
 interface I {
->I : I
-
     [s: string]: (x: any) => number; // Doesn't get hit
 >s : string
 >x : any
@@ -13,7 +11,6 @@ interface I {
 
 var o: I = {
 >o : I
->I : I
 >{    [+"foo"](y) { return y.length; },    [+"bar"]: y => y.length} : { [x: number]: (y: string) => number; }
 
     [+"foo"](y) { return y.length; },

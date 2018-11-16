@@ -1,15 +1,9 @@
 === tests/cases/compiler/contextualSignatureInstantiation3.ts ===
 function map<T, U>(items: T[], f: (x: T) => U): U[]{
 >map : <T, U>(items: T[], f: (x: T) => U) => U[]
->T : T
->U : U
 >items : T[]
->T : T
 >f : (x: T) => U
 >x : T
->T : T
->U : U
->U : U
 
     return items.map(f);
 >items.map(f) : U[]
@@ -21,9 +15,7 @@ function map<T, U>(items: T[], f: (x: T) => U): U[]{
 
 function identity<T>(x: T) {
 >identity : <T>(x: T) => T
->T : T
 >x : T
->T : T
 
     return x;
 >x : T
@@ -31,9 +23,7 @@ function identity<T>(x: T) {
 
 function singleton<T>(x: T) {
 >singleton : <T>(x: T) => T[]
->T : T
 >x : T
->T : T
 
     return [x];
 >[x] : T[]

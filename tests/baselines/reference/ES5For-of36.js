@@ -31,9 +31,10 @@ var __read = (this && this.__read) || function (o, n) {
     }
     return ar;
 };
+var e_1, _a;
 try {
-    for (var _a = __values([2, 3]), _b = _a.next(); !_b.done; _b = _a.next()) {
-        var _c = __read(_b.value, 2), _d = _c[0], a = _d === void 0 ? 0 : _d, _e = _c[1], b = _e === void 0 ? 1 : _e;
+    for (var _b = __values([2, 3]), _c = _b.next(); !_c.done; _c = _b.next()) {
+        var _d = __read(_c.value, 2), _e = _d[0], a = _e === void 0 ? 0 : _e, _f = _d[1], b = _f === void 0 ? 1 : _f;
         a;
         b;
     }
@@ -41,9 +42,8 @@ try {
 catch (e_1_1) { e_1 = { error: e_1_1 }; }
 finally {
     try {
-        if (_b && !_b.done && (_f = _a["return"])) _f.call(_a);
+        if (_c && !_c.done && (_a = _b["return"])) _a.call(_b);
     }
     finally { if (e_1) throw e_1.error; }
 }
-var e_1, _f;
 //# sourceMappingURL=ES5For-of36.js.map

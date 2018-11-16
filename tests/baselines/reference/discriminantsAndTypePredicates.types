@@ -2,20 +2,14 @@
 // Repro from #10145
 
 interface A { type: 'A' }
->A : A
 >type : "A"
 
 interface B { type: 'B' }
->B : B
 >type : "B"
 
 function isA(x: A | B): x is A { return x.type === 'A'; }
 >isA : (x: A | B) => x is A
 >x : A | B
->A : A
->B : B
->x : any
->A : A
 >x.type === 'A' : boolean
 >x.type : "A" | "B"
 >x : A | B
@@ -25,10 +19,6 @@ function isA(x: A | B): x is A { return x.type === 'A'; }
 function isB(x: A | B): x is B { return x.type === 'B'; }
 >isB : (x: A | B) => x is B
 >x : A | B
->A : A
->B : B
->x : any
->B : B
 >x.type === 'B' : boolean
 >x.type : "A" | "B"
 >x : A | B
@@ -38,8 +28,6 @@ function isB(x: A | B): x is B { return x.type === 'B'; }
 function foo1(x: A | B): any {
 >foo1 : (x: A | B) => any
 >x : A | B
->A : A
->B : B
 
     x;  // A | B
 >x : A | B
@@ -70,8 +58,6 @@ function foo1(x: A | B): any {
 function foo2(x: A | B): any {
 >foo2 : (x: A | B) => any
 >x : A | B
->A : A
->B : B
 
     x;  // A | B
 >x : A | B

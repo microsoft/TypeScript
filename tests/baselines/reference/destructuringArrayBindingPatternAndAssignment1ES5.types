@@ -93,18 +93,18 @@ var [c0, c1] = [...temp];
 
 var [c2] = [];
 >c2 : any
->[] : [undefined]
+>[] : [undefined?]
 
 var [[[c3]], [[[[c4]]]]] = [[[]], [[[[]]]]]
 >c3 : any
 >c4 : any
->[[[]], [[[[]]]]] : [[[undefined]], [[[[undefined]]]]]
->[[]] : [[undefined]]
->[] : [undefined]
->[[[[]]]] : [[[[undefined]]]]
->[[[]]] : [[[undefined]]]
->[[]] : [[undefined]]
->[] : [undefined]
+>[[[]], [[[[]]]]] : [[[undefined?]], [[[[undefined?]]]]]
+>[[]] : [[undefined?]]
+>[] : [undefined?]
+>[[[[]]]] : [[[[undefined?]]]]
+>[[[]]] : [[[undefined?]]]
+>[[]] : [[undefined?]]
+>[] : [undefined?]
 
 var [[c5], c6]: [[string|number], boolean] = [[1], true];
 >c5 : string | number
@@ -148,8 +148,8 @@ var [,,,...c10] = [1, 2, 3, 4, "hello"];
 > : undefined
 > : undefined
 > : undefined
->c10 : (string | number)[]
->[1, 2, 3, 4, "hello"] : (string | number)[]
+>c10 : [number, string]
+>[1, 2, 3, 4, "hello"] : [number, number, number, number, string]
 >1 : 1
 >2 : 2
 >3 : 3
@@ -157,10 +157,10 @@ var [,,,...c10] = [1, 2, 3, 4, "hello"];
 >"hello" : "hello"
 
 var [c11, c12, ...c13] = [1, 2, "string"];
->c11 : string | number
->c12 : string | number
->c13 : (string | number)[]
->[1, 2, "string"] : (string | number)[]
+>c11 : number
+>c12 : number
+>c13 : [string]
+>[1, 2, "string"] : [number, number, string]
 >1 : 1
 >2 : 2
 >"string" : "string"

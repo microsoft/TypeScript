@@ -3,19 +3,13 @@
 
 type Constructor<T> = new (...args: any[]) => T;
 >Constructor : Constructor<T>
->T : T
 >args : any[]
->T : T
 
 const WithLocation = <T extends Constructor<Point>>(Base: T) => class extends Base {
->WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & T
-><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & T
->T : T
->Constructor : Constructor<T>
->Point : Point
+>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
+><T extends Constructor<Point>>(Base: T) => class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 >Base : T
->T : T
->class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & T
+>class extends Base {  getLocation(): [number, number] {    const [x,y] = super.getLocation();    return [this.x | x, this.y | y];  }} : { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 >Base : Point
 
   getLocation(): [number, number] {
@@ -63,8 +57,8 @@ class Point {
 
 class Foo extends WithLocation(Point) {
 >Foo : Foo
->WithLocation(Point) : <typeof Point>.(Anonymous class) & Point
->WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: <any>.(Anonymous class); } & T
+>WithLocation(Point) : WithLocation<typeof Point>.(Anonymous class) & Point
+>WithLocation : <T extends Constructor<Point>>(Base: T) => { new (...args: any[]): (Anonymous class); prototype: WithLocation<any>.(Anonymous class); } & T
 >Point : typeof Point
 
   calculate() {
@@ -84,9 +78,9 @@ class Foo extends WithLocation(Point) {
 
     return super.getLocation()
 >super.getLocation() : [number, number]
->super.getLocation : () => [number, number]
->super : <typeof Point>.(Anonymous class) & Point
->getLocation : () => [number, number]
+>super.getLocation : (() => [number, number]) & (() => [number, number])
+>super : WithLocation<typeof Point>.(Anonymous class) & Point
+>getLocation : (() => [number, number]) & (() => [number, number])
   }
   whereAmI() {
 >whereAmI : () => [number, number]

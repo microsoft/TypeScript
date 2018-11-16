@@ -1,9 +1,6 @@
 === tests/cases/compiler/importDeclWithExportModifierAndExportAssignment.ts ===
 module x {
->x : any
-
     interface c {
->c : c
     }
 }
 export import a = x.c;

@@ -15,7 +15,6 @@ module A {
 
         export var Origin: Point = new Point(0, 0);
 >Origin : Point
->Point : Point
 >new Point(0, 0) : Point
 >Point : typeof Point
 >0 : 0
@@ -26,16 +25,13 @@ module A {
 
             constructor(start: Point, end: Point) {
 >start : Point
->Point : Point
 >end : Point
->Point : Point
 
             }
 
             static fromOrigin(p: Point) {
 >fromOrigin : (p: Point) => Line
 >p : Point
->Point : Point
 
                 return new Line({ x: 0, y: 0 }, p);
 >new Line({ x: 0, y: 0 }, p) : Line

@@ -1,7 +1,5 @@
 === /a/node_modules/@types/node/index.d.ts ===
 interface Error {
->Error : Error
-
     stack2: string;
 >stack2 : string
 }
@@ -10,7 +8,6 @@ interface Error {
 /// <reference types="node"/>
 function foo(): Error {
 >foo : () => Error
->Error : Error
 
     return undefined;
 >undefined : undefined

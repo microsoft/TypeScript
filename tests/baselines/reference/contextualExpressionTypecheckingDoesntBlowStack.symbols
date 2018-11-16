@@ -1,0 +1,60 @@
+=== tests/cases/compiler/contextualExpressionTypecheckingDoesntBlowStack.ts ===
+// repro for: https://github.com/Microsoft/TypeScript/issues/23661
+export interface IValidationError {
+>IValidationError : Symbol(IValidationError, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 0, 0))
+
+    message: string;
+>message : Symbol(IValidationError.message, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 1, 35))
+}
+
+export default class Operation {
+>Operation : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+
+    validateParameters(parameterValues: any) : IValidationError[] | null {
+>validateParameters : Symbol(Operation.validateParameters, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 5, 32))
+>parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
+>IValidationError : Symbol(IValidationError, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 0, 0))
+
+        let result: IValidationError[] | null = null;
+>result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+>IValidationError : Symbol(IValidationError, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 0, 0))
+
+        for(const parameterLocation of Object.keys(parameterValues)) {
+>parameterLocation : Symbol(parameterLocation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 8, 17))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>parameterValues : Symbol(parameterValues, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 6, 23))
+
+            const parameter: any = (this as any).getParameter();;
+>parameter : Symbol(parameter, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 9, 17))
+>this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+
+            const values = (this as any).getValues();
+>values : Symbol(values, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 10, 17))
+>this : Symbol(Operation, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 3, 1))
+
+            const innerResult = parameter.validate(values[parameter.oaParameter.name]);
+>innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+>parameter : Symbol(parameter, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 9, 17))
+>values : Symbol(values, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 10, 17))
+>parameter : Symbol(parameter, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 9, 17))
+
+            if(innerResult && innerResult.length > 0) {
+>innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+>innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+
+                // Commenting out this line will fix the problem.
+                result = (result || []).concat(innerResult);
+>result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+>(result || []).concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+>concat : Symbol(Array.concat, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>innerResult : Symbol(innerResult, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 12, 17))
+            }
+        }
+
+        return result;
+>result : Symbol(result, Decl(contextualExpressionTypecheckingDoesntBlowStack.ts, 7, 11))
+    }
+}

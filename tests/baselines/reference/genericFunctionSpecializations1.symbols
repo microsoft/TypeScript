@@ -18,7 +18,7 @@ function foo4<T>(test: string); // valid
 function foo4<T extends String>(test: T) { }
 >foo4 : Symbol(foo4, Decl(genericFunctionSpecializations1.ts, 1, 29), Decl(genericFunctionSpecializations1.ts, 3, 31))
 >T : Symbol(T, Decl(genericFunctionSpecializations1.ts, 4, 14))
->String : Symbol(String, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>String : Symbol(String, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >test : Symbol(test, Decl(genericFunctionSpecializations1.ts, 4, 32))
 >T : Symbol(T, Decl(genericFunctionSpecializations1.ts, 4, 14))
 

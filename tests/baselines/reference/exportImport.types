@@ -5,7 +5,6 @@ import e = require('./exporter');
 export function w(): e.w { // Should be OK
 >w : () => e.w
 >e : any
->w : e.w
 
     return new e.w();
 >new e.w() : e.w

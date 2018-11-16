@@ -18,4 +18,5 @@ tests/cases/compiler/spellingSuggestionModule.ts(8,1): error TS2552: Cannot find
     faroo;
     ~~~~~
 !!! error TS2552: Cannot find name 'faroo'. Did you mean 'farboo'?
+!!! related TS2728 tests/cases/compiler/spellingSuggestionModule.ts:7:16: 'farboo' is declared here.
     

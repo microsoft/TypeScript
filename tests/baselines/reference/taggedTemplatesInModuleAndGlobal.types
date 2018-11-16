@@ -4,10 +4,7 @@ namespace n {
 
     function id<T>(x: T): T {
 >id : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
         return x;
 >x : T
@@ -33,10 +30,7 @@ namespace n {
 export { }
 function id<T>(x: T): T {
 >id : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
     return x;
 >x : T

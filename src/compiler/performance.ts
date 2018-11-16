@@ -2,7 +2,7 @@
 namespace ts {
     declare const performance: { now?(): number } | undefined;
     /** Gets a timestamp with (at least) ms resolution */
-    export const timestamp = typeof performance !== "undefined" && performance.now ? () => performance.now() : Date.now ? Date.now : () => +(new Date());
+    export const timestamp = typeof performance !== "undefined" && performance.now ? () => performance.now!() : Date.now ? Date.now : () => +(new Date());
 }
 
 /*@internal*/
@@ -18,6 +18,41 @@ namespace ts.performance {
     let counts: Map<number>;
     let marks: Map<number>;
     let measures: Map<number>;
+
+    export interface Timer {
+        enter(): void;
+        exit(): void;
+    }
+
+    export function createTimerIf(condition: boolean, measureName: string, startMarkName: string, endMarkName: string) {
+        return condition ? createTimer(measureName, startMarkName, endMarkName) : nullTimer;
+    }
+
+    export function createTimer(measureName: string, startMarkName: string, endMarkName: string): Timer {
+        let enterCount = 0;
+        return {
+            enter,
+            exit
+        };
+
+        function enter() {
+            if (++enterCount === 1) {
+                mark(startMarkName);
+            }
+        }
+
+        function exit() {
+            if (--enterCount === 0) {
+                mark(endMarkName);
+                measure(measureName, startMarkName, endMarkName);
+            }
+            else if (enterCount < 0) {
+                Debug.fail("enter/exit count does not match.");
+            }
+        }
+    }
+
+    export const nullTimer: Timer = { enter: noop, exit: noop };
 
     /**
      * Marks a performance event.

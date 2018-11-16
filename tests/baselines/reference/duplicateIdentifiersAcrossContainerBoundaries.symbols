@@ -22,7 +22,7 @@ module M {
 >M : Symbol(M, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 0, 0), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 2, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 5, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 9, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 12, 1) ... and 5 more)
 
     export class f { } // error
->f : Symbol(M.f, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 10, 10))
+>f : Symbol(f, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 10, 10))
 }
 
 module M {
@@ -75,7 +75,7 @@ module Foo {
 >Foo : Symbol(Foo, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 33, 1), Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 37, 1))
 
     export var x: number; // error for redeclaring var in a different parent
->x : Symbol(Foo.x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 40, 14))
+>x : Symbol(x, Decl(duplicateIdentifiersAcrossContainerBoundaries.ts, 40, 14))
 }
 
 module N {

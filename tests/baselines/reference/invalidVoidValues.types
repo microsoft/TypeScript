@@ -19,7 +19,7 @@ x = true;
 
 enum E { A }
 >E : E
->A : E
+>A : E.A
 
 x = E;
 >x = E : typeof E
@@ -39,7 +39,6 @@ class C { foo: string }
 
 var a: C;
 >a : C
->C : C
 
 x = a;
 >x = a : C
@@ -47,12 +46,10 @@ x = a;
 >a : C
 
 interface I { foo: string }
->I : I
 >foo : string
 
 var b: I;
 >b : I
->I : I
 
 x = b;
 >x = b : I
@@ -77,9 +74,7 @@ x = M;
 
 function f<T>(a: T) {
 >f : <T>(a: T) => void
->T : T
 >a : T
->T : T
 
     x = a;
 >x = a : T

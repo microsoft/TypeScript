@@ -1,4 +1,4 @@
-/// <reference path='fourslash.ts' />
+/// <reference path='../fourslash.ts' />
 
 // @Filename: signatureHelpInFunctionCallOnFunctionDeclarationInMultipleFiles_file0.ts
 ////declare function fn(x: string, y: number);
@@ -9,5 +9,4 @@
 // @Filename: signatureHelpInFunctionCallOnFunctionDeclarationInMultipleFiles_file2.ts
 ////fn(/*1*/
 
-goTo.marker('1');
-verify.signatureHelpCountIs(2);
+verify.signatureHelp({ marker: "1", overloadsCount: 2 });

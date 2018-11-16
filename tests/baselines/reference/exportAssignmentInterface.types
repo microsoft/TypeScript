@@ -4,7 +4,6 @@ import I1 = require("exportAssignmentInterface_A");
 
 var i: I1;
 >i : I1
->I1 : I1
 
 var n: number = i.p1;
 >n : number
@@ -14,8 +13,6 @@ var n: number = i.p1;
 
 === tests/cases/compiler/exportAssignmentInterface_A.ts ===
 interface A {
->A : A
-
 	p1: number;
 >p1 : number
 }

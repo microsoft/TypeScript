@@ -10,8 +10,6 @@ declare class C {
 >n : number
 }
 interface C {
->C : C
-
     foo(n: number): any;
 >foo : { (n: number): any; (n: number): any; }
 >n : number

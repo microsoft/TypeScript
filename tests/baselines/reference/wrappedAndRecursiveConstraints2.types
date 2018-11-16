@@ -1,13 +1,9 @@
 === tests/cases/conformance/types/typeParameters/typeArgumentLists/wrappedAndRecursiveConstraints2.ts ===
 class C<T extends C<T>> { // error
 >C : C<T>
->T : T
->C : C<T>
->T : T
 
     constructor(x: T) { }
 >x : T
->T : T
 }
 
 var c = new C(1);

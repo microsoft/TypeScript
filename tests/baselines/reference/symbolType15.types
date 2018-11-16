@@ -4,7 +4,6 @@ var sym: symbol;
 
 var symObj: Symbol;
 >symObj : Symbol
->Symbol : Symbol
 
 symObj = sym;
 >symObj = sym : symbol

@@ -1,15 +1,12 @@
 === tests/cases/compiler/genericBaseClassLiteralProperty.ts ===
 class BaseClass<T> {
 >BaseClass : BaseClass<T>
->T : T
 
     public _getValue1: { (): T; };
 >_getValue1 : () => T
->T : T
 
     public _getValue2: () => T;
 >_getValue2 : () => T
->T : T
 }
 
 class SubClass extends BaseClass<number> {

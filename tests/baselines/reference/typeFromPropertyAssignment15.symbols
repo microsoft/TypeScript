@@ -3,9 +3,9 @@ var Outer = {};
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
 
 Outer.Inner = class {
->Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
->Inner : Symbol(Inner, Decl(a.js, 0, 15))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 
     constructor() {
         this.x = 1
@@ -33,9 +33,9 @@ inner.m()
 
 var inno = new Outer.Inner()
 >inno : Symbol(inno, Decl(a.js, 13, 3))
->Outer.Inner : Symbol(Inner, Decl(a.js, 0, 15))
+>Outer.Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 >Outer : Symbol(Outer, Decl(a.js, 0, 3), Decl(a.js, 0, 15))
->Inner : Symbol(Inner, Decl(a.js, 0, 15))
+>Inner : Symbol(Outer.Inner, Decl(a.js, 0, 15))
 
 inno.x
 >inno.x : Symbol(Inner.x, Decl(a.js, 3, 19))

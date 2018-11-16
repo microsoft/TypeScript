@@ -3,17 +3,7 @@
 >"use strict" : "use strict"
 
 module public { }
->public : any
-
 module private { }
->private : any
-
 module public.whatever {
->public : any
->whatever : any
 }
 module private.public.foo { }
->private : any
->public : any
->foo : any
-

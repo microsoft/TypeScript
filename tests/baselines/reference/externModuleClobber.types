@@ -11,19 +11,16 @@ declare module EM {
 		public getPosition() : EM.Position;
 >getPosition : () => Position
 >EM : any
->Position : Position
 	}
 }
 
 var x:EM.Position;
 >x : EM.Position
 >EM : any
->Position : EM.Position
 
 var ec:EM.EC = new EM.EC();
 >ec : EM.EC
 >EM : any
->EC : EM.EC
 >new EM.EC() : EM.EC
 >EM.EC : typeof EM.EC
 >EM : typeof EM

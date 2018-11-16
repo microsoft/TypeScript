@@ -13,11 +13,9 @@ class C1 {
 
 class T<T> {
 >T : T<T>
->T : T
 
     constructor(n?: T) { }
 >n : T
->T : T
 }
 
 var anyCtor: {
@@ -35,13 +33,9 @@ var anyCtor1: {
 };
 
 interface nestedCtor {
->nestedCtor : nestedCtor
-
     new (): nestedCtor;
->nestedCtor : nestedCtor
 }
 var nestedCtor: nestedCtor;
->nestedCtor : nestedCtor
 >nestedCtor : nestedCtor
 
 // Construct expression with no parentheses for construct signature with > 0 parameters
@@ -61,7 +55,6 @@ var c1 = new T;
 
 var c1: T<{}>;
 >c1 : T<{}>
->T : T<T>
 
 var c2 = new T<string>; // Parse error
 >c2 : T<string>

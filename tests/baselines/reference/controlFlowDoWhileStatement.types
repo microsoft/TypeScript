@@ -66,7 +66,7 @@ function c() {
 
         if (typeof x === "string") continue;
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -132,8 +132,6 @@ function f() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
->RegExp : RegExp
->Function : Function
 
     x = "";
 >x = "" : ""
@@ -177,8 +175,6 @@ function g() {
 
     let x: string | number | boolean | RegExp | Function;
 >x : string | number | boolean | Function | RegExp
->RegExp : RegExp
->Function : Function
 
     x = "";
 >x = "" : ""

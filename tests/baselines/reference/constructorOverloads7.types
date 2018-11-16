@@ -16,11 +16,9 @@ declare class Point
 >add : (dx: number, dy: number) => any
 >dx : number
 >dy : number
->Point : No type information available!
 
      origin: Point;
 >origin : any
->Point : No type information available!
 
 }
 

@@ -2,11 +2,7 @@
 // same as subtypingWithCallSignatures but with additional specialized signatures that should not affect the results
 
 module CallSignature {
->CallSignature : any
-
     interface Base { // T
->Base : Base
-
         // M's
         new (x: 'a'): void;
 >x : "a"
@@ -18,9 +14,6 @@ module CallSignature {
 
     // S's
     interface I extends Base {
->I : I
->Base : Base
-
         // N's
         new (x: 'a'): number; // ok because base returns void
 >x : "a"
@@ -30,14 +23,10 @@ module CallSignature {
 >y : number
 
         new <T>(x: T): string; // ok because base returns void
->T : T
 >x : T
->T : T
     }   
 
     interface Base2 { // T
->Base2 : Base2
-
         // M's
         new (x: 'a'): number;
 >x : "a"
@@ -48,9 +37,6 @@ module CallSignature {
 
     // S's
     interface I2 extends Base2 {
->I2 : I2
->Base2 : Base2
-
         // N's
         new (x: 'a'): string;
 >x : "a"
@@ -61,23 +47,14 @@ module CallSignature {
 
     // S's
     interface I3 extends Base2 {
->I3 : I3
->Base2 : Base2
-
         // N's
         new <T>(x: T): string; // ok, adds a new call signature
->T : T
 >x : T
->T : T
     }
 }
 
 module MemberWithCallSignature {
->MemberWithCallSignature : any
-
     interface Base { // T
->Base : Base
-
         // M's
         a: {
 >a : { new (x: "a"): void; new (x: string): void; }
@@ -101,16 +78,11 @@ module MemberWithCallSignature {
         }
         a3: new <T>(x: T) => void;
 >a3 : new <T>(x: T) => void
->T : T
 >x : T
->T : T
     }
 
     // S's
     interface I extends Base {
->I : I
->Base : Base
-
         // N's
         a: new (x: string) => number; // ok because base returns void
 >a : new (x: string) => number
@@ -123,14 +95,10 @@ module MemberWithCallSignature {
 
         a3: new <T>(x: T) => string; // ok because base returns void
 >a3 : new <T>(x: T) => string
->T : T
 >x : T
->T : T
     }
 
     interface Base2 { // T
->Base2 : Base2
-
         // M's
         a: {
 >a : { new (x: "a"): number; new (x: string): number; }
@@ -143,17 +111,11 @@ module MemberWithCallSignature {
         }
         a2: new <T>(x: T) => T;
 >a2 : new <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
     }
 
     // S's
     interface I2 extends Base2 {
->I2 : I2
->Base2 : Base2
-
         // N's
         a: new (x: string) => string; // error because base returns non-void;
 >a : new (x: string) => string
@@ -162,14 +124,9 @@ module MemberWithCallSignature {
 
     // S's
     interface I3 extends Base2 {
->I3 : I3
->Base2 : Base2
-
         // N's
         a2: new <T>(x: T) => string; // error because base returns non-void;
 >a2 : new <T>(x: T) => string
->T : T
 >x : T
->T : T
     }
 }

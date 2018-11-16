@@ -44,7 +44,7 @@ export module C {
 >B : Symbol(B, Decl(declFileGenericType.ts, 1, 24))
 >x : Symbol(x, Decl(declFileGenericType.ts, 7, 39))
 >T : Symbol(T, Decl(declFileGenericType.ts, 7, 23))
->Array : Symbol(Array, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))
 >A : Symbol(A, Decl(declFileGenericType.ts, 0, 17))
 >C : Symbol(C, Decl(declFileGenericType.ts, 0, 0))

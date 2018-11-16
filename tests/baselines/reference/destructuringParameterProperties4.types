@@ -1,19 +1,12 @@
 === tests/cases/conformance/es6/destructuring/destructuringParameterProperties4.ts ===
 class C1<T, U, V> {
 >C1 : C1<T, U, V>
->T : T
->U : U
->V : V
 
     constructor(private k: T, protected [a, b, c]: [T,U,V]) {
 >k : T
->T : T
 >a : T
 >b : U
 >c : V
->T : T
->U : U
->V : V
 
         if ((b === undefined && c === undefined) || (this.b === undefined && this.c === undefined)) {
 >(b === undefined && c === undefined) || (this.b === undefined && this.c === undefined) : boolean

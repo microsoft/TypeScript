@@ -3,8 +3,6 @@ declare module string {
 >string : typeof string
 
     interface X { }
->X : X
-
     export function foo(s: string);
 >foo : (s: string) => any
 >s : string
@@ -19,5 +17,4 @@ string.foo("abc");
 var x: string.X;
 >x : string.X
 >string : any
->X : string.X
 

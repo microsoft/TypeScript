@@ -68,11 +68,8 @@ function fn2(s: string, n: number): number;
 
 function fn2<T>(n: number, t: T): T;
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
->T : T
 >n : number
 >t : T
->T : T
->T : T
 
 function fn2() { return undefined; }
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
@@ -82,13 +79,11 @@ var d = fn2<Date>(0, undefined);
 >d : Date
 >fn2<Date>(0, undefined) : Date
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
->Date : Date
 >0 : 0
 >undefined : undefined
 
 var d: Date;
 >d : Date
->Date : Date
 
 // Generic and non - generic overload where generic overload is the only candidate when called without type arguments
 var s = fn2(0, '');
@@ -102,7 +97,6 @@ var s = fn2(0, '');
 fn2<Date>('', 0); // Error
 >fn2<Date>('', 0) : any
 >fn2 : { (s: string, n: number): number; <T>(n: number, t: T): T; }
->Date : Date
 >'' : ""
 >0 : 0
 
@@ -116,32 +110,19 @@ fn2('', 0); // OK
 // Generic overloads with differing arity called without type arguments
 function fn3<T>(n: T): string;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
 >n : T
->T : T
 
 function fn3<T, U>(s: string, t: T, u: U): U;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
->U : U
 >s : string
 >t : T
->T : T
 >u : U
->U : U
->U : U
 
 function fn3<T, U, V>(v: V, u: U, t: T): number;
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
->T : T
->U : U
->V : V
 >v : V
->V : V
 >u : U
->U : U
 >t : T
->T : T
 
 function fn3() { return null; }
 >fn3 : { <T>(n: T): string; <T, U>(s: string, t: T, u: U): U; <T, U, V>(v: V, u: U, t: T): number; }
@@ -203,21 +184,13 @@ fn3<number, number, number, number>(); // Error
 // Generic overloads with constraints called with type arguments that satisfy the constraints
 function fn4<T extends string, U extends number>(n: T, m: U);
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->T : T
->U : U
 >n : T
->T : T
 >m : U
->U : U
 
 function fn4<T extends number, U extends string>(n: T, m: U);
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->T : T
->U : U
 >n : T
->T : T
 >m : U
->U : U
 
 function fn4() { }
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
@@ -275,7 +248,6 @@ fn4('', null);
 fn4<boolean, Date>(null, null); // Error
 >fn4<boolean, Date>(null, null) : any
 >fn4 : { <T extends string, U extends number>(n: T, m: U): any; <T extends number, U extends string>(n: T, m: U): any; }
->Date : Date
 >null : null
 >null : null
 

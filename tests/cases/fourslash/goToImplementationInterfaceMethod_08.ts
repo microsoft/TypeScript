@@ -7,7 +7,7 @@
 //// }
 ////
 //// class SuperBar implements Foo {
-////    [|hello() {}|]
+////    [|hello|]() {}
 //// }
 ////
 //// class Bar extends SuperBar {
@@ -15,7 +15,7 @@
 //// }
 ////
 //// class SubBar extends Bar {
-////    [|hello() {}|]
+////    [|hello|]() {}
 //// }
 
 

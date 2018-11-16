@@ -1,20 +1,13 @@
 === tests/cases/compiler/discriminantPropertyCheck.ts ===
 type Item = Item1 | Item2;
 >Item : Item
->Item1 : Item1
->Item2 : Item2
 
 interface Base {
->Base : Base
-
     bar: boolean;
 >bar : boolean
 }
 
 interface Item1 extends Base {
->Item1 : Item1
->Base : Base
-
     kind: "A";
 >kind : "A"
 
@@ -30,9 +23,6 @@ interface Item1 extends Base {
 }
 
 interface Item2 extends Base {
->Item2 : Item2
->Base : Base
-
     kind: "B";
 >kind : "B"
 
@@ -50,7 +40,6 @@ interface Item2 extends Base {
 function goo1(x: Item) {
 >goo1 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.kind === "A" && x.foo !== undefined) {
 >x.kind === "A" && x.foo !== undefined : boolean
@@ -77,7 +66,6 @@ function goo1(x: Item) {
 function goo2(x: Item) {
 >goo2 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.foo !== undefined && x.kind === "A") {
 >x.foo !== undefined && x.kind === "A" : boolean
@@ -104,7 +92,6 @@ function goo2(x: Item) {
 function foo1(x: Item) {
 >foo1 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.bar && x.foo !== undefined) {
 >x.bar && x.foo !== undefined : boolean
@@ -129,7 +116,6 @@ function foo1(x: Item) {
 function foo2(x: Item) {
 >foo2 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.foo !== undefined && x.bar) {
 >x.foo !== undefined && x.bar : boolean
@@ -154,7 +140,6 @@ function foo2(x: Item) {
 function foo3(x: Item) {
 >foo3 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.baz && x.foo !== undefined) {
 >x.baz && x.foo !== undefined : boolean
@@ -179,7 +164,6 @@ function foo3(x: Item) {
 function foo4(x: Item) {
 >foo4 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.foo !== undefined && x.baz) {
 >x.foo !== undefined && x.baz : boolean
@@ -204,7 +188,6 @@ function foo4(x: Item) {
 function foo5(x: Item) {
 >foo5 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.qux && x.foo !== undefined) {
 >x.qux && x.foo !== undefined : boolean
@@ -229,7 +212,6 @@ function foo5(x: Item) {
 function foo6(x: Item) {
 >foo6 : (x: Item) => void
 >x : Item
->Item : Item
 
     if (x.foo !== undefined && x.qux) {
 >x.foo !== undefined && x.qux : boolean
@@ -250,3 +232,81 @@ function foo6(x: Item) {
 >length : number
     }
 }
+
+// Repro from #27493
+
+enum Types { Str = 1, Num = 2 }
+>Types : Types
+>Str : Types.Str
+>1 : 1
+>Num : Types.Num
+>2 : 2
+
+type Instance = StrType | NumType;
+>Instance : Instance
+
+interface StrType {
+    type: Types.Str;
+>type : Types.Str
+>Types : any
+
+    value: string;
+>value : string
+
+    length: number;
+>length : number
+}
+
+interface NumType {
+    type: Types.Num;
+>type : Types.Num
+>Types : any
+
+    value: number;
+>value : number
+}
+
+function func2(inst: Instance) {
+>func2 : (inst: Instance) => void
+>inst : Instance
+
+    while (true) {
+>true : true
+
+        switch (inst.type) {
+>inst.type : Types
+>inst : Instance
+>type : Types
+
+            case Types.Str: {
+>Types.Str : Types.Str
+>Types : typeof Types
+>Str : Types.Str
+
+                inst.value.length;
+>inst.value.length : number
+>inst.value : string
+>inst : StrType
+>value : string
+>length : number
+
+                break;
+            }
+            case Types.Num: {
+>Types.Num : Types.Num
+>Types : typeof Types
+>Num : Types.Num
+
+                inst.value.toExponential;
+>inst.value.toExponential : (fractionDigits?: number | undefined) => string
+>inst.value : number
+>inst : NumType
+>value : number
+>toExponential : (fractionDigits?: number | undefined) => string
+
+                break;
+            }
+        }
+    }
+}
+

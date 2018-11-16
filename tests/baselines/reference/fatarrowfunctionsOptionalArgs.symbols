@@ -188,31 +188,31 @@ false ? null : (...arg: number[]) => 68;
 // In Expressions
 ((arg) => 90) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 91, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((arg = 1) => 91) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 92, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((arg? ) => 92) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 93, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((arg: number) => 93) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 94, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((arg: number = 1) => 94) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 95, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((arg?: number) => 95) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 96, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 ((...arg: number[]) => 96) instanceof Function;
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 97, 2))
->Function : Symbol(Function, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Function : Symbol(Function, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 '' + ((arg) => 100);
 >arg : Symbol(arg, Decl(fatarrowfunctionsOptionalArgs.ts, 99, 7))

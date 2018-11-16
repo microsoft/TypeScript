@@ -15,7 +15,6 @@ var y = Sammy(); // error to use interface name as call target
 
 var z: Sammy; // no error - z is of type interface Sammy from module 'M'
 >z : Sammy
->Sammy : Sammy
 
 var a = new z(); // constructor - no error
 >a : any
@@ -29,8 +28,6 @@ var b = z(); // call signature - no error
 
 === tests/cases/compiler/exportAssignmentOfDeclaredExternalModule_0.ts ===
 interface Sammy {
->Sammy : Sammy
-
     new (): any; // a constructor signature
         (): number; // a 0 arg call signature
     }

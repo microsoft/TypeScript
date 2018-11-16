@@ -10,7 +10,7 @@ declare module "http" {
 }
 
 declare module 'intern/dojo/node!http' {
->'intern/dojo/node!http' : typeof 'intern/dojo/node!http'
+>'intern/dojo/node!http' : typeof import("intern/dojo/node!http")
 
     import http = require('http');
 >http : typeof http

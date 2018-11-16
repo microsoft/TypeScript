@@ -53,14 +53,14 @@ var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
 //      If the binding element is a rest element, T is an array type with
 //          an element type E, where E is the type of the numeric index signature of S.
 var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
->c1 : number | { c3: number; c5: number; }
->c2 : number | { c3: number; c5: number; }
+>c1 : number
+>c2 : number
 >c3 : any
->c4 : any
->c5 : any
+>c4 : number
+>c5 : number
 > : undefined
->c6 : (number | { c3: number; c5: number; })[]
->[1, 2, { c3: 4, c5: 0 }] : (number | { c3: number; c5: number; })[]
+>c6 : []
+>[1, 2, { c3: 4, c5: 0 }] : [number, number, { c3: number; c5: number; }, undefined?]
 >1 : 1
 >2 : 2
 >{ c3: 4, c5: 0 } : { c3: number; c5: number; }
@@ -74,7 +74,7 @@ var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
 // to the widened form of the type associated with the destructuring variable declaration, binding property, or binding element.
 var {d: {d1 = ["string", null]}}: { d: { d1: number[] } } = { d: { d1: [1, 2] } };  // Error
 >d : any
->d1 : string[] | number[]
+>d1 : number[]
 >["string", null] : string[]
 >"string" : "string"
 >null : null

@@ -21,9 +21,9 @@
 
 goTo.marker('1');
 edit.insert('.');
-verify.completionListContains('toFixed', undefined, undefined, 'method');
+verify.completions({ includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });
 edit.backspace();
 
 goTo.marker('2');
 edit.insert('.');
-verify.completionListContains('substr', undefined, undefined, 'method');
+verify.completions({ includes: { name: "substr", kind: "method", kindModifiers: "declare" } });

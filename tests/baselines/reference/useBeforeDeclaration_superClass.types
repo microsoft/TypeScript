@@ -51,14 +51,11 @@ class Z extends Y {
 
 // Interface doesn't count
 interface I {
->I : I
-
     x: number;
 >x : number
 }
 class J implements I {
 >J : J
->I : I
 
     old_x = this.x;
 >old_x : number

@@ -9,14 +9,12 @@ declare var x, y, z, a, b, c;
 
 async function returnStatement0(): Promise<any> {
 >returnStatement0 : () => Promise<any>
->Promise : Promise<T>
 
     return;
 }
 
 async function returnStatement1(): Promise<any> {
 >returnStatement1 : () => Promise<any>
->Promise : Promise<T>
 
     return x;
 >x : any
@@ -24,7 +22,6 @@ async function returnStatement1(): Promise<any> {
 
 async function returnStatement2(): Promise<any> {
 >returnStatement2 : () => Promise<any>
->Promise : Promise<T>
 
     return await x;
 >await x : any
@@ -33,14 +30,12 @@ async function returnStatement2(): Promise<any> {
 
 async function returnStatement3(): Promise<any> {
 >returnStatement3 : () => Promise<any>
->Promise : Promise<T>
 
     { return; }
 }
 
 async function returnStatement4(): Promise<any> {
 >returnStatement4 : () => Promise<any>
->Promise : Promise<T>
 
     await x;
 >await x : any
@@ -51,7 +46,6 @@ async function returnStatement4(): Promise<any> {
 
 async function returnStatement5(): Promise<any>{
 >returnStatement5 : () => Promise<any>
->Promise : Promise<T>
 
     { return await x; }
 >await x : any

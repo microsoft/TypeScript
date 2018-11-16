@@ -102,7 +102,6 @@ class IceCreamMonster {
 }
 var cookieMonster: IceCreamMonster;
 >cookieMonster : IceCreamMonster
->IceCreamMonster : IceCreamMonster
 
 cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster");
 >cookieMonster = new IceCreamMonster("Chocolate Chip", false, "COOOOOKIE", "Cookie Monster") : IceCreamMonster

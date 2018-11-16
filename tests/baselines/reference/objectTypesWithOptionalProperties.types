@@ -9,8 +9,6 @@ var a: {
 }
 
 interface I {
->I : I
-
     x?: number; // ok
 >x : number
 }
@@ -23,21 +21,15 @@ class C {
 }
 
 interface I2<T> {
->I2 : I2<T>
->T : T
-
     x?: T; // ok
 >x : T
->T : T
 }
 
 class C2<T> {
 >C2 : C2<T>
->T : T
 
     x?: T; // ok
 >x : T
->T : T
 }
 
 var b = {

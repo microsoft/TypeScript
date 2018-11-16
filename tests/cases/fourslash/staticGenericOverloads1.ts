@@ -11,12 +11,10 @@
 ////var a = new A<number>();
 ////A.B(/**/
 
-goTo.marker();
-verify.signatureHelpCountIs(2);
+verify.signatureHelp({ marker: "", overloadsCount: 2 });
 edit.insert('a');
-verify.signatureHelpCountIs(2);
-// verify.currentSignatureHelpIs('B(v: A<number>): A<number>')
+verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<number>): A<number>" });
 edit.insert('); A.B(');
-verify.currentSignatureHelpIs('B(v: A<{}>): A<{}>');
+verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<{}>): A<{}>" });
 edit.insert('a');
-// verify.currentSignatureHelpIs('B(v: A<number>): A<number>')
+verify.signatureHelp({ overloadsCount: 2, text: "B(v: A<number>): A<number>" });

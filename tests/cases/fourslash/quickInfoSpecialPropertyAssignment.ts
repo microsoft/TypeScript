@@ -7,4 +7,4 @@
 ////    }
 ////}
 
-verify.quickInfoAt("", "(property) C.x: number", "Doc ");
+verify.quickInfoAt("", "(property) C.x: number", "Doc");

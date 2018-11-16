@@ -1,26 +1,15 @@
 === tests/cases/compiler/extendedInterfacesWithDuplicateTypeParameters.ts ===
 interface InterfaceWithMultipleTypars<A, A> { // should error
->InterfaceWithMultipleTypars : InterfaceWithMultipleTypars<A>
->A : A
->A : A
-
 	bar(): void;
 >bar : () => void
 }
 
 interface InterfaceWithSomeTypars<B> { // should not error
->InterfaceWithSomeTypars : InterfaceWithSomeTypars<B, C>
->B : B
-
 	bar(): void;
 >bar : () => void
 }
 
 interface InterfaceWithSomeTypars<C, C> { // should error
->InterfaceWithSomeTypars : InterfaceWithSomeTypars<B, C>
->C : C
->C : C
-
 	bar2(): void;
 >bar2 : () => void
 }

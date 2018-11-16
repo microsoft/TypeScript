@@ -711,9 +711,9 @@ module TypeScript {
 >i : Symbol(i, Decl(parserRealSource2.ts, 254, 16))
 
                         if (builder.length > 0) {
->builder.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>builder.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
                             builder += "|";
 >builder : Symbol(builder, Decl(parserRealSource2.ts, 253, 11))

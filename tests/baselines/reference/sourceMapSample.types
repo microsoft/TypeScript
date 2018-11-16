@@ -33,7 +33,6 @@ module Foo.Bar {
 >greeting : string
 >Foo : any
 >Bar : any
->Greeter : No type information available!
 
         return new Greeter(greeting);
 >new Greeter(greeting) : Greeter
@@ -61,7 +60,6 @@ module Foo.Bar {
 
         var greeters: Greeter[] = [];
 >greeters : Greeter[]
->Greeter : Greeter
 >[] : undefined[]
 
         greeters[0] = new Greeter(greeting);

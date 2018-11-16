@@ -1,0 +1,40 @@
+=== tests/cases/compiler/extendingSetWithCheckJs.ts ===
+class MySet extends Set {
+>MySet : Symbol(MySet, Decl(extendingSetWithCheckJs.ts, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(SetConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    }
+}
+
+class MyWeakSet extends WeakSet {
+>MyWeakSet : Symbol(MyWeakSet, Decl(extendingSetWithCheckJs.ts, 4, 1))
+>WeakSet : Symbol(WeakSet, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(WeakSetConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+}
+
+class MyMap extends Map {
+>MyMap : Symbol(MyMap, Decl(extendingSetWithCheckJs.ts, 10, 1))
+>Map : Symbol(Map, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(MapConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+    }
+}
+
+class MyWeakMap extends WeakMap {
+>MyWeakMap : Symbol(MyWeakMap, Decl(extendingSetWithCheckJs.ts, 16, 1))
+>WeakMap : Symbol(WeakMap, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+
+    constructor() {
+        super();
+>super : Symbol(WeakMapConstructor, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --))
+    }
+}

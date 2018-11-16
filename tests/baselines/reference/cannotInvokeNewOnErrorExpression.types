@@ -12,4 +12,5 @@ var t = new M.ClassA[];
 >M.ClassA : any
 >M : typeof M
 >ClassA : any
+> : any
 

@@ -7,5 +7,8 @@
   "license": "Apache-2.0",
   "dependencies": {
     "graceful-fs": "^4.1.11"
+  },
+  "devDependencies": {
+    "@types/node": "latest"
   }
 }

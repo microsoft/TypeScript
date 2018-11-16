@@ -1,4 +1,4 @@
 === /src/a.ts ===
 import * as b from "./b";
->b : any
+>b : error
 

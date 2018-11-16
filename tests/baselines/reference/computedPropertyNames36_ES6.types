@@ -13,7 +13,6 @@ class C {
 
     [s: string]: Foo2;
 >s : string
->Foo2 : Foo2
 
     // Computed properties
     get ["get1"]() { return new Foo }
@@ -26,5 +25,4 @@ class C {
 >["set1"] : Foo2
 >"set1" : "set1"
 >p : Foo2
->Foo2 : Foo2
 }

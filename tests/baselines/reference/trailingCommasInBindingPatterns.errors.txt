@@ -19,3 +19,10 @@ tests/cases/conformance/es7/trailingCommasInBindingPatterns.ts(5,7): error TS101
           ~
 !!! error TS1013: A rest parameter or binding pattern may not have a trailing comma.
     
+    // Allowed for non-rest elements
+    const [e,] = <any>[];
+    const {f,} = <any>{};
+    let g, h;
+    ([g,] = <any>[]);
+    ({h,} = <any>{});
+    

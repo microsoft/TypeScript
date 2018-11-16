@@ -20,14 +20,14 @@ function foo3<T extends string>(test: T) { }
 function foo4<T extends Date>(test: T) { } // valid
 >foo4 : Symbol(foo4, Decl(typeParameterConstraints1.ts, 2, 44))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 >test : Symbol(test, Decl(typeParameterConstraints1.ts, 3, 30))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 3, 14))
 
 function foo5<T extends RegExp>(test: T) { } // valid
 >foo5 : Symbol(foo5, Decl(typeParameterConstraints1.ts, 3, 42))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 4, 14))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >test : Symbol(test, Decl(typeParameterConstraints1.ts, 4, 32))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 4, 14))
 
@@ -40,7 +40,7 @@ function foo6<T extends hm>(test: T) { }
 function foo7<T extends Object>(test: T) { } // valid
 >foo7 : Symbol(foo7, Decl(typeParameterConstraints1.ts, 5, 40))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 6, 14))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >test : Symbol(test, Decl(typeParameterConstraints1.ts, 6, 32))
 >T : Symbol(T, Decl(typeParameterConstraints1.ts, 6, 14))
 

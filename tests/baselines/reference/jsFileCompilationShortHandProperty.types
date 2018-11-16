@@ -1,6 +1,6 @@
 === tests/cases/compiler/a.js ===
 function foo() {
->foo : () => { [x: string]: any; a: number; b: string; }
+>foo : () => { a: number; b: string; }
 
     var a = 10;
 >a : number
@@ -11,7 +11,7 @@ function foo() {
 >"Hello" : "Hello"
 
     return {
->{        a,        b    } : { [x: string]: any; a: number; b: string; }
+>{        a,        b    } : { a: number; b: string; }
 
         a,
 >a : number

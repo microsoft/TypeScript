@@ -10,6 +10,6 @@ tests/cases/conformance/es6/computedProperties/computedPropertyNames42_ES6.ts(8,
     
         // Computed properties
         [""]: Foo;
-        ~~~~~~~~~~
+        ~~~~
 !!! error TS2411: Property '[""]' of type 'Foo' is not assignable to string index type 'Foo2'.
     }

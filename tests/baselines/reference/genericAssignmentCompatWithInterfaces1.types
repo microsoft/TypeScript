@@ -1,39 +1,21 @@
 === tests/cases/compiler/genericAssignmentCompatWithInterfaces1.ts ===
 interface Comparable<T> {
->Comparable : Comparable<T>
->T : T
-
    compareTo(other: T): number;
 >compareTo : (other: T) => number
 >other : T
->T : T
 }
 interface I<T> {
->I : I<T>
->T : T
-
     x: Comparable<T>;
 >x : Comparable<T>
->Comparable : Comparable<T>
->T : T
 }
 interface K<T> {
->K : K<T>
->T : T
-
    x: A<T>;
 >x : A<T>
->A : A<T>
->T : T
 }
 class A<T> implements Comparable<T> { compareTo(other: T) { return 1; } }
 >A : A<T>
->T : T
->Comparable : Comparable<T>
->T : T
 >compareTo : (other: T) => number
 >other : T
->T : T
 >1 : 1
 
 var z = { x: new A<number>() };
@@ -45,7 +27,6 @@ var z = { x: new A<number>() };
 
 var a1: I<string> = { x: new A<number>() };
 >a1 : I<string>
->I : I<T>
 >{ x: new A<number>() } : { x: A<number>; }
 >x : A<number>
 >new A<number>() : A<number>
@@ -53,11 +34,9 @@ var a1: I<string> = { x: new A<number>() };
 
 var a2: I<string> = function (): { x: A<number> } {
 >a2 : I<string>
->I : I<T>
 >function (): { x: A<number> } {   var z = { x: new A<number>() }; return z;} () : { x: A<number>; }
 >function (): { x: A<number> } {   var z = { x: new A<number>() }; return z;} : () => { x: A<number>; }
 >x : A<number>
->A : A<T>
 
    var z = { x: new A<number>() }; return z;
 >z : { x: A<number>; }
@@ -70,14 +49,11 @@ var a2: I<string> = function (): { x: A<number> } {
 } ();
 var a3: I<string> = z;
 >a3 : I<string>
->I : I<T>
 >z : { x: A<number>; }
 
 var a4: I<string> = <K<number>>z;
 >a4 : I<string>
->I : I<T>
 ><K<number>>z : K<number>
->K : K<T>
 >z : { x: A<number>; }
  
 

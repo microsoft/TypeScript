@@ -3,32 +3,20 @@
 
 function foo<T extends String>(x: T): T { return null; }
 >foo : <T extends String>(x: T) => T
->T : T
->String : String
 >x : T
->T : T
->T : T
 >null : null
 
 function foo2<T extends { x: number }>(x: T): T { return null; }
 >foo2 : <T extends { x: number; }>(x: T) => T
->T : T
 >x : number
 >x : T
->T : T
->T : T
 >null : null
 
 //function foo3<T extends T[]>(x: T): T { return null; }
 function foo4<T extends <T>(x: T) => void>(x: T): T { return null; }
 >foo4 : <T extends <T>(x: T) => void>(x: T) => T
->T : T
->T : T
 >x : T
->T : T
 >x : T
->T : T
->T : T
 >null : null
 
 var a;
@@ -75,12 +63,9 @@ foo4<any>(b);
 
 class C<T extends String> {
 >C : C<T>
->T : T
->String : String
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c1 = new C(a);
@@ -97,12 +82,10 @@ var c2 = new C<any>(b);
 
 class C2<T extends { x: number }> {
 >C2 : C2<T>
->T : T
 >x : number
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c3 = new C2(a);
@@ -126,15 +109,10 @@ var c4 = new C2<any>(b);
 
 class C4<T extends <T>(x:T) => T> {
 >C4 : C4<T>
->T : T
->T : T
 >x : T
->T : T
->T : T
 
     constructor(public x: T) { }
 >x : T
->T : T
 }
 
 var c7 = new C4(a);

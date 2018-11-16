@@ -9,7 +9,7 @@ const multiLineOffset = 12;
 ////    foo();
 ////    /*2*/foo(a);
 ////    /*3*/foo(a, b);
-////    /*4*/ foo(a, {x: string}, [c]);
+////    /*4*/foo(a, {x: string}, [c]);
 ////    /*5*/foo(a?, b?, ...args) {
 ////    }
 ////}
@@ -43,7 +43,8 @@ verify.docCommentTemplateAt("4", multiLineOffset,
      * @param a
      * @param param1
      * @param param2
-     */`);
+     */
+    `);
 
 verify.docCommentTemplateAt("5", multiLineOffset,
     `/**

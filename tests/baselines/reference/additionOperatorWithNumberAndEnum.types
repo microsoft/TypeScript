@@ -14,12 +14,9 @@ var a: number;
 
 var b: E;
 >b : E
->E : E
 
 var c: E | F;
 >c : E | F
->E : E
->F : F
 
 var r1 = a + a;
 >r1 : number

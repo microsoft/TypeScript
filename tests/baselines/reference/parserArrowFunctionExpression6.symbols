@@ -7,9 +7,9 @@ function foo(q: string, b: number) {
     return true ? (q ? true : false) : (b = q.length, function() { });
 >q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
 >b : Symbol(b, Decl(parserArrowFunctionExpression6.ts, 0, 23))
->q.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>q.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >q : Symbol(q, Decl(parserArrowFunctionExpression6.ts, 0, 13))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
 };
 

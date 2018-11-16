@@ -46,7 +46,7 @@ function f5() {
 
     return 1;
     return new Object();
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 }
 
 function f6<T>(x: T) {
@@ -121,7 +121,7 @@ function f11() {
     } else {
         return (x: Object) => { }
 >x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 79, 16))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
     }
 }
 
@@ -132,7 +132,7 @@ function f12() {
     if (true) {
         return (x: Object) => { }
 >x : Symbol(x, Decl(functionWithMultipleReturnStatements2.ts, 86, 16))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     } else {
         return (x: number) => { }        

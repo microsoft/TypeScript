@@ -4,7 +4,6 @@ class c1 {
 }
 class c2<T> {
 >c2 : c2<T>
->T : T
 }
 class c3 {
 >c3 : c3

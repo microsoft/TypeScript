@@ -1,0 +1,51 @@
+tests/cases/conformance/jsdoc/a.js(14,29): error TS2339: Property 'a' does not exist on type 'U'.
+tests/cases/conformance/jsdoc/a.js(14,35): error TS2339: Property 'b' does not exist on type 'U'.
+tests/cases/conformance/jsdoc/a.js(21,3): error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
+  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+tests/cases/conformance/jsdoc/a.js(24,15): error TS2304: Cannot find name 'NoLongerAllowed'.
+tests/cases/conformance/jsdoc/a.js(25,2): error TS1069: Unexpected token. A type parameter name was expected without curly braces.
+
+
+==== tests/cases/conformance/jsdoc/a.js (5 errors) ====
+    /**
+     * @template {{ a: number, b: string }} T,U A Comment
+     * @template {{ c: boolean }} V uh ... are comments even supported??
+     * @template W
+     * @template X That last one had no comment
+     * @param {T} t
+     * @param {U} u
+     * @param {V} v
+     * @param {W} w
+     * @param {X} x
+     * @return {W | X}
+     */
+    function f(t, u, v, w, x) {
+        if(t.a + t.b.length > u.a - u.b.length && v.c) {
+                                ~
+!!! error TS2339: Property 'a' does not exist on type 'U'.
+                                      ~
+!!! error TS2339: Property 'b' does not exist on type 'U'.
+            return w;
+        }
+        return x;
+    }
+    
+    f({ a: 12, b: 'hi', c: null }, undefined, { c: false, d: 12, b: undefined }, 101, 'nope');
+    f({ a: 12  }, undefined, undefined, 101, 'nope');
+      ~~~~~~~~~~
+!!! error TS2345: Argument of type '{ a: number; }' is not assignable to parameter of type '{ a: number; b: string; }'.
+!!! error TS2345:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: string; }'.
+!!! related TS2728 tests/cases/conformance/jsdoc/a.js:2:28: 'b' is declared here.
+    
+    /**
+     * @template {NoLongerAllowed}
+                  ~~~~~~~~~~~~~~~
+!!! error TS2304: Cannot find name 'NoLongerAllowed'.
+     * @template T preceding line's syntax is no longer allowed
+     ~
+!!! error TS1069: Unexpected token. A type parameter name was expected without curly braces.
+     * @param {T} x
+     */
+    function g(x) { }
+    
+    

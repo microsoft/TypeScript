@@ -17,7 +17,8 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS2304: C
 tests/cases/conformance/types/conditional/inferTypes1.ts(75,43): error TS4081: Exported type alias 'T62' has or is using private name 'U'.
 tests/cases/conformance/types/conditional/inferTypes1.ts(82,44): error TS2344: Type 'U' does not satisfy the constraint 'string'.
   Type 'number' is not assignable to type 'string'.
-tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: Type 'T' is not assignable to type 'string'.
+tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+  Type 'T' is not assignable to type 'symbol'.
 
 
 ==== tests/cases/conformance/types/conditional/inferTypes1.ts (16 errors) ====
@@ -200,7 +201,8 @@ tests/cases/conformance/types/conditional/inferTypes1.ts(144,40): error TS2322: 
     type A<T> = T extends string ? { [P in T]: void; } : T;
     type B<T> = string extends T ? { [P in T]: void; } : T;  // Error
                                            ~
-!!! error TS2322: Type 'T' is not assignable to type 'string'.
+!!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
+!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
     
     // Repro from #22302
     

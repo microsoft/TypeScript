@@ -14,11 +14,9 @@ import X2 from "foobarx";
 const x: X = X;
 >x : number
 >X : number
->X : number
 
 const x2: X2 = X2;
 >x2 : number
->X2 : number
 >X2 : number
 
 import B from "./a";
@@ -26,7 +24,6 @@ import B from "./a";
 
 const b: B = new B(B.b);
 >b : B
->B : B
 >new B(B.b) : B
 >B : typeof B
 >B.b : number

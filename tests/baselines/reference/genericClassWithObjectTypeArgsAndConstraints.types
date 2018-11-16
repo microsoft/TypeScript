@@ -21,11 +21,9 @@ class D {
 
 class X<T> {
 >X : X<T>
->T : T
 
     x: T;
 >x : T
->T : T
 }
 
 module Class {
@@ -33,23 +31,16 @@ module Class {
 
     class G<T extends { x: string }> {
 >G : G<T>
->T : T
 >x : string
 
         foo<T extends { x: string }>(t: X<T>, t2: X<T>) {
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
->T : T
 >x : string
 >t : X<T>
->X : X<T>
->T : T
 >t2 : X<T>
->X : X<T>
->T : T
 
             var x: T;
 >x : T
->T : T
 
             return x;
 >x : T
@@ -60,17 +51,14 @@ module Class {
 >c1 : X<C>
 >new X<C>() : X<C>
 >X : typeof X
->C : C
 
     var d1 = new X<D>();
 >d1 : X<D>
 >new X<D>() : X<D>
 >X : typeof X
->D : D
 
     var g: G<{ x: string; y: string }>;
 >g : G<{ x: string; y: string; }>
->G : G<T>
 >x : string
 >y : string
 
@@ -94,23 +82,14 @@ module Class {
 
     class G2<T extends C> {
 >G2 : G2<T>
->T : T
->C : C
 
         foo2<T extends C>(t: X<T>, t2: X<T>) {
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
->T : T
->C : C
 >t : X<T>
->X : X<T>
->T : T
 >t2 : X<T>
->X : X<T>
->T : T
 
             var x: T;
 >x : T
->T : T
 
             return x;
 >x : T
@@ -118,8 +97,6 @@ module Class {
     }
     var g2: G2<D>;
 >g2 : G2<D>
->G2 : G2<T>
->D : D
 
     var r = g2.foo2(c1, d1);
 >r : C
@@ -144,38 +121,27 @@ module Interface {
 >Interface : typeof Interface
 
     interface G<T extends { x: string }> {
->G : G<T>
->T : T
 >x : string
 
         foo<T extends { x: string }>(t: X<T>, t2: X<T>): T;
 >foo : <T extends { x: string; }>(t: X<T>, t2: X<T>) => T
->T : T
 >x : string
 >t : X<T>
->X : X<T>
->T : T
 >t2 : X<T>
->X : X<T>
->T : T
->T : T
     }
 
     var c1 = new X<C>();
 >c1 : X<C>
 >new X<C>() : X<C>
 >X : typeof X
->C : C
 
     var d1 = new X<D>();
 >d1 : X<D>
 >new X<D>() : X<D>
 >X : typeof X
->D : D
 
     var g: G<{ x: string; y: string }>;
 >g : G<{ x: string; y: string; }>
->G : G<T>
 >x : string
 >y : string
 
@@ -198,27 +164,14 @@ module Interface {
 >c1 : X<C>
 
     interface G2<T extends C> {
->G2 : G2<T>
->T : T
->C : C
-
         foo2<T extends C>(t: X<T>, t2: X<T>): T;
 >foo2 : <T extends C>(t: X<T>, t2: X<T>) => T
->T : T
->C : C
 >t : X<T>
->X : X<T>
->T : T
 >t2 : X<T>
->X : X<T>
->T : T
->T : T
     }
 
     var g2: G2<D>;
 >g2 : G2<D>
->G2 : G2<T>
->D : D
 
     var r = g2.foo2(c1, d1);
 >r : C

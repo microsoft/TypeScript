@@ -2,19 +2,20 @@
 
 ////var aa = 1;
 
-////class bar1{ constructor(/*constructorParamter1*/
+////class bar1{ constructor(/*1*/
 
-////class bar2{ constructor(a/*constructorParamter2*/
+////class bar2{ constructor(a/*2*/
 
-////class bar3{ constructor(a, /*constructorParamter3*/
+////class bar3{ constructor(a, /*3*/
 
-////class bar4{ constructor(a, b/*constructorParamter4*/
+////class bar4{ constructor(a, b/*4*/
 
-////class bar6{ constructor(public a, /*constructorParamter5*/
+////class bar6{ constructor(public a, /*5*/
 
-////class bar7{ constructor(private a, /*constructorParamter6*/
+////class bar7{ constructor(private a, /*6*/
 
-goTo.eachMarker(() => {
-    verify.not.completionListIsEmpty();
-    verify.completionListAllowsNewIdentifier();
+verify.completions({
+    marker: test.markers(),
+    exact: completion.constructorParameterKeywords,
+    isNewIdentifierLocation: true
 });

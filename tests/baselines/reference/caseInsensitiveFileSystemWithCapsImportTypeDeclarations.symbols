@@ -1,0 +1,45 @@
+=== tests/cases/compiler/Uppercased_Dir/src/index.ts ===
+import { TypeB } from './type-b';
+>TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))
+
+export class Broken {
+>Broken : Symbol(Broken, Decl(index.ts, 0, 33))
+
+    method () {
+>method : Symbol(Broken.method, Decl(index.ts, 2, 21))
+
+        return { } as TypeB;
+>TypeB : Symbol(TypeB, Decl(index.ts, 0, 8))
+    }
+}
+=== tests/cases/compiler/Uppercased_Dir/src/type-b.ts ===
+import { Merge } from './types';
+>Merge : Symbol(Merge, Decl(type-b.ts, 0, 8))
+
+import { TypeA } from './type-a';
+>TypeA : Symbol(TypeA, Decl(type-b.ts, 1, 8))
+
+export type TypeB = Merge<TypeA, {
+>TypeB : Symbol(TypeB, Decl(type-b.ts, 1, 33))
+>Merge : Symbol(Merge, Decl(type-b.ts, 0, 8))
+>TypeA : Symbol(TypeA, Decl(type-b.ts, 1, 8))
+
+    b: string;
+>b : Symbol(b, Decl(type-b.ts, 3, 34))
+
+}>;
+=== tests/cases/compiler/Uppercased_Dir/src/type-a.ts ===
+export type TypeA = {
+>TypeA : Symbol(TypeA, Decl(type-a.ts, 0, 0))
+
+    a: string;
+>a : Symbol(a, Decl(type-a.ts, 0, 21))
+}
+=== tests/cases/compiler/Uppercased_Dir/src/types.ts ===
+export type Merge<T, U> = T & U;
+>Merge : Symbol(Merge, Decl(types.ts, 0, 0))
+>T : Symbol(T, Decl(types.ts, 0, 18))
+>U : Symbol(U, Decl(types.ts, 0, 20))
+>T : Symbol(T, Decl(types.ts, 0, 18))
+>U : Symbol(U, Decl(types.ts, 0, 20))
+

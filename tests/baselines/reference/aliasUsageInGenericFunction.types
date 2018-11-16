@@ -6,8 +6,6 @@ import moduleA = require("./aliasUsageInGenericFunction_moduleA");
 >moduleA : typeof moduleA
 
 interface IHasVisualizationModel {
->IHasVisualizationModel : IHasVisualizationModel
-
     VisualizationModel: typeof Backbone.Model;
 >VisualizationModel : typeof Backbone.Model
 >Backbone.Model : typeof Backbone.Model
@@ -16,11 +14,8 @@ interface IHasVisualizationModel {
 }
 function foo<T extends { a: IHasVisualizationModel }>(x: T) {
 >foo : <T extends { a: IHasVisualizationModel; }>(x: T) => T
->T : T
 >a : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >x : T
->T : T
 
     return x;
 >x : T
@@ -40,7 +35,6 @@ var r2 = foo({ a: <IHasVisualizationModel>null });
 >{ a: <IHasVisualizationModel>null } : { a: IHasVisualizationModel; }
 >a : IHasVisualizationModel
 ><IHasVisualizationModel>null : IHasVisualizationModel
->IHasVisualizationModel : IHasVisualizationModel
 >null : null
 
 === tests/cases/compiler/aliasUsageInGenericFunction_backbone.ts ===

@@ -1,12 +1,9 @@
 === tests/cases/compiler/classExpressions.ts ===
 interface A {}
->A : A
-
 let x = class B implements A {
 >x : typeof B
 >class B implements A {    prop: number;    onStart(): void {    }    func = () => {    }} : typeof B
 >B : typeof B
->A : A
 
     prop: number;
 >prop : number

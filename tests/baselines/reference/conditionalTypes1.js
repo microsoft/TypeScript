@@ -301,7 +301,7 @@ function f50() {
 
 // Repro from #21862
 
-type OldDiff<T extends string, U extends string> = (
+type OldDiff<T extends keyof any, U extends keyof any> = (
     & { [P in T]: P; }
     & { [P in U]: never; }
     & { [x: string]: never; }
@@ -656,7 +656,7 @@ declare type T95<T> = T extends string ? boolean : number;
 declare const f44: <U>(value: T94<U>) => T95<U>;
 declare const f45: <U>(value: T95<U>) => T94<U>;
 declare function f50(): void;
-declare type OldDiff<T extends string, U extends string> = ({
+declare type OldDiff<T extends keyof any, U extends keyof any> = ({
     [P in T]: P;
 } & {
     [P in U]: never;

@@ -1,84 +1,54 @@
 === tests/cases/compiler/typeParameterConstraints1.ts ===
 function foo1<T extends any>(test: T) { }
 >foo1 : <T extends any>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo2<T extends number>(test: T) { }
 >foo2 : <T extends number>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo3<T extends string>(test: T) { }
 >foo3 : <T extends string>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo4<T extends Date>(test: T) { } // valid
 >foo4 : <T extends Date>(test: T) => void
->T : T
->Date : Date
 >test : T
->T : T
 
 function foo5<T extends RegExp>(test: T) { } // valid
 >foo5 : <T extends RegExp>(test: T) => void
->T : T
->RegExp : RegExp
 >test : T
->T : T
 
 function foo6<T extends hm>(test: T) { }
 >foo6 : <T extends any>(test: T) => void
->T : T
->hm : No type information available!
 >test : T
->T : T
 
 function foo7<T extends Object>(test: T) { } // valid
 >foo7 : <T extends Object>(test: T) => void
->T : T
->Object : Object
 >test : T
->T : T
 
 function foo8<T extends "">(test: T) { }
 >foo8 : <T extends "">(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo9<T extends 1 > (test: T) { }
 >foo9 : <T extends 1>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo10<T extends (1)> (test: T) { }
 >foo10 : <T extends 1>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo11<T extends null> (test: T) { }
 >foo11 : <T extends null>(test: T) => void
->T : T
 >null : null
 >test : T
->T : T
 
 function foo12<T extends undefined>(test: T) { }
 >foo12 : <T extends undefined>(test: T) => void
->T : T
 >test : T
->T : T
 
 function foo13<T extends void>(test: T) { }
 >foo13 : <T extends void>(test: T) => void
->T : T
 >test : T
->T : T
 

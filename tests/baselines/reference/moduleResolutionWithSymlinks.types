@@ -7,11 +7,9 @@ import { MyClass2 } from "./library-b";
 
 let x: MyClass;
 >x : MyClass
->MyClass : MyClass
 
 let y: MyClass2;
 >y : MyClass
->MyClass2 : MyClass
 
 x = y;
 >x = y : MyClass

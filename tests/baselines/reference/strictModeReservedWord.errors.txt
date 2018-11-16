@@ -134,6 +134,7 @@ tests/cases/compiler/strictModeReservedWord.ts(24,5): error TS2349: Cannot invok
         ublic();
         ~~~~~
 !!! error TS2552: Cannot find name 'ublic'. Did you mean 'public'?
+!!! related TS2728 tests/cases/compiler/strictModeReservedWord.ts:5:9: 'public' is declared here.
         static();
         ~~~~~~
 !!! error TS1212: Identifier expected. 'static' is a reserved word in strict mode.

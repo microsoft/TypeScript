@@ -1,14 +1,11 @@
 === tests/cases/compiler/instantiatedReturnTypeContravariance.ts ===
 interface B<T> {
->B : B<T>
->T : T
 
 name: string;
 >name : string
 
 x(): T;
 >x : () => T
->T : T
 
 }
  
@@ -17,7 +14,6 @@ class c {
 
 foo(): B<void> {
 >foo : () => B<void>
->B : B<T>
 
 return null;
 >null : null
@@ -32,7 +28,6 @@ class d extends c {
 
 foo(): B<number> {
 >foo : () => B<number>
->B : B<T>
 
 return null;
 >null : null

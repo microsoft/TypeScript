@@ -94,6 +94,16 @@ declare function escape(string: string): string;
   */
 declare function unescape(string: string): string;
 
+interface Symbol {
+  /** Returns a string representation of an object. */
+  toString(): string;
+
+  /** Returns the primitive value of the specified object. */
+  valueOf(): symbol;
+}
+
+declare type PropertyKey = string | number | symbol;
+
 interface PropertyDescriptor {
     configurable?: boolean;
     enumerable?: boolean;
@@ -124,7 +134,7 @@ interface Object {
       * Determines whether an object has a property with the specified name.
       * @param v A property name.
       */
-    hasOwnProperty(v: string): boolean;
+    hasOwnProperty(v: PropertyKey): boolean;
 
     /**
       * Determines whether an object exists in another object's prototype chain.
@@ -136,7 +146,7 @@ interface Object {
       * Determines whether a specified property is enumerable.
       * @param v A property name.
       */
-    propertyIsEnumerable(v: string): boolean;
+    propertyIsEnumerable(v: PropertyKey): boolean;
 }
 
 interface ObjectConstructor {
@@ -159,7 +169,7 @@ interface ObjectConstructor {
       * @param o Object that contains the property.
       * @param p Name of the property.
     */
-    getOwnPropertyDescriptor(o: any, p: string): PropertyDescriptor | undefined;
+    getOwnPropertyDescriptor(o: any, p: PropertyKey): PropertyDescriptor | undefined;
 
     /**
       * Returns the names of the own properties of an object. The own properties of an object are those that are defined directly
@@ -187,7 +197,7 @@ interface ObjectConstructor {
       * @param p The property name.
       * @param attributes Descriptor for the property. It can be for a data property or an accessor property.
       */
-    defineProperty(o: any, p: string, attributes: PropertyDescriptor & ThisType<any>): any;
+    defineProperty(o: any, p: PropertyKey, attributes: PropertyDescriptor & ThisType<any>): any;
 
     /**
       * Adds one or more properties to an object, and/or modifies attributes of existing properties.
@@ -304,6 +314,66 @@ interface FunctionConstructor {
 }
 
 declare const Function: FunctionConstructor;
+
+interface CallableFunction extends Function {
+    /**
+      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args An array of argument values to be passed to the function.
+      */
+    apply<T, R>(this: (this: T) => R, thisArg: T): R;
+    apply<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R;
+
+    /**
+      * Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args Argument values to be passed to the function.
+      */
+    call<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, ...args: A): R;
+
+    /**
+      * For a given function, creates a bound function that has the same body as the original function.
+      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+      * @param thisArg The object to be used as the this object.
+      * @param args Arguments to bind to the parameters of the function.
+      */
+    bind<T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T): (...args: A) => R;
+    bind<T, A0, A extends any[], R>(this: (this: T, arg0: A0, ...args: A) => R, thisArg: T, arg0: A0): (...args: A) => R;
+    bind<T, A0, A1, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1): (...args: A) => R;
+    bind<T, A0, A1, A2, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2): (...args: A) => R;
+    bind<T, A0, A1, A2, A3, A extends any[], R>(this: (this: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: T, arg0: A0, arg1: A1, arg2: A2, arg3: A3): (...args: A) => R;
+    bind<T, AX, R>(this: (this: T, ...args: AX[]) => R, thisArg: T, ...args: AX[]): (...args: AX[]) => R;
+}
+
+interface NewableFunction extends Function {
+    /**
+      * Calls the function with the specified object as the this value and the elements of specified array as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args An array of argument values to be passed to the function.
+      */
+    apply<T>(this: new () => T, thisArg: T): void;
+    apply<T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void;
+
+    /**
+      * Calls the function with the specified object as the this value and the specified rest arguments as the arguments.
+      * @param thisArg The object to be used as the this object.
+      * @param args Argument values to be passed to the function.
+      */
+    call<T, A extends any[]>(this: new (...args: A) => T, thisArg: T, ...args: A): void;
+
+    /**
+      * For a given function, creates a bound function that has the same body as the original function.
+      * The this object of the bound function is associated with the specified object, and has the specified initial parameters.
+      * @param thisArg The object to be used as the this object.
+      * @param args Arguments to bind to the parameters of the function.
+      */
+    bind<A extends any[], R>(this: new (...args: A) => R, thisArg: any): new (...args: A) => R;
+    bind<A0, A extends any[], R>(this: new (arg0: A0, ...args: A) => R, thisArg: any, arg0: A0): new (...args: A) => R;
+    bind<A0, A1, A extends any[], R>(this: new (arg0: A0, arg1: A1, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1): new (...args: A) => R;
+    bind<A0, A1, A2, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2): new (...args: A) => R;
+    bind<A0, A1, A2, A3, A extends any[], R>(this: new (arg0: A0, arg1: A1, arg2: A2, arg3: A3, ...args: A) => R, thisArg: any, arg0: A0, arg1: A1, arg2: A2, arg3: A3): new (...args: A) => R;
+    bind<AX, R>(this: new (...args: AX[]) => R, thisArg: any, ...args: AX[]): new (...args: AX[]) => R;
+}
 
 interface IArguments {
     [index: number]: any;
@@ -523,6 +593,15 @@ declare const Number: NumberConstructor;
 
 interface TemplateStringsArray extends ReadonlyArray<string> {
     readonly raw: ReadonlyArray<string>;
+}
+
+/**
+ * The type of `import.meta`.
+ * 
+ * If you need to declare that a given property exists on `import.meta`,
+ * this type may be augmented via interface merging.
+ */
+interface ImportMeta {
 }
 
 interface Math {
@@ -792,8 +871,7 @@ interface Date {
 
 interface DateConstructor {
     new(): Date;
-    new(value: number): Date;
-    new(value: string): Date;
+    new(value: number | string): Date;
     new(year: number, month: number, date?: number, hours?: number, minutes?: number, seconds?: number, ms?: number): Date;
     (): string;
     readonly prototype: Date;
@@ -1128,14 +1206,14 @@ interface Array<T> {
       */
     toLocaleString(): string;
     /**
+      * Removes the last element from an array and returns it.
+      */
+    pop(): T | undefined;
+    /**
       * Appends new elements to an array, and returns the new length of the array.
       * @param items New elements of the Array.
       */
     push(...items: T[]): number;
-    /**
-      * Removes the last element from an array and returns it.
-      */
-    pop(): T | undefined;
     /**
       * Combines two or more arrays.
       * @param items Additional items to add to the end of array1.
@@ -1352,7 +1430,7 @@ type Readonly<T> = {
 };
 
 /**
- * From T pick a set of properties K
+ * From T, pick a set of properties whose keys are in the union K
  */
 type Pick<T, K extends keyof T> = {
     [P in K]: T[P];
@@ -1361,7 +1439,7 @@ type Pick<T, K extends keyof T> = {
 /**
  * Construct a type with a set of properties K of type T
  */
-type Record<K extends string, T> = {
+type Record<K extends keyof any, T> = {
     [P in K]: T;
 };
 
@@ -1379,6 +1457,16 @@ type Extract<T, U> = T extends U ? T : never;
  * Exclude null and undefined from T
  */
 type NonNullable<T> = T extends null | undefined ? never : T;
+
+/**
+ * Obtain the parameters of a function type in a tuple
+ */
+type Parameters<T extends (...args: any[]) => any> = T extends (...args: infer P) => any ? P : never;
+
+/**
+ * Obtain the parameters of a constructor function type in a tuple
+ */
+type ConstructorParameters<T extends new (...args: any[]) => any> = T extends new (...args: infer P) => any ? P : never;
 
 /**
  * Obtain the return type of a function type

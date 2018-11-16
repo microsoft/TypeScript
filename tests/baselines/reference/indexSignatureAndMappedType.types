@@ -4,15 +4,9 @@
 
 function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
 >f1 : <T, K extends string>(x: { [key: string]: T; }, y: Record<K, T>) => void
->T : T
->K : K
 >x : { [key: string]: T; }
 >key : string
->T : T
 >y : Record<K, T>
->Record : Record<K, T>
->K : K
->T : T
 
     x = y;
 >x = y : Record<K, T>
@@ -27,13 +21,9 @@ function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
 
 function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
 >f2 : <T>(x: { [key: string]: T; }, y: Record<string, T>) => void
->T : T
 >x : { [key: string]: T; }
 >key : string
->T : T
 >y : Record<string, T>
->Record : Record<K, T>
->T : T
 
     x = y;
 >x = y : Record<string, T>
@@ -48,16 +38,9 @@ function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
 
 function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
 >f3 : <T, U, K extends string>(x: { [key: string]: T; }, y: Record<K, U>) => void
->T : T
->U : U
->K : K
 >x : { [key: string]: T; }
 >key : string
->T : T
 >y : Record<K, U>
->Record : Record<K, T>
->K : K
->U : U
 
     x = y;  // Error
 >x = y : Record<K, U>
@@ -81,24 +64,15 @@ type Dictionary = {
 };
 
 interface IBaseEntity {
->IBaseEntity : IBaseEntity
-
     name: string;
 >name : string
 
     properties: Dictionary;
 >properties : Dictionary
->Dictionary : Dictionary
 }
 
 interface IEntity<T extends string> extends IBaseEntity {
->IEntity : IEntity<T>
->T : T
->IBaseEntity : IBaseEntity
-
     properties: Record<T, string>;
 >properties : Record<T, string>
->Record : Record<K, T>
->T : T
 }
 

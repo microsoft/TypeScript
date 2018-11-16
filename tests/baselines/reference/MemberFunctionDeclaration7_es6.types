@@ -4,5 +4,4 @@ class C {
 
    *foo<T>() { }
 >foo : <T>() => IterableIterator<any>
->T : T
 }

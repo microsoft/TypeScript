@@ -1,18 +1,14 @@
-tests/cases/compiler/letConstInCaseClauses.ts(6,5): error TS2304: Cannot find name 'console'.
-tests/cases/compiler/letConstInCaseClauses.ts(20,5): error TS2304: Cannot find name 'console'.
 tests/cases/compiler/letConstInCaseClauses.ts(22,14): error TS2678: Type '10' is not comparable to type '1'.
 tests/cases/compiler/letConstInCaseClauses.ts(26,14): error TS2678: Type '10' is not comparable to type '2'.
 
 
-==== tests/cases/compiler/letConstInCaseClauses.ts (4 errors) ====
+==== tests/cases/compiler/letConstInCaseClauses.ts (2 errors) ====
     var x = 10;
     var y = 20;
     {
         let x = 1;
         let y = 2;
         console.log(x)
-        ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
         switch (x) {
             case 10:
                 let x = 20;
@@ -27,8 +23,6 @@ tests/cases/compiler/letConstInCaseClauses.ts(26,14): error TS2678: Type '10' is
         const x = 1;
         const y = 2;
         console.log(x)
-        ~~~~~~~
-!!! error TS2304: Cannot find name 'console'.
         switch (x) {
             case 10:
                  ~~

@@ -9,7 +9,6 @@ module M {
 >f : () => any
 
     declare declare module N { }  
->N : any
 
     declare declare class C { }
 >C : C

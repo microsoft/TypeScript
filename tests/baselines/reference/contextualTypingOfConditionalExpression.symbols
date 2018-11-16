@@ -3,13 +3,13 @@ var x: (a: number) => void = true ? (a) => a.toExponential() : (b) => b.toFixed(
 >x : Symbol(x, Decl(contextualTypingOfConditionalExpression.ts, 0, 3))
 >a : Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 8))
 >a : Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 37))
->a.toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>a.toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >a : Symbol(a, Decl(contextualTypingOfConditionalExpression.ts, 0, 37))
->toExponential : Symbol(Number.toExponential, Decl(lib.d.ts, --, --))
+>toExponential : Symbol(Number.toExponential, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 0, 64))
->b.toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>b.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >b : Symbol(b, Decl(contextualTypingOfConditionalExpression.ts, 0, 64))
->toFixed : Symbol(Number.toFixed, Decl(lib.d.ts, --, --))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 
 class A {
 >A : Symbol(A, Decl(contextualTypingOfConditionalExpression.ts, 0, 82))

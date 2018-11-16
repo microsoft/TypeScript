@@ -13,7 +13,6 @@ type A = {
 };
 declare const value: A;
 >value : A
->A : A
 
 if (value.foo !== null) {
 >value.foo !== null : boolean

@@ -1,11 +1,11 @@
 ﻿/// <reference path='fourslash.ts'/>
 
 //// class D extends C {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}prop1|]: string;
+////     [|{| "isDefinition": true |}prop1|]: string;
 //// }
 ////
 //// class C extends D {
-////     [|{| "isWriteAccess": true, "isDefinition": true |}prop1|]: string;
+////     [|{| "isDefinition": true |}prop1|]: string;
 //// }
 ////
 //// var c: C;

@@ -4,14 +4,8 @@
 
 function foo<T, U extends T>(x: T, y: U): U { return y; } // this is now an error
 >foo : <T, U extends T>(x: T, y: U) => U
->T : T
->U : U
->T : T
 >x : T
->T : T
 >y : U
->U : U
->U : U
 >y : U
 
 foo(1, '');
@@ -27,15 +21,11 @@ foo(1, {});
 >{} : {}
 
 interface NumberVariant extends Number {
->NumberVariant : NumberVariant
->Number : Number
-
     x: number;
 >x : number
 }
 var n: NumberVariant;
 >n : NumberVariant
->NumberVariant : NumberVariant
 
 var r3 = foo(1, n);
 >r3 : any
@@ -46,14 +36,9 @@ var r3 = foo(1, n);
 
 function foo2<T, U extends { length: T }>(x: T, y: U) { return y; } // this is now an error
 >foo2 : <T, U extends { length: T; }>(x: T, y: U) => U
->T : T
->U : U
 >length : T
->T : T
 >x : T
->T : T
 >y : U
->U : U
 >y : U
 
 foo2(1, { length: '' });

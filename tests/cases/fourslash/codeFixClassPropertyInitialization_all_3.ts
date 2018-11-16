@@ -12,15 +12,15 @@
 ////
 //// class T {
 ////
-////     a: string;
+////     a: boolean;
 ////
-////     static b: string;
+////     static b: boolean;
 ////
-////     private c: string;
+////     private c: boolean;
 ////
 ////     d: number | undefined;
 ////
-////     e: string | number;
+////     e: string | boolean;
 ////
 ////     f: 1;
 ////
@@ -35,6 +35,8 @@
 ////     k: AT;
 ////
 ////     l: Foo;
+////
+////     m: number[];
 //// }
 
 verify.codeFixAll({
@@ -50,15 +52,15 @@ class Foo {}
 
 class T {
 
-    a: string = "";
+    a: boolean = false;
 
-    static b: string;
+    static b: boolean;
 
-    private c: string = "";
+    private c: boolean = false;
 
     d: number | undefined;
 
-    e: string | number = "";
+    e: string | boolean = false;
 
     f: 1 = 1;
 
@@ -73,5 +75,7 @@ class T {
     k: AT = new AT;
 
     l: Foo = new Foo;
+
+    m: number[] = [];
 }`
 });

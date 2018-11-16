@@ -3,10 +3,7 @@ declare module "m" {
 >"m" : typeof import("m")
 
     module x {
->x : any
-
         interface c {
->c : c
         }
     }
     export import a = x.c;
@@ -16,6 +13,5 @@ declare module "m" {
 
     var b: a;
 >b : a
->a : a
 }
 

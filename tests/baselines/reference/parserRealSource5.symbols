@@ -25,6 +25,7 @@ module TypeScript {
 
         constructor (public outfile: ITextWriter, public parser: Parser) {
 >outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>ITextWriter : Symbol(ITextWriter, Decl(lib.scripthost.d.ts, --, --))
 >parser : Symbol(PrintContext.parser, Decl(parserRealSource5.ts, 13, 49))
         }
 
@@ -50,11 +51,11 @@ module TypeScript {
 >startLine : Symbol(PrintContext.startLine, Decl(parserRealSource5.ts, 22, 9))
 
             if (this.builder.length > 0) {
->this.builder.length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>this.builder.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
                 CompilerDiagnostics.Alert(this.builder);
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
@@ -129,9 +130,11 @@ module TypeScript {
 >s : Symbol(s, Decl(parserRealSource5.ts, 43, 25))
 
             this.outfile.WriteLine(this.builder);
+>this.outfile.WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.scripthost.d.ts, --, --))
 >this.outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >outfile : Symbol(PrintContext.outfile, Decl(parserRealSource5.ts, 13, 21))
+>WriteLine : Symbol(ITextWriter.WriteLine, Decl(lib.scripthost.d.ts, --, --))
 >this.builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))
 >this : Symbol(PrintContext, Decl(parserRealSource5.ts, 5, 19))
 >builder : Symbol(PrintContext.builder, Decl(parserRealSource5.ts, 7, 31))

@@ -2,7 +2,7 @@
 
 //// var [|{| "isWriteAccess": true, "isDefinition": true |}dx|] = "Foo";
 ////
-//// module M { export var [|{| "isWriteAccess": true, "isDefinition": true |}dx|]; }
+//// module M { export var [|{| "isDefinition": true |}dx|]; }
 //// module M {
 ////    var z = 100;
 ////    export var y = { [|{| "isWriteAccess": true, "isDefinition": true |}dx|], z };

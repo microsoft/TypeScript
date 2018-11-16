@@ -2,12 +2,12 @@
 
 ////interface A {
 ////    a: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: string;
+////    [|{| "isDefinition": true |}common|]: string;
 ////}
 ////
 ////interface B {
 ////    b: number;
-////    [|{| "isWriteAccess": true, "isDefinition": true |}common|]: number;
+////    [|{| "isDefinition": true |}common|]: number;
 ////}
 ////
 ////// Assignment
@@ -34,8 +34,7 @@
 ////var u1 = { a: 0, b: 0, common: "" };
 ////var u2 = { b: 0, common: 0 };
 
-const all = test.ranges();
-const [aCommon, bCommon, ...unionRefs] = all;
+const [aCommon, bCommon, ...unionRefs] = test.ranges();
 verify.referenceGroups(aCommon, [
     { definition: "(property) A.common: string", ranges: [aCommon] },
     { definition: "(property) common: string | number", ranges: unionRefs },

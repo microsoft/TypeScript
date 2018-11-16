@@ -20,7 +20,7 @@
 //// }
 ////
 //// class SuperBar extends MegaBar {
-////     [|hello() {}|]
+////     [|hello|]() {}
 //// }
 ////
 //// class MegaBar implements Foo {

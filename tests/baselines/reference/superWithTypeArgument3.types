@@ -1,24 +1,18 @@
 === tests/cases/compiler/superWithTypeArgument3.ts ===
 class C<T> {
 >C : C<T>
->T : T
 
     foo: T;
 >foo : T
->T : T
 
     bar<U>(x: U) { }
 >bar : <U>(x: U) => void
->U : U
 >x : U
->U : U
 }
 
 class D<T> extends C<T> {
 >D : D<T>
->T : T
 >C : C<T>
->T : T
 
     constructor() {
         super<T>();
@@ -26,7 +20,6 @@ class D<T> extends C<T> {
 >super : any
 >super : C<T>
 > : any
->T : T
     }
     bar() {
 >bar : () => void
@@ -36,7 +29,6 @@ class D<T> extends C<T> {
 >super.bar : <U>(x: U) => void
 >super : C<T>
 >bar : <U>(x: U) => void
->T : T
 >null : null
     }
 }

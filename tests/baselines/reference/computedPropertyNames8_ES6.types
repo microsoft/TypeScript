@@ -1,16 +1,12 @@
 === tests/cases/conformance/es6/computedProperties/computedPropertyNames8_ES6.ts ===
 function f<T, U extends string>() {
 >f : <T, U extends string>() => void
->T : T
->U : U
 
     var t: T;
 >t : T
->T : T
 
     var u: U;
 >u : U
->U : U
 
     var v = {
 >v : { [x: string]: number; }

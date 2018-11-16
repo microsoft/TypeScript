@@ -17,10 +17,7 @@ class Derived extends Base {
 var a1: { fn<T>(x: T): T };
 >a1 : { fn<T>(x: T): T; }
 >fn : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var b1: { fn(x: string): string };
 >b1 : { fn(x: string): string; }
@@ -30,10 +27,7 @@ var b1: { fn(x: string): string };
 var a2: { fn<T>(x: T): T };
 >a2 : { fn<T>(x: T): T; }
 >fn : <T>(x: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var b2: { fn(x: string, y: number): string };
 >b2 : { fn(x: string, y: number): string; }
@@ -44,13 +38,8 @@ var b2: { fn(x: string, y: number): string };
 var a3: { fn<T, U>(x: T, y: U): T };
 >a3 : { fn<T, U>(x: T, y: U): T; }
 >fn : <T, U>(x: T, y: U) => T
->T : T
->U : U
 >x : T
->T : T
 >y : U
->U : U
->T : T
 
 var b3: { fn(x: string, y: number): string };
 >b3 : { fn(x: string, y: number): string; }
@@ -61,10 +50,7 @@ var b3: { fn(x: string, y: number): string };
 var a4: { fn<T>(x?: T): T };
 >a4 : { fn<T>(x?: T): T; }
 >fn : <T>(x?: T) => T
->T : T
 >x : T
->T : T
->T : T
 
 var b4: { fn(x?: string): string };
 >b4 : { fn(x?: string): string; }
@@ -74,10 +60,7 @@ var b4: { fn(x?: string): string };
 var a5: { fn<T>(...x: T[]): T };
 >a5 : { fn<T>(...x: T[]): T; }
 >fn : <T>(...x: T[]) => T
->T : T
 >x : T[]
->T : T
->T : T
 
 var b5: { fn(...x: string[]): string };
 >b5 : { fn(...x: string[]): string; }
@@ -87,12 +70,8 @@ var b5: { fn(...x: string[]): string };
 var a6: { fn<T>(x: T, y: T): T };
 >a6 : { fn<T>(x: T, y: T): T; }
 >fn : <T>(x: T, y: T) => T
->T : T
 >x : T
->T : T
 >y : T
->T : T
->T : T
 
 var b6: { fn(x: string, y: number): {} };
 >b6 : { fn(x: string, y: number): {}; }
@@ -105,10 +84,7 @@ var b7: { fn(x: Base, y: Derived): Base };
 >b7 : { fn(x: Base, y: Derived): Base; }
 >fn : (x: Base, y: Derived) => Base
 >x : Base
->Base : Base
 >y : Derived
->Derived : Derived
->Base : Base
 
 // operator <
 var r1a1 = a1 < b1;

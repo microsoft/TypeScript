@@ -2,68 +2,49 @@
 // Repro from #14557
 
 interface IData<T> {
->IData : IData<T>
->T : T
-
     content: T;
 >content : T
->T : T
 }
 
 type Data<T> = {
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
->T : T
+>Data : Data<T>
 
     get: <K extends keyof T>(prop: K) => T[K];
 >get : <K extends keyof T>(prop: K) => T[K]
->K : K
->T : T
 >prop : K
->K : K
->T : T
->K : K
 
 };
 
 class Parent<M> {
 >Parent : Parent<M>
->M : M
 
     constructor(private data: Data<M>) {}
->data : { get: <K extends keyof M>(prop: K) => M[K]; }
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
->M : M
+>data : Data<M>
 
     getData(): Data<M> {
->getData : () => { get: <K extends keyof M>(prop: K) => M[K]; }
->Data : { get: <K extends keyof T>(prop: K) => T[K]; }
->M : M
+>getData : () => Data<M>
 
         return this.data;
->this.data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>this.data : Data<M>
 >this : this
->data : { get: <K extends keyof M>(prop: K) => M[K]; }
+>data : Data<M>
     }
 }
 
 export class Foo<C> extends Parent<IData<C>> {
 >Foo : Foo<C>
->C : C
 >Parent : Parent<IData<C>>
->IData : IData<T>
->C : C
 
     getContent(): C {
 >getContent : () => C
->C : C
 
         return this.getData().get('content');
 >this.getData().get('content') : C
 >this.getData().get : <K extends "content">(prop: K) => IData<C>[K]
->this.getData() : { get: <K extends "content">(prop: K) => IData<C>[K]; }
->this.getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>this.getData() : Data<IData<C>>
+>this.getData : () => Data<IData<C>>
 >this : this
->getData : () => { get: <K extends "content">(prop: K) => IData<C>[K]; }
+>getData : () => Data<IData<C>>
 >get : <K extends "content">(prop: K) => IData<C>[K]
 >'content' : "content"
     }
@@ -71,24 +52,18 @@ export class Foo<C> extends Parent<IData<C>> {
 
 export class Bar<C, T extends IData<C>> extends Parent<T> {
 >Bar : Bar<C, T>
->C : C
->T : T
->IData : IData<T>
->C : C
 >Parent : Parent<T>
->T : T
 
     getContent(): C {
 >getContent : () => C
->C : C
 
         return this.getData().get('content');
 >this.getData().get('content') : T["content"]
 >this.getData().get : <K extends keyof T>(prop: K) => T[K]
->this.getData() : { get: <K extends keyof T>(prop: K) => T[K]; }
->this.getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>this.getData() : Data<T>
+>this.getData : () => Data<T>
 >this : this
->getData : () => { get: <K extends keyof T>(prop: K) => T[K]; }
+>getData : () => Data<T>
 >get : <K extends keyof T>(prop: K) => T[K]
 >'content' : "content"
     }
@@ -98,14 +73,9 @@ export class Bar<C, T extends IData<C>> extends Parent<T> {
 
 function foo<C, T extends { content: C }>(x: C, y: T['content']) {
 >foo : <C, T extends { content: C; }>(x: C, y: T["content"]) => void
->C : C
->T : T
 >content : C
->C : C
 >x : C
->C : C
 >y : T["content"]
->T : T
 
     x = y;
 >x = y : T["content"]

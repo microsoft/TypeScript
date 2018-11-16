@@ -9,7 +9,7 @@
 ////}
 ////
 ////var x: I = {
-////    ["[|{| "isDefinition": true |}prop1|]"]: function () { },
+////    ["[|{| "isWriteAccess": true, "isDefinition": true |}prop1|]"]: function () { },
 ////}
 
 const ranges = test.ranges();

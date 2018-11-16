@@ -7,7 +7,6 @@ import { Foo } from "foo";
 
 let foo: Foo = a.foo;
 >foo : Foo
->Foo : Foo
 >a.foo : Foo
 >a : typeof a
 >foo : Foo
@@ -19,7 +18,6 @@ import { Foo } from "foo";
 
 export const foo: Foo;
 >foo : Foo
->Foo : Foo
 
 === /node_modules/a/node_modules/foo/index.d.ts ===
 export class Foo { private x; }

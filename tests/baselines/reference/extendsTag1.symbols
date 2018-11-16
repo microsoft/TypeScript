@@ -1,0 +1,9 @@
+=== tests/cases/conformance/jsdoc/bug25101.js ===
+/**
+ * @template T
+ * @extends {Set<T>} Should prefer this Set<T>, not the Set in the heritage clause
+ */
+class My extends Set {}
+>My : Symbol(My, Decl(bug25101.js, 0, 0))
+>Set : Symbol(Set, Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.collection.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
+

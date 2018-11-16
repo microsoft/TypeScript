@@ -1,36 +1,23 @@
 === tests/cases/conformance/es6/Symbols/symbolProperty21.ts ===
 interface I<T, U> {
->I : I<T, U>
->T : T
->U : U
-
     [Symbol.unscopables]: T;
 >[Symbol.unscopables] : T
 >Symbol.unscopables : symbol
 >Symbol : SymbolConstructor
 >unscopables : symbol
->T : T
 
     [Symbol.isConcatSpreadable]: U;
 >[Symbol.isConcatSpreadable] : U
 >Symbol.isConcatSpreadable : symbol
 >Symbol : SymbolConstructor
 >isConcatSpreadable : symbol
->U : U
 }
 
 declare function foo<T, U>(p: I<T, U>): { t: T; u: U };
 >foo : <T, U>(p: I<T, U>) => { t: T; u: U; }
->T : T
->U : U
 >p : I<T, U>
->I : I<T, U>
->T : T
->U : U
 >t : T
->T : T
 >u : U
->U : U
 
 foo({
 >foo({    [Symbol.isConcatSpreadable]: "",    [Symbol.toPrimitive]: 0,    [Symbol.unscopables]: true}) : any

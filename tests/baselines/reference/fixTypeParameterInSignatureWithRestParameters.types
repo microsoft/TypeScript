@@ -1,11 +1,8 @@
 === tests/cases/compiler/fixTypeParameterInSignatureWithRestParameters.ts ===
 function bar<T>(item1: T, item2: T) { }
 >bar : <T>(item1: T, item2: T) => void
->T : T
 >item1 : T
->T : T
 >item2 : T
->T : T
 
 bar(1, ""); // Should be ok
 >bar(1, "") : any

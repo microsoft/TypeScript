@@ -14,5 +14,5 @@ verify.codeFix({
     description: `Use synthetic 'default' member.`,
     newFileContent: `import * as foo from "./foo";
 foo.default();`,
-    index: 4,
+    index: 2,
 });

@@ -9,9 +9,7 @@ function fn(x) {
 
 <T>(x: T) => { throw x; }
 ><T>(x: T) => { throw x; } : <T>(x: T) => never
->T : T
 >x : T
->T : T
 >x : T
 
 var y: string;
@@ -70,11 +68,9 @@ while (j < 0) { throw j; }
 
 class C<T> {
 >C : C<T>
->T : T
 
     private value: T;
 >value : T
->T : T
 
     biz() {
 >biz : () => void

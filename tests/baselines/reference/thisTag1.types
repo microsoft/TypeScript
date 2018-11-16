@@ -1,0 +1,37 @@
+=== tests/cases/conformance/jsdoc/a.js ===
+/** @this {{ n: number }} Mount Holyoke Preparatory School
+ * @param {string} s
+ * @return {number}
+ */
+function f(s) {
+>f : (s: string) => number
+>s : string
+
+    return this.n + s.length
+>this.n + s.length : number
+>this.n : number
+>this : { n: number; }
+>n : number
+>s.length : number
+>s : string
+>length : number
+}
+
+const o = {
+>o : { f: (s: string) => number; n: number; }
+>{    f,    n: 1} : { f: (s: string) => number; n: number; }
+
+    f,
+>f : (s: string) => number
+
+    n: 1
+>n : number
+>1 : 1
+}
+o.f('hi')
+>o.f('hi') : number
+>o.f : (s: string) => number
+>o : { f: (s: string) => number; n: number; }
+>f : (s: string) => number
+>'hi' : "hi"
+

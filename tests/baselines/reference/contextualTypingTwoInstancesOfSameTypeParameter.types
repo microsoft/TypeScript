@@ -1,11 +1,8 @@
 === tests/cases/compiler/contextualTypingTwoInstancesOfSameTypeParameter.ts ===
 function f6<T>(x: (a: T) => T) {
 >f6 : <T>(x: (a: T) => T) => any
->T : T
 >x : (a: T) => T
 >a : T
->T : T
->T : T
 
     return null;
 >null : null

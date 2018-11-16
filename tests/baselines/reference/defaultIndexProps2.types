@@ -23,7 +23,7 @@ var o = {v:"Yo2"};
 // WScript.Echo(o[0]);
 
 1[0];
->1[0] : any
+>1[0] : error
 >1 : 1
 >0 : 0
 

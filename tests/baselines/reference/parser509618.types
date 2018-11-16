@@ -3,6 +3,5 @@ declare module ambiModule {
 >ambiModule : typeof ambiModule
 
    interface i1 { };
->i1 : i1
 }
 

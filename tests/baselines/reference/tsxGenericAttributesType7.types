@@ -4,18 +4,13 @@ import React = require('react');
 
 declare function Component<T>(props: T) : JSX.Element;
 >Component : <T>(props: T) => JSX.Element
->T : T
 >props : T
->T : T
 >JSX : any
->Element : JSX.Element
 
 const decorator = function <U>(props: U) {
 >decorator : <U>(props: U) => JSX.Element
 >function <U>(props: U) {    return <Component {...props} />;} : <U>(props: U) => JSX.Element
->U : U
 >props : U
->U : U
 
     return <Component {...props} />;
 ><Component {...props} /> : JSX.Element
@@ -26,10 +21,8 @@ const decorator = function <U>(props: U) {
 const decorator1 = function <U extends {x: string}>(props: U) {
 >decorator1 : <U extends { x: string; }>(props: U) => JSX.Element
 >function <U extends {x: string}>(props: U) {    return <Component {...props} x="hi"/>;} : <U extends { x: string; }>(props: U) => JSX.Element
->U : U
 >x : string
 >props : U
->U : U
 
     return <Component {...props} x="hi"/>;
 ><Component {...props} x="hi"/> : JSX.Element

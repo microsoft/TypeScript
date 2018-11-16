@@ -11,12 +11,10 @@ type TestTypeStr = keyof typeof TestType;
 function f1(f: TestType) { }
 >f1 : (f: TestType) => void
 >f : TestType
->TestType : TestType
 
 function f2(f: TestTypeStr) { }
 >f2 : (f: "foo" | "bar") => void
 >f : "foo" | "bar"
->TestTypeStr : "foo" | "bar"
 
 f1(TestType.foo)
 >f1(TestType.foo) : void

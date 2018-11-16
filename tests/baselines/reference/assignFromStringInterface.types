@@ -5,7 +5,6 @@ var x = '';
 
 var a: String;
 >a : String
->String : String
 
 x = a;
 >x = a : String

@@ -1,10 +1,8 @@
 === tests/cases/compiler/invalidUseOfTypeAsNamespace.ts ===
 interface OhNo {
->OhNo : OhNo
 }
 
 declare let y: OhNo.hello;
 >y : any
 >OhNo : any
->hello : No type information available!
 

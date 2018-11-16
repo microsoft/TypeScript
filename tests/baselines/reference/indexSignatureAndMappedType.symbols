@@ -10,7 +10,7 @@ function f1<T, K extends string>(x: { [key: string]: T }, y: Record<K, T>) {
 >key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 3, 39))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 3, 12))
 >y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 3, 57))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 3, 14))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 3, 12))
 
@@ -30,7 +30,7 @@ function f2<T>(x: { [key: string]: T }, y: Record<string, T>) {
 >key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 8, 21))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 8, 12))
 >y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 8, 39))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 8, 12))
 
     x = y;
@@ -51,7 +51,7 @@ function f3<T, U, K extends string>(x: { [key: string]: T }, y: Record<K, U>) {
 >key : Symbol(key, Decl(indexSignatureAndMappedType.ts, 13, 42))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 13, 12))
 >y : Symbol(y, Decl(indexSignatureAndMappedType.ts, 13, 60))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >K : Symbol(K, Decl(indexSignatureAndMappedType.ts, 13, 17))
 >U : Symbol(U, Decl(indexSignatureAndMappedType.ts, 13, 14))
 
@@ -92,7 +92,7 @@ interface IEntity<T extends string> extends IBaseEntity {
 
     properties: Record<T, string>;
 >properties : Symbol(IEntity.properties, Decl(indexSignatureAndMappedType.ts, 29, 57))
->Record : Symbol(Record, Decl(lib.d.ts, --, --))
+>Record : Symbol(Record, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(indexSignatureAndMappedType.ts, 29, 18))
 }
 

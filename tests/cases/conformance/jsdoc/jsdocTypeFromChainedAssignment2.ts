@@ -2,12 +2,7 @@
 // @allowJs: true
 // @checkJs: true
 // @noImplicitAny: true
-// @Filename: types.d.ts
-declare function require(name: string): any;
-declare var exports: any;
-declare var module: { exports: any };
 // @Filename: mod.js
-/// <reference path='./types.d.ts'/>
 
 /** @param {number} n */
 exports.f = exports.g = function fg(n) {
@@ -19,7 +14,6 @@ module.exports.h = module.exports.i = function hi(mom) {
 }
 
 // @Filename: use.js
-/// <reference path='./types.d.ts'/>
 var mod = require('./mod');
 mod.f('no')
 mod.g('also no')

@@ -14,16 +14,12 @@ module A {
 
     export class AG<T, U>{
 >AG : AG<T, U>
->T : T
->U : U
 
         id: T;
 >id : T
->T : T
 
         name: U;
 >name : U
->U : U
     }
 
     class A2 {
@@ -38,16 +34,12 @@ module A {
 
     class AG2<T, U>{
 >AG2 : AG2<T, U>
->T : T
->U : U
 
         id: T;
 >id : T
->T : T
 
         name: U;
 >name : U
->U : U
     }
 }
 

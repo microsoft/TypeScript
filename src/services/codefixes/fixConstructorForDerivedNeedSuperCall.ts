@@ -12,11 +12,11 @@ namespace ts.codefix {
         },
         fixIds: [fixId],
         getAllCodeActions: context => codeFixAll(context, errorCodes, (changes, diag) =>
-            doChange(changes, context.sourceFile, getNode(diag.file, diag.start!))),
+            doChange(changes, context.sourceFile, getNode(diag.file, diag.start))),
     });
 
     function getNode(sourceFile: SourceFile, pos: number): ConstructorDeclaration {
-        const token = getTokenAtPosition(sourceFile, pos, /*includeJsDocComment*/ false);
+        const token = getTokenAtPosition(sourceFile, pos);
         Debug.assert(token.kind === SyntaxKind.ConstructorKeyword);
         return token.parent as ConstructorDeclaration;
     }

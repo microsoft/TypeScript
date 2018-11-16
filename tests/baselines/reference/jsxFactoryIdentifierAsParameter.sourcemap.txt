@@ -12,7 +12,9 @@ sourceFile:test.tsx
 >>>Object.defineProperty(exports, "__esModule", { value: true });
 >>>class AppComponent {
 1 >
-2 >^^^^^^^^^^^^^^^^^^^^^^^^^^^^->
+2 >^^^^^^
+3 >      ^^^^^^^^^^^^
+4 >                  ^^^^^^^^^^->
 1 >declare module JSX {
   >    interface IntrinsicElements {
   >        [s: string]: any;
@@ -20,7 +22,11 @@ sourceFile:test.tsx
   >}
   >
   >
+2 >export class 
+3 >      AppComponent
 1 >Emitted(3, 1) Source(7, 1) + SourceIndex(0)
+2 >Emitted(3, 7) Source(7, 14) + SourceIndex(0)
+3 >Emitted(3, 19) Source(7, 26) + SourceIndex(0)
 ---
 >>>    render(createElement) {
 1->^^^^
@@ -28,7 +34,7 @@ sourceFile:test.tsx
 3 >          ^
 4 >           ^^^^^^^^^^^^^
 5 >                        ^^^^^^^^^^^^^^^^^^^->
-1->export class AppComponent {
+1-> {
   >    
 2 >    render
 3 >          (

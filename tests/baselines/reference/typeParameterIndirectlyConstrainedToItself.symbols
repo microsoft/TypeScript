@@ -90,3 +90,16 @@ class D<U extends T, T extends V, V extends T> { }
 >V : Symbol(V, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 33))
 >T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 20))
 
+// Repro from #25740
+
+type Foo<T> = [T] extends [number] ? {} : {};
+>Foo : Symbol(Foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 50))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 9))
+>T : Symbol(T, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 9))
+
+function foo<S extends Foo<S>>() {}
+>foo : Symbol(foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 21, 45))
+>S : Symbol(S, Decl(typeParameterIndirectlyConstrainedToItself.ts, 22, 13))
+>Foo : Symbol(Foo, Decl(typeParameterIndirectlyConstrainedToItself.ts, 17, 50))
+>S : Symbol(S, Decl(typeParameterIndirectlyConstrainedToItself.ts, 22, 13))
+

@@ -24,7 +24,6 @@ module m {
         // getter with annotation
         get foo1(): private1 {
 >foo1 : private1
->private1 : private1
 
             return;
         }
@@ -42,7 +41,6 @@ module m {
         set foo3(param: private1) {
 >foo3 : private1
 >param : private1
->private1 : private1
         }
 
         // Both - getter without annotation, setter with annotation
@@ -56,26 +54,22 @@ module m {
         set foo4(param: private1) {
 >foo4 : private1
 >param : private1
->private1 : private1
         }
 
         // Both - with annotation
         get foo5(): private1 {
 >foo5 : private1
->private1 : private1
 
             return;
         }
         set foo5(param: private1) {
 >foo5 : private1
 >param : private1
->private1 : private1
         }
 
         // getter with annotation
         get foo11(): public1 {
 >foo11 : public1
->public1 : public1
 
             return;
         }
@@ -93,7 +87,6 @@ module m {
         set foo13(param: public1) {
 >foo13 : public1
 >param : public1
->public1 : public1
         }
 
         // Both - getter without annotation, setter with annotation
@@ -107,27 +100,23 @@ module m {
         set foo14(param: public1) {
 >foo14 : public1
 >param : public1
->public1 : public1
         }
 
         // Both - with annotation
         get foo15(): public1 {
 >foo15 : public1
->public1 : public1
 
             return;
         }
         set foo15(param: public1) {
 >foo15 : public1
 >param : public1
->public1 : public1
         }
 
         // getter with annotation
         get foo111(): m2.public2 {
 >foo111 : m2.public2
 >m2 : any
->public2 : m2.public2
 
             return;
         }
@@ -148,7 +137,6 @@ module m {
 >foo113 : m2.public2
 >param : m2.public2
 >m2 : any
->public2 : m2.public2
         }
 
         // Both - getter without annotation, setter with annotation
@@ -165,14 +153,12 @@ module m {
 >foo114 : m2.public2
 >param : m2.public2
 >m2 : any
->public2 : m2.public2
         }
 
         // Both - with annotation
         get foo115(): m2.public2 {
 >foo115 : m2.public2
 >m2 : any
->public2 : m2.public2
 
             return;
         }
@@ -180,7 +166,6 @@ module m {
 >foo115 : m2.public2
 >param : m2.public2
 >m2 : any
->public2 : m2.public2
         }
     }
 }

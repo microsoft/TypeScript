@@ -100,9 +100,7 @@ for (var x in (<T>(x: T) => x)) { }
 >x : string
 >(<T>(x: T) => x) : <T>(x: T) => T
 ><T>(x: T) => x : <T>(x: T) => T
->T : T
 >x : T
->T : T
 >x : T
 
 for (var x in function (x: string, y: number) { return x + y }) { }
@@ -209,18 +207,14 @@ class B extends A {
 }
 
 interface I {
->I : I
-
     id: number;
 >id : number
 
     [idx: number]: I;
 >idx : number
->I : I
 }
 var i: I;
 >i : I
->I : I
 
 for (var x in i[42]) { } 
 >x : string
@@ -234,7 +228,6 @@ module M {
 
     export class X<T> {
 >X : X<T>
->T : T
 
         name:string
 >name : string

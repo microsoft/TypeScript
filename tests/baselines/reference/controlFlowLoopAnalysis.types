@@ -72,32 +72,23 @@ function test2() {
 
 function mapUntilCant<a, b>(
 >mapUntilCant : <a, b>(values: a[], canTake: (value: a, index: number) => boolean, mapping: (value: a, index: number) => b) => b[]
->a : a
->b : b
 
     values: a[],
 >values : a[]
->a : a
 
     canTake: (value: a, index: number) => boolean,
 >canTake : (value: a, index: number) => boolean
 >value : a
->a : a
 >index : number
 
     mapping: (value: a, index: number) => b
 >mapping : (value: a, index: number) => b
 >value : a
->a : a
 >index : number
->b : b
 
 ): b[] {
->b : b
-
     let result: b[] = [];
 >result : b[]
->b : b
 >[] : never[]
 
     for (let index = 0, length = values.length; index < length; index++) {

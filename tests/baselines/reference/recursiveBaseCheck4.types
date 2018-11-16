@@ -1,7 +1,6 @@
 === tests/cases/compiler/recursiveBaseCheck4.ts ===
 class M<T> extends M<string> { }
 >M : M<T>
->T : T
 >M : typeof M
 
 (new M).blah;

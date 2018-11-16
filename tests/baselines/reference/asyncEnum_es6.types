@@ -3,5 +3,5 @@ async enum E {
 >E : E
 
   Value
->Value : E
+>Value : E.Value
 }

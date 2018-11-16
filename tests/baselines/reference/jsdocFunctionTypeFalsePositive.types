@@ -1,0 +1,6 @@
+=== /a.js ===
+/** @param {<} x */
+function f(x) {}
+>f : (x: any) => void
+>x : any
+

@@ -5,6 +5,13 @@ let c, d;
 ([...c,] = []);
 ({...d,} = {});
 
+// Allowed for non-rest elements
+const [e,] = <any>[];
+const {f,} = <any>{};
+let g, h;
+([g,] = <any>[]);
+({h,} = <any>{});
+
 
 //// [trailingCommasInBindingPatterns.js]
 var __rest = (this && this.__rest) || function (s, e) {
@@ -21,3 +28,9 @@ var b = __rest({}, []);
 var c, d;
 (c = [].slice(0));
 (d = __rest({}, []));
+// Allowed for non-rest elements
+var e = [][0];
+var f = {}.f;
+var g, h;
+(g = [][0]);
+(h = {}.h);

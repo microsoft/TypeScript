@@ -1,25 +1,19 @@
 === tests/cases/conformance/expressions/binaryOperators/comparisonOperator/comparisonOperatorWithNoRelationshipObjectsOnOptionalProperty.ts ===
 interface A1 {
->A1 : A1
-
     b?: number;
 >b : number
 }
 
 interface B1 {
->B1 : B1
-
     b?: string;
 >b : string
 }
 
 var a: A1;
 >a : A1
->A1 : A1
 
 var b: B1;
 >b : B1
->B1 : B1
 
 // operator <
 var ra1 = a < b;

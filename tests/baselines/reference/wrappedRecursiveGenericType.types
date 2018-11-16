@@ -1,40 +1,23 @@
 === tests/cases/compiler/wrappedRecursiveGenericType.ts ===
 interface X<T> { e: T; }
->X : X<T>
->T : T
 >e : T
->T : T
 
 interface A<T> {
->A : A<T>
->T : T
-
     a: B<T>;
 >a : B<T>
->B : B<T>
->T : T
 
     val: T;
 >val : T
->T : T
 }
 interface B<T> {
->B : B<T>
->T : T
-
     b: A<X<T>>;
 >b : A<X<T>>
->A : A<T>
->X : X<T>
->T : T
 
     val: T;
 >val : T
->T : T
 }
 var x: A<number>;
 >x : A<number>
->A : A<T>
 
 x.val = 5;         // val -> number
 >x.val = 5 : 5

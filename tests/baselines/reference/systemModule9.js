@@ -23,8 +23,8 @@ export {y as z};
 //// [systemModule9.js]
 System.register(["file1", "file2", "file3", "file4", "file5", "file6", "file7"], function (exports_1, context_1) {
     "use strict";
-    var __moduleName = context_1 && context_1.id;
     var ns, file2_1, file3_1, file5_1, ns3, x, y;
+    var __moduleName = context_1 && context_1.id;
     var exportedNames_1 = {
         "x": true,
         "z": true

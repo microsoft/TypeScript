@@ -1,20 +1,16 @@
 /// <reference path="fourslash.ts"/>
 
-////{| "itemName": "C", "kind": "class", "parentName": "" |}
-////class C {
-////    {| "itemName": "foo", "kind": "method", "parentName": "C" |}
-////    foo() { }
-////    ["hi" + "bye"]() { }
-////    {| "itemName": "bar", "kind": "method", "parentName": "C" |}
-////    bar() { }
-////}
+// @noLib: true
 
-test.markers().forEach(marker => {
-    verify.navigationItemsListContains(
-        marker.data.itemName,
-        marker.data.kind,
-        marker.data.itemName,
-        "exact",
-        marker.fileName,
-        marker.data.parentName);
-});
+////[|{| "name": "C", "kind": "class" |}class C {
+////    [|{| "name": "foo", "kind": "method", "containerName": "C", "containerKind": "class" |}foo() { }|]
+////    ["hi" + "bye"]() { }
+////    [|{| "name": "bar", "kind": "method", "containerName": "C", "containerKind": "class" |}bar() { }|]
+////}|]
+
+for (const range of test.ranges()) {
+    verify.navigateTo({
+        pattern: range.marker.data.name,
+        expected: [{ ...range.marker.data, range }],
+    });
+}

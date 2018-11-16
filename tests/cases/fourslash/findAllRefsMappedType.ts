@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts'/>
 
-////interface T { [|{| "isWriteAccess": true, "isDefinition": true |}a|]: number; }
+////interface T { [|{| "isDefinition": true |}a|]: number; }
 ////type U = { readonly [K in keyof T]?: string };
 ////declare const t: T;
 ////t.[|a|];

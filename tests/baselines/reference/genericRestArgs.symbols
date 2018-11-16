@@ -18,7 +18,7 @@ var a1Gb = makeArrayG<any>(1, "");
 var a1Gc = makeArrayG<Object>(1, ""); 
 >a1Gc : Symbol(a1Gc, Decl(genericRestArgs.ts, 3, 3))
 >makeArrayG : Symbol(makeArrayG, Decl(genericRestArgs.ts, 0, 0))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 var a1Gd = makeArrayG<number>(1, ""); // error
 >a1Gd : Symbol(a1Gd, Decl(genericRestArgs.ts, 4, 3))

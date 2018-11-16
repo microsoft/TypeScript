@@ -1,4 +1,4 @@
-tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts(2,9): error TS2352: Type '(v: number) => number' cannot be converted to type '(x: number) => string'.
+tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts(2,9): error TS2352: Conversion of type '(v: number) => number' to type '(x: number) => string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
   Type 'number' is not comparable to type 'string'.
 
 
@@ -6,5 +6,5 @@ tests/cases/conformance/expressions/asOperator/asOperatorContextualType.ts(2,9):
     // should error
     var x = (v => v) as (x: number) => string;
             ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
-!!! error TS2352: Type '(v: number) => number' cannot be converted to type '(x: number) => string'.
+!!! error TS2352: Conversion of type '(v: number) => number' to type '(x: number) => string' may be a mistake because neither type sufficiently overlaps with the other. If this was intentional, convert the expression to 'unknown' first.
 !!! error TS2352:   Type 'number' is not comparable to type 'string'.

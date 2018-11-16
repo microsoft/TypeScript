@@ -17,7 +17,6 @@ module c {
 
     export var x: b = new b();
 >x : b
->b : b
 >new b() : b
 >b : typeof b
 }

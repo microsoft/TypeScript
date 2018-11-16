@@ -4,6 +4,5 @@
 ////var x: number;
 ////x./*1*/
 
-goTo.marker("1");
-verify.not.completionListIsEmpty();
+verify.completions({ marker: "1", includes: "toFixed" });
 

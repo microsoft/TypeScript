@@ -5,7 +5,4 @@
 ////f({
 ////    /**/
 
-goTo.marker()
-verify.completionListContains('xa');
-verify.completionListContains('xb');
-verify.completionListCount(2);
+verify.completions({ marker: "", exact: ["xa", "xb"] });

@@ -1,0 +1,33 @@
+=== tests/cases/compiler/nestedRecursiveArraysOrObjectsError01.ts ===
+type Style = StyleBase | StyleArray;
+>Style : Symbol(Style, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 0))
+>StyleBase : Symbol(StyleBase, Decl(nestedRecursiveArraysOrObjectsError01.ts, 1, 44))
+>StyleArray : Symbol(StyleArray, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 36))
+
+interface StyleArray extends Array<Style> {}
+>StyleArray : Symbol(StyleArray, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 36))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Style : Symbol(Style, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 0))
+
+interface StyleBase {
+>StyleBase : Symbol(StyleBase, Decl(nestedRecursiveArraysOrObjectsError01.ts, 1, 44))
+
+    foo: string;
+>foo : Symbol(StyleBase.foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 2, 21))
+}
+
+const blah: Style = [
+>blah : Symbol(blah, Decl(nestedRecursiveArraysOrObjectsError01.ts, 6, 5))
+>Style : Symbol(Style, Decl(nestedRecursiveArraysOrObjectsError01.ts, 0, 0))
+
+    [[{
+        foo: 'asdf',
+>foo : Symbol(foo, Decl(nestedRecursiveArraysOrObjectsError01.ts, 7, 7))
+
+        jj: 1 // intentional error
+>jj : Symbol(jj, Decl(nestedRecursiveArraysOrObjectsError01.ts, 8, 20))
+
+    }]]
+];
+
+

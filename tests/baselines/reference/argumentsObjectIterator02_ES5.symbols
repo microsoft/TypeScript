@@ -17,9 +17,9 @@ function doubleAndReturnAsArray(x: number, y: number, z: number): [number, numbe
 >blah : Symbol(blah, Decl(argumentsObjectIterator02_ES5.ts, 1, 7))
 
         result.push(arg + arg);
->result.push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>result.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >result : Symbol(result, Decl(argumentsObjectIterator02_ES5.ts, 3, 7))
->push : Symbol(Array.push, Decl(lib.d.ts, --, --))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
 >arg : Symbol(arg, Decl(argumentsObjectIterator02_ES5.ts, 4, 12))
 >arg : Symbol(arg, Decl(argumentsObjectIterator02_ES5.ts, 4, 12))
     }

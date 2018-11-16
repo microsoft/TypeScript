@@ -37,11 +37,13 @@ namespace ts {
         getText(): string;
         // Sets the text for the scanner to scan.  An optional subrange starting point and length
         // can be provided to have the scanner only scan a portion of the text.
-        setText(text: string, start?: number, length?: number): void;
-        setOnError(onError: ErrorCallback): void;
+        setText(text: string | undefined, start?: number, length?: number): void;
+        setOnError(onError: ErrorCallback | undefined): void;
         setScriptTarget(scriptTarget: ScriptTarget): void;
         setLanguageVariant(variant: LanguageVariant): void;
         setTextPos(textPos: number): void;
+        /* @internal */
+        setInJSDocType(inType: boolean): void;
         // Invokes the provided callback then unconditionally restores the scanner to the state it
         // was in immediately prior to invoking the callback.  The result of invoking the callback
         // is returned from this function.
@@ -58,80 +60,88 @@ namespace ts {
         tryScan<T>(callback: () => T): T;
     }
 
-    const textToToken = createMapFromTemplate({
-        "abstract": SyntaxKind.AbstractKeyword,
-        "any": SyntaxKind.AnyKeyword,
-        "as": SyntaxKind.AsKeyword,
-        "boolean": SyntaxKind.BooleanKeyword,
-        "break": SyntaxKind.BreakKeyword,
-        "case": SyntaxKind.CaseKeyword,
-        "catch": SyntaxKind.CatchKeyword,
-        "class": SyntaxKind.ClassKeyword,
-        "continue": SyntaxKind.ContinueKeyword,
-        "const": SyntaxKind.ConstKeyword,
-        "constructor": SyntaxKind.ConstructorKeyword,
-        "debugger": SyntaxKind.DebuggerKeyword,
-        "declare": SyntaxKind.DeclareKeyword,
-        "default": SyntaxKind.DefaultKeyword,
-        "delete": SyntaxKind.DeleteKeyword,
-        "do": SyntaxKind.DoKeyword,
-        "else": SyntaxKind.ElseKeyword,
-        "enum": SyntaxKind.EnumKeyword,
-        "export": SyntaxKind.ExportKeyword,
-        "extends": SyntaxKind.ExtendsKeyword,
-        "false": SyntaxKind.FalseKeyword,
-        "finally": SyntaxKind.FinallyKeyword,
-        "for": SyntaxKind.ForKeyword,
-        "from": SyntaxKind.FromKeyword,
-        "function": SyntaxKind.FunctionKeyword,
-        "get": SyntaxKind.GetKeyword,
-        "if": SyntaxKind.IfKeyword,
-        "implements": SyntaxKind.ImplementsKeyword,
-        "import": SyntaxKind.ImportKeyword,
-        "in": SyntaxKind.InKeyword,
-        "infer": SyntaxKind.InferKeyword,
-        "instanceof": SyntaxKind.InstanceOfKeyword,
-        "interface": SyntaxKind.InterfaceKeyword,
-        "is": SyntaxKind.IsKeyword,
-        "keyof": SyntaxKind.KeyOfKeyword,
-        "let": SyntaxKind.LetKeyword,
-        "module": SyntaxKind.ModuleKeyword,
-        "namespace": SyntaxKind.NamespaceKeyword,
-        "never": SyntaxKind.NeverKeyword,
-        "new": SyntaxKind.NewKeyword,
-        "null": SyntaxKind.NullKeyword,
-        "number": SyntaxKind.NumberKeyword,
-        "object": SyntaxKind.ObjectKeyword,
-        "package": SyntaxKind.PackageKeyword,
-        "private": SyntaxKind.PrivateKeyword,
-        "protected": SyntaxKind.ProtectedKeyword,
-        "public": SyntaxKind.PublicKeyword,
-        "readonly": SyntaxKind.ReadonlyKeyword,
-        "require": SyntaxKind.RequireKeyword,
-        "global": SyntaxKind.GlobalKeyword,
-        "return": SyntaxKind.ReturnKeyword,
-        "set": SyntaxKind.SetKeyword,
-        "static": SyntaxKind.StaticKeyword,
-        "string": SyntaxKind.StringKeyword,
-        "super": SyntaxKind.SuperKeyword,
-        "switch": SyntaxKind.SwitchKeyword,
-        "symbol": SyntaxKind.SymbolKeyword,
-        "this": SyntaxKind.ThisKeyword,
-        "throw": SyntaxKind.ThrowKeyword,
-        "true": SyntaxKind.TrueKeyword,
-        "try": SyntaxKind.TryKeyword,
-        "type": SyntaxKind.TypeKeyword,
-        "typeof": SyntaxKind.TypeOfKeyword,
-        "undefined": SyntaxKind.UndefinedKeyword,
-        "unique": SyntaxKind.UniqueKeyword,
-        "var": SyntaxKind.VarKeyword,
-        "void": SyntaxKind.VoidKeyword,
-        "while": SyntaxKind.WhileKeyword,
-        "with": SyntaxKind.WithKeyword,
-        "yield": SyntaxKind.YieldKeyword,
-        "async": SyntaxKind.AsyncKeyword,
-        "await": SyntaxKind.AwaitKeyword,
-        "of": SyntaxKind.OfKeyword,
+    const textToKeywordObj: MapLike<KeywordSyntaxKind> = {
+        abstract: SyntaxKind.AbstractKeyword,
+        any: SyntaxKind.AnyKeyword,
+        as: SyntaxKind.AsKeyword,
+        bigint: SyntaxKind.BigIntKeyword,
+        boolean: SyntaxKind.BooleanKeyword,
+        break: SyntaxKind.BreakKeyword,
+        case: SyntaxKind.CaseKeyword,
+        catch: SyntaxKind.CatchKeyword,
+        class: SyntaxKind.ClassKeyword,
+        continue: SyntaxKind.ContinueKeyword,
+        const: SyntaxKind.ConstKeyword,
+        ["" + "constructor"]: SyntaxKind.ConstructorKeyword,
+        debugger: SyntaxKind.DebuggerKeyword,
+        declare: SyntaxKind.DeclareKeyword,
+        default: SyntaxKind.DefaultKeyword,
+        delete: SyntaxKind.DeleteKeyword,
+        do: SyntaxKind.DoKeyword,
+        else: SyntaxKind.ElseKeyword,
+        enum: SyntaxKind.EnumKeyword,
+        export: SyntaxKind.ExportKeyword,
+        extends: SyntaxKind.ExtendsKeyword,
+        false: SyntaxKind.FalseKeyword,
+        finally: SyntaxKind.FinallyKeyword,
+        for: SyntaxKind.ForKeyword,
+        from: SyntaxKind.FromKeyword,
+        function: SyntaxKind.FunctionKeyword,
+        get: SyntaxKind.GetKeyword,
+        if: SyntaxKind.IfKeyword,
+        implements: SyntaxKind.ImplementsKeyword,
+        import: SyntaxKind.ImportKeyword,
+        in: SyntaxKind.InKeyword,
+        infer: SyntaxKind.InferKeyword,
+        instanceof: SyntaxKind.InstanceOfKeyword,
+        interface: SyntaxKind.InterfaceKeyword,
+        is: SyntaxKind.IsKeyword,
+        keyof: SyntaxKind.KeyOfKeyword,
+        let: SyntaxKind.LetKeyword,
+        module: SyntaxKind.ModuleKeyword,
+        namespace: SyntaxKind.NamespaceKeyword,
+        never: SyntaxKind.NeverKeyword,
+        new: SyntaxKind.NewKeyword,
+        null: SyntaxKind.NullKeyword,
+        number: SyntaxKind.NumberKeyword,
+        object: SyntaxKind.ObjectKeyword,
+        package: SyntaxKind.PackageKeyword,
+        private: SyntaxKind.PrivateKeyword,
+        protected: SyntaxKind.ProtectedKeyword,
+        public: SyntaxKind.PublicKeyword,
+        readonly: SyntaxKind.ReadonlyKeyword,
+        require: SyntaxKind.RequireKeyword,
+        global: SyntaxKind.GlobalKeyword,
+        return: SyntaxKind.ReturnKeyword,
+        set: SyntaxKind.SetKeyword,
+        static: SyntaxKind.StaticKeyword,
+        string: SyntaxKind.StringKeyword,
+        super: SyntaxKind.SuperKeyword,
+        switch: SyntaxKind.SwitchKeyword,
+        symbol: SyntaxKind.SymbolKeyword,
+        this: SyntaxKind.ThisKeyword,
+        throw: SyntaxKind.ThrowKeyword,
+        true: SyntaxKind.TrueKeyword,
+        try: SyntaxKind.TryKeyword,
+        type: SyntaxKind.TypeKeyword,
+        typeof: SyntaxKind.TypeOfKeyword,
+        undefined: SyntaxKind.UndefinedKeyword,
+        unique: SyntaxKind.UniqueKeyword,
+        unknown: SyntaxKind.UnknownKeyword,
+        var: SyntaxKind.VarKeyword,
+        void: SyntaxKind.VoidKeyword,
+        while: SyntaxKind.WhileKeyword,
+        with: SyntaxKind.WithKeyword,
+        yield: SyntaxKind.YieldKeyword,
+        async: SyntaxKind.AsyncKeyword,
+        await: SyntaxKind.AwaitKeyword,
+        of: SyntaxKind.OfKeyword,
+    };
+
+    const textToKeyword = createMapFromTemplate(textToKeywordObj);
+
+    const textToToken = createMapFromTemplate<SyntaxKind>({
+        ...textToKeywordObj,
         "{": SyntaxKind.OpenBraceToken,
         "}": SyntaxKind.CloseBraceToken,
         "(": SyntaxKind.OpenParenToken,
@@ -266,14 +276,14 @@ namespace ts {
         return false;
     }
 
-    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion >= ScriptTarget.ES5 ?
+    /* @internal */ export function isUnicodeIdentifierStart(code: number, languageVersion: ScriptTarget | undefined) {
+        return languageVersion! >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierStart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierStart);
     }
 
-    function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget) {
-        return languageVersion >= ScriptTarget.ES5 ?
+    function isUnicodeIdentifierPart(code: number, languageVersion: ScriptTarget | undefined) {
+        return languageVersion! >= ScriptTarget.ES5 ?
             lookupInUnicodeMap(code, unicodeES5IdentifierPart) :
             lookupInUnicodeMap(code, unicodeES3IdentifierPart);
     }
@@ -601,7 +611,7 @@ namespace ts {
     }
 
     function scanShebangTrivia(text: string, pos: number) {
-        const shebang = shebangTriviaRegex.exec(text)[0];
+        const shebang = shebangTriviaRegex.exec(text)![0];
         pos = pos + shebang.length;
         return pos;
     }
@@ -626,11 +636,11 @@ namespace ts {
      * @returns If "reduce" is true, the accumulated value. If "reduce" is false, the first truthy
      *      return value of the callback.
      */
-    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U) => U, state: T, initial?: U): U {
-        let pendingPos: number;
-        let pendingEnd: number;
-        let pendingKind: CommentKind;
-        let pendingHasTrailingNewLine: boolean;
+    function iterateCommentRanges<T, U>(reduce: boolean, text: string, pos: number, trailing: boolean, cb: (pos: number, end: number, kind: CommentKind, hasTrailingNewLine: boolean, state: T, memo: U | undefined) => U, state: T, initial?: U): U | undefined {
+        let pendingPos!: number;
+        let pendingEnd!: number;
+        let pendingKind!: CommentKind;
+        let pendingHasTrailingNewLine!: boolean;
         let hasPendingCommentRange = false;
         let collecting = trailing || pos === 0;
         let accumulator = initial;
@@ -769,20 +779,20 @@ namespace ts {
         }
     }
 
-    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierStart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
             ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierStart(ch, languageVersion);
     }
 
-    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierPart(ch: number, languageVersion: ScriptTarget | undefined): boolean {
         return ch >= CharacterCodes.A && ch <= CharacterCodes.Z || ch >= CharacterCodes.a && ch <= CharacterCodes.z ||
             ch >= CharacterCodes._0 && ch <= CharacterCodes._9 || ch === CharacterCodes.$ || ch === CharacterCodes._ ||
             ch > CharacterCodes.maxAsciiCharacter && isUnicodeIdentifierPart(ch, languageVersion);
     }
 
     /* @internal */
-    export function isIdentifierText(name: string, languageVersion: ScriptTarget): boolean {
+    export function isIdentifierText(name: string, languageVersion: ScriptTarget | undefined): boolean {
         if (!isIdentifierStart(name.charCodeAt(0), languageVersion)) {
             return false;
         }
@@ -800,12 +810,15 @@ namespace ts {
     export function createScanner(languageVersion: ScriptTarget,
                                   skipTrivia: boolean,
                                   languageVariant = LanguageVariant.Standard,
-                                  text?: string,
+                                  textInitial?: string,
                                   onError?: ErrorCallback,
                                   start?: number,
                                   length?: number): Scanner {
+        let text = textInitial!;
+
         // Current position (end position of text of current token)
         let pos: number;
+
 
         // end of text
         let end: number;
@@ -817,8 +830,10 @@ namespace ts {
         let tokenPos: number;
 
         let token: SyntaxKind;
-        let tokenValue: string;
+        let tokenValue!: string;
         let tokenFlags: TokenFlags;
+
+        let inJSDocType = 0;
 
         setText(text, start, length);
 
@@ -850,6 +865,7 @@ namespace ts {
             setLanguageVariant,
             setOnError,
             setTextPos,
+            setInJSDocType,
             tryScan,
             lookAhead,
             scanRange,
@@ -904,11 +920,11 @@ namespace ts {
             return result + text.substring(start, pos);
         }
 
-        function scanNumber(): string {
+        function scanNumber(): {type: SyntaxKind, value: string} {
             const start = pos;
             const mainFragment = scanNumberFragment();
-            let decimalFragment: string;
-            let scientificFragment: string;
+            let decimalFragment: string | undefined;
+            let scientificFragment: string | undefined;
             if (text.charCodeAt(pos) === CharacterCodes.dot) {
                 pos++;
                 decimalFragment = scanNumberFragment();
@@ -928,18 +944,29 @@ namespace ts {
                     end = pos;
                 }
             }
+            let result: string;
             if (tokenFlags & TokenFlags.ContainsSeparator) {
-                let result = mainFragment;
+                result = mainFragment;
                 if (decimalFragment) {
                     result += "." + decimalFragment;
                 }
                 if (scientificFragment) {
                     result += scientificFragment;
                 }
-                return "" + +result;
             }
             else {
-                return "" + +(text.substring(start, end)); // No need to use all the fragments; no _ removal needed
+                result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
+            }
+            if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
+                return {
+                    type: SyntaxKind.NumericLiteral,
+                    value: "" + +result // if value is not an integer, it can be safely coerced to a number
+                };
+            }
+            else {
+                tokenValue = result;
+                const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
+                return { type, value: tokenValue };
             }
         }
 
@@ -956,24 +983,24 @@ namespace ts {
          * returning -1 if the given number is unavailable.
          */
         function scanExactNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
-            return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false, canHaveSeparators);
+            const valueString = scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ false, canHaveSeparators);
+            return valueString ? parseInt(valueString, 16) : -1;
         }
 
         /**
          * Scans as many hexadecimal digits as are available in the text,
-         * returning -1 if the given number of digits was unavailable.
+         * returning "" if the given number of digits was unavailable.
          */
-        function scanMinimumNumberOfHexDigits(count: number, canHaveSeparators: boolean): number {
+        function scanMinimumNumberOfHexDigits(count: number, canHaveSeparators: boolean): string {
             return scanHexDigits(/*minCount*/ count, /*scanAsManyAsPossible*/ true, canHaveSeparators);
         }
 
-        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean, canHaveSeparators: boolean): number {
-            let digits = 0;
-            let value = 0;
+        function scanHexDigits(minCount: number, scanAsManyAsPossible: boolean, canHaveSeparators: boolean): string {
+            let valueChars: number[] = [];
             let allowSeparator = false;
             let isPreviousTokenSeparator = false;
-            while (digits < minCount || scanAsManyAsPossible) {
-                const ch = text.charCodeAt(pos);
+            while (valueChars.length < minCount || scanAsManyAsPossible) {
+                let ch = text.charCodeAt(pos);
                 if (canHaveSeparators && ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (allowSeparator) {
@@ -990,29 +1017,25 @@ namespace ts {
                     continue;
                 }
                 allowSeparator = canHaveSeparators;
-                if (ch >= CharacterCodes._0 && ch <= CharacterCodes._9) {
-                    value = value * 16 + ch - CharacterCodes._0;
+                if (ch >= CharacterCodes.A && ch <= CharacterCodes.F) {
+                    ch += CharacterCodes.a - CharacterCodes.A; // standardize hex literals to lowercase
                 }
-                else if (ch >= CharacterCodes.A && ch <= CharacterCodes.F) {
-                    value = value * 16 + ch - CharacterCodes.A + 10;
-                }
-                else if (ch >= CharacterCodes.a && ch <= CharacterCodes.f) {
-                    value = value * 16 + ch - CharacterCodes.a + 10;
-                }
-                else {
+                else if (!((ch >= CharacterCodes._0 && ch <= CharacterCodes._9) ||
+                    (ch >= CharacterCodes.a && ch <= CharacterCodes.f)
+                )) {
                     break;
                 }
+                valueChars.push(ch);
                 pos++;
-                digits++;
                 isPreviousTokenSeparator = false;
             }
-            if (digits < minCount) {
-                value = -1;
+            if (valueChars.length < minCount) {
+                valueChars = [];
             }
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
             }
-            return value;
+            return String.fromCharCode(...valueChars);
         }
 
         function scanString(jsxAttributeString = false): string {
@@ -1192,7 +1215,8 @@ namespace ts {
         }
 
         function scanExtendedUnicodeEscape(): string {
-            const escapedValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+            const escapedValueString = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ false);
+            const escapedValue = escapedValueString ? parseInt(escapedValueString, 16) : -1;
             let isInvalidExtendedEscape = false;
 
             // Validate the value of the digit
@@ -1279,33 +1303,30 @@ namespace ts {
             return result;
         }
 
-        function getIdentifierToken(): SyntaxKind {
+        function getIdentifierToken(): SyntaxKind.Identifier | KeywordSyntaxKind {
             // Reserved words are between 2 and 11 characters long and start with a lowercase letter
             const len = tokenValue.length;
             if (len >= 2 && len <= 11) {
                 const ch = tokenValue.charCodeAt(0);
                 if (ch >= CharacterCodes.a && ch <= CharacterCodes.z) {
-                    token = textToToken.get(tokenValue);
-                    if (token !== undefined) {
-                        return token;
+                    const keyword = textToKeyword.get(tokenValue);
+                    if (keyword !== undefined) {
+                        return token = keyword;
                     }
                 }
             }
             return token = SyntaxKind.Identifier;
         }
 
-        function scanBinaryOrOctalDigits(base: number): number {
-            Debug.assert(base === 2 || base === 8, "Expected either base 2 or base 8");
-
-            let value = 0;
+        function scanBinaryOrOctalDigits(base: 2 | 8): string {
+            let value = "";
             // For counting number of digits; Valid binaryIntegerLiteral must have at least one binary digit following B or b.
             // Similarly valid octalIntegerLiteral must have at least one octal digit following o or O.
-            let numberOfDigits = 0;
             let separatorAllowed = false;
             let isPreviousTokenSeparator = false;
             while (true) {
                 const ch = text.charCodeAt(pos);
-                // Numeric seperators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
+                // Numeric separators are allowed anywhere within a numeric literal, except not at the beginning, or following another separator
                 if (ch === CharacterCodes._) {
                     tokenFlags |= TokenFlags.ContainsSeparator;
                     if (separatorAllowed) {
@@ -1322,30 +1343,46 @@ namespace ts {
                     continue;
                 }
                 separatorAllowed = true;
-                const valueOfCh = ch - CharacterCodes._0;
-                if (!isDigit(ch) || valueOfCh >= base) {
+                if (!isDigit(ch) || ch - CharacterCodes._0 >= base) {
                     break;
                 }
-                value = value * base + valueOfCh;
+                value += text[pos];
                 pos++;
-                numberOfDigits++;
                 isPreviousTokenSeparator = false;
-            }
-            // Invalid binaryIntegerLiteral or octalIntegerLiteral
-            if (numberOfDigits === 0) {
-                return -1;
             }
             if (text.charCodeAt(pos - 1) === CharacterCodes._) {
                 // Literal ends with underscore - not allowed
                 error(Diagnostics.Numeric_separators_are_not_allowed_here, pos - 1, 1);
-                return value;
             }
             return value;
+        }
+
+        function checkBigIntSuffix(): SyntaxKind {
+            if (text.charCodeAt(pos) === CharacterCodes.n) {
+                tokenValue += "n";
+                // Use base 10 instead of base 2 or base 8 for shorter literals
+                if (tokenFlags & TokenFlags.BinaryOrOctalSpecifier) {
+                    tokenValue = parsePseudoBigInt(tokenValue) + "n";
+                }
+                pos++;
+                return SyntaxKind.BigIntLiteral;
+            }
+            else { // not a bigint, so can convert to number in simplified form
+                // Number() may not support 0b or 0o, so use parseInt() instead
+                const numericValue = tokenFlags & TokenFlags.BinarySpecifier
+                    ? parseInt(tokenValue.slice(2), 2) // skip "0b"
+                    : tokenFlags & TokenFlags.OctalSpecifier
+                        ? parseInt(tokenValue.slice(2), 8) // skip "0o"
+                        : +tokenValue;
+                tokenValue = "" + numericValue;
+                return SyntaxKind.NumericLiteral;
+            }
         }
 
         function scan(): SyntaxKind {
             startPos = pos;
             tokenFlags = 0;
+            let asteriskSeen = false;
             while (true) {
                 tokenPos = pos;
                 if (pos >= end) {
@@ -1386,6 +1423,24 @@ namespace ts {
                     case CharacterCodes.verticalTab:
                     case CharacterCodes.formFeed:
                     case CharacterCodes.space:
+                    case CharacterCodes.nonBreakingSpace:
+                    case CharacterCodes.ogham:
+                    case CharacterCodes.enQuad:
+                    case CharacterCodes.emQuad:
+                    case CharacterCodes.enSpace:
+                    case CharacterCodes.emSpace:
+                    case CharacterCodes.threePerEmSpace:
+                    case CharacterCodes.fourPerEmSpace:
+                    case CharacterCodes.sixPerEmSpace:
+                    case CharacterCodes.figureSpace:
+                    case CharacterCodes.punctuationSpace:
+                    case CharacterCodes.thinSpace:
+                    case CharacterCodes.hairSpace:
+                    case CharacterCodes.zeroWidthSpace:
+                    case CharacterCodes.narrowNoBreakSpace:
+                    case CharacterCodes.mathematicalSpace:
+                    case CharacterCodes.ideographicSpace:
+                    case CharacterCodes.byteOrderMark:
                         if (skipTrivia) {
                             pos++;
                             continue;
@@ -1443,6 +1498,11 @@ namespace ts {
                             return pos += 2, token = SyntaxKind.AsteriskAsteriskToken;
                         }
                         pos++;
+                        if (inJSDocType && !asteriskSeen && (tokenFlags & TokenFlags.PrecedingLineBreak)) {
+                            // decoration at the start of a JSDoc comment line
+                            asteriskSeen = true;
+                            continue;
+                        }
                         return token = SyntaxKind.AsteriskToken;
                     case CharacterCodes.plus:
                         if (text.charCodeAt(pos + 1) === CharacterCodes.plus) {
@@ -1467,7 +1527,7 @@ namespace ts {
                         return token = SyntaxKind.MinusToken;
                     case CharacterCodes.dot:
                         if (isDigit(text.charCodeAt(pos + 1))) {
-                            tokenValue = scanNumber();
+                            tokenValue = scanNumber().value;
                             return token = SyntaxKind.NumericLiteral;
                         }
                         if (text.charCodeAt(pos + 1) === CharacterCodes.dot && text.charCodeAt(pos + 2) === CharacterCodes.dot) {
@@ -1543,36 +1603,36 @@ namespace ts {
                     case CharacterCodes._0:
                         if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.X || text.charCodeAt(pos + 1) === CharacterCodes.x)) {
                             pos += 2;
-                            let value = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
-                            if (value < 0) {
+                            tokenValue = scanMinimumNumberOfHexDigits(1, /*canHaveSeparators*/ true);
+                            if (!tokenValue) {
                                 error(Diagnostics.Hexadecimal_digit_expected);
-                                value = 0;
+                                tokenValue = "0";
                             }
-                            tokenValue = "" + value;
+                            tokenValue = "0x" + tokenValue;
                             tokenFlags |= TokenFlags.HexSpecifier;
-                            return token = SyntaxKind.NumericLiteral;
+                            return token = checkBigIntSuffix();
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.B || text.charCodeAt(pos + 1) === CharacterCodes.b)) {
                             pos += 2;
-                            let value = scanBinaryOrOctalDigits(/* base */ 2);
-                            if (value < 0) {
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 2);
+                            if (!tokenValue) {
                                 error(Diagnostics.Binary_digit_expected);
-                                value = 0;
+                                tokenValue = "0";
                             }
-                            tokenValue = "" + value;
+                            tokenValue = "0b" + tokenValue;
                             tokenFlags |= TokenFlags.BinarySpecifier;
-                            return token = SyntaxKind.NumericLiteral;
+                            return token = checkBigIntSuffix();
                         }
                         else if (pos + 2 < end && (text.charCodeAt(pos + 1) === CharacterCodes.O || text.charCodeAt(pos + 1) === CharacterCodes.o)) {
                             pos += 2;
-                            let value = scanBinaryOrOctalDigits(/* base */ 8);
-                            if (value < 0) {
+                            tokenValue = scanBinaryOrOctalDigits(/* base */ 8);
+                            if (!tokenValue) {
                                 error(Diagnostics.Octal_digit_expected);
-                                value = 0;
+                                tokenValue = "0";
                             }
-                            tokenValue = "" + value;
+                            tokenValue = "0o" + tokenValue;
                             tokenFlags |= TokenFlags.OctalSpecifier;
-                            return token = SyntaxKind.NumericLiteral;
+                            return token = checkBigIntSuffix();
                         }
                         // Try to parse as an octal
                         if (pos + 1 < end && isOctalDigit(text.charCodeAt(pos + 1))) {
@@ -1593,8 +1653,8 @@ namespace ts {
                     case CharacterCodes._7:
                     case CharacterCodes._8:
                     case CharacterCodes._9:
-                        tokenValue = scanNumber();
-                        return token = SyntaxKind.NumericLiteral;
+                        ({ type: token, value: tokenValue } = scanNumber());
+                        return token;
                     case CharacterCodes.colon:
                         pos++;
                         return token = SyntaxKind.ColonToken;
@@ -1928,12 +1988,11 @@ namespace ts {
         }
 
         function scanJSDocToken(): JsDocSyntaxKind {
+            startPos = tokenPos = pos;
+            tokenFlags = 0;
             if (pos >= end) {
                 return token = SyntaxKind.EndOfFileToken;
             }
-
-            startPos = pos;
-            tokenPos = pos;
 
             const ch = text.charCodeAt(pos);
             pos++;
@@ -1950,6 +2009,7 @@ namespace ts {
                     return token = SyntaxKind.AtToken;
                 case CharacterCodes.lineFeed:
                 case CharacterCodes.carriageReturn:
+                    tokenFlags |= TokenFlags.PrecedingLineBreak;
                     return token = SyntaxKind.NewLineTrivia;
                 case CharacterCodes.asterisk:
                     return token = SyntaxKind.AsteriskToken;
@@ -1983,7 +2043,7 @@ namespace ts {
                     pos++;
                 }
                 tokenValue = text.substring(tokenPos, pos);
-                return token = SyntaxKind.Identifier;
+                return token = getIdentifierToken();
             }
             else {
                 return token = SyntaxKind.Unknown;
@@ -2047,13 +2107,13 @@ namespace ts {
             return text;
         }
 
-        function setText(newText: string, start: number, length: number) {
+        function setText(newText: string | undefined, start: number | undefined, length: number | undefined) {
             text = newText || "";
-            end = length === undefined ? text.length : start + length;
+            end = length === undefined ? text.length : start! + length;
             setTextPos(start || 0);
         }
 
-        function setOnError(errorCallback: ErrorCallback) {
+        function setOnError(errorCallback: ErrorCallback | undefined) {
             onError = errorCallback;
         }
 
@@ -2071,8 +2131,12 @@ namespace ts {
             startPos = textPos;
             tokenPos = textPos;
             token = SyntaxKind.Unknown;
-            tokenValue = undefined;
+            tokenValue = undefined!;
             tokenFlags = 0;
+        }
+
+        function setInJSDocType(inType: boolean) {
+            inJSDocType += inType ? 1 : -1;
         }
     }
 }

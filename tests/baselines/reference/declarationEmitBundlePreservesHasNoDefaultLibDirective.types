@@ -8,27 +8,12 @@ class Foo {
 }
 === tests/cases/compiler/core.ts ===
 interface Array<T> {}
->Array : T[]
->T : T
-
-interface Boolean {}
->Boolean : Boolean
-
-interface Function {}
->Function : Function
-
-interface IArguments {}
->IArguments : IArguments
-
-interface Number {}
->Number : Number
-
-interface Object {}
->Object : Object
-
-interface RegExp {}
->RegExp : RegExp
-
-interface String {}
->String : String
-
+No type information for this code.interface Boolean {}
+No type information for this code.interface Function {}
+No type information for this code.interface IArguments {}
+No type information for this code.interface Number {}
+No type information for this code.interface Object {}
+No type information for this code.interface RegExp {}
+No type information for this code.interface String {}
+No type information for this code.
+No type information for this code.

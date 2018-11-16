@@ -16,6 +16,6 @@
 
 const ranges = test.ranges();
 const [r0, r1, r2] = ranges;
-verify.referenceGroups(ranges, [{ definition: 'module "/a"', ranges: [r0, r2, r1] }]);
+verify.referenceGroups(ranges, [{ definition: 'module "/a"', ranges: [r0, r1, r2] }]);
 // Testing that it works with documentHighlights too
 verify.rangesAreDocumentHighlights();

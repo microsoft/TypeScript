@@ -1,0 +1,6 @@
+=== tests/cases/compiler/folder/foo.ts ===
+export {};
+No type information for this code.=== tests/cases/compiler/folder/bar.ts ===
+import {nosuch} from './foo';
+>nosuch : any
+

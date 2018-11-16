@@ -19,9 +19,7 @@ var x = E;
 var x: { readonly a: E; readonly b: E; readonly [x: number]: string; }; // Shouldnt error
 >x : typeof E
 >a : E
->E : E
 >b : E
->E : E
 >x : number
 
 var y = E;
@@ -31,9 +29,7 @@ var y = E;
 var y: { readonly a: E; readonly b: E; readonly [x: number]: string; readonly [x: number]: string } // two errors: the types are not identical and duplicate signatures
 >y : typeof E
 >a : E
->E : E
 >b : E
->E : E
 >x : number
 >x : number
 

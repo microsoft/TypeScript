@@ -1,19 +1,26 @@
 /// <reference path="fourslash.ts" />
 
-// @Filename: file1.ts
-/////*1*/(function () {
+// @Filename: /a.ts
+////(function () {
 ////    "use strict";
-////    function onResume() {
-////    };
+////    [|function onResume() {
+////    }|];
 ////} )();
-// @Filename: file2.ts
-/////*2*/class EventManager {
-////    public onResume(name: string) { }
+// @Filename: /b.ts
+////class EventManager {
+////    [|{| "containerName": "EventManager" |}public onResume(name: string) { }|]
 ////}
 ////class MyOtherEventManager {
-////    public onResume(name: string) { }
+////    [|{| "containerName": "MyOtherEventManager" |}public onResume(name: string) { }|]
 ////}
-verify.navigationItemsListCount(3, "onResume");
-verify.navigationItemsListCount(1, "onResume", undefined, test.marker("1").fileName);
-verify.navigationItemsListContains("onResume", "function", "onResume", "exact", test.marker("1").fileName);
-verify.navigationItemsListCount(2, "onResume", undefined, test.marker("2").fileName);
+
+const [r0, r1, r2] = test.ranges();
+const aTs: ReadonlyArray<FourSlashInterface.ExpectedNavigateToItem> = [{ name: "onResume", kind: "function", range: r0 }];
+const bTs: ReadonlyArray<FourSlashInterface.ExpectedNavigateToItem> = [r1, r2].map((range): FourSlashInterface.ExpectedNavigateToItem =>
+    ({ name: "onResume", kind: "method", kindModifiers: "public", range, containerName: range.marker.data.containerName, containerKind: "class" }));
+
+verify.navigateTo(
+    { pattern: "onResume", expected: [...aTs, ...bTs] },
+    { pattern: "onResume", fileName: "/a.ts", expected: aTs },
+    { pattern: "onResume", fileName: "/b.ts", expected: bTs },
+);

@@ -17,3 +17,7 @@ function f3(z: number): number {
 
 // error: `this` is `window`, but is still of type `any`
 let f4: (b: number) => number = b => this.c + b;
+let f5 = () => () => this;
+
+let f6 = function() { return () => this; };
+let f7 = function() { return function() { return this } };

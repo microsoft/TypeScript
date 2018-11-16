@@ -11,8 +11,6 @@ class C {
 >y : any
 }
 interface I {
->I : I
-
     [Symbol.iterator]?: { x };
 >[Symbol.iterator] : { x: any; }
 >Symbol.iterator : symbol
@@ -24,8 +22,6 @@ interface I {
 declare function foo(i: I): I;
 >foo : { (i: I): I; (a: any): any; }
 >i : I
->I : I
->I : I
 
 declare function foo(a: any): any;
 >foo : { (i: I): I; (a: any): any; }
@@ -34,8 +30,6 @@ declare function foo(a: any): any;
 declare function bar(i: C): C;
 >bar : { (i: C): C; (a: any): any; }
 >i : C
->C : C
->C : C
 
 declare function bar(a: any): any;
 >bar : { (i: C): C; (a: any): any; }
@@ -49,7 +43,6 @@ foo(new C);
 
 var i: I;
 >i : I
->I : I
 
 bar(i);
 >bar(i) : any

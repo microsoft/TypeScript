@@ -20,6 +20,7 @@ g({ p: "" });
 
 
 //// [computedPropertyNamesContextualType7_ES5.js]
+var _a;
 foo((_a = {
         0: function () { }
     },
@@ -28,4 +29,3 @@ foo((_a = {
     _a[+"hi"] = [0],
     _a));
 g({ p: "" });
-var _a;

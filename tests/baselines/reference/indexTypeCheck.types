@@ -1,7 +1,5 @@
 === tests/cases/compiler/indexTypeCheck.ts ===
 interface Red {
->Red : Red
-
 	[n:number]; // ok
 >n : number
 
@@ -10,8 +8,6 @@ interface Red {
 }
 
 interface Blue {
->Blue : Blue
-
 	[n:number]: any; // ok
 >n : number
 
@@ -20,20 +16,14 @@ interface Blue {
 }
 
 interface Yellow {
->Yellow : Yellow
-
 	[n:number]: Red; // ok
 >n : number
->Red : Red
 
 	[s:string]: Red; // ok
 >s : string
->Red : Red
 }
 
 interface Orange {
->Orange : Orange
-
 	[n:number]: number; // ok
 >n : number
 
@@ -42,20 +32,14 @@ interface Orange {
 }
 
 interface Green {
->Green : Green
-
 	[n:number]: Orange; // error
 >n : number
->Orange : Orange
 
 	[s:string]: Yellow; // ok
 >s : string
->Yellow : Yellow
 }
 
 interface Cyan {
->Cyan : Cyan
-
 	[n:number]: number; // error
 >n : number
 
@@ -64,28 +48,21 @@ interface Cyan {
 }
 
 interface Purple {
->Purple : Purple
-
 	[n:number, s:string]; // error
 >n : number
 >s : string
 }
 
 interface Magenta {
->Magenta : Magenta
-
 	[p:Purple]; // error
 >p : Purple
->Purple : Purple
 }
 
 var yellow: Yellow;
 >yellow : Yellow
->Yellow : Yellow
 
 var blue: Blue;
 >blue : Blue
->Blue : Blue
 
 var s = "some string";
 >s : string

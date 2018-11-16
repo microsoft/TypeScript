@@ -85,8 +85,8 @@ var r4 = foo3(E.A);
 declare function foo4(x: Date): Date;
 >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))
 >x : Symbol(x, Decl(enumAssignabilityInInheritance.ts, 28, 22))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Date : Symbol(Date, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
+>Date : Symbol(Date, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.scripthost.d.ts, --, --))
 
 declare function foo4(x: E): E;
 >foo4 : Symbol(foo4, Decl(enumAssignabilityInInheritance.ts, 26, 19), Decl(enumAssignabilityInInheritance.ts, 28, 37))
@@ -104,8 +104,8 @@ var r4 = foo4(E.A);
 declare function foo5(x: RegExp): RegExp;
 >foo5 : Symbol(foo5, Decl(enumAssignabilityInInheritance.ts, 31, 19), Decl(enumAssignabilityInInheritance.ts, 33, 41))
 >x : Symbol(x, Decl(enumAssignabilityInInheritance.ts, 33, 22))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->RegExp : Symbol(RegExp, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>RegExp : Symbol(RegExp, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function foo5(x: E): E;
 >foo5 : Symbol(foo5, Decl(enumAssignabilityInInheritance.ts, 31, 19), Decl(enumAssignabilityInInheritance.ts, 33, 41))
@@ -354,8 +354,8 @@ var r4 = foo15(E.A);
 declare function foo16(x: Object): Object;
 >foo16 : Symbol(foo16, Decl(enumAssignabilityInInheritance.ts, 98, 20), Decl(enumAssignabilityInInheritance.ts, 100, 42))
 >x : Symbol(x, Decl(enumAssignabilityInInheritance.ts, 100, 23))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 declare function foo16(x: E): E;
 >foo16 : Symbol(foo16, Decl(enumAssignabilityInInheritance.ts, 98, 20), Decl(enumAssignabilityInInheritance.ts, 100, 42))

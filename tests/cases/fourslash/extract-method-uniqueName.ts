@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-////// newFunction
+////const newFunction = 0;
 /////*start*/1 + 1/*end*/;
 
 goTo.select('start', 'end')
@@ -9,7 +9,7 @@ edit.applyRefactor({
     actionName: "function_scope_0",
     actionDescription: "Extract to function in global scope",
     newContent:
-`// newFunction
+`const newFunction = 0;
 /*RENAME*/newFunction_1();
 
 function newFunction_1() {

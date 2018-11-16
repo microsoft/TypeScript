@@ -16,11 +16,9 @@ class B extends A {
 
 var a: A;
 >a : A
->A : A
 
 var b: B;
 >b : B
->B : B
 
 a = b = null;
 >a = b = null : null

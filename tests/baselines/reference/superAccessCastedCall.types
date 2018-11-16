@@ -12,7 +12,6 @@ class Bar extends Foo {
 
     x: Number;
 >x : Number
->Number : Number
 
     constructor() {
         super();

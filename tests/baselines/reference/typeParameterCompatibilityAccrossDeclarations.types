@@ -6,10 +6,7 @@ var a = {
    x: function <T>(y: T): T { return null; }
 >x : <T>(y: T) => T
 >function <T>(y: T): T { return null; } : <T>(y: T) => T
->T : T
 >y : T
->T : T
->T : T
 >null : null
 }
 var a2 = {
@@ -23,18 +20,11 @@ var a2 = {
 >null : null
 }
 export interface I {
->I : I
-
    x<T>(y: T): T;
 >x : <T>(y: T) => T
->T : T
 >y : T
->T : T
->T : T
 }
 export interface I2 {
->I2 : I2
-
    x(y: any): any;
 >x : (y: any) => any
 >y : any
@@ -42,11 +32,9 @@ export interface I2 {
  
 var i: I;
 >i : I
->I : I
 
 var i2: I2;
 >i2 : I2
->I2 : I2
  
 a = i; // error
 >a = i : I

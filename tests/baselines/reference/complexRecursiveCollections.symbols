@@ -174,7 +174,7 @@ declare module Immutable {
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
 >path : Symbol(path, Decl(immutable.ts, 4, 138))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
   export function is(first: any, second: any): boolean;
 >is : Symbol(is, Decl(immutable.ts, 4, 183))
@@ -253,7 +253,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 19, 60))
 >T : Symbol(T, Decl(immutable.ts, 20, 16))
 >values : Symbol(values, Decl(immutable.ts, 20, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 20, 16))
 >List : Symbol(List, Decl(immutable.ts, 21, 3), Decl(immutable.ts, 22, 36), Decl(immutable.ts, 23, 37), Decl(immutable.ts, 17, 3), Decl(immutable.ts, 24, 60))
 >T : Symbol(T, Decl(immutable.ts, 20, 16))
@@ -322,7 +322,7 @@ declare module Immutable {
     push(...values: Array<T>): List<T>;
 >push : Symbol(List.push, Decl(immutable.ts, 31, 21))
 >values : Symbol(values, Decl(immutable.ts, 32, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 >List : Symbol(List, Decl(immutable.ts, 21, 3), Decl(immutable.ts, 22, 36), Decl(immutable.ts, 23, 37), Decl(immutable.ts, 17, 3), Decl(immutable.ts, 24, 60))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
@@ -335,7 +335,7 @@ declare module Immutable {
     unshift(...values: Array<T>): List<T>;
 >unshift : Symbol(List.unshift, Decl(immutable.ts, 33, 19))
 >values : Symbol(values, Decl(immutable.ts, 34, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 >List : Symbol(List, Decl(immutable.ts, 21, 3), Decl(immutable.ts, 22, 36), Decl(immutable.ts, 23, 37), Decl(immutable.ts, 17, 3), Decl(immutable.ts, 24, 60))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
@@ -374,11 +374,11 @@ declare module Immutable {
     merge(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >merge : Symbol(List.merge, Decl(immutable.ts, 38, 46))
 >collections : Symbol(collections, Decl(immutable.ts, 39, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 
     mergeWith(merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>): this;
@@ -391,21 +391,21 @@ declare module Immutable {
 >key : Symbol(key, Decl(immutable.ts, 40, 44))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 >collections : Symbol(collections, Decl(immutable.ts, 40, 63))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 
     mergeDeep(...collections: Array<Collection.Indexed<T> | Array<T>>): this;
 >mergeDeep : Symbol(List.mergeDeep, Decl(immutable.ts, 40, 127))
 >collections : Symbol(collections, Decl(immutable.ts, 41, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 
     mergeDeepWith(merger: (oldVal: T, newVal: T, key: number) => T, ...collections: Array<Collection.Indexed<T> | Array<T>>): this;
@@ -418,11 +418,11 @@ declare module Immutable {
 >key : Symbol(key, Decl(immutable.ts, 42, 48))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 >collections : Symbol(collections, Decl(immutable.ts, 42, 67))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Collection.Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 25, 24))
 
     setSize(size: number): List<T>;
@@ -468,14 +468,14 @@ declare module Immutable {
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 50, 12))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 50, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
 >mergeDeepIn : Symbol(List.mergeDeepIn, Decl(immutable.ts, 50, 70))
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 51, 16))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 51, 39))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     // Transient changes
     withMutations(mutator: (mutable: this) => any): this;
@@ -494,7 +494,7 @@ declare module Immutable {
 >concat : Symbol(List.concat, Decl(immutable.ts, 55, 24))
 >C : Symbol(C, Decl(immutable.ts, 57, 11))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 57, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 57, 11))
 >C : Symbol(C, Decl(immutable.ts, 57, 11))
@@ -565,7 +565,7 @@ declare module Immutable {
     function of(...keyValues: Array<any>): Map<any, any>;
 >of : Symbol(of, Decl(immutable.ts, 64, 61))
 >keyValues : Symbol(keyValues, Decl(immutable.ts, 65, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Map : Symbol(Map, Decl(immutable.ts, 66, 3), Decl(immutable.ts, 67, 69), Decl(immutable.ts, 68, 71), Decl(immutable.ts, 69, 66), Decl(immutable.ts, 70, 41) ... and 2 more)
   }
   export function Map<K, V>(collection: Iterable<[K, V]>): Map<K, V>;
@@ -686,7 +686,7 @@ declare module Immutable {
     merge(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
 >merge : Symbol(Map.merge, Decl(immutable.ts, 82, 46))
 >collections : Symbol(collections, Decl(immutable.ts, 83, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
@@ -704,7 +704,7 @@ declare module Immutable {
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
 >collections : Symbol(collections, Decl(immutable.ts, 84, 58))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
@@ -714,7 +714,7 @@ declare module Immutable {
     mergeDeep(...collections: Array<Collection<K, V> | {[key: string]: V}>): this;
 >mergeDeep : Symbol(Map.mergeDeep, Decl(immutable.ts, 84, 127))
 >collections : Symbol(collections, Decl(immutable.ts, 85, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
@@ -732,7 +732,7 @@ declare module Immutable {
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
 >collections : Symbol(collections, Decl(immutable.ts, 86, 62))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >K : Symbol(K, Decl(immutable.ts, 72, 23))
 >V : Symbol(V, Decl(immutable.ts, 72, 25))
@@ -776,14 +776,14 @@ declare module Immutable {
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 93, 12))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 93, 35))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
 >mergeDeepIn : Symbol(Map.mergeDeepIn, Decl(immutable.ts, 93, 70))
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 94, 16))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 94, 39))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
     // Transient changes
     withMutations(mutator: (mutable: this) => any): this;
@@ -803,7 +803,7 @@ declare module Immutable {
 >KC : Symbol(KC, Decl(immutable.ts, 100, 11))
 >VC : Symbol(VC, Decl(immutable.ts, 100, 14))
 >collections : Symbol(collections, Decl(immutable.ts, 100, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.ts, 100, 11))
 >VC : Symbol(VC, Decl(immutable.ts, 100, 14))
@@ -817,7 +817,7 @@ declare module Immutable {
 >concat : Symbol(Map.concat, Decl(immutable.ts, 98, 24), Decl(immutable.ts, 100, 83))
 >C : Symbol(C, Decl(immutable.ts, 101, 11))
 >collections : Symbol(collections, Decl(immutable.ts, 101, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.ts, 101, 38))
 >C : Symbol(C, Decl(immutable.ts, 101, 11))
 >Map : Symbol(Map, Decl(immutable.ts, 66, 3), Decl(immutable.ts, 67, 69), Decl(immutable.ts, 68, 71), Decl(immutable.ts, 69, 66), Decl(immutable.ts, 70, 41) ... and 2 more)
@@ -980,7 +980,7 @@ declare module Immutable {
 >KC : Symbol(KC, Decl(immutable.ts, 119, 11))
 >VC : Symbol(VC, Decl(immutable.ts, 119, 14))
 >collections : Symbol(collections, Decl(immutable.ts, 119, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.ts, 119, 11))
 >VC : Symbol(VC, Decl(immutable.ts, 119, 14))
@@ -994,7 +994,7 @@ declare module Immutable {
 >concat : Symbol(OrderedMap.concat, Decl(immutable.ts, 117, 55), Decl(immutable.ts, 119, 90))
 >C : Symbol(C, Decl(immutable.ts, 120, 11))
 >collections : Symbol(collections, Decl(immutable.ts, 120, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.ts, 120, 38))
 >C : Symbol(C, Decl(immutable.ts, 120, 11))
 >OrderedMap : Symbol(OrderedMap, Decl(immutable.ts, 111, 3), Decl(immutable.ts, 112, 83), Decl(immutable.ts, 113, 85), Decl(immutable.ts, 114, 80), Decl(immutable.ts, 115, 55) ... and 2 more)
@@ -1103,7 +1103,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 129, 56))
 >T : Symbol(T, Decl(immutable.ts, 130, 16))
 >values : Symbol(values, Decl(immutable.ts, 130, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 130, 16))
 >Set : Symbol(Set, Decl(immutable.ts, 135, 3), Decl(immutable.ts, 136, 34), Decl(immutable.ts, 137, 35), Decl(immutable.ts, 127, 3), Decl(immutable.ts, 138, 58))
 >T : Symbol(T, Decl(immutable.ts, 130, 16))
@@ -1192,37 +1192,37 @@ declare module Immutable {
     union(...collections: Array<Collection<any, T> | Array<T>>): this;
 >union : Symbol(Set.union, Decl(immutable.ts, 144, 18))
 >collections : Symbol(collections, Decl(immutable.ts, 145, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
 
     merge(...collections: Array<Collection<any, T> | Array<T>>): this;
 >merge : Symbol(Set.merge, Decl(immutable.ts, 145, 70))
 >collections : Symbol(collections, Decl(immutable.ts, 146, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
 
     intersect(...collections: Array<Collection<any, T> | Array<T>>): this;
 >intersect : Symbol(Set.intersect, Decl(immutable.ts, 146, 70))
 >collections : Symbol(collections, Decl(immutable.ts, 147, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
 
     subtract(...collections: Array<Collection<any, T> | Array<T>>): this;
 >subtract : Symbol(Set.subtract, Decl(immutable.ts, 147, 74))
 >collections : Symbol(collections, Decl(immutable.ts, 148, 13))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 139, 23))
 
     // Transient changes
@@ -1242,7 +1242,7 @@ declare module Immutable {
 >concat : Symbol(Set.concat, Decl(immutable.ts, 152, 24))
 >C : Symbol(C, Decl(immutable.ts, 154, 11))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 154, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 154, 11))
 >C : Symbol(C, Decl(immutable.ts, 154, 11))
@@ -1312,7 +1312,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 161, 57))
 >T : Symbol(T, Decl(immutable.ts, 162, 16))
 >values : Symbol(values, Decl(immutable.ts, 162, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 162, 16))
 >OrderedSet : Symbol(OrderedSet, Decl(immutable.ts, 165, 3), Decl(immutable.ts, 166, 48), Decl(immutable.ts, 167, 49), Decl(immutable.ts, 159, 3), Decl(immutable.ts, 168, 72))
 >T : Symbol(T, Decl(immutable.ts, 162, 16))
@@ -1362,7 +1362,7 @@ declare module Immutable {
 >concat : Symbol(OrderedSet.concat, Decl(immutable.ts, 169, 49))
 >C : Symbol(C, Decl(immutable.ts, 171, 11))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 171, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 171, 11))
 >C : Symbol(C, Decl(immutable.ts, 171, 11))
@@ -1424,7 +1424,7 @@ declare module Immutable {
     zip(...collections: Array<Collection<any, any>>): OrderedSet<any>;
 >zip : Symbol(OrderedSet.zip, Decl(immutable.ts, 175, 86))
 >collections : Symbol(collections, Decl(immutable.ts, 176, 8))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >OrderedSet : Symbol(OrderedSet, Decl(immutable.ts, 165, 3), Decl(immutable.ts, 166, 48), Decl(immutable.ts, 167, 49), Decl(immutable.ts, 159, 3), Decl(immutable.ts, 168, 72))
 
@@ -1471,10 +1471,10 @@ declare module Immutable {
 >Z : Symbol(Z, Decl(immutable.ts, 179, 12))
 >zipper : Symbol(zipper, Decl(immutable.ts, 179, 15))
 >any : Symbol(any, Decl(immutable.ts, 179, 24))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Z : Symbol(Z, Decl(immutable.ts, 179, 12))
 >collections : Symbol(collections, Decl(immutable.ts, 179, 49))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >OrderedSet : Symbol(OrderedSet, Decl(immutable.ts, 165, 3), Decl(immutable.ts, 166, 48), Decl(immutable.ts, 167, 49), Decl(immutable.ts, 159, 3), Decl(immutable.ts, 168, 72))
 >Z : Symbol(Z, Decl(immutable.ts, 179, 12))
@@ -1492,7 +1492,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 182, 64))
 >T : Symbol(T, Decl(immutable.ts, 183, 16))
 >values : Symbol(values, Decl(immutable.ts, 183, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 183, 16))
 >Stack : Symbol(Stack, Decl(immutable.ts, 184, 3), Decl(immutable.ts, 185, 38), Decl(immutable.ts, 186, 39), Decl(immutable.ts, 180, 3), Decl(immutable.ts, 187, 62))
 >T : Symbol(T, Decl(immutable.ts, 183, 16))
@@ -1538,7 +1538,7 @@ declare module Immutable {
     unshift(...values: Array<T>): Stack<T>;
 >unshift : Symbol(Stack.unshift, Decl(immutable.ts, 192, 22))
 >values : Symbol(values, Decl(immutable.ts, 193, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 188, 25))
 >Stack : Symbol(Stack, Decl(immutable.ts, 184, 3), Decl(immutable.ts, 185, 38), Decl(immutable.ts, 186, 39), Decl(immutable.ts, 180, 3), Decl(immutable.ts, 187, 62))
 >T : Symbol(T, Decl(immutable.ts, 188, 25))
@@ -1559,7 +1559,7 @@ declare module Immutable {
     push(...values: Array<T>): Stack<T>;
 >push : Symbol(Stack.push, Decl(immutable.ts, 195, 22))
 >values : Symbol(values, Decl(immutable.ts, 196, 9))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 188, 25))
 >Stack : Symbol(Stack, Decl(immutable.ts, 184, 3), Decl(immutable.ts, 185, 38), Decl(immutable.ts, 186, 39), Decl(immutable.ts, 180, 3), Decl(immutable.ts, 187, 62))
 >T : Symbol(T, Decl(immutable.ts, 188, 25))
@@ -1594,7 +1594,7 @@ declare module Immutable {
 >concat : Symbol(Stack.concat, Decl(immutable.ts, 202, 24))
 >C : Symbol(C, Decl(immutable.ts, 204, 11))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 204, 14))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 204, 11))
 >C : Symbol(C, Decl(immutable.ts, 204, 11))
@@ -1689,7 +1689,7 @@ declare module Immutable {
     export interface Class<T extends Object> {
 >Class : Symbol(Class, Decl(immutable.ts, 214, 70))
 >T : Symbol(T, Decl(immutable.ts, 215, 27))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       (values?: Partial<T> | Iterable<[string, any]>): Instance<T> & Readonly<T>;
 >values : Symbol(values, Decl(immutable.ts, 216, 7))
@@ -1714,7 +1714,7 @@ declare module Immutable {
     export interface Instance<T extends Object> {
 >Instance : Symbol(Instance, Decl(immutable.ts, 218, 5))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       readonly size: number;
 >size : Symbol(Instance.size, Decl(immutable.ts, 219, 49))
@@ -1779,7 +1779,7 @@ declare module Immutable {
       merge(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
 >merge : Symbol(Instance.merge, Decl(immutable.ts, 232, 78))
 >collections : Symbol(collections, Decl(immutable.ts, 233, 12))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -1787,7 +1787,7 @@ declare module Immutable {
       mergeDeep(...collections: Array<Partial<T> | Iterable<[string, any]>>): this;
 >mergeDeep : Symbol(Instance.mergeDeep, Decl(immutable.ts, 233, 79))
 >collections : Symbol(collections, Decl(immutable.ts, 234, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -1800,7 +1800,7 @@ declare module Immutable {
 >key : Symbol(key, Decl(immutable.ts, 235, 50))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
 >collections : Symbol(collections, Decl(immutable.ts, 235, 72))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -1812,7 +1812,7 @@ declare module Immutable {
 >newVal : Symbol(newVal, Decl(immutable.ts, 236, 41))
 >key : Symbol(key, Decl(immutable.ts, 236, 54))
 >collections : Symbol(collections, Decl(immutable.ts, 236, 72))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Partial : Symbol(Partial, Decl(lib.es5.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
@@ -1853,14 +1853,14 @@ declare module Immutable {
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 243, 14))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 243, 37))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       mergeDeepIn(keyPath: Iterable<any>, ...collections: Array<any>): this;
 >mergeDeepIn : Symbol(Instance.mergeDeepIn, Decl(immutable.ts, 243, 72))
 >keyPath : Symbol(keyPath, Decl(immutable.ts, 244, 18))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >collections : Symbol(collections, Decl(immutable.ts, 244, 41))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       deleteIn(keyPath: Iterable<any>): this;
 >deleteIn : Symbol(Instance.deleteIn, Decl(immutable.ts, 244, 76))
@@ -1910,7 +1910,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<[keyof T, T[keyof T]]>;
 >[Symbol.iterator] : Symbol(Instance[Symbol.iterator], Decl(immutable.ts, 256, 46))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 219, 30))
@@ -1944,7 +1944,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 262, 86))
 >T : Symbol(T, Decl(immutable.ts, 263, 16))
 >values : Symbol(values, Decl(immutable.ts, 263, 19))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 263, 16))
 >Seq : Symbol(Seq, Decl(immutable.ts, 314, 3), Decl(immutable.ts, 315, 58), Decl(immutable.ts, 316, 81), Decl(immutable.ts, 317, 76), Decl(immutable.ts, 318, 68) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.ts, 284, 5), Decl(immutable.ts, 285, 48), Decl(immutable.ts, 286, 49), Decl(immutable.ts, 281, 5), Decl(immutable.ts, 287, 72))
@@ -2005,7 +2005,7 @@ declare module Immutable {
 
       toJS(): Object;
 >toJS : Symbol(Keyed.toJS, Decl(immutable.ts, 269, 76))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       toJSON(): { [key: string]: V };
 >toJSON : Symbol(Keyed.toJSON, Decl(immutable.ts, 270, 21))
@@ -2020,7 +2020,7 @@ declare module Immutable {
 >KC : Symbol(KC, Decl(immutable.ts, 273, 13))
 >VC : Symbol(VC, Decl(immutable.ts, 273, 16))
 >collections : Symbol(collections, Decl(immutable.ts, 273, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.ts, 273, 13))
 >VC : Symbol(VC, Decl(immutable.ts, 273, 16))
@@ -2035,7 +2035,7 @@ declare module Immutable {
 >concat : Symbol(Keyed.concat, Decl(immutable.ts, 272, 20), Decl(immutable.ts, 273, 91))
 >C : Symbol(C, Decl(immutable.ts, 274, 13))
 >collections : Symbol(collections, Decl(immutable.ts, 274, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.ts, 274, 40))
 >C : Symbol(C, Decl(immutable.ts, 274, 13))
 >Seq : Symbol(Seq, Decl(immutable.ts, 314, 3), Decl(immutable.ts, 315, 58), Decl(immutable.ts, 316, 81), Decl(immutable.ts, 317, 76), Decl(immutable.ts, 318, 68) ... and 4 more)
@@ -2144,7 +2144,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 282, 20))
 >T : Symbol(T, Decl(immutable.ts, 283, 18))
 >values : Symbol(values, Decl(immutable.ts, 283, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 283, 18))
 >Seq : Symbol(Seq, Decl(immutable.ts, 314, 3), Decl(immutable.ts, 315, 58), Decl(immutable.ts, 316, 81), Decl(immutable.ts, 317, 76), Decl(immutable.ts, 318, 68) ... and 4 more)
 >Indexed : Symbol(Indexed, Decl(immutable.ts, 284, 5), Decl(immutable.ts, 285, 48), Decl(immutable.ts, 286, 49), Decl(immutable.ts, 281, 5), Decl(immutable.ts, 287, 72))
@@ -2184,11 +2184,11 @@ declare module Immutable {
 
       toJS(): Array<any>;
 >toJS : Symbol(Indexed.toJS, Decl(immutable.ts, 288, 79))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       toJSON(): Array<T>;
 >toJSON : Symbol(Indexed.toJSON, Decl(immutable.ts, 289, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 288, 29))
 
       toSeq(): this;
@@ -2198,7 +2198,7 @@ declare module Immutable {
 >concat : Symbol(Indexed.concat, Decl(immutable.ts, 291, 20))
 >C : Symbol(C, Decl(immutable.ts, 292, 13))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 292, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 292, 13))
 >C : Symbol(C, Decl(immutable.ts, 292, 13))
@@ -2268,7 +2268,7 @@ declare module Immutable {
 >of : Symbol(of, Decl(immutable.ts, 298, 23))
 >T : Symbol(T, Decl(immutable.ts, 299, 18))
 >values : Symbol(values, Decl(immutable.ts, 299, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 299, 18))
 >Seq : Symbol(Seq, Decl(immutable.ts, 314, 3), Decl(immutable.ts, 315, 58), Decl(immutable.ts, 316, 81), Decl(immutable.ts, 317, 76), Decl(immutable.ts, 318, 68) ... and 4 more)
 >Set : Symbol(Set, Decl(immutable.ts, 300, 5), Decl(immutable.ts, 301, 40), Decl(immutable.ts, 302, 41), Decl(immutable.ts, 297, 5), Decl(immutable.ts, 303, 64))
@@ -2308,11 +2308,11 @@ declare module Immutable {
 
       toJS(): Array<any>;
 >toJS : Symbol(Set.toJS, Decl(immutable.ts, 304, 70))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       toJSON(): Array<T>;
 >toJSON : Symbol(Set.toJSON, Decl(immutable.ts, 305, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 304, 25))
 
       toSeq(): this;
@@ -2322,7 +2322,7 @@ declare module Immutable {
 >concat : Symbol(Set.concat, Decl(immutable.ts, 307, 20))
 >C : Symbol(C, Decl(immutable.ts, 308, 13))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 308, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 308, 13))
 >C : Symbol(C, Decl(immutable.ts, 308, 13))
@@ -2594,7 +2594,7 @@ declare module Immutable {
 
       toJS(): Object;
 >toJS : Symbol(Keyed.toJS, Decl(immutable.ts, 340, 59))
->Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
       toJSON(): { [key: string]: V };
 >toJSON : Symbol(Keyed.toJSON, Decl(immutable.ts, 341, 21))
@@ -2617,7 +2617,7 @@ declare module Immutable {
 >KC : Symbol(KC, Decl(immutable.ts, 346, 13))
 >VC : Symbol(VC, Decl(immutable.ts, 346, 16))
 >collections : Symbol(collections, Decl(immutable.ts, 346, 21))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >KC : Symbol(KC, Decl(immutable.ts, 346, 13))
 >VC : Symbol(VC, Decl(immutable.ts, 346, 16))
@@ -2632,7 +2632,7 @@ declare module Immutable {
 >concat : Symbol(Keyed.concat, Decl(immutable.ts, 345, 19), Decl(immutable.ts, 346, 98))
 >C : Symbol(C, Decl(immutable.ts, 347, 13))
 >collections : Symbol(collections, Decl(immutable.ts, 347, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.ts, 347, 40))
 >C : Symbol(C, Decl(immutable.ts, 347, 13))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
@@ -2737,7 +2737,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<[K, V]>;
 >[Symbol.iterator] : Symbol(Keyed[Symbol.iterator], Decl(immutable.ts, 353, 84))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >K : Symbol(K, Decl(immutable.ts, 340, 27))
@@ -2764,11 +2764,11 @@ declare module Immutable {
 
       toJS(): Array<any>;
 >toJS : Symbol(Indexed.toJS, Decl(immutable.ts, 358, 63))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       toJSON(): Array<T>;
 >toJSON : Symbol(Indexed.toJSON, Decl(immutable.ts, 359, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 358, 29))
 
       // Reading values
@@ -2807,7 +2807,7 @@ declare module Immutable {
       interleave(...collections: Array<Collection<any, T>>): this;
 >interleave : Symbol(Indexed.interleave, Decl(immutable.ts, 368, 36))
 >collections : Symbol(collections, Decl(immutable.ts, 369, 17))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >T : Symbol(T, Decl(immutable.ts, 358, 29))
 
@@ -2816,13 +2816,13 @@ declare module Immutable {
 >index : Symbol(index, Decl(immutable.ts, 370, 13))
 >removeNum : Symbol(removeNum, Decl(immutable.ts, 370, 27))
 >values : Symbol(values, Decl(immutable.ts, 370, 46))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 358, 29))
 
       zip(...collections: Array<Collection<any, any>>): Collection.Indexed<any>;
 >zip : Symbol(Indexed.zip, Decl(immutable.ts, 370, 74))
 >collections : Symbol(collections, Decl(immutable.ts, 371, 10))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
@@ -2872,10 +2872,10 @@ declare module Immutable {
 >Z : Symbol(Z, Decl(immutable.ts, 374, 14))
 >zipper : Symbol(zipper, Decl(immutable.ts, 374, 17))
 >any : Symbol(any, Decl(immutable.ts, 374, 26))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Z : Symbol(Z, Decl(immutable.ts, 374, 14))
 >collections : Symbol(collections, Decl(immutable.ts, 374, 51))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 >Indexed : Symbol(Indexed, Decl(immutable.ts, 356, 28), Decl(immutable.ts, 355, 5), Decl(immutable.ts, 357, 79))
@@ -2915,7 +2915,7 @@ declare module Immutable {
 >concat : Symbol(Indexed.concat, Decl(immutable.ts, 379, 104))
 >C : Symbol(C, Decl(immutable.ts, 381, 13))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 381, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 381, 13))
 >C : Symbol(C, Decl(immutable.ts, 381, 13))
@@ -2981,7 +2981,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : Symbol(Indexed[Symbol.iterator], Decl(immutable.ts, 385, 91))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 358, 29))
@@ -3007,11 +3007,11 @@ declare module Immutable {
 
       toJS(): Array<any>;
 >toJS : Symbol(Set.toJS, Decl(immutable.ts, 390, 58))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 
       toJSON(): Array<T>;
 >toJSON : Symbol(Set.toJSON, Decl(immutable.ts, 391, 25))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 390, 25))
 
       toSeq(): Seq.Set<T>;
@@ -3025,7 +3025,7 @@ declare module Immutable {
 >concat : Symbol(Set.concat, Decl(immutable.ts, 393, 26))
 >C : Symbol(C, Decl(immutable.ts, 395, 13))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 395, 16))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Iterable : Symbol(Iterable, Decl(lib.es2015.iterable.d.ts, --, --))
 >C : Symbol(C, Decl(immutable.ts, 395, 13))
 >C : Symbol(C, Decl(immutable.ts, 395, 13))
@@ -3091,7 +3091,7 @@ declare module Immutable {
       [Symbol.iterator](): IterableIterator<T>;
 >[Symbol.iterator] : Symbol(Set[Symbol.iterator], Decl(immutable.ts, 399, 88))
 >Symbol.iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
->Symbol : Symbol(Symbol, Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --))
+>Symbol : Symbol(Symbol, Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >iterator : Symbol(SymbolConstructor.iterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >IterableIterator : Symbol(IterableIterator, Decl(lib.es2015.iterable.d.ts, --, --))
 >T : Symbol(T, Decl(immutable.ts, 390, 25))
@@ -3203,19 +3203,19 @@ declare module Immutable {
     // Conversion to JavaScript types
     toJS(): Array<any> | { [key: string]: any };
 >toJS : Symbol(Collection.toJS, Decl(immutable.ts, 422, 46))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >key : Symbol(key, Decl(immutable.ts, 424, 28))
 
     toJSON(): Array<V> | { [key: string]: V };
 >toJSON : Symbol(Collection.toJSON, Decl(immutable.ts, 424, 48))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >V : Symbol(V, Decl(immutable.ts, 406, 32))
 >key : Symbol(key, Decl(immutable.ts, 425, 28))
 >V : Symbol(V, Decl(immutable.ts, 406, 32))
 
     toArray(): Array<V>;
 >toArray : Symbol(Collection.toArray, Decl(immutable.ts, 425, 46))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >V : Symbol(V, Decl(immutable.ts, 406, 32))
 
     toObject(): { [key: string]: V };
@@ -3497,7 +3497,7 @@ declare module Immutable {
     concat(...valuesOrCollections: Array<any>): Collection<any, any>;
 >concat : Symbol(Collection.concat, Decl(immutable.ts, 470, 89))
 >valuesOrCollections : Symbol(valuesOrCollections, Decl(immutable.ts, 472, 11))
->Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --), Decl(lib.es2015.core.d.ts, --, --), Decl(lib.es2015.iterable.d.ts, --, --), Decl(lib.es2015.symbol.wellknown.d.ts, --, --))
 >Collection : Symbol(Collection, Decl(immutable.ts, 402, 3), Decl(immutable.ts, 403, 79), Decl(immutable.ts, 404, 80), Decl(immutable.ts, 331, 3), Decl(immutable.ts, 405, 86))
 
     flatten(depth?: number): Collection<any, any>;

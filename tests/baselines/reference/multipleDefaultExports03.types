@@ -4,5 +4,5 @@ export default class C {
 }
 
 export default class C {
->C : C
+>C : import("tests/cases/conformance/es6/modules/multipleDefaultExports03").default
 }

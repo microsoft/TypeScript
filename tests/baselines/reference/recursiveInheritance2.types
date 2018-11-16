@@ -1,11 +1,7 @@
 === tests/cases/compiler/recursiveInheritance2.ts ===
 interface A { (): B; };
->A : A
->B : B
-
 declare var a: A;
 >a : A
->A : A
 
 var x = a();
 >x : B
@@ -13,12 +9,8 @@ var x = a();
 >a : A
 
 interface B { (): C; };
->B : B
->C : C
-
 declare var b: B;
 >b : B
->B : B
 
 var y = b();
 >y : C
@@ -26,12 +18,8 @@ var y = b();
 >b : B
 
 interface C { (): A; };
->C : C
->A : A
-
 declare var c: C;
 >c : C
->C : C
 
 var z = c();
 >z : A

@@ -5,7 +5,7 @@
         "main.ts"
     ],
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "lib/classA.ts",
         "lib/classB.ts",
         "main.ts"

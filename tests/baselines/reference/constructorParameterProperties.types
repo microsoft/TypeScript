@@ -12,7 +12,6 @@ class C {
 
 var c: C;
 >c : C
->C : C
 
 var r = c.y;
 >r : string
@@ -34,24 +33,18 @@ var r3 = c.z; // error
 
 class D<T> {
 >D : D<T>
->T : T
 
     y: T;
 >y : T
->T : T
 
     constructor(a: T, private x: T, protected z: T) { }
 >a : T
->T : T
 >x : T
->T : T
 >z : T
->T : T
 }
 
 var d: D<string>;
 >d : D<string>
->D : D<T>
 
 var r = d.y;
 >r : string

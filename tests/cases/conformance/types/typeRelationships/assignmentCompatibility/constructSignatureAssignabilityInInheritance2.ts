@@ -61,7 +61,7 @@ interface I extends A {
     a11: new <T extends Base>(x: T, y: T) => T; // ok
     a12: new <T extends Array<Base>>(x: Array<Base>, y: T) => Array<Derived>; // ok, less specific parameter type
     a13: new <T extends Array<Derived>>(x: Array<Base>, y: T) => T; // ok, T = Array<Derived>, satisfies constraint, contextual signature instantiation succeeds
-    a14: new <T>(x: { a: T; b: T }) => T; // ok, best common type yields T = {} but that's satisfactory for this signature
+    a14: new <T, U>(x: { a: T; b: U }) => T; // ok
     a15: new <T>(x: T) => T[]; // ok
     a16: new <T extends Base>(x: T) => number[]; // ok
     a17: new <T>(x: new (a: T) => T) => T[]; // ok

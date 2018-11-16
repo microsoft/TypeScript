@@ -5,12 +5,11 @@ export namespace TypeGuards {
     export function IsObject(value: any) : value is {[index:string]:any} {
 >IsObject : (value: any) => value is { [index: string]: any; }
 >value : any
->value : any
 >index : string
 
         return typeof(value) === 'object'
 >typeof(value) === 'object' : boolean
->typeof(value) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof(value) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(value) : any
 >value : any
 >'object' : "object"

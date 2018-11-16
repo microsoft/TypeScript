@@ -25,18 +25,9 @@ const obj = { num: 0, str: 's', [num]: num as 0, [sym]: sym };
 
 function set <T extends object, K extends keyof T> (obj: T, key: K, value: T[K]): T[K] {
 >set : <T extends object, K extends keyof T>(obj: T, key: K, value: T[K]) => T[K]
->T : T
->K : K
->T : T
 >obj : T
->T : T
 >key : K
->K : K
 >value : T[K]
->T : T
->K : K
->T : T
->K : K
 
   return obj[key] = value;
 >obj[key] = value : T[K]
@@ -92,12 +83,8 @@ type KeyofObj = keyof typeof obj;
 // "str" | "num"
 type Values<T> = T[keyof T];
 >Values : T[keyof T]
->T : T
->T : T
->T : T
 
 type ValuesOfObj = Values<typeof obj>;
 >ValuesOfObj : string | number
->Values : T[keyof T]
 >obj : { num: number; str: string; [num]: 0; [sym]: symbol; }
 

@@ -1,5 +1,5 @@
 tests/cases/compiler/jsdocInTypeScript.ts(16,23): error TS2304: Cannot find name 'MyType'.
-tests/cases/compiler/jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+tests/cases/compiler/jsdocInTypeScript.ts(23,33): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/jsdocInTypeScript.ts(25,3): error TS2345: Argument of type '1' is not assignable to parameter of type 'boolean'.
 tests/cases/compiler/jsdocInTypeScript.ts(25,15): error TS2339: Property 'length' does not exist on type 'number'.
 tests/cases/compiler/jsdocInTypeScript.ts(30,3): error TS2339: Property 'x' does not exist on type '{}'.
@@ -33,7 +33,7 @@ tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find name
      */
     function f(x: boolean) { return x * 2; } // Should error
                                     ~
-!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.
+!!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     // Should fail, because it takes a boolean and returns a number
     f(1); f(true).length;
       ~
@@ -67,4 +67,12 @@ tests/cases/compiler/jsdocInTypeScript.ts(42,12): error TS2503: Cannot find name
      * @type {{foo: (function(string, string): string)}}
      */
     const obj = { foo: (a, b) => a + b };
+    
+    /** @enum {string} */
+    var E = {};
+    E[""];
+    
+    // make sure import types in JSDoc are not resolved
+    /** @type {import("should-not-be-resolved").Type} */
+    var v = import(String());
     

@@ -3,8 +3,6 @@ export = foo;
 >foo : any
 
 declare namespace foo {
->foo : typeof foo
-
     export type T = number;
 >T : number
 }
@@ -18,7 +16,6 @@ declare module "foo" {
 
     export function f(): T; // OK
 >f : () => number
->T : number
 }
 
 === /b.ts ===
@@ -31,6 +28,5 @@ declare module "foo" {
     export function g(): foo.T; // OK
 >g : () => number
 >foo : any
->T : number
 }
 

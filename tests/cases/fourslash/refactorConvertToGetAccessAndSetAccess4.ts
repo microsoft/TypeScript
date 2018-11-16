@@ -10,12 +10,12 @@ edit.applyRefactor({
     actionName: "Generate 'get' and 'set' accessors",
     actionDescription: "Generate 'get' and 'set' accessors",
     newContent: `class A {
-    private /*RENAME*/__a: string;
-    public get _a(): string {
-        return this.__a;
+    private _a: string;
+    public get /*RENAME*/a(): string {
+        return this._a;
     }
-    public set _a(value: string) {
-        this.__a = value;
+    public set a(value: string) {
+        this._a = value;
     }
 }`,
 });

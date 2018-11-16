@@ -8,15 +8,12 @@ import * as B from "./b";
 >B : typeof B
 
 interface B {
->B : B
-
     x: string;
 >x : string
 }
 
 const x: B = { x: "" };
 >x : B
->B : B
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -35,7 +32,6 @@ import { B } from "./a";
 
 const x: B = { x: "" };
 >x : B
->B : B
 >{ x: "" } : { x: string; }
 >x : string
 >"" : ""
@@ -55,6 +51,5 @@ OriginalB.zzz;
 
 const y: OriginalB = x;
 >y : any
->OriginalB : No type information available!
 >x : B
 

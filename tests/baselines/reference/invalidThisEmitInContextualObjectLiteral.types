@@ -1,7 +1,5 @@
 === tests/cases/compiler/invalidThisEmitInContextualObjectLiteral.ts ===
 interface IDef {
->IDef : IDef
-
 	p1: (e:string) => void;
 >p1 : (e: string) => void
 >e : string
@@ -17,7 +15,6 @@ class TestController {
 	public m(def: IDef) { }
 >m : (def: IDef) => void
 >def : IDef
->IDef : IDef
 
 	public p = this.m({
 >p : void

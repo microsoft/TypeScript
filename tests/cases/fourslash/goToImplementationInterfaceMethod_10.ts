@@ -16,7 +16,7 @@
 //// }
 ////
 //// class FooImpl implements Foo {
-////  	 [|hello() {/**FooImpl*/}|]
+////  	 [|hello|]() {/**FooImpl*/}
 ////  	 aloha() {}
 //// }
 ////
@@ -25,12 +25,12 @@
 //// }
 ////
 //// class BarImpl implements Bar {
-//// 	 [|hello() {/**BarImpl*/}|]
+//// 	 [|hello|]() {/**BarImpl*/}
 //// 	 goodbye() {}
 //// }
 ////
 //// class FooAndBarImpl implements Foo, Bar {
-//// 	 [|hello() {/**FooAndBarImpl*/}|]
+//// 	 [|hello|]() {/**FooAndBarImpl*/}
 //// 	 aloha() {}
 //// 	 goodbye() {}
 //// }

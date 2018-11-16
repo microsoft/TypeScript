@@ -7,14 +7,13 @@ import {Observable} from "Observable";
 import "Map";
 let x: Observable;
 >x : Observable
->Observable : Observable
 
 x.foo().x;
 >x.foo().x : number
->x.foo() : Cls
->x.foo : () => Cls
+>x.foo() : import("M").Cls
+>x.foo : () => import("M").Cls
 >x : Observable
->foo : () => Cls
+>foo : () => import("M").Cls
 >x : number
 
 === tests/cases/compiler/O.d.ts ===
@@ -43,11 +42,8 @@ declare module "Map" {
 >"Observable" : typeof import("Observable")
 
         interface Observable {
->Observable : Observable
-
             foo(): Cls;
 >foo : () => Cls
->Cls : Cls
         }
     }
 }

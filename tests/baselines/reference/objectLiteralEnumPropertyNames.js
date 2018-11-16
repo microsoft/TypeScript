@@ -54,6 +54,7 @@ const um = {
 
 
 //// [objectLiteralEnumPropertyNames.js]
+var _a, _b, _c, _d, _e, _f, _g, _h, _j;
 // Fixes #16887
 var Strs;
 (function (Strs) {
@@ -105,4 +106,3 @@ var um = (_j = {},
     _j[an] = 7,
     _j[bn] = 8,
     _j);
-var _a, _b, _c, _d, _e, _f, _g, _h, _j;

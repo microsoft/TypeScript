@@ -2,7 +2,6 @@
 declare function dec(): (target: Function, paramIndex: number) => void;
 >dec : () => (target: Function, paramIndex: number) => void
 >target : Function
->Function : Function
 >paramIndex : number
 
 @dec()

@@ -7,7 +7,7 @@ namespace ts.formatting {
         advance(): void;
         isOnToken(): boolean;
         readTokenInfo(n: Node): TokenInfo;
-        getCurrentLeadingTrivia(): TextRangeWithKind[];
+        getCurrentLeadingTrivia(): TextRangeWithKind[] | undefined;
         lastTrailingTriviaWasNewLine(): boolean;
         skipToEndOf(node: Node): void;
     }
@@ -54,7 +54,7 @@ namespace ts.formatting {
             const isStarted = scanner.getStartPos() !== startPos;
 
             if (isStarted) {
-                wasNewLine = trailingTrivia && lastOrUndefined(trailingTrivia)!.kind === SyntaxKind.NewLineTrivia;
+                wasNewLine = !!trailingTrivia && last(trailingTrivia).kind === SyntaxKind.NewLineTrivia;
             }
             else {
                 scanner.scan();

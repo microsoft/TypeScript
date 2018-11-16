@@ -14,18 +14,21 @@
 ////x[|./*a*/|];
 ////x["/*b*/"];
 
-verify.completionsAt("b", ["foo ", "bar", "break", "any", "#", "$", "b", "1b"]);
-
 const replacementSpan = test.ranges()[0];
-verify.completionsAt("a", [
-    { name: "foo ", insertText: '["foo "]', replacementSpan },
-    "bar",
-    "break",
-    "any",
-    { name: "#", insertText: '["#"]', replacementSpan },
-    "$",
-    "b",
-    { name: "1b", insertText: '["1b"]', replacementSpan },
-], {
-    includeInsertTextCompletions: true,
-});
+verify.completions(
+    { marker: "b", exact: ["foo ", "bar", "break", "any", "#", "$", "b", "1b"] },
+    {
+        marker: "a",
+        exact: [
+            { name: "foo ", insertText: '["foo "]', replacementSpan },
+            "bar",
+            "break",
+            "any",
+            { name: "#", insertText: '["#"]', replacementSpan },
+            "$",
+            "b",
+            { name: "1b", insertText: '["1b"]', replacementSpan },
+        ],
+        preferences: { includeInsertTextCompletions: true },
+    },
+);

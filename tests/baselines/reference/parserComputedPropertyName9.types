@@ -5,5 +5,4 @@ class C {
    [e]: Type
 >[e] : any
 >e : any
->Type : No type information available!
 }

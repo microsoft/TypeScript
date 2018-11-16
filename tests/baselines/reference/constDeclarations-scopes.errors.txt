@@ -1,9 +1,7 @@
-tests/cases/compiler/constDeclarations-scopes.ts(12,5): error TS7027: Unreachable code detected.
-tests/cases/compiler/constDeclarations-scopes.ts(21,1): error TS7027: Unreachable code detected.
 tests/cases/compiler/constDeclarations-scopes.ts(27,1): error TS2410: The 'with' statement is not supported. All symbols in a 'with' block will have type 'any'.
 
 
-==== tests/cases/compiler/constDeclarations-scopes.ts (3 errors) ====
+==== tests/cases/compiler/constDeclarations-scopes.ts (1 errors) ====
     // global
     const c = "string";
     
@@ -16,8 +14,6 @@ tests/cases/compiler/constDeclarations-scopes.ts(27,1): error TS2410: The 'with'
     }
     else { 
         const c = 0;
-        ~~~~~
-!!! error TS7027: Unreachable code detected.
         n = c;
     }
     
@@ -27,8 +23,6 @@ tests/cases/compiler/constDeclarations-scopes.ts(27,1): error TS2410: The 'with'
     }
     
     do { 
-    ~~
-!!! error TS7027: Unreachable code detected.
        const c = 0;
         n = c;
     } while (true);

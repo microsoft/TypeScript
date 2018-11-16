@@ -35,6 +35,7 @@ var [b0 = 3, b1 = true, b2 = temp] = [3, false, { t1: false, t2: 5}];  // Error
 var [c1, c2, { c3: c4, c5 }, , ...c6] = [1, 2, { c3: 4, c5: 0 }];  // Error
 >c1 : Symbol(c1, Decl(destructuringVariableDeclaration2.ts, 13, 5))
 >c2 : Symbol(c2, Decl(destructuringVariableDeclaration2.ts, 13, 8))
+>c3 : Symbol(c3, Decl(destructuringVariableDeclaration2.ts, 13, 48))
 >c4 : Symbol(c4, Decl(destructuringVariableDeclaration2.ts, 13, 14))
 >c5 : Symbol(c5, Decl(destructuringVariableDeclaration2.ts, 13, 22))
 >c6 : Symbol(c6, Decl(destructuringVariableDeclaration2.ts, 13, 30))

@@ -4,7 +4,5 @@ f(g<A, B>(7));
 >f : any
 >g<A, B>(7) : any
 >g : any
->A : No type information available!
->B : No type information available!
 >7 : 7
 

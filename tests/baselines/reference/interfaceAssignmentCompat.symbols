@@ -94,25 +94,25 @@ module M {
 
         x=x.sort(CompareYeux); // parameter mismatch
 >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
->x.sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>x.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
->sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >CompareYeux : Symbol(CompareYeux, Decl(interfaceAssignmentCompat.ts, 17, 5))
 
         // type of z inferred from specialized array type
         var z=x.sort(CompareEyes); // ok
 >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
->x.sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>x.sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >x : Symbol(x, Decl(interfaceAssignmentCompat.ts, 24, 11))
->sort : Symbol(Array.sort, Decl(lib.d.ts, --, --))
+>sort : Symbol(Array.sort, Decl(lib.es5.d.ts, --, --))
 >CompareEyes : Symbol(CompareEyes, Decl(interfaceAssignmentCompat.ts, 13, 5))
 
         for (var i=0,len=z.length;i<len;i++) {
 >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
 >len : Symbol(len, Decl(interfaceAssignmentCompat.ts, 35, 21))
->z.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>z.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
 >len : Symbol(len, Decl(interfaceAssignmentCompat.ts, 35, 21))
 >i : Symbol(i, Decl(interfaceAssignmentCompat.ts, 35, 16))
@@ -132,9 +132,9 @@ module M {
 
         for (var j=z.length=1;j>=0;j--) {
 >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
->z.length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>z.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >z : Symbol(z, Decl(interfaceAssignmentCompat.ts, 33, 11))
->length : Symbol(Array.length, Decl(lib.d.ts, --, --))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
 >j : Symbol(j, Decl(interfaceAssignmentCompat.ts, 40, 16))
 

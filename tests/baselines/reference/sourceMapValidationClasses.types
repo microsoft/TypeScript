@@ -31,7 +31,6 @@ module Foo.Bar {
     function foo(greeting: string): Greeter {
 >foo : (greeting: string) => Greeter
 >greeting : string
->Greeter : Greeter
 
         return new Greeter(greeting);
 >new Greeter(greeting) : Greeter
@@ -59,7 +58,6 @@ module Foo.Bar {
 
         var greeters: Greeter[] = []; /* inline block comment */
 >greeters : Greeter[]
->Greeter : Greeter
 >[] : undefined[]
 
         greeters[0] = new Greeter(greeting);

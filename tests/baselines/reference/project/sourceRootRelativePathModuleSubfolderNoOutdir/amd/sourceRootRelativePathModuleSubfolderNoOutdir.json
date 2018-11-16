@@ -9,7 +9,7 @@
     "baselineCheck": true,
     "sourceRoot": "../src",
     "resolvedInputFiles": [
-        "lib.d.ts",
+        "lib.es5.d.ts",
         "ref/m1.ts",
         "test.ts"
     ],

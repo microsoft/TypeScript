@@ -1,23 +1,23 @@
 /* @internal */
 namespace ts.NavigateTo {
     interface RawNavigateToItem {
-        name: string;
-        fileName: string;
-        matchKind: PatternMatchKind;
-        isCaseSensitive: boolean;
-        declaration: Declaration;
+        readonly name: string;
+        readonly fileName: string;
+        readonly matchKind: PatternMatchKind;
+        readonly isCaseSensitive: boolean;
+        readonly declaration: Declaration;
     }
 
-    export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number, excludeDtsFiles: boolean): NavigateToItem[] {
+    export function getNavigateToItems(sourceFiles: ReadonlyArray<SourceFile>, checker: TypeChecker, cancellationToken: CancellationToken, searchValue: string, maxResultCount: number | undefined, excludeDtsFiles: boolean): NavigateToItem[] {
         const patternMatcher = createPatternMatcher(searchValue);
         if (!patternMatcher) return emptyArray;
-        let rawItems: RawNavigateToItem[] = [];
+        const rawItems: RawNavigateToItem[] = [];
 
         // Search the declarations in all files and output matched NavigateToItem into array of NavigateToItem[]
         for (const sourceFile of sourceFiles) {
             cancellationToken.throwIfCancellationRequested();
 
-            if (excludeDtsFiles && fileExtensionIs(sourceFile.fileName, Extension.Dts)) {
+            if (excludeDtsFiles && sourceFile.isDeclarationFile) {
                 continue;
             }
 
@@ -27,10 +27,7 @@ namespace ts.NavigateTo {
         }
 
         rawItems.sort(compareNavigateToItems);
-        if (maxResultCount !== undefined) {
-            rawItems = rawItems.slice(0, maxResultCount);
-        }
-        return rawItems.map(createNavigateToItem);
+        return (maxResultCount === undefined ? rawItems : rawItems.slice(0, maxResultCount)).map(createNavigateToItem);
     }
 
     function getItemsFromNamedDeclaration(patternMatcher: PatternMatcher, name: string, declarations: ReadonlyArray<Declaration>, checker: TypeChecker, fileName: string, rawItems: Push<RawNavigateToItem>): void {
@@ -45,13 +42,13 @@ namespace ts.NavigateTo {
             if (!shouldKeepItem(declaration, checker)) continue;
 
             if (patternMatcher.patternContainsDots) {
+                // If the pattern has dots in it, then also see if the declaration container matches as well.
                 const fullMatch = patternMatcher.getFullMatch(getContainers(declaration), name);
                 if (fullMatch) {
                     rawItems.push({ name, fileName, matchKind: fullMatch.kind, isCaseSensitive: fullMatch.isCaseSensitive, declaration });
                 }
             }
             else {
-                // If the pattern has dots in it, then also see if the declaration container matches as well.
                 rawItems.push({ name, fileName, matchKind: match.kind, isCaseSensitive: match.isCaseSensitive, declaration });
             }
         }
@@ -62,7 +59,7 @@ namespace ts.NavigateTo {
             case SyntaxKind.ImportClause:
             case SyntaxKind.ImportSpecifier:
             case SyntaxKind.ImportEqualsDeclaration:
-                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name);
+                const importer = checker.getSymbolAtLocation((declaration as ImportClause | ImportSpecifier | ImportEqualsDeclaration).name!)!; // TODO: GH#18217
                 const imported = checker.getAliasedSymbol(importer);
                 return importer.escapedName !== imported.escapedName;
             default:
@@ -70,65 +67,47 @@ namespace ts.NavigateTo {
         }
     }
 
-    function tryAddSingleDeclarationName(declaration: Declaration, containers: string[]): boolean {
+    function tryAddSingleDeclarationName(declaration: Declaration, containers: Push<string>): boolean {
         const name = getNameOfDeclaration(declaration);
-        if (name && isPropertyNameLiteral(name)) {
-            containers.unshift(getTextOfIdentifierOrLiteral(name));
-            return true;
-        }
-        else if (name && name.kind === SyntaxKind.ComputedPropertyName) {
-            return tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ true);
-        }
-        else {
-            // Don't know how to add this.
-            return false;
-        }
+        return !!name && (pushLiteral(name, containers) || name.kind === SyntaxKind.ComputedPropertyName && tryAddComputedPropertyName(name.expression, containers));
     }
 
     // Only added the names of computed properties if they're simple dotted expressions, like:
     //
     //      [X.Y.Z]() { }
-    function tryAddComputedPropertyName(expression: Expression, containers: string[], includeLastPortion: boolean): boolean {
-        if (isPropertyNameLiteral(expression)) {
-            const text = getTextOfIdentifierOrLiteral(expression);
-            if (includeLastPortion) {
-                containers.unshift(text);
-            }
-            return true;
-        }
-        if (isPropertyAccessExpression(expression)) {
-            if (includeLastPortion) {
-                containers.unshift(expression.name.text);
-            }
-
-            return tryAddComputedPropertyName(expression.expression, containers, /*includeLastPortion*/ true);
-        }
-
-        return false;
+    function tryAddComputedPropertyName(expression: Expression, containers: Push<string>): boolean {
+        return pushLiteral(expression, containers)
+            || isPropertyAccessExpression(expression) && (containers.push(expression.name.text), true) && tryAddComputedPropertyName(expression.expression, containers);
     }
 
-    function getContainers(declaration: Declaration): string[] | undefined {
+    function pushLiteral(node: Node, containers: Push<string>): boolean {
+        return isPropertyNameLiteral(node) && (containers.push(getTextOfIdentifierOrLiteral(node)), true);
+    }
+
+    function getContainers(declaration: Declaration): ReadonlyArray<string> {
         const containers: string[] = [];
 
         // First, if we started with a computed property name, then add all but the last
         // portion into the container array.
         const name = getNameOfDeclaration(declaration);
-        if (name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers, /*includeLastPortion*/ false)) {
-            return undefined;
+        if (name && name.kind === SyntaxKind.ComputedPropertyName && !tryAddComputedPropertyName(name.expression, containers)) {
+            return emptyArray;
         }
+        // Don't include the last portion.
+        containers.shift();
 
         // Now, walk up our containers, adding all their names to the container array.
-        declaration = getContainerNode(declaration);
+        let container = getContainerNode(declaration);
 
-        while (declaration) {
-            if (!tryAddSingleDeclarationName(declaration, containers)) {
-                return undefined;
+        while (container) {
+            if (!tryAddSingleDeclarationName(container, containers)) {
+                return emptyArray;
             }
 
-            declaration = getContainerNode(declaration);
+            container = getContainerNode(container);
         }
 
-        return containers;
+        return containers.reverse();
     }
 
     function compareNavigateToItems(i1: RawNavigateToItem, i2: RawNavigateToItem) {
@@ -145,13 +124,13 @@ namespace ts.NavigateTo {
             name: rawItem.name,
             kind: getNodeKind(declaration),
             kindModifiers: getNodeModifiers(declaration),
-            matchKind: PatternMatchKind[rawItem.matchKind],
+            matchKind: PatternMatchKind[rawItem.matchKind] as keyof typeof PatternMatchKind,
             isCaseSensitive: rawItem.isCaseSensitive,
             fileName: rawItem.fileName,
             textSpan: createTextSpanFromNode(declaration),
             // TODO(jfreeman): What should be the containerName when the container has a computed name?
             containerName: containerName ? (<Identifier>containerName).text : "",
-            containerKind: containerName ? getNodeKind(container) : ScriptElementKind.unknown
+            containerKind: containerName ? getNodeKind(container!) : ScriptElementKind.unknown, // TODO: GH#18217 Just use `container ? ...`
         };
     }
 }

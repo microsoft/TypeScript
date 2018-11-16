@@ -1,0 +1,15 @@
+tests/cases/conformance/jsdoc/mod2.js(1,5): error TS2300: Duplicate identifier 'Foo'.
+tests/cases/conformance/jsdoc/mod2.js(3,1): error TS2300: Duplicate identifier 'Foo'.
+
+
+==== tests/cases/conformance/jsdoc/mod2.js (2 errors) ====
+    /** @typedef {number} Foo */
+        ~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+    const ns = {};
+    ns.Foo = class {}
+    ~~~~~~
+!!! error TS2300: Duplicate identifier 'Foo'.
+    module.exports = ns;
+    
+    

@@ -15,7 +15,7 @@
 //// }
 ////
 //// // Class expression that gets used in a bar implementation
-//// var x = [|class Foo {
+//// var x = class [|Foo|] {
 ////     createBarInClassExpression(): Bar {
 ////         return {
 ////             Foo
@@ -23,13 +23,13 @@
 ////     }
 ////
 ////     someFunction() {}
-//// }|];
+//// };
 ////
 //// // Class declaration that gets used in a bar implementation. This class has multiple definitions
 //// // (the class declaration and the interface above), but we only want the class returned
-//// [|class Foo {
+//// class [|Foo|] {
 ////
-//// }|]
+//// }
 ////
 //// function createBarUsingClassDeclaration(): Bar {
 ////     return {

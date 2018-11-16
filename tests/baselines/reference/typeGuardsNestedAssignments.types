@@ -8,7 +8,6 @@ class Foo {
 
 declare function getFooOrNull(): Foo | null;
 >getFooOrNull : () => Foo | null
->Foo : Foo
 >null : null
 
 declare function getStringOrNumberOrNull(): string | number | null;
@@ -20,7 +19,6 @@ function f1() {
 
     let foo: Foo | null;
 >foo : Foo | null
->Foo : Foo
 >null : null
 
     if ((foo = getFooOrNull()) !== null) {
@@ -42,12 +40,10 @@ function f2() {
 
     let foo1: Foo | null;
 >foo1 : Foo | null
->Foo : Foo
 >null : null
 
     let foo2: Foo | null;
 >foo2 : Foo | null
->Foo : Foo
 >null : null
 
     if ((foo1 = getFooOrNull(), foo2 = foo1) !== null) {
@@ -76,7 +72,6 @@ function f3() {
 
     let obj: Object | null;
 >obj : Object | null
->Object : Object
 >null : null
 
     if ((obj = getFooOrNull()) instanceof Foo) {
@@ -102,7 +97,7 @@ function f4() {
 
     if (typeof (x = getStringOrNumberOrNull()) === "number") {
 >typeof (x = getStringOrNumberOrNull()) === "number" : boolean
->typeof (x = getStringOrNumberOrNull()) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof (x = getStringOrNumberOrNull()) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >(x = getStringOrNumberOrNull()) : string | number | null
 >x = getStringOrNumberOrNull() : string | number | null
 >x : string | number | null
@@ -123,7 +118,6 @@ const re = /./g
 
 let match: RegExpExecArray | null
 >match : RegExpExecArray | null
->RegExpExecArray : RegExpExecArray
 >null : null
 
 while ((match = re.exec("xxx")) != null) {

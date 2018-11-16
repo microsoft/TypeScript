@@ -3,8 +3,6 @@ import React = require('react');
 >React : typeof React
 
 interface PoisonedProp {
->PoisonedProp : PoisonedProp
-
     x: string;
 >x : string
 
@@ -17,7 +15,6 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 >React.Component : React.Component<PoisonedProp, {}>
 >React : typeof React
 >Component : typeof React.Component
->PoisonedProp : PoisonedProp
 
     render() {
 >render : () => JSX.Element
@@ -32,6 +29,16 @@ class Poisoned extends React.Component<PoisonedProp, {}> {
 const obj = {};
 >obj : {}
 >{} : {}
+
+// OK
+<Poisoned {...{x: "ok", y: "2"}} />;
+><Poisoned {...{x: "ok", y: "2"}} /> : JSX.Element
+>Poisoned : typeof Poisoned
+>{x: "ok", y: "2"} : { x: string; y: "2"; }
+>x : string
+>"ok" : "ok"
+>y : "2"
+>"2" : "2"
 
 // Error
 let p = <Poisoned {...obj} />;
@@ -56,20 +63,20 @@ let w = <Poisoned {...{x: 5, y: "2"}}/>;
 >w : JSX.Element
 ><Poisoned {...{x: 5, y: "2"}}/> : JSX.Element
 >Poisoned : typeof Poisoned
->{x: 5, y: "2"} : { x: number; y: "2"; }
+>{x: 5, y: "2"} : { x: number; y: string; }
 >x : number
 >5 : 5
->y : "2"
+>y : string
 >"2" : "2"
 
 let w1 = <Poisoned {...{x: 5, y: "2"}} X="hi" />;
 >w1 : JSX.Element
 ><Poisoned {...{x: 5, y: "2"}} X="hi" /> : JSX.Element
 >Poisoned : typeof Poisoned
->{x: 5, y: "2"} : { x: number; y: "2"; }
+>{x: 5, y: "2"} : { x: number; y: string; }
 >x : number
 >5 : 5
->y : "2"
+>y : string
 >"2" : "2"
 >X : string
 

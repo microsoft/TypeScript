@@ -7,7 +7,6 @@ var x: "foo" | "bar" | number;
 
 var y: T = undefined;
 >y : number | "foo" | "bar"
->T : number | "foo" | "bar"
 >undefined : undefined
 
 if (x === "foo") {

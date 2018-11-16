@@ -4,36 +4,25 @@ module Editor {
 
     export class List<T> {
 >List : List<T>
->T : T
 
         next: List<T>;
 >next : List<T>
->List : List<T>
->T : T
 
         prev: List<T>;
 >prev : List<T>
->List : List<T>
->T : T
 
         constructor(public isHead: boolean, public data: T) {
 >isHead : boolean
 >data : T
->T : T
         }
 
         static MakeHead(): List<T> {
 >MakeHead : () => List<any>
->List : List<T>
->T : No type information available!
 
             var entry: List<T> = new List<T>(true, null); // can't access T here
 >entry : List<any>
->List : List<T>
->T : No type information available!
 >new List<T>(true, null) : List<any>
 >List : typeof List
->T : No type information available!
 >true : true
 >null : null
 

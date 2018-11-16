@@ -21,14 +21,14 @@ module M {
     export enum E1 { B = 'foo'.length }
 >E1 : Symbol(E1, Decl(enumMergingErrors.ts, 1, 10), Decl(enumMergingErrors.ts, 6, 10), Decl(enumMergingErrors.ts, 11, 10))
 >B : Symbol(E1.B, Decl(enumMergingErrors.ts, 7, 20))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     export enum E2 { B = 'foo'.length }
 >E2 : Symbol(E2, Decl(enumMergingErrors.ts, 2, 28), Decl(enumMergingErrors.ts, 7, 39), Decl(enumMergingErrors.ts, 12, 24))
 >B : Symbol(E2.B, Decl(enumMergingErrors.ts, 8, 20))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     export enum E3 { C }
 >E3 : Symbol(E3, Decl(enumMergingErrors.ts, 3, 24), Decl(enumMergingErrors.ts, 8, 39), Decl(enumMergingErrors.ts, 13, 28))
@@ -48,8 +48,8 @@ module M {
     export enum E3 { B = 'foo'.length }
 >E3 : Symbol(E3, Decl(enumMergingErrors.ts, 3, 24), Decl(enumMergingErrors.ts, 8, 39), Decl(enumMergingErrors.ts, 13, 28))
 >B : Symbol(E3.B, Decl(enumMergingErrors.ts, 14, 20))
->'foo'.length : Symbol(String.length, Decl(lib.d.ts, --, --))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>'foo'.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 }
 
 // Enum with no initializer in either declaration with constant members with the same root module

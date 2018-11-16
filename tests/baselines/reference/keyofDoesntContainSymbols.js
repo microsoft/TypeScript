@@ -25,6 +25,7 @@ type Values<T> = T[keyof T];
 type ValuesOfObj = Values<typeof obj>;
 
 //// [keyofDoesntContainSymbols.js]
+var _a;
 var sym = Symbol();
 var num = 0;
 var obj = (_a = { num: 0, str: 's' }, _a[num] = num, _a[sym] = sym, _a);
@@ -40,4 +41,3 @@ var valC = set(obj, sym, sym);
 // Expect type error
 // Argument of type 'unique symbol' is not assignable to parameter of type "str" | "num"
 var valD = set(obj, num, num);
-var _a;

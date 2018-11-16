@@ -1,15 +1,12 @@
 === tests/cases/conformance/es6/classDeclaration/emitClassDeclarationWithTypeArgumentAndOverloadInES6.ts ===
 class B<T> {
 >B : B<T>
->T : T
 
     x: T;
 >x : T
->T : T
 
     B: T;
 >B : T
->T : T
 
     constructor(a: any)
 >a : any
@@ -17,11 +14,9 @@ class B<T> {
     constructor(a: any,b: T)
 >a : any
 >b : T
->T : T
 
     constructor(a: T) { this.B = a;}
 >a : T
->T : T
 >this.B = a : T
 >this.B : T
 >this : this
@@ -31,7 +26,6 @@ class B<T> {
     foo(a: T)
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
 >a : T
->T : T
 
     foo(a: any)
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
@@ -43,7 +37,6 @@ class B<T> {
 
     foo(): T {
 >foo : { (a: T): any; (a: any): any; (b: string): any; }
->T : T
 
         return this.x;
 >this.x : T
@@ -53,7 +46,6 @@ class B<T> {
 
     get BB(): T {
 >BB : T
->T : T
 
         return this.B;
 >this.B : T
@@ -63,7 +55,6 @@ class B<T> {
     set BBWith(c: T) {
 >BBWith : T
 >c : T
->T : T
 
         this.B = c;
 >this.B = c : T

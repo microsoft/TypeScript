@@ -36,3 +36,4 @@ tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAnd
     var fng2 = A.fng2;
                  ~~~~
 !!! error TS2551: Property 'fng2' does not exist on type 'typeof A'. Did you mean 'fng'?
+!!! related TS2728 tests/cases/conformance/internalModules/exportDeclarations/ModuleWithExportedAndNonExportedFunctions.ts:7:21: 'fng' is declared here.

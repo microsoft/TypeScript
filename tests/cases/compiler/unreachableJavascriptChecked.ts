@@ -2,7 +2,11 @@
 // @allowJs: true
 // @checkJs: true
 // @outDir: out
+// @allowUnreachableCode: false
 function unreachable() {
-    return 1;
+    return f();
     return 2;
+    return 3;
+    function f() {}
+    return 4;
 }

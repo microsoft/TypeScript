@@ -1,7 +1,5 @@
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(13,1): error TS2322: Type 'I' is not assignable to type 'C'.
-  Property 'foo' is missing in type 'I'.
-tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(14,1): error TS2322: Type 'C' is not assignable to type 'I'.
-  Property 'fooo' is missing in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(13,1): error TS2741: Property 'foo' is missing in type 'I' but required in type 'C'.
+tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts(14,1): error TS2741: Property 'fooo' is missing in type 'C' but required in type 'I'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts (2 errors) ====
@@ -19,9 +17,9 @@ tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignme
     
     c = i; // error
     ~
-!!! error TS2322: Type 'I' is not assignable to type 'C'.
-!!! error TS2322:   Property 'foo' is missing in type 'I'.
+!!! error TS2741: Property 'foo' is missing in type 'I' but required in type 'C'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:2:5: 'foo' is declared here.
     i = c; // error
     ~
-!!! error TS2322: Type 'C' is not assignable to type 'I'.
-!!! error TS2322:   Property 'fooo' is missing in type 'C'.
+!!! error TS2741: Property 'fooo' is missing in type 'C' but required in type 'I'.
+!!! related TS2728 tests/cases/conformance/types/typeRelationships/assignmentCompatibility/assignmentCompatWithObjectMembers5.ts:8:5: 'fooo' is declared here.

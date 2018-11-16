@@ -12,8 +12,6 @@ declare module "fs" {
 >ReadAllText : () => string
     }
     export interface IFile {
->IFile : IFile
-
         [index: number]: string;
 >index : number
     }
@@ -205,7 +203,6 @@ module TypeScriptAllInOne {
 >local5 : any
 ><fs.File>null : any
 >fs : any
->File : any
 >null : null
 
             var local6 = local5 instanceof fs.File;
@@ -523,7 +520,6 @@ module TypeScriptAllInOne {
 
             var xx: IF = c;
 >xx : IF
->IF : IF
 >c : CLASS
 
             retVal +=  catch .Property;
@@ -800,16 +796,12 @@ module TypeScriptAllInOne {
     }
 
     interface IF {
->IF : IF
-
         Foo(): bool;
 >Foo : () => any
->bool : No type information available!
     }
 
     class CLASS implements IF {
 >CLASS : CLASS
->IF : IF
 
          case  d = () => {  yield  0; };
 >d : () => void
@@ -829,7 +821,6 @@ module TypeScriptAllInOne {
         }
         public Foo(): bool {
 >Foo : () => any
->bool : No type information available!
 
             var myEvent = () => { return 1; };
 >myEvent : () => number
@@ -910,7 +901,6 @@ module TypeScriptAllInOne {
         constructor(private value: number, public name: string)  :  }
 >value : number
 >name : string
-> : No type information available!
        
         public Overloads(value: string);
 >Overloads(value: string) : any
@@ -929,6 +919,7 @@ module TypeScriptAllInOne {
 >rest : any
 >string[] : any
 >string : any
+> : any
 >&         public : number
 > : any
 
@@ -969,8 +960,6 @@ enum Fruit {
 }
 
 interface IDisposable {
->IDisposable : IDisposable
-
     Dispose(): void;
 >Dispose : () => void
 }

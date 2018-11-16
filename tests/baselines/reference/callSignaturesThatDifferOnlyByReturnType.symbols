@@ -54,7 +54,7 @@ var a: {
     (x, y): Object;
 >x : Symbol(x, Decl(callSignaturesThatDifferOnlyByReturnType.ts, 20, 5))
 >y : Symbol(y, Decl(callSignaturesThatDifferOnlyByReturnType.ts, 20, 7))
->Object : Symbol(Object, Decl(lib.d.ts, --, --), Decl(lib.d.ts, --, --))
+>Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
     (x, y): any; // error
 >x : Symbol(x, Decl(callSignaturesThatDifferOnlyByReturnType.ts, 21, 5))

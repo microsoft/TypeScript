@@ -3,10 +3,10 @@
 ////var a;
 
 goTo.eof();
-verify.completionListContains("a");
+verify.completions({ includes: "a" });
 
 edit.insertLine("");
-verify.completionListContains("a");
+verify.completions({ includes: "a" });
 
 edit.insertLine("");
-verify.completionListContains("a");
+verify.completions({ includes: "a" });

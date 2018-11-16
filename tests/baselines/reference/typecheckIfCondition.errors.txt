@@ -1,5 +1,5 @@
-tests/cases/compiler/typecheckIfCondition.ts(4,10): error TS2304: Cannot find name 'module'.
-tests/cases/compiler/typecheckIfCondition.ts(4,26): error TS2304: Cannot find name 'module'.
+tests/cases/compiler/typecheckIfCondition.ts(4,10): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
+tests/cases/compiler/typecheckIfCondition.ts(4,26): error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
 
 
 ==== tests/cases/compiler/typecheckIfCondition.ts (2 errors) ====
@@ -8,9 +8,9 @@ tests/cases/compiler/typecheckIfCondition.ts(4,26): error TS2304: Cannot find na
     {
         if (!module.exports) module.exports = "";
              ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
                              ~~~~~~
-!!! error TS2304: Cannot find name 'module'.
+!!! error TS2580: Cannot find name 'module'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.
         var x = null; // don't want to baseline output
     }
     

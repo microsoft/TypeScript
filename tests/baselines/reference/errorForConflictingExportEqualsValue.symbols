@@ -1,6 +1,10 @@
-=== tests/cases/compiler/errorForConflictingExportEqualsValue.ts ===
+=== /a.ts ===
 export var x;
->x : Symbol(x, Decl(errorForConflictingExportEqualsValue.ts, 0, 10))
+>x : Symbol(x, Decl(a.ts, 0, 10))
 
-export = {};
+export = x;
+>x : Symbol(x, Decl(a.ts, 0, 10))
+
+import("./a");
+>"./a" : Symbol("/a", Decl(a.ts, 0, 0))
 

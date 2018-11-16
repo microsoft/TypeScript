@@ -49,11 +49,11 @@
     }; 
     var x_v = o.name().length;  // should be 'number'
 >x_v : Symbol(x_v, Decl(genericInference2.ts, 14, 7))
->o.name().length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>o.name().length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 >o.name : Symbol(name, Decl(genericInference2.ts, 10, 13))
 >o : Symbol(o, Decl(genericInference2.ts, 10, 7))
 >name : Symbol(name, Decl(genericInference2.ts, 10, 13))
->length : Symbol(String.length, Decl(lib.d.ts, --, --))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
 
     var age_v = o.age();  // should be 'number'
 >age_v : Symbol(age_v, Decl(genericInference2.ts, 15, 7))
