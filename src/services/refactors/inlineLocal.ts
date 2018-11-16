@@ -167,6 +167,6 @@ namespace ts.refactor.inlineLocal {
         }
         getNodes(scope);
         const symbol = checker.getSymbolAtLocation(target);
-        return nodes.filter(n => checker.getSymbolAtLocation(n) === symbol && n.id !== target.id) as Identifier[];
+        return nodes.filter(n => checker.getSymbolAtLocation(n) === symbol && !isVariableDeclaration(n.parent)) as Identifier[];
     }
 }
