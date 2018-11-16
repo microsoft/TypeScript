@@ -4,7 +4,7 @@
 class A {
 >A : A
 
-    prop: { a: string; };
+    prop!: { a: string; };
 >prop : { a: string; }
 >a : string
 }
@@ -12,7 +12,7 @@ class A {
 class B {
 >B : B
 
-    prop: { b: string; }
+    prop!: { b: string; }
 >prop : { b: string; }
 >b : string
 }
@@ -102,6 +102,33 @@ function f2(x: A | B) {
 >prop : { b: string; }
 >b : string
         }
+    }
+}
+
+// Repro from #28100
+
+class Foo1
+>Foo1 : Foo1
+{
+    x: number;  // Error
+>x : number
+
+    constructor() {
+        if (this instanceof Boolean) {
+>this instanceof Boolean : boolean
+>this : this
+>Boolean : BooleanConstructor
+        }
+    }
+}
+
+class Foo2
+>Foo2 : Foo2
+{
+    x: number;  // Error
+>x : number
+
+    constructor() {
     }
 }
 

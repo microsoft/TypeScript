@@ -23,7 +23,6 @@ var x1: number = defaultBinding2;
 
 import defaultBinding3, { a as b } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding3 : Symbol(defaultBinding3, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 4, 6))
->a : Symbol(b, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 4, 25))
 >b : Symbol(b, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 4, 25))
 
 var x1: number = defaultBinding3;
@@ -33,7 +32,6 @@ var x1: number = defaultBinding3;
 import defaultBinding4, { x, a as y } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding4 : Symbol(defaultBinding4, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 6, 6))
 >x : Symbol(x, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 6, 25))
->a : Symbol(y, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 6, 28))
 >y : Symbol(y, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 6, 28))
 
 var x1: number = defaultBinding4;
@@ -42,7 +40,6 @@ var x1: number = defaultBinding4;
 
 import defaultBinding5, { x as z,  } from "es6ImportDefaultBindingFollowedWithNamedImport1_0";
 >defaultBinding5 : Symbol(defaultBinding5, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 8, 6))
->x : Symbol(z, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 8, 25))
 >z : Symbol(z, Decl(es6ImportDefaultBindingFollowedWithNamedImport1_1.ts, 8, 25))
 
 var x1: number = defaultBinding5;

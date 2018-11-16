@@ -4,7 +4,7 @@ import { Member } from './b';
 
 import d, { Member as M } from './b';
 >d : Symbol(d, Decl(a.ts, 1, 6))
->Member : Symbol(M, Decl(a.ts, 1, 11))
+>Member : Symbol(Member, Decl(b.ts, 0, 0))
 >M : Symbol(M, Decl(a.ts, 1, 11))
 
 import * as ns from './b';

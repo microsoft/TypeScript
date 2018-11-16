@@ -26,6 +26,7 @@ tests/cases/compiler/invariantGenericErrorElaboration.ts(4,19): error TS2322: Ty
 !!! error TS2322:               Type 'Constraint<Constraint<Runtype<any>>>' is not assignable to type 'Constraint<Constraint<Num>>'.
 !!! error TS2322:                 Types of property 'underlying' are incompatible.
 !!! error TS2322:                   Type 'Constraint<Runtype<any>>' is not assignable to type 'Constraint<Num>'.
+!!! related TS2728 tests/cases/compiler/invariantGenericErrorElaboration.ts:12:3: 'tag' is declared here.
     const Foo = Obj({ foo: Num })
                       ~~~
 !!! error TS2322: Type 'Num' is not assignable to type 'Runtype<any>'.

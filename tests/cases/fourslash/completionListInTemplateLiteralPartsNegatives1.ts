@@ -4,4 +4,4 @@
 ////
 ////`asdasd$/*7*/{ 2 + 1.1 }/*8*/ 12312 /*9*/{/*10*/
 
-goTo.eachMarker(() => verify.completionListIsEmpty());
+verify.completions({ marker: test.markers(), exact: undefined });

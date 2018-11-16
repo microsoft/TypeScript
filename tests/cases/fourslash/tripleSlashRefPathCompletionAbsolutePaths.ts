@@ -26,18 +26,7 @@
 // @Filename: e2.js
 //// /*e2*/
 
-goTo.marker("0");
-verify.completionListContains("fourslash");
-verify.not.completionListItemsCountIsGreaterThan(1);
-
-goTo.marker("1");
-verify.completionListContains("fourslash");
-verify.not.completionListItemsCountIsGreaterThan(1);
-
-goTo.marker("2");
-verify.completionListContains("f1.ts");
-verify.completionListContains("f2.tsx");
-verify.completionListContains("e1.ts");
-verify.completionListContains("folder");
-verify.completionListContains("tests");
-verify.not.completionListItemsCountIsGreaterThan(5);
+verify.completions(
+    { marker: ["0", "1"], exact: "fourslash", isNewIdentifierLocation: true },
+    { marker: "2", exact: ["e1.ts", "f1.ts", "f2.tsx", "folder", "tests"], isNewIdentifierLocation: true },
+);

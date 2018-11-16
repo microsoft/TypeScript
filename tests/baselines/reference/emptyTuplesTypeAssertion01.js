@@ -9,4 +9,4 @@ var y = x[0];
 
 //// [emptyTuplesTypeAssertion01.d.ts]
 declare let x: [];
-declare let y: never;
+declare let y: undefined;

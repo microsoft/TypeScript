@@ -6,7 +6,4 @@
 ////var aaa: Foo;
 ////aaa = { /*9*/
 
-goTo.marker("9");
-verify.completionListContains("x");
-verify.completionListCount(1);
-
+verify.completions({ marker: "9", exact: "x" });

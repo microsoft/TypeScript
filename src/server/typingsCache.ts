@@ -130,7 +130,7 @@ namespace ts.server {
         }
 
         updateTypingsForProject(projectName: string, compilerOptions: CompilerOptions, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>, newTypings: string[]) {
-            const typings = toSortedArray(newTypings);
+            const typings = sort(newTypings);
             this.perProjectCache.set(projectName, {
                 compilerOptions,
                 typeAcquisition,

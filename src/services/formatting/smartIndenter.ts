@@ -66,6 +66,12 @@ namespace ts.formatting {
                 }
             }
 
+            const containerList = getListByPosition(position, precedingToken.parent, sourceFile);
+            // use list position if the preceding token is before any list items
+            if (containerList && !rangeContainsRange(containerList, precedingToken)) {
+                return getActualIndentationForListStartLine(containerList, sourceFile, options) + options.indentSize!; // TODO: GH#18217
+            }
+
             return getSmartIndent(sourceFile, position, precedingToken, lineAtPosition, assumeNewLineBeforeCloseBrace, options);
         }
 
@@ -79,14 +85,14 @@ namespace ts.formatting {
                 return findFirstNonWhitespaceColumn(getStartPositionOfLine(commentStartLine, sourceFile), position, sourceFile, options);
             }
 
-            const startPostionOfLine = getStartPositionOfLine(previousLine, sourceFile);
-            const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPostionOfLine, position, sourceFile, options);
+            const startPositionOfLine = getStartPositionOfLine(previousLine, sourceFile);
+            const { column, character } = findFirstNonWhitespaceCharacterAndColumn(startPositionOfLine, position, sourceFile, options);
 
             if (column === 0) {
                 return column;
             }
 
-            const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPostionOfLine + character);
+            const firstNonWhitespaceCharacterCode = sourceFile.text.charCodeAt(startPositionOfLine + character);
             return firstNonWhitespaceCharacterCode === CharacterCodes.asterisk ? column - 1 : column;
         }
 
@@ -124,13 +130,12 @@ namespace ts.formatting {
                 }
 
                 // check if current node is a list item - if yes, take indentation from it
-                let actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
+                // do not consider parent-child line sharing yet:
+                // function foo(a
+                //    | preceding node 'a' does share line with its parent but indentation is expected
+                const actualIndentation = getActualIndentationForListItem(current, sourceFile, options, /*listIndentsChild*/ true);
                 if (actualIndentation !== Value.Unknown) {
                     return actualIndentation;
-                }
-                actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
-                if (actualIndentation !== Value.Unknown) {
-                    return actualIndentation + options.indentSize!; // TODO: GH#18217
                 }
 
                 previous = current;
@@ -169,26 +174,20 @@ namespace ts.formatting {
                     useActualIndentation = start < ignoreActualIndentationRange.pos || start > ignoreActualIndentationRange.end;
                 }
 
-                if (useActualIndentation) {
-                    // check if current node is a list item - if yes, take indentation from it
-                    const actualIndentation = getActualIndentationForListItem(current, sourceFile, options);
-                    if (actualIndentation !== Value.Unknown) {
-                        return actualIndentation + indentationDelta;
-                    }
-                }
-
                 const containingListOrParentStart = getContainingListOrParentStart(parent, current, sourceFile);
                 const parentAndChildShareLine =
                     containingListOrParentStart.line === currentStart.line ||
                     childStartsOnTheSameLineWithElseInIfStatement(parent, current, currentStart.line, sourceFile);
 
                 if (useActualIndentation) {
-                    // try to fetch actual indentation for current node from source text
-                    let actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
+                    // check if current node is a list item - if yes, take indentation from it
+                    let actualIndentation = getActualIndentationForListItem(current, sourceFile, options, !parentAndChildShareLine);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
-                    actualIndentation = getLineIndentationWhenExpressionIsInMultiLine(current, sourceFile, options);
+
+                    // try to fetch actual indentation for current node from source text
+                    actualIndentation = getActualIndentationForNode(current, parent, currentStart, parentAndChildShareLine, sourceFile, options);
                     if (actualIndentation !== Value.Unknown) {
                         return actualIndentation + indentationDelta;
                     }
@@ -323,112 +322,92 @@ namespace ts.formatting {
             return false;
         }
 
-        function getListIfStartEndIsInListRange(list: NodeArray<Node> | undefined, start: number, end: number) {
-            return list && rangeContainsStartEnd(list, start, end) ? list : undefined;
+        export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
+            return node.parent && getListByRange(node.getStart(sourceFile), node.getEnd(), node.parent, sourceFile);
         }
 
-        export function getContainingList(node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
-            if (node.parent) {
-                const { end } = node;
-                switch (node.parent.kind) {
-                    case SyntaxKind.TypeReference:
-                        return getListIfStartEndIsInListRange((<TypeReferenceNode>node.parent).typeArguments, node.getStart(sourceFile), end);
-                    case SyntaxKind.ObjectLiteralExpression:
-                        return (<ObjectLiteralExpression>node.parent).properties;
-                    case SyntaxKind.ArrayLiteralExpression:
-                        return (<ArrayLiteralExpression>node.parent).elements;
-                    case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.FunctionExpression:
-                    case SyntaxKind.ArrowFunction:
-                    case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
-                    case SyntaxKind.CallSignature:
-                    case SyntaxKind.Constructor:
-                    case SyntaxKind.ConstructorType:
-                    case SyntaxKind.ConstructSignature: {
-                        const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).typeParameters, start, end) ||
-                            getListIfStartEndIsInListRange((<SignatureDeclaration>node.parent).parameters, start, end);
-                    }
-                    case SyntaxKind.ClassDeclaration:
-                    case SyntaxKind.ClassExpression:
-                    case SyntaxKind.InterfaceDeclaration:
-                    case SyntaxKind.TypeAliasDeclaration:
-                    case SyntaxKind.JSDocTemplateTag: {
-                        const { typeParameters } = <ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node.parent;
-                        return getListIfStartEndIsInListRange(typeParameters, node.getStart(sourceFile), end);
-                    }
-                    case SyntaxKind.NewExpression:
-                    case SyntaxKind.CallExpression: {
-                        const start = node.getStart(sourceFile);
-                        return getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).typeArguments, start, end) ||
-                            getListIfStartEndIsInListRange((<CallExpression | NewExpression>node.parent).arguments, start, end);
-                    }
-                    case SyntaxKind.VariableDeclarationList:
-                        return getListIfStartEndIsInListRange((<VariableDeclarationList>node.parent).declarations, node.getStart(sourceFile), end);
-                    case SyntaxKind.NamedImports:
-                    case SyntaxKind.NamedExports:
-                        return getListIfStartEndIsInListRange((<NamedImportsOrExports>node.parent).elements, node.getStart(sourceFile), end);
-                    case SyntaxKind.ObjectBindingPattern:
-                    case SyntaxKind.ArrayBindingPattern:
-                        return getListIfStartEndIsInListRange((<ObjectBindingPattern | ArrayBindingPattern>node.parent).elements, node.getStart(sourceFile), end);
+        function getListByPosition(pos: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
+            return node && getListByRange(pos, pos, node, sourceFile);
+        }
+
+        function getListByRange(start: number, end: number, node: Node, sourceFile: SourceFile): NodeArray<Node> | undefined {
+            switch (node.kind) {
+                case SyntaxKind.TypeReference:
+                    return getList((<TypeReferenceNode>node).typeArguments);
+                case SyntaxKind.ObjectLiteralExpression:
+                    return getList((<ObjectLiteralExpression>node).properties);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return getList((<ArrayLiteralExpression>node).elements);
+                case SyntaxKind.TypeLiteral:
+                    return getList((<TypeLiteralNode>node).members);
+                case SyntaxKind.FunctionDeclaration:
+                case SyntaxKind.FunctionExpression:
+                case SyntaxKind.ArrowFunction:
+                case SyntaxKind.MethodDeclaration:
+                case SyntaxKind.MethodSignature:
+                case SyntaxKind.CallSignature:
+                case SyntaxKind.Constructor:
+                case SyntaxKind.ConstructorType:
+                case SyntaxKind.ConstructSignature:
+                    return getList((<SignatureDeclaration>node).typeParameters) || getList((<SignatureDeclaration>node).parameters);
+                case SyntaxKind.ClassDeclaration:
+                case SyntaxKind.ClassExpression:
+                case SyntaxKind.InterfaceDeclaration:
+                case SyntaxKind.TypeAliasDeclaration:
+                case SyntaxKind.JSDocTemplateTag:
+                    return getList((<ClassDeclaration | ClassExpression | InterfaceDeclaration | TypeAliasDeclaration | JSDocTemplateTag>node).typeParameters);
+                case SyntaxKind.NewExpression:
+                case SyntaxKind.CallExpression:
+                    return getList((<CallExpression>node).typeArguments) || getList((<CallExpression>node).arguments);
+                case SyntaxKind.VariableDeclarationList:
+                    return getList((<VariableDeclarationList>node).declarations);
+                case SyntaxKind.NamedImports:
+                case SyntaxKind.NamedExports:
+                    return getList((<NamedImportsOrExports>node).elements);
+                case SyntaxKind.ObjectBindingPattern:
+                case SyntaxKind.ArrayBindingPattern:
+                    return getList((<ObjectBindingPattern | ArrayBindingPattern>node).elements);
+            }
+
+            function getList(list: NodeArray<Node> | undefined): NodeArray<Node> | undefined {
+                return list && rangeContainsStartEnd(getVisualListRange(node, list, sourceFile), start, end) ? list : undefined;
+            }
+        }
+
+        function getVisualListRange(node: Node, list: TextRange, sourceFile: SourceFile): TextRange {
+            const children = node.getChildren(sourceFile);
+            for (let i = 1; i < children.length - 1; i++) {
+                if (children[i].pos === list.pos && children[i].end === list.end) {
+                    return { pos: children[i - 1].end, end: children[i + 1].getStart(sourceFile) };
                 }
             }
-            return undefined;
+            return list;
         }
 
-        function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
+        function getActualIndentationForListStartLine(list: NodeArray<Node>, sourceFile: SourceFile, options: EditorSettings): number {
+            if (!list) {
+                return Value.Unknown;
+            }
+            return findColumnForFirstNonWhitespaceCharacterInLine(sourceFile.getLineAndCharacterOfPosition(list.pos), sourceFile, options);
+        }
+
+        function getActualIndentationForListItem(node: Node, sourceFile: SourceFile, options: EditorSettings, listIndentsChild: boolean): number {
+            if (node.parent && node.parent.kind === SyntaxKind.VariableDeclarationList) {
+                // VariableDeclarationList has no wrapping tokens
+                return Value.Unknown;
+            }
             const containingList = getContainingList(node, sourceFile);
             if (containingList) {
                 const index = containingList.indexOf(node);
                 if (index !== -1) {
-                    return deriveActualIndentationFromList(containingList, index, sourceFile, options);
-                }
-            }
-            return Value.Unknown;
-        }
-
-        function getLineIndentationWhenExpressionIsInMultiLine(node: Node, sourceFile: SourceFile, options: EditorSettings): number {
-            // actual indentation should not be used when:
-            // - node is close parenthesis - this is the end of the expression
-            if (node.kind === SyntaxKind.CloseParenToken) {
-                return Value.Unknown;
-            }
-
-            if (node.parent && isCallOrNewExpression(node.parent) && node.parent.expression !== node) {
-                const fullCallOrNewExpression = node.parent.expression;
-                const startingExpression = getStartingExpression(fullCallOrNewExpression);
-
-                if (fullCallOrNewExpression === startingExpression) {
-                    return Value.Unknown;
-                }
-
-                const fullCallOrNewExpressionEnd = sourceFile.getLineAndCharacterOfPosition(fullCallOrNewExpression.end);
-                const startingExpressionEnd = sourceFile.getLineAndCharacterOfPosition(startingExpression.end);
-
-                if (fullCallOrNewExpressionEnd.line === startingExpressionEnd.line) {
-                    return Value.Unknown;
-                }
-
-                return findColumnForFirstNonWhitespaceCharacterInLine(fullCallOrNewExpressionEnd, sourceFile, options);
-            }
-
-            return Value.Unknown;
-
-            function getStartingExpression(node: Expression) {
-                while (true) {
-                    switch (node.kind) {
-                        case SyntaxKind.CallExpression:
-                        case SyntaxKind.NewExpression:
-                        case SyntaxKind.PropertyAccessExpression:
-                        case SyntaxKind.ElementAccessExpression:
-                            node = (<PropertyAccessExpression | CallExpression | NewExpression | ElementAccessExpression | PropertyAccessExpression>node).expression;
-                            break;
-                        default:
-                            return node;
+                    const result = deriveActualIndentationFromList(containingList, index, sourceFile, options);
+                    if (result !== Value.Unknown) {
+                        return result;
                     }
                 }
+                return getActualIndentationForListStartLine(containingList, sourceFile, options) + (listIndentsChild ? options.indentSize! : 0); // TODO: GH#18217
             }
+            return Value.Unknown;
         }
 
         function deriveActualIndentationFromList(list: ReadonlyArray<Node>, index: number, sourceFile: SourceFile, options: EditorSettings): number {

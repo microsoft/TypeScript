@@ -2,6 +2,5 @@
 
 ////var y : (s:string, list/*2*/
 
-goTo.marker("2");
-verify.completionListIsEmpty(); // Parameter name
-verify.completionListAllowsNewIdentifier();
+// Parameter name
+verify.completions({ marker: "2", exact: undefined, isNewIdentifierLocation: true });

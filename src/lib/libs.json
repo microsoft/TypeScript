@@ -34,6 +34,7 @@
         "es2018.intl",
         "esnext.asynciterable",
         "esnext.array",
+        "esnext.bigint",
         "esnext.symbol",
         "esnext.intl",
         // Default libraries

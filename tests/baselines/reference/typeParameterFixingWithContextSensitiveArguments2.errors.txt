@@ -1,5 +1,4 @@
-tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts(7,30): error TS2322: Type 'A' is not assignable to type 'B'.
-  Property 'b' is missing in type 'A'.
+tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts(7,30): error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
 
 
 ==== tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts (1 errors) ====
@@ -11,6 +10,6 @@ tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts(7,30):
     
     var d = f(a, b, x => x, x => x); // A => A not assignable to A => B
                                  ~
-!!! error TS2322: Type 'A' is not assignable to type 'B'.
-!!! error TS2322:   Property 'b' is missing in type 'A'.
+!!! error TS2741: Property 'b' is missing in type 'A' but required in type 'B'.
+!!! related TS2728 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts:3:25: 'b' is declared here.
 !!! related TS6502 tests/cases/compiler/typeParameterFixingWithContextSensitiveArguments2.ts:1:51: The expected type comes from the return type of this signature.

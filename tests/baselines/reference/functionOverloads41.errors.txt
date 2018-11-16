@@ -1,5 +1,4 @@
-tests/cases/compiler/functionOverloads41.ts(4,14): error TS2322: Type '{}' is not assignable to type '{ a: boolean; }'.
-  Property 'a' is missing in type '{}'.
+tests/cases/compiler/functionOverloads41.ts(4,14): error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
 
 
 ==== tests/cases/compiler/functionOverloads41.ts (1 errors) ====
@@ -8,6 +7,6 @@ tests/cases/compiler/functionOverloads41.ts(4,14): error TS2322: Type '{}' is no
     function foo(bar:{a:any;}[]):any{ return bar }
     var x = foo([{}]);
                  ~~
-!!! error TS2322: Type '{}' is not assignable to type '{ a: boolean; }'.
-!!! error TS2322:   Property 'a' is missing in type '{}'.
+!!! error TS2741: Property 'a' is missing in type '{}' but required in type '{ a: boolean; }'.
+!!! related TS2728 tests/cases/compiler/functionOverloads41.ts:2:19: 'a' is declared here.
     

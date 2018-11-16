@@ -5,5 +5,4 @@
 ////}
 ////var r = M./**/;
 
-goTo.marker();
-verify.completionListContains('x', 'var M.x: <T>(x: T) => T');
+verify.completions({ marker: "", exact: { name: "x", text: "var M.x: <T>(x: T) => T" } });

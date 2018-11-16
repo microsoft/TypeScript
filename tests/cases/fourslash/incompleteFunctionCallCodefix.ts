@@ -6,4 +6,7 @@
 ////}
 ////f(
 
-verify.not.codeFixAvailable();
+goTo.marker('1');
+verify.codeFixAvailable([
+    { "description": "Infer parameter types from usage" }
+]);

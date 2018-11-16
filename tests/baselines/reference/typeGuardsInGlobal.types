@@ -11,7 +11,7 @@ var var1: string | number;
 
 if (typeof var1 === "string") {
 >typeof var1 === "string" : boolean
->typeof var1 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof var1 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >var1 : string | number
 >"string" : "string"
 

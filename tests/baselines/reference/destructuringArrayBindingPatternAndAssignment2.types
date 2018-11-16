@@ -39,7 +39,7 @@ function bar(): J {
 >3 : 3
 }
 var [b3 = "string", b4, b5] = bar();  // Error
->b3 : Number | "string"
+>b3 : string | Number
 >"string" : "string"
 >b4 : Number
 >b5 : Number

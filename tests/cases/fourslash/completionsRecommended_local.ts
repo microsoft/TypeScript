@@ -15,23 +15,29 @@
 ////enu = E/*let0*/;
 ////enu = E/*let1*/;
 
-goTo.eachMarker(["e0", "e1", "let0", "let1"], () => {
-    verify.completionListContains("Enu", "enum Enu", "", "enum", undefined, undefined, { isRecommended: true });
+const cls = (ctr: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
+    name: "Cls",
+    text: ctr ? "constructor Cls(): Cls" : "class Cls",
+    kind: "class",
+    isRecommended: true,
 });
 
-goTo.eachMarker(["c0", "c1"], (_, idx) => {
-    verify.completionListContains(
-        "Cls",
-        idx === 0 ? "constructor Cls(): Cls" : "class Cls",
-        "",
-        "class",
-        undefined,
-        undefined, {
-        isRecommended: true,
-    });
+// Not recommended, because it's an abstract class
+const abs = (ctr: boolean): FourSlashInterface.ExpectedCompletionEntry => ({
+    name: "Abs",
+    text: ctr ? "constructor Abs(): Abs" : "class Abs",
+    kind: "class",
+    kindModifiers: "abstract",
 });
 
-goTo.eachMarker(["a0", "a1"], (_, idx) => {
-    // Not recommended, because it's an abstract class
-    verify.completionListContains("Abs", idx == 0 ? "constructor Abs(): Abs" : "class Abs", "", "class");
-});
+verify.completions(
+    {
+        marker: ["e0", "e1", "let0", "let1"],
+        includes: { name: "Enu", text: "enum Enu", kind: "enum", isRecommended: true },
+        isNewIdentifierLocation: true,
+    },
+    { marker: "c0", includes: cls(true) },
+    { marker: "c1", includes: cls(false) },
+    { marker: "a0", includes: abs(true) },
+    { marker: "a1", includes: abs(false) },
+);
