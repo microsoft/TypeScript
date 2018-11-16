@@ -23,12 +23,4 @@
 //// var x;
 //// x[0].a./*3*/
 
-
-goTo.marker('1');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-
-goTo.marker('2');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
-
-goTo.marker('3');
-verify.completionListContains("toFixed", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: test.markers(), includes: { name: "toFixed", kind: "method", kindModifiers: "declare" } });

@@ -10,11 +10,8 @@
 ////    }
 ////}
 
-goTo.marker('1');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: string | number");
-
-goTo.marker('2');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: number");
-
-goTo.marker('3');
-verify.completionListContains("strOrNum", "(parameter) strOrNum: string");
+verify.completions(
+    { marker: "1", includes: { name: "strOrNum", text: "(parameter) strOrNum: string | number" } },
+    { marker: "2", includes: { name: "strOrNum", text: "(parameter) strOrNum: number" } },
+    { marker: "3", includes: { name: "strOrNum", text: "(parameter) strOrNum: string" } },
+);

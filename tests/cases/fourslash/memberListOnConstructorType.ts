@@ -3,6 +3,4 @@
 ////var f: new () => void;
 ////f./*1*/
 
-goTo.marker('1');
-verify.completionListContains('apply');
-verify.completionListContains('arguments');
+verify.completions({ marker: "1", exact: completion.functionMembersWithPrototype });

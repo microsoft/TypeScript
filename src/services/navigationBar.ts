@@ -281,6 +281,9 @@ namespace ts.NavigationBar {
                     case AssignmentDeclarationKind.ThisProperty:
                     case AssignmentDeclarationKind.Property:
                     case AssignmentDeclarationKind.None:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                    case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                    case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
                         break;
                     default:
                         Debug.assertNever(special);

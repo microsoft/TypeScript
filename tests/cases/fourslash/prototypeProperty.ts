@@ -6,5 +6,4 @@
 
 verify.quickInfoAt("1", "(property) A.prototype: A");
 
-goTo.marker('2');
-verify.completionListContains('prototype', '(property) A.prototype: A');
+verify.completions({ marker: "2", includes: [{ name: "prototype", text: "(property) A.prototype: A" }] });

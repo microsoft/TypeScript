@@ -26,7 +26,7 @@ const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
 const prepend = require("./scripts/build/prepend");
 const { removeSourceMaps } = require("./scripts/build/sourcemaps");
-const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex");
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 

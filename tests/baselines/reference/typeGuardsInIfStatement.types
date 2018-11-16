@@ -9,7 +9,7 @@ function foo(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -30,7 +30,7 @@ function foo2(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -53,7 +53,7 @@ function foo3(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -76,7 +76,7 @@ function foo4(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -99,7 +99,7 @@ function foo5(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -122,7 +122,7 @@ function foo6(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -150,7 +150,7 @@ function foo7(x: number | string | boolean) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -161,7 +161,7 @@ function foo7(x: number | string | boolean) {
     }
     else if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"boolean" : "boolean"
 
@@ -181,7 +181,7 @@ function foo8(x: number | string | boolean) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -197,7 +197,7 @@ function foo8(x: number | string | boolean) {
 
         if (typeof x === "boolean") {
 >typeof x === "boolean" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"boolean" : "boolean"
 
@@ -222,7 +222,7 @@ function foo9(x: number | string) {
 
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number
 >"string" : "string"
 
@@ -253,7 +253,7 @@ function foo10(x: number | string | boolean) {
     // Mixing typeguard narrowing in if statement with conditional expression typeguard
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -273,7 +273,7 @@ function foo10(x: number | string | boolean) {
         return typeof x === "number"
 >typeof x === "number"            ? x === 10 // number            : x : boolean
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 
@@ -294,7 +294,7 @@ function foo11(x: number | string | boolean) {
     // Assigning value to x deep inside another guard stops narrowing of type too
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -312,7 +312,7 @@ function foo11(x: number | string | boolean) {
         return typeof x === "number"
 >typeof x === "number"            ? (            // change value of x            x = 10 && x.toString() // number | boolean | string            )            : (            // do not change value            y = x && x.toString() // number | boolean | string            ) : string
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number | boolean
 >"number" : "number"
 
@@ -356,7 +356,7 @@ function foo12(x: number | string | boolean) {
     // Assigning value to x in outer guard shouldn't stop narrowing in the inner expression
     if (typeof x === "string") {
 >typeof x === "string" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : string | number | boolean
 >"string" : "string"
 
@@ -379,7 +379,7 @@ function foo12(x: number | string | boolean) {
         return typeof x === "number"
 >typeof x === "number"            ? x.toString() // number            : x.toString() : any
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : number
 >"number" : "number"
 

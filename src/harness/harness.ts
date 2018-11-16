@@ -490,7 +490,7 @@ namespace Harness {
         getExecutingFilePath(): string;
         getWorkspaceRoot(): string;
         exit(exitCode?: number): void;
-        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): string[];
+        readDirectory(path: string, extension?: ReadonlyArray<string>, exclude?: ReadonlyArray<string>, include?: ReadonlyArray<string>, depth?: number): ReadonlyArray<string>;
         getAccessibleFileSystemEntries(dirname: string): ts.FileSystemEntries;
         tryEnableSourceMapsForHost?(): void;
         getEnvironmentVariable?(name: string): string;
@@ -1325,6 +1325,9 @@ namespace Harness {
                 const [, content] = value;
                 outputLines += content;
             }
+            if (pretty) {
+                outputLines += ts.getErrorSummaryText(ts.getErrorCountForSummary(diagnostics), IO.newLine());
+            }
             return outputLines;
         }
 
@@ -1643,6 +1646,7 @@ namespace Harness {
                 else {
                     sourceMapCode = "";
                     result.maps.forEach(sourceMap => {
+                        if (sourceMapCode) sourceMapCode += "\r\n";
                         sourceMapCode += fileOutput(sourceMap, harnessSettings);
                     });
                 }
@@ -1668,6 +1672,9 @@ namespace Harness {
 
             let jsCode = "";
             result.js.forEach(file => {
+                if (jsCode.length && jsCode.charCodeAt(jsCode.length - 1) !== ts.CharacterCodes.lineFeed) {
+                    jsCode += "\r\n";
+                }
                 jsCode += fileOutput(file, harnessSettings);
             });
 

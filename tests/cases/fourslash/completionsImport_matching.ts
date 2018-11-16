@@ -17,7 +17,7 @@
 verify.completions({
     marker: "",
     includes: ["bdf", "abcdef", "BDF"].map(name =>
-        ({ name, source: "/a", text: `function ${name}(): void`, hasAction: true, kind: "function", sourceDisplay: "./a" })),
+        ({ name, source: "/a", text: `function ${name}(): void`, hasAction: true, kind: "function", kindModifiers: "export", sourceDisplay: "./a" })),
     excludes: ["abcde", "dbf"],
     preferences: { includeCompletionsForModuleExports: true },
 })

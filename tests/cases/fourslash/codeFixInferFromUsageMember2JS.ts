@@ -11,4 +11,4 @@
 ////i.p = 0;
 
 
-verify.rangeAfterCodeFix("p: number", undefined, undefined, 1);
+verify.rangeAfterCodeFix("p: number", undefined, undefined, 0);

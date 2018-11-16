@@ -13,9 +13,12 @@
 ////f(3, "s1", "s2");
 ////f(3, "s1", "s2", "s3", "s4");
 
-verify.fileAfterCodeFix(
-`/** @param {number} a */
-/**
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 2,
+    newFileContent:
+`/**
+ * @param {number} a
  * @param {string[]} rest
  */
 function f(a: number, ...rest){
@@ -24,4 +27,5 @@ function f(a: number, ...rest){
 f(1);
 f(2, "s1");
 f(3, "s1", "s2");
-f(3, "s1", "s2", "s3", "s4");`, undefined, 4);
+f(3, "s1", "s2", "s3", "s4");`,
+});

@@ -113,12 +113,23 @@ namespace ts {
 
             const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, bar, barFooPackage, barFooIndex, fooPackage, fooIndex], cwd: "/" });
             const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
-
-            for (const file of [a, bar, barFooIndex, fooIndex]) {
-                const isExternalExpected = file !== a;
-                const isExternalActual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
-                assert.equal(isExternalActual, isExternalExpected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${isExternalExpected}, got ${isExternalActual}`);
-            }
+            assertIsExternal(program, [a, bar, barFooIndex, fooIndex], f => f !== a);
         });
+
+        it('works on `/// <reference types="" />`', () => {
+            const a = new documents.TextDocument("/a.ts", '/// <reference types="foo" />');
+            const fooIndex = new documents.TextDocument("/node_modules/foo/index.d.ts", "declare const foo: number;");
+            const fs = vfs.createFromFileSystem(Harness.IO, /*ignoreCase*/ false, { documents: [a, fooIndex], cwd: "/" });
+            const program = createProgram(["/a.ts"], emptyOptions, new fakes.CompilerHost(fs, { newLine: NewLineKind.LineFeed }));
+            assertIsExternal(program, [a, fooIndex], f => f !== a);
+        });
+
+        function assertIsExternal(program: Program, files: ReadonlyArray<documents.TextDocument>, isExternalExpected: (file: documents.TextDocument) => boolean): void {
+            for (const file of files) {
+                const actual = program.isSourceFileFromExternalLibrary(program.getSourceFile(file.file)!);
+                const expected = isExternalExpected(file);
+                assert.equal(actual, expected, `Expected ${file.file} isSourceFileFromExternalLibrary to be ${expected}, got ${actual}`);
+            }
+        }
     });
 }

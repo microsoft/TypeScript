@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedPropertyUsedInTypeOf.ts ===
+class C {
+>C : C
+
+    private static readonly x: number;
+>x : number
+
+    m(p: typeof C.x) { return p; }
+>m : (p: number) => number
+>p : number
+>C.x : number
+>C : typeof C
+>x : number
+>p : number
+}
+
