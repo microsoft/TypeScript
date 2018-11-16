@@ -1,5 +1,6 @@
 /// <reference path="fourslash.ts" />
 
+// @noLib: true
 
 // @Filename: /a.ts
 ////export function Test1() {}
@@ -11,11 +12,12 @@
 
 verify.completions({
     marker: "",
-    includes: [
-        { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", hasAction: true },
+    exact: [
         { name: "Test2", text: "(alias) function Test2(): void\nimport Test2", kind: "alias" },
+        "undefined",
+        { name: "Test1", source: "/a", sourceDisplay: "./a", text: "function Test1(): void", kind: "function", kindModifiers: "export", hasAction: true },
+        ...completion.statementKeywordsWithTypes,
     ],
-    excludes: [{ name: "Test2", source: "/a" }],
     preferences: { includeCompletionsForModuleExports: true },
 });
 

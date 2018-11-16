@@ -49,8 +49,7 @@ tests/cases/compiler/promisePermutations3.ts(136,33): error TS2345: Argument of 
   Type 'IPromise<string>' is not assignable to type 'IPromise<number>'.
 tests/cases/compiler/promisePermutations3.ts(143,35): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => IPromise<number>'.
 tests/cases/compiler/promisePermutations3.ts(151,36): error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-  Type 'IPromise<string>' is not assignable to type 'Promise<number>'.
-    Property 'catch' is missing in type 'IPromise<string>'.
+  Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
 tests/cases/compiler/promisePermutations3.ts(155,21): error TS2345: Argument of type '{ (x: number): IPromise<number>; (x: string): IPromise<string>; }' is not assignable to parameter of type '(value: number) => IPromise<string>'.
   Type 'IPromise<number>' is not assignable to type 'IPromise<string>'.
     Type 'number' is not assignable to type 'string'.
@@ -67,8 +66,7 @@ tests/cases/compiler/promisePermutations3.ts(159,21): error TS2345: Argument of 
           Types of parameters 'value' and 'value' are incompatible.
             Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of type '{ <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }' is not assignable to parameter of type '(value: (x: any) => any) => Promise<{}>'.
-  Type 'IPromise<any>' is not assignable to type 'Promise<{}>'.
-    Property 'catch' is missing in type 'IPromise<any>'.
+  Property 'catch' is missing in type 'IPromise<any>' but required in type 'Promise<{}>'.
 
 
 ==== tests/cases/compiler/promisePermutations3.ts (35 errors) ====
@@ -304,8 +302,8 @@ tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of 
     var s10f = s10.then(testFunctionP, sIPromise, nIPromise); // error
                                        ~~~~~~~~~
 !!! error TS2345: Argument of type '(x: any) => IPromise<string>' is not assignable to parameter of type '(error: any) => Promise<number>'.
-!!! error TS2345:   Type 'IPromise<string>' is not assignable to type 'Promise<number>'.
-!!! error TS2345:     Property 'catch' is missing in type 'IPromise<string>'.
+!!! error TS2345:   Property 'catch' is missing in type 'IPromise<string>' but required in type 'Promise<number>'.
+!!! related TS2728 /.ts/lib.es5.d.ts:1403:5: 'catch' is declared here.
     var s10g = s10.then(testFunctionP, nIPromise, sIPromise).then(sPromise, sIPromise, sIPromise); // ok
     
     var r11: IPromise<number>;
@@ -341,6 +339,6 @@ tests/cases/compiler/promisePermutations3.ts(165,21): error TS2345: Argument of 
     var s12b = s12.then(testFunction12P, testFunction12P, testFunction12P); // ok
                         ~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ <T>(x: T): IPromise<T>; <T>(x: T, y: T): Promise<T>; }' is not assignable to parameter of type '(value: (x: any) => any) => Promise<{}>'.
-!!! error TS2345:   Type 'IPromise<any>' is not assignable to type 'Promise<{}>'.
-!!! error TS2345:     Property 'catch' is missing in type 'IPromise<any>'.
+!!! error TS2345:   Property 'catch' is missing in type 'IPromise<any>' but required in type 'Promise<{}>'.
+!!! related TS2728 /.ts/lib.es5.d.ts:1403:5: 'catch' is declared here.
     var s12c = s12.then(testFunction12P, testFunction12, testFunction12); // ok

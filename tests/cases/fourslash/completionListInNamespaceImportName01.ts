@@ -6,6 +6,4 @@
 // @Filename: m2.ts
 ////import * as /**/ from "m1"
 
-goTo.marker();
-verify.completionListIsEmpty();
-verify.completionListAllowsNewIdentifier();
+verify.completions({ marker: "", exact: undefined, isNewIdentifierLocation: true });

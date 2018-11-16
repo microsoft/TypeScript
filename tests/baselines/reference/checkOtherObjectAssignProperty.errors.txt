@@ -1,0 +1,58 @@
+tests/cases/conformance/jsdoc/importer.js(3,5): error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+tests/cases/conformance/jsdoc/importer.js(4,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+tests/cases/conformance/jsdoc/importer.js(11,5): error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+tests/cases/conformance/jsdoc/importer.js(12,5): error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+tests/cases/conformance/jsdoc/importer.js(13,5): error TS2540: Cannot assign to 'bad1' because it is a read-only property.
+tests/cases/conformance/jsdoc/importer.js(14,5): error TS2540: Cannot assign to 'bad2' because it is a read-only property.
+tests/cases/conformance/jsdoc/importer.js(15,5): error TS2540: Cannot assign to 'bad3' because it is a read-only property.
+
+
+==== tests/cases/conformance/jsdoc/importer.js (7 errors) ====
+    const mod = require("./mod1");
+    mod.thing;
+    mod.other;
+        ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+    mod.prop;
+        ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+    mod.bad1;
+    mod.bad2;
+    mod.bad3;
+    
+    
+    mod.thing = 0;
+    mod.other = 0;
+        ~~~~~
+!!! error TS2339: Property 'other' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+    mod.prop = 0;
+        ~~~~
+!!! error TS2339: Property 'prop' does not exist on type 'typeof import("tests/cases/conformance/jsdoc/mod1")'.
+    mod.bad1 = 0;
+        ~~~~
+!!! error TS2540: Cannot assign to 'bad1' because it is a read-only property.
+    mod.bad2 = 0;
+        ~~~~
+!!! error TS2540: Cannot assign to 'bad2' because it is a read-only property.
+    mod.bad3 = 0;
+        ~~~~
+!!! error TS2540: Cannot assign to 'bad3' because it is a read-only property.
+    
+==== tests/cases/conformance/jsdoc/mod1.js (0 errors) ====
+    const obj = { value: 42, writable: true };
+    Object.defineProperty(exports, "thing", obj);
+    
+    /**
+     * @type {string}
+     */
+    let str = /** @type {string} */("other");
+    Object.defineProperty(exports, str, { value: 42, writable: true });
+    
+    const propName = "prop"
+    Object.defineProperty(exports, propName, { value: 42, writable: true });
+    
+    
+    Object.defineProperty(exports, "bad1", { });
+    Object.defineProperty(exports, "bad2", { get() { return 12 }, value: "no" });
+    Object.defineProperty(exports, "bad3", { writable: true });
+    

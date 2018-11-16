@@ -27,4 +27,6 @@ verify.referenceGroups(aRanges, [aGroup, bGroup, cGroup]);
 verify.referenceGroups(bRanges, [bGroup, cGroup]);
 verify.referenceGroups(cRanges, [cGroup, bGroup]);
 
-verify.rangesWithSameTextAreRenameLocations();
+verify.rangesAreRenameLocations(aRanges);
+verify.renameLocations([B0, B1], [...bRanges, ...cRanges]);
+verify.renameLocations(B2, [{ range: B2, prefixText: "B as " }]);

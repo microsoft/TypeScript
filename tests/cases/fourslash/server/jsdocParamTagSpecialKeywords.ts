@@ -9,6 +9,4 @@
 ////     type./**/
 //// }
 
-
-goTo.marker();
-verify.completionListContains("charAt");
+verify.completions({ marker: "", includes: "charAt" });

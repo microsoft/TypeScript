@@ -5,7 +5,7 @@ export function f(x: any): x is number {
 
     return typeof x === "number";
 >typeof x === "number" : boolean
->typeof x : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof x : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >x : any
 >"number" : "number"
 }

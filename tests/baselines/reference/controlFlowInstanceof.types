@@ -261,3 +261,31 @@ if (x instanceof ctor) {
 >x : () => void
 }
 
+// Repro from #27550 (based on uglify code)
+=== tests/cases/compiler/uglify.js ===
+/** @constructor */
+function AtTop(val) { this.val = val }
+>AtTop : typeof AtTop
+>val : any
+>this.val = val : any
+>this.val : any
+>this : AtTop
+>val : any
+>val : any
+
+/** @type {*} */
+var v = 1;
+>v : any
+>1 : 1
+
+if (v instanceof AtTop) {
+>v instanceof AtTop : boolean
+>v : any
+>AtTop : typeof AtTop
+
+    v.val
+>v.val : any
+>v : AtTop
+>val : any
+}
+

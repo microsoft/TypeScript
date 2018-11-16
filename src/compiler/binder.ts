@@ -1181,7 +1181,6 @@ namespace ts {
                 }
                 const preCaseLabel = createBranchLabel();
                 addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
-                addAntecedent(preCaseLabel, createFlowSwitchClause(preSwitchCaseFlow!, node.parent, clauseStart, i + 1));
                 addAntecedent(preCaseLabel, fallthroughFlow);
                 currentFlow = finishFlowLabel(preCaseLabel);
                 const clause = clauses[i];
@@ -1380,6 +1379,7 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
+            node.tagName.parent = node;
             if (node.fullName) {
                 setParentPointers(node, node.fullName);
             }
@@ -2113,7 +2113,7 @@ namespace ts {
                             // Nothing to do
                             break;
                         default:
-                            Debug.fail("Unknown special property assignment kind");
+                            Debug.fail("Unknown binary expression special property assignment kind");
                     }
                     return checkStrictModeBinaryExpression(<BinaryExpression>node);
                 case SyntaxKind.CatchClause:
@@ -2189,6 +2189,19 @@ namespace ts {
                     return bindFunctionExpression(<FunctionExpression>node);
 
                 case SyntaxKind.CallExpression:
+                    const assignmentKind = getAssignmentDeclarationKind(node as CallExpression);
+                    switch (assignmentKind) {
+                        case AssignmentDeclarationKind.ObjectDefinePropertyValue:
+                            return bindObjectDefinePropertyAssignment(node as BindableObjectDefinePropertyCall);
+                        case AssignmentDeclarationKind.ObjectDefinePropertyExports:
+                            return bindObjectDefinePropertyExport(node as BindableObjectDefinePropertyCall);
+                        case AssignmentDeclarationKind.ObjectDefinePrototypeProperty:
+                            return bindObjectDefinePrototypeProperty(node as BindableObjectDefinePropertyCall);
+                        case AssignmentDeclarationKind.None:
+                            break; // Nothing to do
+                        default:
+                            return Debug.fail("Unknown call expression assignment declaration kind");
+                    }
                     if (isInJSFile(node)) {
                         bindCallExpression(<CallExpression>node);
                     }
@@ -2352,6 +2365,22 @@ namespace ts {
             return true;
         }
 
+        function bindObjectDefinePropertyExport(node: BindableObjectDefinePropertyCall) {
+            if (!setCommonJsModuleIndicator(node)) {
+                return;
+            }
+            const symbol = forEachIdentifierInEntityName(node.arguments[0], /*parent*/ undefined, (id, symbol) => {
+                if (symbol) {
+                    addDeclarationToSymbol(symbol, id, SymbolFlags.Module | SymbolFlags.Assignment);
+                }
+                return symbol;
+            });
+            if (symbol) {
+                const flags = SymbolFlags.Property | SymbolFlags.ExportValue;
+                declareSymbol(symbol.exports!, symbol, node, flags, SymbolFlags.None);
+            }
+        }
+
         function bindExportsPropertyAssignment(node: BinaryExpression) {
             // When we create a property via 'exports.foo = bar', the 'exports.foo' property access
             // expression is the declaration
@@ -2390,7 +2419,7 @@ namespace ts {
             const flags = exportAssignmentIsAlias(node)
                 ? SymbolFlags.Alias // An export= with an EntityNameExpression or a ClassExpression exports all meanings of that identifier or class
                 : SymbolFlags.Property | SymbolFlags.ExportValue | SymbolFlags.ValueModule;
-            declareSymbol(file.symbol.exports!, file.symbol, node, flags, SymbolFlags.None);
+            declareSymbol(file.symbol.exports!, file.symbol, node, flags | SymbolFlags.Assignment, SymbolFlags.None);
         }
 
         function bindThisPropertyAssignment(node: BinaryExpression | PropertyAccessExpression) {
@@ -2459,6 +2488,11 @@ namespace ts {
             bindPropertyAssignment(lhs.expression, lhs, /*isPrototypeProperty*/ false);
         }
 
+        function bindObjectDefinePrototypeProperty(node: BindableObjectDefinePropertyCall) {
+            const namespaceSymbol = lookupSymbolForPropertyAccess((node.arguments[0] as PropertyAccessExpression).expression as EntityNameExpression);
+            bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ true);
+        }
+
         /**
          * For `x.prototype.y = z`, declare a member `y` on `x` if `x` is a function or class, or not declared.
          * Note that jsdoc preceding an ExpressionStatement like `x.prototype.y;` is also treated as a declaration.
@@ -2477,6 +2511,12 @@ namespace ts {
             bindPropertyAssignment(constructorFunction, lhs, /*isPrototypeProperty*/ true);
         }
 
+        function bindObjectDefinePropertyAssignment(node: BindableObjectDefinePropertyCall) {
+            let namespaceSymbol = lookupSymbolForPropertyAccess(node.arguments[0]);
+            const isToplevel = node.parent.parent.kind === SyntaxKind.SourceFile;
+            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, node.arguments[0], isToplevel, /*isPrototypeProperty*/ false);
+            bindPotentiallyNewExpandoMemberToNamespace(node, namespaceSymbol, /*isPrototypeProperty*/ false);
+        }
 
         function bindSpecialPropertyAssignment(node: BinaryExpression) {
             const lhs = node.left as PropertyAccessEntityNameExpression;
@@ -2508,16 +2548,12 @@ namespace ts {
             bindPropertyAssignment(node.expression, node, /*isPrototypeProperty*/ false);
         }
 
-        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
-            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
-            const isToplevel = isBinaryExpression(propertyAccess.parent)
-                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
-                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+        function bindPotentiallyMissingNamespaces(namespaceSymbol: Symbol | undefined, entityName: EntityNameExpression, isToplevel: boolean, isPrototypeProperty: boolean) {
             if (isToplevel && !isPrototypeProperty && (!namespaceSymbol || !(namespaceSymbol.flags & SymbolFlags.Namespace))) {
                 // make symbols or add declarations for intermediate containers
                 const flags = SymbolFlags.Module | SymbolFlags.Assignment;
                 const excludeFlags = SymbolFlags.ValueModuleExcludes & ~SymbolFlags.Assignment;
-                namespaceSymbol = forEachIdentifierInEntityName(propertyAccess.expression, namespaceSymbol, (id, symbol, parent) => {
+                namespaceSymbol = forEachIdentifierInEntityName(entityName, namespaceSymbol, (id, symbol, parent) => {
                     if (symbol) {
                         addDeclarationToSymbol(symbol, id, flags);
                         return symbol;
@@ -2529,6 +2565,10 @@ namespace ts {
                     }
                 });
             }
+            return namespaceSymbol;
+        }
+
+        function bindPotentiallyNewExpandoMemberToNamespace(declaration: PropertyAccessEntityNameExpression | CallExpression, namespaceSymbol: Symbol | undefined, isPrototypeProperty: boolean) {
             if (!namespaceSymbol || !isExpandoSymbol(namespaceSymbol)) {
                 return;
             }
@@ -2538,10 +2578,19 @@ namespace ts {
                 (namespaceSymbol.members || (namespaceSymbol.members = createSymbolTable())) :
                 (namespaceSymbol.exports || (namespaceSymbol.exports = createSymbolTable()));
 
-            const isMethod = isFunctionLikeDeclaration(getAssignedExpandoInitializer(propertyAccess)!);
+            const isMethod = isFunctionLikeDeclaration(getAssignedExpandoInitializer(declaration)!);
             const includes = isMethod ? SymbolFlags.Method : SymbolFlags.Property;
             const excludes = isMethod ? SymbolFlags.MethodExcludes : SymbolFlags.PropertyExcludes;
-            declareSymbol(symbolTable, namespaceSymbol, propertyAccess, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
+            declareSymbol(symbolTable, namespaceSymbol, declaration, includes | SymbolFlags.Assignment, excludes & ~SymbolFlags.Assignment);
+        }
+
+        function bindPropertyAssignment(name: EntityNameExpression, propertyAccess: PropertyAccessEntityNameExpression, isPrototypeProperty: boolean) {
+            let namespaceSymbol = lookupSymbolForPropertyAccess(name);
+            const isToplevel = isBinaryExpression(propertyAccess.parent)
+                ? getParentOfBinaryExpression(propertyAccess.parent).parent.kind === SyntaxKind.SourceFile
+                : propertyAccess.parent.parent.kind === SyntaxKind.SourceFile;
+            namespaceSymbol = bindPotentiallyMissingNamespaces(namespaceSymbol, propertyAccess.expression, isToplevel, isPrototypeProperty);
+            bindPotentiallyNewExpandoMemberToNamespace(propertyAccess, namespaceSymbol, isPrototypeProperty);
         }
 
         /**
@@ -2559,6 +2608,9 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
+            if (isCallExpression(node)) {
+                return !!getAssignedExpandoInitializer(node);
+            }
             let init = !node ? undefined :
                 isVariableDeclaration(node) ? node.initializer :
                 isBinaryExpression(node) ? node.right :
@@ -2870,7 +2922,6 @@ namespace ts {
         }
     }
 
-    /* @internal */
     export function isExportsOrModuleExportsOrAlias(sourceFile: SourceFile, node: Expression): boolean {
         return isExportsIdentifier(node) ||
             isModuleExportsPropertyAccessExpression(node) ||
@@ -3445,7 +3496,9 @@ namespace ts {
         // ES6 syntax, and requires a lexical `this` binding.
         if (transformFlags & TransformFlags.Super) {
             transformFlags ^= TransformFlags.Super;
-            transformFlags |= TransformFlags.ContainsSuper;
+            // super inside of an async function requires hoisting the super access (ES2017).
+            // same for super inside of an async generator, which is ESNext.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3461,7 +3514,9 @@ namespace ts {
         // ES6 syntax, and requires a lexical `this` binding.
         if (expressionFlags & TransformFlags.Super) {
             transformFlags &= ~TransformFlags.Super;
-            transformFlags |= TransformFlags.ContainsSuper;
+            // super inside of an async function requires hoisting the super access (ES2017).
+            // same for super inside of an async generator, which is ESNext.
+            transformFlags |= TransformFlags.ContainsSuper | TransformFlags.ContainsES2017 | TransformFlags.ContainsESNext;
         }
 
         node.transformFlags = transformFlags | TransformFlags.HasComputedFlags;
@@ -3647,6 +3702,10 @@ namespace ts {
                 }
                 break;
 
+            case SyntaxKind.BigIntLiteral:
+                transformFlags |= TransformFlags.AssertESNext;
+                break;
+
             case SyntaxKind.ForOfStatement:
                 // This node is either ES2015 syntax or ES2017 syntax (if it is a for-await-of).
                 if ((<ForOfStatement>node).awaitModifier) {
@@ -3663,6 +3722,7 @@ namespace ts {
 
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.ObjectKeyword:
             case SyntaxKind.StringKeyword:
@@ -3838,7 +3898,6 @@ namespace ts {
      *       For performance reasons, `computeTransformFlagsForNode` uses local constant values rather
      *       than calling this function.
      */
-    /* @internal */
     export function getTransformFlagsSubtreeExclusions(kind: SyntaxKind) {
         if (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode) {
             return TransformFlags.TypeExcludes;
@@ -3871,6 +3930,7 @@ namespace ts {
                 return TransformFlags.MethodOrAccessorExcludes;
             case SyntaxKind.AnyKeyword:
             case SyntaxKind.NumberKeyword:
+            case SyntaxKind.BigIntKeyword:
             case SyntaxKind.NeverKeyword:
             case SyntaxKind.StringKeyword:
             case SyntaxKind.ObjectKeyword:

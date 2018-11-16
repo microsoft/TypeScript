@@ -1,7 +1,6 @@
 tests/cases/conformance/types/rest/genericRestParameters2.ts(71,40): error TS2344: Type '(x: string, ...args: T) => void' does not satisfy the constraint '(...args: any[]) => any'.
   Types of parameters 'x' and 'args' are incompatible.
-    Type 'any[]' is not assignable to type '[string, ...any[]]'.
-      Property '0' is missing in type 'any[]'.
+    Property '0' is missing in type 'any[]' but required in type '[string, ...any[]]'.
 
 
 ==== tests/cases/conformance/types/rest/genericRestParameters2.ts (1 errors) ====
@@ -79,8 +78,7 @@ tests/cases/conformance/types/rest/genericRestParameters2.ts(71,40): error TS234
                                            ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2344: Type '(x: string, ...args: T) => void' does not satisfy the constraint '(...args: any[]) => any'.
 !!! error TS2344:   Types of parameters 'x' and 'args' are incompatible.
-!!! error TS2344:     Type 'any[]' is not assignable to type '[string, ...any[]]'.
-!!! error TS2344:       Property '0' is missing in type 'any[]'.
+!!! error TS2344:     Property '0' is missing in type 'any[]' but required in type '[string, ...any[]]'.
     type T06 = T05<[number, ...boolean[]]>;
     
     type P1<T extends Function> = T extends (head: infer A, ...tail: infer B) => any ? { head: A, tail: B } : any[];

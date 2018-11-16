@@ -144,3 +144,13 @@ let f: Foo2<O, 'x'> = {
     pf: {x: 7},
     pt: {x: 7, y: false},
 };
+
+// Repro from #28170
+
+function test1<T, K extends keyof T>(obj: Pick<T, K>) {
+    let x = obj.foo;  // Error
+}
+
+function test2<T, K extends keyof T>(obj: Record<K, number>) {
+    let x = obj.foo;  // Error
+}

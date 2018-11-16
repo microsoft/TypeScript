@@ -9,5 +9,5 @@ function /*[#|*/f/*|]*/() {
 async function f() {
     const x = await fetch('https://typescriptlang.org');
     const y = await Promise.resolve(3);
-    return Promise.resolve(x.statusText.length + y);
+    return await Promise.resolve(x.statusText.length + y);
 }

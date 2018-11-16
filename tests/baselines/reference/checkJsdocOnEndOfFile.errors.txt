@@ -1,0 +1,10 @@
+tests/cases/conformance/jsdoc/eof.js(2,20): error TS2304: Cannot find name 'bad'.
+
+
+==== tests/cases/conformance/jsdoc/eof.js (1 errors) ====
+    /**
+     * @typedef {Array<bad>} Should have error here
+                       ~~~
+!!! error TS2304: Cannot find name 'bad'.
+     */
+    
