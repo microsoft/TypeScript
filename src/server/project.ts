@@ -11,7 +11,7 @@ namespace ts.server {
 
     /* @internal */
     export function countEachFileTypes(infos: ScriptInfo[], includeSizes = false): FileStats {
-        const result: Mutable<FileStats> = { 
+        const result: Mutable<FileStats> = {
             js: 0, jsSize: 0,
             jsx: 0, jsxSize: 0,
             ts: 0, tsSize: 0,

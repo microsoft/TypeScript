@@ -215,11 +215,12 @@ namespace ts.projectSystem {
             const file = makeFile("/a.js");
             const tsconfig = makeFile("/jsconfig.json", {});
             const et = new TestServerEventManager([tsconfig, file]);
-            et.host.getFileSize = () => server.maxProgramSizeForNonTsFiles + 1;
+            const fileSize = server.maxProgramSizeForNonTsFiles + 1;
+            et.host.getFileSize = () => fileSize;
             et.service.openClientFile(file.path);
             et.getEvent<server.ProjectLanguageServiceStateEvent>(server.ProjectLanguageServiceStateEvent);
             et.assertProjectInfoTelemetryEvent({
-                fileStats: fileStats({ js: 1 }),
+                fileStats: fileStats({ js: 1, jsSize: fileSize }),
                 compilerOptions: autoJsCompilerOptions,
                 configFileName: "jsconfig.json",
                 typeAcquisition: {
