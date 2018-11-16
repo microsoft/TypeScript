@@ -266,14 +266,24 @@ namespace ts {
     const sourceMapCommentRegExp = /^\/\/[@#] source[M]appingURL=(.+)\s*$/;
     const whitespaceOrMapCommentRegExp = /^\s*(\/\/[@#] .*)?$/;
 
+    export interface LineInfo {
+        getLineCount(): number;
+        getLineText(line: number): string;
+    }
+
+    export function getLineInfo(text: string, lineStarts: ReadonlyArray<number>): LineInfo {
+        return {
+            getLineCount: () => lineStarts.length,
+            getLineText: line => text.substring(lineStarts[line], lineStarts[line + 1])
+        };
+    }
+
     /**
      * Tries to find the sourceMappingURL comment at the end of a file.
-     * @param text The source text of the file.
-     * @param lineStarts The line starts of the file.
      */
-    export function tryGetSourceMappingURL(text: string, lineStarts: ReadonlyArray<number> = computeLineStarts(text)) {
-        for (let index = lineStarts.length - 1; index >= 0; index--) {
-            const line = text.substring(lineStarts[index], lineStarts[index + 1]);
+    export function tryGetSourceMappingURL(lineInfo: LineInfo) {
+        for (let index = lineInfo.getLineCount() - 1; index >= 0; index--) {
+            const line = lineInfo.getLineText(index);
             const comment = sourceMapCommentRegExp.exec(line);
             if (comment) {
                 return comment[1];

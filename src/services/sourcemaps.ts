@@ -13,8 +13,10 @@ namespace ts {
         useCaseSensitiveFileNames(): boolean;
         getCurrentDirectory(): string;
         getProgram(): Program | undefined;
-        fileExists(path: string): boolean;
-        readFile(path: string, encoding?: string): string | undefined;
+        fileExists?(path: string): boolean;
+        readFile?(path: string, encoding?: string): string | undefined;
+        getSourceFileLike?(fileName: string): SourceFileLike | undefined;
+        getDocumentPositionMapper?(fileName: string): DocumentPositionMapper | undefined;
         log(s: string): void;
     }
 
@@ -22,63 +24,33 @@ namespace ts {
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
         const currentDirectory = host.getCurrentDirectory();
         const sourceFileLike = createMap<SourceFileLike | false>();
+        const documentPositionMappers = createMap<DocumentPositionMapper>();
         return { tryGetSourcePosition, tryGetGeneratedPosition, toLineColumnOffset, clearCache };
 
         function toPath(fileName: string) {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function scanForSourcemapURL(fileName: string) {
-            const mappedFile = sourceFileLike.get(toPath(fileName));
-            if (!mappedFile) {
-                return;
-            }
+        function getDocumentPositionMapper(fileName: string) {
+            const path = toPath(fileName);
+            const value = documentPositionMappers.get(path);
+            if (value) return value;
 
-            return tryGetSourceMappingURL(mappedFile.text, getLineStarts(mappedFile));
-        }
-
-        function convertDocumentToSourceMapper(file: SourceFileLike, contents: string, mapFileName: string) {
-            const map = tryParseRawSourceMap(contents);
-            if (!map || !map.sources || !map.file || !map.mappings) {
-                // obviously invalid map
-                return file.sourceMapper = identitySourceMapConsumer;
+            let mapper: DocumentPositionMapper | undefined;
+            if (host.getDocumentPositionMapper) {
+                mapper = host.getDocumentPositionMapper(fileName);
             }
-
-            return file.sourceMapper = createDocumentPositionMapper({
-                getSourceFileLike,
-                getCanonicalFileName,
-                log: s => host.log(s),
-            }, map, mapFileName);
-        }
-
-        function getSourceMapper(fileName: string, file: SourceFileLike): DocumentPositionMapper {
-            if (file.sourceMapper) {
-                return file.sourceMapper;
+            else if (host.readFile) {
+                const file = getSourceFileLike(fileName);
+                mapper = file && ts.getDocumentPositionMapper({
+                    getSourceFileLike,
+                    getCanonicalFileName,
+                    log: s => host.log(s),
+                    readMapFile: f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
+                }, fileName, getLineInfo(file.text, getLineStarts(file)));
             }
-            let mapFileName = scanForSourcemapURL(fileName);
-            if (mapFileName) {
-                const match = base64UrlRegExp.exec(mapFileName);
-                if (match) {
-                    if (match[1]) {
-                        const base64Object = match[1];
-                        return convertDocumentToSourceMapper(file, base64decode(sys, base64Object), fileName);
-                    }
-                    // Not a data URL we can parse, skip it
-                    mapFileName = undefined;
-                }
-            }
-            const possibleMapLocations: string[] = [];
-            if (mapFileName) {
-                possibleMapLocations.push(mapFileName);
-            }
-            possibleMapLocations.push(fileName + ".map");
-            for (const location of possibleMapLocations) {
-                const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(fileName));
-                if (host.fileExists(mapFileName)) {
-                    return convertDocumentToSourceMapper(file, host.readFile(mapFileName)!, mapFileName); // TODO: GH#18217
-                }
-            }
-            return file.sourceMapper = identitySourceMapConsumer;
+            documentPositionMappers.set(path, mapper || identitySourceMapConsumer);
+            return mapper || identitySourceMapConsumer;
         }
 
         function tryGetSourcePosition(info: DocumentPosition): DocumentPosition | undefined {
@@ -87,8 +59,8 @@ namespace ts {
             const file = getSourceFile(info.fileName);
             if (!file) return undefined;
 
-            const newLoc = getSourceMapper(info.fileName, file).getSourcePosition(info);
-            return newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
+            const newLoc = getDocumentPositionMapper(info.fileName).getSourcePosition(info);
+            return !newLoc || newLoc === info ? undefined : tryGetSourcePosition(newLoc) || newLoc;
         }
 
         function tryGetGeneratedPosition(info: DocumentPosition): DocumentPosition | undefined {
@@ -106,10 +78,7 @@ namespace ts {
                 getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
 
-            const declarationFile = getSourceFileLikeFromCache(declarationPath);
-            if (!declarationFile) return undefined;
-
-            const newLoc = getSourceMapper(declarationPath, declarationFile).getGeneratedPosition(info);
+            const newLoc = getDocumentPositionMapper(declarationPath).getGeneratedPosition(info);
             return newLoc === info ? undefined : newLoc;
         }
 
@@ -123,42 +92,92 @@ namespace ts {
             return file && file.resolvedPath === path ? file : undefined;
         }
 
-        function getSourceFileLikeFromCache(fileName: string): SourceFileLike | undefined {
+        function getOrCreateSourceFileLike(fileName: string): SourceFileLike | undefined {
             const path = toPath(fileName);
             const fileFromCache = sourceFileLike.get(path);
             if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 
             // TODO: should ask host instead?
-            if (!host.fileExists(path)) {
+            if (!host.readFile || host.fileExists && !host.fileExists(path)) {
                 sourceFileLike.set(path, false);
                 return undefined;
             }
 
             // And failing that, check the disk
             const text = host.readFile(path);
-            const file: SourceFileLike | false = text ? {
-                text,
-                lineMap: undefined,
-                getLineAndCharacterOfPosition(pos: number) {
-                    return computeLineAndCharacterOfPosition(getLineStarts(this as SourceFileLike), pos);
-                }
-            } : false;
+            const file = text ? createSourceFileLike(text) : false;
             sourceFileLike.set(path, file);
             return file ? file : undefined;
         }
 
         // This can be called from source mapper in either source program or program that includes generated file
         function getSourceFileLike(fileName: string) {
-            return getSourceFile(fileName) || getSourceFileLikeFromCache(fileName);
+            return !host.getSourceFileLike ?
+                getSourceFile(fileName) || getOrCreateSourceFileLike(fileName) :
+                host.getSourceFileLike(fileName);
         }
 
         function toLineColumnOffset(fileName: string, position: number): LineAndCharacter {
+            // TODO:: shkamat
             const file = getSourceFileLike(fileName)!; // TODO: GH#18217
             return file.getLineAndCharacterOfPosition(position);
         }
 
         function clearCache(): void {
             sourceFileLike.clear();
+            documentPositionMappers.clear();
         }
+    }
+
+    export interface GetDocumentPositionMapperHost extends DocumentPositionMapperHost {
+        readMapFile(fileName: string): string | undefined;
+    }
+
+    export function getDocumentPositionMapper(host: GetDocumentPositionMapperHost, generatedFileName: string, generatedFileLineInfo: LineInfo) {
+        let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
+        if (mapFileName) {
+            const match = base64UrlRegExp.exec(mapFileName);
+            if (match) {
+                if (match[1]) {
+                    const base64Object = match[1];
+                    return convertDocumentToSourceMapper(host, base64decode(sys, base64Object), generatedFileName);
+                }
+                // Not a data URL we can parse, skip it
+                mapFileName = undefined;
+            }
+        }
+        const possibleMapLocations: string[] = [];
+        if (mapFileName) {
+            possibleMapLocations.push(mapFileName);
+        }
+        possibleMapLocations.push(generatedFileName + ".map");
+        for (const location of possibleMapLocations) {
+            const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
+            const mapFileContents = host.readMapFile(mapFileName);
+            if (mapFileContents) {
+                return convertDocumentToSourceMapper(host, mapFileContents, mapFileName);
+            }
+        }
+        return undefined;
+    }
+
+    function convertDocumentToSourceMapper(host: DocumentPositionMapperHost, contents: string, mapFileName: string) {
+        const map = tryParseRawSourceMap(contents);
+        if (!map || !map.sources || !map.file || !map.mappings) {
+            // obviously invalid map
+            return undefined;
+        }
+
+        return createDocumentPositionMapper(host, map, mapFileName);
+    }
+
+    function createSourceFileLike(text: string, lineMap?: SourceFileLike["lineMap"]): SourceFileLike {
+        return {
+            text,
+            lineMap,
+            getLineAndCharacterOfPosition(pos: number) {
+                return computeLineAndCharacterOfPosition(getLineStarts(this), pos);
+            }
+        };
     }
 }

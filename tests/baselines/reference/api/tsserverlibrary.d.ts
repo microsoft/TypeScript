@@ -8046,7 +8046,6 @@ declare namespace ts.server {
         readonly containingProjects: Project[];
         private formatSettings;
         private preferences;
-        private textStorage;
         constructor(host: ServerHost, fileName: NormalizedPath, scriptKind: ScriptKind, hasMixedContent: boolean, path: Path, initialVersion?: ScriptInfoVersion);
         isScriptOpen(): boolean;
         open(newText: string): void;
@@ -8211,6 +8210,7 @@ declare namespace ts.server {
         getGlobalProjectErrors(): ReadonlyArray<Diagnostic>;
         getAllProjectErrors(): ReadonlyArray<Diagnostic>;
         getLanguageService(ensureSynchronized?: boolean): LanguageService;
+        private readMapFile;
         private shouldEmitFile;
         getCompileOnSaveAffectedFileList(scriptInfo: ScriptInfo): string[];
         /**

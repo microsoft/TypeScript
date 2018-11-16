@@ -338,12 +338,16 @@ namespace ts {
     }
 
     export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
+        return sourceFile.getPositionOfLineAndCharacter ?
+            sourceFile.getPositionOfLineAndCharacter(line, character) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
     }
 
     /* @internal */
     export function getPositionOfLineAndCharacterWithEdits(sourceFile: SourceFileLike, line: number, character: number): number {
-        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
+        return sourceFile.getPositionOfLineAndCharacter ?
+            sourceFile.getPositionOfLineAndCharacter(line, character) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
     }
 
     /* @internal */

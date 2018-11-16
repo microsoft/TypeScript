@@ -60,7 +60,7 @@ namespace ts.textStorage {
             ts1.useText();
             assert.isFalse(ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 2");
 
-            ts1.getLineInfo(0);
+            ts1.getAbsolutePositionAndLineText(0);
             assert.isTrue(ts1.hasScriptVersionCache_TestOnly(), "have script version cache - 2");
         });
 

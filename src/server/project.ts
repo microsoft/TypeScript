@@ -503,6 +503,66 @@ namespace ts.server {
             return this.getLanguageService().getSourceMapper();
         }
 
+        /*@internal*/
+        getDocumentPositionMapper(fileName: string): DocumentPositionMapper | undefined {
+            const declarationInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+            if (!declarationInfo) return undefined;
+
+            declarationInfo.getSnapshot(); // Ensure synchronized
+            const existingMapper = declarationInfo.textStorage.mapper;
+            if (existingMapper !== undefined) {
+                return existingMapper ? existingMapper : undefined;
+            }
+
+            // Create the mapper
+            declarationInfo.mapInfo = undefined;
+
+            const mapper = getDocumentPositionMapper({
+                getCanonicalFileName: this.projectService.toCanonicalFileName,
+                log: s => this.log(s),
+                readMapFile: f => this.readMapFile(f, declarationInfo),
+                getSourceFileLike: f => this.getSourceFileLike(f)
+            }, declarationInfo.fileName, declarationInfo.textStorage.getLineInfo());
+            declarationInfo.textStorage.mapper = mapper || false;
+            return mapper;
+        }
+
+        private readMapFile(fileName: string, declarationInfo: ScriptInfo) {
+            const mapInfo = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+            if (!mapInfo) return undefined;
+            declarationInfo.mapInfo = mapInfo;
+            const snap = mapInfo.getSnapshot();
+            return snap.getText(0, snap.getLength());
+        }
+
+        /*@internal*/
+        getSourceFileLike(fileName: string) {
+            const path = this.toPath(fileName);
+            const sourceFile = this.getSourceFile(path);
+            if (sourceFile && sourceFile.resolvedPath === path) return sourceFile;
+
+            // Need to look for other files.
+            const info = this.projectService.getOrCreateScriptInfoNotOpenedByClient(fileName, this.currentDirectory, this.directoryStructureHost);
+            if (!info) return undefined;
+
+            // Key doesnt matter since its only for text and lines
+            if (info.cacheSourceFile) return info.cacheSourceFile.sourceFile;
+            if (info.textStorage.sourceFileLike) return info.textStorage.sourceFileLike;
+
+            info.textStorage.sourceFileLike = {
+                get text() {
+                    Debug.fail("shouldnt need text");
+                    return "";
+                },
+                getLineAndCharacterOfPosition: pos => {
+                    const lineOffset = info.positionToLineOffset(pos);
+                    return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
+                },
+                getPositionOfLineAndCharacter: (line, character) => info.lineOffsetToPosition(line + 1, character + 1)
+            };
+            return info.textStorage.sourceFileLike;
+        }
+
         private shouldEmitFile(scriptInfo: ScriptInfo) {
             return scriptInfo && !scriptInfo.isDynamicOrHasMixedContent();
         }

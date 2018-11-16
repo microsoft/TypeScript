@@ -603,7 +603,7 @@ namespace ts {
         }
 
         public getPositionOfLineAndCharacter(line: number, character: number): number {
-            return getPositionOfLineAndCharacter(this, line, character);
+            return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text);
         }
 
         public getLineEndOfPosition(pos: number): number {
@@ -1143,8 +1143,10 @@ namespace ts {
             useCaseSensitiveFileNames: () => useCaseSensitiveFileNames,
             getCurrentDirectory: () => currentDirectory,
             getProgram,
-            fileExists: host.fileExists ? f => host.fileExists!(f) : returnFalse,
-            readFile: host.readFile ? (f, encoding) => host.readFile!(f, encoding) : () => undefined,
+            fileExists: host.fileExists && (f => host.fileExists!(f)),
+            readFile: host.readFile && ((f, encoding) => host.readFile!(f, encoding)),
+            getDocumentPositionMapper: host.getDocumentPositionMapper && (f => host.getDocumentPositionMapper!(f)),
+            getSourceFileLike: host.getSourceFileLike && (f => host.getSourceFileLike!(f)),
             log
         });
 

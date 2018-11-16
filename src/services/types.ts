@@ -91,7 +91,6 @@ namespace ts {
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        /*@internal*/ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceMapSource {
@@ -233,6 +232,11 @@ namespace ts {
         installPackage?(options: InstallPackageOptions): Promise<ApplyCodeActionCommandResult>;
         /* @internal */ inspectValue?(options: InspectValueOptions): Promise<ValueInfo>;
         writeFile?(fileName: string, content: string): void;
+
+        /* @internal */
+        getDocumentPositionMapper?(fileName: string): DocumentPositionMapper | undefined;
+        /* @internal */
+        getSourceFileLike?(fileName: string): SourceFileLike | undefined;
     }
 
     /* @internal */
