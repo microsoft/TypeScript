@@ -96,8 +96,16 @@ namespace ts.codefix {
                 case SyntaxKind.TypeReference:
 
                     const de = symbol.declarations[0] as PropertySignature;
-                    const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
-                    return createPropertyAssignment(symbol.name, newObj);
+                    const tip = checker.getTypeAtLocation(de);
+                    if (tip.isClass()) {
+                        const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
+                        return createPropertyAssignment(symbol.name, newObj);
+                    }
+                    else {
+                        const enumo = tip.symbol.declarations[0] as EnumDeclaration;
+                        const ea = createMemberAccessForPropertyName(enumo.name, enumo.members[0].name);
+                        return createPropertyAssignment(symbol.name, ea);
+                    }
 
                 case SyntaxKind.TypeLiteral:
                     const te = checker.getTypeAtLocation(symbol.declarations[0]);
