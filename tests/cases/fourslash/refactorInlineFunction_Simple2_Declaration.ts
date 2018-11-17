@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 //// function /*z*/foo/*y*/() {
-////     const num = 42;
+////     let num = 42;
+////     num++;
 ////     return num;
 //// }
 //// function bar() {
@@ -14,7 +15,8 @@ edit.applyRefactor({
     actionName: "Inline all",
     actionDescription: "Inline all",
     newContent: `function bar() {
-    const num = 42;
+    let num = 42;
+    num++;
     const meaningOfLife = num;
 }`
 });
