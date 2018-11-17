@@ -1858,7 +1858,7 @@ namespace ts {
         }
 
         function emitSpreadExpression(node: SpreadElement) {
-            writePunctuation("...");
+            emitTokenWithComment(SyntaxKind.DotDotDotToken, node.pos, writePunctuation, node);
             emitExpression(node.expression);
         }
 
@@ -2715,7 +2715,7 @@ namespace ts {
 
         function emitSpreadAssignment(node: SpreadAssignment) {
             if (node.expression) {
-                writePunctuation("...");
+                emitTokenWithComment(SyntaxKind.DotDotDotToken, node.pos, writePunctuation, node);
                 emitExpression(node.expression);
             }
         }

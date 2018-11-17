@@ -123,11 +123,22 @@ namespace ts.server {
 
     export interface FileStats {
         readonly js: number;
+        readonly jsSize?: number;
+
         readonly jsx: number;
+        readonly jsxSize?: number;
+
         readonly ts: number;
+        readonly tsSize?: number;
+
         readonly tsx: number;
+        readonly tsxSize?: number;
+
         readonly dts: number;
+        readonly dtsSize?: number;
+
         readonly deferred: number;
+        readonly deferredSize?: number;
     }
 
     export interface OpenFileInfo {
@@ -468,7 +479,7 @@ namespace ts.server {
          */
         private readonly openFilesWithNonRootedDiskPath = createMap<ScriptInfo>();
 
-        private compilerOptionsForInferredProjects: CompilerOptions;
+        private compilerOptionsForInferredProjects: CompilerOptions | undefined;
         private compilerOptionsForInferredProjectsPerProjectRoot = createMap<CompilerOptions>();
         /**
          * Project size for configured or external projects
@@ -490,7 +501,7 @@ namespace ts.server {
 
         private pendingProjectUpdates = createMap<Project>();
         /* @internal */
-        pendingEnsureProjectForOpenFiles: boolean;
+        pendingEnsureProjectForOpenFiles = false;
 
         readonly currentDirectory: NormalizedPath;
         readonly toCanonicalFileName: (f: string) => string;
@@ -1600,7 +1611,7 @@ namespace ts.server {
             setProjectOptionsUsed(project);
             const data: ProjectInfoTelemetryEventData = {
                 projectId: this.host.createSHA256Hash(project.projectName),
-                fileStats: countEachFileTypes(project.getScriptInfos()),
+                fileStats: countEachFileTypes(project.getScriptInfos(), /*includeSizes*/ true),
                 compilerOptions: convertCompilerOptionsForTelemetry(project.getCompilationSettings()),
                 typeAcquisition: convertTypeAcquisition(project.getTypeAcquisition()),
                 extends: projectOptions && projectOptions.configHasExtendsProperty,
@@ -1925,7 +1936,7 @@ namespace ts.server {
         }
 
         private createInferredProject(currentDirectory: string | undefined, isSingleInferredProject?: boolean, projectRootPath?: NormalizedPath): InferredProject {
-            const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects;
+            const compilerOptions = projectRootPath && this.compilerOptionsForInferredProjectsPerProjectRoot.get(projectRootPath) || this.compilerOptionsForInferredProjects!; // TODO: GH#18217
             const project = new InferredProject(this, this.documentRegistry, compilerOptions, projectRootPath, currentDirectory, this.currentPluginConfigOverrides);
             if (isSingleInferredProject) {
                 this.inferredProjects.unshift(project);

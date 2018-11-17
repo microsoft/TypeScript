@@ -80,7 +80,7 @@ namespace ts.projectSystem {
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
-        protected projectService: server.ProjectService;
+        protected projectService!: server.ProjectService;
         constructor(
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
@@ -183,7 +183,7 @@ namespace ts.projectSystem {
     }
 
     export function fileStats(nonZeroStats: Partial<server.FileStats>): server.FileStats {
-        return { ts: 0, tsx: 0, dts: 0, js: 0, jsx: 0, deferred: 0, ...nonZeroStats };
+        return { ts: 0, tsSize: 0, tsx: 0, tsxSize: 0, dts: 0, dtsSize: 0, js: 0, jsSize: 0, jsx: 0, jsxSize: 0, deferred: 0, deferredSize: 0, ...nonZeroStats };
     }
 
     export interface ConfigFileDiagnostic {
@@ -282,7 +282,7 @@ namespace ts.projectSystem {
     class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host: TestServerHost;
+        public host!: TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -3433,7 +3433,17 @@ var x = 10;`
                 command: protocol.CommandTypes.GetApplicableRefactors,
                 arguments: { file: file2.path, startLine: 1, startOffset, endLine: 1, endOffset: startOffset + 1 }
             });
+        });
 
+        describe("getApplicableRefactors", () => {
+            it("works when taking position", () => {
+                const aTs: File = { path: "/a.ts", content: "" };
+                const session = createSession(createServerHost([aTs]));
+                openFilesForSession([aTs], session);
+                const response = executeSessionRequest<protocol.GetApplicableRefactorsRequest, protocol.GetApplicableRefactorsResponse>(
+                    session, protocol.CommandTypes.GetApplicableRefactors, { file: aTs.path, line: 1, offset: 1 });
+                assert.deepEqual<ReadonlyArray<protocol.ApplicableRefactorInfo> | undefined>(response, []);
+            });
         });
 
         describe("includes deferred files in the project context", () => {
@@ -9386,16 +9396,16 @@ export const x = 10;`
             const project = getProject(service);
 
             const moduleInfo = service.getScriptInfo(moduleFile.path)!;
-            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            const sourceFile = moduleInfo.cacheSourceFile!.sourceFile;
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             // edit file
             changeFileToNotImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
 
             // write content back
             changeFileToImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
         });
 
@@ -9404,21 +9414,21 @@ export const x = 10;`
             const project = getProject(service);
 
             const moduleInfo = service.getScriptInfo(moduleFile.path)!;
-            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            const sourceFile = moduleInfo.cacheSourceFile!.sourceFile;
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             // edit file
             changeFileToNotImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
 
             const updatedModuleContent = moduleFile.content + "\nexport const b: number;";
             host.writeFile(moduleFile.path, updatedModuleContent);
 
             // write content back
             changeFileToImportModule(service);
-            assert.notEqual(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
-            assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile.sourceFile);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
+            assert.notEqual(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
+            assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile!.sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
         });
     });
 
@@ -9447,7 +9457,7 @@ export const x = 10;`
                 // large file for non ts file should be empty and for ts file should have content
                 const service = session.getProjectService();
                 const info = service.getScriptInfo(largeFile.path)!;
-                assert.equal(info.cacheSourceFile.sourceFile.text, useLargeTsFile ? largeFile.content : "");
+                assert.equal(info.cacheSourceFile!.sourceFile.text, useLargeTsFile ? largeFile.content : "");
 
                 assert.deepEqual(largeFileReferencedEvents, useLargeTsFile ? emptyArray : [{
                     eventName: server.LargeFileReferencedEvent,
@@ -10107,12 +10117,12 @@ declare class TestLib {
 
         const userTs: File = {
             path: "/user/user.ts",
-            content: 'import { fnA, instanceA } from "../a/bin/a";\nimport { fnB } from "../b/bin/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
+            content: 'import * as a from "../a/bin/a";\nimport * as b from "../b/bin/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
         };
 
         const userTsForConfigProject: File = {
             path: "/user/user.ts",
-            content: 'import { fnA, instanceA } from "../a/a";\nimport { fnB } from "../b/b";\nexport function fnUser() { fnA(); fnB(); instanceA; }',
+            content: 'import * as a from "../a/a";\nimport * as b from "../b/b";\nexport function fnUser() { a.fnA(); b.fnB(); a.instanceA; }',
         };
 
         const userTsconfig: File = {
@@ -10202,7 +10212,7 @@ declare class TestLib {
             const session = makeSampleProjects();
             const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, {
-                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
             verifySingleInferredProject(session);
@@ -10212,7 +10222,7 @@ declare class TestLib {
             const session = makeSampleProjects(/*addUserTsConfig*/ true);
             const response = executeSessionRequest<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionAndBoundSpanResponse>(session, protocol.CommandTypes.DefinitionAndBoundSpan, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual(response, {
-                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                textSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
                 definitions: [protocolFileSpanFromSubstring(aTs, "fnA")],
             });
             checkNumberOfProjects(session.getProjectService(), { configuredProjects: 1 });
@@ -10266,7 +10276,7 @@ declare class TestLib {
                     kindModifiers: "export,declare",
                 },
                 {
-                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { fnA(); fnB(); instanceA; }"),
+                    ...protocolFileSpanFromSubstring(userTs, "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
                     name: "fnUser",
                     matchKind: "prefix",
                     isCaseSensitive: true,
@@ -10288,8 +10298,7 @@ declare class TestLib {
 
         const referenceATs = (aTs: File): protocol.ReferencesResponseItem => makeReferenceItem(aTs, /*isDefinition*/ true, "fnA", "export function fnA() {}");
         const referencesUserTs = (userTs: File): ReadonlyArray<protocol.ReferencesResponseItem> => [
-            makeReferenceItem(userTs, /*isDefinition*/ true, "fnA", "import { fnA, instanceA } from \"../a/bin/a\";"),
-            makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
+            makeReferenceItem(userTs, /*isDefinition*/ false, "fnA", "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
         ];
 
         it("findAllReferences", () => {
@@ -10300,7 +10309,7 @@ declare class TestLib {
                 refs: [...referencesUserTs(userTs), referenceATs(aTs)],
                 symbolName: "fnA",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnA()").offset,
-                symbolDisplayString: "(alias) fnA(): void\nimport fnA",
+                symbolDisplayString: "function fnA(): void",
             });
 
             verifyATsConfigOriginalProject(session);
@@ -10327,43 +10336,7 @@ declare class TestLib {
 
             const responseFull = executeSessionRequest<ReferencesFullRequest, ReferencesFullResponse>(session, protocol.CommandTypes.ReferencesFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
 
-            function fnAVoid(kind: SymbolDisplayPartKind): SymbolDisplayPart[] {
-                return [
-                    keywordPart(SyntaxKind.FunctionKeyword),
-                    spacePart(),
-                    displayPart("fnA", kind),
-                    punctuationPart(SyntaxKind.OpenParenToken),
-                    punctuationPart(SyntaxKind.CloseParenToken),
-                    punctuationPart(SyntaxKind.ColonToken),
-                    spacePart(),
-                    keywordPart(SyntaxKind.VoidKeyword),
-                ];
-            }
             assert.deepEqual<ReadonlyArray<ReferencedSymbol>>(responseFull, [
-                {
-                    definition: {
-                        ...documentSpanFromSubstring(userTs, "fnA"),
-                        kind: ScriptElementKind.alias,
-                        name: "(alias) function fnA(): void\nimport fnA",
-                        containerKind: ScriptElementKind.unknown,
-                        containerName: "",
-                        displayParts: [
-                            punctuationPart(SyntaxKind.OpenParenToken),
-                            textPart("alias"),
-                            punctuationPart(SyntaxKind.CloseParenToken),
-                            spacePart(),
-                            ...fnAVoid(SymbolDisplayPartKind.aliasName),
-                            lineBreakPart(),
-                            keywordPart(SyntaxKind.ImportKeyword),
-                            spacePart(),
-                            displayPart("fnA", SymbolDisplayPartKind.aliasName),
-                        ],
-                    },
-                    references: [
-                        makeReferenceEntry(userTs, /*isDefinition*/ true, "fnA"),
-                        makeReferenceEntry(userTs, /*isDefinition*/ false, "fnA", { index: 1 }),
-                    ],
-                },
                 {
                     definition: {
                         ...documentSpanFromSubstring(aTs, "fnA"),
@@ -10371,12 +10344,22 @@ declare class TestLib {
                         name: "function fnA(): void",
                         containerKind: ScriptElementKind.unknown,
                         containerName: "",
-                        displayParts: fnAVoid(SymbolDisplayPartKind.functionName),
+                        displayParts: [
+                            keywordPart(SyntaxKind.FunctionKeyword),
+                            spacePart(),
+                            displayPart("fnA", SymbolDisplayPartKind.functionName),
+                            punctuationPart(SyntaxKind.OpenParenToken),
+                            punctuationPart(SyntaxKind.CloseParenToken),
+                            punctuationPart(SyntaxKind.ColonToken),
+                            spacePart(),
+                            keywordPart(SyntaxKind.VoidKeyword),
+                        ],
                     },
                     references: [
+                        makeReferenceEntry(userTs, /*isDefinition*/ false, "fnA"),
                         makeReferenceEntry(aTs, /*isDefinition*/ true, "fnA"),
                     ],
-                }
+                },
             ]);
             verifyATsConfigOriginalProject(session);
         });
@@ -10448,13 +10431,12 @@ declare class TestLib {
             const response = executeSessionRequest<protocol.ReferencesRequest, protocol.ReferencesResponse>(session, protocol.CommandTypes.References, protocolFileLocationFromSubstring(userTs, "fnB()"));
             assert.deepEqual<protocol.ReferencesResponseBody | undefined>(response, {
                 refs: [
-                    makeReferenceItem(userTs, /*isDefinition*/ true, "fnB", "import { fnB } from \"../b/bin/b\";"),
-                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", "export function fnUser() { fnA(); fnB(); instanceA; }", { index: 1 }),
                     makeReferenceItem(bDts, /*isDefinition*/ true, "fnB", "export declare function fnB(): void;"),
+                    makeReferenceItem(userTs, /*isDefinition*/ false, "fnB", "export function fnUser() { a.fnA(); b.fnB(); a.instanceA; }"),
                 ],
                 symbolName: "fnB",
                 symbolStartOffset: protocolLocationFromSubstring(userTs.content, "fnB()").offset,
-                symbolDisplayString: "(alias) fnB(): void\nimport fnB",
+                symbolDisplayString: "function fnB(): void",
             });
             verifySingleInferredProject(session);
         });
@@ -10465,10 +10447,7 @@ declare class TestLib {
         });
         const renameUserTs = (userTs: File): protocol.SpanGroup => ({
             file: userTs.path,
-            locs: [
-                protocolRenameSpanFromSubstring(userTs.content, "fnA"),
-                protocolRenameSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
-            ],
+            locs: [protocolRenameSpanFromSubstring(userTs.content, "fnA")],
         });
 
         it("renameLocations", () => {
@@ -10479,10 +10458,10 @@ declare class TestLib {
                     canRename: true,
                     displayName: "fnA",
                     fileToRename: undefined,
-                    fullDisplayName: "fnA",
-                    kind: ScriptElementKind.alias,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA", { index: 1 }),
+                    fullDisplayName: '"/a/bin/a".fnA', // Ideally this would use the original source's path instead of the declaration file's path.
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: [ScriptElementKindModifier.exportedModifier, ScriptElementKindModifier.ambientModifier].join(","),
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnA"),
                 },
                 locs: [renameUserTs(userTs), renameATs(aTs)],
             });
@@ -10513,7 +10492,6 @@ declare class TestLib {
             const response = executeSessionRequest<protocol.RenameFullRequest, protocol.RenameFullResponse>(session, protocol.CommandTypes.RenameLocationsFull, protocolFileLocationFromSubstring(userTs, "fnA()"));
             assert.deepEqual<ReadonlyArray<RenameLocation>>(response, [
                 renameLocation(userTs, "fnA"),
-                renameLocation(userTs, "fnA", { index: 1 }),
                 renameLocation(aTs, "fnA"),
             ]);
             verifyATsConfigOriginalProject(session);
@@ -10527,23 +10505,20 @@ declare class TestLib {
                     canRename: true,
                     displayName: "fnB",
                     fileToRename: undefined,
-                    fullDisplayName: "fnB",
-                    kind: ScriptElementKind.alias,
-                    kindModifiers: ScriptElementKindModifier.none,
-                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
+                    fullDisplayName: '"/b/bin/b".fnB',
+                    kind: ScriptElementKind.functionElement,
+                    kindModifiers: [ScriptElementKindModifier.exportedModifier, ScriptElementKindModifier.ambientModifier].join(","),
+                    triggerSpan: protocolTextSpanFromSubstring(userTs.content, "fnB"),
                 },
                 locs: [
                     {
-                        file: userTs.path,
-                        locs: [
-                            protocolRenameSpanFromSubstring(userTs.content, "fnB"),
-                            protocolRenameSpanFromSubstring(userTs.content, "fnB", { index: 1 }),
-                        ],
-                    },
-                    {
                         file: bDts.path,
                         locs: [protocolRenameSpanFromSubstring(bDts.content, "fnB")],
-                    }
+                    },
+                    {
+                        file: userTs.path,
+                        locs: [protocolRenameSpanFromSubstring(userTs.content, "fnB")],
+                    },
                 ],
             });
             verifySingleInferredProject(session);
@@ -10995,7 +10970,7 @@ fn5();`
     function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
         openFilesForSession([file], session);
         const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
-        const program = project.getCurrentProgram();
+        const program = project.getCurrentProgram()!;
         const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
         closeFilesForSession([file], session);
 

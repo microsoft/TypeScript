@@ -158,7 +158,7 @@ namespace FourSlash {
         public lastKnownMarker = "";
 
         // The file that's currently 'opened'
-        public activeFile: FourSlashFile;
+        public activeFile!: FourSlashFile;
 
         // Whether or not we should format on keystrokes
         public enableFormatting = true;
@@ -571,7 +571,8 @@ namespace FourSlash {
         public verifyNoErrors() {
             ts.forEachKey(this.inputFiles, fileName => {
                 if (!ts.isAnySupportedFileExtension(fileName)
-                    || !this.getProgram().getCompilerOptions().allowJs && !ts.extensionIsTS(ts.extensionFromPath(fileName))) return;
+                    || Harness.getConfigNameFromFileName(fileName)
+                    || !this.getProgram().getCompilerOptions().allowJs && !ts.resolutionExtensionIsTSOrJson(ts.extensionFromPath(fileName))) return;
                 const errors = this.getDiagnostics(fileName).filter(e => e.category !== ts.DiagnosticCategory.Suggestion);
                 if (errors.length) {
                     this.printErrorLog(/*expectErrors*/ false, errors);
@@ -854,9 +855,9 @@ namespace FourSlash {
         }
 
         /** Use `getProgram` instead of accessing this directly. */
-        private _program: ts.Program;
+        private _program: ts.Program | undefined;
         /** Use `getChecker` instead of accessing this directly. */
-        private _checker: ts.TypeChecker;
+        private _checker: ts.TypeChecker | undefined;
 
         private getProgram(): ts.Program {
             return this._program || (this._program = this.languageService.getProgram()!); // TODO: GH#18217
@@ -2783,11 +2784,6 @@ Actual: ${stringify(fullActual)}`);
             assert.deepEqual(unique(this.getApplicableRefactorsAtSelection(), r => r.name), names);
         }
 
-        public verifyRefactor({ name, actionName, refactors }: FourSlashInterface.VerifyRefactorOptions) {
-            const actualRefactors = this.getApplicableRefactorsAtSelection().filter(r => r.name === name && r.actions.some(a => a.name === actionName));
-            this.assertObjectsEqual(actualRefactors, refactors);
-        }
-
         public verifyApplicableRefactorAvailableForRange(negative: boolean) {
             const ranges = this.getRanges();
             if (!(ranges && ranges.length === 1)) {
@@ -3738,7 +3734,7 @@ namespace FourSlashInterface {
     }
 
     export class VerifyNegatable {
-        public not: VerifyNegatable;
+        public not: VerifyNegatable | undefined;
 
         constructor(protected state: FourSlash.TestState, private negative = false) {
             if (!negative) {
@@ -3820,10 +3816,6 @@ namespace FourSlashInterface {
 
         public refactorsAvailable(names: ReadonlyArray<string>): void {
             this.state.verifyRefactorsAvailable(names);
-        }
-
-        public refactor(options: VerifyRefactorOptions) {
-            this.state.verifyRefactor(options);
         }
 
         public refactorAvailable(name: string, actionName?: string) {
@@ -4444,7 +4436,7 @@ namespace FourSlashInterface {
         export const keywords: ReadonlyArray<ExpectedCompletionEntryObject> = keywordsWithUndefined.filter(k => k.name !== "undefined");
 
         export const typeKeywords: ReadonlyArray<ExpectedCompletionEntryObject> =
-            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown"].map(keywordEntry);
+            ["false", "null", "true", "void", "any", "boolean", "keyof", "never", "number", "object", "string", "symbol", "undefined", "unique", "unknown", "bigint"].map(keywordEntry);
 
         const globalTypeDecls: ReadonlyArray<ExpectedCompletionEntryObject> = [
             interfaceEntry("Symbol"),

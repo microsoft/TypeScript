@@ -342,12 +342,29 @@ namespace ts {
     }
 
     /* @internal */
-    export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string): number {
+    export function getPositionOfLineAndCharacterWithEdits(sourceFile: SourceFileLike, line: number, character: number): number {
+        return computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
+    }
+
+    /* @internal */
+    export function computePositionOfLineAndCharacter(lineStarts: ReadonlyArray<number>, line: number, character: number, debugText?: string, allowEdits?: true): number {
         if (line < 0 || line >= lineStarts.length) {
-            Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            if (allowEdits) {
+                // Clamp line to nearest allowable value
+                line = line < 0 ? 0 : line >= lineStarts.length ? lineStarts.length - 1 : line;
+            }
+            else {
+                Debug.fail(`Bad line number. Line: ${line}, lineStarts.length: ${lineStarts.length} , line map is correct? ${debugText !== undefined ? arraysEqual(lineStarts, computeLineStarts(debugText)) : "unknown"}`);
+            }
         }
 
         const res = lineStarts[line] + character;
+        if (allowEdits) {
+            // Clamp to nearest allowable values to allow the underlying to be edited without crashing (accuracy is lost, instead)
+            // TODO: Somehow track edits between file as it was during the creation of sourcemap we have and the current file and
+            // apply them to the computed position to improve accuracy
+            return res > lineStarts[line + 1] ? lineStarts[line + 1] : typeof debugText === "string" && res > debugText.length ? debugText.length : res;
+        }
         if (line < lineStarts.length - 1) {
             Debug.assert(res < lineStarts[line + 1]);
         }

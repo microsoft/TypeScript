@@ -13,7 +13,7 @@ class CompilerBaselineRunner extends RunnerBase {
     private testSuiteName: TestRunnerKind;
     private emit: boolean;
 
-    public options: string;
+    public options: string | undefined;
 
     constructor(public testType: CompilerTestType) {
         super();

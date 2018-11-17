@@ -4566,6 +4566,54 @@ namespace ts {
     export function isObjectTypeDeclaration(node: Node): node is ObjectTypeDeclaration {
         return isClassLike(node) || isInterfaceDeclaration(node) || isTypeLiteralNode(node);
     }
+
+    export function isTypeNodeKind(kind: SyntaxKind) {
+        return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
+            || isTypeKeyword(kind)
+            || kind === SyntaxKind.ThisKeyword
+            || kind === SyntaxKind.ExpressionWithTypeArguments
+            || kind === SyntaxKind.JSDocAllType
+            || kind === SyntaxKind.JSDocUnknownType
+            || kind === SyntaxKind.JSDocNullableType
+            || kind === SyntaxKind.JSDocNonNullableType
+            || kind === SyntaxKind.JSDocOptionalType
+            || kind === SyntaxKind.JSDocFunctionType
+            || kind === SyntaxKind.JSDocVariadicType;
+    }
+
+    export function isTypeKeyword(kind: SyntaxKind): boolean {
+        switch (kind) {
+            case SyntaxKind.AnyKeyword:
+            case SyntaxKind.BigIntKeyword:
+            case SyntaxKind.BooleanKeyword:
+            case SyntaxKind.FalseKeyword:
+            case SyntaxKind.KeyOfKeyword:
+            case SyntaxKind.NeverKeyword:
+            case SyntaxKind.NullKeyword:
+            case SyntaxKind.NumberKeyword:
+            case SyntaxKind.ObjectKeyword:
+            case SyntaxKind.StringKeyword:
+            case SyntaxKind.SymbolKeyword:
+            case SyntaxKind.TrueKeyword:
+            case SyntaxKind.VoidKeyword:
+            case SyntaxKind.UndefinedKeyword:
+            case SyntaxKind.UniqueKeyword:
+            case SyntaxKind.UnknownKeyword:
+                return true;
+            default:
+                return false;
+        }
+    }
+
+    export function allKeywords(filter?: (kind: SyntaxKind) => boolean): ReadonlyArray<SyntaxKind> {
+        const out: SyntaxKind[] = [];
+        for (let kw = SyntaxKind.FirstKeyword; kw <= SyntaxKind.LastKeyword; kw++) {
+            if (!filter || filter(kw)) {
+                out.push(kw);
+            }
+        }
+        return out;
+    }
 }
 
 namespace ts {
@@ -6111,6 +6159,10 @@ namespace ts {
             || kind === SyntaxKind.TemplateTail;
     }
 
+    export function isImportOrExportSpecifier(node: Node): node is ImportSpecifier | ExportSpecifier {
+        return isImportSpecifier(node) || isExportSpecifier(node);
+    }
+
     export function isStringTextContainingNode(node: Node): node is StringLiteral | TemplateLiteralToken {
         return node.kind === SyntaxKind.StringLiteral || isTemplateLiteralKind(node.kind);
     }
@@ -6284,54 +6336,6 @@ namespace ts {
     }
 
     // Type
-
-    function isTypeNodeKind(kind: SyntaxKind) {
-        return (kind >= SyntaxKind.FirstTypeNode && kind <= SyntaxKind.LastTypeNode)
-            || isTypeKeyword(kind)
-            || kind === SyntaxKind.ThisKeyword
-            || kind === SyntaxKind.ExpressionWithTypeArguments
-            || kind === SyntaxKind.JSDocAllType
-            || kind === SyntaxKind.JSDocUnknownType
-            || kind === SyntaxKind.JSDocNullableType
-            || kind === SyntaxKind.JSDocNonNullableType
-            || kind === SyntaxKind.JSDocOptionalType
-            || kind === SyntaxKind.JSDocFunctionType
-            || kind === SyntaxKind.JSDocVariadicType;
-    }
-
-    export function isTypeKeyword(kind: SyntaxKind): boolean {
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.BigIntKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.FalseKeyword:
-            case SyntaxKind.KeyOfKeyword:
-            case SyntaxKind.NeverKeyword:
-            case SyntaxKind.NullKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.SymbolKeyword:
-            case SyntaxKind.TrueKeyword:
-            case SyntaxKind.VoidKeyword:
-            case SyntaxKind.UndefinedKeyword:
-            case SyntaxKind.UniqueKeyword:
-            case SyntaxKind.UnknownKeyword:
-                return true;
-            default:
-                return false;
-        }
-    }
-
-    export function allKeywords(filter?: (kind: SyntaxKind) => boolean): ReadonlyArray<SyntaxKind> {
-        const out: SyntaxKind[] = [];
-        for (let kw = SyntaxKind.FirstKeyword; kw <= SyntaxKind.LastKeyword; kw++) {
-            if (!filter || filter(kw)) {
-                out.push(kw);
-            }
-        }
-        return out;
-    }
 
     /**
      * Node test that determines whether a node is a valid type node.
@@ -6860,7 +6864,7 @@ namespace ts {
 
     // TODO: determine what this does before making it public.
     /* @internal */
-    export function isJSDocTag(node: Node): boolean {
+    export function isJSDocTag(node: Node): node is JSDocTag {
         return node.kind >= SyntaxKind.FirstJSDocTagNode && node.kind <= SyntaxKind.LastJSDocTagNode;
     }
 

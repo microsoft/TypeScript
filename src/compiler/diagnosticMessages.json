@@ -1060,7 +1060,7 @@
         "category": "Error",
         "code": 2311
     },
-    "An interface may only extend a class or another interface.": {
+    "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
     },
@@ -1488,7 +1488,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class may only implement another class or interface.": {
+    "A class can only implement an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2422
     },
@@ -1820,7 +1820,7 @@
         "category": "Error",
         "code": 2508
     },
-    "Base constructor return type '{0}' is not a class or interface type.": {
+    "Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2509
     },
@@ -4125,6 +4125,10 @@
         "category": "Suggestion",
         "code": 7050
     },
+    "Parameter has a name but no type. Did you mean '{0}: {1}'?": {
+        "category": "Error",
+        "code": 7051
+    },
 
     "You cannot rename this element.": {
         "category": "Error",
@@ -4508,6 +4512,10 @@
         "category": "Message",
         "code": 90033
     },
+    "Add parameter name": {
+        "category": "Message",
+        "code": 90034
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -4748,7 +4756,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4780,5 +4787,17 @@
     "Add 'unknown' to all conversions of non-overlapping types": {
         "category": "Message",
         "code": 95070
+    },
+    "Add missing 'new' operator to call": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
+    },
+    "Add names to all parameters without names": {
+        "category": "Message",
+        "code": 95073
     }
 }

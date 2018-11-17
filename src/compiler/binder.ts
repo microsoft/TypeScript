@@ -1379,6 +1379,7 @@ namespace ts {
         }
 
         function bindJSDocTypeAlias(node: JSDocTypedefTag | JSDocCallbackTag) {
+            node.tagName.parent = node;
             if (node.fullName) {
                 setParentPointers(node, node.fullName);
             }

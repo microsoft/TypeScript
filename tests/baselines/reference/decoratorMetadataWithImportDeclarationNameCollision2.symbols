@@ -9,7 +9,7 @@ export class db {
 
 === tests/cases/compiler/service.ts ===
 import {db as Database} from './db';
->db : Symbol(Database, Decl(service.ts, 0, 8))
+>db : Symbol(Database, Decl(db.ts, 0, 0))
 >Database : Symbol(Database, Decl(service.ts, 0, 8))
 
 function someDecorator(target) {
