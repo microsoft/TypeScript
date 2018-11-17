@@ -80,7 +80,7 @@ namespace ts.projectSystem {
     }
 
     export class TestTypingsInstaller extends TI.TypingsInstaller implements server.ITypingsInstaller {
-        protected projectService: server.ProjectService;
+        protected projectService!: server.ProjectService;
         constructor(
             readonly globalTypingsCacheLocation: string,
             throttleLimit: number,
@@ -282,7 +282,7 @@ namespace ts.projectSystem {
     class TestSession extends server.Session {
         private seq = 0;
         public events: protocol.Event[] = [];
-        public host: TestServerHost;
+        public host!: TestServerHost;
 
         getProjectService() {
             return this.projectService;
@@ -9396,16 +9396,16 @@ export const x = 10;`
             const project = getProject(service);
 
             const moduleInfo = service.getScriptInfo(moduleFile.path)!;
-            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            const sourceFile = moduleInfo.cacheSourceFile!.sourceFile;
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             // edit file
             changeFileToNotImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
 
             // write content back
             changeFileToImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
         });
 
@@ -9414,21 +9414,21 @@ export const x = 10;`
             const project = getProject(service);
 
             const moduleInfo = service.getScriptInfo(moduleFile.path)!;
-            const sourceFile = moduleInfo.cacheSourceFile.sourceFile;
+            const sourceFile = moduleInfo.cacheSourceFile!.sourceFile;
             assert.equal(project.getSourceFile(moduleInfo.path), sourceFile);
 
             // edit file
             changeFileToNotImportModule(service);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
 
             const updatedModuleContent = moduleFile.content + "\nexport const b: number;";
             host.writeFile(moduleFile.path, updatedModuleContent);
 
             // write content back
             changeFileToImportModule(service);
-            assert.notEqual(moduleInfo.cacheSourceFile.sourceFile, sourceFile);
-            assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile.sourceFile);
-            assert.equal(moduleInfo.cacheSourceFile.sourceFile.text, updatedModuleContent);
+            assert.notEqual(moduleInfo.cacheSourceFile!.sourceFile, sourceFile);
+            assert.equal(project.getSourceFile(moduleInfo.path), moduleInfo.cacheSourceFile!.sourceFile);
+            assert.equal(moduleInfo.cacheSourceFile!.sourceFile.text, updatedModuleContent);
         });
     });
 
@@ -9457,7 +9457,7 @@ export const x = 10;`
                 // large file for non ts file should be empty and for ts file should have content
                 const service = session.getProjectService();
                 const info = service.getScriptInfo(largeFile.path)!;
-                assert.equal(info.cacheSourceFile.sourceFile.text, useLargeTsFile ? largeFile.content : "");
+                assert.equal(info.cacheSourceFile!.sourceFile.text, useLargeTsFile ? largeFile.content : "");
 
                 assert.deepEqual(largeFileReferencedEvents, useLargeTsFile ? emptyArray : [{
                     eventName: server.LargeFileReferencedEvent,
@@ -10970,7 +10970,7 @@ fn5();`
     function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
         openFilesForSession([file], session);
         const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
-        const program = project.getCurrentProgram();
+        const program = project.getCurrentProgram()!;
         const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
         closeFilesForSession([file], session);
 

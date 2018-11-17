@@ -437,7 +437,7 @@ namespace ts.server {
 
         const command = "testhandler";
         class TestSession extends Session {
-            lastSent: protocol.Message;
+            lastSent: protocol.Message | undefined;
             private exceptionRaisingHandler(_request: protocol.Request): { response?: any, responseRequired: boolean } {
                 f1();
                 return Debug.fail(); // unreachable, throw to make compiler happy
@@ -491,7 +491,7 @@ namespace ts.server {
 
     describe("how Session is extendable via subclassing", () => {
         class TestSession extends Session {
-            lastSent: protocol.Message;
+            lastSent: protocol.Message | undefined;
             customHandler = "testhandler";
             constructor() {
                 super({
@@ -610,7 +610,7 @@ namespace ts.server {
         }
 
         class InProcClient {
-            private server: InProcSession;
+            private server: InProcSession | undefined;
             private seq = 0;
             private callbacks: ((resp: protocol.Response) => void)[] = [];
             private eventHandlers = createMap<(args: any) => void>();

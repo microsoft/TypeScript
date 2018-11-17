@@ -4869,7 +4869,7 @@ declare namespace ts {
         message: string;
         position: number;
     }
-    class TextChange {
+    interface TextChange {
         span: TextSpan;
         newText: string;
     }
