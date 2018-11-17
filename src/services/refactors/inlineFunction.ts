@@ -137,8 +137,14 @@ namespace ts.refactor.inlineFunction {
             t: textChanges.ChangeTracker,
             targetNode: CallExpression,
             declaration: InlineableFunction) {
-        const { body } = declaration;
+        const { parameters, body } = declaration;
         const statement = <Statement>findAncestor(targetNode, n => isStatement(n));
+        forEach(parameters, (p, i) => {
+            let name = `arg${i}`; // if parameter is object or array literal
+            if (isIdentifier(p.name)) name = p.name.text;
+            const value = targetNode.arguments[i];
+            t.insertNodeBefore(file, statement, createVariableDeclaration(name, /* type */ undefined , value));
+        });
         forEach(body!.statements, st => {
             if (!isReturnStatement(st)) {
                 t.insertNodeBefore(file, statement, st);
