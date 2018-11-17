@@ -1,4 +1,3 @@
-/** Non-internal stuff goes here */
 namespace ts {
     export function isExternalModuleNameRelative(moduleName: string): boolean {
         // TypeScript 1.0 spec (April 2014): 11.2.1
