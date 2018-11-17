@@ -109,45 +109,46 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getInlineAllEdits(
-        context: RefactorContext,
-        declaration: InlineableFunction,
-        usages: ReadonlyArray<CallExpression>): FileTextChanges[] {
+            context: RefactorContext,
+            declaration: InlineableFunction,
+            usages: ReadonlyArray<CallExpression>): FileTextChanges[] {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             forEach(usages, oldNode => {
-                const { body } = declaration;
-                const statement = <Statement>findAncestor(oldNode, n => isStatement(n));
-                forEach(body!.statements, st => {
-                    if (!isReturnStatement(st)) { t.insertNodeBefore(file, statement, st); }
-                });
-                const retExpr = forEachReturnStatement<Expression | undefined>(body!, r => r.expression);
-                if (retExpr) {
-                    const expression = inlineLocal.parenthesizeIfNecessary(oldNode, retExpr);
-                    t.replaceNode(file, oldNode, expression);
-                }
+                inlineAt(file, t, oldNode, declaration);
             });
             t.delete(file, declaration);
         });
     }
 
     function getInlineHereEdits(context: RefactorContext,
-        declaration: InlineableFunction,
-        usages: ReadonlyArray<CallExpression>,
-        selectedUsage: CallExpression): FileTextChanges[] {
+            declaration: InlineableFunction,
+            usages: ReadonlyArray<CallExpression>,
+            selectedUsage: CallExpression): FileTextChanges[] {
         const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
-            const { body } = declaration;
-            const statement = <Statement>findAncestor(selectedUsage, n => isStatement(n));
-            forEach(body!.statements, st => {
-                if (!isReturnStatement(st)) { t.insertNodeBefore(file, statement, st); }
-            });
-            const retExpr = forEachReturnStatement<Expression | undefined>(body!, r => r.expression);
-            if (retExpr) {
-                const expression = inlineLocal.parenthesizeIfNecessary(selectedUsage, retExpr);
-                t.replaceNode(file, selectedUsage, expression);
-            }
+            inlineAt(file, t, selectedUsage, declaration);
             if (usages.length === 1) t.delete(file, declaration);
         });
+    }
+
+    function inlineAt(
+            file: SourceFile,
+            t: textChanges.ChangeTracker,
+            targetNode: CallExpression,
+            declaration: InlineableFunction) {
+        const { body } = declaration;
+        const statement = <Statement>findAncestor(targetNode, n => isStatement(n));
+        forEach(body!.statements, st => {
+            if (!isReturnStatement(st)) {
+                t.insertNodeBefore(file, statement, st);
+            }
+        });
+        const retExpr = forEachReturnStatement<Expression | undefined>(body!, r => r.expression);
+        if (retExpr) {
+            const expression = inlineLocal.parenthesizeIfNecessary(targetNode, retExpr);
+            t.replaceNode(file, targetNode, expression);
+        }
     }
 
     type InlineableFunction = FunctionDeclaration | MethodDeclaration;
