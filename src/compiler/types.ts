@@ -2886,7 +2886,6 @@ namespace ts {
         // For testing purposes only.  Should not be used by any other consumers (including the
         // language service).
         /* @internal */ getDiagnosticsProducingTypeChecker(): TypeChecker;
-        /* @internal */ dropDiagnosticsProducingTypeChecker(): void;
 
         /* @internal */ getClassifiableNames(): UnderscoreEscapedMap<true>;
 

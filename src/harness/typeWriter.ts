@@ -25,12 +25,8 @@ class TypeWriterWalker {
 
     private checker: ts.TypeChecker;
 
-    constructor(private program: ts.Program, fullTypeCheck: boolean, private hadErrorBaseline: boolean) {
-        // Consider getting both the diagnostics checker and the non-diagnostics checker to verify
-        // they are consistent.
-        this.checker = fullTypeCheck
-            ? program.getDiagnosticsProducingTypeChecker()
-            : program.getTypeChecker();
+    constructor(private program: ts.Program, private hadErrorBaseline: boolean) {
+        this.checker = program.getDiagnosticsProducingTypeChecker();
     }
 
     public *getSymbols(fileName: string): IterableIterator<TypeWriterSymbolResult> {
