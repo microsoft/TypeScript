@@ -2,7 +2,8 @@
 namespace ts.codefix {
     const fixId = "fixConvertConstantVariableOrProperty";
     const errorCodes = [
-        Diagnostics.Cannot_assign_to_0_because_it_is_a_constant_or_a_read_only_property.code
+        Diagnostics.Cannot_assign_to_0_because_it_is_a_read_only_property.code,
+        Diagnostics.Cannot_assign_to_0_because_it_is_a_constant.code
     ];
     registerCodeFix({
         errorCodes,

@@ -4836,12 +4836,16 @@
         "category": "Message",
         "code": 95074
     },
-    "Make all const or readonly expressions reassignable": {
+    "Make variables and properties mutable where necessary": {
         "category": "Message",
         "code": 95075
     },
-    "Remove '{0}' modifier": {
+    "Make all const or readonly expressions reassignable": {
         "category": "Message",
         "code": 95076
+    },
+    "Remove '{0}' modifier": {
+        "category": "Message",
+        "code": 95077
     }
 }
