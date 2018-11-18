@@ -5,43 +5,41 @@ namespace ts.codefix {
 
     registerCodeFix({
         errorCodes,
-        getCodeActions,
+        getCodeActions: getActionsForVariableDeclaration,
         fixIds: [fixId]
     });
 
-    function getCodeActions(context: CodeFixContext): CodeFixAction[] | undefined {
-        let a: FileTextChanges[] = [];
-
+    function getActionsForVariableDeclaration(context: CodeFixContext): CodeFixAction[] | undefined {
         const { program, sourceFile, span } = context;
         const checker = program.getTypeChecker();
 
         const token = getTokenAtPosition(sourceFile, span.start);
-
         const parent = token.parent;
+
         if (!isVariableDeclaration(parent) || !parent.type || !parent.initializer || !isObjectLiteralExpression(parent.initializer)) return undefined;
-        const objLiteral: ObjectLiteralExpression = parent.initializer;
+        const objectLiteralExpression = parent.initializer;
 
         const implementedType = checker.getTypeAtLocation(parent);
-        const props: Symbol[] = checker.getPropertiesOfType(implementedType);
+        const interfaceProperties: Symbol[] = checker.getPropertiesOfType(implementedType);
 
-        const existingMem = objLiteral.symbol.members;
-        const symbolTableExistingProps: SymbolTable = existingMem ? existingMem : createSymbolTable();
+        const existingMembers = objectLiteralExpression.symbol.members;
+        const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
 
-        const nonExistingProps = props.filter(and(and(p => !symbolTableExistingProps.has(p.escapedName), symbolPointsToNonPrivateMember), symbolPointsToNonNullable));
+        const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), symbolPointsToNonNullable));
+        const newProperties: ObjectLiteralElementLike[] = getNewMembers(requiredProperties, checker, objectLiteralExpression);
 
-        const newProps: ObjectLiteralElementLike[] = getNewMembers(nonExistingProps, checker, objLiteral);
-
-        a = textChanges.ChangeTracker.with(context, t => {
-            newProps.forEach(pa => t.insertNodeAtObjectStart(context.sourceFile, objLiteral, pa!));
+        const changes = textChanges.ChangeTracker.with(context, tracker => {
+            newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(context.sourceFile, objectLiteralExpression, propertyAssignment));
         });
 
-        return [createCodeFixActionNoFixId(fixId, a, [Diagnostics.Implement_interface_0, parent.type.getText()])];
+        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, parent.type.getText()])];
     }
 
-    function getNewMembers(symbols: Symbol[], checker: TypeChecker, objLiteral: ObjectLiteralExpression): ObjectLiteralElementLike[] {
+    function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
         return symbols.map(symbol => {
-            const type = checker.getTypeOfSymbolAtLocation(symbol, objLiteral);
-            const typeNode = checker.typeToTypeNode(type, objLiteral)!;
+            const type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
+            const typeNode = checker.typeToTypeNode(type, objectLiteralExpression)!;
+            const declaration = symbol.declarations[0];
 
             let kind = typeNode.kind;
 
@@ -50,8 +48,7 @@ namespace ts.codefix {
             }
 
             if (kind === SyntaxKind.TypeReference) {
-                const tInterface = checker.getTypeAtLocation(symbol.declarations[0]);
-                if (tInterface.isClassOrInterface() && !tInterface.isClass()) {
+                if (type.isClassOrInterface() && !type.isClass()) {
                     kind = SyntaxKind.TypeLiteral;
                 }
             }
@@ -68,42 +65,41 @@ namespace ts.codefix {
                     return createPropertyAssignment(symbol.name, getDefaultValue(kind));
 
                 case SyntaxKind.FunctionType:
-                    const decli = symbol.declarations[0] as MethodDeclaration;
+                    const methodDeclaration = declaration as MethodDeclaration;
 
                     return createMethod(
-                        decli.decorators,
-                        decli.modifiers,
-                        decli.asteriskToken,
-                        decli.name,
-                        decli.questionToken,
-                        decli.typeParameters,
-                        decli.parameters,
-                        decli.type,
+                        methodDeclaration.decorators,
+                        methodDeclaration.modifiers,
+                        methodDeclaration.asteriskToken,
+                        methodDeclaration.name,
+                        methodDeclaration.questionToken,
+                        methodDeclaration.typeParameters,
+                        methodDeclaration.parameters,
+                        methodDeclaration.type,
                         createStubbedMethodBody()
                     );
 
                 case SyntaxKind.TypeReference:
 
-                    const de = symbol.declarations[0] as PropertySignature;
-                    const tip = checker.getTypeAtLocation(de);
-                    if (tip.isClass()) {
-                        const newObj = createNew(createIdentifier(de.type!.getText()), [], []);
-                        return createPropertyAssignment(symbol.name, newObj);
+                    const propertySignature = declaration as PropertySignature;
+                    const typeOfProperty = checker.getTypeAtLocation(propertySignature);
+                    if (typeOfProperty.isClass()) {
+                        const newObject = createNew(createIdentifier(propertySignature.type!.getText()), /* typeArguments */ undefined, /* argumentsArray */ []);
+                        return createPropertyAssignment(symbol.name, newObject);
                     }
                     else {
-                        const enumo = tip.symbol.declarations[0] as EnumDeclaration;
-                        const ea = createMemberAccessForPropertyName(enumo.name, enumo.members[0].name);
-                        return createPropertyAssignment(symbol.name, ea);
+                        const enumDeclaration = typeOfProperty.symbol.declarations[0] as EnumDeclaration;
+                        const enumMemberAccess = createMemberAccessForPropertyName(enumDeclaration.name, enumDeclaration.members[0].name);
+                        return createPropertyAssignment(symbol.name, enumMemberAccess);
                     }
 
                 case SyntaxKind.TypeLiteral:
-                    const te = checker.getTypeAtLocation(symbol.declarations[0]);
-                    const neuvoP: Symbol[] = checker.getPropertiesOfType(te);
+                    const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
 
-                    const neuvoStubbed = getNewMembers(neuvoP, checker, objLiteral);
-                    const subObjLiteral = createObjectLiteral(neuvoStubbed, /* multiline */ true);
+                    const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
+                    const subObjectLiteral = createObjectLiteral(stubbedProperties, /* multiline */ true);
 
-                    return createPropertyAssignment(symbol.name, subObjLiteral);
+                    return createPropertyAssignment(symbol.name, subObjectLiteral);
 
                 case SyntaxKind.IntersectionType:
                     let intersectedTypes: Type[];
@@ -120,7 +116,7 @@ namespace ts.codefix {
                         const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
                         return arr.concat(newEle);
                     });
-                    const intersectStubs = getNewMembers(intersectedProps, checker, objLiteral);
+                    const intersectStubs = getNewMembers(intersectedProps, checker, objectLiteralExpression);
 
                     const interObjLiteral = createObjectLiteral(intersectStubs, /* multiline */ true);
                     return createPropertyAssignment(symbol.name, interObjLiteral);
@@ -159,10 +155,6 @@ namespace ts.codefix {
                 default:
                     return Debug.fail("Default value not implemented");
             }
-    }
-
-    function symbolPointsToNonPrivateMember (symbol: Symbol) {
-        return symbol.declarations.map(d => !(getModifierFlags(d) & ModifierFlags.Private)).reduce((r, l) => r && l);
     }
 
     function symbolPointsToNonNullable(symbol: Symbol): boolean {
