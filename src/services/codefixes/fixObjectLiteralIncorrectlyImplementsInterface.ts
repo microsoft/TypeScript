@@ -1,38 +1,67 @@
 /* @internal */
 namespace ts.codefix {
-    const errorCodes = [Diagnostics.Type_0_is_not_assignable_to_type_1.code];
     const fixId = "fixObjectLiteralIncorrectlyImplementsInterface";
 
     registerCodeFix({
-        errorCodes,
-        getCodeActions: getActionsForVariableDeclaration,
-        fixIds: [fixId]
+        errorCodes: [Diagnostics.Type_0_is_not_assignable_to_type_1.code],
+        getCodeActions: getActionsForVariableDeclaration
+    });
+
+    registerCodeFix({
+        errorCodes: [Diagnostics.Argument_of_type_0_is_not_assignable_to_parameter_of_type_1.code],
+        getCodeActions: getActionsForFunctionArgument
     });
 
     function getActionsForVariableDeclaration(context: CodeFixContext): CodeFixAction[] | undefined {
-        const { program, sourceFile, span } = context;
-        const checker = program.getTypeChecker();
+        const { sourceFile, span } = context;
 
         const token = getTokenAtPosition(sourceFile, span.start);
         const parent = token.parent;
 
         if (!isVariableDeclaration(parent) || !parent.type || !parent.initializer || !isObjectLiteralExpression(parent.initializer)) return undefined;
-        const objectLiteralExpression = parent.initializer;
 
-        const implementedType = checker.getTypeAtLocation(parent);
-        const interfaceProperties: Symbol[] = checker.getPropertiesOfType(implementedType);
+        return getCodeActions(context, parent, parent.initializer);
+    }
 
-        const existingMembers = objectLiteralExpression.symbol.members;
+    function getActionsForFunctionArgument(context: CodeFixContext): CodeFixAction[] | undefined {
+        const { program, sourceFile, span } = context;
+        const checker = program.getTypeChecker();
+
+        const token = getTokenAtPosition(sourceFile, span.start);
+        const objectLiteral = token.parent;
+        const callExpression = objectLiteral.parent;
+
+        if (!isObjectLiteralExpression(objectLiteral) || !isCallExpression(callExpression)) return undefined;
+
+        const functionSymbol = checker.getSymbolAtLocation(callExpression.expression)!;
+        const argumentPosition = callExpression.arguments.findIndex(a => a === objectLiteral);
+        const functionDeclaration = functionSymbol.declarations[0];
+
+        if (!isFunctionLikeDeclaration(functionDeclaration)) return undefined;
+        const parameter = functionDeclaration.parameters[argumentPosition];
+
+        return getCodeActions(context, parameter, objectLiteral);
+    }
+
+    function getCodeActions(context: CodeFixContext, node: Node, objectLiteral: ObjectLiteralExpression): CodeFixAction[]{
+        const { program, sourceFile } = context;
+        const checker = program.getTypeChecker();
+
+        const interfaceType = checker.getTypeAtLocation(node);
+        const interfaceProperties: Symbol[] = checker.getPropertiesOfType(interfaceType);
+        const interfaceName = checker.typeToString(interfaceType);
+
+        const existingMembers = objectLiteral.symbol.members;
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
 
         const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), symbolPointsToNonNullable));
-        const newProperties: ObjectLiteralElementLike[] = getNewMembers(requiredProperties, checker, objectLiteralExpression);
+        const newProperties: ObjectLiteralElementLike[] = getNewMembers(requiredProperties, checker, objectLiteral);
 
         const changes = textChanges.ChangeTracker.with(context, tracker => {
-            newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(context.sourceFile, objectLiteralExpression, propertyAssignment));
+            newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
         });
 
-        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, parent.type.getText()])];
+        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
     function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
