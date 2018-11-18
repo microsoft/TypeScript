@@ -60,6 +60,10 @@ namespace ts.codefix {
                 case SyntaxKind.AnyKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral("any"));
 
+                case SyntaxKind.ObjectKeyword:
+                    const strObj = createNew(createIdentifier("String"), /* */ undefined, [createStringLiteral("object")]);
+                    return createPropertyAssignment(symbol.name, strObj);
+
                 case SyntaxKind.StringKeyword:
                     return createPropertyAssignment(symbol.name, createStringLiteral(""));
 
