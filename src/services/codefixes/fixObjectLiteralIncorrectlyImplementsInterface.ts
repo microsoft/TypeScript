@@ -58,29 +58,14 @@ namespace ts.codefix {
 
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
-                    return createPropertyAssignment(symbol.name, createStringLiteral("any"));
-
                 case SyntaxKind.ObjectKeyword:
-                    const strObj = createNew(createIdentifier("String"), /* */ undefined, [createStringLiteral("object")]);
-                    return createPropertyAssignment(symbol.name, strObj);
-
                 case SyntaxKind.StringKeyword:
-                    return createPropertyAssignment(symbol.name, createStringLiteral(""));
-
                 case SyntaxKind.NumberKeyword:
-                    return createPropertyAssignment(symbol.name, createNumericLiteral("0"));
-
                 case SyntaxKind.BigIntKeyword:
-                    return createPropertyAssignment(symbol.name, createBigIntLiteral("0"));
-
                 case SyntaxKind.BooleanKeyword:
-                    return createPropertyAssignment(symbol.name, createFalse());
-
                 case SyntaxKind.ArrayType:
-                    return createPropertyAssignment(symbol.name, createArrayLiteral());
-
                 case SyntaxKind.NullKeyword:
-                    return createPropertyAssignment(symbol.name, createNull());
+                    return createPropertyAssignment(symbol.name, getDefaultValue(kind));
 
                 case SyntaxKind.FunctionType:
                     const decli = symbol.declarations[0] as MethodDeclaration;
@@ -143,6 +128,37 @@ namespace ts.codefix {
                     return undefined;
             }
         }).filter(pa => pa !== undefined).map(p => p!);
+    }
+
+    function getDefaultValue(kind: SyntaxKind): Expression {
+            switch (kind) {
+                case SyntaxKind.AnyKeyword:
+                    return createStringLiteral("any");
+
+                case SyntaxKind.ObjectKeyword:
+                    return createNew(createIdentifier("String"), /* */ undefined, [createStringLiteral("object")]);
+
+                case SyntaxKind.StringKeyword:
+                    return createStringLiteral("");
+
+                case SyntaxKind.NumberKeyword:
+                    return createNumericLiteral("0");
+
+                case SyntaxKind.BigIntKeyword:
+                    return createBigIntLiteral("0");
+
+                case SyntaxKind.BooleanKeyword:
+                    return createFalse();
+
+                case SyntaxKind.ArrayType:
+                    return createArrayLiteral();
+
+                case SyntaxKind.NullKeyword:
+                    return createNull();
+
+                default:
+                    return Debug.fail("Default value not implemented");
+            }
     }
 
     function symbolPointsToNonPrivateMember (symbol: Symbol) {
