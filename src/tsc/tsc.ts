@@ -199,11 +199,14 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
         }
 
-        // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(buildOptions.watch ?
+        // TODO: change this to host if watch => watchHost otherwiue without watch
+        const buildHost = buildOptions.watch ?
             createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
-            createSolutionBuilderHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions)),
-            projects, buildOptions);
+            createSolutionBuilderHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+        buildHost.beforeCreateProgram = enableStatistics;
+        buildHost.afterProgramEmitAndDiagnostics = reportStatistics;
+
+        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         if (buildOptions.clean) {
             return sys.exit(builder.cleanAllProjects());
         }
