@@ -390,7 +390,7 @@ namespace ts {
         const evolvingArrayTypes: EvolvingArrayType[] = [];
         const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
 
-        const unknownSymbol = createSymbol(SymbolFlags.Property, "<<unknown>>" as __String);
+        const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
 
         const anyType = createIntrinsicType(TypeFlags.Any, "any");
@@ -879,7 +879,7 @@ namespace ts {
                 if (!(target.flags & SymbolFlags.Transient)) {
                     const resolvedTarget = resolveSymbol(target);
                     if (resolvedTarget === unknownSymbol) {
-                        return unknownSymbol;
+                        return source;
                     }
                     target = cloneSymbol(resolvedTarget);
                 }

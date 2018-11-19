@@ -4,6 +4,8 @@ declare global { namespace N {} }
 >N : Symbol(N, Decl(a.d.ts, 0, 16))
 
 export = N;
+>N : Symbol(N, Decl(a.d.ts, 0, 16))
+
 export as namespace N;
 >N : Symbol(N, Decl(a.d.ts, 1, 11))
 
