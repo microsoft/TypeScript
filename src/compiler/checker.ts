@@ -870,7 +870,11 @@ namespace ts {
                 (source.flags | target.flags) & SymbolFlags.Assignment) {
                 Debug.assert(source !== target);
                 if (!(target.flags & SymbolFlags.Transient)) {
-                    target = cloneSymbol(resolveSymbol(target));
+                    const resolvedTarget = resolveSymbol(target);
+                    if (resolvedTarget === unknownSymbol) {
+                        return source;
+                    }
+                    target = cloneSymbol(resolvedTarget);
                 }
                 // Javascript static-property-assignment declarations always merge, even though they are also values
                 if (source.flags & SymbolFlags.ValueModule && target.flags & SymbolFlags.ValueModule && target.constEnumOnlyModule && !source.constEnumOnlyModule) {
