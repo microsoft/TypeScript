@@ -1021,7 +1021,8 @@ namespace ts.Completions {
             const scopeNode = getScopeNode(contextToken, adjustedPosition, sourceFile) || sourceFile;
             isInSnippetScope = isSnippetScope(scopeNode);
 
-            const symbolMeanings = SymbolFlags.Type | SymbolFlags.Value | SymbolFlags.Namespace | SymbolFlags.Alias;
+            const isTypeOnly = isTypeOnlyCompletion();
+            const symbolMeanings = (isTypeOnly ? SymbolFlags.None : SymbolFlags.Value) | SymbolFlags.Type | SymbolFlags.Namespace | SymbolFlags.Alias;
 
             symbols = Debug.assertEachDefined(typeChecker.getSymbolsInScope(scopeNode, symbolMeanings), "getSymbolsInScope() should all be defined");
 
@@ -1070,9 +1071,9 @@ namespace ts.Completions {
         }
 
         function filterGlobalCompletion(symbols: Symbol[]): void {
-            const isTypeOnlyCompletion = insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
-            const allowTypes = isTypeOnlyCompletion || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
-            if (isTypeOnlyCompletion) keywordFilters = KeywordCompletionFilters.TypeKeywords;
+            const isTypeOnly = isTypeOnlyCompletion();
+            const allowTypes = isTypeOnly || !isContextTokenValueLocation(contextToken) && isPossiblyTypeArgumentPosition(contextToken, sourceFile, typeChecker);
+            if (isTypeOnly) keywordFilters = KeywordCompletionFilters.TypeKeywords;
 
             filterMutate(symbols, symbol => {
                 if (!isSourceFile(location)) {
@@ -1091,7 +1092,7 @@ namespace ts.Completions {
                     if (allowTypes) {
                         // Its a type, but you can reach it by namespace.type as well
                         const symbolAllowedAsType = symbolCanBeReferencedAtTypeLocation(symbol);
-                        if (symbolAllowedAsType || isTypeOnlyCompletion) {
+                        if (symbolAllowedAsType || isTypeOnly) {
                             return symbolAllowedAsType;
                         }
                     }
@@ -1100,6 +1101,10 @@ namespace ts.Completions {
                 // expressions are value space (which includes the value namespaces)
                 return !!(getCombinedLocalAndExportSymbolFlags(symbol) & SymbolFlags.Value);
             });
+        }
+
+        function isTypeOnlyCompletion(): boolean {
+            return insideJsDocTagTypeExpression || !isContextTokenValueLocation(contextToken) && (isPartOfTypeNode(location) || isContextTokenTypeLocation(contextToken));
         }
 
         function isContextTokenValueLocation(contextToken: Node) {
