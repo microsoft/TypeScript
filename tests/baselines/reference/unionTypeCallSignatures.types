@@ -119,7 +119,7 @@ unionWithDifferentParameterCount("hello");// no  call signature
 >"hello" : "hello"
 
 unionWithDifferentParameterCount("hello", 10);// no  call signature
->unionWithDifferentParameterCount("hello", 10) : any
+>unionWithDifferentParameterCount("hello", 10) : string | number
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
 >"hello" : "hello"
 >10 : 10
@@ -210,9 +210,9 @@ strOrNum = unionWithOptionalParameter3('hello');
 >'hello' : "hello"
 
 strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
->strOrNum = unionWithOptionalParameter3('hello', 10) : any
+>strOrNum = unionWithOptionalParameter3('hello', 10) : string | number
 >strOrNum : string | number
->unionWithOptionalParameter3('hello', 10) : any
+>unionWithOptionalParameter3('hello', 10) : string | number
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
 >'hello' : "hello"
 >10 : 10
@@ -335,17 +335,17 @@ strOrNum = unionWithRestParameter3('hello');
 >'hello' : "hello"
 
 strOrNum = unionWithRestParameter3('hello', 10); // error no call signature
->strOrNum = unionWithRestParameter3('hello', 10) : any
+>strOrNum = unionWithRestParameter3('hello', 10) : string | number
 >strOrNum : string | number
->unionWithRestParameter3('hello', 10) : any
+>unionWithRestParameter3('hello', 10) : string | number
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
 >'hello' : "hello"
 >10 : 10
 
 strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
->strOrNum = unionWithRestParameter3('hello', 10, 11) : any
+>strOrNum = unionWithRestParameter3('hello', 10, 11) : string | number
 >strOrNum : string | number
->unionWithRestParameter3('hello', 10, 11) : any
+>unionWithRestParameter3('hello', 10, 11) : string | number
 >unionWithRestParameter3 : ((a: string, ...b: number[]) => string) | ((a: string) => number)
 >'hello' : "hello"
 >10 : 10
