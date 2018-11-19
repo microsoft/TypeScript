@@ -19057,25 +19057,24 @@ namespace ts {
         }
 
         function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean {
-            return isValidPropertyAccessWithType(node, node.kind !== SyntaxKind.ImportType && node.expression.kind === SyntaxKind.SuperKeyword, property.escapedName, type)
-                && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
+            const links = getNodeLinks(node);
+            const propertyAccesses = links.propertyAccessValidity || (links.propertyAccessValidity = createMap());
+            let result = propertyAccesses.get("" + type.id + "," + property.id);
+            if (result !== undefined) {
+                return result;
+            }
+            propertyAccesses.set("" + type.id + "," + property.id, result = isValidPropertyAccessWithType(node, node.kind !== SyntaxKind.ImportType && node.expression.kind === SyntaxKind.SuperKeyword, property.escapedName, type)
+                && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type)));
+            return result;
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
             const propType = getTypeOfPropertyOfType(actualThisType, method.escapedName)!;
             const signatures = getSignaturesOfType(getNonNullableType(propType), SignatureKind.Call);
             Debug.assert(signatures.length !== 0);
             return signatures.some(sig => {
-                const signatureThisType = getThisTypeOfSignature(sig);
-                return !signatureThisType || isTypeAssignableTo(actualThisType, getInstantiatedSignatureThisType(sig, signatureThisType, actualThisType));
+                const signatureThisType = getThisTypeOfSignature(getBaseSignature(sig));
+                return !signatureThisType || isTypeAssignableTo(actualThisType, signatureThisType);
             });
-        }
-        function getInstantiatedSignatureThisType(sig: Signature, signatureThisType: Type, actualThisType: Type): Type {
-            if (!sig.typeParameters) {
-                return signatureThisType;
-            }
-            const context = createInferenceContext(sig.typeParameters, sig, InferenceFlags.None);
-            inferTypes(context.inferences, actualThisType, signatureThisType);
-            return instantiateType(signatureThisType, createSignatureTypeMapper(sig, getInferredTypes(context)));
         }
 
         function isValidPropertyAccessWithType(
