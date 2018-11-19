@@ -3,7 +3,7 @@
 // @checkJs: true
 // @noImplicitAny: true
 // @lib: esnext
-// @Filename: a.js
+// @Filename: bug25149.js
 function* f() {
     var o
     while (true) {
@@ -11,7 +11,8 @@ function* f() {
     }
 }
 
-// @Filename: b.ts
+// @Filename: alsoFails.ts
+// fails in Typescript too
 function* g() {
     var o = []
     while (true) {

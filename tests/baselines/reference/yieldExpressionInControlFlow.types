@@ -1,4 +1,4 @@
-=== tests/cases/conformance/es6/yieldExpressions/a.js ===
+=== tests/cases/conformance/es6/yieldExpressions/bug25149.js ===
 function* f() {
 >f : () => IterableIterator<any>
 
@@ -16,7 +16,8 @@ function* f() {
     }
 }
 
-=== tests/cases/conformance/es6/yieldExpressions/b.ts ===
+=== tests/cases/conformance/es6/yieldExpressions/alsoFails.ts ===
+// fails in Typescript too
 function* g() {
 >g : () => IterableIterator<any>
 
