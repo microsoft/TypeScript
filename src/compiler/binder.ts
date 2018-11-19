@@ -2608,7 +2608,7 @@ namespace ts {
                 return true;
             }
             const node = symbol.valueDeclaration;
-            if (isCallExpression(node)) {
+            if (node && isCallExpression(node)) {
                 return !!getAssignedExpandoInitializer(node);
             }
             let init = !node ? undefined :
