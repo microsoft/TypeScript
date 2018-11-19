@@ -22696,27 +22696,20 @@ namespace ts {
             const expr = skipParentheses(node);
             // Optimize for the common case of a call to a function with a single non-generic call
             // signature where we can just fetch the return type without checking the arguments.
-            switch (node.kind) {
-                case SyntaxKind.TypeAssertionExpression:
-                case SyntaxKind.AsExpression:
-                    return getTypeFromTypeNode((<TypeAssertion>expr).type);
-                case SyntaxKind.YieldExpression:
-                    return anyType;
-                case SyntaxKind.CallExpression:
-                    if ((<CallExpression>expr).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
-                        const funcType = checkNonNullExpression((<CallExpression>expr).expression);
-                        const signature = getSingleCallSignature(funcType);
-                        if (signature && !signature.typeParameters) {
-                            return getReturnTypeOfSignature(signature);
-                        }
-                    }
-                    // falls through
-                default:
-                    // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
-                    // should have a parameter that indicates whether full error checking is required such that
-                    // we can perform the optimizations locally.
-                    return cache ? checkExpressionCached(node) : checkExpression(node);
+            if (expr.kind === SyntaxKind.CallExpression && (<CallExpression>expr).expression.kind !== SyntaxKind.SuperKeyword && !isRequireCall(expr, /*checkArgumentIsStringLiteralLike*/ true) && !isSymbolOrSymbolForCall(expr)) {
+                const funcType = checkNonNullExpression((<CallExpression>expr).expression);
+                const signature = getSingleCallSignature(funcType);
+                if (signature && !signature.typeParameters) {
+                    return getReturnTypeOfSignature(signature);
+                }
             }
+            else if (expr.kind === SyntaxKind.TypeAssertionExpression || expr.kind === SyntaxKind.AsExpression) {
+                return getTypeFromTypeNode((<TypeAssertion>expr).type);
+            }
+            // Otherwise simply call checkExpression. Ideally, the entire family of checkXXX functions
+            // should have a parameter that indicates whether full error checking is required such that
+            // we can perform the optimizations locally.
+            return cache ? checkExpressionCached(node) : checkExpression(node);
         }
 
         /**
