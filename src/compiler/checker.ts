@@ -1459,7 +1459,14 @@ namespace ts {
                         //       @y method(x, y) {} // <-- decorator y should be resolved at the class declaration, not the method.
                         //   }
                         //
-                        if (location.parent && isClassElement(location.parent)) {
+
+                        // class Decorators are resolved outside of the class to avoid referencing type parameters of that class.
+                        //
+                        //   type T = number;
+                        //   declare function y(x: T): any;
+                        //   @param(1 as T) // <-- T should resolve to the type alias outside of class C
+                        //   class C<T> {}
+                        if (location.parent && (isClassElement(location.parent) || location.parent.kind === SyntaxKind.ClassDeclaration)) {
                             location = location.parent;
                         }
                         break;
