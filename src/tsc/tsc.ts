@@ -133,13 +133,13 @@ namespace ts {
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
-                updateReportDiagnostic(configParseResult.options);
-                configParseResult.errors.forEach(reportDiagnostic);
-                // tslint:disable-next-line:no-null-keyword
-                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
                 if (configParseResult.errors.length !== 0) {
+                    updateReportDiagnostic(configParseResult.options);
+                    configParseResult.errors.forEach(reportDiagnostic);
                     return sys.exit(ExitStatus.DiagnosticsPresent_OutputsGenerated);
                 }
+                // tslint:disable-next-line:no-null-keyword
+                sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
             }
             updateReportDiagnostic(configParseResult.options);
