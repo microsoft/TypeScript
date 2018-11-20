@@ -8,3 +8,28 @@ function f() {
 >arguments : IArguments
 >12 : 12
 }
+
+interface I {
+    method(args: typeof arguments): void;
+>method : (args: any) => void
+>args : any
+>arguments : any
+
+    fn: (args: typeof arguments) => void;
+>fn : (args: any) => void
+>args : any
+>arguments : any
+
+    (args: typeof arguments): void;
+>args : any
+>arguments : any
+
+    new (args: typeof arguments): void;
+>args : any
+>arguments : any
+
+    construct: new (args: typeof arguments) => void;
+>construct : new (args: any) => void
+>args : any
+>arguments : any
+}

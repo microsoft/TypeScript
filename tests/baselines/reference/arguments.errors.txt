@@ -1,0 +1,29 @@
+tests/cases/compiler/arguments.ts(6,25): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/arguments.ts(7,23): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/arguments.ts(8,19): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/arguments.ts(9,23): error TS2304: Cannot find name 'arguments'.
+tests/cases/compiler/arguments.ts(10,34): error TS2304: Cannot find name 'arguments'.
+
+
+==== tests/cases/compiler/arguments.ts (5 errors) ====
+    function f() {
+        var x=arguments[12];
+    }
+    
+    interface I {
+        method(args: typeof arguments): void;
+                            ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+        fn: (args: typeof arguments) => void;
+                          ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+        (args: typeof arguments): void;
+                      ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+        new (args: typeof arguments): void;
+                          ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+        construct: new (args: typeof arguments) => void;
+                                     ~~~~~~~~~
+!!! error TS2304: Cannot find name 'arguments'.
+    }
