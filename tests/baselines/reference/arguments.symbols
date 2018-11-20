@@ -6,3 +6,25 @@ function f() {
 >x : Symbol(x, Decl(arguments.ts, 1, 7))
 >arguments : Symbol(arguments)
 }
+
+interface I {
+>I : Symbol(I, Decl(arguments.ts, 2, 1))
+
+    method(args: typeof arguments): void;
+>method : Symbol(I.method, Decl(arguments.ts, 4, 13))
+>args : Symbol(args, Decl(arguments.ts, 5, 11))
+
+    fn: (args: typeof arguments) => void;
+>fn : Symbol(I.fn, Decl(arguments.ts, 5, 41))
+>args : Symbol(args, Decl(arguments.ts, 6, 9))
+
+    (args: typeof arguments): void;
+>args : Symbol(args, Decl(arguments.ts, 7, 5))
+
+    new (args: typeof arguments): void;
+>args : Symbol(args, Decl(arguments.ts, 8, 9))
+
+    construct: new (args: typeof arguments) => void;
+>construct : Symbol(I.construct, Decl(arguments.ts, 8, 39))
+>args : Symbol(args, Decl(arguments.ts, 9, 20))
+}

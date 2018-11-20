@@ -1420,7 +1420,6 @@ namespace ts {
                         }
                         break;
                     case SyntaxKind.MethodDeclaration:
-                    case SyntaxKind.MethodSignature:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
