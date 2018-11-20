@@ -121,7 +121,7 @@ export class TestRunner {
 
                 if (typeof testcase.errorMessageRegEx === "string") {
 >typeof testcase.errorMessageRegEx === "string" : boolean
->typeof testcase.errorMessageRegEx : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof testcase.errorMessageRegEx : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >testcase.errorMessageRegEx : string
 >testcase : TestCase
 >errorMessageRegEx : string

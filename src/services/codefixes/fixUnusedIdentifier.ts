@@ -181,8 +181,8 @@ namespace ts.codefix {
 
     function deleteAssignments(changes: textChanges.ChangeTracker, sourceFile: SourceFile, token: Identifier, checker: TypeChecker) {
         FindAllReferences.Core.eachSymbolReferenceInFile(token, checker, sourceFile, (ref: Node) => {
-            if (ref.parent.kind === SyntaxKind.PropertyAccessExpression) ref = ref.parent;
-            if (ref.parent.kind === SyntaxKind.BinaryExpression && ref.parent.parent.kind === SyntaxKind.ExpressionStatement) {
+            if (isPropertyAccessExpression(ref.parent) && ref.parent.name === ref) ref = ref.parent;
+            if (isBinaryExpression(ref.parent) && isExpressionStatement(ref.parent.parent) && ref.parent.left === ref) {
                 changes.delete(sourceFile, ref.parent.parent);
             }
         });
@@ -200,8 +200,16 @@ namespace ts.codefix {
 
     function tryDeleteParameter(changes: textChanges.ChangeTracker, sourceFile: SourceFile, p: ParameterDeclaration, checker: TypeChecker, sourceFiles: ReadonlyArray<SourceFile>, isFixAll: boolean): void {
         if (mayDeleteParameter(p, checker, isFixAll)) {
-            changes.delete(sourceFile, p);
-            deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+            if (p.modifiers && p.modifiers.length > 0
+                    && (!isIdentifier(p.name) || FindAllReferences.Core.isSymbolReferencedInFile(p.name, checker, sourceFile))) {
+                p.modifiers.forEach(modifier => {
+                    changes.deleteModifier(sourceFile, modifier);
+                });
+            }
+            else {
+                changes.delete(sourceFile, p);
+                deleteUnusedArguments(changes, sourceFile, p, sourceFiles, checker);
+            }
         }
     }
 

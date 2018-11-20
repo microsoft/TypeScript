@@ -6,6 +6,4 @@
 ////var d: D<number>;
 ////d./**/
 
-goTo.marker();
-verify.completionListContains('x');
-verify.not.completionListContains('f');
+verify.completions({ marker: "", exact: "x" });

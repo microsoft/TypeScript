@@ -21,8 +21,11 @@
 
 verify.completions({
     marker: "",
-    includes: { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport foo", kind: "alias", hasAction: true },
-    excludes: [{ name: "foo", source: "/a_reexport" }, { name: "foo", source: "/a_reexport_2" }],
+    includes: [
+        "undefined",
+        { name: "foo", source: "/a", sourceDisplay: "./a", text: "(alias) const foo: 0\nexport foo", kind: "alias", hasAction: true },
+        ...completion.statementKeywordsWithTypes,
+    ],
     preferences: { includeCompletionsForModuleExports: true },
 });
 

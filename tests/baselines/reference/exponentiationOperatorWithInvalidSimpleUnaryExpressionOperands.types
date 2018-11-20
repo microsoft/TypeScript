@@ -93,39 +93,39 @@ var temp: any;
 
 (typeof --temp) ** 3;
 >(typeof --temp) ** 3 : number
->(typeof --temp) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof --temp : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof --temp) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof --temp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >--temp : number
 >temp : any
 >3 : 3
 
 (typeof temp--) ** 3;
 >(typeof temp--) ** 3 : number
->(typeof temp--) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp-- : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp--) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp-- : number
 >temp : any
 >3 : 3
 
 (typeof 3) ** 4;
 >(typeof 3) ** 4 : number
->(typeof 3) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof 3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof 3) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof 3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >3 : 3
 >4 : 4
 
 (typeof temp++) ** 4;
 >(typeof temp++) ** 4 : number
->(typeof temp++) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp++ : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp++) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp++ : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp++ : number
 >temp : any
 >4 : 4
 
 (typeof temp--) ** 4;
 >(typeof temp--) ** 4 : number
->(typeof temp--) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp-- : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp--) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp-- : number
 >temp : any
 >4 : 4
@@ -134,8 +134,8 @@ var temp: any;
 >1 ** (typeof --temp) ** 3 : number
 >1 : 1
 >(typeof --temp) ** 3 : number
->(typeof --temp) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof --temp : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof --temp) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof --temp : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >--temp : number
 >temp : any
 >3 : 3
@@ -144,8 +144,8 @@ var temp: any;
 >1 ** (typeof temp--) ** 3 : number
 >1 : 1
 >(typeof temp--) ** 3 : number
->(typeof temp--) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp-- : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp--) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp-- : number
 >temp : any
 >3 : 3
@@ -154,8 +154,8 @@ var temp: any;
 >1 ** (typeof 3) ** 4 : number
 >1 : 1
 >(typeof 3) ** 4 : number
->(typeof 3) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof 3 : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof 3) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof 3 : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >3 : 3
 >4 : 4
 
@@ -163,8 +163,8 @@ var temp: any;
 >1 ** (typeof temp++) ** 4 : number
 >1 : 1
 >(typeof temp++) ** 4 : number
->(typeof temp++) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp++ : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp++) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp++ : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp++ : number
 >temp : any
 >4 : 4
@@ -173,8 +173,8 @@ var temp: any;
 >1 ** (typeof temp--) ** 4 : number
 >1 : 1
 >(typeof temp--) ** 4 : number
->(typeof temp--) : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
->typeof temp-- : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>(typeof temp--) : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof temp-- : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >temp-- : number
 >temp : any
 >4 : 4

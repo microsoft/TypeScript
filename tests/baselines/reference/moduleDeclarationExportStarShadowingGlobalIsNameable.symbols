@@ -15,7 +15,7 @@ interface Account2 {
 >myAccNum : Symbol(Account2.myAccNum, Decl(account.ts, 3, 20))
 }
 export { Account2 as Acc };
->Account2 : Symbol(Acc, Decl(account.ts, 6, 8))
+>Account2 : Symbol(Account2, Decl(account.ts, 2, 1))
 >Acc : Symbol(Acc, Decl(account.ts, 6, 8))
 
 === tests/cases/compiler/index.ts ===

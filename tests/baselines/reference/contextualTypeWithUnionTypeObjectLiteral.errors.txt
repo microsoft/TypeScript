@@ -14,8 +14,7 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
       Type 'string | number' is not assignable to type 'number'.
         Type 'string' is not assignable to type 'number'.
 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(25,5): error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
-  Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
-    Property 'anotherP1' is missing in type '{ prop: string | number; anotherP: string; }'.
+  Property 'anotherP1' is missing in type '{ prop: string | number; anotherP: string; }' but required in type '{ prop: number; anotherP1: number; }'.
 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(29,5): error TS2322: Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
   Type '{ prop: string | number; anotherP: string; anotherP1: number; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
     Types of property 'prop' are incompatible.
@@ -73,8 +72,8 @@ tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts(
     var objStrOrNum7: { prop: string; anotherP: string; } | { prop: number; anotherP1: number } = {
         ~~~~~~~~~~~~
 !!! error TS2322: Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: string; anotherP: string; } | { prop: number; anotherP1: number; }'.
-!!! error TS2322:   Type '{ prop: string | number; anotherP: string; }' is not assignable to type '{ prop: number; anotherP1: number; }'.
-!!! error TS2322:     Property 'anotherP1' is missing in type '{ prop: string | number; anotherP: string; }'.
+!!! error TS2322:   Property 'anotherP1' is missing in type '{ prop: string | number; anotherP: string; }' but required in type '{ prop: number; anotherP1: number; }'.
+!!! related TS2728 tests/cases/conformance/types/union/contextualTypeWithUnionTypeObjectLiteral.ts:25:73: 'anotherP1' is declared here.
         prop: strOrNumber,
         anotherP: str
     };

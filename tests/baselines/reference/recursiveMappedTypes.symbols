@@ -30,3 +30,28 @@ type Recurse2 = {
 >Recurse1 : Symbol(Recurse1, Decl(recursiveMappedTypes.ts, 4, 1))
 >K : Symbol(K, Decl(recursiveMappedTypes.ts, 11, 5))
 }
+
+// Repro from #27881
+
+export type Circular<T> = {[P in keyof T]: Circular<T>};
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+>P : Symbol(P, Decl(recursiveMappedTypes.ts, 16, 28))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>T : Symbol(T, Decl(recursiveMappedTypes.ts, 16, 21))
+
+type tup = [number, number, number, number];
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+
+function foo(arg: Circular<tup>): tup {
+>foo : Symbol(foo, Decl(recursiveMappedTypes.ts, 17, 44))
+>arg : Symbol(arg, Decl(recursiveMappedTypes.ts, 19, 13))
+>Circular : Symbol(Circular, Decl(recursiveMappedTypes.ts, 12, 1))
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+>tup : Symbol(tup, Decl(recursiveMappedTypes.ts, 16, 56))
+
+  return arg;
+>arg : Symbol(arg, Decl(recursiveMappedTypes.ts, 19, 13))
+}
+

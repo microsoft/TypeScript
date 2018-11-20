@@ -4,7 +4,7 @@
 >Array : ArrayConstructor
 
 /*1*/ typeof /*2*/ Array /*3*/;
->typeof /*2*/ Array : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof /*2*/ Array : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >Array : ArrayConstructor
 
 /*1*/ void /*2*/ Array /*3*/;

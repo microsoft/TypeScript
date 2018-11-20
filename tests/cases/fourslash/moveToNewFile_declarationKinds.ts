@@ -33,6 +33,7 @@ export namespace N {
 }
 export type T = number;
 export interface I {
-}`,
+}
+`,
     },
 });

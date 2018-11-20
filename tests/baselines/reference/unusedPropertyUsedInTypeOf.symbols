@@ -1,0 +1,16 @@
+=== tests/cases/compiler/unusedPropertyUsedInTypeOf.ts ===
+class C {
+>C : Symbol(C, Decl(unusedPropertyUsedInTypeOf.ts, 0, 0))
+
+    private static readonly x: number;
+>x : Symbol(C.x, Decl(unusedPropertyUsedInTypeOf.ts, 0, 9))
+
+    m(p: typeof C.x) { return p; }
+>m : Symbol(C.m, Decl(unusedPropertyUsedInTypeOf.ts, 1, 38))
+>p : Symbol(p, Decl(unusedPropertyUsedInTypeOf.ts, 2, 6))
+>C.x : Symbol(C.x, Decl(unusedPropertyUsedInTypeOf.ts, 0, 9))
+>C : Symbol(C, Decl(unusedPropertyUsedInTypeOf.ts, 0, 0))
+>x : Symbol(C.x, Decl(unusedPropertyUsedInTypeOf.ts, 0, 9))
+>p : Symbol(p, Decl(unusedPropertyUsedInTypeOf.ts, 2, 6))
+}
+

@@ -36,23 +36,6 @@ namespace ts {
         Low = 250
     }
 
-    function getPriorityValues(highPriorityValue: number): [number, number, number] {
-        const mediumPriorityValue = highPriorityValue * 2;
-        const lowPriorityValue = mediumPriorityValue * 4;
-        return [highPriorityValue, mediumPriorityValue, lowPriorityValue];
-    }
-
-    function pollingInterval(watchPriority: PollingInterval): number {
-        return pollingIntervalsForPriority[watchPriority];
-    }
-
-    const pollingIntervalsForPriority = getPriorityValues(250);
-
-    /* @internal */
-    export function watchFileUsingPriorityPollingInterval(host: System, fileName: string, callback: FileWatcherCallback, watchPriority: PollingInterval): FileWatcher {
-        return host.watchFile!(fileName, callback, pollingInterval(watchPriority));
-    }
-
     /* @internal */
     export type HostWatchFile = (fileName: string, callback: FileWatcherCallback, pollingInterval: PollingInterval | undefined) => FileWatcher;
     /* @internal */

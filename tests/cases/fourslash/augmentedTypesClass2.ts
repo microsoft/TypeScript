@@ -6,8 +6,6 @@
 ////var r = new c5b();
 ////r./*2*/
 
-goTo.marker('1');
-verify.not.completionListContains('y', 'var y: number');
+verify.completions({ marker: "1", excludes: ["y"] });
 edit.backspace(4);
-goTo.marker('2');
-verify.completionListContains('foo', '(method) c5b.foo(): void');
+verify.completions({ marker: "2", exact: { name: "foo", text: "(method) c5b.foo(): void" } });

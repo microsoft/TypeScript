@@ -209,12 +209,6 @@ namespace ts.textChanges {
 
     export type TypeAnnotatable = SignatureDeclaration | VariableDeclaration | ParameterDeclaration | PropertyDeclaration | PropertySignature;
 
-    interface JSDocParameter {
-        declaration: ParameterDeclaration;
-        typeNode: TypeNode;
-        isOptional?: boolean;
-    }
-
     export class ChangeTracker {
         private readonly changes: Change[] = [];
         private readonly newFiles: { readonly oldFile: SourceFile | undefined, readonly fileName: string, readonly statements: ReadonlyArray<Statement> }[] = [];
@@ -234,9 +228,8 @@ namespace ts.textChanges {
         /** Public for tests only. Other callers should use `ChangeTracker.with`. */
         constructor(private readonly newLineCharacter: string, private readonly formatContext: formatting.FormatContext) {}
 
-        public deleteRange(sourceFile: SourceFile, range: TextRange) {
+        public deleteRange(sourceFile: SourceFile, range: TextRange): void {
             this.changes.push({ kind: ChangeKind.Remove, sourceFile, range });
-            return this;
         }
 
         delete(sourceFile: SourceFile, node: Node | NodeArray<TypeParameterDeclaration>): void {
@@ -247,11 +240,10 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, { pos: modifier.getStart(sourceFile), end: skipTrivia(sourceFile.text, modifier.end, /*stopAfterLineBreak*/ true) });
         }
 
-        public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}) {
+        public deleteNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, options: ConfigurableStartEnd = {}): void {
             const startPosition = getAdjustedStartPosition(sourceFile, startNode, options, Position.FullStart);
             const endPosition = getAdjustedEndPosition(sourceFile, endNode, options);
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
-            return this;
         }
 
         public deleteNodeRangeExcludingEnd(sourceFile: SourceFile, startNode: Node, afterEndNode: Node | undefined, options: ConfigurableStartEnd = {}): void {
@@ -260,43 +252,45 @@ namespace ts.textChanges {
             this.deleteRange(sourceFile, { pos: startPosition, end: endPosition });
         }
 
-        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}) {
+        public replaceRange(sourceFile: SourceFile, range: TextRange, newNode: Node, options: InsertNodeOptions = {}): void {
             this.changes.push({ kind: ChangeKind.ReplaceWithSingleNode, sourceFile, range, options, node: newNode });
-            return this;
         }
 
-        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            return this.replaceRange(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNode, options);
+        public replaceNode(sourceFile: SourceFile, oldNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions): void {
+            this.replaceRange(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNode, options);
         }
 
-        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions) {
+        public replaceNodeRange(sourceFile: SourceFile, startNode: Node, endNode: Node, newNode: Node, options: ChangeNodeOptions = useNonAdjustedPositions): void {
             this.replaceRange(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNode, options);
         }
 
-        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}) {
+        private replaceRangeWithNodes(sourceFile: SourceFile, range: TextRange, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = {}): void {
             this.changes.push({ kind: ChangeKind.ReplaceWithMultipleNodes, sourceFile, range, options, nodes: newNodes });
-            return this;
         }
 
-        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions) {
-            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
+        public replaceNodeWithNodes(sourceFile: SourceFile, oldNode: Node, newNodes: ReadonlyArray<Node>, options: ChangeNodeOptions = useNonAdjustedPositions): void {
+            this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, options), newNodes, options);
         }
 
-        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions) {
-            return this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
+        public replaceNodeWithText(sourceFile: SourceFile, oldNode: Node, text: string): void {
+            this.replaceRangeWithText(sourceFile, getAdjustedRange(sourceFile, oldNode, oldNode, useNonAdjustedPositions), text);
         }
 
-        private nextCommaToken (sourceFile: SourceFile, node: Node): Node | undefined {
+        public replaceNodeRangeWithNodes(sourceFile: SourceFile, startNode: Node, endNode: Node, newNodes: ReadonlyArray<Node>, options: ReplaceWithMultipleNodesOptions & ConfigurableStartEnd = useNonAdjustedPositions): void {
+            this.replaceRangeWithNodes(sourceFile, getAdjustedRange(sourceFile, startNode, endNode, options), newNodes, options);
+        }
+
+        private nextCommaToken(sourceFile: SourceFile, node: Node): Node | undefined {
             const next = findNextToken(node, node.parent, sourceFile);
             return next && next.kind === SyntaxKind.CommaToken ? next : undefined;
         }
 
-        public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment) {
+        public replacePropertyAssignment(sourceFile: SourceFile, oldNode: PropertyAssignment, newNode: PropertyAssignment): void {
             const suffix = this.nextCommaToken(sourceFile, oldNode) ? "" : ("," + this.newLineCharacter);
-            return this.replaceNode(sourceFile, oldNode, newNode, { suffix });
+            this.replaceNode(sourceFile, oldNode, newNode, { suffix });
         }
 
-        public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}) {
+        public insertNodeAt(sourceFile: SourceFile, pos: number, newNode: Node, options: InsertNodeOptions = {}): void {
             this.replaceRange(sourceFile, createRange(pos), newNode, options);
         }
 
@@ -312,7 +306,7 @@ namespace ts.textChanges {
             });
         }
 
-        public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false) {
+        public insertNodeBefore(sourceFile: SourceFile, before: Node, newNode: Node, blankLineBetween = false): void {
             this.insertNodeAt(sourceFile, getAdjustedStartPosition(sourceFile, before, {}, Position.Start), newNode, this.getOptionsForInsertNodeBefore(before, blankLineBetween));
         }
 
@@ -345,35 +339,27 @@ namespace ts.textChanges {
             this.insertText(sourceFile, token.getStart(sourceFile), text);
         }
 
-        public insertCommentThenNewline(sourceFile: SourceFile, character: number, position: number, commentText: string): void {
-            const token = getTouchingToken(sourceFile, position);
-            const text = "/**" + commentText + "*/" + this.newLineCharacter + repeatString(" ", character);
-            this.insertText(sourceFile, token.getStart(sourceFile), text);
+        public insertJsdocCommentBefore(sourceFile: SourceFile, node: HasJSDoc, tag: JSDoc): void {
+            const fnStart = node.getStart(sourceFile);
+            if (node.jsDoc) {
+                for (const jsdoc of node.jsDoc) {
+                    this.deleteRange(sourceFile, {
+                        pos: getLineStartPositionForPosition(jsdoc.getStart(sourceFile), sourceFile),
+                        end: getAdjustedEndPosition(sourceFile, jsdoc, /*options*/ {})
+                    });
+                }
+            }
+            const startPosition = getPrecedingNonSpaceCharacterPosition(sourceFile.text, fnStart - 1);
+            const indent = sourceFile.text.slice(startPosition, fnStart);
+            this.insertNodeAt(sourceFile, fnStart, tag, { preserveLeadingWhitespace: false, suffix: this.newLineCharacter + indent });
         }
 
-        public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string) {
+        public replaceRangeWithText(sourceFile: SourceFile, range: TextRange, text: string): void {
             this.changes.push({ kind: ChangeKind.Text, sourceFile, range, text });
         }
 
         public insertText(sourceFile: SourceFile, pos: number, text: string): void {
             this.replaceRangeWithText(sourceFile, createRange(pos), text);
-        }
-
-        public tryInsertJSDocParameters(sourceFile: SourceFile, parameters: JSDocParameter[]) {
-            if (parameters.length === 0) {
-                return;
-            }
-            const parent = parameters[0].declaration.parent;
-            const indent = getLineAndCharacterOfPosition(sourceFile, parent.getStart()).character;
-            let commentText = "\n";
-            for (const { declaration, typeNode, isOptional } of parameters) {
-                if (isIdentifier(declaration.name)) {
-                    const printed = changesToText.getNonformattedText(typeNode, sourceFile, this.newLineCharacter).text;
-                    commentText += this.printJSDocParameter(indent, printed, declaration.name, isOptional);
-                }
-            }
-            commentText += repeatString(" ", indent + 1);
-            this.insertCommentThenNewline(sourceFile, indent, parent.getStart(), commentText);
         }
 
         /** Prefer this over replacing a node with another that has a type annotation, as it avoids reformatting the other parts of the node. */
@@ -392,27 +378,6 @@ namespace ts.textChanges {
             }
 
             this.insertNodeAt(sourceFile, endNode.end, type, { prefix: ": " });
-        }
-
-        public tryInsertJSDocType(sourceFile: SourceFile, node: Node, type: TypeNode): void {
-            const printed = changesToText.getNonformattedText(type, sourceFile, this.newLineCharacter).text;
-            let commentText;
-            if (isGetAccessorDeclaration(node)) {
-                commentText = ` @return {${printed}} `;
-            }
-            else {
-                commentText = ` @type {${printed}} `;
-                node = node.parent;
-            }
-            this.insertCommentThenNewline(sourceFile, getLineAndCharacterOfPosition(sourceFile, node.getStart(sourceFile)).character, node.getStart(sourceFile), commentText);
-        }
-
-        private printJSDocParameter(indent: number, printed: string, name: Identifier, isOptionalParameter: boolean | undefined) {
-            let printName = unescapeLeadingUnderscores(name.escapedText);
-            if (isOptionalParameter) {
-                printName = `[${printName}]`;
-            }
-            return repeatString(" ", indent) + ` * @param {${printed}} ${printName}\n`;
         }
 
         public insertTypeParameters(sourceFile: SourceFile, node: SignatureDeclaration, typeParameters: ReadonlyArray<TypeParameterDeclaration>): void {
@@ -531,7 +496,7 @@ namespace ts.textChanges {
             return endPosition;
         }
 
-        private getInsertNodeAfterOptions(sourceFile: SourceFile, after: Node) {
+        private getInsertNodeAfterOptions(sourceFile: SourceFile, after: Node): InsertNodeOptions {
             const options = this.getInsertNodeAfterOptionsWorker(after);
             return {
                 ...options,
@@ -602,14 +567,14 @@ namespace ts.textChanges {
          * i.e. arguments in arguments lists, parameters in parameter lists etc.
          * Note that separators are part of the node in statements and class elements.
          */
-        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)) {
+        public insertNodeInListAfter(sourceFile: SourceFile, after: Node, newNode: Node, containingList = formatting.SmartIndenter.getContainingList(after, sourceFile)): void {
             if (!containingList) {
                 Debug.fail("node is not a list element");
-                return this;
+                return;
             }
             const index = indexOfNode(containingList, after);
             if (index < 0) {
-                return this;
+                return;
             }
             const end = after.getEnd();
             if (index !== containingList.length - 1) {
@@ -711,7 +676,6 @@ namespace ts.textChanges {
                     this.replaceRange(sourceFile, createRange(end), newNode, { prefix: `${tokenToString(separator)} ` });
                 }
             }
-            return this;
         }
 
         private finishClassesWithNodesInsertedAtStart(): void {
@@ -725,7 +689,7 @@ namespace ts.textChanges {
         }
 
         private finishDeleteDeclarations(): void {
-            const deletedNodesInLists = new NodeSet(); // Stores ids of nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
+            const deletedNodesInLists = new NodeSet(); // Stores nodes in lists that we already deleted. Used to avoid deleting `, ` twice in `a, b`.
             for (const { sourceFile, node } of this.deletedNodes) {
                 if (!this.deletedNodes.some(d => d.sourceFile === sourceFile && rangeContainsRangeExclusive(d.node, node))) {
                     if (isArray(node)) {
@@ -765,7 +729,7 @@ namespace ts.textChanges {
             return changes;
         }
 
-        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>) {
+        public createNewFile(oldFile: SourceFile | undefined, fileName: string, statements: ReadonlyArray<Statement>): void {
             this.newFiles.push({ oldFile, fileName, statements });
         }
     }
@@ -816,7 +780,7 @@ namespace ts.textChanges {
             const nonFormattedText = statements.map(s => getNonformattedText(s, oldFile, newLineCharacter).text).join(newLineCharacter);
             const sourceFile = createSourceFile("any file name", nonFormattedText, ScriptTarget.ESNext, /*setParentNodes*/ true, scriptKind);
             const changes = formatting.formatDocument(sourceFile, formatContext);
-            return applyChanges(nonFormattedText, changes);
+            return applyChanges(nonFormattedText, changes) + newLineCharacter;
         }
 
         function computeNewText(change: Change, sourceFile: SourceFile, newLineCharacter: string, formatContext: formatting.FormatContext, validate: ValidateNonFormattedText | undefined): string {
@@ -956,6 +920,9 @@ namespace ts.textChanges {
             this.writer.write(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
+        writeComment(s: string): void {
+            this.writer.writeComment(s);
+        }
         writeKeyword(s: string): void {
             this.writer.writeKeyword(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
@@ -966,6 +933,10 @@ namespace ts.textChanges {
         }
         writePunctuation(s: string): void {
             this.writer.writePunctuation(s);
+            this.setLastNonTriviaPosition(s, /*force*/ false);
+        }
+        writeTrailingSemicolon(s: string): void {
+            this.writer.writeTrailingSemicolon(s);
             this.setLastNonTriviaPosition(s, /*force*/ false);
         }
         writeParameter(s: string): void {
@@ -987,9 +958,6 @@ namespace ts.textChanges {
         writeSymbol(s: string, sym: Symbol): void {
             this.writer.writeSymbol(s, sym);
             this.setLastNonTriviaPosition(s, /*force*/ false);
-        }
-        writeTextOfNode(text: string, node: Node): void {
-            this.writer.writeTextOfNode(text, node);
         }
         writeLine(): void {
             this.writer.writeLine();
@@ -1032,9 +1000,26 @@ namespace ts.textChanges {
         }
     }
 
-    function getInsertionPositionAtSourceFileTop({ text }: SourceFile): number {
-        const shebang = getShebang(text);
+    function getInsertionPositionAtSourceFileTop(sourceFile: SourceFile): number {
+        let lastPrologue: PrologueDirective | undefined;
+        for (const node of sourceFile.statements) {
+            if (isPrologueDirective(node)) {
+                lastPrologue = node;
+            }
+            else {
+                break;
+            }
+        }
+
         let position = 0;
+        const text = sourceFile.text;
+        if (lastPrologue) {
+            position = lastPrologue.end;
+            advancePastLineBreak();
+            return position;
+        }
+
+        const shebang = getShebang(text);
         if (shebang !== undefined) {
             position = shebang.length;
             advancePastLineBreak();
@@ -1075,7 +1060,7 @@ namespace ts.textChanges {
     }
 
     export function isValidLocationToAddComment(sourceFile: SourceFile, position: number) {
-        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position);
+        return !isInComment(sourceFile, position) && !isInString(sourceFile, position) && !isInTemplateString(sourceFile, position) && !isInJSXText(sourceFile, position);
     }
 
     function needSemicolonBetween(a: Node, b: Node): boolean {
@@ -1088,25 +1073,13 @@ namespace ts.textChanges {
             switch (node.kind) {
                 case SyntaxKind.Parameter: {
                     const oldFunction = node.parent;
-                    if (isArrowFunction(oldFunction) && oldFunction.parameters.length === 1) {
+                    if (isArrowFunction(oldFunction) &&
+                        oldFunction.parameters.length === 1 &&
+                        !findChildOfKind(oldFunction, SyntaxKind.OpenParenToken, sourceFile)) {
                         // Lambdas with exactly one parameter are special because, after removal, there
                         // must be an empty parameter list (i.e. `()`) and this won't necessarily be the
                         // case if the parameter is simply removed (e.g. in `x => 1`).
-                        const newFunction = updateArrowFunction(
-                            oldFunction,
-                            oldFunction.modifiers,
-                            oldFunction.typeParameters,
-                            /*parameters*/ undefined!, // TODO: GH#18217
-                            oldFunction.type,
-                            oldFunction.equalsGreaterThanToken,
-                            oldFunction.body);
-
-                        // Drop leading and trailing trivia of the new function because we're only going
-                        // to replace the span (vs the full span) of the old function - the old leading
-                        // and trailing trivia will remain.
-                        suppressLeadingAndTrailingTrivia(newFunction);
-
-                        changes.replaceNode(sourceFile, oldFunction, newFunction);
+                        changes.replaceNodeWithText(sourceFile, node, "()");
                     }
                     else {
                         deleteNodeInList(changes, deletedNodesInLists, sourceFile, node);
