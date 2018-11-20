@@ -433,6 +433,7 @@ namespace ts {
         const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
         const writeFileName = (s: string) => host.trace && host.trace(s);
+        let readFileWithCache = (f: string) => host.readFile(f);
 
         // Watch state
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
@@ -1072,7 +1073,7 @@ namespace ts {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(fileName)) {
                     // Check for unchanged .d.ts files
-                    if (host.fileExists(fileName) && host.readFile(fileName) === content) {
+                    if (host.fileExists(fileName) && readFileWithCache(fileName) === content) {
                         priorChangeTime = host.getModifiedTime(fileName);
                     }
                     else {
@@ -1182,6 +1183,97 @@ namespace ts {
 
         function buildAllProjects(): ExitStatus {
             if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+            const originalReadFile = host.readFile;
+            const originalFileExists = host.fileExists;
+            const originalDirectoryExists = host.directoryExists;
+            const originalCreateDirectory = host.createDirectory;
+            const originalWriteFile = host.writeFile;
+            const originalGetSourceFile = host.getSourceFile;
+            const readFileCache = createMap<string | false>();
+            const fileExistsCache = createMap<boolean>();
+            const directoryExistsCache = createMap<boolean>();
+            const sourceFileCache = createMap<SourceFile>();
+            const savedReadFileWithCache = readFileWithCache;
+
+            // TODO:: In watch mode as well to use caches for incremental build once we can invalidate caches correctly and have right api
+            // Override readFile for json files and output .d.ts to cache the text
+            readFileWithCache = fileName => {
+                const key = toPath(fileName);
+                const value = readFileCache.get(key);
+                if (value !== undefined) return value || undefined;
+                return setReadFileCache(key, fileName);
+            };
+            const setReadFileCache = (key: Path, fileName: string) => {
+                const newValue = originalReadFile.call(host, fileName);
+                readFileCache.set(key, newValue || false);
+                return newValue;
+            };
+            host.readFile = fileName => {
+                const key = toPath(fileName);
+                const value = readFileCache.get(key);
+                if (value !== undefined) return value; // could be .d.ts from output
+                if (!fileExtensionIs(fileName, Extension.Json)) {
+                    return originalReadFile.call(host, fileName);
+                }
+
+                return setReadFileCache(key, fileName);
+            };
+            host.getSourceFile = (fileName, languageVersion, onError, shouldCreateNewSourceFile) => {
+                const key = toPath(fileName);
+                const value = sourceFileCache.get(key);
+                if (value) return value;
+
+                const sourceFile = originalGetSourceFile.call(host, fileName, languageVersion, onError, shouldCreateNewSourceFile);
+                if (sourceFile && (isDeclarationFileName(fileName) || fileExtensionIs(fileName, Extension.Json))) {
+                    sourceFileCache.set(key, sourceFile);
+                }
+                return sourceFile;
+            };
+
+            // fileExits for any kind of extension
+            host.fileExists = fileName => {
+                const key = toPath(fileName);
+                const value = fileExistsCache.get(key);
+                if (value !== undefined) return value;
+                const newValue = originalFileExists.call(host, fileName);
+                fileExistsCache.set(key, !!newValue);
+                return newValue;
+            };
+            host.writeFile = (fileName, data, writeByteOrderMark, onError, sourceFiles) => {
+                const key = toPath(fileName);
+                fileExistsCache.delete(key);
+
+                const value = readFileCache.get(key);
+                if (value && value !== data) {
+                    readFileCache.delete(key);
+                    sourceFileCache.delete(key);
+                }
+                else {
+                    const sourceFile = sourceFileCache.get(key);
+                    if (sourceFile && sourceFile.text !== data) {
+                        sourceFileCache.delete(key);
+                    }
+                }
+                originalWriteFile.call(host, fileName, data, writeByteOrderMark, onError, sourceFiles);
+            };
+
+            // directoryExists
+            if (originalDirectoryExists && originalCreateDirectory) {
+                host.directoryExists = directory => {
+                    const key = toPath(directory);
+                    const value = directoryExistsCache.get(key);
+                    if (value !== undefined) return value;
+                    const newValue = originalDirectoryExists.call(host, directory);
+                    directoryExistsCache.set(key, !!newValue);
+                    return newValue;
+                };
+                host.createDirectory = directory => {
+                    const key = toPath(directory);
+                    directoryExistsCache.delete(key);
+                    originalCreateDirectory.call(host, directory);
+                };
+            }
+
             const graph = getGlobalDependencyGraph();
             reportBuildQueue(graph);
             let anyFailed = false;
@@ -1232,6 +1324,13 @@ namespace ts {
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
             reportErrorSummary();
+            host.readFile = originalReadFile;
+            host.fileExists = originalFileExists;
+            host.directoryExists = originalDirectoryExists;
+            host.createDirectory = originalCreateDirectory;
+            host.writeFile = originalWriteFile;
+            readFileWithCache = savedReadFileWithCache;
+            host.getSourceFile = originalGetSourceFile;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
