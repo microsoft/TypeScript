@@ -683,6 +683,7 @@ namespace ts {
         // A parallel array to projectReferences storing the results of reading in the referenced tsconfig files
         let resolvedProjectReferences: ReadonlyArray<ResolvedProjectReference | undefined> | undefined;
         let projectReferenceRedirects: Map<ResolvedProjectReference | false> | undefined;
+        let mapFromFileToProjectReferenceRedirects: Map<Path> | undefined;
 
         const shouldCreateNewSourceFile = shouldProgramCreateNewSourceFiles(oldProgram, options);
         const structuralIsReused = tryReuseStructureFromOldProgram();
@@ -2231,7 +2232,6 @@ namespace ts {
             if (!referencedProject) {
                 return undefined;
             }
-
             const out = referencedProject.commandLine.options.outFile || referencedProject.commandLine.options.out;
             return out ?
                 changeExtension(out, Extension.Dts) :
@@ -2242,16 +2242,20 @@ namespace ts {
          * Get the referenced project if the file is input file from that reference project
          */
         function getResolvedProjectReferenceToRedirect(fileName: string) {
-            return forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
-                // not input file from the referenced project, ignore
-                if (!referencedProject ||
-                    toPath(options.configFilePath!) === referenceProjectPath ||
-                    !contains(referencedProject.commandLine.fileNames, fileName, isSameFile)) {
-                    return undefined;
-                }
+            if (mapFromFileToProjectReferenceRedirects === undefined) {
+                mapFromFileToProjectReferenceRedirects = createMap();
+                forEachResolvedProjectReference((referencedProject, referenceProjectPath) => {
+                    // not input file from the referenced project, ignore
+                    if (referencedProject &&
+                        toPath(options.configFilePath!) !== referenceProjectPath) {
+                        referencedProject.commandLine.fileNames.forEach(f =>
+                            mapFromFileToProjectReferenceRedirects!.set(toPath(f), referenceProjectPath));
+                    }
+                });
+            }
 
-                return referencedProject;
-            });
+            const referencedProjectPath = mapFromFileToProjectReferenceRedirects.get(toPath(fileName));
+            return referencedProjectPath && getResolvedProjectReferenceByPath(referencedProjectPath);
         }
 
         function forEachResolvedProjectReference<T>(
