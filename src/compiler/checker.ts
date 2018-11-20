@@ -13105,13 +13105,8 @@ namespace ts {
                 return true;
             }
             // A source signature partially matches a target signature if the target signature has no fewer required
-            // parameters and no more overall parameters than the source signature (where a signature with a rest
-            // parameter is always considered to have more overall parameters than one without).
-            const sourceRestCount = sourceHasRestParameter ? 1 : 0;
-            const targetRestCount = targetHasRestParameter ? 1 : 0;
-            if (partialMatch && sourceMinArgumentCount <= targetMinArgumentCount && (
-                sourceRestCount > targetRestCount ||
-                sourceRestCount === targetRestCount && sourceParameterCount >= targetParameterCount)) {
+            // parameters
+            if (partialMatch && sourceMinArgumentCount <= targetMinArgumentCount) {
                 return true;
             }
             return false;
