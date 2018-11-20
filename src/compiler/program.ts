@@ -73,7 +73,6 @@ namespace ts {
     // TODO(shkamat): update this after reworking ts build API
     export function createCompilerHostWorker(options: CompilerOptions, setParentNodes?: boolean, system = sys): CompilerHost {
         const existingDirectories = createMap<boolean>();
-
         function getCanonicalFileName(fileName: string): string {
             // if underlying system can distinguish between two files whose names differs only in cases then file name already in canonical form.
             // otherwise use toLowerCase as a canonical form.
@@ -84,7 +83,7 @@ namespace ts {
             let text: string | undefined;
             try {
                 performance.mark("beforeIORead");
-                text = system.readFile(fileName, options.charset);
+                text = host.readFile(fileName);
                 performance.mark("afterIORead");
                 performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
@@ -113,7 +112,12 @@ namespace ts {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 const parentDirectory = getDirectoryPath(directoryPath);
                 ensureDirectoriesExist(parentDirectory);
-                system.createDirectory(directoryPath);
+                if (host.createDirectory) {
+                    host.createDirectory(directoryPath);
+                }
+                else {
+                    system.createDirectory(directoryPath);
+                }
             }
         }
 
@@ -177,8 +181,7 @@ namespace ts {
 
         const newLine = getNewLineCharacter(options, () => system.newLine);
         const realpath = system.realpath && ((path: string) => system.realpath!(path));
-
-        return {
+        const host: CompilerHost = {
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -194,8 +197,10 @@ namespace ts {
             getEnvironmentVariable: name => system.getEnvironmentVariable ? system.getEnvironmentVariable(name) : "",
             getDirectories: (path: string) => system.getDirectories(path),
             realpath,
-            readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth)
+            readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
+            createDirectory: d => system.createDirectory(d)
         };
+        return host;
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
