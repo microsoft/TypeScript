@@ -75,15 +75,15 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     
     var unionWithDifferentParameterCount: { new (a: string): string; } | { new (a: string, b: number): number; };
-    new unionWithDifferentParameterCount();// no  call signature
+    new unionWithDifferentParameterCount();// needs more args
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 0.
 !!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:28:77: An argument for 'a' was not provided.
-    new unionWithDifferentParameterCount("hello");// no  call signature
+    new unionWithDifferentParameterCount("hello");// needs more args
     ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2554: Expected 2 arguments, but got 1.
 !!! related TS6210 tests/cases/conformance/types/union/unionTypeConstructSignatures.ts:28:88: An argument for 'b' was not provided.
-    new unionWithDifferentParameterCount("hello", 10);// no  call signature
+    new unionWithDifferentParameterCount("hello", 10);// ok
     
     var unionWithOptionalParameter1: { new (a: string, b?: number): string; } | { new (a: string, b?: number): number; };
     strOrNum = new unionWithOptionalParameter1('hello');
@@ -112,8 +112,8 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     
     var unionWithOptionalParameter3: { new (a: string, b?: number): string; } | { new (a: string): number; };
     strOrNum = new unionWithOptionalParameter3('hello'); // error no call signature
-    strOrNum = new unionWithOptionalParameter3('hello', 10); // error no call signature
-    strOrNum = new unionWithOptionalParameter3('hello', "hello"); // error no call signature
+    strOrNum = new unionWithOptionalParameter3('hello', 10); // ok
+    strOrNum = new unionWithOptionalParameter3('hello', "hello"); // wrong type
                                                         ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = new unionWithOptionalParameter3(); // error no call signature
@@ -152,9 +152,9 @@ tests/cases/conformance/types/union/unionTypeConstructSignatures.ts(70,12): erro
     
     var unionWithRestParameter3: { new (a: string, ...b: number[]): string; } | { new (a: string): number };
     strOrNum = new unionWithRestParameter3('hello'); // error no call signature
-    strOrNum = new unionWithRestParameter3('hello', 10); // error no call signature
-    strOrNum = new unionWithRestParameter3('hello', 10, 11); // error no call signature
-    strOrNum = new unionWithRestParameter3('hello', "hello"); // error no call signature
+    strOrNum = new unionWithRestParameter3('hello', 10); // ok
+    strOrNum = new unionWithRestParameter3('hello', 10, 11); // ok
+    strOrNum = new unionWithRestParameter3('hello', "hello"); // wrong type
                                                     ~~~~~~~
 !!! error TS2345: Argument of type '"hello"' is not assignable to parameter of type 'number'.
     strOrNum = new unionWithRestParameter3(); // error no call signature

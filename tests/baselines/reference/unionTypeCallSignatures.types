@@ -109,16 +109,16 @@ var unionWithDifferentParameterCount: { (a: string): string; } | { (a: string, b
 >a : string
 >b : number
 
-unionWithDifferentParameterCount();// no  call signature
+unionWithDifferentParameterCount();// needs more args
 >unionWithDifferentParameterCount() : any
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
 
-unionWithDifferentParameterCount("hello");// no  call signature
+unionWithDifferentParameterCount("hello");// needs more args
 >unionWithDifferentParameterCount("hello") : any
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
 >"hello" : "hello"
 
-unionWithDifferentParameterCount("hello", 10);// no  call signature
+unionWithDifferentParameterCount("hello", 10);// OK
 >unionWithDifferentParameterCount("hello", 10) : string | number
 >unionWithDifferentParameterCount : ((a: string) => string) | ((a: string, b: number) => number)
 >"hello" : "hello"
@@ -209,7 +209,7 @@ strOrNum = unionWithOptionalParameter3('hello');
 >unionWithOptionalParameter3 : ((a: string, b?: number) => string) | ((a: string) => number)
 >'hello' : "hello"
 
-strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
+strOrNum = unionWithOptionalParameter3('hello', 10); // ok
 >strOrNum = unionWithOptionalParameter3('hello', 10) : string | number
 >strOrNum : string | number
 >unionWithOptionalParameter3('hello', 10) : string | number
@@ -217,7 +217,7 @@ strOrNum = unionWithOptionalParameter3('hello', 10); // error no call signature
 >'hello' : "hello"
 >10 : 10
 
-strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signature
+strOrNum = unionWithOptionalParameter3('hello', "hello"); // wrong argument type
 >strOrNum = unionWithOptionalParameter3('hello', "hello") : any
 >strOrNum : string | number
 >unionWithOptionalParameter3('hello', "hello") : any
@@ -225,7 +225,7 @@ strOrNum = unionWithOptionalParameter3('hello', "hello"); // error no call signa
 >'hello' : "hello"
 >"hello" : "hello"
 
-strOrNum = unionWithOptionalParameter3(); // error no call signature
+strOrNum = unionWithOptionalParameter3(); // needs more args
 >strOrNum = unionWithOptionalParameter3() : any
 >strOrNum : string | number
 >unionWithOptionalParameter3() : any
@@ -351,7 +351,7 @@ strOrNum = unionWithRestParameter3('hello', 10, 11); // error no call signature
 >10 : 10
 >11 : 11
 
-strOrNum = unionWithRestParameter3('hello', "hello"); // error no call signature
+strOrNum = unionWithRestParameter3('hello', "hello"); // wrong argument type
 >strOrNum = unionWithRestParameter3('hello', "hello") : any
 >strOrNum : string | number
 >unionWithRestParameter3('hello', "hello") : any
