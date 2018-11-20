@@ -43,7 +43,7 @@ namespace ts.codefix {
         return getCodeActions(context, parameter, objectLiteral);
     }
 
-    function getCodeActions(context: CodeFixContext, node: Node, objectLiteral: ObjectLiteralExpression): CodeFixAction[]{
+    function getCodeActions(context: CodeFixContext, node: Node, objectLiteral: ObjectLiteralExpression): CodeFixAction[] {
         const { program, sourceFile } = context;
         const checker = program.getTypeChecker();
 
@@ -94,26 +94,25 @@ namespace ts.codefix {
                     return createPropertyAssignment(symbol.name, getDefaultValue(kind));
 
                 case SyntaxKind.FunctionType:
-                    const methodDeclaration = declaration as MethodDeclaration;
-
+                    const methodSignature = declaration as MethodSignature;
                     return createMethod(
-                        methodDeclaration.decorators,
-                        methodDeclaration.modifiers,
-                        methodDeclaration.asteriskToken,
-                        methodDeclaration.name,
-                        methodDeclaration.questionToken,
-                        methodDeclaration.typeParameters,
-                        methodDeclaration.parameters,
-                        methodDeclaration.type,
+                        methodSignature.decorators,
+                        methodSignature.modifiers,
+                        /* asteriskToken */ undefined,
+                        methodSignature.name,
+                        methodSignature.questionToken,
+                        methodSignature.typeParameters,
+                        methodSignature.parameters,
+                        methodSignature.type,
                         createStubbedMethodBody()
                     );
 
                 case SyntaxKind.TypeReference:
-
                     const propertySignature = declaration as PropertySignature;
                     const typeOfProperty = checker.getTypeAtLocation(propertySignature);
                     if (typeOfProperty.isClass()) {
-                        const newObject = createNew(createIdentifier(propertySignature.type!.getText()), /* typeArguments */ undefined, /* argumentsArray */ []);
+                        const identifierName = checker.typeToString(typeOfProperty);
+                        const newObject = createNew(createIdentifier(identifierName), /* typeArguments */ undefined, /* argumentsArray */ []);
                         return createPropertyAssignment(symbol.name, newObject);
                     }
                     else {
@@ -123,6 +122,15 @@ namespace ts.codefix {
                     }
 
                 case SyntaxKind.TypeLiteral:
+                    const propertySignatureTL = declaration as PropertySignature;
+                    const typeOfPropertyTL = checker.getTypeAtLocation(propertySignatureTL);
+
+                    if (propertySignatureTL.type!.kind === SyntaxKind.TypeReference) {
+                        const primitiveName = checker.typeToString(typeOfPropertyTL);
+                        const newObject = createNew(createIdentifier(primitiveName), /* typeArguments */ undefined, /* argumentsArray */ []);
+                        return createPropertyAssignment(symbol.name, newObject);
+                    }
+
                     const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
 
                     const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
@@ -161,7 +169,7 @@ namespace ts.codefix {
                     return createStringLiteral("any");
 
                 case SyntaxKind.ObjectKeyword:
-                    return createNew(createIdentifier("String"), /* */ undefined, [createStringLiteral("object")]);
+                    return createNew(createIdentifier("Object"), /* */ undefined, []);
 
                 case SyntaxKind.StringKeyword:
                     return createStringLiteral("");
