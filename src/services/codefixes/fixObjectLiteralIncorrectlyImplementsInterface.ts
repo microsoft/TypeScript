@@ -50,7 +50,7 @@ namespace ts.codefix {
 
         const interfaceType = checker.getTypeAtLocation(node);
         const interfaceProperties: Symbol[] = checker.getPropertiesOfType(interfaceType);
-        const interfaceName = checker.typeToString(interfaceType);
+        // const interfaceName = checker.typeToString(interfaceType);
 
         const existingMembers = objectLiteral.symbol.members;
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
@@ -62,7 +62,7 @@ namespace ts.codefix {
             newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
         });
 
-        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
+        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, str])];
     }
 
 
@@ -73,7 +73,9 @@ namespace ts.codefix {
 
         let kind = typeNode.kind;
 
-        kind = redirectKind(kind, declaration, typeNode, type);
+        kind = pickFirstTypeFromUnion(typeNode);
+        kind = redirectInterfaceToObjectLiteral(kind, type);
+        kind = redirectPrimitivObjectToTypeReference(declaration, kind);
 
         if (kind === SyntaxKind.FunctionType) {
             const methodSignature = declaration as MethodSignature;
@@ -96,7 +98,7 @@ namespace ts.codefix {
             expression = getDefaultValue(kind);
         }
         else if (kind === SyntaxKind.TupleType) {
-            expression = getDefaultTuple(checker, declaration);
+            expression = getDefaultTuple(checker, declaration, objectLiteralExpression);
         }
         else if (kind === SyntaxKind.TypeReference) {
             expression = expression = getDefaultClassValue(checker, declaration);
@@ -104,7 +106,7 @@ namespace ts.codefix {
         else if (kind === SyntaxKind.TypeLiteral) {
             expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
         }
-        else if (kind === SyntaxKind.IntersectionType) { 
+        else if (kind === SyntaxKind.IntersectionType) {
             expression = getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression);
         }
         else {
@@ -137,27 +139,35 @@ namespace ts.codefix {
                       .map(p => p!);
     }
 
-    function redirectKind(kind: SyntaxKind, declaration: Declaration, typeNode: TypeNode, type: Type): SyntaxKind {
-        let newKind = kind;
+    function pickFirstTypeFromUnion(typeNode: TypeNode): SyntaxKind {
+        let kind = typeNode.kind;
         if (isUnionTypeNode(typeNode)) {
-            newKind = typeNode.types[0].kind;
+            kind = typeNode.types[0].kind;
         }
-
-        if (isTypeReferenceNode(typeNode)) {
-            if (type.isClassOrInterface() && !type.isClass()) {
-                newKind = SyntaxKind.TypeLiteral;
+        return kind;
+    }
+    function redirectInterfaceToObjectLiteral(kind: SyntaxKind, type: Type): SyntaxKind {
+        if (kind === SyntaxKind.TypeReference && type.isClassOrInterface() && !type.isClass()) {
+            kind = SyntaxKind.TypeLiteral;
+        }
+        return kind;
+    }
+    function redirectPrimitivObjectToTypeReference(declaration: Declaration, kind: SyntaxKind): SyntaxKind {
+        if (kind === SyntaxKind.TypeLiteral && isPropertySignature(declaration)) {
+            if (declaration.type!.kind === SyntaxKind.TypeReference) {
+                kind = SyntaxKind.TypeReference;
             }
         }
 
-        if (newKind === SyntaxKind.TypeLiteral) {
-            const propertySignature = declaration as PropertySignature;
+        return kind;
+    }
 
-            if (propertySignature.type!.kind === SyntaxKind.TypeReference) {
-                newKind = SyntaxKind.TypeReference;
-            }
+    function redirectPrimitivObjectForTuple(declaration: Declaration, kind: SyntaxKind): SyntaxKind {
+        if (kind === SyntaxKind.TypeLiteral && isInterfaceDeclaration(declaration)) {
+                kind = SyntaxKind.TypeReference;
         }
 
-        return newKind;
+        return kind;
     }
 
     function getDefaultIntersectionValue(checker: TypeChecker, declarations: Declaration[], objectLiteralExpression: ObjectLiteralExpression): Expression {
@@ -203,23 +213,66 @@ namespace ts.codefix {
         }
     }
 
-    function getDefaultTuple(checker: TypeChecker, declaration: Declaration): Expression {
+    function getDefaultTuple(checker: TypeChecker, declaration: Declaration, objectLiteralExpression: ObjectLiteralExpression): Expression {
         const tupDecl = declaration as PropertySignature;
         const tupTypNode = tupDecl.type as TupleTypeNode;
         tupTypNode;
 
-        const tt = checker.getTypeAtLocation(tupTypNode.elementTypes[0]);
-        str = tt.symbol.name;
 
         str = tupTypNode.elementTypes.map(e => e.kind.toString()).reduce((acc, val) => acc + " " + val);
 
-        const a = getDefaultClassValue(checker, tt.symbol.declarations[0]);
+        const elements = tupTypNode.elementTypes.map(typeNode => {
+            const type = checker.getTypeAtLocation(typeNode);
+            let kind = typeNode.kind;
 
-        // const elementKinds = tupTypNode.elementTypes.map(e => e.kind);
-        // const defaultExpressions = elementKinds.map(getDefaultValue);
+            kind = pickFirstTypeFromUnion(typeNode);
+            kind = redirectInterfaceToObjectLiteral(kind, type);
 
-        return createArrayLiteral([a]);
+            if (isBasicKind(kind)) {
+                return getDefaultValue(kind);
+            }
+            else {
+                const declaration = type.symbol.declarations[0];
+
+                // const s = fetchSymbol(checker, typeNode.getText(), objectLiteralExpression);
+                // const declaration = s.declarations[0];
+                // if (isTypeLiteralNode(typeNode)) {
+                //     str = typeNode.members.map(s => s.name!.getText()).reduce((acc, val) => acc + " " + val);
+                // }
+                str = declaration ? declaration.kind.toString() : "NÄää";
+
+                kind = redirectPrimitivObjectForTuple(declaration, kind);
+
+                if (kind === SyntaxKind.TypeReference) {    // OK
+                    return getDefaultClassValue(checker, declaration);
+                }
+
+                if (kind === SyntaxKind.TypeLiteral) {     // Ok
+                    return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+                }
+
+                // if (kind === SyntaxKind.TupleType) {    // NO
+                //     return getDefaultTuple(checker, declaration, objectLiteralExpression);
+                // }
+
+
+
+                // if (kind === SyntaxKind.IntersectionType) {
+                //     return getDefaultIntersectionValue(checker, s.declarations, objectLiteralExpression);
+                // }
+
+                objectLiteralExpression; return createStringLiteral("");
+            }
+        });
+
+        return createArrayLiteral(elements);
     }
+
+    // function fetchSymbol(checker: TypeChecker, name: String, scope: Node): Symbol | undefined {
+    //     const sys = checker.getSymbolsInScope(scope, SymbolFlags.Type | SymbolFlags.Interface)
+    //                   .filter(s => s.name === name.trim());
+    //     return (sys.length > 0) ? sys[0] : undefined;
+    // }
 
     function getDefaultValue(kind: SyntaxKind): Expression {
             switch (kind) {
