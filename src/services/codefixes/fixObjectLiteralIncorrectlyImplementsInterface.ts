@@ -92,41 +92,43 @@ namespace ts.codefix {
 
         let expression: Expression;
 
-        switch (kind) {
-            case SyntaxKind.AnyKeyword:
-            case SyntaxKind.ObjectKeyword:
-            case SyntaxKind.StringKeyword:
-            case SyntaxKind.NumberKeyword:
-            case SyntaxKind.BigIntKeyword:
-            case SyntaxKind.BooleanKeyword:
-            case SyntaxKind.ArrayType:
-            case SyntaxKind.NullKeyword:
-                expression = getDefaultValue(kind);
-                break;
-
-            case SyntaxKind.TupleType:
-                expression = getDefaultTuple(checker, declaration);
-                break;
-
-            case SyntaxKind.TypeReference:
-                expression = getDefaultClassValue(checker, declaration);
-                break;
-
-            case SyntaxKind.TypeLiteral:
-                expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
-                break;
-
-            case SyntaxKind.IntersectionType:
-                expression = getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression);
-                break;
-
-            default:
-                return undefined;
+        if (isBasicKind(kind)) {
+            expression = getDefaultValue(kind);
+        }
+        else if (kind === SyntaxKind.TupleType) {
+            expression = getDefaultTuple(checker, declaration);
+        }
+        else if (kind === SyntaxKind.TypeReference) {
+            expression = expression = getDefaultClassValue(checker, declaration);
+        }
+        else if (kind === SyntaxKind.TypeLiteral) {
+            expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+        }
+        else if (kind === SyntaxKind.IntersectionType) { 
+            expression = getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression);
+        }
+        else {
+            return undefined;
         }
 
         return createPropertyAssignment(symbol.name, expression);
 
 
+    }
+
+    function isBasicKind(kind: SyntaxKind): boolean {
+        const validKinds = [
+            SyntaxKind.AnyKeyword,
+            SyntaxKind.ObjectKeyword,
+            SyntaxKind.StringKeyword,
+            SyntaxKind.NumberKeyword,
+            SyntaxKind.BigIntKeyword,
+            SyntaxKind.BooleanKeyword,
+            SyntaxKind.ArrayType,
+            SyntaxKind.NullKeyword
+        ];
+
+        return validKinds.some(k => k === kind);
     }
 
     function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
