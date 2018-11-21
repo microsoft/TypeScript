@@ -433,6 +433,7 @@ namespace ts {
         const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
         const writeFileName = (s: string) => host.trace && host.trace(s);
+        let readFileWithCache = (f: string) => host.readFile(f);
 
         // Watch state
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
@@ -1073,7 +1074,7 @@ namespace ts {
                 let priorChangeTime: Date | undefined;
                 if (!anyDtsChanged && isDeclarationFile(name)) {
                     // Check for unchanged .d.ts files
-                    if (host.fileExists(name) && host.readFile(name) === text) {
+                    if (host.fileExists(name) && readFileWithCache(name) === text) {
                         priorChangeTime = host.getModifiedTime(name);
                     }
                     else {
@@ -1184,6 +1185,15 @@ namespace ts {
 
         function buildAllProjects(): ExitStatus {
             if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+            // TODO:: In watch mode as well to use caches for incremental build once we can invalidate caches correctly and have right api
+            // Override readFile for json files and output .d.ts to cache the text
+            const { originalReadFile, originalFileExists, originalDirectoryExists,
+                originalCreateDirectory, originalWriteFile, originalGetSourceFile,
+                readFileWithCache: newReadFileWithCache
+            } = changeCompilerHostToUseCache(host, toPath, /*useCacheForSourceFile*/ true);
+            const savedReadFileWithCache = readFileWithCache;
+            readFileWithCache = newReadFileWithCache;
+
             const graph = getGlobalDependencyGraph();
             reportBuildQueue(graph);
             let anyFailed = false;
@@ -1234,6 +1244,13 @@ namespace ts {
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
             reportErrorSummary();
+            host.readFile = originalReadFile;
+            host.fileExists = originalFileExists;
+            host.directoryExists = originalDirectoryExists;
+            host.createDirectory = originalCreateDirectory;
+            host.writeFile = originalWriteFile;
+            readFileWithCache = savedReadFileWithCache;
+            host.getSourceFile = originalGetSourceFile;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 

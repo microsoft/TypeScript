@@ -227,6 +227,9 @@ namespace ts {
 
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName), /*useCacheForSourceFile*/ false);
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
