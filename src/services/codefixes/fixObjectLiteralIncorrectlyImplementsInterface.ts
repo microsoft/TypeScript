@@ -82,6 +82,14 @@ namespace ts.codefix {
                 }
             }
 
+            if (kind === SyntaxKind.TypeLiteral) {
+                const propertySignature = declaration as PropertySignature;
+
+                if (propertySignature.type!.kind === SyntaxKind.TypeReference) {
+                    kind = SyntaxKind.TypeReference;
+                }
+            }
+
             switch (kind) {
                 case SyntaxKind.AnyKeyword:
                 case SyntaxKind.ObjectKeyword:
@@ -110,7 +118,7 @@ namespace ts.codefix {
                 case SyntaxKind.TypeReference:
                     const propertySignature = declaration as PropertySignature;
                     const typeOfProperty = checker.getTypeAtLocation(propertySignature);
-                    if (typeOfProperty.isClass()) {
+                    if (typeOfProperty.isClassOrInterface()) {
                         const identifierName = checker.typeToString(typeOfProperty);
                         const newObject = createNew(createIdentifier(identifierName), /* typeArguments */ undefined, /* argumentsArray */ []);
                         return createPropertyAssignment(symbol.name, newObject);
@@ -122,15 +130,6 @@ namespace ts.codefix {
                     }
 
                 case SyntaxKind.TypeLiteral:
-                    const propertySignatureTL = declaration as PropertySignature;
-                    const typeOfPropertyTL = checker.getTypeAtLocation(propertySignatureTL);
-
-                    if (propertySignatureTL.type!.kind === SyntaxKind.TypeReference) {
-                        const primitiveName = checker.typeToString(typeOfPropertyTL);
-                        const newObject = createNew(createIdentifier(primitiveName), /* typeArguments */ undefined, /* argumentsArray */ []);
-                        return createPropertyAssignment(symbol.name, newObject);
-                    }
-
                     const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
 
                     const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
