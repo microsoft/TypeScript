@@ -1,7 +1,6 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "fixObjectLiteralIncorrectlyImplementsInterface";
-    let str = ""; str;
 
     registerCodeFix({
         errorCodes: [Diagnostics.Type_0_is_not_assignable_to_type_1.code],
@@ -50,7 +49,7 @@ namespace ts.codefix {
 
         const interfaceType = checker.getTypeAtLocation(node);
         const interfaceProperties: Symbol[] = checker.getPropertiesOfType(interfaceType);
-        // const interfaceName = checker.typeToString(interfaceType);
+        const interfaceName = checker.typeToString(interfaceType);
 
         const existingMembers = objectLiteral.symbol.members;
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
@@ -62,7 +61,7 @@ namespace ts.codefix {
             newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
         });
 
-        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, str])];
+        return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
 
@@ -205,7 +204,6 @@ namespace ts.codefix {
 
     function getDefaultClassValue(checker: TypeChecker, declaration: Declaration): Expression {
         const propertySignature = declaration as PropertySignature;
-        // TODO replace with type
         const typeOfProperty = checker.getTypeAtLocation(propertySignature);
         if (typeOfProperty.isClassOrInterface()) {
             const identifierName = checker.typeToString(typeOfProperty);
@@ -220,8 +218,6 @@ namespace ts.codefix {
     }
 
     function getDefaultTuple(checker: TypeChecker, elementTypes: NodeArray<TypeNode>, objectLiteralExpression: ObjectLiteralExpression): Expression {
-
-        str = elementTypes.map(e => e.kind.toString()).reduce((acc, val) => acc + " " + val);
 
         const elements = elementTypes.map(typeNode => {
             const type = checker.getTypeAtLocation(typeNode);
@@ -267,6 +263,16 @@ namespace ts.codefix {
 
                 if (kind === SyntaxKind.TupleType) {
                     return getDefaultTuple(checker, (typeNode as TupleTypeNode).elementTypes, objectLiteralExpression);
+                }
+
+                if (kind === SyntaxKind.FunctionType && isFunctionTypeNode(typeNode)) {
+                    return createArrowFunction(
+                        typeNode.modifiers,
+                        typeNode.typeParameters,
+                        typeNode.parameters,
+                        typeNode.type,
+                        createToken(SyntaxKind.EqualsGreaterThanToken),
+                        createStubbedMethodBody());
                 }
 
                 return createStringLiteral("FAILLLLLLLL");
