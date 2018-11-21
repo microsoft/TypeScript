@@ -1,8 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-//// class Bar{}
 //// interface foo {
-////     x: Bar;
+////     x: [{ y: string, x: number}]
 //// }
 ////
 //// let n: foo = { }
@@ -10,12 +9,14 @@
 verify.codeFix({
     description: "Implement interface 'foo'",
     newFileContent:
-`class Bar{}
-interface foo {
-    x: Bar;
+`interface foo {
+    x: [{ y: string, x: number}]
 }
 
 let n: foo = {
-    x: new Bar(),
+    x: [{
+        y: "",
+        x: 0
+    }],
 }`,
 });

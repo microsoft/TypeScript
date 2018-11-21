@@ -1,21 +1,17 @@
 /// <reference path='fourslash.ts' />
 
-//// class Bar{}
 //// interface foo {
-////     x: Bar;
+////     x: [string | number];
 //// }
-////
 //// let n: foo = { }
 
 verify.codeFix({
     description: "Implement interface 'foo'",
     newFileContent:
-`class Bar{}
-interface foo {
-    x: Bar;
+`interface foo {
+    x: [string | number];
 }
-
 let n: foo = {
-    x: new Bar(),
+    x: [""],
 }`,
 });

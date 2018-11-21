@@ -2,7 +2,7 @@
 
 //// class Bar{}
 //// interface foo {
-////     x: Bar;
+////     x: [Bar];
 //// }
 ////
 //// let n: foo = { }
@@ -12,10 +12,10 @@ verify.codeFix({
     newFileContent:
 `class Bar{}
 interface foo {
-    x: Bar;
+    x: [Bar];
 }
 
 let n: foo = {
-    x: new Bar(),
+    x: [new Bar()],
 }`,
 });
