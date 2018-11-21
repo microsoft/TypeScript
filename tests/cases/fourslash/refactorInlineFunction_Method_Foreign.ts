@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// class Car {
-////     drive() { return "vroom"; }
+////     /*z*/drive/*y*/() { return "vroom"; }
 ////     drinkAndDrive() { return "glug " + this.drive(); }
 //// }
 //// class Driver {

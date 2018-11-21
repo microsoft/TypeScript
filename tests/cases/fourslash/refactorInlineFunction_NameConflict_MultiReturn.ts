@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// function foo() {
+//// function /*z*/foo/*y*/() {
 ////     const x = 2;
 ////     if (x < 0) return 42;
 ////     else return 69;

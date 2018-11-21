@@ -2,7 +2,7 @@
 
 //// const knife = "sharp";
 //// {
-////     function foo() { return knife; }
+////     function /*z*/foo/*y*/() { return knife; }
 //// }
 //// function bar() { const meaningOfLife = foo(); }
 

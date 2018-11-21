@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// function square(arg: number) { return arg*arg; }
+//// function /*z*/square/*y*/(arg: number) { return arg*arg; }
 //// function bar(arg: number) {
 ////     const someValue = square(2);
 ////     return arg * someValue;
