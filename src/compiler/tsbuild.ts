@@ -1230,7 +1230,7 @@ namespace ts {
                 return sourceFile;
             };
 
-            // fileExits for any kind of extension
+            // fileExists for any kind of extension
             host.fileExists = fileName => {
                 const key = toPath(fileName);
                 const value = fileExistsCache.get(key);
