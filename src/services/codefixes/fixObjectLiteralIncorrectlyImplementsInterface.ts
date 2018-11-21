@@ -1,6 +1,7 @@
 /* @internal */
 namespace ts.codefix {
     const fixId = "fixObjectLiteralIncorrectlyImplementsInterface";
+    let str = ""; str;
 
     registerCodeFix({
         errorCodes: [Diagnostics.Type_0_is_not_assignable_to_type_1.code],
@@ -101,6 +102,24 @@ namespace ts.codefix {
                 case SyntaxKind.NullKeyword:
                     return createPropertyAssignment(symbol.name, getDefaultValue(kind));
 
+                case SyntaxKind.TupleType:
+                    const tupDecl = symbol.declarations[0] as PropertySignature;
+                    const tupTypNode = tupDecl.type as TupleTypeNode;
+                    tupTypNode;
+
+                    const tt = checker.getTypeAtLocation(tupTypNode.elementTypes[0]);
+                    str = tt.symbol.name;
+
+                    str = tupTypNode.elementTypes.map(e => e.kind.toString()).reduce((acc, val) => acc + " " + val);
+
+                    const a = getDefaultClassValue(checker, tt.symbol.declarations[0]);
+
+                    // const elementKinds = tupTypNode.elementTypes.map(e => e.kind);
+                    // const defaultExpressions = elementKinds.map(getDefaultValue);
+
+                    return createPropertyAssignment(symbol.name, createArrayLiteral([a]));
+
+
                 case SyntaxKind.FunctionType:
                     const methodSignature = declaration as MethodSignature;
                     return createMethod(
@@ -116,50 +135,61 @@ namespace ts.codefix {
                     );
 
                 case SyntaxKind.TypeReference:
-                    const propertySignature = declaration as PropertySignature;
-                    const typeOfProperty = checker.getTypeAtLocation(propertySignature);
-                    if (typeOfProperty.isClassOrInterface()) {
-                        const identifierName = checker.typeToString(typeOfProperty);
-                        const newObject = createNew(createIdentifier(identifierName), /* typeArguments */ undefined, /* argumentsArray */ []);
-                        return createPropertyAssignment(symbol.name, newObject);
-                    }
-                    else {
-                        const enumDeclaration = typeOfProperty.symbol.declarations[0] as EnumDeclaration;
-                        const enumMemberAccess = createMemberAccessForPropertyName(enumDeclaration.name, enumDeclaration.members[0].name);
-                        return createPropertyAssignment(symbol.name, enumMemberAccess);
-                    }
+                    return createPropertyAssignment(symbol.name, getDefaultClassValue(checker, declaration));
 
                 case SyntaxKind.TypeLiteral:
-                    const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
-
-                    const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
-                    const subObjectLiteral = createObjectLiteral(stubbedProperties, /* multiline */ true);
-
-                    return createPropertyAssignment(symbol.name, subObjectLiteral);
+                    return createPropertyAssignment(symbol.name, getDefaultObjectLiteral(checker, type, objectLiteralExpression));
 
                 case SyntaxKind.IntersectionType:
-                    let intersectedTypes: Type[];
+                    return createPropertyAssignment(symbol.name, getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression));
 
-                    if (symbol.declarations.length === 1) {
-                        const intersectedTyped = checker.getTypeAtLocation(symbol.declarations[0]) as IntersectionType;
-                        intersectedTypes = intersectedTyped.types;
-                    }
-                    else {
-                        intersectedTypes = symbol.declarations.map(d => checker.getTypeAtLocation(d));
-                    }
-                    const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t))
-                    .reduce((arr, ele) => {
-                        const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
-                        return arr.concat(newEle);
-                    });
-                    const intersectStubs = getNewMembers(intersectedProps, checker, objectLiteralExpression);
-
-                    const interObjLiteral = createObjectLiteral(intersectStubs, /* multiline */ true);
-                    return createPropertyAssignment(symbol.name, interObjLiteral);
                 default:
                     return undefined;
             }
         }).filter(pa => pa !== undefined).map(p => p!);
+    }
+
+    function getDefaultIntersectionValue(checker: TypeChecker, declarations: Declaration[], objectLiteralExpression: ObjectLiteralExpression): Expression {
+        let intersectedTypes: Type[];
+
+        if (declarations.length === 1) {
+            const intersectedTyped = checker.getTypeAtLocation(declarations[0]) as IntersectionType;
+            intersectedTypes = intersectedTyped.types;
+        }
+        else {
+            intersectedTypes = declarations.map(d => checker.getTypeAtLocation(d));
+        }
+        const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t))
+        .reduce((arr, ele) => {
+            const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
+            return arr.concat(newEle);
+        });
+        const intersectStubs = getNewMembers(intersectedProps, checker, objectLiteralExpression);
+
+        return createObjectLiteral(intersectStubs, /* multiline */ true);
+    }
+
+    function getDefaultObjectLiteral(checker: TypeChecker, type: Type, objectLiteralExpression: ObjectLiteralExpression): Expression {
+        const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
+
+        const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
+        return createObjectLiteral(stubbedProperties, /* multiline */ true);
+    }
+
+    function getDefaultClassValue(checker: TypeChecker, declaration: Declaration): Expression {
+        const propertySignature = declaration as PropertySignature;
+        // TODO replace with type
+        const typeOfProperty = checker.getTypeAtLocation(propertySignature);
+        if (typeOfProperty.isClassOrInterface()) {
+            const identifierName = checker.typeToString(typeOfProperty);
+            const newObject = createNew(createIdentifier(identifierName), /* typeArguments */ undefined, /* argumentsArray */ []);
+            return newObject;
+        }
+        else {
+            const enumDeclaration = typeOfProperty.symbol.declarations[0] as EnumDeclaration;
+            const enumMemberAccess = createMemberAccessForPropertyName(enumDeclaration.name, enumDeclaration.members[0].name);
+            return enumMemberAccess;
+        }
     }
 
     function getDefaultValue(kind: SyntaxKind): Expression {
