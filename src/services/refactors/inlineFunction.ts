@@ -112,10 +112,10 @@ namespace ts.refactor.inlineFunction {
             context: RefactorContext,
             declaration: InlineableFunction,
             usages: ReadonlyArray<CallExpression>): FileTextChanges[] {
-        const { file } = context;
+        const { file, program } = context;
         return textChanges.ChangeTracker.with(context, t => {
             forEach(usages, oldNode => {
-                inlineAt(file, t, oldNode, declaration);
+                inlineAt(file, program.getTypeChecker(), t, oldNode, declaration);
             });
             t.delete(file, declaration);
         });
@@ -125,32 +125,50 @@ namespace ts.refactor.inlineFunction {
             declaration: InlineableFunction,
             usages: ReadonlyArray<CallExpression>,
             selectedUsage: CallExpression): FileTextChanges[] {
-        const { file } = context;
+        const { file, program } = context;
         return textChanges.ChangeTracker.with(context, t => {
-            inlineAt(file, t, selectedUsage, declaration);
+            inlineAt(file, program.getTypeChecker(), t, selectedUsage, declaration);
             if (usages.length === 1) t.delete(file, declaration);
         });
     }
 
     function inlineAt(
             file: SourceFile,
+            checker: TypeChecker,
             t: textChanges.ChangeTracker,
             targetNode: CallExpression,
             declaration: InlineableFunction) {
-        const { parameters, body } = declaration;
+        const { parameters } = declaration;
+        let body = getSynthesizedDeepClone(declaration.body)!;
         const statement = <Statement>findAncestor(targetNode, n => isStatement(n));
+        const renameMap: Map<Identifier> = createMap();
         forEach(parameters, (p, i) => {
-            let name = `arg${i}`; // if parameter is object or array literal
-            if (isIdentifier(p.name)) name = p.name.text;
-            const value = targetNode.arguments[i];
-            t.insertNodeBefore(file, statement, createVariableDeclaration(name, /* type */ undefined , value));
+            // let name = `arg${i}`; // if parameter is object or array literal
+            const oldName = p.name;
+            if (isIdentifier(oldName)) {
+                const symbol = checker.getSymbolAtLocation(oldName)!;
+                checker.isSymbolAccessible(symbol, targetNode, 0, /* shouldComputeAliasesToMakeVisible */ false);
+                const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
+                let name = oldName.text;
+                let safeName = getSynthesizedClone(oldName);
+                if (nameIsTaken(symbols, name, symbol)) {
+                    name = getUniqueName(name, file);
+                    safeName = createIdentifier(name);
+                    renameMap.set(String(symbol.id), safeName);
+                }
+                const value = targetNode.arguments[i];
+                const decl = createVariableDeclaration(safeName, /* type */ undefined, value);
+                const declList = createVariableDeclarationList([decl], NodeFlags.Const);
+                t.insertNodeBefore(file, statement, createVariableStatement(/* modifiers */ undefined, declList));
+            }
         });
-        forEach(body!.statements, st => {
+        body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
+        forEach(body.statements, st => {
             if (!isReturnStatement(st)) {
                 t.insertNodeBefore(file, statement, st);
             }
         });
-        const retExpr = forEachReturnStatement<Expression | undefined>(body!, r => r.expression);
+        const retExpr = forEachReturnStatement<Expression | undefined>(body, r => r.expression);
         if (retExpr) {
             const expression = inlineLocal.parenthesizeIfNecessary(targetNode, retExpr);
             t.replaceNode(file, targetNode, expression);
@@ -158,6 +176,10 @@ namespace ts.refactor.inlineFunction {
     }
 
     type InlineableFunction = FunctionDeclaration | MethodDeclaration;
+
+    function nameIsTaken(symbols: Symbol[], name: string, symbol: Symbol) {
+        return forEach(symbols, s => s.name === name && s !== symbol ? s : undefined);
+    }
 
     function isInlineableFunction(node: Node): node is InlineableFunction {
         return node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration;

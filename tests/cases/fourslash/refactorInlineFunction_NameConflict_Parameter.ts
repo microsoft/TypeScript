@@ -12,8 +12,8 @@ edit.applyRefactor({
     actionName: "Inline all",
     actionDescription: "Inline all",
     newContent: `function bar(arg: number) {
-    const arg1 = 2;
-    const someValue = arg1*arg1;
+    const arg_1 = 2;
+    const someValue = arg_1 * arg_1;
     return arg * someValue;
 }`
 });
