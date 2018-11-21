@@ -107,7 +107,18 @@ namespace ts.codefix {
             expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
         }
         else if (kind === SyntaxKind.IntersectionType) {
-            expression = getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression);
+            let intersectedTypes: Type[];
+            const declarations = symbol.declarations;
+
+            if (declarations.length === 1) {
+                const intersectedTyped = checker.getTypeAtLocation(declarations[0]) as IntersectionType;
+                intersectedTypes = intersectedTyped.types;
+            }
+            else {
+                intersectedTypes = declarations.map(d => checker.getTypeAtLocation(d));
+            }
+
+            expression = getDefaultIntersectionValue(checker, intersectedTypes, objectLiteralExpression);
         }
         else {
             return undefined;
@@ -170,16 +181,8 @@ namespace ts.codefix {
         return kind;
     }
 
-    function getDefaultIntersectionValue(checker: TypeChecker, declarations: Declaration[], objectLiteralExpression: ObjectLiteralExpression): Expression {
-        let intersectedTypes: Type[];
+    function getDefaultIntersectionValue(checker: TypeChecker, intersectedTypes: Type[], objectLiteralExpression: ObjectLiteralExpression): Expression {
 
-        if (declarations.length === 1) {
-            const intersectedTyped = checker.getTypeAtLocation(declarations[0]) as IntersectionType;
-            intersectedTypes = intersectedTyped.types;
-        }
-        else {
-            intersectedTypes = declarations.map(d => checker.getTypeAtLocation(d));
-        }
         const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t))
         .reduce((arr, ele) => {
             const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
@@ -232,33 +235,47 @@ namespace ts.codefix {
                 return getDefaultValue(kind);
             }
             else {
-                const declaration = type.symbol.declarations[0];
-
-                // const s = fetchSymbol(checker, typeNode.getText(), objectLiteralExpression);
-                // const declaration = s.declarations[0];
-                // if (isTypeLiteralNode(typeNode)) {
-                //     str = typeNode.members.map(s => s.name!.getText()).reduce((acc, val) => acc + " " + val);
+                // Redirect PrimitiveObject to TypeReference
+                str = type.isIntersection() ? "Nöö" : "Meow";
+                // if (kind === SyntaxKind.TypeLiteral && type.isClassOrInterface()) {
+                //     kind = SyntaxKind.TypeReference;
                 // }
-                str = declaration ? declaration.kind.toString() : "NÄää";
 
-                kind = redirectPrimitivObjectForTuple(declaration, kind);
+                if (type.isIntersection() || kind === SyntaxKind.IntersectionType) {
+                    let intersectedTypes: Type[];
 
-                if (kind === SyntaxKind.TypeReference) {    // OK
-                    return getDefaultClassValue(checker, declaration);
+                    if (kind !== SyntaxKind.IntersectionType) {
+                        // if multiple declaration
+                        intersectedTypes = [type];
+                    }
+                    else {
+                        const intersectedTyped = type as IntersectionType;
+                        // if one declaration
+                        intersectedTypes = intersectedTyped.types;
+                    }
+
+                    return getDefaultIntersectionValue(checker, intersectedTypes, objectLiteralExpression);
                 }
 
-                if (kind === SyntaxKind.TypeLiteral) {     // Ok
-                    return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+                if (kind === SyntaxKind.TypeLiteral || kind === SyntaxKind.TypeReference) {
+                    const declaration = type.symbol.declarations[0];
+
+                    kind = redirectPrimitivObjectForTuple(declaration, kind);
+
+                    if (kind === SyntaxKind.TypeReference) {    // OK
+                        return getDefaultClassValue(checker, declaration);
+                    }
+
+                    if (kind === SyntaxKind.TypeLiteral) {     // Ok
+                        return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+                    }
                 }
+
+
+
 
                 // if (kind === SyntaxKind.TupleType) {    // NO
                 //     return getDefaultTuple(checker, declaration, objectLiteralExpression);
-                // }
-
-
-
-                // if (kind === SyntaxKind.IntersectionType) {
-                //     return getDefaultIntersectionValue(checker, s.declarations, objectLiteralExpression);
                 // }
 
                 objectLiteralExpression; return createStringLiteral("");
