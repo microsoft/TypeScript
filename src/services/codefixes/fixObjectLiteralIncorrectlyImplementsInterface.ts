@@ -65,9 +65,6 @@ namespace ts.codefix {
         return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
-    // TODO offer getNewMember(symbol): ObjectLiteralElementLike
-    // TODO extract Redirection of Kind
-    // TODO extract PropertyAssignment
 
     function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike | undefined {
         const type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
@@ -76,23 +73,24 @@ namespace ts.codefix {
 
         let kind = typeNode.kind;
 
-        if (isUnionTypeNode(typeNode)) {
-            kind = typeNode.types[0].kind;
+        kind = redirectKind(kind, declaration, typeNode, type);
+
+        if (kind === SyntaxKind.FunctionType) {
+            const methodSignature = declaration as MethodSignature;
+            return createMethod(
+                methodSignature.decorators,
+                methodSignature.modifiers,
+                /* asteriskToken */ undefined,
+                methodSignature.name,
+                methodSignature.questionToken,
+                methodSignature.typeParameters,
+                methodSignature.parameters,
+                methodSignature.type,
+                createStubbedMethodBody()
+            );
         }
 
-        if (kind === SyntaxKind.TypeReference) {
-            if (type.isClassOrInterface() && !type.isClass()) {
-                kind = SyntaxKind.TypeLiteral;
-            }
-        }
-
-        if (kind === SyntaxKind.TypeLiteral) {
-            const propertySignature = declaration as PropertySignature;
-
-            if (propertySignature.type!.kind === SyntaxKind.TypeReference) {
-                kind = SyntaxKind.TypeReference;
-            }
-        }
+        let expression: Expression;
 
         switch (kind) {
             case SyntaxKind.AnyKeyword:
@@ -103,43 +101,61 @@ namespace ts.codefix {
             case SyntaxKind.BooleanKeyword:
             case SyntaxKind.ArrayType:
             case SyntaxKind.NullKeyword:
-                return createPropertyAssignment(symbol.name, getDefaultValue(kind));
+                expression = getDefaultValue(kind);
+                break;
 
             case SyntaxKind.TupleType:
-                return createPropertyAssignment(symbol.name, getDefaultTuple(checker, declaration));
-
-            case SyntaxKind.FunctionType:
-                const methodSignature = declaration as MethodSignature;
-                return createMethod(
-                    methodSignature.decorators,
-                    methodSignature.modifiers,
-                    /* asteriskToken */ undefined,
-                    methodSignature.name,
-                    methodSignature.questionToken,
-                    methodSignature.typeParameters,
-                    methodSignature.parameters,
-                    methodSignature.type,
-                    createStubbedMethodBody()
-                );
+                expression = getDefaultTuple(checker, declaration);
+                break;
 
             case SyntaxKind.TypeReference:
-                return createPropertyAssignment(symbol.name, getDefaultClassValue(checker, declaration));
+                expression = getDefaultClassValue(checker, declaration);
+                break;
 
             case SyntaxKind.TypeLiteral:
-                return createPropertyAssignment(symbol.name, getDefaultObjectLiteral(checker, type, objectLiteralExpression));
+                expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+                break;
 
             case SyntaxKind.IntersectionType:
-                return createPropertyAssignment(symbol.name, getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression));
+                expression = getDefaultIntersectionValue(checker, symbol.declarations, objectLiteralExpression);
+                break;
 
             default:
                 return undefined;
         }
+
+        return createPropertyAssignment(symbol.name, expression);
+
+
     }
 
-        function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
+    function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
         return symbols.map(symbol => convertSymbolToMember(symbol, checker, objectLiteralExpression))
                       .filter(pa => pa !== undefined)
                       .map(p => p!);
+    }
+
+    function redirectKind(kind: SyntaxKind, declaration: Declaration, typeNode: TypeNode, type: Type): SyntaxKind {
+        let newKind = kind;
+        if (isUnionTypeNode(typeNode)) {
+            newKind = typeNode.types[0].kind;
+        }
+
+        if (isTypeReferenceNode(typeNode)) {
+            if (type.isClassOrInterface() && !type.isClass()) {
+                newKind = SyntaxKind.TypeLiteral;
+            }
+        }
+
+        if (newKind === SyntaxKind.TypeLiteral) {
+            const propertySignature = declaration as PropertySignature;
+
+            if (propertySignature.type!.kind === SyntaxKind.TypeReference) {
+                newKind = SyntaxKind.TypeReference;
+            }
+        }
+
+        return newKind;
     }
 
     function getDefaultIntersectionValue(checker: TypeChecker, declarations: Declaration[], objectLiteralExpression: ObjectLiteralExpression): Expression {
