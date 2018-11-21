@@ -1051,14 +1051,6 @@ namespace ts {
                 return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");
             }
 
-            // Don't emit .d.ts if there are decl file errors
-            if (getEmitDeclarations(program.getCompilerOptions())) {
-                const declDiagnostics = program.getDeclarationDiagnostics();
-                if (declDiagnostics.length) {
-                    return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
-                }
-            }
-
             // Same as above but now for semantic diagnostics
             const semanticDiagnostics = program.getSemanticDiagnostics();
             if (semanticDiagnostics.length) {
@@ -1067,14 +1059,23 @@ namespace ts {
 
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
-            let emitDiagnostics: Diagnostic[] | undefined;
-            const reportEmitDiagnostic = (d: Diagnostic) => (emitDiagnostics || (emitDiagnostics = [])).push(d);
-            emitFilesAndReportErrors(program, reportEmitDiagnostic, writeFileName, /*reportSummary*/ undefined, (fileName, content, writeBom, onError) => {
+            let declDiagnostics: Diagnostic[] | undefined;
+            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
+            const outputFiles: OutputFile[] = [];
+            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
+            // Don't emit .d.ts if there are decl file errors
+            if (declDiagnostics) {
+                return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
+            }
+
+            // Actual Emit
+            const emitterDiagnostics = createDiagnosticCollection();
+            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
-                if (!anyDtsChanged && isDeclarationFile(fileName)) {
+                if (!anyDtsChanged && isDeclarationFile(name)) {
                     // Check for unchanged .d.ts files
-                    if (host.fileExists(fileName) && readFileWithCache(fileName) === content) {
-                        priorChangeTime = host.getModifiedTime(fileName);
+                    if (host.fileExists(name) && readFileWithCache(name) === text) {
+                        priorChangeTime = host.getModifiedTime(name);
                     }
                     else {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
@@ -1082,14 +1083,15 @@ namespace ts {
                     }
                 }
 
-                host.writeFile(fileName, content, writeBom, onError, emptyArray);
+                writeFile(host, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-                    unchangedOutputs.setValue(fileName, priorChangeTime);
+                    unchangedOutputs.setValue(name, priorChangeTime);
                 }
             });
 
-            if (emitDiagnostics) {
+            const emitDiagnostics = emitterDiagnostics.getDiagnostics();
+            if (emitDiagnostics.length) {
                 return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
             }
 
