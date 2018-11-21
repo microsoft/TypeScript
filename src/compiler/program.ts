@@ -83,7 +83,7 @@ namespace ts {
             let text: string | undefined;
             try {
                 performance.mark("beforeIORead");
-                text = host.readFile(fileName);
+                text = compilerHost.readFile(fileName);
                 performance.mark("afterIORead");
                 performance.measure("I/O Read", "beforeIORead", "afterIORead");
             }
@@ -112,8 +112,8 @@ namespace ts {
             if (directoryPath.length > getRootLength(directoryPath) && !directoryExists(directoryPath)) {
                 const parentDirectory = getDirectoryPath(directoryPath);
                 ensureDirectoriesExist(parentDirectory);
-                if (host.createDirectory) {
-                    host.createDirectory(directoryPath);
+                if (compilerHost.createDirectory) {
+                    compilerHost.createDirectory(directoryPath);
                 }
                 else {
                     system.createDirectory(directoryPath);
@@ -181,7 +181,7 @@ namespace ts {
 
         const newLine = getNewLineCharacter(options, () => system.newLine);
         const realpath = system.realpath && ((path: string) => system.realpath!(path));
-        const host: CompilerHost = {
+        const compilerHost: CompilerHost = {
             getSourceFile,
             getDefaultLibLocation,
             getDefaultLibFileName: options => combinePaths(getDefaultLibLocation(), getDefaultLibFileName(options)),
@@ -200,7 +200,7 @@ namespace ts {
             readDirectory: (path, extensions, include, exclude, depth) => system.readDirectory(path, extensions, include, exclude, depth),
             createDirectory: d => system.createDirectory(d)
         };
-        return host;
+        return compilerHost;
     }
 
     export function getPreEmitDiagnostics(program: Program, sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
