@@ -202,7 +202,7 @@ namespace ts.refactor.inlineFunction {
             const symbol = checker.getSymbolAtLocation(name)!;
             if (nameIsTaken(symbols, name.text, symbol)) {
                 const safeName = createIdentifier(getUniqueName(name.text, file));
-                renameMap.set(String(symbol.id), safeName);
+                renameMap.set(String(getSymbolId(symbol)), safeName);
                 return safeName;
             }
             return name;
