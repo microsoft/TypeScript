@@ -49,8 +49,8 @@ namespace ts.refactor.inlineFunction {
                 return createInfo(checker, <InlineableFunction>token.parent);
             }
 
-            const call = token.parent;
-            if (!isCallExpression(call)) return undefined;
+            const call = <CallExpression>findAncestor(token, n => isCallExpression(n));
+            if (!call) return undefined;
             const symbol = checker.getSymbolAtLocation(token);
             if (!symbol) return undefined;
             const declaration = symbol.valueDeclaration;
