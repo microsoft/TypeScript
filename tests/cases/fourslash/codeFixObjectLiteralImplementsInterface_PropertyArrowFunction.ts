@@ -13,7 +13,7 @@ verify.codeFix({
 }
 let n: foo = {
     bar(): (x: boolean, y: number) => boolean {
-        throw new Error("Method not implemented.");
+        throw new Error("Function not implemented.");
     },
 }`,
 });

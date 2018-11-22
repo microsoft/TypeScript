@@ -13,10 +13,10 @@ interface boat { swim(): void; }
 interface amphibian extends car, boat {}
 let VAB: amphibian = {
     drive(): void {
-        throw new Error("Method not implemented.");
+        throw new Error("Function not implemented.");
     },
     swim(): void {
-        throw new Error("Method not implemented.");
+        throw new Error("Function not implemented.");
     },
 }`,
 });

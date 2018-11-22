@@ -1,19 +1,19 @@
 /// <reference path='fourslash.ts' />
 
+//// enum CardinalPoint { North, East, South, West }
 //// interface foo {
-////     bar(x: number, y: string): boolean;
+////     x: [CardinalPoint];
 //// }
 //// let n: foo = { }
 
 verify.codeFix({
     description: "Implement interface 'foo'",
     newFileContent:
-`interface foo {
-    bar(x: number, y: string): boolean;
+`enum CardinalPoint { North, East, South, West }
+interface foo {
+    x: [CardinalPoint];
 }
 let n: foo = {
-    bar(x: number, y: string): boolean {
-        throw new Error("Method not implemented.");
-    },
+    x: [CardinalPoint.North],
 }`,
 });

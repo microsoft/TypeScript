@@ -54,7 +54,7 @@ namespace ts.codefix {
         const existingMembers = objectLiteral.symbol.members;
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
 
-        const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), symbolPointsToNonNullable));
+        const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), isSymbolNonNullable));
         const newProperties: ObjectLiteralElementLike[] = getNewMembers(requiredProperties, checker, objectLiteral);
 
         const changes = textChanges.ChangeTracker.with(context, tracker => {
@@ -87,7 +87,7 @@ namespace ts.codefix {
                 methodSignature.typeParameters,
                 methodSignature.parameters,
                 methodSignature.type,
-                createStubbedMethodBody()
+                createStubbedFunctionBody()
             );
         }
 
@@ -97,30 +97,30 @@ namespace ts.codefix {
             expression = getDefaultValue(kind);
         }
         else if (kind === SyntaxKind.TupleType) {
-            const tupDecl = declaration as PropertySignature;
-            const tupTypNode = tupDecl.type as TupleTypeNode;
-            const elements = tupTypNode.elementTypes;
+            if (!isPropertySignature(declaration) || !declaration.type || !isTupleTypeNode(declaration.type)) return undefined;
+            const elements = declaration.type.elementTypes;
             expression = getDefaultTuple(checker, elements, objectLiteralExpression);
         }
         else if (kind === SyntaxKind.TypeReference) {
-            expression = expression = getDefaultClassValue(checker, declaration);
+            if (!isPropertySignature(declaration)) return undefined;
+            expression = expression = getDefaultClass(checker, declaration);
         }
         else if (kind === SyntaxKind.TypeLiteral) {
             expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
         }
         else if (kind === SyntaxKind.IntersectionType) {
-            let intersectedTypes: Type[];
+            let typesFromIntersection: Type[];
             const declarations = symbol.declarations;
 
             if (declarations.length === 1) {
-                const intersectedTyped = checker.getTypeAtLocation(declarations[0]) as IntersectionType;
-                intersectedTypes = intersectedTyped.types;
+                const intersectionType = type as IntersectionType;
+                typesFromIntersection = intersectionType.types;
             }
             else {
-                intersectedTypes = declarations.map(d => checker.getTypeAtLocation(d));
+                typesFromIntersection = declarations.map(d => checker.getTypeAtLocation(d));
             }
 
-            expression = getDefaultIntersectionValue(checker, intersectedTypes, objectLiteralExpression);
+            expression = getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
         }
         else {
             return undefined;
@@ -171,7 +171,6 @@ namespace ts.codefix {
                 kind = SyntaxKind.TypeReference;
             }
         }
-
         return kind;
     }
 
@@ -179,35 +178,36 @@ namespace ts.codefix {
         if (kind === SyntaxKind.TypeLiteral && isInterfaceDeclaration(declaration)) {
                 kind = SyntaxKind.TypeReference;
         }
-
         return kind;
     }
 
-    function getDefaultIntersectionValue(checker: TypeChecker, intersectedTypes: Type[], objectLiteralExpression: ObjectLiteralExpression): Expression {
+    const mergeSymbolArray = (accumulator: Symbol[], newArray: Symbol[]) => {
+        const updatedArray = newArray.filter(newOne => !accumulator.some(existingOne => existingOne.escapedName === newOne.escapedName));
+        return accumulator.concat(updatedArray);
+    };
 
-        const intersectedProps = intersectedTypes.map(t => checker.getPropertiesOfType(t))
-        .reduce((arr, ele) => {
-            const newEle = ele.filter(e => !arr.some(i => i.escapedName === e.escapedName));
-            return arr.concat(newEle);
-        });
-        const intersectStubs = getNewMembers(intersectedProps, checker, objectLiteralExpression);
-
-        return createObjectLiteral(intersectStubs, /* multiline */ true);
+    function getDefaultIntersection(checker: TypeChecker, typesFromIntersection: Type[], objectLiteralExpression: ObjectLiteralExpression): Expression {
+        const properties = typesFromIntersection.map(t => checker.getPropertiesOfType(t))
+                                                   .reduce(mergeSymbolArray);
+        return createStubbedObjectLiteral(properties, checker, objectLiteralExpression);
     }
 
     function getDefaultObjectLiteral(checker: TypeChecker, type: Type, objectLiteralExpression: ObjectLiteralExpression): Expression {
-        const propertiesOfObjectLiteral: Symbol[] = checker.getPropertiesOfType(type);
-
-        const stubbedProperties = getNewMembers(propertiesOfObjectLiteral, checker, objectLiteralExpression);
-        return createObjectLiteral(stubbedProperties, /* multiline */ true);
+        const properties: Symbol[] = checker.getPropertiesOfType(type);
+        return createStubbedObjectLiteral(properties, checker, objectLiteralExpression);
     }
 
-    function getDefaultClassValue(checker: TypeChecker, declaration: Declaration): Expression {
-        const propertySignature = declaration as PropertySignature;
-        const typeOfProperty = checker.getTypeAtLocation(propertySignature);
+    function createStubbedObjectLiteral(properties: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): Expression {
+        const stubbedProperties = getNewMembers(properties, checker, objectLiteralExpression);
+        return createObjectLiteral(stubbedProperties, /*multiline*/ true);
+    }
+
+    function getDefaultClass(checker: TypeChecker, declaration: PropertySignature): Expression {
+        const typeOfProperty = checker.getTypeAtLocation(declaration);
+
         if (typeOfProperty.isClassOrInterface()) {
             const identifierName = checker.typeToString(typeOfProperty);
-            const newObject = createNew(createIdentifier(identifierName), /* typeArguments */ undefined, /* argumentsArray */ []);
+            const newObject = createNew(createIdentifier(identifierName), /*typeArguments*/ undefined, /*argumentsArray*/ []);
             return newObject;
         }
         else {
@@ -244,7 +244,7 @@ namespace ts.codefix {
                         intersectedTypes = intersectedTyped.types;
                     }
 
-                    return getDefaultIntersectionValue(checker, intersectedTypes, objectLiteralExpression);
+                    return getDefaultIntersection(checker, intersectedTypes, objectLiteralExpression);
                 }
 
                 if (kind === SyntaxKind.TypeLiteral || kind === SyntaxKind.TypeReference) {
@@ -252,11 +252,11 @@ namespace ts.codefix {
 
                     kind = redirectPrimitivObjectForTuple(declaration, kind);
 
-                    if (kind === SyntaxKind.TypeReference) {    // OK
-                        return getDefaultClassValue(checker, declaration);
+                    if (kind === SyntaxKind.TypeReference) {
+                        return getDefaultClass(checker, declaration as PropertySignature);
                     }
 
-                    if (kind === SyntaxKind.TypeLiteral) {     // Ok
+                    if (kind === SyntaxKind.TypeLiteral) {
                         return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
                     }
                 }
@@ -272,7 +272,7 @@ namespace ts.codefix {
                         typeNode.parameters,
                         typeNode.type,
                         createToken(SyntaxKind.EqualsGreaterThanToken),
-                        createStubbedMethodBody());
+                        createStubbedFunctionBody());
                 }
 
                 return createStringLiteral("FAILLLLLLLL");
@@ -288,7 +288,7 @@ namespace ts.codefix {
                     return createStringLiteral("any");
 
                 case SyntaxKind.ObjectKeyword:
-                    return createNew(createIdentifier("Object"), /* */ undefined, []);
+                    return createNew(createIdentifier("Object"), /*typeArguments*/ undefined, []);
 
                 case SyntaxKind.StringKeyword:
                     return createStringLiteral("");
@@ -309,23 +309,23 @@ namespace ts.codefix {
                     return createNull();
 
                 default:
-                    return Debug.fail("Default value not implemented");
+                    return Debug.fail("Default value is not implemented for " + kind.toString());
             }
     }
 
-    function symbolPointsToNonNullable(symbol: Symbol): boolean {
+    function isSymbolNonNullable(symbol: Symbol): boolean {
         const declaration = symbol.declarations[0];
         if (!isPropertySignature(declaration) || !declaration.questionToken) return true;
         return false;
     }
 
-    function createStubbedMethodBody(): Block {
+    function createStubbedFunctionBody(): Block {
         return createBlock(
             [createThrow(
                 createNew(
                     createIdentifier("Error"),
                     /*typeArguments*/ undefined,
-                    [createStringLiteral("Method not implemented.")]))],
+                    [createStringLiteral("Function not implemented.")]))],
             /*multiline*/ true);
     }
 
