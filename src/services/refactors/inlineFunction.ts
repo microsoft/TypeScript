@@ -142,26 +142,22 @@ namespace ts.refactor.inlineFunction {
         let body = getSynthesizedDeepClone(declaration.body)!;
         const statement = <Statement>findAncestor(targetNode, n => isStatement(n));
         const renameMap: Map<Identifier> = createMap();
+        const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
         forEach(parameters, (p, i) => {
             // let name = `arg${i}`; // if parameter is object or array literal
             const oldName = p.name;
             if (isIdentifier(oldName)) {
                 const symbol = checker.getSymbolAtLocation(oldName)!;
                 checker.isSymbolAccessible(symbol, targetNode, 0, /* shouldComputeAliasesToMakeVisible */ false);
-                const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
-                let name = oldName.text;
-                let safeName = getSynthesizedClone(oldName);
-                if (nameIsTaken(symbols, name, symbol)) {
-                    name = getUniqueName(name, file);
-                    safeName = createIdentifier(name);
-                    renameMap.set(String(symbol.id), safeName);
-                }
+                const safeName = getSafeName(oldName);
                 const value = targetNode.arguments[i];
                 const decl = createVariableDeclaration(safeName, /* type */ undefined, value);
                 const declList = createVariableDeclarationList([decl], NodeFlags.Const);
                 t.insertNodeBefore(file, statement, createVariableStatement(/* modifiers */ undefined, declList));
             }
         });
+
+        /* body = */ collectConflictingNames(declaration.body!) /* as Block */;
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         forEach(body.statements, st => {
             if (!isReturnStatement(st)) {
@@ -172,6 +168,44 @@ namespace ts.refactor.inlineFunction {
         if (retExpr) {
             const expression = inlineLocal.parenthesizeIfNecessary(targetNode, retExpr);
             t.replaceNode(file, targetNode, expression);
+        }
+
+        function collectConflictingNames(node: Node) {
+            const sourceSymbols = checker.getSymbolsInScope(node, SymbolFlags.All);
+            const localSymbols = filter(sourceSymbols, s => s.valueDeclaration && getEnclosingBlockScopeContainer(s.valueDeclaration) === node);
+            forEach(localSymbols, s => {
+                const declaration = s.valueDeclaration;
+                if (!isNamedDeclaration(declaration)) return;
+                if (!isIdentifier(declaration.name)) return;
+                getSafeName(declaration.name);
+            });
+        }
+
+        // function collectConflictingNames(node: Node): VisitResult<Node> {
+        //     if (isVariableDeclaration(node)) {
+        //         const name = node.name;
+        //         if (isIdentifier(name)) {
+        //             getSafeName(name);
+        //         }
+        //     }
+        //     if (isReturnStatement(node)) {
+        //         if (node.expression) {
+        //             const name = getUniqueName("returnValue", file);
+        //             const assignment = createAssignment(createIdentifier(name), node.expression);
+        //             return createExpressionStatement(assignment);
+        //         }
+        //     }
+        //     return visitEachChild(node, collectConflictingNames, nullTransformationContext);
+        // }
+
+        function getSafeName(name: Identifier) {
+            const symbol = checker.getSymbolAtLocation(name)!;
+            if (nameIsTaken(symbols, name.text, symbol)) {
+                const safeName = createIdentifier(getUniqueName(name.text, file));
+                renameMap.set(String(symbol.id), safeName);
+                return safeName;
+            }
+            return name;
         }
     }
 
