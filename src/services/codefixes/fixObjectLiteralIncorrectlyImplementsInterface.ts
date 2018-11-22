@@ -71,10 +71,16 @@ namespace ts.codefix {
         const declaration = symbol.declarations[0];
 
         let kind = typeNode.kind;
+        let isIntersectionRedirected = false;
 
         kind = pickFirstTypeFromUnion(typeNode);
-        kind = redirectInterfaceToObjectLiteral(kind, type);
+        kind = redirectInterface(kind, type);
         kind = redirectPrimitivObjectToTypeReference(declaration, kind);
+
+        if (type.isIntersection()) {
+            kind = SyntaxKind.IntersectionType;
+            isIntersectionRedirected = true;
+        }
 
         if (kind === SyntaxKind.FunctionType) {
             const methodSignature = declaration as MethodSignature;
@@ -113,9 +119,12 @@ namespace ts.codefix {
             let typesFromIntersection: Type[];
             const declarations = symbol.declarations;
 
-            if (declarations.length === 1) {
+            if (declarations.length === 1 && !isIntersectionRedirected) {
                 const intersectionType = type as IntersectionType;
                 typesFromIntersection = intersectionType.types;
+            }
+            else if (isIntersectionRedirected) {
+                typesFromIntersection = [type];
             }
             else {
                 typesFromIntersection = declarations.map(d => checker.getTypeAtLocation(d));
@@ -158,8 +167,8 @@ namespace ts.codefix {
         }
         return kind;
     }
-    function redirectInterfaceToObjectLiteral(kind: SyntaxKind, type: Type): SyntaxKind {
-        if (kind === SyntaxKind.TypeReference && type.isClassOrInterface() && !type.isClass()) {
+    function redirectInterface(kind: SyntaxKind, type: Type): SyntaxKind {
+        if (type.isClassOrInterface() && !type.isClass()) {
             kind = SyntaxKind.TypeLiteral;
         }
         return kind;
@@ -173,8 +182,8 @@ namespace ts.codefix {
         return kind;
     }
 
-    function redirectPrimitivObjectForTuple(declaration: Declaration, kind: SyntaxKind): SyntaxKind {
-        if (kind === SyntaxKind.TypeLiteral && isInterfaceDeclaration(declaration)) {
+    function redirectPrimitivObjectForTuple(symbol: Symbol | undefined, kind: SyntaxKind): SyntaxKind {
+        if (symbol && kind === SyntaxKind.TypeLiteral && isInterfaceDeclaration(symbol.declarations[0])) {
                 kind = SyntaxKind.TypeReference;
         }
         return kind;
@@ -220,44 +229,34 @@ namespace ts.codefix {
 
         const type = checker.getTypeAtLocation(typeNode);
         let kind = typeNode.kind;
+        let isIntersectionRedirected = false;
 
         kind = pickFirstTypeFromUnion(typeNode);
-        kind = redirectInterfaceToObjectLiteral(kind, type);
+        kind = redirectInterface(kind, type);
+        kind = redirectPrimitivObjectForTuple(type.symbol, kind);
+
+        if (type.isIntersection()) {
+            kind = SyntaxKind.IntersectionType;
+            isIntersectionRedirected = true;
+        }
 
         if (isBasicKind(kind)) {
             return getDefaultValue(kind);
         }
-        else if (type.isIntersection() || kind === SyntaxKind.IntersectionType) {
-            let typesFromIntersection: Type[];
-
-            if (kind !== SyntaxKind.IntersectionType) {
-                // if multiple declaration
-                typesFromIntersection = [type];
-            }
-            else {
-                const intersectedTyped = type as IntersectionType;
-                // if one declaration
-                typesFromIntersection = intersectedTyped.types;
-            }
-
+        else if (kind === SyntaxKind.IntersectionType) {
+            const intersectionType = type as IntersectionType;
+            const typesFromIntersection = isIntersectionRedirected ? [type] : intersectionType.types;
             return getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
         }
-        else if (kind === SyntaxKind.TypeLiteral || kind === SyntaxKind.TypeReference) {
-            const declaration = type.symbol.declarations[0];
-
-            kind = redirectPrimitivObjectForTuple(declaration, kind);
-
-            if (kind === SyntaxKind.TypeReference) {
-                return getDefaultClass(checker, declaration as PropertySignature);
-            }
-
-            if (kind === SyntaxKind.TypeLiteral) {
-                return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
-            }
+        else if (kind === SyntaxKind.TypeLiteral) {
+            return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
         }
-        else if (kind === SyntaxKind.TupleType) {
-            const typeNodes = (typeNode as TupleTypeNode).elementTypes;
-            const stubbedElements = typeNodes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
+        else if (kind === SyntaxKind.TypeReference) {
+            const declaration = type.symbol.declarations[0];
+            return getDefaultClass(checker, declaration as PropertySignature);
+        }
+        else if (kind === SyntaxKind.TupleType && isTupleTypeNode(typeNode)) {
+            const stubbedElements = typeNode.elementTypes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
             return createArrayLiteral(stubbedElements);
         }
         else if (kind === SyntaxKind.FunctionType && isFunctionTypeNode(typeNode)) {
@@ -270,7 +269,7 @@ namespace ts.codefix {
                 createStubbedFunctionBody());
         }
 
-        return createStringLiteral("FAILLLLLLLL");
+        return Debug.fail("Expression is not implemented for " + typeNode.getText());
 
     }
 
