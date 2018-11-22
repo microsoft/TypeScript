@@ -99,7 +99,8 @@ namespace ts.codefix {
         else if (kind === SyntaxKind.TupleType) {
             if (!isPropertySignature(declaration) || !declaration.type || !isTupleTypeNode(declaration.type)) return undefined;
             const elements = declaration.type.elementTypes;
-            expression = getDefaultTuple(checker, elements, objectLiteralExpression);
+            const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
+            expression = createArrayLiteral(stubbedElements);
         }
         else if (kind === SyntaxKind.TypeReference) {
             if (!isPropertySignature(declaration)) return undefined;
@@ -127,8 +128,6 @@ namespace ts.codefix {
         }
 
         return createPropertyAssignment(symbol.name, expression);
-
-
     }
 
     function isBasicKind(kind: SyntaxKind): boolean {
@@ -217,69 +216,62 @@ namespace ts.codefix {
         }
     }
 
-    function getDefaultTuple(checker: TypeChecker, elementTypes: NodeArray<TypeNode>, objectLiteralExpression: ObjectLiteralExpression): Expression {
+    function typeNodeToStubbedExpression(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
 
-        const elements = elementTypes.map(typeNode => {
-            const type = checker.getTypeAtLocation(typeNode);
-            let kind = typeNode.kind;
+        const type = checker.getTypeAtLocation(typeNode);
+        let kind = typeNode.kind;
 
-            kind = pickFirstTypeFromUnion(typeNode);
-            kind = redirectInterfaceToObjectLiteral(kind, type);
+        kind = pickFirstTypeFromUnion(typeNode);
+        kind = redirectInterfaceToObjectLiteral(kind, type);
 
-            if (isBasicKind(kind)) {
-                return getDefaultValue(kind);
+        if (isBasicKind(kind)) {
+            return getDefaultValue(kind);
+        }
+        else if (type.isIntersection() || kind === SyntaxKind.IntersectionType) {
+            let typesFromIntersection: Type[];
+
+            if (kind !== SyntaxKind.IntersectionType) {
+                // if multiple declaration
+                typesFromIntersection = [type];
             }
             else {
-
-                if (type.isIntersection() || kind === SyntaxKind.IntersectionType) {
-                    let intersectedTypes: Type[];
-
-                    if (kind !== SyntaxKind.IntersectionType) {
-                        // if multiple declaration
-                        intersectedTypes = [type];
-                    }
-                    else {
-                        const intersectedTyped = type as IntersectionType;
-                        // if one declaration
-                        intersectedTypes = intersectedTyped.types;
-                    }
-
-                    return getDefaultIntersection(checker, intersectedTypes, objectLiteralExpression);
-                }
-
-                if (kind === SyntaxKind.TypeLiteral || kind === SyntaxKind.TypeReference) {
-                    const declaration = type.symbol.declarations[0];
-
-                    kind = redirectPrimitivObjectForTuple(declaration, kind);
-
-                    if (kind === SyntaxKind.TypeReference) {
-                        return getDefaultClass(checker, declaration as PropertySignature);
-                    }
-
-                    if (kind === SyntaxKind.TypeLiteral) {
-                        return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
-                    }
-                }
-
-                if (kind === SyntaxKind.TupleType) {
-                    return getDefaultTuple(checker, (typeNode as TupleTypeNode).elementTypes, objectLiteralExpression);
-                }
-
-                if (kind === SyntaxKind.FunctionType && isFunctionTypeNode(typeNode)) {
-                    return createArrowFunction(
-                        typeNode.modifiers,
-                        typeNode.typeParameters,
-                        typeNode.parameters,
-                        typeNode.type,
-                        createToken(SyntaxKind.EqualsGreaterThanToken),
-                        createStubbedFunctionBody());
-                }
-
-                return createStringLiteral("FAILLLLLLLL");
+                const intersectedTyped = type as IntersectionType;
+                // if one declaration
+                typesFromIntersection = intersectedTyped.types;
             }
-        });
 
-        return createArrayLiteral(elements);
+            return getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
+        }
+        else if (kind === SyntaxKind.TypeLiteral || kind === SyntaxKind.TypeReference) {
+            const declaration = type.symbol.declarations[0];
+
+            kind = redirectPrimitivObjectForTuple(declaration, kind);
+
+            if (kind === SyntaxKind.TypeReference) {
+                return getDefaultClass(checker, declaration as PropertySignature);
+            }
+
+            if (kind === SyntaxKind.TypeLiteral) {
+                return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+            }
+        }
+        else if (kind === SyntaxKind.TupleType) {
+            const typeNodes = (typeNode as TupleTypeNode).elementTypes;
+            const stubbedElements = typeNodes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
+            return createArrayLiteral(stubbedElements);
+        }
+        else if (kind === SyntaxKind.FunctionType && isFunctionTypeNode(typeNode)) {
+            return createArrowFunction(
+                typeNode.modifiers,
+                typeNode.typeParameters,
+                typeNode.parameters,
+                typeNode.type,
+                createToken(SyntaxKind.EqualsGreaterThanToken),
+                createStubbedFunctionBody());
+        }
+
+        return createStringLiteral("FAILLLLLLLL");
+
     }
 
     function getDefaultValue(kind: SyntaxKind): Expression {
