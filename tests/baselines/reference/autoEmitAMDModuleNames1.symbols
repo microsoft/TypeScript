@@ -1,0 +1,17 @@
+=== tests/cases/compiler/autoEmitAMDModuleNames1.ts ===
+class Foo {
+>Foo : Symbol(Foo, Decl(autoEmitAMDModuleNames1.ts, 0, 0))
+
+    x: number;
+>x : Symbol(Foo.x, Decl(autoEmitAMDModuleNames1.ts, 0, 11))
+
+    constructor() {
+        this.x = 5;
+>this.x : Symbol(Foo.x, Decl(autoEmitAMDModuleNames1.ts, 0, 11))
+>this : Symbol(Foo, Decl(autoEmitAMDModuleNames1.ts, 0, 0))
+>x : Symbol(Foo.x, Decl(autoEmitAMDModuleNames1.ts, 0, 11))
+    }
+}
+export = Foo;
+>Foo : Symbol(Foo, Decl(autoEmitAMDModuleNames1.ts, 0, 0))
+

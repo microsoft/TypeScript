@@ -3815,6 +3815,10 @@
         "category": "Message",
         "code": 6217
     },
+    "Generates AMD module names regardless even when outDir option is provided.": {
+        "category": "Message",
+        "code": 6218
+    },
 
     "Projects to reference": {
         "category": "Message",

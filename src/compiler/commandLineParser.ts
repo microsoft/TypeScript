@@ -783,6 +783,13 @@ namespace ts {
             description: Diagnostics.Disable_strict_checking_of_generic_signatures_in_function_types,
         },
         {
+            name: "autoEmitAMDModuleNames",
+            type: "boolean",
+            affectsSemanticDiagnostics: true,
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Generates_AMD_module_names_regardless_even_when_outDir_option_is_provided,
+        },
+        {
             name: "keyofStringsOnly",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
