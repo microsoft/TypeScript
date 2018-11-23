@@ -160,6 +160,7 @@ namespace ts.refactor.inlineFunction {
 
         /* body = */ collectConflictingNames(declaration.body!) /* as Block */;
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
+        body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
             if (!isReturnStatement(st)) {
                 t.insertNodeBefore(file, statement, st);
@@ -180,6 +181,28 @@ namespace ts.refactor.inlineFunction {
                 if (!isIdentifier(declaration.name)) return;
                 getSafeName(declaration.name);
             });
+        }
+
+        function visitor(node: Node): VisitResult<Node> {
+            if (isMethodDeclaration(declaration) && isThisProperty(node)) {
+                const expr = targetNode.expression;
+                if (isPropertyAccessExpression(expr)) {
+                    const propertyAccess = <PropertyAccessExpression>node;
+                    // propertyAccess.expression = expr.expression;
+                    return createPropertyAccess(expr.expression, propertyAccess.name);
+                    // return node;
+                }
+                // const symbol = checker.getSymbolAtLocation(node);
+                // if (symbol) {}
+            }
+            if (isReturnStatement(node)) {
+                if (node.expression) {
+                    const name = getUniqueName("returnValue", file);
+                    const assignment = createAssignment(createIdentifier(name), node.expression);
+                    return createExpressionStatement(assignment);
+                }
+            }
+            return visitEachChild(node, visitor, nullTransformationContext);
         }
 
         // function collectConflictingNames(node: Node): VisitResult<Node> {
