@@ -176,7 +176,7 @@ namespace ts.refactor.inlineFunction {
                     /* initializer */ undefined
             ));
         }
-        collectConflictingNames(declaration.body!);
+        collectConflictingNames(declaration);
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
