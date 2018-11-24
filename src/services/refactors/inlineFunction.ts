@@ -12,6 +12,8 @@ namespace ts.refactor.inlineFunction {
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
+    type InlineableFunction = FunctionDeclaration | MethodDeclaration;
+
     interface Info {
         readonly declaration: InlineableFunction;
         readonly usages: ReadonlyArray<CallExpression>;
@@ -142,8 +144,7 @@ namespace ts.refactor.inlineFunction {
         const { parameters } = declaration;
         let body = declaration.body!;
         const statement = findAncestor(targetNode, isStatement)!;
-        const renameMap = createMap<Identifier>();
-        const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
+        const renameMap = getConflictingNames(checker, declaration, targetNode);
         forEach(parameters, (p, i) => {
             // let name = `arg${i}`; // if parameter is object or array literal
             const oldName = p.name;
@@ -153,7 +154,7 @@ namespace ts.refactor.inlineFunction {
                 const flags = NodeFlags.Const;
                 const value = targetNode.arguments[i];
                 const type: TypeNode | undefined = undefined;
-                const name = getSafeName(oldName);
+                const name = getSafeName(oldName, symbol);
                 const variableStatement = createVariable(name, type, flags, value);
                 t.insertNodeBefore(file, statement, variableStatement);
             }
@@ -176,7 +177,6 @@ namespace ts.refactor.inlineFunction {
                     /* initializer */ undefined
             ));
         }
-        collectConflictingNames(declaration);
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
@@ -195,15 +195,11 @@ namespace ts.refactor.inlineFunction {
             t.replaceNode(file, targetNode, createIdentifier(returnVariableName));
         }
 
-        function collectConflictingNames(node: Node) {
-            const sourceSymbols = checker.getSymbolsInScope(node, SymbolFlags.All);
-            const localSymbols = filter(sourceSymbols, s => s.valueDeclaration && getEnclosingBlockScopeContainer(s.valueDeclaration) === node);
-            forEach(localSymbols, s => {
-                const declaration = s.valueDeclaration;
-                if (!isNamedDeclaration(declaration)) return;
-                if (!isIdentifier(declaration.name)) return;
-                getSafeName(declaration.name);
-            });
+        function getSafeName(name: Identifier, { id }: Symbol): Identifier {
+            if (renameMap.has(String(id))) {
+                return renameMap.get(String(id))!;
+            }
+            return name;
         }
 
         function visitor(node: Node): VisitResult<Node> {
@@ -226,19 +222,25 @@ namespace ts.refactor.inlineFunction {
             }
             return visitEachChild(node, visitor, nullTransformationContext);
         }
-
-        function getSafeName(name: Identifier) {
-            const symbol = checker.getSymbolAtLocation(name)!;
-            if (nameIsTaken(symbols, name.text, symbol)) {
-                const safeName = createIdentifier(getUniqueName(name.text, file));
-                renameMap.set(String(getSymbolId(symbol)), safeName);
-                return safeName;
-            }
-            return name;
-        }
     }
 
-    type InlineableFunction = FunctionDeclaration | MethodDeclaration;
+    function getConflictingNames(checker: TypeChecker, scope: Node, targetNode: Node) {
+        const renameMap = createMap<Identifier>();
+        const sourceSymbols = checker.getSymbolsInScope(scope, SymbolFlags.All);
+        const localSymbols = filter(sourceSymbols, s => s.valueDeclaration && getEnclosingBlockScopeContainer(s.valueDeclaration) === scope);
+        const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
+        forEach(localSymbols, s => {
+            const declaration = s.valueDeclaration;
+            if (!isNamedDeclaration(declaration)) return;
+            const name = declaration.name;
+            if (!isIdentifier(name)) return;
+            if (nameIsTaken(symbols, name.text, s)) { // TODO: move symbols declaration here
+                const safeName = createIdentifier(getUniqueName(name.text, targetNode.getSourceFile()));
+                renameMap.set(String(getSymbolId(s)), safeName);
+            }
+        });
+        return renameMap;
+    }
 
     function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
         const decl = createVariableDeclaration(name, type, initializer);
