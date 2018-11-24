@@ -153,7 +153,11 @@ namespace ts.refactor.inlineFunction {
                 checker.isSymbolAccessible(symbol, targetNode, 0, /* shouldComputeAliasesToMakeVisible */ false);
                 const flags = NodeFlags.Const;
                 const value = targetNode.arguments[i];
-                const type: TypeNode | undefined = undefined;
+                const typeArguments = targetNode.typeArguments;
+                let type: TypeNode | undefined;
+                if (typeArguments) {
+                    type = typeArguments[i];
+                }
                 const name = getSafeName(oldName, symbol);
                 const variableStatement = createVariable(name, type, flags, value);
                 t.insertNodeBefore(file, statement, variableStatement);
@@ -167,15 +171,13 @@ namespace ts.refactor.inlineFunction {
         const returnVariableName = getUniqueName("returnValue", file);
         if (nofReturns > 1 && !isVoid) {
             const typeNode = getEffectiveReturnTypeNode(declaration);
-            t.insertNodeBefore(
-                file,
-                statement,
-                createVariable(
-                    createIdentifier(returnVariableName),
-                    typeNode,
-                    NodeFlags.Let,
-                    /* initializer */ undefined
-            ));
+            const variableStatement = createVariable(
+                createIdentifier(returnVariableName),
+                typeNode,
+                NodeFlags.Let,
+                /* initializer */ undefined
+            );
+            t.insertNodeBefore(file, statement, variableStatement);
         }
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
