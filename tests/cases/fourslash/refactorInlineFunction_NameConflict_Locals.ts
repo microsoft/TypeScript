@@ -5,7 +5,7 @@
 ////     return arg*arg;
 //// }
 //// function bar(arg: number) {
-////     const someValue = square(2);
+////     const someValue = square();
 ////     return arg * someValue;
 //// }
 

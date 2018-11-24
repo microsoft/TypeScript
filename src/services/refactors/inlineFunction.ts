@@ -45,11 +45,12 @@ namespace ts.refactor.inlineFunction {
         const checker = program.getTypeChecker();
         if (isIdentifier(token)) {
             if (isNameOfFunctionDeclaration(token)) {
-                if (!(<InlineableFunction>token.parent).body) return undefined;
-                return createInfo(checker, <InlineableFunction>token.parent);
+                const inlineableFunction = <InlineableFunction>token.parent;
+                if (!inlineableFunction.body) return undefined;
+                return createInfo(checker, inlineableFunction);
             }
 
-            const call = <CallExpression>findAncestor(token, n => isCallExpression(n));
+            const call = findAncestor(token, isCallExpression);
             if (!call) return undefined;
             const symbol = checker.getSymbolAtLocation(token);
             if (!symbol) return undefined;
@@ -139,9 +140,9 @@ namespace ts.refactor.inlineFunction {
             targetNode: CallExpression,
             declaration: InlineableFunction) {
         const { parameters } = declaration;
-        let body = getSynthesizedDeepClone(declaration.body)!;
-        const statement = <Statement>findAncestor(targetNode, n => isStatement(n));
-        const renameMap: Map<Identifier> = createMap();
+        let body = declaration.body!;
+        const statement = findAncestor(targetNode, isStatement)!;
+        const renameMap = createMap<Identifier>();
         const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
         forEach(parameters, (p, i) => {
             // let name = `arg${i}`; // if parameter is object or array literal
@@ -159,12 +160,12 @@ namespace ts.refactor.inlineFunction {
         });
 
         const returnType = checker.getTypeAtLocation(declaration);
-        const typeNode = getEffectiveReturnTypeNode(declaration);
         const isVoid = returnType.flags === TypeFlags.VoidLike;
-        const returns: ReadonlyArray<ReturnStatement> = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
+        const returns = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
         const nofReturns = returns.length;
         const returnVariableName = getUniqueName("returnValue", file);
         if (nofReturns > 1 && !isVoid) {
+            const typeNode = getEffectiveReturnTypeNode(declaration);
             t.insertNodeBefore(
                 file,
                 statement,
@@ -239,8 +240,8 @@ namespace ts.refactor.inlineFunction {
 
     type InlineableFunction = FunctionDeclaration | MethodDeclaration;
 
-    function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, value?: Expression) {
-        const decl = createVariableDeclaration(name, type, value);
+    function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
+        const decl = createVariableDeclaration(name, type, initializer);
         const declList = createVariableDeclarationList([decl], flags);
         const variableStatement = createVariableStatement(/* modifiers */ undefined, declList);
         return variableStatement;
