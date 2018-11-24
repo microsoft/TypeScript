@@ -21,7 +21,7 @@ edit.applyRefactor({
     if (x < 0)
         returnValue_1 = 42;
     else
-        returnValue1 = 69;
+        returnValue_1 = 69;
     const returnValue = arg * returnValue_1;
     return returnValue;
 }`

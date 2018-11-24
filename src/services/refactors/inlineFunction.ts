@@ -43,7 +43,6 @@ namespace ts.refactor.inlineFunction {
     function getInfo(program: Program, file: SourceFile, startPosition: number): Info | undefined {
         const token = getTokenAtPosition(file, startPosition);
         const checker = program.getTypeChecker();
-        isCallExpression(token);
         if (isIdentifier(token)) {
             if (isNameOfFunctionDeclaration(token)) {
                 if (!(<InlineableFunction>token.parent).body) return undefined;
@@ -75,9 +74,9 @@ namespace ts.refactor.inlineFunction {
 
     function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker): ReadonlyArray<CallExpression> {
         const symbol = checker.getSymbolAtLocation(target);
-        return inlineLocal.findDescendants(scope, n =>
+        return <CallExpression[]>inlineLocal.findDescendants(scope, n =>
             isCallExpression(n) &&
-            checker.getSymbolAtLocation(n.expression) === symbol) as CallExpression[];
+            checker.getSymbolAtLocation(n.expression) === symbol);
     }
 
     function canInline(declaration: InlineableFunction, /* usages: ReadonlyArray<CallExpression> */): boolean {
@@ -150,15 +149,33 @@ namespace ts.refactor.inlineFunction {
             if (isIdentifier(oldName)) {
                 const symbol = checker.getSymbolAtLocation(oldName)!;
                 checker.isSymbolAccessible(symbol, targetNode, 0, /* shouldComputeAliasesToMakeVisible */ false);
-                const safeName = getSafeName(oldName);
+                const flags = NodeFlags.Const;
                 const value = targetNode.arguments[i];
-                const decl = createVariableDeclaration(safeName, /* type */ undefined, value);
-                const declList = createVariableDeclarationList([decl], NodeFlags.Const);
-                t.insertNodeBefore(file, statement, createVariableStatement(/* modifiers */ undefined, declList));
+                const type: TypeNode | undefined = undefined;
+                const name = getSafeName(oldName);
+                const variableStatement = createVariable(name, type, flags, value);
+                t.insertNodeBefore(file, statement, variableStatement);
             }
         });
 
-        /* body = */ collectConflictingNames(declaration.body!) /* as Block */;
+        const returnType = checker.getTypeAtLocation(declaration);
+        const typeNode = getEffectiveReturnTypeNode(declaration);
+        const isVoid = returnType.flags === TypeFlags.VoidLike;
+        const returns: ReadonlyArray<ReturnStatement> = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
+        const nofReturns = returns.length;
+        const returnVariableName = getUniqueName("returnValue", file);
+        if (nofReturns > 1 && !isVoid) {
+            t.insertNodeBefore(
+                file,
+                statement,
+                createVariable(
+                    createIdentifier(returnVariableName),
+                    typeNode,
+                    NodeFlags.Let,
+                    /* initializer */ undefined
+            ));
+        }
+        collectConflictingNames(declaration.body!);
         body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
@@ -166,10 +183,15 @@ namespace ts.refactor.inlineFunction {
                 t.insertNodeBefore(file, statement, st);
             }
         });
-        const retExpr = forEachReturnStatement<Expression | undefined>(body, r => r.expression);
-        if (retExpr) {
-            const expression = inlineLocal.parenthesizeIfNecessary(targetNode, retExpr);
-            t.replaceNode(file, targetNode, expression);
+        if (nofReturns === 1) {
+            const returnExpression = forEachReturnStatement<Expression | undefined>(body, r => r.expression);
+            if (returnExpression) {
+                const expression = inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
+                t.replaceNode(file, targetNode, expression);
+            }
+        }
+        else if (nofReturns > 1) {
+            t.replaceNode(file, targetNode, createIdentifier(returnVariableName));
         }
 
         function collectConflictingNames(node: Node) {
@@ -195,32 +217,14 @@ namespace ts.refactor.inlineFunction {
                 // const symbol = checker.getSymbolAtLocation(node);
                 // if (symbol) {}
             }
-            if (isReturnStatement(node)) {
+            if (isReturnStatement(node) && nofReturns > 1) {
                 if (node.expression) {
-                    const name = getUniqueName("returnValue", file);
-                    const assignment = createAssignment(createIdentifier(name), node.expression);
+                    const assignment = createAssignment(createIdentifier(returnVariableName), node.expression);
                     return createExpressionStatement(assignment);
                 }
             }
             return visitEachChild(node, visitor, nullTransformationContext);
         }
-
-        // function collectConflictingNames(node: Node): VisitResult<Node> {
-        //     if (isVariableDeclaration(node)) {
-        //         const name = node.name;
-        //         if (isIdentifier(name)) {
-        //             getSafeName(name);
-        //         }
-        //     }
-        //     if (isReturnStatement(node)) {
-        //         if (node.expression) {
-        //             const name = getUniqueName("returnValue", file);
-        //             const assignment = createAssignment(createIdentifier(name), node.expression);
-        //             return createExpressionStatement(assignment);
-        //         }
-        //     }
-        //     return visitEachChild(node, collectConflictingNames, nullTransformationContext);
-        // }
 
         function getSafeName(name: Identifier) {
             const symbol = checker.getSymbolAtLocation(name)!;
@@ -234,6 +238,13 @@ namespace ts.refactor.inlineFunction {
     }
 
     type InlineableFunction = FunctionDeclaration | MethodDeclaration;
+
+    function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, value?: Expression) {
+        const decl = createVariableDeclaration(name, type, value);
+        const declList = createVariableDeclarationList([decl], flags);
+        const variableStatement = createVariableStatement(/* modifiers */ undefined, declList);
+        return variableStatement;
+    }
 
     function nameIsTaken(symbols: Symbol[], name: string, symbol: Symbol) {
         return forEach(symbols, s => s.name === name && s !== symbol ? s : undefined);
