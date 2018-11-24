@@ -16,10 +16,12 @@ edit.applyRefactor({
     actionName: "Inline all",
     actionDescription: "Inline all",
     newContent: `function bar(arg: number) {
-    const x = 2;
     let returnValue;
-    if (x < 0) returnValue = 42;
-    else returnValue = 69;
+    const x = 2;
+    if (x < 0)
+        returnValue = 42;
+    else
+        returnValue = 69;
     const someValue = returnValue;
     return arg * someValue;
 }`
