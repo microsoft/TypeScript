@@ -74,8 +74,13 @@ namespace ts.codefix {
         let isIntersectionRedirected = false;
 
         kind = pickFirstTypeFromUnion(typeNode);
-        kind = redirectInterface(kind, type);
-        kind = redirectPrimitivObjectToTypeReference(declaration, kind);
+
+        if (type.isClassOrInterface()) {
+            const areAllDeclarationsInterface = type.symbol.declarations.every(d => d.kind === SyntaxKind.InterfaceDeclaration);
+            if (areAllDeclarationsInterface) {
+                kind = SyntaxKind.TypeLiteral;
+            }
+        }
 
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
@@ -167,17 +172,10 @@ namespace ts.codefix {
         }
         return kind;
     }
+
     function redirectInterface(kind: SyntaxKind, type: Type): SyntaxKind {
         if (type.isClassOrInterface() && !type.isClass()) {
             kind = SyntaxKind.TypeLiteral;
-        }
-        return kind;
-    }
-    function redirectPrimitivObjectToTypeReference(declaration: Declaration, kind: SyntaxKind): SyntaxKind {
-        if (kind === SyntaxKind.TypeLiteral && isPropertySignature(declaration)) {
-            if (declaration.type!.kind === SyntaxKind.TypeReference) {
-                kind = SyntaxKind.TypeReference;
-            }
         }
         return kind;
     }
