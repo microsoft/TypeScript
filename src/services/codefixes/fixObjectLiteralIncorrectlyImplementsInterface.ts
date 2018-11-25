@@ -73,7 +73,7 @@ namespace ts.codefix {
         let kind = typeNode.kind;
         let isIntersectionRedirected = false;
 
-        kind = pickFirstTypeFromUnion(typeNode);
+        kind = pickFirstTypeFromUnion(kind, type);
 
         if (type.isClassOrInterface()) {
             const areAllDeclarationsInterface = type.symbol.declarations.every(d => d.kind === SyntaxKind.InterfaceDeclaration);
@@ -174,10 +174,13 @@ namespace ts.codefix {
                       .map(p => p!);
     }
 
-    function pickFirstTypeFromUnion(typeNode: TypeNode): SyntaxKind {
-        let kind = typeNode.kind;
-        if (isUnionTypeNode(typeNode)) {
-            kind = typeNode.types[0].kind;
+    function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): SyntaxKind {
+        const checker = type.checker;
+        if (kind !== SyntaxKind.BooleanKeyword && type.isUnion()) {
+            const uniont = type as UnionType;
+            const firstT = uniont.types[0];
+            const typeN = checker.typeToTypeNode(firstT);
+            kind = typeN!.kind;
         }
         return kind;
     }
@@ -238,7 +241,7 @@ namespace ts.codefix {
         let kind = typeNode.kind;
         let isIntersectionRedirected = false;
 
-        kind = pickFirstTypeFromUnion(typeNode);
+        kind = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
         kind = redirectPrimitivObjectForTuple(type.symbol, kind);
 
