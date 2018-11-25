@@ -82,6 +82,10 @@ namespace ts.codefix {
             }
         }
 
+        if (kind !== SyntaxKind.FunctionType && !!(getObjectFlags(type) & ObjectFlags.Anonymous)) {
+            kind = SyntaxKind.TypeLiteral;
+        }
+
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
             isIntersectionRedirected = true;
@@ -115,7 +119,7 @@ namespace ts.codefix {
         }
         else if (kind === SyntaxKind.TypeReference) {
             if (!isPropertySignature(declaration)) return undefined;
-            expression = expression = getDefaultClass(checker, declaration);
+            expression = getDefaultClass(checker, declaration);
         }
         else if (kind === SyntaxKind.TypeLiteral) {
             expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
