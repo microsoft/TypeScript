@@ -117,8 +117,8 @@ namespace ts.codefix {
             expression = getDefaultValue(kind);
         }
         else if (kind === SyntaxKind.TupleType) {
-            if (!isPropertySignature(declaration) || !declaration.type || !isTupleTypeNode(declaration.type)) return undefined;
-            const elements = declaration.type.elementTypes;
+            if (!isTupleTypeNode(typeNode)) return undefined;
+            const elements = isPropertySignature(declaration) && declaration.type && isTupleTypeNode(declaration.type) ? declaration.type.elementTypes : typeNode.elementTypes;
             const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
             expression = createArrayLiteral(stubbedElements);
         }
