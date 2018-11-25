@@ -82,8 +82,13 @@ namespace ts.codefix {
             }
         }
 
-        if (kind !== SyntaxKind.FunctionType && !!(getObjectFlags(type) & ObjectFlags.Anonymous)) {
-            kind = SyntaxKind.TypeLiteral;
+        if (kind !== SyntaxKind.FunctionType && (getObjectFlags(type) & ObjectFlags.Anonymous)) {
+            if (type.symbol.declarations[0].kind === SyntaxKind.FunctionType) {
+                kind = SyntaxKind.FunctionType;
+            }
+            else {
+                kind = SyntaxKind.TypeLiteral;
+            }
         }
 
         if (type.isIntersection()) {
