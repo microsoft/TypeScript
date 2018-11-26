@@ -1,0 +1,82 @@
+=== tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts ===
+interface Foo {
+    a: string;
+>a : string
+
+    b: number;
+>b : number
+
+};
+
+interface Bar {
+    b: string;
+>b : string
+}
+
+interface Other {
+    totallyUnrelatedProperty: number;
+>totallyUnrelatedProperty : number
+}
+
+export let x = { a: '', b: '' };
+>x : { a: string; b: string; }
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function f(x: Foo | Other): any;
+>f : (x: Foo | Other) => any
+>x : Foo | Other
+
+f(x);
+>f(x) : any
+>f : (x: Foo | Other) => any
+>x : { a: string; b: string; }
+
+f({ a: '', b: '' })
+>f({ a: '', b: '' }) : any
+>f : (x: Foo | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function g(x: Bar | Other): any;
+>g : (x: Bar | Other) => any
+>x : Bar | Other
+
+g(x);
+>g(x) : any
+>g : (x: Bar | Other) => any
+>x : { a: string; b: string; }
+
+g({ a: '', b: '' })
+>g({ a: '', b: '' }) : any
+>g : (x: Bar | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
+declare function h(x: Foo | Bar | Other): any;
+>h : (x: Foo | Bar | Other) => any
+>x : Foo | Bar | Other
+
+h(x);
+>h(x) : any
+>h : (x: Foo | Bar | Other) => any
+>x : { a: string; b: string; }
+
+h({ a: '', b: '' })
+>h({ a: '', b: '' }) : any
+>h : (x: Foo | Bar | Other) => any
+>{ a: '', b: '' } : { a: string; b: string; }
+>a : string
+>'' : ""
+>b : string
+>'' : ""
+
