@@ -11920,7 +11920,8 @@ namespace ts {
                         findMatchingDiscriminantType(source, target) ||
                         findMatchingTypeReferenceOrTypeAliasReference(source, target) ||
                         findBestTypeForObjectLiteral(source, target) ||
-                        findBestTypeForInvokable(source, target);
+                        findBestTypeForInvokable(source, target) ||
+                        findMostOverlappyType(source, target);
 
                     isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
                 }
@@ -11958,6 +11959,34 @@ namespace ts {
                 if (hasSignatures) {
                     return find(unionTarget.types, t => getSignaturesOfType(t, signatureKind).length > 0);
                 }
+            }
+
+            function findMostOverlappyType(source: Type, unionTarget: UnionOrIntersectionType) {
+                let bestMatch: Type | undefined;
+                let matchingCount = 0;
+                for (const target of unionTarget.types) {
+                    const overlap = getIntersectionType([getIndexType(source), getIndexType(target)]);
+                    if (overlap.flags & TypeFlags.Index) {
+                        // perfect overlap of keys
+                        bestMatch = target;
+                        matchingCount = Infinity;
+                    }
+                    else if (overlap.flags & TypeFlags.Union) {
+                        // Some subset overlap if we have only string literals.
+                        // If we have a union of index types, it seems likely that we
+                        // needed to elaborate between two generic mapped types anyway.
+                        const len = length((overlap as UnionType).types);
+                        if (len >= matchingCount) {
+                            bestMatch = target;
+                            matchingCount = len;
+                        }
+                    }
+                    else if (!(overlap.flags & TypeFlags.Never) && 1 >= matchingCount) {
+                        bestMatch = target;
+                        matchingCount = 1;
+                    }
+                }
+                return bestMatch;
             }
 
             // Keep this up-to-date with the same logic within `getApparentTypeOfContextualType`, since they should behave similarly
