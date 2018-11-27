@@ -1451,8 +1451,14 @@ namespace ts {
 
         function emitTypeLiteral(node: TypeLiteralNode) {
             writePunctuation("{");
+            if(node.isExact) {
+                writePunctuation("|");
+            }
             const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
             emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
+            if(node.isExact) {
+                writePunctuation("|");
+            }
             writePunctuation("}");
         }
 

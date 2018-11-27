@@ -4129,6 +4129,10 @@
         "category": "Error",
         "code": 7051
     },
+    "Non-exact type cannot be assigned to exact type": {
+        "category": "Error",
+        "code": 7052
+    },
 
     "You cannot rename this element.": {
         "category": "Error",

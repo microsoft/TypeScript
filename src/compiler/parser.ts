@@ -1601,9 +1601,10 @@ namespace ts {
             }
 
             switch (kind) {
+                case ParsingContext.TypeMembers:
+                    if(token() === SyntaxKind.BarToken) return true;
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
-                case ParsingContext.TypeMembers:
                 case ParsingContext.ClassMembers:
                 case ParsingContext.EnumMembers:
                 case ParsingContext.ObjectLiteralMembers:
@@ -2742,14 +2743,31 @@ namespace ts {
 
         function parseTypeLiteral(): TypeLiteralNode {
             const node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
-            node.members = parseObjectTypeMembers();
-            return finishNode(node);
+            if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                const isExact = parseOptional(SyntaxKind.BarToken);
+                node.isExact = isExact;
+                node.members = parseList(ParsingContext.TypeMembers, parseTypeMember);
+                if(isExact) {
+                    parseExpected(SyntaxKind.BarToken);
+                }
+                parseExpected(SyntaxKind.CloseBraceToken);
+                return finishNode(node);
+            }
+            else {
+                const node = <TypeLiteralNode>createNode(SyntaxKind.TypeLiteral);
+                node.members = createMissingList<TypeElement>();
+                return finishNode(node);
+            }
         }
 
         function parseObjectTypeMembers(): NodeArray<TypeElement> {
             let members: NodeArray<TypeElement>;
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
+                const isExact = parseOptional(SyntaxKind.BarToken);
                 members = parseList(ParsingContext.TypeMembers, parseTypeMember);
+                if(isExact) {
+                    parseExpected(SyntaxKind.BarToken);
+                }
                 parseExpected(SyntaxKind.CloseBraceToken);
             }
             else {

@@ -723,15 +723,16 @@ namespace ts {
             : node;
     }
 
-    export function createTypeLiteralNode(members: ReadonlyArray<TypeElement> | undefined) {
+    export function createTypeLiteralNode(members: ReadonlyArray<TypeElement> | undefined, isExact: boolean = false) {
         const node = createSynthesizedNode(SyntaxKind.TypeLiteral) as TypeLiteralNode;
+        node.isExact = isExact;
         node.members = createNodeArray(members);
         return node;
     }
 
     export function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>) {
         return node.members !== members
-            ? updateNode(createTypeLiteralNode(members), node)
+            ? updateNode(createTypeLiteralNode(members, node.isExact), node)
             : node;
     }
 

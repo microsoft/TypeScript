@@ -3545,7 +3545,7 @@ namespace ts {
                     if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             context.approximateLength += 2;
-                            return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
+                            return setEmitFlags(createTypeLiteralNode(/*members*/ undefined, !!(type.objectFlags & ObjectFlags.Exact)), EmitFlags.SingleLine);
                         }
 
                         if (resolved.callSignatures.length === 1 && !resolved.constructSignatures.length) {
@@ -3566,7 +3566,7 @@ namespace ts {
                     context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
                     const members = createTypeNodesFromResolvedType(resolved);
                     context.flags = savedFlags;
-                    const typeLiteralNode = createTypeLiteralNode(members);
+                    const typeLiteralNode = createTypeLiteralNode(members, !!(type.objectFlags & ObjectFlags.Exact));
                     context.approximateLength += 2;
                     return setEmitFlags(typeLiteralNode, (context.flags & NodeBuilderFlags.MultilineObjectLiterals) ? 0 : EmitFlags.SingleLine);
                 }
@@ -9991,7 +9991,11 @@ namespace ts {
                     links.resolvedType = emptyTypeLiteralType;
                 }
                 else {
-                    let type = createObjectType(ObjectFlags.Anonymous, node.symbol);
+                    let flags = ObjectFlags.Anonymous;
+                    if(isTypeLiteralNode(node) && node.isExact) {
+                        flags |= ObjectFlags.Exact;
+                    }
+                    let type = createObjectType(flags, node.symbol);
                     type.aliasSymbol = aliasSymbol;
                     type.aliasTypeArguments = getTypeArgumentsForAliasSymbol(aliasSymbol);
                     if (isJSDocTypeLiteral(node) && node.isArrayType) {
@@ -11685,6 +11689,15 @@ namespace ts {
 
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
+
+                if((getObjectFlags(target) & ObjectFlags.Exact)
+                   && !(getObjectFlags(source) & ObjectFlags.Exact) &&
+                   !(isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral)) {
+                    if(reportErrors) {
+                        reportRelationError(Diagnostics.Non_exact_type_cannot_be_assigned_to_exact_type, source, target);
+                    }
+                    return Ternary.False;
+                }
 
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 if (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral) {
