@@ -912,8 +912,9 @@ namespace ts.Completions {
                 symbols.push(...getPropertiesForCompletion(type, typeChecker));
             }
             else {
-                for (const symbol of type.getApparentProperties()) {
-                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol)) {
+                const props = type.getApparentProperties();
+                for (const symbol of props) {
+                    if (typeChecker.isValidPropertyAccessForCompletions(node.kind === SyntaxKind.ImportType ? <ImportTypeNode>node : <PropertyAccessExpression>node.parent, type, symbol, props.length > 20)) {
                         addPropertySymbol(symbol);
                     }
                 }

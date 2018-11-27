@@ -230,9 +230,9 @@ namespace ts {
                 const node = getParseTreeNode(nodeIn, isPropertyAccessOrQualifiedNameOrImportTypeNode);
                 return !!node && isValidPropertyAccess(node, escapeLeadingUnderscores(propertyName));
             },
-            isValidPropertyAccessForCompletions: (nodeIn, type, property) => {
+            isValidPropertyAccessForCompletions: (nodeIn, type, property, skipMethodCheck) => {
                 const node = getParseTreeNode(nodeIn, isPropertyAccessExpression);
-                return !!node && isValidPropertyAccessForCompletions(node, type, property);
+                return !!node && isValidPropertyAccessForCompletions(node, type, property, skipMethodCheck);
             },
             getSignatureFromDeclaration: declarationIn => {
                 const declaration = getParseTreeNode(declarationIn, isFunctionLike);
@@ -19083,9 +19083,9 @@ namespace ts {
             }
         }
 
-        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol): boolean {
+        function isValidPropertyAccessForCompletions(node: PropertyAccessExpression | ImportTypeNode, type: Type, property: Symbol, skipMethodCheck: boolean): boolean {
             return isValidPropertyAccessWithType(node, node.kind !== SyntaxKind.ImportType && node.expression.kind === SyntaxKind.SuperKeyword, property.escapedName, type)
-                && (!(property.flags & SymbolFlags.Method) || isValidMethodAccess(property, type));
+                && (!(property.flags & SymbolFlags.Method) || (skipMethodCheck || isValidMethodAccess(property, type)));
         }
         function isValidMethodAccess(method: Symbol, actualThisType: Type): boolean {
             const propType = getTypeOfPropertyOfType(actualThisType, method.escapedName)!;
