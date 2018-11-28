@@ -147,3 +147,12 @@ type B2<T, V> =
 
 type C2<T, V, E> =
     T extends object ? { [Q in keyof T]: C2<T[Q], V, E>; } : T;
+
+// Repro from #28654
+
+type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
+
+type T0 = MaybeTrue<{ b: never }>     // "no"
+type T1 = MaybeTrue<{ b: false }>;    // "no"
+type T2 = MaybeTrue<{ b: true }>;     // "yes"
+type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
