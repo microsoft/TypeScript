@@ -74,22 +74,8 @@ namespace ts.codefix {
         let isIntersectionRedirected = false;
 
         kind = pickFirstTypeFromUnion(kind, type);
-
-        if (type.isClassOrInterface()) {
-            const areAllDeclarationsInterface = type.symbol.declarations.every(d => d.kind === SyntaxKind.InterfaceDeclaration);
-            if (areAllDeclarationsInterface) {
-                kind = SyntaxKind.TypeLiteral;
-            }
-        }
-
-        if (kind !== SyntaxKind.FunctionType && (getObjectFlags(type) & ObjectFlags.Anonymous)) {
-            if (type.symbol.declarations[0].kind === SyntaxKind.FunctionType) {
-                kind = SyntaxKind.FunctionType;
-            }
-            else {
-                kind = SyntaxKind.TypeLiteral;
-            }
-        }
+        kind = redirectInterface(kind, type);
+        kind = redirectAnonymousObject(kind, type);
 
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
@@ -177,24 +163,31 @@ namespace ts.codefix {
     function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): SyntaxKind {
         const checker = type.checker;
         if (kind !== SyntaxKind.BooleanKeyword && type.isUnion()) {
-            const uniont = type as UnionType;
-            const firstT = uniont.types[0];
-            const typeN = checker.typeToTypeNode(firstT);
-            kind = typeN!.kind;
+            const firstType = (type as UnionType).types[0];
+            const typeNode = checker.typeToTypeNode(firstType);
+            kind = typeNode!.kind;
         }
         return kind;
     }
 
     function redirectInterface(kind: SyntaxKind, type: Type): SyntaxKind {
-        if (type.isClassOrInterface() && !type.isClass()) {
-            kind = SyntaxKind.TypeLiteral;
+        if (isInterface(type)) {
+            const areAllDeclarationsInterface = type.symbol.declarations.every(d => d.kind === SyntaxKind.InterfaceDeclaration);
+            if (areAllDeclarationsInterface) {
+                kind = SyntaxKind.TypeLiteral;
+            }
         }
         return kind;
     }
 
-    function redirectPrimitivObjectForTuple(symbol: Symbol | undefined, kind: SyntaxKind): SyntaxKind {
-        if (symbol && kind === SyntaxKind.TypeLiteral && isInterfaceDeclaration(symbol.declarations[0])) {
-                kind = SyntaxKind.TypeReference;
+    function redirectAnonymousObject(kind: SyntaxKind, type: Type): SyntaxKind {
+        if (kind !== SyntaxKind.FunctionType && isAnonymousObject(type)) {
+            if (isFunctionBehindTypeAlias(type)) {
+                kind = SyntaxKind.FunctionType;
+            }
+            else {
+                kind = SyntaxKind.TypeLiteral;
+            }
         }
         return kind;
     }
@@ -244,7 +237,6 @@ namespace ts.codefix {
 
         kind = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
-        kind = redirectPrimitivObjectForTuple(type.symbol, kind);
 
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
@@ -321,6 +313,19 @@ namespace ts.codefix {
         if (!isPropertySignature(declaration) || !declaration.questionToken) return true;
         return false;
     }
+
+    function isInterface(type: Type): boolean {
+        return !!(getObjectFlags(type) & ObjectFlags.Interface);
+    }
+
+    function isAnonymousObject(type: Type): boolean {
+        return !!(getObjectFlags(type) & ObjectFlags.Anonymous);
+    }
+
+    function isFunctionBehindTypeAlias(type: Type): boolean {
+        return type.symbol.declarations[0].kind === SyntaxKind.FunctionType;
+    }
+
 
     function createStubbedFunctionBody(): Block {
         return createBlock(
