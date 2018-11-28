@@ -71,7 +71,7 @@ namespace ts.codefix {
         const declaration = symbol.declarations[0];
 
         let kind = typeNode.kind;
-        let isIntersectionRedirected = false;
+        let wasRedirectedForIntersection = false;
 
         kind = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
@@ -79,7 +79,7 @@ namespace ts.codefix {
 
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
-            isIntersectionRedirected = true;
+            wasRedirectedForIntersection = true;
         }
 
         if (kind === SyntaxKind.FunctionType) {
@@ -97,17 +97,9 @@ namespace ts.codefix {
             );
         }
 
-        return createStubbedPropertyAssigment(symbol, kind, type, isIntersectionRedirected, objectLiteralExpression);
-    }
-
-    function createStubbedPropertyAssigment(symbol: Symbol, kind: SyntaxKind, type: Type, isIntersectionRedirected: boolean, objectLiteralExpression: ObjectLiteralExpression): PropertyAssignment | undefined {
         if (isBasicKind(kind)) {
             return createPropertyAssignment(symbol.name, getDefaultValue(kind));
         }
-
-        const checker = type.checker;
-        const typeNode = checker.typeToTypeNode(type)!;
-        const declaration = symbol.declarations[0];
 
         let expression: Expression;
 
@@ -116,7 +108,7 @@ namespace ts.codefix {
                 if (!isTupleTypeNode(typeNode)) return undefined;
                 const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
                 const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
-                const stubbedElements = elementTypes.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
+                const stubbedElements = elementTypes.map(typeNode => typeNodeToExpressionForTuple(checker, typeNode, objectLiteralExpression));
                 expression = createArrayLiteral(stubbedElements);
                 break;
 
@@ -131,9 +123,10 @@ namespace ts.codefix {
 
             case SyntaxKind.IntersectionType:
                 const declarations = symbol.declarations;
-                const typesFromIntersection = isIntersectionRedirected ? [type] : declarations.map(d => checker.getTypeAtLocation(d));
+                const typesFromIntersection = wasRedirectedForIntersection ? [type] : declarations.map(d => checker.getTypeAtLocation(d));
                 expression = getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
                 break;
+
             default:
                 return Debug.fail("Expression is not implemented for " + kind.toString());
         }
@@ -231,51 +224,56 @@ namespace ts.codefix {
         }
     }
 
-    function typeNodeToStubbedExpression(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
+    function typeNodeToExpressionForTuple(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
 
         const type = checker.getTypeAtLocation(typeNode);
         let kind = typeNode.kind;
-        let isIntersectionRedirected = false;
+        let wasRedirectedForIntersection = false;
 
         kind = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
 
         if (type.isIntersection()) {
             kind = SyntaxKind.IntersectionType;
-            isIntersectionRedirected = true;
+            wasRedirectedForIntersection = true;
         }
 
         if (isBasicKind(kind)) {
             return getDefaultValue(kind);
         }
-        else if (kind === SyntaxKind.IntersectionType) {
-            const intersectionType = type as IntersectionType;
-            const typesFromIntersection = isIntersectionRedirected ? [type] : intersectionType.types;
-            return getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
-        }
-        else if (kind === SyntaxKind.TypeLiteral) {
-            return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
-        }
-        else if (kind === SyntaxKind.TypeReference) {
-            const declaration = type.symbol.declarations[0];
-            const typeNode = checker.typeToTypeNode(type) as TypeReferenceNode;
-            return getDefaultClassOrEnum(checker, declaration as PropertySignature, typeNode);
-        }
-        else if (kind === SyntaxKind.TupleType && isTupleTypeNode(typeNode)) {
-            const stubbedElements = typeNode.elementTypes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
-            return createArrayLiteral(stubbedElements);
-        }
-        else if (kind === SyntaxKind.FunctionType && isFunctionTypeNode(typeNode)) {
-            return createArrowFunction(
-                typeNode.modifiers,
-                typeNode.typeParameters,
-                typeNode.parameters,
-                typeNode.type,
-                createToken(SyntaxKind.EqualsGreaterThanToken),
-                createStubbedFunctionBody());
-        }
 
-        return Debug.fail("Expression is not implemented for " + typeNode.getText());
+        switch (kind) {
+            case SyntaxKind.IntersectionType:
+                const intersectionType = type as IntersectionType;
+                const typesFromIntersection = wasRedirectedForIntersection ? [type] : intersectionType.types;
+                return getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
+
+            case SyntaxKind.TypeLiteral:
+                return getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+
+            case SyntaxKind.TypeReference:
+                const declaration = type.symbol.declarations[0];
+                return getDefaultClassOrEnum(checker, declaration as PropertySignature, typeNode as TypeReferenceNode);
+
+            case SyntaxKind.TupleType:
+                const tupleTypeNode = typeNode as TupleTypeNode;
+                const stubbedElements = tupleTypeNode.elementTypes.map(t => typeNodeToExpressionForTuple(checker, t, objectLiteralExpression));
+                return createArrayLiteral(stubbedElements);
+
+            case SyntaxKind.FunctionType:
+                const functionTypeNode = typeNode as FunctionTypeNode;
+                return createArrowFunction(
+                    functionTypeNode.modifiers,
+                    functionTypeNode.typeParameters,
+                    functionTypeNode.parameters,
+                    functionTypeNode.type,
+                    createToken(SyntaxKind.EqualsGreaterThanToken),
+                    createStubbedFunctionBody()
+                    );
+
+            default:
+                return Debug.fail("Expression is not implemented for " + typeNode.getText());
+        }
 
     }
 
