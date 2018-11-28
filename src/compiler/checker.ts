@@ -9118,7 +9118,7 @@ namespace ts {
                     case UnionReduction.SubtypeOrError:
                         if (!removeSubtypes(typeSet, /*checkOverflow*/ unionReduction === UnionReduction.SubtypeOrError)) {
                             return overflowErrorType;
-                        };
+                        }
                         break;
                 }
                 if (typeSet.length === 0) {
