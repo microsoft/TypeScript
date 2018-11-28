@@ -9410,8 +9410,13 @@ namespace ts {
             if (!(getDeclarationModifierFlagsFromSymbol(prop) & ModifierFlags.NonPublicAccessibilityModifier)) {
                 let type = getLateBoundSymbol(prop).nameType;
                 if (!type && !isKnownSymbol(prop)) {
-                    const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
-                    type = name && getLiteralTypeFromPropertyName(name) || getLiteralType(symbolName(prop));
+                    if (prop.escapedName === InternalSymbolName.Default) {
+                        type = getLiteralType("default");
+                    }
+                    else {
+                        const name = prop.valueDeclaration && getNameOfDeclaration(prop.valueDeclaration) as PropertyName;
+                        type = name && getLiteralTypeFromPropertyName(name) || getLiteralType(symbolName(prop));
+                    }
                 }
                 if (type && type.flags & include) {
                     return type;
@@ -20873,6 +20878,7 @@ namespace ts {
                     if (hasSyntheticDefault) {
                         const memberTable = createSymbolTable();
                         const newSymbol = createSymbol(SymbolFlags.Alias, InternalSymbolName.Default);
+                        newSymbol.nameType = getLiteralType("default");
                         newSymbol.target = resolveSymbol(symbol);
                         memberTable.set(InternalSymbolName.Default, newSymbol);
                         const anonymousSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
