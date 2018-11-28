@@ -167,12 +167,7 @@ namespace ts.codefix {
 
     function redirectAnonymousObject(kind: SyntaxKind, type: Type): SyntaxKind {
         if (kind !== SyntaxKind.FunctionType && isAnonymousObject(type)) {
-            if (isFunctionBehindTypeAlias(type)) {
-                kind = SyntaxKind.FunctionType;
-            }
-            else {
-                kind = SyntaxKind.TypeLiteral;
-            }
+            kind = isFunctionBehindTypeAlias(type) ? SyntaxKind.FunctionType : SyntaxKind.TypeLiteral;
         }
         return kind;
     }
