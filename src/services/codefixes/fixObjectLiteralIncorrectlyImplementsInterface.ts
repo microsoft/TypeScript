@@ -115,14 +115,14 @@ namespace ts.codefix {
             case SyntaxKind.TupleType:
                 if (!isTupleTypeNode(typeNode)) return undefined;
                 const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
-                const elements = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
-                const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
+                const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
+                const stubbedElements = elementTypes.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
                 expression = createArrayLiteral(stubbedElements);
                 break;
 
             case SyntaxKind.TypeReference:
                 if (!isPropertySignature(declaration) || !isTypeReferenceNode(typeNode)) return undefined;
-                expression = getDefaultClass(checker, declaration, typeNode);
+                expression = getDefaultClassOrEnum(checker, declaration, typeNode);
                 break;
 
             case SyntaxKind.TypeLiteral:
@@ -130,20 +130,8 @@ namespace ts.codefix {
                 break;
 
             case SyntaxKind.IntersectionType:
-                let typesFromIntersection: Type[];
                 const declarations = symbol.declarations;
-
-                if (declarations.length === 1 && !isIntersectionRedirected) {
-                    const intersectionType = type as IntersectionType;
-                    typesFromIntersection = intersectionType.types;
-                }
-                else if (isIntersectionRedirected) {
-                    typesFromIntersection = [type];
-                }
-                else {
-                    typesFromIntersection = declarations.map(d => checker.getTypeAtLocation(d));
-                }
-
+                const typesFromIntersection = isIntersectionRedirected ? [type] : declarations.map(d => checker.getTypeAtLocation(d));
                 expression = getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
                 break;
             default:
@@ -227,7 +215,7 @@ namespace ts.codefix {
         return createObjectLiteral(stubbedProperties, /*multiline*/ true);
     }
 
-    function getDefaultClass(checker: TypeChecker, declaration: PropertySignature, typeNode: TypeReferenceNode): Expression {
+    function getDefaultClassOrEnum(checker: TypeChecker, declaration: PropertySignature, typeNode: TypeReferenceNode): Expression {
         const type = checker.getTypeAtLocation(declaration);
 
         if (type.isClassOrInterface() || isReferenceType(type)) {
@@ -271,7 +259,7 @@ namespace ts.codefix {
         else if (kind === SyntaxKind.TypeReference) {
             const declaration = type.symbol.declarations[0];
             const typeNode = checker.typeToTypeNode(type) as TypeReferenceNode;
-            return getDefaultClass(checker, declaration as PropertySignature, typeNode);
+            return getDefaultClassOrEnum(checker, declaration as PropertySignature, typeNode);
         }
         else if (kind === SyntaxKind.TupleType && isTupleTypeNode(typeNode)) {
             const stubbedElements = typeNode.elementTypes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
