@@ -222,10 +222,12 @@ namespace ts.codefix {
 
     function getDefaultClass(checker: TypeChecker, declaration: PropertySignature): Expression {
         const typeOfProperty = checker.getTypeAtLocation(declaration);
+        const typeNode = checker.typeToTypeNode(typeOfProperty) as TypeReferenceNode;
 
-        if (typeOfProperty.isClassOrInterface()) {
+        if (typeOfProperty.isClassOrInterface() || (getObjectFlags(typeOfProperty) & ObjectFlags.Reference)) {
             const identifierName = checker.typeToString(typeOfProperty);
-            const newObject = createNew(createIdentifier(identifierName), /*typeArguments*/ undefined, /*argumentsArray*/ []);
+            const updatedName = identifierName.replace(/<.*>/, "");
+            const newObject = createNew(createIdentifier(updatedName), typeNode.typeArguments, /*argumentsArray*/ []);
             return newObject;
         }
         else {
