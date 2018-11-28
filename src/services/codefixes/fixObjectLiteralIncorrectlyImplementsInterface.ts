@@ -19,7 +19,6 @@ namespace ts.codefix {
         const parent = token.parent;
 
         if (!isVariableDeclaration(parent) || !parent.type || !parent.initializer || !isObjectLiteralExpression(parent.initializer)) return undefined;
-
         return getCodeActions(context, parent, parent.initializer);
     }
 
@@ -32,7 +31,6 @@ namespace ts.codefix {
         const callExpression = objectLiteral.parent;
 
         if (!isObjectLiteralExpression(objectLiteral) || !isCallExpression(callExpression)) return undefined;
-
         const functionSymbol = checker.getSymbolAtLocation(callExpression.expression)!;
         const argumentPosition = callExpression.arguments.findIndex(a => a === objectLiteral);
         const functionDeclaration = functionSymbol.declarations[0];
@@ -55,7 +53,7 @@ namespace ts.codefix {
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
 
         const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), isSymbolNonNullable));
-        const newProperties: ObjectLiteralElementLike[] = getNewMembers(requiredProperties, checker, objectLiteral);
+        const newProperties = requiredProperties.map(symbol => convertSymbolToMember(symbol, checker, objectLiteral));
 
         const changes = textChanges.ChangeTracker.with(context, tracker => {
             newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
@@ -64,8 +62,7 @@ namespace ts.codefix {
         return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
-
-    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike | undefined {
+    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike {
         const type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
         const typeNode = checker.typeToTypeNode(type, objectLiteralExpression)!;
         const declaration = symbol.declarations[0];
@@ -105,16 +102,15 @@ namespace ts.codefix {
 
         switch (kind) {
             case SyntaxKind.TupleType:
-                if (!isTupleTypeNode(typeNode)) return undefined;
+                const tupleTypeNode = typeNode as TupleTypeNode;
                 const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
-                const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
+                const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : tupleTypeNode.elementTypes;
                 const stubbedElements = elementTypes.map(typeNode => typeNodeToExpressionForTuple(checker, typeNode, objectLiteralExpression));
                 expression = createArrayLiteral(stubbedElements);
                 break;
 
             case SyntaxKind.TypeReference:
-                if (!isPropertySignature(declaration) || !isTypeReferenceNode(typeNode)) return undefined;
-                expression = getDefaultClassOrEnum(checker, declaration, typeNode);
+                expression = getDefaultClassOrEnum(checker, declaration as PropertySignature, typeNode as TypeReferenceNode);
                 break;
 
             case SyntaxKind.TypeLiteral:
@@ -147,12 +143,6 @@ namespace ts.codefix {
         ];
 
         return validKinds.some(k => k === kind);
-    }
-
-    function getNewMembers(symbols: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike[] {
-        return symbols.map(symbol => convertSymbolToMember(symbol, checker, objectLiteralExpression))
-                      .filter(pa => pa !== undefined)
-                      .map(p => p!);
     }
 
     function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): SyntaxKind {
@@ -194,7 +184,7 @@ namespace ts.codefix {
 
     function getDefaultIntersection(checker: TypeChecker, typesFromIntersection: Type[], objectLiteralExpression: ObjectLiteralExpression): Expression {
         const properties = typesFromIntersection.map(t => checker.getPropertiesOfType(t))
-                                                   .reduce(mergeSymbolArray);
+                                                .reduce(mergeSymbolArray);
         return createStubbedObjectLiteral(properties, checker, objectLiteralExpression);
     }
 
@@ -203,8 +193,8 @@ namespace ts.codefix {
         return createStubbedObjectLiteral(properties, checker, objectLiteralExpression);
     }
 
-    function createStubbedObjectLiteral(properties: Symbol[], checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): Expression {
-        const stubbedProperties = getNewMembers(properties, checker, objectLiteralExpression);
+    function createStubbedObjectLiteral(properties: Symbol[], checker: TypeChecker, objectLiteral: ObjectLiteralExpression): Expression {
+        const stubbedProperties = properties.map(symbol => convertSymbolToMember(symbol, checker, objectLiteral));
         return createObjectLiteral(stubbedProperties, /*multiline*/ true);
     }
 
@@ -334,7 +324,6 @@ namespace ts.codefix {
         if (!isPropertySignature(declaration) || !declaration.type || !isTupleTypeNode(declaration.type)) return undefined;
         return declaration.type;
     }
-
 
     function createStubbedFunctionBody(): Block {
         return createBlock(
