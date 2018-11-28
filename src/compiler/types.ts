@@ -3230,7 +3230,8 @@ namespace ts {
     export const enum UnionReduction {
         None = 0,
         Literal,
-        Subtype
+        Subtype,
+        SubtypeOrError
     }
 
     // NOTE: If modifying this enum, must modify `TypeFormatFlags` too!

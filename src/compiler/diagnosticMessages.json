@@ -2529,6 +2529,10 @@
         "category": "Error",
         "code": 2742
     },
+    "Array literal type is too complex to represent.": {
+        "category": "Error",
+        "code": 2743
+    },
 
     "Import declaration '{0}' is using private name '{1}'.": {
         "category": "Error",

@@ -388,6 +388,7 @@ namespace ts {
         const autoType = createIntrinsicType(TypeFlags.Any, "any");
         const wildcardType = createIntrinsicType(TypeFlags.Any, "any");
         const errorType = createIntrinsicType(TypeFlags.Any, "error");
+        const overflowErrorType = createIntrinsicType(TypeFlags.Any, "error");
         const unknownType = createIntrinsicType(TypeFlags.Unknown, "unknown");
         const undefinedType = createIntrinsicType(TypeFlags.Undefined, "undefined");
         const undefinedWideningType = strictNullChecks ? undefinedType : createIntrinsicType(TypeFlags.Undefined | TypeFlags.ContainsWideningType, "undefined");
@@ -9024,18 +9025,6 @@ namespace ts {
             return includes;
         }
 
-        function isSubtypeOfAny(source: Type, targets: ReadonlyArray<Type>): boolean {
-            for (const target of targets) {
-                if (source !== target && isTypeSubtypeOf(source, target) && (
-                    !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
-                    !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
-                    isTypeDerivedFrom(source, target))) {
-                    return true;
-                }
-            }
-            return false;
-        }
-
         function isSetOfLiteralsFromSameEnum(types: ReadonlyArray<Type>): boolean {
             const first = types[0];
             if (first.flags & TypeFlags.EnumLiteral) {
@@ -9052,17 +9041,34 @@ namespace ts {
             return false;
         }
 
-        function removeSubtypes(types: Type[]) {
+        function removeSubtypes(types: Type[], checkOverflow: boolean): boolean {
             if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
-                return;
+                return true;
             }
             let i = types.length;
-            while (i > 0) {
+            let count = 0;
+            loop: while (i > 0) {
                 i--;
-                if (isSubtypeOfAny(types[i], types)) {
-                    orderedRemoveItemAt(types, i);
+                const source = types[i];
+                for (const target of types) {
+                    if (source !== target) {
+                        if (isTypeSubtypeOf(source, target) && (
+                            !(getObjectFlags(getTargetType(source)) & ObjectFlags.Class) ||
+                            !(getObjectFlags(getTargetType(target)) & ObjectFlags.Class) ||
+                            isTypeDerivedFrom(source, target))) {
+                            orderedRemoveItemAt(types, i);
+                            continue loop;
+                        }
+                        count++;
+                        if (checkOverflow && count >= 500000) {
+                            // If we reach 500000 failed subtype checks, we deem the union type
+                            // too complex to represent. We indicate this by returning false.
+                            return false;
+                        }
+                    }
                 }
             }
+            return true;
         }
 
         function removeRedundantLiteralTypes(types: Type[], includes: TypeFlags) {
@@ -9109,7 +9115,10 @@ namespace ts {
                         }
                         break;
                     case UnionReduction.Subtype:
-                        removeSubtypes(typeSet);
+                    case UnionReduction.SubtypeOrError:
+                        if (!removeSubtypes(typeSet, /*checkOverflow*/ unionReduction === UnionReduction.SubtypeOrError)) {
+                            return overflowErrorType;
+                        };
                         break;
                 }
                 if (typeSet.length === 0) {
@@ -17717,7 +17726,15 @@ namespace ts {
                     return createTupleType(elementTypes, minLength, hasRestElement);
                 }
             }
-            return getArrayLiteralType(elementTypes, UnionReduction.Subtype);
+            if (!elementTypes.length) {
+                return createArrayType(strictNullChecks ? implicitNeverType : undefinedWideningType);
+            }
+            const elementType = getUnionType(elementTypes, UnionReduction.SubtypeOrError);
+            if (elementType === overflowErrorType) {
+                error(node, Diagnostics.Array_literal_type_is_too_complex_to_represent);
+                return createArrayType(errorType);
+            }
+            return createArrayType(elementType);
         }
 
         function getArrayLiteralTupleTypeIfApplicable(elementTypes: Type[], contextualType: Type | undefined, hasRestElement: boolean, elementCount = elementTypes.length) {
@@ -17744,12 +17761,6 @@ namespace ts {
                 }
                 return createTupleType(elementTypes, minLength, hasRestElement);
             }
-        }
-
-        function getArrayLiteralType(elementTypes: Type[], unionReduction = UnionReduction.Literal) {
-            return createArrayType(elementTypes.length ?
-                getUnionType(elementTypes, unionReduction) :
-                strictNullChecks ? implicitNeverType : undefinedWideningType);
         }
 
         function isNumericName(name: DeclarationName): boolean {
