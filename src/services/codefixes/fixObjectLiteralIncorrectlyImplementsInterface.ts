@@ -97,44 +97,57 @@ namespace ts.codefix {
             );
         }
 
+        return createStubbedPropertyAssigment(symbol, kind, type, isIntersectionRedirected, objectLiteralExpression);
+    }
+
+    function createStubbedPropertyAssigment(symbol: Symbol, kind: SyntaxKind, type: Type, isIntersectionRedirected: boolean, objectLiteralExpression: ObjectLiteralExpression): PropertyAssignment | undefined {
+        if (isBasicKind(kind)) {
+            return createPropertyAssignment(symbol.name, getDefaultValue(kind));
+        }
+
+        const checker = type.checker;
+        const typeNode = checker.typeToTypeNode(type)!;
+        const declaration = symbol.declarations[0];
+
         let expression: Expression;
 
-        if (isBasicKind(kind)) {
-            expression = getDefaultValue(kind);
-        }
-        else if (kind === SyntaxKind.TupleType) {
-            if (!isTupleTypeNode(typeNode)) return undefined;
-            const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
-            const elements = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
-            const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
-            expression = createArrayLiteral(stubbedElements);
-        }
-        else if (kind === SyntaxKind.TypeReference) {
-            if (!isPropertySignature(declaration) || !isTypeReferenceNode(typeNode)) return undefined;
-            expression = getDefaultClass(checker, declaration, typeNode);
-        }
-        else if (kind === SyntaxKind.TypeLiteral) {
-            expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
-        }
-        else if (kind === SyntaxKind.IntersectionType) {
-            let typesFromIntersection: Type[];
-            const declarations = symbol.declarations;
+        switch (kind) {
+            case SyntaxKind.TupleType:
+                if (!isTupleTypeNode(typeNode)) return undefined;
+                const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
+                const elements = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
+                const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
+                expression = createArrayLiteral(stubbedElements);
+                break;
 
-            if (declarations.length === 1 && !isIntersectionRedirected) {
-                const intersectionType = type as IntersectionType;
-                typesFromIntersection = intersectionType.types;
-            }
-            else if (isIntersectionRedirected) {
-                typesFromIntersection = [type];
-            }
-            else {
-                typesFromIntersection = declarations.map(d => checker.getTypeAtLocation(d));
-            }
+            case SyntaxKind.TypeReference:
+                if (!isPropertySignature(declaration) || !isTypeReferenceNode(typeNode)) return undefined;
+                expression = getDefaultClass(checker, declaration, typeNode);
+                break;
 
-            expression = getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
-        }
-        else {
-            return undefined;
+            case SyntaxKind.TypeLiteral:
+                expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
+                break;
+
+            case SyntaxKind.IntersectionType:
+                let typesFromIntersection: Type[];
+                const declarations = symbol.declarations;
+
+                if (declarations.length === 1 && !isIntersectionRedirected) {
+                    const intersectionType = type as IntersectionType;
+                    typesFromIntersection = intersectionType.types;
+                }
+                else if (isIntersectionRedirected) {
+                    typesFromIntersection = [type];
+                }
+                else {
+                    typesFromIntersection = declarations.map(d => checker.getTypeAtLocation(d));
+                }
+
+                expression = getDefaultIntersection(checker, typesFromIntersection, objectLiteralExpression);
+                break;
+            default:
+                return Debug.fail("Expression is not implemented for " + kind.toString());
         }
 
         return createPropertyAssignment(symbol.name, expression);
