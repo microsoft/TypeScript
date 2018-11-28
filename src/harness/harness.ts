@@ -1107,7 +1107,8 @@ namespace Harness {
             { name: "symlink", type: "string" },
             { name: "link", type: "string" },
             // Emitted js baseline will print full paths for every output file
-            { name: "fullEmitPaths", type: "boolean" }
+            { name: "fullEmitPaths", type: "boolean" },
+            { name: "skipTypeAndSymbol", type: "boolean" }
         ];
 
         let optionsIndex: ts.Map<ts.CommandLineOption>;

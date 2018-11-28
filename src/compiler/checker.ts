@@ -379,7 +379,7 @@ namespace ts {
         const literalTypes = createMap<LiteralType>();
         const indexedAccessTypes = createMap<IndexedAccessType>();
         const evolvingArrayTypes: EvolvingArrayType[] = [];
-        const undefinedProperties = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
+        const undefinedProperties = createSymbolTable();
 
         const unknownSymbol = createSymbol(SymbolFlags.Property, "unknown" as __String);
         const resolvingSymbol = createSymbol(0, InternalSymbolName.Resolving);
@@ -427,6 +427,12 @@ namespace ts {
         const emptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         const emptyJsxObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
         emptyJsxObjectType.objectFlags |= ObjectFlags.JsxAttributes;
+        const freshEmptyObjectType = createAnonymousType(undefined, emptySymbols, emptyArray, emptyArray, undefined, undefined);
+        freshEmptyObjectType.objectFlags |= ObjectFlags.FreshLiteral;
+        freshEmptyObjectType.regularType = emptyObjectType;
+        freshEmptyObjectType.freshType = freshEmptyObjectType;
+        emptyObjectType.regularType = emptyObjectType;
+        emptyObjectType.freshType = freshEmptyObjectType;
 
         const emptyTypeLiteralSymbol = createSymbol(SymbolFlags.TypeLiteral, InternalSymbolName.Type);
         emptyTypeLiteralSymbol.members = createSymbolTable();
@@ -3246,10 +3252,10 @@ namespace ts {
 
             function checkTruncationLength(context: NodeBuilderContext): boolean {
                 if (context.truncating) return context.truncating;
-                return context.truncating = !(context.flags & NodeBuilderFlags.NoTruncation) && context.approximateLength > defaultMaximumTruncationLength;
+                return context.truncating = context.approximateLength > (context.flags & NodeBuilderFlags.NoTruncation ? defaultHardCapTrunctionLength : defaultMaximumTruncationLength);
             }
 
-            function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext): TypeNode {
+            function typeToTypeNodeHelper(type: Type, context: NodeBuilderContext, containingUnion?: UnionType): TypeNode {
                 if (cancellationToken && cancellationToken.throwIfCancellationRequested) {
                     cancellationToken.throwIfCancellationRequested();
                 }
@@ -3400,7 +3406,7 @@ namespace ts {
                     if (length(types) === 1) {
                         return typeToTypeNodeHelper(types[0], context);
                     }
-                    const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true);
+                    const typeNodes = mapToTypeNodes(types, context, /*isBareList*/ true, containingUnion || (type.flags & TypeFlags.Union ? type as UnionType : undefined));
                     if (typeNodes && typeNodes.length > 0) {
                         const unionOrIntersectionTypeNode = createUnionOrIntersectionTypeNode(type.flags & TypeFlags.Union ? SyntaxKind.UnionType : SyntaxKind.IntersectionType, typeNodes);
                         return unionOrIntersectionTypeNode;
@@ -3415,7 +3421,7 @@ namespace ts {
                 if (objectFlags & (ObjectFlags.Anonymous | ObjectFlags.Mapped)) {
                     Debug.assert(!!(type.flags & TypeFlags.Object));
                     // The type is an object literal type.
-                    return createAnonymousTypeNode(<ObjectType>type);
+                    return createAnonymousTypeNode(<ObjectType>type, containingUnion);
                 }
                 if (type.flags & TypeFlags.Index) {
                     const indexedType = (<IndexType>type).type;
@@ -3466,7 +3472,7 @@ namespace ts {
                     return setEmitFlags(mappedTypeNode, EmitFlags.SingleLine);
                 }
 
-                function createAnonymousTypeNode(type: ObjectType): TypeNode {
+                function createAnonymousTypeNode(type: ObjectType, containingUnion?: UnionType): TypeNode {
                     const typeId = "" + type.id;
                     const symbol = type.symbol;
                     let id: string;
@@ -3511,7 +3517,7 @@ namespace ts {
                             }
                             context.symbolDepth.set(id, depth + 1);
                             context.visitedTypes.set(typeId, true);
-                            const result = createTypeNodeFromObjectType(type);
+                            const result = createTypeNodeFromObjectType(type, containingUnion);
                             context.visitedTypes.delete(typeId);
                             context.symbolDepth.set(id, depth);
                             return result;
@@ -3519,7 +3525,7 @@ namespace ts {
                     }
                     else {
                         // Anonymous types without a symbol are never circular.
-                        return createTypeNodeFromObjectType(type);
+                        return createTypeNodeFromObjectType(type, containingUnion);
                     }
                     function shouldWriteTypeOfFunctionSymbol() {
                         const isStaticMethodSymbol = !!(symbol.flags & SymbolFlags.Method) &&  // typeof static method
@@ -3536,13 +3542,14 @@ namespace ts {
                     }
                 }
 
-                function createTypeNodeFromObjectType(type: ObjectType): TypeNode {
+                function createTypeNodeFromObjectType(type: ObjectType, containingUnion?: UnionType): TypeNode {
                     if (isGenericMappedType(type)) {
                         return createMappedTypeNodeFromType(type);
                     }
 
                     const resolved = resolveStructuredTypeMembers(type);
-                    if (!resolved.properties.length && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
+                    const hasUndefinedMembers = !!(containingUnion && (containingUnion.unionFlags & UnionFlags.WidenedFreshObjectsOnly) && getUnionPropertyNameCache(containingUnion).size);
+                    if (!resolved.properties.length && !hasUndefinedMembers && !resolved.stringIndexInfo && !resolved.numberIndexInfo) {
                         if (!resolved.callSignatures.length && !resolved.constructSignatures.length) {
                             context.approximateLength += 2;
                             return setEmitFlags(createTypeLiteralNode(/*members*/ undefined), EmitFlags.SingleLine);
@@ -3564,7 +3571,7 @@ namespace ts {
 
                     const savedFlags = context.flags;
                     context.flags |= NodeBuilderFlags.InObjectTypeLiteral;
-                    const members = createTypeNodesFromResolvedType(resolved);
+                    const members = createTypeNodesFromResolvedType(resolved, containingUnion);
                     context.flags = savedFlags;
                     const typeLiteralNode = createTypeLiteralNode(members);
                     context.approximateLength += 2;
@@ -3688,7 +3695,7 @@ namespace ts {
                     return ids;
                 }
 
-                function createTypeNodesFromResolvedType(resolvedType: ResolvedType): TypeElement[] | undefined {
+                function createTypeNodesFromResolvedType(resolvedType: ResolvedType, containingUnion?: UnionType): TypeElement[] | undefined {
                     if (checkTruncationLength(context)) {
                         return [createPropertySignature(/*modifiers*/ undefined, "...", /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined)];
                     }
@@ -3720,8 +3727,10 @@ namespace ts {
                     }
 
                     let i = 0;
+                    const writtenProperties = createUnderscoreEscapedMap<true>();
                     for (const propertySymbol of properties) {
                         i++;
+                        writtenProperties.set(propertySymbol.escapedName, true);
                         if (context.flags & NodeBuilderFlags.WriteClassExpressionAsTypeLiteral) {
                             if (propertySymbol.flags & SymbolFlags.Prototype) {
                                 continue;
@@ -3732,11 +3741,25 @@ namespace ts {
                         }
                         if (checkTruncationLength(context) && (i + 2 < properties.length - 1)) {
                             typeElements.push(createPropertySignature(/*modifiers*/ undefined, `... ${properties.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
-                            addPropertyToElementList(properties[properties.length - 1], context, typeElements);
+                            addPropertyToElementList(properties[properties.length - 1], context, typeElements, containingUnion);
                             break;
                         }
-                        addPropertyToElementList(propertySymbol, context, typeElements);
+                        addPropertyToElementList(propertySymbol, context, typeElements, containingUnion);
 
+                    }
+                    if (containingUnion && containingUnion.unionFlags & UnionFlags.WidenedFreshObjectsOnly) {
+                        const presentKeys = getUnionPropertyNameCache(containingUnion);
+                        const keys = filter(arrayFrom(presentKeys.keys()), k => !writtenProperties.has(k));
+                        i = 0;
+                        for (const key of keys) {
+                            i++;
+                            if (checkTruncationLength(context) && (i + 2 < keys.length - 1)) {
+                                typeElements.push(createPropertySignature(/*modifiers*/ undefined, `... ${keys.length - i} more ...`, /*questionToken*/ undefined, /*type*/ undefined, /*initializer*/ undefined));
+                                addPropertyToElementList(getUndefinedProperty(keys[keys.length - 1]), context, typeElements, containingUnion);
+                                break;
+                            }
+                            addPropertyToElementList(getUndefinedProperty(key), context, typeElements, containingUnion);
+                        }
                     }
                     return typeElements.length ? typeElements : undefined;
                 }
@@ -3750,7 +3773,7 @@ namespace ts {
                 return createKeywordTypeNode(SyntaxKind.AnyKeyword);
             }
 
-            function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[]) {
+            function addPropertyToElementList(propertySymbol: Symbol, context: NodeBuilderContext, typeElements: TypeElement[], containingUnion: UnionType | undefined) {
                 const propertyIsReverseMapped = !!(getCheckFlags(propertySymbol) & CheckFlags.ReverseMapped);
                 const propertyType = propertyIsReverseMapped && context.flags & NodeBuilderFlags.InReverseMappedType ?
                     anyType : getTypeOfSymbol(propertySymbol);
@@ -3787,7 +3810,10 @@ namespace ts {
                         propertyTypeNode = createElidedInformationPlaceholder(context);
                     }
                     else {
-                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
+                        const propName = getLiteralTypeFromProperty(propertySymbol, TypeFlags.StringOrNumberLiteralOrUnique);
+                        const propertyUnionType = containingUnion && propName ? getIndexedAccessType(containingUnion, propName) : undefined;
+                        const propertyTypeIfUnion = propertyUnionType && propertyUnionType.flags & TypeFlags.Union ? propertyUnionType as UnionType : undefined;
+                        propertyTypeNode = propertyType ? typeToTypeNodeHelper(propertyType, context, propertyTypeIfUnion) : createKeywordTypeNode(SyntaxKind.AnyKeyword);
                     }
                     context.flags = savedFlags;
 
@@ -3809,7 +3835,7 @@ namespace ts {
                 }
             }
 
-            function mapToTypeNodes(types: ReadonlyArray<Type> | undefined, context: NodeBuilderContext, isBareList?: boolean): TypeNode[] | undefined {
+            function mapToTypeNodes(types: ReadonlyArray<Type> | undefined, context: NodeBuilderContext, isBareList?: boolean, containingUnion?: UnionType): TypeNode[] | undefined {
                 if (some(types)) {
                     if (checkTruncationLength(context)) {
                         if (!isBareList) {
@@ -3817,9 +3843,9 @@ namespace ts {
                         }
                         else if (types.length > 2) {
                             return [
-                                typeToTypeNodeHelper(types[0], context),
+                                typeToTypeNodeHelper(types[0], context, containingUnion),
                                 createTypeReferenceNode(`... ${types.length - 2} more ...`, /*typeArguments*/ undefined),
-                                typeToTypeNodeHelper(types[types.length - 1], context)
+                                typeToTypeNodeHelper(types[types.length - 1], context, containingUnion)
                             ];
                         }
                     }
@@ -3829,14 +3855,14 @@ namespace ts {
                         i++;
                         if (checkTruncationLength(context) && (i + 2 < types.length - 1)) {
                             result.push(createTypeReferenceNode(`... ${types.length - i} more ...`, /*typeArguments*/ undefined));
-                            const typeNode = typeToTypeNodeHelper(types[types.length - 1], context);
+                            const typeNode = typeToTypeNodeHelper(types[types.length - 1], context, containingUnion);
                             if (typeNode) {
                                 result.push(typeNode);
                             }
                             break;
                         }
                         context.approximateLength += 2; // Account for whitespace + separator
-                        const typeNode = typeToTypeNodeHelper(type, context);
+                        const typeNode = typeToTypeNodeHelper(type, context, containingUnion);
                         if (typeNode) {
                             result.push(typeNode);
                         }
@@ -4413,6 +4439,7 @@ namespace ts {
             inferTypeParameters: TypeParameter[] | undefined;
             approximateLength: number;
             truncating?: boolean;
+            unionContext?: UnionType;
         }
 
         function isDefaultBindingContext(location: Node) {
@@ -7456,8 +7483,37 @@ namespace ts {
                 t;
         }
 
+        function getUndefinedProperty(name: __String) {
+            const cached = undefinedProperties.get(name);
+            if (cached) {
+                return cached;
+            }
+            const result = createSymbol(SymbolFlags.Optional | SymbolFlags.Property, name);
+            result.type = undefinedType;
+            result.nameType = getLiteralType(unescapeLeadingUnderscores(name));
+            undefinedProperties.set(name, result);
+            return result;
+        }
+
+        function getUnionPropertyNameCache(type: UnionType) {
+            if (type.propertyNameCache) {
+                return type.propertyNameCache;
+            }
+            type.propertyNameCache = createUnderscoreEscapedMap();
+            for (const member of type.types) {
+                for (const prop of getPropertiesOfType(member)) {
+                    type.propertyNameCache.set(prop.escapedName, true);
+                }
+            }
+            return type.propertyNameCache;
+        }
+
+        function getUnionContainsPropertyOfName(type: UnionType, name: __String) {
+            return (type.propertyNameCache || (type.propertyNameCache = getUnionPropertyNameCache(type))).get(name);
+        }
+
         function createUnionOrIntersectionProperty(containingType: UnionOrIntersectionType, name: __String): Symbol | undefined {
-            let props: Symbol[] | undefined;
+            let props: Map<Symbol> | undefined;
             let indexTypes: Type[] | undefined;
             const isUnion = containingType.flags & TypeFlags.Union;
             const excludeModifiers = isUnion ? ModifierFlags.NonPublicAccessibilityModifier : 0;
@@ -7472,7 +7528,13 @@ namespace ts {
                     const modifiers = prop ? getDeclarationModifierFlagsFromSymbol(prop) : 0;
                     if (prop && !(modifiers & excludeModifiers)) {
                         commonFlags &= prop.flags;
-                        props = appendIfUnique(props, prop);
+                        if (!props) {
+                            props = createMap();
+                        }
+                        const id = "" + getSymbolId(prop);
+                        if (!props.has(id)) {
+                            props.set(id, prop);
+                        }
                         checkFlags |= (isReadonlySymbol(prop) ? CheckFlags.Readonly : 0) |
                             (!(modifiers & ModifierFlags.NonPublicAccessibilityModifier) ? CheckFlags.ContainsPublic : 0) |
                             (modifiers & ModifierFlags.Protected ? CheckFlags.ContainsProtected : 0) |
@@ -7483,6 +7545,21 @@ namespace ts {
                         }
                     }
                     else if (isUnion) {
+                        if ((containingType as UnionType).unionFlags & UnionFlags.WidenedFreshObjectsOnly) {
+                            if (getUnionContainsPropertyOfName(containingType as UnionType, name)) {
+                                const prop = getUndefinedProperty(name);
+                                commonFlags &= prop.flags;
+                                if (!props) {
+                                    props = createMap();
+                                }
+                                const id = "" + getSymbolId(prop);
+                                if (!props.has(id)) {
+                                    props.set(id, prop);
+                                }
+                                syntheticFlag = CheckFlags.SyntheticProperty;
+                                continue;
+                            }
+                        }
                         const indexInfo = !isLateBoundName(name) && (isNumericLiteralName(name) && getIndexInfoOfType(type, IndexKind.Number) || getIndexInfoOfType(type, IndexKind.String));
                         if (indexInfo) {
                             checkFlags |= indexInfo.isReadonly ? CheckFlags.Readonly : 0;
@@ -7497,8 +7574,8 @@ namespace ts {
             if (!props) {
                 return undefined;
             }
-            if (props.length === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
-                return props[0];
+            if (props.size === 1 && !(checkFlags & CheckFlags.Partial) && !indexTypes) {
+                return props.values().next().value;
             }
             let declarations: Declaration[] | undefined;
             let commonType: Type | undefined;
@@ -7507,7 +7584,8 @@ namespace ts {
             let first = true;
             let commonValueDeclaration: Declaration | undefined;
             let hasNonUniformValueDeclaration = false;
-            for (const prop of props) {
+            let allConstituentsWidenedFreshLiterals = true;
+            for (const prop of arrayFrom(props.values())) {
                 if (!commonValueDeclaration) {
                     commonValueDeclaration = prop.valueDeclaration;
                 }
@@ -7527,6 +7605,14 @@ namespace ts {
                     }
                 }
                 propTypes.push(type);
+                if (allConstituentsWidenedFreshLiterals && isUnion) {
+                    allConstituentsWidenedFreshLiterals = !!(type.flags & TypeFlags.Object &&
+                        (type as ObjectType).freshType &&
+                        (type as ObjectType).regularType === type &&
+                        // An object type with a fresh type pointer should always be pointing at a fresh type - so this might be extraneous
+                        getObjectFlags((type as ObjectType).freshType!) & ObjectFlags.FreshLiteral) ||
+                        !!(type.flags & TypeFlags.Union && (type as UnionType).unionFlags & UnionFlags.WidenedFreshObjectsOnly);
+                }
             }
             addRange(propTypes, indexTypes);
             const result = createSymbol(SymbolFlags.Property | commonFlags, name, syntheticFlag | checkFlags);
@@ -7537,6 +7623,9 @@ namespace ts {
             result.declarations = declarations!;
             result.nameType = nameType;
             result.type = isUnion ? getUnionType(propTypes) : getIntersectionType(propTypes);
+            if (isUnion && allConstituentsWidenedFreshLiterals && result.type.flags & TypeFlags.Union && !indexTypes) {
+                (result.type as UnionType).unionFlags |= UnionFlags.WidenedFreshObjectsOnly;
+            }
             return result;
         }
 
@@ -9000,6 +9089,9 @@ namespace ts {
             // easier to reason about their origin.
             if (!(flags & TypeFlags.Never || flags & TypeFlags.Intersection && isEmptyIntersectionType(<IntersectionType>type))) {
                 includes |= flags & ~TypeFlags.ConstructionFlags;
+                if (includes & TypeFlags.AllFresh && !(getObjectFlags(type) & ObjectFlags.FreshLiteral)) {
+                    includes ^= TypeFlags.AllFresh;
+                }
                 if (type === wildcardType) includes |= TypeFlags.Wildcard;
                 if (!strictNullChecks && flags & TypeFlags.Nullable) {
                     if (!(flags & TypeFlags.ContainsWideningType)) includes |= TypeFlags.NonWideningType;
@@ -9053,7 +9145,7 @@ namespace ts {
         }
 
         function removeSubtypes(types: Type[]) {
-            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types)) {
+            if (types.length === 0 || isSetOfLiteralsFromSameEnum(types) || types.length > 1000) {
                 return;
             }
             let i = types.length;
@@ -9097,7 +9189,7 @@ namespace ts {
                 return types[0];
             }
             const typeSet: Type[] = [];
-            const includes = addTypesToUnion(typeSet, 0, types);
+            const includes = addTypesToUnion(typeSet, TypeFlags.AllFresh, types);
             if (unionReduction !== UnionReduction.None) {
                 if (includes & TypeFlags.AnyOrUnknown) {
                     return includes & TypeFlags.Any ? includes & TypeFlags.Wildcard ? wildcardType : anyType : unknownType;
@@ -9118,7 +9210,8 @@ namespace ts {
                             neverType;
                 }
             }
-            return getUnionTypeFromSortedList(typeSet, !(includes & TypeFlags.NotPrimitiveUnion), aliasSymbol, aliasTypeArguments);
+            const unionFlags = (!(includes & TypeFlags.NotPrimitiveUnion) ? UnionFlags.PrimitiveOnly : 0) | (includes & TypeFlags.AllFresh ? UnionFlags.FreshObjectsOnly : 0);
+            return getUnionTypeFromSortedList(typeSet, unionFlags, aliasSymbol, aliasTypeArguments);
         }
 
         function getUnionTypePredicate(signatures: ReadonlyArray<Signature>): TypePredicate | undefined {
@@ -9158,7 +9251,7 @@ namespace ts {
         }
 
         // This function assumes the constituent type list is sorted and deduplicated.
-        function getUnionTypeFromSortedList(types: Type[], primitiveTypesOnly: boolean, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
+        function getUnionTypeFromSortedList(types: Type[], unionFlags: UnionFlags, aliasSymbol?: Symbol, aliasTypeArguments?: ReadonlyArray<Type>): Type {
             if (types.length === 0) {
                 return neverType;
             }
@@ -9172,7 +9265,7 @@ namespace ts {
                 type = <UnionType>createType(TypeFlags.Union | propagatedFlags);
                 unionTypes.set(id, type);
                 type.types = types;
-                type.primitiveTypesOnly = primitiveTypesOnly;
+                type.unionFlags = unionFlags;
                 /*
                 Note: This is the alias symbol (or lack thereof) that we see when we first encounter this union type.
                 For aliases of identical unions, eg `type T = A | B; type U = A | B`, the symbol of the first alias encountered is the aliasSymbol.
@@ -9267,7 +9360,7 @@ namespace ts {
         // other unions and return true. Otherwise, do nothing and return false.
         function intersectUnionsOfPrimitiveTypes(types: Type[]) {
             let unionTypes: UnionType[] | undefined;
-            const index = findIndex(types, t => !!(t.flags & TypeFlags.Union) && (<UnionType>t).primitiveTypesOnly);
+            const index = findIndex(types, t => !!(t.flags & TypeFlags.Union) && !!((<UnionType>t).unionFlags & UnionFlags.PrimitiveOnly));
             if (index < 0) {
                 return false;
             }
@@ -9276,7 +9369,7 @@ namespace ts {
             // the unionTypes array.
             while (i < types.length) {
                 const t = types[i];
-                if (t.flags & TypeFlags.Union && (<UnionType>t).primitiveTypesOnly) {
+                if (t.flags & TypeFlags.Union && (<UnionType>t).unionFlags & UnionFlags.PrimitiveOnly) {
                     (unionTypes || (unionTypes = [<UnionType>types[index]])).push(<UnionType>t);
                     orderedRemoveItemAt(types, i);
                 }
@@ -9303,7 +9396,7 @@ namespace ts {
                 }
             }
             // Finally replace the first union with the result
-            types[index] = getUnionTypeFromSortedList(result, /*primitiveTypesOnly*/ true);
+            types[index] = getUnionTypeFromSortedList(result, UnionFlags.PrimitiveOnly);
             return true;
         }
 
@@ -10069,7 +10162,7 @@ namespace ts {
             const skippedPrivateMembers = createUnderscoreEscapedMap<boolean>();
             let stringIndexInfo: IndexInfo | undefined;
             let numberIndexInfo: IndexInfo | undefined;
-            if (left === emptyObjectType) {
+            if (left === emptyObjectType || left === freshEmptyObjectType || left === emptyJsxObjectType) {
                 // for the first spread element, left === emptyObjectType, so take the right's string indexer
                 stringIndexInfo = getIndexInfoOfType(right, IndexKind.String);
                 numberIndexInfo = getIndexInfoOfType(right, IndexKind.Number);
@@ -10180,6 +10273,10 @@ namespace ts {
 
         function isFreshLiteralType(type: Type) {
             return !!(type.flags & TypeFlags.Literal) && (<LiteralType>type).freshType === type;
+        }
+
+        function isFreshUnionType(type: Type) {
+            return !!(type.flags & TypeFlags.Union) && (<UnionType>type).freshType === type;
         }
 
         function getLiteralType(value: string | number | PseudoBigInt, enumId?: number, symbol?: Symbol) {
@@ -11644,11 +11741,11 @@ namespace ts {
              * * Ternary.Maybe if they are related with assumptions of other relationships, or
              * * Ternary.False if they are not related.
              */
-            function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean): Ternary {
-                if (isFreshLiteralType(source)) {
+            function isRelatedTo(source: Type, target: Type, reportErrors = false, headMessage?: DiagnosticMessage, isApparentIntersectionConstituent?: boolean, containingUnionTarget?: UnionType): Ternary {
+                if (isFreshLiteralType(source) || isFreshUnionType(source)) {
                     source = (<FreshableType>source).regularType;
                 }
-                if (isFreshLiteralType(target)) {
+                if (isFreshLiteralType(target) || isFreshUnionType(target)) {
                     target = (<FreshableType>target).regularType;
                 }
                 if (source.flags & TypeFlags.Substitution) {
@@ -11694,7 +11791,7 @@ namespace ts {
                 const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                 if (isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral) {
                     const discriminantType = target.flags & TypeFlags.Union ? findMatchingDiscriminantType(source, target as UnionType) : undefined;
-                    if (hasExcessProperties(<FreshObjectLiteralType>source, target, discriminantType, reportErrors)) {
+                    if (hasExcessProperties(<ObjectType>source, target, discriminantType, reportErrors, containingUnionTarget)) {
                         if (reportErrors) {
                             reportRelationError(headMessage, source, target);
                         }
@@ -11713,7 +11810,7 @@ namespace ts {
                     source.flags & (TypeFlags.Primitive | TypeFlags.Object | TypeFlags.Intersection) && source !== globalObjectType &&
                     target.flags & (TypeFlags.Object | TypeFlags.Intersection) && isWeakType(target) &&
                     (getPropertiesOfType(source).length > 0 || typeHasCallOrConstructSignatures(source)) &&
-                    !hasCommonProperties(source, target, isComparingJsxAttributes)) {
+                    !hasCommonProperties(source, target, isComparingJsxAttributes, containingUnionTarget)) {
                     if (reportErrors) {
                         const calls = getSignaturesOfType(source, SignatureKind.Call);
                         const constructs = getSignaturesOfType(source, SignatureKind.Construct);
@@ -11765,7 +11862,7 @@ namespace ts {
                         result = someTypeRelatedToType(<IntersectionType>source, target, /*reportErrors*/ false);
                     }
                     if (!result && (source.flags & TypeFlags.StructuredOrInstantiable || target.flags & TypeFlags.StructuredOrInstantiable)) {
-                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent)) {
+                        if (result = recursiveTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent, containingUnionTarget)) {
                             errorInfo = saveErrorInfo;
                         }
                     }
@@ -11820,7 +11917,7 @@ namespace ts {
                 let result: Ternary;
                 const flags = source.flags & target.flags;
                 if (flags & TypeFlags.Object || flags & TypeFlags.IndexedAccess || flags & TypeFlags.Conditional || flags & TypeFlags.Index || flags & TypeFlags.Substitution) {
-                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ false);
+                    return recursiveTypeRelatedTo(source, target, /*reportErrors*/ false, /*isIntersectionConstituent*/ false, /*unionContainer*/ undefined);
                 }
                 if (flags & (TypeFlags.Union | TypeFlags.Intersection)) {
                     if (result = eachTypeRelatedToSomeType(<UnionOrIntersectionType>source, <UnionOrIntersectionType>target)) {
@@ -11832,7 +11929,7 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function hasExcessProperties(source: FreshObjectLiteralType, target: Type, discriminant: Type | undefined, reportErrors: boolean): boolean {
+            function hasExcessProperties(source: ObjectType, target: Type, discriminant: Type | undefined, reportErrors: boolean, containingTargetUnion: UnionType | undefined): boolean {
                 if (!noImplicitAny && getObjectFlags(target) & ObjectFlags.JSLiteral) {
                     return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
                 }
@@ -11844,10 +11941,10 @@ namespace ts {
                     }
                     if (discriminant) {
                         // check excess properties against discriminant type only, not the entire union
-                        return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors);
+                        return hasExcessProperties(source, discriminant, /*discriminant*/ undefined, reportErrors, containingTargetUnion);
                     }
                     for (const prop of getPropertiesOfObjectType(source)) {
-                        if (shouldCheckAsExcessProperty(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                        if (shouldCheckAsExcessProperty(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes, containingTargetUnion)) {
                             if (reportErrors) {
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
@@ -11914,8 +12011,9 @@ namespace ts {
                 if (target.flags & TypeFlags.Union && containsType(targetTypes, source)) {
                     return Ternary.True;
                 }
+                const unionTarget = target.flags & TypeFlags.Union ? target as UnionType : undefined;
                 for (const type of targetTypes) {
-                    const related = isRelatedTo(source, type, /*reportErrors*/ false);
+                    const related = isRelatedTo(source, type, /*reportErrors*/ false, /*headMessage*/ undefined, /*apparentIntersection*/ undefined, unionTarget);
                     if (related) {
                         return related;
                     }
@@ -11928,7 +12026,7 @@ namespace ts {
                         findBestTypeForInvokable(source, target) ||
                         findMostOverlappyType(source, target);
 
-                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true);
+                    isRelatedTo(source, bestMatchingType || targetTypes[targetTypes.length - 1], /*reportErrors*/ true, /*headMessage*/ undefined, /*apparentIntersection*/ undefined, unionTarget);
                 }
                 return Ternary.False;
             }
@@ -12104,7 +12202,7 @@ namespace ts {
             // Third, check if both types are part of deeply nested chains of generic type instantiations and if so assume the types are
             // equal and infinitely expanding. Fourth, if we have reached a depth of 100 nested comparisons, assume we have runaway recursion
             // and issue an error. Otherwise, actually compare the structure of the two types.
-            function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function recursiveTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean, containingUnionTarget: UnionType | undefined): Ternary {
                 if (overflow) {
                     return Ternary.False;
                 }
@@ -12145,7 +12243,7 @@ namespace ts {
                 const saveExpandingFlags = expandingFlags;
                 if (!(expandingFlags & ExpandingFlags.Source) && isDeeplyNestedType(source, sourceStack, depth)) expandingFlags |= ExpandingFlags.Source;
                 if (!(expandingFlags & ExpandingFlags.Target) && isDeeplyNestedType(target, targetStack, depth)) expandingFlags |= ExpandingFlags.Target;
-                const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent) : Ternary.Maybe;
+                const result = expandingFlags !== ExpandingFlags.Both ? structuredTypeRelatedTo(source, target, reportErrors, isIntersectionConstituent, containingUnionTarget) : Ternary.Maybe;
                 expandingFlags = saveExpandingFlags;
                 depth--;
                 if (result) {
@@ -12170,7 +12268,7 @@ namespace ts {
                 return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
             }
 
-            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
+            function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean, containingUnionTarget: UnionType | undefined): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
                     if (flags & TypeFlags.Index) {
@@ -12425,7 +12523,7 @@ namespace ts {
                     if (source.flags & (TypeFlags.Object | TypeFlags.Intersection) && target.flags & TypeFlags.Object) {
                         // Report structural errors only if we haven't reported any errors yet
                         const reportStructuralErrors = reportErrors && errorInfo === saveErrorInfo && !sourceIsPrimitive;
-                        result = propertiesRelatedTo(source, target, reportStructuralErrors);
+                        result = propertiesRelatedTo(source, target, reportStructuralErrors, containingUnionTarget);
                         if (result) {
                             result &= signaturesRelatedTo(source, target, SignatureKind.Call, reportStructuralErrors);
                             if (result) {
@@ -12466,15 +12564,15 @@ namespace ts {
                 return Ternary.False;
             }
 
-            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean): Ternary {
+            function propertiesRelatedTo(source: Type, target: Type, reportErrors: boolean, containingUnionTarget: UnionType | undefined): Ternary {
                 if (relation === identityRelation) {
                     return propertiesIdenticalTo(source, target);
                 }
                 const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
-                const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
+                const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, containingUnionTarget);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
+                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, containingUnionTarget));
                         if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
                             headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
                             suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
@@ -12495,9 +12593,10 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
+                const targetHasUndefinedProps = !!(containingUnionTarget && containingUnionTarget.unionFlags & UnionFlags.WidenedFreshObjectsOnly);
                 if (isObjectLiteralType(target)) {
                     for (const sourceProp of getPropertiesOfType(source)) {
-                        if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
+                        if (!getPropertyOfObjectType(target, sourceProp.escapedName) && (!targetHasUndefinedProps || !getUnionContainsPropertyOfName(containingUnionTarget!, sourceProp.escapedName))) {
                             const sourceType = getTypeOfSymbol(sourceProp);
                             if (!(sourceType === undefinedType || sourceType === undefinedWideningType)) {
                                 if (reportErrors) {
@@ -12537,12 +12636,31 @@ namespace ts {
                     }
                 }
                 const properties = getPropertiesOfObjectType(target);
+                const visited = targetHasUndefinedProps ? createUnderscoreEscapedMap<true>() : undefined;
                 for (const targetProp of properties) {
+                    if (visited) {
+                        visited.set(targetProp.escapedName, true);
+                    }
+                    if (!validateTargetProp(targetProp)) {
+                        return Ternary.False;
+                    }
+                }
+                if (targetHasUndefinedProps) {
+                    for (const undefinedKeyName of arrayFrom(getUnionPropertyNameCache(containingUnionTarget!).keys())) {
+                        if (visited!.has(undefinedKeyName)) continue;
+                        if (!validateTargetProp(getUndefinedProperty(undefinedKeyName))) {
+                            return Ternary.False;
+                        }
+                    }
+                }
+                return result;
+
+                function validateTargetProp(targetProp: Symbol) {
                     if (!(targetProp.flags & SymbolFlags.Prototype)) {
                         const sourceProp = getPropertyOfType(source, targetProp.escapedName);
                         if (sourceProp && sourceProp !== targetProp) {
                             if (isIgnoredJsxProperty(source, sourceProp, getTypeOfSymbol(targetProp))) {
-                                continue;
+                                return Ternary.True;
                             }
                             const sourcePropFlags = getDeclarationModifierFlagsFromSymbol(sourceProp);
                             const targetPropFlags = getDeclarationModifierFlagsFromSymbol(targetProp);
@@ -12609,8 +12727,8 @@ namespace ts {
                             }
                         }
                     }
+                    return Ternary.True;
                 }
-                return result;
             }
 
             function propertiesIdenticalTo(source: Type, target: Type): Ternary {
@@ -12864,7 +12982,7 @@ namespace ts {
             for (const [getDiscriminatingType, propertyName] of discriminators) {
                 for (const type of target.types) {
                     const targetType = getTypeOfPropertyOfType(type, propertyName);
-                    if (targetType && related(getDiscriminatingType(), targetType)) {
+                    if (targetType ? related(getDiscriminatingType(), targetType) : target.unionFlags & UnionFlags.WidenedFreshObjectsOnly && getUnionContainsPropertyOfName(target, propertyName) && related(getDiscriminatingType(), undefinedType)) {
                         if (match) {
                             if (type === match) continue; // Finding multiple fields which discriminate to the same type is fine
                             return defaultValue;
@@ -12894,9 +13012,9 @@ namespace ts {
             return false;
         }
 
-        function hasCommonProperties(source: Type, target: Type, isComparingJsxAttributes: boolean) {
+        function hasCommonProperties(source: Type, target: Type, isComparingJsxAttributes: boolean, containingUnionTarget: UnionType | undefined) {
             for (const prop of getPropertiesOfType(source)) {
-                if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
+                if (isKnownProperty(target, prop.escapedName, isComparingJsxAttributes, containingUnionTarget)) {
                     return true;
                 }
             }
@@ -13478,7 +13596,7 @@ namespace ts {
             if (!(isObjectLiteralType(type) && getObjectFlags(type) & ObjectFlags.FreshLiteral)) {
                 return type;
             }
-            const regularType = (<FreshObjectLiteralType>type).regularType;
+            const regularType = (<ObjectType>type).regularType;
             if (regularType) {
                 return regularType;
             }
@@ -13493,81 +13611,28 @@ namespace ts {
                 resolved.numberIndexInfo);
             regularNew.flags = resolved.flags;
             regularNew.objectFlags |= ObjectFlags.ObjectLiteral | (getObjectFlags(resolved) & ObjectFlags.JSLiteral);
-            (<FreshObjectLiteralType>type).regularType = regularNew;
+            regularNew.freshType = regularNew;
+            regularNew.regularType = resolved;
+            (<ObjectType>type).regularType = regularNew;
+            (<ObjectType>type).freshType = resolved;
             return regularNew;
         }
 
-        function createWideningContext(parent: WideningContext | undefined, propertyName: __String | undefined, siblings: Type[] | undefined): WideningContext {
-            return { parent, propertyName, siblings, resolvedProperties: undefined };
-        }
-
-        function getSiblingsOfContext(context: WideningContext): Type[] {
-            if (!context.siblings) {
-                const siblings: Type[] = [];
-                for (const type of getSiblingsOfContext(context.parent!)) {
-                    if (isObjectLiteralType(type)) {
-                        const prop = getPropertyOfObjectType(type, context.propertyName!);
-                        if (prop) {
-                            forEachType(getTypeOfSymbol(prop), t => {
-                                siblings.push(t);
-                            });
-                        }
-                    }
-                }
-                context.siblings = siblings;
-            }
-            return context.siblings;
-        }
-
-        function getPropertiesOfContext(context: WideningContext): Symbol[] {
-            if (!context.resolvedProperties) {
-                const names = createMap<Symbol>() as UnderscoreEscapedMap<Symbol>;
-                for (const t of getSiblingsOfContext(context)) {
-                    if (isObjectLiteralType(t) && !(getObjectFlags(t) & ObjectFlags.ContainsSpread)) {
-                        for (const prop of getPropertiesOfType(t)) {
-                            names.set(prop.escapedName, prop);
-                        }
-                    }
-                }
-                context.resolvedProperties = arrayFrom(names.values());
-            }
-            return context.resolvedProperties;
-        }
-
-        function getWidenedProperty(prop: Symbol, context: WideningContext | undefined): Symbol {
+        function getWidenedProperty(prop: Symbol): Symbol {
             if (!(prop.flags & SymbolFlags.Property)) {
                 // Since get accessors already widen their return value there is no need to
                 // widen accessor based properties here.
                 return prop;
             }
             const original = getTypeOfSymbol(prop);
-            const propContext = context && createWideningContext(context, prop.escapedName, /*siblings*/ undefined);
-            const widened = getWidenedTypeWithContext(original, propContext);
+            const widened = getWidenedType(original);
             return widened === original ? prop : createSymbolWithType(prop, widened);
         }
 
-        function getUndefinedProperty(prop: Symbol) {
-            const cached = undefinedProperties.get(prop.escapedName);
-            if (cached) {
-                return cached;
-            }
-            const result = createSymbolWithType(prop, undefinedType);
-            result.flags |= SymbolFlags.Optional;
-            undefinedProperties.set(prop.escapedName, result);
-            return result;
-        }
-
-        function getWidenedTypeOfObjectLiteral(type: Type, context: WideningContext | undefined): Type {
+        function getWidenedTypeOfObjectLiteral(type: AnonymousType): AnonymousType {
             const members = createSymbolTable();
             for (const prop of getPropertiesOfObjectType(type)) {
-                members.set(prop.escapedName, getWidenedProperty(prop, context));
-            }
-            if (context) {
-                for (const prop of getPropertiesOfContext(context)) {
-                    if (!members.has(prop.escapedName)) {
-                        members.set(prop.escapedName, getUndefinedProperty(prop));
-                    }
-                }
+                members.set(prop.escapedName, getWidenedProperty(prop));
             }
             const stringIndexInfo = getIndexInfoOfType(type, IndexKind.String);
             const numberIndexInfo = getIndexInfoOfType(type, IndexKind.Number);
@@ -13575,28 +13640,38 @@ namespace ts {
                 stringIndexInfo && createIndexInfo(getWidenedType(stringIndexInfo.type), stringIndexInfo.isReadonly),
                 numberIndexInfo && createIndexInfo(getWidenedType(numberIndexInfo.type), numberIndexInfo.isReadonly));
             result.objectFlags |= (getObjectFlags(type) & ObjectFlags.JSLiteral); // Retain js literal flag through widening
+            result.regularType = result;
+            result.freshType = type as ResolvedType;
+            type.freshType = type;
+            type.regularType = result;
             return result;
         }
 
-        function getWidenedType(type: Type) {
-            return getWidenedTypeWithContext(type, /*context*/ undefined);
-        }
-
-        function getWidenedTypeWithContext(type: Type, context: WideningContext | undefined): Type {
+        function getWidenedType(type: Type): Type {
             if (type.flags & TypeFlags.RequiresWidening) {
                 if (type.flags & TypeFlags.Nullable) {
                     return anyType;
                 }
                 if (isObjectLiteralType(type)) {
-                    return getWidenedTypeOfObjectLiteral(type, context);
+                    return getWidenedTypeOfObjectLiteral(type as AnonymousType);
                 }
                 if (type.flags & TypeFlags.Union) {
-                    const unionContext = context || createWideningContext(/*parent*/ undefined, /*propertyName*/ undefined, (<UnionType>type).types);
-                    const widenedTypes = sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedTypeWithContext(t, unionContext));
+                    if ((type as UnionType).regularType) {
+                        return (type as UnionType).regularType!;
+                    }
+                    const widenedTypes = sameMap((<UnionType>type).types, t => t.flags & TypeFlags.Nullable ? t : getWidenedType(t));
                     // Widening an empty object literal transitions from a highly restrictive type to
                     // a highly inclusive one. For that reason we perform subtype reduction here if the
                     // union includes empty object types (e.g. reducing {} | string to just {}).
-                    return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) ? UnionReduction.Subtype : UnionReduction.Literal);
+                    const result = getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) && !((type as UnionType).unionFlags & UnionFlags.FreshObjectsOnly) ? UnionReduction.Subtype : UnionReduction.Literal);
+                    if (result.flags & TypeFlags.Union && (type as UnionType).unionFlags & UnionFlags.FreshObjectsOnly) {
+                        (result as UnionType).unionFlags |= UnionFlags.WidenedFreshObjectsOnly;
+                        (result as UnionType).freshType = type as UnionType;
+                        (result as UnionType).regularType = result as UnionType;
+                        (type as UnionType).freshType = type as UnionType;
+                        (type as UnionType).regularType = result as UnionType;
+                    }
+                    return result;
                 }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
@@ -13894,20 +13969,36 @@ namespace ts {
             return getTypeFromInference(inference);
         }
 
-        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, containingUnionTarget: UnionType | undefined) {
             const properties = target.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>target) : getPropertiesOfObjectType(target);
+            const hasPotentialUndefinedProps = requireOptionalProperties && containingUnionTarget && containingUnionTarget.unionFlags & UnionFlags.WidenedFreshObjectsOnly;
+            const visited = hasPotentialUndefinedProps ? createUnderscoreEscapedMap<true>() : undefined;
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional)) {
                     const sourceProp = getPropertyOfType(source, targetProp.escapedName);
+                    if (visited) {
+                        visited.set(targetProp.escapedName, true);
+                    }
                     if (!sourceProp) {
                         yield targetProp;
                     }
                 }
             }
+            if (hasPotentialUndefinedProps) {
+                for (const undefinedPropName of arrayFrom(getUnionPropertyNameCache(containingUnionTarget!).keys())) {
+                    if (visited!.has(undefinedPropName)) {
+                        continue;
+                    }
+                    const sourceProp = getPropertyOfType(source, undefinedPropName);
+                    if (!sourceProp) {
+                        yield getUndefinedProperty(undefinedPropName);
+                    }
+                }
+            }
         }
 
-        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean): Symbol | undefined {
-            return getUnmatchedProperties(source, target, requireOptionalProperties).next().value;
+        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, containingUnionTarget: UnionType | undefined): Symbol | undefined {
+            return getUnmatchedProperties(source, target, requireOptionalProperties, containingUnionTarget).next().value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -13919,7 +14010,7 @@ namespace ts {
             // Two tuple types with incompatible arities are definitely unrelated.
             // Two object types that each have a property that is unmatched in the other are definitely unrelated.
             return isTupleType(source) && isTupleType(target) && tupleTypesDefinitelyUnrelated(source, target) ||
-                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) && !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false);
+                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false, /*containingUnion*/ undefined) && !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*containingUnion*/ undefined);
         }
 
         function getTypeFromInference(inference: InferenceInfo) {
@@ -15082,7 +15173,7 @@ namespace ts {
             if (type.flags & TypeFlags.Union) {
                 const types = (<UnionType>type).types;
                 const filtered = filter(types, f);
-                return filtered === types ? type : getUnionTypeFromSortedList(filtered, (<UnionType>type).primitiveTypesOnly);
+                return filtered === types ? type : getUnionTypeFromSortedList(filtered, (<UnionType>type).unionFlags);
             }
             return f(type) ? type : neverType;
         }
@@ -17885,7 +17976,7 @@ namespace ts {
 
             let propertiesTable: SymbolTable;
             let propertiesArray: Symbol[] = [];
-            let spread: Type = emptyObjectType;
+            let spread: Type = freshEmptyObjectType;
             let propagatedFlags: TypeFlags = 0;
 
             const contextualType = getApparentTypeOfContextualType(node);
@@ -17971,7 +18062,7 @@ namespace ts {
                         checkExternalEmitHelpers(memberDecl, ExternalEmitHelpers.Assign);
                     }
                     if (propertiesArray.length > 0) {
-                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                        spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, getTypeIsFreshLiteral(spread) ? ObjectFlags.FreshLiteral : 0);
                         propertiesArray = [];
                         propertiesTable = createSymbolTable();
                         hasComputedStringProperty = false;
@@ -17983,7 +18074,8 @@ namespace ts {
                         error(memberDecl, Diagnostics.Spread_types_may_only_be_created_from_object_types);
                         return errorType;
                     }
-                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                    // Do not persist freshness into any spread resulting in spreads of null/undefined/other unit types which are still valid spreads
+                    spread = getSpreadType(spread, type, node.symbol, propagatedFlags, getTypeIsFreshLiteral(spread) && getTypeIsFreshLiteral(type) ? ObjectFlags.FreshLiteral : 0);
                     offset = i + 1;
                     continue;
                 }
@@ -18031,14 +18123,21 @@ namespace ts {
                 }
             }
 
-            if (spread !== emptyObjectType) {
+            if (spread !== freshEmptyObjectType) {
                 if (propertiesArray.length > 0) {
-                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, ObjectFlags.FreshLiteral);
+                    spread = getSpreadType(spread, createObjectLiteralType(), node.symbol, propagatedFlags, getTypeIsFreshLiteral(spread) ? ObjectFlags.FreshLiteral : 0);
                 }
                 return spread;
             }
 
             return createObjectLiteralType();
+
+            function getTypeIsFreshLiteral(type: Type) {
+                if (type.flags & TypeFlags.Union) {
+                    return !!((type as UnionType).unionFlags & UnionFlags.FreshObjectsOnly);
+                }
+                return !!(getObjectFlags(type) & ObjectFlags.FreshLiteral);
+            }
 
             function createObjectLiteralType() {
                 const stringIndexInfo = hasComputedStringProperty ? getObjectLiteralIndexInfo(node.properties, offset, propertiesArray, IndexKind.String) : undefined;
@@ -18573,12 +18672,12 @@ namespace ts {
          * @param name a property name to search
          * @param isComparingJsxAttributes a boolean flag indicating whether we are searching in JsxAttributesType
          */
-        function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean): boolean {
+        function isKnownProperty(targetType: Type, name: __String, isComparingJsxAttributes: boolean, containingTargetUnion: UnionType | undefined): boolean {
             if (targetType.flags & TypeFlags.Object) {
                 const resolved = resolveStructuredTypeMembers(targetType as ObjectType);
                 if (resolved.stringIndexInfo ||
                     resolved.numberIndexInfo && isNumericLiteralName(name) ||
-                    getPropertyOfObjectType(targetType, name) ||
+                    (containingTargetUnion && containingTargetUnion.unionFlags & UnionFlags.WidenedFreshObjectsOnly ? getUnionContainsPropertyOfName(containingTargetUnion, name) : getPropertyOfObjectType(targetType, name)) ||
                     isComparingJsxAttributes && !isUnhyphenatedJsxName(name)) {
                     // For JSXAttributes, if the attribute has a hyphenated name, consider that the attribute to be known.
                     return true;
@@ -18586,14 +18685,14 @@ namespace ts {
             }
             else if (targetType.flags & TypeFlags.UnionOrIntersection) {
                 for (const t of (targetType as UnionOrIntersectionType).types) {
-                    if (isKnownProperty(t, name, isComparingJsxAttributes)) {
+                    if (isKnownProperty(t, name, isComparingJsxAttributes, targetType.flags & TypeFlags.Union ? targetType as UnionType : undefined)) {
                         return true;
                     }
                 }
             }
             else if (targetType.flags & TypeFlags.Conditional) {
-                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes) ||
-                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes);
+                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes, /*containingTargetUnion*/ undefined) ||
+                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes, /*containingTargetUnion*/ undefined);
             }
             return false;
         }
@@ -18817,9 +18916,18 @@ namespace ts {
                 return apparentType;
             }
             const assignmentKind = getAssignmentTargetKind(node);
-            const prop = getPropertyOfType(apparentType, right.escapedText);
+            let prop = getPropertyOfType(apparentType, right.escapedText);
             if (isIdentifier(left) && parentSymbol && !(prop && isConstEnumOrConstEnumOnlyModule(prop))) {
                 markAliasReferenced(parentSymbol, node);
+            }
+            if (!prop) {
+                const parentDeclaredType = parentSymbol && getTypeOfSymbol(parentSymbol);
+                if (parentDeclaredType && parentDeclaredType.flags & TypeFlags.Union &&
+                    (parentDeclaredType as UnionType).unionFlags & UnionFlags.WidenedFreshObjectsOnly &&
+                    getUnionContainsPropertyOfName(parentDeclaredType as UnionType, right.escapedText)) {
+                    prop = getUndefinedProperty(right.escapedText);
+
+                }
             }
             if (!prop) {
                 const indexInfo = getIndexInfoOfType(apparentType, IndexKind.String);

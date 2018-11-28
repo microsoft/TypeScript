@@ -246,6 +246,9 @@ class CompilerTest {
     }
 
     public verifyTypesAndSymbols() {
+        if (this.harnessSettings.skipTypeAndSymbol) {
+            return;
+        }
         if (this.fileName.indexOf("APISample") >= 0) {
             return;
         }

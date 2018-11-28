@@ -3890,7 +3890,9 @@ namespace ts {
         /* @internal */
         EmptyObject = ContainsAnyFunctionType,
         /* @internal */
-        ConstructionFlags = NonWideningType | Wildcard | EmptyObject,
+        AllFresh = EnumLiteral,
+        /* @internal */
+        ConstructionFlags = NonWideningType | Wildcard | EmptyObject | AllFresh,
         // The following flag is used for different purposes by maybeTypeOfKind
         /* @internal */
         GenericMappedType = ContainsWideningType
@@ -3988,6 +3990,8 @@ namespace ts {
         /* @internal */ constructSignatures?: ReadonlyArray<Signature>; // Construct signatures of type
         /* @internal */ stringIndexInfo?: IndexInfo;      // String indexing info
         /* @internal */ numberIndexInfo?: IndexInfo;      // Numeric indexing info
+        /* @internal */ regularType?: this;
+        /* @internal */ freshType?: this;
     }
 
     /** Class and interface types (ObjectFlags.Class and ObjectFlags.Interface). */
@@ -4071,9 +4075,22 @@ namespace ts {
         couldContainTypeVariables: boolean;
     }
 
+    /* @internal */
+    export const enum UnionFlags {
+        PrimitiveOnly           = 1 << 0,
+        FreshObjectsOnly        = 1 << 1,
+        WidenedFreshObjectsOnly = 1 << 2,
+    }
+
     export interface UnionType extends UnionOrIntersectionType {
         /* @internal */
-        primitiveTypesOnly: boolean;
+        unionFlags: UnionFlags;
+        /* @internal */
+        propertyNameCache?: UnderscoreEscapedMap<true>;       // Cache of possible property names
+        /* @internal */
+        freshType?: this; // Pointer back to the original `FreshObjectsOnly` union for `WidenedFreshObjectsOnly` unions
+        /* @internal */
+        regularType?: this; // Pointer to the widened union for `FreshObjectsOnly` unions, if it has been made
     }
 
     export interface IntersectionType extends UnionOrIntersectionType {
@@ -4120,14 +4137,6 @@ namespace ts {
         properties: Symbol[];             // Properties
         callSignatures: ReadonlyArray<Signature>;      // Call signatures of type
         constructSignatures: ReadonlyArray<Signature>; // Construct signatures of type
-    }
-
-    /* @internal */
-    // Object literals are initially marked fresh. Freshness disappears following an assignment,
-    // before a type assertion, or when an object literal's type is widened. The regular
-    // version of a fresh type is identical except for the TypeFlags.FreshObjectLiteral flag.
-    export interface FreshObjectLiteralType extends ResolvedType {
-        regularType: ResolvedType;  // Regular version of fresh type
     }
 
     // Just a place to cache element types of iterables and iterators

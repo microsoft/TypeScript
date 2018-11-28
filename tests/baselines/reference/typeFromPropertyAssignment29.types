@@ -96,9 +96,9 @@ var n = (ExpandoExpr.prop.x || 0) + ExpandoExpr.m(12) + ExpandoExpr(101).length
 >(ExpandoExpr.prop.x || 0) : 0
 >ExpandoExpr.prop.x || 0 : 0
 >ExpandoExpr.prop.x : undefined
->ExpandoExpr.prop : { y: string; x?: undefined; }
+>ExpandoExpr.prop : { y: string; }
 >ExpandoExpr : { (n: number): string; prop: { x: number; y?: undefined; } | { y: string; x?: undefined; }; m(n: number): number; }
->prop : { y: string; x?: undefined; }
+>prop : { y: string; }
 >x : undefined
 >0 : 0
 >ExpandoExpr.m(12) : number

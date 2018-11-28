@@ -20,6 +20,7 @@ namespace ts {
     export const externalHelpersModuleNameText = "tslib";
 
     export const defaultMaximumTruncationLength = 160;
+    export const defaultHardCapTrunctionLength = 100000; // Trunction limit used even when `noErrorTruncation` is on to avoid OOM when printing huge types
 
     export function getDeclarationOfKind<T extends Declaration>(symbol: Symbol, kind: T["kind"]): T | undefined {
         const declarations = symbol.declarations;
