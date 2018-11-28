@@ -53,10 +53,10 @@ namespace ts.codefix {
         const existingProperties: SymbolTable = existingMembers ? existingMembers : createSymbolTable();
 
         const requiredProperties = interfaceProperties.filter(and(p => !existingProperties.has(p.escapedName), isSymbolNonNullable));
-        const newProperties = requiredProperties.map(symbol => convertSymbolToMember(symbol, checker, objectLiteral));
+        const stubbedProperties = requiredProperties.map(symbol => convertSymbolToMember(symbol, checker, objectLiteral));
 
         const changes = textChanges.ChangeTracker.with(context, tracker => {
-            newProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
+            stubbedProperties.forEach(propertyAssignment => tracker.insertNodeAtObjectStart(sourceFile, objectLiteral, propertyAssignment));
         });
 
         return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
