@@ -104,7 +104,8 @@ namespace ts.codefix {
         }
         else if (kind === SyntaxKind.TupleType) {
             if (!isTupleTypeNode(typeNode)) return undefined;
-            const elements = isPropertySignature(declaration) && declaration.type && isTupleTypeNode(declaration.type) ? declaration.type.elementTypes : typeNode.elementTypes;
+            const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
+            const elements = maybeTupleNode ? maybeTupleNode.elementTypes : typeNode.elementTypes;
             const stubbedElements = elements.map(typeNode => typeNodeToStubbedExpression(checker, typeNode, objectLiteralExpression));
             expression = createArrayLiteral(stubbedElements);
         }
@@ -163,7 +164,7 @@ namespace ts.codefix {
     function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): SyntaxKind {
         const checker = type.checker;
         if (kind !== SyntaxKind.BooleanKeyword && type.isUnion()) {
-            const firstType = (type as UnionType).types[0];
+            const firstType = type.types[0];
             const typeNode = checker.typeToTypeNode(firstType);
             kind = typeNode!.kind;
         }
@@ -214,16 +215,16 @@ namespace ts.codefix {
     }
 
     function getDefaultClass(checker: TypeChecker, declaration: PropertySignature, typeNode: TypeReferenceNode): Expression {
-        const typeOfProperty = checker.getTypeAtLocation(declaration);
+        const type = checker.getTypeAtLocation(declaration);
 
-        if (typeOfProperty.isClassOrInterface() || (getObjectFlags(typeOfProperty) & ObjectFlags.Reference)) {
-            const identifierName = checker.typeToString(typeOfProperty);
-            const updatedName = identifierName.replace(/<.*>/, "");
-            const newObject = createNew(createIdentifier(updatedName), typeNode.typeArguments, /*argumentsArray*/ []);
+        if (type.isClassOrInterface() || isReferenceType(type)) {
+            const identifierName = checker.typeToString(type);
+            const nameWithoutAngleBracket = identifierName.replace(/<.*>/, "");
+            const newObject = createNew(createIdentifier(nameWithoutAngleBracket), typeNode.typeArguments, /*argumentsArray*/ []);
             return newObject;
         }
         else {
-            const enumDeclaration = typeOfProperty.symbol.declarations[0] as EnumDeclaration;
+            const enumDeclaration = type.symbol.declarations[0] as EnumDeclaration;
             const enumMemberAccess = createMemberAccessForPropertyName(enumDeclaration.name, enumDeclaration.members[0].name);
             return enumMemberAccess;
         }
@@ -322,8 +323,17 @@ namespace ts.codefix {
         return !!(getObjectFlags(type) & ObjectFlags.Anonymous);
     }
 
+    function isReferenceType(type: Type): boolean {
+        return !!(getObjectFlags(type) & ObjectFlags.Reference);
+    }
+
     function isFunctionBehindTypeAlias(type: Type): boolean {
         return type.symbol.declarations[0].kind === SyntaxKind.FunctionType;
+    }
+
+    function getTupleNodeFromDeclaration(declaration: Declaration): TupleTypeNode | undefined {
+        if (!isPropertySignature(declaration) || !declaration.type || !isTupleTypeNode(declaration.type)) return undefined;
+        return declaration.type;
     }
 
 
