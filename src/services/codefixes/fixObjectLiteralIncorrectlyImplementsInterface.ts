@@ -123,8 +123,8 @@ namespace ts.codefix {
             expression = createArrayLiteral(stubbedElements);
         }
         else if (kind === SyntaxKind.TypeReference) {
-            if (!isPropertySignature(declaration)) return undefined;
-            expression = getDefaultClass(checker, declaration);
+            if (!isPropertySignature(declaration) || !isTypeReferenceNode(typeNode)) return undefined;
+            expression = getDefaultClass(checker, declaration, typeNode);
         }
         else if (kind === SyntaxKind.TypeLiteral) {
             expression = getDefaultObjectLiteral(checker, type, objectLiteralExpression);
@@ -220,9 +220,8 @@ namespace ts.codefix {
         return createObjectLiteral(stubbedProperties, /*multiline*/ true);
     }
 
-    function getDefaultClass(checker: TypeChecker, declaration: PropertySignature): Expression {
+    function getDefaultClass(checker: TypeChecker, declaration: PropertySignature, typeNode: TypeReferenceNode): Expression {
         const typeOfProperty = checker.getTypeAtLocation(declaration);
-        const typeNode = checker.typeToTypeNode(typeOfProperty) as TypeReferenceNode;
 
         if (typeOfProperty.isClassOrInterface() || (getObjectFlags(typeOfProperty) & ObjectFlags.Reference)) {
             const identifierName = checker.typeToString(typeOfProperty);
@@ -265,7 +264,8 @@ namespace ts.codefix {
         }
         else if (kind === SyntaxKind.TypeReference) {
             const declaration = type.symbol.declarations[0];
-            return getDefaultClass(checker, declaration as PropertySignature);
+            const typeNode = checker.typeToTypeNode(type) as TypeReferenceNode;
+            return getDefaultClass(checker, declaration as PropertySignature, typeNode);
         }
         else if (kind === SyntaxKind.TupleType && isTupleTypeNode(typeNode)) {
             const stubbedElements = typeNode.elementTypes.map(t => typeNodeToStubbedExpression(checker, t, objectLiteralExpression));
