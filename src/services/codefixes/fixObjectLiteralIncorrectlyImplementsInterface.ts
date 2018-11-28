@@ -273,7 +273,7 @@ namespace ts.codefix {
                     return createStringLiteral("any");
 
                 case SyntaxKind.ObjectKeyword:
-                    return createNew(createIdentifier("Object"), /*typeArguments*/ undefined, []);
+                    return createNew(createIdentifier("Object"), /*typeArguments*/ undefined, [createStringLiteral("anyObject")]);
 
                 case SyntaxKind.StringKeyword:
                     return createStringLiteral("");

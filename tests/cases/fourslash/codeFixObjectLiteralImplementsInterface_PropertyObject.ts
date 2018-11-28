@@ -12,6 +12,6 @@ verify.codeFix({
     x: object;
 }
 let n: foo = {
-    x: new Object(),
+    x: new Object("anyObject"),
 }`,
 });
