@@ -87,10 +87,20 @@ namespace ts.codefix {
 
         switch (kind) {
             case SyntaxKind.FunctionType:
-                const methodOrArrowDeclaration = isMethodSignature(declaration) ? declaration : (declaration as PropertySignature).type!;
-                expression = getDefaultArrowFunction(methodOrArrowDeclaration as FunctionTypeNode | MethodSignature);
 
+                if (isMethodSignature(declaration)) {
+                    expression = getDefaultArrowFunction(declaration);
+                }
+                else {
+                    const propertySignature = declaration as PropertySignature;
+                    const typeNodeOfProperty = propertySignature.type!;
+                    const typeOfProperty = checker.getTypeAtLocation(typeNodeOfProperty);
+                    const functionTypeNode = isTypeReferenceNode(typeNodeOfProperty) ? typeOfProperty.symbol.declarations[0] : typeNodeOfProperty;
+
+                    expression = getDefaultArrowFunction(functionTypeNode as FunctionTypeNode);
+                }
                 break;
+
             case SyntaxKind.TupleType:
                 const tupleTypeNode = typeNode as TupleTypeNode;
                 const maybeTupleNode = getTupleNodeFromDeclaration(declaration);

@@ -16,7 +16,7 @@ interface foo {
 }
 
 let n: foo = {
-    x: <T>(a: T, b: T): alias => {
+    x: <T>(a: T, b: T): void => {
         throw new Error("Function not implemented.");
     },
 }`,
