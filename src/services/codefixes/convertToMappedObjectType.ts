@@ -46,7 +46,7 @@ namespace ts.codefix {
             mappedTypeParameter,
             indexSignature.questionToken,
             indexSignature.type,
-            false /*isExact*/);
+            /*isExact*/ false);
         const intersectionType = createIntersectionTypeNode([
             ...getAllSuperTypeNodes(container),
             mappedIntersectionType,

@@ -21758,7 +21758,6 @@ namespace ts {
             return true;
         }
 
-        // Excess TODO: should not be able to delete on something that might be excess. 
         function checkDeleteExpression(node: DeleteExpression): Type {
             checkExpression(node.expression);
             const expr = skipParentheses(node.expression);
