@@ -3,6 +3,7 @@
     "pos": 1,
     "end": 11,
     "flags": "JSDoc",
+    "isExact": false,
     "members": {
         "0": {
             "kind": "PropertySignature",

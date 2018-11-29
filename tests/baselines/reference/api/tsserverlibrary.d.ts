@@ -770,6 +770,7 @@ declare namespace ts {
     }
     interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
+        isExact: boolean;
         members: NodeArray<TypeElement>;
     }
     interface ArrayTypeNode extends TypeNode {
@@ -827,6 +828,7 @@ declare namespace ts {
         readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken | PlusToken | MinusToken;
+        isExact: boolean;
         type?: TypeNode;
     }
     interface LiteralTypeNode extends TypeNode {
@@ -2243,6 +2245,7 @@ declare namespace ts {
         MarkerType = 8192,
         JSLiteral = 16384,
         FreshLiteral = 32768,
+        Exact = 65536,
         ClassOrInterface = 3
     }
     interface ObjectType extends Type {
@@ -3729,7 +3732,7 @@ declare namespace ts {
     function updateConstructorTypeNode(node: ConstructorTypeNode, typeParameters: NodeArray<TypeParameterDeclaration> | undefined, parameters: NodeArray<ParameterDeclaration>, type: TypeNode | undefined): ConstructorTypeNode;
     function createTypeQueryNode(exprName: EntityName): TypeQueryNode;
     function updateTypeQueryNode(node: TypeQueryNode, exprName: EntityName): TypeQueryNode;
-    function createTypeLiteralNode(members: ReadonlyArray<TypeElement> | undefined): TypeLiteralNode;
+    function createTypeLiteralNode(members: ReadonlyArray<TypeElement> | undefined, isExact?: boolean): TypeLiteralNode;
     function updateTypeLiteralNode(node: TypeLiteralNode, members: NodeArray<TypeElement>): TypeLiteralNode;
     function createArrayTypeNode(elementType: TypeNode): ArrayTypeNode;
     function updateArrayTypeNode(node: ArrayTypeNode, elementType: TypeNode): ArrayTypeNode;
@@ -3758,8 +3761,8 @@ declare namespace ts {
     function updateTypeOperatorNode(node: TypeOperatorNode, type: TypeNode): TypeOperatorNode;
     function createIndexedAccessTypeNode(objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
     function updateIndexedAccessTypeNode(node: IndexedAccessTypeNode, objectType: TypeNode, indexType: TypeNode): IndexedAccessTypeNode;
-    function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
-    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined): MappedTypeNode;
+    function createMappedTypeNode(readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, isExact: boolean): MappedTypeNode;
+    function updateMappedTypeNode(node: MappedTypeNode, readonlyToken: ReadonlyToken | PlusToken | MinusToken | undefined, typeParameter: TypeParameterDeclaration, questionToken: QuestionToken | PlusToken | MinusToken | undefined, type: TypeNode | undefined, isExact: boolean): MappedTypeNode;
     function createLiteralTypeNode(literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function updateLiteralTypeNode(node: LiteralTypeNode, literal: LiteralTypeNode["literal"]): LiteralTypeNode;
     function createObjectBindingPattern(elements: ReadonlyArray<BindingElement>): ObjectBindingPattern;

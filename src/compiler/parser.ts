@@ -1602,7 +1602,7 @@ namespace ts {
 
             switch (kind) {
                 case ParsingContext.TypeMembers:
-                    if(token() === SyntaxKind.BarToken) return true;
+                    return token() === SyntaxKind.BarToken || token() === SyntaxKind.CloseBraceToken;
                 case ParsingContext.BlockStatements:
                 case ParsingContext.SwitchClauses:
                 case ParsingContext.ClassMembers:
@@ -2747,7 +2747,7 @@ namespace ts {
                 const isExact = parseOptional(SyntaxKind.BarToken);
                 node.isExact = isExact;
                 node.members = parseList(ParsingContext.TypeMembers, parseTypeMember);
-                if(isExact) {
+                if (isExact) {
                     parseExpected(SyntaxKind.BarToken);
                 }
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -2765,7 +2765,7 @@ namespace ts {
             if (parseExpected(SyntaxKind.OpenBraceToken)) {
                 const isExact = parseOptional(SyntaxKind.BarToken);
                 members = parseList(ParsingContext.TypeMembers, parseTypeMember);
-                if(isExact) {
+                if (isExact) {
                     parseExpected(SyntaxKind.BarToken);
                 }
                 parseExpected(SyntaxKind.CloseBraceToken);
@@ -2779,6 +2779,7 @@ namespace ts {
 
         function isStartOfMappedType() {
             nextToken();
+            parseOptional(SyntaxKind.BarToken);
             if (token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
                 return nextToken() === SyntaxKind.ReadonlyKeyword;
             }
@@ -2799,6 +2800,8 @@ namespace ts {
         function parseMappedType() {
             const node = <MappedTypeNode>createNode(SyntaxKind.MappedType);
             parseExpected(SyntaxKind.OpenBraceToken);
+            const isExact = parseOptional(SyntaxKind.BarToken);
+            node.isExact = isExact;
             if (token() === SyntaxKind.ReadonlyKeyword || token() === SyntaxKind.PlusToken || token() === SyntaxKind.MinusToken) {
                 node.readonlyToken = parseTokenNode<ReadonlyToken | PlusToken | MinusToken>();
                 if (node.readonlyToken.kind !== SyntaxKind.ReadonlyKeyword) {
@@ -2816,6 +2819,9 @@ namespace ts {
             }
             node.type = parseTypeAnnotation();
             parseSemicolon();
+            if (isExact) {
+                parseExpected(SyntaxKind.BarToken);
+            }
             parseExpected(SyntaxKind.CloseBraceToken);
             return finishNode(node);
         }

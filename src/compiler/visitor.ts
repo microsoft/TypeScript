@@ -428,7 +428,7 @@ namespace ts {
                     visitNode((<MappedTypeNode>node).readonlyToken, tokenVisitor, isToken),
                     visitNode((<MappedTypeNode>node).typeParameter, visitor, isTypeParameterDeclaration),
                     visitNode((<MappedTypeNode>node).questionToken, tokenVisitor, isToken),
-                    visitNode((<MappedTypeNode>node).type, visitor, isTypeNode));
+                    visitNode((<MappedTypeNode>node).type, visitor, isTypeNode), (<MappedTypeNode>node).isExact);
 
             case SyntaxKind.LiteralType:
                 return updateLiteralTypeNode(<LiteralTypeNode>node,

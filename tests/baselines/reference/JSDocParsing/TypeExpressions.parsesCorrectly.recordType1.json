@@ -3,6 +3,7 @@
     "pos": 1,
     "end": 3,
     "flags": "JSDoc",
+    "isExact": false,
     "members": {
         "length": 0,
         "pos": 2,

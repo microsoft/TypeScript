@@ -1451,12 +1451,12 @@ namespace ts {
 
         function emitTypeLiteral(node: TypeLiteralNode) {
             writePunctuation("{");
-            if(node.isExact) {
+            if (node.isExact) {
                 writePunctuation("|");
             }
             const flags = getEmitFlags(node) & EmitFlags.SingleLine ? ListFormat.SingleLineTypeLiteralMembers : ListFormat.MultiLineTypeLiteralMembers;
             emitList(node, node.members, flags | ListFormat.NoSpaceIfEmpty);
-            if(node.isExact) {
+            if (node.isExact) {
                 writePunctuation("|");
             }
             writePunctuation("}");
@@ -1540,6 +1540,9 @@ namespace ts {
         function emitMappedType(node: MappedTypeNode) {
             const emitFlags = getEmitFlags(node);
             writePunctuation("{");
+            if (node.isExact) {
+                writePunctuation("|");
+            }
             if (emitFlags & EmitFlags.SingleLine) {
                 writeSpace();
             }
@@ -1576,6 +1579,9 @@ namespace ts {
             else {
                 writeLine();
                 decreaseIndent();
+            }
+            if (node.isExact) {
+                writePunctuation("|");
             }
             writePunctuation("}");
         }

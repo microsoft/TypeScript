@@ -1178,7 +1178,7 @@ namespace ts {
     // A TypeLiteral is the declaration node for an anonymous symbol.
     export interface TypeLiteralNode extends TypeNode, Declaration {
         kind: SyntaxKind.TypeLiteral;
-        isExact: boolean
+        isExact: boolean;
         members: NodeArray<TypeElement>;
     }
 
@@ -1254,6 +1254,7 @@ namespace ts {
         readonlyToken?: ReadonlyToken | PlusToken | MinusToken;
         typeParameter: TypeParameterDeclaration;
         questionToken?: QuestionToken | PlusToken | MinusToken;
+        isExact: boolean;
         type?: TypeNode;
     }
 
