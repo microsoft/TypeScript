@@ -62,15 +62,15 @@ namespace ts.codefix {
         return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
-    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): ObjectLiteralElementLike {
-        const type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
+    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): PropertyAssignment {
+        let type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
         const typeNode = checker.typeToTypeNode(type, objectLiteralExpression)!;
         const declaration = symbol.declarations[0];
 
         let kind = typeNode.kind;
         let wasRedirectedForIntersection = false;
 
-        kind = pickFirstTypeFromUnion(kind, type);
+        [kind, type] = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
         kind = redirectAnonymousObject(kind, type);
 
@@ -145,14 +145,14 @@ namespace ts.codefix {
         return validKinds.some(k => k === kind);
     }
 
-    function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): SyntaxKind {
+    function pickFirstTypeFromUnion(kind: SyntaxKind, type: Type): [SyntaxKind, Type] {
         const checker = type.checker;
-        if (kind !== SyntaxKind.BooleanKeyword && type.isUnion()) {
-            const firstType = type.types[0];
-            const typeNode = checker.typeToTypeNode(firstType);
+        if (kind !== SyntaxKind.BooleanKeyword && type.isUnion() && !isEnumType(type.types[0])) {
+            type = type.types[0];
+            const typeNode = checker.typeToTypeNode(type);
             kind = typeNode!.kind;
         }
-        return kind;
+        return [kind, type];
     }
 
     function redirectInterface(kind: SyntaxKind, type: Type): SyntaxKind {
@@ -222,11 +222,11 @@ namespace ts.codefix {
 
     function typeNodeToExpressionForTuple(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
 
-        const type = checker.getTypeAtLocation(typeNode);
+        let type = checker.getTypeAtLocation(typeNode);
         let kind = typeNode.kind;
         let wasRedirectedForIntersection = false;
 
-        kind = pickFirstTypeFromUnion(kind, type);
+        [kind, type] = pickFirstTypeFromUnion(kind, type);
         kind = redirectInterface(kind, type);
 
         if (type.isIntersection()) {
@@ -312,6 +312,10 @@ namespace ts.codefix {
 
     function isReferenceType(type: Type): boolean {
         return !!(getObjectFlags(type) & ObjectFlags.Reference);
+    }
+
+    function isEnumType(type: Type): boolean {
+        return !!(type.flags & TypeFlags.EnumLike);
     }
 
     function isFunctionBehindTypeAlias(type: Type): boolean {
