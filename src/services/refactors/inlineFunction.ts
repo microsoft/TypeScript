@@ -24,22 +24,65 @@ namespace ts.refactor.inlineFunction {
         const { program, file, startPosition } = context;
         const info = getInfo(program, file, startPosition);
         if (!info) return emptyArray;
-        const { selectedUsage } = info;
-        const refactorInfo = {
+        const { declaration, usages, selectedUsage } = info;
+        const checker = program.getTypeChecker();
+        const symbols = getExternalSymbolsReferencedInScope(declaration, checker);
+        let areSymbolsAccessibleAtUsages = true;
+        forEach(usages, u => {
+            if (!areSymbolsAccessible(checker, symbols, u)) areSymbolsAccessibleAtUsages = false;
+        });
+        const refactorInfo: ApplicableRefactorInfo = {
             name: refactorName,
             description: refactorDescription,
-            actions: [{
+            actions: []
+        };
+        if (areSymbolsAccessibleAtUsages) {
+            refactorInfo.actions.push({
                 name: inlineAllActionName,
                 description: inlineAllActionDescription
-            }]
-        };
-        if (selectedUsage) {
+            });
+        }
+        if (selectedUsage && areSymbolsAccessible(checker, symbols, selectedUsage)) {
             refactorInfo.actions.push({
                 name: inlineHereActionName,
                 description: inlineHereActionDescription
             });
         }
         return [refactorInfo];
+    }
+
+    function areSymbolsAccessible(checker: TypeChecker, symbols: ReadonlyArray<Symbol>, target: Node) {
+        forEach(symbols, symbol => {
+            const symbolAccessibility = checker.isSymbolAccessible(
+                symbol,
+                target,
+                SymbolFlags.All,
+                /* shouldComputeAliasesToMakeVisible */ false).accessibility;
+            if (symbolAccessibility !== SymbolAccessibility.Accessible) {
+                return false;
+            }
+        });
+        return true;
+    }
+
+    function getExternalSymbolsReferencedInScope(declaration: InlineableFunction, checker: TypeChecker) {
+        const ids = inlineLocal.findDescendants(declaration, isIdentifier);
+        const visited = createMap<Symbol>();
+        forEach(ids, id => {
+            const symbol = checker.getSymbolAtLocation(id);
+            if (!symbol) return;
+            const symbolId = String(getSymbolId(symbol));
+            if (!visited.has(symbolId)) visited.set(symbolId, symbol);
+        });
+        const symbols: Symbol[] = [];
+        visited.forEach(v => { symbols.push(v); });
+        return filter(symbols, s => {
+            if (s.valueDeclaration) {
+                const symbolScope = getEnclosingBlockScopeContainer(s.valueDeclaration);
+                return !(declaration === symbolScope || isAncestor(symbolScope, declaration));
+            }
+            return false;
+        });
     }
 
     function getInfo(program: Program, file: SourceFile, startPosition: number): Info | undefined {
@@ -65,9 +108,10 @@ namespace ts.refactor.inlineFunction {
 
     function createInfo(checker: TypeChecker, declaration: InlineableFunction, call?: CallExpression): Info | undefined {
         const usages = getReferencesInScope(
-            getEnclosingBlockScopeContainer(declaration),
+            declaration.getSourceFile(),
             declaration.name!,
             checker);
+        // Debug.fail("len: " + usages.length);
         return canInline(declaration, /* usages */) ? {
             declaration,
             usages,
@@ -76,10 +120,15 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker): ReadonlyArray<CallExpression> {
-        const symbol = checker.getSymbolAtLocation(target);
-        return <CallExpression[]>inlineLocal.findDescendants(scope, n =>
-            isCallExpression(n) &&
-            checker.getSymbolAtLocation(n.expression) === symbol);
+        const symbol = checker.getMergedSymbol(checker.getSymbolAtLocation(target)!);
+        const expr = <CallExpression[]>inlineLocal.findDescendants(scope, n => isCallExpression(n));
+        let str = "";
+        expr.forEach(v => {
+            const sym = checker.getMergedSymbol(checker.getSymbolAtLocation(v.expression)!);
+            str += `txt: ${v.getText()}, sym: ${sym.getEscapedName()}, id: ${getSymbolId(sym)}, decl: ${sym.valueDeclaration.getText()} | `;
+        });
+        Debug.fail("tar: " + target.getText() + ", sym: " + symbol!.getEscapedName() + ", id: " + getSymbolId(symbol) + " | " + str);
+        return expr.filter(n => checker.getSymbolAtLocation(n.expression) === symbol);
     }
 
     function canInline(declaration: InlineableFunction, /* usages: ReadonlyArray<CallExpression> */): boolean {
@@ -129,9 +178,10 @@ namespace ts.refactor.inlineFunction {
             usages: ReadonlyArray<CallExpression>,
             selectedUsage: CallExpression): FileTextChanges[] {
         const { file, program } = context;
+        // Debug.fail("help");
         return textChanges.ChangeTracker.with(context, t => {
             inlineAt(file, program.getTypeChecker(), t, selectedUsage, declaration);
-            if (usages.length === 1) t.delete(file, declaration);
+            if (usages.length <= 1) t.delete(file, declaration);
         });
     }
 
@@ -143,6 +193,7 @@ namespace ts.refactor.inlineFunction {
             declaration: InlineableFunction) {
         const { parameters } = declaration;
         let body = declaration.body!;
+        // Debug.fail("help");
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
         forEach(parameters, (p, i) => {
@@ -168,6 +219,7 @@ namespace ts.refactor.inlineFunction {
         const isVoid = returnType.flags === TypeFlags.VoidLike;
         const returns = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
         const nofReturns = returns.length;
+        // Debug.fail("returns: " + nofReturns);
         const returnVariableName = getUniqueName("returnValue", file);
         if (nofReturns > 1 && !isVoid) {
             const typeNode = getEffectiveReturnTypeNode(declaration);
