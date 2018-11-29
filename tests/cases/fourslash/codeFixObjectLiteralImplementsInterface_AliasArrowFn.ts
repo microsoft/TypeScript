@@ -16,7 +16,7 @@ interface foo {
 }
 
 let n: foo = {
-    x(): alias {
+    x: (): alias => {
         throw new Error("Function not implemented.");
     },
 }`,

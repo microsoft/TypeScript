@@ -79,21 +79,6 @@ namespace ts.codefix {
             wasRedirectedForIntersection = true;
         }
 
-        if (kind === SyntaxKind.FunctionType) {
-            const methodSignature = declaration as MethodSignature;
-            return createMethod(
-                methodSignature.decorators,
-                methodSignature.modifiers,
-                /* asteriskToken */ undefined,
-                methodSignature.name,
-                methodSignature.questionToken,
-                methodSignature.typeParameters,
-                methodSignature.parameters,
-                methodSignature.type,
-                createStubbedFunctionBody()
-            );
-        }
-
         if (isBasicKind(kind)) {
             return createPropertyAssignment(symbol.name, getDefaultValue(kind));
         }
@@ -101,6 +86,11 @@ namespace ts.codefix {
         let expression: Expression;
 
         switch (kind) {
+            case SyntaxKind.FunctionType:
+                const methodOrArrowDeclaration = isMethodSignature(declaration) ? declaration : (declaration as PropertySignature).type!;
+                expression = getDefaultArrowFunction(methodOrArrowDeclaration as FunctionTypeNode | MethodSignature);
+
+                break;
             case SyntaxKind.TupleType:
                 const tupleTypeNode = typeNode as TupleTypeNode;
                 const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
@@ -209,6 +199,17 @@ namespace ts.codefix {
         }
     }
 
+    function getDefaultArrowFunction(functionTypeNode: FunctionTypeNode | MethodSignature): Expression {
+        return createArrowFunction(
+            functionTypeNode.modifiers,
+            functionTypeNode.typeParameters,
+            functionTypeNode.parameters,
+            functionTypeNode.type,
+            createToken(SyntaxKind.EqualsGreaterThanToken),
+            createStubbedFunctionBody()
+        );
+    }
+
     function typeNodeToExpressionForTuple(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
 
         const type = checker.getTypeAtLocation(typeNode);
@@ -246,15 +247,7 @@ namespace ts.codefix {
                 return createArrayLiteral(stubbedElements);
 
             case SyntaxKind.FunctionType:
-                const functionTypeNode = typeNode as FunctionTypeNode;
-                return createArrowFunction(
-                    functionTypeNode.modifiers,
-                    functionTypeNode.typeParameters,
-                    functionTypeNode.parameters,
-                    functionTypeNode.type,
-                    createToken(SyntaxKind.EqualsGreaterThanToken),
-                    createStubbedFunctionBody()
-                    );
+                return getDefaultArrowFunction(typeNode as FunctionTypeNode);
 
             default:
                 return Debug.fail("Expression is not implemented for " + typeNode.getText());

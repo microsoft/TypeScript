@@ -1,6 +1,7 @@
 /// <reference path='fourslash.ts' />
 
-//// type alias = <T>(a: T, b: T) => void
+//// class Building {}
+//// type alias = Building
 //// interface foo {
 ////     x: alias;
 //// }
@@ -10,14 +11,13 @@
 verify.codeFix({
     description: "Implement interface 'foo'",
     newFileContent:
-`type alias = <T>(a: T, b: T) => void
+`class Building {}
+type alias = Building
 interface foo {
     x: alias;
 }
 
 let n: foo = {
-    x: <T>(a: T, b: T): alias => {
-        throw new Error("Function not implemented.");
-    },
+    x: new Building(),
 }`,
 });

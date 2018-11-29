@@ -12,10 +12,10 @@ verify.codeFix({
 interface boat { swim(): void; }
 interface amphibian extends car, boat {}
 let VAB: amphibian = {
-    drive(): void {
+    drive: (): void => {
         throw new Error("Function not implemented.");
     },
-    swim(): void {
+    swim: (): void => {
         throw new Error("Function not implemented.");
     },
 }`,
