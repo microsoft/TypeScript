@@ -281,19 +281,29 @@ namespace ts.refactor.inlineFunction {
     function getConflictingNames(checker: TypeChecker, scope: Node, targetNode: Node) {
         const renameMap = createMap<Identifier>();
         const sourceSymbols = checker.getSymbolsInScope(scope, SymbolFlags.All);
-        const localSymbols = filter(sourceSymbols, s => s.valueDeclaration && getEnclosingBlockScopeContainer(s.valueDeclaration) === scope);
+        const localSymbols = filter(sourceSymbols, s => {
+            if (s.valueDeclaration) {
+                const declScope = getEnclosingBlockScopeContainer(s.valueDeclaration);
+                return scope === declScope || isAncestor(declScope, scope);
+            }
+            return false;
+        });
         const symbols = checker.getSymbolsInScope(targetNode, SymbolFlags.All);
         forEach(localSymbols, s => {
             const declaration = s.valueDeclaration;
             if (!isNamedDeclaration(declaration)) return;
             const name = declaration.name;
             if (!isIdentifier(name)) return;
-            if (nameIsTaken(symbols, name.text, s)) { // TODO: move symbols declaration here
+            if (nameIsTaken(symbols, name.text, s)) {
                 const safeName = createIdentifier(getUniqueName(name.text, targetNode.getSourceFile()));
                 renameMap.set(String(getSymbolId(s)), safeName);
             }
         });
         return renameMap;
+    }
+
+    function isAncestor(node: Node, ancestor: Node) {
+        return !!findAncestor(node, n => n === ancestor);
     }
 
     function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
