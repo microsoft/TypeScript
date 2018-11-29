@@ -270,6 +270,7 @@ TypeScript is authored by:
 * Raj Dosanjh
 * Reiner Dolp 
 * Remo H. Jansen 
+* @rflorian
 * @rhysd
 * Ricardo N Feliciano 
 * Richard Karmazín 
