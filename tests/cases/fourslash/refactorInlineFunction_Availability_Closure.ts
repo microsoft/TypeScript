@@ -1,10 +1,9 @@
 /// <reference path='fourslash.ts' />
 
-//// {
-////     const knife = "sharp";
-////     function /*z*/foo/*y*/() { return knife; }
+//// namespace a {
+////     export function /*z*/foo/*y*/() { return 42; }
 //// }
-//// function bar() { const meaningOfLife = /*x*/foo/*w*/(); }
+//// function bar() { const meaningOfLife = /*x*/a.foo/*w*/(); }
 
 goTo.select("z", "y");
 verify.not.refactorAvailable("Inline function", "Inline all");
