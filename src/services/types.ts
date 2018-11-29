@@ -234,7 +234,7 @@ namespace ts {
         writeFile?(fileName: string, content: string): void;
 
         /* @internal */
-        getDocumentPositionMapper?(fileName: string): DocumentPositionMapper | undefined;
+        getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         /* @internal */
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
     }

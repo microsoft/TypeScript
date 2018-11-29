@@ -2197,8 +2197,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getDocumentPositionMapper(fileName: string, project: Project): DocumentPositionMapper | undefined {
-            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
+        getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
+            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, project.directoryStructureHost);
             if (!declarationInfo) return undefined;
 
             declarationInfo.getSnapshot(); // Ensure synchronized
@@ -2210,7 +2210,6 @@ namespace ts.server {
             // Create the mapper
             declarationInfo.mapInfo = undefined;
 
-            // TODO: shkamat Lifetime of declarationInfo and mapInfo
             let readMapFile: ((fileName: string) => string | undefined) | undefined = fileName => {
                 const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
                 if (!mapInfo) return undefined;
@@ -2227,6 +2226,11 @@ namespace ts.server {
             );
             readMapFile = undefined; // Remove ref to project
             declarationInfo.mapper = mapper || false;
+            if (sourceFileName && mapper) {
+                // Attach as source
+                const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
+                (declarationInfo.mapInfo!.sourceInfos || (declarationInfo.mapInfo!.sourceInfos = createMap())).set(sourceInfo.path, true);
+            }
             return mapper;
         }
 
@@ -2609,13 +2613,25 @@ namespace ts.server {
         private removeOrphanScriptInfos() {
             const toRemoveScriptInfos = cloneMap(this.filenameToScriptInfo);
             this.filenameToScriptInfo.forEach(info => {
-                if (info.isScriptOpen() || !info.isOrphan()) {
-                    toRemoveScriptInfos.delete(info.path);
-                    if (info.mapInfo) {
-                        toRemoveScriptInfos.delete(info.mapInfo.path);
-                        if (info.mapInfo.sourceInfos) {
-                            info.mapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
-                        }
+                // If script info is open or orphan, retain it and its dependencies
+                if (!info.isScriptOpen() && info.isOrphan()) {
+                    // Otherwise if there is any source info that is alive, this alive too
+                    if (!info.mapInfo || !info.mapInfo.sourceInfos) return;
+                    if (!forEachKey(info.mapInfo.sourceInfos, path => {
+                        const info = this.getScriptInfoForPath(path as Path)!;
+                        return info.isScriptOpen() || !info.isOrphan();
+                    })) {
+                        return;
+                    }
+                }
+
+                // Retain this script info
+                toRemoveScriptInfos.delete(info.path);
+                if (info.mapInfo) {
+                    // And map file info and source infos
+                    toRemoveScriptInfos.delete(info.mapInfo.path);
+                    if (info.mapInfo.sourceInfos) {
+                        info.mapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
                     }
                 }
             });

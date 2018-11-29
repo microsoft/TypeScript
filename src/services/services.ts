@@ -1145,7 +1145,7 @@ namespace ts {
             getProgram,
             fileExists: host.fileExists && (f => host.fileExists!(f)),
             readFile: host.readFile && ((f, encoding) => host.readFile!(f, encoding)),
-            getDocumentPositionMapper: host.getDocumentPositionMapper && (f => host.getDocumentPositionMapper!(f)),
+            getDocumentPositionMapper: host.getDocumentPositionMapper && ((generatedFileName, sourceFileName) => host.getDocumentPositionMapper!(generatedFileName, sourceFileName)),
             getSourceFileLike: host.getSourceFileLike && (f => host.getSourceFileLike!(f)),
             log
         });

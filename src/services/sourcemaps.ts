@@ -16,7 +16,7 @@ namespace ts {
         fileExists?(path: string): boolean;
         readFile?(path: string, encoding?: string): string | undefined;
         getSourceFileLike?(fileName: string): SourceFileLike | undefined;
-        getDocumentPositionMapper?(fileName: string): DocumentPositionMapper | undefined;
+        getDocumentPositionMapper?(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined;
         log(s: string): void;
     }
 
@@ -31,20 +31,20 @@ namespace ts {
             return ts.toPath(fileName, currentDirectory, getCanonicalFileName);
         }
 
-        function getDocumentPositionMapper(fileName: string) {
-            const path = toPath(fileName);
+        function getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string) {
+            const path = toPath(generatedFileName);
             const value = documentPositionMappers.get(path);
             if (value) return value;
 
             let mapper: DocumentPositionMapper | undefined;
             if (host.getDocumentPositionMapper) {
-                mapper = host.getDocumentPositionMapper(fileName);
+                mapper = host.getDocumentPositionMapper(generatedFileName, sourceFileName);
             }
             else if (host.readFile) {
-                const file = getSourceFileLike(fileName);
+                const file = getSourceFileLike(generatedFileName);
                 mapper = file && ts.getDocumentPositionMapper(
                     { getSourceFileLike, getCanonicalFileName, log: s => host.log(s) },
-                    fileName,
+                    generatedFileName,
                     getLineInfo(file.text, getLineStarts(file)),
                     f => !host.fileExists || host.fileExists(f) ? host.readFile!(f) : undefined
                 );
@@ -78,7 +78,7 @@ namespace ts {
                 getDeclarationEmitOutputFilePathWorker(info.fileName, program.getCompilerOptions(), currentDirectory, program.getCommonSourceDirectory(), getCanonicalFileName);
             if (declarationPath === undefined) return undefined;
 
-            const newLoc = getDocumentPositionMapper(declarationPath).getGeneratedPosition(info);
+            const newLoc = getDocumentPositionMapper(declarationPath, info.fileName).getGeneratedPosition(info);
             return newLoc === info ? undefined : newLoc;
         }
 

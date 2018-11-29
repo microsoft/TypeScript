@@ -504,8 +504,8 @@ namespace ts.server {
         }
 
         /*@internal*/
-        getDocumentPositionMapper(fileName: string): DocumentPositionMapper | undefined {
-            return this.projectService.getDocumentPositionMapper(fileName, this);
+        getDocumentPositionMapper(generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
+            return this.projectService.getDocumentPositionMapper(this, generatedFileName, sourceFileName);
         }
 
         /*@internal*/

@@ -10757,7 +10757,6 @@ fn5();`
                 openFilesForSession([dependencyTs, randomFile], session);
                 checkNumberOfProjects(service, { configuredProjects: 2 });
                 checkProjectActualFiles(service.configuredProjects.get(dependencyConfig.path)!, [dependencyTs.path, libFile.path, dependencyConfig.path]);
-                debugger;
                 for (let i = 0; i < 5; i++) {
                     const startSpan = { line: i + 1, offset: 17 };
                     const response = session.executeCommandSeq<protocol.RenameRequest>({

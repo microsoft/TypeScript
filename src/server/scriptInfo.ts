@@ -64,14 +64,20 @@ namespace ts.server {
             this.switchToScriptVersionCache();
         }
 
+        private resetSourceMapInfo() {
+            this.info.mapper = undefined;
+            this.info.sourceFileLike = undefined;
+            this.info.mapInfo = undefined;
+            this.info.sourceInfos = undefined;
+        }
+
         /** Public for testing */
         public useText(newText?: string) {
             this.svc = undefined;
             this.text = newText;
             this.lineMap = undefined;
             this.fileSize = undefined;
-            this.info.mapper = undefined;
-            this.info.sourceFileLike = undefined;
+            this.resetSourceMapInfo();
             this.version.text++;
         }
 
@@ -81,8 +87,7 @@ namespace ts.server {
             this.text = undefined;
             this.lineMap = undefined;
             this.fileSize = undefined;
-            this.info.mapper = undefined;
-            this.info.sourceFileLike = undefined;
+            this.resetSourceMapInfo();
         }
 
         /**
@@ -304,7 +309,7 @@ namespace ts.server {
         /*@internal*/
         sourceInfos?: Map<true>;
         /*@internal*/
-        mapper: DocumentPositionMapper | false | undefined = false;
+        mapper?: DocumentPositionMapper | false;
         /*@internal*/
         sourceFileLike: SourceFileLike | undefined;
 
