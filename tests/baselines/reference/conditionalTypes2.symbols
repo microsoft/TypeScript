@@ -551,3 +551,31 @@ type C2<T, V, E> =
 >E : Symbol(E, Decl(conditionalTypes2.ts, 144, 13))
 >T : Symbol(T, Decl(conditionalTypes2.ts, 144, 8))
 
+// Repro from #28654
+
+type MaybeTrue<T extends { b: boolean }> = true extends T["b"] ? "yes" : "no";
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 15))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 149, 26))
+>T : Symbol(T, Decl(conditionalTypes2.ts, 149, 15))
+
+type T0 = MaybeTrue<{ b: never }>     // "no"
+>T0 : Symbol(T0, Decl(conditionalTypes2.ts, 149, 78))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 151, 21))
+
+type T1 = MaybeTrue<{ b: false }>;    // "no"
+>T1 : Symbol(T1, Decl(conditionalTypes2.ts, 151, 33))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 152, 21))
+
+type T2 = MaybeTrue<{ b: true }>;     // "yes"
+>T2 : Symbol(T2, Decl(conditionalTypes2.ts, 152, 34))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 153, 21))
+
+type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
+>T3 : Symbol(T3, Decl(conditionalTypes2.ts, 153, 33))
+>MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
+>b : Symbol(b, Decl(conditionalTypes2.ts, 154, 21))
+
