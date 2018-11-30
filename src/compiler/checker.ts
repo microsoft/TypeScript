@@ -11980,7 +11980,7 @@ namespace ts {
                         // Some subset overlap if we have only string literals.
                         // If we have a union of index types, it seems likely that we
                         // needed to elaborate between two generic mapped types anyway.
-                        const len = length((overlap as UnionType).types);
+                        const len = length(filter((overlap as UnionType).types, isUnitType));
                         if (len >= matchingCount) {
                             bestMatch = target;
                             matchingCount = len;

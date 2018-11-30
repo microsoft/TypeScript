@@ -37,7 +37,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(128,16): error TS2322: 
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(129,25): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(130,39): error TS2322: Type 'string' is not assignable to type 'number | undefined'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,16): error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-  Type 'T' is not assignable to type 'string'.
+  Type 'T' is not assignable to type 'symbol'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(136,21): error TS2536: Type 'P' cannot be used to index type 'T'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(148,17): error TS2339: Property 'foo' does not exist on type 'Pick<T, K>'.
 tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: Property 'foo' does not exist on type 'Record<K, number>'.
@@ -249,7 +249,7 @@ tests/cases/conformance/types/mapped/mappedTypeErrors.ts(152,17): error TS2339: 
         pt: {[P in T]?: T[P]}, // note: should be in keyof T
                    ~
 !!! error TS2322: Type 'T' is not assignable to type 'string | number | symbol'.
-!!! error TS2322:   Type 'T' is not assignable to type 'string'.
+!!! error TS2322:   Type 'T' is not assignable to type 'symbol'.
                         ~~~~
 !!! error TS2536: Type 'P' cannot be used to index type 'T'.
     };
