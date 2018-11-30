@@ -11981,7 +11981,7 @@ namespace ts {
                         // If we have a union of index types, it seems likely that we
                         // needed to elaborate between two generic mapped types anyway.
                         if (overlap.flags & TypeFlags.Union) {
-                            const len = length((overlap as UnionType).types);
+                            const len = length(filter((overlap as UnionType).types, isUnitType));
                             if (len >= matchingCount) {
                                 bestMatch = target;
                                 matchingCount = len;
