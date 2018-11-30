@@ -12285,7 +12285,7 @@ namespace ts {
                         }
                     }
                 }
-                else if (isGenericMappedType(target) && !(getObjectFlags(target) & ObjectFlags.Exact)) {
+                else if (isGenericMappedType(target)) {
                     // A source type T is related to a target type { [P in X]: T[P] }
                     const template = getTemplateTypeFromMappedType(target);
                     const modifiers = getMappedTypeModifiers(target);
@@ -12474,6 +12474,15 @@ namespace ts {
                         getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
+                    // Todo, this should really only work when both constraint types are concrete and the same. Two equal parameters are not good enough.
+                    if (getObjectFlags(target) & ObjectFlags.Exact) {
+                        if (getObjectFlags(source) & ObjectFlags.Exact && isTypeIdenticalTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source))) {
+                            const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
+                            return isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
+                        }
+                        // Need error here for non-exact -> exact
+                        return Ternary.False;
+                    }
                     if (result = isRelatedTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source), reportErrors)) {
                         const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                         return result & isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
@@ -12511,7 +12520,7 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
-                if (isObjectLiteralType(target)) {
+                if (isObjectLiteralType(target) || (getObjectFlags(target) & getObjectFlags(source) & ObjectFlags.Exact)) {
                     for (const sourceProp of getPropertiesOfType(source)) {
                         if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
                             const sourceType = getTypeOfSymbol(sourceProp);
