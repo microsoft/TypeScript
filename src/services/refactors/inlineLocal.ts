@@ -81,7 +81,7 @@ namespace ts.refactor.inlineLocal {
         return !hasErrors;
     }
 
-    function isAssigned(usage: Identifier): boolean {
+    export function isAssigned(usage: Identifier): boolean {
         type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
         const assignment: AssignExpr = findAncestor(
             usage,

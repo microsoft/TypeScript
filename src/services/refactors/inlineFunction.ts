@@ -197,22 +197,37 @@ namespace ts.refactor.inlineFunction {
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
         forEach(parameters, (p, i) => {
-            // let name = `arg${i}`; // if parameter is object or array literal
             const oldName = p.name;
+            const typeArguments = targetNode.typeArguments;
+            const typeNode = typeArguments && typeArguments[i];
+            const argument = targetNode.arguments[i];
+            const initializer = argument ? argument : p.initializer;
+            let name: BindingName; // = getSynthesizedDeepCloneWithRenames(oldName, /* includeTrivia */ true, renameMap, checker);
             if (isIdentifier(oldName)) {
                 const symbol = checker.getSymbolAtLocation(oldName)!;
-                checker.isSymbolAccessible(symbol, targetNode, 0, /* shouldComputeAliasesToMakeVisible */ false);
-                const flags = NodeFlags.Const;
-                const value = targetNode.arguments[i];
-                const typeArguments = targetNode.typeArguments;
-                let type: TypeNode | undefined;
-                if (typeArguments) {
-                    type = typeArguments[i];
-                }
-                const name = getSafeName(oldName, symbol);
-                const variableStatement = createVariable(name, type, flags, value);
-                t.insertNodeBefore(file, statement, variableStatement);
+                name = getSafeName(oldName, symbol);
             }
+            else {
+                // oldName.elements
+                name = visitNode(oldName, visitor);
+            }
+            const newNode = createVariable(
+                name,
+                typeNode,
+                NodeFlags.Const,
+                initializer
+            );
+            t.insertNodeBefore(file, statement, newNode);
+            // }
+            // else {
+            //     const newNode = createVariable(
+            //         getSynthesizedDeepCloneWithRenames(oldName, /* includeTrivia */ true, renameMap, checker),
+            //         typeNode,
+            //         inlineLocal.isAssigned(oldName) ? NodeFlags.Let : NodeFlags.Const,
+            //         initializer
+            //     );
+            //     t.insertNodeBefore(file, statement, newNode);
+            // }
         });
 
         const returnType = checker.getTypeAtLocation(declaration);
@@ -231,7 +246,7 @@ namespace ts.refactor.inlineFunction {
             );
             t.insertNodeBefore(file, statement, variableStatement);
         }
-        body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
+        // body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
             if (!isReturnStatement(st)) {
@@ -251,12 +266,31 @@ namespace ts.refactor.inlineFunction {
 
         function getSafeName(name: Identifier, { id }: Symbol): Identifier {
             if (renameMap.has(String(id))) {
-                return renameMap.get(String(id))!;
+                return createIdentifier(renameMap.get(String(id))!);
             }
             return name;
         }
 
         function visitor(node: Node): VisitResult<Node> {
+            if (isIdentifier(node)) {
+                const symbol = checker.getSymbolAtLocation(node);
+                if (symbol) return getSafeName(node, symbol);
+            }
+            if (isObjectBindingElementWithoutPropertyName(node)) {
+                const name = <Identifier>node.name;
+                const symbol = checker.getSymbolAtLocation(name);
+                if (symbol) {
+                    const safeName = getSafeName(name, symbol);
+                    if (safeName !== name) {
+                        return createBindingElement(
+                            node.dotDotDotToken,
+                            name,
+                            safeName,
+                            node.initializer
+                        );
+                    }
+                }
+            }
             if (isMethodDeclaration(declaration) && isThisProperty(node)) {
                 const expr = targetNode.expression;
                 if (isPropertyAccessExpression(expr)) {
@@ -279,7 +313,7 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getConflictingNames(checker: TypeChecker, scope: Node, targetNode: Node) {
-        const renameMap = createMap<Identifier>();
+        const renameMap = createMap<string>();
         const sourceSymbols = checker.getSymbolsInScope(scope, SymbolFlags.All);
         const localSymbols = filter(sourceSymbols, s => {
             if (s.valueDeclaration) {
@@ -295,7 +329,7 @@ namespace ts.refactor.inlineFunction {
             const name = declaration.name;
             if (!isIdentifier(name)) return;
             if (nameIsTaken(symbols, name.text, s)) {
-                const safeName = createIdentifier(getUniqueName(name.text, targetNode.getSourceFile()));
+                const safeName = getUniqueName(name.text, targetNode.getSourceFile());
                 renameMap.set(String(getSymbolId(s)), safeName);
             }
         });
@@ -306,7 +340,7 @@ namespace ts.refactor.inlineFunction {
         return !!findAncestor(node, n => n === ancestor);
     }
 
-    function createVariable(name: Identifier, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
+    function createVariable(name: BindingName, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
         const decl = createVariableDeclaration(name, type, initializer);
         const declList = createVariableDeclarationList([decl], flags);
         const variableStatement = createVariableStatement(/* modifiers */ undefined, declList);
