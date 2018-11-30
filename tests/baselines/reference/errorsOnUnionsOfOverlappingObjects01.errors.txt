@@ -9,7 +9,7 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(19,3): error TS2345
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(24,5): error TS2345: Argument of type '{ a: string; b: string; }' is not assignable to parameter of type 'Bar | Other'.
   Object literal may only specify known properties, and 'a' does not exist in type 'Bar | Other'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(42,10): error TS2345: Argument of type '{ dog: string; }' is not assignable to parameter of type 'ExoticAnimal'.
-  Property 'platypus' is missing in type '{ dog: string; }' but required in type 'Platypus'.
+  Property 'cat' is missing in type '{ dog: string; }' but required in type 'CatDog'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(43,10): error TS2345: Argument of type '{ man: string; bear: string; }' is not assignable to parameter of type 'ExoticAnimal'.
   Property 'pig' is missing in type '{ man: string; bear: string; }' but required in type 'ManBearPig'.
 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(46,26): error TS2345: Argument of type '{ man: string; beer: string; }' is not assignable to parameter of type 'ExoticAnimal'.
@@ -76,8 +76,8 @@ tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts(47,10): error TS234
     addToZoo({ dog: "Barky McBarkface" });
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ dog: string; }' is not assignable to parameter of type 'ExoticAnimal'.
-!!! error TS2345:   Property 'platypus' is missing in type '{ dog: string; }' but required in type 'Platypus'.
-!!! related TS2728 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:33:22: 'platypus' is declared here.
+!!! error TS2345:   Property 'cat' is missing in type '{ dog: string; }' but required in type 'CatDog'.
+!!! related TS2728 tests/cases/compiler/errorsOnUnionsOfOverlappingObjects01.ts:31:20: 'cat' is declared here.
     addToZoo({ man: "Manny", bear: "Coffee" });
              ~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
 !!! error TS2345: Argument of type '{ man: string; bear: string; }' is not assignable to parameter of type 'ExoticAnimal'.
