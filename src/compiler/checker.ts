@@ -14615,15 +14615,15 @@ namespace ts {
                         getAccessedPropertyName(source as PropertyAccessExpression | ElementAccessExpression) === getAccessedPropertyName(target) &&
                         isMatchingReference((source as PropertyAccessExpression | ElementAccessExpression).expression, target.expression);
                 case SyntaxKind.BindingElement:
-                    if (target.kind !== SyntaxKind.PropertyAccessExpression) return false;
-                    const t = target as PropertyAccessExpression;
-                    if (t.name.escapedText !== getBindingElementNameText(source as BindingElement)) return false;
-                    if (source.parent.parent.kind === SyntaxKind.BindingElement && isMatchingReference(source.parent.parent, t.expression)) {
-                            return true;
-                    }
-                    if (source.parent.parent.kind === SyntaxKind.VariableDeclaration) {
-                        const maybeId = (source.parent.parent as VariableDeclaration).initializer;
-                        return !!maybeId && isMatchingReference(maybeId, t.expression);
+                    if (target.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>target).name.escapedText === getBindingElementNameText(<BindingElement>source)) {
+                        const ancestor = source.parent.parent;
+                        if (ancestor.kind === SyntaxKind.BindingElement) {
+                            return isMatchingReference(ancestor, (<PropertyAccessExpression>target).expression);
+                        }
+                        if (ancestor.kind === SyntaxKind.VariableDeclaration) {
+                            const initializer = (<VariableDeclaration>ancestor).initializer;
+                            return !!initializer && isMatchingReference(initializer, (<PropertyAccessExpression>target).expression);
+                        }
                     }
             }
             return false;
@@ -14635,14 +14635,25 @@ namespace ts {
                 undefined;
         }
 
+        function getReferenceParent(source: Node) {
+            if (source.kind === SyntaxKind.PropertyAccessExpression) {
+                return (<PropertyAccessExpression>source).expression;
+            }
+            if (source.kind === SyntaxKind.BindingElement) {
+                const ancestor = source.parent.parent;
+                return ancestor.kind === SyntaxKind.VariableDeclaration ? (<VariableDeclaration>ancestor).initializer : ancestor;
+            }
+            return undefined;
+        }
+
         function containsMatchingReference(source: Node, target: Node) {
-            while (source.kind === SyntaxKind.PropertyAccessExpression) {
-                source = (<PropertyAccessExpression>source).expression;
-                if (isMatchingReference(source, target)) {
+            let parent = getReferenceParent(source);
+            while (parent) {
+                if (isMatchingReference(parent, target)) {
                     return true;
                 }
+                parent = getReferenceParent(parent);
             }
-            return false;
         }
 
         // Return true if target is a property access xxx.yyy, source is a property access xxx.zzz, the declared
