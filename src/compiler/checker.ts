@@ -11977,7 +11977,7 @@ namespace ts {
                         matchingCount = Infinity;
                     }
                     else if (overlap.flags & TypeFlags.Union) {
-                        // Some subset overlap if we have only string literals.
+                        // We only want to account for literal types otherwise.
                         // If we have a union of index types, it seems likely that we
                         // needed to elaborate between two generic mapped types anyway.
                         const len = length(filter((overlap as UnionType).types, isUnitType));
@@ -11986,7 +11986,7 @@ namespace ts {
                             matchingCount = len;
                         }
                     }
-                    else if (!(overlap.flags & TypeFlags.Never) && 1 >= matchingCount) {
+                    else if (isUnitType(overlap) && 1 >= matchingCount) {
                         bestMatch = target;
                         matchingCount = 1;
                     }
