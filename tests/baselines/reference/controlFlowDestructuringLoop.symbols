@@ -1,0 +1,63 @@
+=== tests/cases/compiler/controlFlowDestructuringLoop.ts ===
+// Repro from #28758
+
+interface NumVal { val: number; }
+>NumVal : Symbol(NumVal, Decl(controlFlowDestructuringLoop.ts, 0, 0))
+>val : Symbol(NumVal.val, Decl(controlFlowDestructuringLoop.ts, 2, 18))
+
+interface StrVal { val: string; }
+>StrVal : Symbol(StrVal, Decl(controlFlowDestructuringLoop.ts, 2, 33))
+>val : Symbol(StrVal.val, Decl(controlFlowDestructuringLoop.ts, 3, 18))
+
+type Val = NumVal | StrVal;
+>Val : Symbol(Val, Decl(controlFlowDestructuringLoop.ts, 3, 33))
+>NumVal : Symbol(NumVal, Decl(controlFlowDestructuringLoop.ts, 0, 0))
+>StrVal : Symbol(StrVal, Decl(controlFlowDestructuringLoop.ts, 2, 33))
+
+function isNumVal(x: Val): x is NumVal {
+>isNumVal : Symbol(isNumVal, Decl(controlFlowDestructuringLoop.ts, 4, 27))
+>x : Symbol(x, Decl(controlFlowDestructuringLoop.ts, 6, 18))
+>Val : Symbol(Val, Decl(controlFlowDestructuringLoop.ts, 3, 33))
+>x : Symbol(x, Decl(controlFlowDestructuringLoop.ts, 6, 18))
+>NumVal : Symbol(NumVal, Decl(controlFlowDestructuringLoop.ts, 0, 0))
+
+    return typeof x.val === 'number';
+>x.val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 2, 18), Decl(controlFlowDestructuringLoop.ts, 3, 18))
+>x : Symbol(x, Decl(controlFlowDestructuringLoop.ts, 6, 18))
+>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 2, 18), Decl(controlFlowDestructuringLoop.ts, 3, 18))
+}
+
+function foo(things: Val[]): void {
+>foo : Symbol(foo, Decl(controlFlowDestructuringLoop.ts, 8, 1))
+>things : Symbol(things, Decl(controlFlowDestructuringLoop.ts, 10, 13))
+>Val : Symbol(Val, Decl(controlFlowDestructuringLoop.ts, 3, 33))
+
+    for (const thing of things) {
+>thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+>things : Symbol(things, Decl(controlFlowDestructuringLoop.ts, 10, 13))
+
+        if (isNumVal(thing)) {
+>isNumVal : Symbol(isNumVal, Decl(controlFlowDestructuringLoop.ts, 4, 27))
+>thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+
+            const { val } = thing;
+>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 13, 19))
+>thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+
+            val.toFixed(2);
+>val.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 13, 19))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+        }
+        else {
+            const { val } = thing;
+>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 17, 19))
+>thing : Symbol(thing, Decl(controlFlowDestructuringLoop.ts, 11, 14))
+
+            val.length;
+>val.length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+>val : Symbol(val, Decl(controlFlowDestructuringLoop.ts, 17, 19))
+>length : Symbol(String.length, Decl(lib.es5.d.ts, --, --))
+        }
+    }
+}
