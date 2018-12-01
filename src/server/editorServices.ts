@@ -945,7 +945,36 @@ namespace ts.server {
                     // this file and set of inferred projects
                     info.delayReloadNonMixedContentFile();
                     this.delayUpdateProjectGraphs(info.containingProjects);
+                    this.handleSourceMapProjects(info);
                 }
+            }
+        }
+
+        private handleSourceMapProjects(info: ScriptInfo) {
+            // Change in d.ts, update source projects as well
+            if (info.sourceMapFilePath) {
+                const sourceMapFileInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                if (sourceMapFileInfo && sourceMapFileInfo.sourceInfos) {
+                    this.delayUpdateSourceInfoProjects(sourceMapFileInfo.sourceInfos);
+                }
+            }
+            // Change in mapInfo, update declarationProjects and source projects
+            if (info.sourceInfos) {
+                this.delayUpdateSourceInfoProjects(info.sourceInfos);
+            }
+            if (info.declarationInfoPath) {
+                this.delayUpdateProjectsOfScriptInfoPath(info.declarationInfoPath);
+            }
+        }
+
+        private delayUpdateSourceInfoProjects(sourceInfos: Map<true>) {
+            sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
+        }
+
+        private delayUpdateProjectsOfScriptInfoPath(path: Path) {
+            const info = this.getScriptInfoForPath(path);
+            if (info) {
+                this.delayUpdateProjectGraphs(info.containingProjects);
             }
         }
 
@@ -962,6 +991,7 @@ namespace ts.server {
 
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects);
+                this.handleSourceMapProjects(info);
             }
         }
 
@@ -2201,19 +2231,30 @@ namespace ts.server {
             const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, project.directoryStructureHost);
             if (!declarationInfo) return undefined;
 
+            // Try to get from cache
             declarationInfo.getSnapshot(); // Ensure synchronized
-            const existingMapper = declarationInfo.mapper;
-            if (existingMapper !== undefined) {
-                return existingMapper ? existingMapper : undefined;
+            if (declarationInfo.sourceMapFilePath !== undefined) {
+                // Doesnt have sourceMap
+                if (!declarationInfo.sourceMapFilePath) return undefined;
+
+                // Ensure mapper is synchronized
+                const mapFileInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
+                if (mapFileInfo) {
+                    mapFileInfo.getSnapshot();
+                    if (mapFileInfo.mapper !== undefined) {
+                        return mapFileInfo.mapper ? mapFileInfo.mapper : undefined;
+                    }
+                }
             }
 
             // Create the mapper
-            declarationInfo.mapInfo = undefined;
+            declarationInfo.sourceMapFilePath = undefined;
+            let sourceMapFileInfo: ScriptInfo | undefined;
 
             let readMapFile: ((fileName: string) => string | undefined) | undefined = fileName => {
                 const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
                 if (!mapInfo) return undefined;
-                declarationInfo.mapInfo = mapInfo;
+                sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 return snap.getText(0, snap.getLength());
             };
@@ -2225,11 +2266,17 @@ namespace ts.server {
                 readMapFile
             );
             readMapFile = undefined; // Remove ref to project
-            declarationInfo.mapper = mapper || false;
-            if (sourceFileName && mapper) {
-                // Attach as source
-                const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
-                (declarationInfo.mapInfo!.sourceInfos || (declarationInfo.mapInfo!.sourceInfos = createMap())).set(sourceInfo.path, true);
+            if (sourceMapFileInfo) {
+                declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
+                sourceMapFileInfo.mapper = mapper || false;
+                if (sourceFileName && mapper) {
+                    // Attach as source
+                    const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
+                    (sourceMapFileInfo.sourceInfos || (sourceMapFileInfo.sourceInfos = createMap())).set(sourceInfo.path, true);
+                }
+            }
+            else {
+                declarationInfo.sourceMapFilePath = false;
             }
             return mapper;
         }
@@ -2248,8 +2295,11 @@ namespace ts.server {
             if (!info) return undefined;
 
             // Attach as source
-            if (declarationInfo && declarationInfo.mapInfo && info !== declarationInfo) {
-                (declarationInfo.mapInfo.sourceInfos || (declarationInfo.mapInfo.sourceInfos = createMap())).set(info.path, true);
+            if (declarationInfo && declarationInfo.sourceMapFilePath && info !== declarationInfo) {
+                const sourceMapInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
+                if (sourceMapInfo) {
+                    (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = createMap())).set(info.path, true);
+                }
             }
 
             // Key doesnt matter since its only for text and lines
@@ -2616,8 +2666,10 @@ namespace ts.server {
                 // If script info is open or orphan, retain it and its dependencies
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // Otherwise if there is any source info that is alive, this alive too
-                    if (!info.mapInfo || !info.mapInfo.sourceInfos) return;
-                    if (!forEachKey(info.mapInfo.sourceInfos, path => {
+                    if (!info.sourceMapFilePath) return;
+                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                    if (!sourceMapInfo || !sourceMapInfo.sourceInfos) return;
+                    if (!forEachKey(sourceMapInfo.sourceInfos, path => {
                         const info = this.getScriptInfoForPath(path as Path)!;
                         return info.isScriptOpen() || !info.isOrphan();
                     })) {
@@ -2627,11 +2679,12 @@ namespace ts.server {
 
                 // Retain this script info
                 toRemoveScriptInfos.delete(info.path);
-                if (info.mapInfo) {
+                if (info.sourceMapFilePath) {
                     // And map file info and source infos
-                    toRemoveScriptInfos.delete(info.mapInfo.path);
-                    if (info.mapInfo.sourceInfos) {
-                        info.mapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
+                    toRemoveScriptInfos.delete(info.sourceMapFilePath);
+                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                    if (sourceMapInfo && sourceMapInfo.sourceInfos) {
+                        sourceMapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
                     }
                 }
             });

@@ -65,10 +65,11 @@ namespace ts.server {
         }
 
         private resetSourceMapInfo() {
-            this.info.mapper = undefined;
             this.info.sourceFileLike = undefined;
-            this.info.mapInfo = undefined;
+            this.info.sourceMapFilePath = undefined;
+            this.info.declarationInfoPath = undefined;
             this.info.sourceInfos = undefined;
+            this.info.mapper = undefined;
         }
 
         /** Public for testing */
@@ -305,13 +306,18 @@ namespace ts.server {
         mTime?: number;
 
         /*@internal*/
-        mapInfo?: ScriptInfo;
+        sourceFileLike?: SourceFileLike;
+
+        /*@internal*/
+        sourceMapFilePath?: Path | false;
+
+        // Present on sourceMapFile info
+        /*@internal*/
+        declarationInfoPath?: Path;
         /*@internal*/
         sourceInfos?: Map<true>;
         /*@internal*/
         mapper?: DocumentPositionMapper | false;
-        /*@internal*/
-        sourceFileLike: SourceFileLike | undefined;
 
         constructor(
             private readonly host: ServerHost,
