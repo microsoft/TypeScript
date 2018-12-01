@@ -389,6 +389,7 @@ namespace ts {
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_interface_has_or_is_using_private_name_1;
                     break;
 
+                case SyntaxKind.ConstructorType:
                 case SyntaxKind.ConstructSignature:
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_constructor_signature_from_exported_interface_has_or_is_using_private_name_1;
                     break;
