@@ -410,6 +410,7 @@ namespace ts {
                     }
                     break;
 
+                case SyntaxKind.FunctionType:
                 case SyntaxKind.FunctionDeclaration:
                     diagnosticMessage = Diagnostics.Type_parameter_0_of_exported_function_has_or_is_using_private_name_1;
                     break;
