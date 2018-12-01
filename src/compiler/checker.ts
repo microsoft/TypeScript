@@ -11976,21 +11976,19 @@ namespace ts {
                         bestMatch = target;
                         matchingCount = Infinity;
                     }
-                    else if (isLiteralType(overlap)) {
+                    else if (overlap.flags & TypeFlags.Union) {
                         // We only want to account for literal types otherwise.
                         // If we have a union of index types, it seems likely that we
                         // needed to elaborate between two generic mapped types anyway.
-                        if (overlap.flags & TypeFlags.Union) {
-                            const len = length(filter((overlap as UnionType).types, isUnitType));
-                            if (len >= matchingCount) {
-                                bestMatch = target;
-                                matchingCount = len;
-                            }
-                        }
-                        else if (1 >= matchingCount) {
+                        const len = length(filter((overlap as UnionType).types, isUnitType));
+                        if (len >= matchingCount) {
                             bestMatch = target;
-                            matchingCount = 1;
+                            matchingCount = len;
                         }
+                    }
+                    else if (isUnitType(overlap) && 1 >= matchingCount) {
+                        bestMatch = target;
+                        matchingCount = 1;
                     }
                 }
                 return bestMatch;
