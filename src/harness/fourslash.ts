@@ -4908,6 +4908,7 @@ namespace FourSlashInterface {
             "package",
             "yield",
             "async",
+            "await",
         ].map(keywordEntry);
 
         export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {
