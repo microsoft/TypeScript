@@ -16,7 +16,7 @@
 verify.completions(
     {
         marker: ["1", "2"],
-        includes: ["async", "await"],
+        includes: "async",
         excludes: ["public", "private", "protected", "constructor", "readonly", "static", "abstract", "get", "set"],
     },
     { marker: ["3", "4"], exact: completion.classElementKeywords, isNewIdentifierLocation: true },
