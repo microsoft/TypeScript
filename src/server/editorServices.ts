@@ -2241,8 +2241,8 @@ namespace ts.server {
                 const mapFileInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
                 if (mapFileInfo) {
                     mapFileInfo.getSnapshot();
-                    if (mapFileInfo.mapper !== undefined) {
-                        return mapFileInfo.mapper ? mapFileInfo.mapper : undefined;
+                    if (mapFileInfo.documentPositionMapper !== undefined) {
+                        return mapFileInfo.documentPositionMapper ? mapFileInfo.documentPositionMapper : undefined;
                     }
                 }
             }
@@ -2251,15 +2251,16 @@ namespace ts.server {
             declarationInfo.sourceMapFilePath = undefined;
             let sourceMapFileInfo: ScriptInfo | undefined;
 
-            let readMapFile: ((fileName: string) => string | undefined) | undefined = fileName => {
-                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(fileName, project.currentDirectory, project.directoryStructureHost);
+            let readMapFile: ReadMapFile | undefined = mapFileName => {
+                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, project.directoryStructureHost);
                 if (!mapInfo) return undefined;
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
+                if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
                 return snap.getText(0, snap.getLength());
             };
             const projectName = project.projectName;
-            const mapper = getDocumentPositionMapper(
+            const documentPositionMapper = getDocumentPositionMapper(
                 { getCanonicalFileName: this.toCanonicalFileName, log: s => this.logger.info(s), getSourceFileLike: f => this.getSourceFileLike(f, projectName, declarationInfo) },
                 declarationInfo.fileName,
                 declarationInfo.getLineInfo(),
@@ -2268,8 +2269,9 @@ namespace ts.server {
             readMapFile = undefined; // Remove ref to project
             if (sourceMapFileInfo) {
                 declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
-                sourceMapFileInfo.mapper = mapper || false;
-                if (sourceFileName && mapper) {
+                sourceMapFileInfo.declarationInfoPath = declarationInfo.path;
+                sourceMapFileInfo.documentPositionMapper = documentPositionMapper || false;
+                if (sourceFileName && documentPositionMapper) {
                     // Attach as source
                     const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
                     (sourceMapFileInfo.sourceInfos || (sourceMapFileInfo.sourceInfos = createMap())).set(sourceInfo.path, true);
@@ -2278,7 +2280,7 @@ namespace ts.server {
             else {
                 declarationInfo.sourceMapFilePath = false;
             }
-            return mapper;
+            return documentPositionMapper;
         }
 
         /*@internal*/

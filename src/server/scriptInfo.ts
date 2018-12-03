@@ -69,7 +69,7 @@ namespace ts.server {
             this.info.sourceMapFilePath = undefined;
             this.info.declarationInfoPath = undefined;
             this.info.sourceInfos = undefined;
-            this.info.mapper = undefined;
+            this.info.documentPositionMapper = undefined;
         }
 
         /** Public for testing */
@@ -317,7 +317,7 @@ namespace ts.server {
         /*@internal*/
         sourceInfos?: Map<true>;
         /*@internal*/
-        mapper?: DocumentPositionMapper | false;
+        documentPositionMapper?: DocumentPositionMapper | false;
 
         constructor(
             private readonly host: ServerHost,

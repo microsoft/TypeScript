@@ -127,11 +127,17 @@ namespace ts {
         }
     }
 
+    /**
+     * string | undefined to contents of map file to create DocumentPositionMapper from it
+     * DocumentPositionMapper | false to give back cached DocumentPositionMapper
+     */
+    export type ReadMapFile = (mapFileName: string) => string | undefined | DocumentPositionMapper | false;
+
     export function getDocumentPositionMapper(
         host: DocumentPositionMapperHost,
         generatedFileName: string,
         generatedFileLineInfo: LineInfo,
-        readMapFile: (fileName: string) => string | undefined) {
+        readMapFile: ReadMapFile) {
         let mapFileName = tryGetSourceMappingURL(generatedFileLineInfo);
         if (mapFileName) {
             const match = base64UrlRegExp.exec(mapFileName);
@@ -152,8 +158,11 @@ namespace ts {
         for (const location of possibleMapLocations) {
             const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
             const mapFileContents = readMapFile(mapFileName);
-            if (mapFileContents) {
+            if (isString(mapFileContents)) {
                 return convertDocumentToSourceMapper(host, mapFileContents, mapFileName);
+            }
+            if (mapFileContents !== undefined) {
+                return mapFileContents || undefined;
             }
         }
         return undefined;
