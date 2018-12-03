@@ -97,7 +97,6 @@ namespace ts {
             const fileFromCache = sourceFileLike.get(path);
             if (fileFromCache !== undefined) return fileFromCache ? fileFromCache : undefined;
 
-            // TODO: should ask host instead?
             if (!host.readFile || host.fileExists && !host.fileExists(path)) {
                 sourceFileLike.set(path, false);
                 return undefined;

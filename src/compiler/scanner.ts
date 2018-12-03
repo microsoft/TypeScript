@@ -337,17 +337,14 @@ namespace ts {
         return result;
     }
 
-    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number {
-        return sourceFile.getPositionOfLineAndCharacter ?
-            sourceFile.getPositionOfLineAndCharacter(line, character) :
-            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text);
-    }
-
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number): number;
     /* @internal */
-    export function getPositionOfLineAndCharacterWithEdits(sourceFile: SourceFileLike, line: number, character: number): number {
+    // tslint:disable-next-line:unified-signatures
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number;
+    export function getPositionOfLineAndCharacter(sourceFile: SourceFileLike, line: number, character: number, allowEdits?: true): number {
         return sourceFile.getPositionOfLineAndCharacter ?
-            sourceFile.getPositionOfLineAndCharacter(line, character) :
-            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, /*allowEdits*/ true);
+            sourceFile.getPositionOfLineAndCharacter(line, character, allowEdits) :
+            computePositionOfLineAndCharacter(getLineStarts(sourceFile), line, character, sourceFile.text, allowEdits);
     }
 
     /* @internal */

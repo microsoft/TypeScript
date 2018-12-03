@@ -2615,7 +2615,7 @@ namespace ts {
         readonly text: string;
         lineMap?: ReadonlyArray<number>;
         /* @internal */
-        getPositionOfLineAndCharacter?(line: number, character: number): number;
+        getPositionOfLineAndCharacter?(line: number, character: number, allowEdits?: true): number;
     }
 
 

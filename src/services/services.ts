@@ -602,8 +602,8 @@ namespace ts {
             return getLineStarts(this);
         }
 
-        public getPositionOfLineAndCharacter(line: number, character: number): number {
-            return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text);
+        public getPositionOfLineAndCharacter(line: number, character: number, allowEdits?: true): number {
+            return computePositionOfLineAndCharacter(getLineStarts(this), line, character, this.text, allowEdits);
         }
 
         public getLineEndOfPosition(pos: number): number {

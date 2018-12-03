@@ -186,9 +186,9 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
             if (!this.useScriptVersionCacheIfValidOrOpen()) {
-                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text);
+                return computePositionOfLineAndCharacter(this.getLineMap(), line - 1, offset - 1, this.text, allowEdits);
             }
 
             // TODO: assert this offset is actually on the line
@@ -586,8 +586,12 @@ namespace ts.server {
          * @param line 1 based index
          * @param offset 1 based index
          */
-        lineOffsetToPosition(line: number, offset: number): number {
-            return this.textStorage.lineOffsetToPosition(line, offset);
+        lineOffsetToPosition(line: number, offset: number): number;
+        /*@internal*/
+        // tslint:disable-next-line:unified-signatures
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number;
+        lineOffsetToPosition(line: number, offset: number, allowEdits?: true): number {
+            return this.textStorage.lineOffsetToPosition(line, offset, allowEdits);
         }
 
         positionToLineOffset(position: number): protocol.Location {

@@ -2316,7 +2316,7 @@ namespace ts.server {
                         const lineOffset = info.positionToLineOffset(pos);
                         return { line: lineOffset.line - 1, character: lineOffset.offset - 1 };
                     },
-                    getPositionOfLineAndCharacter: (line, character) => info.lineOffsetToPosition(line + 1, character + 1)
+                    getPositionOfLineAndCharacter: (line, character, allowEdits) => info.lineOffsetToPosition(line + 1, character + 1, allowEdits)
                 };
             }
             return info.sourceFileLike;
