@@ -10758,33 +10758,34 @@ fn5();
                 }]);
             }
 
-            function verifyAllFnAction(action: (fn: number, session: TestSession) => void, session: TestSession) {
-                for (let fn = 1; fn <= 5; fn++) {
-                    action(fn, session);
-                }
-            }
-
+            // Open File, expectedProjectActualFiles, action, openFileLastLine
+            type DocumentPositionMapperVerifier = [File, ReadonlyArray<string>, (fn: number, session: TestSession) => void, number];
             function verifyDocumentPositionMapperUpdates(
                 mainScenario: string,
-                openFile: File,
-                expectedProjectActualFiles: ReadonlyArray<string>,
-                action: (fn: number, session: TestSession) => void,
-                closedInfos: ReadonlyArray<string>,
-                openFileLastLine: number) {
-                const configFile = `${getDirectoryPath(openFile.path)}/tsconfig.json`;
-                const openInfos = [openFile.path];
-                const otherWatchedFiles = [configFile];
+                verifier: ReadonlyArray<DocumentPositionMapperVerifier>,
+                closedInfos: ReadonlyArray<string>) {
+
+                const openFiles = verifier.map(v => v[0]);
+                const expectedProjectActualFiles = verifier.map(v => v[1]);
+                const actions = verifier.map(v => v[2]);
+                const openFileLastLines = verifier.map(v => v[3]);
+
+                const configFiles = openFiles.map(openFile => `${getDirectoryPath(openFile.path)}/tsconfig.json`);
+                const openInfos = openFiles.map(f => f.path);
+                const otherWatchedFiles = configFiles;
                 function openTsFile() {
                     const host = createHost(files, [mainConfig.path]);
                     const session = createSession(host);
                     const service = session.getProjectService();
-                    openFilesForSession([openFile, randomFile], session);
+                    openFilesForSession([...openFiles, randomFile], session);
                     return { host, session, service };
                 }
 
                 function checkProject(service: server.ProjectService) {
-                    checkNumberOfProjects(service, { configuredProjects: 2 });
-                    checkProjectActualFiles(service.configuredProjects.get(configFile)!, expectedProjectActualFiles);
+                    checkNumberOfProjects(service, { configuredProjects: 1 + verifier.length });
+                    configFiles.forEach((configFile, index) => {
+                        checkProjectActualFiles(service.configuredProjects.get(configFile)!, expectedProjectActualFiles[index]);
+                    });
                 }
 
                 function verifyInfos(service: server.ProjectService, host: TestServerHost) {
@@ -10801,27 +10802,74 @@ fn5();
                     }
                 }
 
-                function verifyScenarioWithChanges(
+                function verifyAllFnAction(
+                    session: TestSession,
+                    service: server.ProjectService,
+                    host: TestServerHost,
+                    firstDocumentPositionMapperNotEquals?: true,
+                    dependencyMap?: server.ScriptInfo,
+                    documentPositionMapper?: server.ScriptInfo["documentPositionMapper"]
+                ) {
+                    // action
+                    let isFirst = true;
+                    for (const action of actions) {
+                        for (let fn = 1; fn <= 5; fn++) {
+                            action(fn, session);
+                            verifyInfos(service, host);
+                            if (isFirst) {
+                                isFirst = false;
+                                if (dependencyMap) {
+                                    verifyDocumentPositionMapper(service, dependencyMap, documentPositionMapper, firstDocumentPositionMapperNotEquals);
+                                    documentPositionMapper = dependencyMap.documentPositionMapper;
+                                }
+                                else {
+                                    dependencyMap = service.filenameToScriptInfo.get(`${dependecyLocation}/fns.d.ts.map`)!;
+                                    documentPositionMapper = dependencyMap.documentPositionMapper;
+                                }
+                            }
+                            else {
+                                verifyDocumentPositionMapper(service, dependencyMap!, documentPositionMapper);
+                            }
+                        }
+                    }
+                    return { dependencyMap: dependencyMap!, documentPositionMapper };
+                }
+
+                function verifyScenarioWithChangesWorker(
                     change: (host: TestServerHost, session: TestSession) => void,
-                    afterActionDocumentPositionMapperNotEquals?: true
+                    afterActionDocumentPositionMapperNotEquals: true | undefined,
+                    timeoutBeforeAction: boolean
                 ) {
                     const { host, session, service } = openTsFile();
 
                     // Create DocumentPositionMapper
-                    action(1, session);
+                    actions.forEach(action => action(1, session));
                     const dependencyMap = service.filenameToScriptInfo.get(`${dependecyLocation}/fns.d.ts.map`)!;
                     const documentPositionMapper = dependencyMap.documentPositionMapper;
 
                     // change
                     change(host, session);
-                    host.runQueuedTimeoutCallbacks();
-                    checkProject(service);
-                    verifyDocumentPositionMapper(service, dependencyMap, documentPositionMapper);
+                    if (timeoutBeforeAction) {
+                        host.runQueuedTimeoutCallbacks();
+                        checkProject(service);
+                        verifyDocumentPositionMapper(service, dependencyMap, documentPositionMapper);
+                    }
 
                     // action
-                    verifyAllFnAction(action, session);
-                    verifyInfos(service, host);
-                    verifyDocumentPositionMapper(service, dependencyMap, documentPositionMapper, afterActionDocumentPositionMapperNotEquals);
+                    verifyAllFnAction(session, service, host, afterActionDocumentPositionMapperNotEquals, dependencyMap, documentPositionMapper);
+                }
+
+                function verifyScenarioWithChanges(
+                    change: (host: TestServerHost, session: TestSession) => void,
+                    afterActionDocumentPositionMapperNotEquals?: true
+                ) {
+                    it("when timeout occurs before request", () => {
+                        verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ true);
+                    });
+
+                    it("when timeout does not occur before request", () => {
+                        verifyScenarioWithChangesWorker(change, afterActionDocumentPositionMapperNotEquals, /*timeoutBeforeAction*/ false);
+                    });
                 }
 
                 it(mainScenario, () => {
@@ -10829,11 +10877,9 @@ fn5();
                     checkProject(service);
 
                     // Main scenario action
-                    verifyAllFnAction(action, session);
+                    const { dependencyMap, documentPositionMapper } = verifyAllFnAction(session, service, host);
                     checkProject(service);
                     verifyInfos(service, host);
-                    const dependencyMap = service.filenameToScriptInfo.get(`${dependecyLocation}/fns.d.ts.map`)!;
-                    const documentPositionMapper = dependencyMap.documentPositionMapper;
 
                     // Collecting at this point retains dependency.d.ts and map
                     closeFilesForSession([randomFile], session);
@@ -10842,20 +10888,20 @@ fn5();
                     verifyDocumentPositionMapper(service, dependencyMap, documentPositionMapper);
 
                     // Closing open file, removes dependencies too
-                    closeFilesForSession([openFile, randomFile], session);
+                    closeFilesForSession([...openFiles, randomFile], session);
                     openFilesForSession([randomFile], session);
                     verifyOnlyRandomInfos(service, host);
                 });
 
-                it("when usage file changes, document position mapper doesnt change", () => {
+                describe("when usage file changes, document position mapper doesnt change", () => {
                     // Edit
-                    verifyScenarioWithChanges((_host, session) => session.executeCommandSeq<protocol.ChangeRequest>({
+                    verifyScenarioWithChanges((_host, session) => openFiles.forEach((openFile, index) => session.executeCommandSeq<protocol.ChangeRequest>({
                         command: protocol.CommandTypes.Change,
-                        arguments: { file: openFile.path, line: openFileLastLine, offset: 1, endLine: openFileLastLine, endOffset: 1, insertString: "const x = 10;" }
-                    }));
+                        arguments: { file: openFile.path, line: openFileLastLines[index], offset: 1, endLine: openFileLastLines[index], endOffset: 1, insertString: "const x = 10;" }
+                    })));
                 });
 
-                it("when dependency file changes, document position mapper doesnt change", () => {
+                describe("when dependency file changes, document position mapper doesnt change", () => {
                     // Edit dts to add new fn
                     verifyScenarioWithChanges(host => host.writeFile(
                         `${dependecyLocation}/fns.d.ts`,
@@ -10867,7 +10913,7 @@ fn5();
                     ));
                 });
 
-                it("when dependency file's map changes", () => {
+                describe("when dependency file's map changes", () => {
                     // Edit map file to represent added new line
                     verifyScenarioWithChanges(host => host.writeFile(
                         `${dependecyLocation}/FnS.d.ts.map`,
@@ -10876,32 +10922,44 @@ fn5();
                 });
             }
 
+            const usageVerifier: DocumentPositionMapperVerifier = [
+                        /*openFile*/ mainTs,
+                        /*expectedProjectActualFiles*/[mainTs.path, libFile.path, mainConfig.path, `${dependecyLocation}/fns.d.ts`],
+                        /*action*/ verifyGotoDefintinionFromMainTs,
+                        /*openFileLastLine*/ 10
+            ];
             describe("from project that uses dependency", () => {
                 const closedInfos = [dependencyTs.path, dependencyConfig.path, libFile.path, `${dependecyLocation}/fns.d.ts`, `${dependecyLocation}/FnS.d.ts.map`];
                 verifyDocumentPositionMapperUpdates(
                     "can go to definition correctly",
-                    /*openFile*/ mainTs,
-                    /*expectedProjectActualFiles*/ [mainTs.path, libFile.path, mainConfig.path, `${dependecyLocation}/fns.d.ts`],
-                    /*action*/ verifyGotoDefintinionFromMainTs,
-                    closedInfos,
-                    /*openFileLastLine*/ 10
+                    [usageVerifier],
+                    closedInfos
                 );
             });
 
+            const definingVerifier: DocumentPositionMapperVerifier = [
+                        /*openFile*/ dependencyTs,
+                        /*expectedProjectActualFiles*/[dependencyTs.path, libFile.path, dependencyConfig.path],
+                        /*action*/ verifyRenameFromDependencyTs,
+                        /*openFileLastLine*/ 6
+            ];
             describe("from defining project", () => {
                 const closedInfos = [libFile.path, `${dependecyLocation}/FnS.d.ts`, `${dependecyLocation}/FnS.d.ts.map`];
                 verifyDocumentPositionMapperUpdates(
                     "rename locations from dependency",
-                    /*openFile*/ dependencyTs,
-                    /*expectedProjectActualFiles*/ [dependencyTs.path, libFile.path, dependencyConfig.path],
-                    /*action*/ verifyRenameFromDependencyTs,
-                    closedInfos,
-                    /*openFileLastLine*/ 6
+                    [definingVerifier],
+                    closedInfos
                 );
             });
 
-            // TODO: test project changes when both projects are open
-            // TODO: project change when dependency is not built
+            describe("when opening depedency and usage project", () => {
+                const closedInfos = [libFile.path, `${dependecyLocation}/FnS.d.ts`, `${dependecyLocation}/FnS.d.ts.map`];
+                verifyDocumentPositionMapperUpdates(
+                    "goto Definition in usage and rename locations from defining project",
+                    [definingVerifier],
+                    closedInfos
+                );
+            });
         });
     });
 
