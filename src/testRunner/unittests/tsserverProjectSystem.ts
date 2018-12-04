@@ -10899,6 +10899,9 @@ fn5();
                     /*openFileLastLine*/ 6
                 );
             });
+
+            // TODO: test project changes when both projects are open
+            // TODO: project change when dependency is not built
         });
     });
 
