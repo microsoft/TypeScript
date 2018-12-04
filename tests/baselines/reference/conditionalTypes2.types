@@ -366,3 +366,68 @@ type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
 >T3 : "yes"
 >b : boolean
 
+// Repro from #28824
+
+type Union = 'a' | 'b';
+>Union : Union
+
+type Product<A extends Union, B> = { f1: A, f2: B};
+>Product : Product<A, B>
+>f1 : A
+>f2 : B
+
+type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+>ProductUnion : ProductUnion
+
+// {a: "b"; b: "a"}
+type UnionComplement = {
+>UnionComplement : UnionComplement
+
+  [K in Union]: Exclude<Union, K>
+};
+type UCA = UnionComplement['a'];
+>UCA : "b"
+
+type UCB = UnionComplement['b'];
+>UCB : "a"
+
+// {a: "a"; b: "b"}
+type UnionComplementComplement = {
+>UnionComplementComplement : UnionComplementComplement
+
+  [K in Union]: Exclude<Union, Exclude<Union, K>>
+};
+type UCCA = UnionComplementComplement['a'];
+>UCCA : "a"
+
+type UCCB = UnionComplementComplement['b'];
+>UCCB : "b"
+
+// {a: Product<'b', 1>; b: Product<'a', 0>}
+type ProductComplement = {
+>ProductComplement : ProductComplement
+
+  [K in Union]: Exclude<ProductUnion, { f1: K }>
+>f1 : K
+
+};
+type PCA = ProductComplement['a'];
+>PCA : Product<"b", 1>
+
+type PCB = ProductComplement['b'];
+>PCB : Product<"a", 0>
+
+// {a: Product<'a', 0>; b: Product<'b', 1>}
+type ProductComplementComplement = {
+>ProductComplementComplement : ProductComplementComplement
+
+  [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+>f1 : K
+
+};
+type PCCA = ProductComplementComplement['a'];
+>PCCA : Product<"a", 0>
+
+type PCCB = ProductComplementComplement['b'];
+>PCCB : Product<"b", 1>
+
