@@ -156,3 +156,37 @@ type T0 = MaybeTrue<{ b: never }>     // "no"
 type T1 = MaybeTrue<{ b: false }>;    // "no"
 type T2 = MaybeTrue<{ b: true }>;     // "yes"
 type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
+
+// Repro from #28824
+
+type Union = 'a' | 'b';
+type Product<A extends Union, B> = { f1: A, f2: B};
+type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+
+// {a: "b"; b: "a"}
+type UnionComplement = {
+  [K in Union]: Exclude<Union, K>
+};
+type UCA = UnionComplement['a'];
+type UCB = UnionComplement['b'];
+
+// {a: "a"; b: "b"}
+type UnionComplementComplement = {
+  [K in Union]: Exclude<Union, Exclude<Union, K>>
+};
+type UCCA = UnionComplementComplement['a'];
+type UCCB = UnionComplementComplement['b'];
+
+// {a: Product<'b', 1>; b: Product<'a', 0>}
+type ProductComplement = {
+  [K in Union]: Exclude<ProductUnion, { f1: K }>
+};
+type PCA = ProductComplement['a'];
+type PCB = ProductComplement['b'];
+
+// {a: Product<'a', 0>; b: Product<'b', 1>}
+type ProductComplementComplement = {
+  [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+};
+type PCCA = ProductComplementComplement['a'];
+type PCCB = ProductComplementComplement['b'];

@@ -579,3 +579,109 @@ type T3 = MaybeTrue<{ b: boolean }>;  // "yes"
 >MaybeTrue : Symbol(MaybeTrue, Decl(conditionalTypes2.ts, 145, 63))
 >b : Symbol(b, Decl(conditionalTypes2.ts, 154, 21))
 
+// Repro from #28824
+
+type Union = 'a' | 'b';
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+
+type Product<A extends Union, B> = { f1: A, f2: B};
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 159, 36))
+>A : Symbol(A, Decl(conditionalTypes2.ts, 159, 13))
+>f2 : Symbol(f2, Decl(conditionalTypes2.ts, 159, 43))
+>B : Symbol(B, Decl(conditionalTypes2.ts, 159, 29))
+
+type ProductUnion = Product<'a', 0> | Product<'b', 1>;
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+>Product : Symbol(Product, Decl(conditionalTypes2.ts, 158, 23))
+
+// {a: "b"; b: "a"}
+type UnionComplement = {
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+  [K in Union]: Exclude<Union, K>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 164, 3))
+
+};
+type UCA = UnionComplement['a'];
+>UCA : Symbol(UCA, Decl(conditionalTypes2.ts, 165, 2))
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+type UCB = UnionComplement['b'];
+>UCB : Symbol(UCB, Decl(conditionalTypes2.ts, 166, 32))
+>UnionComplement : Symbol(UnionComplement, Decl(conditionalTypes2.ts, 160, 54))
+
+// {a: "a"; b: "b"}
+type UnionComplementComplement = {
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+  [K in Union]: Exclude<Union, Exclude<Union, K>>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 171, 3))
+
+};
+type UCCA = UnionComplementComplement['a'];
+>UCCA : Symbol(UCCA, Decl(conditionalTypes2.ts, 172, 2))
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+type UCCB = UnionComplementComplement['b'];
+>UCCB : Symbol(UCCB, Decl(conditionalTypes2.ts, 173, 43))
+>UnionComplementComplement : Symbol(UnionComplementComplement, Decl(conditionalTypes2.ts, 167, 32))
+
+// {a: Product<'b', 1>; b: Product<'a', 0>}
+type ProductComplement = {
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+  [K in Union]: Exclude<ProductUnion, { f1: K }>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 178, 39))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 178, 3))
+
+};
+type PCA = ProductComplement['a'];
+>PCA : Symbol(PCA, Decl(conditionalTypes2.ts, 179, 2))
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+type PCB = ProductComplement['b'];
+>PCB : Symbol(PCB, Decl(conditionalTypes2.ts, 180, 34))
+>ProductComplement : Symbol(ProductComplement, Decl(conditionalTypes2.ts, 174, 43))
+
+// {a: Product<'a', 0>; b: Product<'b', 1>}
+type ProductComplementComplement = {
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
+  [K in Union]: Exclude<ProductUnion, Exclude<ProductUnion, { f1: K }>>
+>K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
+>Union : Symbol(Union, Decl(conditionalTypes2.ts, 154, 36))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>Exclude : Symbol(Exclude, Decl(lib.es5.d.ts, --, --))
+>ProductUnion : Symbol(ProductUnion, Decl(conditionalTypes2.ts, 159, 51))
+>f1 : Symbol(f1, Decl(conditionalTypes2.ts, 185, 61))
+>K : Symbol(K, Decl(conditionalTypes2.ts, 185, 3))
+
+};
+type PCCA = ProductComplementComplement['a'];
+>PCCA : Symbol(PCCA, Decl(conditionalTypes2.ts, 186, 2))
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
+type PCCB = ProductComplementComplement['b'];
+>PCCB : Symbol(PCCB, Decl(conditionalTypes2.ts, 187, 45))
+>ProductComplementComplement : Symbol(ProductComplementComplement, Decl(conditionalTypes2.ts, 181, 34))
+
