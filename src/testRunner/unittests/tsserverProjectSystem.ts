@@ -10718,7 +10718,9 @@ fn5();
                 path: `${projectLocation}/random/tsconfig.json`,
                 content: "{}"
             };
-            const dtsMapLocation = `${dependecyLocation}/FnS.d.ts.map`;
+            const dtsLocation = `${dependecyLocation}/FnS.d.ts`;
+            const dtsPath = dtsLocation.toLowerCase() as Path;
+            const dtsMapLocation = `${dtsLocation}.map`;
             const dtsMapPath = dtsMapLocation.toLowerCase() as Path;
 
             const files = [dependencyTs, dependencyConfig, mainTs, mainConfig, libFile, randomFile, randomConfig];
@@ -10736,18 +10738,25 @@ fn5();
                 verifyScriptInfos(session, host, [randomFile.path], [libFile.path], [randomConfig.path]);
             }
 
-            // Returns request and expected Response
-            type SessionAction<Req = protocol.Request, Response = {}> = [Partial<Req>, Response];
+            // Returns request and expected Response, expected response when no map file
+            type SessionAction<Req = protocol.Request, Response = {}> = [Partial<Req>, Response, Response?];
             function gotoDefintinionFromMainTs(fn: number): SessionAction<protocol.DefinitionAndBoundSpanRequest, protocol.DefinitionInfoAndBoundSpan> {
                 const startSpan = { line: fn + 4, offset: 1 };
+                const textSpan: protocol.TextSpan = { start: startSpan, end: { line: startSpan.line, offset: startSpan.offset + 3 } };
+                const definitionSpan: protocol.FileSpan = { file: dependencyTs.path, start: { line: fn, offset: 17 }, end: { line: fn, offset: 20 } };
+                const declareSpaceLength = "declare ".length;
                 return [
                     {
                         command: protocol.CommandTypes.DefinitionAndBoundSpan,
                         arguments: { file: mainTs.path, ...startSpan }
                     },
                     {
-                        definitions: [{ file: dependencyTs.path, start: { line: fn, offset: 17 }, end: { line: fn, offset: 20 } }],
-                        textSpan: { start: startSpan, end: { line: startSpan.line, offset: startSpan.offset + 3 } }
+                        definitions: [definitionSpan],
+                        textSpan
+                    },
+                    {
+                        definitions: [{ file: dtsPath, start: { line: fn, offset: definitionSpan.start.offset + declareSpaceLength }, end: { line: fn, offset: definitionSpan.end.offset + declareSpaceLength } }],
+                        textSpan
                     }
                 ];
             }
@@ -10812,8 +10821,8 @@ fn5();
                     });
                 }
 
-                function verifyInfos(session: TestSession, host: TestServerHost, minusDtsMap?: true) {
-                    verifyInfosWithRandom(session, host, openInfos, minusDtsMap ? closedInfos.filter(f => f.toLowerCase() !== dtsMapPath) : closedInfos, otherWatchedFiles);
+                function verifyInfos(session: TestSession, host: TestServerHost, minusDtsMapAndSource?: true) {
+                    verifyInfosWithRandom(session, host, openInfos, minusDtsMapAndSource ? closedInfos.filter(f => f !== dependencyTs.path && f.toLowerCase() !== dtsMapPath) : closedInfos, otherWatchedFiles);
                 }
 
                 function verifyDocumentPositionMapper(session: TestSession, dependencyMap: server.ScriptInfo, documentPositionMapper: server.ScriptInfo["documentPositionMapper"], notEqual?: true) {
@@ -10827,9 +10836,9 @@ fn5();
                 }
 
                 function action(actionGetter: SessionActionGetter, fn: number, session: TestSession) {
-                    const [req, expectedResponse] = actionGetter(fn);
+                    const [req, expectedResponse, expectedNoMapResponse] = actionGetter(fn);
                     const { response } = session.executeCommandSeq(req);
-                    return { response, expectedResponse };
+                    return { response, expectedResponse, expectedNoMapResponse };
                 }
 
                 function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo) => void) {
@@ -10837,7 +10846,7 @@ fn5();
                     for (const actionGetter of actionGetters) {
                         for (let fn = 1; fn <= 5; fn++) {
                             const result = action(actionGetter, fn, session);
-                            const dtsInfo = session.getProjectService().filenameToScriptInfo.get(`${dependecyLocation}/fns.d.ts`);
+                            const dtsInfo = session.getProjectService().filenameToScriptInfo.get(dtsPath);
                             assert.isDefined(dtsInfo);
                             verifyAction(result, dtsInfo!);
                         }
@@ -10880,9 +10889,9 @@ fn5();
                     host: TestServerHost
                 ) {
                     // action
-                    verifyAllFnActionWorker(session, ({ response, expectedResponse }, dtsInfo) => {
-                        assert.deepEqual(response, expectedResponse);
-                        verifyInfos(session, host);
+                    verifyAllFnActionWorker(session, ({ response, expectedResponse, expectedNoMapResponse }, dtsInfo) => {
+                        assert.deepEqual(response, expectedNoMapResponse && verifier.length ? expectedNoMapResponse : expectedResponse);
+                        verifyInfos(session, host, /*minusDtsMapAndSource*/ true);
                         assert.isFalse(dtsInfo.sourceMapFilePath);
                         assert.isUndefined(session.getProjectService().filenameToScriptInfo.get(dtsMapPath));
                     });
@@ -10957,8 +10966,8 @@ fn5();
                 describe("when dependency file changes, document position mapper doesnt change", () => {
                     // Edit dts to add new fn
                     verifyScenarioWithChanges(host => host.writeFile(
-                        `${dependecyLocation}/fns.d.ts`,
-                        host.readFile(`${dependecyLocation}/fns.d.ts`)!.replace(
+                        dtsLocation,
+                        host.readFile(dtsLocation)!.replace(
                             "//# sourceMappingURL=FnS.d.ts.map",
                             `export declare function fn6(): void;
 //# sourceMappingURL=FnS.d.ts.map`
@@ -10988,12 +10997,12 @@ fn5();
 
             const usageVerifier: DocumentPositionMapperVerifier = [
                         /*openFile*/ mainTs,
-                        /*expectedProjectActualFiles*/[mainTs.path, libFile.path, mainConfig.path, `${dependecyLocation}/fns.d.ts`],
+                        /*expectedProjectActualFiles*/[mainTs.path, libFile.path, mainConfig.path, dtsPath],
                         /*actionGetter*/ gotoDefintinionFromMainTs,
                         /*openFileLastLine*/ 10
             ];
             describe("from project that uses dependency", () => {
-                const closedInfos = [dependencyTs.path, dependencyConfig.path, libFile.path, `${dependecyLocation}/fns.d.ts`, dtsMapLocation];
+                const closedInfos = [dependencyTs.path, dependencyConfig.path, libFile.path, dtsPath, dtsMapLocation];
                 verifyDocumentPositionMapperUpdates(
                     "can go to definition correctly",
                     [usageVerifier],
@@ -11008,7 +11017,7 @@ fn5();
                         /*openFileLastLine*/ 6
             ];
             describe("from defining project", () => {
-                const closedInfos = [libFile.path, `${dependecyLocation}/FnS.d.ts`, dtsMapLocation];
+                const closedInfos = [libFile.path, dtsLocation, dtsMapLocation];
                 verifyDocumentPositionMapperUpdates(
                     "rename locations from dependency",
                     [definingVerifier],
@@ -11017,7 +11026,7 @@ fn5();
             });
 
             describe("when opening depedency and usage project", () => {
-                const closedInfos = [libFile.path, `${dependecyLocation}/FnS.d.ts`, dtsMapLocation];
+                const closedInfos = [libFile.path, dtsLocation, dtsMapLocation];
                 verifyDocumentPositionMapperUpdates(
                     "goto Definition in usage and rename locations from defining project",
                     [definingVerifier],
