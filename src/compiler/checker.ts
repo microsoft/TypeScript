@@ -13684,6 +13684,10 @@ namespace ts {
                     break;
                 case SyntaxKind.BindingElement:
                     diagnostic = Diagnostics.Binding_element_0_implicitly_has_an_1_type;
+                    if (!noImplicitAny) {
+                        // Don't issue a suggestion for binding elements since the codefix doesn't yet support them.
+                        return;
+                    }
                     break;
                 case SyntaxKind.JSDocFunctionType:
                     error(declaration, Diagnostics.Function_type_which_lacks_return_type_annotation_implicitly_has_an_0_return_type, typeAsString);
