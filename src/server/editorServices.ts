@@ -342,6 +342,7 @@ namespace ts.server {
         FailedLookupLocation = "Directory of Failed lookup locations in module resolution",
         TypeRoots = "Type root directory",
         NodeModulesForClosedScriptInfo = "node_modules for closed script infos in them",
+        MissingSourceMapFile = "Missing source map file"
     }
 
     const enum ConfigFileWatcherStatus {
@@ -953,22 +954,25 @@ namespace ts.server {
         private handleSourceMapProjects(info: ScriptInfo) {
             // Change in d.ts, update source projects as well
             if (info.sourceMapFilePath) {
-                const sourceMapFileInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                if (sourceMapFileInfo && sourceMapFileInfo.sourceInfos) {
-                    this.delayUpdateSourceInfoProjects(sourceMapFileInfo.sourceInfos);
+                if (isString(info.sourceMapFilePath)) {
+                    const sourceMapFileInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                    this.delayUpdateSourceInfoProjects(sourceMapFileInfo && sourceMapFileInfo.sourceInfos);
+                }
+                else {
+                    this.delayUpdateSourceInfoProjects(info.sourceMapFilePath.sourceInfos);
                 }
             }
             // Change in mapInfo, update declarationProjects and source projects
-            if (info.sourceInfos) {
-                this.delayUpdateSourceInfoProjects(info.sourceInfos);
-            }
+            this.delayUpdateSourceInfoProjects(info.sourceInfos);
             if (info.declarationInfoPath) {
                 this.delayUpdateProjectsOfScriptInfoPath(info.declarationInfoPath);
             }
         }
 
-        private delayUpdateSourceInfoProjects(sourceInfos: Map<true>) {
-            sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
+        private delayUpdateSourceInfoProjects(sourceInfos: Map<true> | undefined) {
+            if (sourceInfos) {
+                sourceInfos.forEach((_value, path) => this.delayUpdateProjectsOfScriptInfoPath(path as Path));
+            }
         }
 
         private delayUpdateProjectsOfScriptInfoPath(path: Path) {
@@ -992,6 +996,14 @@ namespace ts.server {
                 // update projects to make sure that set of referenced files is correct
                 this.delayUpdateProjectGraphs(containingProjects);
                 this.handleSourceMapProjects(info);
+                info.closeSourceMapFileWatcher();
+                // need to recalculate source map from declaration file
+                if (info.declarationInfoPath) {
+                    const declarationInfo = this.getScriptInfoForPath(info.declarationInfoPath);
+                    if (declarationInfo) {
+                        declarationInfo.sourceMapFilePath = undefined;
+                    }
+                }
             }
         }
 
@@ -2228,32 +2240,43 @@ namespace ts.server {
 
         /*@internal*/
         getDocumentPositionMapper(project: Project, generatedFileName: string, sourceFileName?: string): DocumentPositionMapper | undefined {
-            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, project.directoryStructureHost);
+            // Since declaration info and map file watches arent updating project's directory structure host (which can cache file structure) use host
+            const declarationInfo = this.getOrCreateScriptInfoNotOpenedByClient(generatedFileName, project.currentDirectory, this.host);
             if (!declarationInfo) return undefined;
 
             // Try to get from cache
             declarationInfo.getSnapshot(); // Ensure synchronized
-            if (declarationInfo.sourceMapFilePath !== undefined) {
-                // Doesnt have sourceMap
-                if (!declarationInfo.sourceMapFilePath) return undefined;
-
+            if (isString(declarationInfo.sourceMapFilePath)) {
                 // Ensure mapper is synchronized
-                const mapFileInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
-                if (mapFileInfo) {
-                    mapFileInfo.getSnapshot();
-                    if (mapFileInfo.documentPositionMapper !== undefined) {
-                        return mapFileInfo.documentPositionMapper ? mapFileInfo.documentPositionMapper : undefined;
+                const sourceMapFileInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
+                if (sourceMapFileInfo) {
+                    sourceMapFileInfo.getSnapshot();
+                    if (sourceMapFileInfo.documentPositionMapper !== undefined) {
+                        sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
+                        return sourceMapFileInfo.documentPositionMapper ? sourceMapFileInfo.documentPositionMapper : undefined;
                     }
                 }
+                declarationInfo.sourceMapFilePath = undefined;
+            }
+            else if (declarationInfo.sourceMapFilePath) {
+                declarationInfo.sourceMapFilePath.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, declarationInfo.sourceMapFilePath.sourceInfos);
+                return undefined;
+            }
+            else if (declarationInfo.sourceMapFilePath !== undefined) {
+                // Doesnt have sourceMap
+                return undefined;
             }
 
             // Create the mapper
-            declarationInfo.sourceMapFilePath = undefined;
             let sourceMapFileInfo: ScriptInfo | undefined;
+            let mapFileNameFromDeclarationInfo: string | undefined;
 
-            let readMapFile: ReadMapFile | undefined = mapFileName => {
-                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, project.directoryStructureHost);
-                if (!mapInfo) return undefined;
+            let readMapFile: ReadMapFile | undefined = (mapFileName, mapFileNameFromDts) => {
+                const mapInfo = this.getOrCreateScriptInfoNotOpenedByClient(mapFileName, project.currentDirectory, this.host);
+                if (!mapInfo) {
+                    mapFileNameFromDeclarationInfo = mapFileNameFromDts;
+                    return undefined;
+                }
                 sourceMapFileInfo = mapInfo;
                 const snap = mapInfo.getSnapshot();
                 if (mapInfo.documentPositionMapper !== undefined) return mapInfo.documentPositionMapper;
@@ -2271,16 +2294,52 @@ namespace ts.server {
                 declarationInfo.sourceMapFilePath = sourceMapFileInfo.path;
                 sourceMapFileInfo.declarationInfoPath = declarationInfo.path;
                 sourceMapFileInfo.documentPositionMapper = documentPositionMapper || false;
-                if (sourceFileName && documentPositionMapper) {
-                    // Attach as source
-                    const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
-                    (sourceMapFileInfo.sourceInfos || (sourceMapFileInfo.sourceInfos = createMap())).set(sourceInfo.path, true);
-                }
+                sourceMapFileInfo.sourceInfos = this.addSourceInfoToSourceMap(sourceFileName, project, sourceMapFileInfo.sourceInfos);
+            }
+            else if (mapFileNameFromDeclarationInfo) {
+                declarationInfo.sourceMapFilePath = {
+                    declarationInfoPath: declarationInfo.path,
+                    watcher: this.addMissingSourceMapFile(
+                        project.currentDirectory === this.currentDirectory ?
+                            mapFileNameFromDeclarationInfo :
+                            getNormalizedAbsolutePath(mapFileNameFromDeclarationInfo, project.currentDirectory),
+                        declarationInfo.path
+                    ),
+                    sourceInfos: this.addSourceInfoToSourceMap(sourceFileName, project)
+                };
             }
             else {
                 declarationInfo.sourceMapFilePath = false;
             }
             return documentPositionMapper;
+        }
+
+        private addSourceInfoToSourceMap(sourceFileName: string | undefined, project: Project, sourceInfos?: Map<true>) {
+            if (sourceFileName) {
+                // Attach as source
+                const sourceInfo = this.getOrCreateScriptInfoNotOpenedByClient(sourceFileName, project.currentDirectory, project.directoryStructureHost)!;
+                (sourceInfos || (sourceInfos = createMap())).set(sourceInfo.path, true);
+            }
+            return sourceInfos;
+        }
+
+        private addMissingSourceMapFile(mapFileName: string, declarationInfoPath: Path) {
+            const fileWatcher = this.watchFactory.watchFile(
+                this.host,
+                mapFileName,
+                () => {
+                    const declarationInfo = this.getScriptInfoForPath(declarationInfoPath);
+                    if (declarationInfo && declarationInfo.sourceMapFilePath && !isString(declarationInfo.sourceMapFilePath)) {
+                        // Update declaration and source projects
+                        this.delayUpdateProjectGraphs(declarationInfo.containingProjects);
+                        this.delayUpdateSourceInfoProjects(declarationInfo.sourceMapFilePath.sourceInfos);
+                        declarationInfo.closeSourceMapFileWatcher();
+                    }
+                 },
+                PollingInterval.High,
+                WatchType.MissingSourceMapFile,
+            );
+            return fileWatcher;
         }
 
         /*@internal*/
@@ -2297,7 +2356,7 @@ namespace ts.server {
             if (!info) return undefined;
 
             // Attach as source
-            if (declarationInfo && declarationInfo.sourceMapFilePath && info !== declarationInfo) {
+            if (declarationInfo && isString(declarationInfo.sourceMapFilePath) && info !== declarationInfo) {
                 const sourceMapInfo = this.getScriptInfoForPath(declarationInfo.sourceMapFilePath);
                 if (sourceMapInfo) {
                     (sourceMapInfo.sourceInfos || (sourceMapInfo.sourceInfos = createMap())).set(info.path, true);
@@ -2669,11 +2728,18 @@ namespace ts.server {
                 if (!info.isScriptOpen() && info.isOrphan()) {
                     // Otherwise if there is any source info that is alive, this alive too
                     if (!info.sourceMapFilePath) return;
-                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                    if (!sourceMapInfo || !sourceMapInfo.sourceInfos) return;
-                    if (!forEachKey(sourceMapInfo.sourceInfos, path => {
-                        const info = this.getScriptInfoForPath(path as Path)!;
-                        return info.isScriptOpen() || !info.isOrphan();
+                    let sourceInfos: Map<true> | undefined;
+                    if (isString(info.sourceMapFilePath)) {
+                        const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                        sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
+                    }
+                    else {
+                        sourceInfos = info.sourceMapFilePath.sourceInfos;
+                    }
+                    if (!sourceInfos) return;
+                    if (!forEachKey(sourceInfos, path => {
+                        const info = this.getScriptInfoForPath(path as Path);
+                        return !!info && (info.isScriptOpen() || !info.isOrphan());
                     })) {
                         return;
                     }
@@ -2682,11 +2748,18 @@ namespace ts.server {
                 // Retain this script info
                 toRemoveScriptInfos.delete(info.path);
                 if (info.sourceMapFilePath) {
-                    // And map file info and source infos
-                    toRemoveScriptInfos.delete(info.sourceMapFilePath);
-                    const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
-                    if (sourceMapInfo && sourceMapInfo.sourceInfos) {
-                        sourceMapInfo.sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
+                    let sourceInfos: Map<true> | undefined;
+                    if (isString(info.sourceMapFilePath)) {
+                        // And map file info and source infos
+                        toRemoveScriptInfos.delete(info.sourceMapFilePath);
+                        const sourceMapInfo = this.getScriptInfoForPath(info.sourceMapFilePath);
+                        sourceInfos = sourceMapInfo && sourceMapInfo.sourceInfos;
+                    }
+                    else {
+                        sourceInfos = info.sourceMapFilePath.sourceInfos;
+                    }
+                    if (sourceInfos) {
+                        sourceInfos.forEach((_value, path) => toRemoveScriptInfos.delete(path));
                     }
                 }
             });
@@ -2695,6 +2768,7 @@ namespace ts.server {
                 // if there are not projects that include this script info - delete it
                 this.stopWatchingScriptInfo(info);
                 this.deleteScriptInfo(info);
+                info.closeSourceMapFileWatcher();
             });
         }
 

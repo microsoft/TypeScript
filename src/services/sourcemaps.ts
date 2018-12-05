@@ -131,7 +131,7 @@ namespace ts {
      * string | undefined to contents of map file to create DocumentPositionMapper from it
      * DocumentPositionMapper | false to give back cached DocumentPositionMapper
      */
-    export type ReadMapFile = (mapFileName: string) => string | undefined | DocumentPositionMapper | false;
+    export type ReadMapFile = (mapFileName: string, mapFileNameFromDts: string | undefined) => string | undefined | DocumentPositionMapper | false;
 
     export function getDocumentPositionMapper(
         host: DocumentPositionMapperHost,
@@ -155,9 +155,10 @@ namespace ts {
             possibleMapLocations.push(mapFileName);
         }
         possibleMapLocations.push(generatedFileName + ".map");
+        const originalMapFileName = mapFileName && getNormalizedAbsolutePath(mapFileName, getDirectoryPath(generatedFileName));
         for (const location of possibleMapLocations) {
             const mapFileName = getNormalizedAbsolutePath(location, getDirectoryPath(generatedFileName));
-            const mapFileContents = readMapFile(mapFileName);
+            const mapFileContents = readMapFile(mapFileName, originalMapFileName);
             if (isString(mapFileContents)) {
                 return convertDocumentToSourceMapper(host, mapFileContents, mapFileName);
             }

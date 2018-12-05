@@ -10806,8 +10806,11 @@ fn5();
                 const configFiles = openFiles.map(openFile => `${getDirectoryPath(openFile.path)}/tsconfig.json`);
                 const openInfos = openFiles.map(f => f.path);
                 const otherWatchedFiles = configFiles;
-                function openTsFile() {
+                function openTsFile(onHostCreate?: (host: TestServerHost) => void) {
                     const host = createHost(files, [mainConfig.path]);
+                    if (onHostCreate) {
+                        onHostCreate(host);
+                    }
                     const session = createSession(host);
                     openFilesForSession([...openFiles, randomFile], session);
                     return { host, session };
@@ -10821,8 +10824,19 @@ fn5();
                     });
                 }
 
-                function verifyInfos(session: TestSession, host: TestServerHost, minusDtsMapAndSource?: true) {
-                    verifyInfosWithRandom(session, host, openInfos, minusDtsMapAndSource ? closedInfos.filter(f => f !== dependencyTs.path && f.toLowerCase() !== dtsMapPath) : closedInfos, otherWatchedFiles);
+                function verifyInfos(session: TestSession, host: TestServerHost) {
+                    verifyInfosWithRandom(session, host, openInfos, closedInfos, otherWatchedFiles);
+                }
+
+                function verifyInfosWhenNoMapFile(session: TestSession, host: TestServerHost, dependencyTsOK?: true) {
+                    const dtsMapClosedInfo = firstDefined(closedInfos, f => f.toLowerCase() === dtsMapPath ? f : undefined);
+                    verifyInfosWithRandom(
+                        session,
+                        host,
+                        openInfos,
+                        closedInfos.filter(f => f !== dtsMapClosedInfo && (dependencyTsOK || f !== dependencyTs.path)),
+                        dtsMapClosedInfo ? otherWatchedFiles.concat(dtsMapClosedInfo) : otherWatchedFiles
+                    );
                 }
 
                 function verifyDocumentPositionMapper(session: TestSession, dependencyMap: server.ScriptInfo, documentPositionMapper: server.ScriptInfo["documentPositionMapper"], notEqual?: true) {
@@ -10841,14 +10855,20 @@ fn5();
                     return { response, expectedResponse, expectedNoMapResponse };
                 }
 
-                function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo) => void) {
+                function firstAction(session: TestSession) {
+                    actionGetters.forEach(actionGetter => action(actionGetter, 1, session));
+                }
+
+                function verifyAllFnActionWorker(session: TestSession, verifyAction: (result: ReturnType<typeof action>, dtsInfo: server.ScriptInfo, isFirst: boolean) => void) {
                     // action
+                    let isFirst = true;
                     for (const actionGetter of actionGetters) {
                         for (let fn = 1; fn <= 5; fn++) {
                             const result = action(actionGetter, fn, session);
                             const dtsInfo = session.getProjectService().filenameToScriptInfo.get(dtsPath);
                             assert.isDefined(dtsInfo);
-                            verifyAction(result, dtsInfo!);
+                            verifyAction(result, dtsInfo!, isFirst);
+                            isFirst = false;
                         }
                     }
                 }
@@ -10861,13 +10881,11 @@ fn5();
                     documentPositionMapper?: server.ScriptInfo["documentPositionMapper"]
                 ) {
                     // action
-                    let isFirst = true;
-                    verifyAllFnActionWorker(session, ({ response, expectedResponse }, dtsInfo) => {
+                    verifyAllFnActionWorker(session, ({ response, expectedResponse }, dtsInfo, isFirst) => {
                         assert.deepEqual(response, expectedResponse);
                         verifyInfos(session, host);
                         assert.equal(dtsInfo.sourceMapFilePath, dtsMapPath);
                         if (isFirst) {
-                            isFirst = false;
                             if (dependencyMap) {
                                 verifyDocumentPositionMapper(session, dependencyMap, documentPositionMapper, firstDocumentPositionMapperNotEquals);
                                 documentPositionMapper = dependencyMap.documentPositionMapper;
@@ -10886,15 +10904,26 @@ fn5();
 
                 function verifyAllFnActionWithNoMap(
                     session: TestSession,
-                    host: TestServerHost
+                    host: TestServerHost,
+                    dependencyTsOK?: true
                 ) {
+                    let sourceMapFilePath: server.ScriptInfo["sourceMapFilePath"];
                     // action
-                    verifyAllFnActionWorker(session, ({ response, expectedResponse, expectedNoMapResponse }, dtsInfo) => {
+                    verifyAllFnActionWorker(session, ({ response, expectedResponse, expectedNoMapResponse }, dtsInfo, isFirst) => {
                         assert.deepEqual(response, expectedNoMapResponse && verifier.length ? expectedNoMapResponse : expectedResponse);
-                        verifyInfos(session, host, /*minusDtsMapAndSource*/ true);
-                        assert.isFalse(dtsInfo.sourceMapFilePath);
+                        verifyInfosWhenNoMapFile(session, host, dependencyTsOK);
                         assert.isUndefined(session.getProjectService().filenameToScriptInfo.get(dtsMapPath));
+                        if (isFirst) {
+                            assert.isNotString(dtsInfo.sourceMapFilePath);
+                            assert.isNotFalse(dtsInfo.sourceMapFilePath);
+                            assert.isDefined(dtsInfo.sourceMapFilePath);
+                            sourceMapFilePath = dtsInfo.sourceMapFilePath;
+                        }
+                        else {
+                            assert.equal(dtsInfo.sourceMapFilePath, sourceMapFilePath);
+                        }
                     });
+                    return sourceMapFilePath;
                 }
 
                 function verifyScenarioWithChangesWorker(
@@ -10905,7 +10934,7 @@ fn5();
                     const { host, session } = openTsFile();
 
                     // Create DocumentPositionMapper
-                    actionGetters.forEach(actionGetter => action(actionGetter, 1, session));
+                    firstAction(session);
                     const dependencyMap = session.getProjectService().filenameToScriptInfo.get(dtsMapPath)!;
                     const documentPositionMapper = dependencyMap.documentPositionMapper;
 
@@ -10934,10 +10963,7 @@ fn5();
                     });
                 }
 
-                it(mainScenario, () => {
-                    const { host, session } = openTsFile();
-                    checkProject(session);
-
+                function verifyMainScenarioAndScriptInfoCollection(session: TestSession, host: TestServerHost) {
                     // Main scenario action
                     const { dependencyMap, documentPositionMapper } = verifyAllFnAction(session, host);
                     checkProject(session);
@@ -10953,6 +10979,28 @@ fn5();
                     closeFilesForSession([...openFiles, randomFile], session);
                     openFilesForSession([randomFile], session);
                     verifyOnlyRandomInfos(session, host);
+                }
+
+                function verifyMainScenarioAndScriptInfoCollectionWithNoMap(session: TestSession, host: TestServerHost, dependencyTsOKInScenario?: true) {
+                    // Main scenario action
+                    verifyAllFnActionWithNoMap(session, host, dependencyTsOKInScenario);
+
+                    // Collecting at this point retains dependency.d.ts and map watcher
+                    closeFilesForSession([randomFile], session);
+                    openFilesForSession([randomFile], session);
+                    verifyInfosWhenNoMapFile(session, host);
+
+                    // Closing open file, removes dependencies too
+                    closeFilesForSession([...openFiles, randomFile], session);
+                    openFilesForSession([randomFile], session);
+                    verifyOnlyRandomInfos(session, host);
+                }
+
+                it(mainScenario, () => {
+                    const { host, session } = openTsFile();
+                    checkProject(session);
+
+                    verifyMainScenarioAndScriptInfoCollection(session, host);
                 });
 
                 describe("when usage file changes, document position mapper doesnt change", () => {
@@ -10963,7 +11011,7 @@ fn5();
                     })));
                 });
 
-                describe("when dependency file changes, document position mapper doesnt change", () => {
+                describe("when dependency .d.ts changes, document position mapper doesnt change", () => {
                     // Edit dts to add new fn
                     verifyScenarioWithChanges(host => host.writeFile(
                         dtsLocation,
@@ -10983,15 +11031,34 @@ fn5();
                     ), /*afterActionDocumentPositionMapperNotEquals*/ true);
                 });
 
-                it("when map file is not present", () => {
-                    const host = createHost(files, [mainConfig.path]);
-                    host.deleteFile(dtsMapLocation);
+                describe("when map file is not present", () => {
+                    it(mainScenario, () => {
+                        const { host, session } = openTsFile(host => host.deleteFile(dtsMapLocation));
+                        checkProject(session);
 
-                    const session = createSession(host);
-                    openFilesForSession([...openFiles, randomFile], session);
-                    checkProject(session);
+                        verifyMainScenarioAndScriptInfoCollectionWithNoMap(session, host);
+                    });
 
-                    verifyAllFnActionWithNoMap(session, host);
+                    it("when map file is created", () => {
+                        let dtsMapContents: string | undefined;
+                        const { host, session } = openTsFile(host => {
+                            dtsMapContents = host.readFile(dtsMapLocation)!;
+                            host.deleteFile(dtsMapLocation);
+                        });
+                        firstAction(session);
+
+                        host.writeFile(dtsMapLocation, dtsMapContents!);
+                        verifyMainScenarioAndScriptInfoCollection(session, host);
+                    });
+
+                    it("when map file is deleted", () => {
+                        const { host, session } = openTsFile();
+                        firstAction(session);
+
+                        // The dependency file is deleted when orphan files are collected
+                        host.deleteFile(dtsMapLocation);
+                        verifyMainScenarioAndScriptInfoCollectionWithNoMap(session, host, /*dependencyTsOKInScenario*/ true);
+                    });
                 });
             }
 

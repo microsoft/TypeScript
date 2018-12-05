@@ -66,6 +66,7 @@ namespace ts.server {
 
         private resetSourceMapInfo() {
             this.info.sourceFileLike = undefined;
+            this.info.closeSourceMapFileWatcher();
             this.info.sourceMapFilePath = undefined;
             this.info.declarationInfoPath = undefined;
             this.info.sourceInfos = undefined;
@@ -280,6 +281,13 @@ namespace ts.server {
         sourceFile: SourceFile;
     }
 
+    /*@internal*/
+    export interface SourceMapFileWatcher {
+        declarationInfoPath: Path;
+        watcher: FileWatcher;
+        sourceInfos?: Map<true>;
+    }
+
     export class ScriptInfo {
         /**
          * All projects that include this file
@@ -309,7 +317,7 @@ namespace ts.server {
         sourceFileLike?: SourceFileLike;
 
         /*@internal*/
-        sourceMapFilePath?: Path | false;
+        sourceMapFilePath?: Path | SourceMapFileWatcher | false;
 
         // Present on sourceMapFile info
         /*@internal*/
@@ -605,6 +613,14 @@ namespace ts.server {
         /*@internal*/
         getLineInfo(): LineInfo {
             return this.textStorage.getLineInfo();
+        }
+
+        /*@internal*/
+        closeSourceMapFileWatcher() {
+            if (this.sourceMapFilePath && !isString(this.sourceMapFilePath)) {
+                closeFileWatcherOf(this.sourceMapFilePath);
+                this.sourceMapFilePath = undefined;
+            }
         }
     }
 }
