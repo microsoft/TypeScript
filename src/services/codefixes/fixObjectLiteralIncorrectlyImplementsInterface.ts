@@ -62,10 +62,16 @@ namespace ts.codefix {
         return [createCodeFixActionNoFixId(fixId, changes, [Diagnostics.Implement_interface_0, interfaceName])];
     }
 
-    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): PropertyAssignment {
-        let type = checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression);
-        const typeNode = checker.typeToTypeNode(type, objectLiteralExpression)!;
-        const declaration = symbol.declarations[0];
+    interface TypeInfo {
+        readonly type: Type;
+        readonly kind: SyntaxKind;
+        readonly typeNode: TypeNode;
+        readonly wasRedirectedForIntersection: boolean;
+    }
+
+    function getTypeInfo(checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression, symbol: Symbol | undefined, oldTypeNode: TypeNode | undefined): TypeInfo {
+        let type = symbol ? checker.getTypeOfSymbolAtLocation(symbol, objectLiteralExpression) : checker.getTypeAtLocation(oldTypeNode!);
+        const typeNode = symbol ? checker.typeToTypeNode(type, objectLiteralExpression)! : oldTypeNode!;
 
         let kind = typeNode.kind;
         let wasRedirectedForIntersection = false;
@@ -79,6 +85,13 @@ namespace ts.codefix {
             wasRedirectedForIntersection = true;
         }
 
+        return { type, typeNode, kind, wasRedirectedForIntersection };
+    }
+
+    function convertSymbolToMember(symbol: Symbol, checker: TypeChecker, objectLiteralExpression: ObjectLiteralExpression): PropertyAssignment {
+        const { kind, typeNode, type, wasRedirectedForIntersection } = getTypeInfo(checker, objectLiteralExpression, symbol, /* typeNode */ undefined);
+        const declaration = symbol.declarations[0];
+
         if (isBasicKind(kind)) {
             return createPropertyAssignment(symbol.name, getDefaultValue(kind));
         }
@@ -87,26 +100,11 @@ namespace ts.codefix {
 
         switch (kind) {
             case SyntaxKind.FunctionType:
-
-                if (isMethodSignature(declaration)) {
-                    expression = getDefaultArrowFunction(declaration);
-                }
-                else {
-                    const propertySignature = declaration as PropertySignature;
-                    const typeNodeOfProperty = propertySignature.type!;
-                    const typeOfProperty = checker.getTypeAtLocation(typeNodeOfProperty);
-                    const functionTypeNode = isTypeReferenceNode(typeNodeOfProperty) ? typeOfProperty.symbol.declarations[0] : typeNodeOfProperty;
-
-                    expression = getDefaultArrowFunction(functionTypeNode as FunctionTypeNode);
-                }
+                expression = getExpressionForFunctionType(checker, declaration);
                 break;
 
             case SyntaxKind.TupleType:
-                const tupleTypeNode = typeNode as TupleTypeNode;
-                const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
-                const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : tupleTypeNode.elementTypes;
-                const stubbedElements = elementTypes.map(typeNode => typeNodeToExpressionForTuple(checker, typeNode, objectLiteralExpression));
-                expression = createArrayLiteral(stubbedElements);
+                expression = getExpressionForTupleType(checker, declaration, typeNode, objectLiteralExpression);
                 break;
 
             case SyntaxKind.TypeReference:
@@ -124,7 +122,7 @@ namespace ts.codefix {
                 break;
 
             default:
-                return Debug.fail("Expression is not implemented for " + kind.toString());
+                return Debug.fail("Expression is not implemented for kind " + kind.toString());
         }
 
         return createPropertyAssignment(symbol.name, expression);
@@ -172,10 +170,32 @@ namespace ts.codefix {
         return kind;
     }
 
-    const mergeSymbolArray = (accumulator: Symbol[], newArray: Symbol[]) => {
+    function getExpressionForFunctionType(checker: TypeChecker, declaration: Declaration): Expression{
+        if (isMethodSignature(declaration)) {
+            return getDefaultArrowFunction(declaration);
+        }
+        else {
+            const propertySignature = declaration as PropertySignature;
+            const typeNodeOfProperty = propertySignature.type!;
+            const typeOfProperty = checker.getTypeAtLocation(typeNodeOfProperty);
+            const functionTypeNode = isTypeReferenceNode(typeNodeOfProperty) ? typeOfProperty.symbol.declarations[0] : typeNodeOfProperty;
+
+           return getDefaultArrowFunction(functionTypeNode as FunctionTypeNode);
+        }
+    }
+
+    function getExpressionForTupleType(checker: TypeChecker, declaration: Declaration, typeNode: TypeNode, objectLiteral: ObjectLiteralExpression): Expression{
+        const tupleTypeNode = typeNode as TupleTypeNode;
+        const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
+        const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : tupleTypeNode.elementTypes;
+        const stubbedElements = elementTypes.map(typeNode => typeNodeToExpressionForTuple(checker, typeNode, objectLiteral));
+        return createArrayLiteral(stubbedElements);
+    }
+
+    function mergeSymbolArray (accumulator: Symbol[], newArray: Symbol[]): Symbol[] {
         const updatedArray = newArray.filter(newOne => !accumulator.some(existingOne => existingOne.escapedName === newOne.escapedName));
         return accumulator.concat(updatedArray);
-    };
+    }
 
     function getDefaultIntersection(checker: TypeChecker, typesFromIntersection: Type[], objectLiteralExpression: ObjectLiteralExpression): Expression {
         const properties = typesFromIntersection.map(t => checker.getPropertiesOfType(t))
@@ -221,18 +241,7 @@ namespace ts.codefix {
     }
 
     function typeNodeToExpressionForTuple(checker: TypeChecker, typeNode: TypeNode, objectLiteralExpression: ObjectLiteralExpression): Expression {
-
-        let type = checker.getTypeAtLocation(typeNode);
-        let kind = typeNode.kind;
-        let wasRedirectedForIntersection = false;
-
-        [kind, type] = pickFirstTypeFromUnion(kind, type);
-        kind = redirectInterface(kind, type);
-
-        if (type.isIntersection()) {
-            kind = SyntaxKind.IntersectionType;
-            wasRedirectedForIntersection = true;
-        }
+        const { kind, type, wasRedirectedForIntersection } = getTypeInfo(checker, objectLiteralExpression, /* symbol */ undefined, typeNode);
 
         if (isBasicKind(kind)) {
             return getDefaultValue(kind);
@@ -292,7 +301,7 @@ namespace ts.codefix {
                     return createNull();
 
                 default:
-                    return Debug.fail("Default value is not implemented for " + kind.toString());
+                    return Debug.fail("Default value is not implemented for kind " + kind.toString());
             }
     }
 
