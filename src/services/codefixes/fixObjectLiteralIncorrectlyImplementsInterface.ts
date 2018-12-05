@@ -170,7 +170,7 @@ namespace ts.codefix {
         return kind;
     }
 
-    function getExpressionForFunctionType(checker: TypeChecker, declaration: Declaration): Expression{
+    function getExpressionForFunctionType(checker: TypeChecker, declaration: Declaration): Expression {
         if (isMethodSignature(declaration)) {
             return getDefaultArrowFunction(declaration);
         }
@@ -184,7 +184,7 @@ namespace ts.codefix {
         }
     }
 
-    function getExpressionForTupleType(checker: TypeChecker, declaration: Declaration, typeNode: TypeNode, objectLiteral: ObjectLiteralExpression): Expression{
+    function getExpressionForTupleType(checker: TypeChecker, declaration: Declaration, typeNode: TypeNode, objectLiteral: ObjectLiteralExpression): Expression {
         const tupleTypeNode = typeNode as TupleTypeNode;
         const maybeTupleNode = getTupleNodeFromDeclaration(declaration);
         const elementTypes = maybeTupleNode ? maybeTupleNode.elementTypes : tupleTypeNode.elementTypes;
