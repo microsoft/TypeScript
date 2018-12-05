@@ -111,7 +111,6 @@ namespace ts.refactor.inlineFunction {
             declaration.getSourceFile(),
             declaration,
             checker);
-        // Debug.fail("len: " + usages.length);
         return canInline(declaration, /* usages */) ? {
             declaration,
             usages,
@@ -126,26 +125,14 @@ namespace ts.refactor.inlineFunction {
             return calls.filter(c => {
                 const property = <PropertyAccessExpression>c.expression;
                 if (isThisProperty(property)) {
-                    // Debug.fail("oops");
                     return checker.getSymbolAtLocation(property) === targetSymbol;
                 }
                 const obj = property.expression;
                 const type = obj.contextualType || checker.getTypeAtLocation(obj);
-                // Debug.fail(type.symbol.name + " " + targetSymbol.name);
                 const members = type.symbol.members;
                 return members && members.get(targetSymbol.escapedName);
-                // if (members) {
-                //     members.
-                // }
             });
         }
-        // const symbol = checker.getMergedSymbol(checker.getSymbolAtLocation(target)!);
-        // let str = "";
-        // calls.forEach(v => {
-        //     const sym = checker.getMergedSymbol(checker.getSymbolAtLocation(v.expression)!);
-        //     str += `txt: ${v.getText()}, sym: ${sym.getEscapedName()}, id: ${getSymbolId(sym)}, decl: ${sym.valueDeclaration.getText()} | `;
-        // });
-        // Debug.fail("tar: " + target.getText() + ", sym: " + symbol!.getEscapedName() + ", id: " + getSymbolId(symbol) + " | " + str);
         return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
@@ -196,7 +183,6 @@ namespace ts.refactor.inlineFunction {
             usages: ReadonlyArray<CallExpression>,
             selectedUsage: CallExpression): FileTextChanges[] {
         const { file, program } = context;
-        // Debug.fail("help");
         return textChanges.ChangeTracker.with(context, t => {
             inlineAt(file, program.getTypeChecker(), t, selectedUsage, declaration);
             if (usages.length <= 1) t.delete(file, declaration);
@@ -211,7 +197,6 @@ namespace ts.refactor.inlineFunction {
             declaration: InlineableFunction) {
         const { parameters } = declaration;
         let body = declaration.body!;
-        // Debug.fail("help");
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
         forEach(parameters, (p, i) => {
@@ -220,13 +205,12 @@ namespace ts.refactor.inlineFunction {
             const typeNode = typeArguments && typeArguments[i];
             const argument = targetNode.arguments[i];
             const initializer = argument ? argument : p.initializer;
-            let name: BindingName; // = getSynthesizedDeepCloneWithRenames(oldName, /* includeTrivia */ true, renameMap, checker);
+            let name: BindingName;
             if (isIdentifier(oldName)) {
                 const symbol = checker.getSymbolAtLocation(oldName)!;
                 name = getSafeName(oldName, symbol);
             }
             else {
-                // oldName.elements
                 name = visitNode(oldName, visitor);
             }
             const newNode = createVariable(
@@ -236,23 +220,12 @@ namespace ts.refactor.inlineFunction {
                 initializer
             );
             t.insertNodeBefore(file, statement, newNode);
-            // }
-            // else {
-            //     const newNode = createVariable(
-            //         getSynthesizedDeepCloneWithRenames(oldName, /* includeTrivia */ true, renameMap, checker),
-            //         typeNode,
-            //         inlineLocal.isAssigned(oldName) ? NodeFlags.Let : NodeFlags.Const,
-            //         initializer
-            //     );
-            //     t.insertNodeBefore(file, statement, newNode);
-            // }
         });
 
         const returnType = checker.getTypeAtLocation(declaration);
         const isVoid = returnType.flags === TypeFlags.VoidLike;
         const returns = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
         const nofReturns = returns.length;
-        // Debug.fail("returns: " + nofReturns);
         const returnVariableName = getUniqueName("returnValue", file);
         if (nofReturns > 1 && !isVoid) {
             const typeNode = getEffectiveReturnTypeNode(declaration);
@@ -264,7 +237,6 @@ namespace ts.refactor.inlineFunction {
             );
             t.insertNodeBefore(file, statement, variableStatement);
         }
-        // body = getSynthesizedDeepCloneWithRenames(body, /* includeTrivia */ true, renameMap, checker);
         body = visitEachChild(body, visitor, nullTransformationContext);
         forEach(body.statements, st => {
             if (!isReturnStatement(st)) {
@@ -313,12 +285,8 @@ namespace ts.refactor.inlineFunction {
                 const expr = targetNode.expression;
                 if (isPropertyAccessExpression(expr)) {
                     const propertyAccess = <PropertyAccessExpression>node;
-                    // propertyAccess.expression = expr.expression;
                     return createPropertyAccess(expr.expression, propertyAccess.name);
-                    // return node;
                 }
-                // const symbol = checker.getSymbolAtLocation(node);
-                // if (symbol) {}
             }
             if (isReturnStatement(node) && nofReturns > 1) {
                 if (node.expression) {
