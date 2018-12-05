@@ -1893,7 +1893,7 @@ namespace ts {
             }
             result.push(`}`);
 
-            return result.join(newLine);
+            return result.join(newLine) + newLine;
         }
     }
 
