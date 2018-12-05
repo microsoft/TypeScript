@@ -4930,5 +4930,17 @@
     "Convert parameters to destructured object": {
         "category": "Message",
         "code": 95075
+    },
+    "Convert string concatenation or template literal": {
+        "category": "Message",
+        "code": 95076
+    },
+    "Convert to template literal": {
+        "category": "Message",
+        "code": 95077
+    },
+    "Convert to string concatenation": {
+        "category": "Message",
+        "code": 95078
     }
 }
