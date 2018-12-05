@@ -8,5 +8,6 @@ edit.applyRefactor({
     refactorName: "Inline function",
     actionName: "Inline here",
     actionDescription: "Inline here",
-    newContent: `function bar() { const meaningOfLife = 42; }`
+    newContent: `function foo() { return 42; }
+function bar() { const meaningOfLife = 42; }`
 });

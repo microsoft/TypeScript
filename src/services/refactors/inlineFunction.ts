@@ -74,8 +74,7 @@ namespace ts.refactor.inlineFunction {
             const symbolId = String(getSymbolId(symbol));
             if (!visited.has(symbolId)) visited.set(symbolId, symbol);
         });
-        const symbols: Symbol[] = [];
-        visited.forEach(v => { symbols.push(v); });
+        const symbols = arrayFrom(visited.values());
         return filter(symbols, s => {
             if (s.valueDeclaration) {
                 const symbolScope = getEnclosingBlockScopeContainer(s.valueDeclaration);
@@ -159,7 +158,7 @@ namespace ts.refactor.inlineFunction {
             case inlineAllActionName:
                 return { edits: getInlineAllEdits(context, declaration, usages) };
             case inlineHereActionName:
-                return { edits: getInlineHereEdits(context, declaration, usages, selectedUsage!) };
+                return { edits: getInlineHereEdits(context, declaration, selectedUsage!) };
             default:
                 return Debug.fail("invalid action");
         }
@@ -180,12 +179,10 @@ namespace ts.refactor.inlineFunction {
 
     function getInlineHereEdits(context: RefactorContext,
             declaration: InlineableFunction,
-            usages: ReadonlyArray<CallExpression>,
             selectedUsage: CallExpression): FileTextChanges[] {
         const { file, program } = context;
         return textChanges.ChangeTracker.with(context, t => {
             inlineAt(file, program.getTypeChecker(), t, selectedUsage, declaration);
-            if (usages.length <= 1) t.delete(file, declaration);
         });
     }
 
@@ -224,7 +221,10 @@ namespace ts.refactor.inlineFunction {
 
         const returnType = checker.getTypeAtLocation(declaration);
         const isVoid = returnType.flags === TypeFlags.VoidLike;
-        const returns = <ReturnStatement[]>inlineLocal.findDescendants(body, isReturnStatement);
+        const returns = <ReturnStatement[]>inlineLocal.findDescendants(
+            body,
+            n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
+        );
         const nofReturns = returns.length;
         const returnVariableName = getUniqueName("returnValue", file);
         if (nofReturns > 1 && !isVoid) {

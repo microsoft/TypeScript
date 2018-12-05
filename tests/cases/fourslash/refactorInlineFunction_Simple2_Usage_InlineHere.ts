@@ -14,7 +14,12 @@ edit.applyRefactor({
     refactorName: "Inline function",
     actionName: "Inline here",
     actionDescription: "Inline here",
-    newContent: `function bar() {
+    newContent: `function foo() {
+    let num = 42;
+    num++;
+    return num;
+}
+function bar() {
     let num = 42;
     num++;
     const meaningOfLife = num;

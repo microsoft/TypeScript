@@ -16,6 +16,7 @@ edit.applyRefactor({
     actionDescription: "Inline here",
     newContent: `class Car {
     drive() { return "vroom"; }
+    drinkAndDrive() { return "glug " + this.drive(); }
 }
 class Driver {
     car: Car = new Car();
