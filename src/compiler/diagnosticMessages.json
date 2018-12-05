@@ -4799,5 +4799,17 @@
     "Add names to all parameters without names": {
         "category": "Message",
         "code": 95073
+    },
+    "Convert string concatenation or template literal": {
+        "category": "Message",
+        "code": 95074
+    },
+    "Convert to template literal": {
+        "category": "Message",
+        "code": 95075
+    },
+    "Convert to string concatenation": {
+        "category": "Message",
+        "code": 95076
     }
 }
