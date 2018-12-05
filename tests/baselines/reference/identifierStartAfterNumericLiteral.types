@@ -1,0 +1,56 @@
+=== tests/cases/compiler/identifierStartAfterNumericLiteral.ts ===
+let valueIn = 3in[null];
+>valueIn : boolean
+>3in[null] : boolean
+>3 : 3
+>[null] : null[]
+>null : null
+
+3a[null]
+>3 : 3
+>a[null] : any
+>a : any
+>null : null
+
+3e[null]
+>3e[null] : any
+>3e : 3
+>null : null
+
+3in[null]
+>3in[null] : boolean
+>3 : 3
+>[null] : null[]
+>null : null
+
+3en[null]
+>3e : 3
+>n[null] : any
+>n : any
+>null : null
+
+1a
+>1 : 1
+>a : any
+
+1e
+>1e : 1
+
+1e9
+>1e9 : 1000000000
+
+1ee
+>1e : 1
+>e : any
+
+1n
+>1n : 1n
+
+2n2
+>2n : 2n
+>2 : 2
+
+2na
+>2n : 2n
+>a : any
+

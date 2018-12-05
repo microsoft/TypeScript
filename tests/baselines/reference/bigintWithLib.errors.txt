@@ -1,15 +1,30 @@
 tests/cases/compiler/bigintWithLib.ts(4,1): error TS2350: Only a void function can be called with the 'new' keyword.
+tests/cases/compiler/bigintWithLib.ts(15,35): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(15,39): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(15,43): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/bigintWithLib.ts(16,33): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
   Type 'number[]' is missing the following properties from type 'SharedArrayBuffer': byteLength, [Symbol.species], [Symbol.toStringTag]
 tests/cases/compiler/bigintWithLib.ts(21,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/bigintWithLib.ts(27,37): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(27,41): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(27,45): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/bigintWithLib.ts(28,35): error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
   Type 'number[]' is not assignable to type 'SharedArrayBuffer'.
 tests/cases/compiler/bigintWithLib.ts(33,13): error TS2540: Cannot assign to 'length' because it is a read-only property.
+tests/cases/compiler/bigintWithLib.ts(38,27): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(39,27): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/bigintWithLib.ts(40,25): error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
+tests/cases/compiler/bigintWithLib.ts(41,29): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(42,29): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
+tests/cases/compiler/bigintWithLib.ts(50,13): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(51,14): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(52,12): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(52,18): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigintWithLib.ts(53,11): error TS1351: An identifier cannot follow a numeric literal.
 
 
-==== tests/cases/compiler/bigintWithLib.ts (7 errors) ====
+==== tests/cases/compiler/bigintWithLib.ts (22 errors) ====
     // Test BigInt functions
     let bigintVal: bigint = BigInt(123);
     bigintVal = BigInt("456");
@@ -27,6 +42,12 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     let bigIntArray: BigInt64Array = new BigInt64Array();
     bigIntArray = new BigInt64Array(10);
     bigIntArray = new BigInt64Array([1n, 2n, 3n]);
+                                      ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
+                                          ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
+                                              ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     bigIntArray = new BigInt64Array([1, 2, 3]); // should error
                                     ~~~~~~~~~
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
@@ -44,6 +65,12 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     let bigUintArray: BigUint64Array = new BigUint64Array();
     bigUintArray = new BigUint64Array(10);
     bigUintArray = new BigUint64Array([1n, 2n, 3n]);
+                                        ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
+                                            ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
+                                                ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     bigUintArray = new BigUint64Array([1, 2, 3]); // should error
                                       ~~~~~~~~~
 !!! error TS2345: Argument of type 'number[]' is not assignable to parameter of type 'ArrayBuffer | SharedArrayBuffer'.
@@ -60,12 +87,20 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     // Test added DataView methods
     const dataView = new DataView(new ArrayBuffer(80));
     dataView.setBigInt64(1, -1n);
+                              ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     dataView.setBigInt64(1, -1n, true);
+                              ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     dataView.setBigInt64(1, -1); // should error
                             ~~
 !!! error TS2345: Argument of type '-1' is not assignable to parameter of type 'bigint'.
     dataView.setBigUint64(2, 123n);
+                                ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     dataView.setBigUint64(2, 123n, true);
+                                ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     dataView.setBigUint64(2, 123); // should error
                              ~~~
 !!! error TS2345: Argument of type '123' is not assignable to parameter of type 'bigint'.
@@ -76,6 +111,16 @@ tests/cases/compiler/bigintWithLib.ts(43,26): error TS2345: Argument of type '12
     
     // Test emitted declarations files
     const w = 12n; // should emit as const w = 12n
+                ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     const x = -12n; // should emit as const x = -12n
+                 ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     const y: 12n = 12n; // should emit type 12n
+               ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
+                     ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     let z = 12n; // should emit type bigint in declaration file
+              ~
+!!! error TS1351: An identifier cannot follow a numeric literal.

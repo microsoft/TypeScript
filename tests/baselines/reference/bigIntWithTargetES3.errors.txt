@@ -1,21 +1,18 @@
-tests/cases/compiler/bigIntWithTargetES3.ts(5,22): error TS2737: BigInt literals are not available when targeting lower than ESNext.
-tests/cases/compiler/bigIntWithTargetES3.ts(5,29): error TS2737: BigInt literals are not available when targeting lower than ESNext.
-tests/cases/compiler/bigIntWithTargetES3.ts(5,39): error TS2737: BigInt literals are not available when targeting lower than ESNext.
-tests/cases/compiler/bigIntWithTargetES3.ts(5,48): error TS2737: BigInt literals are not available when targeting lower than ESNext.
+tests/cases/compiler/bigIntWithTargetES3.ts(3,27): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigIntWithTargetES3.ts(4,36): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/bigIntWithTargetES3.ts(5,25): error TS1351: An identifier cannot follow a numeric literal.
 
 
-==== tests/cases/compiler/bigIntWithTargetES3.ts (4 errors) ====
+==== tests/cases/compiler/bigIntWithTargetES3.ts (3 errors) ====
     const normalNumber = 123; // should not error
     let bigintType: bigint; // should not error
     let bigintLiteralType: 123n; // should not error when used as type
+                              ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     let bigintNegativeLiteralType: -123n; // should not error when used as type
+                                       ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should error
-                         ~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
-                                ~~~~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
-                                          ~~~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
-                                                   ~~~~~
-!!! error TS2737: BigInt literals are not available when targeting lower than ESNext.
+                            ~
+!!! error TS1351: An identifier cannot follow a numeric literal.
     
