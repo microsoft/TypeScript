@@ -1,124 +1,51 @@
-tests/cases/compiler/numberVsBigIntOperations.ts(2,15): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(3,11): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(3,14): error TS2322: Type '2' is not assignable to type 'bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(3,26): error TS2322: Type '1n' is not assignable to type 'number'.
-tests/cases/compiler/numberVsBigIntOperations.ts(3,33): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(4,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(4,15): error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(4,28): error TS2365: Operator '+=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(4,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(5,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(5,15): error TS2365: Operator '-=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(5,28): error TS2365: Operator '-=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(5,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(6,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(6,15): error TS2365: Operator '*=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(6,28): error TS2365: Operator '*=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(6,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(7,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(7,15): error TS2365: Operator '/=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(7,28): error TS2365: Operator '/=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(7,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(8,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(8,15): error TS2365: Operator '%=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(8,28): error TS2365: Operator '%=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(8,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(9,13): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(9,16): error TS2365: Operator '**=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(9,30): error TS2365: Operator '**=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(9,39): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(10,13): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(10,16): error TS2365: Operator '<<=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(10,30): error TS2365: Operator '<<=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(10,39): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(11,13): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(11,16): error TS2365: Operator '>>=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(11,30): error TS2365: Operator '>>=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(11,39): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(12,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(12,15): error TS2365: Operator '&=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(12,28): error TS2365: Operator '&=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(12,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(13,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(13,15): error TS2365: Operator '^=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(13,28): error TS2365: Operator '^=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(13,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(14,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(14,15): error TS2365: Operator '|=' cannot be applied to types 'bigint' and '2'.
 tests/cases/compiler/numberVsBigIntOperations.ts(14,28): error TS2365: Operator '|=' cannot be applied to types 'number' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(14,36): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(15,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(15,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(15,32): error TS2365: Operator '+' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(15,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(15,40): error TS2365: Operator '+' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(15,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(16,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(16,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(16,32): error TS2365: Operator '-' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(16,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(16,40): error TS2365: Operator '-' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(16,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(17,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(17,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(17,32): error TS2365: Operator '*' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(17,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(17,40): error TS2365: Operator '*' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(17,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(18,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(18,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(18,32): error TS2365: Operator '/' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(18,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(18,40): error TS2365: Operator '/' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(18,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(19,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(19,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(19,32): error TS2365: Operator '%' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(19,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(19,40): error TS2365: Operator '%' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(19,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(20,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(20,17): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(20,34): error TS2365: Operator '**' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(20,40): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(20,43): error TS2365: Operator '**' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(20,44): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(21,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(21,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(21,32): error TS2365: Operator '&' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(21,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(21,40): error TS2365: Operator '&' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(21,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(22,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(22,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(22,32): error TS2365: Operator '|' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(22,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(22,40): error TS2365: Operator '|' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(22,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(23,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(23,16): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(23,32): error TS2365: Operator '^' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(23,37): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(23,40): error TS2365: Operator '^' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(23,41): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(24,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(24,17): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(24,34): error TS2365: Operator '<<' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(24,40): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(24,43): error TS2365: Operator '<<' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(24,44): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(25,11): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(25,17): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(25,34): error TS2365: Operator '>>' cannot be applied to types '1' and '2n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(25,40): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(25,43): error TS2365: Operator '>>' cannot be applied to types '1n' and '2'.
-tests/cases/compiler/numberVsBigIntOperations.ts(25,44): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(29,37): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(29,68): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(38,1): error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(38,14): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(39,10): error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(39,22): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(40,8): error TS2736: Operator '+' cannot be applied to type 'bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(50,10): error TS2367: This condition will always return 'false' since the types 'bigint' and 'number' have no overlap.
 tests/cases/compiler/numberVsBigIntOperations.ts(51,10): error TS2367: This condition will always return 'true' since the types 'bigint' and 'number' have no overlap.
@@ -128,286 +55,137 @@ tests/cases/compiler/numberVsBigIntOperations.ts(56,7): error TS2362: The left-h
 tests/cases/compiler/numberVsBigIntOperations.ts(56,27): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(57,1): error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(57,1): error TS2365: Operator '&' cannot be applied to types '"3"' and '5n'.
-tests/cases/compiler/numberVsBigIntOperations.ts(57,8): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(57,11): error TS2365: Operator '**' cannot be applied to types '2n' and 'false'.
-tests/cases/compiler/numberVsBigIntOperations.ts(57,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/numberVsBigIntOperations.ts(57,17): error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
 tests/cases/compiler/numberVsBigIntOperations.ts(60,1): error TS2365: Operator '+' cannot be applied to types 'number | bigint' and 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(61,1): error TS2365: Operator '<<' cannot be applied to types 'number | bigint' and 'number | bigint'.
 tests/cases/compiler/numberVsBigIntOperations.ts(70,2): error TS2736: Operator '+' cannot be applied to type 'number | bigint'.
-tests/cases/compiler/numberVsBigIntOperations.ts(84,22): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(84,27): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(84,47): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(84,52): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(86,26): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(91,24): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/numberVsBigIntOperations.ts(93,22): error TS1351: An identifier cannot follow a numeric literal.
+tests/cases/compiler/numberVsBigIntOperations.ts(86,7): error TS1155: 'const' declarations must be initialized.
+tests/cases/compiler/numberVsBigIntOperations.ts(93,7): error TS1155: 'const' declarations must be initialized.
 
 
-==== tests/cases/compiler/numberVsBigIntOperations.ts (144 errors) ====
+==== tests/cases/compiler/numberVsBigIntOperations.ts (64 errors) ====
     // Cannot mix bigints and numbers
     let bigInt = 1n, num = 2;
-                  ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n; bigInt = 2; num = 1n; num = 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                  ~~~~~~
 !!! error TS2322: Type '2' is not assignable to type 'bigint'.
                              ~~~
 !!! error TS2322: Type '1n' is not assignable to type 'number'.
-                                    ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt += 1n; bigInt += 2; num += 1n; num += 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '+=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt -= 1n; bigInt -= 2; num -= 1n; num -= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '-=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '-=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt *= 1n; bigInt *= 2; num *= 1n; num *= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '*=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '*=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt /= 1n; bigInt /= 2; num /= 1n; num /= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '/=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '/=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt %= 1n; bigInt %= 2; num %= 1n; num %= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '%=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '%=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt **= 1n; bigInt **= 2; num **= 1n; num **= 2;
-                ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                    ~~~~~~~~~~~~
 !!! error TS2365: Operator '**=' cannot be applied to types 'bigint' and '2'.
                                  ~~~~~~~~~~
 !!! error TS2365: Operator '**=' cannot be applied to types 'number' and '1n'.
-                                          ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt <<= 1n; bigInt <<= 2; num <<= 1n; num <<= 2;
-                ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                    ~~~~~~~~~~~~
 !!! error TS2365: Operator '<<=' cannot be applied to types 'bigint' and '2'.
                                  ~~~~~~~~~~
 !!! error TS2365: Operator '<<=' cannot be applied to types 'number' and '1n'.
-                                          ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt >>= 1n; bigInt >>= 2; num >>= 1n; num >>= 2;
-                ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                    ~~~~~~~~~~~~
 !!! error TS2365: Operator '>>=' cannot be applied to types 'bigint' and '2'.
                                  ~~~~~~~~~~
 !!! error TS2365: Operator '>>=' cannot be applied to types 'number' and '1n'.
-                                          ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt &= 1n; bigInt &= 2; num &= 1n; num &= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '&=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '&=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt ^= 1n; bigInt ^= 2; num ^= 1n; num ^= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '^=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '^=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt |= 1n; bigInt |= 2; num |= 1n; num |= 2;
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                   ~~~~~~~~~~~
 !!! error TS2365: Operator '|=' cannot be applied to types 'bigint' and '2'.
                                ~~~~~~~~~
 !!! error TS2365: Operator '|=' cannot be applied to types 'number' and '1n'.
-                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n + 2n; num = 1 + 2; 1 + 2n; 1n + 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '+' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n - 2n; num = 1 - 2; 1 - 2n; 1n - 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '-' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '-' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n * 2n; num = 1 * 2; 1 * 2n; 1n * 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '*' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '*' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n / 2n; num = 1 / 2; 1 / 2n; 1n / 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '/' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '/' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n % 2n; num = 1 % 2; 1 % 2n; 1n % 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '%' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '%' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n ** 2n; num = 1 ** 2; 1 ** 2n; 1n ** 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                    ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                      ~~~~~~~
 !!! error TS2365: Operator '**' cannot be applied to types '1' and '2n'.
-                                           ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                               ~~~~~~~
 !!! error TS2365: Operator '**' cannot be applied to types '1n' and '2'.
-                                               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n & 2n; num = 1 & 2; 1 & 2n; 1n & 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '&' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '&' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n | 2n; num = 1 | 2; 1 | 2n; 1n | 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '|' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '|' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n ^ 2n; num = 1 ^ 2; 1 ^ 2n; 1n ^ 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                   ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                    ~~~~~~
 !!! error TS2365: Operator '^' cannot be applied to types '1' and '2n'.
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                            ~~~~~~
 !!! error TS2365: Operator '^' cannot be applied to types '1n' and '2'.
-                                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n << 2n; num = 1 << 2; 1 << 2n; 1n << 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                    ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                      ~~~~~~~
 !!! error TS2365: Operator '<<' cannot be applied to types '1' and '2n'.
-                                           ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                               ~~~~~~~
 !!! error TS2365: Operator '<<' cannot be applied to types '1n' and '2'.
-                                               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = 1n >> 2n; num = 1 >> 2; 1 >> 2n; 1n >> 2;
-              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                    ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                      ~~~~~~~
 !!! error TS2365: Operator '>>' cannot be applied to types '1' and '2n'.
-                                           ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                                               ~~~~~~~
 !!! error TS2365: Operator '>>' cannot be applied to types '1n' and '2'.
-                                               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     
     // Plus should still coerce to strings
     let str: string;
     str = "abc" + 123; str = "abc" + 123n; str = 123 + "abc"; str = 123n + "abc";
-                                        ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                                                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     
     // Unary operations allowed on bigints and numbers
     bigInt = bigInt++; bigInt = ++bigInt; num = num++; num = ++num;
@@ -419,13 +197,9 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,22): error TS1351: An identi
     bigInt >>>= 1n; num >>>= 2;
     ~~~~~~~~~~~~~~
 !!! error TS2365: Operator '>>>=' cannot be applied to types 'bigint' and '1n'.
-                 ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     bigInt = bigInt >>> 1n; num = num >>> 2;
              ~~~~~~~~~~~~~
 !!! error TS2365: Operator '>>>' cannot be applied to types 'bigint' and '1n'.
-                         ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     num = +bigInt; num = +num; num = +"3";
            ~~~~~~
 !!! error TS2736: Operator '+' cannot be applied to type 'bigint'.
@@ -462,12 +236,8 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,22): error TS1351: An identi
 !!! error TS2362: The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     ~~~~~~~~
 !!! error TS2365: Operator '&' cannot be applied to types '"3"' and '5n'.
-           ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
               ~~~~~~~~~~~
 !!! error TS2365: Operator '**' cannot be applied to types '2n' and 'false'.
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                     ~~~~~
 !!! error TS2363: The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.
     num = ~"3"; num = -false; // should infer number
@@ -503,27 +273,17 @@ tests/cases/compiler/numberVsBigIntOperations.ts(93,22): error TS1351: An identi
     
     // Distinguishing numbers from bigints with typeof
     const isBigInt: (x: 0n | 1n) => bigint = (x: 0n | 1n) => x;
-                         ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                              ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                                                  ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
-                                                       ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     const isNumber: (x: 0 | 1) => number = (x: 0 | 1) => x;
     const zeroOrBigOne: 0 | 1n;
-                             ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
+          ~~~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
     if (typeof zeroOrBigOne === "bigint") isBigInt(zeroOrBigOne);
     else isNumber(zeroOrBigOne);
     
     // Distinguishing truthy from falsy
     const isOne = (x: 1 | 1n) => x;
-                           ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     if (zeroOrBigOne) isOne(zeroOrBigOne);
     const bigZeroOrOne: 0n | 1;
-                         ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
+          ~~~~~~~~~~~~
+!!! error TS1155: 'const' declarations must be initialized.
     if (bigZeroOrOne) isOne(bigZeroOrOne);

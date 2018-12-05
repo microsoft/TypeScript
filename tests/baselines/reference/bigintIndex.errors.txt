@@ -1,21 +1,19 @@
+tests/cases/compiler/a.ts(2,6): error TS1023: An index signature parameter type must be 'string' or 'number'.
 tests/cases/compiler/a.ts(8,11): error TS2538: Type '1n' cannot be used as an index type.
-tests/cases/compiler/a.ts(8,12): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/a.ts(14,1): error TS2322: Type '123n' is not assignable to type 'string | number | symbol'.
-tests/cases/compiler/a.ts(14,10): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/a.ts(17,25): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/a.ts(19,12): error TS2538: Type 'bigint' cannot be used as an index type.
 tests/cases/compiler/b.ts(2,12): error TS1136: Property assignment expected.
-tests/cases/compiler/b.ts(2,13): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/b.ts(2,14): error TS1005: ';' expected.
 tests/cases/compiler/b.ts(2,19): error TS1128: Declaration or statement expected.
 tests/cases/compiler/b.ts(3,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-tests/cases/compiler/b.ts(3,14): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
 
 
-==== tests/cases/compiler/a.ts (6 errors) ====
+==== tests/cases/compiler/a.ts (4 errors) ====
     interface BigIntIndex<E> {
         [index: bigint]: E; // should error
+         ~~~~~
+!!! error TS1023: An index signature parameter type must be 'string' or 'number'.
     }
     
     const arr: number[] = [1, 2, 3];
@@ -24,8 +22,6 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     num = arr[1n]; // should error
               ~~
 !!! error TS2538: Type '1n' cannot be used as an index type.
-               ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     
     let key: keyof any; // should be type "string | number | symbol"
     key = 123;
@@ -34,13 +30,9 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     key = 123n; // should error
     ~~~
 !!! error TS2322: Type '123n' is not assignable to type 'string | number | symbol'.
-             ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     
     // Show correct usage of bigint index: explicitly convert to string
     const bigNum: bigint = 0n;
-                            ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     const typedArray = new Uint8Array(3);
     typedArray[bigNum] = 0xAA; // should error
                ~~~~~~
@@ -50,13 +42,11 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     typedArray[2] = 0xCC;
     
     // {1n: 123} is a syntax error; must go in separate file so BigIntIndex error is shown
-==== tests/cases/compiler/b.ts (7 errors) ====
+==== tests/cases/compiler/b.ts (5 errors) ====
     // BigInt cannot be used as an object literal property
     const a = {1n: 123};
                ~~
 !!! error TS1136: Property assignment expected.
-                ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
                  ~
 !!! error TS1005: ';' expected.
                       ~
@@ -64,8 +54,6 @@ tests/cases/compiler/b.ts(4,12): error TS2464: A computed property name must be 
     const b = {[1n]: 456};
                ~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.
-                 ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     const c = {[bigNum]: 789};
                ~~~~~~~~
 !!! error TS2464: A computed property name must be of type 'string', 'number', 'symbol', or 'any'.

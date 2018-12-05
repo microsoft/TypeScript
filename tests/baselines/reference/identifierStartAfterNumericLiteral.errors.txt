@@ -11,15 +11,12 @@ tests/cases/compiler/identifierStartAfterNumericLiteral.ts(7,2): error TS2304: C
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(8,3): error TS1124: Digit expected.
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(10,3): error TS1124: Digit expected.
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(10,3): error TS2304: Cannot find name 'e'.
-tests/cases/compiler/identifierStartAfterNumericLiteral.ts(11,2): error TS1351: An identifier cannot follow a numeric literal.
-tests/cases/compiler/identifierStartAfterNumericLiteral.ts(12,2): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(12,3): error TS1005: ';' expected.
-tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,2): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,3): error TS1351: An identifier cannot follow a numeric literal.
 tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,3): error TS2304: Cannot find name 'a'.
 
 
-==== tests/cases/compiler/identifierStartAfterNumericLiteral.ts (19 errors) ====
+==== tests/cases/compiler/identifierStartAfterNumericLiteral.ts (16 errors) ====
     let valueIn = 3in[null];
                    ~
 !!! error TS1351: An identifier cannot follow a numeric literal.
@@ -57,16 +54,10 @@ tests/cases/compiler/identifierStartAfterNumericLiteral.ts(13,3): error TS2304: 
       ~
 !!! error TS2304: Cannot find name 'e'.
     1n
-     ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
     2n2
-     ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
       ~
 !!! error TS1005: ';' expected.
     2na
-     ~
-!!! error TS1351: An identifier cannot follow a numeric literal.
       ~
 !!! error TS1351: An identifier cannot follow a numeric literal.
       ~
