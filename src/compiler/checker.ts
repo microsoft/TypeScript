@@ -11835,7 +11835,7 @@ namespace ts {
                 if (!noImplicitAny && getObjectFlags(target) & ObjectFlags.JSLiteral) {
                     return false; // Disable excess property checks on JS literals to simulate having an implicit "index signature" - but only outside of noImplicitAny
                 }
-                if (maybeTypeOfKind(target, TypeFlags.Object) && !(getObjectFlags(target) & ObjectFlags.ObjectLiteralPatternWithComputedProperties)) {
+                if (isExcessPropertyCheckTarget(target)) {
                     const isComparingJsxAttributes = !!(getObjectFlags(source) & ObjectFlags.JsxAttributes);
                     if ((relation === assignableRelation || relation === definitelyAssignableRelation || relation === comparableRelation) &&
                         (isTypeSubsetOf(globalObjectType, target) || (!isComparingJsxAttributes && isEmptyObjectType(target)))) {
@@ -11848,6 +11848,9 @@ namespace ts {
                     for (const prop of getPropertiesOfObjectType(source)) {
                         if (shouldCheckAsExcessProperty(prop, source.symbol) && !isKnownProperty(target, prop.escapedName, isComparingJsxAttributes)) {
                             if (reportErrors) {
+                                // Report error in terms of object types in the target as those are the only ones
+                                // we check in isKnownProperty.
+                                const errorTarget = filterType(target, isExcessPropertyCheckTarget);
                                 // We know *exactly* where things went wrong when comparing the types.
                                 // Use this property as the error node as this will be more helpful in
                                 // reasoning about what went wrong.
@@ -11856,7 +11859,7 @@ namespace ts {
                                     // JsxAttributes has an object-literal flag and undergo same type-assignablity check as normal object-literal.
                                     // However, using an object-literal error message will be very confusing to the users so we give different a message.
                                     // TODO: Spelling suggestions for excess jsx attributes (needs new diagnostic messages)
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(target));
+                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(prop), typeToString(errorTarget));
                                 }
                                 else {
                                     // use the property's value declaration if the property is assigned inside the literal itself
@@ -11870,17 +11873,17 @@ namespace ts {
 
                                         const name = propDeclaration.name!;
                                         if (isIdentifier(name)) {
-                                            suggestion = getSuggestionForNonexistentProperty(name, target);
+                                            suggestion = getSuggestionForNonexistentProperty(name, errorTarget);
                                         }
                                     }
 
                                     if (suggestion !== undefined) {
                                         reportError(Diagnostics.Object_literal_may_only_specify_known_properties_but_0_does_not_exist_in_type_1_Did_you_mean_to_write_2,
-                                            symbolToString(prop), typeToString(target), suggestion);
+                                            symbolToString(prop), typeToString(errorTarget), suggestion);
                                     }
                                     else {
                                         reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
-                                            symbolToString(prop), typeToString(target));
+                                            symbolToString(prop), typeToString(errorTarget));
                                     }
                                 }
                             }
@@ -18598,18 +18601,21 @@ namespace ts {
                     return true;
                 }
             }
-            else if (targetType.flags & TypeFlags.UnionOrIntersection) {
+            else if (targetType.flags & TypeFlags.UnionOrIntersection && isExcessPropertyCheckTarget(targetType)) {
                 for (const t of (targetType as UnionOrIntersectionType).types) {
                     if (isKnownProperty(t, name, isComparingJsxAttributes)) {
                         return true;
                     }
                 }
             }
-            else if (targetType.flags & TypeFlags.Conditional) {
-                return isKnownProperty((targetType as ConditionalType).root.trueType, name, isComparingJsxAttributes) ||
-                    isKnownProperty((targetType as ConditionalType).root.falseType, name, isComparingJsxAttributes);
-            }
             return false;
+        }
+
+        function isExcessPropertyCheckTarget(type: Type): boolean {
+            return !!(type.flags & TypeFlags.Object && !(getObjectFlags(type) & ObjectFlags.ObjectLiteralPatternWithComputedProperties) ||
+                type.flags & TypeFlags.NonPrimitive ||
+                type.flags & TypeFlags.Union && some((<UnionType>type).types, isExcessPropertyCheckTarget) ||
+                type.flags & TypeFlags.Intersection && every((<IntersectionType>type).types, isExcessPropertyCheckTarget));
         }
 
         function checkJsxExpression(node: JsxExpression, checkMode?: CheckMode) {
