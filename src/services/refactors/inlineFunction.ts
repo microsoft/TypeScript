@@ -107,9 +107,9 @@ namespace ts.refactor.inlineFunction {
     }
 
     function createInfo(checker: TypeChecker, declaration: InlineableFunction, call?: CallExpression): Info | undefined {
-        const usages = getReferencesInScope(
+        const usages = getCallsInScope(
             declaration.getSourceFile(),
-            declaration.name!,
+            declaration,
             checker);
         // Debug.fail("len: " + usages.length);
         return canInline(declaration, /* usages */) ? {
@@ -119,16 +119,34 @@ namespace ts.refactor.inlineFunction {
         } : undefined;
     }
 
-    function getReferencesInScope(scope: Node, target: Node, checker: TypeChecker): ReadonlyArray<CallExpression> {
-        const symbol = checker.getMergedSymbol(checker.getSymbolAtLocation(target)!);
-        const expr = <CallExpression[]>inlineLocal.findDescendants(scope, n => isCallExpression(n));
-        let str = "";
-        expr.forEach(v => {
-            const sym = checker.getMergedSymbol(checker.getSymbolAtLocation(v.expression)!);
-            str += `txt: ${v.getText()}, sym: ${sym.getEscapedName()}, id: ${getSymbolId(sym)}, decl: ${sym.valueDeclaration.getText()} | `;
-        });
-        Debug.fail("tar: " + target.getText() + ", sym: " + symbol!.getEscapedName() + ", id: " + getSymbolId(symbol) + " | " + str);
-        return expr.filter(n => checker.getSymbolAtLocation(n.expression) === symbol);
+    function getCallsInScope(scope: Node, target: InlineableFunction, checker: TypeChecker): ReadonlyArray<CallExpression> {
+        const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
+        const calls = <CallExpression[]>inlineLocal.findDescendants(scope, isCallExpression);
+        if (isMethodDeclaration(target)) {
+            return calls.filter(c => {
+                const property = <PropertyAccessExpression>c.expression;
+                if (isThisProperty(property)) {
+                    // Debug.fail("oops");
+                    return checker.getSymbolAtLocation(property) === targetSymbol;
+                }
+                const obj = property.expression;
+                const type = obj.contextualType || checker.getTypeAtLocation(obj);
+                // Debug.fail(type.symbol.name + " " + targetSymbol.name);
+                const members = type.symbol.members;
+                return members && members.get(targetSymbol.escapedName);
+                // if (members) {
+                //     members.
+                // }
+            });
+        }
+        // const symbol = checker.getMergedSymbol(checker.getSymbolAtLocation(target)!);
+        // let str = "";
+        // calls.forEach(v => {
+        //     const sym = checker.getMergedSymbol(checker.getSymbolAtLocation(v.expression)!);
+        //     str += `txt: ${v.getText()}, sym: ${sym.getEscapedName()}, id: ${getSymbolId(sym)}, decl: ${sym.valueDeclaration.getText()} | `;
+        // });
+        // Debug.fail("tar: " + target.getText() + ", sym: " + symbol!.getEscapedName() + ", id: " + getSymbolId(symbol) + " | " + str);
+        return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
     function canInline(declaration: InlineableFunction, /* usages: ReadonlyArray<CallExpression> */): boolean {
