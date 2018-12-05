@@ -61,3 +61,8 @@ var test8 = new Number(4).toString();
 var test9 = 3. + 3.
 >test9 : Symbol(test9, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 16, 3))
 
+var test10 = 0 /* any comment */.toString();
+>test10 : Symbol(test10, Decl(numericLiteralsWithTrailingDecimalPoints01.ts, 17, 3))
+>0 /* any comment */.toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+>toString : Symbol(Number.toString, Decl(lib.es5.d.ts, --, --))
+

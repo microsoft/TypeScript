@@ -94,3 +94,10 @@ var test9 = 3. + 3.
 >3. : 3
 >3. : 3
 
+var test10 = 0 /* any comment */.toString();
+>test10 : string
+>0 /* any comment */.toString() : string
+>0 /* any comment */.toString : (radix?: number) => string
+>0 : 0
+>toString : (radix?: number) => string
+
