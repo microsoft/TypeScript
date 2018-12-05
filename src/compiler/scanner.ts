@@ -975,9 +975,8 @@ namespace ts {
                 result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
             }
 
-            checkForIdentifierAfterNumericLiteral();
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
-                checkForIdentifierAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral();
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -986,12 +985,12 @@ namespace ts {
             else {
                 tokenValue = result;
                 const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
-                checkForIdentifierAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral();
                 return { type, value: tokenValue };
             }
         }
 
-        function checkForIdentifierAfterNumericLiteral() {
+        function checkForIdentifierStartAfterNumericLiteral() {
             if (isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
                 error(Diagnostics.An_identifier_cannot_follow_a_numeric_literal, pos, 1);
             }
