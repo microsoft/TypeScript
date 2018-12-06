@@ -198,17 +198,17 @@ namespace ts.refactor.inlineFunction {
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
 
-        const statements = [] as Statement[];
-        statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
-
         const isVoid = returnTypeIsVoidLike(checker, declaration);
         const returns = findDescendants(
             body,
             n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
         );
         const nofReturns = returns.length;
-        const returnVariableName = getUniqueName("returnValue", file);
-        const variableStatement = getVariableDeclarationFromReturn();
+
+        const statements = [] as Statement[];
+        statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
+
+        const variableStatement = getVariableDeclarationFromReturn(file, declaration, nofReturns, isVoid);
         if (variableStatement) statements.push(variableStatement);
 
         body = visitEachChild(body, transformVisitor, nullTransformationContext);
@@ -224,25 +224,13 @@ namespace ts.refactor.inlineFunction {
             t.deleteRange(file, { pos: statement.getStart(), end: statement.getEnd() });
         }
 
-        function getVariableDeclarationFromReturn() {
-            if (nofReturns > 1 && !isVoid) {
-                const typeNode = getEffectiveReturnTypeNode(declaration);
-                return createVariable(
-                    createIdentifier(returnVariableName),
-                    typeNode,
-                    NodeFlags.Let,
-                    /* initializer */ undefined);
-            }
-            return undefined;
-        }
-
         function getReturnExpression() {
             if (nofReturns === 1 && !isVoid) {
                 const returnExpression = forEachReturnStatement(body, r => r.expression)!;
                 return inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
             }
             else if (nofReturns > 1 && !isVoid) {
-                return createIdentifier(returnVariableName);
+                return createReturnVariableName(file);
             }
             return undefined;
         }
@@ -276,7 +264,7 @@ namespace ts.refactor.inlineFunction {
             }
             if (isReturnStatement(node) && nofReturns > 1) {
                 if (node.expression) {
-                    const assignment = createAssignment(createIdentifier(returnVariableName), node.expression);
+                    const assignment = createAssignment(createReturnVariableName(file), node.expression);
                     return createExpressionStatement(assignment);
                 }
             }
@@ -289,6 +277,10 @@ namespace ts.refactor.inlineFunction {
             }
             return name;
         }
+    }
+
+    function createReturnVariableName(file: SourceFile) {
+        return createIdentifier(getUniqueName("returnValue", file));
     }
 
     function getVariableDeclarationsFromParameters(
@@ -304,6 +296,18 @@ namespace ts.refactor.inlineFunction {
             const name = visitNode(oldName, transformVisitor);
             return createVariable(name, typeNode, NodeFlags.Const, initializer);
         });
+    }
+
+    function getVariableDeclarationFromReturn(file: SourceFile, declaration: InlineableFunction, nofReturns: number, isVoid: boolean) {
+        if (nofReturns > 1 && !isVoid) {
+            const typeNode = getEffectiveReturnTypeNode(declaration);
+            return createVariable(
+                createReturnVariableName(file),
+                typeNode,
+                NodeFlags.Let,
+                /* initializer */ undefined);
+        }
+        return undefined;
     }
 
     function returnTypeIsVoidLike(checker: TypeChecker, declaration: InlineableFunction) {
