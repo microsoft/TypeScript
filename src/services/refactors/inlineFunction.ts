@@ -193,14 +193,13 @@ namespace ts.refactor.inlineFunction {
             t: textChanges.ChangeTracker,
             targetNode: CallExpression,
             declaration: InlineableFunction) {
-        const { parameters } = declaration;
-        let body = declaration.body!;
+        const { parameters, body } = declaration;
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
 
         const isVoid = returnTypeIsVoidLike(checker, declaration);
         const returns = findDescendants(
-            body,
+            body!,
             n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
         );
         const nofReturns = returns.length;
@@ -211,8 +210,8 @@ namespace ts.refactor.inlineFunction {
         const variableStatement = getVariableDeclarationFromReturn(file, declaration, nofReturns, isVoid);
         if (variableStatement) statements.push(variableStatement);
 
-        body = visitEachChild(body, transformVisitor, nullTransformationContext);
-        statements.push(...filter(body.statements, s => !isReturnStatement(s)));
+        const transformedBody = visitEachChild(body!, transformVisitor, nullTransformationContext);
+        statements.push(...filter(transformedBody.statements, s => !isReturnStatement(s)));
 
         forEach(statements, st => { t.insertNodeBefore(file, statement, st); });
 
@@ -226,7 +225,7 @@ namespace ts.refactor.inlineFunction {
 
         function getReturnExpression() {
             if (nofReturns === 1 && !isVoid) {
-                const returnExpression = forEachReturnStatement(body, r => r.expression)!;
+                const returnExpression = forEachReturnStatement(transformedBody, r => r.expression)!;
                 return inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
             }
             else if (nofReturns > 1 && !isVoid) {
