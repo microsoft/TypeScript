@@ -81,7 +81,7 @@ namespace ts.refactor.inlineLocal {
         return !hasErrors;
     }
 
-    export function isAssigned(usage: Identifier): boolean {
+    function isAssigned(usage: Identifier): boolean {
         type AssignExpr = AssignmentExpression<AssignmentOperatorToken>;
         const assignment: AssignExpr = findAncestor(
             usage,
@@ -165,18 +165,5 @@ namespace ts.refactor.inlineLocal {
         return findDescendants(scope, n =>
             checker.getSymbolAtLocation(n) === symbol &&
             (withDeclaration || !isDeclaration(n.parent))) as Identifier[];
-    }
-
-    export function findDescendants(node: Node, predicate: (n: Node) => boolean) {
-        const nodes: Node[] = [];
-        visitDescendants(node);
-
-        function visitDescendants(node: Node) {
-            forEachChild(node, n => {
-                if (predicate(n)) nodes.push(n);
-                visitDescendants(n);
-            });
-        }
-        return nodes;
     }
 }

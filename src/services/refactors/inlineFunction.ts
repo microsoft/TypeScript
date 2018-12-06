@@ -59,7 +59,7 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getExternalSymbolsReferencedInScope(declaration: InlineableFunction, checker: TypeChecker) {
-        const ids = inlineLocal.findDescendants(declaration, isIdentifier);
+        const ids = findDescendants(declaration, isIdentifier);
         const visited = createMap<Symbol>();
         forEach(ids, id => {
             const symbol = checker.getSymbolAtLocation(id);
@@ -110,7 +110,7 @@ namespace ts.refactor.inlineFunction {
 
     function getCallsInScope(scope: Node, target: InlineableFunction, checker: TypeChecker): ReadonlyArray<CallExpression> {
         const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
-        const calls = <CallExpression[]>inlineLocal.findDescendants(scope, isCallExpression);
+        const calls = findDescendants(scope, isCallExpression);
         if (isMethodDeclaration(target)) {
             return calls.filter(c => {
                 const property = <PropertyAccessExpression>c.expression;
@@ -202,7 +202,7 @@ namespace ts.refactor.inlineFunction {
         statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
 
         const isVoid = returnTypeIsVoidLike(checker, declaration);
-        const returns = <ReturnStatement[]>inlineLocal.findDescendants(
+        const returns = findDescendants(
             body,
             n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
         );
@@ -280,7 +280,10 @@ namespace ts.refactor.inlineFunction {
         }
     }
 
-    function getVariableDeclarationsFromParameters(parameters: NodeArray<ParameterDeclaration>, targetNode: CallExpression, transformVisitor: (node: Node) => VisitResult<Node>) {
+    function getVariableDeclarationsFromParameters(
+            parameters: NodeArray<ParameterDeclaration>,
+            targetNode: CallExpression,
+            transformVisitor: (node: Node) => VisitResult<Node>) {
         return map(parameters, (p, i) => {
             const oldName = p.name;
             const typeArguments = targetNode.typeArguments;

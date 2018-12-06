@@ -138,6 +138,25 @@ namespace ts {
     }
 
     /**
+     * Collects all descendants whose predicate results in a truthy value.
+     * If no descendant is found, returns empty array.
+     */
+    export function findDescendants<T extends Node>(node: Node | undefined, predicate: (element: Node) => element is T): ReadonlyArray<T>;
+    export function findDescendants(node: Node | undefined, callback: (element: Node) => boolean): ReadonlyArray<Node>;
+    export function findDescendants(node: Node, predicate: (n: Node) => boolean) {
+        const nodes: Node[] = [];
+        collectDescendants(node);
+        return nodes;
+
+        function collectDescendants(node: Node) {
+            forEachChild(node, n => {
+                if (predicate(n)) nodes.push(n);
+                collectDescendants(n);
+            });
+        }
+    }
+
+    /**
      * Calls `callback` for each entry in the map, returning the first truthy result.
      * Use `map.forEach` instead for normal iteration.
      */
