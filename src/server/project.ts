@@ -759,7 +759,10 @@ namespace ts.server {
         }
 
         containsScriptInfo(info: ScriptInfo): boolean {
-            return this.isRoot(info) || (!!this.program && this.program.getSourceFileByPath(info.path) !== undefined);
+            if (this.isRoot(info)) return true;
+            if (!this.program) return false;
+            const file = this.program.getSourceFileByPath(info.path);
+            return !!file && file.resolvedPath === info.path;
         }
 
         containsFile(filename: NormalizedPath, requireOpen?: boolean): boolean {

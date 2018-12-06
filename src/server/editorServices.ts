@@ -2604,7 +2604,7 @@ namespace ts.server {
 
         /** @internal */
         fileExists(fileName: NormalizedPath): boolean {
-            return this.filenameToScriptInfo.has(fileName) || this.host.fileExists(fileName);
+            return !!this.getScriptInfoForNormalizedPath(fileName) || this.host.fileExists(fileName);
         }
 
         private findExternalProjectContainingOpenScriptInfo(info: ScriptInfo): ExternalProject | undefined {
