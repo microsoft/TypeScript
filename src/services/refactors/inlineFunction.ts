@@ -93,7 +93,11 @@ namespace ts.refactor.inlineFunction {
         return createInfo(checker, declaration, call);
     }
 
-    function createInfo(checker: TypeChecker, declaration: InlineableFunction, call?: CallExpression): Info | undefined {
+    function createInfo(
+        checker: TypeChecker,
+        declaration: InlineableFunction,
+        call?: CallExpression
+    ): Info | undefined {
         const usages = getCallsInScope(
             declaration.getSourceFile(),
             declaration,
@@ -108,7 +112,11 @@ namespace ts.refactor.inlineFunction {
         };
     }
 
-    function getCallsInScope(scope: Node, target: InlineableFunction, checker: TypeChecker): ReadonlyArray<CallExpression> {
+    function getCallsInScope(
+        scope: Node,
+        target: InlineableFunction,
+        checker: TypeChecker
+    ): ReadonlyArray<CallExpression> {
         const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
         const calls = findDescendants(scope, isCallExpression);
         if (isMethodDeclaration(target)) {
@@ -126,7 +134,12 @@ namespace ts.refactor.inlineFunction {
         return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
-    function canInline(checker: TypeChecker, declaration: InlineableFunction, usages: ReadonlyArray<CallExpression>, call?: CallExpression) {
+    function canInline(
+        checker: TypeChecker,
+        declaration: InlineableFunction,
+        usages: ReadonlyArray<CallExpression>,
+        call?: CallExpression
+    ) {
         let anyHaveErrors = false;
         let selectedHasErrors = false;
         const body = declaration.body;
@@ -166,34 +179,38 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getInlineAllEdits(
-            context: RefactorContext,
-            declaration: InlineableFunction,
-            usages: ReadonlyArray<CallExpression>): FileTextChanges[] {
-        const { file, program } = context;
+        context: RefactorContext,
+        declaration: InlineableFunction,
+        usages: ReadonlyArray<CallExpression>
+    ): FileTextChanges[] {
+        const { file } = context;
         return textChanges.ChangeTracker.with(context, t => {
             forEach(usages, oldNode => {
-                inlineAt(file, program.getTypeChecker(), t, oldNode, declaration);
+                inlineAt(context, t, oldNode, declaration);
             });
             t.delete(file, declaration);
         });
     }
 
-    function getInlineHereEdits(context: RefactorContext,
-            declaration: InlineableFunction,
-            selectedUsage: CallExpression): FileTextChanges[] {
-        const { file, program } = context;
+    function getInlineHereEdits(
+        context: RefactorContext,
+        declaration: InlineableFunction,
+        selectedUsage: CallExpression
+    ): FileTextChanges[] {
         return textChanges.ChangeTracker.with(context, t => {
-            inlineAt(file, program.getTypeChecker(), t, selectedUsage, declaration);
+            inlineAt(context, t, selectedUsage, declaration);
         });
     }
 
     function inlineAt(
-            file: SourceFile,
-            checker: TypeChecker,
-            t: textChanges.ChangeTracker,
-            targetNode: CallExpression,
-            declaration: InlineableFunction) {
+        context: RefactorContext,
+        t: textChanges.ChangeTracker,
+        targetNode: CallExpression,
+        declaration: InlineableFunction
+    ) {
+        const { file, program } = context;
         const { parameters, body } = declaration;
+        const checker = program.getTypeChecker();
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
 
@@ -283,9 +300,10 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getVariableDeclarationsFromParameters(
-            parameters: NodeArray<ParameterDeclaration>,
-            targetNode: CallExpression,
-            transformVisitor: (node: Node) => VisitResult<Node>) {
+        parameters: NodeArray<ParameterDeclaration>,
+        targetNode: CallExpression,
+        transformVisitor: (node: Node) => VisitResult<Node>
+    ) {
         return map(parameters, (p, i) => {
             const oldName = p.name;
             const typeArguments = targetNode.typeArguments;
@@ -297,7 +315,12 @@ namespace ts.refactor.inlineFunction {
         });
     }
 
-    function getVariableDeclarationFromReturn(file: SourceFile, declaration: InlineableFunction, nofReturns: number, isVoid: boolean) {
+    function getVariableDeclarationFromReturn(
+        file: SourceFile,
+        declaration: InlineableFunction,
+        nofReturns: number,
+        isVoid: boolean
+    ) {
         if (nofReturns > 1 && !isVoid) {
             const typeNode = getEffectiveReturnTypeNode(declaration);
             return createVariable(
@@ -344,7 +367,12 @@ namespace ts.refactor.inlineFunction {
         return !!findAncestor(node, n => n === ancestor);
     }
 
-    function createVariable(name: BindingName, type?: TypeNode | undefined, flags?: NodeFlags, initializer?: Expression) {
+    function createVariable(
+        name: BindingName,
+        type?: TypeNode | undefined,
+        flags?: NodeFlags,
+        initializer?: Expression
+    ) {
         const decl = createVariableDeclaration(name, type, initializer);
         const declList = createVariableDeclarationList([decl], flags);
         const variableStatement = createVariableStatement(/* modifiers */ undefined, declList);
