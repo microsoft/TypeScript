@@ -17065,7 +17065,7 @@ interface DecodeSuccessCallback {
 }
 
 interface ErrorEventHandler {
-    (event: Event | string, source?: string, fileno?: number, columnNumber?: number, error?: Error): void;
+    (event: Event | string, source?: string, lineno?: number, columnNumber?: number, error?: Error): void;
 }
 
 interface EventHandlerNonNull {
