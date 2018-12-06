@@ -10,12 +10,16 @@ namespace ts.textStorage {
                 }`
         };
 
+        function getDummyScriptInfo() {
+            return { closeSourceMapFileWatcher: noop } as server.ScriptInfo;
+        }
+
         it("text based storage should be have exactly the same as script version cache", () => {
 
             const host = projectSystem.createServerHost([f]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
-            const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
+            const ts2 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             ts1.useScriptVersionCache_TestOnly();
             ts2.useText();
@@ -49,7 +53,7 @@ namespace ts.textStorage {
         it("should switch to script version cache if necessary", () => {
             const host = projectSystem.createServerHost([f]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             ts1.getSnapshot();
             assert.isFalse(ts1.hasScriptVersionCache_TestOnly(), "should not have script version cache - 1");
@@ -67,7 +71,7 @@ namespace ts.textStorage {
         it("should be able to return the file size immediately after construction", () => {
             const host = projectSystem.createServerHost([f]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             assert.strictEqual(f.content.length, ts1.getTelemetryFileSize());
         });
@@ -75,7 +79,7 @@ namespace ts.textStorage {
         it("should be able to return the file size when backed by text", () => {
             const host = projectSystem.createServerHost([f]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             ts1.useText(f.content);
             assert.isFalse(ts1.hasScriptVersionCache_TestOnly());
@@ -86,7 +90,7 @@ namespace ts.textStorage {
         it("should be able to return the file size when backed by a script version cache", () => {
             const host = projectSystem.createServerHost([f]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(f.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             ts1.useScriptVersionCache_TestOnly();
             assert.isTrue(ts1.hasScriptVersionCache_TestOnly());
@@ -126,7 +130,7 @@ namespace ts.textStorage {
 
             const host = projectSystem.createServerHost([changingFile]);
             // Since script info is not used in these tests, just cheat by passing undefined
-            const ts1 = new server.TextStorage(host, server.asNormalizedPath(changingFile.path), /*initialVersion*/ undefined, {} as server.ScriptInfo);
+            const ts1 = new server.TextStorage(host, server.asNormalizedPath(changingFile.path), /*initialVersion*/ undefined, getDummyScriptInfo());
 
             assert.isTrue(ts1.reloadFromDisk());
 

@@ -8688,6 +8688,8 @@ declare namespace ts.server {
          */
         getScriptInfoForNormalizedPath(fileName: NormalizedPath): ScriptInfo | undefined;
         getScriptInfoForPath(fileName: Path): ScriptInfo | undefined;
+        private addSourceInfoToSourceMap;
+        private addMissingSourceMapFile;
         setHostConfiguration(args: protocol.ConfigureRequestArguments): void;
         closeLog(): void;
         /**
