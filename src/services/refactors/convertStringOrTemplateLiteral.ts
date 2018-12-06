@@ -9,6 +9,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
     // TODO let a = 45 + 45 + " ee" + 33;
+    // TODO let a = tag `aaa`;
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
@@ -58,7 +59,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                     const templateLiteralExpression = node.parent;
                     const nodesArray: Expression[] = [];
 
-                    nodesArray.push(createStringLiteral(templateLiteralExpression.head.text));
+                    if (templateLiteralExpression.head.text.length !== 0) nodesArray.push(createStringLiteral(templateLiteralExpression.head.text));
+
                     templateLiteralExpression.templateSpans.forEach(ts => {
                         nodesArray.push(ts.expression);
                         const str = ts.literal.text;
