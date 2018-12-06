@@ -283,7 +283,6 @@ namespace ts.server {
 
     /*@internal*/
     export interface SourceMapFileWatcher {
-        declarationInfoPath: Path;
         watcher: FileWatcher;
         sourceInfos?: Map<true>;
     }

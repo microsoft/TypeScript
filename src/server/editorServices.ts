@@ -2298,7 +2298,6 @@ namespace ts.server {
             }
             else if (mapFileNameFromDeclarationInfo) {
                 declarationInfo.sourceMapFilePath = {
-                    declarationInfoPath: declarationInfo.path,
                     watcher: this.addMissingSourceMapFile(
                         project.currentDirectory === this.currentDirectory ?
                             mapFileNameFromDeclarationInfo :
