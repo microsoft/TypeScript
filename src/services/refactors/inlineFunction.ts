@@ -18,31 +18,27 @@ namespace ts.refactor.inlineFunction {
         readonly declaration: InlineableFunction;
         readonly usages: ReadonlyArray<CallExpression>;
         readonly selectedUsage: CallExpression | undefined;
+        readonly allAvailable: boolean;
+        readonly selectedAvailable: boolean;
     }
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { program, file, startPosition } = context;
         const info = getInfo(program, file, startPosition);
         if (!info) return emptyArray;
-        const { declaration, usages, selectedUsage } = info;
-        const checker = program.getTypeChecker();
-        const symbols = getExternalSymbolsReferencedInScope(declaration, checker);
-        let areSymbolsAccessibleAtUsages = true;
-        forEach(usages, u => {
-            if (!areSymbolsAccessible(checker, symbols, u)) areSymbolsAccessibleAtUsages = false;
-        });
+        const { allAvailable, selectedAvailable } = info;
         const refactorInfo: ApplicableRefactorInfo = {
             name: refactorName,
             description: refactorDescription,
             actions: []
         };
-        if (areSymbolsAccessibleAtUsages) {
+        if (allAvailable) {
             refactorInfo.actions.push({
                 name: inlineAllActionName,
                 description: inlineAllActionDescription
             });
         }
-        if (selectedUsage && areSymbolsAccessible(checker, symbols, selectedUsage)) {
+        if (selectedAvailable) {
             refactorInfo.actions.push({
                 name: inlineHereActionName,
                 description: inlineHereActionDescription
@@ -52,17 +48,14 @@ namespace ts.refactor.inlineFunction {
     }
 
     function areSymbolsAccessible(checker: TypeChecker, symbols: ReadonlyArray<Symbol>, target: Node) {
-        forEach(symbols, symbol => {
+        return every(symbols, symbol => {
             const symbolAccessibility = checker.isSymbolAccessible(
                 symbol,
                 target,
                 SymbolFlags.All,
                 /* shouldComputeAliasesToMakeVisible */ false).accessibility;
-            if (symbolAccessibility !== SymbolAccessibility.Accessible) {
-                return false;
-            }
+            return symbolAccessibility === SymbolAccessibility.Accessible;
         });
-        return true;
     }
 
     function getExternalSymbolsReferencedInScope(declaration: InlineableFunction, checker: TypeChecker) {
@@ -87,22 +80,17 @@ namespace ts.refactor.inlineFunction {
     function getInfo(program: Program, file: SourceFile, startPosition: number): Info | undefined {
         const token = getTokenAtPosition(file, startPosition);
         const checker = program.getTypeChecker();
-        if (isIdentifier(token)) {
-            if (isNameOfFunctionDeclaration(token)) {
-                const inlineableFunction = <InlineableFunction>token.parent;
-                if (!inlineableFunction.body) return undefined;
-                return createInfo(checker, inlineableFunction);
-            }
-
-            const call = findAncestor(token, isCallExpression);
-            if (!call) return undefined;
-            const symbol = checker.getSymbolAtLocation(call.expression);
-            if (!symbol) return undefined;
-            const declaration = symbol.valueDeclaration;
-            if (!isInlineableFunction(declaration) || !declaration.body) return undefined;
-            return createInfo(checker, declaration, call);
+        if (isNameOfFunctionDeclaration(token)) {
+            return createInfo(checker, <InlineableFunction>token.parent);
         }
-        return undefined;
+
+        const call = findAncestor(token, isCallExpression);
+        if (!call) return undefined;
+        const symbol = checker.getSymbolAtLocation(call.expression);
+        if (!symbol) return undefined;
+        const declaration = symbol.valueDeclaration;
+        if (!isInlineableFunction(declaration)) return undefined;
+        return createInfo(checker, declaration, call);
     }
 
     function createInfo(checker: TypeChecker, declaration: InlineableFunction, call?: CallExpression): Info | undefined {
@@ -110,11 +98,14 @@ namespace ts.refactor.inlineFunction {
             declaration.getSourceFile(),
             declaration,
             checker);
-        return canInline(declaration, /* usages */) ? {
+        const { allAvailable, selectedAvailable } = canInline(checker, declaration, usages, call);
+        return {
             declaration,
             usages,
-            selectedUsage: call ? call : undefined
-        } : undefined;
+            selectedUsage: call ? call : undefined,
+            allAvailable,
+            selectedAvailable
+        };
     }
 
     function getCallsInScope(scope: Node, target: InlineableFunction, checker: TypeChecker): ReadonlyArray<CallExpression> {
@@ -135,17 +126,27 @@ namespace ts.refactor.inlineFunction {
         return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
-    function canInline(declaration: InlineableFunction, /* usages: ReadonlyArray<CallExpression> */): boolean {
-        let hasErrors = false;
-        if (!declaration.body) hasErrors = true;
-        if (containsProhibitedModifiers(declaration.modifiers)) hasErrors = true;
-        return !hasErrors;
+    function canInline(checker: TypeChecker, declaration: InlineableFunction, usages: ReadonlyArray<CallExpression>, call?: CallExpression) {
+        let anyHaveErrors = false;
+        let selectedHasErrors = false;
+        const body = declaration.body;
+        if (!body || body.statements.length === 0) {
+            anyHaveErrors = true;
+            selectedHasErrors = true;
+        }
+        if (containsProhibitedModifiers(declaration.modifiers)) {
+            anyHaveErrors = true;
+            selectedHasErrors = true;
+        }
+        const symbols = getExternalSymbolsReferencedInScope(declaration, checker);
+        if (!every(usages, u => areSymbolsAccessible(checker, symbols, u))) anyHaveErrors = true;
+        if (!call || !areSymbolsAccessible(checker, symbols, call)) selectedHasErrors = true;
+        return { allAvailable: !anyHaveErrors, selectedAvailable: !selectedHasErrors };
     }
 
     function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
         return !!modifiers && !!modifiers.find(mod =>
-            mod.kind === SyntaxKind.ExportKeyword ||
-            mod.kind === SyntaxKind.PrivateKeyword);
+            mod.kind === SyntaxKind.ExportKeyword);
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
@@ -196,31 +197,11 @@ namespace ts.refactor.inlineFunction {
         let body = declaration.body!;
         const statement = findAncestor(targetNode, isStatement)!;
         const renameMap = getConflictingNames(checker, declaration, targetNode);
-        forEach(parameters, (p, i) => {
-            const oldName = p.name;
-            const typeArguments = targetNode.typeArguments;
-            const typeNode = typeArguments && typeArguments[i];
-            const argument = targetNode.arguments[i];
-            const initializer = argument ? argument : p.initializer;
-            let name: BindingName;
-            if (isIdentifier(oldName)) {
-                const symbol = checker.getSymbolAtLocation(oldName)!;
-                name = getSafeName(oldName, symbol);
-            }
-            else {
-                name = visitNode(oldName, visitor);
-            }
-            const newNode = createVariable(
-                name,
-                typeNode,
-                NodeFlags.Const,
-                initializer
-            );
-            t.insertNodeBefore(file, statement, newNode);
-        });
 
-        const returnType = checker.getTypeAtLocation(declaration);
-        const isVoid = returnType.flags === TypeFlags.VoidLike;
+        const statements = [] as Statement[];
+        statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
+
+        const isVoid = returnTypeIsVoidLike(checker, declaration);
         const returns = <ReturnStatement[]>inlineLocal.findDescendants(
             body,
             n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
@@ -235,39 +216,33 @@ namespace ts.refactor.inlineFunction {
                 NodeFlags.Let,
                 /* initializer */ undefined
             );
-            t.insertNodeBefore(file, statement, variableStatement);
+            statements.push(variableStatement);
         }
-        body = visitEachChild(body, visitor, nullTransformationContext);
-        forEach(body.statements, st => {
-            if (!isReturnStatement(st)) {
-                t.insertNodeBefore(file, statement, st);
-            }
-        });
-        if (nofReturns === 1) {
-            const returnExpression = forEachReturnStatement<Expression | undefined>(body, r => r.expression);
-            if (returnExpression) {
-                const expression = inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
-                t.replaceNode(file, targetNode, expression);
-            }
+
+        body = visitEachChild(body, transformVisitor, nullTransformationContext);
+        statements.push(...filter(body.statements, s => !isReturnStatement(s)));
+
+        forEach(statements, st => { t.insertNodeBefore(file, statement, st); });
+
+        if (nofReturns === 1 && !isVoid) {
+            const returnExpression = forEachReturnStatement(body, r => r.expression)!;
+            const expression = inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
+            t.replaceNode(file, targetNode, expression);
         }
-        else if (nofReturns > 1) {
+        else if (nofReturns > 1 && !isVoid) {
             t.replaceNode(file, targetNode, createIdentifier(returnVariableName));
         }
-
-        function getSafeName(name: Identifier, { id }: Symbol): Identifier {
-            if (renameMap.has(String(id))) {
-                return createIdentifier(renameMap.get(String(id))!);
-            }
-            return name;
+        else {
+            t.deleteRange(file, { pos: statement.getStart(), end: statement.getEnd() });
         }
 
-        function visitor(node: Node): VisitResult<Node> {
+        function transformVisitor(node: Node): VisitResult<Node> {
             if (isIdentifier(node)) {
                 const symbol = checker.getSymbolAtLocation(node);
                 if (symbol) return getSafeName(node, symbol);
             }
             if (isObjectBindingElementWithoutPropertyName(node)) {
-                const name = <Identifier>node.name;
+                const name = node.name;
                 const symbol = checker.getSymbolAtLocation(name);
                 if (symbol) {
                     const safeName = getSafeName(name, symbol);
@@ -294,8 +269,34 @@ namespace ts.refactor.inlineFunction {
                     return createExpressionStatement(assignment);
                 }
             }
-            return visitEachChild(node, visitor, nullTransformationContext);
+            return visitEachChild(node, transformVisitor, nullTransformationContext);
         }
+
+        function getSafeName(name: Identifier, { id }: Symbol): Identifier {
+            if (renameMap.has(String(id))) {
+                return createIdentifier(renameMap.get(String(id))!);
+            }
+            return name;
+        }
+    }
+
+    function getVariableDeclarationsFromParameters(parameters: NodeArray<ParameterDeclaration>, targetNode: CallExpression, transformVisitor: (node: Node) => VisitResult<Node>) {
+        return map(parameters, (p, i) => {
+            const oldName = p.name;
+            const typeArguments = targetNode.typeArguments;
+            const typeNode = typeArguments && typeArguments[i];
+            const argument = targetNode.arguments[i];
+            const initializer = argument ? argument : p.initializer;
+            const name = visitNode(oldName, transformVisitor);
+            return createVariable(name, typeNode, NodeFlags.Const, initializer);
+        });
+    }
+
+    function returnTypeIsVoidLike(checker: TypeChecker, declaration: InlineableFunction) {
+        const signature = checker.getSignatureFromDeclaration(declaration)!;
+        const returnType = checker.getReturnTypeOfSignature(signature);
+        const isVoid = !!(returnType.flags & TypeFlags.VoidLike);
+        return isVoid;
     }
 
     function getConflictingNames(checker: TypeChecker, scope: Node, targetNode: Node) {
@@ -314,7 +315,7 @@ namespace ts.refactor.inlineFunction {
             if (!isNamedDeclaration(declaration)) return;
             const name = declaration.name;
             if (!isIdentifier(name)) return;
-            if (nameIsTaken(symbols, name.text, s)) {
+            if (nameIsTaken(symbols, s)) {
                 const safeName = getUniqueName(name.text, targetNode.getSourceFile());
                 renameMap.set(String(getSymbolId(s)), safeName);
             }
@@ -333,11 +334,11 @@ namespace ts.refactor.inlineFunction {
         return variableStatement;
     }
 
-    function nameIsTaken(symbols: Symbol[], name: string, symbol: Symbol) {
-        return forEach(symbols, s => s.name === name && s !== symbol ? s : undefined);
+    function nameIsTaken(symbols: Symbol[], symbol: Symbol) {
+        return some(symbols, s => s.name === symbol.name && s !== symbol);
     }
 
     function isInlineableFunction(node: Node): node is InlineableFunction {
-        return node.kind === SyntaxKind.FunctionDeclaration || node.kind === SyntaxKind.MethodDeclaration;
+        return isFunctionDeclaration(node) || isMethodDeclaration(node);
     }
 }
