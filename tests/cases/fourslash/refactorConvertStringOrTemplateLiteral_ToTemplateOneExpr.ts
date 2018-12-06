@@ -8,7 +8,7 @@ edit.applyRefactor({
     refactorName: "Convert string concatenation or template literal",
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
-    newContent: 
+    newContent:
 `const age = 42
-const foo = \`foobar is \${ age } years old\``,
+const foo = \`foobar is \${age} years old\``,
 });

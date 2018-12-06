@@ -1,6 +1,6 @@
 /// <reference path='fourslash.ts' />
 
-//// const foo = "/*x*/w/*y*/ith back`tick"
+//// const foo = "/*x*/f/*y*/oobar " + "rocks" + " fantastically"
 
 goTo.select("x", "y");
 edit.applyRefactor({
@@ -8,5 +8,5 @@ edit.applyRefactor({
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
     newContent:
-"const foo = `with back\\`tick`",
+"const foo = `foobar rocks fantastically`",
 });
