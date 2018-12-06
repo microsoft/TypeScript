@@ -8,9 +8,9 @@ lib/Browser.js(71,49): error TS2322: Type 'Promise<CDPSession>' is not assignabl
           Type 'T' is not assignable to type 'string | symbol'.
             Type 'string | number | symbol' is not assignable to type 'string | symbol'.
               Type 'number' is not assignable to type 'string | symbol'.
-                Type 'T' is not assignable to type 'string'.
-                  Type 'string | number | symbol' is not assignable to type 'string'.
-                    Type 'number' is not assignable to type 'string'.
+                Type 'T' is not assignable to type 'symbol'.
+                  Type 'string | number | symbol' is not assignable to type 'symbol'.
+                    Type 'string' is not assignable to type 'symbol'.
 lib/BrowserFetcher.js(100,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/BrowserFetcher.js(195,13): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 lib/Connection.js(91,14): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
