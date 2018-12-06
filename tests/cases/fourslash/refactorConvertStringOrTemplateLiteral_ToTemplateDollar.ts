@@ -8,5 +8,5 @@ edit.applyRefactor({
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
     newContent:
-"const foo = `with $\\{dollar}`",
+"const foo = `with $\\\\{dollar}`",
 });
