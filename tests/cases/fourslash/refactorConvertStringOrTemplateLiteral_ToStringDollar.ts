@@ -8,5 +8,5 @@ edit.applyRefactor({
     actionName: "Convert to string concatenation",
     actionDescription: "Convert to string concatenation",
     newContent:
-"const foo = \"with ${dollar}\"",
+"const foo = \"with \${dollar}\"",
 });

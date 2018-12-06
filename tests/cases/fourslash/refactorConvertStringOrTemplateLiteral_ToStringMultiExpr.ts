@@ -2,7 +2,7 @@
 
 //// const age = 22
 //// const name = "Eddy"
-//// const foo = `${ /*x*/n/*y*/ame } is ${ age } years old`
+//// const foo = `/*x*/$/*y*/{ name } is ${ age } years old`
 
 goTo.select("x", "y");
 edit.applyRefactor({
@@ -12,5 +12,5 @@ edit.applyRefactor({
     newContent:
 `const age = 22
 const name = "Eddy"
-const foo = name + " is " + age + " years old"`,
+const foo = "" + name + " is " + age + " years old"`,
 });
