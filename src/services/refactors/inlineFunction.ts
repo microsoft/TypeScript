@@ -208,32 +208,43 @@ namespace ts.refactor.inlineFunction {
         );
         const nofReturns = returns.length;
         const returnVariableName = getUniqueName("returnValue", file);
-        if (nofReturns > 1 && !isVoid) {
-            const typeNode = getEffectiveReturnTypeNode(declaration);
-            const variableStatement = createVariable(
-                createIdentifier(returnVariableName),
-                typeNode,
-                NodeFlags.Let,
-                /* initializer */ undefined
-            );
-            statements.push(variableStatement);
-        }
+        const variableStatement = getVariableDeclarationFromReturn();
+        if (variableStatement) statements.push(variableStatement);
 
         body = visitEachChild(body, transformVisitor, nullTransformationContext);
         statements.push(...filter(body.statements, s => !isReturnStatement(s)));
 
         forEach(statements, st => { t.insertNodeBefore(file, statement, st); });
 
-        if (nofReturns === 1 && !isVoid) {
-            const returnExpression = forEachReturnStatement(body, r => r.expression)!;
-            const expression = inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
-            t.replaceNode(file, targetNode, expression);
-        }
-        else if (nofReturns > 1 && !isVoid) {
-            t.replaceNode(file, targetNode, createIdentifier(returnVariableName));
+        const returnexpression = getReturnExpression();
+        if (returnexpression) {
+            t.replaceNode(file, targetNode, returnexpression);
         }
         else {
             t.deleteRange(file, { pos: statement.getStart(), end: statement.getEnd() });
+        }
+
+        function getVariableDeclarationFromReturn() {
+            if (nofReturns > 1 && !isVoid) {
+                const typeNode = getEffectiveReturnTypeNode(declaration);
+                return createVariable(
+                    createIdentifier(returnVariableName),
+                    typeNode,
+                    NodeFlags.Let,
+                    /* initializer */ undefined);
+            }
+            return undefined;
+        }
+
+        function getReturnExpression() {
+            if (nofReturns === 1 && !isVoid) {
+                const returnExpression = forEachReturnStatement(body, r => r.expression)!;
+                return inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
+            }
+            else if (nofReturns > 1 && !isVoid) {
+                return createIdentifier(returnVariableName);
+            }
+            return undefined;
         }
 
         function transformVisitor(node: Node): VisitResult<Node> {
