@@ -991,9 +991,14 @@ namespace ts {
         }
 
         function checkForIdentifierStartAfterNumericLiteral() {
-            if (isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
-                error(Diagnostics.An_identifier_cannot_follow_a_numeric_literal, pos, 1);
+            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+                return;
             }
+
+            const identifierStart = pos;
+            const { length } = scanIdentifierParts();
+            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+            pos = identifierStart;
         }
 
         function scanOctalDigits(): number {

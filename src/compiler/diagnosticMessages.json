@@ -1011,7 +1011,7 @@
         "category": "Message",
         "code": 1350
     },
-    "An identifier cannot follow a numeric literal.": {
+    "An identifier or keyword cannot immediately follow a numeric literal.": {
         "category": "Error",
         "code": 1351
     },
