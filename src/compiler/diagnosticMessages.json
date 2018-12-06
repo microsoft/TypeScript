@@ -1011,6 +1011,10 @@
         "category": "Message",
         "code": 1350
     },
+    "An identifier or keyword cannot immediately follow a numeric literal.": {
+        "category": "Error",
+        "code": 1351
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",

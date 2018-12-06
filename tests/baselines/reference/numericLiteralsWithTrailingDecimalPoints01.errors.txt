@@ -1,5 +1,5 @@
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(3,3): error TS1005: ';' expected.
-tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,15): error TS1005: ',' expected.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(3,3): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
+tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,15): error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
 tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,23): error TS1005: ',' expected.
 tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error TS1109: Expression expected.
 
@@ -9,7 +9,7 @@ tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error 
     1.0.toString();
     1.toString();
       ~~~~~~~~
-!!! error TS1005: ';' expected.
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
     1.+2.0 + 3. ;
     
     // Preserve whitespace where important for JS compatibility
@@ -17,7 +17,7 @@ tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts(9,24): error 
     var test1 = i.toString();  
     var test2 = 2.toString();
                   ~~~~~~~~
-!!! error TS1005: ',' expected.
+!!! error TS1351: An identifier or keyword cannot immediately follow a numeric literal.
                           ~
 !!! error TS1005: ',' expected.
                            ~

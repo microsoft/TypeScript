@@ -974,7 +974,9 @@ namespace ts {
             else {
                 result = text.substring(start, end); // No need to use all the fragments; no _ removal needed
             }
+
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
+                checkForIdentifierStartAfterNumericLiteral();
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -983,8 +985,20 @@ namespace ts {
             else {
                 tokenValue = result;
                 const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
+                checkForIdentifierStartAfterNumericLiteral();
                 return { type, value: tokenValue };
             }
+        }
+
+        function checkForIdentifierStartAfterNumericLiteral() {
+            if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
+                return;
+            }
+
+            const identifierStart = pos;
+            const { length } = scanIdentifierParts();
+            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+            pos = identifierStart;
         }
 
         function scanOctalDigits(): number {
