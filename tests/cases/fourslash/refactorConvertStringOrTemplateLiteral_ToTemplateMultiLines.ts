@@ -10,7 +10,7 @@ edit.applyRefactor({
     refactorName: "Convert string concatenation or template literal",
     actionName: "Convert to template literal",
     actionDescription: "Convert to template literal",
-    newContent: 
+    newContent:
 `const foo = \`wait for others
 D'oh!
 Yada, yada, yada

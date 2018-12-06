@@ -3,6 +3,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const refactorName = "Convert string concatenation or template literal";
     const toTemplateLiteralActionName = "Convert to template literal";
     // const toStringConcatenationActionName = "Convert to string concatenation";
+    // let str = ""; str;
 
     const refactorDescription = getLocaleSpecificMessage(Diagnostics.Convert_string_concatenation_or_template_literal);
     const toTemplateLiteralDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_literal);
@@ -11,8 +12,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
-        const { file, startPosition } = context; file; startPosition;
-        
+        const { file, startPosition } = context;
         const node = getTokenAtPosition(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node); containsString(maybeBinary);
         if (!(isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) || !containsString(maybeBinary)) return emptyArray;
@@ -34,24 +34,23 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
-        const { file, startPosition } = context; file; startPosition; actionName;
+        const { file, startPosition } = context;
         const node = getTokenAtPosition(file, startPosition);
-
 
         switch (actionName) {
             case toTemplateLiteralActionName:
                 const maybeBinary = getParentBinaryExpression(node);
                 let templateLiteral: TemplateExpression | NoSubstitutionTemplateLiteral;
                 if (isStringLiteral(maybeBinary)) {
-                    templateLiteral = createNoSubstitutionTemplateLiteral(maybeBinary.text);
+                    templateLiteral = createNoSubstitutionTemplateLiteral(cleanString(maybeBinary.text));
                 }
                 else {
-                    const arrayOfNodes = treeToArray(maybeBinary); arrayOfNodes;
+                    const arrayOfNodes = treeToArray(maybeBinary);
                     templateLiteral = nodesToTemplate(arrayOfNodes);
                 }
 
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
-                return {edits};
+                return { edits };
 
             default:
                 return Debug.fail("invalid action");
@@ -76,7 +75,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function treeToArray(node: Node): Node[] {
         if (isBinaryExpression(node)) {
-            return treeToArray(node.left).concat(treeToArray(node.right))
+            return treeToArray(node.left).concat(treeToArray(node.right));
         }
         return [node];
     }
@@ -88,46 +87,56 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const firstNode = nodes[0];
         const spans: TemplateSpan[] = [];
 
-        if (isStringLiteral(firstNode)){
+        if (isStringLiteral(firstNode)) {
             head.text = firstNode.text;
             begin++;
 
-            while(begin < nodes.length && isStringLiteral(nodes[begin])){
+            while (begin < nodes.length && isStringLiteral(nodes[begin])) {
 
-                let next = nodes[begin] as StringLiteral;
+                const next = nodes[begin] as StringLiteral;
                 head.text = head.text + next.text;
                 begin++;
             }
+
+            head.text = cleanString(head.text);
         }
 
-        if(begin === nodes.length){
+        if (begin === nodes.length) {
             return createNoSubstitutionTemplateLiteral(head.text);
         }
 
-        for(let i = begin; i < nodes.length; i++){
-            const current = nodes[i];
+        for (let i = begin; i < nodes.length; i++) {
+            let current = nodes[i];
+            let templatePart: TemplateMiddle | TemplateTail;
 
-            if (i+1 < nodes.length && isStringLiteral(nodes[i+1])){
-                let next = nodes[i+1] as StringLiteral;
+            if (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
+                let next = nodes[i + 1] as StringLiteral;
                 let text = next.text;
                 i++;
 
-                while(i+1 < nodes.length && isStringLiteral(nodes[i+1])){
-                    next = nodes[i+1] as StringLiteral;
+                while (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
+                    next = nodes[i + 1] as StringLiteral;
                     text = text + next.text;
                     i++;
                 }
 
-                const templatePart = i === nodes.length-1 ? createTemplateTail(text) : createTemplateMiddle(text);
-                spans.push(createTemplateSpan(current as Expression, templatePart));
+                if (isParenthesizedExpression(current)) current = current.expression;
+                text = cleanString(text);
+
+                templatePart = i === nodes.length - 1 ? createTemplateTail(text) : createTemplateMiddle(text);
             }
             else {
-                const templatePart = i === nodes.length-1 ? createTemplateTail("") : createTemplateMiddle("");
-                spans.push(createTemplateSpan(current as Expression, templatePart));
+                templatePart = i === nodes.length - 1 ? createTemplateTail("") : createTemplateMiddle("");
             }
+
+            spans.push(createTemplateSpan(current as Expression, templatePart));
         }
 
         return createTemplateExpression(head, spans);
+    }
+
+    function cleanString(content: string) {
+        return content.replace("`", "\`").replace("\${", `$\\{`);
     }
 
 }
