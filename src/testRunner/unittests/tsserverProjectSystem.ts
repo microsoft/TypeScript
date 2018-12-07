@@ -15,7 +15,6 @@ namespace ts.projectSystem {
     export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
     import safeList = TestFSWithWatch.safeList;
-    import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
 
     const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
     function mapOutputToJson(s: string) {
@@ -9153,89 +9152,6 @@ export const x = 10;`
                 host.ensureFileOrFolder(npmCacheFile);
                 host.checkTimeoutQueueLength(0);
             });
-        });
-    });
-
-    describe("tsserverProjectSystem watchDirectories implementation", () => {
-        function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
-            const projectFolder = "/a/username/project";
-            const projectSrcFolder = `${projectFolder}/src`;
-            const configFile: File = {
-                path: `${projectFolder}/tsconfig.json`,
-                content: "{}"
-            };
-            const index: File = {
-                path: `${projectSrcFolder}/index.ts`,
-                content: `import {} from "./"`
-            };
-            const file1: File = {
-                path: `${projectSrcFolder}/file1.ts`,
-                content: ""
-            };
-
-            const files = [index, file1, configFile, libFile];
-            const fileNames = files.map(file => file.path);
-            // All closed files(files other than index), project folder, project/src folder and project/node_modules/@types folder
-            const expectedWatchedFiles = arrayToMap(fileNames.slice(1), s => s, () => 1);
-            const expectedWatchedDirectories = createMap<number>();
-            const mapOfDirectories = tscWatchDirectory === Tsc_WatchDirectory.NonRecursiveWatchDirectory ?
-                expectedWatchedDirectories :
-                tscWatchDirectory === Tsc_WatchDirectory.WatchFile ?
-                    expectedWatchedFiles :
-                    createMap();
-            // For failed resolution lookup and tsconfig files => cached so only watched only once
-            mapOfDirectories.set(projectFolder, 1);
-            // Through above recursive watches
-            mapOfDirectories.set(projectSrcFolder, 1);
-            // node_modules/@types folder
-            mapOfDirectories.set(`${projectFolder}/${nodeModulesAtTypes}`, 1);
-            const expectedCompletions = ["file1"];
-            const completionPosition = index.content.lastIndexOf('"');
-            const environmentVariables = createMap<string>();
-            environmentVariables.set("TSC_WATCHDIRECTORY", tscWatchDirectory);
-            const host = createServerHost(files, { environmentVariables });
-            const projectService = createProjectService(host);
-            projectService.openClientFile(index.path);
-
-            const project = Debug.assertDefined(projectService.configuredProjects.get(configFile.path));
-            verifyProjectAndCompletions();
-
-            // Add file2
-            const file2: File = {
-                path: `${projectSrcFolder}/file2.ts`,
-                content: ""
-            };
-            files.push(file2);
-            fileNames.push(file2.path);
-            expectedWatchedFiles.set(file2.path, 1);
-            expectedCompletions.push("file2");
-            host.reloadFS(files);
-            host.runQueuedTimeoutCallbacks();
-            assert.equal(projectService.configuredProjects.get(configFile.path), project);
-            verifyProjectAndCompletions();
-
-            function verifyProjectAndCompletions() {
-                const completions = project.getLanguageService().getCompletionsAtPosition(index.path, completionPosition, { includeExternalModuleExports: false, includeInsertTextCompletions: false })!;
-                checkArray("Completion Entries", completions.entries.map(e => e.name), expectedCompletions);
-
-                checkWatchedDirectories(host, emptyArray, /*recursive*/ true);
-
-                checkWatchedFilesDetailed(host, expectedWatchedFiles);
-                checkWatchedDirectoriesDetailed(host, expectedWatchedDirectories, /*recursive*/ false);
-                checkProjectActualFiles(project, fileNames);
-            }
-        }
-
-        it("uses watchFile when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.WatchFile);
-        });
-
-        it("uses non recursive watchDirectory when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.NonRecursiveWatchDirectory);
-        });
-
-        it("uses dynamic polling when file is added to subfolder, completion list has new file", () => {
-            verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.DynamicPolling);
         });
     });
 

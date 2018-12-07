@@ -87,6 +87,7 @@
         "unittests/tsconfigParsing.ts",
         "unittests/tscWatchMode.ts",
         "unittests/versionCache.ts",
+        "unittests/watchEnvironment.ts",
         "unittests/evaluation/asyncArrow.ts",
         "unittests/evaluation/asyncGenerator.ts",
         "unittests/evaluation/forAwaitOf.ts",
