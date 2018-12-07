@@ -15,13 +15,13 @@ namespace ts.projectSystem {
     export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
 
-    //const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
-    //function mapOutputToJson(s: string) {
-    //    return convertToObject(
-    //        parseJsonText("json.json", s.replace(outputEventRegex, "")),
-    //        []
-    //    );
-    //}
+    const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
+    export function mapOutputToJson(s: string) {
+        return convertToObject(
+            parseJsonText("json.json", s.replace(outputEventRegex, "")),
+            []
+        );
+    }
 
     export const customTypesMap = {
         path: <Path>"/typesMap.json",
@@ -330,39 +330,39 @@ namespace ts.projectSystem {
         return new TestSession({ ...sessionOptions, ...opts });
     }
 
-    //function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
-    //    const events: T[] = [];
-    //    const session = createSession(host, {
-    //        eventHandler: e => {
-    //            if (e.eventName === eventName || eventNames.some(eventName => e.eventName === eventName)) {
-    //                events.push(e as T);
-    //            }
-    //        }
-    //    });
+    export function createSessionWithEventTracking<T extends server.ProjectServiceEvent>(host: server.ServerHost, eventName: T["eventName"], ...eventNames: T["eventName"][]) {
+        const events: T[] = [];
+        const session = createSession(host, {
+            eventHandler: e => {
+                if (e.eventName === eventName || eventNames.some(eventName => e.eventName === eventName)) {
+                    events.push(e as T);
+                }
+            }
+        });
 
-    //    return { session, events };
-    //}
+        return { session, events };
+    }
 
-    //function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
-    //    const session = createSession(host, { canUseEvents: true, ...opts });
+    export function createSessionWithDefaultEventHandler<T extends protocol.AnyEvent>(host: TestServerHost, eventNames: T["event"] | T["event"][], opts: Partial<server.SessionOptions> = {}) {
+        const session = createSession(host, { canUseEvents: true, ...opts });
 
-    //    return {
-    //        session,
-    //        getEvents,
-    //        clearEvents
-    //    };
+        return {
+            session,
+            getEvents,
+            clearEvents
+        };
 
-    //    function getEvents() {
-    //        return mapDefined(host.getOutput(), s => {
-    //            const e = mapOutputToJson(s);
-    //            return (isArray(eventNames) ? eventNames.some(eventName => e.event === eventName) : e.event === eventNames) ? e as T : undefined;
-    //        });
-    //    }
+        function getEvents() {
+            return mapDefined(host.getOutput(), s => {
+                const e = mapOutputToJson(s);
+                return (isArray(eventNames) ? eventNames.some(eventName => e.event === eventName) : e.event === eventNames) ? e as T : undefined;
+            });
+        }
 
-    //    function clearEvents() {
-    //        session.clearMessages();
-    //    }
-    //}
+        function clearEvents() {
+            session.clearMessages();
+        }
+    }
 
     export interface CreateProjectServiceParameters {
         cancellationToken?: HostCancellationToken;
@@ -467,23 +467,25 @@ namespace ts.projectSystem {
     //    checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
     //}
 
-    //function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
-    //    const start = str.indexOf(substring);
-    //    Debug.assert(start !== -1);
-    //    return protocolToLocation(str)(start);
-    //}
-    //function protocolToLocation(text: string): (pos: number) => protocol.Location {
-    //    const lineStarts = computeLineStarts(text);
-    //    return pos => {
-    //        const x = computeLineAndCharacterOfPosition(lineStarts, pos);
-    //        return { line: x.line + 1, offset: x.character + 1 };
-    //    };
-    //}
-    //function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.TextSpan {
-    //    const span = textSpanFromSubstring(str, substring, options);
-    //    const toLocation = protocolToLocation(str);
-    //    return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
-    //}
+    export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
+        const start = str.indexOf(substring);
+        Debug.assert(start !== -1);
+        return protocolToLocation(str)(start);
+    }
+
+    function protocolToLocation(text: string): (pos: number) => protocol.Location {
+        const lineStarts = computeLineStarts(text);
+        return pos => {
+            const x = computeLineAndCharacterOfPosition(lineStarts, pos);
+            return { line: x.line + 1, offset: x.character + 1 };
+        };
+    }
+
+    export function protocolTextSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): protocol.TextSpan {
+        const span = textSpanFromSubstring(str, substring, options);
+        const toLocation = protocolToLocation(str);
+        return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
+    }
     //function protocolRenameSpanFromSubstring(
     //    str: string,
     //    substring: string,
@@ -492,11 +494,12 @@ namespace ts.projectSystem {
     //): protocol.RenameTextSpan {
     //    return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
     //}
-    //function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
-    //    const start = nthIndexOf(str, substring, options ? options.index : 0);
-    //    Debug.assert(start !== -1);
-    //    return createTextSpan(start, substring.length);
-    //}
+
+    export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
+        const start = nthIndexOf(str, substring, options ? options.index : 0);
+        Debug.assert(start !== -1);
+        return createTextSpan(start, substring.length);
+    }
     //function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
     //    return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
     //}
@@ -509,18 +512,19 @@ namespace ts.projectSystem {
     //function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
     //    return documentSpanFromSubstring(file, substring, options);
     //}
-    //interface SpanFromSubstringOptions {
-    //    readonly index: number;
-    //}
 
-    //function nthIndexOf(str: string, substr: string, n: number): number {
-    //    let index = -1;
-    //    for (; n >= 0; n--) {
-    //        index = str.indexOf(substr, index + 1);
-    //        if (index === -1) return -1;
-    //    }
-    //    return index;
-    //}
+    export interface SpanFromSubstringOptions {
+        readonly index: number;
+    }
+
+    function nthIndexOf(str: string, substr: string, n: number): number {
+        let index = -1;
+        for (; n >= 0; n--) {
+            index = str.indexOf(substr, index + 1);
+            if (index === -1) return -1;
+        }
+        return index;
+    }
 
     /**
      * Test server cancellation token used to mock host token cancellation requests.
