@@ -976,7 +976,7 @@ namespace ts {
             }
 
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
-                checkForIdentifierStartAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral(decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -990,14 +990,26 @@ namespace ts {
             }
         }
 
-        function checkForIdentifierStartAfterNumericLiteral() {
+        function checkForIdentifierStartAfterNumericLiteral(isScientific?: boolean) {
             if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
                 return;
             }
 
             const identifierStart = pos;
             const { length } = scanIdentifierParts();
-            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+
+            if (length === 1 && text[identifierStart] === "n") {
+                if (isScientific) {
+                    error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, identifierStart, length);
+                }
+                else {
+                    error(Diagnostics.A_bigint_literal_must_be_an_integer, identifierStart, length);
+                }
+            }
+            else {
+                error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+            }
+
             pos = identifierStart;
         }
 

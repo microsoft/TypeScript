@@ -1015,6 +1015,14 @@
         "category": "Error",
         "code": 1351
     },
+    "A bigint literal cannot use exponential notation.": {
+        "category": "Error",
+        "code": 1352
+    },
+    "A bigint literal must be an integer.": {
+        "category": "Error",
+        "code": 1353
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
