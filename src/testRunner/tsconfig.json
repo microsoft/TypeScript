@@ -90,6 +90,7 @@
         "unittests/tscWatchMode.ts",
         "unittests/tsserverProjectLoadingEvents.ts",
         "unittests/tsserverProjectSystem.ts",
+        "unittests/tsserverProjectUpdatedInBackgroundEvent.ts",
         "unittests/typingsInstaller.ts",
         "unittests/versionCache.ts",
         "unittests/watchEnvironment.ts",
