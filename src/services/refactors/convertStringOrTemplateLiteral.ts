@@ -37,7 +37,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         switch (actionName) {
             case toTemplateLiteralActionName:
                 const maybeBinary = getParentBinaryExpression(node);
-                const arrayOfNodes = treeToArray(maybeBinary);
+                const arrayOfNodes = treeToArray(maybeBinary)[0];
                 const templateLiteral = nodesToTemplate(arrayOfNodes);
 
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
@@ -106,11 +106,16 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return arrayToTree(nodes.slice(1), binary);
     }
 
-    function treeToArray(node: Node): Node[] {
+    function treeToArray(node: Node): [Node[], boolean] {
         if (isBinaryExpression(node)) {
-            return treeToArray(node.left).concat(treeToArray(node.right));
+            const [leftNodes, leftHasString] = treeToArray(node.left);
+            const [rightNodes, rightHasString] = treeToArray(node.right);
+
+            if (!leftHasString && !rightHasString) return [[node], false];
+            return [leftNodes.concat(rightNodes), true];
         }
-        return [node];
+
+        return [[node], isStringLiteral(node)];
     }
 
     function nodesToTemplate(nodes: Node[]) {
@@ -141,19 +146,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         for (let i = begin; i < nodes.length; i++) {
             let current = nodes[i];
             let templatePart: TemplateMiddle | TemplateTail;
-
-            if (head.text.length === 0 && i + 1 < nodes.length && !isStringLiteral(nodes[i + 1])) {
-                let binary = createBinary(current as Expression, SyntaxKind.PlusToken, nodes[i + 1] as Expression);
-                current = binary;
-                i++;
-
-                while (i + 1 < nodes.length && !isStringLiteral(nodes[i + 1])) {
-                    binary = createBinary(binary, SyntaxKind.PlusToken, nodes[i + 1] as Expression);
-                    i++;
-                }
-
-                current = binary;
-            }
 
             if (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
                 let next = nodes[i + 1] as StringLiteral;
