@@ -430,9 +430,9 @@ namespace ts.projectSystem {
         checkArray(`${server.ProjectKind[project.projectKind]} project, actual files`, project.getFileNames(), expectedFiles);
     }
 
-    //function checkProjectRootFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
-    //    checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
-    //}
+    export function checkProjectRootFiles(project: server.Project, expectedFiles: ReadonlyArray<string>) {
+        checkArray(`${server.ProjectKind[project.projectKind]} project, rootFileNames`, project.getRootFiles(), expectedFiles);
+    }
 
     export function mapCombinedPathsInAncestor(dir: string, path2: string, mapAncestor: (ancestor: string) => boolean) {
         dir = normalizePath(dir);
@@ -613,17 +613,17 @@ namespace ts.projectSystem {
     //    verifyDiagnostics(actual, []);
     //}
 
-    //function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
-    //    checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
-    //}
+    export function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
+        checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
+    }
 
-    //function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
-    //    return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
-    //}
+    export function createDiagnostic(start: protocol.Location, end: protocol.Location, message: DiagnosticMessage, args: ReadonlyArray<string> = [], category = diagnosticCategoryName(message), reportsUnnecessary?: {}, relatedInformation?: protocol.DiagnosticRelatedInformation[]): protocol.Diagnostic {
+        return { start, end, text: formatStringFromArgs(message.message, args), code: message.code, category, reportsUnnecessary, relatedInformation, source: undefined };
+    }
 
-    //function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
-    //    checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
-    //}
+    export function checkCompleteEvent(session: TestSession, numberOfCurrentEvents: number, expectedSequenceId: number, isMostRecent = true): void {
+        checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
+    }
 
     //function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
     //    checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
@@ -635,18 +635,18 @@ namespace ts.projectSystem {
     //    }
     //}
 
-    //function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
-    //    const events = session.events;
-    //    assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
+    export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
+        const events = session.events;
+        assert.deepEqual(events[index], expectedEvent, `Expected ${JSON.stringify(expectedEvent)} at ${index} in ${JSON.stringify(events)}`);
 
-    //    const outputs = session.host.getOutput();
-    //    assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
+        const outputs = session.host.getOutput();
+        assert.equal(outputs[index], server.formatMessage(expectedEvent, nullLogger, Utils.byteLength, session.host.newLine));
 
-    //    if (isMostRecent) {
-    //        assert.strictEqual(events.length, index + 1, JSON.stringify(events));
-    //        assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
-    //    }
-    //}
+        if (isMostRecent) {
+            assert.strictEqual(events.length, index + 1, JSON.stringify(events));
+            assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
+        }
+    }
 
     //function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
     //    return {
