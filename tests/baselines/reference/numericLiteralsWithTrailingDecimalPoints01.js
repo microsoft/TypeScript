@@ -38,4 +38,4 @@ var test7 = 3
     .toString();
 var test8 = new Number(4).toString();
 var test9 = 3. + 3.;
-var test10 = 0 /* any comment */..toString();
+var test10 = 0 /* any comment */.toString();
