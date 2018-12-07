@@ -48,7 +48,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                 if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
                 const maybeBinary = getParentBinaryExpression(node);
 
-                const arrayOfNodes = treeToArray(maybeBinary)[0];
+                const arrayOfNodes = transformTreeToArray(maybeBinary);
                 const templateLiteral = nodesToTemplate(arrayOfNodes);
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
                 return { edits };
@@ -73,7 +73,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                         }
                     });
 
-                    const binaryExpression = arrayToTree(nodesArray, /* binaryExpression*/ undefined);
+                    const binaryExpression = arrayToTree(nodesArray);
                     return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, templateLiteralExpression, binaryExpression)) };
                 }
 
@@ -91,10 +91,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return expr;
     }
 
-    function arrayToTree(nodes: Expression[], bexpr: BinaryExpression | undefined): BinaryExpression {
-        if (nodes.length === 0) return bexpr!;
+    function arrayToTree(nodes: Expression[], accumulator?: BinaryExpression): BinaryExpression {
+        if (nodes.length === 0) return accumulator!;
 
-        if (bexpr === undefined) {
+        if (!accumulator) {
             const left = nodes[0];
             const right = nodes[1];
 
@@ -103,7 +103,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         }
 
         const right = nodes[0];
-        const binary = createBinary (bexpr, SyntaxKind.PlusToken, right);
+        const binary = createBinary(accumulator, SyntaxKind.PlusToken, right);
         return arrayToTree(nodes.slice(1), binary);
     }
 
@@ -112,20 +112,24 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return containsString && areOperatorsValid;
     }
 
-    function treeToArray(node: Node): [Node[], /* containsString */ boolean, /* areOperatorsValid */ boolean] {
+    function transformTreeToArray(node: Node): Expression[] {
+        return treeToArray(node)[0];
+    }
+
+    function treeToArray(node: Node): [Expression[], /* containsString */ boolean, /* areOperatorsValid */ boolean] {
         if (isBinaryExpression(node)) {
-            const [leftNodes, leftHasString, leftOp] = treeToArray(node.left);
-            const [rightNodes, rightHasString, rightOp] = treeToArray(node.right);
+            const [leftNodes, leftHasString, leftOperatorValid] = treeToArray(node.left);
+            const [rightNodes, rightHasString, rightOperatorValid] = treeToArray(node.right);
 
             if (!leftHasString && !rightHasString) return [[node], false, true];
 
-            const currentOp = node.operatorToken.kind === SyntaxKind.PlusToken;
-            const isPlus = leftOp && currentOp && rightOp;
+            const nodeOperatorValid = node.operatorToken.kind === SyntaxKind.PlusToken;
+            const isPlus = leftOperatorValid && nodeOperatorValid && rightOperatorValid;
 
             return [leftNodes.concat(rightNodes), true, isPlus];
         }
 
-        return [[node], isStringLiteral(node), true];
+        return [[node as Expression], isStringLiteral(node), true];
     }
 
     function createHead(nodes: Node[]): [number, TemplateHead] {
@@ -142,8 +146,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return [begin, head];
     }
 
-    function nodesToTemplate(nodes: Node[]) {
-        const spans: TemplateSpan[] = [];
+    function nodesToTemplate(nodes: Expression[]) {
+        const templateSpans: TemplateSpan[] = [];
         const [begin, head] = createHead(nodes);
 
         if (begin === nodes.length) {
@@ -152,35 +156,27 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
         for (let i = begin; i < nodes.length; i++) {
             let current = nodes[i];
-            let templatePart: TemplateMiddle | TemplateTail;
+            let text = "";
 
-            if (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
-                let next = nodes[i + 1] as StringLiteral;
-                let text = next.text;
+            while (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
+                const next = nodes[i + 1] as StringLiteral;
+                text = text + next.text;
                 i++;
-
-                while (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
-                    next = nodes[i + 1] as StringLiteral;
-                    text = text + next.text;
-                    i++;
-                }
-
-                text = escapeText(text);
-                templatePart = i === nodes.length - 1 ? createTemplateTail(text) : createTemplateMiddle(text);
             }
-            else {
-                templatePart = i === nodes.length - 1 ? createTemplateTail("") : createTemplateMiddle("");
-            }
+
+            text = escapeText(text);
+            const templatePart = i === nodes.length - 1 ? createTemplateTail(text) : createTemplateMiddle(text);
 
             if (isParenthesizedExpression(current)) current = current.expression;
-            spans.push(createTemplateSpan(current as Expression, templatePart));
+            templateSpans.push(createTemplateSpan(current, templatePart));
         }
 
-        return createTemplateExpression(head, spans);
+        return createTemplateExpression(head, templateSpans);
     }
 
     function escapeText(content: string) {
-        return content.replace("`", "\`").replace("\${", `$\\{`);
+        return content.replace("`", "\`")
+                      .replace("\${", `$\\{`);
     }
 
 }
