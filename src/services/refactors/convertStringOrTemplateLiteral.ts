@@ -8,8 +8,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const toTemplateLiteralDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_literal);
     const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
-    // TODO let a = 45 - 45 + " ee" - 33;
-
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
@@ -19,7 +17,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const maybeTemplateExpression = findAncestor(node, n => isTemplateExpression(n));
         const actions: RefactorActionInfo[] = [];
 
-        if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && containsString(maybeBinary)) {
+        if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && isStringConcatenationValid(maybeBinary)) {
             actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
         }
 
@@ -39,7 +37,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                 const maybeBinary = getParentBinaryExpression(node);
                 const arrayOfNodes = treeToArray(maybeBinary)[0];
                 const templateLiteral = nodesToTemplate(arrayOfNodes);
-
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
                 return { edits };
 
@@ -97,7 +94,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             const left = nodes[0];
             const right = nodes[1];
 
-            const binary = createBinary (left, SyntaxKind.PlusToken, right);
+            const binary = createBinary(left, SyntaxKind.PlusToken, right);
             return arrayToTree(nodes.slice(2), binary);
         }
 
@@ -106,16 +103,25 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return arrayToTree(nodes.slice(1), binary);
     }
 
-    function treeToArray(node: Node): [Node[], boolean] {
-        if (isBinaryExpression(node)) {
-            const [leftNodes, leftHasString] = treeToArray(node.left);
-            const [rightNodes, rightHasString] = treeToArray(node.right);
+    function isStringConcatenationValid(node: Node): boolean {
+        const [, containsString, areOperatorsValid] = treeToArray(node);
+        return containsString && areOperatorsValid;
+    }
 
-            if (!leftHasString && !rightHasString) return [[node], false];
-            return [leftNodes.concat(rightNodes), true];
+    function treeToArray(node: Node): [Node[], /* containsString */ boolean, /* areOperatorsValid */ boolean] {
+        if (isBinaryExpression(node)) {
+            const [leftNodes, leftHasString, leftOp] = treeToArray(node.left);
+            const [rightNodes, rightHasString, rightOp] = treeToArray(node.right);
+
+            if (!leftHasString && !rightHasString) return [[node], false, true];
+
+            const currentOp = node.operatorToken.kind === SyntaxKind.PlusToken;
+            const isPlus = leftOp && currentOp && rightOp;
+
+            return [leftNodes.concat(rightNodes), true, isPlus];
         }
 
-        return [[node], isStringLiteral(node)];
+        return [[node], isStringLiteral(node), true];
     }
 
     function nodesToTemplate(nodes: Node[]) {
