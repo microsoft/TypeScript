@@ -9,6 +9,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
     // TODO let a = 45 + 45 + " ee" + 33;
+    // TODO let a = 45 - 45 + " ee" - 33;
     // TODO let a = tag `aaa`;
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
@@ -19,20 +20,15 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const maybeBinary = getParentBinaryExpression(node); containsString(maybeBinary);
         const actions: RefactorActionInfo[] = [];
 
-        if (!isTemplateLike(node) && (isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && containsString(maybeBinary)) {
+        if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && containsString(maybeBinary)) {
             actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
         }
 
-
-        if (isTemplateLike(node)) {
+        if (isNoSubstitutionTemplateLiteral(node) || isTemplateHead(node) || isTemplateSpan(node.parent)) {
             actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
         }
 
         return [{ name: refactorName, description: refactorDescription, actions }];
-    }
-
-    function isTemplateLike(node: Node): boolean {
-        return isNoSubstitutionTemplateLiteral(node) || isTemplateHead(node) || isTemplateMiddleOrTemplateTail(node);
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
@@ -55,8 +51,8 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                 return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, node, stringLiteral)) };
 
                 }
-                if (isTemplateExpression(node.parent)) {
-                    const templateLiteralExpression = node.parent;
+                if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
+                    const templateLiteralExpression = isTemplateSpan(node.parent) ? node.parent.parent : node.parent;
                     const nodesArray: Expression[] = [];
 
                     if (templateLiteralExpression.head.text.length !== 0) nodesArray.push(createStringLiteral(templateLiteralExpression.head.text));
