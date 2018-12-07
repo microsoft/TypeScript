@@ -12,8 +12,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
-        let node = getTokenAtPosition(file, startPosition);
-        if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
+        const node = getNodeOrParentOfBraces(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
         const actions: RefactorActionInfo[] = [];
 
@@ -28,11 +27,17 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return [{ name: refactorName, description: refactorDescription, actions }];
     }
 
+    function getNodeOrParentOfBraces(file: SourceFile, startPosition: number) {
+        const node = getTokenAtPosition(file, startPosition);
+        if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) return node.parent.parent;
+        return node;
+    }
+
     function isTemplateLike(node: Node) {
-        const isEmptyTemplate = isNoSubstitutionTemplateLiteral(node) && isNotTagged(node);
+        const isTemplateWithoutSubstitution = isNoSubstitutionTemplateLiteral(node) && isNotTagged(node);
         const isTemplate = (isTemplateHead(node) || isTemplateMiddleOrTemplateTail(node)) && isNotTagged(node.parent);
         const isTemplateFromExpression = isTemplateSpan(node.parent) && isNotTagged(node.parent.parent);
-        return isEmptyTemplate || isTemplate || isTemplateFromExpression;
+        return isTemplateWithoutSubstitution || isTemplate || isTemplateFromExpression;
     }
 
     function isNotTagged(templateExpression: Node) {
@@ -41,46 +46,45 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
-        let node = getTokenAtPosition(file, startPosition);
+        const node = getNodeOrParentOfBraces(file, startPosition);
 
         switch (actionName) {
             case toTemplateLiteralActionName:
-                if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
                 const maybeBinary = getParentBinaryExpression(node);
-
                 const arrayOfNodes = transformTreeToArray(maybeBinary);
                 const templateLiteral = nodesToTemplate(arrayOfNodes);
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
                 return { edits };
 
             case toStringConcatenationActionName:
-                if (isNoSubstitutionTemplateLiteral(node)) {
-                    const stringLiteral = createStringLiteral(node.text);
-                    return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, node, stringLiteral)) };
-
-                }
-                if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
-                    const templateLiteralExpression = isTemplateSpan(node.parent) ? node.parent.parent : node.parent;
-                    const nodesArray: Expression[] = [];
-
-                    if (templateLiteralExpression.head.text.length !== 0) nodesArray.push(createStringLiteral(templateLiteralExpression.head.text));
-
-                    templateLiteralExpression.templateSpans.forEach(ts => {
-                        nodesArray.push(ts.expression);
-                        const str = ts.literal.text;
-                        if (str.length !== 0) {
-                            nodesArray.push(createStringLiteral(str));
-                        }
-                    });
-
-                    const binaryExpression = arrayToTree(nodesArray);
-                    return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, templateLiteralExpression, binaryExpression)) };
-                }
-
-                break;
+                return { edits: getEditsForToStringConcatenation(context, node) };
 
             default:
                 return Debug.fail("invalid action");
+        }
+    }
+
+    function getEditsForToStringConcatenation(context: RefactorContext, node: Node) {
+        if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
+            const templateLiteralExpression = isTemplateSpan(node.parent) ? node.parent.parent : node.parent;
+            const { head, templateSpans } = templateLiteralExpression;
+            const arrayOfNodes: Expression[] = [];
+
+            if (head.text.length !== 0) arrayOfNodes.push(createStringLiteral(head.text));
+
+            templateSpans.forEach(ts => {
+                arrayOfNodes.push(ts.expression);
+                const text = ts.literal.text;
+                if (text.length !== 0) arrayOfNodes.push(createStringLiteral(text));
+            });
+
+            const binaryExpression = arrayToTree(arrayOfNodes);
+            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteralExpression, binaryExpression));
+        }
+        else {
+            const templateWithoutSubstitution = node as NoSubstitutionTemplateLiteral;
+            const stringLiteral = createStringLiteral(templateWithoutSubstitution.text);
+            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, node, stringLiteral));
         }
     }
 
