@@ -583,6 +583,8 @@ namespace ts {
     }
 
     function compareSourcePositions(left: SourceMappedPosition, right: SourceMappedPosition) {
+        // Compares sourcePosition without comparing sourceIndex
+        // since the mappings are grouped by sourceIndex
         Debug.assert(left.sourceIndex === right.sourceIndex);
         return compareValues(left.sourcePosition, right.sourcePosition);
     }
