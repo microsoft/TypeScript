@@ -15,18 +15,26 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         let node = getTokenAtPosition(file, startPosition);
         if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
         const maybeBinary = getParentBinaryExpression(node);
-        const maybeTemplateExpression = findAncestor(node, n => isTemplateExpression(n));
+        // const maybeTemplateExpression = findAncestor(node, n => isTemplateExpression(n));
         const actions: RefactorActionInfo[] = [];
 
         if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && isStringConcatenationValid(maybeBinary)) {
             actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
         }
 
-        if ((isNoSubstitutionTemplateLiteral(node) && !isTaggedTemplateExpression(node.parent)) || (maybeTemplateExpression && !isTaggedTemplateExpression(maybeTemplateExpression.parent))) {
+        // if ((isNoSubstitutionTemplateLiteral(node) && !isTaggedTemplateExpression(node.parent)) || (maybeTemplateExpression && !isTaggedTemplateExpression(maybeTemplateExpression.parent))) {
+        if (isTemplateLike(node)) {
             actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
         }
 
         return [{ name: refactorName, description: refactorDescription, actions }];
+    }
+
+    function isTemplateLike(node: Node) {
+        const isEmptyTL = isNoSubstitutionTemplateLiteral(node) && !isTaggedTemplateExpression(node.parent);
+        const is = (isTemplateHead(node) || isTemplateMiddleOrTemplateTail(node)) && !isTaggedTemplateExpression(node.parent.parent);
+        const ise = (isTemplateSpan(node.parent)) && !isTaggedTemplateExpression(node.parent.parent.parent);
+        return isEmptyTL || is || ise;
     }
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
