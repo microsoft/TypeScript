@@ -8,7 +8,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const toTemplateLiteralDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_template_literal);
     const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
-    // TODO let a = 45 + 45 + " ee" + 33;
     // TODO let a = 45 - 45 + " ee" - 33;
     // TODO let a = tag `aaa`;
 
@@ -143,6 +142,19 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         for (let i = begin; i < nodes.length; i++) {
             let current = nodes[i];
             let templatePart: TemplateMiddle | TemplateTail;
+
+            if (head.text.length === 0 && i + 1 < nodes.length && !isStringLiteral(nodes[i + 1])) {
+                let binary = createBinary(current as Expression, SyntaxKind.PlusToken, nodes[i + 1] as Expression);
+                current = binary;
+                i++;
+
+                while (i + 1 < nodes.length && !isStringLiteral(nodes[i + 1])) {
+                    binary = createBinary(binary, SyntaxKind.PlusToken, nodes[i + 1] as Expression);
+                    i++;
+                }
+
+                current = binary;
+            }
 
             if (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
                 let next = nodes[i + 1] as StringLiteral;
