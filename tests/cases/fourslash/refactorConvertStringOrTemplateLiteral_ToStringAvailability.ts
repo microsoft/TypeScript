@@ -2,7 +2,7 @@
 
 //// const age = 22
 //// const name = "Eddy"
-//// const /*z*/f/*y*/oo = /*x*/`/*w*/M/*v*/r/*u*/ /*t*/$/*s*/{ /*r*/n/*q*/ame } is $/*p*/{/*o*/ age } years old`
+//// const /*z*/f/*y*/oo = /*x*/`/*w*/M/*v*/r/*u*/ /*t*/$/*s*/{ /*r*/n/*q*/ame } is ${ /*p*/a/*o*/ge + 34 } years old`
 
 goTo.select("z", "y");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
@@ -25,5 +25,5 @@ verify.refactorAvailable("Convert string concatenation or template literal", "Co
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
 
 goTo.select("p", "o");
-verify.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
+verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to string concatenation");
 verify.not.refactorAvailable("Convert string concatenation or template literal", "Convert to template literal");
