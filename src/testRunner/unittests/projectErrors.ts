@@ -480,4 +480,87 @@ namespace ts.projectSystem {
             }
         });
     });
+
+    describe("tsserver:: Project Errors dont include overwrite emit error", () => {
+        it("for inferred project", () => {
+            const f1 = {
+                path: "/a/b/f1.js",
+                content: "function test1() { }"
+            };
+            const host = createServerHost([f1, libFile]);
+            const session = createSession(host);
+            openFilesForSession([f1], session);
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { inferredProjects: 1 });
+            const projectName = projectService.inferredProjects[0].getProjectName();
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName: projectName }
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.SetCompilerOptionsForInferredProjectsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsForInferredProjects,
+                seq: 3,
+                arguments: { options: { module: ModuleKind.CommonJS } }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName: projectName }
+            }).response as ReadonlyArray<protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diagsAfterUpdate.length === 0);
+        });
+
+        it("for external project", () => {
+            const f1 = {
+                path: "/a/b/f1.js",
+                content: "function test1() { }"
+            };
+            const host = createServerHost([f1, libFile]);
+            const session = createSession(host);
+            const projectService = session.getProjectService();
+            const projectFileName = "/a/b/project.csproj";
+            const externalFiles = toExternalFiles([f1.path]);
+            projectService.openExternalProject(<protocol.ExternalProject>{
+                projectFileName,
+                rootFiles: externalFiles,
+                options: {}
+            });
+
+            checkNumberOfProjects(projectService, { externalProjects: 1 });
+
+            const diags = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 2,
+                arguments: { projectFileName }
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diags.length === 0);
+
+            session.executeCommand(<server.protocol.OpenExternalProjectRequest>{
+                type: "request",
+                command: server.CommandNames.OpenExternalProject,
+                seq: 3,
+                arguments: {
+                    projectFileName,
+                    rootFiles: externalFiles,
+                    options: { module: ModuleKind.CommonJS }
+                }
+            });
+            const diagsAfterUpdate = session.executeCommand(<server.protocol.CompilerOptionsDiagnosticsRequest>{
+                type: "request",
+                command: server.CommandNames.CompilerOptionsDiagnosticsFull,
+                seq: 4,
+                arguments: { projectFileName }
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diagsAfterUpdate.length === 0);
+        });
+    });
 }
