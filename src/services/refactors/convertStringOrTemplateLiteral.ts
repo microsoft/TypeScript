@@ -164,15 +164,14 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
                     i++;
                 }
 
-                if (isParenthesizedExpression(current)) current = current.expression;
                 text = cleanString(text);
-
                 templatePart = i === nodes.length - 1 ? createTemplateTail(text) : createTemplateMiddle(text);
             }
             else {
                 templatePart = i === nodes.length - 1 ? createTemplateTail("") : createTemplateMiddle("");
             }
 
+            if (isParenthesizedExpression(current)) current = current.expression;
             spans.push(createTemplateSpan(current as Expression, templatePart));
         }
 
