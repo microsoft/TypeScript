@@ -86,6 +86,7 @@
         "unittests/tsbuild.ts",
         "unittests/tsbuildWatchMode.ts",
         "unittests/tsconfigParsing.ts",
+        "unittests/tscWatchEmit.ts",
         "unittests/tscWatchMode.ts",
         "unittests/tsserverProjectSystem.ts",
         "unittests/typingsInstaller.ts",

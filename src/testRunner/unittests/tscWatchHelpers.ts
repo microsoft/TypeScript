@@ -41,45 +41,6 @@ namespace ts.tscWatch {
         return () => watch.getCurrentProgram().getProgram();
     }
 
-    //function getEmittedLineForMultiFileOutput(file: File, host: WatchedSystem) {
-    //    return `TSFILE: ${file.path.replace(".ts", ".js")}${host.newLine}`;
-    //}
-
-    //function getEmittedLineForSingleFileOutput(filename: string, host: WatchedSystem) {
-    //    return `TSFILE: ${filename}${host.newLine}`;
-    //}
-
-    //interface FileOrFolderEmit extends File {
-    //    output?: string;
-    //}
-
-    //function getFileOrFolderEmit(file: File, getOutput?: (file: File) => string): FileOrFolderEmit {
-    //    const result = file as FileOrFolderEmit;
-    //    if (getOutput) {
-    //        result.output = getOutput(file);
-    //    }
-    //    return result;
-    //}
-
-    //function getEmittedLines(files: FileOrFolderEmit[]) {
-    //    const seen = createMap<true>();
-    //    const result: string[] = [];
-    //    for (const { output } of files) {
-    //        if (output && !seen.has(output)) {
-    //            seen.set(output, true);
-    //            result.push(output);
-    //        }
-    //    }
-    //    return result;
-    //}
-
-    //function checkAffectedLines(host: WatchedSystem, affectedFiles: FileOrFolderEmit[], allEmittedFiles: string[]) {
-    //    const expectedAffectedFiles = getEmittedLines(affectedFiles);
-    //    const expectedNonAffectedFiles = mapDefined(allEmittedFiles, line => contains(expectedAffectedFiles, line) ? undefined : line);
-    //    checkOutputContains(host, expectedAffectedFiles);
-    //    checkOutputDoesNotContain(host, expectedNonAffectedFiles);
-    //}
-
     const elapsedRegex = /^Elapsed:: [0-9]+ms/;
     function checkOutputErrors(
         host: WatchedSystem,
@@ -182,7 +143,7 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
+    export function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
         return {
             file,
             start,
@@ -193,31 +154,6 @@ namespace ts.tscWatch {
             code: message.code,
         };
     }
-
-    //function getDiagnosticWithoutFile(message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-    //    let text = getLocaleSpecificMessage(message);
-
-    //    if (arguments.length > 1) {
-    //        text = formatStringFromArgs(text, arguments, 1);
-    //    }
-
-    //    return getDiagnosticOfFileFrom(/*file*/ undefined, text, /*start*/ undefined, /*length*/ undefined, message);
-    //}
-
-    //function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-    //    let text = getLocaleSpecificMessage(message);
-
-    //    if (arguments.length > 4) {
-    //        text = formatStringFromArgs(text, arguments, 4);
-    //    }
-
-    //    return getDiagnosticOfFileFrom(file, text, start, length, message);
-    //}
-
-    //function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
-    //    const quotedOption = `"${option}"`;
-    //    return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
-    //}
 
     export function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
         let text = getLocaleSpecificMessage(message);
