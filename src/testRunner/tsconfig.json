@@ -93,6 +93,7 @@
         "unittests/tsserverProjectLoadingEvents.ts",
         "unittests/tsserverProjectSystem.ts",
         "unittests/tsserverProjectUpdatedInBackgroundEvent.ts",
+        "unittests/tsserverSymLinks.ts",
         "unittests/typingsInstaller.ts",
         "unittests/versionCache.ts",
         "unittests/watchEnvironment.ts",

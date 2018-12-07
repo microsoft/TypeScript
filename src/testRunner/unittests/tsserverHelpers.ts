@@ -482,14 +482,15 @@ namespace ts.projectSystem {
         const toLocation = protocolToLocation(str);
         return { start: toLocation(span.start), end: toLocation(textSpanEnd(span)) };
     }
-    //function protocolRenameSpanFromSubstring(
-    //    str: string,
-    //    substring: string,
-    //    options?: SpanFromSubstringOptions,
-    //    prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
-    //): protocol.RenameTextSpan {
-    //    return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
-    //}
+
+    export function protocolRenameSpanFromSubstring(
+        str: string,
+        substring: string,
+        options?: SpanFromSubstringOptions,
+        prefixSuffixText?: { readonly prefixText?: string, readonly suffixText?: string },
+    ): protocol.RenameTextSpan {
+        return { ...protocolTextSpanFromSubstring(str, substring, options), ...prefixSuffixText };
+    }
 
     export function textSpanFromSubstring(str: string, substring: string, options?: SpanFromSubstringOptions): TextSpan {
         const start = nthIndexOf(str, substring, options ? options.index : 0);
