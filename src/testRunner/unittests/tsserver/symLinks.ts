@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserverProjectSystem with symLinks", () => {
+    describe("tsserver:: symLinks", () => {
         it("rename in common file renames all project", () => {
             const projects = "/users/username/projects";
             const folderA = `${projects}/a`;

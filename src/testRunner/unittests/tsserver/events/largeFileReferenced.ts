@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserverLargeFileReferencedEvent:: LargeFileReferencedEvent with large file", () => {
+    describe("tsserver:: LargeFileReferencedEvent with large file", () => {
         const projectRoot = "/user/username/projects/project";
 
         function getLargeFile(useLargeTsFile: boolean) {

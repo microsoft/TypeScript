@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("tsserverProjectLoadingEvents:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
+    describe("tsserver:: events:: ProjectLoadingStart and ProjectLoadingFinish events", () => {
         const projectRoot = "/user/username/projects";
         const aTs: File = {
             path: `${projectRoot}/a/a.ts`,
