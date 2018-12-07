@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("Project errors", () => {
+    describe("tsserver:: Project Errors", () => {
         function checkProjectErrors(projectFiles: server.ProjectFilesWithTSDiagnostics, expectedErrors: ReadonlyArray<string>): void {
             assert.isTrue(projectFiles !== undefined, "missing project files");
             checkProjectErrorsWorker(projectFiles.projectErrors, expectedErrors);

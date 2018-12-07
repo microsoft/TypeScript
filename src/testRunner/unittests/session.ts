@@ -35,7 +35,7 @@ namespace ts.server {
         }
     }
 
-    describe("the Session class", () => {
+    describe("tsserver:: Session:: General functionality", () => {
         let session: TestSession;
         let lastSent: protocol.Message;
 
@@ -418,7 +418,7 @@ namespace ts.server {
         });
     });
 
-    describe("exceptions", () => {
+    describe("tsserver:: Session:: exceptions", () => {
 
         // Disable sourcemap support for the duration of the test, as sourcemapping the errors generated during this test is slow and not something we care to test
         let oldPrepare: AnyFunction;
@@ -489,7 +489,7 @@ namespace ts.server {
         });
     });
 
-    describe("how Session is extendable via subclassing", () => {
+    describe("tsserver:: Session:: how Session is extendable via subclassing", () => {
         class TestSession extends Session {
             lastSent: protocol.Message | undefined;
             customHandler = "testhandler";
@@ -558,7 +558,7 @@ namespace ts.server {
         });
     });
 
-    describe("an example of using the Session API to create an in-process server", () => {
+    describe("tsserver:: Session:: an example of using the Session API to create an in-process server", () => {
         class InProcSession extends Session {
             private queue: protocol.Request[] = [];
             constructor(private client: InProcClient) {
@@ -710,7 +710,7 @@ namespace ts.server {
         });
     });
 
-    describe("helpers", () => {
+    describe("tsserver:: Session:: helpers", () => {
         it(getLocationInNewDocument.name, () => {
             const text = `// blank line\nconst x = 0;`;
             const renameLocationInOldText = text.indexOf("0");

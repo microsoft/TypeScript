@@ -6,7 +6,7 @@ namespace ts.projectSystem {
         return new TestTypingsInstaller("/a/data/", /*throttleLimit*/5, host);
     }
 
-    describe("CompileOnSave affected list", () => {
+    describe("compileOnSave:: affected list", () => {
         function sendAffectedFileRequestAndCheckResult(session: server.Session, request: server.protocol.Request, expectedFileList: { projectFileName: string, files: File[] }[]) {
             const response = session.executeCommand(request).response as server.protocol.CompileOnSaveAffectedFileListSingleProject[];
             const actualResult = response.sort((list1, list2) => compareStringsCaseSensitive(list1.projectFileName, list2.projectFileName));
@@ -504,7 +504,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("EmitFile test", () => {
+    describe("compileOnSave:: EmitFile test", () => {
         it("should respect line endings", () => {
             test("\n");
             test("\r\n");

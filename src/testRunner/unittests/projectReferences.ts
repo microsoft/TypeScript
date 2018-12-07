@@ -308,7 +308,7 @@ namespace ts {
         });
     });
 
-    describe("errors when a file in a composite project occurs outside the root", () => {
+    describe("project-references errors when a file in a composite project occurs outside the root", () => {
         it("Errors when a file is outside the rootdir", () => {
             const spec: TestSpecification = {
                 "/alpha": {
