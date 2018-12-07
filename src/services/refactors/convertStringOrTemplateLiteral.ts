@@ -68,15 +68,10 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
             const templateLiteralExpression = isTemplateSpan(node.parent) ? node.parent.parent : node.parent;
             const { head, templateSpans } = templateLiteralExpression;
-            const arrayOfNodes: Expression[] = [];
+            const arrayOfNodes = templateSpans.map(templateSpanToExpressions)
+                                              .reduce((accumulator, nextArray) => accumulator.concat(nextArray));
 
-            if (head.text.length !== 0) arrayOfNodes.push(createStringLiteral(head.text));
-
-            templateSpans.forEach(ts => {
-                arrayOfNodes.push(ts.expression);
-                const text = ts.literal.text;
-                if (text.length !== 0) arrayOfNodes.push(createStringLiteral(text));
-            });
+            if (head.text.length !== 0) arrayOfNodes.unshift(createStringLiteral(head.text));
 
             const binaryExpression = arrayToTree(arrayOfNodes);
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteralExpression, binaryExpression));
@@ -86,6 +81,12 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             const stringLiteral = createStringLiteral(templateWithoutSubstitution.text);
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, node, stringLiteral));
         }
+    }
+
+    function templateSpanToExpressions(templateSpan: TemplateSpan): Expression[] {
+        const { expression, literal } = templateSpan;
+        const text = literal.text;
+        return text.length === 0 ? [expression] : [expression, createStringLiteral(text)];
     }
 
     function getParentBinaryExpression(expr: Node) {
