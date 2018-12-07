@@ -450,18 +450,14 @@ namespace ts.projectSystem {
     }
 
     export const nodeModules = "node_modules";
-    //function getNodeModuleDirectories(dir: string) {
-    //    return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
-    //}
+    export function getNodeModuleDirectories(dir: string) {
+        return getRootsToWatchWithAncestorDirectory(dir, nodeModules);
+    }
 
     export const nodeModulesAtTypes = "node_modules/@types";
     export function getTypeRootsFromLocation(currentDirectory: string) {
         return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
     }
-
-    //function getNumberOfWatchesInvokedForRecursiveWatches(recursiveWatchedDirs: string[], file: string) {
-    //    return countWhere(recursiveWatchedDirs, dir => file.length > dir.length && startsWith(file, dir) && file[dir.length] === directorySeparator);
-    //}
 
     //function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
     //    checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
