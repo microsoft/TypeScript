@@ -12,8 +12,9 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
-        const node = getTokenAtPosition(file, startPosition);
-        const maybeBinary = getParentBinaryExpression(node); containsString(maybeBinary);
+        let node = getTokenAtPosition(file, startPosition);
+        if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
+        const maybeBinary = getParentBinaryExpression(node);
         const maybeTemplateExpression = findAncestor(node, n => isTemplateExpression(n));
         const actions: RefactorActionInfo[] = [];
 
@@ -30,11 +31,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
-        const node = getTokenAtPosition(file, startPosition);
+        let node = getTokenAtPosition(file, startPosition);
 
         switch (actionName) {
             case toTemplateLiteralActionName:
+                if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) node = node.parent.parent;
                 const maybeBinary = getParentBinaryExpression(node);
+
                 const arrayOfNodes = treeToArray(maybeBinary)[0];
                 const templateLiteral = nodesToTemplate(arrayOfNodes);
                 const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
@@ -76,15 +79,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             expr = expr.parent;
         }
         return expr;
-    }
-
-    function containsString(node: Node): boolean {
-        if (isBinaryExpression(node)) {
-            return containsString(node.left) || containsString(node.right);
-        }
-
-        if (isStringLiteral(node)) return true;
-        return false;
     }
 
     function arrayToTree(nodes: Expression[], bexpr: BinaryExpression | undefined): BinaryExpression {
