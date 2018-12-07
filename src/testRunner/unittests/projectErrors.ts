@@ -563,4 +563,287 @@ namespace ts.projectSystem {
             assert.isTrue(diagsAfterUpdate.length === 0);
         });
     });
+
+    describe("tsserver:: Project Errors for Configure file diagnostics events", () => {
+        function getUnknownCompilerOptionDiagnostic(configFile: File, prop: string): ConfigFileDiagnostic {
+            const d = Diagnostics.Unknown_compiler_option_0;
+            const start = configFile.content.indexOf(prop) - 1; // start at "prop"
+            return {
+                fileName: configFile.path,
+                start,
+                length: prop.length + 2,
+                messageText: formatStringFromArgs(d.message, [prop]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
+
+        function getFileNotFoundDiagnostic(configFile: File, relativeFileName: string): ConfigFileDiagnostic {
+            const findString = `{"path":"./${relativeFileName}"}`;
+            const d = Diagnostics.File_0_not_found;
+            const start = configFile.content.indexOf(findString);
+            return {
+                fileName: configFile.path,
+                start,
+                length: findString.length,
+                messageText: formatStringFromArgs(d.message, [`${getDirectoryPath(configFile.path)}/${relativeFileName}`]),
+                category: d.category,
+                code: d.code,
+                reportsUnnecessary: undefined
+            };
+        }
+
+        it("are generated when the config file has errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "foo"),
+                getUnknownCompilerOptionDiagnostic(configFile, "allowJS")
+            ]);
+        });
+
+        it("are generated when the config file doesn't have errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
+        });
+
+        it("are generated when the config file changes", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {}
+                }`
+            };
+
+            const files = [file, libFile, configFile];
+            const serverEventManager = new TestServerEventManager(files);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, emptyArray);
+
+            configFile.content = `{
+                "compilerOptions": {
+                    "haha": 123
+                }
+            }`;
+            serverEventManager.host.reloadFS(files);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, [
+                getUnknownCompilerOptionDiagnostic(configFile, "haha")
+            ]);
+
+            configFile.content = `{
+                "compilerOptions": {}
+            }`;
+            serverEventManager.host.reloadFS(files);
+            serverEventManager.host.runQueuedTimeoutCallbacks();
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, configFile.path, emptyArray);
+        });
+
+        it("are not generated when the config file does not include file opened and config file has errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2: File = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    },
+                    "files": ["app.ts"]
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file has errors but suppressDiagnosticEvents is true", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "compilerOptions": {
+                        "foo": "bar",
+                        "allowJS": true
+                    }
+                }`
+            };
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile], /*suppressDiagnosticEvents*/ true);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("are not generated when the config file does not include file opened and doesnt contain any errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const file2: File = {
+                path: "/a/b/test.ts",
+                content: "let x = 10"
+            };
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, file2, libFile, configFile]);
+            openFilesForSession([file2], serverEventManager.session);
+            serverEventManager.hasZeroEvent("configFileDiag");
+        });
+
+        it("contains the project reference errors", () => {
+            const file: File = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const noSuchTsconfig = "no-such-tsconfig.json";
+            const configFile: File = {
+                path: "/a/b/tsconfig.json",
+                content: `{
+                    "files": ["app.ts"],
+                    "references": [{"path":"./${noSuchTsconfig}"}]
+                }`
+            };
+
+            const serverEventManager = new TestServerEventManager([file, libFile, configFile]);
+            openFilesForSession([file], serverEventManager.session);
+            serverEventManager.checkSingleConfigFileDiagEvent(configFile.path, file.path, [
+                getFileNotFoundDiagnostic(configFile, noSuchTsconfig)
+            ]);
+        });
+    });
+
+    describe("tsserver:: Project Errors reports Options Diagnostic locations correctly with changes in configFile contents", () => {
+        it("when options change", () => {
+            const file = {
+                path: "/a/b/app.ts",
+                content: "let x = 10"
+            };
+            const configFileContentBeforeComment = `{`;
+            const configFileContentComment = `
+                // comment`;
+            const configFileContentAfterComment = `
+                "compilerOptions": {
+                    "allowJs": true,
+                    "declaration": true
+                }
+            }`;
+            const configFileContentWithComment = configFileContentBeforeComment + configFileContentComment + configFileContentAfterComment;
+            const configFileContentWithoutCommentLine = configFileContentBeforeComment + configFileContentAfterComment;
+
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: configFileContentWithComment
+            };
+            const host = createServerHost([file, libFile, configFile]);
+            const session = createSession(host);
+            openFilesForSession([file], session);
+
+            const projectService = session.getProjectService();
+            checkNumberOfProjects(projectService, { configuredProjects: 1 });
+            const projectName = configuredProjectAt(projectService, 0).getProjectName();
+
+            const diags = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+                type: "request",
+                command: server.CommandNames.SemanticDiagnosticsSync,
+                seq: 2,
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diags.length === 2);
+
+            configFile.content = configFileContentWithoutCommentLine;
+            host.reloadFS([file, configFile]);
+
+            const diagsAfterEdit = session.executeCommand(<server.protocol.SemanticDiagnosticsSyncRequest>{
+                type: "request",
+                command: server.CommandNames.SemanticDiagnosticsSync,
+                seq: 2,
+                arguments: { file: configFile.path, projectFileName: projectName, includeLinePosition: true }
+            }).response as ReadonlyArray<server.protocol.DiagnosticWithLinePosition>;
+            assert.isTrue(diagsAfterEdit.length === 2);
+
+            verifyDiagnostic(diags[0], diagsAfterEdit[0]);
+            verifyDiagnostic(diags[1], diagsAfterEdit[1]);
+
+            function verifyDiagnostic(beforeEditDiag: server.protocol.DiagnosticWithLinePosition, afterEditDiag: server.protocol.DiagnosticWithLinePosition) {
+                assert.equal(beforeEditDiag.message, afterEditDiag.message);
+                assert.equal(beforeEditDiag.code, afterEditDiag.code);
+                assert.equal(beforeEditDiag.category, afterEditDiag.category);
+                assert.equal(beforeEditDiag.startLocation.line, afterEditDiag.startLocation.line + 1);
+                assert.equal(beforeEditDiag.startLocation.offset, afterEditDiag.startLocation.offset);
+                assert.equal(beforeEditDiag.endLocation.line, afterEditDiag.endLocation.line + 1);
+                assert.equal(beforeEditDiag.endLocation.offset, afterEditDiag.endLocation.offset);
+            }
+        });
+    });
+
+    describe("tsserver:: Project Errors with config file change", () => {
+        it("Updates diagnostics when '--noUnusedLabels' changes", () => {
+            const aTs: File = { path: "/a.ts", content: "label: while (1) {}" };
+            const options = (allowUnusedLabels: boolean) => `{ "compilerOptions": { "allowUnusedLabels": ${allowUnusedLabels} } }`;
+            const tsconfig: File = { path: "/tsconfig.json", content: options(/*allowUnusedLabels*/ true) };
+
+            const host = createServerHost([aTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+
+            host.modifyFile(tsconfig.path, options(/*allowUnusedLabels*/ false));
+            host.runQueuedTimeoutCallbacks();
+
+            const response = executeSessionRequest<protocol.SemanticDiagnosticsSyncRequest, protocol.SemanticDiagnosticsSyncResponse>(session, protocol.CommandTypes.SemanticDiagnosticsSync, { file: aTs.path }) as protocol.Diagnostic[] | undefined;
+            assert.deepEqual<protocol.Diagnostic[] | undefined>(response, [
+                {
+                    start: { line: 1, offset: 1 },
+                    end: { line: 1, offset: 1 + "label".length },
+                    text: "Unused label.",
+                    category: "error",
+                    code: Diagnostics.Unused_label.code,
+                    relatedInformation: undefined,
+                    reportsUnnecessary: true,
+                    source: undefined,
+                },
+            ]);
+        });
+    });
 }

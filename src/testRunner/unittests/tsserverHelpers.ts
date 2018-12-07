@@ -599,23 +599,23 @@ namespace ts.projectSystem {
         }
     }
 
-    //interface ErrorInformation {
-    //    diagnosticMessage: DiagnosticMessage;
-    //    errorTextArguments?: string[];
-    //}
+    export interface ErrorInformation {
+        diagnosticMessage: DiagnosticMessage;
+        errorTextArguments?: string[];
+    }
 
-    //function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
-    //    return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
-    //}
+    function getProtocolDiagnosticMessage({ diagnosticMessage, errorTextArguments = [] }: ErrorInformation) {
+        return formatStringFromArgs(diagnosticMessage.message, errorTextArguments);
+    }
 
-    //function verifyDiagnostics(actual: server.protocol.Diagnostic[], expected: ErrorInformation[]) {
-    //    const expectedErrors = expected.map(getProtocolDiagnosticMessage);
-    //    assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
-    //}
+    export function verifyDiagnostics(actual: ReadonlyArray<server.protocol.Diagnostic>, expected: ReadonlyArray<ErrorInformation>) {
+        const expectedErrors = expected.map(getProtocolDiagnosticMessage);
+        assert.deepEqual(actual.map(diag => flattenDiagnosticMessageText(diag.text, "\n")), expectedErrors);
+    }
 
-    //function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
-    //    verifyDiagnostics(actual, []);
-    //}
+    export function verifyNoDiagnostics(actual: server.protocol.Diagnostic[]) {
+        verifyDiagnostics(actual, []);
+    }
 
     export function checkErrorMessage(session: TestSession, eventName: protocol.DiagnosticEventKind, diagnostics: protocol.DiagnosticEventBody, isMostRecent = false): void {
         checkNthEvent(session, server.toEvent(eventName, diagnostics), 0, isMostRecent);
@@ -629,15 +629,15 @@ namespace ts.projectSystem {
         checkNthEvent(session, server.toEvent("requestCompleted", { request_seq: expectedSequenceId }), numberOfCurrentEvents - 1, isMostRecent);
     }
 
-    //function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
-    //    checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
-    //}
+    export function checkProjectUpdatedInBackgroundEvent(session: TestSession, openFiles: string[]) {
+        checkNthEvent(session, server.toEvent("projectsUpdatedInBackground", { openFiles }), 0, /*isMostRecent*/ true);
+    }
 
-    //function checkNoDiagnosticEvents(session: TestSession) {
-    //    for (const event of session.events) {
-    //        assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
-    //    }
-    //}
+    export function checkNoDiagnosticEvents(session: TestSession) {
+        for (const event of session.events) {
+            assert.isFalse(event.event.endsWith("Diag"), JSON.stringify(event));
+        }
+    }
 
     export function checkNthEvent(session: TestSession, expectedEvent: protocol.Event, index: number, isMostRecent: boolean) {
         const events = session.events;
