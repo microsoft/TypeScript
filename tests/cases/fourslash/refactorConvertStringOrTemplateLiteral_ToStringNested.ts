@@ -10,5 +10,5 @@ edit.applyRefactor({
     actionDescription: "Convert to string concatenation",
     newContent:
 `const age = 42
-const·foo·=·"foobar·is·a·"·+·(age·<·18·?·'child'·:·\`grown-up·\${age·>·40·?·'who·needs·probaply·assistance'·:·''}\`)`,
+const foo = "foobar is a " + (age < 18 ? 'child' : \`grown-up \${age > 40 ? 'who needs probaply assistance' : ''}\`)`,
 });
