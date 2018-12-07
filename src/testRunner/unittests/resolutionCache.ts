@@ -495,6 +495,453 @@ namespace ts.projectSystem {
         });
     });
 
+    describe("resolutionCache:: tsserverProjectSystem watching @types", () => {
+        it("works correctly when typings are added or removed", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1;"
+            };
+            const t1 = {
+                path: "/a/b/node_modules/@types/lib1/index.d.ts",
+                content: "export let a: number"
+            };
+            const t2 = {
+                path: "/a/b/node_modules/@types/lib2/index.d.ts",
+                content: "export let b: number"
+            };
+            const tsconfig = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({
+                    compilerOptions: {},
+                    exclude: ["node_modules"]
+                })
+            };
+            const host = createServerHost([f1, t1, tsconfig]);
+            const projectService = createProjectService(host);
+
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
+
+            // delete t1
+            host.reloadFS([f1, tsconfig]);
+            // run throttled operation
+            host.runQueuedTimeoutCallbacks();
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
+
+            // create t2
+            host.reloadFS([f1, tsconfig, t2]);
+            // run throttled operation
+            host.runQueuedTimeoutCallbacks();
+
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t2.path, tsconfig.path]);
+        });
+    });
+
+    describe("resolutionCache:: tsserverProjectSystem add the missing module file for inferred project", () => {
+        it("should remove the `module not found` error", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const host = createServerHost([file1]);
+            const session = createSession(host);
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
+
+            host.reloadFS([file1, moduleFile]);
+            host.runQueuedTimeoutCallbacks();
+
+            // Make a change to trigger the program rebuild
+            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
+                server.CommandNames.Change,
+                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            );
+            session.executeCommand(changeRequest);
+
+            // Recheck
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyNoDiagnostics(diags);
+        });
+
+        it("npm install @types works", () => {
+            const folderPath = "/a/b/projects/temp";
+            const file1: File = {
+                path: `${folderPath}/a.ts`,
+                content: 'import f = require("pad"); f;'
+            };
+            const files = [file1, libFile];
+            const host = createServerHost(files);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: {
+                    file: file1.path,
+                    fileContent: file1.content,
+                    scriptKindName: "TS",
+                    projectRootPath: folderPath
+                }
+            });
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file1.path]
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks();
+            const startOffset = file1.content.indexOf('"') + 1;
+            checkErrorMessage(session, "semanticDiag", {
+                file: file1.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
+                ],
+            });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+
+            const padIndex: File = {
+                path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
+                content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
+            };
+            files.push(padIndex);
+            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
+            host.runQueuedTimeoutCallbacks();
+            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
+            session.clearMessages();
+
+            host.runQueuedTimeoutCallbacks();
+            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks();
+            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
+        });
+
+        it("suggestion diagnostics", () => {
+            const file: File = {
+                path: "/a.js",
+                content: "function f(p) {}",
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "suggestionDiag", {
+                file: file.path,
+                diagnostics: [
+                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
+                ],
+            });
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
+        it("disable suggestion diagnostics", () => {
+            const file: File = {
+                path: "/a.js",
+                content: 'require("b")',
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            session.executeCommandSeq<protocol.ConfigureRequest>({
+                command: server.CommandNames.Configure,
+                arguments: {
+                    preferences: { disableSuggestions: true }
+                },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+            session.clearMessages();
+            const expectedSequenceId = session.getNextSeq();
+            host.checkTimeoutQueueLengthAndRun(2);
+
+            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
+            session.clearMessages();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLengthAndRun(1);
+
+            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
+            session.clearMessages();
+
+            host.runQueuedImmediateCallbacks(1);
+
+            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
+            // No suggestion event, we're done.
+            checkCompleteEvent(session, 2, expectedSequenceId);
+            session.clearMessages();
+        });
+
+        it("suppressed diagnostic events", () => {
+            const file: File = {
+                path: "/a.ts",
+                content: "1 = 2;",
+            };
+
+            const host = createServerHost([file]);
+            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
+            const service = session.getProjectService();
+
+            session.executeCommandSeq<protocol.OpenRequest>({
+                command: server.CommandNames.Open,
+                arguments: { file: file.path, fileContent: file.content },
+            });
+
+            checkNumberOfProjects(service, { inferredProjects: 1 });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            session.clearMessages();
+
+            let expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    files: [file.path],
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+
+            expectedSequenceId = session.getNextSeq();
+
+            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
+                command: server.CommandNames.Geterr,
+                arguments: {
+                    delay: 0,
+                    file: file.path,
+                }
+            });
+
+            host.checkTimeoutQueueLength(0);
+            checkNoDiagnosticEvents(session);
+
+            checkCompleteEvent(session, 1, expectedSequenceId);
+
+            session.clearMessages();
+        });
+    });
+
+    describe("resolutionCache:: tsserverProjectSystem rename a module file and rename back", () => {
+        it("should restore the states for inferred projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const host = createServerHost([moduleFile, file1]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyNoDiagnostics(diags);
+
+            const moduleFileOldPath = moduleFile.path;
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1]);
+            host.runQueuedTimeoutCallbacks();
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
+            assert.equal(diags.length, 1);
+
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1]);
+            host.runQueuedTimeoutCallbacks();
+
+            // Make a change to trigger the program rebuild
+            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
+                server.CommandNames.Change,
+                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
+            );
+            session.executeCommand(changeRequest);
+            host.runQueuedTimeoutCallbacks();
+
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyNoDiagnostics(diags);
+        });
+
+        it("should restore the states for configured projects", () => {
+            const moduleFile = {
+                path: "/a/b/moduleFile.ts",
+                content: "export function bar() { };"
+            };
+            const file1 = {
+                path: "/a/b/file1.ts",
+                content: "import * as T from './moduleFile'; T.bar();"
+            };
+            const configFile = {
+                path: "/a/b/tsconfig.json",
+                content: `{}`
+            };
+            const host = createServerHost([moduleFile, file1, configFile]);
+            const session = createSession(host);
+
+            openFilesForSession([file1], session);
+            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
+                server.CommandNames.SemanticDiagnosticsSync,
+                { file: file1.path }
+            );
+            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyNoDiagnostics(diags);
+
+            const moduleFileOldPath = moduleFile.path;
+            const moduleFileNewPath = "/a/b/moduleFile1.ts";
+            moduleFile.path = moduleFileNewPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.runQueuedTimeoutCallbacks();
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyDiagnostics(diags, [
+                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
+            ]);
+
+            moduleFile.path = moduleFileOldPath;
+            host.reloadFS([moduleFile, file1, configFile]);
+            host.runQueuedTimeoutCallbacks();
+            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
+            verifyNoDiagnostics(diags);
+        });
+
+        it("should property handle missing config files", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: "{}"
+            };
+            const projectName = "project1";
+            const host = createServerHost([f1]);
+            const projectService = createProjectService(host);
+            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
+
+            // should have one external project since config file is missing
+            projectService.checkNumberOfProjects({ externalProjects: 1 });
+
+            host.reloadFS([f1, config]);
+            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+        });
+
+        it("types should load from config file path if config exists", () => {
+            const f1 = {
+                path: "/a/b/app.ts",
+                content: "let x = 1"
+            };
+            const config = {
+                path: "/a/b/tsconfig.json",
+                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
+            };
+            const node = {
+                path: "/a/b/node_modules/@types/node/index.d.ts",
+                content: "declare var process: any"
+            };
+            const cwd = {
+                path: "/a/c"
+            };
+            const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
+            const projectService = createProjectService(host);
+            projectService.openClientFile(f1.path);
+            projectService.checkNumberOfProjects({ configuredProjects: 1 });
+            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, node.path, config.path]);
+        });
+    });
+
     describe("resolutionCache:: tsserverProjectSystem module resolution caching", () => {
         const projectLocation = "/user/username/projects/myproject";
         const configFile: File = {
@@ -976,407 +1423,6 @@ export const x = 10;`
                 host.ensureFileOrFolder(npmCacheFile);
                 host.checkTimeoutQueueLength(0);
             });
-        });
-    });
-
-    describe("resolutionCache:: tsserverProjectSystem rename a module file and rename back", () => {
-        it("should restore the states for inferred projects", () => {
-            const moduleFile = {
-                path: "/a/b/moduleFile.ts",
-                content: "export function bar() { };"
-            };
-            const file1 = {
-                path: "/a/b/file1.ts",
-                content: "import * as T from './moduleFile'; T.bar();"
-            };
-            const host = createServerHost([moduleFile, file1]);
-            const session = createSession(host);
-
-            openFilesForSession([file1], session);
-            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-                server.CommandNames.SemanticDiagnosticsSync,
-                { file: file1.path }
-            );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
-
-            const moduleFileOldPath = moduleFile.path;
-            const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1]);
-            host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
-            assert.equal(diags.length, 1);
-
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1]);
-            host.runQueuedTimeoutCallbacks();
-
-            // Make a change to trigger the program rebuild
-            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
-                server.CommandNames.Change,
-                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
-            );
-            session.executeCommand(changeRequest);
-            host.runQueuedTimeoutCallbacks();
-
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
-        });
-
-        it("should restore the states for configured projects", () => {
-            const moduleFile = {
-                path: "/a/b/moduleFile.ts",
-                content: "export function bar() { };"
-            };
-            const file1 = {
-                path: "/a/b/file1.ts",
-                content: "import * as T from './moduleFile'; T.bar();"
-            };
-            const configFile = {
-                path: "/a/b/tsconfig.json",
-                content: `{}`
-            };
-            const host = createServerHost([moduleFile, file1, configFile]);
-            const session = createSession(host);
-
-            openFilesForSession([file1], session);
-            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-                server.CommandNames.SemanticDiagnosticsSync,
-                { file: file1.path }
-            );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
-
-            const moduleFileOldPath = moduleFile.path;
-            const moduleFileNewPath = "/a/b/moduleFile1.ts";
-            moduleFile.path = moduleFileNewPath;
-            host.reloadFS([moduleFile, file1, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
-
-            moduleFile.path = moduleFileOldPath;
-            host.reloadFS([moduleFile, file1, configFile]);
-            host.runQueuedTimeoutCallbacks();
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
-        });
-
-        it("should property handle missing config files", () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1"
-            };
-            const config = {
-                path: "/a/b/tsconfig.json",
-                content: "{}"
-            };
-            const projectName = "project1";
-            const host = createServerHost([f1]);
-            const projectService = createProjectService(host);
-            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
-
-            // should have one external project since config file is missing
-            projectService.checkNumberOfProjects({ externalProjects: 1 });
-
-            host.reloadFS([f1, config]);
-            projectService.openExternalProject({ rootFiles: toExternalFiles([f1.path, config.path]), options: {}, projectFileName: projectName });
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-        });
-
-        it("types should load from config file path if config exists", () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1"
-            };
-            const config = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({ compilerOptions: { types: ["node"], typeRoots: [] } })
-            };
-            const node = {
-                path: "/a/b/node_modules/@types/node/index.d.ts",
-                content: "declare var process: any"
-            };
-            const cwd = {
-                path: "/a/c"
-            };
-            const host = createServerHost([f1, config, node, cwd], { currentDirectory: cwd.path });
-            const projectService = createProjectService(host);
-            projectService.openClientFile(f1.path);
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, node.path, config.path]);
-        });
-    });
-
-    describe("resolutionCache:: tsserverProjectSystem add the missing module file for inferred project", () => {
-        it("should remove the `module not found` error", () => {
-            const moduleFile = {
-                path: "/a/b/moduleFile.ts",
-                content: "export function bar() { };"
-            };
-            const file1 = {
-                path: "/a/b/file1.ts",
-                content: "import * as T from './moduleFile'; T.bar();"
-            };
-            const host = createServerHost([file1]);
-            const session = createSession(host);
-            openFilesForSession([file1], session);
-            const getErrRequest = makeSessionRequest<server.protocol.SemanticDiagnosticsSyncRequestArgs>(
-                server.CommandNames.SemanticDiagnosticsSync,
-                { file: file1.path }
-            );
-            let diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyDiagnostics(diags, [
-                { diagnosticMessage: Diagnostics.Cannot_find_module_0, errorTextArguments: ["./moduleFile"] }
-            ]);
-
-            host.reloadFS([file1, moduleFile]);
-            host.runQueuedTimeoutCallbacks();
-
-            // Make a change to trigger the program rebuild
-            const changeRequest = makeSessionRequest<server.protocol.ChangeRequestArgs>(
-                server.CommandNames.Change,
-                { file: file1.path, line: 1, offset: 44, endLine: 1, endOffset: 44, insertString: "\n" }
-            );
-            session.executeCommand(changeRequest);
-
-            // Recheck
-            diags = session.executeCommand(getErrRequest).response as server.protocol.Diagnostic[];
-            verifyNoDiagnostics(diags);
-        });
-
-        it("npm install @types works", () => {
-            const folderPath = "/a/b/projects/temp";
-            const file1: File = {
-                path: `${folderPath}/a.ts`,
-                content: 'import f = require("pad"); f;'
-            };
-            const files = [file1, libFile];
-            const host = createServerHost(files);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
-                arguments: {
-                    file: file1.path,
-                    fileContent: file1.content,
-                    scriptKindName: "TS",
-                    projectRootPath: folderPath
-                }
-            });
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file1.path]
-                }
-            });
-
-            host.checkTimeoutQueueLengthAndRun(1);
-            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks();
-            const startOffset = file1.content.indexOf('"') + 1;
-            checkErrorMessage(session, "semanticDiag", {
-                file: file1.path,
-                diagnostics: [
-                    createDiagnostic({ line: 1, offset: startOffset }, { line: 1, offset: startOffset + '"pad"'.length }, Diagnostics.Cannot_find_module_0, ["pad"])
-                ],
-            });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-            checkErrorMessage(session, "suggestionDiag", { file: file1.path, diagnostics: [] });
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
-
-            const padIndex: File = {
-                path: `${folderPath}/node_modules/@types/pad/index.d.ts`,
-                content: "export = pad;declare function pad(length: number, text: string, char ?: string): string;"
-            };
-            files.push(padIndex);
-            host.reloadFS(files, { ignoreWatchInvokedWithTriggerAsFileCreate: true });
-            host.runQueuedTimeoutCallbacks();
-            checkProjectUpdatedInBackgroundEvent(session, [file1.path]);
-            session.clearMessages();
-
-            host.runQueuedTimeoutCallbacks();
-            checkErrorMessage(session, "syntaxDiag", { file: file1.path, diagnostics: [] });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks();
-            checkErrorMessage(session, "semanticDiag", { file: file1.path, diagnostics: [] });
-        });
-
-        it("suggestion diagnostics", () => {
-            const file: File = {
-                path: "/a.js",
-                content: "function f(p) {}",
-            };
-
-            const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
-
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
-                arguments: { file: file.path, fileContent: file.content },
-            });
-
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-            session.clearMessages();
-
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file.path],
-                }
-            });
-
-            host.checkTimeoutQueueLengthAndRun(1);
-
-            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "suggestionDiag", {
-                file: file.path,
-                diagnostics: [
-                    createDiagnostic({ line: 1, offset: 12 }, { line: 1, offset: 13 }, Diagnostics._0_is_declared_but_its_value_is_never_read, ["p"], "suggestion", /*reportsUnnecessary*/ true),
-                ],
-            });
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
-        });
-
-        it("disable suggestion diagnostics", () => {
-            const file: File = {
-                path: "/a.js",
-                content: 'require("b")',
-            };
-
-            const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true });
-            const service = session.getProjectService();
-
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
-                arguments: { file: file.path, fileContent: file.content },
-            });
-
-            session.executeCommandSeq<protocol.ConfigureRequest>({
-                command: server.CommandNames.Configure,
-                arguments: {
-                    preferences: { disableSuggestions: true }
-                },
-            });
-
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-            session.clearMessages();
-            const expectedSequenceId = session.getNextSeq();
-            host.checkTimeoutQueueLengthAndRun(2);
-
-            checkProjectUpdatedInBackgroundEvent(session, [file.path]);
-            session.clearMessages();
-
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file.path],
-                }
-            });
-
-            host.checkTimeoutQueueLengthAndRun(1);
-
-            checkErrorMessage(session, "syntaxDiag", { file: file.path, diagnostics: [] }, /*isMostRecent*/ true);
-            session.clearMessages();
-
-            host.runQueuedImmediateCallbacks(1);
-
-            checkErrorMessage(session, "semanticDiag", { file: file.path, diagnostics: [] });
-            // No suggestion event, we're done.
-            checkCompleteEvent(session, 2, expectedSequenceId);
-            session.clearMessages();
-        });
-
-        it("suppressed diagnostic events", () => {
-            const file: File = {
-                path: "/a.ts",
-                content: "1 = 2;",
-            };
-
-            const host = createServerHost([file]);
-            const session = createSession(host, { canUseEvents: true, suppressDiagnosticEvents: true });
-            const service = session.getProjectService();
-
-            session.executeCommandSeq<protocol.OpenRequest>({
-                command: server.CommandNames.Open,
-                arguments: { file: file.path, fileContent: file.content },
-            });
-
-            checkNumberOfProjects(service, { inferredProjects: 1 });
-
-            host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            session.clearMessages();
-
-            let expectedSequenceId = session.getNextSeq();
-
-            session.executeCommandSeq<protocol.GeterrRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    files: [file.path],
-                }
-            });
-
-            host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
-
-            expectedSequenceId = session.getNextSeq();
-
-            session.executeCommandSeq<protocol.GeterrForProjectRequest>({
-                command: server.CommandNames.Geterr,
-                arguments: {
-                    delay: 0,
-                    file: file.path,
-                }
-            });
-
-            host.checkTimeoutQueueLength(0);
-            checkNoDiagnosticEvents(session);
-
-            checkCompleteEvent(session, 1, expectedSequenceId);
-
-            session.clearMessages();
         });
     });
 }

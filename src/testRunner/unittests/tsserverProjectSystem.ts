@@ -3653,52 +3653,6 @@ var x = 10;`
         });
     });
 
-    describe("tsserverProjectSystem watching @types", () => {
-        it("works correctly when typings are added or removed", () => {
-            const f1 = {
-                path: "/a/b/app.ts",
-                content: "let x = 1;"
-            };
-            const t1 = {
-                path: "/a/b/node_modules/@types/lib1/index.d.ts",
-                content: "export let a: number"
-            };
-            const t2 = {
-                path: "/a/b/node_modules/@types/lib2/index.d.ts",
-                content: "export let b: number"
-            };
-            const tsconfig = {
-                path: "/a/b/tsconfig.json",
-                content: JSON.stringify({
-                    compilerOptions: {},
-                    exclude: ["node_modules"]
-                })
-            };
-            const host = createServerHost([f1, t1, tsconfig]);
-            const projectService = createProjectService(host);
-
-            projectService.openClientFile(f1.path);
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t1.path, tsconfig.path]);
-
-            // delete t1
-            host.reloadFS([f1, tsconfig]);
-            // run throttled operation
-            host.runQueuedTimeoutCallbacks();
-
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, tsconfig.path]);
-
-            // create t2
-            host.reloadFS([f1, tsconfig, t2]);
-            // run throttled operation
-            host.runQueuedTimeoutCallbacks();
-
-            projectService.checkNumberOfProjects({ configuredProjects: 1 });
-            checkProjectActualFiles(configuredProjectAt(projectService, 0), [f1.path, t2.path, tsconfig.path]);
-        });
-    });
-
     describe("tsserverProjectSystem Open-file", () => {
         it("can be reloaded with empty content", () => {
             const f = {
