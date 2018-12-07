@@ -9,7 +9,6 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     const toStringConcatenationDescription = getLocaleSpecificMessage(Diagnostics.Convert_to_string_concatenation);
 
     // TODO let a = 45 - 45 + " ee" - 33;
-    // TODO let a = tag `aaa`;
 
     registerRefactor(refactorName, { getEditsForAction, getAvailableActions });
 
@@ -17,13 +16,14 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         const { file, startPosition } = context;
         const node = getTokenAtPosition(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node); containsString(maybeBinary);
+        const maybeTemplateExpression = findAncestor(node, n => isTemplateExpression(n));
         const actions: RefactorActionInfo[] = [];
 
         if ((isBinaryExpression(maybeBinary) || isStringLiteral(maybeBinary)) && containsString(maybeBinary)) {
             actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
         }
 
-        if (isNoSubstitutionTemplateLiteral(node) || isTemplateHead(node) || isTemplateSpan(node.parent)) {
+        if ((isNoSubstitutionTemplateLiteral(node) && !isTaggedTemplateExpression(node.parent)) || (maybeTemplateExpression && !isTaggedTemplateExpression(maybeTemplateExpression.parent))) {
             actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
         }
 
@@ -46,8 +46,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             case toStringConcatenationActionName:
                 if (isNoSubstitutionTemplateLiteral(node)) {
                     const stringLiteral = createStringLiteral(node.text);
-
-                return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, node, stringLiteral)) };
+                    return { edits: textChanges.ChangeTracker.with(context, t => t.replaceNode(file, node, stringLiteral)) };
 
                 }
                 if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
