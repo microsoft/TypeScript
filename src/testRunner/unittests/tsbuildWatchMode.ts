@@ -1,5 +1,4 @@
 namespace ts.tscWatch {
-    export import libFile = TestFSWithWatch.libFile;
     import projectsLocation = TestFSWithWatch.tsbuildProjectsLocation;
     import getFilePathInProject = TestFSWithWatch.getTsBuildProjectFilePath;
     import getFileFromProject = TestFSWithWatch.getTsBuildProjectFile;

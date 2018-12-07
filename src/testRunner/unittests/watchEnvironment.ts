@@ -262,5 +262,55 @@ namespace ts {
                 verifyCompletionListWithNewFileInSubFolder(Tsc_WatchDirectory.DynamicPolling);
             });
         });
+
+        describe("watchEnvironment:: tsserverProjectSystem Watched recursive directories with windows style file system", () => {
+            function verifyWatchedDirectories(rootedPath: string, useProjectAtRoot: boolean) {
+                const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
+                const configFile: File = {
+                    path: root + "project/tsconfig.json",
+                    content: "{}"
+                };
+                const file1: File = {
+                    path: root + "project/file1.ts",
+                    content: "let x = 10;"
+                };
+                const file2: File = {
+                    path: root + "project/file2.ts",
+                    content: "let y = 10;"
+                };
+                const files = [configFile, file1, file2, libFile];
+                const host = createServerHost(files, { useWindowsStylePaths: true });
+                const projectService = createProjectService(host);
+                projectService.openClientFile(file1.path);
+                const project = projectService.configuredProjects.get(configFile.path)!;
+                assert.isDefined(project);
+                const winsowsStyleLibFilePath = "c:/" + libFile.path.substring(1);
+                checkProjectActualFiles(project, files.map(f => f === libFile ? winsowsStyleLibFilePath : f.path));
+                checkWatchedFiles(host, mapDefined(files, f => f === libFile ? winsowsStyleLibFilePath : f === file1 ? undefined : f.path));
+                checkWatchedDirectories(host, [], /*recursive*/ false);
+                checkWatchedDirectories(host, [
+                    root + "project",
+                    root + "project/node_modules/@types"
+                ].concat(useProjectAtRoot ? [] : [root + nodeModulesAtTypes]), /*recursive*/ true);
+            }
+
+            function verifyRootedDirectoryWatch(rootedPath: string) {
+                it("When project is in rootFolder of style c:/", () => {
+                    verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ true);
+                });
+
+                it("When files at some folder other than root", () => {
+                    verifyWatchedDirectories(rootedPath, /*useProjectAtRoot*/ false);
+                });
+            }
+
+            describe("for rootFolder of style c:/", () => {
+                verifyRootedDirectoryWatch("c:/");
+            });
+
+            describe("for rootFolder of style c:/users/username", () => {
+                verifyRootedDirectoryWatch("c:/users/username/");
+            });
+        });
     }
 }
