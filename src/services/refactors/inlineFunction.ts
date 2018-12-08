@@ -268,8 +268,10 @@ namespace ts.refactor.inlineFunction {
                 }
             }
             if (isReturnStatement(node) && nofReturns > 1) {
-                if (node.expression) {
-                    const assignment = createAssignment(createReturnVariableName(file), node.expression);
+                const expression = node.expression;
+                if (expression) {
+                    const safeExpression = visitNode(expression, transformVisitor);
+                    const assignment = createAssignment(createReturnVariableName(file), safeExpression);
                     return createExpressionStatement(assignment);
                 }
             }
@@ -379,9 +381,9 @@ namespace ts.refactor.inlineFunction {
         flags?: NodeFlags,
         initializer?: Expression
     ) {
-        const decl = createVariableDeclaration(name, type, initializer);
-        const declList = createVariableDeclarationList([decl], flags);
-        const variableStatement = createVariableStatement(/* modifiers */ undefined, declList);
+        const declaration = createVariableDeclaration(name, type, initializer);
+        const declarationList = createVariableDeclarationList([declaration], flags);
+        const variableStatement = createVariableStatement(/* modifiers */ undefined, declarationList);
         return variableStatement;
     }
 
