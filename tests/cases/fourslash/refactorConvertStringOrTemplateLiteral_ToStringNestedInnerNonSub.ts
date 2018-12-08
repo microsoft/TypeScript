@@ -1,7 +1,7 @@
 /// <reference path='fourslash.ts' />
 
 //// const age = 42
-//// const foo = `/*x*/f/*y*/oobar is a ${ age < 18 ? 'child' : `grown-up ${ age > 40 ? 'who needs probaply assistance': ''}` }`
+//// const foo = `foobar is a ${ `/*x*/3/*y*/4` }`
 
 goTo.select("x", "y");
 edit.applyRefactor({
@@ -10,5 +10,5 @@ edit.applyRefactor({
     actionDescription: "Convert to string concatenation",
     newContent:
 `const age = 42
-const foo = "foobar is a " + (age < 18 ? 'child' : \`grown-up \${age > 40 ? 'who needs probaply assistance' : ''}\`)`,
+const foo = \`foobar is a \${ "34" }\``,
 });
