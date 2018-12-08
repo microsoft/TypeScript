@@ -12,7 +12,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function getAvailableActions(context: RefactorContext): ReadonlyArray<ApplicableRefactorInfo> {
         const { file, startPosition } = context;
-        const node = getNodeOrParentOfBraces(file, startPosition);
+        const node = getNodeOrParentOfParentheses(file, startPosition);
         const maybeBinary = getParentBinaryExpression(node);
         const actions: RefactorActionInfo[] = [];
 
@@ -20,33 +20,24 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             actions.push({ name: toTemplateLiteralActionName, description: toTemplateLiteralDescription });
         }
 
-        if (isTemplateLike(node)) {
+        const templateLiteral = findAncestor(node, n => isTemplateLiteral(n));
+
+        if (templateLiteral && !isTaggedTemplateExpression(templateLiteral.parent)) {
             actions.push({ name: toStringConcatenationActionName, description: toStringConcatenationDescription });
         }
 
         return [{ name: refactorName, description: refactorDescription, actions }];
     }
 
-    function getNodeOrParentOfBraces(file: SourceFile, startPosition: number) {
+    function getNodeOrParentOfParentheses(file: SourceFile, startPosition: number) {
         const node = getTokenAtPosition(file, startPosition);
         if (isParenthesizedExpression(node.parent) && isBinaryExpression(node.parent.parent)) return node.parent.parent;
         return node;
     }
 
-    function isTemplateLike(node: Node) {
-        const isTemplateWithoutSubstitution = isNoSubstitutionTemplateLiteral(node) && isNotTagged(node);
-        const isTemplate = (isTemplateHead(node) || isTemplateMiddleOrTemplateTail(node)) && isNotTagged(node.parent);
-        const isTemplateFromExpression = isTemplateSpan(node.parent) && isNotTagged(node.parent.parent);
-        return isTemplateWithoutSubstitution || isTemplate || isTemplateFromExpression;
-    }
-
-    function isNotTagged(templateExpression: Node) {
-        return !isTaggedTemplateExpression(templateExpression.parent);
-    }
-
     function getEditsForAction(context: RefactorContext, actionName: string): RefactorEditInfo | undefined {
         const { file, startPosition } = context;
-        const node = getNodeOrParentOfBraces(file, startPosition);
+        const node = getNodeOrParentOfParentheses(file, startPosition);
 
         switch (actionName) {
             case toTemplateLiteralActionName:
@@ -65,20 +56,20 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function getEditsForToStringConcatenation(context: RefactorContext, node: Node) {
-        if (isTemplateExpression(node.parent) || isTemplateSpan(node.parent)) {
-            const templateLiteralExpression = isTemplateSpan(node.parent) ? node.parent.parent : node.parent;
-            const { head, templateSpans } = templateLiteralExpression;
+        const templateLiteral = findAncestor(node, n => isTemplateLiteral(n))! as TemplateLiteral;
+
+        if (isTemplateExpression(templateLiteral)) {
+            const { head, templateSpans } = templateLiteral;
             const arrayOfNodes = templateSpans.map(templateSpanToExpressions)
                                               .reduce((accumulator, nextArray) => accumulator.concat(nextArray));
 
             if (head.text.length !== 0) arrayOfNodes.unshift(createStringLiteral(head.text));
 
             const binaryExpression = arrayToTree(arrayOfNodes);
-            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteralExpression, binaryExpression));
+            return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, templateLiteral, binaryExpression));
         }
         else {
-            const templateWithoutSubstitution = node as NoSubstitutionTemplateLiteral;
-            const stringLiteral = createStringLiteral(templateWithoutSubstitution.text);
+            const stringLiteral = createStringLiteral(templateLiteral.text);
             return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, node, stringLiteral));
         }
     }
