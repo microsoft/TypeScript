@@ -96,7 +96,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return expr;
     }
 
-    function arrayToTree(nodes: Expression[], accumulator?: BinaryExpression): BinaryExpression {
+    function arrayToTree(nodes: ReadonlyArray<Expression>, accumulator?: BinaryExpression): BinaryExpression {
         if (nodes.length === 0) return accumulator!;
 
         if (!accumulator) {
@@ -113,31 +113,33 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function isStringConcatenationValid(node: Node): boolean {
-        const [, containsString, areOperatorsValid] = treeToArray(node);
+        const { containsString, areOperatorsValid } = treeToArray(node);
         return containsString && areOperatorsValid;
     }
 
-    function transformTreeToArray(node: Node): Expression[] {
-        return treeToArray(node)[0];
+    function transformTreeToArray(node: Node): ReadonlyArray<Expression> {
+        return treeToArray(node).nodes;
     }
 
-    function treeToArray(node: Node): [Expression[], /* containsString */ boolean, /* areOperatorsValid */ boolean] {
+    function treeToArray(node: Node): { nodes: ReadonlyArray<Expression>, containsString: boolean, areOperatorsValid: boolean} {
         if (isBinaryExpression(node)) {
-            const [leftNodes, leftHasString, leftOperatorValid] = treeToArray(node.left);
-            const [rightNodes, rightHasString, rightOperatorValid] = treeToArray(node.right);
+            const { nodes: leftNodes, containsString: leftHasString, areOperatorsValid: leftOperatorValid } = treeToArray(node.left);
+            const { nodes: rightNodes, containsString: rightHasString, areOperatorsValid: rightOperatorValid } = treeToArray(node.right);
 
-            if (!leftHasString && !rightHasString) return [[node], false, true];
+            if (!leftHasString && !rightHasString) {
+                return { nodes: [node], containsString: false, areOperatorsValid: true };
+            }
 
             const nodeOperatorValid = node.operatorToken.kind === SyntaxKind.PlusToken;
             const isPlus = leftOperatorValid && nodeOperatorValid && rightOperatorValid;
 
-            return [leftNodes.concat(rightNodes), true, isPlus];
+            return { nodes: leftNodes.concat(rightNodes), containsString: true, areOperatorsValid: isPlus };
         }
 
-        return [[node as Expression], isStringLiteral(node), true];
+        return { nodes: [node as Expression], containsString: isStringLiteral(node), areOperatorsValid: true };
     }
 
-    function createHead(nodes: Node[]): [number, TemplateHead] {
+    function createHead(nodes: ReadonlyArray<Expression>): [number, TemplateHead] {
         let begin = 0;
         const head = createTemplateHead("");
 
@@ -151,7 +153,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return [begin, head];
     }
 
-    function nodesToTemplate(nodes: Expression[]) {
+    function nodesToTemplate(nodes: ReadonlyArray<Expression>) {
         const templateSpans: TemplateSpan[] = [];
         const [begin, head] = createHead(nodes);
 
