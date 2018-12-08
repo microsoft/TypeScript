@@ -5,7 +5,7 @@ namespace ts.projectSystem {
         return resolutionTrace;
     }
 
-    describe("resolutionCache:: tsserverProjectSystem extra resolution pass in lshost", () => {
+    describe("tsserver:: resolutionCache:: tsserverProjectSystem extra resolution pass in lshost", () => {
         it("can load typings that are proper modules", () => {
             const file1 = {
                 path: "/a/b/app.js",
@@ -46,7 +46,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("resolutionCache:: tsserverProjectSystem watching @types", () => {
+    describe("tsserver:: resolutionCache:: tsserverProjectSystem watching @types", () => {
         it("works correctly when typings are added or removed", () => {
             const f1 = {
                 path: "/a/b/app.ts",
@@ -92,7 +92,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("resolutionCache:: tsserverProjectSystem add the missing module file for inferred project", () => {
+    describe("tsserver:: resolutionCache:: tsserverProjectSystem add the missing module file for inferred project", () => {
         it("should remove the `module not found` error", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -358,7 +358,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("resolutionCache:: tsserverProjectSystem rename a module file and rename back", () => {
+    describe("tsserver:: resolutionCache:: tsserverProjectSystem rename a module file and rename back", () => {
         it("should restore the states for inferred projects", () => {
             const moduleFile = {
                 path: "/a/b/moduleFile.ts",
@@ -493,7 +493,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("resolutionCache:: tsserverProjectSystem module resolution caching", () => {
+    describe("tsserver:: resolutionCache:: tsserverProjectSystem module resolution caching", () => {
         const projectLocation = "/user/username/projects/myproject";
         const configFile: File = {
             path: `${projectLocation}/tsconfig.json`,

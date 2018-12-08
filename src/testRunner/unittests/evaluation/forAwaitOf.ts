@@ -1,4 +1,4 @@
-describe("forAwaitOfEvaluation", () => {
+describe("evaluation:: forAwaitOfEvaluation", () => {
     it("sync (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
         let i = 0;

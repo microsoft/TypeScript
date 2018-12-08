@@ -1,5 +1,5 @@
 namespace ts.tscWatch {
-    describe("resolutionCache:: tsc-watch module resolution caching", () => {
+    describe("tsc-watch:: resolutionCache:: tsc-watch module resolution caching", () => {
         it("works", () => {
             const root = {
                 path: "/a/d/f0.ts",
@@ -404,7 +404,7 @@ declare module "fs" {
         });
     });
 
-    describe("resolutionCache:: tsc-watch with modules linked to sibling folder", () => {
+    describe("tsc-watch:: resolutionCache:: tsc-watch with modules linked to sibling folder", () => {
         const projectRoot = "/user/username/projects/project";
         const mainPackageRoot = `${projectRoot}/main`;
         const linkedPackageRoot = `${projectRoot}/linked-package`;

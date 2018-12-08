@@ -1,5 +1,5 @@
 namespace ts {
-    describe("tsconfigParsing:: parseConfigFileTextToJson", () => {
+    describe("config:: tsconfigParsing:: parseConfigFileTextToJson", () => {
         function assertParseResult(jsonText: string, expectedConfigObject: { config?: any; error?: Diagnostic[] }) {
             const parsed = parseConfigFileTextToJson("/apath/tsconfig.json", jsonText);
             assert.equal(JSON.stringify(parsed), JSON.stringify(expectedConfigObject));

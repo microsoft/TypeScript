@@ -1,5 +1,5 @@
 namespace ts {
-    describe("convertCompilerOptionsFromJson", () => {
+    describe("config:: convertCompilerOptionsFromJson", () => {
         const formatDiagnosticHost: FormatDiagnosticsHost = {
             getCurrentDirectory: () => "/apath/",
             getCanonicalFileName: createGetCanonicalFileName(/*useCaseSensitiveFileNames*/ true),

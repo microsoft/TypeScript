@@ -1,5 +1,5 @@
 namespace ts {
-    describe("Organize imports", () => {
+    describe("services:: Organize imports", () => {
         describe("Sort imports", () => {
             it("Sort - non-relative vs non-relative", () => {
                 assertSortsBefore(

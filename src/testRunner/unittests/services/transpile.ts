@@ -1,5 +1,5 @@
 namespace ts {
-    describe("Transpile", () => {
+    describe("services:: Transpile", () => {
 
         interface TranspileTestSettings {
             options?: TranspileOptions;

@@ -1,5 +1,5 @@
 namespace ts {
-    describe("extractFunctions", () => {
+    describe("services:: extract:: extractFunctions", () => {
         testExtractFunction("extractFunction1",
             `namespace A {
     let x = 1;

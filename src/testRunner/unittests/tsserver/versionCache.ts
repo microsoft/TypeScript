@@ -15,7 +15,7 @@ namespace ts {
         assert.equal(editedText, checkText);
     }
 
-    describe(`VersionCache TS code`, () => {
+    describe(`tsserver:: VersionCache TS code`, () => {
         let validateEditAtLineCharIndex: (line: number, char: number, deleteLength: number, insertString: string) => void;
 
         before(() => {
@@ -77,7 +77,7 @@ var q:Point=<Point>p;`;
         });
     });
 
-    describe(`VersionCache simple text`, () => {
+    describe(`tsserver:: VersionCache simple text`, () => {
         let validateEditAtPosition: (position: number, deleteLength: number, insertString: string) => void;
         let testContent: string;
         let lines: string[];
@@ -181,7 +181,7 @@ and grew 1cm per day`;
         });
     });
 
-    describe(`VersionCache stress test`, () => {
+    describe(`tsserver:: VersionCache stress test`, () => {
         let rsa: number[] = [];
         let la: number[] = [];
         let las: number[] = [];

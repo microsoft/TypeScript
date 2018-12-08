@@ -12,6 +12,15 @@ namespace ts.tscWatch {
     export import checkOutputContains = TestFSWithWatch.checkOutputContains;
     export import checkOutputDoesNotContain = TestFSWithWatch.checkOutputDoesNotContain;
 
+    export const commonFile1: File = {
+        path: "/a/b/commonFile1.ts",
+        content: "let x = 1"
+    };
+    export const commonFile2: File = {
+        path: "/a/b/commonFile2.ts",
+        content: "let y = 1"
+    };
+
     export function checkProgramActualFiles(program: Program, expectedFiles: ReadonlyArray<string>) {
         checkArray(`Program actual files`, program.getSourceFiles().map(file => file.fileName), expectedFiles);
     }

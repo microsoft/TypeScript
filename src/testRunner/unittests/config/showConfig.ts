@@ -1,5 +1,5 @@
 namespace ts {
-    describe("showConfig", () => {
+    describe("config:: showConfig", () => {
         function showTSConfigCorrectly(name: string, commandLinesArgs: string[], configJson?: object) {
             describe(name, () => {
                 const outputFileName = `showConfig/${name.replace(/[^a-z0-9\-./ ]/ig, "")}/tsconfig.json`;

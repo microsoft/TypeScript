@@ -1,5 +1,5 @@
 namespace ts.textStorage {
-    describe("Text storage", () => {
+    describe("tsserver:: Text storage", () => {
         const f = {
             path: "/a/app.ts",
             content: `

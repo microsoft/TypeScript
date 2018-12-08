@@ -143,7 +143,7 @@ namespace ts {
         return createFileDiagnostic(file, start, length, diagnosticMessage, arg0);
     }
 
-    describe("matchFiles", () => {
+    describe("config:: matchFiles", () => {
         it("with defaults", () => {
             const json = {};
             const expected: ParsedCommandLine = {

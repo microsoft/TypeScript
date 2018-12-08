@@ -1,6 +1,6 @@
 namespace ts.projectSystem {
     import Tsc_WatchDirectory = TestFSWithWatch.Tsc_WatchDirectory;
-    describe("watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
+    describe("tsserver:: watchEnvironment:: tsserverProjectSystem watchDirectories implementation", () => {
         function verifyCompletionListWithNewFileInSubFolder(tscWatchDirectory: Tsc_WatchDirectory) {
             const projectFolder = "/a/username/project";
             const projectSrcFolder = `${projectFolder}/src`;
@@ -83,7 +83,7 @@ namespace ts.projectSystem {
         });
     });
 
-    describe("watchEnvironment:: tsserverProjectSystem Watched recursive directories with windows style file system", () => {
+    describe("tsserver:: watchEnvironment:: tsserverProjectSystem Watched recursive directories with windows style file system", () => {
         function verifyWatchedDirectories(rootedPath: string, useProjectAtRoot: boolean) {
             const root = useProjectAtRoot ? rootedPath : `${rootedPath}myfolder/allproject/`;
             const configFile: File = {

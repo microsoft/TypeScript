@@ -1,5 +1,5 @@
 namespace ts {
-    describe("cancellableLanguageServiceOperations", () => {
+    describe("services:: cancellableLanguageServiceOperations", () => {
         const file = `
         function foo(): void;
         function foo<T>(x: T): T;

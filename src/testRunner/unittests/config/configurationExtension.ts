@@ -208,7 +208,7 @@ namespace ts {
         }
     }
 
-    describe("configurationExtension", () => {
+    describe("config:: configurationExtension", () => {
         forEach<[string, string, fakes.ParseConfigHost], void>([
             ["under a case insensitive host", caseInsensitiveBasePath, caseInsensitiveHost],
             ["under a case sensitive host", caseSensitiveBasePath, caseSensitiveHost]

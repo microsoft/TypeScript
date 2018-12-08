@@ -2,7 +2,7 @@
 // tslint:disable trim-trailing-whitespace
 
 namespace ts {
-    describe("textChanges", () => {
+    describe("services:: textChanges", () => {
         function findChild(name: string, n: Node) {
             return find(n)!;
 

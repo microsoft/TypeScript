@@ -25,15 +25,6 @@ namespace ts.tscWatch {
     }
 
     describe("tsc-watch program updates", () => {
-        const commonFile1: File = {
-            path: "/a/b/commonFile1.ts",
-            content: "let x = 1"
-        };
-        const commonFile2: File = {
-            path: "/a/b/commonFile2.ts",
-            content: "let y = 1"
-        };
-
         it("create watch without config file", () => {
             const appFile: File = {
                 path: "/a/b/c/app.ts",

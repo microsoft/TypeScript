@@ -1,5 +1,5 @@
 namespace ts.projectSystem {
-    describe("project telemetry", () => {
+    describe("tsserver:: project telemetry", () => {
         it("does nothing for inferred project", () => {
             const file = makeFile("/a.js");
             const et = new TestServerEventManager([file]);

@@ -15,6 +15,9 @@ namespace ts.projectSystem {
     export import checkWatchedDirectories = TestFSWithWatch.checkWatchedDirectories;
     export import checkWatchedDirectoriesDetailed = TestFSWithWatch.checkWatchedDirectoriesDetailed;
 
+    export import commonFile1 = tscWatch.commonFile1;
+    export import commonFile2 = tscWatch.commonFile2;
+
     const outputEventRegex = /Content\-Length: [\d]+\r\n\r\n/;
     export function mapOutputToJson(s: string) {
         return convertToObject(
@@ -459,9 +462,13 @@ namespace ts.projectSystem {
         return getRootsToWatchWithAncestorDirectory(currentDirectory, nodeModulesAtTypes);
     }
 
-    //function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
-    //    checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
-    //}
+    export function checkOpenFiles(projectService: server.ProjectService, expectedFiles: File[]) {
+        checkArray("Open files", arrayFrom(projectService.openFiles.keys(), path => projectService.getScriptInfoForPath(path as Path)!.fileName), expectedFiles.map(file => file.path));
+    }
+
+    export function checkScriptInfos(projectService: server.ProjectService, expectedFiles: ReadonlyArray<string>) {
+        checkArray("ScriptInfos files", arrayFrom(projectService.filenameToScriptInfo.values(), info => info.fileName), expectedFiles);
+    }
 
     export function protocolLocationFromSubstring(str: string, substring: string): protocol.Location {
         const start = str.indexOf(substring);
@@ -497,18 +504,10 @@ namespace ts.projectSystem {
         Debug.assert(start !== -1);
         return createTextSpan(start, substring.length);
     }
-    //function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
-    //    return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
-    //}
-    //function protocolFileSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): protocol.FileSpan {
-    //    return { file: file.path, ...protocolTextSpanFromSubstring(file.content, substring, options) };
-    //}
-    //function documentSpanFromSubstring(file: File, substring: string, options?: SpanFromSubstringOptions): DocumentSpan {
-    //    return { fileName: file.path, textSpan: textSpanFromSubstring(file.content, substring, options) };
-    //}
-    //function renameLocation(file: File, substring: string, options?: SpanFromSubstringOptions): RenameLocation {
-    //    return documentSpanFromSubstring(file, substring, options);
-    //}
+
+    export function protocolFileLocationFromSubstring(file: File, substring: string): protocol.FileLocationRequestArgs {
+        return { file: file.path, ...protocolLocationFromSubstring(file.content, substring) };
+    }
 
     export interface SpanFromSubstringOptions {
         readonly index: number;
@@ -648,33 +647,4 @@ namespace ts.projectSystem {
             assert.strictEqual(outputs.length, index + 1, JSON.stringify(outputs));
         }
     }
-
-    //function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
-    //    return {
-    //        ...protocolFileSpanFromSubstring(file, text, options),
-    //        isDefinition,
-    //        isWriteAccess: isDefinition,
-    //        lineText,
-    //    };
-    //}
-
-    //function makeReferenceEntry(file: File, isDefinition: boolean, text: string, options?: SpanFromSubstringOptions): ReferenceEntry {
-    //    return {
-    //        ...documentSpanFromSubstring(file, text, options),
-    //        isDefinition,
-    //        isWriteAccess: isDefinition,
-    //        isInString: undefined,
-    //    };
-    //}
-
-    //function checkDeclarationFiles(file: File, session: TestSession, expectedFiles: ReadonlyArray<File>): void {
-    //    openFilesForSession([file], session);
-    //    const project = Debug.assertDefined(session.getProjectService().getDefaultProjectForFile(file.path as server.NormalizedPath, /*ensureProject*/ false));
-    //    const program = project.getCurrentProgram()!;
-    //    const output = getFileEmitOutput(program, Debug.assertDefined(program.getSourceFile(file.path)), /*emitOnlyDtsFiles*/ true);
-    //    closeFilesForSession([file], session);
-
-    //    Debug.assert(!output.emitSkipped);
-    //    assert.deepEqual(output.outputFiles, expectedFiles.map((e): OutputFile => ({ name: e.path, text: e.content, writeByteOrderMark: false })));
-    //}
 }

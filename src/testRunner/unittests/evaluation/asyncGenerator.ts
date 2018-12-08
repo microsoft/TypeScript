@@ -1,4 +1,4 @@
-describe("asyncGeneratorEvaluation", () => {
+describe("evaluation:: asyncGeneratorEvaluation", () => {
     it("return (es5)", async () => {
         const result = evaluator.evaluateTypeScript(`
         async function * g() {

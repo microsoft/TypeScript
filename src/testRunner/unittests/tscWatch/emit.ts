@@ -38,7 +38,7 @@ namespace ts.tscWatch {
         checkOutputDoesNotContain(host, expectedNonAffectedFiles);
     }
 
-    describe("tsc-watch emit with outFile or out setting", () => {
+    describe("tsc-watch:: emit with outFile or out setting", () => {
         function createWatchForOut(out?: string, outFile?: string) {
             const host = createWatchedSystem([]);
             const config: FileOrFolderEmit = {
@@ -161,7 +161,7 @@ namespace ts.tscWatch {
         });
     });
 
-    describe("tsc-watch emit for configured projects", () => {
+    describe("tsc-watch:: emit for configured projects", () => {
         const file1Consumer1Path = "/a/b/file1Consumer1.ts";
         const moduleFile1Path = "/a/b/moduleFile1.ts";
         const configFilePath = "/a/b/tsconfig.json";
@@ -495,7 +495,7 @@ namespace ts.tscWatch {
         });
     });
 
-    describe("tsc-watch emit file content", () => {
+    describe("tsc-watch:: emit file content", () => {
         interface EmittedFile extends File {
             shouldBeWritten: boolean;
         }
@@ -676,7 +676,7 @@ namespace ts.tscWatch {
         });
     });
 
-    describe("tsc-watch with when module emit is specified as node", () => {
+    describe("tsc-watch:: emit with when module emit is specified as node", () => {
         it("when instead of filechanged recursive directory watcher is invoked", () => {
             const configFile: File = {
                 path: "/a/rootFolder/project/tsconfig.json",

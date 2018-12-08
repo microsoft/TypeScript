@@ -1,5 +1,5 @@
 namespace ts {
-    describe("commandLineParsing:: parseCommandLine", () => {
+    describe("config:: commandLineParsing:: parseCommandLine", () => {
 
         function assertParseResult(commandLine: string[], expectedParsedCommandLine: ParsedCommandLine) {
             const parsed = parseCommandLine(commandLine);
@@ -367,7 +367,7 @@ namespace ts {
         });
     });
 
-    describe("commandLineParsing:: parseBuildOptions", () => {
+    describe("config:: commandLineParsing:: parseBuildOptions", () => {
         function assertParseResult(commandLine: string[], expectedParsedBuildCommand: ParsedBuildCommand) {
             const parsed = parseBuildCommand(commandLine);
             const parsedBuildOptions = JSON.stringify(parsed.buildOptions);
