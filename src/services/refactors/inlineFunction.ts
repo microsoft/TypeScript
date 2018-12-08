@@ -208,37 +208,41 @@ namespace ts.refactor.inlineFunction {
         targetNode: CallExpression,
         declaration: InlineableFunction
     ) {
-        const { file, program } = context;
-        const { parameters, body } = declaration;
-        const checker = program.getTypeChecker();
+        const { file } = context;
         const statement = findAncestor(targetNode, isStatement)!;
-        const renameMap = getConflictingNames(checker, declaration, targetNode);
-
-        const isVoid = returnTypeIsVoidLike(checker, declaration);
-        const returns = findDescendants(
-            body!,
-            n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration
-        );
-        const nofReturns = returns.length;
-
-        const statements = [] as Statement[];
-        statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
-
-        const variableStatement = getVariableDeclarationFromReturn(file, declaration, nofReturns, isVoid);
-        if (variableStatement) statements.push(variableStatement);
-
-        const transformedBody = visitEachChild(body!, transformVisitor, nullTransformationContext);
-        statements.push(...filter(transformedBody.statements, s => !isReturnStatement(s)));
+        const { statements, returnExpression } = getInlineInfo(context, declaration, targetNode);
 
         forEach(statements, st => { t.insertNodeBefore(file, statement, st); });
 
-        const returnexpression = getReturnExpression(file, targetNode, transformedBody, isVoid, nofReturns);
-        if (returnexpression) {
-            t.replaceNode(file, targetNode, returnexpression);
+        if (returnExpression) {
+            t.replaceNode(file, targetNode, returnExpression);
         }
         else {
+            /* deleteNode does not work here, because it deletes from fullStart to end,
+             * but replaceNode only replaces from start. This creates a runtime error of
+             * overlapping edits because of the inserts made before.
+            */
             t.deleteRange(file, { pos: statement.getStart(), end: statement.getEnd() });
         }
+    }
+
+    function getInlineInfo(context: RefactorContext, declaration: InlineableFunction, targetNode: CallExpression) {
+        const { file, program } = context;
+        const { parameters, body } = declaration;
+        const checker = program.getTypeChecker();
+        const renameMap = getConflictingNames(checker, declaration, targetNode);
+        const isVoid = returnTypeIsVoidLike(checker, declaration);
+        const returns = findDescendants(body!, n => isReturnStatement(n) && getEnclosingBlockScopeContainer(n) === declaration);
+        const nofReturns = returns.length;
+        const transformedBody = visitEachChild(body!, transformVisitor, nullTransformationContext);
+
+        const statements = [] as Statement[];
+        statements.push(...getVariableDeclarationsFromParameters(parameters, targetNode, transformVisitor));
+        const returnVariableStatement = getVariableDeclarationFromReturn(file, declaration, nofReturns, isVoid);
+        if (returnVariableStatement) statements.push(returnVariableStatement);
+        statements.push(...filter(transformedBody.statements, s => !isReturnStatement(s)));
+        const returnExpression = getReturnExpression(file, targetNode, transformedBody, isVoid, nofReturns);
+        return { statements, returnExpression };
 
         function transformVisitor(node: Node): VisitResult<Node> {
             if (isIdentifier(node)) {
@@ -251,12 +255,7 @@ namespace ts.refactor.inlineFunction {
                 if (symbol) {
                     const safeName = getSafeName(renameMap, name, symbol);
                     if (safeName !== name) {
-                        return createBindingElement(
-                            node.dotDotDotToken,
-                            name,
-                            safeName,
-                            node.initializer
-                        );
+                        return createBindingElement(node.dotDotDotToken, name, safeName, node.initializer);
                     }
                 }
             }
