@@ -232,7 +232,7 @@ namespace ts.refactor.inlineFunction {
 
         forEach(statements, st => { t.insertNodeBefore(file, statement, st); });
 
-        const returnexpression = getReturnExpression();
+        const returnexpression = getReturnExpression(file, targetNode, transformedBody, isVoid, nofReturns);
         if (returnexpression) {
             t.replaceNode(file, targetNode, returnexpression);
         }
@@ -240,27 +240,16 @@ namespace ts.refactor.inlineFunction {
             t.deleteRange(file, { pos: statement.getStart(), end: statement.getEnd() });
         }
 
-        function getReturnExpression() {
-            if (nofReturns === 1 && !isVoid) {
-                const returnExpression = forEachReturnStatement(transformedBody, r => r.expression)!;
-                return inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
-            }
-            else if (nofReturns > 1 && !isVoid) {
-                return createReturnVariableName(file);
-            }
-            return undefined;
-        }
-
         function transformVisitor(node: Node): VisitResult<Node> {
             if (isIdentifier(node)) {
                 const symbol = checker.getSymbolAtLocation(node);
-                if (symbol) return getSafeName(node, symbol);
+                if (symbol) return getSafeName(renameMap, node, symbol);
             }
             if (isObjectBindingElementWithoutPropertyName(node)) {
                 const name = node.name;
                 const symbol = checker.getSymbolAtLocation(name);
                 if (symbol) {
-                    const safeName = getSafeName(name, symbol);
+                    const safeName = getSafeName(renameMap, name, symbol);
                     if (safeName !== name) {
                         return createBindingElement(
                             node.dotDotDotToken,
@@ -286,13 +275,30 @@ namespace ts.refactor.inlineFunction {
             }
             return visitEachChild(node, transformVisitor, nullTransformationContext);
         }
+    }
 
-        function getSafeName(name: Identifier, { id }: Symbol): Identifier {
-            if (renameMap.has(String(id))) {
-                return createIdentifier(renameMap.get(String(id))!);
-            }
-            return name;
+    function getSafeName(renameMap: Map<string>, name: Identifier, { id }: Symbol): Identifier {
+        if (renameMap.has(String(id))) {
+            return createIdentifier(renameMap.get(String(id))!);
         }
+        return name;
+    }
+
+    function getReturnExpression(
+        file: SourceFile,
+        targetNode: Node,
+        transformedBody: Block,
+        isVoid: boolean,
+        nofReturns: number
+    ) {
+        if (nofReturns === 1 && !isVoid) {
+            const returnExpression = forEachReturnStatement(transformedBody, r => r.expression)!;
+            return inlineLocal.parenthesizeIfNecessary(targetNode, returnExpression);
+        }
+        else if (nofReturns > 1 && !isVoid) {
+            return createReturnVariableName(file);
+        }
+        return undefined;
     }
 
     function createReturnVariableName(file: SourceFile) {
