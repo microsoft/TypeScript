@@ -1,0 +1,71 @@
+tests/cases/compiler/isArray.ts(5,11): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/isArray.ts(16,11): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/isArray.ts(17,24): error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+tests/cases/compiler/isArray.ts(27,11): error TS2322: Type 'number' is not assignable to type 'string'.
+tests/cases/compiler/isArray.ts(28,28): error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+tests/cases/compiler/isArray.ts(30,5): error TS2533: Object is possibly 'null' or 'undefined'.
+
+
+==== tests/cases/compiler/isArray.ts (6 errors) ====
+    var maybeArray = [] as Array<number> | number;
+    
+    if (Array.isArray(maybeArray)) {
+        maybeArray.length; // OK
+        const str: string = maybeArray[0]; // Expect error
+              ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        maybeArray.push(42); // OK
+    } else {
+        maybeArray.toFixed(2); // OK
+    }
+    
+    
+    var maybeReadonlyArray = [] as ReadonlyArray<number> | number;
+    
+    if (Array.isArray(maybeReadonlyArray)) {
+        maybeReadonlyArray.length; // OK
+        const str: string = maybeReadonlyArray[0]; // Expect error
+              ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        maybeReadonlyArray.push(42); // Expect error
+                           ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+    } else {
+        maybeReadonlyArray.toFixed(2); // OK
+    }
+    
+    
+    var readonlyArrayOrNullish: ReadonlyArray<number> | undefined | null;
+    
+    if (Array.isArray(readonlyArrayOrNullish)) {
+        readonlyArrayOrNullish.length; // OK
+        const str: string = readonlyArrayOrNullish[0]; // Expect error
+              ~~~
+!!! error TS2322: Type 'number' is not assignable to type 'string'.
+        readonlyArrayOrNullish.push(42); // Expect error
+                               ~~~~
+!!! error TS2339: Property 'push' does not exist on type 'ReadonlyArray<number>'.
+    } else {
+        readonlyArrayOrNullish.X; // Expect error
+        ~~~~~~~~~~~~~~~~~~~~~~
+!!! error TS2533: Object is possibly 'null' or 'undefined'.
+    }
+    
+    
+    var someUnknown: unknown;
+    
+    if (Array.isArray(someUnknown)) {
+        someUnknown.length; // OK
+        const str: string = someUnknown[0]; // OK
+        someUnknown.push("anything"); // OK
+    }
+    
+    
+    var someAny: any;
+    
+    if (Array.isArray(someAny)) {
+        someAny.length; // OK
+        const str: string = someAny[0]; // OK
+        someAny.push("anything"); // OK
+    }
+    

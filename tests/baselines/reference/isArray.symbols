@@ -1,22 +1,140 @@
 === tests/cases/compiler/isArray.ts ===
-var maybeArray: number | number[];
+var maybeArray = [] as Array<number> | number;
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
-
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 
 if (Array.isArray(maybeArray)) {
->Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 
     maybeArray.length; // OK
 >maybeArray.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 >length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
-}
-else {
-    maybeArray.toFixed(); // OK
+
+    const str: string = maybeArray[0]; // Expect error
+>str : Symbol(str, Decl(isArray.ts, 4, 9))
+>maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+
+    maybeArray.push(42); // OK
+>maybeArray.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+
+} else {
+    maybeArray.toFixed(2); // OK
 >maybeArray.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 >maybeArray : Symbol(maybeArray, Decl(isArray.ts, 0, 3))
 >toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
 }
+
+
+var maybeReadonlyArray = [] as ReadonlyArray<number> | number;
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+if (Array.isArray(maybeReadonlyArray)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+
+    maybeReadonlyArray.length; // OK
+>maybeReadonlyArray.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    const str: string = maybeReadonlyArray[0]; // Expect error
+>str : Symbol(str, Decl(isArray.ts, 15, 9))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+
+    maybeReadonlyArray.push(42); // Expect error
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+
+} else {
+    maybeReadonlyArray.toFixed(2); // OK
+>maybeReadonlyArray.toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+>maybeReadonlyArray : Symbol(maybeReadonlyArray, Decl(isArray.ts, 11, 3))
+>toFixed : Symbol(Number.toFixed, Decl(lib.es5.d.ts, --, --))
+}
+
+
+var readonlyArrayOrNullish: ReadonlyArray<number> | undefined | null;
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+>ReadonlyArray : Symbol(ReadonlyArray, Decl(lib.es5.d.ts, --, --))
+
+if (Array.isArray(readonlyArrayOrNullish)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+
+    readonlyArrayOrNullish.length; // OK
+>readonlyArrayOrNullish.length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+>length : Symbol(ReadonlyArray.length, Decl(lib.es5.d.ts, --, --))
+
+    const str: string = readonlyArrayOrNullish[0]; // Expect error
+>str : Symbol(str, Decl(isArray.ts, 26, 9))
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+
+    readonlyArrayOrNullish.push(42); // Expect error
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+
+} else {
+    readonlyArrayOrNullish.X; // Expect error
+>readonlyArrayOrNullish : Symbol(readonlyArrayOrNullish, Decl(isArray.ts, 22, 3))
+}
+
+
+var someUnknown: unknown;
+>someUnknown : Symbol(someUnknown, Decl(isArray.ts, 33, 3))
+
+if (Array.isArray(someUnknown)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>someUnknown : Symbol(someUnknown, Decl(isArray.ts, 33, 3))
+
+    someUnknown.length; // OK
+>someUnknown.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>someUnknown : Symbol(someUnknown, Decl(isArray.ts, 33, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    const str: string = someUnknown[0]; // OK
+>str : Symbol(str, Decl(isArray.ts, 37, 9))
+>someUnknown : Symbol(someUnknown, Decl(isArray.ts, 33, 3))
+
+    someUnknown.push("anything"); // OK
+>someUnknown.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>someUnknown : Symbol(someUnknown, Decl(isArray.ts, 33, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+
+
+var someAny: any;
+>someAny : Symbol(someAny, Decl(isArray.ts, 42, 3))
+
+if (Array.isArray(someAny)) {
+>Array.isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>Array : Symbol(Array, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>isArray : Symbol(ArrayConstructor.isArray, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>someAny : Symbol(someAny, Decl(isArray.ts, 42, 3))
+
+    someAny.length; // OK
+>someAny.length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+>someAny : Symbol(someAny, Decl(isArray.ts, 42, 3))
+>length : Symbol(Array.length, Decl(lib.es5.d.ts, --, --))
+
+    const str: string = someAny[0]; // OK
+>str : Symbol(str, Decl(isArray.ts, 46, 9))
+>someAny : Symbol(someAny, Decl(isArray.ts, 42, 3))
+
+    someAny.push("anything"); // OK
+>someAny.push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+>someAny : Symbol(someAny, Decl(isArray.ts, 42, 3))
+>push : Symbol(Array.push, Decl(lib.es5.d.ts, --, --))
+}
+

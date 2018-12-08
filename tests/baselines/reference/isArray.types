@@ -1,24 +1,177 @@
 === tests/cases/compiler/isArray.ts ===
-var maybeArray: number | number[];
+var maybeArray = [] as Array<number> | number;
 >maybeArray : number | number[]
-
+>[] as Array<number> | number : number | number[]
+>[] : never[]
 
 if (Array.isArray(maybeArray)) {
 >Array.isArray(maybeArray) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >maybeArray : number | number[]
 
     maybeArray.length; // OK
 >maybeArray.length : number
 >maybeArray : number[]
 >length : number
-}
-else {
-    maybeArray.toFixed(); // OK
->maybeArray.toFixed() : string
->maybeArray.toFixed : (fractionDigits?: number) => string
+
+    const str: string = maybeArray[0]; // Expect error
+>str : string
+>maybeArray[0] : number
+>maybeArray : number[]
+>0 : 0
+
+    maybeArray.push(42); // OK
+>maybeArray.push(42) : number
+>maybeArray.push : (...items: number[]) => number
+>maybeArray : number[]
+>push : (...items: number[]) => number
+>42 : 42
+
+} else {
+    maybeArray.toFixed(2); // OK
+>maybeArray.toFixed(2) : string
+>maybeArray.toFixed : (fractionDigits?: number | undefined) => string
 >maybeArray : number
->toFixed : (fractionDigits?: number) => string
+>toFixed : (fractionDigits?: number | undefined) => string
+>2 : 2
 }
+
+
+var maybeReadonlyArray = [] as ReadonlyArray<number> | number;
+>maybeReadonlyArray : number | ReadonlyArray<number>
+>[] as ReadonlyArray<number> | number : number | ReadonlyArray<number>
+>[] : never[]
+
+if (Array.isArray(maybeReadonlyArray)) {
+>Array.isArray(maybeReadonlyArray) : boolean
+>Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>Array : ArrayConstructor
+>isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>maybeReadonlyArray : number | ReadonlyArray<number>
+
+    maybeReadonlyArray.length; // OK
+>maybeReadonlyArray.length : number
+>maybeReadonlyArray : ReadonlyArray<number>
+>length : number
+
+    const str: string = maybeReadonlyArray[0]; // Expect error
+>str : string
+>maybeReadonlyArray[0] : number
+>maybeReadonlyArray : ReadonlyArray<number>
+>0 : 0
+
+    maybeReadonlyArray.push(42); // Expect error
+>maybeReadonlyArray.push(42) : any
+>maybeReadonlyArray.push : any
+>maybeReadonlyArray : ReadonlyArray<number>
+>push : any
+>42 : 42
+
+} else {
+    maybeReadonlyArray.toFixed(2); // OK
+>maybeReadonlyArray.toFixed(2) : string
+>maybeReadonlyArray.toFixed : (fractionDigits?: number | undefined) => string
+>maybeReadonlyArray : number
+>toFixed : (fractionDigits?: number | undefined) => string
+>2 : 2
+}
+
+
+var readonlyArrayOrNullish: ReadonlyArray<number> | undefined | null;
+>readonlyArrayOrNullish : ReadonlyArray<number> | null | undefined
+>null : null
+
+if (Array.isArray(readonlyArrayOrNullish)) {
+>Array.isArray(readonlyArrayOrNullish) : boolean
+>Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>Array : ArrayConstructor
+>isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>readonlyArrayOrNullish : ReadonlyArray<number> | null | undefined
+
+    readonlyArrayOrNullish.length; // OK
+>readonlyArrayOrNullish.length : number
+>readonlyArrayOrNullish : ReadonlyArray<number>
+>length : number
+
+    const str: string = readonlyArrayOrNullish[0]; // Expect error
+>str : string
+>readonlyArrayOrNullish[0] : number
+>readonlyArrayOrNullish : ReadonlyArray<number>
+>0 : 0
+
+    readonlyArrayOrNullish.push(42); // Expect error
+>readonlyArrayOrNullish.push(42) : any
+>readonlyArrayOrNullish.push : any
+>readonlyArrayOrNullish : ReadonlyArray<number>
+>push : any
+>42 : 42
+
+} else {
+    readonlyArrayOrNullish.X; // Expect error
+>readonlyArrayOrNullish.X : any
+>readonlyArrayOrNullish : null | undefined
+>X : any
+}
+
+
+var someUnknown: unknown;
+>someUnknown : unknown
+
+if (Array.isArray(someUnknown)) {
+>Array.isArray(someUnknown) : boolean
+>Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>Array : ArrayConstructor
+>isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>someUnknown : unknown
+
+    someUnknown.length; // OK
+>someUnknown.length : number
+>someUnknown : any[]
+>length : number
+
+    const str: string = someUnknown[0]; // OK
+>str : string
+>someUnknown[0] : any
+>someUnknown : any[]
+>0 : 0
+
+    someUnknown.push("anything"); // OK
+>someUnknown.push("anything") : number
+>someUnknown.push : (...items: any[]) => number
+>someUnknown : any[]
+>push : (...items: any[]) => number
+>"anything" : "anything"
+}
+
+
+var someAny: any;
+>someAny : any
+
+if (Array.isArray(someAny)) {
+>Array.isArray(someAny) : boolean
+>Array.isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>Array : ArrayConstructor
+>isArray : { (arg: {} | ReadonlyArray<any> | null | undefined): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
+>someAny : any
+
+    someAny.length; // OK
+>someAny.length : number
+>someAny : any[]
+>length : number
+
+    const str: string = someAny[0]; // OK
+>str : string
+>someAny[0] : any
+>someAny : any[]
+>0 : 0
+
+    someAny.push("anything"); // OK
+>someAny.push("anything") : number
+>someAny.push : (...items: any[]) => number
+>someAny : any[]
+>push : (...items: any[]) => number
+>"anything" : "anything"
+}
+
