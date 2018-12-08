@@ -4450,6 +4450,8 @@ namespace FourSlashInterface {
             interfaceEntry("ObjectConstructor"),
             constEntry("Function"),
             interfaceEntry("FunctionConstructor"),
+            typeEntry("ThisParameterType"),
+            typeEntry("OmitThisParameter"),
             interfaceEntry("CallableFunction"),
             interfaceEntry("NewableFunction"),
             interfaceEntry("IArguments"),
