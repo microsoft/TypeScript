@@ -3068,13 +3068,13 @@ module Harness {
 >(Array.isArray && Array.isArray(arg)) || arg instanceof Array : boolean
 >(Array.isArray && Array.isArray(arg)) : boolean
 >Array.isArray && Array.isArray(arg) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : { (arg: {} | ReadonlyArray<any>): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : { (arg: {} | ReadonlyArray<any>): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >Array.isArray(arg) : boolean
->Array.isArray : (arg: any) => arg is any[]
+>Array.isArray : { (arg: {} | ReadonlyArray<any>): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >Array : ArrayConstructor
->isArray : (arg: any) => arg is any[]
+>isArray : { (arg: {} | ReadonlyArray<any>): arg is ReadonlyArray<any>; (arg: any): arg is any[]; }
 >arg : any
 >arg instanceof Array : boolean
 >arg : any
