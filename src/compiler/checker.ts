@@ -11672,7 +11672,7 @@ namespace ts {
                 // disable excess property checking and just use exact
                 // type rules.
                 inExactContext = inExactContext || someType(target, t => (getObjectFlags(t) & ObjectFlags.Exact) !== 0);
-                
+
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
                 // First, see if we're even relating an object type to a union.
