@@ -11,9 +11,9 @@ const record: Record<K, boolean> = { foo: true, bar: false };
 
 Object.keys(record).forEach((key: K) => {
 >Object.keys(record).forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
->Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>Object.keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >Object : Symbol(Object, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
->keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --))
+>keys : Symbol(ObjectConstructor.keys, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
 >record : Symbol(record, Decl(objectKeysWithRecord.ts, 1, 5))
 >forEach : Symbol(Array.forEach, Decl(lib.es5.d.ts, --, --))
 >key : Symbol(key, Decl(objectKeysWithRecord.ts, 3, 29))

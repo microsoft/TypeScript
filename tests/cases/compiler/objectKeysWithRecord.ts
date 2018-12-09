@@ -1,3 +1,4 @@
+// @strictFunctionTypes: true
 type K = 'foo' | 'bar'
 const record: Record<K, boolean> = { foo: true, bar: false };
 
