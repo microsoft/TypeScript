@@ -148,7 +148,8 @@ namespace ts {
     }
 
     export function isJsPrivate(name: string): boolean {
-        return startsWith(name, "_");    }
+        return startsWith(name, "_");
+    }
 
     function tryRequire(fileNameToRequire: string): unknown {
         try {
