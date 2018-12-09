@@ -41,11 +41,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
         switch (actionName) {
             case toTemplateLiteralActionName:
-                const maybeBinary = getParentBinaryExpression(node);
-                const arrayOfNodes = transformTreeToArray(maybeBinary);
-                const templateLiteral = nodesToTemplate(arrayOfNodes);
-                const edits = textChanges.ChangeTracker.with(context, t => t.replaceNode(file, maybeBinary, templateLiteral));
-                return { edits };
+                return { edits: getEditsForToTemplateLiteral(context, node) };
 
             case toStringConcatenationActionName:
                 return { edits: getEditsForToStringConcatenation(context, node) };
@@ -53,6 +49,13 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
             default:
                 return Debug.fail("invalid action");
         }
+    }
+
+    function getEditsForToTemplateLiteral(context: RefactorContext, node: Node) {
+        const maybeBinary = getParentBinaryExpression(node);
+        const arrayOfNodes = transformTreeToArray(maybeBinary);
+        const templateLiteral = nodesToTemplate(arrayOfNodes);
+        return textChanges.ChangeTracker.with(context, t => t.replaceNode(context.file, maybeBinary, templateLiteral));
     }
 
     function getEditsForToStringConcatenation(context: RefactorContext, node: Node) {
