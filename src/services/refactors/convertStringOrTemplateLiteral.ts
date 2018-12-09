@@ -139,7 +139,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
         while (begin < nodes.length && isStringLiteral(nodes[begin])) {
             const next = nodes[begin] as StringLiteral;
-            text = text + next.text;
+            text = text + decodeRawString(next.getText());
             begin++;
         }
 
@@ -161,7 +161,7 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
             while (i + 1 < nodes.length && isStringLiteral(nodes[i + 1])) {
                 const next = nodes[i + 1] as StringLiteral;
-                text = text + next.text;
+                text = text + decodeRawString(next.getText());
                 i++;
             }
 
@@ -175,13 +175,27 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
         return createTemplateExpression(head, templateSpans);
     }
 
+    const hexToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 16));
+    const octalToUnicode = (_match: string, grp: string) => String.fromCharCode(parseInt(grp, 8));
+
+    function decodeRawString(content: string) {
+        const outerQuotes = /"((.|\s)*)"/;
+        const unicodeEscape = /\\u([\d\w]+)/gi;
+        const unicodeEscapeWithBraces = /\\u\{([\d\w]+\})/gi;
+        const hexEscape = /\\x([\d\w]+)/gi;
+        const octalEscape = /\\([0-7]+)/g;
+
+        return content.replace(outerQuotes, (_match, grp) => grp)
+                      .replace(unicodeEscape, hexToUnicode)
+                      .replace(unicodeEscapeWithBraces, hexToUnicode)
+                      .replace(hexEscape, hexToUnicode)
+                      .replace(octalEscape, octalToUnicode);
+
+    }
+
     function escapeText(content: string) {
-                       // back-tick
-        return content.replace("`", "\`")
-                       // placeholder alike beginning
-                      .replace("\${", `$\\{`)
-                       // octal escape
-                      .replace(/\\([0-7]+)/g, (_whole, n) => "\\x" + parseInt(n, 8).toString(16));
+        return content.replace("`", "\`")       // back-tick
+                      .replace("\${", `$\\{`);  // placeholder alike beginning
     }
 
 }
