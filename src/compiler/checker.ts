@@ -11700,9 +11700,7 @@ namespace ts {
                 if (relation === comparableRelation && !(target.flags & TypeFlags.Never) && isSimpleTypeRelatedTo(target, source, relation) ||
                     isSimpleTypeRelatedTo(source, target, relation, reportErrors ? reportError : undefined)) return Ternary.True;
 
-                if ((getObjectFlags(target) & ObjectFlags.Exact)
-                   && !(getObjectFlags(source) & ObjectFlags.Exact) &&
-                   !(isObjectLiteralType(source) && getObjectFlags(source) & ObjectFlags.FreshLiteral)) {
+                if ((getObjectFlags(target) & ObjectFlags.Exact) && !(getObjectFlags(source) & (ObjectFlags.Exact | ObjectFlags.FreshLiteral))) {
                     if (reportErrors) {
                         reportRelationError(Diagnostics.Non_exact_type_cannot_be_assigned_to_exact_type, source, target);
                     }
@@ -12528,7 +12526,7 @@ namespace ts {
                     }
                     return Ternary.False;
                 }
-                if (isObjectLiteralType(target) || (getObjectFlags(target) & getObjectFlags(source) & ObjectFlags.Exact)) {
+                if (isObjectLiteralType(target) || (getObjectFlags(target) & ObjectFlags.Exact)) {
                     for (const sourceProp of getPropertiesOfType(source)) {
                         if (!getPropertyOfObjectType(target, sourceProp.escapedName)) {
                             const sourceType = getTypeOfSymbol(sourceProp);
