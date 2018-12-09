@@ -11667,7 +11667,12 @@ namespace ts {
                 if (target.flags & TypeFlags.IndexedAccess) {
                     target = getSimplifiedType(target);
                 }
+
+                // Are we in a context that uses exact types? If so we
+                // disable excess property checking and just use exact
+                // type rules.
                 inExactContext = inExactContext || someType(target, t => (getObjectFlags(t) & ObjectFlags.Exact) !== 0);
+                
                 // Try to see if we're relating something like `Foo` -> `Bar | null | undefined`.
                 // If so, reporting the `null` and `undefined` in the type is hardly useful.
                 // First, see if we're even relating an object type to a union.
@@ -11721,6 +11726,9 @@ namespace ts {
                     // and intersection types are further deconstructed on the target side, we don't want to
                     // make the check again (as it might fail for a partial target type). Therefore we obtain
                     // the regular source type and proceed with that.
+                    //
+                    // Note that if we are in an exact context we do not drop freshness incase we encounter a nested
+                    // exact type and we need to know the source is a literal.
                     if (!inExactContext && isUnionOrIntersectionTypeWithoutNullableConstituents(target) && !discriminantType) {
                         source = getRegularTypeOfObjectLiteral(source);
                     }
@@ -15104,7 +15112,7 @@ namespace ts {
         }
 
         function someType(type: Type, f: (t: Type) => boolean): boolean {
-            return type.flags & TypeFlags.UnionOrIntersection ? every((<UnionOrIntersectionType>type).types, f) : f(type);
+            return type.flags & TypeFlags.UnionOrIntersection ? some((<UnionOrIntersectionType>type).types, f) : f(type);
         }
 
         function filterType(type: Type, f: (t: Type) => boolean): Type {
