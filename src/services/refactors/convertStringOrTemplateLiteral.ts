@@ -135,16 +135,16 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
 
     function createHead(nodes: ReadonlyArray<Expression>): [number, TemplateHead] {
         let begin = 0;
-        const head = createTemplateHead("");
+        let text = "";
 
         while (begin < nodes.length && isStringLiteral(nodes[begin])) {
             const next = nodes[begin] as StringLiteral;
-            head.text = head.text + next.text;
+            text = text + next.text;
             begin++;
         }
 
-        head.text = escapeText(head.text);
-        return [begin, head];
+        text = escapeText(text);
+        return [begin, createTemplateHead(text)];
     }
 
     function nodesToTemplate(nodes: ReadonlyArray<Expression>) {
@@ -176,8 +176,12 @@ namespace ts.refactor.convertStringOrTemplateLiteral {
     }
 
     function escapeText(content: string) {
+                       // back-tick
         return content.replace("`", "\`")
-                      .replace("\${", `$\\{`);
+                       // placeholder alike beginning
+                      .replace("\${", `$\\{`)
+                       // octal escape
+                      .replace(/\\([0-7]+)/g, (_whole, n) => "\\x" + parseInt(n, 8).toString(16));
     }
 
 }
