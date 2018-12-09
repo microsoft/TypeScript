@@ -12480,13 +12480,12 @@ namespace ts {
                         getCombinedMappedTypeOptionality(source) <= getCombinedMappedTypeOptionality(target));
                 if (modifiersRelated) {
                     let result: Ternary;
-                    // Todo, this should really only work when both constraint types are concrete and the same. Two equal parameters are not good enough.
                     if (getObjectFlags(target) & ObjectFlags.Exact) {
-                        if (getObjectFlags(source) & ObjectFlags.Exact && isTypeIdenticalTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source))) {
+                        // TODO: Not sure if identical is right here
+                        if (isTypeIdenticalTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source))) {
                             const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                             return isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
                         }
-                        // Need error here for non-exact -> exact
                         return Ternary.False;
                     }
                     if (result = isRelatedTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source), reportErrors)) {
