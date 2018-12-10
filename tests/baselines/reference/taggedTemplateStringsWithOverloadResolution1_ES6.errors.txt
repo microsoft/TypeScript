@@ -22,7 +22,7 @@ tests/cases/conformance/es6/templates/taggedTemplateStringsWithOverloadResolutio
                 ~~
 !!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
 !!! error TS2345:   Property 'raw' is missing in type 'undefined[]' but required in type 'TemplateStringsArray'.
-!!! related TS2728 /.ts/lib.es5.d.ts:595:14: 'raw' is declared here.
+!!! related TS2728 /.ts/lib.es5.d.ts:605:14: 'raw' is declared here.
     var b = foo([], 1);          // string
                 ~~
 !!! error TS2345: Argument of type 'undefined[]' is not assignable to parameter of type 'TemplateStringsArray'.
