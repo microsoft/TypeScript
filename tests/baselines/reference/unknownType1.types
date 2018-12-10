@@ -76,7 +76,7 @@ type T31<T> = T extends unknown ? true : false;  // Deferred (so it distributes)
 >false : false
 
 type T32<T> = never extends T ? true : false;  // true
->T32 : true
+>T32 : T32<T>
 >true : true
 >false : false
 
