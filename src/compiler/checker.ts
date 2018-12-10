@@ -23641,7 +23641,6 @@ namespace ts {
                     break;
                 }
             }
-            checkGrammarForDisallowedTrailingComma(node.elementTypes);
             forEach(node.elementTypes, checkSourceElement);
         }
 
