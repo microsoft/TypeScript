@@ -7,5 +7,5 @@ function f() {
 
     var a = () => arguments;
 >a : Symbol(a, Decl(emitArrowFunctionWhenUsingArguments04_ES6.ts, 2, 7))
->arguments : Symbol(arguments)
+>arguments : Symbol(arguments, Decl(emitArrowFunctionWhenUsingArguments04_ES6.ts, 1, 7))
 }

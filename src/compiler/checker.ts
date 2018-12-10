@@ -1419,12 +1419,18 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.ArrowFunction:
+                        // when targeting ES6 or higher there is no 'arguments' in an arrow function
+                        // for lower compile targets the resolved symbol is used to emit an error
+                        if (compilerOptions.target! >= ScriptTarget.ES2015) {
+                            break;
+                        }
+                        // falls through
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
                         if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
