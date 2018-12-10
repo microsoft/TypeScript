@@ -12168,10 +12168,6 @@ namespace ts {
                 return result;
             }
 
-            function getConstraintForRelation(type: Type) {
-                return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
-            }
-
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -12304,23 +12300,25 @@ namespace ts {
                             return result;
                         }
                     }
-                    const constraint = getConstraintForRelation(<TypeParameter>source);
-                    if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.AnyOrUnknown)) {
-                        // A type variable with no constraint is not related to the non-primitive object type.
-                        if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                    if (relation !== definitelyAssignableRelation) {
+                        const constraint = getConstraintOfType(<TypeParameter>source);
+                        if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                            // A type variable with no constraint is not related to the non-primitive object type.
+                            if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                        // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
+                        else if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                        }
+                        // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors, /*headMessage*/ undefined, isIntersectionConstituent)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
-                    }
-                    // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                    else if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                    }
-                    // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                    else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors, /*headMessage*/ undefined, isIntersectionConstituent)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
