@@ -1570,7 +1570,8 @@ namespace ts {
 
                 // If we're in an external module, we can't reference value symbols created from UMD export declarations
                 if (result && isInExternalModule && (meaning & SymbolFlags.Value) === SymbolFlags.Value && !(originalLocation!.flags & NodeFlags.JSDoc)) {
-                    if (some(result.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
+                    const merged = getMergedSymbol(result);
+                    if (length(merged.declarations) && every(merged.declarations, d => isNamespaceExportDeclaration(d) || isSourceFile(d) && !!d.symbol.globalExports)) {
                         error(errorLocation!, Diagnostics._0_refers_to_a_UMD_global_but_the_current_file_is_a_module_Consider_adding_an_import_instead, unescapeLeadingUnderscores(name)); // TODO: GH#18217
                     }
                 }
@@ -5323,12 +5324,11 @@ namespace ts {
                 return anyType;
             }
             // Handle export default expressions
-            if (isSourceFile(declaration)) {
-                const jsonSourceFile = cast(declaration, isJsonSourceFile);
-                if (!jsonSourceFile.statements.length) {
+            if (isSourceFile(declaration) && isJsonSourceFile(declaration)) {
+                if (!declaration.statements.length) {
                     return emptyObjectType;
                 }
-                const type = getWidenedLiteralType(checkExpression(jsonSourceFile.statements[0].expression));
+                const type = getWidenedLiteralType(checkExpression(declaration.statements[0].expression));
                 if (type.flags & TypeFlags.Object) {
                     return getRegularTypeOfObjectLiteral(type);
                 }
@@ -5353,7 +5353,8 @@ namespace ts {
                 || isClassDeclaration(declaration)
                 || isFunctionDeclaration(declaration)
                 || (isMethodDeclaration(declaration) && !isObjectLiteralMethod(declaration))
-                || isMethodSignature(declaration)) {
+                || isMethodSignature(declaration)
+                || isSourceFile(declaration)) {
                 // Symbol is property of some kind that is merged with something - should use `getTypeOfFuncClassEnumModule` and not `getTypeOfVariableOrParameterOrProperty`
                 if (symbol.flags & (SymbolFlags.Function | SymbolFlags.Method | SymbolFlags.Class | SymbolFlags.Enum | SymbolFlags.ValueModule)) {
                     return getTypeOfFuncClassEnumModule(symbol);
