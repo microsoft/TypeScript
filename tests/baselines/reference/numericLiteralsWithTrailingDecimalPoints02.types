@@ -1,4 +1,4 @@
-=== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints01.ts ===
+=== tests/cases/compiler/numericLiteralsWithTrailingDecimalPoints02.ts ===
 1..toString();
 >1..toString() : string
 >1..toString : (radix?: number) => string
@@ -23,7 +23,7 @@
 >2.0 : 2
 >3. : 3
 
-// Preserve whitespace and comments where important for JS compatibility
+// Preserve whitespace where important for JS compatibility
 var i: number = 1;
 >i : number
 >1 : 1
