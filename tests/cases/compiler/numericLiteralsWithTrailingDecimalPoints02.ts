@@ -1,10 +1,12 @@
 // @lib: es5
+// @removeComments: true
+
 1..toString();
 1.0.toString();
 1.toString();
 1.+2.0 + 3. ;
 
-// Preserve whitespace and comments where important for JS compatibility
+// Preserve whitespace where important for JS compatibility
 var i: number = 1;
 var test1 = i.toString();
 var test2 = 2.toString();
