@@ -4849,7 +4849,7 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) ?
+            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) && !getContextualTypeForVariableLikeDeclaration(walkUpBindingElementsAndPatterns(declaration)) ?
                 getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
                 type;
         }
@@ -17020,6 +17020,32 @@ namespace ts {
             }
         }
 
+        function getContextualTypeForVariableLikeDeclaration(declaration: VariableLikeDeclaration): Type | undefined {
+            const typeNode = getEffectiveTypeAnnotationNode(declaration);
+            if (typeNode) {
+                return getTypeFromTypeNode(typeNode);
+            }
+            switch (declaration.kind) {
+                case SyntaxKind.Parameter:
+                    return getContextuallyTypedParameterType(declaration);
+                case SyntaxKind.BindingElement:
+                    return getContextualTypeForBindingElement(declaration);
+                // By default, do nothing and return undefined - only parameters and binding elements have context implied by a parent
+            }
+        }
+
+        function getContextualTypeForBindingElement(declaration: BindingElement): Type | undefined {
+            const parentDeclaration = declaration.parent.parent;
+            const name = declaration.propertyName || declaration.name;
+            const parentType = getContextualTypeForVariableLikeDeclaration(parentDeclaration);
+            if (parentType && !isBindingPattern(name)) {
+                const text = getTextOfPropertyName(name);
+                if (text !== undefined) {
+                    return getTypeOfPropertyOfType(parentType, text);
+                }
+            }
+        }
+
         // In a variable, parameter or property declaration with a type annotation,
         //   the contextual type of an initializer expression is the type of the variable, parameter or property.
         // Otherwise, in a parameter declaration of a contextually typed function expression,
@@ -17031,31 +17057,12 @@ namespace ts {
         function getContextualTypeForInitializerExpression(node: Expression): Type | undefined {
             const declaration = <VariableLikeDeclaration>node.parent;
             if (hasInitializer(declaration) && node === declaration.initializer) {
-                const typeNode = getEffectiveTypeAnnotationNode(declaration);
-                if (typeNode) {
-                    return getTypeFromTypeNode(typeNode);
+                const result = getContextualTypeForVariableLikeDeclaration(declaration);
+                if (result) {
+                    return result;
                 }
-                if (declaration.kind === SyntaxKind.Parameter) {
-                    const type = getContextuallyTypedParameterType(declaration);
-                    if (type) {
-                        return type;
-                    }
-                }
-                if (isBindingPattern(declaration.name)) {
+                if (isBindingPattern(declaration.name)) { // This is less a contextual type and more an implied shape - in some cases, this may be undesirable
                     return getTypeFromBindingPattern(declaration.name, /*includePatternInType*/ true, /*reportErrors*/ false);
-                }
-                if (isBindingPattern(declaration.parent)) {
-                    const parentDeclaration = declaration.parent.parent;
-                    const name = (declaration as BindingElement).propertyName || declaration.name;
-                    if (parentDeclaration.kind !== SyntaxKind.BindingElement) {
-                        const parentTypeNode = getEffectiveTypeAnnotationNode(parentDeclaration);
-                        if (parentTypeNode && !isBindingPattern(name)) {
-                            const text = getTextOfPropertyName(name);
-                            if (text) {
-                                return getTypeOfPropertyOfType(getTypeFromTypeNode(parentTypeNode), text);
-                            }
-                        }
-                    }
                 }
             }
             return undefined;
