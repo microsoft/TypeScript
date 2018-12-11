@@ -1,0 +1,12 @@
+=== tests/cases/compiler/selfRecrusiveTypeParameterWithDefault.ts ===
+interface JoiObject {}
+>JoiObject : Symbol(JoiObject, Decl(selfRecrusiveTypeParameterWithDefault.ts, 0, 0))
+
+interface AbstractSchema<Schema extends AbstractSchema = any, Value = any> extends JoiObject { x; }
+>AbstractSchema : Symbol(AbstractSchema, Decl(selfRecrusiveTypeParameterWithDefault.ts, 0, 22))
+>Schema : Symbol(Schema, Decl(selfRecrusiveTypeParameterWithDefault.ts, 2, 25))
+>AbstractSchema : Symbol(AbstractSchema, Decl(selfRecrusiveTypeParameterWithDefault.ts, 0, 22))
+>Value : Symbol(Value, Decl(selfRecrusiveTypeParameterWithDefault.ts, 2, 61))
+>JoiObject : Symbol(JoiObject, Decl(selfRecrusiveTypeParameterWithDefault.ts, 0, 0))
+>x : Symbol(AbstractSchema.x, Decl(selfRecrusiveTypeParameterWithDefault.ts, 2, 94))
+

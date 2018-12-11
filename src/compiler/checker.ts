@@ -70,6 +70,7 @@ namespace ts {
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
+        const fillMissingTypeArgumentState = createMap<true>();
 
         const compilerOptions = host.getCompilerOptions();
         const languageVersion = getEmitScriptTarget(compilerOptions);
@@ -7771,14 +7772,24 @@ namespace ts {
             const numTypeArguments = length(typeArguments);
             if (isJavaScriptImplicitAny || (numTypeArguments >= minTypeArgumentCount && numTypeArguments <= numTypeParameters)) {
                 const result = typeArguments ? typeArguments.slice() : [];
-
+                const stateKey = getTypeListId(typeArguments) + ">" + getTypeListId(typeParameters);
                 // Map an unsatisfied type parameter with a default type.
                 // If a type parameter does not have a default type, or if the default type
                 // is a forward reference, the empty object type is used.
                 const baseDefaultType = getDefaultTypeArgumentType(isJavaScriptImplicitAny);
                 const circularityMapper = createTypeMapper(typeParameters!, map(typeParameters!, () => baseDefaultType));
-                for (let i = numTypeArguments; i < numTypeParameters; i++) {
-                    result[i] = instantiateType(getConstraintFromTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
+                if (fillMissingTypeArgumentState.has(stateKey)) {
+                    // If we are already in the process of filling the type argument list's defaults, we cannot recur into the constraint again and must the the base
+                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        result[i] = baseDefaultType;
+                    }
+                }
+                else {
+                    fillMissingTypeArgumentState.set(stateKey, true);
+                    for (let i = numTypeArguments; i < numTypeParameters; i++) {
+                        result[i] = instantiateType(getConstraintFromTypeParameter(typeParameters![i]) || baseDefaultType, circularityMapper);
+                    }
+                    fillMissingTypeArgumentState.delete(stateKey);
                 }
                 for (let i = numTypeArguments; i < numTypeParameters; i++) {
                     const mapper = createTypeMapper(typeParameters!, result);
