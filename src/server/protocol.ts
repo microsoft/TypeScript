@@ -2349,7 +2349,7 @@ namespace ts.server.protocol {
         /**
          * The error code of the diagnostic message.
          */
-        code?: number;
+        code?: number | string;
 
         /**
          * The name of the plugin reporting the message.
