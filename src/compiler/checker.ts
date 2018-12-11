@@ -4715,6 +4715,10 @@ namespace ts {
             return prop ? getTypeOfSymbol(prop) : undefined;
         }
 
+        function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
+            return getTypeOfPropertyOfType(type, name) || isNumericLiteralName(name) && getIndexTypeOfType(type, IndexKind.Number) || getIndexTypeOfType(type, IndexKind.String) || unknownType;
+        }
+
         function isTypeAny(type: Type | undefined) {
             return type && (type.flags & TypeFlags.Any) !== 0;
         }
@@ -15657,7 +15661,7 @@ namespace ts {
                 }
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
-                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOfType(t, propName)!, narrowedPropType!));
+                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType!));
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
