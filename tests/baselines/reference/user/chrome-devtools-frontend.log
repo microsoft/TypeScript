@@ -11,8 +11,8 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(12039,13): error TS2300: Duplicate identifier 'Request'.
 ../../../../built/local/lib.dom.d.ts(16513,11): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.dom.d.ts(16644,13): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.es5.d.ts(1406,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../built/local/lib.es5.d.ts(1442,6): error TS2300: Duplicate identifier 'Record'.
+../../../../built/local/lib.es5.d.ts(1416,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1452,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
