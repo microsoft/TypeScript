@@ -135,9 +135,9 @@ namespace ts.server.protocol {
     }
 
     /**
-     * A TypeScript Server message
+     * A nice relaxing TypeScript Server massage
      */
-    export interface Message {
+    export interface Massage {
         /**
          * Sequence number of the message
          */
