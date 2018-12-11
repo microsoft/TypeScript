@@ -67,6 +67,7 @@ namespace ts {
         let enumCount = 0;
         let instantiationDepth = 0;
         let constraintDepth = 0;
+        let simplificationDepth = 0;
 
         const emptySymbols = createSymbolTable();
         const identityMapper: (type: Type) => Type = identity;
@@ -9686,24 +9687,29 @@ namespace ts {
 
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
-            // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
-            // and we might never terminate.
-            if (isGenericMappedType(objectType)) {
-                return type.simplified = substituteIndexedMappedType(objectType, type);
-            }
-            if (objectType.flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
-                if (constraint && isGenericMappedType(constraint)) {
-                    return type.simplified = substituteIndexedMappedType(constraint, type);
+            // construct the type Box<T[X]>. Mapped types can be recursive so to guard against infinite recursion we
+            // only perform this simplification up to five levels deep.
+            if (simplificationDepth < 5) {
+                if (isGenericMappedType(objectType)) {
+                    return type.simplified = substituteIndexedMappedType(objectType, type);
+                }
+                if (objectType.flags & TypeFlags.TypeParameter) {
+                    const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
+                    if (constraint && isGenericMappedType(constraint)) {
+                        return type.simplified = substituteIndexedMappedType(constraint, type);
+                    }
                 }
             }
             return type.simplified = type;
         }
 
         function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
+            simplificationDepth++;
             const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
             const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
+            const result = mapType(instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper), getSimplifiedType);
+            simplificationDepth--;
+            return result;
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, missingType = accessNode ? errorType : unknownType): Type {
