@@ -147,8 +147,7 @@ namespace ts.refactor.inlineFunction {
             anyHaveErrors = true;
             selectedHasErrors = true;
         }
-        if (containsProhibitedModifiers(declaration.modifiers)) {
-            anyHaveErrors = true;
+        if (containsExportKeyword(declaration.modifiers)) {
             selectedHasErrors = true;
         }
         const symbols = getExternalSymbolsReferencedInScope(declaration, checker);
@@ -157,7 +156,7 @@ namespace ts.refactor.inlineFunction {
         return { allAvailable: !anyHaveErrors, selectedAvailable: !selectedHasErrors };
     }
 
-    function containsProhibitedModifiers(modifiers?: NodeArray<Modifier>): boolean {
+    function containsExportKeyword(modifiers?: NodeArray<Modifier>): boolean {
         return !!modifiers && !!modifiers.find(mod =>
             mod.kind === SyntaxKind.ExportKeyword);
     }
