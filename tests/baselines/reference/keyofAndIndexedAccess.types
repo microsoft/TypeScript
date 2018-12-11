@@ -1731,7 +1731,7 @@ function onChangeGenericFunction<T>(handler: Handler<T & {preset: number}>) {
 // Repro from #13285
 
 function updateIds<T extends Record<K, string>, K extends string>(
->updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: { [oldId: string]: string; }) => Record<K, string>
+>updateIds : <T extends Record<K, string>, K extends string>(obj: T, idFields: K[], idMapping: Partial<Record<T[K], T[K]>>) => Record<K, string>
 
     obj: T,
 >obj : T
@@ -1739,32 +1739,31 @@ function updateIds<T extends Record<K, string>, K extends string>(
     idFields: K[],
 >idFields : K[]
 
-    idMapping: { [oldId: string]: string }
->idMapping : { [oldId: string]: string; }
->oldId : string
+    idMapping: Partial<Record<T[K], T[K]>>
+>idMapping : Partial<Record<T[K], T[K]>>
 
 ): Record<K, string> {
     for (const idField of idFields) {
 >idField : K
 >idFields : K[]
 
-        const newId = idMapping[obj[idField]];
->newId : { [oldId: string]: string; }[T[K]]
->idMapping[obj[idField]] : { [oldId: string]: string; }[T[K]]
->idMapping : { [oldId: string]: string; }
+        const newId: T[K] | undefined = idMapping[obj[idField]];
+>newId : T[K] | undefined
+>idMapping[obj[idField]] : Partial<Record<T[K], T[K]>>[T[K]]
+>idMapping : Partial<Record<T[K], T[K]>>
 >obj[idField] : T[K]
 >obj : T
 >idField : K
 
         if (newId) {
->newId : { [oldId: string]: string; }[T[K]]
+>newId : T[K] | undefined
 
             obj[idField] = newId;
->obj[idField] = newId : { [oldId: string]: string; }[T[K]]
+>obj[idField] = newId : T[K]
 >obj[idField] : T[K]
 >obj : T
 >idField : K
->newId : { [oldId: string]: string; }[T[K]]
+>newId : T[K]
         }
     }
     return obj;

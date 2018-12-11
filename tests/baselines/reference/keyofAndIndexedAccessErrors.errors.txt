@@ -66,10 +66,9 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(123,5): error
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(140,5): error TS2322: Type '42' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(141,5): error TS2322: Type '"hello"' is not assignable to type 'T[K]'.
 tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(142,5): error TS2322: Type 'number[]' is not assignable to type 'T[K]'.
-tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(158,9): error TS2322: Type '"hello"' is not assignable to type 'Record<keyof T, string>[K]'.
 
 
-==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (42 errors) ====
+==== tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts (41 errors) ====
     class Shape {
         name: string;
         width: number;
@@ -329,15 +328,7 @@ tests/cases/conformance/types/keyof/keyofAndIndexedAccessErrors.ts(158,9): error
         let x: Partial<Record<keyof T, string>>[K] = "hello";
     }
     
-    // We simplify indexed accesses applied to mapped types up to five levels deep
-    
     function f31<T, K extends keyof T>() {
-        let x: Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>[K] = "hello";
-    }
-    
-    function f32<T, K extends keyof T>() {
-        let x: Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>[K] = "hello";
-            ~
-!!! error TS2322: Type '"hello"' is not assignable to type 'Record<keyof T, string>[K]'.
+        let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
     }
     

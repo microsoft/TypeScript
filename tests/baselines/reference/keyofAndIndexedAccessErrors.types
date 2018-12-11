@@ -475,21 +475,11 @@ function f30<T, K extends keyof T>() {
 >"hello" : "hello"
 }
 
-// We simplify indexed accesses applied to mapped types up to five levels deep
-
 function f31<T, K extends keyof T>() {
 >f31 : <T, K extends keyof T>() => void
 
-    let x: Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>[K] = "hello";
->x : Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>[K]
->"hello" : "hello"
-}
-
-function f32<T, K extends keyof T>() {
->f32 : <T, K extends keyof T>() => void
-
-    let x: Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>[K] = "hello";
->x : Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>[K]
+    let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
+>x : Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K]
 >"hello" : "hello"
 }
 
