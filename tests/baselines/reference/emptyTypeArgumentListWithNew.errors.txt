@@ -1,5 +1,5 @@
 tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,8): error TS1099: Type argument list cannot be empty.
-tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,9): error TS2558: Expected 1 type argument(s), but got 0.
+tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,9): error TS2558: Expected 1 type arguments, but got 0.
 
 
 ==== tests/cases/compiler/emptyTypeArgumentListWithNew.ts (2 errors) ====
@@ -8,4 +8,4 @@ tests/cases/compiler/emptyTypeArgumentListWithNew.ts(2,9): error TS2558: Expecte
            ~~
 !!! error TS1099: Type argument list cannot be empty.
             
-!!! error TS2558: Expected 1 type argument(s), but got 0.
+!!! error TS2558: Expected 1 type arguments, but got 0.

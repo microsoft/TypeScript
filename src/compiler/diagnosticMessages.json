@@ -2012,7 +2012,7 @@
         "category": "Error",
         "code": 2557
     },
-    "Expected {0} type argument(s), but got {1}.": {
+    "Expected {0} type arguments, but got {1}.": {
         "category": "Error",
         "code": 2558
     },
@@ -2529,7 +2529,7 @@
         "category": "Error",
         "code": 2742
     },
-    "No overload expects {0} type argument(s), but overloads do exist that expect either {1} or {2} type argument(s).": {
+    "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
         "category": "Error",
         "code": 2743
     },

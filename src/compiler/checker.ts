@@ -19795,7 +19795,7 @@ namespace ts {
                 const sig = signatures[0];
                 const min = getMinTypeArgumentCount(sig.typeParameters);
                 const max = length(sig.typeParameters);
-                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_argument_s_but_got_1, min < max ? min + "-" + max : min , argCount);
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min , argCount);
             }
             // Overloads exist
             let belowArgCount = -Infinity;
@@ -19811,9 +19811,9 @@ namespace ts {
                 }
             }
             if (belowArgCount !== -Infinity && aboveArgCount !== Infinity) {
-                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_argument_s_but_overloads_do_exist_that_expect_either_1_or_2_type_argument_s, argCount, belowArgCount, aboveArgCount);
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
             }
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_argument_s_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
         function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature {
