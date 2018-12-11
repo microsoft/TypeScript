@@ -34,10 +34,10 @@ foo({
 >bar : () => number
 
             let z = this.bar;
->z : () => number
->this.bar : () => number
->this : { bar(): number; baz: number; }
->bar : () => number
+>z : any
+>this.bar : any
+>this : { x: number; y: number; }
+>bar : any
 
             return 42;
 >42 : 42

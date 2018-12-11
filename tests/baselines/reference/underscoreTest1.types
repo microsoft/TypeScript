@@ -235,7 +235,7 @@ _.all([true, 1, null, 'yes'], _.identity);
 >_.all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
 >_ : Underscore.Static
 >all : { <T>(list: T[], iterator?: Iterator_<T, boolean>, context?: any): boolean; <T>(list: Dictionary<T>, iterator?: Iterator_<T, boolean>, context?: any): boolean; }
->[true, 1, null, 'yes'] : (string | number | boolean)[]
+>[true, 1, null, 'yes'] : (string | number | true)[]
 >true : true
 >1 : 1
 >null : null

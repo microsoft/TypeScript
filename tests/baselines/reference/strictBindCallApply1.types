@@ -99,7 +99,7 @@ let a01 = foo.apply(undefined, [10]);  // Error
 >foo : (a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >undefined : undefined
->[10] : number[]
+>[10] : [number]
 >10 : 10
 
 let a02 = foo.apply(undefined, [10, 20]);  // Error
@@ -109,7 +109,7 @@ let a02 = foo.apply(undefined, [10, 20]);  // Error
 >foo : (a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >undefined : undefined
->[10, 20] : number[]
+>[10, 20] : [number, number]
 >10 : 10
 >20 : 20
 
@@ -120,7 +120,7 @@ let a03 = foo.apply(undefined, [10, "hello", 30]);  // Error
 >foo : (a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >undefined : undefined
->[10, "hello", 30] : (string | number)[]
+>[10, "hello", 30] : [number, string, number]
 >10 : 10
 >"hello" : "hello"
 >30 : 30
@@ -283,7 +283,7 @@ let a11 = c.foo.apply(c, [10]);  // Error
 >foo : (this: C, a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >c : C
->[10] : number[]
+>[10] : [number]
 >10 : 10
 
 let a12 = c.foo.apply(c, [10, 20]);  // Error
@@ -295,7 +295,7 @@ let a12 = c.foo.apply(c, [10, 20]);  // Error
 >foo : (this: C, a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >c : C
->[10, 20] : number[]
+>[10, 20] : [number, number]
 >10 : 10
 >20 : 20
 
@@ -308,7 +308,7 @@ let a13 = c.foo.apply(c, [10, "hello", 30]);  // Error
 >foo : (this: C, a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >c : C
->[10, "hello", 30] : (string | number)[]
+>[10, "hello", 30] : [number, string, number]
 >10 : 10
 >"hello" : "hello"
 >30 : 30
@@ -322,7 +322,7 @@ let a14 = c.foo.apply(undefined, [10, "hello"]);  // Error
 >foo : (this: C, a: number, b: string) => string
 >apply : { <T, R>(this: (this: T) => R, thisArg: T): R; <T, A extends any[], R>(this: (this: T, ...args: A) => R, thisArg: T, args: A): R; }
 >undefined : undefined
->[10, "hello"] : (string | number)[]
+>[10, "hello"] : [number, string]
 >10 : 10
 >"hello" : "hello"
 
@@ -415,7 +415,7 @@ C.apply(c, [10]);  // Error
 >C : typeof C
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 >c : C
->[10] : number[]
+>[10] : [number]
 >10 : 10
 
 C.apply(c, [10, 20]);  // Error
@@ -424,7 +424,7 @@ C.apply(c, [10, 20]);  // Error
 >C : typeof C
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 >c : C
->[10, 20] : number[]
+>[10, 20] : [number, number]
 >10 : 10
 >20 : 20
 
@@ -434,7 +434,7 @@ C.apply(c, [10, "hello", 30]);  // Error
 >C : typeof C
 >apply : { <T>(this: new () => T, thisArg: T): void; <T, A extends any[]>(this: new (...args: A) => T, thisArg: T, args: A): void; }
 >c : C
->[10, "hello", 30] : (string | number)[]
+>[10, "hello", 30] : [number, string, number]
 >10 : 10
 >"hello" : "hello"
 >30 : 30

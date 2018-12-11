@@ -75,7 +75,7 @@ var x = new C1(undefined, [0, undefined, ""]);
 >new C1(undefined, [0, undefined, ""]) : any
 >C1 : typeof C1
 >undefined : undefined
->[0, undefined, ""] : (string | number)[]
+>[0, undefined, ""] : [number, undefined, string]
 >0 : 0
 >undefined : undefined
 >"" : ""

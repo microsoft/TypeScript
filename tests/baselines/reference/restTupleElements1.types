@@ -170,7 +170,7 @@ declare function f0<T, U>(x: [T, ...U[]]): [T, U];
 f0([]);  // Error
 >f0([]) : any
 >f0 : <T, U>(x: [T, ...U[]]) => [T, U]
->[] : never[]
+>[] : []
 
 f0([1]);
 >f0([1]) : [number, {}]

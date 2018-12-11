@@ -17139,7 +17139,14 @@ namespace ts {
         function getContextualTypeForArgumentAtIndex(callTarget: CallLikeExpression, argIndex: number): Type {
             // If we're already in the process of resolving the given signature, don't resolve again as
             // that could cause infinite recursion. Instead, return anySignature.
-            const signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            let signature = getNodeLinks(callTarget).resolvedSignature === resolvingSignature ? resolvingSignature : getResolvedSignature(callTarget);
+            if (signature === unknownSignature) {
+                const sigs: Signature[] = [];
+                signature = getResolvedSignature(callTarget, sigs); // If cached signature is the error signature, atempt to get the more general "best candidate" signature
+                if (sigs.length > 1) {
+                    signature = createUnionOfSignaturesForOverloadFailure(sigs);
+                }
+            }
             if (isJsxOpeningLikeElement(callTarget) && argIndex === 0) {
                 return getEffectiveFirstArgumentForJsxSignature(signature, callTarget);
             }
@@ -19892,7 +19899,10 @@ namespace ts {
             return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
         }
 
-        function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature {
+        interface FailedSignature {
+            getFailureCandidate(): Signature;
+        }
+        function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature | FailedSignature {
             const isTaggedTemplate = node.kind === SyntaxKind.TaggedTemplateExpression;
             const isDecorator = node.kind === SyntaxKind.Decorator;
             const isJsxOpeningOrSelfClosingElement = isJsxOpeningLikeElement(node);
@@ -20020,7 +20030,7 @@ namespace ts {
                 }
             }
 
-            return produceDiagnostics || !args ? resolveErrorCall(node) : getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray);
+            return { getFailureCandidate() { return getCandidateForOverloadFailure(node, candidates, args, !!candidatesOutArray); } };
 
             function chooseOverload(candidates: Signature[], relation: Map<RelationComparisonResult>, signatureHelpTrailingComma = false) {
                 candidateForArgumentError = undefined;
@@ -20241,7 +20251,7 @@ namespace ts {
             return maxParamsIndex;
         }
 
-        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveCallExpression(node: CallExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             if (node.expression.kind === SyntaxKind.SuperKeyword) {
                 const superType = checkSuperExpression(node.expression);
                 if (isTypeAny(superType)) {
@@ -20335,7 +20345,7 @@ namespace ts {
                 !numCallSignatures && !numConstructSignatures && !(apparentFuncType.flags & (TypeFlags.Union | TypeFlags.Never)) && isTypeAssignableTo(funcType, globalFunctionType);
         }
 
-        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveNewExpression(node: NewExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             if (node.arguments && languageVersion < ScriptTarget.ES5) {
                 const spreadIndex = getSpreadArgumentIndex(node.arguments);
                 if (spreadIndex >= 0) {
@@ -20398,7 +20408,7 @@ namespace ts {
             const callSignatures = getSignaturesOfType(expressionType, SignatureKind.Call);
             if (callSignatures.length) {
                 const signature = resolveCall(node, callSignatures, candidatesOutArray, isForSignatureHelp);
-                if (!noImplicitAny) {
+                if (!noImplicitAny && !signature.getFailureCandidate) {
                     if (signature.declaration && !isJSConstructor(signature.declaration) && getReturnTypeOfSignature(signature) !== voidType) {
                         error(node, Diagnostics.Only_a_void_function_can_be_called_with_the_new_keyword);
                     }
@@ -20507,7 +20517,7 @@ namespace ts {
             }
         }
 
-        function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveTaggedTemplateExpression(node: TaggedTemplateExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             const tagType = checkExpression(node.tag);
             const apparentType = getApparentType(tagType);
 
@@ -20559,7 +20569,7 @@ namespace ts {
         /**
          * Resolves a decorator as if it were a call expression.
          */
-        function resolveDecorator(node: Decorator, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveDecorator(node: Decorator, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             const funcType = checkExpression(node.expression);
             const apparentType = getApparentType(funcType);
             if (apparentType === errorType) {
@@ -20617,7 +20627,7 @@ namespace ts {
             );
         }
 
-        function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveJsxOpeningLikeElement(node: JsxOpeningLikeElement, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             if (isJsxIntrinsicIdentifier(node.tagName)) {
                 const result = getIntrinsicAttributesTypeFromJsxOpeningLikeElement(node);
                 const fakeSignature = createSignatureForJSXIntrinsic(node, result);
@@ -20656,7 +20666,7 @@ namespace ts {
                 signature.parameters.length < getDecoratorArgumentCount(decorator, signature));
         }
 
-        function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature {
+        function resolveSignature(node: CallLikeExpression, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean): Signature | FailedSignature {
             switch (node.kind) {
                 case SyntaxKind.CallExpression:
                     return resolveCallExpression(node, candidatesOutArray, isForSignatureHelp);
@@ -20691,12 +20701,20 @@ namespace ts {
                 return cached;
             }
             links.resolvedSignature = resolvingSignature;
-            const result = resolveSignature(node, candidatesOutArray, isForSignatureHelp);
+            let result = resolveSignature(node, candidatesOutArray, isForSignatureHelp);
             // If signature resolution originated in control flow type analysis (for example to compute the
             // assigned type in a flow assignment) we don't cache the result as it may be based on temporary
             // types from the control flow analysis.
+            let sentinelResult: Signature | undefined;
+            if (result.getFailureCandidate) {
+                const sentinel = result;
+                result = resolveErrorCall(node);
+                if (candidatesOutArray) {
+                    sentinelResult = sentinel.getFailureCandidate(); // Failure candidate can't be cached, but still needs to be returned
+                }
+            }
             links.resolvedSignature = flowLoopStart === flowLoopCount ? result : cached;
-            return result;
+            return sentinelResult || result;
         }
 
         /**

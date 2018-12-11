@@ -4281,6 +4281,8 @@ namespace ts {
         isolatedSignatureType?: ObjectType; // A manufactured type that just contains the signature for purposes of signature comparison
         /* @internal */
         instantiations?: Map<Signature>;    // Generic signature instantiation cache
+        /* @internal */
+        getFailureCandidate?: undefined;    // Make discriminable with the `FailedSignature` sentinel inside the checker
     }
 
     export const enum IndexKind {

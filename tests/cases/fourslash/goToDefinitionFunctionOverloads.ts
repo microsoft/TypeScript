@@ -11,6 +11,6 @@
 verify.goToDefinition({
     functionOverloadReference1: "functionOverload1",
     functionOverloadReference2: "functionOverload2",
-    brokenOverload: "functionOverload1",
+    brokenOverload: "functionOverloadDefinition",
     functionOverload1: "functionOverloadDefinition"
 });

@@ -6,4 +6,4 @@
 ////declare function f(s: string): B;
 ////f()./**/
 
-verify.completions({ marker: "", exact: ["a", "b"] });
+verify.completions({ marker: "", exact: undefined });

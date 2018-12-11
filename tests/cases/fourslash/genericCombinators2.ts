@@ -63,8 +63,8 @@ verify.quickInfos({
     "3b": "(parameter) y: A",
     "4a": "(parameter) x: number",
     "4b": "(parameter) y: B<any>",
-    "5a": "(parameter) x: number",
-    "5b": "(parameter) y: string",
+    "5a": "(parameter) x: any",
+    "5b": "(parameter) y: any",
     "6a": "(parameter) x: Collection<number, number>",
     "6b": "(parameter) y: string",
     "7a": "(parameter) x: number",
@@ -78,12 +78,12 @@ verify.quickInfos({
     13: "var r3a: Collection<number, {}>",
     14: "var r3b: Collection<number, {}>",
     15: "var r4a: Collection<number, any>",
-    17: "var r5a: Collection<number, Date>",
+    17: "var r5a: any",
     18: "var r5b: Collection<number, Date>",
     19: "var r6a: Collection<Collection<number, number>, Date>",
     20: "var r6b: Collection<Collection<number, number>, Date>",
     21: "var r7a: Collection<number, string>",
-    22: "var r7b: Collection<number, string>",
+    22: "var r7b: any",
     23: "var r8a: Collection<number, string>"
 });
 
