@@ -19813,7 +19813,7 @@ namespace ts {
             if (belowArgCount !== -Infinity && aboveArgCount !== Infinity) {
                 return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_argument_s_but_overloads_do_exist_that_expect_either_1_or_2_type_argument_s, argCount, belowArgCount, aboveArgCount);
             }
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_argument_s_but_an_overload_does_exist_that_expects_1_type_argument_s, argCount, belowArgCount === -Infinity ? aboveArgCount : belowArgCount);
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_argument_s_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
         function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature {

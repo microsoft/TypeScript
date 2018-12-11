@@ -2529,13 +2529,9 @@
         "category": "Error",
         "code": 2742
     },
-    "No overload expects {0} type argument(s), but an overload does exist that expects {1} type argument(s).": {
-        "category": "Error",
-        "code": 2743
-    },
     "No overload expects {0} type argument(s), but overloads do exist that expect either {1} or {2} type argument(s).": {
         "category": "Error",
-        "code": 2744
+        "code": 2743
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
