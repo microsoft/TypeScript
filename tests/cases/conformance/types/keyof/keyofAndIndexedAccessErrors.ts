@@ -148,12 +148,6 @@ function f30<T, K extends keyof T>() {
     let x: Partial<Record<keyof T, string>>[K] = "hello";
 }
 
-// We simplify indexed accesses applied to mapped types up to five levels deep
-
 function f31<T, K extends keyof T>() {
-    let x: Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>[K] = "hello";
-}
-
-function f32<T, K extends keyof T>() {
-    let x: Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>[K] = "hello";
+    let x: Partial<Partial<Partial<Partial<Partial<Partial<Partial<Record<keyof T, string>>>>>>>>[K] = "hello";
 }
