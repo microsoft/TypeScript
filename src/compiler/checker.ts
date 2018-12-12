@@ -4849,7 +4849,7 @@ namespace ts {
             if (strictNullChecks && declaration.initializer && !(getFalsyFlags(checkDeclarationInitializer(declaration)) & TypeFlags.Undefined)) {
                 type = getTypeWithFacts(type, TypeFacts.NEUndefined);
             }
-            return declaration.initializer && !getEffectiveTypeAnnotationNode(walkUpBindingElementsAndPatterns(declaration)) && !getContextualTypeForVariableLikeDeclaration(walkUpBindingElementsAndPatterns(declaration)) ?
+            return declaration.initializer && !getContextualTypeForVariableLikeDeclaration(walkUpBindingElementsAndPatterns(declaration)) ?
                 getUnionType([type, checkDeclarationInitializer(declaration)], UnionReduction.Subtype) :
                 type;
         }
