@@ -19,7 +19,7 @@ and limitations under the License.
 
 
 /////////////////////////////
-/// DOM APIs
+/// DAN APIs
 /////////////////////////////
 
 interface Account {
@@ -230,7 +230,7 @@ interface ComputedKeyframe {
 }
 
 interface ConfirmSiteSpecificExceptionsInformation extends ExceptionInformation {
-    arrayOfDomainStrings?: string[];
+    arrayOfDanainStrings?: string[];
 }
 
 interface ConstantSourceOptions {
@@ -242,7 +242,7 @@ interface ConstrainBooleanParameters {
     ideal?: boolean;
 }
 
-interface ConstrainDOMStringParameters {
+interface ConstrainDANStringParameters {
     exact?: string | string[];
     ideal?: string | string[];
 }
@@ -271,7 +271,7 @@ interface CustomEventInit<T = any> extends EventInit {
     detail?: T;
 }
 
-interface DOMMatrix2DInit {
+interface DANMatrix2DInit {
     a?: number;
     b?: number;
     c?: number;
@@ -286,7 +286,7 @@ interface DOMMatrix2DInit {
     m42?: number;
 }
 
-interface DOMMatrixInit extends DOMMatrix2DInit {
+interface DANMatrixInit extends DANMatrix2DInit {
     is2D?: boolean;
     m13?: number;
     m14?: number;
@@ -300,21 +300,21 @@ interface DOMMatrixInit extends DOMMatrix2DInit {
     m44?: number;
 }
 
-interface DOMPointInit {
+interface DANPointInit {
     w?: number;
     x?: number;
     y?: number;
     z?: number;
 }
 
-interface DOMQuadInit {
-    p1?: DOMPointInit;
-    p2?: DOMPointInit;
-    p3?: DOMPointInit;
-    p4?: DOMPointInit;
+interface DANQuadInit {
+    p1?: DANPointInit;
+    p2?: DANPointInit;
+    p3?: DANPointInit;
+    p4?: DANPointInit;
 }
 
-interface DOMRectInit {
+interface DANRectInit {
     height?: number;
     width?: number;
     x?: number;
@@ -449,7 +449,7 @@ interface EventModifierInit extends UIEventInit {
 }
 
 interface ExceptionInformation {
-    domain?: string | null;
+    danain?: string | null;
 }
 
 interface FilePropertyBag extends BlobPropertyBag {
@@ -542,10 +542,10 @@ interface IIRFilterOptions extends AudioNodeOptions {
 }
 
 interface IntersectionObserverEntryInit {
-    boundingClientRect: DOMRectInit;
-    intersectionRect: DOMRectInit;
+    boundingClientRect: DANRectInit;
+    intersectionRect: DANRectInit;
     isIntersecting: boolean;
-    rootBounds: DOMRectInit;
+    rootBounds: DANRectInit;
     target: Element;
     time: number;
 }
@@ -684,12 +684,12 @@ interface MediaTrackCapabilities {
 interface MediaTrackConstraintSet {
     aspectRatio?: number | ConstrainDoubleRange;
     channelCount?: number | ConstrainLongRange;
-    deviceId?: string | string[] | ConstrainDOMStringParameters;
-    displaySurface?: string | string[] | ConstrainDOMStringParameters;
+    deviceId?: string | string[] | ConstrainDANStringParameters;
+    displaySurface?: string | string[] | ConstrainDANStringParameters;
     echoCancellation?: boolean | ConstrainBooleanParameters;
-    facingMode?: string | string[] | ConstrainDOMStringParameters;
+    facingMode?: string | string[] | ConstrainDANStringParameters;
     frameRate?: number | ConstrainDoubleRange;
-    groupId?: string | string[] | ConstrainDOMStringParameters;
+    groupId?: string | string[] | ConstrainDANStringParameters;
     height?: number | ConstrainLongRange;
     latency?: number | ConstrainDoubleRange;
     logicalSurface?: boolean | ConstrainBooleanParameters;
@@ -1486,7 +1486,7 @@ interface StoreExceptionsInformation extends ExceptionInformation {
 }
 
 interface StoreSiteSpecificExceptionsInformation extends StoreExceptionsInformation {
-    arrayOfDomainStrings?: string[];
+    arrayOfDanainStrings?: string[];
 }
 
 interface TextDecodeOptions {
@@ -1715,9 +1715,9 @@ interface AnalyserNode extends AudioNode {
     minDecibels: number;
     smoothingTimeConstant: number;
     getByteFrequencyData(array: Uint8Array): void;
-    getByteTimeDomainData(array: Uint8Array): void;
+    getByteTimeDanainData(array: Uint8Array): void;
     getFloatFrequencyData(array: Float32Array): void;
-    getFloatTimeDomainData(array: Float32Array): void;
+    getFloatTimeDanainData(array: Float32Array): void;
 }
 
 declare var AnalyserNode: {
@@ -2175,7 +2175,7 @@ declare var BeforeUnloadEvent: {
 };
 
 interface BhxBrowser {
-    readonly lastError: DOMException;
+    readonly lastError: DANException;
     checkMatchesGlobExpression(pattern: string, value: string): boolean;
     checkMatchesUriExpression(pattern: string, value: string): boolean;
     clearLastError(): void;
@@ -2523,7 +2523,7 @@ interface CSSStyleDeclaration {
     cursor: string | null;
     direction: string | null;
     display: string | null;
-    dominantBaseline: string | null;
+    daninantBaseline: string | null;
     emptyCells: string | null;
     enableBackground: string | null;
     fill: string | null;
@@ -3027,8 +3027,8 @@ interface CanvasGradient {
     /**
      * Adds a color stop with the given color to the gradient at the given offset. 0.0 is the offset
      * at one end of the gradient, 1.0 is the offset at the other end.
-     * Throws an "IndexSizeError" DOMException if the offset
-     * is out of range. Throws a "SyntaxError" DOMException if
+     * Throws an "IndexSizeError" DANException if the offset
+     * is out of range. Throws a "SyntaxError" DANException if
      * the color cannot be parsed.
      */
     addColorStop(offset: number, color: string): void;
@@ -3079,7 +3079,7 @@ interface CanvasPattern {
      * Sets the transformation matrix that will be used when rendering the pattern during a fill or
      * stroke painting operation.
      */
-    setTransform(transform?: DOMMatrix2DInit): void;
+    setTransform(transform?: DANMatrix2DInit): void;
 }
 
 declare var CanvasPattern: {
@@ -3128,12 +3128,12 @@ interface CanvasTextDrawingStyles {
 }
 
 interface CanvasTransform {
-    getTransform(): DOMMatrix;
+    getTransform(): DANMatrix;
     resetTransform(): void;
     rotate(angle: number): void;
     scale(x: number, y: number): void;
     setTransform(a: number, b: number, c: number, d: number, e: number, f: number): void;
-    setTransform(transform?: DOMMatrix2DInit): void;
+    setTransform(transform?: DANMatrix2DInit): void;
     transform(a: number, b: number, c: number, d: number, e: number, f: number): void;
     translate(x: number, y: number): void;
 }
@@ -3148,7 +3148,7 @@ interface CanvasUserInterface {
 interface CaretPosition {
     readonly offset: number;
     readonly offsetNode: Node;
-    getClientRect(): DOMRect | null;
+    getClientRect(): DANRect | null;
 }
 
 declare var CaretPosition: {
@@ -3190,13 +3190,13 @@ declare var CharacterData: {
 interface ChildNode extends Node {
     /**
      * Inserts nodes just after node, while replacing strings in nodes with equivalent Text nodes.
-     * Throws a "HierarchyRequestError" DOMException if the constraints of
+     * Throws a "HierarchyRequestError" DANException if the constraints of
      * the node tree are violated.
      */
     after(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes just before node, while replacing strings in nodes with equivalent Text nodes.
-     * Throws a "HierarchyRequestError" DOMException if the constraints of
+     * Throws a "HierarchyRequestError" DANException if the constraints of
      * the node tree are violated.
      */
     before(...nodes: (Node | string)[]): void;
@@ -3206,7 +3206,7 @@ interface ChildNode extends Node {
     remove(): void;
     /**
      * Replaces node with nodes, while replacing strings in nodes with equivalent Text nodes.
-     * Throws a "HierarchyRequestError" DOMException if the constraints of
+     * Throws a "HierarchyRequestError" DANException if the constraints of
      * the node tree are violated.
      */
     replaceWith(...nodes: (Node | string)[]): void;
@@ -3370,7 +3370,7 @@ declare var CountQueuingStrategy: {
 
 interface Crypto {
     readonly subtle: SubtleCrypto;
-    getRandomValues<T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | null>(array: T): T;
+    getRandanValues<T extends Int8Array | Int16Array | Int32Array | Uint8Array | Uint16Array | Uint32Array | Uint8ClampedArray | Float32Array | Float64Array | DataView | null>(array: T): T;
 }
 
 declare var Crypto: {
@@ -3426,23 +3426,23 @@ declare var CustomEvent: {
     new<T>(typeArg: string, eventInitDict?: CustomEventInit<T>): CustomEvent<T>;
 };
 
-interface DOMError {
+interface DANError {
     readonly name: string;
     toString(): string;
 }
 
-declare var DOMError: {
-    prototype: DOMError;
-    new(): DOMError;
+declare var DANError: {
+    prototype: DANError;
+    new(): DANError;
 };
 
-interface DOMException {
+interface DANException {
     readonly code: number;
     readonly message: string;
     readonly name: string;
     readonly ABORT_ERR: number;
     readonly DATA_CLONE_ERR: number;
-    readonly DOMSTRING_SIZE_ERR: number;
+    readonly DANSTRING_SIZE_ERR: number;
     readonly HIERARCHY_REQUEST_ERR: number;
     readonly INDEX_SIZE_ERR: number;
     readonly INUSE_ATTRIBUTE_ERR: number;
@@ -3467,12 +3467,12 @@ interface DOMException {
     readonly WRONG_DOCUMENT_ERR: number;
 }
 
-declare var DOMException: {
-    prototype: DOMException;
-    new(message?: string, name?: string): DOMException;
+declare var DANException: {
+    prototype: DANException;
+    new(message?: string, name?: string): DANException;
     readonly ABORT_ERR: number;
     readonly DATA_CLONE_ERR: number;
-    readonly DOMSTRING_SIZE_ERR: number;
+    readonly DANSTRING_SIZE_ERR: number;
     readonly HIERARCHY_REQUEST_ERR: number;
     readonly INDEX_SIZE_ERR: number;
     readonly INUSE_ATTRIBUTE_ERR: number;
@@ -3497,7 +3497,7 @@ declare var DOMException: {
     readonly WRONG_DOCUMENT_ERR: number;
 };
 
-interface DOMImplementation {
+interface DANImplementation {
     createDocument(namespaceURI: string | null, qualifiedName: string | null, doctype: DocumentType | null): Document;
     createDocumentType(qualifiedName: string, publicId: string, systemId: string): DocumentType;
     createHTMLDocument(title?: string): Document;
@@ -3505,16 +3505,16 @@ interface DOMImplementation {
     hasFeature(...args: any[]): true;
 }
 
-declare var DOMImplementation: {
-    prototype: DOMImplementation;
-    new(): DOMImplementation;
+declare var DANImplementation: {
+    prototype: DANImplementation;
+    new(): DANImplementation;
 };
 
-interface DOML2DeprecatedColorProperty {
+interface DANL2DeprecatedColorProperty {
     color: string;
 }
 
-interface DOMMatrix extends DOMMatrixReadOnly {
+interface DANMatrix extends DANMatrixReadOnly {
     a: number;
     b: number;
     c: number;
@@ -3537,35 +3537,35 @@ interface DOMMatrix extends DOMMatrixReadOnly {
     m42: number;
     m43: number;
     m44: number;
-    invertSelf(): DOMMatrix;
-    multiplySelf(other?: DOMMatrixInit): DOMMatrix;
-    preMultiplySelf(other?: DOMMatrixInit): DOMMatrix;
-    rotateAxisAngleSelf(x?: number, y?: number, z?: number, angle?: number): DOMMatrix;
-    rotateFromVectorSelf(x?: number, y?: number): DOMMatrix;
-    rotateSelf(rotX?: number, rotY?: number, rotZ?: number): DOMMatrix;
-    scale3dSelf(scale?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    scaleSelf(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    setMatrixValue(transformList: string): DOMMatrix;
-    skewXSelf(sx?: number): DOMMatrix;
-    skewYSelf(sy?: number): DOMMatrix;
-    translateSelf(tx?: number, ty?: number, tz?: number): DOMMatrix;
+    invertSelf(): DANMatrix;
+    multiplySelf(other?: DANMatrixInit): DANMatrix;
+    preMultiplySelf(other?: DANMatrixInit): DANMatrix;
+    rotateAxisAngleSelf(x?: number, y?: number, z?: number, angle?: number): DANMatrix;
+    rotateFromVectorSelf(x?: number, y?: number): DANMatrix;
+    rotateSelf(rotX?: number, rotY?: number, rotZ?: number): DANMatrix;
+    scale3dSelf(scale?: number, originX?: number, originY?: number, originZ?: number): DANMatrix;
+    scaleSelf(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DANMatrix;
+    setMatrixValue(transformList: string): DANMatrix;
+    skewXSelf(sx?: number): DANMatrix;
+    skewYSelf(sy?: number): DANMatrix;
+    translateSelf(tx?: number, ty?: number, tz?: number): DANMatrix;
 }
 
-declare var DOMMatrix: {
-    prototype: DOMMatrix;
-    new(init?: string | number[]): DOMMatrix;
-    fromFloat32Array(array32: Float32Array): DOMMatrix;
-    fromFloat64Array(array64: Float64Array): DOMMatrix;
-    fromMatrix(other?: DOMMatrixInit): DOMMatrix;
+declare var DANMatrix: {
+    prototype: DANMatrix;
+    new(init?: string | number[]): DANMatrix;
+    fromFloat32Array(array32: Float32Array): DANMatrix;
+    fromFloat64Array(array64: Float64Array): DANMatrix;
+    fromMatrix(other?: DANMatrixInit): DANMatrix;
 };
 
-type SVGMatrix = DOMMatrix;
-declare var SVGMatrix: typeof DOMMatrix;
+type SVGMatrix = DANMatrix;
+declare var SVGMatrix: typeof DANMatrix;
 
-type WebKitCSSMatrix = DOMMatrix;
-declare var WebKitCSSMatrix: typeof DOMMatrix;
+type WebKitCSSMatrix = DANMatrix;
+declare var WebKitCSSMatrix: typeof DANMatrix;
 
-interface DOMMatrixReadOnly {
+interface DANMatrixReadOnly {
     readonly a: number;
     readonly b: number;
     readonly c: number;
@@ -3590,116 +3590,116 @@ interface DOMMatrixReadOnly {
     readonly m42: number;
     readonly m43: number;
     readonly m44: number;
-    flipX(): DOMMatrix;
-    flipY(): DOMMatrix;
-    inverse(): DOMMatrix;
-    multiply(other?: DOMMatrixInit): DOMMatrix;
-    rotate(rotX?: number, rotY?: number, rotZ?: number): DOMMatrix;
-    rotateAxisAngle(x?: number, y?: number, z?: number, angle?: number): DOMMatrix;
-    rotateFromVector(x?: number, y?: number): DOMMatrix;
-    scale(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    scale3d(scale?: number, originX?: number, originY?: number, originZ?: number): DOMMatrix;
-    skewX(sx?: number): DOMMatrix;
-    skewY(sy?: number): DOMMatrix;
+    flipX(): DANMatrix;
+    flipY(): DANMatrix;
+    inverse(): DANMatrix;
+    multiply(other?: DANMatrixInit): DANMatrix;
+    rotate(rotX?: number, rotY?: number, rotZ?: number): DANMatrix;
+    rotateAxisAngle(x?: number, y?: number, z?: number, angle?: number): DANMatrix;
+    rotateFromVector(x?: number, y?: number): DANMatrix;
+    scale(scaleX?: number, scaleY?: number, scaleZ?: number, originX?: number, originY?: number, originZ?: number): DANMatrix;
+    scale3d(scale?: number, originX?: number, originY?: number, originZ?: number): DANMatrix;
+    skewX(sx?: number): DANMatrix;
+    skewY(sy?: number): DANMatrix;
     toFloat32Array(): Float32Array;
     toFloat64Array(): Float64Array;
     toJSON(): any;
-    transformPoint(point?: DOMPointInit): DOMPoint;
-    translate(tx?: number, ty?: number, tz?: number): DOMMatrix;
+    transformPoint(point?: DANPointInit): DANPoint;
+    translate(tx?: number, ty?: number, tz?: number): DANMatrix;
 }
 
-declare var DOMMatrixReadOnly: {
-    prototype: DOMMatrixReadOnly;
-    new(init?: string | number[]): DOMMatrixReadOnly;
-    fromFloat32Array(array32: Float32Array): DOMMatrixReadOnly;
-    fromFloat64Array(array64: Float64Array): DOMMatrixReadOnly;
-    fromMatrix(other?: DOMMatrixInit): DOMMatrixReadOnly;
+declare var DANMatrixReadOnly: {
+    prototype: DANMatrixReadOnly;
+    new(init?: string | number[]): DANMatrixReadOnly;
+    fromFloat32Array(array32: Float32Array): DANMatrixReadOnly;
+    fromFloat64Array(array64: Float64Array): DANMatrixReadOnly;
+    fromMatrix(other?: DANMatrixInit): DANMatrixReadOnly;
 };
 
-interface DOMParser {
+interface DANParser {
     parseFromString(str: string, type: SupportedType): Document;
 }
 
-declare var DOMParser: {
-    prototype: DOMParser;
-    new(): DOMParser;
+declare var DANParser: {
+    prototype: DANParser;
+    new(): DANParser;
 };
 
-interface DOMPoint extends DOMPointReadOnly {
+interface DANPoint extends DANPointReadOnly {
     w: number;
     x: number;
     y: number;
     z: number;
 }
 
-declare var DOMPoint: {
-    prototype: DOMPoint;
-    new(x?: number, y?: number, z?: number, w?: number): DOMPoint;
-    fromPoint(other?: DOMPointInit): DOMPoint;
+declare var DANPoint: {
+    prototype: DANPoint;
+    new(x?: number, y?: number, z?: number, w?: number): DANPoint;
+    fromPoint(other?: DANPointInit): DANPoint;
 };
 
-type SVGPoint = DOMPoint;
-declare var SVGPoint: typeof DOMPoint;
+type SVGPoint = DANPoint;
+declare var SVGPoint: typeof DANPoint;
 
-interface DOMPointReadOnly {
+interface DANPointReadOnly {
     readonly w: number;
     readonly x: number;
     readonly y: number;
     readonly z: number;
-    matrixTransform(matrix?: DOMMatrixInit): DOMPoint;
+    matrixTransform(matrix?: DANMatrixInit): DANPoint;
     toJSON(): any;
 }
 
-declare var DOMPointReadOnly: {
-    prototype: DOMPointReadOnly;
-    new(x?: number, y?: number, z?: number, w?: number): DOMPointReadOnly;
-    fromPoint(other?: DOMPointInit): DOMPointReadOnly;
+declare var DANPointReadOnly: {
+    prototype: DANPointReadOnly;
+    new(x?: number, y?: number, z?: number, w?: number): DANPointReadOnly;
+    fromPoint(other?: DANPointInit): DANPointReadOnly;
 };
 
-interface DOMQuad {
-    readonly p1: DOMPoint;
-    readonly p2: DOMPoint;
-    readonly p3: DOMPoint;
-    readonly p4: DOMPoint;
-    getBounds(): DOMRect;
+interface DANQuad {
+    readonly p1: DANPoint;
+    readonly p2: DANPoint;
+    readonly p3: DANPoint;
+    readonly p4: DANPoint;
+    getBounds(): DANRect;
     toJSON(): any;
 }
 
-declare var DOMQuad: {
-    prototype: DOMQuad;
-    new(p1?: DOMPointInit, p2?: DOMPointInit, p3?: DOMPointInit, p4?: DOMPointInit): DOMQuad;
-    fromQuad(other?: DOMQuadInit): DOMQuad;
-    fromRect(other?: DOMRectInit): DOMQuad;
+declare var DANQuad: {
+    prototype: DANQuad;
+    new(p1?: DANPointInit, p2?: DANPointInit, p3?: DANPointInit, p4?: DANPointInit): DANQuad;
+    fromQuad(other?: DANQuadInit): DANQuad;
+    fromRect(other?: DANRectInit): DANQuad;
 };
 
-interface DOMRect extends DOMRectReadOnly {
+interface DANRect extends DANRectReadOnly {
     height: number;
     width: number;
     x: number;
     y: number;
 }
 
-declare var DOMRect: {
-    prototype: DOMRect;
-    new(x?: number, y?: number, width?: number, height?: number): DOMRect;
-    fromRect(other?: DOMRectInit): DOMRect;
+declare var DANRect: {
+    prototype: DANRect;
+    new(x?: number, y?: number, width?: number, height?: number): DANRect;
+    fromRect(other?: DANRectInit): DANRect;
 };
 
-type SVGRect = DOMRect;
-declare var SVGRect: typeof DOMRect;
+type SVGRect = DANRect;
+declare var SVGRect: typeof DANRect;
 
-interface DOMRectList {
+interface DANRectList {
     readonly length: number;
-    item(index: number): DOMRect | null;
-    [index: number]: DOMRect;
+    item(index: number): DANRect | null;
+    [index: number]: DANRect;
 }
 
-declare var DOMRectList: {
-    prototype: DOMRectList;
-    new(): DOMRectList;
+declare var DANRectList: {
+    prototype: DANRectList;
+    new(): DANRectList;
 };
 
-interface DOMRectReadOnly {
+interface DANRectReadOnly {
     readonly bottom: number;
     readonly height: number;
     readonly left: number;
@@ -3711,22 +3711,22 @@ interface DOMRectReadOnly {
     toJSON(): any;
 }
 
-declare var DOMRectReadOnly: {
-    prototype: DOMRectReadOnly;
-    new(x?: number, y?: number, width?: number, height?: number): DOMRectReadOnly;
-    fromRect(other?: DOMRectInit): DOMRectReadOnly;
+declare var DANRectReadOnly: {
+    prototype: DANRectReadOnly;
+    new(x?: number, y?: number, width?: number, height?: number): DANRectReadOnly;
+    fromRect(other?: DANRectInit): DANRectReadOnly;
 };
 
-interface DOMSettableTokenList extends DOMTokenList {
+interface DANSettableTokenList extends DANTokenList {
     value: string;
 }
 
-declare var DOMSettableTokenList: {
-    prototype: DOMSettableTokenList;
-    new(): DOMSettableTokenList;
+declare var DANSettableTokenList: {
+    prototype: DANSettableTokenList;
+    new(): DANSettableTokenList;
 };
 
-interface DOMStringList {
+interface DANStringList {
     /**
      * Returns the number of strings in strings.
      */
@@ -3743,21 +3743,21 @@ interface DOMStringList {
     [index: number]: string;
 }
 
-declare var DOMStringList: {
-    prototype: DOMStringList;
-    new(): DOMStringList;
+declare var DANStringList: {
+    prototype: DANStringList;
+    new(): DANStringList;
 };
 
-interface DOMStringMap {
+interface DANStringMap {
     [name: string]: string | undefined;
 }
 
-declare var DOMStringMap: {
-    prototype: DOMStringMap;
-    new(): DOMStringMap;
+declare var DANStringMap: {
+    prototype: DANStringMap;
+    new(): DANStringMap;
 };
 
-interface DOMTokenList {
+interface DANTokenList {
     /**
      * Returns the number of tokens.
      */
@@ -3769,9 +3769,9 @@ interface DOMTokenList {
     value: string;
     /**
      * Adds all arguments passed, except those already present.
-     * Throws a "SyntaxError" DOMException if one of the arguments is the empty
+     * Throws a "SyntaxError" DANException if one of the arguments is the empty
      * string.
-     * Throws an "InvalidCharacterError" DOMException if one of the arguments
+     * Throws an "InvalidCharacterError" DANException if one of the arguments
      * contains any ASCII whitespace.
      */
     add(...tokens: string[]): void;
@@ -3785,18 +3785,18 @@ interface DOMTokenList {
     item(index: number): string | null;
     /**
      * Removes arguments passed, if they are present.
-     * Throws a "SyntaxError" DOMException if one of the arguments is the empty
+     * Throws a "SyntaxError" DANException if one of the arguments is the empty
      * string.
-     * Throws an "InvalidCharacterError" DOMException if one of the arguments
+     * Throws an "InvalidCharacterError" DANException if one of the arguments
      * contains any ASCII whitespace.
      */
     remove(...tokens: string[]): void;
     /**
      * Replaces token with newToken.
      * Returns true if token was replaced with newToken, and false otherwise.
-     * Throws a "SyntaxError" DOMException if one of the arguments is the empty
+     * Throws a "SyntaxError" DANException if one of the arguments is the empty
      * string.
-     * Throws an "InvalidCharacterError" DOMException if one of the arguments
+     * Throws an "InvalidCharacterError" DANException if one of the arguments
      * contains any ASCII whitespace.
      */
     replace(oldToken: string, newToken: string): void;
@@ -3807,13 +3807,13 @@ interface DOMTokenList {
      */
     supports(token: string): boolean;
     toggle(token: string, force?: boolean): boolean;
-    forEach(callbackfn: (value: string, key: number, parent: DOMTokenList) => void, thisArg?: any): void;
+    forEach(callbackfn: (value: string, key: number, parent: DANTokenList) => void, thisArg?: any): void;
     [index: number]: string;
 }
 
-declare var DOMTokenList: {
-    prototype: DOMTokenList;
-    new(): DOMTokenList;
+declare var DANTokenList: {
+    prototype: DANTokenList;
+    new(): DANTokenList;
 };
 
 interface DataCue extends TextTrackCue {
@@ -4090,7 +4090,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * Can be set, to add a new cookie to the element's set of HTTP cookies.
      * If the contents are sandboxed into a
      * unique origin (e.g. in an iframe with the sandbox attribute), a
-     * "SecurityError" DOMException will be thrown on getting
+     * "SecurityError" DANException will be thrown on getting
      * and setting.
      */
     cookie: string;
@@ -4127,9 +4127,9 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      */
     readonly documentURI: string;
     /**
-     * Sets or gets the security domain of the document.
+     * Sets or gets the security danain of the document.
      */
-    domain: string;
+    danain: string;
     /**
      * Retrieves a collection of all embed objects in the document.
      */
@@ -4162,7 +4162,7 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /**
      * Gets the implementation object of the current document.
      */
-    readonly implementation: DOMImplementation;
+    readonly implementation: DANImplementation;
     /**
      * Returns the character encoding used to create the webpage that is loaded into the document object.
      */
@@ -4226,8 +4226,8 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     vlinkColor: string;
     /**
      * Moves node from another document and returns it.
-     * If node is a document, throws a "NotSupportedError" DOMException or, if node is a shadow root, throws a
-     * "HierarchyRequestError" DOMException.
+     * If node is a document, throws a "NotSupportedError" DANException or, if node is a shadow root, throws a
+     * "HierarchyRequestError" DANException.
      */
     adoptNode<T extends Node>(source: T): T;
     /** @deprecated */
@@ -4272,8 +4272,8 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
      * Returns an element with namespace namespace. Its namespace prefix will be everything before ":" (U+003E) in qualifiedName or null. Its local name will be everything after
      * ":" (U+003E) in qualifiedName or qualifiedName.
      * If localName does not match the Name production an
-     * "InvalidCharacterError" DOMException will be thrown.
-     * If one of the following conditions is true a "NamespaceError" DOMException will be thrown:
+     * "InvalidCharacterError" DANException will be thrown.
+     * If one of the following conditions is true a "NamespaceError" DANException will be thrown:
      * localName does not match the QName production.
      * Namespace prefix is not null and namespace is the empty string.
      * Namespace prefix is "xml" and namespace is not the XML namespace.
@@ -4437,9 +4437,9 @@ interface Document extends Node, NonElementParentNode, DocumentOrShadowRoot, Par
     /**
      * Returns a ProcessingInstruction node whose target is target and data is data.
      * If target does not match the Name production an
-     * "InvalidCharacterError" DOMException will be thrown.
+     * "InvalidCharacterError" DANException will be thrown.
      * If data contains "?>" an
-     * "InvalidCharacterError" DOMException will be thrown.
+     * "InvalidCharacterError" DANException will be thrown.
      */
     createProcessingInstruction(target: string, data: string): ProcessingInstruction;
     /**
@@ -4777,9 +4777,9 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
     readonly attributes: NamedNodeMap;
     /**
      * Allows for manipulation of element's class content attribute as a
-     * set of whitespace-separated tokens through a DOMTokenList object.
+     * set of whitespace-separated tokens through a DANTokenList object.
      */
-    readonly classList: DOMTokenList;
+    readonly classList: DANTokenList;
     /**
      * Returns the value of element's class content attribute. Can be set
      * to change it.
@@ -4853,8 +4853,8 @@ interface Element extends Node, ParentNode, NonDocumentTypeChildNode, ChildNode,
     getAttributeNames(): string[];
     getAttributeNode(name: string): Attr | null;
     getAttributeNodeNS(namespaceURI: string, localName: string): Attr | null;
-    getBoundingClientRect(): ClientRect | DOMRect;
-    getClientRects(): ClientRectList | DOMRectList;
+    getBoundingClientRect(): ClientRect | DANRect;
+    getClientRects(): ClientRectList | DANRectList;
     getElementsByClassName(classNames: string): HTMLCollectionOf<Element>;
     getElementsByTagName<K extends keyof HTMLElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<HTMLElementTagNameMap[K]>;
     getElementsByTagName<K extends keyof SVGElementTagNameMap>(qualifiedName: K): HTMLCollectionOf<SVGElementTagNameMap[K]>;
@@ -5138,7 +5138,7 @@ interface FileReaderEventMap {
 }
 
 interface FileReader extends EventTarget {
-    readonly error: DOMException | null;
+    readonly error: DANException | null;
     onabort: ((this: FileReader, ev: ProgressEvent) => any) | null;
     onerror: ((this: FileReader, ev: ProgressEvent) => any) | null;
     onload: ((this: FileReader, ev: ProgressEvent) => any) | null;
@@ -5702,7 +5702,7 @@ interface HTMLAnchorElement extends HTMLElement, HTMLHyperlinkElementUtils {
      * Sets or retrieves the relationship between the object and the destination of the link.
      */
     rel: string;
-    readonly relList: DOMTokenList;
+    readonly relList: DANTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
      */
@@ -5801,7 +5801,7 @@ interface HTMLAreaElement extends HTMLElement, HTMLHyperlinkElementUtils {
     ping: string;
     referrerPolicy: string;
     rel: string;
-    readonly relList: DOMTokenList;
+    readonly relList: DANTokenList;
     /**
      * Sets or retrieves the shape of the object.
      */
@@ -5870,7 +5870,7 @@ declare var HTMLBaseElement: {
     new(): HTMLBaseElement;
 };
 
-interface HTMLBaseFontElement extends HTMLElement, DOML2DeprecatedColorProperty {
+interface HTMLBaseFontElement extends HTMLElement, DANL2DeprecatedColorProperty {
     /**
      * Sets or retrieves the current typeface family.
      */
@@ -6639,7 +6639,7 @@ interface HTMLIFrameElement extends HTMLElement, GetSVGDocument {
      */
     name: string;
     readonly referrerPolicy: ReferrerPolicy;
-    readonly sandbox: DOMTokenList;
+    readonly sandbox: DANTokenList;
     /**
      * Sets or retrieves whether the frame can be scrolled.
      */
@@ -7045,13 +7045,13 @@ interface HTMLLinkElement extends HTMLElement, LinkStyle {
      * Sets or retrieves the relationship between the object and the destination of the link.
      */
     rel: string;
-    readonly relList: DOMTokenList;
+    readonly relList: DANTokenList;
     /**
      * Sets or retrieves the relationship between the object and the destination of the link.
      */
     /** @deprecated */
     rev: string;
-    readonly sizes: DOMTokenList;
+    readonly sizes: DANTokenList;
     /**
      * Sets or retrieves the window or frame at which to target content.
      */
@@ -7655,7 +7655,7 @@ interface HTMLOptionsCollection extends HTMLCollectionOf<HTMLOptionElement> {
      * The before argument can be a number, in which case element is inserted before the item with that number, or an element from the
      * collection, in which case element is inserted before that element.
      * If before is omitted, null, or a number out of range, then element will be added at the end of the list.
-     * This method will throw a "HierarchyRequestError" DOMException if
+     * This method will throw a "HierarchyRequestError" DANException if
      * element is an ancestor of the element into which it is to be inserted.
      */
     add(element: HTMLOptionElement | HTMLOptGroupElement, before?: HTMLElement | number | null): void;
@@ -7671,7 +7671,7 @@ declare var HTMLOptionsCollection: {
 };
 
 interface HTMLOrSVGElement {
-    readonly dataset: DOMStringMap;
+    readonly dataset: DANStringMap;
     nonce: string;
     tabIndex: number;
     blur(): void;
@@ -7681,7 +7681,7 @@ interface HTMLOrSVGElement {
 interface HTMLOutputElement extends HTMLElement {
     defaultValue: string;
     readonly form: HTMLFormElement | null;
-    readonly htmlFor: DOMTokenList;
+    readonly htmlFor: DANTokenList;
     readonly labels: NodeListOf<HTMLLabelElement>;
     name: string;
     readonly type: string;
@@ -8709,12 +8709,12 @@ interface IDBCursor {
     readonly direction: IDBCursorDirection;
     /**
      * Returns the key of the cursor.
-     * Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
+     * Throws a "InvalidStateError" DANException if the cursor is advancing or is finished.
      */
     readonly key: IDBValidKey | IDBKeyRange;
     /**
      * Returns the effective key of the cursor.
-     * Throws a "InvalidStateError" DOMException if the cursor is advancing or is finished.
+     * Throws a "InvalidStateError" DANException if the cursor is advancing or is finished.
      */
     readonly primaryKey: IDBValidKey | IDBKeyRange;
     /**
@@ -8733,7 +8733,7 @@ interface IDBCursor {
     continue(key?: IDBValidKey | IDBKeyRange): void;
     /**
      * Advances the cursor to the next record in range matching
-     * or after key and primaryKey. Throws an "InvalidAccessError" DOMException if the source is not an index.
+     * or after key and primaryKey. Throws an "InvalidAccessError" DANException if the source is not an index.
      */
     continuePrimaryKey(key: IDBValidKey | IDBKeyRange, primaryKey: IDBValidKey | IDBKeyRange): void;
     /**
@@ -8743,7 +8743,7 @@ interface IDBCursor {
     delete(): IDBRequest<undefined>;
     /**
      * Updated the record pointed at by the cursor with a new value.
-     * Throws a "DataError" DOMException if the effective object store uses in-line keys and the key would have changed.
+     * Throws a "DataError" DANException if the effective object store uses in-line keys and the key would have changed.
      * If successful, request's result will be the record's key.
      */
     update(value: any): IDBRequest<IDBValidKey>;
@@ -8781,7 +8781,7 @@ interface IDBDatabase extends EventTarget {
     /**
      * Returns a list of the names of object stores in the database.
      */
-    readonly objectStoreNames: DOMStringList;
+    readonly objectStoreNames: DANStringList;
     onabort: ((this: IDBDatabase, ev: Event) => any) | null;
     onclose: ((this: IDBDatabase, ev: Event) => any) | null;
     onerror: ((this: IDBDatabase, ev: Event) => any) | null;
@@ -8796,12 +8796,12 @@ interface IDBDatabase extends EventTarget {
     close(): void;
     /**
      * Creates a new object store with the given name and options and returns a new IDBObjectStore.
-     * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
+     * Throws a "InvalidStateError" DANException if not called within an upgrade transaction.
      */
     createObjectStore(name: string, optionalParameters?: IDBObjectStoreParameters): IDBObjectStore;
     /**
      * Deletes the object store with the given name.
-     * Throws a "InvalidStateError" DOMException if not called within an upgrade transaction.
+     * Throws a "InvalidStateError" DANException if not called within an upgrade transaction.
      */
     deleteObjectStore(name: string): void;
     /**
@@ -8828,7 +8828,7 @@ interface IDBFactory {
     /**
      * Compares two values as keys. Returns -1 if key1 precedes key2, 1 if key2 precedes key1, and 0 if
      * the keys are equal.
-     * Throws a "DataError" DOMException if either input is not a valid key.
+     * Throws a "DataError" DANException if either input is not a valid key.
      */
     cmp(first: any, second: any): number;
     /**
@@ -8858,7 +8858,7 @@ interface IDBIndex {
     readonly multiEntry: boolean;
     /**
      * Updates the name of the store to newName.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
+     * Throws an "InvalidStateError" DANException if not called within an upgrade
      * transaction.
      */
     name: string;
@@ -8969,14 +8969,14 @@ interface IDBObjectStore {
     /**
      * Returns a list of the names of indexes in the store.
      */
-    readonly indexNames: DOMStringList;
+    readonly indexNames: DANStringList;
     /**
      * Returns the key path of the store, or null if none.
      */
     readonly keyPath: string | string[];
     /**
      * Updates the name of the store to newName.
-     * Throws "InvalidStateError" DOMException if not called within an upgrade
+     * Throws "InvalidStateError" DANException if not called within an upgrade
      * transaction.
      */
     name: string;
@@ -9001,8 +9001,8 @@ interface IDBObjectStore {
      * Creates a new index in store with the given name, keyPath and options and returns a new IDBIndex. If the keyPath and options define constraints that cannot be
      * satisfied with the data already in store the upgrade
      * transaction will abort with
-     * a "ConstraintError" DOMException.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
+     * a "ConstraintError" DANException.
+     * Throws an "InvalidStateError" DANException if not called within an upgrade
      * transaction.
      */
     createIndex(name: string, keyPath: string | string[], options?: IDBIndexParameters): IDBIndex;
@@ -9014,7 +9014,7 @@ interface IDBObjectStore {
     delete(key: IDBValidKey | IDBKeyRange): IDBRequest<undefined>;
     /**
      * Deletes the index in store with the given name.
-     * Throws an "InvalidStateError" DOMException if not called within an upgrade
+     * Throws an "InvalidStateError" DANException if not called within an upgrade
      * transaction.
      */
     deleteIndex(name: string): void;
@@ -9091,10 +9091,10 @@ interface IDBRequestEventMap {
 
 interface IDBRequest<T = any> extends EventTarget {
     /**
-     * When a request is completed, returns the error (a DOMException), or null if the request succeeded. Throws
-     * a "InvalidStateError" DOMException if the request is still pending.
+     * When a request is completed, returns the error (a DANException), or null if the request succeeded. Throws
+     * a "InvalidStateError" DANException if the request is still pending.
      */
-    readonly error: DOMException | null;
+    readonly error: DANException | null;
     onerror: ((this: IDBRequest<T>, ev: Event) => any) | null;
     onsuccess: ((this: IDBRequest<T>, ev: Event) => any) | null;
     /**
@@ -9105,7 +9105,7 @@ interface IDBRequest<T = any> extends EventTarget {
     /**
      * When a request is completed, returns the result,
      * or undefined if the request failed. Throws a
-     * "InvalidStateError" DOMException if the request is still pending.
+     * "InvalidStateError" DANException if the request is still pending.
      */
     readonly result: T;
     /**
@@ -9142,9 +9142,9 @@ interface IDBTransaction extends EventTarget {
     readonly db: IDBDatabase;
     /**
      * If the transaction was aborted, returns the
-     * error (a DOMException) providing the reason.
+     * error (a DANException) providing the reason.
      */
-    readonly error: DOMException;
+    readonly error: DANException;
     /**
      * Returns the mode the transaction was created with
      * ("readonly" or "readwrite"), or "versionchange" for
@@ -9155,13 +9155,13 @@ interface IDBTransaction extends EventTarget {
      * Returns a list of the names of object stores in the
      * transaction's scope. For an upgrade transaction this is all object stores in the database.
      */
-    readonly objectStoreNames: DOMStringList;
+    readonly objectStoreNames: DANStringList;
     onabort: ((this: IDBTransaction, ev: Event) => any) | null;
     oncomplete: ((this: IDBTransaction, ev: Event) => any) | null;
     onerror: ((this: IDBTransaction, ev: Event) => any) | null;
     /**
      * Aborts the transaction. All pending requests will fail with
-     * a "AbortError" DOMException and all changes made to the database will be
+     * a "AbortError" DANException and all changes made to the database will be
      * reverted.
      */
     abort(): void;
@@ -9284,11 +9284,11 @@ declare var IntersectionObserver: {
 };
 
 interface IntersectionObserverEntry {
-    readonly boundingClientRect: ClientRect | DOMRect;
+    readonly boundingClientRect: ClientRect | DANRect;
     readonly intersectionRatio: number;
-    readonly intersectionRect: ClientRect | DOMRect;
+    readonly intersectionRect: ClientRect | DANRect;
     readonly isIntersecting: boolean;
-    readonly rootBounds: ClientRect | DOMRect;
+    readonly rootBounds: ClientRect | DANRect;
     readonly target: Element;
     readonly time: number;
 }
@@ -9318,23 +9318,23 @@ interface KeyboardEvent extends UIEvent {
     getModifierState(keyArg: string): boolean;
     /** @deprecated */
     initKeyboardEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, keyArg: string, locationArg: number, modifiersListArg: string, repeat: boolean, locale: string): void;
-    readonly DOM_KEY_LOCATION_JOYSTICK: number;
-    readonly DOM_KEY_LOCATION_LEFT: number;
-    readonly DOM_KEY_LOCATION_MOBILE: number;
-    readonly DOM_KEY_LOCATION_NUMPAD: number;
-    readonly DOM_KEY_LOCATION_RIGHT: number;
-    readonly DOM_KEY_LOCATION_STANDARD: number;
+    readonly DAN_KEY_LOCATION_JOYSTICK: number;
+    readonly DAN_KEY_LOCATION_LEFT: number;
+    readonly DAN_KEY_LOCATION_MOBILE: number;
+    readonly DAN_KEY_LOCATION_NUMPAD: number;
+    readonly DAN_KEY_LOCATION_RIGHT: number;
+    readonly DAN_KEY_LOCATION_STANDARD: number;
 }
 
 declare var KeyboardEvent: {
     prototype: KeyboardEvent;
     new(typeArg: string, eventInitDict?: KeyboardEventInit): KeyboardEvent;
-    readonly DOM_KEY_LOCATION_JOYSTICK: number;
-    readonly DOM_KEY_LOCATION_LEFT: number;
-    readonly DOM_KEY_LOCATION_MOBILE: number;
-    readonly DOM_KEY_LOCATION_NUMPAD: number;
-    readonly DOM_KEY_LOCATION_RIGHT: number;
-    readonly DOM_KEY_LOCATION_STANDARD: number;
+    readonly DAN_KEY_LOCATION_JOYSTICK: number;
+    readonly DAN_KEY_LOCATION_LEFT: number;
+    readonly DAN_KEY_LOCATION_MOBILE: number;
+    readonly DAN_KEY_LOCATION_NUMPAD: number;
+    readonly DAN_KEY_LOCATION_RIGHT: number;
+    readonly DAN_KEY_LOCATION_STANDARD: number;
 };
 
 interface KeyframeEffect extends AnimationEffect {
@@ -9367,10 +9367,10 @@ declare var ListeningStateChangedEvent: {
 
 interface Location {
     /**
-     * Returns a DOMStringList object listing the origins of the ancestor browsing contexts, from the parent browsing
+     * Returns a DANStringList object listing the origins of the ancestor browsing contexts, from the parent browsing
      * context to the top-level browsing context.
      */
-    readonly ancestorOrigins: DOMStringList;
+    readonly ancestorOrigins: DANStringList;
     /**
      * Returns the Location object's URL's fragment (includes leading "#" if non-empty).
      * Can be set, to navigate to the same URL with a changed fragment (ignores leading "#").
@@ -9583,7 +9583,7 @@ interface MSMediaKeyError {
     readonly code: number;
     readonly systemCode: number;
     readonly MS_MEDIA_KEYERR_CLIENT: number;
-    readonly MS_MEDIA_KEYERR_DOMAIN: number;
+    readonly MS_MEDIA_KEYERR_DANAIN: number;
     readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
     readonly MS_MEDIA_KEYERR_OUTPUT: number;
     readonly MS_MEDIA_KEYERR_SERVICE: number;
@@ -9594,7 +9594,7 @@ declare var MSMediaKeyError: {
     prototype: MSMediaKeyError;
     new(): MSMediaKeyError;
     readonly MS_MEDIA_KEYERR_CLIENT: number;
-    readonly MS_MEDIA_KEYERR_DOMAIN: number;
+    readonly MS_MEDIA_KEYERR_DANAIN: number;
     readonly MS_MEDIA_KEYERR_HARDWARECHANGE: number;
     readonly MS_MEDIA_KEYERR_OUTPUT: number;
     readonly MS_MEDIA_KEYERR_SERVICE: number;
@@ -10081,7 +10081,7 @@ interface MessagePort extends EventTarget {
     /**
      * Posts a message through the channel. Objects listed in transfer are
      * transferred, not just cloned, meaning that they are no longer usable on the sending side.
-     * Throws a "DataCloneError" DOMException if
+     * Throws a "DataCloneError" DANException if
      * transfer contains duplicate objects or port, or if message
      * could not be cloned.
      */
@@ -10812,14 +10812,14 @@ interface ParentNode {
     /**
      * Inserts nodes after the last child of node, while replacing
      * strings in nodes with equivalent Text nodes.
-     * Throws a "HierarchyRequestError" DOMException if the constraints of
+     * Throws a "HierarchyRequestError" DANException if the constraints of
      * the node tree are violated.
      */
     append(...nodes: (Node | string)[]): void;
     /**
      * Inserts nodes before the first child of node, while
      * replacing strings in nodes with equivalent Text nodes.
-     * Throws a "HierarchyRequestError" DOMException if the constraints of
+     * Throws a "HierarchyRequestError" DANException if the constraints of
      * the node tree are violated.
      */
     prepend(...nodes: (Node | string)[]): void;
@@ -10840,7 +10840,7 @@ interface ParentNode {
 }
 
 interface Path2D extends CanvasPath {
-    addPath(path: Path2D, transform?: DOMMatrix2DInit): void;
+    addPath(path: Path2D, transform?: DANMatrix2DInit): void;
 }
 
 declare var Path2D: {
@@ -11032,10 +11032,10 @@ declare var PerformanceNavigation: {
 };
 
 interface PerformanceNavigationTiming extends PerformanceResourceTiming {
-    readonly domComplete: number;
-    readonly domContentLoadedEventEnd: number;
-    readonly domContentLoadedEventStart: number;
-    readonly domInteractive: number;
+    readonly danComplete: number;
+    readonly danContentLoadedEventEnd: number;
+    readonly danContentLoadedEventStart: number;
+    readonly danInteractive: number;
     readonly loadEventEnd: number;
     readonly loadEventStart: number;
     readonly redirectCount: number;
@@ -11076,8 +11076,8 @@ interface PerformanceResourceTiming extends PerformanceEntry {
     readonly connectEnd: number;
     readonly connectStart: number;
     readonly decodedBodySize: number;
-    readonly domainLookupEnd: number;
-    readonly domainLookupStart: number;
+    readonly danainLookupEnd: number;
+    readonly danainLookupStart: number;
     readonly encodedBodySize: number;
     readonly fetchStart: number;
     readonly initiatorType: string;
@@ -11101,13 +11101,13 @@ declare var PerformanceResourceTiming: {
 interface PerformanceTiming {
     readonly connectEnd: number;
     readonly connectStart: number;
-    readonly domComplete: number;
-    readonly domContentLoadedEventEnd: number;
-    readonly domContentLoadedEventStart: number;
-    readonly domInteractive: number;
-    readonly domLoading: number;
-    readonly domainLookupEnd: number;
-    readonly domainLookupStart: number;
+    readonly danComplete: number;
+    readonly danContentLoadedEventEnd: number;
+    readonly danContentLoadedEventStart: number;
+    readonly danInteractive: number;
+    readonly danLoading: number;
+    readonly danainLookupEnd: number;
+    readonly danainLookupStart: number;
     readonly fetchStart: number;
     readonly loadEventEnd: number;
     readonly loadEventStart: number;
@@ -11824,13 +11824,13 @@ declare var RadioNodeList: {
     new(): RadioNodeList;
 };
 
-interface RandomSource {
-    getRandomValues<T extends Int8Array | Uint8ClampedArray | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array>(array: T): T;
+interface RandanSource {
+    getRandanValues<T extends Int8Array | Uint8ClampedArray | Uint8Array | Int16Array | Uint16Array | Int32Array | Uint32Array>(array: T): T;
 }
 
-declare var RandomSource: {
-    prototype: RandomSource;
-    new(): RandomSource;
+declare var RandanSource: {
+    prototype: RandanSource;
+    new(): RandanSource;
 };
 
 interface Range extends AbstractRange {
@@ -11852,8 +11852,8 @@ interface Range extends AbstractRange {
     deleteContents(): void;
     detach(): void;
     extractContents(): DocumentFragment;
-    getBoundingClientRect(): ClientRect | DOMRect;
-    getClientRects(): ClientRectList | DOMRectList;
+    getBoundingClientRect(): ClientRect | DANRect;
+    getClientRects(): ClientRectList | DANRectList;
     insertNode(node: Node): void;
     /**
      * Returns whether range intersects node.
@@ -12229,8 +12229,8 @@ declare var SVGAnimatedPreserveAspectRatio: {
 };
 
 interface SVGAnimatedRect {
-    readonly animVal: DOMRectReadOnly;
-    readonly baseVal: DOMRect;
+    readonly animVal: DANRectReadOnly;
+    readonly baseVal: DANRect;
 }
 
 declare var SVGAnimatedRect: {
@@ -12952,10 +12952,10 @@ declare var SVGGElement: {
 
 interface SVGGeometryElement extends SVGGraphicsElement {
     readonly pathLength: SVGAnimatedNumber;
-    getPointAtLength(distance: number): DOMPoint;
+    getPointAtLength(distance: number): DANPoint;
     getTotalLength(): number;
-    isPointInFill(point?: DOMPointInit): boolean;
-    isPointInStroke(point?: DOMPointInit): boolean;
+    isPointInFill(point?: DANPointInit): boolean;
+    isPointInStroke(point?: DANPointInit): boolean;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGeometryElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGeometryElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -12992,9 +12992,9 @@ declare var SVGGradientElement: {
 
 interface SVGGraphicsElement extends SVGElement, SVGTests {
     readonly transform: SVGAnimatedTransformList;
-    getBBox(options?: SVGBoundingBoxOptions): DOMRect;
-    getCTM(): DOMMatrix | null;
-    getScreenCTM(): DOMMatrix | null;
+    getBBox(options?: SVGBoundingBoxOptions): DANRect;
+    getCTM(): DANMatrix | null;
+    getScreenCTM(): DANMatrix | null;
     addEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGraphicsElement, ev: SVGElementEventMap[K]) => any, options?: boolean | AddEventListenerOptions): void;
     addEventListener(type: string, listener: EventListenerOrEventListenerObject, options?: boolean | AddEventListenerOptions): void;
     removeEventListener<K extends keyof SVGElementEventMap>(type: K, listener: (this: SVGGraphicsElement, ev: SVGElementEventMap[K]) => any, options?: boolean | EventListenerOptions): void;
@@ -14782,31 +14782,31 @@ declare var TextEncoder: {
 interface TextEvent extends UIEvent {
     readonly data: string;
     initTextEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, dataArg: string, inputMethod: number, locale: string): void;
-    readonly DOM_INPUT_METHOD_DROP: number;
-    readonly DOM_INPUT_METHOD_HANDWRITING: number;
-    readonly DOM_INPUT_METHOD_IME: number;
-    readonly DOM_INPUT_METHOD_KEYBOARD: number;
-    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
-    readonly DOM_INPUT_METHOD_OPTION: number;
-    readonly DOM_INPUT_METHOD_PASTE: number;
-    readonly DOM_INPUT_METHOD_SCRIPT: number;
-    readonly DOM_INPUT_METHOD_UNKNOWN: number;
-    readonly DOM_INPUT_METHOD_VOICE: number;
+    readonly DAN_INPUT_METHOD_DROP: number;
+    readonly DAN_INPUT_METHOD_HANDWRITING: number;
+    readonly DAN_INPUT_METHOD_IME: number;
+    readonly DAN_INPUT_METHOD_KEYBOARD: number;
+    readonly DAN_INPUT_METHOD_MULTIMODAL: number;
+    readonly DAN_INPUT_METHOD_OPTION: number;
+    readonly DAN_INPUT_METHOD_PASTE: number;
+    readonly DAN_INPUT_METHOD_SCRIPT: number;
+    readonly DAN_INPUT_METHOD_UNKNOWN: number;
+    readonly DAN_INPUT_METHOD_VOICE: number;
 }
 
 declare var TextEvent: {
     prototype: TextEvent;
     new(): TextEvent;
-    readonly DOM_INPUT_METHOD_DROP: number;
-    readonly DOM_INPUT_METHOD_HANDWRITING: number;
-    readonly DOM_INPUT_METHOD_IME: number;
-    readonly DOM_INPUT_METHOD_KEYBOARD: number;
-    readonly DOM_INPUT_METHOD_MULTIMODAL: number;
-    readonly DOM_INPUT_METHOD_OPTION: number;
-    readonly DOM_INPUT_METHOD_PASTE: number;
-    readonly DOM_INPUT_METHOD_SCRIPT: number;
-    readonly DOM_INPUT_METHOD_UNKNOWN: number;
-    readonly DOM_INPUT_METHOD_VOICE: number;
+    readonly DAN_INPUT_METHOD_DROP: number;
+    readonly DAN_INPUT_METHOD_HANDWRITING: number;
+    readonly DAN_INPUT_METHOD_IME: number;
+    readonly DAN_INPUT_METHOD_KEYBOARD: number;
+    readonly DAN_INPUT_METHOD_MULTIMODAL: number;
+    readonly DAN_INPUT_METHOD_OPTION: number;
+    readonly DAN_INPUT_METHOD_PASTE: number;
+    readonly DAN_INPUT_METHOD_SCRIPT: number;
+    readonly DAN_INPUT_METHOD_UNKNOWN: number;
+    readonly DAN_INPUT_METHOD_VOICE: number;
 };
 
 interface TextMetrics {
@@ -16398,17 +16398,17 @@ interface WheelEvent extends MouseEvent {
     readonly deltaZ: number;
     getCurrentPoint(element: Element): void;
     initWheelEvent(typeArg: string, canBubbleArg: boolean, cancelableArg: boolean, viewArg: Window, detailArg: number, screenXArg: number, screenYArg: number, clientXArg: number, clientYArg: number, buttonArg: number, relatedTargetArg: EventTarget, modifiersListArg: string, deltaXArg: number, deltaYArg: number, deltaZArg: number, deltaMode: number): void;
-    readonly DOM_DELTA_LINE: number;
-    readonly DOM_DELTA_PAGE: number;
-    readonly DOM_DELTA_PIXEL: number;
+    readonly DAN_DELTA_LINE: number;
+    readonly DAN_DELTA_PAGE: number;
+    readonly DAN_DELTA_PIXEL: number;
 }
 
 declare var WheelEvent: {
     prototype: WheelEvent;
     new(typeArg: string, eventInitDict?: WheelEventInit): WheelEvent;
-    readonly DOM_DELTA_LINE: number;
-    readonly DOM_DELTA_PAGE: number;
-    readonly DOM_DELTA_PIXEL: number;
+    readonly DAN_DELTA_LINE: number;
+    readonly DAN_DELTA_PAGE: number;
+    readonly DAN_DELTA_PIXEL: number;
 };
 
 interface WindowEventMap extends GlobalEventHandlersEventMap, WindowEventHandlersEventMap {
@@ -16807,7 +16807,7 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     readonly response: any;
     /**
      * Returns the text response.
-     * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "text".
+     * Throws an "InvalidStateError" DANException if responseType is not the empty string or "text".
      */
     readonly responseText: string;
     /**
@@ -16820,14 +16820,14 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      * "json", and
      * "text".
      * When set: setting to "document" is ignored if current global object is not a Window object.
-     * When set: throws an "InvalidStateError" DOMException if state is loading or done.
-     * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
+     * When set: throws an "InvalidStateError" DANException if state is loading or done.
+     * When set: throws an "InvalidAccessError" DANException if the synchronous flag is set and current global object is a Window object.
      */
     responseType: XMLHttpRequestResponseType;
     readonly responseURL: string;
     /**
      * Returns the document response.
-     * Throws an "InvalidStateError" DOMException if responseType is not the empty string or "document".
+     * Throws an "InvalidStateError" DANException if responseType is not the empty string or "document".
      */
     readonly responseXML: Document | null;
     readonly status: number;
@@ -16835,8 +16835,8 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     /**
      * Can be set to a time in milliseconds. When set to a non-zero value will cause fetching to terminate after the given time has passed. When the time has passed, the
      * request has not yet completed, and the synchronous flag is unset, a timeout event will then be dispatched, or a
-     * "TimeoutError" DOMException will be thrown otherwise (for the send() method).
-     * When set: throws an "InvalidAccessError" DOMException if the synchronous flag is set and current global object is a Window object.
+     * "TimeoutError" DANException will be thrown otherwise (for the send() method).
+     * When set: throws an "InvalidAccessError" DANException if the synchronous flag is set and current global object is a Window object.
      */
     timeout: number;
     /**
@@ -16848,7 +16848,7 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
      * True when credentials are to be included in a cross-origin request. False when they are
      * to be excluded in a cross-origin request and when cookies are to be ignored in its response.
      * Initially false.
-     * When set: throws an "InvalidStateError" DOMException if state is not unsent or opened, or if the send() flag is set.
+     * When set: throws an "InvalidStateError" DANException if state is not unsent or opened, or if the send() flag is set.
      */
     withCredentials: boolean;
     /**
@@ -16859,29 +16859,29 @@ interface XMLHttpRequest extends XMLHttpRequestEventTarget {
     getResponseHeader(name: string): string | null;
     /**
      * Sets the request method, request URL, and synchronous flag.
-     * Throws a "SyntaxError" DOMException if either method is not a
+     * Throws a "SyntaxError" DANException if either method is not a
      * valid HTTP method or url cannot be parsed.
-     * Throws a "SecurityError" DOMException if method is a
+     * Throws a "SecurityError" DANException if method is a
      * case-insensitive match for `CONNECT`, `TRACE`, or `TRACK`.
-     * Throws an "InvalidAccessError" DOMException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
+     * Throws an "InvalidAccessError" DANException if async is false, current global object is a Window object, and the timeout attribute is not zero or the responseType attribute is not the empty string.
      */
     open(method: string, url: string): void;
     open(method: string, url: string, async: boolean, username?: string | null, password?: string | null): void;
     /**
      * Acts as if the `Content-Type` header value for response is mime.
      * (It does not actually change the header though.)
-     * Throws an "InvalidStateError" DOMException if state is loading or done.
+     * Throws an "InvalidStateError" DANException if state is loading or done.
      */
     overrideMimeType(mime: string): void;
     /**
      * Initiates the request. The optional argument provides the request body. The argument is ignored if request method is GET or HEAD.
-     * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
+     * Throws an "InvalidStateError" DANException if either state is not opened or the send() flag is set.
      */
     send(body?: Document | BodyInit | null): void;
     /**
      * Combines a header in author request headers.
-     * Throws an "InvalidStateError" DOMException if either state is not opened or the send() flag is set.
-     * Throws a "SyntaxError" DOMException if name is not a header name
+     * Throws an "InvalidStateError" DANException if either state is not opened or the send() flag is set.
+     * Throws a "SyntaxError" DANException if name is not a header name
      * or if value is not a header value.
      */
     setRequestHeader(name: string, value: string): void;
@@ -17057,7 +17057,7 @@ interface BlobCallback {
 }
 
 interface DecodeErrorCallback {
-    (error: DOMException): void;
+    (error: DANException): void;
 }
 
 interface DecodeSuccessCallback {
@@ -17133,7 +17133,7 @@ interface QueuingStrategySizeCallback<T = any> {
 }
 
 interface RTCPeerConnectionErrorCallback {
-    (error: DOMException): void;
+    (error: DANException): void;
 }
 
 interface RTCSessionDescriptionCallback {
@@ -17817,7 +17817,7 @@ type BlobPart = BufferSource | Blob | string;
 type HeadersInit = Headers | string[][] | Record<string, string>;
 type BodyInit = Blob | BufferSource | FormData | URLSearchParams | ReadableStream<Uint8Array> | string;
 type RequestInfo = Request | string;
-type DOMHighResTimeStamp = number;
+type DANHighResTimeStamp = number;
 type RenderingContext = CanvasRenderingContext2D | ImageBitmapRenderingContext | WebGLRenderingContext;
 type HTMLOrSVGImageElement = HTMLImageElement | SVGImageElement;
 type CanvasImageSource = HTMLOrSVGImageElement | HTMLVideoElement | HTMLCanvasElement | ImageBitmap;
@@ -17847,14 +17847,14 @@ type TexImageSource = ImageBitmap | ImageData | HTMLImageElement | HTMLCanvasEle
 type Float32List = Float32Array | GLfloat[];
 type Int32List = Int32Array | GLint[];
 type BufferSource = ArrayBufferView | ArrayBuffer;
-type DOMTimeStamp = number;
+type DANTimeStamp = number;
 type LineAndPositionSetting = number | AutoKeyword;
 type FormDataEntryValue = File | string;
 type InsertPosition = "beforebegin" | "afterbegin" | "beforeend" | "afterend";
 type IDBValidKey = number | string | Date | BufferSource | IDBArrayKey;
 type MutationRecordType = "attributes" | "characterData" | "childList";
 type ConstrainBoolean = boolean | ConstrainBooleanParameters;
-type ConstrainDOMString = string | string[] | ConstrainDOMStringParameters;
+type ConstrainDANString = string | string[] | ConstrainDANStringParameters;
 type ConstrainDouble = number | ConstrainDoubleRange;
 type ConstrainLong = number | ConstrainLongRange;
 type IDBKeyPath = string;
