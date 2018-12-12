@@ -27,11 +27,18 @@ namespace ts.tscWatch {
         return () => watch.getCurrentProgram();
     }
 
+    interface Watch {
+        (): Program;
+        getBuilderProgram(): EmitAndSemanticDiagnosticsBuilderProgram;
+    }
+
     export function createWatchOfConfigFile(configFileName: string, host: WatchedSystem, maxNumberOfFilesToIterateForInvalidation?: number) {
         const compilerHost = createWatchCompilerHostOfConfigFile(configFileName, {}, host);
         compilerHost.maxNumberOfFilesToIterateForInvalidation = maxNumberOfFilesToIterateForInvalidation;
         const watch = createWatchProgram(compilerHost);
-        return () => watch.getCurrentProgram().getProgram();
+        const result = (() => watch.getCurrentProgram().getProgram()) as Watch;
+        result.getBuilderProgram = () => watch.getCurrentProgram();
+        return result;
     }
 
     function createWatchOfFilesAndCompilerOptions(rootFiles: string[], host: WatchedSystem, options: CompilerOptions = {}, maxNumberOfFilesToIterateForInvalidation?: number) {
@@ -182,7 +189,22 @@ namespace ts.tscWatch {
         assert.equal(host.exitCode, expectedExitCode);
     }
 
-    function getDiagnosticOfFileFrom(file: SourceFile | undefined, text: string, start: number | undefined, length: number | undefined, message: DiagnosticMessage): Diagnostic {
+    function isDiagnosticMessageChain(message: DiagnosticMessage | DiagnosticMessageChain): message is DiagnosticMessageChain {
+        return !!(message as DiagnosticMessageChain).messageText;
+    }
+    function getDiagnosticOfFileFrom(file: SourceFile | undefined, start: number | undefined, length: number | undefined, message: DiagnosticMessage | DiagnosticMessageChain, ..._args: (string | number)[]): Diagnostic {
+        let text: DiagnosticMessageChain | string;
+        if (isDiagnosticMessageChain(message)) {
+            text = message;
+        }
+        else {
+            text = getLocaleSpecificMessage(message);
+
+            if (arguments.length > 4) {
+                text = formatStringFromArgs(text, arguments, 4);
+            }
+        }
+
         return {
             file,
             start,
@@ -194,24 +216,12 @@ namespace ts.tscWatch {
         };
     }
 
-    function getDiagnosticWithoutFile(message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 1) {
-            text = formatStringFromArgs(text, arguments, 1);
-        }
-
-        return getDiagnosticOfFileFrom(/*file*/ undefined, text, /*start*/ undefined, /*length*/ undefined, message);
+    function getDiagnosticWithoutFile(message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
+        return getDiagnosticOfFileFrom(/*file*/ undefined, /*start*/ undefined, /*length*/ undefined, message, ...args);
     }
 
-    function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 4) {
-            text = formatStringFromArgs(text, arguments, 4);
-        }
-
-        return getDiagnosticOfFileFrom(file, text, start, length, message);
+    function getDiagnosticOfFile(file: SourceFile, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
+        return getDiagnosticOfFileFrom(file, start, length, message, ...args);
     }
 
     function getUnknownCompilerOption(program: Program, configFile: File, option: string) {
@@ -219,15 +229,9 @@ namespace ts.tscWatch {
         return getDiagnosticOfFile(program.getCompilerOptions().configFile!, configFile.content.indexOf(quotedOption), quotedOption.length, Diagnostics.Unknown_compiler_option_0, option);
     }
 
-    function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage, ..._args: (string | number)[]): Diagnostic {
-        let text = getLocaleSpecificMessage(message);
-
-        if (arguments.length > 5) {
-            text = formatStringFromArgs(text, arguments, 5);
-        }
-
+    function getDiagnosticOfFileFromProgram(program: Program, filePath: string, start: number, length: number, message: DiagnosticMessage | DiagnosticMessageChain, ...args: (string | number)[]): Diagnostic {
         return getDiagnosticOfFileFrom(program.getSourceFileByPath(toPath(filePath, program.getCurrentDirectory(), s => s.toLowerCase()))!,
-            text, start, length, message);
+            start, length, message, ...args);
     }
 
     function getDiagnosticModuleNotFoundOfFile(program: Program, file: File, moduleName: string) {
@@ -1703,6 +1707,125 @@ interface Document {
             function verifyProgramFiles() {
                 checkProgramActualFiles(watch(), [aFile.path, bFile.path, libFile.path]);
             }
+        });
+    });
+
+    describe("Emit times and Error updates in builder after program changes", () => {
+        function getOutputFileStampAndError(host: WatchedSystem, watch: Watch, file: File) {
+            const builderProgram = watch.getBuilderProgram();
+            const state = builderProgram.getState();
+            return {
+                file,
+                fileStamp: host.getModifiedTime(file.path.replace(".ts", ".js")),
+                errors: builderProgram.getSemanticDiagnostics(watch().getSourceFileByPath(file.path as Path)),
+                errorsFromOldState: !!state.semanticDiagnosticsFromOldState && state.semanticDiagnosticsFromOldState.has(file.path)
+            };
+        }
+
+        function getOutputFileStampsAndErrors(host: WatchedSystem, watch: Watch, directoryFiles: ReadonlyArray<File>) {
+            return directoryFiles.map(d => getOutputFileStampAndError(host, watch, d));
+        }
+
+        function findStampAndErrors(stampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>, file: File) {
+            return find(stampsAndErrors, info => info.file === file)!;
+        }
+
+        function verifyOutputFileStampsAndErrors(
+            file: File,
+            emitExpected: boolean,
+            errorRefershExpected: boolean,
+            beforeChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>,
+            afterChangeFileStampsAndErrors: ReadonlyArray<ReturnType<typeof getOutputFileStampAndError>>
+        ) {
+            const beforeChange = findStampAndErrors(beforeChangeFileStampsAndErrors, file);
+            const afterChange = findStampAndErrors(afterChangeFileStampsAndErrors, file);
+            if (emitExpected) {
+                assert.notStrictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Expected emit for file ${file.path}`);
+            }
+            else {
+                assert.strictEqual(afterChange.fileStamp, beforeChange.fileStamp, `Did not expect new emit for file ${file.path}`);
+            }
+            if (errorRefershExpected) {
+                if (afterChange.errors !== emptyArray || beforeChange.errors !== emptyArray) {
+                    assert.notStrictEqual(afterChange.errors, beforeChange.errors, `Expected new errors for file ${file.path}`);
+                }
+                assert.isFalse(afterChange.errorsFromOldState, `Expected errors to be not copied from old state for file ${file.path}`);
+            }
+            else {
+                assert.strictEqual(afterChange.errors, beforeChange.errors, `Expected errors to not change for file ${file.path}`);
+                assert.isTrue(afterChange.errorsFromOldState, `Expected errors to be copied from old state for file ${file.path}`);
+            }
+        }
+
+        it("updates errors in file not exporting a deep multilevel import that changes", () => {
+            const currentDirectory = "/user/username/projects/myproject";
+            const aFile: File = {
+                path: `${currentDirectory}/a.ts`,
+                content: `export interface Point {
+    name: string;
+    c: Coords;
+}
+export interface Coords {
+    x2: number;
+    y: number;
+}`
+            };
+            const bFile: File = {
+                path: `${currentDirectory}/b.ts`,
+                content: `import { Point } from "./a";
+export interface PointWrapper extends Point {
+}`
+            };
+            const cFile: File = {
+                path: `${currentDirectory}/c.ts`,
+                content: `import { PointWrapper } from "./b";
+export function getPoint(): PointWrapper {
+    return {
+        name: "test",
+        c: {
+            x: 1,
+            y: 2
+        }
+    }
+};`
+            };
+            const dFile: File = {
+                path: `${currentDirectory}/d.ts`,
+                content: `import { getPoint } from "./c";
+getPoint().c.x;`
+            };
+            const eFile: File = {
+                path: `${currentDirectory}/e.ts`,
+                content: `import "./d";`
+            };
+            const config: File = {
+                path: `${currentDirectory}/tsconfig.json`,
+                content: `{}`
+            };
+            const directoryFiles = [aFile, bFile, cFile, dFile, eFile];
+            const files = [...directoryFiles, config, libFile];
+            const host = createWatchedSystem(files, { currentDirectory });
+            const watch = createWatchOfConfigFile("tsconfig.json", host);
+            checkProgramActualFiles(watch(), [aFile.path, bFile.path, cFile.path, dFile.path, eFile.path, libFile.path]);
+            checkOutputErrorsInitial(host, [
+                getDiagnosticOfFileFromProgram(watch(), cFile.path, cFile.content.indexOf("x: 1"), 4, chainDiagnosticMessages(
+                    chainDiagnosticMessages(/*details*/ undefined, Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1, "x", "Coords"),
+                    Diagnostics.Type_0_is_not_assignable_to_type_1,
+                    "{ x: number; y: number; }",
+                    "Coords"
+                )),
+                getDiagnosticOfFileFromProgram(watch(), dFile.path, dFile.content.lastIndexOf("x"), 1, Diagnostics.Property_0_does_not_exist_on_type_1, "x", "Coords")
+            ]);
+            const beforeChange = getOutputFileStampsAndErrors(host, watch, directoryFiles);
+            host.writeFile(aFile.path, aFile.content.replace("x2", "x"));
+            host.runQueuedTimeoutCallbacks();
+            checkOutputErrorsIncremental(host, emptyArray);
+            const afterChange = getOutputFileStampsAndErrors(host, watch, directoryFiles);
+            verifyOutputFileStampsAndErrors(aFile, /*emitExpected*/ true, /*errorRefershExpected*/ true, beforeChange, afterChange);
+            verifyOutputFileStampsAndErrors(bFile, /*emitExpected*/ true, /*errorRefershExpected*/ true, beforeChange, afterChange);
+            verifyOutputFileStampsAndErrors(cFile, /*emitExpected*/ false, /*errorRefershExpected*/ true, beforeChange, afterChange);
+            verifyOutputFileStampsAndErrors(dFile, /*emitExpected*/ false, /*errorRefershExpected*/ true, beforeChange, afterChange);
+            verifyOutputFileStampsAndErrors(eFile, /*emitExpected*/ false, /*errorRefershExpected*/ false, beforeChange, afterChange);
         });
     });
 
