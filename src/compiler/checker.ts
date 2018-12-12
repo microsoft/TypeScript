@@ -9686,24 +9686,13 @@ namespace ts {
 
             // If the object type is a mapped type { [P in K]: E }, where K is generic, instantiate E using a mapper
             // that substitutes the index type for P. For example, for an index access { [P in K]: Box<T[P]> }[X], we
-            // construct the type Box<T[X]>. We do not further simplify the result because mapped types can be recursive
-            // and we might never terminate.
+            // construct the type Box<T[X]>.
             if (isGenericMappedType(objectType)) {
-                return type.simplified = substituteIndexedMappedType(objectType, type);
-            }
-            if (objectType.flags & TypeFlags.TypeParameter) {
-                const constraint = getConstraintOfTypeParameter(objectType as TypeParameter);
-                if (constraint && isGenericMappedType(constraint)) {
-                    return type.simplified = substituteIndexedMappedType(constraint, type);
-                }
+                const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
+                const templateMapper = combineTypeMappers(objectType.mapper, mapper);
+                return type.simplified = mapType(instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper), getSimplifiedType);
             }
             return type.simplified = type;
-        }
-
-        function substituteIndexedMappedType(objectType: MappedType, type: IndexedAccessType) {
-            const mapper = createTypeMapper([getTypeParameterFromMappedType(objectType)], [type.indexType]);
-            const templateMapper = combineTypeMappers(objectType.mapper, mapper);
-            return instantiateType(getTemplateTypeFromMappedType(objectType), templateMapper);
         }
 
         function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, missingType = accessNode ? errorType : unknownType): Type {
