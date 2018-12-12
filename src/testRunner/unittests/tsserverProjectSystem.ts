@@ -192,7 +192,7 @@ namespace ts.projectSystem {
         length: number | undefined;
         messageText: string;
         category: DiagnosticCategory;
-        code: number;
+        code: number | string;
         reportsUnnecessary?: {};
         source?: string;
         relatedInformation?: DiagnosticRelatedInformation[];

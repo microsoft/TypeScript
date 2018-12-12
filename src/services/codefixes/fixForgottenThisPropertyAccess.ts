@@ -25,7 +25,7 @@ namespace ts.codefix {
     });
 
     interface Info { readonly node: Identifier; readonly className: string | undefined; }
-    function getInfo(sourceFile: SourceFile, pos: number, diagCode: number): Info | undefined {
+    function getInfo(sourceFile: SourceFile, pos: number, diagCode: number | string): Info | undefined {
         const node = getTokenAtPosition(sourceFile, pos);
         if (!isIdentifier(node)) return undefined;
         return { node, className: diagCode === didYouMeanStaticMemberCode ? getContainingClass(node)!.name!.text : undefined };

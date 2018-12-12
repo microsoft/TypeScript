@@ -473,7 +473,7 @@ namespace ts.server.protocol {
         startLocation: Location;
         endLocation: Location;
         category: string;
-        code: number;
+        code: number | string;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
@@ -2375,7 +2375,7 @@ namespace ts.server.protocol {
         /**
          * The code used ot identify the related information
          */
-        code: number;
+        code: number | string;
         /**
          * Text of related or additional information.
          */

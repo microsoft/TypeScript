@@ -590,7 +590,7 @@ namespace ts {
         start: number;
         length: number;
         category: string;
-        code: number;
+        code: number | string;
         reportsUnnecessary?: {};
     }
     export function realizeDiagnostics(diagnostics: ReadonlyArray<Diagnostic>, newLine: string): RealizedDiagnostic[] {

@@ -146,7 +146,7 @@ namespace ts.codefix {
         return false;
     }
 
-    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number, sourceFile: SourceFile, token: Node): void {
+    function tryPrefixDeclaration(changes: textChanges.ChangeTracker, errorCode: number | string, sourceFile: SourceFile, token: Node): void {
         // Don't offer to prefix a property.
         if (errorCode === Diagnostics.Property_0_is_declared_but_its_value_is_never_read.code) return;
         if (token.kind === SyntaxKind.InferKeyword) {

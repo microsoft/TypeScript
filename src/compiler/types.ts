@@ -4427,7 +4427,7 @@ namespace ts {
     }
     export interface DiagnosticRelatedInformation {
         category: DiagnosticCategory;
-        code: number;
+        code: number | string;
         file: SourceFile | undefined;
         start: number | undefined;
         length: number | undefined;

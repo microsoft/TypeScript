@@ -1685,9 +1685,10 @@ namespace ts {
         return equateValues(a, b);
     }
 
-    function compareComparableValues(a: string | undefined, b: string | undefined): Comparison;
-    function compareComparableValues(a: number | undefined, b: number | undefined): Comparison;
-    function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
+    /**
+     * Compare two values for their order relative to each other.
+     */
+    export function compareComparableValues(a: string | number | undefined, b: string | number | undefined) {
         return a === b ? Comparison.EqualTo :
             a === undefined ? Comparison.LessThan :
             b === undefined ? Comparison.GreaterThan :
