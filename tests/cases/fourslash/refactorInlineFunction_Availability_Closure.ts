@@ -1,7 +1,8 @@
 /// <reference path='fourslash.ts' />
 
 //// namespace a {
-////     export function /*z*/foo/*y*/() { return 42; }
+////     const meaningOfLife = 42;
+////     export function /*z*/foo/*y*/() { return meaningOfLife; }
 //// }
 //// function bar() { const meaningOfLife = /*x*/a.foo/*w*/(); }
 

@@ -9,4 +9,4 @@ verify.not.refactorAvailable("Inline function", "Inline here");
 
 goTo.select("x", "w");
 verify.not.refactorAvailable("Inline function", "Inline all");
-verify.not.refactorAvailable("Inline function", "Inline here");
+verify.refactorAvailable("Inline function", "Inline here");

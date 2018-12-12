@@ -113,25 +113,28 @@ namespace ts.refactor.inlineFunction {
     }
 
     function getCallsInScope(
-        scope: Node,
+        file: SourceFile,
         target: InlineableFunction,
         checker: TypeChecker
     ): ReadonlyArray<CallExpression> {
-        const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
-        const calls = findDescendants(scope, isCallExpression);
-        if (isMethodDeclaration(target)) {
-            return calls.filter(c => {
-                const property = <PropertyAccessExpression>c.expression;
-                if (isThisProperty(property)) {
-                    return checker.getSymbolAtLocation(property) === targetSymbol;
-                }
-                const obj = property.expression;
-                const type = obj.contextualType || checker.getTypeAtLocation(obj);
-                const members = type.symbol.members;
-                return members && members.get(targetSymbol.escapedName);
-            });
-        }
-        return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
+        // const targetSymbol = checker.getSymbolAtLocation(target.name!)!;
+        const calls: CallExpression[] = [];
+        FindAllReferences.Core.eachSignatureCall(target, [file], checker, c => { calls.push(c); });
+        return calls;
+        // const calls = findDescendants(scope, isCallExpression);
+        // if (isMethodDeclaration(target)) {
+        //     return calls.filter(c => {
+        //         const property = <PropertyAccessExpression>c.expression;
+        //         if (isThisProperty(property)) {
+        //             return checker.getSymbolAtLocation(property) === targetSymbol;
+        //         }
+        //         const obj = property.expression;
+        //         const type = obj.contextualType || checker.getTypeAtLocation(obj);
+        //         const members = type.symbol.members;
+        //         return members && members.get(targetSymbol.escapedName);
+        //     });
+        // }
+        // return calls.filter(n => checker.getSymbolAtLocation(n.expression) === targetSymbol);
     }
 
     function canInline(
@@ -148,7 +151,7 @@ namespace ts.refactor.inlineFunction {
             selectedHasErrors = true;
         }
         if (containsExportKeyword(declaration.modifiers)) {
-            selectedHasErrors = true;
+            anyHaveErrors = true;
         }
         const symbols = getExternalSymbolsReferencedInScope(declaration, checker);
         if (!every(usages, u => areSymbolsAccessible(checker, symbols, u))) anyHaveErrors = true;
