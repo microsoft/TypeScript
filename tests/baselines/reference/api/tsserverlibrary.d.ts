@@ -2399,7 +2399,7 @@ declare namespace ts {
     }
     interface DiagnosticRelatedInformation {
         category: DiagnosticCategory;
-        code: number;
+        code: number | string;
         file: SourceFile | undefined;
         start: number | undefined;
         length: number | undefined;
@@ -4736,7 +4736,7 @@ declare namespace ts {
         getJsxClosingTagAtPosition(fileName: string, position: number): JsxClosingTagInfo | undefined;
         getSpanOfEnclosingComment(fileName: string, position: number, onlyMultiLine: boolean): TextSpan | undefined;
         toLineColumnOffset?(fileName: string, position: number): LineAndCharacter;
-        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
+        getCodeFixesAtPosition(fileName: string, start: number, end: number, errorCodes: ReadonlyArray<number | string>, formatOptions: FormatCodeSettings, preferences: UserPreferences): ReadonlyArray<CodeFixAction>;
         getCombinedCodeFix(scope: CombinedCodeFixScope, fixId: {}, formatOptions: FormatCodeSettings, preferences: UserPreferences): CombinedCodeActions;
         applyCodeActionCommand(action: CodeActionCommand, formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult>;
         applyCodeActionCommand(action: CodeActionCommand[], formatSettings?: FormatCodeSettings): Promise<ApplyCodeActionCommandResult[]>;
@@ -5984,7 +5984,7 @@ declare namespace ts.server.protocol {
         startLocation: Location;
         endLocation: Location;
         category: string;
-        code: number;
+        code: number | string;
         /** May store more in future. For now, this will simply be `true` to indicate when a diagnostic is an unused-identifier diagnostic. */
         reportsUnnecessary?: {};
         relatedInformation?: DiagnosticRelatedInformation[];
@@ -7477,7 +7477,7 @@ declare namespace ts.server.protocol {
         /**
          * The code used ot identify the related information
          */
-        code: number;
+        code: number | string;
         /**
          * Text of related or additional information.
          */
