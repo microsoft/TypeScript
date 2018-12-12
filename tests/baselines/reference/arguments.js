@@ -1,7 +1,10 @@
 //// [arguments.ts]
 function f() {
     var x=arguments[12];
+    (() => arguments)();
 }
+
+(() => arguments)();
 
 interface I {
     method(args: typeof arguments): void;
@@ -14,4 +17,6 @@ interface I {
 //// [arguments.js]
 function f() {
     var x = arguments[12];
+    (() => arguments)();
 }
+(() => arguments)();

@@ -24,8 +24,6 @@ else if (process.env.PATH !== undefined) {
 
 const host = process.env.TYPESCRIPT_HOST || process.env.host || "node";
 
-const locales = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"];
-
 const defaultTestTimeout = 40000;
 
 let useDebugMode = true;
@@ -708,19 +706,6 @@ const Travis = {
         console.log("travis_time:end:" + marker.id + ":start=" + toNs(marker.stamp) + ",finish=" + toNs(total) + ",duration=" + toNs(diff) + "\r");
     }
 };
-
-function buildLocalizedTargets() {
-    /**
-     * The localization target produces the two following transformations:
-     *    1. 'src\loc\lcl\<locale>\diagnosticMessages.generated.json.lcl' => 'built\local\<locale>\diagnosticMessages.generated.json'
-     *       convert localized resources into a .json file the compiler can understand
-     *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
-     *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
-     */
-    const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
-        .map(f => path.join(Paths.builtLocal,f))
-        .concat(path.dirname(Paths.generatedLCGFile));
-}
 
 function toNs(diff) {
     return diff[0] * 1e9 + diff[1];

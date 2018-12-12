@@ -11,8 +11,8 @@ Standard output:
 ../../../../built/local/lib.dom.d.ts(12039,13): error TS2300: Duplicate identifier 'Request'.
 ../../../../built/local/lib.dom.d.ts(16513,11): error TS2300: Duplicate identifier 'Window'.
 ../../../../built/local/lib.dom.d.ts(16644,13): error TS2300: Duplicate identifier 'Window'.
-../../../../built/local/lib.es5.d.ts(1406,11): error TS2300: Duplicate identifier 'ArrayLike'.
-../../../../built/local/lib.es5.d.ts(1442,6): error TS2300: Duplicate identifier 'Record'.
+../../../../built/local/lib.es5.d.ts(1416,11): error TS2300: Duplicate identifier 'ArrayLike'.
+../../../../built/local/lib.es5.d.ts(1452,6): error TS2300: Duplicate identifier 'Record'.
 ../../../../node_modules/@types/node/index.d.ts(150,13): error TS2403: Subsequent variable declarations must have the same type.  Variable 'module' must be of type '{}', but here has type 'NodeModule'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(43,8): error TS2339: Property '_importScriptPathPrefix' does not exist on type 'Window'.
 node_modules/chrome-devtools-frontend/front_end/Runtime.js(77,16): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
@@ -7661,7 +7661,7 @@ node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(271
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(272,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(274,52): error TS2555: Expected at least 2 arguments, but got 1.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(288,74): error TS2345: Argument of type '{ min: number; max: number; count: number; }' is not assignable to parameter of type 'number | { min: number; max: number; }'.
-  Object literal may only specify known properties, and 'count' does not exist in type 'number | { min: number; max: number; }'.
+  Object literal may only specify known properties, and 'count' does not exist in type '{ min: number; max: number; }'.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(290,29): error TS2339: Property 'createChild' does not exist on type 'Element'.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(307,34): error TS2339: Property 'millisToString' does not exist on type 'NumberConstructor'.
 node_modules/chrome-devtools-frontend/front_end/network/RequestTimingView.js(315,37): error TS2339: Property 'createChild' does not exist on type 'Element'.
@@ -13639,7 +13639,7 @@ node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(75,15): error TS70
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(82,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(89,15): error TS7014: Function type, which lacks return-type annotation, implicitly has an 'any' return type.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(100,79): error TS2345: Argument of type '{ passive: boolean; capture: false; }' is not assignable to parameter of type 'boolean | EventListenerOptions'.
-  Object literal may only specify known properties, and 'passive' does not exist in type 'boolean | EventListenerOptions'.
+  Object literal may only specify known properties, and 'passive' does not exist in type 'EventListenerOptions'.
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(108,19): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(109,37): error TS2551: Property '_scrollTop' does not exist on type 'Element'. Did you mean 'scrollTop'?
 node_modules/chrome-devtools-frontend/front_end/ui/XWidget.js(110,19): error TS2551: Property '_scrollLeft' does not exist on type 'Element'. Did you mean 'scrollLeft'?

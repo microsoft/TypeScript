@@ -1419,12 +1419,18 @@ namespace ts {
                             }
                         }
                         break;
+                    case SyntaxKind.ArrowFunction:
+                        // when targeting ES6 or higher there is no 'arguments' in an arrow function
+                        // for lower compile targets the resolved symbol is used to emit an error
+                        if (compilerOptions.target! >= ScriptTarget.ES2015) {
+                            break;
+                        }
+                        // falls through
                     case SyntaxKind.MethodDeclaration:
                     case SyntaxKind.Constructor:
                     case SyntaxKind.GetAccessor:
                     case SyntaxKind.SetAccessor:
                     case SyntaxKind.FunctionDeclaration:
-                    case SyntaxKind.ArrowFunction:
                         if (meaning & SymbolFlags.Variable && name === "arguments") {
                             result = argumentsSymbol;
                             break loop;
@@ -4707,6 +4713,10 @@ namespace ts {
         function getTypeOfPropertyOfType(type: Type, name: __String): Type | undefined {
             const prop = getPropertyOfType(type, name);
             return prop ? getTypeOfSymbol(prop) : undefined;
+        }
+
+        function getTypeOfPropertyOrIndexSignature(type: Type, name: __String): Type {
+            return getTypeOfPropertyOfType(type, name) || isNumericLiteralName(name) && getIndexTypeOfType(type, IndexKind.Number) || getIndexTypeOfType(type, IndexKind.String) || unknownType;
         }
 
         function isTypeAny(type: Type | undefined) {
@@ -12168,10 +12178,6 @@ namespace ts {
                 return result;
             }
 
-            function getConstraintForRelation(type: Type) {
-                return relation === definitelyAssignableRelation ? undefined : getConstraintOfType(type);
-            }
-
             function structuredTypeRelatedTo(source: Type, target: Type, reportErrors: boolean, isIntersectionConstituent: boolean): Ternary {
                 const flags = source.flags & target.flags;
                 if (relation === identityRelation && !(flags & TypeFlags.Object)) {
@@ -12304,23 +12310,25 @@ namespace ts {
                             return result;
                         }
                     }
-                    const constraint = getConstraintForRelation(<TypeParameter>source);
-                    if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.AnyOrUnknown)) {
-                        // A type variable with no constraint is not related to the non-primitive object type.
-                        if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                    if (relation !== definitelyAssignableRelation) {
+                        const constraint = getConstraintOfType(<TypeParameter>source);
+                        if (!constraint || (source.flags & TypeFlags.TypeParameter && constraint.flags & TypeFlags.Any)) {
+                            // A type variable with no constraint is not related to the non-primitive object type.
+                            if (result = isRelatedTo(emptyObjectType, extractTypesOfKind(target, ~TypeFlags.NonPrimitive))) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                            }
+                        }
+                        // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
+                        else if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
+                                errorInfo = saveErrorInfo;
+                                return result;
+                        }
+                        // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
+                        else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors, /*headMessage*/ undefined, isIntersectionConstituent)) {
                             errorInfo = saveErrorInfo;
                             return result;
                         }
-                    }
-                    // hi-speed no-this-instantiation check (less accurate, but avoids costly `this`-instantiation when the constraint will suffice), see #28231 for report on why this is needed
-                    else if (result = isRelatedTo(constraint, target, /*reportErrors*/ false, /*headMessage*/ undefined, isIntersectionConstituent)) {
-                            errorInfo = saveErrorInfo;
-                            return result;
-                    }
-                    // slower, fuller, this-instantiated check (necessary when comparing raw `this` types from base classes), see `subclassWithPolymorphicThisIsAssignable.ts` test for example
-                    else if (result = isRelatedTo(getTypeWithThisArgument(constraint, source), target, reportErrors, /*headMessage*/ undefined, isIntersectionConstituent)) {
-                        errorInfo = saveErrorInfo;
-                        return result;
                     }
                 }
                 else if (source.flags & TypeFlags.Index) {
@@ -12473,10 +12481,10 @@ namespace ts {
                     return propertiesIdenticalTo(source, target);
                 }
                 const requireOptionalProperties = relation === subtypeRelation && !isObjectLiteralType(source) && !isEmptyArrayLiteralType(source) && !isTupleType(source);
-                const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties);
+                const unmatchedProperty = getUnmatchedProperty(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false);
                 if (unmatchedProperty) {
                     if (reportErrors) {
-                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties));
+                        const props = arrayFrom(getUnmatchedProperties(source, target, requireOptionalProperties, /*matchDiscriminantProperties*/ false));
                         if (!headMessage || (headMessage.code !== Diagnostics.Class_0_incorrectly_implements_interface_1.code &&
                             headMessage.code !== Diagnostics.Class_0_incorrectly_implements_class_1_Did_you_mean_to_extend_1_and_inherit_its_members_as_a_subclass.code)) {
                             suppressNextError = true; // Retain top-level error for interface implementing issues, otherwise omit it
@@ -13900,7 +13908,7 @@ namespace ts {
             return getTypeFromInference(inference);
         }
 
-        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean) {
+        function* getUnmatchedProperties(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean) {
             const properties = target.flags & TypeFlags.Intersection ? getPropertiesOfUnionOrIntersectionType(<IntersectionType>target) : getPropertiesOfObjectType(target);
             for (const targetProp of properties) {
                 if (requireOptionalProperties || !(targetProp.flags & SymbolFlags.Optional)) {
@@ -13908,12 +13916,21 @@ namespace ts {
                     if (!sourceProp) {
                         yield targetProp;
                     }
+                    else if (matchDiscriminantProperties) {
+                        const targetType = getTypeOfSymbol(targetProp);
+                        if (targetType.flags & TypeFlags.Unit) {
+                            const sourceType = getTypeOfSymbol(sourceProp);
+                            if (!(sourceType.flags & TypeFlags.Any || getRegularTypeOfLiteralType(sourceType) === getRegularTypeOfLiteralType(targetType))) {
+                                yield targetProp;
+                            }
+                        }
+                    }
                 }
             }
         }
 
-        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean): Symbol | undefined {
-            return getUnmatchedProperties(source, target, requireOptionalProperties).next().value;
+        function getUnmatchedProperty(source: Type, target: Type, requireOptionalProperties: boolean, matchDiscriminantProperties: boolean): Symbol | undefined {
+            return getUnmatchedProperties(source, target, requireOptionalProperties, matchDiscriminantProperties).next().value;
         }
 
         function tupleTypesDefinitelyUnrelated(source: TupleTypeReference, target: TupleTypeReference) {
@@ -13925,7 +13942,8 @@ namespace ts {
             // Two tuple types with incompatible arities are definitely unrelated.
             // Two object types that each have a property that is unmatched in the other are definitely unrelated.
             return isTupleType(source) && isTupleType(target) && tupleTypesDefinitelyUnrelated(source, target) ||
-                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false) && !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false);
+                !!getUnmatchedProperty(source, target, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true) &&
+                !!getUnmatchedProperty(target, source, /*requireOptionalProperties*/ false, /*matchDiscriminantProperties*/ true);
         }
 
         function getTypeFromInference(inference: InferenceInfo) {
@@ -15643,7 +15661,7 @@ namespace ts {
                 }
                 const propType = getTypeOfPropertyOfType(type, propName);
                 const narrowedPropType = propType && narrowType(propType);
-                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOfType(t, propName)!, narrowedPropType!));
+                return propType === narrowedPropType ? type : filterType(type, t => isTypeComparableTo(getTypeOfPropertyOrIndexSignature(t, propName), narrowedPropType!));
             }
 
             function narrowTypeByTruthiness(type: Type, expr: Expression, assumeTrue: boolean): Type {
@@ -19872,14 +19890,31 @@ namespace ts {
         }
 
         function getTypeArgumentArityError(node: Node, signatures: ReadonlyArray<Signature>, typeArguments: NodeArray<TypeNode>) {
-            let min = Infinity;
-            let max = -Infinity;
-            for (const sig of signatures) {
-                min = Math.min(min, getMinTypeArgumentCount(sig.typeParameters));
-                max = Math.max(max, length(sig.typeParameters));
+            const argCount = typeArguments.length;
+            // No overloads exist
+            if (signatures.length === 1) {
+                const sig = signatures[0];
+                const min = getMinTypeArgumentCount(sig.typeParameters);
+                const max = length(sig.typeParameters);
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, min < max ? min + "-" + max : min , argCount);
             }
-            const paramCount = min === max ? min : min + "-" + max;
-            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, paramCount, typeArguments.length);
+            // Overloads exist
+            let belowArgCount = -Infinity;
+            let aboveArgCount = Infinity;
+            for (const sig of signatures) {
+                const min = getMinTypeArgumentCount(sig.typeParameters);
+                const max = length(sig.typeParameters);
+                if (min > argCount) {
+                    aboveArgCount = Math.min(aboveArgCount, min);
+                }
+                else if (max < argCount) {
+                    belowArgCount = Math.max(belowArgCount, max);
+                }
+            }
+            if (belowArgCount !== -Infinity && aboveArgCount !== Infinity) {
+                return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.No_overload_expects_0_type_arguments_but_overloads_do_exist_that_expect_either_1_or_2_type_arguments, argCount, belowArgCount, aboveArgCount);
+            }
+            return createDiagnosticForNodeArray(getSourceFileOfNode(node), typeArguments, Diagnostics.Expected_0_type_arguments_but_got_1, belowArgCount === -Infinity ? aboveArgCount : belowArgCount, argCount);
         }
 
         function resolveCall(node: CallLikeExpression, signatures: ReadonlyArray<Signature>, candidatesOutArray: Signature[] | undefined, isForSignatureHelp: boolean, fallbackError?: DiagnosticMessage): Signature {
@@ -23633,7 +23668,6 @@ namespace ts {
                     break;
                 }
             }
-            checkGrammarForDisallowedTrailingComma(node.elementTypes);
             forEach(node.elementTypes, checkSourceElement);
         }
 
