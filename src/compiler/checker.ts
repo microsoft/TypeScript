@@ -6765,13 +6765,12 @@ namespace ts {
             }
             if (!length(result) && indexWithLengthOverOne !== -1) {
                 // No sufficiently similar signature existed to subsume all the other signatures in the union - time to see if we can make a single
-                // signature that handles all over them. We only do this when there are overloads in only one constituent. 
+                // signature that handles all over them. We only do this when there are overloads in only one constituent.
                 // (Overloads are conditional in nature and having overloads in multiple constituents would necessitate making a power set of
                 // signatures from the type, whose ordering would be non-obvious)
                 const masterList = signatureLists[indexWithLengthOverOne !== undefined ? indexWithLengthOverOne : 0];
                 let results: Signature[] | undefined = masterList.slice();
-                for (let i = 0; i < signatureLists.length; i++) {
-                    const signatures = signatureLists[i];
+                for (const signatures of signatureLists) {
                     if (signatures === masterList) continue;
                     const signature = signatures[0];
                     Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
@@ -6815,7 +6814,7 @@ namespace ts {
             const longestCount = getParameterCount(longest);
             const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
             const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
-            let params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
+            const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
             let i = 0;
             for (; i < longestCount; i++) {
                 const longestParamType = tryGetTypeAtPosition(longest, i)!;
@@ -6845,7 +6844,7 @@ namespace ts {
             const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
             const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
             const hasRestParam = left.hasRestParameter || right.hasRestParameter;
-            const hasLiteralTypes = left.hasLiteralTypes || right.hasLiteralTypes; 
+            const hasLiteralTypes = left.hasLiteralTypes || right.hasLiteralTypes;
             const result = createSignature(
                 declaration,
                 left.typeParameters || right.typeParameters,
