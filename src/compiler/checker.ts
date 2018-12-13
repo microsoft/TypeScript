@@ -6840,31 +6840,25 @@ namespace ts {
         }
 
         function combineSignaturesOfUnionMembers(left: Signature, right: Signature): Signature {
-            const declaration = left.declaration; // TODO: Synthesize new declaration? Include field pointing to all backing declarations?
+            const declaration = left.declaration;
             const params = combineUnionParameters(left, right);
             const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
-            const resolvedReturnType = left.resolvedReturnType && right.resolvedReturnType ? getUnionType([left.resolvedReturnType, right.resolvedReturnType]) : undefined;
-            const resolvedTypePredicate = left.resolvedTypePredicate && right.resolvedTypePredicate && left.resolvedTypePredicate.kind === right.resolvedTypePredicate.kind
-                ? left.resolvedTypePredicate.kind === TypePredicateKind.Identifier && left.resolvedTypePredicate.parameterIndex === (right.resolvedTypePredicate as IdentifierTypePredicate).parameterIndex
-                    ? createIdentifierTypePredicate(unescapeLeadingUnderscores(params[left.resolvedTypePredicate.parameterIndex].escapedName), left.resolvedTypePredicate.parameterIndex, getUnionType([left.resolvedTypePredicate.type, right.resolvedTypePredicate.type]))
-                    : left.resolvedTypePredicate.kind === TypePredicateKind.This
-                        ? createThisTypePredicate(getUnionType([left.resolvedTypePredicate.type, right.resolvedTypePredicate.type]))
-                        : undefined
-                : undefined;
             const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
             const hasRestParam = left.hasRestParameter || right.hasRestParameter;
             const hasLiteralTypes = left.hasLiteralTypes || right.hasLiteralTypes; 
-            return createSignature(
+            const result = createSignature(
                 declaration,
                 left.typeParameters || right.typeParameters,
                 thisParam,
                 params,
-                resolvedReturnType,
-                resolvedTypePredicate,
+                /*resolvedReturnType*/ undefined,
+                /*resolvedTypePredicate*/ undefined,
                 minArgCount,
                 hasRestParam,
                 hasLiteralTypes
             );
+            result.unionSignatures = concatenate(left.unionSignatures || [left], [right]);
+            return result;
         }
 
         function getUnionIndexInfo(types: ReadonlyArray<Type>, kind: IndexKind): IndexInfo | undefined {
@@ -17644,6 +17638,26 @@ namespace ts {
         }
 
         function getJsxPropsTypeForSignatureFromMember(sig: Signature, forcedLookupLocation: __String) {
+            if (sig.unionSignatures) {
+                // JSX Elements using the legacy `props`-field based lookup (eg, react class components) need to treat the `props` member as an input
+                // instead of an output position when resolving the signature. We need to go back to the input signatures of the composite signature,
+                // get the type of `props` on each return type individually, and then _intersect them_, rather than union them (as would normally occur
+                // for a union signature). It's an unfortunate quirk of looking in the output of the signature for the type we want to use for the input.
+                // The default behavior of `getTypeOfFirstParameterOfSignatureWithFallback` when no `props` member name is defined is much more sane.
+                const results: Type[] = [];
+                for (const signature of sig.unionSignatures) {
+                    const instance = getReturnTypeOfSignature(signature);
+                    if (isTypeAny(instance)) {
+                        return instance;
+                    }
+                    const propType = getTypeOfPropertyOfType(instance, forcedLookupLocation);
+                    if (!propType) {
+                        return;
+                    }
+                    results.push(propType);
+                }
+                return getIntersectionType(results);
+            }
             const instanceType = getReturnTypeOfSignature(sig);
             return isTypeAny(instanceType) ? instanceType : getTypeOfPropertyOfType(instanceType, forcedLookupLocation);
         }
