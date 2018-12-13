@@ -1039,7 +1039,7 @@ namespace ts {
 
     export interface FunctionDeclaration extends FunctionLikeDeclarationBase, DeclarationStatement {
         kind: SyntaxKind.FunctionDeclaration;
-        name?: Identifier;
+        name: Identifier;
         body?: FunctionBody;
     }
 
