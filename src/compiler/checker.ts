@@ -4827,21 +4827,13 @@ namespace ts {
                         mapType(parentType, t => sliceTupleType(<TupleTypeReference>t, index)) :
                         createArrayType(elementType);
                 }
+                else if (isArrayLikeType(parentType)) {
+                    const indexType = getLiteralType(index);
+                    const declaredType = getIndexedAccessType(parentType, indexType, createSyntheticExpression(declaration.name, indexType));
+                    type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
+                }
                 else {
-                    // Use specific property type when parent is a tuple or numeric index type when parent is an array
-                    const index = pattern.elements.indexOf(declaration);
-                    type = everyType(parentType, isTupleLikeType) ?
-                        getTupleElementType(parentType, index) || declaration.initializer && checkDeclarationInitializer(declaration) :
-                        elementType;
-                    if (!type) {
-                        if (isTupleType(parentType)) {
-                            error(declaration, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(parentType), getTypeReferenceArity(<TypeReference>parentType), pattern.elements.length);
-                        }
-                        else {
-                            error(declaration, Diagnostics.Type_0_has_no_property_1, typeToString(parentType), "" + index);
-                        }
-                        return errorType;
-                    }
+                    type = elementType;
                 }
             }
             // In strict null checking mode, if a default value of a non-undefined type is specified, remove
@@ -9523,7 +9515,7 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | undefined, cacheSymbol: boolean, missingType: Type) {
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression | undefined, cacheSymbol: boolean, missingType: Type) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
             const propName = isTypeUsableAsLateBoundName(indexType)
                 ? getLateBoundNameFromType(indexType)
@@ -9626,7 +9618,7 @@ namespace ts {
             return missingType;
         }
 
-        function getIndexNodeForAccessExpression(accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName) {
+        function getIndexNodeForAccessExpression(accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression) {
             return accessNode.kind === SyntaxKind.ElementAccessExpression
             ? accessNode.argumentExpression
             : accessNode.kind === SyntaxKind.IndexedAccessType
@@ -9695,7 +9687,7 @@ namespace ts {
             return type.simplified = type;
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName, missingType = accessNode ? errorType : unknownType): Type {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression, missingType = accessNode ? errorType : unknownType): Type {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -14628,7 +14620,7 @@ namespace ts {
                         getAccessedPropertyName(source as PropertyAccessExpression | ElementAccessExpression) === getAccessedPropertyName(target) &&
                         isMatchingReference((source as PropertyAccessExpression | ElementAccessExpression).expression, target.expression);
                 case SyntaxKind.BindingElement:
-                    if (target.kind === SyntaxKind.PropertyAccessExpression && (<PropertyAccessExpression>target).name.escapedText === getBindingElementNameText(<BindingElement>source)) {
+                    if ((isPropertyAccessExpression(target) || isElementAccessExpression(target)) && getBindingElementNameText(<BindingElement>source) === getAccessedPropertyName(target)) {
                         const ancestor = source.parent.parent;
                         if (ancestor.kind === SyntaxKind.BindingElement) {
                             return isMatchingReference(ancestor, (<PropertyAccessExpression>target).expression);
@@ -22010,21 +22002,17 @@ namespace ts {
         function checkObjectLiteralDestructuringPropertyAssignment(objectLiteralType: Type, property: ObjectLiteralElementLike, allProperties?: NodeArray<ObjectLiteralElementLike>, rightIsThis = false) {
             if (property.kind === SyntaxKind.PropertyAssignment || property.kind === SyntaxKind.ShorthandPropertyAssignment) {
                 const name = property.name;
-                if (name.kind === SyntaxKind.ComputedPropertyName) {
-                    checkComputedPropertyName(name);
+                const text = getTextOfPropertyName(name);
+                if (text) {
+                    const prop = getPropertyOfType(objectLiteralType, text);
+                    if (prop) {
+                        markPropertyAsReferenced(prop, property, rightIsThis);
+                        checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
+                    }
                 }
-                if (isComputedNonLiteralName(name)) {
-                    return undefined;
-                }
-
-                const type = getTypeOfObjectLiteralDestructuringProperty(objectLiteralType, name, property, rightIsThis);
-                if (type) {
-                    // non-shorthand property assignments should always have initializers
-                    return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
-                }
-                else {
-                    error(name, Diagnostics.Type_0_has_no_property_1_and_no_string_index_signature, typeToString(objectLiteralType), declarationNameToString(name));
-                }
+                const exprType = getLiteralTypeFromPropertyName(name);
+                const type = getIndexedAccessType(objectLiteralType, exprType, name);
+                return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
             }
             else if (property.kind === SyntaxKind.SpreadAssignment) {
                 if (languageVersion < ScriptTarget.ESNext) {
@@ -22045,31 +22033,11 @@ namespace ts {
             }
         }
 
-        function getTypeOfObjectLiteralDestructuringProperty(objectLiteralType: Type, name: PropertyName, property: PropertyAssignment | ShorthandPropertyAssignment, rightIsThis: boolean) {
-            if (isTypeAny(objectLiteralType)) {
-                return objectLiteralType;
-            }
-
-            let type: Type | undefined;
-            const text = getTextOfPropertyName(name);
-            if (text) { // TODO: GH#26379
-                const prop = getPropertyOfType(objectLiteralType, text);
-                if (prop) {
-                    markPropertyAsReferenced(prop, property, rightIsThis);
-                    checkPropertyAccessibility(property, /*isSuper*/ false, objectLiteralType, prop);
-                    type = getTypeOfSymbol(prop);
-                }
-                type = type || (isNumericLiteralName(text) ? getIndexTypeOfType(objectLiteralType, IndexKind.Number) : undefined);
-            }
-            return type || getIndexTypeOfType(objectLiteralType, IndexKind.String);
-        }
-
         function checkArrayLiteralAssignment(node: ArrayLiteralExpression, sourceType: Type, checkMode?: CheckMode): Type {
             const elements = node.elements;
             if (languageVersion < ScriptTarget.ES2015 && compilerOptions.downlevelIteration) {
                 checkExternalEmitHelpers(node, ExternalEmitHelpers.Read);
             }
-
             // This elementType will be used if the specific property corresponding to this index is not
             // present (aka the tuple element property). This call also checks that the parentType is in
             // fact an iterable or array (depending on target language).
@@ -22086,39 +22054,26 @@ namespace ts {
             const element = elements[elementIndex];
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElement) {
-                    const propName = "" + elementIndex as __String;
-                    const type = isTypeAny(sourceType) ? sourceType :
-                        everyType(sourceType, isTupleLikeType) ? getTupleElementType(sourceType, elementIndex) :
+                    const indexType = getLiteralType(elementIndex);
+                    const type = isArrayLikeType(sourceType) ?
+                        getIndexedAccessType(sourceType, indexType, createSyntheticExpression(element, indexType)) :
                         elementType;
-                    if (type) {
-                        return checkDestructuringAssignment(element, type, checkMode);
-                    }
-                    // We still need to check element expression here because we may need to set appropriate flag on the expression
-                    // such as NodeCheckFlags.LexicalThis on "this"expression.
-                    checkExpression(element);
-                    if (isTupleType(sourceType)) {
-                        error(element, Diagnostics.Tuple_type_0_with_length_1_cannot_be_assigned_to_tuple_with_length_2, typeToString(sourceType), getTypeReferenceArity(<TypeReference>sourceType), elements.length);
-                    }
-                    else {
-                        error(element, Diagnostics.Type_0_has_no_property_1, typeToString(sourceType), propName as string);
-                    }
+                    return checkDestructuringAssignment(element, type, checkMode);
+                }
+                if (elementIndex < elements.length - 1) {
+                    error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
                 }
                 else {
-                    if (elementIndex < elements.length - 1) {
-                        error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
+                    const restExpression = (<SpreadElement>element).expression;
+                    if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
+                        error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
                     }
                     else {
-                        const restExpression = (<SpreadElement>element).expression;
-                        if (restExpression.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>restExpression).operatorToken.kind === SyntaxKind.EqualsToken) {
-                            error((<BinaryExpression>restExpression).operatorToken, Diagnostics.A_rest_element_cannot_have_an_initializer);
-                        }
-                        else {
-                            checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
-                            const type = everyType(sourceType, isTupleType) ?
-                                mapType(sourceType, t => sliceTupleType(<TupleTypeReference>t, elementIndex)) :
-                                createArrayType(elementType);
-                            return checkDestructuringAssignment(restExpression, type, checkMode);
-                        }
+                        checkGrammarForDisallowedTrailingComma(node.elements, Diagnostics.A_rest_parameter_or_binding_pattern_may_not_have_a_trailing_comma);
+                        const type = everyType(sourceType, isTupleType) ?
+                            mapType(sourceType, t => sliceTupleType(<TupleTypeReference>t, elementIndex)) :
+                            createArrayType(elementType);
+                        return checkDestructuringAssignment(restExpression, type, checkMode);
                     }
                 }
             }

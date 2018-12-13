@@ -1636,14 +1636,6 @@
         "category": "Error",
         "code": 2458
     },
-    "Type '{0}' has no property '{1}' and no string index signature.": {
-        "category": "Error",
-        "code": 2459
-    },
-    "Type '{0}' has no property '{1}'.": {
-        "category": "Error",
-        "code": 2460
-    },
     "Type '{0}' is not an array type.": {
         "category": "Error",
         "code": 2461
@@ -1759,10 +1751,6 @@
     "Cannot redeclare identifier '{0}' in catch clause.": {
         "category": "Error",
         "code": 2492
-    },
-    "Tuple type '{0}' with length '{1}' cannot be assigned to tuple with length '{2}'.": {
-        "category": "Error",
-        "code": 2493
     },
     "Using a string in a 'for...of' statement is only supported in ECMAScript 5 and higher.": {
         "category": "Error",
