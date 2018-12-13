@@ -45,7 +45,6 @@ with any additional questions or comments.
 *  [Programming handbook](https://www.typescriptlang.org/docs/handbook/basic-types.html)
 *  [Language specification](https://github.com/Microsoft/TypeScript/blob/master/doc/spec.md)
 
-
 ## Building
 
 In order to build the TypeScript compiler, ensure that you have [Git](https://git-scm.com/downloads) and [Node.js](https://nodejs.org/) installed.
