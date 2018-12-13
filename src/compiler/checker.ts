@@ -6729,7 +6729,17 @@ namespace ts {
         // type is the union of the constituent return types.
         function getUnionSignatures(signatureLists: ReadonlyArray<ReadonlyArray<Signature>>): Signature[] {
             let result: Signature[] | undefined;
+            let indexWithLengthOverOne: number | undefined;
             for (let i = 0; i < signatureLists.length; i++) {
+                if (signatureLists[i].length === 0) return emptyArray;
+                if (signatureLists[i].length > 1) {
+                    if (indexWithLengthOverOne === undefined) {
+                        indexWithLengthOverOne = i;
+                    }
+                    else {
+                        indexWithLengthOverOne = -1; // signal there are multiple overload sets
+                    }
+                }
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
                     if (!result || !findMatchingSignature(result, signature, /*partialMatch*/ false, /*ignoreThisTypes*/ true, /*ignoreReturnTypes*/ true)) {
@@ -6753,7 +6763,108 @@ namespace ts {
                     }
                 }
             }
+            if (!length(result) && indexWithLengthOverOne !== -1) {
+                // No sufficiently similar signature existed to subsume all the other signatures in the union - time to see if we can make a single
+                // signature that handles all over them. We only do this when there are overloads in only one constituent. 
+                // (Overloads are conditional in nature and having overloads in multiple constituents would necessitate making a power set of
+                // signatures from the type, whose ordering would be non-obvious)
+                const masterList = signatureLists[indexWithLengthOverOne !== undefined ? indexWithLengthOverOne : 0];
+                let results: Signature[] | undefined = masterList.slice();
+                for (let i = 0; i < signatureLists.length; i++) {
+                    const signatures = signatureLists[i];
+                    if (signatures === masterList) continue;
+                    const signature = signatures[0];
+                    Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
+                    results = mergeAsUnionSignature(results, signature);
+                    if (!results) {
+                        break;
+                    }
+                }
+                result = results;
+            }
             return result || emptyArray;
+        }
+
+        function mergeAsUnionSignature(masterList: Signature[], addition: Signature): Signature[] | undefined {
+            if (addition.typeParameters && some(masterList, s => !!s.typeParameters)) {
+                return; // Can't currently unify type parameters
+            }
+            return map(masterList, sig => combineSignaturesOfUnionMembers(sig, addition));
+        }
+
+        function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
+            if (!left && !right) {
+                return;
+            }
+            if (!left) {
+                return right;
+            }
+            if (!right) {
+                return left;
+            }
+            // A signature `this` type might be a read or a write position... It's very possible that it should be invariant
+            // and we should refuse to merge signatures if there are `this` types and they do not match. However, so as to be
+            // permissive when calling, for now, we'll union the `this` types just like the overlapping-union-signature check does
+            const thisType = getUnionType([getTypeOfSymbol(left), getTypeOfSymbol(right)], UnionReduction.Subtype);
+            return createSymbolWithType(left, thisType);
+        }
+
+        function combineUnionParameters(left: Signature, right: Signature) {
+            const longest = getParameterCount(left) >= getParameterCount(right) ? left : right;
+            const shorter = longest === left ? right : left;
+            const longestCount = getParameterCount(longest);
+            const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
+            const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
+            let params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
+            let i = 0;
+            for (; i < longestCount; i++) {
+                const longestParamType = tryGetTypeAtPosition(longest, i)!;
+                const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
+                let unionParamType = getIntersectionType([longestParamType, shorterParamType]);
+                const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
+                if (isRestParam) {
+                    unionParamType = createArrayType(unionParamType);
+                }
+                const isOptional = i > getMinArgumentCount(longest);
+                // TODO: Synthesize symbol name from input signatures
+                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), `arg${i}` as __String);
+                paramSymbol.type = unionParamType;
+                params[i] = paramSymbol;
+            }
+            if (needsExtraRestElement) {
+                const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
+                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, i));
+                params[i] = restParamSymbol;
+            }
+            return params;
+        }
+
+        function combineSignaturesOfUnionMembers(left: Signature, right: Signature): Signature {
+            const declaration = left.declaration; // TODO: Synthesize new declaration? Include field pointing to all backing declarations?
+            const params = combineUnionParameters(left, right);
+            const thisParam = combineUnionThisParam(left.thisParameter, right.thisParameter);
+            const resolvedReturnType = left.resolvedReturnType && right.resolvedReturnType ? getUnionType([left.resolvedReturnType, right.resolvedReturnType]) : undefined;
+            const resolvedTypePredicate = left.resolvedTypePredicate && right.resolvedTypePredicate && left.resolvedTypePredicate.kind === right.resolvedTypePredicate.kind
+                ? left.resolvedTypePredicate.kind === TypePredicateKind.Identifier && left.resolvedTypePredicate.parameterIndex === (right.resolvedTypePredicate as IdentifierTypePredicate).parameterIndex
+                    ? createIdentifierTypePredicate(unescapeLeadingUnderscores(params[left.resolvedTypePredicate.parameterIndex].escapedName), left.resolvedTypePredicate.parameterIndex, getUnionType([left.resolvedTypePredicate.type, right.resolvedTypePredicate.type]))
+                    : left.resolvedTypePredicate.kind === TypePredicateKind.This
+                        ? createThisTypePredicate(getUnionType([left.resolvedTypePredicate.type, right.resolvedTypePredicate.type]))
+                        : undefined
+                : undefined;
+            const minArgCount = Math.max(left.minArgumentCount, right.minArgumentCount);
+            const hasRestParam = left.hasRestParameter || right.hasRestParameter;
+            const hasLiteralTypes = left.hasLiteralTypes || right.hasLiteralTypes; 
+            return createSignature(
+                declaration,
+                left.typeParameters || right.typeParameters,
+                thisParam,
+                params,
+                resolvedReturnType,
+                resolvedTypePredicate,
+                minArgCount,
+                hasRestParam,
+                hasLiteralTypes
+            );
         }
 
         function getUnionIndexInfo(types: ReadonlyArray<Type>, kind: IndexKind): IndexInfo | undefined {
