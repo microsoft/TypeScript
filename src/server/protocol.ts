@@ -748,6 +748,7 @@ namespace ts.server.protocol {
      */
     export interface GetSupportedCodeFixesRequest extends Request {
         command: CommandTypes.GetSupportedCodeFixes;
+        arguments?: Partial<FileRequestArgs>;
     }
 
     /**

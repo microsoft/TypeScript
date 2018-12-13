@@ -4754,6 +4754,7 @@ declare namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program | undefined;
         dispose(): void;
+        getSupportedCodeFixes(): ReadonlyArray<string>;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
@@ -6199,6 +6200,7 @@ declare namespace ts.server.protocol {
      */
     interface GetSupportedCodeFixesRequest extends Request {
         command: CommandTypes.GetSupportedCodeFixes;
+        arguments?: Partial<FileRequestArgs>;
     }
     /**
      * A response for GetSupportedCodeFixesRequest request.

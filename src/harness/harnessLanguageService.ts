@@ -578,6 +578,9 @@ namespace Harness.LanguageService {
             return ts.notImplemented();
         }
         dispose(): void { this.shim.dispose({}); }
+        getSupportedCodeFixes(): ReadonlyArray<string> {
+            throw new Error("Not supported on the shim.");
+        }
     }
 
     export class ShimLanguageServiceAdapter implements LanguageServiceAdapter {

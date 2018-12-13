@@ -1803,7 +1803,11 @@ namespace ts.server {
             }
         }
 
-        private getSupportedCodeFixes(): string[] {
+        private getSupportedCodeFixes(args?: protocol.FileRequestArgs): ReadonlyArray<string> {
+            if (args && args.file) {
+                const {project} = this.getFileAndProject(args);
+                return project.getLanguageService(/*ensureSynchronized*/ false).getSupportedCodeFixes();
+            }
             return getSupportedCodeFixes();
         }
 

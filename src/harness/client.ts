@@ -741,5 +741,9 @@ namespace ts.server {
         dispose(): void {
             throw new Error("dispose is not available through the server layer.");
         }
+
+        getSupportedCodeFixes() {
+            return getSupportedCodeFixes();
+        }
     }
 }

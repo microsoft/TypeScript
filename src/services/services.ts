@@ -2143,6 +2143,7 @@ namespace ts {
             getEditsForRefactor,
             toLineColumnOffset: sourceMapper.toLineColumnOffset,
             getSourceMapper: () => sourceMapper,
+            getSupportedCodeFixes,
         };
     }
 
