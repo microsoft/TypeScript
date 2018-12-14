@@ -194,6 +194,30 @@ namespace ts {
         };
     }
 
+    export const enum WatchType {
+        ConfigFile = "Config file",
+        SourceFile = "Source file",
+        MissingFile = "Missing file",
+        WildcardDirectory = "Wild card directory",
+        FailedLookupLocations = "Failed Lookup Locations",
+        TypeRoots = "Type roots"
+    }
+
+    interface WatchFactory<X, Y= undefined> extends ts.WatchFactory<X, Y> {
+        watchLogLevel: WatchLogLevel;
+        writeLog: (s: string) => void;
+    }
+
+    export function createWatchFactory<Y = undefined>(host: { trace?(s: string): void; }, options: { extendedDiagnostics?: boolean; diagnostics?: boolean; }) {
+        const watchLogLevel = host.trace ? options.extendedDiagnostics ? WatchLogLevel.Verbose :
+            options.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
+        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? (s => host.trace!(s)) : noop;
+        const result = getWatchFactory<WatchType, Y>(watchLogLevel, writeLog) as WatchFactory<WatchType, Y>;
+        result.watchLogLevel = watchLogLevel;
+        result.writeLog = writeLog;
+        return result;
+    }
+
     /**
      * Creates the watch compiler host that can be extended with config file or root file names and options host
      */
@@ -224,7 +248,7 @@ namespace ts {
             watchDirectory,
             setTimeout,
             clearTimeout,
-            trace: s => system.write(s),
+            trace: s => system.write(s + system.newLine),
             onWatchStatusChange,
             createDirectory: path => system.createDirectory(path),
             writeFile: (path, data, writeByteOrderMark) => system.writeFile(path, data, writeByteOrderMark),
@@ -517,17 +541,12 @@ namespace ts {
             newLine = updateNewLine();
         }
 
-        const trace = host.trace && ((s: string) => { host.trace!(s + newLine); });
-        const watchLogLevel = trace ? compilerOptions.extendedDiagnostics ? WatchLogLevel.Verbose :
-            compilerOptions.diagnostics ? WatchLogLevel.TriggerOnly : WatchLogLevel.None : WatchLogLevel.None;
-        const writeLog: (s: string) => void = watchLogLevel !== WatchLogLevel.None ? trace! : noop; // TODO: GH#18217
-        const { watchFile, watchFilePath, watchDirectory } = getWatchFactory<string>(watchLogLevel, writeLog);
-
+        const { watchFile, watchFilePath, watchDirectory, watchLogLevel, writeLog } = createWatchFactory<string>(host, compilerOptions);
         const getCanonicalFileName = createGetCanonicalFileName(useCaseSensitiveFileNames);
 
         writeLog(`Current directory: ${currentDirectory} CaseSensitiveFileNames: ${useCaseSensitiveFileNames}`);
         if (configFileName) {
-            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, "Config file");
+            watchFile(host, configFileName, scheduleProgramReload, PollingInterval.High, WatchType.ConfigFile);
         }
 
         const compilerHost: CompilerHost & ResolutionCacheHost = {
@@ -543,7 +562,7 @@ namespace ts {
             getNewLine: () => newLine,
             fileExists,
             readFile,
-            trace,
+            trace: host.trace && (s => host.trace!(s)),
             directoryExists: directoryStructureHost.directoryExists && (path => directoryStructureHost.directoryExists!(path)),
             getDirectories: (directoryStructureHost.getDirectories && ((path: string) => directoryStructureHost.getDirectories!(path)))!, // TODO: GH#18217
             realpath: host.realpath && (s => host.realpath!(s)),
@@ -553,8 +572,8 @@ namespace ts {
             // Members for ResolutionCacheHost
             toPath,
             getCompilationSettings: () => compilerOptions,
-            watchDirectoryOfFailedLookupLocation: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Failed Lookup Locations"),
-            watchTypeRootsDirectory: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, "Type roots"),
+            watchDirectoryOfFailedLookupLocation: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, WatchType.FailedLookupLocations),
+            watchTypeRootsDirectory: (dir, cb, flags) => watchDirectory(host, dir, cb, flags, WatchType.TypeRoots),
             getCachedDirectoryStructureHost: () => cachedDirectoryStructureHost,
             onInvalidatedResolution: scheduleProgramUpdate,
             onChangedAutomaticTypeDirectiveNames: () => {
@@ -719,7 +738,7 @@ namespace ts {
                         (hostSourceFile as FilePresentOnHost).sourceFile = sourceFile;
                         sourceFile.version = hostSourceFile.version.toString();
                         if (!(hostSourceFile as FilePresentOnHost).fileWatcher) {
-                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
+                            (hostSourceFile as FilePresentOnHost).fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
                         }
                     }
                     else {
@@ -733,7 +752,7 @@ namespace ts {
                 else {
                     if (sourceFile) {
                         sourceFile.version = initialVersion.toString();
-                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, "Source file");
+                        const fileWatcher = watchFilePath(host, fileName, onSourceFileChange, PollingInterval.Low, path, WatchType.SourceFile);
                         sourceFilesCache.set(path, { sourceFile, version: initialVersion, fileWatcher });
                     }
                     else {
@@ -907,7 +926,7 @@ namespace ts {
         }
 
         function watchMissingFilePath(missingFilePath: Path) {
-            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath, "Missing file");
+            return watchFilePath(host, missingFilePath, onMissingFileChange, PollingInterval.Medium, missingFilePath, WatchType.MissingFile);
         }
 
         function onMissingFileChange(fileName: string, eventKind: FileWatcherEventKind, missingFilePath: Path) {
@@ -971,7 +990,7 @@ namespace ts {
                     }
                 },
                 flags,
-                "Wild card directories"
+                WatchType.WildcardDirectory
             );
         }
 

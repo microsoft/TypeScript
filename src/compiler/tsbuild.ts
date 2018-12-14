@@ -443,6 +443,7 @@ namespace ts {
         let nextProjectToBuild = 0;
         let timerToBuildInvalidatedProject: any;
         let reportFileChangeDetected = false;
+        const { watchFile, watchFilePath, watchDirectory } = createWatchFactory<ResolvedConfigFileName>(host, options);
 
         // Watches for the solution
         const allWatchedWildcardDirectories = createFileMap<Map<WildcardDirectoryWatcher>>(toPath);
@@ -542,9 +543,16 @@ namespace ts {
 
         function watchConfigFile(resolved: ResolvedConfigFileName) {
             if (options.watch && !allWatchedConfigFiles.hasKey(resolved)) {
-                allWatchedConfigFiles.setValue(resolved, hostWithWatch.watchFile(resolved, () => {
+                allWatchedConfigFiles.setValue(resolved, watchFile(
+                    hostWithWatch,
+                    resolved,
+                    () => {
                     invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Full);
-                }));
+                    },
+                    PollingInterval.High,
+                    WatchType.ConfigFile,
+                    resolved
+                ));
             }
         }
 
@@ -554,20 +562,27 @@ namespace ts {
                 getOrCreateValueMapFromConfigFileMap(allWatchedWildcardDirectories, resolved),
                 createMapFromTemplate(parsed.configFileSpecs!.wildcardDirectories),
                 (dir, flags) => {
-                    return hostWithWatch.watchDirectory(dir, fileOrDirectory => {
-                        const fileOrDirectoryPath = toPath(fileOrDirectory);
-                        if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
-                            // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
-                            return;
-                        }
+                    return watchDirectory(
+                        hostWithWatch,
+                        dir,
+                        fileOrDirectory => {
+                            const fileOrDirectoryPath = toPath(fileOrDirectory);
+                            if (fileOrDirectoryPath !== toPath(dir) && hasExtension(fileOrDirectoryPath) && !isSupportedSourceFileName(fileOrDirectory, parsed.options)) {
+                                // writeLog(`Project: ${configFileName} Detected file add/remove of non supported extension: ${fileOrDirectory}`);
+                                return;
+                            }
 
-                        if (isOutputFile(fileOrDirectory, parsed)) {
-                            // writeLog(`${fileOrDirectory} is output file`);
-                            return;
-                        }
+                            if (isOutputFile(fileOrDirectory, parsed)) {
+                                // writeLog(`${fileOrDirectory} is output file`);
+                                return;
+                            }
 
-                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
-                    }, !!(flags & WatchDirectoryFlags.Recursive));
+                            invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.Partial);
+                        },
+                        flags,
+                        WatchType.WildcardDirectory,
+                        resolved
+                    );
                 }
             );
         }
@@ -578,9 +593,15 @@ namespace ts {
                 getOrCreateValueMapFromConfigFileMap(allWatchedInputFiles, resolved),
                 arrayToMap(parsed.fileNames, toPath),
                 {
-                    createNewValue: (_key, input) => hostWithWatch.watchFile(input, () => {
-                        invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None);
-                    }),
+                    createNewValue: (path, input) => watchFilePath(
+                        hostWithWatch,
+                        input,
+                        () => invalidateProjectAndScheduleBuilds(resolved, ConfigFileProgramReloadLevel.None),
+                        PollingInterval.Low,
+                        path as Path,
+                        WatchType.SourceFile,
+                        resolved
+                    ),
                     onDeleteValue: closeFileWatcher,
                 }
             );
