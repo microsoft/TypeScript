@@ -6469,6 +6469,17 @@ namespace ts {
                     return links.resolvedSymbol = lateSymbol;
                 }
             }
+            else {
+                // Symbol may still be a late symbol merged into the symbol list via a global augmentation - verify presence in the late-bound table
+                // Otherwise, add to late-bound set
+                const type = checkComputedPropertyName(decl.name);
+                if (isTypeUsableAsLateBoundName(type)) {
+                    const memberName = getLateBoundNameFromType(type);
+                    if (!lateSymbols.get(memberName)) {
+                        lateSymbols.set(memberName, links.resolvedSymbol);
+                    }
+                }
+            }
             return links.resolvedSymbol;
         }
 
