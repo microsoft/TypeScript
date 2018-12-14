@@ -1696,7 +1696,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "const enum member initializers can only contain literal values and other const enums values.": {
         "category": "Error",
         "code": 2474
     },
