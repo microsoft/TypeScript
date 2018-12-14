@@ -356,7 +356,7 @@ namespace ts {
         /* @internal */ getNonBoundSourceFile(fileName: string): SourceFile;
 
         dispose(): void;
-        getSupportedCodeFixes(): ReadonlyArray<string>;
+        getSupportedCodeFixes(fileName: string): ReadonlyArray<string>;
     }
 
     export interface JsxClosingTagInfo {

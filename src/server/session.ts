@@ -1805,8 +1805,8 @@ namespace ts.server {
 
         private getSupportedCodeFixes(args?: protocol.FileRequestArgs): ReadonlyArray<string> {
             if (args && args.file) {
-                const {project} = this.getFileAndProject(args);
-                return project.getLanguageService(/*ensureSynchronized*/ false).getSupportedCodeFixes();
+                const {file, project} = this.getFileAndProject(args);
+                return project.getLanguageService().getSupportedCodeFixes(file);
             }
             return getSupportedCodeFixes();
         }

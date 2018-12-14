@@ -4754,7 +4754,7 @@ declare namespace ts {
         getEmitOutput(fileName: string, emitOnlyDtsFiles?: boolean): EmitOutput;
         getProgram(): Program | undefined;
         dispose(): void;
-        getSupportedCodeFixes(): ReadonlyArray<string>;
+        getSupportedCodeFixes(fileName: string): ReadonlyArray<string>;
     }
     interface JsxClosingTagInfo {
         readonly newText: string;
