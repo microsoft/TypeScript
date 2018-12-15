@@ -1065,8 +1065,9 @@ namespace ts {
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
             const syntaxDiagnostics = [
-                ...program.getOptionsDiagnostics(),
                 ...program.getConfigFileParsingDiagnostics(),
+                ...program.getOptionsDiagnostics(),
+                ...program.getGlobalDiagnostics(),
                 ...program.getSyntacticDiagnostics()];
             if (syntaxDiagnostics.length) {
                 return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");

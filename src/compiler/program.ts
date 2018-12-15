@@ -2180,7 +2180,7 @@ namespace ts {
         }
 
         function createRedirectSourceFile(redirectTarget: SourceFile, unredirected: SourceFile, fileName: string, path: Path, resolvedPath: Path, originalFileName: string): SourceFile {
-            const redirect: SourceFile = Object.create(redirectTarget);
+            const redirect = createRedirectObject(redirectTarget);
             redirect.fileName = fileName;
             redirect.path = path;
             redirect.resolvedPath = resolvedPath;
