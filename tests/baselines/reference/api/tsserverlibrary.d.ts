@@ -4245,39 +4245,11 @@ declare namespace ts {
     /**
      * Builder to manage the program state changes
      */
-    interface BuilderProgram {
+    interface BuilderProgram extends Program {
         /**
          * Returns current program
          */
         getProgram(): Program;
-        /**
-         * Get compiler options of the program
-         */
-        getCompilerOptions(): CompilerOptions;
-        /**
-         * Get the source file in the program with file name
-         */
-        getSourceFile(fileName: string): SourceFile | undefined;
-        /**
-         * Get a list of files in the program
-         */
-        getSourceFiles(): ReadonlyArray<SourceFile>;
-        /**
-         * Get the diagnostics for compiler options
-         */
-        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        /**
-         * Get the diagnostics that dont belong to any file
-         */
-        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
-        /**
-         * Get the diagnostics from config file parsing
-         */
-        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
-        /**
-         * Get the syntax diagnostics, for all source files if source file is not supplied
-         */
-        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
         /**
          * Get all the dependencies of the file
          */
@@ -4303,10 +4275,6 @@ declare namespace ts {
          * in that order would be used to write the files
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
-        /**
-         * Get the current directory of the program
-         */
-        getCurrentDirectory(): string;
     }
     /**
      * The builder that caches the semantic diagnostics for the program and handles the changed files and affected files

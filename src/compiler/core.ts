@@ -1370,6 +1370,10 @@ namespace ts {
         return result;
     }
 
+    export function createRedirectObject<T extends object>(redirectTarget: T): T {
+        return Object.create(redirectTarget);
+    }
+
     export function extend<T1, T2>(first: T1, second: T2): T1 & T2 {
         const result: T1 & T2 = <any>{};
         for (const id in second) {
