@@ -10949,6 +10949,78 @@ fn5();`
         });
     });
 
+    describe("tsserverProjectSystem getSupportedCodeFixes", () => {
+        const tsconfig: File = {
+            path: "/tsconfig.json",
+            content: JSON.stringify({
+                compilerOptions: { plugins: [{ name: "myplugin" }] }
+            })
+        };
+
+        function createHostWithPlugin(files: ReadonlyArray<File>) {
+            const host = createServerHost(files);
+            host.require = (_initialPath, moduleName) => {
+                assert.equal(moduleName, "myplugin");
+                return {
+                    module: () => ({
+                        create(info: server.PluginCreateInfo) {
+                            const proxy = Harness.LanguageService.makeDefaultProxy(info);
+                            proxy.getSupportedCodeFixes = (fileName) => {
+                                switch (fileName) {
+                                    case "/a.ts":
+                                        return ["a"];
+                                    case "/b.ts":
+                                        return ["b"];
+                                    default:
+                                        return info.languageService.getSupportedCodeFixes(fileName);
+                                }
+                            };
+                            return proxy;
+                        }
+                    }),
+                    error: undefined
+                };
+            };
+            return host;
+        }
+
+        it("uses default if fileName is not provided", () => {
+            const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const host = createHostWithPlugin([aTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs], session);
+            assert.deepStrictEqual(
+                executeSessionRequest<protocol.GetSupportedCodeFixesRequest, protocol.GetSupportedCodeFixesResponse>(session, protocol.CommandTypes.GetSupportedCodeFixes, /*args*/ undefined),
+                getSupportedCodeFixes(),
+            );
+            assert.deepStrictEqual(
+                executeSessionRequest<protocol.GetSupportedCodeFixesRequest, protocol.GetSupportedCodeFixesResponse>(session, protocol.CommandTypes.GetSupportedCodeFixes, {}),
+                getSupportedCodeFixes(),
+            );
+        });
+
+        it("forwards the request to the LanguageService", () => {
+            const aTs: File = { path: "/a.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const bTs: File = { path: "/b.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const cTs: File = { path: "/c.ts", content: `class c { prop = "hello"; foo() { const x = 0; } }` };
+            const host = createHostWithPlugin([aTs, bTs, cTs, tsconfig]);
+            const session = createSession(host);
+            openFilesForSession([aTs, bTs, cTs], session);
+            assert.deepStrictEqual(
+                executeSessionRequest<protocol.GetSupportedCodeFixesRequest, protocol.GetSupportedCodeFixesResponse>(session, protocol.CommandTypes.GetSupportedCodeFixes, { file: "/a.ts" }),
+                ["a"],
+            );
+            assert.deepStrictEqual(
+                executeSessionRequest<protocol.GetSupportedCodeFixesRequest, protocol.GetSupportedCodeFixesResponse>(session, protocol.CommandTypes.GetSupportedCodeFixes, { file: "/b.ts" }),
+                ["b"],
+            );
+            assert.deepStrictEqual(
+                executeSessionRequest<protocol.GetSupportedCodeFixesRequest, protocol.GetSupportedCodeFixesResponse>(session, protocol.CommandTypes.GetSupportedCodeFixes, { file: "/c.ts" }),
+                getSupportedCodeFixes(),
+            );
+        });
+    });
+
     function makeReferenceItem(file: File, isDefinition: boolean, text: string, lineText: string, options?: SpanFromSubstringOptions): protocol.ReferencesResponseItem {
         return {
             ...protocolFileSpanFromSubstring(file, text, options),

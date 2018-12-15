@@ -1803,9 +1803,9 @@ namespace ts.server {
             }
         }
 
-        private getSupportedCodeFixes(args?: protocol.FileRequestArgs): ReadonlyArray<string> {
+        private getSupportedCodeFixes(args?: Partial<protocol.FileRequestArgs>): ReadonlyArray<string> {
             if (args && args.file) {
-                const {file, project} = this.getFileAndProject(args);
+                const {file, project} = this.getFileAndProject(<protocol.FileRequestArgs>args);
                 return project.getLanguageService().getSupportedCodeFixes(file);
             }
             return getSupportedCodeFixes();
@@ -2346,8 +2346,8 @@ namespace ts.server {
             [CommandNames.ApplyCodeActionCommand]: (request: protocol.ApplyCodeActionCommandRequest) => {
                 return this.requiredResponse(this.applyCodeActionCommand(request.arguments));
             },
-            [CommandNames.GetSupportedCodeFixes]: () => {
-                return this.requiredResponse(this.getSupportedCodeFixes());
+            [CommandNames.GetSupportedCodeFixes]: (request: protocol.GetSupportedCodeFixesRequest) => {
+                return this.requiredResponse(this.getSupportedCodeFixes(request.arguments));
             },
             [CommandNames.GetApplicableRefactors]: (request: protocol.GetApplicableRefactorsRequest) => {
                 return this.requiredResponse(this.getApplicableRefactors(request.arguments));
