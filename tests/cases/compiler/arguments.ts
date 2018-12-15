@@ -1,6 +1,10 @@
+// @target: ES6
 function f() {
     var x=arguments[12];
+    (() => arguments)();
 }
+
+(() => arguments)();
 
 interface I {
     method(args: typeof arguments): void;

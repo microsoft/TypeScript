@@ -1663,11 +1663,17 @@ namespace ts {
         function emitPropertyAccessExpression(node: PropertyAccessExpression) {
             let indentBeforeDot = false;
             let indentAfterDot = false;
+            const dotRangeFirstCommentStart = skipTrivia(
+                currentSourceFile!.text,
+                node.expression.end,
+                /*stopAfterLineBreak*/ false,
+                /*stopAtComments*/ true
+            );
+            const dotRangeStart = skipTrivia(currentSourceFile!.text, dotRangeFirstCommentStart);
+            const dotRangeEnd = dotRangeStart + 1;
             if (!(getEmitFlags(node) & EmitFlags.NoIndentation)) {
-                const dotRangeStart = node.expression.end;
-                const dotRangeEnd = skipTrivia(currentSourceFile!.text, node.expression.end) + 1;
                 const dotToken = createToken(SyntaxKind.DotToken);
-                dotToken.pos = dotRangeStart;
+                dotToken.pos = node.expression.end;
                 dotToken.end = dotRangeEnd;
                 indentBeforeDot = needsIndentation(node, node.expression, dotToken);
                 indentAfterDot = needsIndentation(node, dotToken, node.name);
@@ -1676,7 +1682,8 @@ namespace ts {
             emitExpression(node.expression);
             increaseIndentIf(indentBeforeDot, /*writeSpaceIfNotIndenting*/ false);
 
-            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression);
+            const dotHasCommentTrivia = dotRangeFirstCommentStart !== dotRangeStart;
+            const shouldEmitDotDot = !indentBeforeDot && needsDotDotForPropertyAccess(node.expression, dotHasCommentTrivia);
             if (shouldEmitDotDot) {
                 writePunctuation(".");
             }
@@ -1689,13 +1696,15 @@ namespace ts {
 
         // 1..toString is a valid property access, emit a dot after the literal
         // Also emit a dot if expression is a integer const enum value - it will appear in generated code as numeric literal
-        function needsDotDotForPropertyAccess(expression: Expression) {
+        function needsDotDotForPropertyAccess(expression: Expression, dotHasTrivia: boolean) {
             expression = skipPartiallyEmittedExpressions(expression);
             if (isNumericLiteral(expression)) {
                 // check if numeric literal is a decimal literal that was originally written with a dot
                 const text = getLiteralTextOfNode(<LiteralExpression>expression, /*neverAsciiEscape*/ true);
-                return !expression.numericLiteralFlags
-                    && !stringContains(text, tokenToString(SyntaxKind.DotToken)!);
+                // If he number will be printed verbatim and it doesn't already contain a dot, add one
+                // if the expression doesn't have any comments that will be emitted.
+                return !expression.numericLiteralFlags && !stringContains(text, tokenToString(SyntaxKind.DotToken)!) &&
+                    (!dotHasTrivia || printerOptions.removeComments);
             }
             else if (isPropertyAccessExpression(expression) || isElementAccessExpression(expression)) {
                 // check if constant enum value is integer

@@ -6925,7 +6925,7 @@ namespace ts {
 
     export interface ObjectAllocator {
         getNodeConstructor(): new (kind: SyntaxKind, pos?: number, end?: number) => Node;
-        getTokenConstructor(): new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number) => Token<TKind>;
+        getTokenConstructor(): { new <TKind extends SyntaxKind>(kind: TKind, pos?: number, end?: number): Token<TKind> };
         getIdentifierConstructor(): new (kind: SyntaxKind.Identifier, pos?: number, end?: number) => Identifier;
         getSourceFileConstructor(): new (kind: SyntaxKind.SourceFile, pos?: number, end?: number) => SourceFile;
         getSymbolConstructor(): new (flags: SymbolFlags, name: __String) => Symbol;
@@ -7687,16 +7687,38 @@ namespace ts {
         return path;
     }
 
+    // check path for these segments: '', '.'. '..'
+    const relativePathSegmentRegExp = /(^|\/)\.{0,2}($|\/)/;
+
     function comparePathsWorker(a: string, b: string, componentComparer: (a: string, b: string) => Comparison) {
         if (a === b) return Comparison.EqualTo;
         if (a === undefined) return Comparison.LessThan;
         if (b === undefined) return Comparison.GreaterThan;
+
+        // NOTE: Performance optimization - shortcut if the root segments differ as there would be no
+        //       need to perform path reduction.
+        const aRoot = a.substring(0, getRootLength(a));
+        const bRoot = b.substring(0, getRootLength(b));
+        const result = compareStringsCaseInsensitive(aRoot, bRoot);
+        if (result !== Comparison.EqualTo) {
+            return result;
+        }
+
+        // NOTE: Performance optimization - shortcut if there are no relative path segments in
+        //       the non-root portion of the path
+        const aRest = a.substring(aRoot.length);
+        const bRest = b.substring(bRoot.length);
+        if (!relativePathSegmentRegExp.test(aRest) && !relativePathSegmentRegExp.test(bRest)) {
+            return componentComparer(aRest, bRest);
+        }
+
+        // The path contains a relative path segment. Normalize the paths and perform a slower component
+        // by component comparison.
         const aComponents = reducePathComponents(getPathComponents(a));
         const bComponents = reducePathComponents(getPathComponents(b));
         const sharedLength = Math.min(aComponents.length, bComponents.length);
-        for (let i = 0; i < sharedLength; i++) {
-            const stringComparer = i === 0 ? compareStringsCaseInsensitive : componentComparer;
-            const result = stringComparer(aComponents[i], bComponents[i]);
+        for (let i = 1; i < sharedLength; i++) {
+            const result = componentComparer(aComponents[i], bComponents[i]);
             if (result !== Comparison.EqualTo) {
                 return result;
             }

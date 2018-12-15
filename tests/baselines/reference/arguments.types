@@ -7,7 +7,19 @@ function f() {
 >arguments[12] : any
 >arguments : IArguments
 >12 : 12
+
+    (() => arguments)();
+>(() => arguments)() : IArguments
+>(() => arguments) : () => IArguments
+>() => arguments : () => IArguments
+>arguments : IArguments
 }
+
+(() => arguments)();
+>(() => arguments)() : any
+>(() => arguments) : () => any
+>() => arguments : () => any
+>arguments : any
 
 interface I {
     method(args: typeof arguments): void;

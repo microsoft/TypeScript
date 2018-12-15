@@ -4450,6 +4450,8 @@ namespace FourSlashInterface {
             interfaceEntry("ObjectConstructor"),
             constEntry("Function"),
             interfaceEntry("FunctionConstructor"),
+            typeEntry("ThisParameterType"),
+            typeEntry("OmitThisParameter"),
             interfaceEntry("CallableFunction"),
             interfaceEntry("NewableFunction"),
             interfaceEntry("IArguments"),
@@ -4775,6 +4777,7 @@ namespace FourSlashInterface {
             "package",
             "yield",
             "async",
+            "await",
         ].map(keywordEntry);
 
         // TODO: many of these are inappropriate to always provide
@@ -4907,6 +4910,7 @@ namespace FourSlashInterface {
             "package",
             "yield",
             "async",
+            "await",
         ].map(keywordEntry);
 
         export const globalKeywordsPlusUndefined: ReadonlyArray<ExpectedCompletionEntryObject> = (() => {

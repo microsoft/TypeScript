@@ -239,3 +239,53 @@ function f20<Data>(carrier: DataCarrier<Data>) {
     }
 }
 
+// Repro from #28935
+
+type Foo = { tag: true, x: number } | { tag: false, y: number } | { [x: string]: string };
+>Foo : Foo
+>tag : true
+>true : true
+>x : number
+>tag : false
+>false : false
+>y : number
+>x : string
+
+function f30(foo: Foo) {
+>f30 : (foo: Foo) => void
+>foo : Foo
+
+    if (foo.tag) {
+>foo.tag : string | boolean
+>foo : Foo
+>tag : string | boolean
+
+        foo;
+>foo : { tag: true; x: number; } | { [x: string]: string; }
+    }
+    else {
+        foo;
+>foo : { tag: false; y: number; } | { [x: string]: string; }
+    }
+}
+
+function f31(foo: Foo) {
+>f31 : (foo: Foo) => void
+>foo : Foo
+
+    if (foo.tag === true) {
+>foo.tag === true : boolean
+>foo.tag : string | boolean
+>foo : Foo
+>tag : string | boolean
+>true : true
+
+        foo;
+>foo : { tag: true; x: number; }
+    }
+    else {
+        foo;
+>foo : { tag: false; y: number; } | { [x: string]: string; }
+    }
+}
+

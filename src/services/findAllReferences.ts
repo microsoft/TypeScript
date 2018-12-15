@@ -1428,6 +1428,10 @@ namespace ts.FindAllReferences.Core {
         return [{ definition: { type: DefinitionKind.Symbol, symbol: searchSpaceNode.symbol }, references }];
     }
 
+    function isParameterName(node: Node) {
+        return node.kind === SyntaxKind.Identifier && node.parent.kind === SyntaxKind.Parameter && (<ParameterDeclaration>node.parent).name === node;
+    }
+
     function getReferencesForThisKeyword(thisOrSuperKeyword: Node, sourceFiles: ReadonlyArray<SourceFile>, cancellationToken: CancellationToken): SymbolAndEntries[] | undefined {
         let searchSpaceNode = getThisContainer(thisOrSuperKeyword, /* includeArrowFunctions */ false);
 
@@ -1450,7 +1454,7 @@ namespace ts.FindAllReferences.Core {
                 searchSpaceNode = searchSpaceNode.parent; // re-assign to be the owning class
                 break;
             case SyntaxKind.SourceFile:
-                if (isExternalModule(<SourceFile>searchSpaceNode)) {
+                if (isExternalModule(<SourceFile>searchSpaceNode) || isParameterName(thisOrSuperKeyword)) {
                     return undefined;
                 }
                 // falls through
@@ -1483,7 +1487,7 @@ namespace ts.FindAllReferences.Core {
                         // and has the appropriate static modifier from the original container.
                         return container.parent && searchSpaceNode.symbol === container.parent.symbol && (getModifierFlags(container) & ModifierFlags.Static) === staticFlag;
                     case SyntaxKind.SourceFile:
-                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container);
+                        return container.kind === SyntaxKind.SourceFile && !isExternalModule(<SourceFile>container) && !isParameterName(node);
                 }
             });
         }).map(n => nodeEntry(n));
