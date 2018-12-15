@@ -4129,11 +4129,26 @@
         "category": "Error",
         "code": 7051
     },
-    "Non-exact type cannot be assigned to exact type": {
+    "Non-exact types are not assignable to exact types.": {
         "category": "Error",
         "code": 7052
     },
-
+    "Properties on exact types cannot be deleted.": {
+        "category": "Error",
+        "code": 7053
+    },
+    "Exact mapped types {0} and {1} do not have identical key constraints.": {
+        "category": "Error",
+        "code": 7054
+    },
+    "Object literal may only specify known properties when assigned to exact type, and '{0}' does not exist in type '{1}'.": {
+        "category": "Error",
+        "code": 7055
+    },
+    "Exact types may only include specified properties, and '{0}' does not exist on type '{1}'.": {
+        "category": "Error",
+        "code": 7056
+    },
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000

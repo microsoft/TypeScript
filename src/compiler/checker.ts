@@ -11702,7 +11702,7 @@ namespace ts {
 
                 if ((getObjectFlags(target) & ObjectFlags.Exact) && !(getObjectFlags(source) & (ObjectFlags.Exact | ObjectFlags.FreshLiteral))) {
                     if (reportErrors) {
-                        reportRelationError(Diagnostics.Non_exact_type_cannot_be_assigned_to_exact_type, source, target);
+                        reportRelationError(Diagnostics.Non_exact_types_are_not_assignable_to_exact_types, source, target);
                     }
                     return Ternary.False;
                 }
@@ -11903,7 +11903,9 @@ namespace ts {
                                             symbolToString(prop), typeToString(target), suggestion);
                                     }
                                     else {
-                                        reportError(Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
+                                        reportError(getObjectFlags(target) & ObjectFlags.Exact ?
+                                            Diagnostics.Object_literal_may_only_specify_known_properties_when_assigned_to_exact_type_and_0_does_not_exist_in_type_1 :
+                                            Diagnostics.Object_literal_may_only_specify_known_properties_and_0_does_not_exist_in_type_1,
                                             symbolToString(prop), typeToString(target));
                                     }
                                 }
@@ -12481,10 +12483,14 @@ namespace ts {
                 if (modifiersRelated) {
                     let result: Ternary;
                     if (getObjectFlags(target) & ObjectFlags.Exact) {
-                        // TODO: Not sure if identical is right here
+                        // TODO: Not sure if identical is right here and need Better errors here.
                         if (isTypeIdenticalTo(getConstraintTypeFromMappedType(target), getConstraintTypeFromMappedType(source))) {
                             const mapper = createTypeMapper([getTypeParameterFromMappedType(source)], [getTypeParameterFromMappedType(target)]);
                             return isRelatedTo(instantiateType(getTemplateTypeFromMappedType(source), mapper), getTemplateTypeFromMappedType(target), reportErrors);
+                        }
+                        if (reportErrors) {
+                            // Invariant. source must be exact.
+                            reportError(Diagnostics.Exact_mapped_types_0_and_1_do_not_have_identical_key_constraints, typeToString(source), typeToString(target));
                         }
                         return Ternary.False;
                     }
@@ -12531,7 +12537,9 @@ namespace ts {
                             const sourceType = getTypeOfSymbol(sourceProp);
                             if (!(sourceType === undefinedType || sourceType === undefinedWideningType)) {
                                 if (reportErrors) {
-                                    reportError(Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
+                                    reportError(getObjectFlags(target) & ObjectFlags.Exact ?
+                                        Diagnostics.Exact_types_may_only_include_specified_properties_and_0_does_not_exist_on_type_1 :
+                                        Diagnostics.Property_0_does_not_exist_on_type_1, symbolToString(sourceProp), typeToString(target));
                                 }
                                 return Ternary.False;
                             }
@@ -21782,8 +21790,7 @@ namespace ts {
             const expression = (<PropertyAccessExpression>expr).expression;
             const type = getTypeOfExpression(expression);
             if (someType(type, t => (getObjectFlags(t) & ObjectFlags.Exact) !== 0)) {
-                // Terrible error message;
-                error(expression, Diagnostics.Non_exact_type_cannot_be_assigned_to_exact_type);
+                error(expression, Diagnostics.Properties_on_exact_types_cannot_be_deleted);
             }
             const links = getNodeLinks(expr);
             const symbol = getExportSymbolOfValueSymbolIfExported(links.resolvedSymbol);
