@@ -6808,6 +6808,34 @@ namespace ts {
             return createSymbolWithType(left, thisType);
         }
 
+        function combinePartameterNames(index: number, left: __String | undefined, right: __String | undefined): __String {
+            if (!left && !right) {
+                return `arg${index}` as __String;
+            }
+            if (!left) {
+                return right!;
+            }
+            if (!right || left === right) {
+                return left;
+            }
+            const names = createMap<true>();
+            // We join names in an upperCamelCase fashion.
+            const seperator = "And";
+            const leftNames = unescapeLeadingUnderscores(left).split(seperator);
+            const rightNames = unescapeLeadingUnderscores(right).split(seperator);
+            let first = true;
+            for (const list of [leftNames, rightNames]) {
+                for (const n of list) {
+                    names.set(first ? (first = false, n) : (n.slice(0, 1).toUpperCase() + n.slice(1)), true);
+                }
+            }
+            if (names.size > 5) {
+                // Combining >5 names just looks bad
+                return `arg${index}` as __String;
+            }
+            return escapeLeadingUnderscores(arrayFrom(names.keys()).join(seperator));
+        }
+
         function combineUnionParameters(left: Signature, right: Signature) {
             const longest = getParameterCount(left) >= getParameterCount(right) ? left : right;
             const shorter = longest === left ? right : left;
@@ -6825,8 +6853,9 @@ namespace ts {
                     unionParamType = createArrayType(unionParamType);
                 }
                 const isOptional = i > getMinArgumentCount(longest);
-                // TODO: Synthesize symbol name from input signatures
-                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), `arg${i}` as __String);
+                const leftName = tryGetNameAtPosition(left, i);
+                const rightName = tryGetNameAtPosition(right, i);
+                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), combinePartameterNames(i, leftName, rightName));
                 paramSymbol.type = unionParamType;
                 params[i] = paramSymbol;
             }
@@ -21202,22 +21231,47 @@ namespace ts {
             return tryGetTypeAtPosition(signature, pos) || anyType;
         }
 
-        function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
+        function tryGetAtXPositionWorker<T>(
+            signature: Signature,
+            pos: number,
+            symbolGetter: (symbol: Symbol) => T,
+            restTypeGetter: (type: Type, pos: number, paramCount: number) => T): T | undefined {
             const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
             if (pos < paramCount) {
-                return getTypeOfParameter(signature.parameters[pos]);
+                return symbolGetter(signature.parameters[pos]);
             }
             if (signature.hasRestParameter) {
                 const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                if (isTupleType(restType)) {
-                    if (pos - paramCount < getLengthOfTupleType(restType)) {
-                        return restType.typeArguments![pos - paramCount];
-                    }
-                    return getRestTypeOfTupleType(restType);
-                }
-                return getIndexTypeOfType(restType, IndexKind.Number);
+                return restTypeGetter(restType, pos, paramCount);
             }
             return undefined;
+        }
+
+        function getTupleTypeForArgumentAtPos(restType: Type, pos: number, paramCount: number) {
+            if (isTupleType(restType)) {
+                if (pos - paramCount < getLengthOfTupleType(restType)) {
+                    return restType.typeArguments![pos - paramCount];
+                }
+                return getRestTypeOfTupleType(restType);
+            }
+            return getIndexTypeOfType(restType, IndexKind.Number);
+        }
+
+        function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
+            return tryGetAtXPositionWorker(signature, pos, getTypeOfParameter, getTupleTypeForArgumentAtPos);
+        }
+
+        function getTupleParameterNameForArgumentAtPos(restType: Type, pos: number, paramCount: number): __String {
+            if (isTupleType(restType)) {
+                if (pos - paramCount < getLengthOfTupleType(restType) && restType.target.associatedNames) {
+                    return restType.target.associatedNames[pos - paramCount];
+                }
+            }
+            return `arg${pos}` as __String;
+        }
+
+        function tryGetNameAtPosition(signature: Signature, pos: number): __String | undefined {
+            return tryGetAtXPositionWorker(signature, pos, s => s.escapedName, getTupleParameterNameForArgumentAtPos);
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
