@@ -1054,6 +1054,7 @@ declare namespace ts {
     }
     type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
+    type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
     interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
@@ -3350,6 +3351,7 @@ declare namespace ts {
     function isObjectLiteralExpression(node: Node): node is ObjectLiteralExpression;
     function isPropertyAccessExpression(node: Node): node is PropertyAccessExpression;
     function isElementAccessExpression(node: Node): node is ElementAccessExpression;
+    function isAccessExpression(node: Node): node is AccessExpression;
     function isCallExpression(node: Node): node is CallExpression;
     function isNewExpression(node: Node): node is NewExpression;
     function isTaggedTemplateExpression(node: Node): node is TaggedTemplateExpression;
