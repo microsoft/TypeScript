@@ -5586,6 +5586,10 @@ namespace ts {
         return node.kind === SyntaxKind.ElementAccessExpression;
     }
 
+    export function isAccessExpression(node: Node): node is AccessExpression {
+        return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
+    }
+
     export function isCallExpression(node: Node): node is CallExpression {
         return node.kind === SyntaxKind.CallExpression;
     }

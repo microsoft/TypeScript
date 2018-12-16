@@ -4768,6 +4768,69 @@ namespace ts {
             return createAnonymousType(symbol, members, emptyArray, emptyArray, stringIndexInfo, numberIndexInfo);
         }
 
+        // Determine the control flow type associated with a destructuring declaration or assignment. The following
+        // forms of destructuring are possible:
+        //   let { x } = obj;  // BindingElement
+        //   let [ x ] = obj;  // BindingElement
+        //   { x } = obj;      // ShorthandPropertyAssignment
+        //   { x: v } = obj;   // PropertyAssignment
+        //   [ x ] = obj;      // Expression
+        // We construct a synthetic element access expression corresponding to 'obj.x' such that the control
+        // flow analyzer doesn't have to handle all the different syntactic forms.
+        function getFlowTypeOfDestructuring(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression, declaredType: Type) {
+            const reference = getSyntheticElementAccess(node);
+            return reference ? getFlowTypeOfReference(reference, declaredType) : declaredType;
+        }
+
+        function getSyntheticElementAccess(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression): ElementAccessExpression | undefined {
+            const parentAccess = getParentElementAccess(node);
+            if (parentAccess && parentAccess.flowNode) {
+                const propName = getDestructuringPropertyName(node);
+                if (propName) {
+                    const result = <ElementAccessExpression>createNode(SyntaxKind.ElementAccessExpression, node.pos, node.end);
+                    result.parent = node;
+                    result.expression = <LeftHandSideExpression>parentAccess;
+                    const literal = <StringLiteral>createNode(SyntaxKind.StringLiteral, node.pos, node.end);
+                    literal.parent = result;
+                    literal.text = propName;
+                    result.argumentExpression = literal;
+                    result.flowNode = parentAccess.flowNode;
+                    return result;
+                }
+            }
+        }
+
+        function getParentElementAccess(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression) {
+            const ancestor = node.parent.parent;
+            switch (ancestor.kind) {
+                case SyntaxKind.BindingElement:
+                case SyntaxKind.PropertyAssignment:
+                    return getSyntheticElementAccess(<BindingElement | PropertyAssignment>ancestor);
+                case SyntaxKind.ArrayLiteralExpression:
+                    return getSyntheticElementAccess(<Expression>node.parent);
+                case SyntaxKind.VariableDeclaration:
+                    return (<VariableDeclaration>ancestor).initializer;
+                case SyntaxKind.BinaryExpression:
+                    return (<BinaryExpression>ancestor).right;
+            }
+        }
+
+        function getDestructuringPropertyName(node: BindingElement | PropertyAssignment | ShorthandPropertyAssignment | Expression) {
+            const parent = node.parent;
+            if (node.kind === SyntaxKind.BindingElement && parent.kind === SyntaxKind.ObjectBindingPattern) {
+                return getLiteralPropertyNameText((<BindingElement>node).propertyName || <Identifier>(<BindingElement>node).name);
+            }
+            if (node.kind === SyntaxKind.PropertyAssignment || node.kind === SyntaxKind.ShorthandPropertyAssignment) {
+                return getLiteralPropertyNameText((<PropertyAssignment | ShorthandPropertyAssignment>node).name);
+            }
+            return "" + (<NodeArray<Node>>(<BindingPattern | ArrayLiteralExpression>parent).elements).indexOf(node);
+        }
+
+        function getLiteralPropertyNameText(name: PropertyName) {
+            const type = getLiteralTypeFromPropertyName(name);
+            return type.flags & (TypeFlags.StringLiteral | TypeFlags.NumberLiteral) ? "" + (<LiteralType>type).value : undefined;
+        }
+
         /** Return the inferred type for a binding element */
         function getTypeForBindingElement(declaration: BindingElement): Type | undefined {
             const pattern = declaration.parent;
@@ -4808,9 +4871,9 @@ namespace ts {
                 else {
                     // Use explicitly specified property name ({ p: xxx } form), or otherwise the implied name ({ p } form)
                     const name = declaration.propertyName || <Identifier>declaration.name;
-                    const exprType = getLiteralTypeFromPropertyName(name);
-                    const declaredType = checkIndexedAccessIndexType(getIndexedAccessType(parentType, exprType, name), name);
-                    type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
+                    const indexType = getLiteralTypeFromPropertyName(name);
+                    const declaredType = getConstraintForLocation(getIndexedAccessType(parentType, indexType, name), declaration.name);
+                    type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
             }
             else {
@@ -4829,8 +4892,8 @@ namespace ts {
                 }
                 else if (isArrayLikeType(parentType)) {
                     const indexType = getLiteralType(index);
-                    const declaredType = getIndexedAccessType(parentType, indexType, createSyntheticExpression(declaration.name, indexType));
-                    type = getFlowTypeOfReference(declaration, getConstraintForLocation(declaredType, declaration.name));
+                    const declaredType = getConstraintForLocation(getIndexedAccessType(parentType, indexType, declaration.name), declaration.name);
+                    type = getFlowTypeOfDestructuring(declaration, declaredType);
                 }
                 else {
                     type = elementType;
@@ -9515,16 +9578,16 @@ namespace ts {
             return false;
         }
 
-        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression | undefined, cacheSymbol: boolean, missingType: Type) {
+        function getPropertyTypeForIndexType(objectType: Type, indexType: Type, accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression | undefined, cacheSymbol: boolean, missingType: Type) {
             const accessExpression = accessNode && accessNode.kind === SyntaxKind.ElementAccessExpression ? accessNode : undefined;
-            const propName = isTypeUsableAsLateBoundName(indexType)
-                ? getLateBoundNameFromType(indexType)
-                : accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false)
-                    ? getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name))
-                    : accessNode && isPropertyName(accessNode)
+            const propName = isTypeUsableAsLateBoundName(indexType) ?
+                getLateBoundNameFromType(indexType) :
+                accessExpression && checkThatExpressionIsProperSymbolReference(accessExpression.argumentExpression, indexType, /*reportError*/ false) ?
+                    getPropertyNameForKnownSymbolName(idText((<PropertyAccessExpression>accessExpression.argumentExpression).name)) :
+                    accessNode && isPropertyName(accessNode) ?
                         // late bound names are handled in the first branch, so here we only need to handle normal names
-                        ? getPropertyNameForPropertyNameNode(accessNode)
-                        : undefined;
+                        getPropertyNameForPropertyNameNode(accessNode) :
+                        undefined;
             if (propName !== undefined) {
                 const prop = getPropertyOfType(objectType, propName);
                 if (prop) {
@@ -9618,7 +9681,7 @@ namespace ts {
             return missingType;
         }
 
-        function getIndexNodeForAccessExpression(accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression) {
+        function getIndexNodeForAccessExpression(accessNode: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression) {
             return accessNode.kind === SyntaxKind.ElementAccessExpression
             ? accessNode.argumentExpression
             : accessNode.kind === SyntaxKind.IndexedAccessType
@@ -9687,7 +9750,7 @@ namespace ts {
             return type.simplified = type;
         }
 
-        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | SyntheticExpression, missingType = accessNode ? errorType : unknownType): Type {
+        function getIndexedAccessType(objectType: Type, indexType: Type, accessNode?: ElementAccessExpression | IndexedAccessTypeNode | PropertyName | BindingName | SyntheticExpression, missingType = accessNode ? errorType : unknownType): Type {
             if (objectType === wildcardType || indexType === wildcardType) {
                 return wildcardType;
             }
@@ -14561,47 +14624,21 @@ namespace ts {
         // occurring in an apparent type position with '@' because the control flow type
         // of such nodes may be based on the apparent type instead of the declared type.
         function getFlowCacheKey(node: Node): string | undefined {
-            if (node.kind === SyntaxKind.Identifier) {
-                const symbol = getResolvedSymbol(<Identifier>node);
-                return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
-            }
-            if (node.kind === SyntaxKind.ThisKeyword) {
-                return "0";
-            }
-            if (node.kind === SyntaxKind.PropertyAccessExpression) {
-                const key = getFlowCacheKey((<PropertyAccessExpression>node).expression);
-                return key && key + "." + idText((<PropertyAccessExpression>node).name);
-            }
-            if (node.kind === SyntaxKind.BindingElement) {
-                const container = (node as BindingElement).parent.parent;
-                const key = container.kind === SyntaxKind.BindingElement ? getFlowCacheKey(container) : (container.initializer && getFlowCacheKey(container.initializer));
-                const text = getBindingElementNameText(node as BindingElement);
-                const result = key && text && (key + "." + text);
-                return result;
+            switch (node.kind) {
+                case SyntaxKind.Identifier:
+                    const symbol = getResolvedSymbol(<Identifier>node);
+                    return symbol !== unknownSymbol ? (isConstraintPosition(node) ? "@" : "") + getSymbolId(symbol) : undefined;
+                case SyntaxKind.ThisKeyword:
+                    return "0";
+                case SyntaxKind.PropertyAccessExpression:
+                case SyntaxKind.ElementAccessExpression:
+                    const propName = getAccessedPropertyName(<AccessExpression>node);
+                    if (propName) {
+                        const key = getFlowCacheKey((<AccessExpression>node).expression);
+                        return key && key + "." + propName;
+                    }
             }
             return undefined;
-        }
-
-        function getBindingElementNameText(element: BindingElement): string | undefined {
-            const parent = element.parent;
-            if (parent.kind === SyntaxKind.ObjectBindingPattern) {
-                const name = element.propertyName || element.name;
-                switch (name.kind) {
-                    case SyntaxKind.Identifier:
-                        return idText(name);
-                    case SyntaxKind.ComputedPropertyName:
-                        return isStringOrNumericLiteralLike(name.expression) ? name.expression.text : undefined;
-                    case SyntaxKind.StringLiteral:
-                    case SyntaxKind.NumericLiteral:
-                        return name.text;
-                    default:
-                        // Per types, array and object binding patterns remain, however they should never be present if propertyName is not defined
-                        Debug.fail("Unexpected name kind for binding element name");
-                }
-            }
-            else {
-                 return "" + parent.elements.indexOf(element);
-            }
         }
 
         function isMatchingReference(source: Node, target: Node): boolean {
@@ -14616,49 +14653,27 @@ namespace ts {
                     return target.kind === SyntaxKind.SuperKeyword;
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
-                    return (isPropertyAccessExpression(target) || isElementAccessExpression(target)) &&
-                        getAccessedPropertyName(source as PropertyAccessExpression | ElementAccessExpression) === getAccessedPropertyName(target) &&
-                        isMatchingReference((source as PropertyAccessExpression | ElementAccessExpression).expression, target.expression);
-                case SyntaxKind.BindingElement:
-                    if ((isPropertyAccessExpression(target) || isElementAccessExpression(target)) && getBindingElementNameText(<BindingElement>source) === getAccessedPropertyName(target)) {
-                        const ancestor = source.parent.parent;
-                        if (ancestor.kind === SyntaxKind.BindingElement) {
-                            return isMatchingReference(ancestor, (<PropertyAccessExpression>target).expression);
-                        }
-                        if (ancestor.kind === SyntaxKind.VariableDeclaration) {
-                            const initializer = (<VariableDeclaration>ancestor).initializer;
-                            return !!initializer && isMatchingReference(initializer, (<PropertyAccessExpression>target).expression);
-                        }
-                    }
+                    return isAccessExpression(target) &&
+                        getAccessedPropertyName(<AccessExpression>source) === getAccessedPropertyName(target) &&
+                        isMatchingReference((<AccessExpression>source).expression, target.expression);
             }
             return false;
         }
 
-        function getAccessedPropertyName(access: PropertyAccessExpression | ElementAccessExpression): __String | undefined {
-            return isPropertyAccessExpression(access) ? access.name.escapedText :
+        function getAccessedPropertyName(access: AccessExpression): __String | undefined {
+            return access.kind === SyntaxKind.PropertyAccessExpression ? access.name.escapedText :
                 isStringLiteral(access.argumentExpression) || isNumericLiteral(access.argumentExpression) ? escapeLeadingUnderscores(access.argumentExpression.text) :
                 undefined;
         }
 
-        function getReferenceParent(source: Node) {
-            if (source.kind === SyntaxKind.PropertyAccessExpression) {
-                return (<PropertyAccessExpression>source).expression;
-            }
-            if (source.kind === SyntaxKind.BindingElement) {
-                const ancestor = source.parent.parent;
-                return ancestor.kind === SyntaxKind.VariableDeclaration ? (<VariableDeclaration>ancestor).initializer : ancestor;
-            }
-            return undefined;
-        }
-
         function containsMatchingReference(source: Node, target: Node) {
-            let parent = getReferenceParent(source);
-            while (parent) {
-                if (isMatchingReference(parent, target)) {
+            while (isAccessExpression(source)) {
+                source = source.expression;
+                if (isMatchingReference(source, target)) {
                     return true;
                 }
-                parent = getReferenceParent(parent);
             }
+            return false;
         }
 
         // Return true if target is a property access xxx.yyy, source is a property access xxx.zzz, the declared
@@ -14666,18 +14681,21 @@ namespace ts {
         // a possible discriminant if its type differs in the constituents of containing union type, and if every
         // choice is a unit type or a union of unit types.
         function containsMatchingReferenceDiscriminant(source: Node, target: Node) {
-            return target.kind === SyntaxKind.PropertyAccessExpression &&
-                containsMatchingReference(source, (<PropertyAccessExpression>target).expression) &&
-                isDiscriminantProperty(getDeclaredTypeOfReference((<PropertyAccessExpression>target).expression), (<PropertyAccessExpression>target).name.escapedText);
+            return isAccessExpression(target) &&
+                containsMatchingReference(source, target.expression) &&
+                isDiscriminantProperty(getDeclaredTypeOfReference(target.expression), getAccessedPropertyName(target));
         }
 
         function getDeclaredTypeOfReference(expr: Node): Type | undefined {
             if (expr.kind === SyntaxKind.Identifier) {
                 return getTypeOfSymbol(getResolvedSymbol(<Identifier>expr));
             }
-            if (expr.kind === SyntaxKind.PropertyAccessExpression) {
-                const type = getDeclaredTypeOfReference((<PropertyAccessExpression>expr).expression);
-                return type && getTypeOfPropertyOfType(type, (<PropertyAccessExpression>expr).name.escapedText);
+            if (isAccessExpression(expr)) {
+                const type = getDeclaredTypeOfReference(expr.expression);
+                if (type) {
+                    const propName = getAccessedPropertyName(expr);
+                    return propName && getTypeOfPropertyOfType(type, propName);
+                }
             }
             return undefined;
         }
@@ -14696,8 +14714,8 @@ namespace ts {
             return false;
         }
 
-        function isDiscriminantProperty(type: Type | undefined, name: __String) {
-            if (type && type.flags & TypeFlags.Union) {
+        function isDiscriminantProperty(type: Type | undefined, name: __String | undefined) {
+            if (type && name && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
@@ -15503,7 +15521,7 @@ namespace ts {
                 else if (isMatchingReferenceDiscriminant(expr, type)) {
                     type = narrowTypeByDiscriminant(
                         type,
-                        expr as PropertyAccessExpression | ElementAccessExpression,
+                        expr as AccessExpression,
                         t => narrowTypeBySwitchOnDiscriminant(t, flow.switchStatement, flow.clauseStart, flow.clauseEnd));
                 }
                 else if (expr.kind === SyntaxKind.TypeOfExpression && isMatchingReference(reference, (expr as TypeOfExpression).expression)) {
@@ -15623,19 +15641,17 @@ namespace ts {
             }
 
             function isMatchingReferenceDiscriminant(expr: Expression, computedType: Type) {
-                if (!(computedType.flags & TypeFlags.Union) ||
-                    expr.kind !== SyntaxKind.PropertyAccessExpression && expr.kind !== SyntaxKind.ElementAccessExpression) {
+                if (!(computedType.flags & TypeFlags.Union) || !isAccessExpression(expr)) {
                     return false;
                 }
-                const access = expr as PropertyAccessExpression | ElementAccessExpression;
-                const name = getAccessedPropertyName(access);
+                const name = getAccessedPropertyName(expr);
                 if (!name) {
                     return false;
                 }
-                return isMatchingReference(reference, access.expression) && isDiscriminantProperty(computedType, name);
+                return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
             }
 
-            function narrowTypeByDiscriminant(type: Type, access: PropertyAccessExpression | ElementAccessExpression, narrowType: (t: Type) => Type): Type {
+            function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
                 if (!propName) {
                     return type;
@@ -15650,7 +15666,7 @@ namespace ts {
                     return getTypeWithFacts(type, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy);
                 }
                 if (isMatchingReferenceDiscriminant(expr, declaredType)) {
-                    return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
+                    return narrowTypeByDiscriminant(type, <AccessExpression>expr, t => getTypeWithFacts(t, assumeTrue ? TypeFacts.Truthy : TypeFacts.Falsy));
                 }
                 if (containsMatchingReferenceDiscriminant(reference, expr)) {
                     return declaredType;
@@ -15701,10 +15717,10 @@ namespace ts {
                             return narrowTypeByEquality(type, operator, left, assumeTrue);
                         }
                         if (isMatchingReferenceDiscriminant(left, declaredType)) {
-                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
+                            return narrowTypeByDiscriminant(type, <AccessExpression>left, t => narrowTypeByEquality(t, operator, right, assumeTrue));
                         }
                         if (isMatchingReferenceDiscriminant(right, declaredType)) {
-                            return narrowTypeByDiscriminant(type, <PropertyAccessExpression | ElementAccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
+                            return narrowTypeByDiscriminant(type, <AccessExpression>right, t => narrowTypeByEquality(t, operator, left, assumeTrue));
                         }
                         if (containsMatchingReferenceDiscriminant(reference, left) || containsMatchingReferenceDiscriminant(reference, right)) {
                             return declaredType;
@@ -16009,9 +16025,8 @@ namespace ts {
                 }
                 else {
                     const invokedExpression = skipParentheses(callExpression.expression);
-                    if (invokedExpression.kind === SyntaxKind.ElementAccessExpression || invokedExpression.kind === SyntaxKind.PropertyAccessExpression) {
-                        const accessExpression = invokedExpression as ElementAccessExpression | PropertyAccessExpression;
-                        const possibleReference = skipParentheses(accessExpression.expression);
+                    if (isAccessExpression(invokedExpression)) {
+                        const possibleReference = skipParentheses(invokedExpression.expression);
                         if (isMatchingReference(reference, possibleReference)) {
                             return getNarrowedType(type, predicate.type, assumeTrue, isTypeSubtypeOf);
                         }
@@ -16954,7 +16969,7 @@ namespace ts {
                 if (parent.kind === SyntaxKind.BinaryExpression && (<BinaryExpression>parent).operatorToken.kind === SyntaxKind.EqualsToken) {
                     const target = (<BinaryExpression>parent).left;
                     if (target.kind === SyntaxKind.PropertyAccessExpression || target.kind === SyntaxKind.ElementAccessExpression) {
-                        const { expression } = target as PropertyAccessExpression | ElementAccessExpression;
+                        const { expression } = target as AccessExpression;
                         // Don't contextually type `this` as `exports` in `exports.Point = function(x, y) { this.x = x; this.y = y; }`
                         if (inJs && isIdentifier(expression)) {
                             const sourceFile = getSourceFileOfNode(parent);
@@ -19703,7 +19718,7 @@ namespace ts {
             if (node.kind === SyntaxKind.CallExpression) {
                 const callee = skipOuterExpressions(node.expression);
                 if (callee.kind === SyntaxKind.PropertyAccessExpression || callee.kind === SyntaxKind.ElementAccessExpression) {
-                    return (callee as PropertyAccessExpression | ElementAccessExpression).expression;
+                    return (callee as AccessExpression).expression;
                 }
             }
         }
@@ -21735,7 +21750,7 @@ namespace ts {
                 // Allow assignments to readonly properties within constructors of the same class declaration.
                 if (symbol.flags & SymbolFlags.Property &&
                     (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) &&
-                    (expr as PropertyAccessExpression | ElementAccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
+                    (expr as AccessExpression).expression.kind === SyntaxKind.ThisKeyword) {
                     // Look for if this is the constructor for the class that `symbol` is a property of.
                     const func = getContainingFunction(expr);
                     if (!(func && func.kind === SyntaxKind.Constructor)) {
@@ -21753,7 +21768,7 @@ namespace ts {
 
         function isReferenceThroughNamespaceImport(expr: Expression): boolean {
             if (expr.kind === SyntaxKind.PropertyAccessExpression || expr.kind === SyntaxKind.ElementAccessExpression) {
-                const node = skipParentheses((expr as PropertyAccessExpression | ElementAccessExpression).expression);
+                const node = skipParentheses((expr as AccessExpression).expression);
                 if (node.kind === SyntaxKind.Identifier) {
                     const symbol = getNodeLinks(node).resolvedSymbol!;
                     if (symbol.flags & SymbolFlags.Alias) {
@@ -22011,7 +22026,8 @@ namespace ts {
                     }
                 }
                 const exprType = getLiteralTypeFromPropertyName(name);
-                const type = getIndexedAccessType(objectLiteralType, exprType, name);
+                const elementType = getIndexedAccessType(objectLiteralType, exprType, name);
+                const type = getFlowTypeOfDestructuring(property, elementType);
                 return checkDestructuringAssignment(property.kind === SyntaxKind.ShorthandPropertyAssignment ? property : property.initializer, type);
             }
             else if (property.kind === SyntaxKind.SpreadAssignment) {
@@ -22055,10 +22071,14 @@ namespace ts {
             if (element.kind !== SyntaxKind.OmittedExpression) {
                 if (element.kind !== SyntaxKind.SpreadElement) {
                     const indexType = getLiteralType(elementIndex);
-                    const type = isArrayLikeType(sourceType) ?
-                        getIndexedAccessType(sourceType, indexType, createSyntheticExpression(element, indexType)) :
-                        elementType;
-                    return checkDestructuringAssignment(element, type, checkMode);
+                    if (isArrayLikeType(sourceType)) {
+                        // We create a synthetic expression so that getIndexedAccessType doesn't get confused
+                        // when the element is a SyntaxKind.ElementAccessExpression.
+                        const elementType = getIndexedAccessType(sourceType, indexType, createSyntheticExpression(element, indexType));
+                        const type = getFlowTypeOfDestructuring(element, elementType);
+                        return checkDestructuringAssignment(element, type, checkMode);
+                    }
+                    return checkDestructuringAssignment(element, elementType, checkMode);
                 }
                 if (elementIndex < elements.length - 1) {
                     error(element, Diagnostics.A_rest_element_must_be_last_in_a_destructuring_pattern);
@@ -26912,7 +26932,7 @@ namespace ts {
                         return nodeIsMissing(expr) ? 0 : evaluateEnumMember(expr, getSymbolOfNode(member.parent), identifier.escapedText);
                     case SyntaxKind.ElementAccessExpression:
                     case SyntaxKind.PropertyAccessExpression:
-                        const ex = <PropertyAccessExpression | ElementAccessExpression>expr;
+                        const ex = <AccessExpression>expr;
                         if (isConstantMemberAccess(ex)) {
                             const type = getTypeOfExpression(ex.expression);
                             if (type.symbol && type.symbol.flags & SymbolFlags.Enum) {
@@ -28886,7 +28906,7 @@ namespace ts {
             return getNodeLinks(node).enumMemberValue;
         }
 
-        function canHaveConstantValue(node: Node): node is EnumMember | PropertyAccessExpression | ElementAccessExpression {
+        function canHaveConstantValue(node: Node): node is EnumMember | AccessExpression {
             switch (node.kind) {
                 case SyntaxKind.EnumMember:
                 case SyntaxKind.PropertyAccessExpression:
@@ -28896,7 +28916,7 @@ namespace ts {
             return false;
         }
 
-        function getConstantValue(node: EnumMember | PropertyAccessExpression | ElementAccessExpression): string | number | undefined {
+        function getConstantValue(node: EnumMember | AccessExpression): string | number | undefined {
             if (node.kind === SyntaxKind.EnumMember) {
                 return getEnumMemberValue(node);
             }
