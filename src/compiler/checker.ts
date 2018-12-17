@@ -14633,7 +14633,7 @@ namespace ts {
                 case SyntaxKind.PropertyAccessExpression:
                 case SyntaxKind.ElementAccessExpression:
                     const propName = getAccessedPropertyName(<AccessExpression>node);
-                    if (propName) {
+                    if (propName !== undefined) {
                         const key = getFlowCacheKey((<AccessExpression>node).expression);
                         return key && key + "." + propName;
                     }
@@ -14694,7 +14694,7 @@ namespace ts {
                 const type = getDeclaredTypeOfReference(expr.expression);
                 if (type) {
                     const propName = getAccessedPropertyName(expr);
-                    return propName && getTypeOfPropertyOfType(type, propName);
+                    return propName !== undefined ? getTypeOfPropertyOfType(type, propName) : undefined;
                 }
             }
             return undefined;
@@ -15645,7 +15645,7 @@ namespace ts {
                     return false;
                 }
                 const name = getAccessedPropertyName(expr);
-                if (!name) {
+                if (name === undefined) {
                     return false;
                 }
                 return isMatchingReference(reference, expr.expression) && isDiscriminantProperty(computedType, name);
@@ -15653,7 +15653,7 @@ namespace ts {
 
             function narrowTypeByDiscriminant(type: Type, access: AccessExpression, narrowType: (t: Type) => Type): Type {
                 const propName = getAccessedPropertyName(access);
-                if (!propName) {
+                if (propName === undefined) {
                     return type;
                 }
                 const propType = getTypeOfPropertyOfType(type, propName);
