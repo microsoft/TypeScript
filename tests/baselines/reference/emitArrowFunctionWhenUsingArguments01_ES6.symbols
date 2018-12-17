@@ -4,7 +4,6 @@ var a = () => {
 
     var arg = arguments[0];  // error
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 1, 7))
->arguments : Symbol(arguments)
 }
 
 var b = function () {
@@ -38,7 +37,6 @@ foo(() => {
 
     var arg = arguments[0];  // error
 >arg : Symbol(arg, Decl(emitArrowFunctionWhenUsingArguments01_ES6.ts, 18, 7))
->arguments : Symbol(arguments)
 
 });
 

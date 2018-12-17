@@ -15,4 +15,4 @@ var x;
 function f() {
     x++;
 }
-`, /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 2);
+`, /*includeWhiteSpace*/ undefined, /*errorCode*/ undefined, 0);

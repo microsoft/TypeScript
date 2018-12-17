@@ -1,0 +1,69 @@
+=== tests/cases/compiler/reactSFCAndFunctionResolvable.tsx ===
+/// <reference path="react16.d.ts" />
+
+import * as React from 'react';
+>React : typeof React
+
+declare const Radio: (props: {}) => React.ReactElement<{}>;
+>Radio : (props: {}) => React.ReactElement<{}>
+>props : {}
+>React : any
+
+declare const OtherRadio: () => React.ReactElement<{}>;
+>OtherRadio : () => React.ReactElement<{}>
+>React : any
+
+declare const Checkbox: React.SFC;
+>Checkbox : React.StatelessComponent<{}>
+>React : any
+
+declare const condition1: boolean;
+>condition1 : boolean
+
+declare const condition2: boolean;
+>condition2 : boolean
+
+declare const condition3: boolean;
+>condition3 : boolean
+
+const RandomComponent: React.SFC = () => {
+>RandomComponent : React.StatelessComponent<{}>
+>React : any
+>() => {  const Component =    condition1      ? Radio      : Checkbox;  const OtherComponent =    condition2      ? OtherRadio      : Checkbox;  return condition1 ? <Component /> : <OtherComponent />;} : () => JSX.Element
+
+  const Component =
+>Component : React.StatelessComponent<{}> | ((props: {}) => React.ReactElement<{}>)
+
+    condition1
+>condition1      ? Radio      : Checkbox : React.StatelessComponent<{}> | ((props: {}) => React.ReactElement<{}>)
+>condition1 : boolean
+
+      ? Radio
+>Radio : (props: {}) => React.ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : React.StatelessComponent<{}>
+
+  const OtherComponent =
+>OtherComponent : React.StatelessComponent<{}> | (() => React.ReactElement<{}>)
+
+    condition2
+>condition2      ? OtherRadio      : Checkbox : React.StatelessComponent<{}> | (() => React.ReactElement<{}>)
+>condition2 : boolean
+
+      ? OtherRadio
+>OtherRadio : () => React.ReactElement<{}>
+
+      : Checkbox;
+>Checkbox : React.StatelessComponent<{}>
+
+  return condition1 ? <Component /> : <OtherComponent />;
+>condition1 ? <Component /> : <OtherComponent /> : JSX.Element
+>condition1 : boolean
+><Component /> : JSX.Element
+>Component : React.StatelessComponent<{}> | ((props: {}) => React.ReactElement<{}>)
+><OtherComponent /> : JSX.Element
+>OtherComponent : React.StatelessComponent<{}> | (() => React.ReactElement<{}>)
+
+};
+

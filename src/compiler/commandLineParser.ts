@@ -44,7 +44,8 @@ namespace ts {
         ["esnext.array", "lib.esnext.array.d.ts"],
         ["esnext.symbol", "lib.esnext.symbol.d.ts"],
         ["esnext.asynciterable", "lib.esnext.asynciterable.d.ts"],
-        ["esnext.intl", "lib.esnext.intl.d.ts"]
+        ["esnext.intl", "lib.esnext.intl.d.ts"],
+        ["esnext.bigint", "lib.esnext.bigint.d.ts"]
     ];
 
     /**
@@ -104,12 +105,31 @@ namespace ts {
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Print_names_of_generated_files_part_of_the_compilation
         },
+        {
+            name: "pretty",
+            type: "boolean",
+            showInSimplifiedHelpView: true,
+            category: Diagnostics.Command_line_Options,
+            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
+        },
 
         {
             name: "traceResolution",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.Enable_tracing_of_the_name_resolution_process
+        },
+        {
+            name: "diagnostics",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Show_diagnostic_information
+        },
+        {
+            name: "extendedDiagnostics",
+            type: "boolean",
+            category: Diagnostics.Advanced_Options,
+            description: Diagnostics.Show_verbose_diagnostic_information
         },
     ];
 
@@ -156,13 +176,6 @@ namespace ts {
             showInSimplifiedHelpView: true,
             category: Diagnostics.Command_line_Options,
             description: Diagnostics.Build_one_or_more_projects_and_their_dependencies_if_out_of_date
-        },
-        {
-            name: "pretty",
-            type: "boolean",
-            showInSimplifiedHelpView: true,
-            category: Diagnostics.Command_line_Options,
-            description: Diagnostics.Stylize_errors_and_messages_using_color_and_context_experimental
         },
         {
             name: "showConfig",
@@ -592,18 +605,6 @@ namespace ts {
             description: Diagnostics.Specify_the_JSX_factory_function_to_use_when_targeting_react_JSX_emit_e_g_React_createElement_or_h
         },
         {
-            name: "diagnostics",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Show_diagnostic_information
-        },
-        {
-            name: "extendedDiagnostics",
-            type: "boolean",
-            category: Diagnostics.Advanced_Options,
-            description: Diagnostics.Show_verbose_diagnostic_information
-        },
-        {
             name: "resolveJsonModule",
             type: "boolean",
             category: Diagnostics.Advanced_Options,
@@ -770,7 +771,7 @@ namespace ts {
         {
             name: "maxNodeModuleJsDepth",
             type: "number",
-            // TODO: GH#27108 affectsModuleResolution: true,
+            affectsModuleResolution: true,
             category: Diagnostics.Advanced_Options,
             description: Diagnostics.The_maximum_dependency_depth_to_search_under_node_modules_and_load_JavaScript_files
         },
@@ -1672,13 +1673,13 @@ namespace ts {
         const files = map(
             filter(
                 configParseResult.fileNames,
-                !configParseResult.configFileSpecs ? _ => false : matchesSpecs(
+                (!configParseResult.configFileSpecs || !configParseResult.configFileSpecs.validatedIncludeSpecs) ? _ => true : matchesSpecs(
                     configFileName,
                     configParseResult.configFileSpecs.validatedIncludeSpecs,
                     configParseResult.configFileSpecs.validatedExcludeSpecs
                 )
             ),
-            f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), f, getCanonicalFileName)
+            f => getRelativePathFromFile(getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), getNormalizedAbsolutePath(f, host.getCurrentDirectory()), getCanonicalFileName)
         );
         const optionMap = serializeCompilerOptions(configParseResult.options, { configFilePath: getNormalizedAbsolutePath(configFileName, host.getCurrentDirectory()), useCaseSensitiveFileNames: host.useCaseSensitiveFileNames });
         const config = {
@@ -1692,6 +1693,8 @@ namespace ts {
                 listFiles: undefined,
                 listEmittedFiles: undefined,
                 project: undefined,
+                build: undefined,
+                version: undefined,
             },
             references: map(configParseResult.projectReferences, r => ({ ...r, path: r.originalPath, originalPath: undefined })),
             files: length(files) ? files : undefined,
@@ -1712,24 +1715,24 @@ namespace ts {
     }
 
     function matchesSpecs(path: string, includeSpecs: ReadonlyArray<string> | undefined, excludeSpecs: ReadonlyArray<string> | undefined): (path: string) => boolean {
-        if (!includeSpecs) return _ => false;
+        if (!includeSpecs) return _ => true;
         const patterns = getFileMatcherPatterns(path, excludeSpecs, includeSpecs, sys.useCaseSensitiveFileNames, sys.getCurrentDirectory());
         const excludeRe = patterns.excludePattern && getRegexFromPattern(patterns.excludePattern, sys.useCaseSensitiveFileNames);
         const includeRe = patterns.includeFilePattern && getRegexFromPattern(patterns.includeFilePattern, sys.useCaseSensitiveFileNames);
         if (includeRe) {
             if (excludeRe) {
-                return path => includeRe.test(path) && !excludeRe.test(path);
+                return path => !(includeRe.test(path) && !excludeRe.test(path));
             }
-            return path => includeRe.test(path);
+            return path => !includeRe.test(path);
         }
         if (excludeRe) {
-            return path => !excludeRe.test(path);
+            return path => excludeRe.test(path);
         }
-        return _ => false;
+        return _ => true;
     }
 
     function getCustomTypeMapOfCommandLineOption(optionDefinition: CommandLineOption): Map<string | number> | undefined {
-        if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean") {
+        if (optionDefinition.type === "string" || optionDefinition.type === "number" || optionDefinition.type === "boolean" || optionDefinition.type === "object") {
             // this is of a type CommandLineOptionOfPrimitiveType
             return undefined;
         }
@@ -1892,7 +1895,7 @@ namespace ts {
             }
             result.push(`}`);
 
-            return result.join(newLine);
+            return result.join(newLine) + newLine;
         }
     }
 
@@ -2805,7 +2808,7 @@ namespace ts {
     }
 
     /**
-     * Produces a cleaned version of compiler options with personally identifiying info (aka, paths) removed.
+     * Produces a cleaned version of compiler options with personally identifying info (aka, paths) removed.
      * Also converts enum values back to strings.
      */
     /* @internal */

@@ -11,17 +11,13 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(47,5): error TS2322: Type '
 tests/cases/conformance/types/mapped/mappedTypes6.ts(56,5): error TS2322: Type '{}' is not assignable to type 'Denullified<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(57,5): error TS2322: Type '{}' is not assignable to type 'Required<T>'.
 tests/cases/conformance/types/mapped/mappedTypes6.ts(58,5): error TS2322: Type '{}' is not assignable to type 'T'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2322: Type '{ a: number; }' is not assignable to type 'Foo'.
-  Property 'b' is missing in type '{ a: number; }'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2322: Type '{ a: number; }' is not assignable to type 'Required<Foo>'.
-  Property 'b' is missing in type '{ a: number; }'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Required<Foo>'.
-  Property 'c' is missing in type '{ a: number; b: number; }'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Required<Foo>'.
-  Property 'd' is missing in type '{ a: number; b: number; c: number; }'.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
-tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(92,1): error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(104,1): error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(105,1): error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
+tests/cases/conformance/types/mapped/mappedTypes6.ts(106,1): error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(116,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(119,4): error TS2540: Cannot assign to 'a' because it is a read-only property.
+tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Cannot assign to 'b' because it is a read-only property.
 
 
 ==== tests/cases/conformance/types/mapped/mappedTypes6.ts (19 errors) ====
@@ -143,8 +139,8 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     
     x1 = { a: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type 'Foo'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2741: Property 'b' is missing in type '{ a: number; }' but required in type 'Foo'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:80:5: 'b' is declared here.
     x1 = { a: 1, b: 1 };
     x1 = { a: 1, b: 1, c: 1 };
     x1 = { a: 1, b: 1, c: 1, d: 1 };
@@ -158,16 +154,14 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     
     x2 = { a: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2739: Type '{ a: number; }' is missing the following properties from type 'Required<Foo>': b, c, d
     x2 = { a: 1, b: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; b: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Property 'c' is missing in type '{ a: number; b: number; }'.
+!!! error TS2739: Type '{ a: number; b: number; }' is missing the following properties from type 'Required<Foo>': c, d
     x2 = { a: 1, b: 1, c: 1 };  // Error
     ~~
-!!! error TS2322: Type '{ a: number; b: number; c: number; }' is not assignable to type 'Required<Foo>'.
-!!! error TS2322:   Property 'd' is missing in type '{ a: number; b: number; c: number; }'.
+!!! error TS2741: Property 'd' is missing in type '{ a: number; b: number; c: number; }' but required in type 'Required<Foo>'.
+!!! related TS2728 tests/cases/conformance/types/mapped/mappedTypes6.ts:82:5: 'd' is declared here.
     x2 = { a: 1, b: 1, c: 1, d: 1 };
     
     type Bar = {
@@ -179,15 +173,15 @@ tests/cases/conformance/types/mapped/mappedTypes6.ts(120,4): error TS2540: Canno
     x3.a = 1;
     x3.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x4: Readonly<Bar>;
     x4.a = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'a' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'a' because it is a read-only property.
     x4.b = 1;  // Error
        ~
-!!! error TS2540: Cannot assign to 'b' because it is a constant or a read-only property.
+!!! error TS2540: Cannot assign to 'b' because it is a read-only property.
     
     declare let x5: Readwrite<Bar>;
     x5.a = 1;

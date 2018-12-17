@@ -1,6 +1,5 @@
 tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): error TS2413: 'number' index type '{}' is not assignable to 'string' index type '{ a: any; }'.
-  Type '{}' is not assignable to type '{ a: any; }'.
-    Property 'a' is missing in type '{}'.
+  Property 'a' is missing in type '{}' but required in type '{ a: any; }'.
 
 
 ==== tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts (1 errors) ====
@@ -24,8 +23,8 @@ tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts(18,11): e
     interface E extends A, D { } // error
               ~
 !!! error TS2413: 'number' index type '{}' is not assignable to 'string' index type '{ a: any; }'.
-!!! error TS2413:   Type '{}' is not assignable to type '{ a: any; }'.
-!!! error TS2413:     Property 'a' is missing in type '{}'.
+!!! error TS2413:   Property 'a' is missing in type '{}' but required in type '{ a: any; }'.
+!!! related TS2728 tests/cases/compiler/inheritedStringIndexersFromDifferentBaseTypes2.ts:4:9: 'a' is declared here.
     
     interface F extends A, D {
         [s: number]: {

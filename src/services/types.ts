@@ -85,12 +85,12 @@ namespace ts {
         getPositionOfLineAndCharacter(line: number, character: number): number;
         update(newText: string, textChangeRange: TextChangeRange): SourceFile;
 
-        /* @internal */ sourceMapper?: sourcemaps.SourceMapper;
+        /* @internal */ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceFileLike {
         getLineAndCharacterOfPosition(pos: number): LineAndCharacter;
-        /*@internal*/ sourceMapper?: sourcemaps.SourceMapper;
+        /*@internal*/ sourceMapper?: DocumentPositionMapper;
     }
 
     export interface SourceMapSource {
@@ -237,6 +237,8 @@ namespace ts {
     /* @internal */
     export const emptyOptions = {};
 
+    export type WithMetadata<T> = T & { metadata?: unknown; };
+
     //
     // Public services of a language service instance associated
     // with a language service host instance
@@ -267,7 +269,7 @@ namespace ts {
         getEncodedSyntacticClassifications(fileName: string, span: TextSpan): Classifications;
         getEncodedSemanticClassifications(fileName: string, span: TextSpan): Classifications;
 
-        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): CompletionInfo | undefined;
+        getCompletionsAtPosition(fileName: string, position: number, options: GetCompletionsAtPositionOptions | undefined): WithMetadata<CompletionInfo> | undefined;
         // "options" and "source" are optional only for backwards-compatibility
         getCompletionEntryDetails(
             fileName: string,
@@ -486,7 +488,7 @@ namespace ts {
         position: number;
     }
 
-    export class TextChange {
+    export interface TextChange {
         span: TextSpan;
         newText: string;
     }
@@ -977,6 +979,7 @@ namespace ts {
         Whitespace,
         Identifier,
         NumberLiteral,
+        BigIntLiteral,
         StringLiteral,
         RegExpLiteral,
     }
@@ -1140,6 +1143,7 @@ namespace ts {
         identifier = "identifier",
         keyword = "keyword",
         numericLiteral = "number",
+        bigintLiteral = "bigint",
         operator = "operator",
         stringLiteral = "string",
         whiteSpace = "whitespace",
@@ -1188,5 +1192,6 @@ namespace ts {
         jsxAttribute = 22,
         jsxText = 23,
         jsxAttributeStringLiteralValue = 24,
+        bigintLiteral = 25,
     }
 }

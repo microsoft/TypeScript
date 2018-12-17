@@ -1,17 +1,14 @@
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(7,14): error TS2322: Type 'number' is not assignable to type 'string | undefined'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(8,1): error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-  Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-    Property 'a' is missing in type '{ b: string; }'.
+  Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(9,1): error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-  Type '{ c: true; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-    Property 'a' is missing in type '{ c: true; }'.
+  Type '{ c: true; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, b
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(17,1): error TS2322: Type '{ a: string; b: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
   Type '{ a: string; b: number; }' is not assignable to type '{ a?: undefined; b?: undefined; }'.
     Types of property 'a' are incompatible.
       Type 'string' is not assignable to type 'undefined'.
 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts(18,1): error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
-  Type '{ a: number; }' is not assignable to type '{ a: number; b: number; }'.
-    Property 'b' is missing in type '{ a: number; }'.
+  Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
 
 
 ==== tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts (5 errors) ====
@@ -28,13 +25,11 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a1 = { b: "y" };  // Error
     ~~
 !!! error TS2322: Type '{ b: string; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-!!! error TS2322:   Type '{ b: string; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-!!! error TS2322:     Property 'a' is missing in type '{ b: string; }'.
+!!! error TS2322:   Type '{ b: string; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, c
     a1 = { c: true };  // Error
     ~~
 !!! error TS2322: Type '{ c: true; }' is not assignable to type '{ a: number; b?: undefined; c?: undefined; } | { a: number; b: string; c?: undefined; } | { a: number; b: string; c: boolean; }'.
-!!! error TS2322:   Type '{ c: true; }' is not assignable to type '{ a: number; b: string; c: boolean; }'.
-!!! error TS2322:     Property 'a' is missing in type '{ c: true; }'.
+!!! error TS2322:   Type '{ c: true; }' is missing the following properties from type '{ a: number; b: string; c: boolean; }': a, b
     
     let a2 = [{ a: 1, b: 2 }, { a: "abc" }, {}][0];
     a2.a;  // string | number | undefined
@@ -51,8 +46,8 @@ tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts
     a2 = { a: 1 };  // Error
     ~~
 !!! error TS2322: Type '{ a: number; }' is not assignable to type '{ a: number; b: number; } | { a: string; b?: undefined; } | { a?: undefined; b?: undefined; }'.
-!!! error TS2322:   Type '{ a: number; }' is not assignable to type '{ a: number; b: number; }'.
-!!! error TS2322:     Property 'b' is missing in type '{ a: number; }'.
+!!! error TS2322:   Property 'b' is missing in type '{ a: number; }' but required in type '{ a: number; b: number; }'.
+!!! related TS2728 tests/cases/conformance/expressions/objectLiterals/objectLiteralNormalization.ts:11:19: 'b' is declared here.
     
     // Object literals containing spreads are not normalized
     declare let b1: { a: string, b: string } | { b: string, c: string };

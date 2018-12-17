@@ -12,19 +12,40 @@
 ////
 
 // @Filename: /b.js
-//// /**/
+//// /*1*/
 
-verify.completions({ marker: "", excludes: "fail", preferences: { includeCompletionsForModuleExports: true } });
-edit.insert("export const k = 10;\r\nf");
-verify.completions({
-    includes: {
-        name: "fail",
-        source: "/node_modules/foo/index",
-        sourceDisplay: "./node_modules/foo/index",
-        text: "const fail: number",
-        kind: "const",
-        kindModifiers: "export,declare",
-        hasAction: true,
-    },
-    preferences: { includeCompletionsForModuleExports: true },
+// @Filename: /b2.js
+//////@ts-check
+/////*2*/
+
+// @Filename: /b3.ts
+/////*3*/
+
+// In esnext js files are assumed to be modules
+goTo.eachMarker(() => {
+    verify.completions({
+        includes: {
+            name: "fail",
+            source: "/node_modules/foo/index",
+            sourceDisplay: "./node_modules/foo/index",
+            text: "const fail: number",
+            kind: "const",
+            kindModifiers: "export,declare",
+            hasAction: true,
+        },
+        preferences: { includeCompletionsForModuleExports: true },
+    });
+    edit.insert("export const k = 10;\r\nf");
+    verify.completions({
+        includes: {
+            name: "fail",
+            source: "/node_modules/foo/index",
+            sourceDisplay: "./node_modules/foo/index",
+            text: "const fail: number",
+            kind: "const",
+            kindModifiers: "export,declare",
+            hasAction: true,
+        },
+        preferences: { includeCompletionsForModuleExports: true },
+    });
 });

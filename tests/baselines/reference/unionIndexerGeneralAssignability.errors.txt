@@ -53,10 +53,8 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(146,5)
   Type 'string' is not assignable to type '"a"'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(151,5): error TS2413: 'S3' index type 'string' is not assignable to 'S3.A' index type 'never'.
   Type 'string' is not assignable to type 'never'.
-tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(161,5): error TS2322: Type 'I' is not assignable to type 'H'.
-  Property '[S3.A]' is missing in type 'I'.
-tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(162,5): error TS2322: Type 'J' is not assignable to type 'H'.
-  Property '[S3.A]' is missing in type 'J'.
+tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(161,5): error TS2741: Property '[S3.A]' is missing in type 'I' but required in type 'H'.
+tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(162,5): error TS2741: Property '[S3.A]' is missing in type 'J' but required in type 'H'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(164,5): error TS2322: Type 'L' is not assignable to type 'H'.
   Types of property '[S3.A]' are incompatible.
     Type 'string' is not assignable to type '"a"'.
@@ -73,25 +71,20 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(172,5)
   'S3' and 'S3.A' index signatures are incompatible.
     Type 'string' is not assignable to type 'never'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(176,5): error TS2322: Type 'H' is not assignable to type 'K'.
-  Type 'H' is not assignable to type '{ a: string; b: string; c: string; }'.
-    Property 'b' is missing in type 'H'.
+  Type 'H' is missing the following properties from type '{ a: string; b: string; c: string; }': b, c
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(177,5): error TS2322: Type 'I' is not assignable to type 'H'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(178,5): error TS2322: Type 'J' is not assignable to type 'K'.
-  Type 'J' is not assignable to type '{ a: string; b: string; c: string; }'.
-    Property 'a' is missing in type 'J'.
+  Type 'J' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(179,5): error TS2322: Type 'L' is not assignable to type 'K'.
   Type 'L' is not assignable to type '{ [S3.A]: "a"; }'.
     Types of property '[S3.A]' are incompatible.
       Type 'string' is not assignable to type '"a"'.
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(181,5): error TS2322: Type 'H' is not assignable to type 'L'.
-  Type 'H' is not assignable to type '{ a: string; b: string; c: string; }'.
-    Property 'b' is missing in type 'H'.
+  Type 'H' is missing the following properties from type '{ a: string; b: string; c: string; }': b, c
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(182,5): error TS2322: Type 'I' is not assignable to type 'L'.
-  Type 'I' is not assignable to type '{ a: string; b: string; c: string; }'.
-    Property 'a' is missing in type 'I'.
+  Type 'I' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5): error TS2322: Type 'J' is not assignable to type 'L'.
-  Type 'J' is not assignable to type '{ a: string; b: string; c: string; }'.
-    Property 'a' is missing in type 'J'.
+  Type 'J' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
 
 
 ==== tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts (42 errors) ====
@@ -340,12 +333,12 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
     function f4(h: H, i: I, j: J, k: K, l: L) {
         h = i;
         ~
-!!! error TS2322: Type 'I' is not assignable to type 'H'.
-!!! error TS2322:   Property '[S3.A]' is missing in type 'I'.
+!!! error TS2741: Property '[S3.A]' is missing in type 'I' but required in type 'H'.
+!!! related TS2728 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts:142:5: '[S3.A]' is declared here.
         h = j;
         ~
-!!! error TS2322: Type 'J' is not assignable to type 'H'.
-!!! error TS2322:   Property '[S3.A]' is missing in type 'J'.
+!!! error TS2741: Property '[S3.A]' is missing in type 'J' but required in type 'H'.
+!!! related TS2728 tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts:142:5: '[S3.A]' is declared here.
         h = k;
         h = l;
         ~
@@ -382,16 +375,14 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
         k = h;
         ~
 !!! error TS2322: Type 'H' is not assignable to type 'K'.
-!!! error TS2322:   Type 'H' is not assignable to type '{ a: string; b: string; c: string; }'.
-!!! error TS2322:     Property 'b' is missing in type 'H'.
+!!! error TS2322:   Type 'H' is missing the following properties from type '{ a: string; b: string; c: string; }': b, c
         h = i;
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'H'.
         k = j;
         ~
 !!! error TS2322: Type 'J' is not assignable to type 'K'.
-!!! error TS2322:   Type 'J' is not assignable to type '{ a: string; b: string; c: string; }'.
-!!! error TS2322:     Property 'a' is missing in type 'J'.
+!!! error TS2322:   Type 'J' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
         k = l;
         ~
 !!! error TS2322: Type 'L' is not assignable to type 'K'.
@@ -402,18 +393,15 @@ tests/cases/conformance/types/members/unionIndexerGeneralAssignability.ts(183,5)
         l = h;
         ~
 !!! error TS2322: Type 'H' is not assignable to type 'L'.
-!!! error TS2322:   Type 'H' is not assignable to type '{ a: string; b: string; c: string; }'.
-!!! error TS2322:     Property 'b' is missing in type 'H'.
+!!! error TS2322:   Type 'H' is missing the following properties from type '{ a: string; b: string; c: string; }': b, c
         l = i;
         ~
 !!! error TS2322: Type 'I' is not assignable to type 'L'.
-!!! error TS2322:   Type 'I' is not assignable to type '{ a: string; b: string; c: string; }'.
-!!! error TS2322:     Property 'a' is missing in type 'I'.
+!!! error TS2322:   Type 'I' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
         l = j;
         ~
 !!! error TS2322: Type 'J' is not assignable to type 'L'.
-!!! error TS2322:   Type 'J' is not assignable to type '{ a: string; b: string; c: string; }'.
-!!! error TS2322:     Property 'a' is missing in type 'J'.
+!!! error TS2322:   Type 'J' is missing the following properties from type '{ a: string; b: string; c: string; }': a, b, c
         l = k;
     }
     

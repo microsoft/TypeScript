@@ -133,6 +133,11 @@ namespace ts {
         if (configFileName) {
             const configParseResult = parseConfigFileWithSystem(configFileName, commandLineOptions, sys, reportDiagnostic)!; // TODO: GH#18217
             if (commandLineOptions.showConfig) {
+                if (configParseResult.errors.length !== 0) {
+                    updateReportDiagnostic(configParseResult.options);
+                    configParseResult.errors.forEach(reportDiagnostic);
+                    return sys.exit(ExitStatus.DiagnosticsPresent_OutputsSkipped);
+                }
                 // tslint:disable-next-line:no-null-keyword
                 sys.write(JSON.stringify(convertToTSConfig(configParseResult, configFileName, sys), null, 4) + sys.newLine);
                 return sys.exit(ExitStatus.Success);
@@ -199,22 +204,37 @@ namespace ts {
             reportWatchModeWithoutSysSupport();
         }
 
-        // TODO: change this to host if watch => watchHost otherwiue without wathc
-        const builder = createSolutionBuilder(createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()), projects, buildOptions);
+        // TODO: change this to host if watch => watchHost otherwiue without watch
+        const buildHost = buildOptions.watch ?
+            createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
+            createSolutionBuilderHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+        buildHost.beforeCreateProgram = enableStatistics;
+        buildHost.afterProgramEmitAndDiagnostics = reportStatistics;
+
+        const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         if (buildOptions.clean) {
             return sys.exit(builder.cleanAllProjects());
         }
 
         if (buildOptions.watch) {
             builder.buildAllProjects();
-            return builder.startWatching();
+            return (builder as SolutionBuilderWithWatch).startWatching();
         }
 
         return sys.exit(builder.buildAllProjects());
     }
 
+    function createReportErrorSummary(options: CompilerOptions | BuildOptions): ReportEmitErrorSummary | undefined {
+        return shouldBePretty(options) ?
+            errorCount => sys.write(getErrorSummaryText(errorCount, sys.newLine)) :
+            undefined;
+    }
+
     function performCompilation(rootNames: string[], projectReferences: ReadonlyArray<ProjectReference> | undefined, options: CompilerOptions, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>) {
         const host = createCompilerHost(options);
+        const currentDirectory = host.getCurrentDirectory();
+        const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
+        changeCompilerHostToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName), /*useCacheForSourceFile*/ false);
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
@@ -225,7 +245,12 @@ namespace ts {
             configFileParsingDiagnostics
         };
         const program = createProgram(programOptions);
-        const exitStatus = emitFilesAndReportErrors(program, reportDiagnostic, s => sys.write(s + sys.newLine));
+        const exitStatus = emitFilesAndReportErrors(
+            program,
+            reportDiagnostic,
+            s => sys.write(s + sys.newLine),
+            createReportErrorSummary(options)
+        );
         reportStatistics(program);
         return sys.exit(exitStatus);
     }
