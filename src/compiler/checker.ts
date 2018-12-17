@@ -7158,7 +7158,7 @@ namespace ts {
             return list.some(property => {
                 const name = property.name && getTextOfPropertyName(property.name);
                 const expected = name === undefined ? undefined : getTypeOfPropertyOfType(contextualType, name);
-                return !!expected && typeIsLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
+                return !!expected && isLiteralType(expected) && !isTypeIdenticalTo(getTypeOfNode(property), expected);
             });
         }
 
@@ -30936,9 +30936,5 @@ namespace ts {
         export const IntrinsicClassAttributes = "IntrinsicClassAttributes" as __String;
         export const LibraryManagedAttributes = "LibraryManagedAttributes" as __String;
         // tslint:enable variable-name
-    }
-
-    function typeIsLiteralType(type: Type): type is LiteralType {
-        return !!(type.flags & TypeFlags.Literal);
     }
 }
