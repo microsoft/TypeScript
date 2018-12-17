@@ -14681,9 +14681,11 @@ namespace ts {
         // a possible discriminant if its type differs in the constituents of containing union type, and if every
         // choice is a unit type or a union of unit types.
         function containsMatchingReferenceDiscriminant(source: Node, target: Node) {
+            let name;
             return isAccessExpression(target) &&
                 containsMatchingReference(source, target.expression) &&
-                isDiscriminantProperty(getDeclaredTypeOfReference(target.expression), getAccessedPropertyName(target));
+                (name = getAccessedPropertyName(target)) !== undefined &&
+                isDiscriminantProperty(getDeclaredTypeOfReference(target.expression), name);
         }
 
         function getDeclaredTypeOfReference(expr: Node): Type | undefined {
@@ -14714,8 +14716,8 @@ namespace ts {
             return false;
         }
 
-        function isDiscriminantProperty(type: Type | undefined, name: __String | undefined) {
-            if (type && name && type.flags & TypeFlags.Union) {
+        function isDiscriminantProperty(type: Type | undefined, name: __String) {
+            if (type && type.flags & TypeFlags.Union) {
                 const prop = getUnionOrIntersectionProperty(<UnionType>type, name);
                 if (prop && getCheckFlags(prop) & CheckFlags.SyntheticProperty) {
                     if ((<TransientSymbol>prop).isDiscriminantProperty === undefined) {
