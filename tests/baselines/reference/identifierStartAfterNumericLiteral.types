@@ -41,15 +41,13 @@ let valueIn = 3in[null];
 >null : null
 
 3en[null]
->3e : 3
->n[null] : any
->n : any
+>3en[null] : any
+>3en : 3
 >null : null
 
 123en[null]
->123e : 123
->n[null] : any
->n : any
+>123en[null] : any
+>123en : 123
 >null : null
 
 1a
