@@ -1,0 +1,70 @@
+=== tests/cases/compiler/rangeTypeBasicOperators.ts ===
+declare var a: (> 42);
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+
+declare var b: (<= 3);
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a1 = a + b;
+>a1 : Symbol(a1, Decl(rangeTypeBasicOperators.ts, 3, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a2 = a - b;
+>a2 : Symbol(a2, Decl(rangeTypeBasicOperators.ts, 4, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a3 = a * b;
+>a3 : Symbol(a3, Decl(rangeTypeBasicOperators.ts, 5, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a4 = a / b;
+>a4 : Symbol(a4, Decl(rangeTypeBasicOperators.ts, 6, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a5 = a % b;
+>a5 : Symbol(a5, Decl(rangeTypeBasicOperators.ts, 7, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a6 = a & b;
+>a6 : Symbol(a6, Decl(rangeTypeBasicOperators.ts, 8, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a7 = a | b;
+>a7 : Symbol(a7, Decl(rangeTypeBasicOperators.ts, 9, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a8 = a ^ b;
+>a8 : Symbol(a8, Decl(rangeTypeBasicOperators.ts, 10, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a9 = a << b;
+>a9 : Symbol(a9, Decl(rangeTypeBasicOperators.ts, 11, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a10 = a >> b;
+>a10 : Symbol(a10, Decl(rangeTypeBasicOperators.ts, 12, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a11 = a >>> b;
+>a11 : Symbol(a11, Decl(rangeTypeBasicOperators.ts, 13, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+>b : Symbol(b, Decl(rangeTypeBasicOperators.ts, 1, 11))
+
+let a12 = ~a;
+>a12 : Symbol(a12, Decl(rangeTypeBasicOperators.ts, 14, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+
+let a13 = -a;
+>a13 : Symbol(a13, Decl(rangeTypeBasicOperators.ts, 15, 3))
+>a : Symbol(a, Decl(rangeTypeBasicOperators.ts, 0, 11))
+

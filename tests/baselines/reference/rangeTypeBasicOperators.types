@@ -1,0 +1,83 @@
+=== tests/cases/compiler/rangeTypeBasicOperators.ts ===
+declare var a: (> 42);
+>a : (> 42)
+
+declare var b: (<= 3);
+>b : (<= 3)
+
+let a1 = a + b;
+>a1 : number
+>a + b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a2 = a - b;
+>a2 : number
+>a - b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a3 = a * b;
+>a3 : number
+>a * b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a4 = a / b;
+>a4 : number
+>a / b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a5 = a % b;
+>a5 : number
+>a % b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a6 = a & b;
+>a6 : number
+>a & b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a7 = a | b;
+>a7 : number
+>a | b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a8 = a ^ b;
+>a8 : number
+>a ^ b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a9 = a << b;
+>a9 : number
+>a << b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a10 = a >> b;
+>a10 : number
+>a >> b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a11 = a >>> b;
+>a11 : number
+>a >>> b : number
+>a : (> 42)
+>b : (<= 3)
+
+let a12 = ~a;
+>a12 : number
+>~a : number
+>a : (> 42)
+
+let a13 = -a;
+>a13 : number
+>-a : number
+>a : (> 42)
+
