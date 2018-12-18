@@ -90,11 +90,11 @@ Library files in `built/local/` are updated by running
 jake
 ```
 
-The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
+**Note**: The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
 
-#### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
+#### Generated library files
 
-These two files represent the DOM typings and are auto-generated. To make any modifications to them, please submit a PR to  https://github.com/Microsoft/TSJS-lib-generator
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
 ## Running the Tests
 
