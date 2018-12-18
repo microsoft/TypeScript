@@ -92,7 +92,7 @@ jake
 
 **Note**: The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
 
-#### Generated library files
+### Modifying generated library files
 
 The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
