@@ -233,6 +233,11 @@ namespace ts {
                 symbol.members = createSymbolTable();
             }
 
+            // On merge of const enum module with class or function, reset const enum only flag (namespaces will already recalculate)
+            if (symbol.constEnumOnlyModule && (symbol.flags & (SymbolFlags.Function | SymbolFlags.Class | SymbolFlags.RegularEnum))) {
+                symbol.constEnumOnlyModule = false;
+            }
+
             if (symbolFlags & SymbolFlags.Value) {
                 setValueDeclaration(symbol, node);
             }
