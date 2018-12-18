@@ -1,9 +1,7 @@
 tests/cases/compiler/tupleTypes.ts(11,12): error TS2339: Property '2' does not exist on type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(12,5): error TS2403: Subsequent variable declarations must have the same type.  Variable 't2' must be of type 'undefined', but here has type 'string | number'.
-tests/cases/compiler/tupleTypes.ts(14,1): error TS2322: Type '[]' is not assignable to type '[number, string]'.
-  Property '0' is missing in type '[]'.
-tests/cases/compiler/tupleTypes.ts(15,1): error TS2322: Type '[number]' is not assignable to type '[number, string]'.
-  Property '1' is missing in type '[number]'.
+tests/cases/compiler/tupleTypes.ts(14,1): error TS2739: Type '[]' is missing the following properties from type '[number, string]': 0, 1
+tests/cases/compiler/tupleTypes.ts(15,1): error TS2741: Property '1' is missing in type '[number]' but required in type '[number, string]'.
 tests/cases/compiler/tupleTypes.ts(17,6): error TS2322: Type 'string' is not assignable to type 'number'.
 tests/cases/compiler/tupleTypes.ts(17,15): error TS2322: Type 'number' is not assignable to type 'string'.
 tests/cases/compiler/tupleTypes.ts(18,1): error TS2322: Type '[number, string, number]' is not assignable to type '[number, string]'.
@@ -44,12 +42,10 @@ tests/cases/compiler/tupleTypes.ts(51,1): error TS2322: Type '[number, {}]' is n
     
     t = [];               // Error
     ~
-!!! error TS2322: Type '[]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Property '0' is missing in type '[]'.
+!!! error TS2739: Type '[]' is missing the following properties from type '[number, string]': 0, 1
     t = [1];              // Error
     ~
-!!! error TS2322: Type '[number]' is not assignable to type '[number, string]'.
-!!! error TS2322:   Property '1' is missing in type '[number]'.
+!!! error TS2741: Property '1' is missing in type '[number]' but required in type '[number, string]'.
     t = [1, "hello"];     // Ok
     t = ["hello", 1];     // Error
          ~~~~~~~

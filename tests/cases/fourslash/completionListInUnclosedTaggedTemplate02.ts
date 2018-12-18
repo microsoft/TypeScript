@@ -3,6 +3,4 @@
 ////var x;
 ////var y = (p) => x `abc ${ 123 } ${ /*1*/
 
-goTo.marker("1");
-verify.completionListContains("p");
-verify.completionListContains("x");
+verify.completions({ marker: "1", includes: ["p", "x"], isNewIdentifierLocation: true });

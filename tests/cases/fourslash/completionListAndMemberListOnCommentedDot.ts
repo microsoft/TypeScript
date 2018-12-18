@@ -13,5 +13,4 @@
 //////Test for comment
 //////c./**/
 
-goTo.marker();
-verify.completionListIsEmpty();
+verify.completions({ marker: "", exact: undefined });

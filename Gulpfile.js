@@ -26,7 +26,7 @@ const exec = require("./scripts/build/exec");
 const browserify = require("./scripts/build/browserify");
 const prepend = require("./scripts/build/prepend");
 const { removeSourceMaps } = require("./scripts/build/sourcemaps");
-const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex"); 
+const { CancellationTokenSource, CancelError, delay, Semaphore } = require("prex");
 const { libraryTargets, generateLibs } = require("./scripts/build/lib");
 const { runConsoleTests, cleanTestDirs, writeTestConfigFile, refBaseline, localBaseline, refRwcBaseline, localRwcBaseline } = require("./scripts/build/tests");
 
@@ -117,7 +117,8 @@ const generatedLCGFile = "built/local/enu/diagnosticMessages.generated.json.lcg"
  *    2. 'src\compiler\diagnosticMessages.generated.json' => 'built\local\ENU\diagnosticMessages.generated.json.lcg'
  *       generate the lcg file (source of messages to localize) from the diagnosticMessages.generated.json
  */
-const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-BR", "ru", "tr", "zh-CN", "zh-TW"]
+const localizationTargets = ["cs", "de", "es", "fr", "it", "ja", "ko", "pl", "pt-br", "ru", "tr", "zh-cn", "zh-tw"]
+    .map(f => f.toLowerCase())
     .map(f => `built/local/${f}/diagnosticMessages.generated.json`)
     .concat(generatedLCGFile);
 

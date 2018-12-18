@@ -23,27 +23,12 @@
 ////    };
 ////}
 
-function VerifyGlobalCompletionList() {
-    verify.completionListItemsCountIsGreaterThan(10);
-}
-
-// Completion on '{' location.
-goTo.marker("1");
-VerifyGlobalCompletionList();
-
-// Literal member completion after member name with empty member expression and missing colon.
-goTo.marker("2");
-VerifyGlobalCompletionList();
-
-goTo.marker("3");
-VerifyGlobalCompletionList();
-
-goTo.marker("4");
-verify.completionListIsEmpty();
-
-// Literal member completion after member name with empty member expression.
-goTo.marker("5");
-VerifyGlobalCompletionList();
-
-goTo.marker("6");
-VerifyGlobalCompletionList();
+// 1: Completion on '{' location.
+// 2: Literal member completion after member name with empty member expression and missing colon.
+// 5, 6: Literal member completion after member name with empty member expression.
+const exact = ["p1", "p2", "p3", "p4", ...completion.globalsPlus(["ObjectLiterals"])];
+verify.completions(
+    { marker: ["1"], exact, isNewIdentifierLocation: true },
+    { marker: ["2", "3", "5", "6"], exact },
+    { marker: "4", exact: undefined },
+);

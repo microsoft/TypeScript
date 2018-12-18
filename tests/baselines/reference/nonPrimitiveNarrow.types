@@ -27,7 +27,7 @@ if (a instanceof Narrow) {
 
 if (typeof a === 'number') {
 >typeof a === 'number' : boolean
->typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >a : object
 >'number' : "number"
 
@@ -44,7 +44,7 @@ var b: object | null
 
 if (typeof b === 'object') {
 >typeof b === 'object' : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : object
 >'object' : "object"
 

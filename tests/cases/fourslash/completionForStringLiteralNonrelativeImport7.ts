@@ -18,7 +18,7 @@
 ////
 
 verify.completions({
-    marker: test.markerNames(),
+    marker: test.markers(),
     exact: ["module", "module-from-node"],
     isNewIdentifierLocation: true,
 });

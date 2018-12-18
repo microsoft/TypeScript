@@ -22,8 +22,8 @@
 //// */
 ////function i(foo, bar) {}
 
-verify.completionsAt("0", ["foo", "bar"]);
-verify.completionsAt("1", ["bar"]);
-verify.completionsAt("2", ["canary", "canoodle"]);
-verify.completionsAt("3", ["foo", "bar"]);
-verify.completionsAt("4", ["foo", "bar"]);
+verify.completions(
+    { marker: ["0", "3", "4"], exact: ["foo", "bar"] },
+    { marker: "1", exact: "bar" },
+    { marker: "2", exact: ["canary", "canoodle"] },
+);

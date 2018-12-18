@@ -331,19 +331,19 @@ namespace ts {
         private loggingEnabled = false;
         private tracingEnabled = false;
 
-        public resolveModuleNames: (moduleName: string[], containingFile: string) => ResolvedModuleFull[];
-        public resolveTypeReferenceDirectives: (typeDirectiveNames: string[], containingFile: string) => ResolvedTypeReferenceDirective[];
-        public directoryExists: (directoryName: string) => boolean;
+        public resolveModuleNames: ((moduleName: string[], containingFile: string) => (ResolvedModuleFull | undefined)[]) | undefined;
+        public resolveTypeReferenceDirectives: ((typeDirectiveNames: string[], containingFile: string) => (ResolvedTypeReferenceDirective | undefined)[]) | undefined;
+        public directoryExists: ((directoryName: string) => boolean) | undefined;
 
         constructor(private shimHost: LanguageServiceShimHost) {
             // if shimHost is a COM object then property check will become method call with no arguments.
             // 'in' does not have this effect.
             if ("getModuleResolutionsForFile" in this.shimHost) {
-                this.resolveModuleNames = (moduleNames: string[], containingFile: string): ResolvedModuleFull[] => {
+                this.resolveModuleNames = (moduleNames, containingFile) => {
                     const resolutionsInFile = <MapLike<string>>JSON.parse(this.shimHost.getModuleResolutionsForFile!(containingFile)); // TODO: GH#18217
                     return map(moduleNames, name => {
                         const result = getProperty(resolutionsInFile, name);
-                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined!; // TODO: GH#18217
+                        return result ? { resolvedFileName: result, extension: extensionFromPath(result), isExternalLibraryImport: false } : undefined;
                     });
                 };
             }
@@ -351,9 +351,9 @@ namespace ts {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
             if ("getTypeReferenceDirectiveResolutionsForFile" in this.shimHost) {
-                this.resolveTypeReferenceDirectives = (typeDirectiveNames: string[], containingFile: string) => {
+                this.resolveTypeReferenceDirectives = (typeDirectiveNames, containingFile) => {
                     const typeDirectivesForFile = <MapLike<ResolvedTypeReferenceDirective>>JSON.parse(this.shimHost.getTypeReferenceDirectiveResolutionsForFile!(containingFile)); // TODO: GH#18217
-                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name)!); // TODO: GH#18217
+                    return map(typeDirectiveNames, name => getProperty(typeDirectivesForFile, name));
                 };
             }
         }
@@ -490,12 +490,18 @@ namespace ts {
         public useCaseSensitiveFileNames: boolean;
 
         constructor(private shimHost: CoreServicesShimHost) {
-        this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
+            this.useCaseSensitiveFileNames = this.shimHost.useCaseSensitiveFileNames ? this.shimHost.useCaseSensitiveFileNames() : false;
             if ("directoryExists" in this.shimHost) {
                 this.directoryExists = directoryName => this.shimHost.directoryExists(directoryName);
             }
+            else {
+                this.directoryExists = undefined!; // TODO: GH#18217
+            }
             if ("realpath" in this.shimHost) {
                 this.realpath = path => this.shimHost.realpath!(path); // TODO: GH#18217
+            }
+            else {
+                this.realpath = undefined!; // TODO: GH#18217
             }
         }
 
@@ -1182,7 +1188,7 @@ namespace ts {
 
     export class TypeScriptServicesFactory implements ShimFactory {
         private _shims: Shim[] = [];
-        private documentRegistry: DocumentRegistry;
+        private documentRegistry: DocumentRegistry | undefined;
 
         /*
          * Returns script API version.

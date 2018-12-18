@@ -215,13 +215,13 @@ namespace ts.server {
     }
 
     class NodeTypingsInstaller implements ITypingsInstaller {
-        private installer: NodeChildProcess;
-        private projectService: ProjectService;
+        private installer!: NodeChildProcess;
+        private projectService!: ProjectService;
         private activeRequestCount = 0;
         private requestQueue: QueuedOperation[] = [];
         private requestMap = createMap<QueuedOperation>(); // Maps operation ID to newest requestQueue entry with that ID
         /** We will lazily request the types registry on the first call to `isKnownTypesPackageName` and store it in `typesRegistryCache`. */
-        private requestedRegistry: boolean;
+        private requestedRegistry = false;
         private typesRegistryCache: Map<MapLike<string>> | undefined;
 
         // This number is essentially arbitrary.  Processing more than one typings request

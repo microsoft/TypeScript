@@ -25,9 +25,18 @@
 //// /// <reference path="./[|f1.t/*9*/|]
 //// /// <reference path="./[|f1.ts/*10*/|]
 
+const names = ["f1.ts", "f2.ts", "d"];
 const markersWithReplacementSpan = [4, 5, 6, 8, 9, 10];
-for (let m = 0; m < 11; ++m) {
-    const idx = markersWithReplacementSpan.indexOf(m);
-    const names = ["f1.ts", "f2.ts", "d"];
-    verify.completionsAt(String(m), idx === -1 ? names : names.map(name => ({ name, replacementSpan: test.ranges()[idx] })), { isNewIdentifierLocation: true });
-}
+const ranges = test.ranges();
+verify.completions(
+    {
+        marker: ["0", "1", "2", "3", "7"],
+        exact: names,
+        isNewIdentifierLocation: true,
+    },
+    ...markersWithReplacementSpan.map((marker, i): FourSlashInterface.CompletionsOptions => ({
+        marker: String(marker),
+        exact: names.map(name => ({ name, replacementSpan: ranges[i] })),
+        isNewIdentifierLocation: true,
+    })),
+);

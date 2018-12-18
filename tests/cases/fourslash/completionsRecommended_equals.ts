@@ -5,6 +5,7 @@
 ////e === /*a*/;
 ////e === E/*b*/
 
-goTo.eachMarker(["a", "b"], () => {
-    verify.completionListContains("Enu", "enum Enu", "", "enum", undefined, undefined, { isRecommended: true });
+verify.completions({
+    marker: ["a", "b"],
+    includes: { name: "Enu", text: "enum Enu", kind: "enum", isRecommended: true },
 });

@@ -13,17 +13,17 @@
 ////}
 ////f(1, 2, 3)
 
-verify.fileAfterCodeFix(
-`
-/**
+verify.codeFix({
+    description: "Infer parameter types from usage",
+    index: 0,
+    newFileContent:
+`/**
  * @param {*} y
- */
-/**
  * @param {number} x
  * @param {number} z
  */
 function f(x, y, z) {
     return x
 }
-f(1, 2, 3)
-`, undefined, 2);
+f(1, 2, 3)`,
+});

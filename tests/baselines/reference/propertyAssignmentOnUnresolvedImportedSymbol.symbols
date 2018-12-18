@@ -1,0 +1,8 @@
+=== tests/cases/conformance/salsa/bug28576.js ===
+import x from 'arglebaz'
+>x : Symbol(x, Decl(bug28576.js, 0, 6))
+{
+    x.bar = 1
+>x : Symbol(x, Decl(bug28576.js, 0, 6))
+}
+

@@ -1007,6 +1007,14 @@
         "category": "Error",
         "code": 1349
     },
+    "Print the final configuration instead of building.": {
+        "category": "Message",
+        "code": 1350
+    },
+    "An identifier or keyword cannot immediately follow a numeric literal.": {
+        "category": "Error",
+        "code": 1351
+    },
 
     "Duplicate identifier '{0}'.": {
         "category": "Error",
@@ -1056,7 +1064,7 @@
         "category": "Error",
         "code": 2311
     },
-    "An interface may only extend a class or another interface.": {
+    "An interface can only extend an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2312
     },
@@ -1232,7 +1240,7 @@
         "category": "Error",
         "code": 2355
     },
-    "An arithmetic operand must be of type 'any', 'number' or an enum type.": {
+    "An arithmetic operand must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2356
     },
@@ -1256,11 +1264,11 @@
         "category": "Error",
         "code": 2361
     },
-    "The left-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The left-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2362
     },
-    "The right-hand side of an arithmetic operation must be of type 'any', 'number' or an enum type.": {
+    "The right-hand side of an arithmetic operation must be of type 'any', 'number', 'bigint' or an enum type.": {
         "category": "Error",
         "code": 2363
     },
@@ -1484,7 +1492,7 @@
         "category": "Error",
         "code": 2420
     },
-    "A class may only implement another class or interface.": {
+    "A class can only implement an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2422
     },
@@ -1688,7 +1696,7 @@
         "category": "Error",
         "code": 2473
     },
-    "In 'const' enum declarations member initializer must be constant expression.": {
+    "const enum member initializers can only contain literal values and other computed enum values.": {
         "category": "Error",
         "code": 2474
     },
@@ -1816,7 +1824,7 @@
         "category": "Error",
         "code": 2508
     },
-    "Base constructor return type '{0}' is not a class or interface type.": {
+    "Base constructor return type '{0}' is not an object type or intersection of object types with statically known members.": {
         "category": "Error",
         "code": 2509
     },
@@ -1940,7 +1948,7 @@
         "category": "Error",
         "code": 2539
     },
-    "Cannot assign to '{0}' because it is a constant or a read-only property.": {
+    "Cannot assign to '{0}' because it is a read-only property.": {
         "category": "Error",
         "code": 2540
     },
@@ -2088,15 +2096,15 @@
         "category": "Error",
         "code": 2577
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for node? Try `npm i @types/node` and then add `node` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2580
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for jQuery? Try `npm i @types/jquery` and then add `jquery` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2581
     },
-    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`.": {
+    "Cannot find name '{0}'. Do you need to install type definitions for a test runner? Try `npm i @types/jest` or `npm i @types/mocha`  and then add `jest` or `mocha` to the types field in your tsconfig.": {
         "category": "Error",
         "code": 2582
     },
@@ -2119,6 +2127,10 @@
     "JSDoc type '{0}' circularly references itself.": {
         "category": "Error",
         "code": 2587
+    },
+    "Cannot assign to '{0}' because it is a constant.": {
+        "category": "Error",
+        "code": 2588
     },
     "JSX element attributes type '{0}' may not be a union type.": {
         "category": "Error",
@@ -2488,6 +2500,42 @@
     "It is highly likely that you are missing a semicolon.": {
         "category": "Error",
         "code": 2734
+    },
+    "Did you mean for '{0}' to be constrained to type 'new (...args: any[]) => {1}'?": {
+        "category": "Error",
+        "code": 2735
+    },
+    "Operator '{0}' cannot be applied to type '{1}'.": {
+        "category": "Error",
+        "code": 2736
+    },
+    "BigInt literals are not available when targeting lower than ESNext.": {
+        "category": "Error",
+        "code": 2737
+    },
+    "An outer value of 'this' is shadowed by this container.": {
+        "category": "Message",
+        "code": 2738
+    },
+    "Type '{0}' is missing the following properties from type '{1}': {2}": {
+        "category": "Error",
+        "code": 2739
+    },
+    "Type '{0}' is missing the following properties from type '{1}': {2}, and {3} more.": {
+        "category": "Error",
+        "code": 2740
+    },
+    "Property '{0}' is missing in type '{1}' but required in type '{2}'.": {
+        "category": "Error",
+        "code": 2741
+    },
+    "The inferred type of '{0}' cannot be named without a reference to '{1}'. This is likely not portable. A type annotation is necessary.": {
+        "category": "Error",
+        "code": 2742
+    },
+    "No overload expects {0} type arguments, but overloads do exist that expect either {1} or {2} type arguments.": {
+        "category": "Error",
+        "code": 2743
     },
 
     "Import declaration '{0}' is using private name '{1}'.": {
@@ -3763,6 +3811,18 @@
         "category": "Message",
         "code": 6214
     },
+    "Using compiler options of project reference redirect '{0}'.": {
+        "category": "Message",
+        "code": 6215
+    },
+    "Found 1 error.": {
+        "category": "Message",
+        "code": 6216
+    },
+    "Found {0} errors.": {
+        "category": "Message",
+        "code": 6217
+    },
 
     "Projects to reference": {
         "category": "Message",
@@ -3927,6 +3987,10 @@
         "category": "Error",
         "code": 7013
     },
+    "Function type, which lacks return-type annotation, implicitly has an '{0}' return type.": {
+        "category": "Error",
+        "code": 7014
+    },
     "Element implicitly has an 'any' type because index expression is not of type 'number'.": {
         "category": "Error",
         "code": 7015
@@ -4037,6 +4101,43 @@
         "category": "Error",
         "code": 7042
     },
+    "Variable '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7043
+    },
+    "Parameter '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7044
+    },
+    "Member '{0}' implicitly has an '{1}' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7045
+    },
+    "Variable '{0}' implicitly has type '{1}' in some locations, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7046
+    },
+    "Rest parameter '{0}' implicitly has an 'any[]' type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7047
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its get accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7048
+    },
+    "Property '{0}' implicitly has type 'any', but a better type for its set accessor may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7049
+    },
+    "'{0}' implicitly has an '{1}' return type, but a better type may be inferred from usage.": {
+        "category": "Suggestion",
+        "code": 7050
+    },
+    "Parameter has a name but no type. Did you mean '{0}: {1}'?": {
+        "category": "Error",
+        "code": 7051
+    },
+
     "You cannot rename this element.": {
         "category": "Error",
         "code": 8000
@@ -4419,6 +4520,10 @@
         "category": "Message",
         "code": 90033
     },
+    "Add parameter name": {
+        "category": "Message",
+        "code": 90034
+    },
     "Convert function to an ES2015 class": {
         "category": "Message",
         "code": 95001
@@ -4659,7 +4764,6 @@
         "category": "Message",
         "code": 95062
     },
-
     "Add missing enum member '{0}'": {
         "category": "Message",
         "code": 95063
@@ -4683,5 +4787,25 @@
     "Generate types for all packages without types": {
         "category": "Message",
         "code": 95068
+    },
+    "Add 'unknown' conversion for non-overlapping types": {
+        "category": "Message",
+        "code": 95069
+    },
+    "Add 'unknown' to all conversions of non-overlapping types": {
+        "category": "Message",
+        "code": 95070
+    },
+    "Add missing 'new' operator to call": {
+        "category": "Message",
+        "code": 95071
+    },
+    "Add missing 'new' operator to all calls": {
+        "category": "Message",
+        "code": 95072
+    },
+    "Add names to all parameters without names": {
+        "category": "Message",
+        "code": 95073
     }
 }

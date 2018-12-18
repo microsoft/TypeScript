@@ -8,7 +8,7 @@ let b: {toString(): string};
 
 if (typeof a === "number") {
 >typeof a === "number" : boolean
->typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >a : {}
 >"number" : "number"
 
@@ -18,7 +18,7 @@ if (typeof a === "number") {
 }
 if (typeof a === "string") {
 >typeof a === "string" : boolean
->typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >a : {}
 >"string" : "string"
 
@@ -28,7 +28,7 @@ if (typeof a === "string") {
 }
 if (typeof a === "boolean") {
 >typeof a === "boolean" : boolean
->typeof a : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof a : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >a : {}
 >"boolean" : "boolean"
 
@@ -39,7 +39,7 @@ if (typeof a === "boolean") {
 
 if (typeof b === "number") {
 >typeof b === "number" : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : { toString(): string; }
 >"number" : "number"
 
@@ -49,7 +49,7 @@ if (typeof b === "number") {
 }
 if (typeof b === "string") {
 >typeof b === "string" : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : { toString(): string; }
 >"string" : "string"
 
@@ -59,7 +59,7 @@ if (typeof b === "string") {
 }
 if (typeof b === "boolean") {
 >typeof b === "boolean" : boolean
->typeof b : "string" | "number" | "boolean" | "symbol" | "undefined" | "object" | "function"
+>typeof b : "string" | "number" | "bigint" | "boolean" | "symbol" | "undefined" | "object" | "function"
 >b : { toString(): string; }
 >"boolean" : "boolean"
 

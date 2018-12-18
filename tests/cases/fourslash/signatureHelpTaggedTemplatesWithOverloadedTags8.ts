@@ -8,7 +8,7 @@
 //// f `${ undefined }   ${ undefined }    ${/*1*/   10/*2*/./*3*/01 /*4*/} `
 
 verify.signatureHelp({
-    marker: test.markerNames(),
+    marker: test.markers(),
     overloadsCount: 3,
     text: "f(templateStrings: string[], p1_o2: number, p2_o2: number, p3_o2: number): string",
     argumentCount: 4,

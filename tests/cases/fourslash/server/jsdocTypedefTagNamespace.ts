@@ -15,13 +15,7 @@
 //// /** @type {T.People} */
 //// var x1; x1./*3*/;
 
-goTo.marker("1");
-verify.completionListContains('charAt');
-verify.completionListContains('toExponential');
-
-goTo.marker("2");
-verify.completionListContains('age');
-
-goTo.marker("3");
-verify.completionListContains('charAt');
-verify.completionListContains('toExponential');
+verify.completions(
+    { marker: ["1", "3"], includes: ["charAt", "toExponential"] },
+    { marker: "2", includes: "age" },
+);
