@@ -1,0 +1,101 @@
+=== tests/cases/compiler/rangeTypeFunctions.ts ===
+function a(): (> 1) {
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+    return 3;
+}
+let a0 = a();
+>a0 : Symbol(a0, Decl(rangeTypeFunctions.ts, 3, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a1: number = a();
+>a1 : Symbol(a1, Decl(rangeTypeFunctions.ts, 4, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a2: (> 1) = a();
+>a2 : Symbol(a2, Decl(rangeTypeFunctions.ts, 5, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a3: (>= 1) = a();
+>a3 : Symbol(a3, Decl(rangeTypeFunctions.ts, 6, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a4: (> 0) = a();
+>a4 : Symbol(a4, Decl(rangeTypeFunctions.ts, 7, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a5: (> 2) = a();
+>a5 : Symbol(a5, Decl(rangeTypeFunctions.ts, 9, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+let a6: (< 4) = a();
+>a6 : Symbol(a6, Decl(rangeTypeFunctions.ts, 10, 3))
+>a : Symbol(a, Decl(rangeTypeFunctions.ts, 0, 0))
+
+
+function b(): (>= 0) {
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+    return 0;
+}
+let b0 = b();
+>b0 : Symbol(b0, Decl(rangeTypeFunctions.ts, 16, 3))
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+let b1: number = b();
+>b1 : Symbol(b1, Decl(rangeTypeFunctions.ts, 17, 3))
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+let b2: (>= 0) = b();
+>b2 : Symbol(b2, Decl(rangeTypeFunctions.ts, 18, 3))
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+let b3: (> 0) = b();
+>b3 : Symbol(b3, Decl(rangeTypeFunctions.ts, 20, 3))
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+let b4: (>= 1) = b();
+>b4 : Symbol(b4, Decl(rangeTypeFunctions.ts, 21, 3))
+>b : Symbol(b, Decl(rangeTypeFunctions.ts, 10, 20))
+
+
+function c(): (> 0) {
+>c : Symbol(c, Decl(rangeTypeFunctions.ts, 21, 21))
+
+    return 0;
+}
+
+
+function d(arg: (> 0)): void {
+>d : Symbol(d, Decl(rangeTypeFunctions.ts, 26, 1))
+>arg : Symbol(arg, Decl(rangeTypeFunctions.ts, 29, 11))
+
+    arg;
+>arg : Symbol(arg, Decl(rangeTypeFunctions.ts, 29, 11))
+
+    return;
+}
+let d1 = d(1);
+>d1 : Symbol(d1, Decl(rangeTypeFunctions.ts, 33, 3))
+>d : Symbol(d, Decl(rangeTypeFunctions.ts, 26, 1))
+
+let d2 = d(0);
+>d2 : Symbol(d2, Decl(rangeTypeFunctions.ts, 35, 3))
+>d : Symbol(d, Decl(rangeTypeFunctions.ts, 26, 1))
+
+
+function e(arg: (> 0)): (> 0) {
+>e : Symbol(e, Decl(rangeTypeFunctions.ts, 35, 14))
+>arg : Symbol(arg, Decl(rangeTypeFunctions.ts, 38, 11))
+
+    return arg;
+>arg : Symbol(arg, Decl(rangeTypeFunctions.ts, 38, 11))
+}
+let e1 = e(1);
+>e1 : Symbol(e1, Decl(rangeTypeFunctions.ts, 41, 3))
+>e : Symbol(e, Decl(rangeTypeFunctions.ts, 35, 14))
+
+let e2 = e(0);
+>e2 : Symbol(e2, Decl(rangeTypeFunctions.ts, 43, 3))
+>e : Symbol(e, Decl(rangeTypeFunctions.ts, 35, 14))
+

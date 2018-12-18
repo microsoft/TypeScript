@@ -1344,6 +1344,8 @@ namespace ts {
                         return emitIndexedAccessType(<IndexedAccessTypeNode>node);
                     case SyntaxKind.MappedType:
                         return emitMappedType(<MappedTypeNode>node);
+                    case SyntaxKind.HalfRangeType:
+                        return emitHalfRangeType(<HalfRangeTypeNode>node);
                     case SyntaxKind.LiteralType:
                         return emitLiteralType(<LiteralTypeNode>node);
                     case SyntaxKind.ImportType:
@@ -2194,6 +2196,14 @@ namespace ts {
                 decreaseIndent();
             }
             writePunctuation("}");
+        }
+
+        function emitHalfRangeType(node: HalfRangeTypeNode) {
+            writePunctuation("(");
+            writeTokenNode(node.operator, writeOperator);
+            writeSpace();
+            emit(node.basis);
+            writePunctuation(")");
         }
 
         function emitLiteralType(node: LiteralTypeNode) {

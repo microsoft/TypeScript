@@ -1,0 +1,65 @@
+=== tests/cases/compiler/rangeTypeFunctionDeclarations.ts ===
+declare function a(arg: (> 0)): void;
+>a : (arg: (> 0)) => void
+>arg : (> 0)
+
+let a1 = 1;
+>a1 : number
+>1 : 1
+
+a(a1);
+>a(a1) : void
+>a : (arg: (> 0)) => void
+>a1 : number
+
+let a2: (> 1) = 2;
+>a2 : (> 1)
+>2 : 2
+
+a(a2);
+>a(a2) : void
+>a : (arg: (> 0)) => void
+>a2 : (> 1)
+
+let a3 = 0;
+>a3 : number
+>0 : 0
+
+a(a3);
+>a(a3) : void
+>a : (arg: (> 0)) => void
+>a3 : number
+
+let a4: (>= 0) = 0;
+>a4 : (>= 0)
+>0 : 0
+
+a(a4);
+>a(a4) : void
+>a : (arg: (> 0)) => void
+>a4 : (>= 0)
+
+
+declare function b(): (< 1);
+>b : () => (< 1)
+
+let b1: (< 1) = b();
+>b1 : (< 1)
+>b() : (< 1)
+>b : () => (< 1)
+
+let b2: (<= 1) = b();
+>b2 : (<= 1)
+>b() : (< 1)
+>b : () => (< 1)
+
+let b3: (< 2) = b();
+>b3 : (< 2)
+>b() : (< 1)
+>b : () => (< 1)
+
+let b4: (< 0) = b();
+>b4 : (< 0)
+>b() : (< 1)
+>b : () => (< 1)
+

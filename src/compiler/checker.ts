@@ -4238,6 +4238,20 @@ namespace ts {
                 if (type.flags & TypeFlags.Substitution) {
                     return typeToTypeNodeHelper((<SubstitutionType>type).typeVariable, context);
                 }
+                if (type.flags & TypeFlags.Range) {
+                    let operator;
+                    let basis;
+                    if ((<RangeType>type).min && !(<RangeType>type).max) {
+                        operator = (<RangeType>type).minOpen ? createToken(SyntaxKind.GreaterThanToken) : createToken(SyntaxKind.GreaterThanEqualsToken);
+                        basis = createLiteral((<RangeType>type).min!.value);
+                        return createHalfRangeTypeNode(operator, basis);
+                    }
+                    else if (!(<RangeType>type).min && (<RangeType>type).max) {
+                        operator = (<RangeType>type).maxOpen ? createToken(SyntaxKind.LessThanToken) : createToken(SyntaxKind.LessThanEqualsToken);
+                        basis = createLiteral((<RangeType>type).max!.value);
+                        return createHalfRangeTypeNode(operator, basis);
+                    } // TODO: "full" range handling (e.g. union)
+                }
 
                 return Debug.fail("Should be unreachable.");
 
@@ -13217,6 +13231,37 @@ namespace ts {
             return links.resolvedType;
         }
 
+        function getRangeTypeFromHalfRangeTypeNode(node: HalfRangeTypeNode): Type {
+            const links = getNodeLinks(node);
+            if (!links.resolvedType) {
+                let value: NumberLiteralType;
+                if (isPrefixUnaryExpression(node.basis)) {
+                    value = <NumberLiteralType>getLiteralType(-(node.basis.operand as NumericLiteral).text);
+                }
+                else {
+                    value = <NumberLiteralType>getLiteralType(+node.basis.text);
+                }
+
+                const type = <RangeType>createType(TypeFlags.Range);
+
+                switch (node.operator.kind) {
+                    case SyntaxKind.LessThanToken:
+                        type.maxOpen = true;
+                    // falls through
+                    case SyntaxKind.LessThanEqualsToken:
+                        type.max = value;
+                        break;
+                    case SyntaxKind.GreaterThanToken:
+                        type.minOpen = true;
+                    // falls through
+                    case SyntaxKind.GreaterThanEqualsToken:
+                        type.min = value;
+                }
+                links.resolvedType = type;
+            }
+            return links.resolvedType;
+        }
+
         function getTypeFromTypeNode(node: TypeNode): Type {
             switch (node.kind) {
                 case SyntaxKind.AnyKeyword:
@@ -13298,6 +13343,8 @@ namespace ts {
                     return getTypeFromInferTypeNode(<InferTypeNode>node);
                 case SyntaxKind.ImportType:
                     return getTypeFromImportTypeNode(<ImportTypeNode>node);
+                case SyntaxKind.HalfRangeType:
+                    return getRangeTypeFromHalfRangeTypeNode(<HalfRangeTypeNode>node);
                 // This function assumes that an identifier or qualified name is a type expression
                 // Callers should first ensure this by calling isTypeNode
                 case SyntaxKind.Identifier:
@@ -14696,7 +14743,52 @@ namespace ts {
                 if (s & (TypeFlags.Number | TypeFlags.NumberLiteral) && !(s & TypeFlags.EnumLiteral) && (
                     t & TypeFlags.Enum || t & TypeFlags.NumberLiteral && t & TypeFlags.EnumLiteral)) return true;
             }
+            if (s & TypeFlags.NumberLike && t & TypeFlags.Range) {
+                return isRangeTypeRelatedTo(source, <RangeType>target, relation);
+            }
             return false;
+        }
+
+        function isRangeTypeRelatedTo(source: Type, target: RangeType, relation: Map<RelationComparisonResult>) {
+            if (relation === comparableRelation) return true;
+            if (relation === assignableRelation) {
+                if (source.flags & TypeFlags.Range) {
+                    return isRangeContainedBy(<RangeType>source, target);
+                }
+                if (source.flags & TypeFlags.NumberLiteral) {
+                    return isValueInRange(target, (<NumberLiteralType>source).value);
+                }
+            }
+            return false;
+        }
+
+        // A range "contained" by another is essentially a subtype of it
+        function isRangeContainedBy(source: RangeType, target: RangeType) {
+            if (!source.min && target.min) return false;
+            if (!source.max && target.max) return false;
+            if (source.min && target.min) {
+                if ((source.min.value === target.min.value && !source.minOpen && target.minOpen
+                    || source.min.value < target.min.value)) {
+                        return false;
+                }
+            }
+            if (source.max && target.max) {
+                if ((source.max.value === target.max.value && !source.maxOpen && target.maxOpen
+                    || source.max.value > target.max.value)) {
+                    return false;
+                }
+            }
+            return true;
+        }
+
+        function isValueInRange(range: RangeType, value: number) {
+            if (range.min && (range.minOpen && value === range.min.value || value < range.min.value)) {
+                return false;
+            }
+            if (range.max && (range.maxOpen && value === range.max.value || value > range.max.value)) {
+                return false;
+            }
+            return true;
         }
 
         function isTypeRelatedTo(source: Type, target: Type, relation: Map<RelationComparisonResult>) {
@@ -15228,6 +15320,15 @@ namespace ts {
                             return result;
                         }
                     }
+                }
+                if (flags & TypeFlags.Range) {
+                    // assert types
+                    const src = <RangeType>source;
+                    const tgt = <RangeType>target;
+                    if (src.min === tgt.min && src.minOpen === tgt.minOpen
+                        && src.max === tgt.max && tgt.maxOpen === tgt.maxOpen) {
+                            return Ternary.True;
+                        }
                 }
                 return Ternary.False;
             }
@@ -29122,6 +29223,10 @@ namespace ts {
             forEach(node.types, checkSourceElement);
         }
 
+        function checkHalfRangeType(node: HalfRangeTypeNode) {
+            forEachChild(node, checkSourceElement);
+        }
+
         function checkIndexedAccessIndexType(type: Type, accessNode: IndexedAccessTypeNode | ElementAccessExpression) {
             if (!(type.flags & TypeFlags.IndexedAccess)) {
                 return type;
@@ -33627,6 +33732,8 @@ namespace ts {
                 case SyntaxKind.UnionType:
                 case SyntaxKind.IntersectionType:
                     return checkUnionOrIntersectionType(<UnionOrIntersectionTypeNode>node);
+                case SyntaxKind.HalfRangeType:
+                    return checkHalfRangeType(<HalfRangeTypeNode>node);
                 case SyntaxKind.ParenthesizedType:
                 case SyntaxKind.OptionalType:
                 case SyntaxKind.RestType:

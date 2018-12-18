@@ -1,0 +1,98 @@
+=== tests/cases/compiler/rangeTypeDeclaration.ts ===
+let a1: (> -1) = 0;
+>a1 : (> -1)
+>-1 : -1
+>1 : 1
+>0 : 0
+
+let a2: (< 1) = -10;
+>a2 : (< 1)
+>-10 : -10
+>10 : 10
+
+let a4: (> 0.1) = 0.5;
+>a4 : (> 0.1)
+>0.5 : 0.5
+
+let a5: (<= 4.5) = Math.E;
+>a5 : (<= 4.5)
+>Math.E : number
+>Math : Math
+>E : number
+
+let a6: (>= -4) = 1.5;
+>a6 : (>= -4)
+>-4 : -4
+>4 : 4
+>1.5 : 1.5
+
+let a7: (>= 2) = 2;
+>a7 : (>= 2)
+>2 : 2
+
+let b1: (> 1.2) = 1.2;
+>b1 : (> 1.2)
+>1.2 : 1.2
+
+let b2: (< 1.2) = 1.2;
+>b2 : (< 1.2)
+>1.2 : 1.2
+
+let b3: (>= 0) = -1;
+>b3 : (>= 0)
+>-1 : -1
+>1 : 1
+
+let b4: (< 0) = 42;
+>b4 : (< 0)
+>42 : 42
+
+enum C {
+>C : C
+
+    foo,
+>foo : C.foo
+
+    bar
+>bar : C.bar
+}
+
+let c1: (>= 0) = C.foo;
+>c1 : (>= 0)
+>C.foo : C.foo
+>C : typeof C
+>foo : C.foo
+
+let c2: C = <C>c1;
+>c2 : C
+><C>c1 : C
+>c1 : (>= 0)
+
+const enum D {
+>D : D
+
+    foo,
+>foo : D.foo
+
+    bar
+>bar : D.bar
+}
+
+let d1: (>= 0) = D.foo;
+>d1 : (>= 0)
+>D.foo : D.foo
+>D : typeof D
+>foo : D.foo
+
+let d2: (<= 0) = D.foo;
+>d2 : (<= 0)
+>D.foo : D.foo
+>D : typeof D
+>foo : D.foo
+
+let d3: (<= 0) = D.bar;
+>d3 : (<= 0)
+>D.bar : D.bar
+>D : typeof D
+>bar : D.bar
+

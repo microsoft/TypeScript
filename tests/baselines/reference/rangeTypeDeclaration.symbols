@@ -1,0 +1,84 @@
+=== tests/cases/compiler/rangeTypeDeclaration.ts ===
+let a1: (> -1) = 0;
+>a1 : Symbol(a1, Decl(rangeTypeDeclaration.ts, 0, 3))
+
+let a2: (< 1) = -10;
+>a2 : Symbol(a2, Decl(rangeTypeDeclaration.ts, 1, 3))
+
+let a4: (> 0.1) = 0.5;
+>a4 : Symbol(a4, Decl(rangeTypeDeclaration.ts, 2, 3))
+
+let a5: (<= 4.5) = Math.E;
+>a5 : Symbol(a5, Decl(rangeTypeDeclaration.ts, 3, 3))
+>Math.E : Symbol(Math.E, Decl(lib.es5.d.ts, --, --))
+>Math : Symbol(Math, Decl(lib.es5.d.ts, --, --), Decl(lib.es5.d.ts, --, --))
+>E : Symbol(Math.E, Decl(lib.es5.d.ts, --, --))
+
+let a6: (>= -4) = 1.5;
+>a6 : Symbol(a6, Decl(rangeTypeDeclaration.ts, 4, 3))
+
+let a7: (>= 2) = 2;
+>a7 : Symbol(a7, Decl(rangeTypeDeclaration.ts, 5, 3))
+
+let b1: (> 1.2) = 1.2;
+>b1 : Symbol(b1, Decl(rangeTypeDeclaration.ts, 7, 3))
+
+let b2: (< 1.2) = 1.2;
+>b2 : Symbol(b2, Decl(rangeTypeDeclaration.ts, 8, 3))
+
+let b3: (>= 0) = -1;
+>b3 : Symbol(b3, Decl(rangeTypeDeclaration.ts, 9, 3))
+
+let b4: (< 0) = 42;
+>b4 : Symbol(b4, Decl(rangeTypeDeclaration.ts, 10, 3))
+
+enum C {
+>C : Symbol(C, Decl(rangeTypeDeclaration.ts, 10, 19))
+
+    foo,
+>foo : Symbol(C.foo, Decl(rangeTypeDeclaration.ts, 12, 8))
+
+    bar
+>bar : Symbol(C.bar, Decl(rangeTypeDeclaration.ts, 13, 8))
+}
+
+let c1: (>= 0) = C.foo;
+>c1 : Symbol(c1, Decl(rangeTypeDeclaration.ts, 17, 3))
+>C.foo : Symbol(C.foo, Decl(rangeTypeDeclaration.ts, 12, 8))
+>C : Symbol(C, Decl(rangeTypeDeclaration.ts, 10, 19))
+>foo : Symbol(C.foo, Decl(rangeTypeDeclaration.ts, 12, 8))
+
+let c2: C = <C>c1;
+>c2 : Symbol(c2, Decl(rangeTypeDeclaration.ts, 18, 3))
+>C : Symbol(C, Decl(rangeTypeDeclaration.ts, 10, 19))
+>C : Symbol(C, Decl(rangeTypeDeclaration.ts, 10, 19))
+>c1 : Symbol(c1, Decl(rangeTypeDeclaration.ts, 17, 3))
+
+const enum D {
+>D : Symbol(D, Decl(rangeTypeDeclaration.ts, 18, 18))
+
+    foo,
+>foo : Symbol(D.foo, Decl(rangeTypeDeclaration.ts, 20, 14))
+
+    bar
+>bar : Symbol(D.bar, Decl(rangeTypeDeclaration.ts, 21, 8))
+}
+
+let d1: (>= 0) = D.foo;
+>d1 : Symbol(d1, Decl(rangeTypeDeclaration.ts, 25, 3))
+>D.foo : Symbol(D.foo, Decl(rangeTypeDeclaration.ts, 20, 14))
+>D : Symbol(D, Decl(rangeTypeDeclaration.ts, 18, 18))
+>foo : Symbol(D.foo, Decl(rangeTypeDeclaration.ts, 20, 14))
+
+let d2: (<= 0) = D.foo;
+>d2 : Symbol(d2, Decl(rangeTypeDeclaration.ts, 26, 3))
+>D.foo : Symbol(D.foo, Decl(rangeTypeDeclaration.ts, 20, 14))
+>D : Symbol(D, Decl(rangeTypeDeclaration.ts, 18, 18))
+>foo : Symbol(D.foo, Decl(rangeTypeDeclaration.ts, 20, 14))
+
+let d3: (<= 0) = D.bar;
+>d3 : Symbol(d3, Decl(rangeTypeDeclaration.ts, 28, 3))
+>D.bar : Symbol(D.bar, Decl(rangeTypeDeclaration.ts, 21, 8))
+>D : Symbol(D, Decl(rangeTypeDeclaration.ts, 18, 18))
+>bar : Symbol(D.bar, Decl(rangeTypeDeclaration.ts, 21, 8))
+

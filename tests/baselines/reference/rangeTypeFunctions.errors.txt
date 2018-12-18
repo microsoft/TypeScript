@@ -1,0 +1,69 @@
+tests/cases/compiler/rangeTypeFunctions.ts(10,5): error TS2322: Type '(> 1)' is not assignable to type '(> 2)'.
+tests/cases/compiler/rangeTypeFunctions.ts(11,5): error TS2322: Type '(> 1)' is not assignable to type '(< 4)'.
+tests/cases/compiler/rangeTypeFunctions.ts(21,5): error TS2322: Type '(>= 0)' is not assignable to type '(> 0)'.
+tests/cases/compiler/rangeTypeFunctions.ts(22,5): error TS2322: Type '(>= 0)' is not assignable to type '(>= 1)'.
+tests/cases/compiler/rangeTypeFunctions.ts(26,5): error TS2322: Type '0' is not assignable to type '(> 0)'.
+tests/cases/compiler/rangeTypeFunctions.ts(36,12): error TS2345: Argument of type '0' is not assignable to parameter of type '(> 0)'.
+tests/cases/compiler/rangeTypeFunctions.ts(44,12): error TS2345: Argument of type '0' is not assignable to parameter of type '(> 0)'.
+
+
+==== tests/cases/compiler/rangeTypeFunctions.ts (7 errors) ====
+    function a(): (> 1) {
+        return 3;
+    }
+    let a0 = a();
+    let a1: number = a();
+    let a2: (> 1) = a();
+    let a3: (>= 1) = a();
+    let a4: (> 0) = a();
+    
+    let a5: (> 2) = a();
+        ~~
+!!! error TS2322: Type '(> 1)' is not assignable to type '(> 2)'.
+    let a6: (< 4) = a();
+        ~~
+!!! error TS2322: Type '(> 1)' is not assignable to type '(< 4)'.
+    
+    
+    function b(): (>= 0) {
+        return 0;
+    }
+    let b0 = b();
+    let b1: number = b();
+    let b2: (>= 0) = b();
+    
+    let b3: (> 0) = b();
+        ~~
+!!! error TS2322: Type '(>= 0)' is not assignable to type '(> 0)'.
+    let b4: (>= 1) = b();
+        ~~
+!!! error TS2322: Type '(>= 0)' is not assignable to type '(>= 1)'.
+    
+    
+    function c(): (> 0) {
+        return 0;
+        ~~~~~~~~~
+!!! error TS2322: Type '0' is not assignable to type '(> 0)'.
+    }
+    
+    
+    function d(arg: (> 0)): void {
+        arg;
+        return;
+    }
+    let d1 = d(1);
+    
+    let d2 = d(0);
+               ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '(> 0)'.
+    
+    
+    function e(arg: (> 0)): (> 0) {
+        return arg;
+    }
+    let e1 = e(1);
+    
+    let e2 = e(0);
+               ~
+!!! error TS2345: Argument of type '0' is not assignable to parameter of type '(> 0)'.
+    

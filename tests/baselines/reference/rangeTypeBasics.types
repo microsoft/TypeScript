@@ -1,0 +1,145 @@
+=== tests/cases/compiler/rangeTypeBasics.ts ===
+let a1: (< 1);
+>a1 : (< 1)
+
+let a2: (< -1);
+>a2 : (< -1)
+>-1 : -1
+>1 : 1
+
+let a3: (<= 1);
+>a3 : (<= 1)
+
+let a4: (<= -1);
+>a4 : (<= -1)
+>-1 : -1
+>1 : 1
+
+let a5: (> 1);
+>a5 : (> 1)
+
+let a6: (> -1);
+>a6 : (> -1)
+>-1 : -1
+>1 : 1
+
+let a7: (>= 1);
+>a7 : (>= 1)
+
+let a8: (>= -1);
+>a8 : (>= -1)
+>-1 : -1
+>1 : 1
+
+let a9: ((> 0));
+>a9 : (> 0)
+
+let a10: (((> 0)));
+>a10 : (> 0)
+
+declare function b1(): (> -3.14);
+>b1 : () => (> -3.14)
+>-3.14 : -3.14
+>3.14 : 3.14
+
+declare function b2(b2arg: (>= 42)): void;
+>b2 : (b2arg: (>= 42)) => void
+>b2arg : (>= 42)
+
+declare function b3(b3arg: (< 7.4)): (> 10);
+>b3 : (b3arg: (< 7.4)) => (> 10)
+>b3arg : (< 7.4)
+
+interface C {
+    c1: (>= 4);
+>c1 : (>= 4)
+
+    c2(c2arg: (> -6)): void;
+>c2 : (c2arg: (> -6)) => void
+>c2arg : (> -6)
+>-6 : -6
+>6 : 6
+
+    c3(): (> 9.6);
+>c3 : () => (> 9.6)
+
+    c4(c4arg: (<= -2)): (> 100);
+>c4 : (c4arg: (<= -2)) => (> 100)
+>c4arg : (<= -2)
+>-2 : -2
+>2 : 2
+}
+
+class D {
+>D : D
+
+    public d1: (> 0);
+>d1 : (> 0)
+
+    d2(d2arg: (> 0)) {
+>d2 : (d2arg: (> 0)) => (> 0)
+>d2arg : (> 0)
+
+        return d2arg;
+>d2arg : (> 0)
+    }
+}
+
+type E1 = (> 4);
+>E1 : (> 4)
+
+type E2 = (<= 10);
+>E2 : (<= 10)
+
+type E3 = (>= -42);
+>E3 : (>= -42)
+>-42 : -42
+>42 : 42
+
+type F1 = (<= "notanumber");
+>F1 : any
+><= "notanumber" : boolean
+> : any
+>"notanumber" : "notanumber"
+
+type F2 = (>= "0");
+>F2 : any
+>>= "0" : boolean
+> : any
+>"0" : "0"
+
+type F3 = (<4>);
+>F3 : (< 4)
+>> : boolean
+> : any
+> : any
+
+type F4 = (< +);
+>F4 : () => any
+>+ : number
+> : any
+
+type F5 = (> +);
+>F5 : any
+>> + : boolean
+> : any
+>+ : number
+> : any
+
+type F6 = (> &);
+>F6 : any
+>> & : number
+>> : boolean
+> : any
+> : any
+> : any
+
+type F7 = (>= );
+>F7 : any
+>>= : boolean
+> : any
+> : any
+
+type F8 = (< );
+>F8 : () => any
+

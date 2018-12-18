@@ -983,6 +983,20 @@ namespace ts {
             : node;
     }
 
+    export function createHalfRangeTypeNode(operator: HalfRangeTypeNode["operator"], basis: HalfRangeTypeNode["basis"]) {
+        const node = createSynthesizedNode(SyntaxKind.HalfRangeType) as HalfRangeTypeNode;
+        node.operator = operator;
+        node.basis = basis;
+        return node;
+    }
+
+    export function updateHalfRangeTypeNode(node: HalfRangeTypeNode, operator: HalfRangeTypeNode["operator"], basis: HalfRangeTypeNode["basis"]) {
+        return node.operator !== operator
+            || node.basis !== basis
+            ? updateNode(createHalfRangeTypeNode(operator, basis), node)
+            : node;
+    }
+
     export function createLiteralTypeNode(literal: LiteralTypeNode["literal"]) {
         const node = createSynthesizedNode(SyntaxKind.LiteralType) as LiteralTypeNode;
         node.literal = literal;

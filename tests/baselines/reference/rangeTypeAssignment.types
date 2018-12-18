@@ -1,0 +1,61 @@
+=== tests/cases/compiler/rangeTypeAssignment.ts ===
+let a1: (> 0) = 1;
+>a1 : (> 0)
+>1 : 1
+
+let a2: number = a1;
+>a2 : number
+>a1 : (> 0)
+
+let a3: (> -1) = a1;
+>a3 : (> -1)
+>-1 : -1
+>1 : 1
+>a1 : (> 0)
+
+let a4: (>= 0) = a1;
+>a4 : (>= 0)
+>a1 : (> 0)
+
+let a5: (> 0) = a1;
+>a5 : (> 0)
+>a1 : (> 0)
+
+let b1: number = 0;
+>b1 : number
+>0 : 0
+
+let b2: (< 0) = b1;
+>b2 : (< 0)
+>b1 : number
+
+let b3: (> 0) = b1;
+>b3 : (> 0)
+>b1 : number
+
+enum C {
+>C : C
+
+    foo,
+>foo : C.foo
+
+    bar
+>bar : C.bar
+}
+
+let c1: C = C.foo;
+>c1 : C
+>C.foo : C.foo
+>C : typeof C
+>foo : C.foo
+
+let c2: (>= 0) = C.foo;
+>c2 : (>= 0)
+>C.foo : C.foo
+>C : typeof C
+>foo : C.foo
+
+let c3: C = c2;
+>c3 : C
+>c2 : (>= 0)
+

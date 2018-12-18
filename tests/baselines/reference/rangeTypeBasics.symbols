@@ -1,0 +1,108 @@
+=== tests/cases/compiler/rangeTypeBasics.ts ===
+let a1: (< 1);
+>a1 : Symbol(a1, Decl(rangeTypeBasics.ts, 0, 3))
+
+let a2: (< -1);
+>a2 : Symbol(a2, Decl(rangeTypeBasics.ts, 1, 3))
+
+let a3: (<= 1);
+>a3 : Symbol(a3, Decl(rangeTypeBasics.ts, 2, 3))
+
+let a4: (<= -1);
+>a4 : Symbol(a4, Decl(rangeTypeBasics.ts, 3, 3))
+
+let a5: (> 1);
+>a5 : Symbol(a5, Decl(rangeTypeBasics.ts, 4, 3))
+
+let a6: (> -1);
+>a6 : Symbol(a6, Decl(rangeTypeBasics.ts, 5, 3))
+
+let a7: (>= 1);
+>a7 : Symbol(a7, Decl(rangeTypeBasics.ts, 6, 3))
+
+let a8: (>= -1);
+>a8 : Symbol(a8, Decl(rangeTypeBasics.ts, 7, 3))
+
+let a9: ((> 0));
+>a9 : Symbol(a9, Decl(rangeTypeBasics.ts, 9, 3))
+
+let a10: (((> 0)));
+>a10 : Symbol(a10, Decl(rangeTypeBasics.ts, 10, 3))
+
+declare function b1(): (> -3.14);
+>b1 : Symbol(b1, Decl(rangeTypeBasics.ts, 10, 19))
+
+declare function b2(b2arg: (>= 42)): void;
+>b2 : Symbol(b2, Decl(rangeTypeBasics.ts, 12, 33))
+>b2arg : Symbol(b2arg, Decl(rangeTypeBasics.ts, 13, 20))
+
+declare function b3(b3arg: (< 7.4)): (> 10);
+>b3 : Symbol(b3, Decl(rangeTypeBasics.ts, 13, 42))
+>b3arg : Symbol(b3arg, Decl(rangeTypeBasics.ts, 14, 20))
+
+interface C {
+>C : Symbol(C, Decl(rangeTypeBasics.ts, 14, 44))
+
+    c1: (>= 4);
+>c1 : Symbol(C.c1, Decl(rangeTypeBasics.ts, 16, 13))
+
+    c2(c2arg: (> -6)): void;
+>c2 : Symbol(C.c2, Decl(rangeTypeBasics.ts, 17, 15))
+>c2arg : Symbol(c2arg, Decl(rangeTypeBasics.ts, 18, 7))
+
+    c3(): (> 9.6);
+>c3 : Symbol(C.c3, Decl(rangeTypeBasics.ts, 18, 28))
+
+    c4(c4arg: (<= -2)): (> 100);
+>c4 : Symbol(C.c4, Decl(rangeTypeBasics.ts, 19, 18))
+>c4arg : Symbol(c4arg, Decl(rangeTypeBasics.ts, 20, 7))
+}
+
+class D {
+>D : Symbol(D, Decl(rangeTypeBasics.ts, 21, 1))
+
+    public d1: (> 0);
+>d1 : Symbol(D.d1, Decl(rangeTypeBasics.ts, 23, 9))
+
+    d2(d2arg: (> 0)) {
+>d2 : Symbol(D.d2, Decl(rangeTypeBasics.ts, 24, 21))
+>d2arg : Symbol(d2arg, Decl(rangeTypeBasics.ts, 25, 7))
+
+        return d2arg;
+>d2arg : Symbol(d2arg, Decl(rangeTypeBasics.ts, 25, 7))
+    }
+}
+
+type E1 = (> 4);
+>E1 : Symbol(E1, Decl(rangeTypeBasics.ts, 28, 1))
+
+type E2 = (<= 10);
+>E2 : Symbol(E2, Decl(rangeTypeBasics.ts, 30, 16))
+
+type E3 = (>= -42);
+>E3 : Symbol(E3, Decl(rangeTypeBasics.ts, 31, 18))
+
+type F1 = (<= "notanumber");
+>F1 : Symbol(F1, Decl(rangeTypeBasics.ts, 32, 19))
+
+type F2 = (>= "0");
+>F2 : Symbol(F2, Decl(rangeTypeBasics.ts, 34, 28))
+
+type F3 = (<4>);
+>F3 : Symbol(F3, Decl(rangeTypeBasics.ts, 35, 19))
+
+type F4 = (< +);
+>F4 : Symbol(F4, Decl(rangeTypeBasics.ts, 36, 16))
+
+type F5 = (> +);
+>F5 : Symbol(F5, Decl(rangeTypeBasics.ts, 37, 16))
+
+type F6 = (> &);
+>F6 : Symbol(F6, Decl(rangeTypeBasics.ts, 38, 16))
+
+type F7 = (>= );
+>F7 : Symbol(F7, Decl(rangeTypeBasics.ts, 39, 16))
+
+type F8 = (< );
+>F8 : Symbol(F8, Decl(rangeTypeBasics.ts, 40, 16))
+
