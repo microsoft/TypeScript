@@ -4,8 +4,7 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(14,15): error TS2322: T
       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
         Types of property 'next' are incompatible.
           Type '() => { value: string; }' is not assignable to type '(value?: any) => IteratorResult<string>'.
-            Type '{ value: string; }' is not assignable to type 'IteratorResult<string>'.
-              Property 'done' is missing in type '{ value: string; }'.
+            Property 'done' is missing in type '{ value: string; }' but required in type 'IteratorResult<string>'.
 
 
 ==== tests/cases/conformance/es6/for-ofStatements/for-of31.ts (1 errors) ====
@@ -30,5 +29,5 @@ tests/cases/conformance/es6/for-ofStatements/for-of31.ts(14,15): error TS2322: T
 !!! error TS2322:       Type 'StringIterator' is not assignable to type 'Iterator<string>'.
 !!! error TS2322:         Types of property 'next' are incompatible.
 !!! error TS2322:           Type '() => { value: string; }' is not assignable to type '(value?: any) => IteratorResult<string>'.
-!!! error TS2322:             Type '{ value: string; }' is not assignable to type 'IteratorResult<string>'.
-!!! error TS2322:               Property 'done' is missing in type '{ value: string; }'.
+!!! error TS2322:             Property 'done' is missing in type '{ value: string; }' but required in type 'IteratorResult<string>'.
+!!! related TS2728 /.ts/lib.es2015.iterable.d.ts:32:5: 'done' is declared here.

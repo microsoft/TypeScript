@@ -1,0 +1,16 @@
+=== tests/cases/compiler/bigIntWithTargetES3.ts ===
+const normalNumber = 123; // should not error
+>normalNumber : Symbol(normalNumber, Decl(bigIntWithTargetES3.ts, 0, 5))
+
+let bigintType: bigint; // should not error
+>bigintType : Symbol(bigintType, Decl(bigIntWithTargetES3.ts, 1, 3))
+
+let bigintLiteralType: 123n; // should not error when used as type
+>bigintLiteralType : Symbol(bigintLiteralType, Decl(bigIntWithTargetES3.ts, 2, 3))
+
+let bigintNegativeLiteralType: -123n; // should not error when used as type
+>bigintNegativeLiteralType : Symbol(bigintNegativeLiteralType, Decl(bigIntWithTargetES3.ts, 3, 3))
+
+const bigintNumber = 123n * 0b1111n + 0o444n * 0x7fn; // each literal should error
+>bigintNumber : Symbol(bigintNumber, Decl(bigIntWithTargetES3.ts, 4, 5))
+

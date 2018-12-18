@@ -3,6 +3,4 @@
 ////// no a or b
 /////*1*/function f (a, b) {}
 
-goTo.marker("1");
-verify.not.completionListContains("a");
-verify.not.completionListContains("b");
+verify.completions({ marker: "1", excludes: ["a", "b"] });

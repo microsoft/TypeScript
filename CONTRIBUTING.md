@@ -82,19 +82,26 @@ Your pull request should:
 * To avoid line ending issues, set `autocrlf = input` and `whitespace = cr-at-eol` in your git configuration
 
 ## Contributing `lib.d.ts` fixes
- 
-The library sources are in: [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib)
 
-Library files in `built/local/` are updated by running
-```Shell
+There are three relevant locations to be aware of when it comes to TypeScript's library declaration files:
+
+* `src/lib`: the location of the sources themselves.
+* `lib`: the location of the last-known-good (LKG) versions of the files which are updated periodically.
+* `built/local`: the build output location, including where `src/lib` files will be copied to.
+
+Any changes should be made to [src/lib](https://github.com/Microsoft/TypeScript/tree/master/src/lib). **Most** of these files can be updated by hand, with the exception of any generated files (see below).
+
+Library files in `built/local/` are updated automatically by running the standard build task:
+
+```sh
 jake
 ```
 
-The files in `lib/` are used to bootstrap compilation and usually do not need to be updated.
+The files in `lib/` are used to bootstrap compilation and usually **should not** be updated unless publishing a new version or updating the LKG.
 
-#### `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts`
+### Modifying generated library files
 
-These two files represent the DOM typings and are auto-generated. To make any modifications to them, please submit a PR to  https://github.com/Microsoft/TSJS-lib-generator
+The files `src/lib/dom.generated.d.ts` and `src/lib/webworker.generated.d.ts` both represent type declarations for the DOM and are auto-generated. To make any modifications to them, you will have to direct changes to https://github.com/Microsoft/TSJS-lib-generator
 
 ## Running the Tests
 
@@ -137,10 +144,10 @@ You can specify which browser to use for debugging. Currently Chrome and IE are 
 jake runtests-browser tests=2dArrays browser=chrome
 ```
 
-You can debug with VS Code or Node instead with `jake runtests debug=true`:
+You can debug with VS Code or Node instead with `jake runtests inspect=true`:
 
 ```Shell
-jake runtests tests=2dArrays debug=true
+jake runtests tests=2dArrays inspect=true
 ```
 
 ## Adding a Test
@@ -153,7 +160,7 @@ The supported names and values are the same as those supported in the compiler i
 They are useful for tests relating to modules.
 See below for examples.
 
-**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder. 
+**Note** that if you have a test corresponding to a specific spec compliance item, you can place it in `tests\cases\conformance` in an appropriately-named subfolder.
 **Note** that filenames here must be distinct from all other compiler testcase names, so you may have to work a bit to find a unique name if it's something common.
 
 ### Tests for multiple files

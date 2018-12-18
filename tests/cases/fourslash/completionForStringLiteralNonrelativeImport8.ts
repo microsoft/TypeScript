@@ -41,7 +41,7 @@
 //// export var z = 5;
 
 verify.completions({
-    marker: test.markerNames(),
+    marker: test.markers(),
     exact: ["2test", "prefix", "prefix-only", "0test", "1test"],
     isNewIdentifierLocation: true,
 });

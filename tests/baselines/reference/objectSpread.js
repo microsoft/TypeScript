@@ -120,6 +120,41 @@ let shortCutted: { a: number, b: string } = { ...o, a }
 // non primitive
 let spreadNonPrimitive = { ...<object>{}};
 
+// generic spreads
+
+function f<T, U>(t: T, u: U) {
+    return { ...t, ...u, id: 'id' };
+}
+
+let exclusive: { id: string, a: number, b: string, c: string, d: boolean } =
+    f({ a: 1, b: 'yes' }, { c: 'no', d: false })
+let overlap: { id: string, a: number, b: string } =
+    f({ a: 1 }, { a: 2, b: 'extra' })
+let overlapConflict: { id:string, a: string } =
+    f({ a: 1 }, { a: 'mismatch' })
+let overwriteId: { id: string, a: number, c: number, d: string } =
+    f({ a: 1, id: true }, { c: 1, d: 'no' })
+
+function genericSpread<T, U>(t: T, u: U, v: T | U, w: T | { s: string }, obj: { x: number }) {
+    let x01 = { ...t };
+    let x02 = { ...t, ...t };
+    let x03 = { ...t, ...u };
+    let x04 = { ...u, ...t };
+    let x05 = { a: 5, b: 'hi', ...t };
+    let x06 = { ...t, a: 5, b: 'hi' };
+    let x07 = { a: 5, b: 'hi', ...t, c: true, ...obj };
+    let x09 = { a: 5, ...t, b: 'hi', c: true, ...obj };
+    let x10 = { a: 5, ...t, b: 'hi', ...u, ...obj };
+    let x11 = { ...v };
+    let x12 = { ...v, ...obj };
+    let x13 = { ...w };
+    let x14 = { ...w, ...obj };
+    let x15 = { ...t, ...v };
+    let x16 = { ...t, ...w };
+    let x17 = { ...t, ...w, ...obj };
+    let x18 = { ...t, ...v, ...w };
+}
+
 
 //// [objectSpread.js]
 var __assign = (this && this.__assign) || function () {
@@ -214,3 +249,30 @@ var a = 12;
 var shortCutted = __assign({}, o, { a: a });
 // non primitive
 var spreadNonPrimitive = __assign({}, {});
+// generic spreads
+function f(t, u) {
+    return __assign({}, t, u, { id: 'id' });
+}
+var exclusive = f({ a: 1, b: 'yes' }, { c: 'no', d: false });
+var overlap = f({ a: 1 }, { a: 2, b: 'extra' });
+var overlapConflict = f({ a: 1 }, { a: 'mismatch' });
+var overwriteId = f({ a: 1, id: true }, { c: 1, d: 'no' });
+function genericSpread(t, u, v, w, obj) {
+    var x01 = __assign({}, t);
+    var x02 = __assign({}, t, t);
+    var x03 = __assign({}, t, u);
+    var x04 = __assign({}, u, t);
+    var x05 = __assign({ a: 5, b: 'hi' }, t);
+    var x06 = __assign({}, t, { a: 5, b: 'hi' });
+    var x07 = __assign({ a: 5, b: 'hi' }, t, { c: true }, obj);
+    var x09 = __assign({ a: 5 }, t, { b: 'hi', c: true }, obj);
+    var x10 = __assign({ a: 5 }, t, { b: 'hi' }, u, obj);
+    var x11 = __assign({}, v);
+    var x12 = __assign({}, v, obj);
+    var x13 = __assign({}, w);
+    var x14 = __assign({}, w, obj);
+    var x15 = __assign({}, t, v);
+    var x16 = __assign({}, t, w);
+    var x17 = __assign({}, t, w, obj);
+    var x18 = __assign({}, t, v, w);
+}

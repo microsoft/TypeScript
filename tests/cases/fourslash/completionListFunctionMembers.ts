@@ -7,5 +7,4 @@
 ////
 ////fnc1./**/
 
-goTo.marker();
-verify.completionListContains('arguments', '(property) Function.arguments: any');
+verify.completions({ marker: "", exact: completion.functionMembersWithPrototype });

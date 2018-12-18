@@ -20,8 +20,8 @@ class C<T> extends Component<{ x?: boolean; } & T> {}
 >x : boolean | undefined
 
 const y = new C({foobar: "example"});
->y : C<{ foobar: {}; }>
->new C({foobar: "example"}) : C<{ foobar: {}; }>
+>y : C<{ foobar: string; }>
+>new C({foobar: "example"}) : C<{ foobar: string; }>
 >C : typeof C
 >{foobar: "example"} : { foobar: string; }
 >foobar : string

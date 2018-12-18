@@ -41,11 +41,11 @@ namespace ts.server {
         // path to start of range
         private readonly startPath: LineCollection[];
         private readonly endBranch: LineCollection[] = [];
-        private branchNode: LineNode;
+        private branchNode: LineNode | undefined;
         // path to current node
         private readonly stack: LineNode[];
         private state = CharRangeSection.Entire;
-        private lineCollectionAtBranch: LineCollection;
+        private lineCollectionAtBranch: LineCollection | undefined;
         private initialText = "";
         private trailingText = "";
 
@@ -382,9 +382,8 @@ namespace ts.server {
         }
     }
 
-    /* @internal */
     export class LineIndex {
-        root: LineNode;
+        root!: LineNode;
         // set this to true to check each edit for accuracy
         checkEdits = false;
 

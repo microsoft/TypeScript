@@ -20,7 +20,9 @@
 // @Filename: my_typings/some-module/index.d.ts
 //// export var x = 9;
 
-verify.completionsAt("0", ["someFile.ts", "my_typings", "sub"], { isNewIdentifierLocation: true });
-verify.completionsAt("1", ["some-module"], { isNewIdentifierLocation: true });
-verify.completionsAt("2", ["someOtherFile.ts"], { isNewIdentifierLocation: true });
-verify.completionsAt("3", ["some-module"], { isNewIdentifierLocation: true });
+verify.completions(
+    { marker: "0", exact: ["someFile.ts", "my_typings", "sub"], isNewIdentifierLocation: true },
+    { marker: "1", exact: "some-module", isNewIdentifierLocation: true },
+    { marker: "2", exact: "someOtherFile.ts", isNewIdentifierLocation: true },
+    { marker: "3", exact: "some-module", isNewIdentifierLocation: true },
+);

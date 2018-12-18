@@ -29,6 +29,11 @@ namespace ts {
         preserveWatchOutput?: boolean;
         listEmittedFiles?: boolean;
         listFiles?: boolean;
+        pretty?: boolean;
+
+        traceResolution?: boolean;
+        /* @internal */ diagnostics?: boolean;
+        /* @internal */ extendedDiagnostics?: boolean;
     }
 
     enum BuildResultFlags {
@@ -316,22 +321,32 @@ namespace ts {
         return fileExtensionIs(fileName, Extension.Dts);
     }
 
-    export interface SolutionBuilderHost extends CompilerHost {
+    export interface SolutionBuilderHostBase extends CompilerHost {
         getModifiedTime(fileName: string): Date | undefined;
         setModifiedTime(fileName: string, date: Date): void;
         deleteFile(fileName: string): void;
 
         reportDiagnostic: DiagnosticReporter; // Technically we want to move it out and allow steps of actions on Solution, but for now just merge stuff in build host here
         reportSolutionBuilderStatus: DiagnosticReporter;
+
+        // TODO: To do better with watch mode and normal build mode api that creates program and emits files
+        // This currently helps enable --diagnostics and --extendedDiagnostics
+        beforeCreateProgram?(options: CompilerOptions): void;
+        afterProgramEmitAndDiagnostics?(program: Program): void;
     }
 
-    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHost, WatchHost {
+    export interface SolutionBuilderHost extends SolutionBuilderHostBase {
+        reportErrorSummary?: ReportEmitErrorSummary;
+    }
+
+    export interface SolutionBuilderWithWatchHost extends SolutionBuilderHostBase, WatchHost {
     }
 
     export interface SolutionBuilder {
         buildAllProjects(): ExitStatus;
         cleanAllProjects(): ExitStatus;
 
+        // TODO:: All the below ones should technically only be in watch mode. but thats for later time
         /*@internal*/ resolveProjectName(name: string): ResolvedConfigFileName;
         /*@internal*/ getUpToDateStatusOfFile(configFileName: ResolvedConfigFileName): UpToDateStatus;
         /*@internal*/ getBuildGraph(configFileNames: ReadonlyArray<string>): DependencyGraph;
@@ -340,7 +355,9 @@ namespace ts {
         /*@internal*/ buildInvalidatedProject(): void;
 
         /*@internal*/ resetBuildContext(opts?: BuildOptions): void;
+    }
 
+    export interface SolutionBuilderWithWatch extends SolutionBuilder {
         /*@internal*/ startWatching(): void;
     }
 
@@ -355,8 +372,8 @@ namespace ts {
         };
     }
 
-    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
-        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHost;
+    function createSolutionBuilderHostBase(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter) {
+        const host = createCompilerHostWorker({}, /*setParentNodes*/ undefined, system) as SolutionBuilderHostBase;
         host.getModifiedTime = system.getModifiedTime ? path => system.getModifiedTime!(path) : () => undefined;
         host.setModifiedTime = system.setModifiedTime ? (path, date) => system.setModifiedTime!(path, date) : noop;
         host.deleteFile = system.deleteFile ? path => system.deleteFile!(path) : noop;
@@ -365,8 +382,14 @@ namespace ts {
         return host;
     }
 
-    export function createSolutionBuilderWithWatchHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
-        const host = createSolutionBuilderHost(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
+    export function createSolutionBuilderHost(system = sys, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportErrorSummary?: ReportEmitErrorSummary) {
+        const host = createSolutionBuilderHostBase(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderHost;
+        host.reportErrorSummary = reportErrorSummary;
+        return host;
+    }
+
+    export function createSolutionBuilderWithWatchHost(system?: System, reportDiagnostic?: DiagnosticReporter, reportSolutionBuilderStatus?: DiagnosticReporter, reportWatchStatus?: WatchStatusReporter) {
+        const host = createSolutionBuilderHostBase(system, reportDiagnostic, reportSolutionBuilderStatus) as SolutionBuilderWithWatchHost;
         const watchHost = createWatchHost(system, reportWatchStatus);
         host.onWatchStatusChange = watchHost.onWatchStatusChange;
         host.watchFile = watchHost.watchFile;
@@ -390,7 +413,9 @@ namespace ts {
      * TODO: use SolutionBuilderWithWatchHost => watchedSolution
      *  use SolutionBuilderHost => Solution
      */
-    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder {
+    export function createSolutionBuilder(host: SolutionBuilderHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilder;
+    export function createSolutionBuilder(host: SolutionBuilderWithWatchHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch;
+    export function createSolutionBuilder(host: SolutionBuilderHost | SolutionBuilderWithWatchHost, rootNames: ReadonlyArray<string>, defaultOptions: BuildOptions): SolutionBuilderWithWatch {
         const hostWithWatch = host as SolutionBuilderWithWatchHost;
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
@@ -408,6 +433,7 @@ namespace ts {
         const missingRoots = createMap<true>();
         let globalDependencyGraph: DependencyGraph | undefined;
         const writeFileName = (s: string) => host.trace && host.trace(s);
+        let readFileWithCache = (f: string) => host.readFile(f);
 
         // Watch state
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
@@ -803,9 +829,7 @@ namespace ts {
                 globalDependencyGraph = undefined;
             }
             projectStatus.removeKey(resolved);
-            if (options.watch) {
-                diagnostics.removeKey(resolved);
-            }
+            diagnostics.removeKey(resolved);
 
             addProjToQueue(resolved, reloadLevel);
         }
@@ -874,7 +898,7 @@ namespace ts {
         }
 
         function reportErrorSummary() {
-            if (options.watch) {
+            if (options.watch || (host as SolutionBuilderHost).reportErrorSummary) {
                 // Report errors from the other projects
                 getGlobalDependencyGraph().buildQueue.forEach(project => {
                     if (!projectErrorsReported.hasKey(project)) {
@@ -882,8 +906,13 @@ namespace ts {
                     }
                 });
                 let totalErrors = 0;
-                diagnostics.forEach(singleProjectErrors => totalErrors += singleProjectErrors.filter(diagnostic => diagnostic.category === DiagnosticCategory.Error).length);
-                reportWatchStatus(totalErrors === 1 ? Diagnostics.Found_1_error_Watching_for_file_changes : Diagnostics.Found_0_errors_Watching_for_file_changes, totalErrors);
+                diagnostics.forEach(singleProjectErrors => totalErrors += getErrorCountForSummary(singleProjectErrors));
+                if (options.watch) {
+                    reportWatchStatus(getWatchErrorSummaryDiagnosticMessage(totalErrors), totalErrors);
+                }
+                else {
+                    (host as SolutionBuilderHost).reportErrorSummary!(totalErrors);
+                }
             }
         }
 
@@ -976,7 +1005,6 @@ namespace ts {
             }
         }
 
-
         function buildSingleProject(proj: ResolvedConfigFileName): BuildResultFlags {
             if (options.dry) {
                 reportStatus(Diagnostics.A_non_dry_build_would_build_project_0, proj);
@@ -1009,6 +1037,9 @@ namespace ts {
                 options: configFile.options,
                 configFileParsingDiagnostics: configFile.errors
             };
+            if (host.beforeCreateProgram) {
+                host.beforeCreateProgram(options);
+            }
             const program = createProgram(programOptions);
 
             // Don't emit anything in the presence of syntactic errors or options diagnostics
@@ -1020,14 +1051,6 @@ namespace ts {
                 return buildErrors(syntaxDiagnostics, BuildResultFlags.SyntaxErrors, "Syntactic");
             }
 
-            // Don't emit .d.ts if there are decl file errors
-            if (getEmitDeclarations(program.getCompilerOptions())) {
-                const declDiagnostics = program.getDeclarationDiagnostics();
-                if (declDiagnostics.length) {
-                    return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
-                }
-            }
-
             // Same as above but now for semantic diagnostics
             const semanticDiagnostics = program.getSemanticDiagnostics();
             if (semanticDiagnostics.length) {
@@ -1036,14 +1059,23 @@ namespace ts {
 
             let newestDeclarationFileContentChangedTime = minimumDate;
             let anyDtsChanged = false;
-            let emitDiagnostics: Diagnostic[] | undefined;
-            const reportEmitDiagnostic = (d: Diagnostic) => (emitDiagnostics || (emitDiagnostics = [])).push(d);
-            emitFilesAndReportErrors(program, reportEmitDiagnostic, writeFileName, /*reportSummary*/ undefined, (fileName, content, writeBom, onError) => {
+            let declDiagnostics: Diagnostic[] | undefined;
+            const reportDeclarationDiagnostics = (d: Diagnostic) => (declDiagnostics || (declDiagnostics = [])).push(d);
+            const outputFiles: OutputFile[] = [];
+            emitFilesAndReportErrors(program, reportDeclarationDiagnostics, writeFileName, /*reportSummary*/ undefined, (name, text, writeByteOrderMark) => outputFiles.push({ name, text, writeByteOrderMark }));
+            // Don't emit .d.ts if there are decl file errors
+            if (declDiagnostics) {
+                return buildErrors(declDiagnostics, BuildResultFlags.DeclarationEmitErrors, "Declaration file");
+            }
+
+            // Actual Emit
+            const emitterDiagnostics = createDiagnosticCollection();
+            outputFiles.forEach(({ name, text, writeByteOrderMark }) => {
                 let priorChangeTime: Date | undefined;
-                if (!anyDtsChanged && isDeclarationFile(fileName)) {
+                if (!anyDtsChanged && isDeclarationFile(name)) {
                     // Check for unchanged .d.ts files
-                    if (host.fileExists(fileName) && host.readFile(fileName) === content) {
-                        priorChangeTime = host.getModifiedTime(fileName);
+                    if (host.fileExists(name) && readFileWithCache(name) === text) {
+                        priorChangeTime = host.getModifiedTime(name);
                     }
                     else {
                         resultFlags &= ~BuildResultFlags.DeclarationOutputUnchanged;
@@ -1051,14 +1083,15 @@ namespace ts {
                     }
                 }
 
-                host.writeFile(fileName, content, writeBom, onError, emptyArray);
+                writeFile(host, emitterDiagnostics, name, text, writeByteOrderMark);
                 if (priorChangeTime !== undefined) {
                     newestDeclarationFileContentChangedTime = newer(priorChangeTime, newestDeclarationFileContentChangedTime);
-                    unchangedOutputs.setValue(fileName, priorChangeTime);
+                    unchangedOutputs.setValue(name, priorChangeTime);
                 }
             });
 
-            if (emitDiagnostics) {
+            const emitDiagnostics = emitterDiagnostics.getDiagnostics();
+            if (emitDiagnostics.length) {
                 return buildErrors(emitDiagnostics, BuildResultFlags.EmitErrors, "Emit");
             }
 
@@ -1066,16 +1099,20 @@ namespace ts {
                 type: UpToDateStatusType.UpToDate,
                 newestDeclarationFileContentChangedTime: anyDtsChanged ? maximumDate : newestDeclarationFileContentChangedTime
             };
-            if (options.watch) {
-                diagnostics.removeKey(proj);
-            }
+            diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
+            if (host.afterProgramEmitAndDiagnostics) {
+                host.afterProgramEmitAndDiagnostics(program);
+            }
             return resultFlags;
 
             function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
                 resultFlags |= errorFlags;
                 reportAndStoreErrors(proj, diagnostics);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
+                if (host.afterProgramEmitAndDiagnostics) {
+                    host.afterProgramEmitAndDiagnostics(program);
+                }
                 return resultFlags;
             }
         }
@@ -1148,6 +1185,15 @@ namespace ts {
 
         function buildAllProjects(): ExitStatus {
             if (options.watch) { reportWatchStatus(Diagnostics.Starting_compilation_in_watch_mode); }
+            // TODO:: In watch mode as well to use caches for incremental build once we can invalidate caches correctly and have right api
+            // Override readFile for json files and output .d.ts to cache the text
+            const { originalReadFile, originalFileExists, originalDirectoryExists,
+                originalCreateDirectory, originalWriteFile, originalGetSourceFile,
+                readFileWithCache: newReadFileWithCache
+            } = changeCompilerHostToUseCache(host, toPath, /*useCacheForSourceFile*/ true);
+            const savedReadFileWithCache = readFileWithCache;
+            readFileWithCache = newReadFileWithCache;
+
             const graph = getGlobalDependencyGraph();
             reportBuildQueue(graph);
             let anyFailed = false;
@@ -1198,6 +1244,13 @@ namespace ts {
                 anyFailed = anyFailed || !!(buildResult & BuildResultFlags.AnyErrors);
             }
             reportErrorSummary();
+            host.readFile = originalReadFile;
+            host.fileExists = originalFileExists;
+            host.directoryExists = originalDirectoryExists;
+            host.createDirectory = originalCreateDirectory;
+            host.writeFile = originalWriteFile;
+            readFileWithCache = savedReadFileWithCache;
+            host.getSourceFile = originalGetSourceFile;
             return anyFailed ? ExitStatus.DiagnosticsPresent_OutputsSkipped : ExitStatus.Success;
         }
 
@@ -1207,10 +1260,8 @@ namespace ts {
 
         function reportAndStoreErrors(proj: ResolvedConfigFileName, errors: ReadonlyArray<Diagnostic>) {
             reportErrors(errors);
-            if (options.watch) {
-                projectErrorsReported.setValue(proj, true);
-                diagnostics.setValue(proj, errors);
-            }
+            projectErrorsReported.setValue(proj, true);
+            diagnostics.setValue(proj, errors);
         }
 
         function reportErrors(errors: ReadonlyArray<Diagnostic>) {

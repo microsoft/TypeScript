@@ -1,0 +1,18 @@
+tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(3,18): error TS2322: Type '{ foo: string; }' is not assignable to type 'Test<string>'.
+  Object literal may only specify known properties, and 'foo' does not exist in type 'Test<string>'.
+tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts(5,19): error TS2322: Type '{}' is not assignable to type 'string'.
+
+
+==== tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts (2 errors) ====
+    type Test<T extends string = T> = { value: T };
+    
+    let zz: Test = { foo: "abc" };  // should error on comparison with Test<string>
+                     ~~~~~~~~~~
+!!! error TS2322: Type '{ foo: string; }' is not assignable to type 'Test<string>'.
+!!! error TS2322:   Object literal may only specify known properties, and 'foo' does not exist in type 'Test<string>'.
+    
+    let zzy: Test = { value: {} };  // should error
+                      ~~~~~
+!!! error TS2322: Type '{}' is not assignable to type 'string'.
+!!! related TS6500 tests/cases/compiler/typeArgumentDefaultUsesConstraintOnCircularDefault.ts:1:37: The expected type comes from property 'value' which is declared here on type 'Test<string>'
+    

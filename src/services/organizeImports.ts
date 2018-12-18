@@ -146,7 +146,7 @@ namespace ts.OrganizeImports {
             : undefined;
     }
 
-    /* @internal */ // Internal for testing
+    // Internal for testing
     /**
      * @param importGroup a list of ImportDeclarations, all with the same module name.
      */
@@ -266,7 +266,7 @@ namespace ts.OrganizeImports {
         }
     }
 
-    /* @internal */ // Internal for testing
+    // Internal for testing
     /**
      * @param exportGroup a list of ExportDeclarations, all with the same module name.
      */

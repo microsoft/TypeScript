@@ -18,7 +18,7 @@ export default function assert(value: boolean) {
 === tests/cases/compiler/es3defaultAliasQuoted_file1.ts ===
 import {Foo, default as assert} from "./es3defaultAliasQuoted_file0";
 >Foo : Symbol(Foo, Decl(es3defaultAliasQuoted_file1.ts, 0, 8))
->default : Symbol(assert, Decl(es3defaultAliasQuoted_file1.ts, 0, 12))
+>default : Symbol(assert, Decl(es3defaultAliasQuoted_file0.ts, 2, 1))
 >assert : Symbol(assert, Decl(es3defaultAliasQuoted_file1.ts, 0, 12))
 
 assert(Foo.CONSTANT === "Foo");

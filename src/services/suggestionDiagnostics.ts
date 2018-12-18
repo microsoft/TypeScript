@@ -140,13 +140,11 @@ namespace ts {
         return !!forEachReturnStatement(body, isReturnStatementWithFixablePromiseHandler);
     }
 
-    /* @internal */
     export function isReturnStatementWithFixablePromiseHandler(node: Node): node is ReturnStatement {
         return isReturnStatement(node) && !!node.expression && isFixablePromiseHandler(node.expression);
     }
 
     // Should be kept up to date with transformExpression in convertToAsyncFunction.ts
-    /* @internal */
     export function isFixablePromiseHandler(node: Node): boolean {
         // ensure outermost call exists and is a promise handler
         if (!isPromiseHandler(node) || !node.arguments.every(isFixablePromiseArgument)) {

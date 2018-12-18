@@ -7,5 +7,4 @@
 //// */
 ////function f() { this./**/ }
 
-goTo.marker();
-verify.completionListContains("toExponential", /*displayText:*/ undefined, /*documentation*/ undefined, "method");
+verify.completions({ marker: "", includes: { name: "toExponential", kind: "method", kindModifiers: "declare" } });

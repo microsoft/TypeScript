@@ -310,7 +310,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     enqueueIsCalled = true;
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
@@ -409,7 +409,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -451,7 +451,7 @@ namespace ts.projectSystem {
                 constructor() {
                     super(host, { typesRegistry: createTypesRegistry("jquery") });
                 }
-                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: server.SortedReadonlyArray<string>) {
+                enqueueInstallTypingsRequest(project: server.Project, typeAcquisition: TypeAcquisition, unresolvedImports: SortedReadonlyArray<string>) {
                     super.enqueueInstallTypingsRequest(project, typeAcquisition, unresolvedImports);
                 }
                 installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction): void {
@@ -984,6 +984,50 @@ namespace ts.projectSystem {
 
             host.checkTimeoutQueueLengthAndRun(2);
             checkProjectActualFiles(service.inferredProjects[0], [file.path, node.path, commander.path]);
+        });
+
+        it("should redo resolution that resolved to '.js' file after typings are installed", () => {
+            const file: TestFSWithWatch.File = {
+                path: "/a/b/app.js",
+                content: `
+                import * as commander from "commander";`
+            };
+            const cachePath = "/a/cache";
+            const commanderJS: TestFSWithWatch.File = {
+                path: "/node_modules/commander/index.js",
+                content: "module.exports = 0",
+            };
+
+            const typeNames: ReadonlyArray<string> = ["commander"];
+            const typePath = (name: string): string => `${cachePath}/node_modules/@types/${name}/index.d.ts`;
+            const host = createServerHost([file, commanderJS]);
+            const installer = new (class extends Installer {
+                constructor() {
+                    super(host, { globalTypingsCacheLocation: cachePath, typesRegistry: createTypesRegistry(...typeNames) });
+                }
+                installWorker(_requestId: number, _args: string[], _cwd: string, cb: TI.RequestCompletedAction) {
+                    const installedTypings = typeNames.map(name => `@types/${name}`);
+                    const typingFiles = typeNames.map((name): TestFSWithWatch.File => ({ path: typePath(name), content: "" }));
+                    executeCommand(this, host, installedTypings, typingFiles, cb);
+                }
+            })();
+            const service = createProjectService(host, { typingsInstaller: installer });
+            service.openClientFile(file.path);
+
+            checkWatchedFiles(host, [...flatMap(["/a/b", "/a", ""], x => [x + "/tsconfig.json", x + "/jsconfig.json"]), "/a/lib/lib.d.ts"]);
+            checkWatchedDirectories(host, [], /*recursive*/ false);
+            // Does not include cachePath because that is handled by typingsInstaller
+            checkWatchedDirectories(host, ["/node_modules", "/a/b/node_modules", "/a/b/node_modules/@types", "/a/b/bower_components"], /*recursive*/ true);
+
+            service.checkNumberOfProjects({ inferredProjects: 1 });
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, commanderJS.path]);
+
+            installer.installAll(/*expectedCount*/1);
+            for (const name of typeNames) {
+                assert.isTrue(host.fileExists(typePath(name)), `typings for '${name}' should be created`);
+            }
+            host.checkTimeoutQueueLengthAndRun(2);
+            checkProjectActualFiles(service.inferredProjects[0], [file.path, ...typeNames.map(typePath)]);
         });
 
         it("should pick typing names from non-relative unresolved imports", () => {
