@@ -1768,7 +1768,7 @@
         "category": "Error",
         "code": 2496
     },
-    "When writing ECMAScript imports, callable 'export ='-style modules can only be imported by turning on the '{0}' flag and using a default import.": {
+    "This module can only be imported with ECMAScript imports by turning on the '{0}' flag and using a default import.": {
         "category": "Error",
         "code": 2497
     },
