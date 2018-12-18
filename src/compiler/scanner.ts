@@ -976,7 +976,7 @@ namespace ts {
             }
 
             if (decimalFragment !== undefined || tokenFlags & TokenFlags.Scientific) {
-                checkForIdentifierStartAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral(start, decimalFragment === undefined && !!(tokenFlags & TokenFlags.Scientific));
                 return {
                     type: SyntaxKind.NumericLiteral,
                     value: "" + +result // if value is not an integer, it can be safely coerced to a number
@@ -985,20 +985,31 @@ namespace ts {
             else {
                 tokenValue = result;
                 const type = checkBigIntSuffix(); // if value is an integer, check whether it is a bigint
-                checkForIdentifierStartAfterNumericLiteral();
+                checkForIdentifierStartAfterNumericLiteral(start);
                 return { type, value: tokenValue };
             }
         }
 
-        function checkForIdentifierStartAfterNumericLiteral() {
+        function checkForIdentifierStartAfterNumericLiteral(numericStart: number, isScientific?: boolean) {
             if (!isIdentifierStart(text.charCodeAt(pos), languageVersion)) {
                 return;
             }
 
             const identifierStart = pos;
             const { length } = scanIdentifierParts();
-            error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
-            pos = identifierStart;
+
+            if (length === 1 && text[identifierStart] === "n") {
+                if (isScientific) {
+                    error(Diagnostics.A_bigint_literal_cannot_use_exponential_notation, numericStart, identifierStart - numericStart + 1);
+                }
+                else {
+                    error(Diagnostics.A_bigint_literal_must_be_an_integer, numericStart, identifierStart - numericStart + 1);
+                }
+            }
+            else {
+                error(Diagnostics.An_identifier_or_keyword_cannot_immediately_follow_a_numeric_literal, identifierStart, length);
+                pos = identifierStart;
+            }
         }
 
         function scanOctalDigits(): number {
