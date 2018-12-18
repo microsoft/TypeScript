@@ -13597,6 +13597,9 @@ namespace ts {
                     // union includes empty object types (e.g. reducing {} | string to just {}).
                     return getUnionType(widenedTypes, some(widenedTypes, isEmptyObjectType) ? UnionReduction.Subtype : UnionReduction.Literal);
                 }
+                if (type.flags & TypeFlags.Intersection) {
+                    return getIntersectionType(sameMap((<IntersectionType>type).types, getWidenedType));
+                }
                 if (isArrayType(type) || isTupleType(type)) {
                     return createTypeReference((<TypeReference>type).target, sameMap((<TypeReference>type).typeArguments, getWidenedType));
                 }
