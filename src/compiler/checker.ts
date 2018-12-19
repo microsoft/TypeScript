@@ -6870,22 +6870,7 @@ namespace ts {
             if (left === right) {
                 return left;
             }
-            const names = createMap<true>();
-            // We join names in an upperCamelCase fashion.
-            const seperator = "And";
-            const leftNames = unescapeLeadingUnderscores(left).split(seperator);
-            const rightNames = unescapeLeadingUnderscores(right).split(seperator);
-            let first = true;
-            for (const list of [leftNames, rightNames]) {
-                for (const n of list) {
-                    names.set(first ? (first = false, n) : (n.slice(0, 1).toUpperCase() + n.slice(1)), true);
-                }
-            }
-            if (names.size > 5) {
-                // Combining >5 names just looks bad
-                return `arg${index}` as __String;
-            }
-            return escapeLeadingUnderscores(arrayFrom(names.keys()).join(seperator));
+            return `arg${index}` as __String;
         }
 
         function combineUnionParameters(left: Signature, right: Signature) {

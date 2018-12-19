@@ -41,11 +41,11 @@ verify.signatureHelp({
 },
 {
     marker: "2",
-    text: "callableThing2(o1AndO2: { x: number; } & { y: number; }): void"
+    text: "callableThing2(arg0: { x: number; } & { y: number; }): void"
 },
 {
     marker: "3",
-    text: "callableThing3(o1AndO2AndO3AndO4AndO5: { x: number; } & { y: number; } & { z: number; } & { u: number; } & { v: number; }): void"
+    text: "callableThing3(arg0: { x: number; } & { y: number; } & { z: number; } & { u: number; } & { v: number; }): void"
 },
 {
     marker: "4",
