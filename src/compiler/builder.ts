@@ -411,11 +411,9 @@ namespace ts {
         oldProgram = undefined;
         oldState = undefined;
 
-        const result = createRedirectObject(state.program) as BuilderProgram;
+        const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
         result.getState = () => state;
-        result.getProgram = () => state.program;
         result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, state.program, sourceFile);
-        result.getConfigFileParsingDiagnostics = () => configFileParsingDiagnostics;
         result.getSemanticDiagnostics = getSemanticDiagnostics;
         result.emit = emit;
 
@@ -563,6 +561,25 @@ namespace ts {
             return diagnostics || emptyArray;
         }
     }
+
+    export function createRedirectedBuilderProgram(state: { program: Program; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
+        return {
+            getState: notImplemented,
+            getProgram: () => state.program,
+            getCompilerOptions: () => state.program.getCompilerOptions(),
+            getSourceFile: fileName => state.program.getSourceFile(fileName),
+            getSourceFiles: () => state.program.getSourceFiles(),
+            getOptionsDiagnostics: cancellationToken => state.program.getOptionsDiagnostics(cancellationToken),
+            getGlobalDiagnostics: cancellationToken => state.program.getGlobalDiagnostics(cancellationToken),
+            getConfigFileParsingDiagnostics: () => configFileParsingDiagnostics,
+            getSyntacticDiagnostics: (sourceFile, cancellationToken) => state.program.getSyntacticDiagnostics(sourceFile, cancellationToken),
+            getDeclarationDiagnostics: (sourceFile, cancellationToken) => state.program.getDeclarationDiagnostics(sourceFile, cancellationToken),
+            getSemanticDiagnostics: (sourceFile, cancellationToken) => state.program.getSemanticDiagnostics(sourceFile, cancellationToken),
+            emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => state.program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
+            getAllDependencies: notImplemented,
+            getCurrentDirectory: () => state.program.getCurrentDirectory()
+        };
+    }
 }
 
 namespace ts {
@@ -587,7 +604,7 @@ namespace ts {
     /**
      * Builder to manage the program state changes
      */
-    export interface BuilderProgram extends Program {
+    export interface BuilderProgram {
         /*@internal*/
         getState(): BuilderProgramState;
         /**
@@ -595,11 +612,41 @@ namespace ts {
          */
         getProgram(): Program;
         /**
+         * Get compiler options of the program
+         */
+        getCompilerOptions(): CompilerOptions;
+        /**
+         * Get the source file in the program with file name
+         */
+        getSourceFile(fileName: string): SourceFile | undefined;
+        /**
+         * Get a list of files in the program
+         */
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        /**
+         * Get the diagnostics for compiler options
+         */
+        getOptionsDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics that dont belong to any file
+         */
+        getGlobalDiagnostics(cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the diagnostics from config file parsing
+         */
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the syntax diagnostics, for all source files if source file is not supplied
+         */
+        getSyntacticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic>;
+        /**
+         * Get the declaration diagnostics, for all source files if source file is not supplied
+         */
+        getDeclarationDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<DiagnosticWithLocation>;
+        /**
          * Get all the dependencies of the file
          */
         getAllDependencies(sourceFile: SourceFile): ReadonlyArray<string>;
-
-        // These two are same signatures but because the doc comments are useful they are retained
 
         /**
          * Gets the semantic diagnostics from the program corresponding to this state of file (if provided) or whole program
@@ -622,6 +669,10 @@ namespace ts {
          * in that order would be used to write the files
          */
         emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback, cancellationToken?: CancellationToken, emitOnlyDtsFiles?: boolean, customTransformers?: CustomTransformers): EmitResult;
+        /**
+         * Get the current directory of the program
+         */
+        getCurrentDirectory(): string;
     }
 
     /**
@@ -674,13 +725,6 @@ namespace ts {
     export function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
     export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | BuilderProgram, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram {
         const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
-        const builderProgram = createRedirectObject(newProgram) as BuilderProgram;
-        builderProgram.getState = notImplemented;
-        builderProgram.getProgram = () => newProgram;
-        builderProgram.getAllDependencies = notImplemented;
-
-        // Always return latest config file diagnostics
-        builderProgram.getConfigFileParsingDiagnostics = () => newConfigFileParsingDiagnostics;
-        return builderProgram;
+        return createRedirectedBuilderProgram({ program: newProgram }, newConfigFileParsingDiagnostics);
     }
 }

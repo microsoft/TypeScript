@@ -107,9 +107,24 @@ namespace ts {
     }
 
     /**
+     * Program structure needed to emit the files and report diagnostics
+     */
+    export interface ProgramToEmitFilesAndReportErrors {
+        getCurrentDirectory(): string;
+        getCompilerOptions(): CompilerOptions;
+        getSourceFiles(): ReadonlyArray<SourceFile>;
+        getSyntacticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getOptionsDiagnostics(): ReadonlyArray<Diagnostic>;
+        getGlobalDiagnostics(): ReadonlyArray<Diagnostic>;
+        getSemanticDiagnostics(): ReadonlyArray<Diagnostic>;
+        getConfigFileParsingDiagnostics(): ReadonlyArray<Diagnostic>;
+        emit(targetSourceFile?: SourceFile, writeFile?: WriteFileCallback): EmitResult;
+    }
+
+    /**
      * Helper that emit files, report diagnostics and lists emitted and/or source files depending on compiler options
      */
-    export function emitFilesAndReportErrors(program: Program, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback) {
+    export function emitFilesAndReportErrors(program: ProgramToEmitFilesAndReportErrors, reportDiagnostic: DiagnosticReporter, writeFileName?: (s: string) => void, reportSummary?: ReportEmitErrorSummary, writeFile?: WriteFileCallback) {
         // First get and report any syntactic errors.
         const diagnostics = program.getConfigFileParsingDiagnostics().slice();
         const configFileParsingDiagnosticsLength = diagnostics.length;

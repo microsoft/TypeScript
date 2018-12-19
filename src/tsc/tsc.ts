@@ -209,7 +209,7 @@ namespace ts {
             createSolutionBuilderWithWatchHost(sys, createSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
             createSolutionBuilderHost(sys, createAbstractBuilder, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
         updateCreateProgram(buildHost);
-        buildHost.afterProgramEmitAndDiagnostics = reportStatistics;
+        buildHost.afterProgramEmitAndDiagnostics = (program: BuilderProgram) => reportStatistics(program.getProgram());
 
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
         if (buildOptions.clean) {
