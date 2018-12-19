@@ -683,11 +683,17 @@ function ensureCompileTask(projectGraph, options) {
                     }
                 });
             }
-            const js = (projectGraphConfig.resolvedOptions.js ? projectGraphConfig.resolvedOptions.js(stream.js) : stream.js)
+
+            const additionalJsOutputs = projectGraphConfig.resolvedOptions.js ? projectGraphConfig.resolvedOptions.js(stream.js)
+                .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.write(sourceMapPath, sourceMapOptions))) : undefined;
+            const additionalDtsOutputs = projectGraphConfig.resolvedOptions.dts ? projectGraphConfig.resolvedOptions.dts(stream.dts)
+                .pipe(gulpif(declarationMap, sourcemaps.write(sourceMapPath, sourceMapOptions))) : undefined;
+
+            const js = stream.js
                 .pipe(gulpif(sourceMap || inlineSourceMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
-            const dts = (projectGraphConfig.resolvedOptions.dts ? projectGraphConfig.resolvedOptions.dts(stream.dts) : stream.dts)
+            const dts = stream.dts
                 .pipe(gulpif(declarationMap, sourcemaps.write(sourceMapPath, sourceMapOptions)));
-            return merge2([js, dts])
+            return merge2([js, dts, additionalJsOutputs, additionalDtsOutputs].filter(x => !!x))
                 .pipe(gulp.dest(destPath));
         });
     }
