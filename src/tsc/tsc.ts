@@ -206,9 +206,9 @@ namespace ts {
 
         // TODO: change this to host if watch => watchHost otherwiue without watch
         const buildHost = buildOptions.watch ?
-            createSolutionBuilderWithWatchHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
-            createSolutionBuilderHost(sys, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
-        buildHost.beforeCreateProgram = enableStatistics;
+            createSolutionBuilderWithWatchHost(sys, createSemanticDiagnosticsBuilderProgram, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createWatchStatusReporter()) :
+            createSolutionBuilderHost(sys, createAbstractBuilder, reportDiagnostic, createBuilderStatusReporter(sys, shouldBePretty()), createReportErrorSummary(buildOptions));
+        updateCreateProgram(buildHost);
         buildHost.afterProgramEmitAndDiagnostics = reportStatistics;
 
         const builder = createSolutionBuilder(buildHost, projects, buildOptions);
@@ -234,7 +234,7 @@ namespace ts {
         const host = createCompilerHost(options);
         const currentDirectory = host.getCurrentDirectory();
         const getCanonicalFileName = createGetCanonicalFileName(host.useCaseSensitiveFileNames());
-        changeCompilerHostToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName), /*useCacheForSourceFile*/ false);
+        changeCompilerHostLikeToUseCache(host, fileName => toPath(fileName, currentDirectory, getCanonicalFileName));
         enableStatistics(options);
 
         const programOptions: CreateProgramOptions = {
@@ -255,15 +255,19 @@ namespace ts {
         return sys.exit(exitStatus);
     }
 
-    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
-        const compileUsingBuilder = watchCompilerHost.createProgram;
-        watchCompilerHost.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
+    function updateCreateProgram<T extends BuilderProgram>(host: { createProgram: CreateProgram<T>; }) {
+        const compileUsingBuilder = host.createProgram;
+        host.createProgram = (rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences) => {
             Debug.assert(rootNames !== undefined || (options === undefined && !!oldProgram));
             if (options !== undefined) {
                 enableStatistics(options);
             }
             return compileUsingBuilder(rootNames, options, host, oldProgram, configFileParsingDiagnostics, projectReferences);
         };
+    }
+
+    function updateWatchCompilationHost(watchCompilerHost: WatchCompilerHost<EmitAndSemanticDiagnosticsBuilderProgram>) {
+        updateCreateProgram(watchCompilerHost);
         const emitFilesUsingBuilder = watchCompilerHost.afterProgramCreate!; // TODO: GH#18217
         watchCompilerHost.afterProgramCreate = builderProgram => {
             emitFilesUsingBuilder(builderProgram);
