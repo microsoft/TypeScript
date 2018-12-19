@@ -434,8 +434,12 @@ namespace ts {
         let readFileWithCache = (f: string) => host.readFile(f);
         let projectCompilerOptions = baseCompilerOptions;
         const compilerHost = createCompilerHostFromProgramHost(host, () => projectCompilerOptions);
+        const originalGetSourceFile = compilerHost.getSourceFile;
+        const computeHash = host.createHash || generateDjb2Hash;
+        updateGetSourceFile();
 
         // Watch state
+        const builderPrograms = createFileMap<T>(toPath);
         const diagnostics = createFileMap<ReadonlyArray<Diagnostic>>(toPath);
         const projectPendingBuild = createFileMap<ConfigFileProgramReloadLevel>(toPath);
         const projectErrorsReported = createFileMap<true>(toPath);
@@ -493,6 +497,29 @@ namespace ts {
             clearMap(allWatchedWildcardDirectories, wildCardWatches => clearMap(wildCardWatches, closeFileWatcherOf));
             clearMap(allWatchedInputFiles, inputFileWatches => clearMap(inputFileWatches, closeFileWatcher));
             clearMap(allWatchedConfigFiles, closeFileWatcher);
+            if (!options.watch) {
+                builderPrograms.clear();
+            }
+            updateGetSourceFile();
+        }
+
+        function updateGetSourceFile() {
+            if (options.watch) {
+                if (compilerHost.getSourceFile === originalGetSourceFile) {
+                    compilerHost.getSourceFile = (...args) => {
+                        const result = originalGetSourceFile.call(compilerHost, ...args);
+                        if (result && options.watch) {
+                            result.version = computeHash.call(host, result.text);
+                        }
+                        return result;
+                    };
+                }
+            }
+            else {
+                if (compilerHost.getSourceFile !== originalGetSourceFile) {
+                    compilerHost.getSourceFile = originalGetSourceFile;
+                }
+            }
         }
 
         function isParsedCommandLine(entry: ConfigFileCacheEntry): entry is ParsedCommandLine {
@@ -1057,7 +1084,7 @@ namespace ts {
                 configFile.fileNames,
                 configFile.options,
                 compilerHost,
-                /*oldProgram*/ undefined,
+                builderPrograms.getValue(proj),
                 configFile.errors,
                 configFile.projectReferences
             );
@@ -1123,19 +1150,25 @@ namespace ts {
             };
             diagnostics.removeKey(proj);
             projectStatus.setValue(proj, status);
-            if (host.afterProgramEmitAndDiagnostics) {
-                host.afterProgramEmitAndDiagnostics(program);
-            }
+            afterProgramCreate(proj, program);
             return resultFlags;
 
             function buildErrors(diagnostics: ReadonlyArray<Diagnostic>, errorFlags: BuildResultFlags, errorType: string) {
                 resultFlags |= errorFlags;
                 reportAndStoreErrors(proj, diagnostics);
                 projectStatus.setValue(proj, { type: UpToDateStatusType.Unbuildable, reason: `${errorType} errors` });
-                if (host.afterProgramEmitAndDiagnostics) {
-                    host.afterProgramEmitAndDiagnostics(program);
-                }
+                afterProgramCreate(proj, program);
                 return resultFlags;
+            }
+        }
+
+        function afterProgramCreate(proj: ResolvedConfigFileName, program: T) {
+            if (host.afterProgramEmitAndDiagnostics) {
+                host.afterProgramEmitAndDiagnostics(program);
+            }
+            if (options.watch) {
+                program.releaseProgram();
+                builderPrograms.setValue(proj, program);
             }
         }
 

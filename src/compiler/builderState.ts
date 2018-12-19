@@ -505,14 +505,14 @@ namespace ts.BuilderState {
 
         // Start with the paths this file was referenced by
         seenFileNamesMap.set(sourceFileWithUpdatedShape.path, sourceFileWithUpdatedShape);
-        const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.path);
+        const queue = getReferencedByPaths(state, sourceFileWithUpdatedShape.resolvedPath);
         while (queue.length > 0) {
             const currentPath = queue.pop()!;
             if (!seenFileNamesMap.has(currentPath)) {
                 const currentSourceFile = programOfThisState.getSourceFileByPath(currentPath)!;
                 seenFileNamesMap.set(currentPath, currentSourceFile);
                 if (currentSourceFile && updateShapeSignature(state, programOfThisState, currentSourceFile, cacheToUpdateSignature, cancellationToken, computeHash!, exportedModulesMapCache)) { // TODO: GH#18217
-                    queue.push(...getReferencedByPaths(state, currentPath));
+                    queue.push(...getReferencedByPaths(state, currentSourceFile.resolvedPath));
                 }
             }
         }
