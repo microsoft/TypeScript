@@ -2827,7 +2827,7 @@ namespace ts {
         fileName: string,
         data: string,
         writeByteOrderMark: boolean,
-        onError: ((message: string) => void) | undefined,
+        onError?: (message: string) => void,
         sourceFiles?: ReadonlyArray<SourceFile>,
     ) => void;
 

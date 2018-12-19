@@ -265,7 +265,7 @@ export class cNew {}`);
                 // Build downstream projects should update 'tests', but not 'core'
                 tick();
                 builder.buildInvalidatedProject();
-                assert.isBelow(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
+                assert.equal(fs.statSync("/src/tests/index.js").mtimeMs, time(), "Downstream JS file should have been rebuilt");
                 assert.isBelow(fs.statSync("/src/core/index.js").mtimeMs, time(), "Upstream JS file should not have been rebuilt");
             });
         });
