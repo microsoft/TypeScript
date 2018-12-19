@@ -49,7 +49,11 @@ namespace ts {
         /**
          * program corresponding to this state
          */
-        program: Program;
+        program: Program | undefined;
+        /**
+         * compilerOptions for the program
+         */
+        compilerOptions: CompilerOptions;
     }
 
     function hasSameKeys<T, U>(map1: ReadonlyMap<T> | undefined, map2: ReadonlyMap<U> | undefined): boolean {
@@ -64,13 +68,14 @@ namespace ts {
         const state = BuilderState.create(newProgram, getCanonicalFileName, oldState) as BuilderProgramState;
         state.program = newProgram;
         const compilerOptions = newProgram.getCompilerOptions();
+        state.compilerOptions = compilerOptions;
         if (!compilerOptions.outFile && !compilerOptions.out) {
             state.semanticDiagnosticsPerFile = createMap<ReadonlyArray<Diagnostic>>();
         }
         state.changedFilesSet = createMap<true>();
 
         const useOldState = BuilderState.canReuseOldState(state.referencedMap, oldState);
-        const oldCompilerOptions = useOldState ? oldState!.program.getCompilerOptions() : undefined;
+        const oldCompilerOptions = useOldState ? oldState!.compilerOptions : undefined;
         const canCopySemanticDiagnostics = useOldState && oldState!.semanticDiagnosticsPerFile && !!state.semanticDiagnosticsPerFile &&
             !compilerOptionsAffectSemanticDiagnostics(compilerOptions, oldCompilerOptions!);
         if (useOldState) {
@@ -109,7 +114,7 @@ namespace ts {
                 state.changedFilesSet.set(sourceFilePath, true);
             }
             else if (canCopySemanticDiagnostics) {
-                const sourceFile = state.program.getSourceFileByPath(sourceFilePath as Path)!;
+                const sourceFile = newProgram.getSourceFileByPath(sourceFilePath as Path)!;
 
                 if (sourceFile.isDeclarationFile && !copyDeclarationFileDiagnostics) { return; }
                 if (sourceFile.hasNoDefaultLib && !copyLibFileDiagnostics) { return; }
@@ -179,10 +184,11 @@ namespace ts {
 
             // With --out or --outFile all outputs go into single file
             // so operations are performed directly on program, return program
-            const compilerOptions = state.program.getCompilerOptions();
+            const program = Debug.assertDefined(state.program);
+            const compilerOptions = program.getCompilerOptions();
             if (compilerOptions.outFile || compilerOptions.out) {
                 Debug.assert(!state.semanticDiagnosticsPerFile);
-                return state.program;
+                return program;
             }
 
             // Get next batch of affected files
@@ -190,7 +196,7 @@ namespace ts {
             if (state.exportedModulesMap) {
                 state.currentAffectedFilesExportedModulesMap = state.currentAffectedFilesExportedModulesMap || createMap<BuilderState.ReferencedSet | false>();
             }
-            state.affectedFiles = BuilderState.getFilesAffectedBy(state, state.program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
+            state.affectedFiles = BuilderState.getFilesAffectedBy(state, program, nextKey.value as Path, cancellationToken, computeHash, state.currentAffectedFilesSignatures, state.currentAffectedFilesExportedModulesMap);
             state.currentChangedFilePath = nextKey.value as Path;
             state.affectedFilesIndex = 0;
             state.seenAffectedFiles = state.seenAffectedFiles || createMap<true>();
@@ -209,9 +215,10 @@ namespace ts {
         // Clean lib file diagnostics if its all files excluding default files to emit
         if (state.allFilesExcludingDefaultLibraryFile === state.affectedFiles && !state.cleanedDiagnosticsOfLibFiles) {
             state.cleanedDiagnosticsOfLibFiles = true;
-            const options = state.program.getCompilerOptions();
-            if (forEach(state.program.getSourceFiles(), f =>
-                state.program.isSourceFileDefaultLibrary(f) &&
+            const program = Debug.assertDefined(state.program);
+            const options = program.getCompilerOptions();
+            if (forEach(program.getSourceFiles(), f =>
+                program.isSourceFileDefaultLibrary(f) &&
                 !skipTypeChecking(f, options) &&
                 removeSemanticDiagnosticsOf(state, f.path)
             )) {
@@ -336,7 +343,7 @@ namespace ts {
         }
 
         // Diagnostics werent cached, get them from program, and cache the result
-        const diagnostics = state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
+        const diagnostics = Debug.assertDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken);
         state.semanticDiagnosticsPerFile!.set(path, diagnostics);
         return diagnostics;
     }
@@ -370,7 +377,7 @@ namespace ts {
                 rootNames: newProgramOrRootNames,
                 options: hostOrOptions as CompilerOptions,
                 host: oldProgramOrHost as CompilerHost,
-                oldProgram: oldProgram && oldProgram.getProgram(),
+                oldProgram: oldProgram && oldProgram.getProgramOrUndefined(),
                 configFileParsingDiagnostics,
                 projectReferences
             });
@@ -413,7 +420,7 @@ namespace ts {
 
         const result = createRedirectedBuilderProgram(state, configFileParsingDiagnostics);
         result.getState = () => state;
-        result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, state.program, sourceFile);
+        result.getAllDependencies = sourceFile => BuilderState.getAllDependencies(state, Debug.assertDefined(state.program), sourceFile);
         result.getSemanticDiagnostics = getSemanticDiagnostics;
         result.emit = emit;
 
@@ -445,7 +452,7 @@ namespace ts {
                 state,
                 // When whole program is affected, do emit only once (eg when --out or --outFile is specified)
                 // Otherwise just affected file
-                state.program.emit(affected === state.program ? undefined : affected as SourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers),
+                Debug.assertDefined(state.program).emit(affected === state.program ? undefined : affected as SourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers),
                 affected
             );
         }
@@ -486,7 +493,7 @@ namespace ts {
                     };
                 }
             }
-            return state.program.emit(targetSourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
+            return Debug.assertDefined(state.program).emit(targetSourceFile, writeFile || host.writeFile, cancellationToken, emitOnlyDtsFiles, customTransformers);
         }
 
         /**
@@ -534,11 +541,11 @@ namespace ts {
          */
         function getSemanticDiagnostics(sourceFile?: SourceFile, cancellationToken?: CancellationToken): ReadonlyArray<Diagnostic> {
             assertSourceFileOkWithoutNextAffectedCall(state, sourceFile);
-            const compilerOptions = state.program.getCompilerOptions();
+            const compilerOptions = Debug.assertDefined(state.program).getCompilerOptions();
             if (compilerOptions.outFile || compilerOptions.out) {
                 Debug.assert(!state.semanticDiagnosticsPerFile);
                 // We dont need to cache the diagnostics just return them from program
-                return state.program.getSemanticDiagnostics(sourceFile, cancellationToken);
+                return Debug.assertDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken);
             }
 
             if (sourceFile) {
@@ -555,29 +562,31 @@ namespace ts {
             }
 
             let diagnostics: Diagnostic[] | undefined;
-            for (const sourceFile of state.program.getSourceFiles()) {
+            for (const sourceFile of Debug.assertDefined(state.program).getSourceFiles()) {
                 diagnostics = addRange(diagnostics, getSemanticDiagnosticsOfFile(state, sourceFile, cancellationToken));
             }
             return diagnostics || emptyArray;
         }
     }
 
-    export function createRedirectedBuilderProgram(state: { program: Program; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
+    export function createRedirectedBuilderProgram(state: { program: Program | undefined; compilerOptions: CompilerOptions; }, configFileParsingDiagnostics: ReadonlyArray<Diagnostic>): BuilderProgram {
         return {
             getState: notImplemented,
-            getProgram: () => state.program,
-            getCompilerOptions: () => state.program.getCompilerOptions(),
-            getSourceFile: fileName => state.program.getSourceFile(fileName),
-            getSourceFiles: () => state.program.getSourceFiles(),
-            getOptionsDiagnostics: cancellationToken => state.program.getOptionsDiagnostics(cancellationToken),
-            getGlobalDiagnostics: cancellationToken => state.program.getGlobalDiagnostics(cancellationToken),
+            getProgram: () => Debug.assertDefined(state.program),
+            getProgramOrUndefined: () => state.program,
+            releaseProgram: () => state.program = undefined,
+            getCompilerOptions: () => state.compilerOptions,
+            getSourceFile: fileName => Debug.assertDefined(state.program).getSourceFile(fileName),
+            getSourceFiles: () => Debug.assertDefined(state.program).getSourceFiles(),
+            getOptionsDiagnostics: cancellationToken => Debug.assertDefined(state.program).getOptionsDiagnostics(cancellationToken),
+            getGlobalDiagnostics: cancellationToken => Debug.assertDefined(state.program).getGlobalDiagnostics(cancellationToken),
             getConfigFileParsingDiagnostics: () => configFileParsingDiagnostics,
-            getSyntacticDiagnostics: (sourceFile, cancellationToken) => state.program.getSyntacticDiagnostics(sourceFile, cancellationToken),
-            getDeclarationDiagnostics: (sourceFile, cancellationToken) => state.program.getDeclarationDiagnostics(sourceFile, cancellationToken),
-            getSemanticDiagnostics: (sourceFile, cancellationToken) => state.program.getSemanticDiagnostics(sourceFile, cancellationToken),
-            emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => state.program.emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
+            getSyntacticDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getSyntacticDiagnostics(sourceFile, cancellationToken),
+            getDeclarationDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getDeclarationDiagnostics(sourceFile, cancellationToken),
+            getSemanticDiagnostics: (sourceFile, cancellationToken) => Debug.assertDefined(state.program).getSemanticDiagnostics(sourceFile, cancellationToken),
+            emit: (sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers) => Debug.assertDefined(state.program).emit(sourceFile, writeFile, cancellationToken, emitOnlyDts, customTransformers),
             getAllDependencies: notImplemented,
-            getCurrentDirectory: () => state.program.getCurrentDirectory()
+            getCurrentDirectory: () => Debug.assertDefined(state.program).getCurrentDirectory()
         };
     }
 }
@@ -611,6 +620,16 @@ namespace ts {
          * Returns current program
          */
         getProgram(): Program;
+        /**
+         * Returns current program that could be undefined if the program was released
+         */
+        /*@internal*/
+        getProgramOrUndefined(): Program | undefined;
+        /**
+         * Releases reference to the program, making all the other operations that need program to fail.
+         */
+        /*@internal*/
+        releaseProgram(): void;
         /**
          * Get compiler options of the program
          */
@@ -725,6 +744,6 @@ namespace ts {
     export function createAbstractBuilder(rootNames: ReadonlyArray<string> | undefined, options: CompilerOptions | undefined, host?: CompilerHost, oldProgram?: BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram;
     export function createAbstractBuilder(newProgramOrRootNames: Program | ReadonlyArray<string> | undefined, hostOrOptions: BuilderProgramHost | CompilerOptions | undefined, oldProgramOrHost?: CompilerHost | BuilderProgram, configFileParsingDiagnosticsOrOldProgram?: ReadonlyArray<Diagnostic> | BuilderProgram, configFileParsingDiagnostics?: ReadonlyArray<Diagnostic>, projectReferences?: ReadonlyArray<ProjectReference>): BuilderProgram {
         const { newProgram, configFileParsingDiagnostics: newConfigFileParsingDiagnostics } = getBuilderCreationParameters(newProgramOrRootNames, hostOrOptions, oldProgramOrHost, configFileParsingDiagnosticsOrOldProgram, configFileParsingDiagnostics, projectReferences);
-        return createRedirectedBuilderProgram({ program: newProgram }, newConfigFileParsingDiagnostics);
+        return createRedirectedBuilderProgram({ program: newProgram, compilerOptions: newProgram.getCompilerOptions() }, newConfigFileParsingDiagnostics);
     }
 }
