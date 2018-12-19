@@ -6733,12 +6733,7 @@ namespace ts {
             for (let i = 0; i < signatureLists.length; i++) {
                 if (signatureLists[i].length === 0) return emptyArray;
                 if (signatureLists[i].length > 1) {
-                    if (indexWithLengthOverOne === undefined) {
-                        indexWithLengthOverOne = i;
-                    }
-                    else {
-                        indexWithLengthOverOne = -1; // signal there are multiple overload sets
-                    }
+                    indexWithLengthOverOne = indexWithLengthOverOne === undefined ? i : -1; // -1 is a signal there are multiple overload sets
                 }
                 for (const signature of signatureLists[i]) {
                     // Only process signatures with parameter lists that aren't already in the result list
@@ -6774,7 +6769,7 @@ namespace ts {
                     if (signatures === masterList) continue;
                     const signature = signatures[0];
                     Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                    results = mergeAsUnionSignature(results, signature);
+                    results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, addition));
                     if (!results) {
                         break;
                     }
@@ -6782,13 +6777,6 @@ namespace ts {
                 result = results;
             }
             return result || emptyArray;
-        }
-
-        function mergeAsUnionSignature(masterList: Signature[], addition: Signature): Signature[] | undefined {
-            if (addition.typeParameters && some(masterList, s => !!s.typeParameters)) {
-                return; // Can't currently unify type parameters
-            }
-            return map(masterList, sig => combineSignaturesOfUnionMembers(sig, addition));
         }
 
         function combineUnionThisParam(left: Symbol | undefined, right: Symbol | undefined): Symbol | undefined {
@@ -6808,7 +6796,7 @@ namespace ts {
             return createSymbolWithType(left, thisType);
         }
 
-        function combinePartameterNames(index: number, left: __String | undefined, right: __String | undefined): __String {
+        function combineParameterNames(index: number, left: __String | undefined, right: __String | undefined): __String {
             if (!left && !right) {
                 return `arg${index}` as __String;
             }
@@ -6855,7 +6843,7 @@ namespace ts {
                 const isOptional = i > getMinArgumentCount(longest);
                 const leftName = tryGetNameAtPosition(left, i);
                 const rightName = tryGetNameAtPosition(right, i);
-                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), combinePartameterNames(i, leftName, rightName));
+                const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), combineParameterNames(i, leftName, rightName));
                 paramSymbol.type = unionParamType;
                 params[i] = paramSymbol;
             }
