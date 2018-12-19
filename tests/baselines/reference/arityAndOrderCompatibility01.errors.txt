@@ -1,4 +1,4 @@
-tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(15,12): error TS2339: Property '2' does not exist on type '[string, number]'.
+tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(15,12): error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(17,5): error TS2461: Type '{ 0: string; 1: number; length: 2; }' is not an array type.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(18,5): error TS2741: Property '2' is missing in type '[string, number]' but required in type '[number, number, number]'.
 tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(19,5): error TS2741: Property '2' is missing in type 'StrNum' but required in type '[number, number, number]'.
@@ -45,7 +45,7 @@ tests/cases/conformance/types/tuple/arityAndOrderCompatibility01.ts(32,5): error
     
     var [a, b, c] = x;
                ~
-!!! error TS2339: Property '2' does not exist on type '[string, number]'.
+!!! error TS2493: Tuple type '[string, number]' of length '2' has no element at index '2'.
     var [d, e, f] = y;
     var [g, h, i] = z;
         ~~~~~~~~~

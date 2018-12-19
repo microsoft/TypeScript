@@ -1,7 +1,7 @@
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(22,13): error TS2339: Property '2' does not exist on type '[(x: number) => string, (x: number) => number]'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(23,13): error TS2339: Property '2' does not exist on type '[E1, E2]'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(24,13): error TS2339: Property '2' does not exist on type '[number, any]'.
-tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(25,13): error TS2339: Property '3' does not exist on type '[E1, E2, number]'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(22,13): error TS2493: Tuple type '[(x: number) => string, (x: number) => number]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(23,13): error TS2493: Tuple type '[E1, E2]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(24,13): error TS2493: Tuple type '[number, any]' of length '2' has no element at index '2'.
+tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts(25,13): error TS2493: Tuple type '[E1, E2, number]' of length '3' has no element at index '3'.
 
 
 ==== tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfTuple.ts (4 errors) ====
@@ -28,13 +28,13 @@ tests/cases/conformance/types/typeRelationships/bestCommonType/bestCommonTypeOfT
     t4 = [E1.one, E2.two, 20];
     var e1 = t1[2];  // {}
                 ~
-!!! error TS2339: Property '2' does not exist on type '[(x: number) => string, (x: number) => number]'.
+!!! error TS2493: Tuple type '[(x: number) => string, (x: number) => number]' of length '2' has no element at index '2'.
     var e2 = t2[2];  // {}
                 ~
-!!! error TS2339: Property '2' does not exist on type '[E1, E2]'.
+!!! error TS2493: Tuple type '[E1, E2]' of length '2' has no element at index '2'.
     var e3 = t3[2];  // any
                 ~
-!!! error TS2339: Property '2' does not exist on type '[number, any]'.
+!!! error TS2493: Tuple type '[number, any]' of length '2' has no element at index '2'.
     var e4 = t4[3];  // number
                 ~
-!!! error TS2339: Property '3' does not exist on type '[E1, E2, number]'.
+!!! error TS2493: Tuple type '[E1, E2, number]' of length '3' has no element at index '3'.

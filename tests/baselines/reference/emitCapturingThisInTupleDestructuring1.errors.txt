@@ -1,5 +1,5 @@
-tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,17): error TS2339: Property '1' does not exist on type '[any]'.
-tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,29): error TS2339: Property '2' does not exist on type '[any]'.
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,17): error TS2493: Tuple type '[any]' of length '1' has no element at index '1'.
+tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,29): error TS2493: Tuple type '[any]' of length '1' has no element at index '2'.
 
 
 ==== tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts (2 errors) ====
@@ -7,7 +7,7 @@ tests/cases/compiler/emitCapturingThisInTupleDestructuring1.ts(3,29): error TS23
     wrapper((array: [any]) => {
         [this.test, this.test1, this.test2] = array;  // even though there is a compiler error, we should still emit lexical capture for "this"
                     ~~~~~~~~~~
-!!! error TS2339: Property '1' does not exist on type '[any]'.
+!!! error TS2493: Tuple type '[any]' of length '1' has no element at index '1'.
                                 ~~~~~~~~~~
-!!! error TS2339: Property '2' does not exist on type '[any]'.
+!!! error TS2493: Tuple type '[any]' of length '1' has no element at index '2'.
     });
