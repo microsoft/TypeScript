@@ -4590,6 +4590,10 @@ namespace ts {
             || kind === SyntaxKind.JSDocFunctionType
             || kind === SyntaxKind.JSDocVariadicType;
     }
+
+    export function isAccessExpression(node: Node): node is AccessExpression {
+        return node.kind === SyntaxKind.PropertyAccessExpression || node.kind === SyntaxKind.ElementAccessExpression;
+    }
 }
 
 namespace ts {

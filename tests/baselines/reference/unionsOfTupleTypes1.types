@@ -70,13 +70,13 @@ function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
     let [d10, d11, d12] = t1;  // string, number
 >d10 : string
 >d11 : number
->d12 : any
+>d12 : undefined
 >t1 : [string, number]
 
     let [d20, d21, d22] = t2;  // string | boolean, number | undefined
 >d20 : string | boolean
 >d21 : number | undefined
->d22 : any
+>d22 : undefined
 >t2 : T2
 
     let [d30, d31, d32] = t3;  // string, number, number
@@ -93,18 +93,18 @@ function f1(t1: T1, t2: T2, t3: T3, t4: T4, x: number) {
 
     [d10, d11, d12] = t1;
 >[d10, d11, d12] = t1 : [string, number]
->[d10, d11, d12] : [string, number, any]
+>[d10, d11, d12] : [string, number, undefined]
 >d10 : string
 >d11 : number
->d12 : any
+>d12 : undefined
 >t1 : [string, number]
 
     [d20, d21, d22] = t2;
 >[d20, d21, d22] = t2 : T2
->[d20, d21, d22] : [string | boolean, number | undefined, any]
+>[d20, d21, d22] : [string | boolean, number | undefined, undefined]
 >d20 : string | boolean
 >d21 : number | undefined
->d22 : any
+>d22 : undefined
 >t2 : T2
 
     [d30, d31, d32] = t3;

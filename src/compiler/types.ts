@@ -1745,6 +1745,9 @@ namespace ts {
     export type EntityNameExpression = Identifier | PropertyAccessEntityNameExpression;
     export type EntityNameOrEntityNameExpression = EntityName | EntityNameExpression;
 
+    /* @internal */
+    export type AccessExpression = PropertyAccessExpression | ElementAccessExpression;
+
     export interface PropertyAccessExpression extends MemberExpression, NamedDeclaration {
         kind: SyntaxKind.PropertyAccessExpression;
         expression: LeftHandSideExpression;
