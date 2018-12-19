@@ -1,0 +1,35 @@
+=== tests/cases/compiler/rangeTypeFalsiness.ts ===
+function a(arg: (> 0)) {
+>a : (arg: (> 0)) => boolean
+>arg : (> 0)
+
+    if(!arg) {
+>!arg : false
+>arg : (> 0)
+
+        return false;
+>false : false
+    }
+    else {
+        return true;
+>true : true
+    }
+}
+
+function b(arg: (>= 0)) {
+>b : (arg: (>= 0)) => boolean
+>arg : (>= 0)
+
+    if (!arg) {
+>!arg : boolean
+>arg : (>= 0)
+
+        return false;
+>false : false
+    }
+    else {
+        return true;
+>true : true
+    }
+}
+
