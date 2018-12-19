@@ -6866,14 +6866,8 @@ namespace ts {
             return createSymbolWithType(left, thisType);
         }
 
-        function combineParameterNames(index: number, left: __String | undefined, right: __String | undefined): __String {
-            if (!left && !right) {
-                return `arg${index}` as __String;
-            }
-            if (!left) {
-                return right!;
-            }
-            if (!right || left === right) {
+        function combineParameterNames(index: number, left: __String, right: __String): __String {
+            if (left === right) {
                 return left;
             }
             const names = createMap<true>();
@@ -6901,26 +6895,22 @@ namespace ts {
             const eitherHasEffectiveRest = (hasEffectiveRestParameter(left) || hasEffectiveRestParameter(right));
             const needsExtraRestElement = eitherHasEffectiveRest && !hasEffectiveRestParameter(longest);
             const params = new Array<Symbol>(longestCount + (needsExtraRestElement ? 1 : 0));
-            let i = 0;
-            for (; i < longestCount; i++) {
+            for (let i = 0; i < longestCount; i++) {
                 const longestParamType = tryGetTypeAtPosition(longest, i)!;
                 const shorterParamType = tryGetTypeAtPosition(shorter, i) || unknownType;
-                let unionParamType = getIntersectionType([longestParamType, shorterParamType]);
+                const unionParamType = getIntersectionType([longestParamType, shorterParamType]);
                 const isRestParam = eitherHasEffectiveRest && !needsExtraRestElement && i === (longestCount - 1);
-                if (isRestParam) {
-                    unionParamType = createArrayType(unionParamType);
-                }
-                const isOptional = i > getMinArgumentCount(longest);
-                const leftName = tryGetNameAtPosition(left, i);
-                const rightName = tryGetNameAtPosition(right, i);
+                const isOptional = i > getMinArgumentCount(longest) && i > getMinArgumentCount(shorter);
+                const leftName = getParameterNameAtPosition(left, i);
+                const rightName = getParameterNameAtPosition(right, i);
                 const paramSymbol = createSymbol(SymbolFlags.FunctionScopedVariable | (isOptional && !isRestParam ? SymbolFlags.Optional : 0), combineParameterNames(i, leftName, rightName));
-                paramSymbol.type = unionParamType;
+                paramSymbol.type = isRestParam ? createArrayType(unionParamType) : unionParamType;
                 params[i] = paramSymbol;
             }
             if (needsExtraRestElement) {
                 const restParamSymbol = createSymbol(SymbolFlags.FunctionScopedVariable, "args" as __String);
-                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, i));
-                params[i] = restParamSymbol;
+                restParamSymbol.type = createArrayType(getTypeAtPosition(shorter, longestCount));
+                params[longestCount] = restParamSymbol;
             }
             return params;
         }
@@ -21252,22 +21242,6 @@ namespace ts {
             return tryGetTypeAtPosition(signature, pos) || anyType;
         }
 
-        function tryGetAtXPositionWorker<T>(
-            signature: Signature,
-            pos: number,
-            symbolGetter: (symbol: Symbol) => T,
-            restTypeGetter: (type: Type, pos: number, paramCount: number) => T): T | undefined {
-            const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
-            if (pos < paramCount) {
-                return symbolGetter(signature.parameters[pos]);
-            }
-            if (signature.hasRestParameter) {
-                const restType = getTypeOfSymbol(signature.parameters[paramCount]);
-                return restTypeGetter(restType, pos, paramCount);
-            }
-            return undefined;
-        }
-
         function getTupleTypeForArgumentAtPos(restType: Type, pos: number, paramCount: number) {
             if (isTupleType(restType)) {
                 if (pos - paramCount < getLengthOfTupleType(restType)) {
@@ -21279,20 +21253,15 @@ namespace ts {
         }
 
         function tryGetTypeAtPosition(signature: Signature, pos: number): Type | undefined {
-            return tryGetAtXPositionWorker(signature, pos, getTypeOfParameter, getTupleTypeForArgumentAtPos);
-        }
-
-        function getTupleParameterNameForArgumentAtPos(restType: Type, pos: number, paramCount: number): __String {
-            if (isTupleType(restType)) {
-                if (pos - paramCount < getLengthOfTupleType(restType) && restType.target.associatedNames) {
-                    return restType.target.associatedNames[pos - paramCount];
-                }
+            const paramCount = signature.parameters.length - (signature.hasRestParameter ? 1 : 0);
+            if (pos < paramCount) {
+                return getTypeOfParameter(signature.parameters[pos]);
             }
-            return `arg${pos}` as __String;
-        }
-
-        function tryGetNameAtPosition(signature: Signature, pos: number): __String | undefined {
-            return tryGetAtXPositionWorker(signature, pos, s => s.escapedName, getTupleParameterNameForArgumentAtPos);
+            if (signature.hasRestParameter) {
+                const restType = getTypeOfSymbol(signature.parameters[paramCount]);
+                return getTupleTypeForArgumentAtPos(restType, pos, paramCount);
+            }
+            return undefined;
         }
 
         function getRestTypeAtPosition(source: Signature, pos: number): Type {
