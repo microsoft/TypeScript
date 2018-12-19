@@ -6839,7 +6839,7 @@ namespace ts {
                     if (signatures === masterList) continue;
                     const signature = signatures[0];
                     Debug.assert(!!signature, "getUnionSignatures bails early on empty signature lists and should not have empty lists on second pass");
-                    results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, addition));
+                    results = signature.typeParameters && some(results, s => !!s.typeParameters) ? undefined : map(results, sig => combineSignaturesOfUnionMembers(sig, signature));
                     if (!results) {
                         break;
                     }
